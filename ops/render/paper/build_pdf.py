@@ -17,6 +17,21 @@ from urllib.parse import quote
 
 ROOT=Path(__file__).resolve().parents[3]
 HERE=Path(__file__).resolve().parent
+PINNED_PANDOC_VERSION='pandoc 3.1.3'
+PINNED_LUALATEX_VERSION='This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)'
+
+
+def check_toolchain():
+    try:
+        pandoc_ver=subprocess.check_output(['pandoc','--version'],text=True).splitlines()[0].strip()
+        latex_ver=subprocess.check_output(['lualatex','--version'],text=True).splitlines()[0].strip()
+    except (FileNotFoundError,subprocess.CalledProcessError,IndexError) as exc:
+        raise RuntimeError(f'Required PDF toolchain missing or failed ({PINNED_PANDOC_VERSION}; {PINNED_LUALATEX_VERSION})') from exc
+    if pandoc_ver!=PINNED_PANDOC_VERSION:
+        raise RuntimeError(f'Unpinned pandoc version: got {pandoc_ver!r}, expected {PINNED_PANDOC_VERSION!r}')
+    if latex_ver!=PINNED_LUALATEX_VERSION:
+        raise RuntimeError(f'Unpinned lualatex version: got {latex_ver!r}, expected {PINNED_LUALATEX_VERSION!r}')
+    return pandoc_ver,latex_ver
 
 
 def sha(path):
@@ -38,6 +53,7 @@ def stage(path, raw, renderer_inputs):
 
 
 def build(name):
+    pandoc_ver,latex_ver=check_toolchain()
     out=ROOT/'target/paper';out.mkdir(parents=True,exist_ok=True)
     head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     inputs={};renderer_inputs={}
@@ -102,12 +118,13 @@ def build(name):
     with (out/f'{name}.build.log').open('w') as log:
         run=subprocess.run(['nice','-n','10']+cmd,cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT)
     if run.returncode:raise RuntimeError(f'PDF build failed; see {out/name}.build.log')
+    pandoc_after,latex_after=check_toolchain()
     record={'schema':1,'source_commit':head,'source':str(source.relative_to(ROOT)),
             'source_sha256':inputs[str(source.relative_to(ROOT))],
             'inputs':inputs,'renderer_inputs':renderer_inputs,
             'output':str(pdf.relative_to(ROOT)),'output_sha256':sha(pdf),
-            'pandoc':subprocess.check_output(['pandoc','--version'],text=True).splitlines()[0],
-            'latex':subprocess.check_output(['lualatex','--version'],text=True).splitlines()[0],
+            'pandoc':pandoc_after,
+            'latex':latex_after,
             'command':cmd,'scope':'Publication render only; no new engineering solves or certification'}
     if subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()!=head:
         raise ValueError('Checkout changed during PDF build')
@@ -122,7 +139,14 @@ def build(name):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--document',choices=['WHITEPAPER','ENGINEERING_GATES_AND_EVOLUTION']);args=p.parse_args()
+    p=argparse.ArgumentParser()
+    p.add_argument('--document',choices=['WHITEPAPER','ENGINEERING_GATES_AND_EVOLUTION'])
+    p.add_argument('--check-toolchain',action='store_true')
+    args=p.parse_args()
+    if args.check_toolchain:
+        pandoc_ver,latex_ver=check_toolchain()
+        print(f'PDF toolchain OK: {pandoc_ver} | {latex_ver}',flush=True)
+        return
     for name in [args.document] if args.document else ['WHITEPAPER','ENGINEERING_GATES_AND_EVOLUTION']:build(name)
 
 
