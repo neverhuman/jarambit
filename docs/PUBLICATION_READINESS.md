@@ -7,10 +7,10 @@ establish scientific validity, certification, or visual quality.
 
 | Requested publication component | Coverage at the audit baseline | Remaining gap |
 | --- | --- | --- |
-| Individual entries grouped by tested property | [White paper §IV-B](WHITEPAPER.md#iv-b-engineering-gates-implementation-derived-atlas): six groups and 16 individual entries; the [companion §II](ENGINEERING_GATES_AND_EVOLUTION.md) contains the corresponding verification discussions. | This inventory does not reassess the scientific content. |
-| Historical observations | [White paper §IV-D](WHITEPAPER.md#iv-d-evolution-mechanics-and-measured-population-history) links seven population-history figures and the separate plateau-history figure, with committed input ledgers. | Some historical population telemetry was not retained. The paper discloses those omissions; runtime-only observations are outside this audit. |
-| Per-entry image coverage | Sixteen existing Blender plates have committed manifests. | These depict the labeled assessed example, not a certified winner. |
-| Final-design views | Three existing illustrative views have committed manifests. | The [certified-winner slot](WHITEPAPER.md#iv-e-certified-winner-re-render-slot) is empty. No certified winner is present in the baseline evidence. |
+| Individual entries grouped by tested property | [White paper §IV-B](WHITEPAPER.md#iv-b-engineering-gates-implementation-derived-atlas): six groups, 16 numbered individual gate subsubsections (`1`–`16`), and the 10-group `RS-karambit-v2` hard-gate table (§IV-B.7); the [companion §II–§III](ENGINEERING_GATES_AND_EVOLUTION.md) contains the full derivations. | This inventory does not reassess the scientific content. |
+| Historical observations | [White paper §IV-D](WHITEPAPER.md#iv-d-evolution-mechanics-and-measured-population-history) links seven population-history figures, the certifiable-pipeline figure, the plateau-history figure, and the completed automatic-wave history figure (`fig_wave_history.png`), all with committed input ledgers. | Some historical population telemetry was not retained (`w301`–`w308` and completed `w300`). The paper discloses those omissions; runtime-only observations are outside this audit. |
+| Per-entry image coverage | Sixteen existing Blender plates have committed manifests and are embedded inline in both papers. | These depict the labeled assessed example, not a certified winner. |
+| Final-design views | Three existing illustrative views (`hero_oblique.webp`, `hero_reverse.webp`, `hero_section.webp`) have committed manifests and are embedded inline in both papers. | The [certified-winner slot](WHITEPAPER.md#iv-e-certified-winner-re-render-slot-and-assessed-candidate-studio-views) is empty. No certified winner is present in the baseline evidence. |
 | PDF publication | [Build command and provenance controls](../ops/render/paper/build_pdf.py) are available; PDF outputs belong in the lane's `target/paper/`, rather than Git. | Regenerate PDFs for each publication head and retain their build manifests. A previous-head PDF does not validate a later head. |
 | Catalog denominators | README and paper both identify 23 subjects × 18 evaluators = 414 cells, with 0/23 RS-v2 all-hard passes. | Keep the catalog denominator separate from later automatic assessments. |
 
@@ -24,7 +24,7 @@ dirty working-tree copies cannot supply missing publication inputs.
 ```sh
 mkdir -p target/paper
 python3 -B ops/ci/publication_inventory.py \
-  --ref 253944829cb58e262a16b13f4a72ff9adc745425 \
+  --ref HEAD \
   README.md docs/WHITEPAPER.md docs/ENGINEERING_GATES_AND_EVOLUTION.md \
   > target/paper/publication-inventory.json
 ```
@@ -36,13 +36,14 @@ without adjacent manifests are listed explicitly; remote images are counted
 without fetching them. Fenced examples are excluded. Reference-style and HTML
 images are outside this command's scope.
 
-At the baseline, the white paper references 48 unique local inline images,
-31 with adjacent manifests; the companion references 30, all with adjacent
-manifests. Seventeen older white-paper images and the README's market-landscape
-image lack adjacent figure manifests. This is a coverage disclosure, not a new
-manifest requirement: the repository's existing figure gate checks its required
-set, and all 50 committed figure manifests pass that gate. This inventory does
-not create retroactive provenance for legacy assets.
+With the completed automatic-wave history figure and inline studio views, the
+white paper references 51 unique local inline images (34 with adjacent
+manifests), and the companion references 31 (all 31 with adjacent manifests).
+Seventeen older white-paper images and the README's market-landscape image lack
+adjacent figure manifests. This is a coverage disclosure, not a new manifest
+requirement: the repository's existing figure gate checks its required set, and
+all 51 committed figure manifests pass that gate. This inventory does not create
+retroactive provenance for legacy assets.
 
 Use the normal generated-document and figure checks alongside this inventory:
 

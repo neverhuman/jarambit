@@ -40,3 +40,4 @@ docs/figures/whitepaper/blender/hero_section.webp
 
 docs/figures/engineering_gates/fig_certifiable_pipeline.png
 docs/figures/engineering_gates/fig_plateau_history.png
+docs/figures/engineering_gates/fig_wave_history.png

@@ -66,5 +66,57 @@ class PaperObservations(unittest.TestCase):
                 for key in ['stl', 'd1', 'scorecard', 'rs', 'leaderboard']:
                     self.assertIn(artifacts[key], manifest['inputs'])
 
+    def test_wave_history_points_and_paper_gate_coverage(self):
+        ledger = load('docs/figures/engineering_gates/wave_history_points.json')
+        manifest = load('docs/figures/engineering_gates/fig_wave_history.png.manifest.json')
+        self.assertFalse(ledger['preview'])
+        self.assertNotIn('/home/', json.dumps(manifest))
+        for point in ledger['points']:
+            with self.subTest(point=point):
+                self.assertIn(point['source'], manifest['inputs'])
+                document = load(point['source'])
+                if 'pointers' in point:
+                    values = [at(document, p) for p in point['pointers']]
+                    expected = {'min': min, 'median': statistics.median, 'max': max}[point['reduction']](values)
+                else:
+                    expected = at(document, point['pointer'])
+                self.assertIs(type(point['value']), type(expected))
+                self.assertEqual(point['value'], expected)
+        wp = (ROOT / 'docs/WHITEPAPER.md').read_text(encoding='utf-8')
+        eg = (ROOT / 'docs/ENGINEERING_GATES_AND_EVOLUTION.md').read_text(encoding='utf-8')
+        proof = load('evidence/evolve_certifiable/manifest.json')['automatic']
+        gates = [
+            'cad_watertight_and_single_solid', 'geometric_and_holder_gates',
+            'karambit_ring_and_curved_claw', 'c6_aesthetic_floor',
+            'cert_hiker_180n', 'cert_hunter_260n', 'strict_hunter_260n',
+            'cert_ring_pull_1500n', 'twist_body_1p82nm', 'twist_tip_only_1p82nm',
+            'twist_tip_submodel_strict_1p82nm', 'solid_tip_3d_p2_1p82nm',
+            'side_a4_buckling_and_support', 'failure_sequence_1p2',
+            'plate_gci_valid_3level', 'dolfinx_cross_check_2pct',
+        ]
+        self.assertEqual(set(gates), set(load(proof['artifacts']['scorecard'])['weighted_cad_score']['gates']))
+        for idx, gate in enumerate(gates, 1):
+            self.assertIn(f'##### {idx}. `{gate}`', wp, msg=gate)
+            self.assertIn(f'#### {idx}. `{gate}`', eg, msg=gate)
+        for group in ('aesthetic_and_geometric', 'floors_828_joint', 'twist_floor_body_and_tipsub_strict',
+                      'solid_tip_sf', 'strict_hunter_lateral', 'seq_hard', 'human_max',
+                      'fatigue', 'gate_s_sharp_law', 'gate_s_tip_point_brep'):
+            self.assertIn(f'`{group}`', wp, msg=group)
+            self.assertIn(f'`{group}`', eg, msg=group)
+        for scene in gates + ['hero_oblique', 'hero_reverse', 'hero_section']:
+            self.assertIn(f'](figures/whitepaper/blender/{scene}.webp)', wp, msg=scene)
+            self.assertIn(f'](figures/whitepaper/blender/{scene}.webp)', eg, msg=scene)
+        for doc_name, doc in (('WHITEPAPER.md', wp), ('ENGINEERING_GATES_AND_EVOLUTION.md', eg)):
+            self.assertIn('![Selected Stage-2 wave history](figures/engineering_gates/fig_wave_history.png)', doc, msg=doc_name)
+            for w in ledger['waves']:
+                self.assertIn(
+                    f"| {w['wave']} | {w['assessed']} | {w['qualified']} | "
+                    f"{w['mass_g_min']:.3f} / {w['mass_g_median']:.3f} | "
+                    f"{w['w_cad_max']:.6f} / {w['w_cad_median']:.6f} |",
+                    doc,
+                    msg=f"{doc_name}:{w['wave']}",
+                )
+
 
 if __name__ == '__main__':unittest.main()
+

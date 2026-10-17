@@ -39,11 +39,11 @@ Each gate below names its exact Boolean predicate, computation, retained evidenc
 
 #### 1. `cad_watertight_and_single_solid` — exported topology and mass consistency
 
-**Predicate and units.** `cad_info.cad_valid` requires the STEP header, exactly **one** `MANIFOLD_SOLID_BREP`, at least **one** closed shell, STL **zero boundary edges**, **zero non-manifold edges**, maximum directed-edge repeat **one**, and relative solid/raster mass difference **≤0.01** (1%). In the post-#84 independent evaluator it also requires OpenCascade `BRepCheck_Analyzer` validity and exactly **one** transferred solid. Lengths are mm. At Ti-6Al-4V density, $m_{3D}=0.00443 V$ grams for volume in mm³; $V=|\sum a\cdot(b\times c)|/6$ on oriented surface triangles.
+**Predicate and units.** `cad_info.cad_valid` requires the STEP header, an explicit millimetre length-unit declaration (`has_mm_decl`) in the comment/string-stripped `DATA;` section, exactly **one** `MANIFOLD_SOLID_BREP`, at least **one** closed shell, STL **zero boundary edges**, **zero non-manifold edges**, maximum directed-edge repeat **one**, relative solid/raster mass difference **≤0.01** (1%), and byte-for-byte deterministic export regeneration (`regeneration_deterministic` across `.step`, `.stl`, and `_surface.json`). In the post-#84 independent evaluator it also requires OpenCascade `BRepCheck_Analyzer` validity and exactly **one** transferred solid. Lengths are mm. At Ti-6Al-4V density, $m_{3D}=0.00443 V$ grams for volume in mm³; $V=|\sum a\cdot(b\times c)|/6$ on oriented surface triangles.
 
 **Computation.** [export.rs::solid, census, volume](../crates/crescent/src/export.rs), [evaluate_cad_candidate.py::verify_step_and_stl, evaluate_candidate](../ops/ci/evaluate_cad_candidate.py), [verify_genome_export.py::inspect_step](../ops/ci/verify_genome_export.py), and native [cad_ingest.rs::mesh_census_and_volume](../crates/crescent/src/cad_ingest.rs). Mesh census and volume consistency alone do not prove absence of every triangle self-intersection or valid sewing; the independent OCC observation is an additional check on the STEP, not a deduction from its entity names.
 
-**Verification.** CAD ingest/export unit controls and `ops/ci/tests/test_cad_battery.py`; retained `*_cad_eval.json:/cad` binds actual STEP/STL hashes and mass observations. The #84 proof retains `*_step_check.json` with one valid OCC solid. T02 governs whether those observations may support a claim; it is not a topology solver. The #75 regression `plate_and_export_use_actual_thickness_not_the_thicker_machining_base` additionally checks geometry consistency. `previous_model_certificates_never_bind_to_the_new_surface_model` rejects reuse from the old geometry regime.
+**Verification.** CAD ingest/export unit controls and [test_cad_battery.py](../ops/ci/tests/test_cad_battery.py) (`test_evaluated_genome_spec_binds_step_stl_surface_and_fails_closed`); retained `*_cad_eval.json:/cad` binds actual STEP/STL/surface hashes, mass observations, and battery `geom.unit`, `geom.one_solid`, `geom.mass`, and `geom.pin` verdicts. The #84 proof retains `*_step_check.json` with one valid OCC solid. T02 governs whether those observations may support a claim; it is not a topology solver. The #75 regression `plate_and_export_use_actual_thickness_not_the_thicker_machining_base` additionally checks geometry consistency. `previous_model_certificates_never_bind_to_the_new_surface_model` rejects reuse from the old geometry regime.
 
 [Blender topology plate](figures/whitepaper/blender/cad_watertight_and_single_solid.webp).
 
@@ -179,9 +179,9 @@ The linearized eigenproblem is $K_{support}\phi=\lambda_{cr}G\phi$, with compres
 
 **Exact implemented predicate:** the sequence-ratio GCI record must have truthy **`sequence_valid` and `observable_valid`**. This particular W_CAD Boolean does **not** test a maximum GCI percentage or require `fit_status == admissible_estimate`. Consequently, its name must not be read as proof of an asymptotic error bound. The battery's `plate.gci` reports the fuller convergence status separately.
 
-**Computation:** [plate_gci_probe.rs](../crates/crescent/examples/plate_gci_probe.rs) supplies three **4, 1, 0.25 mm²** meshes, corresponding to edge-size ratio $r=2$, to [evaluate_cad_candidate.py](../ops/ci/evaluate_cad_candidate.py) / [fem_solid/gci.py::compute_gci](../fem_solid/gci.py). For a monotone valid sequence, $p=\ln|\epsilon_{32}/\epsilon_{21}|/\ln r$ and $GCI_{fine}=1.25| (f_1-f_2)/f_1 |/(r^p-1)$. The frozen implementation refuses unsupported sequences and distinguishes oscillation, unresolved/precision-limited behavior and nonpositive order. Three levels alone do not establish asymptotic validity.
+**Computation:** [plate_gci_probe.rs](../crates/crescent/examples/plate_gci_probe.rs) and [gci.rs::run_plate_gci_3level](../crates/crescent/src/gci.rs) supply three **4, 1, 0.25 mm²** meshes, corresponding to edge-size ratio $r=2$, to [evaluate_cad_candidate.py](../ops/ci/evaluate_cad_candidate.py) / [fem_solid/gci.py::compute_gci](../fem_solid/gci.py), hashing the actual solved `fem::report_fields` triangulation (`mesh_hash(&fl.xy, &fl.tris, &fl.te)`) at each refinement level rather than a separate re-mesh. For a monotone valid sequence, $p=\ln|\epsilon_{32}/\epsilon_{21}|/\ln r$ and $GCI_{fine}=1.25| (f_1-f_2)/f_1 |/(r^p-1)$. The frozen implementation refuses unsupported sequences and distinguishes oscillation, unresolved/precision-limited behavior and nonpositive order. Three levels alone do not establish asymptotic validity.
 
-**Verification:** `fem_solid/tests/test_gci.py`, `test_gci_evidence.py`, actual T01's 18 catalog entries, saved candidate mesh/observable identities. Several historical scorecards show this W_CAD flag as true while the battery records oscillatory GCI. We retain that discrepancy explicitly; no threshold or gate code is changed in this paper update.
+**Verification:** `fem_solid/tests/test_gci.py`, `test_gci_evidence.py`, `test_plate_gci_hashes_the_solved_mesh_not_a_separate_remesh` in [test_cad_battery.py](../ops/ci/tests/test_cad_battery.py), actual T01's 18 catalog entries, and saved candidate mesh/observable identities. Several historical scorecards show this W_CAD flag as true while the battery records oscillatory GCI. We retain that discrepancy explicitly; no threshold or gate code is changed in this paper update.
 
 [Blender mesh plate](figures/whitepaper/blender/plate_gci_valid_3level.webp).
 
@@ -484,9 +484,28 @@ The w300 row describes only the committed capture, **not the later completed wav
 
 W298's best coarse shortfall falls from 3.104828 to 3.068820 over three rounds without producing a qualified candidate. Its initial 68 birth instances contain 56 distinct CSV rows. All four leading first-round parents are p14, and later births lose p10; w401c3 exhibits the opposite family loss. The retained [geometry-only replay](../evidence/evolution_plateau/2026-10-17/rejection_probe.json), with [input/source/output hashes](../evidence/evolution_plateau/2026-10-17/probe_manifest.json), finds all 25 w300 control-family births rejected by the assumed holder envelope, despite aesthetic acceptance. Family preservation addresses one measured selection failure. It supplies neither a physical-feasibility proof nor measured improvement under the new selection rule; no matched post-fix run is retained here.
 
-### V-J. History source availability
+### V-J. Completed automatic-wave observations
 
-The audited [main snapshot `0c8d169`](https://github.com/neverhuman/jarambit/tree/0c8d1692a2f113726f8a74aa796f2dea959b7094) contains no `out/w301/leaderboard.json` through `out/w308/leaderboard.json`. These waves are excluded from the published history. Local file hashes identify observed bytes but do not preserve unavailable inputs or establish reproducibility. Later publication requires committed source bytes and regenerated input ledgers; no missing-wave statistics are inferred.
+The following observations come from committed automatic-wave leaderboards, reduced by [`wave_history.py`](../ops/render/paper/wave_history.py) into [`wave_history_points.json`](figures/engineering_gates/wave_history_points.json).
+
+| Wave | Assessed | Qualified | Raster mass min / median (g) | W_CAD best / median |
+|---|---:|---:|---:|---:|
+| w298 | 6 | 0 | 83.047 / 83.059 | -5.565306 / -5.765577 |
+| w401c3 | 4 | 0 | 82.861 / 82.869 | -5.556243 / -5.569637 |
+
+![Selected Stage-2 wave history](figures/engineering_gates/fig_wave_history.png)
+
+*Figure 8b. Script-generated from the named leaderboards: dots show selected-assessment medians, lines their ranges, and diamonds the lowest mass or highest W_CAD. These are not full-population statistics. Different wave source/model identities are not a controlled comparison of the search rule.*
+
+Completed independent solves do not imply physical qualification. All listed leaderboards retain `qualified_count=0` and `champion=null`. No certified winner is established.
+
+Later waves enter only after an actual leaderboard exists and the cited evidence is committed on main. No missing wave or unfinished assessment is imputed. The catalog remains 23 subjects ×18 evaluators (414 cells); wave assessments are a separate denominator.
+
+Sources: `evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/leaderboard.json` (SHA256 `4ae79eda014772848816063e3f157d8899fa3968385700d7d600b2527d9aa748`); `evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json` (SHA256 `1c2916610a51bb5a1114210e29e587791ad5d2849ccf1f9f206e1c5c276a80fe`).
+
+### V-K. History source availability
+
+The audited [main snapshot `0c8d169`](https://github.com/neverhuman/jarambit/tree/0c8d1692a2f113726f8a74aa796f2dea959b7094) contains no `out/w301/leaderboard.json` through `out/w308/leaderboard.json` (and retains only the partial first-screen capture for `w300` rather than a completed `out/w300/leaderboard.json`). These waves are excluded from the published history. Local file hashes identify observed bytes but do not preserve unavailable inputs or establish reproducibility. Later publication requires committed source bytes and regenerated input ledgers; no missing-wave statistics are inferred.
 
 ## VI. Blender atlas and reproducible publication
 
@@ -518,6 +537,9 @@ python3 ops/render/paper/battery.py
 python3 ops/render/paper/verification.py
 python3 ops/render/paper/certifiable.py
 python3 ops/render/paper/plateau.py
+python3 ops/render/paper/wave_history.py --output-dir docs/figures/engineering_gates \
+  evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/leaderboard.json \
+  evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json
 BLENDER=$HOME/opt/blender-4.5.3-linux-x64/blender \
   python3 ops/render/blender/render_paper.py
 python3 ops/render/paper/build_pdf.py

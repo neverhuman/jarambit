@@ -1,0 +1,21 @@
+{
+ "extra": {
+  "command": "python3 ops/render/paper/wave_history.py --output-dir docs/figures/engineering_gates evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/leaderboard.json evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+  "point_ledger": "docs/figures/engineering_gates/wave_history_points.json",
+  "preview": false,
+  "scope": "Selected Stage-2 observations, not population estimates or new certification",
+  "snippet_sha256": "3e37c77e734d87f362633267f4a25691adf053172c9a320f4a2cb4b803070661",
+  "source_commit": "dae022254e950e5500bd59634398b0e548e112d2"
+ },
+ "figure": "docs/figures/engineering_gates/fig_wave_history.png",
+ "figure_sha256": "59070f06bbf8b145e389520e53ba8d162ef4c2abcc68c6e7b636085782352ebb",
+ "inputs": {
+  "docs/figures/engineering_gates/wave_history_points.json": "33ce525deaf10975f9f3c310fc258290400b43e08c669f0ce5be89e131c79427",
+  "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/leaderboard.json": "4ae79eda014772848816063e3f157d8899fa3968385700d7d600b2527d9aa748",
+  "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json": "1c2916610a51bb5a1114210e29e587791ad5d2849ccf1f9f206e1c5c276a80fe",
+  "ops/render/paper/wave_history.py": "99f808b6f9d082f57420b564ecfc8ce03858c94e6efc2175a53bb016ff0b38a5"
+ },
+ "norms": {},
+ "schema": 1,
+ "script": "ops/render/paper/wave_history.py"
+}

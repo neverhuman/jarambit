@@ -120,14 +120,19 @@ def write_history_manifest(figure, ledger, snippet, data, source_root, paths):
     inputs = source_inputs(data, source_root)
     script = Path(__file__).resolve()
     inputs.update({figlib.rel(p):figlib.sha256_file(p) for p in (ledger, script)})
+    rel_or_str = str if data['preview'] else figlib.rel
+    cmd = (['python3', figlib.rel(script)]
+           + ([] if not data['preview'] and source_root.resolve() == ROOT else ['--source-root', rel_or_str(source_root)])
+           + ['--output-dir', rel_or_str(figure.parent)]
+           + (['--preview'] if data['preview'] else [])
+           + [rel_or_str(p) for p in paths])
     manifest = dict(schema=1, figure=figlib.rel(figure),
         figure_sha256=figlib.sha256_file(figure), script=figlib.rel(script),
         inputs=inputs, norms={}, extra={
             'preview':data['preview'], 'source_commit':data['source_commit'],
             'scope':'Selected Stage-2 observations, not population estimates or new certification',
-            'point_ledger':str(ledger), 'snippet_sha256':figlib.sha256_file(snippet),
-            'command':' '.join([sys.executable, str(script), '--source-root', str(source_root),
-                '--output-dir', str(figure.parent)] + (['--preview'] if data['preview'] else []) + [str(p) for p in paths])})
+            'point_ledger':rel_or_str(ledger), 'snippet_sha256':figlib.sha256_file(snippet),
+            'command':' '.join(cmd)})
     Path(str(figure)+'.manifest.json').write_text(json.dumps(manifest, indent=1, sort_keys=True)+'\n')
     return manifest
 
