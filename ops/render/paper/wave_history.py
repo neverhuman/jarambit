@@ -18,19 +18,33 @@ sys.path.insert(0, str(ROOT / 'ops/wave_figures'))
 import figlib
 
 
+def _resolve_committed_input(relative, raw, source_root, base_commit):
+    committed = subprocess.run(['git', 'show', base_commit + ':' + relative],
+        cwd=source_root, capture_output=True, check=False)
+    if committed.returncode == 0 and committed.stdout == raw:
+        return base_commit
+    if source_root == ROOT and relative.startswith('evidence/evolution_waves/'):
+        head_blob = subprocess.run(['git', 'show', 'HEAD:' + relative],
+            cwd=source_root, capture_output=True, check=False)
+        if head_blob.returncode == 0 and head_blob.stdout == raw:
+            log = subprocess.run(['git', 'log', '-n', '1', '--format=%H', 'HEAD', '--', relative],
+                cwd=source_root, capture_output=True, text=True, check=False)
+            commit = log.stdout.strip()
+            if log.returncode == 0 and commit:
+                pin_blob = subprocess.run(['git', 'show', commit + ':' + relative],
+                    cwd=source_root, capture_output=True, check=False)
+                if pin_blob.returncode == 0 and pin_blob.stdout == raw:
+                    return commit
+    raise ValueError('Wave evidence is not committed unchanged on origin/main: ' + relative)
+
+
 def read_board(path, source_root, preview=False, source_commit='origin/main'):
     path = path.resolve()
     source_root = source_root.resolve()
     relative = path.relative_to(source_root).as_posix()
     raw = path.read_bytes()
     if not preview:
-        committed = subprocess.run(['git', 'show', source_commit + ':' + relative],
-            cwd=source_root, capture_output=True, check=False)
-        if committed.returncode and source_root == ROOT and relative.startswith('evidence/evolution_waves/'):
-            committed = subprocess.run(['git', 'show', 'HEAD:' + relative],
-                cwd=source_root, capture_output=True, check=False)
-        if committed.returncode or committed.stdout != raw:
-            raise ValueError('Wave evidence is not committed unchanged on origin/main: ' + relative)
+        _resolve_committed_input(relative, raw, source_root, source_commit)
     board = json.loads(raw)
     if board['schema'] != 'jarambit.auto_evolve.leaderboard.v2':
         raise ValueError('Unsupported leaderboard schema')
@@ -75,13 +89,14 @@ def collect(paths, source_root, preview=False):
     source_root = source_root.resolve()
     if not preview and source_root != ROOT:
         raise ValueError('Publish from this worktree so manifest inputs stay repository-relative')
-    source_commit = None
+    base_commit = None
     if not preview:
         ref = subprocess.run(['git', 'rev-parse', '--verify', 'origin/main^{commit}'],
             cwd=source_root, capture_output=True, text=True, check=False)
         if ref.returncode:
             raise ValueError('Cannot resolve committed wave evidence on origin/main')
-        source_commit = ref.stdout.strip()
+        base_commit = ref.stdout.strip()
+    input_commits = {}
     summary_by_wave = {}
     summary_sha = None
     summary_rel = 'evidence/evolution_waves/2026-10-17/wave_summary.json'
@@ -89,21 +104,27 @@ def collect(paths, source_root, preview=False):
     if summary_path.is_file():
         summary_raw = summary_path.read_bytes()
         if not preview:
-            committed = subprocess.run(['git', 'show', source_commit + ':' + summary_rel],
-                cwd=source_root, capture_output=True, check=False)
-            if committed.returncode and source_root == ROOT:
-                committed = subprocess.run(['git', 'show', 'HEAD:' + summary_rel],
-                    cwd=source_root, capture_output=True, check=False)
-            if committed.returncode or committed.stdout != summary_raw:
-                raise ValueError('Wave summary is not committed unchanged: ' + summary_rel)
+            input_commits[summary_rel] = _resolve_committed_input(
+                summary_rel, summary_raw, source_root, base_commit)
         summary_sha = hashlib.sha256(summary_raw).hexdigest()
         summary_doc = json.loads(summary_raw)
         for w_entry in summary_doc.get('waves', []):
             summary_by_wave[w_entry['wave']] = w_entry
     points, waves = [], []
+    expected_shas = {}
+    if summary_sha is not None:
+        expected_shas[summary_rel] = summary_sha
     for path in paths:
-        board, sha = read_board(path, source_root, preview, source_commit=source_commit)
+        board, sha = read_board(path, source_root, preview, source_commit=base_commit)
         source = str(path.resolve()) if preview else path.resolve().relative_to(ROOT).as_posix()
+        if not preview:
+            expected_shas[source] = sha
+            if source_root == ROOT and source.startswith('evidence/evolution_waves/'):
+                log = subprocess.run(['git', 'log', '-n', '1', '--format=%H', 'HEAD', '--', source],
+                    cwd=source_root, capture_output=True, text=True, check=False)
+                input_commits[source] = log.stdout.strip() if log.returncode == 0 and log.stdout.strip() else base_commit
+            else:
+                input_commits[source] = base_commit
         wave = path.parent.name
         if any(w['wave'] == wave for w in waves):
             raise ValueError('Duplicate wave: ' + wave)
@@ -140,16 +161,38 @@ def collect(paths, source_root, preview=False):
         host = meta.get('host') or ('xbabe3' if 'xbabe3' in source else 'xbabe2')
         commits = meta.get('engine_commits', [])
         stage1_rounds = meta.get('stage1_rounds', [])
-        stage1_str = ', '.join(f"{r['survivors']}/{r['births']}" for r in stage1_rounds) if stage1_rounds else 'n/a'
-        waves.append(dict(wave=wave, host=host, engine_commits=commits,
+        stage1_str = ', '.join(
+            f"{r['survivors']}/{r['births']}" + ('*' if r.get('verification') == 'unverified_producer_reported' else '')
+            for r in stage1_rounds
+        ) if stage1_rounds else 'n/a'
+        wave_entry = dict(wave=wave, host=host, engine_commits=commits,
             stage1_screens=stage1_str, source=source, sha256=sha,
             assessed=board['assessed_count'], qualified=board['qualified_count'],
-            champion=board['champion'], unverified=board['unverified'], **summaries))
+            champion=board['champion'], unverified=board['unverified'], **summaries)
+        if not preview and source in input_commits:
+            wave_entry['source_commit'] = input_commits[source]
+        waves.append(wave_entry)
+    source_commit = base_commit
+    if not preview and any(c != base_commit for c in input_commits.values()):
+        ev_log = subprocess.run(['git', 'log', '-n', '1', '--format=%H', 'HEAD', '--', 'evidence/evolution_waves/2026-10-17'],
+            cwd=source_root, capture_output=True, text=True, check=False)
+        ev_commit = ev_log.stdout.strip()
+        if ev_log.returncode or not ev_commit:
+            raise ValueError('Cannot resolve committed evolution_waves evidence commit')
+        for rel_in, exp_sha in expected_shas.items():
+            chk = subprocess.run(['git', 'show', ev_commit + ':' + rel_in],
+                cwd=source_root, capture_output=True, check=False)
+            if chk.returncode or hashlib.sha256(chk.stdout).hexdigest() != exp_sha:
+                raise ValueError(f'Evidence commit {ev_commit} does not contain exact input {rel_in}')
+        source_commit = ev_commit
     result = dict(schema=1, preview=preview, source_commit=source_commit,
         scope='Selected completed Stage-2 assessments; no new solve or certification.',
         waves=waves, points=points)
     if summary_sha is not None:
         result['summary_sha256'] = summary_sha
+    if not preview and any(c != base_commit for c in input_commits.values()):
+        result['base_commit'] = base_commit
+        result['input_commits'] = input_commits
     return result
 
 
@@ -182,13 +225,21 @@ def write_history_manifest(figure, ledger, snippet, data, source_root, paths):
            + ['--output-dir', rel_or_str(figure.parent)]
            + (['--preview'] if data['preview'] else [])
            + [rel_or_str(p) for p in paths])
+    extra = {
+        'preview': data['preview'],
+        'source_commit': data['source_commit'],
+        'scope': 'Selected Stage-2 observations, not population estimates or new certification',
+        'point_ledger': rel_or_str(ledger),
+        'snippet_sha256': figlib.sha256_file(snippet),
+        'command': ' '.join(cmd),
+    }
+    if 'base_commit' in data:
+        extra['base_commit'] = data['base_commit']
+    if 'input_commits' in data:
+        extra['input_commits'] = data['input_commits']
     manifest = dict(schema=1, figure=figlib.rel(figure),
         figure_sha256=figlib.sha256_file(figure), script=figlib.rel(script),
-        inputs=inputs, norms={}, extra={
-            'preview':data['preview'], 'source_commit':data['source_commit'],
-            'scope':'Selected Stage-2 observations, not population estimates or new certification',
-            'point_ledger':rel_or_str(ledger), 'snippet_sha256':figlib.sha256_file(snippet),
-            'command':' '.join(cmd)})
+        inputs=inputs, norms={}, extra=extra)
     Path(str(figure)+'.manifest.json').write_text(json.dumps(manifest, indent=1, sort_keys=True)+'\n')
     return manifest
 
@@ -197,7 +248,7 @@ def build_insertion(waves, preview=False):
     has_ext = all('battery_pass_count_max' in w and 'solid_tip_sf_max' in w for w in waves)
     lines = ['#### Completed automatic-wave observations', '',
         '**LOCAL DRAFT — runtime inputs are not yet committed on main. Do not insert into the paper.**' if preview else
-        'The following observations come from committed automatic-wave leaderboards and `evidence/evolution_waves/2026-10-17/wave_summary.json`.', '']
+        'The following observations come from committed automatic-wave leaderboards and `evidence/evolution_waves/2026-10-17/wave_summary.json` (`*` marks unverified producer-reported Stage-1 round counts whose raw `round_*.json` files remain outside Git).', '']
     if has_ext:
         lines += [
             '| Wave (host / commit) | Stage-1 screens | Assessed | Qualified | Mass min / med (g) | W_CAD best / med | Battery best / med (/18) | Solid-tip SF best / med |',
