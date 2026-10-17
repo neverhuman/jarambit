@@ -106,7 +106,11 @@ class PaperObservations(unittest.TestCase):
         for scene in gates + ['hero_oblique', 'hero_reverse', 'hero_section']:
             self.assertIn(f'](figures/whitepaper/blender/{scene}.webp)', wp, msg=scene)
             self.assertIn(f'](figures/whitepaper/blender/{scene}.webp)', eg, msg=scene)
-        summary = load('evidence/evolution_waves/2026-10-17/wave_summary.json')
+        import copy, importlib.util, tempfile
+        spec = importlib.util.spec_from_file_location('summarize', ROOT / 'evidence/evolution_waves/2026-10-17/summarize.py')
+        summarize_mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(summarize_mod)
+        summary = summarize_mod.verify_and_summarize()
         self.assertIn('evidence/evolution_waves/2026-10-17/wave_summary.json', manifest['inputs'])
         self.assertEqual(summary['total_waves'], 17)
         self.assertEqual(summary['total_assessed'], 69)
@@ -114,8 +118,34 @@ class PaperObservations(unittest.TestCase):
         self.assertEqual(summary['total_unverified'], 5)
         self.assertEqual(summary['total_stage1_births'], 2936)
         self.assertEqual(summary['total_stage1_survivors'], 2606)
+        self.assertEqual(summary['plotted_waves_count'], 15)
+        self.assertEqual(summary['plotted_assessed'], 64)
+        self.assertEqual(summary['plotted_stage1_births'], 2700)
+        self.assertEqual(summary['plotted_stage1_survivors'], 2398)
+        self.assertEqual(summary['stage1_committed_verified_files'], 14)
+        self.assertEqual(summary['stage1_unverified_producer_files'], 60)
+        self.assertEqual(manifest['extra']['source_commit'], ledger['source_commit'])
+        self.assertEqual(manifest['extra']['input_commits'], ledger['input_commits'])
+        with tempfile.TemporaryDirectory() as tmp:
+            bad_path = Path(tmp) / 'wave_summary.json'
+            bad_agg = copy.deepcopy(summary)
+            bad_agg['total_assessed'] = 999
+            bad_path.write_text(json.dumps(bad_agg))
+            with self.assertRaises(ValueError):
+                summarize_mod.verify_and_summarize(bad_path)
+            bad_s1 = copy.deepcopy(summary)
+            bad_s1['waves'][0]['stage1_rounds'][0]['births_sha256'] = '0' * 64
+            bad_path.write_text(json.dumps(bad_s1))
+            with self.assertRaises(ValueError):
+                summarize_mod.verify_and_summarize(bad_path)
+            bad_unv = copy.deepcopy(summary)
+            bad_unv['waves'][2]['stage1_rounds'][0]['births_sha256'] = '1234567890abcdef' * 4
+            bad_path.write_text(json.dumps(bad_unv))
+            with self.assertRaises(ValueError):
+                summarize_mod.verify_and_summarize(bad_path)
         for doc_name, doc in (('WHITEPAPER.md', wp), ('ENGINEERING_GATES_AND_EVOLUTION.md', eg)):
             self.assertIn('![Selected Stage-2 wave history](figures/engineering_gates/fig_wave_history.png)', doc, msg=doc_name)
+            self.assertIn('`2,700` births, `2,398` survivors, `64` assessments', doc, msg=doc_name)
             for w in ledger['waves']:
                 commits = '/'.join(c[:7] for c in w['engine_commits'])
                 label = f"`{w['wave']}` (`{w['host']}` / `{commits}`)"
