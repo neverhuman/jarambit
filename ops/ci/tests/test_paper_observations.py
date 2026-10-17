@@ -106,13 +106,25 @@ class PaperObservations(unittest.TestCase):
         for scene in gates + ['hero_oblique', 'hero_reverse', 'hero_section']:
             self.assertIn(f'](figures/whitepaper/blender/{scene}.webp)', wp, msg=scene)
             self.assertIn(f'](figures/whitepaper/blender/{scene}.webp)', eg, msg=scene)
+        summary = load('evidence/evolution_waves/2026-10-17/wave_summary.json')
+        self.assertIn('evidence/evolution_waves/2026-10-17/wave_summary.json', manifest['inputs'])
+        self.assertEqual(summary['total_waves'], 17)
+        self.assertEqual(summary['total_assessed'], 69)
+        self.assertEqual(summary['total_qualified'], 0)
+        self.assertEqual(summary['total_unverified'], 5)
+        self.assertEqual(summary['total_stage1_births'], 2936)
+        self.assertEqual(summary['total_stage1_survivors'], 2606)
         for doc_name, doc in (('WHITEPAPER.md', wp), ('ENGINEERING_GATES_AND_EVOLUTION.md', eg)):
             self.assertIn('![Selected Stage-2 wave history](figures/engineering_gates/fig_wave_history.png)', doc, msg=doc_name)
             for w in ledger['waves']:
+                commits = '/'.join(c[:7] for c in w['engine_commits'])
+                label = f"`{w['wave']}` (`{w['host']}` / `{commits}`)"
                 self.assertIn(
-                    f"| {w['wave']} | {w['assessed']} | {w['qualified']} | "
+                    f"| {label} | {w['stage1_screens']} | {w['assessed']} | {w['qualified']} | "
                     f"{w['mass_g_min']:.3f} / {w['mass_g_median']:.3f} | "
-                    f"{w['w_cad_max']:.6f} / {w['w_cad_median']:.6f} |",
+                    f"{w['w_cad_max']:.6f} / {w['w_cad_median']:.6f} | "
+                    f"{w['battery_pass_count_max']} / {w['battery_pass_count_median']:g} | "
+                    f"{w['solid_tip_sf_max']:.4f} / {w['solid_tip_sf_median']:.4f} |",
                     doc,
                     msg=f"{doc_name}:{w['wave']}",
                 )

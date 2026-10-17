@@ -8,13 +8,20 @@
 \pagestyle{fancy}
 \fancyhf{}
 \providecommand{\PaperVersion}{unversioned}
+\providecommand{\PaperTrailerID}{00000000000000000000000000000000}
+\ifdefined\pdfvariable
+\pdfvariable suppressoptionalinfo \numexpr 1+2+4+8\relax
+\edef\setpdfid{\pdfvariable trailerid {[<\PaperTrailerID> <\PaperTrailerID>]}}\setpdfid
+\fi
 \fancyhead[L]{\small JARAMBIT / Technical paper}
 \fancyhead[R]{\small Version \PaperVersion{} · corrected certification}
 \fancyfoot[C]{\small\thepage}
 \setlength{\headheight}{14pt}
 \setlength{\emergencystretch}{3em}
+\ifdefined\LTpre
 \setlength{\LTpre}{8pt}
 \setlength{\LTpost}{8pt}
+\fi
 \setcounter{tocdepth}{2}
-\AtBeginDocument{\hypersetup{colorlinks=true,linkcolor=teal,urlcolor=teal,citecolor=teal}}
+\AtBeginDocument{\hypersetup{colorlinks=true,linkcolor=teal,urlcolor=teal,citecolor=teal,pdfinfo={Creator={LaTeX via pandoc},Producer={LuaHBTeX}}}}
 \floatplacement{figure}{htbp}

@@ -20,11 +20,15 @@ import figlib
 
 def read_board(path, source_root, preview=False, source_commit='origin/main'):
     path = path.resolve()
-    relative = path.relative_to(source_root.resolve()).as_posix()
+    source_root = source_root.resolve()
+    relative = path.relative_to(source_root).as_posix()
     raw = path.read_bytes()
     if not preview:
         committed = subprocess.run(['git', 'show', source_commit + ':' + relative],
             cwd=source_root, capture_output=True, check=False)
+        if committed.returncode and source_root == ROOT and relative.startswith('evidence/evolution_waves/'):
+            committed = subprocess.run(['git', 'show', 'HEAD:' + relative],
+                cwd=source_root, capture_output=True, check=False)
         if committed.returncode or committed.stdout != raw:
             raise ValueError('Wave evidence is not committed unchanged on origin/main: ' + relative)
     board = json.loads(raw)
@@ -50,6 +54,12 @@ def read_board(path, source_root, preview=False, source_commit='origin/main'):
         for metric in ('mass_g', 'w_cad', 'g1'):
             if isinstance(row[metric], bool) or not math.isfinite(row[metric]):
                 raise ValueError('Non-finite observation: ' + metric)
+        if 'battery_pass_count' in row:
+            if type(row['battery_pass_count']) is not int or not (0 <= row['battery_pass_count'] <= 18):
+                raise ValueError('Invalid battery_pass_count observation')
+        for metric in ('solid_tip_sf', 'strict_hunter_sf'):
+            if metric in row and (isinstance(row[metric], bool) or not math.isfinite(row[metric])):
+                raise ValueError('Non-finite observation: ' + metric)
     if board['qualified_count'] != sum(d['qualified'] for d in designs):
         raise ValueError('Qualification count mismatch')
     champion = board['champion']
@@ -72,6 +82,24 @@ def collect(paths, source_root, preview=False):
         if ref.returncode:
             raise ValueError('Cannot resolve committed wave evidence on origin/main')
         source_commit = ref.stdout.strip()
+    summary_by_wave = {}
+    summary_sha = None
+    summary_rel = 'evidence/evolution_waves/2026-10-17/wave_summary.json'
+    summary_path = source_root / summary_rel
+    if summary_path.is_file():
+        summary_raw = summary_path.read_bytes()
+        if not preview:
+            committed = subprocess.run(['git', 'show', source_commit + ':' + summary_rel],
+                cwd=source_root, capture_output=True, check=False)
+            if committed.returncode and source_root == ROOT:
+                committed = subprocess.run(['git', 'show', 'HEAD:' + summary_rel],
+                    cwd=source_root, capture_output=True, check=False)
+            if committed.returncode or committed.stdout != summary_raw:
+                raise ValueError('Wave summary is not committed unchanged: ' + summary_rel)
+        summary_sha = hashlib.sha256(summary_raw).hexdigest()
+        summary_doc = json.loads(summary_raw)
+        for w_entry in summary_doc.get('waves', []):
+            summary_by_wave[w_entry['wave']] = w_entry
     points, waves = [], []
     for path in paths:
         board, sha = read_board(path, source_root, preview, source_commit=source_commit)
@@ -81,7 +109,11 @@ def collect(paths, source_root, preview=False):
             raise ValueError('Duplicate wave: ' + wave)
         designs = board['designs']
         summaries = {}
-        for metric in ('mass_g', 'w_cad', 'g1'):
+        metrics = ['mass_g', 'w_cad', 'g1']
+        for ext in ('battery_pass_count', 'solid_tip_sf', 'strict_hunter_sf'):
+            if all(ext in row for row in designs):
+                metrics.append(ext)
+        for metric in metrics:
             values = [row[metric] for row in designs]
             for operation, reduce in [('min', min), ('median', statistics.median), ('max', max)]:
                 value = reduce(values)
@@ -92,15 +124,33 @@ def collect(paths, source_root, preview=False):
         for key in ('assessed_count', 'qualified_count', 'champion', 'unverified'):
             points.append(dict(wave=wave, source=source, pointer='/' + key, value=board[key]))
         for i, row in enumerate(designs):
-            for key in ('label', 'mass_g', 'w_cad', 'g1', 'all_16_gates', 'rs_v2_all_hard', 'qualified'):
+            row_keys = ['label', 'mass_g', 'w_cad', 'g1', 'all_16_gates', 'rs_v2_all_hard', 'qualified']
+            for ext in ('battery_pass_count', 'solid_tip_sf', 'strict_hunter_sf'):
+                if ext in row:
+                    row_keys.append(ext)
+            for key in row_keys:
                 points.append(dict(wave=wave, source=source,
                     pointer=f'/designs/{i}/{key}', value=row[key]))
-        waves.append(dict(wave=wave, source=source, sha256=sha,
+        meta = summary_by_wave.get(wave, {})
+        if meta:
+            if meta.get('leaderboard_sha256') != sha:
+                raise ValueError('Wave summary leaderboard_sha256 mismatch for ' + wave)
+            if meta.get('assessed_count') != board['assessed_count'] or meta.get('qualified_count') != board['qualified_count']:
+                raise ValueError('Wave summary count mismatch for ' + wave)
+        host = meta.get('host') or ('xbabe3' if 'xbabe3' in source else 'xbabe2')
+        commits = meta.get('engine_commits', [])
+        stage1_rounds = meta.get('stage1_rounds', [])
+        stage1_str = ', '.join(f"{r['survivors']}/{r['births']}" for r in stage1_rounds) if stage1_rounds else 'n/a'
+        waves.append(dict(wave=wave, host=host, engine_commits=commits,
+            stage1_screens=stage1_str, source=source, sha256=sha,
             assessed=board['assessed_count'], qualified=board['qualified_count'],
             champion=board['champion'], unverified=board['unverified'], **summaries))
-    return dict(schema=1, preview=preview, source_commit=source_commit,
+    result = dict(schema=1, preview=preview, source_commit=source_commit,
         scope='Selected completed Stage-2 assessments; no new solve or certification.',
         waves=waves, points=points)
+    if summary_sha is not None:
+        result['summary_sha256'] = summary_sha
+    return result
 
 
 def source_inputs(data, source_root):
@@ -111,6 +161,12 @@ def source_inputs(data, source_root):
         if figlib.sha256_file(path) != wave['sha256']:
             raise ValueError('Source changed after leaderboard admission: ' + str(path))
         inputs[figlib.rel(path)] = wave['sha256']
+    summary_path = source_root / 'evidence/evolution_waves/2026-10-17/wave_summary.json'
+    if 'summary_sha256' in data:
+        if not summary_path.is_file() or figlib.sha256_file(summary_path) != data['summary_sha256']:
+            raise ValueError('Source changed after summary admission: ' + str(summary_path))
+        if not data['preview']:
+            inputs[figlib.rel(summary_path)] = data['summary_sha256']
     return inputs
 
 
@@ -138,19 +194,41 @@ def write_history_manifest(figure, ledger, snippet, data, source_root, paths):
 
 
 def build_insertion(waves, preview=False):
+    has_ext = all('battery_pass_count_max' in w and 'solid_tip_sf_max' in w for w in waves)
     lines = ['#### Completed automatic-wave observations', '',
         '**LOCAL DRAFT — runtime inputs are not yet committed on main. Do not insert into the paper.**' if preview else
-        'The following observations come from committed automatic-wave leaderboards.', '',
-        '| Wave | Assessed | Qualified | Raster mass min / median (g) | W_CAD best / median |',
-        '|---|---:|---:|---:|---:|']
-    for w in waves:
-        lines.append(f"| {w['wave']} | {w['assessed']} | {w['qualified']} | {w['mass_g_min']:.3f} / {w['mass_g_median']:.3f} | {w['w_cad_max']:.6f} / {w['w_cad_median']:.6f} |")
+        'The following observations come from committed automatic-wave leaderboards and `evidence/evolution_waves/2026-10-17/wave_summary.json`.', '']
+    if has_ext:
+        lines += [
+            '| Wave (host / commit) | Stage-1 screens | Assessed | Qualified | Mass min / med (g) | W_CAD best / med | Battery best / med (/18) | Solid-tip SF best / med |',
+            '|---|---|---:|---:|---:|---:|---:|---:|',
+        ]
+        for w in waves:
+            commits = '/'.join(c[:7] for c in w.get('engine_commits', [])) or 'n/a'
+            host = w.get('host', 'xbabe2')
+            s1 = w.get('stage1_screens', 'n/a')
+            b_med = w['battery_pass_count_median']
+            b_med_str = f"{b_med:.1f}" if isinstance(b_med, float) and not b_med.is_integer() else f"{int(b_med)}"
+            lines.append(
+                f"| `{w['wave']}` (`{host}` / `{commits}`) | {s1} | {w['assessed']} | {w['qualified']} | "
+                f"{w['mass_g_min']:.3f} / {w['mass_g_median']:.3f} | "
+                f"{w['w_cad_max']:.6f} / {w['w_cad_median']:.6f} | "
+                f"{w['battery_pass_count_max']} / {b_med_str} | "
+                f"{w['solid_tip_sf_max']:.4f} / {w['solid_tip_sf_median']:.4f} |"
+            )
+    else:
+        lines += [
+            '| Wave | Assessed | Qualified | Raster mass min / median (g) | W_CAD best / median |',
+            '|---|---:|---:|---:|---:|',
+        ]
+        for w in waves:
+            lines.append(f"| {w['wave']} | {w['assessed']} | {w['qualified']} | {w['mass_g_min']:.3f} / {w['mass_g_median']:.3f} | {w['w_cad_max']:.6f} / {w['w_cad_median']:.6f} |")
     lines += ['', '![Selected Stage-2 wave history](figures/engineering_gates/fig_wave_history.png)', '',
-        '*Script-generated from the named leaderboards: dots show selected-assessment medians, lines their ranges, and diamonds the lowest mass or highest W_CAD. These are not full-population statistics. Different wave source/model identities are not a controlled comparison of the search rule.*', '',
+        '*Script-generated from the named leaderboards: dots show selected-assessment medians, lines their ranges, and diamonds the best per-wave W_CAD, battery pass count (/18), or 3D P2 solid-tip safety factor (`solid_tip_SF`). These are not full-population statistics. Different wave source/model identities are not a controlled comparison of the search rule.*', '',
         'Completed independent solves do not imply physical qualification. ' +
         ('All listed leaderboards retain `qualified_count=0` and `champion=null`. No certified winner is established.' if not any(w['qualified'] for w in waves) else
          'Qualification flags retain their recorded scope; promotion requires the separate committed export/certificate checks.'), '',
-        'Later waves enter only after an actual leaderboard exists and the cited evidence is committed on main. No missing wave or unfinished assessment is imputed. The catalog remains 23 subjects ×18 evaluators (414 cells); wave assessments are a separate denominator.', '',
+        'Two additional `xbabe3` runs recorded in `evidence/evolution_waves/2026-10-17/wave_summary.json` contain non-empty `unverified` lists (`w400c3`: `assessed_count=0`, `unverified_count=4`; `w403c3`: `assessed_count=5`, `unverified_count=1`, best `W_CAD = -5.556243`, best `solid_tip_SF = 0.6708`, battery `11/18`) and are excluded from the plotted completed-wave series by `read_board` while retained in committed evidence. Later waves enter only after an actual leaderboard exists and the cited evidence is committed on main. No missing wave or unfinished assessment is imputed. The catalog remains 23 subjects × 18 evaluators (414 cells); wave assessments are a separate denominator.', '',
         'Sources: ' + '; '.join(f"`{w['source']}` (SHA256 `{w['sha256']}`)" for w in waves) + '.', '']
     return '\n'.join(lines)
 
@@ -167,36 +245,65 @@ def generate(paths, source_root, output, preview=False):
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     import numpy as np
-    plt.rcParams.update({'font.family':'DejaVu Sans', 'font.size':10,
+    plt.rcParams.update({'font.family':'DejaVu Sans', 'font.size':9.5,
         'axes.spines.top':False, 'axes.spines.right':False,
         'figure.facecolor':'#faf9f5', 'axes.facecolor':'#faf9f5', 'savefig.facecolor':'#faf9f5'})
-    fig, axes = plt.subplots(1, 3, figsize=(12, 4.4))
+    fig, axes_grid = plt.subplots(2, 2, figsize=(13.6, 7.6))
+    axes = axes_grid.ravel()
     x = np.arange(len(waves))
-    for ax, metric, title in [(axes[0], 'mass_g', '(a) Selected Stage-2 mass (g)'),
-                              (axes[1], 'w_cad', '(b) Selected Stage-2 W_CAD')]:
+    has_batt = all('battery_pass_count_max' in w for w in waves)
+    has_tip = all('solid_tip_sf_max' in w for w in waves)
+    panels = [
+        (axes[0], 'w_cad', '(a) Stage-2 W_CAD (best & median/range)', None),
+        (axes[1], 'battery_pass_count' if has_batt else 'mass_g',
+         '(b) CAD battery pass count (/18)' if has_batt else '(b) Selected Stage-2 mass (g)',
+         18.0 if has_batt else None),
+        (axes[2], 'solid_tip_sf' if has_tip else 'g1',
+         '(c) 3D P2 solid-tip SF (threshold = 1.00)' if has_tip else '(c) Selected Stage-2 G1',
+         1.0 if has_tip else None),
+    ]
+    for ax, metric, title, target in panels:
         for i, wave in enumerate(waves):
             lo, med, hi = (wave[metric + '_' + k] for k in ('min', 'median', 'max'))
-            ax.plot([i, i], [lo, hi], color='#007f86', lw=3)
-            ax.scatter([i], [med], color='#007f86', s=42, zorder=3)
-            ax.scatter([i], [lo if metric == 'mass_g' else hi], marker='D',
-                color='#ad4e43', s=28, zorder=4)
-        ax.set_title(title); ax.grid(axis='y', alpha=.2)
-    axes[0].plot([], [], 'o', color='#007f86', label='Median; line = min–max')
-    axes[0].plot([], [], 'D', color='#ad4e43', label='Lowest mass / highest W_CAD')
-    axes[0].legend(fontsize=8)
-    axes[2].bar(x-.16, [w['assessed'] for w in waves], .32, color='#007f86', label='Assessed')
-    axes[2].bar(x+.16, [w['qualified'] for w in waves], .32, color='#ad4e43', label='Qualified')
+            color = '#5b4b8a' if wave.get('host') == 'xbabe3' else '#007f86'
+            ax.plot([i, i], [lo, hi], color=color, lw=2.8)
+            ax.scatter([i], [med], color=color, s=38, zorder=3)
+            best_val = lo if metric == 'mass_g' else hi
+            ax.scatter([i], [best_val], marker='D', color='#ad4e43', s=30, zorder=4)
+        if target is not None:
+            ax.axhline(target, color='#8c2d19', ls='--', lw=1.1, alpha=0.75, label=f'Target ({target:g})')
+        ax.set_title(title, fontweight='bold', fontsize=10)
+        ax.grid(axis='y', alpha=.22)
+    axes[0].plot([], [], 'o', color='#007f86', label='xbabe2 median; line = min–max')
+    axes[0].plot([], [], 'o', color='#5b4b8a', label='xbabe3 median; line = min–max')
+    axes[0].plot([], [], 'D', color='#ad4e43', label='Per-wave best')
+    axes[0].legend(fontsize=8, loc='lower right')
+    if has_batt:
+        axes[1].set_ylim(9.5, 18.8)
+        axes[1].legend(fontsize=8, loc='lower right')
+    if has_tip:
+        axes[2].set_ylim(0.58, 1.05)
+        axes[2].legend(fontsize=8, loc='upper left')
+    axes[3].bar(x-.16, [w['assessed'] for w in waves], .32, color='#007f86', label='Assessed')
+    axes[3].bar(x+.16, [w['qualified'] for w in waves], .32, color='#ad4e43', label='Qualified')
     for i, w in enumerate(waves):
-        axes[2].text(i, w['assessed']+.08, f"{w['qualified']}/{w['assessed']}", ha='center')
-    axes[2].set_title('(c) Qualification among assessed rows'); axes[2].legend(fontsize=8)
+        axes[3].text(i, w['assessed']+.1, f"{w['qualified']}/{w['assessed']}", ha='center', fontsize=7.5)
+    axes[3].set_ylim(0, max(w['assessed'] for w in waves) + 1.5)
+    axes[3].set_title('(d) Qualification among assessed rows', fontweight='bold', fontsize=10)
+    axes[3].legend(fontsize=8, loc='upper center', ncol=2)
+    axes[3].grid(axis='y', alpha=.22)
+    tick_labels = [f"{w['wave']}\n(n={w['assessed']})" for w in waves]
     for ax in axes:
-        ax.set_xticks(x, [w['wave'] + f"\nn={w['assessed']}" for w in waves]); ax.set_xlim(-.6, len(waves)-.4)
-    scope = 'LOCAL PREVIEW — UNCOMMITTED INPUTS; NOT PAPER EVIDENCE' if preview else 'Committed automatic-wave observations'
-    fig.suptitle(scope, fontsize=12, color='#9b4c36' if preview else '#243641')
-    fig.text(.02, .025, 'Selected Stage-2 candidates only; not full-population medians, pass rates, or a controlled comparison of search versions.', fontsize=9)
-    fig.tight_layout(rect=(0, .08, 1, .95))
+        ax.set_xticks(x, tick_labels, fontsize=7.5, rotation=30 if len(waves) > 6 else 0)
+        ax.set_xlim(-.6, len(waves)-.4)
+    scope = 'LOCAL PREVIEW — UNCOMMITTED INPUTS; NOT PAPER EVIDENCE' if preview else 'Committed automatic-wave observations (xbabe2 w298, w300–w310; xbabe3 w401c3, w402c3, w404c3)'
+    fig.suptitle(scope, fontsize=11.5, fontweight='bold', color='#9b4c36' if preview else '#243641')
+    fig.text(.015, .015, 'Selected Stage-2 candidates only; not full-population medians, pass rates, or a controlled comparison across engine commits. All waves have qualified_count=0.', fontsize=8.5)
+    fig.tight_layout(rect=(0, .04, 1, .95))
     output.mkdir(parents=True, exist_ok=True)
-    figure = output / 'fig_wave_history.png'; fig.savefig(figure, dpi=145); plt.close(fig)
+    figure = output / 'fig_wave_history.png'
+    fig.savefig(figure, dpi=145, metadata={'Software': None})
+    plt.close(fig)
     ledger = output / 'wave_history_points.json'
     ledger.write_text(json.dumps(data, indent=1, sort_keys=True)+'\n')
     snippet = output / 'iv_d_wave_history.md'; snippet.write_text(build_insertion(waves, preview))
