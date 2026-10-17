@@ -138,5 +138,51 @@ class PdfProvenance(unittest.TestCase):
                     self.run_build(staged_mutation=substitute)
                 self.assertFalse((self.root/'target/paper'/(NAME+'.pdf.manifest.json')).exists())
 
+    def test_two_builds_across_distinct_roots_hash_identically(self):
+        from PIL import Image
+        folder = ROOT/'target/paper/test-pdf-provenance'
+        orig_check_output = subprocess.check_output
+        pdfs = []
+        manifests = []
+        for label in ('root-a', 'root-b'):
+            with tempfile.TemporaryDirectory(dir=folder, prefix=label+'-') as tmp:
+                root = Path(tmp)
+                docs = root/'docs';docs.mkdir()
+                (docs/'VERSION').write_text('1.0.0\n')
+                im = Image.new('RGB', (16, 16), (36, 54, 65))
+                im.save(docs/'neutral.png', format='PNG', compress_level=9)
+                im.save(docs/'neutral.webp', format='WEBP', lossless=True)
+                (docs/(NAME+'.md')).write_text(
+                    '# Neutral report\n**Jepson Taylor**\n\n'
+                    'A deterministic packaging control with inline code `ops/render/paper/build_pdf.py` '
+                    'and relative link [VERSION](VERSION).\n\n'
+                    '| Control | Status |\n|---|---|\n| Packaging | Deterministic |\n\n'
+                    '![Neutral PNG](neutral.png)\n\n![Neutral WebP](neutral.webp)\n'
+                )
+                here = root/'ops/render/paper';here.mkdir(parents=True)
+                for support_name in ('build_pdf.py', 'publication.lua', 'header.tex'):
+                    (here/support_name).write_bytes((ROOT/'ops/render/paper'/support_name).read_bytes())
+                def capture_git(command, **kwargs):
+                    if command[:3] == ['git', 'rev-parse', 'HEAD']:return self.head+'\n'
+                    if command[:2] == ['git', 'show']:return '1792195200\n'
+                    return orig_check_output(command, **kwargs)
+                with patch.object(build_pdf, 'ROOT', root), \
+                     patch.object(build_pdf, 'HERE', here), \
+                     patch.object(build_pdf, '__file__', str(here/'build_pdf.py')), \
+                     patch.object(build_pdf.subprocess, 'check_output', side_effect=capture_git):
+                    build_pdf.build(NAME)
+                pdf_bytes = (root/'target/paper'/(NAME+'.pdf')).read_bytes()
+                manifest = json.loads((root/'target/paper'/(NAME+'.pdf.manifest.json')).read_text())
+                log_text = (root/'target/paper'/(NAME+'.build.log')).read_text()
+                self.assertEqual(log_text, '')
+                self.assertEqual(hashlib.sha256(pdf_bytes).hexdigest(), manifest['output_sha256'])
+                pdfs.append(pdf_bytes)
+                manifests.append(manifest)
+        self.assertEqual(hashlib.sha256(pdfs[0]).hexdigest(), hashlib.sha256(pdfs[1]).hexdigest())
+        self.assertEqual(pdfs[0], pdfs[1])
+        self.assertEqual(manifests[0]['output_sha256'], manifests[1]['output_sha256'])
+        self.assertEqual(manifests[0]['inputs'], manifests[1]['inputs'])
+
 
 if __name__ == '__main__':unittest.main()
+

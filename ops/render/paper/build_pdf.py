@@ -42,11 +42,15 @@ def build(name):
     head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     inputs={};renderer_inputs={}
     source=ROOT/'docs'/f'{name}.md';text=capture(source,inputs).decode('utf-8')
-    epoch=int(subprocess.check_output(['git','show','-s','--format=%ct',head],cwd=ROOT,text=True))
+    source_rel=str(source.relative_to(ROOT))
+    commit_epoch=int(subprocess.check_output(['git','show','-s','--format=%ct',head],cwd=ROOT,text=True))
+    epoch=int(os.environ.get('SOURCE_DATE_EPOCH',commit_epoch))
     version_path=ROOT/'docs/VERSION';version=capture(version_path,inputs).decode('utf-8').strip()
     if not re.fullmatch(r'[0-9A-Za-z.-]+',version):raise ValueError('invalid version')
+    trailer_id=hashlib.sha256(f'{head}:{name}:{version}:{epoch}:{inputs[source_rel]}'.encode('utf-8')).hexdigest()[:32].upper()
     version_header=out/'version.tex'
-    stage(version_header,('\\newcommand{\\PaperVersion}{'+version+'}\n').encode('utf-8'),renderer_inputs)
+    version_tex=f'\\newcommand{{\\PaperVersion}}{{{version}}}\n\\newcommand{{\\PaperTrailerID}}{{{trailer_id}}}\n'
+    stage(version_header,version_tex.encode('utf-8'),renderer_inputs)
     title=text.splitlines()[0].removeprefix('# ')
     text=text.split('\n',1)[1].replace('**Jepson Taylor**\n','',1)
     if name=='WHITEPAPER':
@@ -63,7 +67,7 @@ def build(name):
         if path.suffix=='.webp':
             from PIL import Image
             encoded=io.BytesIO()
-            with Image.open(io.BytesIO(raw)) as im:im.convert('RGB').save(encoded,format='PNG')
+            with Image.open(io.BytesIO(raw)) as im:im.convert('RGB').save(encoded,format='PNG',compress_level=9)
             raw=encoded.getvalue()
         stage(staged_image,raw,renderer_inputs)
         return f'![{match.group(1)}]({staged_image})'
@@ -94,7 +98,7 @@ def build(name):
          '--metadata','date='+datetime.fromtimestamp(epoch,timezone.utc).strftime('%d %B %Y')+f' · Version {version} (corrected certification)',
          '--standalone','--lua-filter',str(support['publication.lua']),
          '--include-in-header',str(version_header),'--include-in-header',str(support['header.tex']),'-o',str(pdf)]
-    env=dict(os.environ,TEXMFOUTPUT=str(out),SOURCE_DATE_EPOCH=str(epoch))
+    env=dict(os.environ,TEXMFOUTPUT=str(out),SOURCE_DATE_EPOCH=str(epoch),FORCE_SOURCE_DATE='1',TZ='UTC',LC_ALL='C.UTF-8')
     with (out/f'{name}.build.log').open('w') as log:
         run=subprocess.run(['nice','-n','10']+cmd,cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT)
     if run.returncode:raise RuntimeError(f'PDF build failed; see {out/name}.build.log')
