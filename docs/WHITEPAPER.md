@@ -504,25 +504,25 @@ W298's best coarse shortfall falls from 3.104828 to 3.068820 over three rounds w
 
 #### Completed automatic-wave observations
 
-The following observations come from committed automatic-wave leaderboards and [`wave_summary.json`](../evidence/evolution_waves/2026-10-17/wave_summary.json) (verified by [`summarize.py`](../evidence/evolution_waves/2026-10-17/summarize.py)), reduced by [`wave_history.py`](../ops/render/paper/wave_history.py) into [`wave_history_points.json`](figures/engineering_gates/wave_history_points.json). Across all 17 committed wave records (`w298` and `w300`–`w310` on `xbabe2`; `w400c3`–`w404c3` on `xbabe3`), Stage-1 screened 2,936 births (2,606 survivors) and Stage-2 completed 69 independent assessments (`0` qualified, `5` unverified across `w400c3` and `w403c3`). The 15 zero-unverified completed waves (2,784 births, 2,474 survivors, 64 assessments) are tabulated and plotted below:
+The following observations come from committed automatic-wave leaderboards and [`wave_summary.json`](../evidence/evolution_waves/2026-10-17/wave_summary.json) (verified by [`summarize.py`](../evidence/evolution_waves/2026-10-17/summarize.py)), reduced by [`wave_history.py`](../ops/render/paper/wave_history.py) into [`wave_history_points.json`](figures/engineering_gates/wave_history_points.json). Across all 17 committed wave records (`w298` and `w300`–`w310` on `xbabe2`; `w400c3`–`w404c3` on `xbabe3`), Stage-2 completed 69 independent assessments (`0` qualified, `5` unverified across `w400c3` and `w403c3`), all verified directly from committed `leaderboard.json` files. For Stage-1 (`2,936` births / `2,606` survivors across all 17 waves; `2,700` births / `2,398` survivors across the 15 plotted waves), 7 of the 37 rounds (14 `round_*_births.json` / `round_*_screen.json` files under `evidence/evolution_plateau/2026-10-17/`: `w298` rounds 0–2, `w300` round 0, `w401c3` rounds 0–1, and `w402c3` round 0; `448` births / `379` survivors) are verified against committed raw JSON in Git, while the remaining 30 rounds (60 birth/screen digests; `2,488` births / `2,227` survivors across all 17 waves, or `2,252` births / `2,019` survivors across the 15 plotted waves, marked `*` below) are unverified producer-reported host metadata whose raw `round_*.json` files remain outside Git. The 15 zero-unverified completed waves (`2,700` births, `2,398` survivors, `64` assessments) are tabulated and plotted below:
 
 | Wave (host / commit) | Stage-1 screens | Assessed | Qualified | Mass min / med (g) | W_CAD best / med | Battery best / med (/18) | Solid-tip SF best / med |
 |---|---|---:|---:|---:|---:|---:|---:|
 | `w298` (`xbabe2` / `ae86f18`) | 53/68, 63/64, 63/64 | 6 | 0 | 83.047 / 83.059 | -5.565306 / -5.765577 | 12 / 11 | 0.6694 / 0.6527 |
-| `w300` (`xbabe2` / `9d64160`) | 64/100, 92/96 | 4 | 0 | 83.324 / 86.927 | -5.389172 / -5.557408 | 11 / 11 | 0.6932 / 0.6747 |
-| `w301` (`xbabe2` / `7cb952e/9d64160`) | 83/100, 95/96 | 4 | 0 | 83.364 / 85.708 | -5.287856 / -5.754633 | 11 / 11 | 0.6932 / 0.6613 |
-| `w302` (`xbabe2` / `edc0f40`) | 81/100, 92/96 | 4 | 0 | 88.015 / 89.720 | -5.321724 / -5.529497 | 11 / 11 | 0.6932 / 0.6747 |
-| `w303` (`xbabe2` / `edc0f40`) | 82/100, 94/96 | 4 | 0 | 86.854 / 89.144 | -5.473826 / -5.558305 | 11 / 11 | 0.6746 / 0.6740 |
-| `w304` (`xbabe2` / `805faaa`) | 80/100, 91/96 | 4 | 0 | 86.841 / 89.162 | -5.280962 / -5.453326 | 11 / 11 | 0.6934 / 0.6885 |
-| `w305` (`xbabe2` / `805faaa`) | 82/100, 93/96 | 4 | 0 | 86.888 / 91.307 | -5.276352 / -5.326866 | 11 / 11 | 0.6934 / 0.6885 |
-| `w306` (`xbabe2` / `805faaa`) | 83/100, 94/96 | 4 | 0 | 91.408 / 92.118 | -5.286892 / -5.402706 | 12 / 11.5 | 0.6892 / 0.6741 |
-| `w307` (`xbabe2` / `2539448`) | 84/100, 92/96 | 4 | 0 | 91.491 / 92.165 | -5.226954 / -5.470097 | 15 / 14 | 0.7068 / 0.6607 |
-| `w308` (`xbabe2` / `a8a7de4`) | 83/100, 94/96 | 4 | 0 | 91.437 / 92.141 | -5.306115 / -5.323521 | 14 / 14 | 0.6938 / 0.6841 |
-| `w309` (`xbabe2` / `0c8d169`) | 86/100, 92/96 | 4 | 0 | 91.420 / 92.143 | -5.183108 / -5.211783 | 15 / 14 | 0.7163 / 0.7090 |
-| `w310` (`xbabe2` / `dae0222`) | 82/100, 94/96 | 4 | 0 | 87.531 / 91.412 | -5.183108 / -5.297277 | 15 / 14.5 | 0.7113 / 0.7067 |
+| `w300` (`xbabe2` / `9d64160`) | 64/100, 92/96* | 4 | 0 | 83.324 / 86.927 | -5.389172 / -5.557408 | 11 / 11 | 0.6932 / 0.6747 |
+| `w301` (`xbabe2` / `7cb952e/9d64160`) | 83/100*, 95/96* | 4 | 0 | 83.364 / 85.708 | -5.287856 / -5.754633 | 11 / 11 | 0.6932 / 0.6613 |
+| `w302` (`xbabe2` / `edc0f40`) | 81/100*, 92/96* | 4 | 0 | 88.015 / 89.720 | -5.321724 / -5.529497 | 11 / 11 | 0.6932 / 0.6747 |
+| `w303` (`xbabe2` / `edc0f40`) | 82/100*, 94/96* | 4 | 0 | 86.854 / 89.144 | -5.473826 / -5.558305 | 11 / 11 | 0.6746 / 0.6740 |
+| `w304` (`xbabe2` / `805faaa`) | 80/100*, 91/96* | 4 | 0 | 86.841 / 89.162 | -5.280962 / -5.453326 | 11 / 11 | 0.6934 / 0.6885 |
+| `w305` (`xbabe2` / `805faaa`) | 82/100*, 93/96* | 4 | 0 | 86.888 / 91.307 | -5.276352 / -5.326866 | 11 / 11 | 0.6934 / 0.6885 |
+| `w306` (`xbabe2` / `805faaa`) | 83/100*, 94/96* | 4 | 0 | 91.408 / 92.118 | -5.286892 / -5.402706 | 12 / 11.5 | 0.6892 / 0.6741 |
+| `w307` (`xbabe2` / `2539448`) | 84/100*, 92/96* | 4 | 0 | 91.491 / 92.165 | -5.226954 / -5.470097 | 15 / 14 | 0.7068 / 0.6607 |
+| `w308` (`xbabe2` / `a8a7de4`) | 83/100*, 94/96* | 4 | 0 | 91.437 / 92.141 | -5.306115 / -5.323521 | 14 / 14 | 0.6938 / 0.6841 |
+| `w309` (`xbabe2` / `0c8d169`) | 86/100*, 92/96* | 4 | 0 | 91.420 / 92.143 | -5.183108 / -5.211783 | 15 / 14 | 0.7163 / 0.7090 |
+| `w310` (`xbabe2` / `dae0222`) | 82/100*, 94/96* | 4 | 0 | 87.531 / 91.412 | -5.183108 / -5.297277 | 15 / 14.5 | 0.7113 / 0.7067 |
 | `w401c3` (`xbabe3` / `6438f07`) | 45/52, 47/48 | 4 | 0 | 82.861 / 82.869 | -5.556243 / -5.569637 | 11 / 11 | 0.6716 / 0.6701 |
-| `w402c3` (`xbabe3` / `6438f07`) | 44/52, 46/48 | 4 | 0 | 83.072 / 83.292 | -5.570458 / -5.640241 | 11 / 11 | 0.6693 / 0.6535 |
-| `w404c3` (`xbabe3` / `7cb952e`) | 32/52, 45/48, 47/48 | 6 | 0 | 82.865 / 82.971 | -5.496513 / -5.664944 | 12 / 11 | 0.6777 / 0.6534 |
+| `w402c3` (`xbabe3` / `6438f07`) | 44/52, 46/48* | 4 | 0 | 83.072 / 83.292 | -5.570458 / -5.640241 | 11 / 11 | 0.6693 / 0.6535 |
+| `w404c3` (`xbabe3` / `7cb952e`) | 32/52*, 45/48*, 47/48* | 6 | 0 | 82.865 / 82.971 | -5.496513 / -5.664944 | 12 / 11 | 0.6777 / 0.6534 |
 
 ![Selected Stage-2 wave history](figures/engineering_gates/fig_wave_history.png)
 
@@ -536,7 +536,7 @@ Sources: `evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/leaderboard.json
 
 #### History source availability
 
-The earlier [main snapshot `0c8d169`](https://github.com/neverhuman/jarambit/tree/0c8d1692a2f113726f8a74aa796f2dea959b7094) contained no `out/w301/leaderboard.json` through `out/w308/leaderboard.json` (and retained only the partial first-screen capture for `w300`). The completed `leaderboard.json` and `RESULT.md`/`leaderboard.md` outputs for `xbabe2` `w300`–`w310` and `xbabe3` `w400c3`–`w404c3`, together with SHA-256 bindings to their Stage-1 birth/screen files, are now committed under [`evidence/evolution_waves/2026-10-17/`](../evidence/evolution_waves/2026-10-17/wave_summary.json) while keeping the `08:02 UTC` plateau snapshot under `evidence/evolution_plateau/2026-10-17/` immutable. Per-candidate large binary exports (`.step`, `.stl`, `_D1.json`, `_surface.json`) for `w300`–`w310` and `w400c3`–`w404c3` remain in host `out/` directories rather than Git, and any subsequent waves (`w311+`, `w405c3+`) remain excluded until their completed leaderboards are committed on `main`; no missing-wave statistics are inferred.
+The earlier [main snapshot `0c8d169`](https://github.com/neverhuman/jarambit/tree/0c8d1692a2f113726f8a74aa796f2dea959b7094) contained no `out/w301/leaderboard.json` through `out/w308/leaderboard.json` (and retained only the partial first-screen capture for `w300`). The completed Stage-2 `leaderboard.json` and `RESULT.md`/`leaderboard.md` outputs for `xbabe2` `w300`–`w310` and `xbabe3` `w400c3`–`w404c3` are now committed under [`evidence/evolution_waves/2026-10-17/`](../evidence/evolution_waves/2026-10-17/wave_summary.json) while keeping the `08:02 UTC` plateau snapshot under `evidence/evolution_plateau/2026-10-17/` immutable. Raw Stage-1 `round_*_births.json` and `round_*_screen.json` files are committed in Git for 7 of the 37 rounds (14 files under `evidence/evolution_plateau/2026-10-17/`); the remaining 30 Stage-1 rounds (60 birth/screen digests) are recorded in `wave_summary.json` as `unverified_producer_reported` host metadata because their raw `round_*.json` files and per-candidate large binary exports (`.step`, `.stl`, `_D1.json`, `_surface.json`) remain in host `out/` directories rather than Git. Any subsequent waves (`w311+`, `w405c3+`) remain excluded until their completed leaderboards are committed on `main`; no missing-wave statistics are inferred.
 
 ### IV-E. Certified-winner re-render slot and assessed-candidate studio views
 
