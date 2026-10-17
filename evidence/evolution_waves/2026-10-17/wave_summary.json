@@ -3,6 +3,7 @@
     "w400c3",
     "w403c3"
   ],
+  "plotted_assessed": 64,
   "plotted_completed_waves": [
     "w298",
     "w300",
@@ -20,14 +21,30 @@
     "w402c3",
     "w404c3"
   ],
+  "plotted_qualified": 0,
+  "plotted_stage1_births": 2700,
+  "plotted_stage1_survivors": 2398,
+  "plotted_stage1_unverified_producer_births": 2252,
+  "plotted_stage1_unverified_producer_survivors": 2019,
+  "plotted_unverified": 0,
+  "plotted_waves_count": 15,
   "schema": "jarambit.evolution_waves.summary.v1",
-  "scope": "Size-bounded summary and SHA-256 provenance of completed post-#84 automatic evolution waves across xbabe2 (w298, w300-w310) and xbabe3 (w400c3-w404c3); no design is qualified (qualified_count=0, champion=null).",
+  "scope": "Size-bounded summary and SHA-256 provenance of completed post-#84 automatic evolution waves across xbabe2 (w298, w300-w310) and xbabe3 (w400c3-w404c3). All 17 Stage-2 leaderboards (69 assessments) and 7 Stage-1 rounds (14 birth/screen JSON files under evidence/evolution_plateau/2026-10-17/) are verified against committed JSON in Git; the remaining 30 Stage-1 rounds (60 birth/screen digests) are explicitly labeled unverified_producer_reported host metadata because raw round_*.json files for those rounds remain outside Git. No design is qualified (qualified_count=0, champion=null).",
+  "stage1_committed_verified_births": 448,
+  "stage1_committed_verified_files": 14,
+  "stage1_committed_verified_rounds": 7,
+  "stage1_committed_verified_survivors": 379,
+  "stage1_unverified_producer_births": 2488,
+  "stage1_unverified_producer_files": 60,
+  "stage1_unverified_producer_rounds": 30,
+  "stage1_unverified_producer_survivors": 2227,
   "total_assessed": 69,
   "total_qualified": 0,
   "total_stage1_births": 2936,
   "total_stage1_survivors": 2606,
   "total_unverified": 5,
   "total_waves": 17,
+  "unverified_producer_stage1_digest_sha256": "db60e913d13e456bb8bf3629903c0dbc739c8b59a5d4a63477f92c9611a6be89",
   "waves": [
     {
       "assessed_count": 6,
@@ -92,6 +109,7 @@
       "result_md_path": null,
       "result_md_sha256": null,
       "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 3,
       "stage1_rounds": [
         {
           "best_screen_deficit": 3.1048283707200004,
@@ -100,8 +118,10 @@
             "p14": 34
           },
           "births": 68,
+          "births_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/round_00_births.json",
           "births_sha256": "31fa1989f0589880701951e69f29951584f7474d1fadae9c931da1f090f8966f",
           "round": 0,
+          "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/round_00_screen.json",
           "screen_sha256": "5a382c819aed487fd9f32993d445bd7a9832cd56ab4ded54b01cdf3771948ece",
           "seed": 2980,
           "survivor_families": {
@@ -109,7 +129,8 @@
             "p14": 26
           },
           "survivors": 53,
-          "unique_births": 56
+          "unique_births": 56,
+          "verification": "committed_json_verified"
         },
         {
           "best_screen_deficit": 3.068920295345873,
@@ -117,15 +138,18 @@
             "p14": 64
           },
           "births": 64,
+          "births_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/round_01_births.json",
           "births_sha256": "5c07ffe5ea52fab88d7a9591c7f0e77d4e41b7b47058e0730afcb1928f5c016c",
           "round": 1,
+          "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/round_01_screen.json",
           "screen_sha256": "c7f9963efff755c344a53931231fae80b7e05029c17845dc864e27144b23800f",
           "seed": 2980,
           "survivor_families": {
             "p14": 63
           },
           "survivors": 63,
-          "unique_births": 54
+          "unique_births": 54,
+          "verification": "committed_json_verified"
         },
         {
           "best_screen_deficit": 3.068820410046691,
@@ -133,18 +157,22 @@
             "p14": 64
           },
           "births": 64,
+          "births_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/round_02_births.json",
           "births_sha256": "bb87be57fc049efb4b7b3a39a926e2454c13556f2e31bbec72b9b8f47343387b",
           "round": 2,
+          "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/round_02_screen.json",
           "screen_sha256": "6a9f4ab68a8816afe1ef3b3170e5e6a7250a132052180dceede81aae9f4e5ddf",
           "seed": 2980,
           "survivor_families": {
             "p14": 63
           },
           "survivors": 63,
-          "unique_births": 55
+          "unique_births": 55,
+          "verification": "committed_json_verified"
         }
       ],
       "stage1_survivors_total": 179,
+      "stage1_unverified_producer_rounds": 0,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w298"
@@ -212,6 +240,7 @@
       "result_md_path": null,
       "result_md_sha256": null,
       "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 1,
       "stage1_rounds": [
         {
           "best_screen_deficit": 2.9905278249428906,
@@ -221,8 +250,10 @@
             "p14": 50
           },
           "births": 100,
+          "births_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w300/round_00_births.json",
           "births_sha256": "a30476f416a0feb3e61f9d66d7143dc856d4b7deb0df76cc14c13dfaf62990c4",
           "round": 0,
+          "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w300/round_00_screen.json",
           "screen_sha256": "aee8ec5447da5d6a75764a731e5f0c011baf9732c9a3f6e87c1d01328342586b",
           "seed": 2990,
           "survivor_families": {
@@ -230,7 +261,8 @@
             "p14": 43
           },
           "survivors": 64,
-          "unique_births": 84
+          "unique_births": 84,
+          "verification": "committed_json_verified"
         },
         {
           "best_screen_deficit": 2.9854507851972207,
@@ -239,8 +271,10 @@
             "p14": 48
           },
           "births": 96,
+          "births_path": null,
           "births_sha256": "6c3043504d55cb78ab13344b5f640bfcc4e3357eab20381162ce73791a039b80",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "c99f8564aac6769f5fd0917059f4b53fd6abbe7bfa04de1377f6c967f87c4314",
           "seed": 2990,
           "survivor_families": {
@@ -248,10 +282,12 @@
             "p14": 46
           },
           "survivors": 92,
-          "unique_births": 90
+          "unique_births": 90,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 156,
+      "stage1_unverified_producer_rounds": 1,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w300"
@@ -320,6 +356,7 @@
       "result_md_path": null,
       "result_md_sha256": null,
       "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 0,
       "stage1_rounds": [
         {
           "best_screen_deficit": 2.981053956357822,
@@ -328,8 +365,10 @@
             "p14": 75
           },
           "births": 100,
+          "births_path": null,
           "births_sha256": "3e4313540123d294e51c299ad0e01ca20a1d376d5451b622a4209f3001ebb019",
           "round": 0,
+          "screen_path": null,
           "screen_sha256": "82919d3b971cc983fadad7d81e9117d830a7bb773a0eb929190dc48a858c0fb5",
           "seed": 3010,
           "survivor_families": {
@@ -337,7 +376,8 @@
             "p14": 62
           },
           "survivors": 83,
-          "unique_births": 92
+          "unique_births": 92,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 2.954066471033076,
@@ -345,18 +385,22 @@
             "p10": 96
           },
           "births": 96,
+          "births_path": null,
           "births_sha256": "fab92b418ef72fe67cb8eabd7fb58a5f49e675fd95255569d615aadc24cdd095",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "b842ce2d92fafc24f08cac0ef12ee31e74ddaf692abfbc5fe716fb24d8adb096",
           "seed": 3010,
           "survivor_families": {
             "p10": 95
           },
           "survivors": 95,
-          "unique_births": 84
+          "unique_births": 84,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 178,
+      "stage1_unverified_producer_rounds": 2,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w301"
@@ -424,6 +468,7 @@
       "result_md_path": null,
       "result_md_sha256": null,
       "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 0,
       "stage1_rounds": [
         {
           "best_screen_deficit": 2.957027770002474,
@@ -432,8 +477,10 @@
             "p14": 50
           },
           "births": 100,
+          "births_path": null,
           "births_sha256": "ee31c01d3033432e48331ef55b0f56700e7450a70f3f6ee84dcdfb875a5009aa",
           "round": 0,
+          "screen_path": null,
           "screen_sha256": "0c717fe0a6ebb91261b5815d6c1aae49a0ffc9db578c5337d526cc1ef06ecbf3",
           "seed": 3020,
           "survivor_families": {
@@ -441,7 +488,8 @@
             "p14": 41
           },
           "survivors": 81,
-          "unique_births": 92
+          "unique_births": 92,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 2.8249680439163485,
@@ -450,8 +498,10 @@
             "p14": 24
           },
           "births": 96,
+          "births_path": null,
           "births_sha256": "7e27da8e000d19eafdf7d06548c1e01342524f8b0b58d852da2ee0856f374ebc",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "dc7f1e1f76d4898f3cf42b5f18423412fdedc774b4a9d85a7968f72319bf6ef1",
           "seed": 3020,
           "survivor_families": {
@@ -459,10 +509,12 @@
             "p14": 22
           },
           "survivors": 92,
-          "unique_births": 92
+          "unique_births": 92,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 173,
+      "stage1_unverified_producer_rounds": 2,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w302"
@@ -530,6 +582,7 @@
       "result_md_path": null,
       "result_md_sha256": null,
       "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 0,
       "stage1_rounds": [
         {
           "best_screen_deficit": 2.8695819524348343,
@@ -538,8 +591,10 @@
             "p14": 50
           },
           "births": 100,
+          "births_path": null,
           "births_sha256": "3e5b91253b20e792d77f95bf25db60da1503105970c85bb4ab661823c9074850",
           "round": 0,
+          "screen_path": null,
           "screen_sha256": "a24e6b50ddcc8cd5011c282c29234b26bf1d2d95c3e8ee3c9c564d9623c543a6",
           "seed": 3030,
           "survivor_families": {
@@ -547,7 +602,8 @@
             "p14": 41
           },
           "survivors": 82,
-          "unique_births": 87
+          "unique_births": 87,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 2.8670818545633403,
@@ -556,8 +612,10 @@
             "p14": 24
           },
           "births": 96,
+          "births_path": null,
           "births_sha256": "91f06b41c16589024cd2b94abe8b255bd0140ac7e1a9db30e7c376de906118e0",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "f90b3a756ce97ed814c99cced957119c0b919d1b965096b1f1d3e65d3e810346",
           "seed": 3030,
           "survivor_families": {
@@ -565,10 +623,12 @@
             "p14": 24
           },
           "survivors": 94,
-          "unique_births": 90
+          "unique_births": 90,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 176,
+      "stage1_unverified_producer_rounds": 2,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w303"
@@ -636,6 +696,7 @@
       "result_md_path": null,
       "result_md_sha256": null,
       "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 0,
       "stage1_rounds": [
         {
           "best_screen_deficit": 2.8641510875322913,
@@ -644,8 +705,10 @@
             "p14": 50
           },
           "births": 100,
+          "births_path": null,
           "births_sha256": "cbbf320be71a9d8f66b2a0f48bcd00379d4822d2c603f7ae453d885b76f03ed6",
           "round": 0,
+          "screen_path": null,
           "screen_sha256": "ffc1d9048c30448a2a4dd8f75eea4f0b86b86cd8377f88216321abee7679388c",
           "seed": 3040,
           "survivor_families": {
@@ -653,7 +716,8 @@
             "p14": 41
           },
           "survivors": 80,
-          "unique_births": 83
+          "unique_births": 83,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 2.8481488830550648,
@@ -662,8 +726,10 @@
             "p14": 24
           },
           "births": 96,
+          "births_path": null,
           "births_sha256": "7e70e3174fbe7600aa04d2b3226e661b1c5addeed1bd9dc9b6996c2b375dfbed",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "5833296ab9adf26b74ce6a574ed0a66c979c9059eaca869e7891194b4fb7c1f3",
           "seed": 3040,
           "survivor_families": {
@@ -671,10 +737,12 @@
             "p14": 23
           },
           "survivors": 91,
-          "unique_births": 84
+          "unique_births": 84,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 171,
+      "stage1_unverified_producer_rounds": 2,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w304"
@@ -742,6 +810,7 @@
       "result_md_path": null,
       "result_md_sha256": null,
       "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 0,
       "stage1_rounds": [
         {
           "best_screen_deficit": 2.846683450581881,
@@ -750,8 +819,10 @@
             "p14": 50
           },
           "births": 100,
+          "births_path": null,
           "births_sha256": "2e3e6b43aad93e25b56d76b912dbd1bf125df6603ed89c2238b9000265c2b720",
           "round": 0,
+          "screen_path": null,
           "screen_sha256": "560e27df5854da1cfe52bde075142cf3e55cd908e4fabe563675542ce72d0bd4",
           "seed": 3050,
           "survivor_families": {
@@ -759,7 +830,8 @@
             "p14": 41
           },
           "survivors": 82,
-          "unique_births": 84
+          "unique_births": 84,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 2.8120569263005692,
@@ -768,8 +840,10 @@
             "p14": 24
           },
           "births": 96,
+          "births_path": null,
           "births_sha256": "a1d721c72430d4e24660e95d97c0dabdd1e4b52d317b635b6e34bd8cf08d059f",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "564caf4480b66a608806146c8c77ecccfa4a855605edc1715ebda9d350465cd0",
           "seed": 3050,
           "survivor_families": {
@@ -777,10 +851,12 @@
             "p14": 23
           },
           "survivors": 93,
-          "unique_births": 87
+          "unique_births": 87,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 175,
+      "stage1_unverified_producer_rounds": 2,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w305"
@@ -848,6 +924,7 @@
       "result_md_path": null,
       "result_md_sha256": null,
       "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 0,
       "stage1_rounds": [
         {
           "best_screen_deficit": 2.8420810850588563,
@@ -856,8 +933,10 @@
             "p14": 50
           },
           "births": 100,
+          "births_path": null,
           "births_sha256": "778b7c366b456d7b679a404b76c70dd990ff9d6f75bf585171d934fe8a4f2bda",
           "round": 0,
+          "screen_path": null,
           "screen_sha256": "a7c5c5235ac7fd831b5eb141ccdcc061547a27a45133b5bfaec9b07b088abdc8",
           "seed": 3060,
           "survivor_families": {
@@ -865,7 +944,8 @@
             "p14": 40
           },
           "survivors": 83,
-          "unique_births": 83
+          "unique_births": 83,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 2.8350725987554775,
@@ -874,8 +954,10 @@
             "p14": 24
           },
           "births": 96,
+          "births_path": null,
           "births_sha256": "3f07e71bb9d7ad4e2dab6c77a959eb16eabcd52ec38d7990eca4f3cf1e98e415",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "087d33d16d1423076fe38fae0f9032be325c638842c17a816db64da5eff8549d",
           "seed": 3060,
           "survivor_families": {
@@ -883,10 +965,12 @@
             "p14": 24
           },
           "survivors": 94,
-          "unique_births": 86
+          "unique_births": 86,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 177,
+      "stage1_unverified_producer_rounds": 2,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w306"
@@ -954,6 +1038,7 @@
       "result_md_path": null,
       "result_md_sha256": null,
       "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 0,
       "stage1_rounds": [
         {
           "best_screen_deficit": 2.8350117199000144,
@@ -962,8 +1047,10 @@
             "p14": 50
           },
           "births": 100,
+          "births_path": null,
           "births_sha256": "860b742bb6db12b340703276a07285e88a151c37b93f4cf06fdf54408406c0ff",
           "round": 0,
+          "screen_path": null,
           "screen_sha256": "dca354c65cf0980edab3cd5a594eb092bacae5c6abd123acae2d54a6bae273ba",
           "seed": 3070,
           "survivor_families": {
@@ -971,7 +1058,8 @@
             "p14": 42
           },
           "survivors": 84,
-          "unique_births": 88
+          "unique_births": 88,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 2.8268111310318127,
@@ -980,8 +1068,10 @@
             "p14": 24
           },
           "births": 96,
+          "births_path": null,
           "births_sha256": "7144c0891835cc451f98d37e2094cad3deb1aa8bc7fcea1cd4cbcc8bc5197f99",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "04f16e535679485dd2276009427c0047a9ef0228ca8677826a6f5ec2ddec704f",
           "seed": 3070,
           "survivor_families": {
@@ -989,10 +1079,12 @@
             "p14": 23
           },
           "survivors": 92,
-          "unique_births": 93
+          "unique_births": 93,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 176,
+      "stage1_unverified_producer_rounds": 2,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w307"
@@ -1060,6 +1152,7 @@
       "result_md_path": null,
       "result_md_sha256": null,
       "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 0,
       "stage1_rounds": [
         {
           "best_screen_deficit": 2.8095082147675865,
@@ -1068,8 +1161,10 @@
             "p14": 50
           },
           "births": 100,
+          "births_path": null,
           "births_sha256": "8b1d7874e11bd1f37ec8b406bee126077ce18800140a4906ef123769d99b5584",
           "round": 0,
+          "screen_path": null,
           "screen_sha256": "4aae5d898666c697a4f57ab09477d033d820175f33065605f3bd7ed737a50be3",
           "seed": 3080,
           "survivor_families": {
@@ -1077,7 +1172,8 @@
             "p14": 40
           },
           "survivors": 83,
-          "unique_births": 91
+          "unique_births": 91,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 2.804028401369116,
@@ -1086,8 +1182,10 @@
             "p14": 24
           },
           "births": 96,
+          "births_path": null,
           "births_sha256": "cae4f70439ae3bdddae663cba26a3ccbb321ca081f6c716fb397407064cc3d98",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "cceff5c3969006e9a3ecfd11b582a92d6668acd0c4b3747e0ec91be8f504f09b",
           "seed": 3080,
           "survivor_families": {
@@ -1095,10 +1193,12 @@
             "p14": 23
           },
           "survivors": 94,
-          "unique_births": 92
+          "unique_births": 92,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 177,
+      "stage1_unverified_producer_rounds": 2,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w308"
@@ -1166,6 +1266,7 @@
       "result_md_path": null,
       "result_md_sha256": null,
       "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 0,
       "stage1_rounds": [
         {
           "best_screen_deficit": 2.8266930355210946,
@@ -1174,8 +1275,10 @@
             "p14": 50
           },
           "births": 100,
+          "births_path": null,
           "births_sha256": "4cb0a1d5a7d3b115b3ed47bf096b51c563024ec1294c4696e8f136b39cef141c",
           "round": 0,
+          "screen_path": null,
           "screen_sha256": "e7b0a488abbcedd984cd21bb47280ebf714ab8ed2f392eecabc21d6a0c6323e2",
           "seed": 3090,
           "survivor_families": {
@@ -1183,7 +1286,8 @@
             "p14": 42
           },
           "survivors": 86,
-          "unique_births": 90
+          "unique_births": 90,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 2.8172541919846745,
@@ -1192,8 +1296,10 @@
             "p14": 24
           },
           "births": 96,
+          "births_path": null,
           "births_sha256": "e43245017007a4009e47c18eca0aa5718f1a2caea6cd7e5eb9d46aceed6f742c",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "df76d778a55c74f65eb10dfea96c77201e3f5711685544d36f19d6b830334177",
           "seed": 3090,
           "survivor_families": {
@@ -1201,10 +1307,12 @@
             "p14": 24
           },
           "survivors": 92,
-          "unique_births": 92
+          "unique_births": 92,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 178,
+      "stage1_unverified_producer_rounds": 2,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w309"
@@ -1272,6 +1380,7 @@
       "result_md_path": null,
       "result_md_sha256": null,
       "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 0,
       "stage1_rounds": [
         {
           "best_screen_deficit": 2.8171720750513156,
@@ -1280,8 +1389,10 @@
             "p14": 25
           },
           "births": 100,
+          "births_path": null,
           "births_sha256": "31dbfa7936a859730f0c0bbec249ee6812464128426044aa574db7e58409f29b",
           "round": 0,
+          "screen_path": null,
           "screen_sha256": "5add2c3634bfbaff95752feab961fa9f350f4958411bc2bdd3c8fc8605c17c41",
           "seed": 3100,
           "survivor_families": {
@@ -1289,7 +1400,8 @@
             "p14": 20
           },
           "survivors": 82,
-          "unique_births": 94
+          "unique_births": 94,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 2.7829572928407678,
@@ -1298,8 +1410,10 @@
             "p14": 24
           },
           "births": 96,
+          "births_path": null,
           "births_sha256": "32c6e6fe76d18ba1c3d2e547690cd1ae035a1a7b4c0d31114f74ca92a2cdf87e",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "b751b48335cae731279e25046c8c70dc08be0742cded215cd124bf189bef5041",
           "seed": 3100,
           "survivor_families": {
@@ -1307,10 +1421,12 @@
             "p14": 24
           },
           "survivors": 94,
-          "unique_births": 91
+          "unique_births": 91,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 176,
+      "stage1_unverified_producer_rounds": 2,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w310"
@@ -1332,6 +1448,7 @@
       "result_md_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w400c3/RESULT.md",
       "result_md_sha256": "062a792286964ed8a07f4698a32fd7963946494c2c9dac8c34e72b805155417b",
       "stage1_births_total": 100,
+      "stage1_committed_verified_rounds": 0,
       "stage1_rounds": [
         {
           "best_screen_deficit": 3.1029515463000066,
@@ -1340,8 +1457,10 @@
             "p14": 26
           },
           "births": 52,
+          "births_path": null,
           "births_sha256": "db93a19d2676e2a07782d4360fa4a3ed39f175d23661aead3b5bf801afad53e0",
           "round": 0,
+          "screen_path": null,
           "screen_sha256": "d94474d629f1187624af04358af448346e8d56f6eab8966335b354409e1c5b93",
           "seed": 3401,
           "survivor_families": {
@@ -1349,7 +1468,8 @@
             "p14": 23
           },
           "survivors": 45,
-          "unique_births": 44
+          "unique_births": 44,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 3.1025443729825275,
@@ -1357,18 +1477,22 @@
             "p10": 48
           },
           "births": 48,
+          "births_path": null,
           "births_sha256": "6a466b81cf609d9c16fbb11adea0d3e281d5cb393824096b10efc401d95e9947",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "e56623e88aa541eb598e0ec420f7e1b499e787ed7252895dff59d880e74e87b0",
           "seed": 3401,
           "survivor_families": {
             "p10": 47
           },
           "survivors": 47,
-          "unique_births": 42
+          "unique_births": 42,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 92,
+      "stage1_unverified_producer_rounds": 2,
       "unverified": [
         {
           "certificate_identity": "487a23cf530620be56fa7f9445ea2c4ce22beacc00862b797071039c33bb6f82",
@@ -1461,6 +1585,7 @@
       "result_md_path": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/RESULT.md",
       "result_md_sha256": "8404f106a79c4ea097e218539232429c833d9f5e4d27bbb1bd92ca2965f86c85",
       "stage1_births_total": 100,
+      "stage1_committed_verified_rounds": 2,
       "stage1_rounds": [
         {
           "best_screen_deficit": 3.1029515463000066,
@@ -1469,8 +1594,10 @@
             "p14": 26
           },
           "births": 52,
+          "births_path": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/round_00_births.json",
           "births_sha256": "aaaf4b9b4eb3402de76d50c09647cb7d4393f173639e5c5c75ea99c4bd0c957f",
           "round": 0,
+          "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/round_00_screen.json",
           "screen_sha256": "81b9798206c295ca1376d110be03a5d2f619a9076d4ea6b144991d4468c9a6c1",
           "seed": 3402,
           "survivor_families": {
@@ -1478,7 +1605,8 @@
             "p14": 23
           },
           "survivors": 45,
-          "unique_births": 44
+          "unique_births": 44,
+          "verification": "committed_json_verified"
         },
         {
           "best_screen_deficit": 3.1010350812580474,
@@ -1486,18 +1614,22 @@
             "p10": 48
           },
           "births": 48,
+          "births_path": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/round_01_births.json",
           "births_sha256": "9aa07cc54dae03d686af84af8f9d080969711ad0b299c4c6a15d99efbcdf6a75",
           "round": 1,
+          "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/round_01_screen.json",
           "screen_sha256": "58370b6a4862d25e3099d5070f659ae60d540067f1dd67fdacc03a082b193157",
           "seed": 3402,
           "survivor_families": {
             "p10": 47
           },
           "survivors": 47,
-          "unique_births": 42
+          "unique_births": 42,
+          "verification": "committed_json_verified"
         }
       ],
       "stage1_survivors_total": 92,
+      "stage1_unverified_producer_rounds": 0,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w401c3"
@@ -1565,6 +1697,7 @@
       "result_md_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w402c3/RESULT.md",
       "result_md_sha256": "fe795d3cab26bacd6a82222c973949b7bc8beddf0383c6a4b49d481d2a10589d",
       "stage1_births_total": 100,
+      "stage1_committed_verified_rounds": 1,
       "stage1_rounds": [
         {
           "best_screen_deficit": 3.0627671772404965,
@@ -1573,8 +1706,10 @@
             "p14": 26
           },
           "births": 52,
+          "births_path": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w402c3/round_00_births.json",
           "births_sha256": "746bd77b5a38a43d3842a0561ef02249792b9749e3b83014ec8a85784dcac86d",
           "round": 0,
+          "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w402c3/round_00_screen.json",
           "screen_sha256": "6f98c3194556f673e2765ffea2a4b7dce713617a1b5cd1e79f8fdf71769251e0",
           "seed": 3403,
           "survivor_families": {
@@ -1582,7 +1717,8 @@
             "p14": 22
           },
           "survivors": 44,
-          "unique_births": 44
+          "unique_births": 44,
+          "verification": "committed_json_verified"
         },
         {
           "best_screen_deficit": 3.0598550386587897,
@@ -1590,18 +1726,22 @@
             "p10": 48
           },
           "births": 48,
+          "births_path": null,
           "births_sha256": "0f62b69f302723c8b7ca9c1751779ae8484bd00f7384756b0336df11ba259435",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "a8bf85fa703669167fcb4cfbc544ecf239b75a046f71afaeb5d831391962e346",
           "seed": 3403,
           "survivor_families": {
             "p10": 46
           },
           "survivors": 46,
-          "unique_births": 44
+          "unique_births": 44,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 90,
+      "stage1_unverified_producer_rounds": 1,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w402c3"
@@ -1669,6 +1809,7 @@
       "result_md_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w403c3/RESULT.md",
       "result_md_sha256": "8634fe835a8e51c8256d48728578cbd9d5646ecfa46f71cee0a53c5b60c9716b",
       "stage1_births_total": 136,
+      "stage1_committed_verified_rounds": 0,
       "stage1_rounds": [
         {
           "best_screen_deficit": 3.051824669095757,
@@ -1678,8 +1819,10 @@
             "p14": 26
           },
           "births": 52,
+          "births_path": null,
           "births_sha256": "57f9c0d198209e3d9e560e43e6531dccdd6950c96151fb2c6bf8007ff58f7f5c",
           "round": 0,
+          "screen_path": null,
           "screen_sha256": "d0c23a93659c69b45762b9339f7405d2c79d576d90f6a92d5b651d1333299edc",
           "seed": 3404,
           "survivor_families": {
@@ -1687,7 +1830,8 @@
             "p14": 21
           },
           "survivors": 32,
-          "unique_births": 44
+          "unique_births": 44,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 3.047540093834815,
@@ -1695,15 +1839,18 @@
             "p14": 36
           },
           "births": 36,
+          "births_path": null,
           "births_sha256": "02c3bc178d662007037e07af128cb8aed189eb7c24e89fe5fcb9e158981f9446",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "373475162d956396157df2d8798253d0cde211eda73d573f8c9cfa16e25bfef3",
           "seed": 3404,
           "survivor_families": {
             "p14": 36
           },
           "survivors": 36,
-          "unique_births": 32
+          "unique_births": 32,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 3.0429853147838246,
@@ -1711,18 +1858,22 @@
             "p14": 48
           },
           "births": 48,
+          "births_path": null,
           "births_sha256": "ec4f6816132ebcf4118b45dbe2aaf166d58799e1ae3072bc9580919d0340ac01",
           "round": 2,
+          "screen_path": null,
           "screen_sha256": "1656ef20e19370cee819d86f2660d9008cb8f467e0a66db52a6ecc47aae1375b",
           "seed": 3404,
           "survivor_families": {
             "p14": 48
           },
           "survivors": 48,
-          "unique_births": 44
+          "unique_births": 44,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 116,
+      "stage1_unverified_producer_rounds": 3,
       "unverified": [
         {
           "certificate_identity": "e71b66abe5ca554380011d8969b56bf4447b995836c406afa79597b1b501da5b",
@@ -1797,6 +1948,7 @@
       "result_md_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w404c3/RESULT.md",
       "result_md_sha256": "072688ac3938389df3a09e418f8bb6ec1a9f1b06d09c87c9e585a0817b767c8e",
       "stage1_births_total": 148,
+      "stage1_committed_verified_rounds": 0,
       "stage1_rounds": [
         {
           "best_screen_deficit": 3.06891943093358,
@@ -1806,8 +1958,10 @@
             "p14": 26
           },
           "births": 52,
+          "births_path": null,
           "births_sha256": "9f5ca05919831176cba4a981c412cb59af48a58d235532ec338357cfc3d3dc59",
           "round": 0,
+          "screen_path": null,
           "screen_sha256": "5891bf7180ed3bbcfd9a5b657c4e769ca8e471e0551c53049a7dc29027524b6b",
           "seed": 3405,
           "survivor_families": {
@@ -1815,7 +1969,8 @@
             "p14": 21
           },
           "survivors": 32,
-          "unique_births": 44
+          "unique_births": 44,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 3.0023950414744927,
@@ -1824,8 +1979,10 @@
             "p14": 36
           },
           "births": 48,
+          "births_path": null,
           "births_sha256": "1c9a4ff4be398fc869810109e59c44a3298503c478287bba8851972d7113ee88",
           "round": 1,
+          "screen_path": null,
           "screen_sha256": "917955ca7628012105dba1054871769b9d9884021d2cf9d6a605ca8dcd2fa09d",
           "seed": 3405,
           "survivor_families": {
@@ -1833,7 +1990,8 @@
             "p14": 34
           },
           "survivors": 45,
-          "unique_births": 44
+          "unique_births": 44,
+          "verification": "unverified_producer_reported"
         },
         {
           "best_screen_deficit": 3.001567074019643,
@@ -1842,8 +2000,10 @@
             "p14": 36
           },
           "births": 48,
+          "births_path": null,
           "births_sha256": "7d1dd6ecafb4af66dbe93e24583bc22f44fe8a578dba66ef05ce6144382982a4",
           "round": 2,
+          "screen_path": null,
           "screen_sha256": "db1ac86f8b77624c97cbe52b4f2c542fed5139e4988f1b56c3dae1834e00526f",
           "seed": 3405,
           "survivor_families": {
@@ -1851,10 +2011,12 @@
             "p14": 35
           },
           "survivors": 47,
-          "unique_births": 42
+          "unique_births": 42,
+          "verification": "unverified_producer_reported"
         }
       ],
       "stage1_survivors_total": 124,
+      "stage1_unverified_producer_rounds": 3,
       "unverified": [],
       "unverified_count": 0,
       "wave": "w404c3"
