@@ -97,6 +97,8 @@ jobs:
         run: python3 ops/render/patent/figures.py --verify docs/patent/figures/figures.json
       - name: Figure manifests match inputs (PR-0.29.4)
         run: python3 ops/ci/verify_figures.py
+      - name: Verify pinned PDF toolchain (pandoc 3.1.3 + LuaHBTeX 1.17.0)
+        run: python3 -B ops/render/paper/build_pdf.py --check-toolchain
       - name: Figure helper tests (PR-0.29.4)
         run: |
           python3 -B - <<'PY'

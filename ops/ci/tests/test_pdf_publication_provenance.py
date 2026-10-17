@@ -34,6 +34,8 @@ class PdfProvenance(unittest.TestCase):
         def capture(command, **kwargs):
             if command[:3] == ['git', 'rev-parse', 'HEAD']:return self.head+'\n'
             if command[:2] == ['git', 'show']:return '1792195200\n'
+            if command[:2] == ['pandoc', '--version']:return build_pdf.PINNED_PANDOC_VERSION+'\n'
+            if command[:2] == ['lualatex', '--version']:return build_pdf.PINNED_LUALATEX_VERSION+'\n'
             return 'neutral tool version\n'
 
         def render(command, **kwargs):
@@ -138,6 +140,24 @@ class PdfProvenance(unittest.TestCase):
                     self.run_build(staged_mutation=substitute)
                 self.assertFalse((self.root/'target/paper'/(NAME+'.pdf.manifest.json')).exists())
 
+    def test_unpinned_toolchain_is_rejected(self):
+        for bad_tool, bad_ver in (('pandoc', 'pandoc 3.1.2\n'), ('lualatex', 'This is LuaHBTeX, Version 1.16.0\n')):
+            with self.subTest(bad_tool=bad_tool):
+                def capture_bad(command, **kwargs):
+                    if command[:3] == ['git', 'rev-parse', 'HEAD']:return self.head+'\n'
+                    if command[:2] == ['git', 'show']:return '1792195200\n'
+                    if command[:2] == [bad_tool, '--version']:return bad_ver
+                    if command[:2] == ['pandoc', '--version']:return build_pdf.PINNED_PANDOC_VERSION+'\n'
+                    if command[:2] == ['lualatex', '--version']:return build_pdf.PINNED_LUALATEX_VERSION+'\n'
+                    return 'neutral tool version\n'
+                with patch.object(build_pdf, 'ROOT', self.root), \
+                     patch.object(build_pdf, 'HERE', self.here), \
+                     patch.object(build_pdf, '__file__', str(self.here/'build_pdf.py')), \
+                     patch.object(build_pdf.subprocess, 'check_output', side_effect=capture_bad):
+                    with self.assertRaisesRegex(RuntimeError, 'Unpinned'):
+                        build_pdf.build(NAME)
+                self.assertFalse((self.root/'target/paper'/(NAME+'.pdf.manifest.json')).exists())
+
     def test_two_builds_across_distinct_roots_hash_identically(self):
         from PIL import Image
         folder = ROOT/'target/paper/test-pdf-provenance'
@@ -175,7 +195,10 @@ class PdfProvenance(unittest.TestCase):
                 manifest = json.loads((root/'target/paper'/(NAME+'.pdf.manifest.json')).read_text())
                 log_text = (root/'target/paper'/(NAME+'.build.log')).read_text()
                 self.assertEqual(log_text, '')
+                self.assertEqual(manifest['pandoc'], build_pdf.PINNED_PANDOC_VERSION)
+                self.assertEqual(manifest['latex'], build_pdf.PINNED_LUALATEX_VERSION)
                 self.assertEqual(hashlib.sha256(pdf_bytes).hexdigest(), manifest['output_sha256'])
+                self.assertEqual(manifest['output_sha256'], '9fd1af093b50947d05880607b60ac87139c0110d70cd722d9163be8cb3b87b06')
                 pdfs.append(pdf_bytes)
                 manifests.append(manifest)
         self.assertEqual(hashlib.sha256(pdfs[0]).hexdigest(), hashlib.sha256(pdfs[1]).hexdigest())
