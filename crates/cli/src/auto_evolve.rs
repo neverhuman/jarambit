@@ -147,14 +147,20 @@ fn spawn_offspring_batch(
                 p0.v[EDGE_TH] = 0.18;
                 p0.clamp();
             }
-            batch.push((fam.clone(), p0));
+            batch.push((fam.clone(), p0.clone()));
+            if p0.v[genome::RING_WALL] < 6.0 {
+                p0.v[genome::RING_WALL] = p0.v[genome::RING_WALL].max(6.05);
+                p0.v[..N_CP].fill(0.0);
+                p0.clamp();
+                batch.push((fam.clone(), p0));
+            }
         }
 
         for k in 0..candidates_per_elite {
             let mut child = parent.clone();
             let scale = 0.35 / ((round + 1) as f64).sqrt();
 
-            match k % 6 {
+            match k % 8 {
                 0 => {
                     if child.p1() {
                         child.v[POCKET_D] = (child.v[POCKET_D] + rng.normal() * 0.015 * scale)
@@ -201,7 +207,7 @@ fn spawn_offspring_batch(
                         child.v[EA_IN] = rng.range(b[EA_IN].0, b[EA_IN].1);
                         child.v[EA_SP] = rng.range(b[EA_SP].0, b[EA_SP].1);
                         child.v[genome::RING_WALL] =
-                            rng.range(b[genome::RING_WALL].0, b[genome::RING_WALL].1);
+                            rng.range(6.0, b[genome::RING_WALL].1);
                     }
                 }
                 3 => {
@@ -220,7 +226,7 @@ fn spawn_offspring_batch(
                             (child.v[cp] + rng.normal() * 0.06 * scale).clamp(b[cp].0, b[cp].1);
                     }
                 }
-                _ => {
+                5 => {
                     // Multi-gene Gaussian + optional crossover with another elite
                     if k % 12 != 5 && elites.len() > 1 && rng.f64() < 0.5 {
                         let pick =
@@ -244,9 +250,49 @@ fn spawn_offspring_batch(
                         }
                     }
                 }
+                _ => {
+                    // Increase section modulus through thickness, taper and grind angles.
+                    let reinforcement = if k % 8 == 6 {
+                        rng.range(0.5, 0.9)
+                    } else {
+                        1.0
+                    };
+                    for idx in [
+                        genome::T,
+                        T_TIP,
+                        TAPER_X0,
+                        K0,
+                        K0 + 1,
+                        K0 + 2,
+                        K0 + 3,
+                        K0 + 4,
+                        EA_IN,
+                        EA_SP,
+                    ] {
+                        child.v[idx] += reinforcement * (b[idx].1 - child.v[idx]);
+                    }
+                    for idx in [
+                        FUL_D,
+                        POCKET_D,
+                        genome::ISO_D,
+                        genome::LAT_D,
+                        genome::FLUTE,
+                        genome::WIN_N,
+                    ] {
+                        child.v[idx] *= 1.0 - reinforcement;
+                    }
+                    // Reduce outline offsets to leave holder-envelope space for the bore collar.
+                    for offset in &mut child.v[..N_CP] {
+                        *offset *= 1.0 - reinforcement;
+                    }
+                }
             }
 
             child.v[EDGE_TH] = child.v[EDGE_TH].clamp(0.12, 0.20);
+            if child.rs_v2() {
+                child.v[genome::RING_WALL] =
+                    child.v[genome::RING_WALL].clamp(6.0, b[genome::RING_WALL].1);
+            }
             child.clamp();
             batch.push((fam.clone(), child));
         }
@@ -273,8 +319,10 @@ fn screen_candidate_stage1(
     let (bw, _) = fem::ring_bearing(&p);
     let (radius, _) = pheno::bore_dimensions(&p);
     let screen_deficit = deficit(f.lat_rob, 260.0)
+        + deficit(f.sf_hiker, 1.0)
         + deficit(f.ring_rob, 1500.0)
         + deficit(f.seq_ratio, fem::SEQ_TARGET)
+        + deficit(f.twist_sf, 1.0)
         + deficit(f.twist_body_sf, 1.0)
         + deficit(f.twist_tipzone_sf, 1.0)
         + deficit(f.hm_twist_sf, 1.0)
@@ -767,25 +815,186 @@ mod tests {
     fn offspring_can_explore_stock_and_rail_architecture_inside_existing_bounds() {
         let seeds = load_seed_genomes(
             &repo_root(),
-            Some("evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv"),
+            Some("evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv,evidence/rs_v2/w283_ultrarunner/w283_p10_c02_genome.csv"),
         );
-        let batch = spawn_offspring_batch(&seeds, 12, 0, &mut Rng(20261017));
-        assert!(batch.iter().any(|(_, g)| g.p1() != seeds[0].1.p1()));
-        assert!(batch
-            .iter()
-            .any(|(_, g)| g.v[genome::T] != seeds[0].1.v[genome::T]));
         let bounds = genome::bounds();
-        for (_, g) in batch {
-            for (i, &value) in g.v.iter().enumerate() {
-                if i == EDGE_TH {
-                    assert!((0.12..=0.20).contains(&value));
-                } else {
-                    assert!(
-                        (bounds[i].0..=bounds[i].1).contains(&value),
-                        "gene {i}: {value}"
-                    );
+        for round in [0, 1, 8] {
+            let batch = spawn_offspring_batch(&seeds, 64, round, &mut Rng(20261017 + round as u64));
+            assert!(batch.iter().any(|(_, g)| g.p1() != seeds[0].1.p1()));
+            assert!(batch
+                .iter()
+                .any(|(_, g)| g.v[genome::T] != seeds[0].1.v[genome::T]));
+            for (idx, (_, g)) in batch.iter().enumerate() {
+                assert!(g.rs_v2());
+                if round != 0 || !seeds.iter().any(|(_, parent)| parent == g) {
+                    assert!((6.0..=bounds[genome::RING_WALL].1).contains(&g.v[genome::RING_WALL]));
+                }
+                for (i, &value) in g.v.iter().enumerate() {
+                    if i == EDGE_TH {
+                        // Genome::clamp preserves the RS-v2 apex below the legacy edge bounds.
+                        assert!((0.12..=0.20).contains(&value));
+                    } else {
+                        assert!(
+                            (bounds[i].0..=bounds[i].1).contains(&value),
+                            "round {round}, candidate {idx}, gene {i}: {value}"
+                        );
+                    }
                 }
             }
+        }
+    }
+    #[test]
+    fn round_zero_preserves_exact_parents_and_adds_bore_compliant_siblings() {
+        let mut parent = Genome::c4_seed(genome::T_MIN);
+        parent.v[EDGE_TH] = 0.18;
+        parent.v[genome::RING_WALL] = 4.5;
+        parent.v[1] = 1.0;
+        parent.clamp();
+        let mut compliant = parent.clone();
+        compliant.v[genome::RING_WALL] = 7.0;
+        let elites = vec![
+            ("thin_bore".into(), parent.clone()),
+            ("compliant".into(), compliant),
+        ];
+        let batch = spawn_offspring_batch(&elites, 0, 0, &mut Rng(20261018));
+        assert_eq!(batch.len(), 3);
+        assert_eq!(batch[0], elites[0]);
+        let mut sibling = parent;
+        sibling.v[genome::RING_WALL] = 6.05;
+        sibling.v[..N_CP].fill(0.0);
+        assert_eq!(batch[1], ("thin_bore".into(), sibling.clone()));
+        assert_eq!(batch[2], elites[1]);
+        let (radius, bearing) = pheno::bore_dimensions(&pheno::build(&sibling));
+        assert!(radius >= 1.5 && bearing >= 12.0);
+        assert!(spawn_offspring_batch(&elites, 0, 1, &mut Rng(20261018)).is_empty());
+    }
+    #[test]
+    fn reinforcement_increases_sections_and_attenuates_removal_in_both_architectures() {
+        let bounds = genome::bounds();
+        let sections = [
+            genome::T,
+            T_TIP,
+            TAPER_X0,
+            K0,
+            K0 + 1,
+            K0 + 2,
+            K0 + 3,
+            K0 + 4,
+            EA_IN,
+            EA_SP,
+        ];
+        let removal = [
+            FUL_D,
+            POCKET_D,
+            genome::ISO_D,
+            genome::LAT_D,
+            genome::FLUTE,
+            genome::WIN_N,
+        ];
+        for p1 in [false, true] {
+            let mut parent = Genome::c4_seed(genome::T_MIN);
+            parent.v[EDGE_TH] = 0.18;
+            parent.v[genome::P1_ON] = if p1 { 1.0 } else { 0.0 };
+            parent.v[1] = 1.5;
+            parent.v[10] = -1.0;
+            for idx in sections {
+                parent.v[idx] = bounds[idx].0;
+            }
+            for idx in removal {
+                parent.v[idx] = bounds[idx].1 * 0.5;
+            }
+            parent.clamp();
+            let elites = vec![("section".into(), parent.clone())];
+            let batch = spawn_offspring_batch(&elites, 8, 1, &mut Rng(20261018));
+            assert_eq!(
+                batch,
+                spawn_offspring_batch(&elites, 8, 1, &mut Rng(20261018))
+            );
+            for (_, child) in &batch[6..8] {
+                assert_eq!(child.p1(), p1);
+                assert!(child.rs_v2());
+                for idx in 0..N_CP {
+                    assert!(child.v[idx].abs() <= parent.v[idx].abs());
+                    if parent.v[idx] != 0.0 {
+                        assert!(child.v[idx].abs() < parent.v[idx].abs());
+                    }
+                    assert_eq!(batch[7].1.v[idx], 0.0);
+                }
+                for idx in sections {
+                    assert!(child.v[idx] >= parent.v[idx], "section gene {idx}");
+                    assert!(child.v[idx] <= bounds[idx].1, "section bound {idx}");
+                    let ceiling = if idx == genome::T || idx >= K0 {
+                        bounds[genome::T].1
+                    } else {
+                        bounds[idx].1
+                    };
+                    if parent.v[idx] < ceiling {
+                        assert!(child.v[idx] > parent.v[idx], "section increase {idx}");
+                    }
+                }
+                for idx in removal {
+                    assert!(child.v[idx] <= parent.v[idx], "removal gene {idx}");
+                    assert!(child.v[idx] >= bounds[idx].0, "removal bound {idx}");
+                    assert_eq!(batch[7].1.v[idx], 0.0);
+                }
+            }
+        }
+    }
+    #[test]
+    fn stage1_ranks_bore_compliance_and_section_reinforcement_with_lower_deficits() {
+        let seeds = load_seed_genomes(
+            &repo_root(),
+            Some("evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv,evidence/rs_v2/w283_ultrarunner/w283_p10_c02_genome.csv"),
+        );
+        assert_eq!(seeds.len(), 2);
+        for seed in &seeds {
+            assert!(seed.1.v[..N_CP].iter().any(|&offset| offset != 0.0));
+            let batch = spawn_offspring_batch(std::slice::from_ref(seed), 8, 0, &mut Rng(20261018));
+            assert_eq!(&batch[0], seed);
+            let screen = |idx: usize| {
+                let candidate = &batch[idx];
+                screen_candidate_stage1(0, idx, &candidate.0, &candidate.1, "test").unwrap_or_else(
+                    || {
+                        let r = qd::evaluate(&candidate.1, idx, 0, 2.0);
+                        panic!(
+                            "{} candidate {idx}: aesthetic failures {:?}; CAD rejects {:?}",
+                            candidate.0, r.aes.fails, r.rejects
+                        );
+                    },
+                )
+            };
+            let sibling = screen(1);
+            let reinforced = screen(9);
+            assert!(seed.1.v[genome::RING_WALL] < 6.0);
+            for candidate in [&sibling, &reinforced] {
+                assert!(candidate.g.v[genome::RING_WALL] >= 6.0);
+                assert!(candidate.g.v[..N_CP].iter().all(|&offset| offset == 0.0));
+                let p = pheno::build(&candidate.g);
+                assert!(jarambit_crescent::gates::holder_fit(&p.outline).0);
+                let (radius, bearing) = pheno::bore_dimensions(&p);
+                assert!(radius >= 1.5 && bearing >= 12.0);
+            }
+            // Hold the generated outline fixed when measuring the bore deficit alone.
+            let mut bore_deficient = sibling.g.clone();
+            bore_deficient.v[genome::RING_WALL] = seed.1.v[genome::RING_WALL];
+            let baseline = screen_candidate_stage1(0, 10, &seed.0, &bore_deficient, "test")
+                .expect("rankable bore-deficient comparison at the same outline");
+            eprintln!(
+                "{} Stage-1 deficits: bore-deficient at fixed outline={}, bore-compliant={}, reinforced={}",
+                seed.0, baseline.screen_deficit, sibling.screen_deficit, reinforced.screen_deficit
+            );
+            assert!(
+                sibling.screen_deficit < baseline.screen_deficit,
+                "bore deficit: {} >= {}",
+                sibling.screen_deficit,
+                baseline.screen_deficit
+            );
+            assert!(
+                reinforced.screen_deficit < sibling.screen_deficit,
+                "section deficit: {} >= {}",
+                reinforced.screen_deficit,
+                sibling.screen_deficit
+            );
         }
     }
     #[test]
