@@ -16,7 +16,11 @@ SELF = "tools/verify_gate_feasibility_audit.py"
 SOURCES = ("crates/genotype/src/lib.rs", "crates/phenotype/src/lib.rs")
 CONTRACT_TASK = "G16-12-RSV2-04-p26"
 MANIFEST_TASK = "G16-12-RSV2-04-p27"
-TASK = "G16-12-RSV2-04-p28"
+DIGEST_TASK = "G16-12-RSV2-04-p28"
+TASK = "G16-12-RSV2-04-p29"
+CLI_REPORT = "docs/audit/CLI_SOURCE_PROVENANCE_AUDIT.md"
+CLI_JSON = "docs/audit/cli_source_provenance_audit.json"
+CLI_SOURCES = ("crates/cli/src/main.rs", "crates/cli/src/auto_evolve.rs")
 DIGEST_REPORT = "docs/audit/EVOLVE_PHYSICS_SOURCE_PROVENANCE_AUDIT.md"
 DIGEST_JSON = "docs/audit/evolve_physics_source_provenance_audit.json"
 DIGEST_SOURCES = ("crates/evolve/src/lib.rs", "crates/physics/src/lib.rs")
@@ -110,12 +114,12 @@ def manifest_inventory(module, root):
             "manifests": records}
 
 
-def digest_inventory(module, root):
+def digest_inventory(module, root, *, task=DIGEST_TASK, sources=DIGEST_SOURCES):
     """Hash inert source bytes and count UTF-8 lines; never inspect Rust semantics."""
-    return {"schema_version": 1, "task": TASK, "status": STATUS, "qualified_count": 0,
+    return {"schema_version": 1, "task": task, "status": STATUS, "qualified_count": 0,
             "assignment_outcome": "COMPLETE", "scope": "Static source byte provenance only",
-            "source_count": len(DIGEST_SOURCES),
-            "source_files": [record(module, root, path) for path in DIGEST_SOURCES]}
+            "source_count": len(sources),
+            "source_files": [record(module, root, path) for path in sources]}
 
 
 def verify(root):
@@ -138,11 +142,11 @@ def verify(root):
             "unsupported index schema")
     require(index["task"] == TASK, "unexpected task")
     diagnostic(index)
-    require(type(index["report_count"]) is int and index["report_count"] == 18,
-            "expected eighteen reports")
-    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT]
+    require(type(index["report_count"]) is int and index["report_count"] == 19,
+            "expected nineteen reports")
+    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT]
     require(len(m.REPORTS) == 15, "expected fifteen historical reports")
-    require(isinstance(index["reports"], list) and len(index["reports"]) == 18,
+    require(isinstance(index["reports"], list) and len(index["reports"]) == 19,
             "report coverage mismatch")
     for row, path in zip(index["reports"], expected):
         require(isinstance(row, dict) and row.get("path") == path,
@@ -153,7 +157,8 @@ def verify(root):
                 "report counts must be integers")
     require(index["supplemental_documents"] == [record(m, root, CONTRACT),
                                                    record(m, root, MANIFEST_JSON),
-                                                   record(m, root, DIGEST_JSON)],
+                                                   record(m, root, DIGEST_JSON),
+                                                   record(m, root, CLI_JSON)],
             "supplemental fingerprint mismatch")
     contract = read_json(CONTRACT)
     require(set(contract) == {"schema_version", "task", "status", "qualified_count",
@@ -195,12 +200,20 @@ def verify(root):
     digest_text = m.portable_path(root, DIGEST_REPORT).read_text(encoding="utf-8")
     require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in digest_text.splitlines()
             and "qualified_count: 0" in digest_text.splitlines(), "invalid digest report status")
-    for path in expected + [INDEX, CONTRACT, MANIFEST_JSON, DIGEST_JSON, SELF, LEGACY]:
+    cli_digest = read_json(CLI_JSON)
+    require(json.dumps(cli_digest, sort_keys=True) == json.dumps(
+        digest_inventory(m, root, task=TASK, sources=CLI_SOURCES), sort_keys=True),
+        "source fingerprint mismatch: CLI digest metadata")
+    cli_text = m.portable_path(root, CLI_REPORT).read_text(encoding="utf-8")
+    require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in cli_text.splitlines()
+            and "qualified_count: 0" in cli_text.splitlines(), "invalid CLI report status")
+    for path in expected + [INDEX, CONTRACT, MANIFEST_JSON, DIGEST_JSON, CLI_JSON, SELF, LEGACY]:
         require(m.FORBIDDEN_HOME not in m.portable_path(root, path).read_text(encoding="utf-8"),
                 "literal host prefix")
     require(m.verify(root) == 15, "historical index mismatch")
     return {"task": TASK, "status": STATUS, "assignment_outcome": "COMPLETE",
-            "qualified_count": 0, "reports": 18, "source_files": 2,
+            "qualified_count": 0, "reports": 19, "source_files": 2,
+            "cli_source_files": len(CLI_SOURCES),
             "digest_source_files": len(DIGEST_SOURCES),
             "manifest_files": observed["manifest_count"], "prior_contract_assignment_outcome": OUTCOME,
             "parity_assessment": "NOT_ASSESSED"}

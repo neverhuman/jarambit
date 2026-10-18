@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "task": "G16-12-RSV2-04-p28",
+  "task": "G16-12-RSV2-04-p29",
   "status": "IN_PROGRESS",
   "qualified_count": 0,
-  "report_count": 18,
+  "report_count": 19,
   "reports": [
     {
       "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V5_REPORT.md",
@@ -184,6 +184,16 @@
       "table_schema_sha256": "cf7e35b5b87b3dd6ab0c0640cbf7afb201bace9c586caf3fbb02624a6897492b",
       "status": "IN_PROGRESS",
       "qualified_count": 0
+    },
+    {
+      "path": "docs/audit/CLI_SOURCE_PROVENANCE_AUDIT.md",
+      "sha256": "c7231c90696db8f31c2fd505789b544def671080d6eeeda2bece0d07a8935aae",
+      "bytes": 3980,
+      "lines": 33,
+      "tables": 1,
+      "table_schema_sha256": "cf7e35b5b87b3dd6ab0c0640cbf7afb201bace9c586caf3fbb02624a6897492b",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
     }
   ],
   "supplemental_documents": [
@@ -203,6 +213,12 @@
       "path": "docs/audit/evolve_physics_source_provenance_audit.json",
       "sha256": "5d58298c3d67b0d75d46d1013dcd81dbfd60c847ad2a30767f31d453224e3f26",
       "bytes": 601,
+      "lines": 23
+    },
+    {
+      "path": "docs/audit/cli_source_provenance_audit.json",
+      "sha256": "2996e296293b5dfcc471b6a43235d91f126fffc333606d7029af4704109937b6",
+      "bytes": 603,
       "lines": 23
     }
   ]
