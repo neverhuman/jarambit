@@ -12,6 +12,7 @@ use jarambit_crescent::{
 };
 use jarambit_genotype::Rng;
 use serde_json::{json, Value};
+use std::collections::HashSet;
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
@@ -445,9 +446,12 @@ fn spawn_offspring_batch(
                     } else {
                         if k % 12 == 5 {
                             // Preserve exploration after formerly "certified" seeds become failures.
-                            // All changes use the pre-existing genotype domain and clamp rules.
+                            // Sample lighter stock (< 5.55 mm) toward the sub-80 g regime and cap
+                            // EDGE_TH at <= 0.175 mm for exported solid Gate S S1 margin.
                             child = child.mutate(rng, 0.08);
-                            child.v[genome::T] = rng.range(b[genome::T].0, b[genome::T].1);
+                            child.v[genome::T] =
+                                rng.range(b[genome::T].0, 5.55).clamp(b[genome::T].0, b[genome::T].1);
+                            child.v[EDGE_TH] = child.v[EDGE_TH].clamp(0.12, 0.175);
                             child.v[genome::P1_ON] = if parent.p1() { 0.0 } else { 1.0 };
                         } else {
                             child = child.mutate(rng, 0.008 * scale);
@@ -701,6 +705,115 @@ fn replacement_elites(
     }
 }
 
+fn append_stage2_pass(
+    candidates: &[ScreenSurvivor],
+    selected: &mut Vec<ScreenSurvivor>,
+    selected_ids: &mut HashSet<String>,
+    limit: usize,
+    one_per_family: bool,
+) {
+    for survivor in candidates {
+        if selected.len() >= limit {
+            break;
+        }
+        let identity = certification::identity(&survivor.g);
+        if selected_ids.contains(&identity)
+            || (one_per_family
+                && selected
+                    .iter()
+                    .any(|selected| selected.family == survivor.family))
+        {
+            continue;
+        }
+        selected_ids.insert(identity);
+        selected.push(survivor.clone());
+    }
+}
+
+fn select_stage2_candidates(
+    survivors: &[ScreenSurvivor],
+    certify_top: usize,
+    assessed_ids: &HashSet<String>,
+    seed_parent_ids: &HashSet<String>,
+) -> Vec<ScreenSurvivor> {
+    let novel: Vec<_> = survivors
+        .iter()
+        .filter(|survivor| {
+            let identity = certification::identity(&survivor.g);
+            !assessed_ids.contains(&identity) && !seed_parent_ids.contains(&identity)
+        })
+        .cloned()
+        .collect();
+    let seed_parents: Vec<_> = survivors
+        .iter()
+        .filter(|survivor| {
+            let identity = certification::identity(&survivor.g);
+            seed_parent_ids.contains(&identity) && !assessed_ids.contains(&identity)
+        })
+        .cloned()
+        .collect();
+
+    let mut selected = Vec::with_capacity(certify_top);
+    let mut selected_ids = HashSet::new();
+    append_stage2_pass(
+        &novel,
+        &mut selected,
+        &mut selected_ids,
+        certify_top,
+        true,
+    );
+    append_stage2_pass(
+        &novel,
+        &mut selected,
+        &mut selected_ids,
+        certify_top,
+        false,
+    );
+
+    // Retest exact seed parents only when fewer novel, unassessed genomes screened
+    // successfully than Stage 2 can assess.
+    if selected.len() < certify_top {
+        append_stage2_pass(
+            &seed_parents,
+            &mut selected,
+            &mut selected_ids,
+            certify_top,
+            true,
+        );
+        append_stage2_pass(
+            &seed_parents,
+            &mut selected,
+            &mut selected_ids,
+            certify_top,
+            false,
+        );
+    }
+    selected
+}
+
+/// Identities that should remain eligible only as exact seed parents in Stage 2.
+/// Round 0 also screens the legacy-to-RS-v2 and low-ring-wall clamped variants.
+fn round_parent_identities(elites: &[(String, Genome)]) -> HashSet<String> {
+    let mut identities = HashSet::new();
+    for (_, parent) in elites {
+        identities.insert(certification::identity(parent));
+
+        let mut p0 = parent.clone();
+        if !p0.rs_v2() {
+            p0.v[EDGE_TH] = 0.18;
+            p0.clamp();
+        }
+        identities.insert(certification::identity(&p0));
+        if p0.v[genome::RING_WALL] < 6.0 {
+            p0.v[genome::RING_WALL] = p0.v[genome::RING_WALL].max(6.05);
+            p0.v[..N_CP].fill(0.0);
+            p0.clamp();
+            identities.insert(certification::identity(&p0));
+        }
+    }
+    identities
+}
+
 /// CLI entrypoint for `jarambit auto-evolve`.
 pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
     let root = repo_root();
@@ -783,6 +896,7 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
     }
 
     let mut elites = load_seed_genomes(&root, seeds_arg.as_deref());
+    let mut seed_parent_ids = round_parent_identities(&elites);
     if elites.is_empty() {
         eprintln!("auto-evolve: supply at least one valid committed/evolved genome CSV; no external CAD fallback");
         return 1;
@@ -827,6 +941,7 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
     );
 
     for round in 0..rounds {
+        seed_parent_ids.extend(round_parent_identities(&elites));
         let batch = spawn_offspring_batch(&elites, candidates_per_round, round, &mut rng);
         let births = json!({"round":round,"seed":seed,"source":"spawn_offspring_batch from evolved genome CSV seeds",
             "genome_header":Genome::csv_header(),"genomes":batch.iter().map(|(family,g)|json!({"family":family,"row":g.csv_row(),"certificate_identity":certification::identity(g)})).collect::<Vec<_>>()});
@@ -890,28 +1005,18 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
             return 1;
         }
 
-        // Select up to `certify_top` distinct candidates (one per family first, then lightest overall)
-        let mut to_certify: Vec<ScreenSurvivor> = Vec::new();
-        for surv in &survivors {
-            if to_certify.len() >= certify_top {
-                break;
-            }
-            let already_certified = assessed_all.iter().any(|c| c.g == surv.g);
-            let dup_fam = to_certify.iter().any(|c| c.family == surv.family);
-            if !already_certified && !dup_fam {
-                to_certify.push(surv.clone());
-            }
-        }
-        for surv in &survivors {
-            if to_certify.len() >= certify_top {
-                break;
-            }
-            let already_certified = assessed_all.iter().any(|c| c.g == surv.g);
-            let dup_in_batch = to_certify.iter().any(|c| c.g == surv.g);
-            if !already_certified && !dup_in_batch {
-                to_certify.push(surv.clone());
-            }
-        }
+        // Stage 2 spends its budget on novel offspring first, retaining family-first
+        // selection and using exact seed parents only when fewer novel candidates screen.
+        let assessed_ids: HashSet<String> = assessed_all
+            .iter()
+            .map(|candidate| certification::identity(&candidate.g))
+            .collect();
+        let to_certify = select_stage2_candidates(
+            &survivors,
+            certify_top,
+            &assessed_ids,
+            &seed_parent_ids,
+        );
 
         for cand in &to_certify {
             println!(
@@ -1015,6 +1120,157 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn diversity_slot_5_explores_sub_5_55mm_stock_and_caps_edge_th_for_gate_s() {
+        let parent = Genome::c4_seed(genome::T_MIN);
+        for rng_seed in 1..=16 {
+            let children = spawn_offspring_batch(
+                &[("p10".into(), parent.clone())],
+                12,
+                1,
+                &mut Rng(rng_seed),
+            );
+            let child = &children[5].1;
+            assert!(
+                (4.0..=5.55).contains(&child.v[genome::T]),
+                "seed={rng_seed}: stock={}",
+                child.v[genome::T]
+            );
+            assert!(
+                (0.12..=0.175).contains(&child.v[EDGE_TH]),
+                "seed={rng_seed}: edge_th={}",
+                child.v[EDGE_TH]
+            );
+            assert_ne!(child.p1(), parent.p1(), "seed={rng_seed}: P1 did not toggle");
+        }
+    }
+
+    #[test]
+    fn stage2_selection_prioritizes_novel_offspring_over_unmutated_seed_parents() {
+        let mut p10_seed = Genome::c4_seed(genome::T_MIN);
+        p10_seed.v[EA_IN] = 14.0;
+        p10_seed.clamp();
+        let mut p14_seed = Genome::c4_seed(genome::T_MIN);
+        p14_seed.v[EA_IN] = 15.0;
+        p14_seed.clamp();
+
+        let mut p10_offspring = p10_seed.clone();
+        p10_offspring.v[TAPER_X0] += 0.5;
+        p10_offspring.clamp();
+        let mut p14_offspring = p14_seed.clone();
+        p14_offspring.v[EA_SP] += 0.25;
+        p14_offspring.clamp();
+
+        let make_survivor = |label: &str, family: &str, g: Genome, screen_deficit| {
+            ScreenSurvivor {
+                label: label.into(),
+                family: family.into(),
+                g,
+                mass_g: 90.0,
+                seq_ratio: 0.0,
+                fat_sf: 0.0,
+                ring_bearing_w_mm: 12.0,
+                screen_deficit,
+            }
+        };
+        let screened = vec![
+            make_survivor("p10_seed", "p10", p10_seed.clone(), 0.01),
+            make_survivor("p14_seed", "p14", p14_seed.clone(), 0.02),
+            make_survivor("p10_mutated", "p10", p10_offspring.clone(), 0.03),
+            make_survivor("p14_mutated", "p14", p14_offspring.clone(), 0.04),
+        ];
+        let seed_parent_ids = [&p10_seed, &p14_seed]
+            .into_iter()
+            .map(certification::identity)
+            .collect();
+        let selected = select_stage2_candidates(
+            &screened,
+            2,
+            &HashSet::new(),
+            &seed_parent_ids,
+        );
+
+        assert_eq!(selected.len(), 2);
+        assert_eq!(selected[0].label, "p10_mutated");
+        assert_eq!(selected[1].label, "p14_mutated");
+        assert_eq!(selected[0].g, p10_offspring);
+        assert_eq!(selected[1].g, p14_offspring);
+    }
+
+    #[test]
+    fn round_parent_identities_includes_carried_forward_and_clamped_parents() {
+        let mut carried = Genome::c4_seed(genome::T_MIN);
+        carried.v[EA_IN] = 14.0;
+        carried.v[genome::RING_WALL] = 6.1;
+        carried.v[EDGE_TH] = 0.18;
+        carried.clamp();
+
+        let mut legacy = Genome::c4_seed(genome::T_MIN);
+        legacy.v[EA_IN] = 15.0;
+        legacy.v[genome::RING_WALL] = 5.5;
+        legacy.v[EDGE_TH] = 0.10;
+        legacy.clamp();
+        legacy.v[EDGE_TH] = 0.01;
+        let mut edge_clamped = legacy.clone();
+        edge_clamped.v[EDGE_TH] = 0.18;
+        edge_clamped.clamp();
+        let mut round0_clamped = edge_clamped.clone();
+        round0_clamped.v[genome::RING_WALL] = round0_clamped.v[genome::RING_WALL].max(6.05);
+        round0_clamped.v[..N_CP].fill(0.0);
+        round0_clamped.clamp();
+
+        let elites = vec![("p10".into(), carried.clone()), ("p14".into(), legacy.clone())];
+        let seed_parent_ids = round_parent_identities(&elites);
+        for (label, parent) in [
+            ("carried", &carried),
+            ("legacy", &legacy),
+            ("edge_clamped", &edge_clamped),
+            ("round0_clamped", &round0_clamped),
+        ] {
+            assert!(
+                seed_parent_ids.contains(&certification::identity(parent)),
+                "missing {label}; legacy_rs_v2={} ring={} edge={}",
+                legacy.rs_v2(),
+                legacy.v[genome::RING_WALL],
+                legacy.v[EDGE_TH]
+            );
+        }
+
+        let mut p10_novel = carried.clone();
+        p10_novel.v[TAPER_X0] += 0.5;
+        p10_novel.clamp();
+        let mut p14_novel = round0_clamped.clone();
+        p14_novel.v[EA_SP] += 0.25;
+        p14_novel.clamp();
+        let make_survivor = |label: &str, family: &str, g: Genome, screen_deficit| {
+            ScreenSurvivor {
+                label: label.into(),
+                family: family.into(),
+                g,
+                mass_g: 90.0,
+                seq_ratio: 0.0,
+                fat_sf: 0.0,
+                ring_bearing_w_mm: 12.0,
+                screen_deficit,
+            }
+        };
+        let screened = vec![
+            make_survivor("carried", "p10", carried, 0.01),
+            make_survivor("legacy", "p14", legacy, 0.02),
+            make_survivor("edge_clamped", "p14", edge_clamped, 0.03),
+            make_survivor("round0_clamped", "p14", round0_clamped, 0.04),
+            make_survivor("p10_novel", "p10", p10_novel.clone(), 0.05),
+            make_survivor("p14_novel", "p14", p14_novel.clone(), 0.06),
+        ];
+        let selected = select_stage2_candidates(&screened, 2, &HashSet::new(), &seed_parent_ids);
+
+        assert_eq!(selected.len(), 2);
+        assert_eq!(selected[0].label, "p10_novel");
+        assert_eq!(selected[1].label, "p14_novel");
+        assert_eq!(selected[0].g, p10_novel);
+        assert_eq!(selected[1].g, p14_novel);
+    }
     use jarambit_crescent::{aesthetic, gates};
     #[test]
     fn failed_strength_screen_remains_available_for_top_k_assessment() {
