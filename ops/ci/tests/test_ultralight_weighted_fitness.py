@@ -140,6 +140,12 @@ class TestUltralightWeightedFitness(unittest.TestCase):
             self.assertEqual(curve['best_so_far']['label'], 'r2_c01')
             self.assertTrue((wdir / 'fitness_curve.json').is_file())
 
+    def test_missing_gate_evidence_fails_closed(self):
+        res = compute_ultralight_weighted_fitness({})
+        self.assertFalse(res['all_26_legacy_hard_gates_pass'])
+        self.assertEqual(res['legacy_hard_gates_passed_count'], 0)
+        self.assertEqual(len(res['legacy_hard_gates_failed']), 26)
+
 
 if __name__ == '__main__':
     unittest.main()
