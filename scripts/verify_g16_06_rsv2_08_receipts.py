@@ -17,6 +17,8 @@ MARKDOWN_INDEX = INVENTORY.parent / 'phase22_markdown_report_digest_index.json'
 MARKDOWN_BASELINE = '7856869b68099329c11980db845391d2f4fa3a35'
 MARKDOWN_PATHS_SHA256 = '1ab223e05331f03aec309f5d1d281262f82d143734a0d66593a7a05e881e61d9'
 MARKDOWN_INDEX_SHA256 = '7c81cebd99494529cbc1978df11ffc3f0136b2f837f42232d816ef7239df5f5a'
+CROSS_CHECK = INVENTORY.parent / 'phase23_inventory_cross_check_audit.json'
+CROSS_CHECK_SHA256 = '5d6c1e1b4046a537ccbecd7f64a9e887b2aa384dd8eed5fdb0b15acbc76e1784'
 HOST_PATH_PATTERN = re.compile(r'/(?:home|Users|tmp|root|var/tmp|private/tmp)/|[A-Za-z]:[\\/](?:Users|Temp)[\\/]')
 
 
@@ -155,9 +157,72 @@ def verify_markdown(root=ROOT, document=None):
                 lines=actual['total_lines'], literal_host_path_count=0)
 
 
+def disjoint_index_entries(json_document, markdown_document):
+    entries = []
+    seen = set()
+    for label, document in [('json', json_document), ('markdown', markdown_document)]:
+        local = [row['path'] for row in document['files']]
+        if len(local) != len(set(local)):
+            raise ValueError('Duplicate path within ' + label + ' index')
+        overlap = seen.intersection(local)
+        if overlap:
+            raise ValueError('Cross-index path overlap: ' + ', '.join(sorted(overlap)))
+        seen.update(local)
+        entries.extend((label, row) for row in document['files'])
+    return entries
+
+
+def generate_cross_check(root):
+    root = Path(root)
+    documents = []
+    inputs = []
+    for relative, expected in [(INVENTORY, INVENTORY_SHA256), (MARKDOWN_INDEX, MARKDOWN_INDEX_SHA256)]:
+        data = (root / relative).read_bytes()
+        actual = digest(data)
+        if actual != expected:
+            raise ValueError('Cross-check source index digest mismatch: ' + relative.as_posix())
+        documents.append(strict_json(data))
+        inputs.append(dict(path=relative.as_posix(), bytes=len(data), expected_sha256=expected,
+                           actual_sha256=actual, digest_parity=True))
+    entries = disjoint_index_entries(*documents)
+    verify(root, documents[0])
+    verify_markdown(root, documents[1])
+    members = []
+    for label, row in entries:
+        data = (root / row['path']).read_bytes()
+        actual = digest(data)
+        if actual != row['sha256'] or len(data) != row['bytes']:
+            raise ValueError('Cross-check member digest/size mismatch: ' + row['path'])
+        members.append(dict(path=row['path'], source_index=label, bytes=len(data),
+                            expected_sha256=row['sha256'], actual_sha256=actual, digest_parity=True))
+    return dict(task='G16-06-RSV2-08-p24', study_phase=23,
+                scope='Cross-check unchanged Phase21 JSON and Phase22 Markdown frozen indexes; no resnapshotting or numerical work.',
+                source_indexes=inputs, json_file_count=len(documents[0]['files']),
+                markdown_file_count=len(documents[1]['files']), unique_member_count=len(members),
+                overlap_paths=[], overlap_count=0, exact_digest_parity=True,
+                digest_mismatch_count=0, total_member_bytes=sum(row['bytes'] for row in members),
+                engineering_qualification_assessed=False, qualified_count=0, full_qualification=False,
+                members=members)
+
+
+def verify_cross_check(root=ROOT, document=None):
+    root = Path(root)
+    if document is None:
+        data = (root / CROSS_CHECK).read_bytes()
+        if digest(data) != CROSS_CHECK_SHA256:
+            raise ValueError('Frozen cross-check audit digest mismatch')
+        document = strict_json(data)
+    actual = generate_cross_check(root)
+    if document != actual:
+        raise ValueError('Cross-check audit metadata or digest parity mismatch')
+    return dict(status='pass', source_indexes=2, unique_members=actual['unique_member_count'],
+                overlap_count=0, digest_mismatch_count=0, exact_digest_parity=True)
+
+
 def verify_all(root=ROOT):
     result = verify(root)
     result['markdown_reports'] = verify_markdown(root)
+    result['inventory_cross_check'] = verify_cross_check(root)
     return result
 
 
@@ -165,6 +230,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--write', action='store_true', help='Generate the frozen inventory using read-only Git discovery')
     parser.add_argument('--write-markdown', action='store_true', help='Generate the Markdown index at its pinned baseline')
+    parser.add_argument('--write-cross-check', action='store_true', help='Generate the cross-check from the two unchanged frozen indexes')
     args = parser.parse_args()
     if args.write:
         import subprocess
@@ -180,6 +246,8 @@ def main():
         paths = sorted(path for path in tracked if path and PurePosixPath(path).parent == PurePosixPath(INVENTORY.parent.as_posix())
                        and fnmatch.fnmatchcase(PurePosixPath(path).name, 'PHASE*.md'))
         (ROOT / MARKDOWN_INDEX).write_text(json.dumps(generate_markdown(ROOT, paths), indent=2, allow_nan=False) + '\n')
+    if args.write_cross_check:
+        (ROOT / CROSS_CHECK).write_text(json.dumps(generate_cross_check(ROOT), indent=2, allow_nan=False) + '\n')
     print(json.dumps(verify_all(), sort_keys=True, allow_nan=False))
 
 

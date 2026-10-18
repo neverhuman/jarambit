@@ -177,7 +177,7 @@ class MarkdownReportIndexTests(unittest.TestCase):
             root = Path(temp)
             files = [r['path'] for r in audit.strict_json((ROOT / audit.INVENTORY).read_bytes())['files']]
             files += [r['path'] for r in self.document()['files']]
-            for relative in [*files, audit.INVENTORY.as_posix(), audit.MARKDOWN_INDEX.as_posix()]:
+            for relative in [*files, audit.INVENTORY.as_posix(), audit.MARKDOWN_INDEX.as_posix(), audit.CROSS_CHECK.as_posix()]:
                 target = root / relative; target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(ROOT / relative, target)
             self.assertFalse((root / '.git').exists()); self.assertFalse((root / 'target').exists())
@@ -187,7 +187,9 @@ class MarkdownReportIndexTests(unittest.TestCase):
                     raise AssertionError('Nonlocal read or write')
                 return real(path, mode, *args, **kwargs)
             with patch.object(Path, 'open', new=guarded), patch.dict('os.environ',{},clear=True), patch('subprocess.run', side_effect=AssertionError('Process launch')):
-                self.assertEqual(audit.verify_all(root)['markdown_reports']['status'],'pass')
+                result = audit.verify_all(root)
+                self.assertEqual(result['markdown_reports']['status'],'pass')
+                self.assertEqual(result['inventory_cross_check']['unique_members'],30)
             victim = root / self.document()['files'][0]['path']; original = victim.read_bytes()
             def absent(path, *args, **kwargs):
                 if path == victim: raise FileNotFoundError(path)
@@ -200,6 +202,65 @@ class MarkdownReportIndexTests(unittest.TestCase):
             victim.write_bytes(original + ('/'+'home/alice/secret').encode())
             with self.assertRaisesRegex(ValueError, 'Literal host path'):
                 audit.verify_markdown(root)
+
+
+class InventoryCrossCheckTests(unittest.TestCase):
+    def document(self):
+        return audit.strict_json((ROOT / audit.CROSS_CHECK).read_bytes())
+
+    def sources(self):
+        return [audit.strict_json((ROOT / path).read_bytes()) for path in [audit.INVENTORY, audit.MARKDOWN_INDEX]]
+
+    def test_exact_source_and_member_digest_parity(self):
+        d = self.document(); result = audit.verify_cross_check()
+        self.assertEqual(result['unique_members'],30)
+        self.assertEqual((d['json_file_count'],d['markdown_file_count'],d['total_member_bytes']),(29,1,18550633))
+        self.assertEqual(d['overlap_count'],0); self.assertEqual(d['overlap_paths'],[])
+        self.assertTrue(d['exact_digest_parity']); self.assertEqual(d['digest_mismatch_count'],0)
+        for row in [*d['source_indexes'], *d['members']]:
+            data = (ROOT / row['path']).read_bytes()
+            self.assertEqual(row['bytes'],len(data))
+            self.assertEqual(row['expected_sha256'],audit.digest(data))
+            self.assertEqual(row['actual_sha256'],row['expected_sha256'])
+            self.assertTrue(row['digest_parity'])
+
+    def test_overlap_rejected_even_when_digests_differ(self):
+        left, right = self.sources()
+        right['files'][0]['path'] = left['files'][0]['path']
+        right['files'][0]['sha256'] = '0'*64
+        with self.assertRaisesRegex(ValueError,'Cross-index path overlap'):
+            audit.disjoint_index_entries(left,right)
+
+    def test_duplicate_paths_in_either_index_rejected(self):
+        for which in [0,1]:
+            sources = self.sources(); sources[which]['files'].append(copy.deepcopy(sources[which]['files'][0]))
+            with self.subTest(index=which), self.assertRaisesRegex(ValueError,'Duplicate path'):
+                audit.disjoint_index_entries(*sources)
+
+    def test_forged_overlap_counts_and_parity_rejected(self):
+        for key,value in [('overlap_count',1),('exact_digest_parity',False),('unique_member_count',29),('digest_mismatch_count',1)]:
+            d = self.document(); d[key] = value
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError,'Cross-check audit metadata'):
+                audit.verify_cross_check(document=d)
+        d = self.document(); d['members'][0]['actual_sha256'] = '0'*64
+        with self.assertRaisesRegex(ValueError,'digest parity mismatch'):
+            audit.verify_cross_check(document=d)
+
+    def test_cross_audit_and_both_source_index_pins_enforced(self):
+        real = Path.read_bytes
+        for relative in [audit.CROSS_CHECK,audit.INVENTORY,audit.MARKDOWN_INDEX]:
+            victim = ROOT / relative
+            def changed(path):
+                data = real(path)
+                return data + b' ' if path == victim else data
+            with self.subTest(path=relative), patch.object(Path,'read_bytes',new=changed), self.assertRaisesRegex(ValueError,'digest mismatch'):
+                audit.verify_cross_check()
+
+    def test_static_scope_and_no_literal_host_paths_in_outputs(self):
+        d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
+        self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
+        for path in [ROOT / audit.CROSS_CHECK, ROOT / audit.INVENTORY.parent / 'PHASE23.md']:
+            self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
 
 
 if __name__ == '__main__':
