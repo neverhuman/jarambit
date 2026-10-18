@@ -1458,5 +1458,153 @@ class JsonSchemaKeysetTests(unittest.TestCase):
         self.assertEqual(error.exception.code, 1)
 
 
+class MarkdownHeadingConsistencyTests(unittest.TestCase):
+    def setUp(self):
+        scratch = Path(__file__).resolve().parents[1] / "target/rsv2-07/phase37/test-fixtures"
+        scratch.mkdir(parents=True, exist_ok=True)
+        temporary = tempfile.TemporaryDirectory(prefix="headings-", dir=scratch)
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.names, self.files = {}, {}
+        for phase in range(19, 37):
+            directory = "experiments/rsv2_07/" if phase < 26 else audit.DIRECTORY
+            name = directory + f"PHASE{phase}_FIXTURE.md"
+            data = f"# Phase-{phase} saved audit\n\n```sh\n# code comment\n```\n".encode()
+            self.names[phase], self.files[name] = name, data
+            self.write(name, data)
+
+    def write(self, name, data):
+        path = self.root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+
+    def cli(self, *extra):
+        with patch.object(sys, "argv", ["forensics", "--phase", "37", "--repo-root", str(self.root), *extra]), \
+                redirect_stdout(io.StringIO()) as output:
+            result = audit.main()
+        return result, output.getvalue()
+
+    def test_atx_titles_levels_optional_closing_hashes_and_nonheadings(self):
+        data = b"# Phase-19 saved audit ###\n\n  ## Section\n### Nested # literal\n#not-heading\n    # indented\n> # quoted\n- # listed\n"
+        result = audit.markdown_heading_structure(data, 19)
+        self.assertEqual([(row["level"], row["title"], row["line"]) for row in result["headings"]],
+                         [(1, "Phase-19 saved audit", 1), (2, "Section", 3), (3, "Nested # literal", 4)])
+        self.assertEqual(result["issues"], [])
+
+    def test_matching_code_fences_ignore_fake_headings_and_shorter_closers(self):
+        data = b"# Phase-19 audit\n````sh\n# fake\n```\n## still fake\n`````\n## Real\n~~~\n# tilde fake\n```\n~~~\n"
+        result = audit.markdown_heading_structure(data, 19)
+        self.assertEqual([row["title"] for row in result["headings"]], ["Phase-19 audit", "Real"])
+        self.assertEqual(result["issues"], [])
+        unfinished = audit.markdown_heading_structure(b"# Phase-19 audit\n```\n# fake\n", 19)
+        self.assertEqual(unfinished["issues"], [{"code": "unclosed_code_fence", "line": 2}])
+
+    def test_single_line_setext_headings_keep_source_line_numbers(self):
+        result = audit.markdown_heading_structure(b"Phase-19 saved audit\r\n===\r\n\r\nSection\r\n---\r\n", 19)
+        self.assertEqual([(row["level"], row["line"], row["style"]) for row in result["headings"]],
+                         [(1, 1, "setext"), (2, 4, "setext")])
+        self.assertEqual(result["issues"], [])
+
+    def test_structural_findings_cover_titles_h1_count_level_skips_and_duplicates(self):
+        cases = ((b"", {"h1_count_not_one", "first_heading_not_h1", "phase_title_mismatch"}),
+                 (b"## Phase-19 audit\n", {"first_heading_not_h1", "h1_count_not_one"}),
+                 (b"# Phase-20 audit\n", {"phase_title_mismatch"}),
+                 (b"# Phase-19 audit\n# Second\n", {"h1_count_not_one"}),
+                 (b"# Phase-19 audit\n### Skipped\n", {"skipped_heading_level"}),
+                 (b"# \n", {"empty_heading", "phase_title_mismatch"}),
+                 (b"# Phase-19 audit\n## Repeated title\n## repeated   TITLE\n", {"repeated_heading_title"}))
+        for data, expected in cases:
+            with self.subTest(data=data):
+                actual = {row["code"] for row in audit.markdown_heading_structure(data, 19)["issues"]}
+                self.assertTrue(expected <= actual, (expected, actual))
+
+    def test_all_phases_source_digests_and_discovery_scope(self):
+        current = audit.markdown_heading_audit(self.root)
+        self.assertEqual(current["phases"], list(range(19, 37)))
+        self.assertEqual((current["document_count"], current["heading_count"], current["issue_count"]), (18, 18, 0))
+        for name, data in self.files.items():
+            self.assertEqual((current["documents"][name]["sha256"], current["documents"][name]["size_bytes"]),
+                             (hashlib.sha256(data).hexdigest(), len(data)))
+        for name in (audit.HEADING_REPORT, audit.DIRECTORY + "PHASE18_OTHER.md", audit.DIRECTORY + "PHASE360_OTHER.md",
+                     audit.DIRECTORY + "phase19_lowercase.md", "other/PHASE19_OTHER.md"):
+            self.write(name, b"excluded malformed heading")
+        self.assertEqual(current, audit.markdown_heading_audit(self.root))
+        extra = audit.DIRECTORY + "archive/PHASE21_ADDITIONAL.md"
+        self.write(extra, b"# Phase-21 another saved report\n")
+        self.assertEqual(audit.markdown_heading_audit(self.root)["document_count"], 19)
+        self.assertNotIn(str(self.root), json.dumps(current))
+
+    def test_invalid_utf8_missing_coverage_and_symlinked_sources_fail(self):
+        path = self.root / self.names[36]
+        path.write_bytes(b"\xff")
+        with self.assertRaises(ValueError):
+            audit.markdown_heading_audit(self.root)
+        path.unlink()
+        with self.assertRaisesRegex(ValueError, "coverage must include every phase"):
+            audit.markdown_heading_audit(self.root)
+        path.symlink_to(Path(self.names[35]).name)
+        with self.assertRaisesRegex(ValueError, "regular Markdown source"):
+            audit.markdown_heading_audit(self.root)
+
+    def test_changed_bytes_or_membership_during_scan_fail(self):
+        original_read = Path.read_bytes
+        changed = False
+        def read(path):
+            nonlocal changed
+            data = original_read(path)
+            if path == self.root / self.names[36] and not changed:
+                changed = True
+                path.write_bytes(data + b"\n")
+            return data
+        with patch.object(Path, "read_bytes", new=read), self.assertRaisesRegex(ValueError, "changed during heading audit"):
+            audit.markdown_heading_audit(self.root)
+        names = audit.phase_markdown_paths(self.root)
+        with patch.object(audit, "phase_markdown_paths", side_effect=[names, names + [audit.DIRECTORY + "PHASE20_ADDED.md"]]), \
+                self.assertRaisesRegex(ValueError, "membership changed"):
+            audit.markdown_heading_audit(self.root)
+
+    def test_cli_preserves_sources_checks_readonly_and_records_findings_with_exit_two(self):
+        with patch.object(audit.subprocess, "check_output", side_effect=AssertionError("Unexpected Git command")):
+            result, output = self.cli("--write")
+            self.assertEqual(result, 0)
+            self.assertIn("documents=18 | headings=18 | findings=0", output)
+            expected = set(self.files) | {audit.HEADING_RECEIPT, audit.HEADING_REPORT}
+            self.assertEqual({path.relative_to(self.root).as_posix() for path in self.root.rglob("*") if path.is_file()}, expected)
+            for name, data in self.files.items():
+                self.assertEqual((self.root / name).read_bytes(), data)
+            with patch.object(Path, "write_text", side_effect=AssertionError("Readonly audit wrote")):
+                self.assertEqual(self.cli()[0], 0)
+            receipt = self.root / audit.HEADING_RECEIPT
+            original = receipt.read_bytes()
+            for field, value in (("h1_count", True), ("sha256", "0" * 64), ("headings", [])):
+                saved = json.loads(original)
+                saved["documents"][self.names[36]][field] = value
+                receipt.write_text(json.dumps(saved))
+                with self.subTest(field=field), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                    self.cli()
+                self.assertEqual(error.exception.code, 1)
+            receipt.write_bytes(original)
+            report = self.root / audit.HEADING_REPORT
+            original_report = report.read_bytes()
+            report.write_bytes(original_report + b"changed")
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                self.cli()
+            self.assertEqual(error.exception.code, 1)
+            report.write_bytes(original_report)
+            self.write(self.names[36], b"# Wrong phase title\n")
+            result, output = self.cli("--write")
+            self.assertEqual(result, 2)
+            self.assertIn("| FINDINGS |", output)
+            self.assertEqual(self.cli()[0], 2)
+            saved = json.loads(receipt.read_bytes())
+            self.assertEqual(saved["status"], "heading_inconsistencies")
+            self.assertEqual(saved["issue_count"], 1)
+
+    def test_artifact_root_is_rejected_for_heading_audit(self):
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli("--artifact-root", str(self.root))
+        self.assertEqual(error.exception.code, 1)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

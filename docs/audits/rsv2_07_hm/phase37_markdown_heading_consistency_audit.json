@@ -1,0 +1,485 @@
+{
+  "schema": "jarambit.rsv2_07_hm.phase37_markdown_heading_consistency.v1",
+  "task": "RSV2-07-p37",
+  "status": "pass",
+  "search_roots": [
+    "experiments/rsv2_07",
+    "docs/audits/rsv2_07_hm"
+  ],
+  "phases": [
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36
+  ],
+  "document_count": 18,
+  "documents": {
+    "docs/audits/rsv2_07_hm/PHASE26_ROUND1_BIRTHS_VS_ELITES_LINEAGE_AUDIT.md": {
+      "phase": 26,
+      "sha256": "faa15cb6421fece10670268ccb644846f66d3f153aa943b21be711fbdf8683f9",
+      "size_bytes": 2937,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-26 Round-1 births versus Round-0 elites lineage audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "docs/audits/rsv2_07_hm/PHASE27_ARTIFACT_DIGEST_INDEX.md": {
+      "phase": 27,
+      "sha256": "bc39415bb1709a746eb0e2366ec34bd0d0cb32e712c07063f0e7057d38aa19fe",
+      "size_bytes": 1832,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-27 artifact digest index",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "docs/audits/rsv2_07_hm/PHASE28_SCRIPT_TEST_INVENTORY_AUDIT.md": {
+      "phase": 28,
+      "sha256": "ee894ddd7ef378e5d0da6bba2c34d12e4ea3ecbf05d936ab443290904f1b12cb",
+      "size_bytes": 1895,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-28 script and test inventory audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "docs/audits/rsv2_07_hm/PHASE29_INDEX_INVENTORY_CROSS_CHECK_AUDIT.md": {
+      "phase": 29,
+      "sha256": "cb649896fad00154ed39594c54d52836016f9395395704c35e08fbecc16aaa2b",
+      "size_bytes": 2708,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-29 index and inventory cross-check audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "docs/audits/rsv2_07_hm/PHASE30_SUMMARY_MANIFEST_AUDIT.md": {
+      "phase": 30,
+      "sha256": "6a074af3222351fd4d172f12c2d4eb89218ab6a445d5e2b0fd505f3b60f0587f",
+      "size_bytes": 2964,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-30 summary manifest audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "docs/audits/rsv2_07_hm/PHASE31_MANIFEST_CROSS_CHECK_AUDIT.md": {
+      "phase": 31,
+      "sha256": "38bfd5d4aebc0591e59ca59e2a655de01d4db03e50014526d6a9c206c1736998",
+      "size_bytes": 3342,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-31 manifest cross-check audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "docs/audits/rsv2_07_hm/PHASE32_CUMULATIVE_RECEIPT_TABLE_AUDIT.md": {
+      "phase": 32,
+      "sha256": "132d265c0f39d9ac9402ad2ddce43dd5241425a74bf659277ab14492278879bf",
+      "size_bytes": 3597,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-32 cumulative receipt table audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "docs/audits/rsv2_07_hm/PHASE33_TABLE_PARITY_AUDIT.md": {
+      "phase": 33,
+      "sha256": "2460b8d8a059bd0d6fb14b8dd8b680b7d19874fe4848c466ac84f1db0d75ae43",
+      "size_bytes": 3679,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-33 table parity audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "docs/audits/rsv2_07_hm/PHASE34_CUMULATIVE_RECEIPT_TABLE_AUDIT.md": {
+      "phase": 34,
+      "sha256": "227dfdd7671b608c52cee3ec68ecc151eeef5c0a632907b7c0e5adec45b471d3",
+      "size_bytes": 4189,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-34 cumulative receipt table audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "docs/audits/rsv2_07_hm/PHASE35_VERIFIER_SELF_DIGEST_AUDIT.md": {
+      "phase": 35,
+      "sha256": "8188b98169b07d7597f19a1df49c59cf880a8efc479e011de24407804cd260f5",
+      "size_bytes": 2281,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-35 verifier self-digest audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "docs/audits/rsv2_07_hm/PHASE36_JSON_SCHEMA_KEYSET_AUDIT.md": {
+      "phase": 36,
+      "sha256": "0a1ed1cfce5e4a42a9791dc027fb3487a6095ca110e5a8f35e9d65edecad85b4",
+      "size_bytes": 8061,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-36 JSON schema keyset audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "experiments/rsv2_07/PHASE19_W320_R02_PROVENANCE_AUDIT.md": {
+      "phase": 19,
+      "sha256": "501c13aa4b9752c17c121d743dc15f8b1565635e524080ac5eafd2aad39bddc5",
+      "size_bytes": 10705,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-19 w320 r02 attempt provenance audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "experiments/rsv2_07/PHASE20_STAGE2_IDENTITY_DEDUP_AUDIT.md": {
+      "phase": 20,
+      "sha256": "f9db22de38195f4289107f34880f5a63b6c183af3584779c769cb3fd8892de65",
+      "size_bytes": 5855,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-20 cross-wave Stage-2 identity deduplication audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "experiments/rsv2_07/PHASE21_ROUND0_SEED_VS_MUTATED_INVENTORY_AUDIT.md": {
+      "phase": 21,
+      "sha256": "dbcc651e3aeede360224c7897dfe46b020e49776df79007c8eddd29f41ef4e74",
+      "size_bytes": 4580,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-21 Round-0 seed versus mutated inventory audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "experiments/rsv2_07/PHASE22_W320_LEADERBOARD_PROVENANCE_AUDIT.md": {
+      "phase": 22,
+      "sha256": "508302503726024411b113be3bdfa6e02de964da2b19271d0f64e58bb777f65c",
+      "size_bytes": 4183,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-22 w320 leaderboard and screen schema provenance audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "experiments/rsv2_07/PHASE23_COMPLETE_RECEIPT_MANIFEST_AUDIT.md": {
+      "phase": 23,
+      "sha256": "2959470b88edc84abdfb60df6709ebdb877ce44beb1b7399cc21955dc18cb31e",
+      "size_bytes": 8749,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-23 complete current receipt manifest audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "experiments/rsv2_07/PHASE24_SCREEN_DEFICIT_ORDERING_AUDIT.md": {
+      "phase": 24,
+      "sha256": "13ed0c506b2ee4e1cb1dd4d47365598c2ae1d03bebbf34f890eb6dd5461b3b02",
+      "size_bytes": 6381,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-24 saved screen tuple ordering provenance audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    },
+    "experiments/rsv2_07/PHASE25_BIRTHS_TO_SCREEN_IDENTITY_JOIN_AUDIT.md": {
+      "phase": 25,
+      "sha256": "b1eab5fe7ced2991558d7fabf5b8fa54946e333b7a6a32a9883d490c4294d33b",
+      "size_bytes": 6682,
+      "headings": [
+        {
+          "line": 1,
+          "level": 1,
+          "title": "Phase-25 births-to-screen certificate identity join audit",
+          "style": "atx"
+        }
+      ],
+      "heading_count": 1,
+      "h1_count": 1,
+      "level_counts": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+      },
+      "phase_title_matches": true,
+      "issues": []
+    }
+  },
+  "heading_count": 18,
+  "issue_count": 0,
+  "documents_with_issues": 0
+}

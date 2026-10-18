@@ -47,6 +47,9 @@ KEYSET_RECEIPT = DIRECTORY + "phase36_json_schema_keyset_audit.json"
 KEYSET_REPORT = DIRECTORY + "PHASE36_JSON_SCHEMA_KEYSET_AUDIT.md"
 KEYSET_ROOTS = ("experiments/rsv2_07", DIRECTORY.rstrip("/"))
 KEYSET_PATTERN = re.compile(r"phase(19|2[0-9]|3[0-5])(?:_[^/]*)?\.json")
+HEADING_RECEIPT = DIRECTORY + "phase37_markdown_heading_consistency_audit.json"
+HEADING_REPORT = DIRECTORY + "PHASE37_MARKDOWN_HEADING_CONSISTENCY_AUDIT.md"
+HEADING_PATTERN = re.compile(r"PHASE(19|2[0-9]|3[0-6])(?:_[^/]*)?\.md")
 # Absolute POSIX paths, Windows drive paths, UNC paths and file URIs.
 HOST_PATH = re.compile(r"(?<![\w./:])/(?!/)[\w.~-]+|(?<!\w)[A-Za-z]:[\\/]|\\\\[^\\\s]+\\|file://")
 
@@ -424,6 +427,135 @@ def run_keysets(args):
         require((args.repo_root / KEYSET_REPORT).read_text(encoding="utf-8") == report, "Phase-36 report mismatch")
     print(f"LANE: RSV2-07-hm | RSV2-07-p36 | PASS | receipts={current['receipt_count']} | keysets={current['keyset_group_count']}")
     return 0
+
+
+def phase_markdown_paths(repo_root):
+    repo_root = Path(repo_root)
+    names = []
+    for directory in KEYSET_ROOTS:
+        require((repo_root / directory).is_dir(), "Missing Markdown search directory: " + directory)
+        names.extend(path.relative_to(repo_root).as_posix() for path in (repo_root / directory).rglob("PHASE*.md")
+                     if HEADING_PATTERN.fullmatch(path.name))
+    return sorted(names)
+
+
+def markdown_heading_structure(data, phase):
+    headings, issues, fence, pending = [], [], None, None
+    for number, line in enumerate(data.decode("utf-8").split("\n"), 1):
+        line = line.rstrip("\r")
+        if fence is not None:
+            marker, length, opening_line = fence
+            if re.fullmatch(r" {0,3}" + re.escape(marker) + "{" + str(length) + r",}[ \t]*", line):
+                fence = None
+            continue
+        opening = re.fullmatch(r" {0,3}(`{3,}|~{3,})(.*)", line)
+        if opening and (opening[1][0] != "`" or "`" not in opening[2]):
+            fence, pending = (opening[1][0], len(opening[1]), number), None
+            continue
+        atx = re.fullmatch(r" {0,3}(#{1,6})(?:[ \t]+(.*)|[ \t]*)", line)
+        underline = re.fullmatch(r" {0,3}(=+|-+)[ \t]*", line)
+        if atx:
+            title = re.sub(r"(?:[ \t]+|^)#+[ \t]*$", "", atx[2] or "").strip()
+            headings.append({"line": number, "level": len(atx[1]), "title": title, "style": "atx"})
+            pending = None
+        elif underline and pending:
+            headings.append({"line": pending[0], "level": 1 if underline[1][0] == "=" else 2,
+                             "title": pending[1], "style": "setext"})
+            pending = None
+        else:
+            plain = line.strip()
+            pending = (number, plain) if plain and not line.startswith(("    ", "\t")) and not re.match(
+                r"(?:[#>|]|[-+*](?:\s|$)|\d+[.)]\s|=+$|-+$)", plain) and "|" not in plain else None
+    if fence is not None:
+        issues.append({"code": "unclosed_code_fence", "line": fence[2]})
+    h1 = [row for row in headings if row["level"] == 1]
+    if len(h1) != 1:
+        issues.append({"code": "h1_count_not_one", "count": len(h1)})
+    if not headings or headings[0]["level"] != 1:
+        issues.append({"code": "first_heading_not_h1"})
+    title_match = len(h1) == 1 and re.match(r"Phase[- ]" + str(phase) + r"\b", h1[0]["title"], re.IGNORECASE) is not None
+    if not title_match:
+        issues.append({"code": "phase_title_mismatch"})
+    seen, previous = set(), 0
+    for row in headings:
+        if row["level"] > previous + 1:
+            issues.append({"code": "skipped_heading_level", "line": row["line"]})
+        if not row["title"]:
+            issues.append({"code": "empty_heading", "line": row["line"]})
+        title = " ".join(row["title"].casefold().split())
+        if title in seen:
+            issues.append({"code": "repeated_heading_title", "line": row["line"]})
+        seen.add(title)
+        previous = row["level"]
+    return {"headings": headings, "heading_count": len(headings), "h1_count": len(h1),
+            "level_counts": {str(level): sum(row["level"] == level for row in headings) for level in range(1, 7)},
+            "phase_title_matches": title_match, "issues": issues}
+
+
+def markdown_heading_audit(repo_root):
+    repo_root = Path(repo_root)
+    names = phase_markdown_paths(repo_root)
+    sources, documents = {}, {}
+    for name in names:
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode), "Expected regular Markdown source: " + name)
+        data = path.read_bytes()
+        phase = int(HEADING_PATTERN.fullmatch(path.name)[1])
+        sources[name] = data
+        documents[name] = {"phase": phase, "sha256": hashlib.sha256(data).hexdigest(), "size_bytes": len(data),
+                           **markdown_heading_structure(data, phase)}
+    phases = sorted({row["phase"] for row in documents.values()})
+    require(phases == list(range(19, 37)), "Markdown coverage must include every phase from 19 through 36")
+    require(phase_markdown_paths(repo_root) == names, "Markdown membership changed during heading audit")
+    for name, data in sources.items():
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode) and path.read_bytes() == data,
+                "Markdown bytes or type changed during heading audit")
+    issue_count = sum(len(row["issues"]) for row in documents.values())
+    return {"schema": "jarambit.rsv2_07_hm.phase37_markdown_heading_consistency.v1", "task": "RSV2-07-p37",
+            "status": "pass" if not issue_count else "heading_inconsistencies", "search_roots": list(KEYSET_ROOTS),
+            "phases": phases, "document_count": len(documents), "documents": documents,
+            "heading_count": sum(row["heading_count"] for row in documents.values()), "issue_count": issue_count,
+            "documents_with_issues": sum(bool(row["issues"]) for row in documents.values())}
+
+
+def render_headings(document):
+    rows = [f"| {row['phase']} | {name} | {row['heading_count']} | {row['h1_count']} | {'yes' if row['phase_title_matches'] else 'no'} | {len(row['issues'])} |"
+            for name, row in sorted(document["documents"].items(), key=lambda item: (item[1]["phase"], item[0]))]
+    label = "PASS" if not document["issue_count"] else "FINDINGS"
+    return "\n".join([
+        "# Phase-37 Markdown heading consistency audit", "",
+        f"**{label}.** Audited {document['document_count']} reports covering every phase from 19 through 36: {document['heading_count']} headings, {document['issue_count']} structural findings in {document['documents_with_issues']} reports.", "",
+        "| Phase | Repository-relative report | Headings | H1 count | Title phase matches | Findings |",
+        "| ---: | --- | ---: | ---: | --- | ---: |", *rows, "",
+        "Checks require exactly one H1, an initial H1, its Phase-number prefix matching the filename, nonempty titles, no skipped heading levels and no repeated titles after case and whitespace normalization. Unclosed code fences are recorded. The JSON lists source SHA-256 and byte sizes, heading line numbers, levels, titles, syntax styles, level counts and individual findings. Findings are recorded without changing source documents.", "",
+        "Parser scope is standalone ATX headings and single-line Setext headings with at most three leading spaces. Optional closing ATX hashes are removed. Backtick and tilde fences are excluded until a matching fence of equal or greater length closes; four-space or tab-indented lines, blockquote prefixes and list-marker lines are not headings. Container blocks, HTML blocks and multiline Setext paragraphs are outside this bounded parser; this is not a full CommonMark conformance check. The saved reports use standalone ATX headings and simple fenced command blocks.", "",
+        "Discovery recursively searches experiments/rsv2_07 and docs/audits/rsv2_07_hm for uppercase PHASE19 through PHASE36 Markdown filenames with an exact phase-number boundary. Multiple reports per phase are retained; complete phase coverage is required. Phase-37 outputs and other phases are excluded. Sources must be regular UTF-8 files. Membership, types and source bytes are checked again after scanning. Earlier audit conclusions and receipts are preserved.", "",
+        "Paths in these outputs are repository-relative. --repo-root supports a relocated source tree without Git. Normal verification compares the complete saved JSON and exact report text without writes. --write replaces only the two Phase-37 outputs. Exit 0 means consistent headings, exit 2 means recorded structural findings, and malformed or mismatching evidence exits 1.", "",
+        "```sh", "python3 scripts/audit_rsv2_07_hm_forensics.py --phase 37",
+        "python3 -m unittest discover -s scripts -p 'test_audit_rsv2_07_hm_forensics.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs 14,15 at nice 10. This is a static Markdown heading audit. Changes are left uncommitted.", "",
+    ])
+
+
+def run_headings(args):
+    require(args.artifact_root is None, "Phase-37 reads reports in --repo-root; --artifact-root is not supported")
+    current = markdown_heading_audit(args.repo_root)
+    report = render_headings(current)
+    receipt = json.dumps(current, indent=2) + "\n"
+    require_portable(report, "Phase-37 report")
+    require_portable(receipt, "Phase-37 receipt")
+    if args.write:
+        (args.repo_root / DIRECTORY).mkdir(parents=True, exist_ok=True)
+        (args.repo_root / HEADING_RECEIPT).write_text(receipt, encoding="utf-8")
+        (args.repo_root / HEADING_REPORT).write_text(report, encoding="utf-8")
+    else:
+        saved = strict_json((args.repo_root / HEADING_RECEIPT).read_bytes())
+        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-37 saved receipt mismatch")
+        require((args.repo_root / HEADING_REPORT).read_text(encoding="utf-8") == report, "Phase-37 report mismatch")
+    label = "PASS" if not current["issue_count"] else "FINDINGS"
+    print(f"LANE: RSV2-07-hm | RSV2-07-p37 | {label} | documents={current['document_count']} | headings={current['heading_count']} | findings={current['issue_count']}")
+    return 0 if not current["issue_count"] else 2
 
 
 def snapshot_bytes(repo_root, name):
@@ -899,11 +1031,13 @@ def render(document):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36"), default="26")
+    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37"), default="26")
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     try:
+        if args.phase == "37":
+            return run_headings(args)
         if args.phase == "36":
             return run_keysets(args)
         if args.phase == "35":
