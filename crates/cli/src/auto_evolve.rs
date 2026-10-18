@@ -1457,6 +1457,36 @@ mod tests {
     }
 
     #[test]
+    fn round_parent_identities_zeroes_cps_only_on_ring_wall_clamped_sibling() {
+        let mut seed = Genome::c4_seed(genome::T_MIN);
+        seed.v[genome::RING_WALL] = 5.5;
+        seed.v[EDGE_TH] = 0.10;
+        seed.v[36] = 0.5;
+        seed.v[37] = 0.6;
+        seed.v[38] = 0.7;
+        seed.clamp();
+        seed.v[EDGE_TH] = 0.01;
+        assert!(seed.v[..N_CP].iter().any(|&cp| cp != 0.0));
+        assert!(seed.v[genome::RING_WALL] < 6.0);
+
+        let mut legacy_clamped = seed.clone();
+        legacy_clamped.v[EDGE_TH] = 0.18;
+        legacy_clamped.clamp();
+        assert_eq!(legacy_clamped.v[..N_CP], seed.v[..N_CP]);
+        let mut ring_wall_sibling = legacy_clamped.clone();
+        ring_wall_sibling.v[genome::RING_WALL] =
+            ring_wall_sibling.v[genome::RING_WALL].max(6.05);
+        ring_wall_sibling.v[..N_CP].fill(0.0);
+        ring_wall_sibling.clamp();
+        assert!(ring_wall_sibling.v[..N_CP].iter().all(|&cp| cp == 0.0));
+
+        let identities = round_parent_identities(&[("p10".into(), seed)]);
+
+        assert!(identities.contains(&certification::identity(&legacy_clamped)));
+        assert!(identities.contains(&certification::identity(&ring_wall_sibling)));
+    }
+
+    #[test]
     fn stage2_selection_falls_back_to_unassessed_seed_parents_only_when_novel_pool_is_short() {
         let mut p10_seed = Genome::c4_seed(genome::T_MIN);
         p10_seed.v[EA_IN] = 14.0;
