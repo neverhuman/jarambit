@@ -245,6 +245,76 @@ class PdfProvenance(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, 'Non-reproducible PDF'):
                 build_pdf.verify_reproducible((NAME,))
 
+    def test_reproducibility_preserves_unrelated_receipts_and_rejects_redirected_roots(self):
+        paper = self.root/'target/paper'
+        paper.mkdir(parents=True, exist_ok=True)
+        unrelated = paper/'unrelated-audit.json'
+        unrelated.write_text('{"neutral": "retain this receipt"}\n')
+        wave_fixture = paper/'test-wave-publication';wave_fixture.mkdir()
+        (wave_fixture/'receipt.txt').write_text('neutral retained fixture')
+        prov_fixture = paper/'test-pdf-provenance';prov_fixture.mkdir()
+        (prov_fixture/'receipt.txt').write_text('explicitly exempt neutral fixture')
+        prior_pdf = paper/(NAME+'.pdf')
+        prior_pdf.write_bytes(b'prior pdf receipt to preserve')
+
+        def capture_bad(command, **kwargs):
+            if command[:2] == ['pandoc', '--version']:return 'pandoc 3.1.2\n'
+            if command[:2] == ['lualatex', '--version']:return build_pdf.PINNED_LUALATEX_VERSION+'\n'
+            return 'neutral tool version\n'
+
+        with patch.object(build_pdf, 'ROOT', self.root), \
+             patch.object(build_pdf, 'HERE', self.here), \
+             patch.object(build_pdf, '__file__', str(self.here/'build_pdf.py')), \
+             patch.object(build_pdf.subprocess, 'check_output', side_effect=capture_bad):
+            with self.assertRaisesRegex(RuntimeError, 'Unpinned'):
+                build_pdf.verify_reproducible((NAME,))
+        self.assertFalse((paper/'repro-attempts').exists())
+        self.assertEqual(prior_pdf.read_bytes(), b'prior pdf receipt to preserve')
+
+        def capture_ok(command, **kwargs):
+            if command[:3] == ['git', 'rev-parse', 'HEAD']:return self.head+'\n'
+            if command[:2] == ['git', 'show']:return '1792195200\n'
+            if command[:2] == ['pandoc', '--version']:return build_pdf.PINNED_PANDOC_VERSION+'\n'
+            if command[:2] == ['lualatex', '--version']:return build_pdf.PINNED_LUALATEX_VERSION+'\n'
+            return 'neutral tool version\n'
+
+        def render_ok(command, **kwargs):
+            Path(command[command.index('-o')+1]).write_bytes(b'neutral PDF packaging control')
+            return subprocess.CompletedProcess(command, 0)
+
+        delete_attempts = []
+        with patch.object(build_pdf, 'ROOT', self.root), \
+             patch.object(build_pdf, 'HERE', self.here), \
+             patch.object(build_pdf, '__file__', str(self.here/'build_pdf.py')), \
+             patch.object(build_pdf.subprocess, 'check_output', side_effect=capture_ok), \
+             patch.object(build_pdf.subprocess, 'run', side_effect=render_ok), \
+             patch.object(build_pdf.shutil, 'rmtree', side_effect=lambda p:delete_attempts.append(('rmtree', str(p)))), \
+             patch.object(Path, 'unlink', side_effect=lambda *a, **kw:delete_attempts.append(('unlink',))):
+            build_pdf.verify_reproducible((NAME,))
+
+        self.assertEqual(delete_attempts, [])
+        self.assertEqual(unrelated.read_text(), '{"neutral": "retain this receipt"}\n')
+        self.assertEqual((wave_fixture/'receipt.txt').read_text(), 'neutral retained fixture')
+        self.assertEqual((prov_fixture/'receipt.txt').read_text(), 'explicitly exempt neutral fixture')
+        self.assertEqual((paper/'repro-attempts/attempt-0001/pre-existing'/(NAME+'.pdf')).read_bytes(),
+                         b'prior pdf receipt to preserve')
+        self.assertEqual((paper/'repro-attempts/attempt-0001/pass-1'/(NAME+'.pdf')).read_bytes(),
+                         b'neutral PDF packaging control')
+        self.assertEqual((paper/(NAME+'.pdf')).read_bytes(), b'neutral PDF packaging control')
+
+        linked = self.root/'target/linked-paper'
+        linked.symlink_to(paper, target_is_directory=True)
+        outside = self.root/'docs/paper'
+        with patch.object(build_pdf, 'ROOT', self.root), \
+             patch.object(build_pdf, 'HERE', self.here), \
+             patch.object(build_pdf, '__file__', str(self.here/'build_pdf.py')), \
+             patch.object(build_pdf.subprocess, 'check_output', side_effect=capture_ok):
+            for bad_out in (linked, outside):
+                with self.assertRaisesRegex(ValueError, 'output directory|target'):
+                    build_pdf.clean_paper_outputs(bad_out)
+                with self.assertRaisesRegex(ValueError, 'output directory|target'):
+                    build_pdf.verify_reproducible((NAME,), out=bad_out)
+
 
 if __name__ == '__main__':unittest.main()
 
