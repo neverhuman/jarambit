@@ -1,0 +1,40 @@
+{
+  "command": [
+    "/home/ubuntu/jarambit_wt_diag/target/gate-feasibility-bound/unified_study/study",
+    "fem",
+    "/home/ubuntu/jarambit_wt_diag/target/gate-feasibility-bound/unified_study/combined_d055_fem.json",
+    "/home/ubuntu/jarambit_wt_diag/target/gate-feasibility-bound/unified_study/combined.csv"
+  ],
+  "config": {
+    "STUDY_ANGLE": "18",
+    "STUDY_APEX": ".175",
+    "STUDY_D0": ".55",
+    "STUDY_D1": ".85",
+    "STUDY_POINT_SHAPE": "3",
+    "STUDY_RADIAL": "1",
+    "STUDY_GRID": ".05",
+    "STUDY_BOUNDARY_TOL": ".001",
+    "STUDY_SMOOTH_HEEL": "1",
+    "STUDY_NECK_FULL": "1",
+    "STUDY_NECK_SOLID": "1",
+    "STUDY_BLADE_CORE": "6",
+    "STUDY_HEEL_RUNOUT": "5",
+    "STUDY_AREAS": "2,.25,.125,.0625",
+    "STUDY_BLADE_D1": "0",
+    "STUDY_WINDOW_CURRENT": "1",
+    "STUDY_SLOT_SMOOTH": "0",
+    "STUDY_BASELINE": "0",
+    "STUDY_CORE": "0",
+    "STUDY_POINT_SLOPE": ".3",
+    "STUDY_POINT_END": "6",
+    "STUDY_EXPORT_AREA": ".25",
+    "JARAMBIT_SOLVER": "faer",
+    "STUDY_POINT_LATERAL": "2"
+  },
+  "cpu_affinity": [
+    10,
+    11
+  ],
+  "CARGO_BUILD_JOBS": 2,
+  "solver": "faer"
+}

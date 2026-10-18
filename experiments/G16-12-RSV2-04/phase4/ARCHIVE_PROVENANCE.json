@@ -1,0 +1,20 @@
+{
+  "archived_utc": "2026-10-18T05:22:57.755614+00:00",
+  "scientific_run_source_commit": "21425fe2948ab3941eedbe9710ebc3d29427faae",
+  "packaging_parent_commit": "d046093432864ac3cc619dc40c177c452e1e967a",
+  "original_stage_directory": "/home/ubuntu/jarambit_wt_diag/target/gate-feasibility-bound/unified_study",
+  "original_seal_sha256": "71a0a93386eb3d6da12385494b89ce21c68a3c0201373770935a635b29b771fe",
+  "original_sealed_artifact_count": 95,
+  "archived_original_artifact_count": 94,
+  "omitted_generated_executables": {
+    "study": {
+      "sha256": "c611e23786ba8257b47a0344b42295561453bbaec3d35c0f838ac565433fb3d8",
+      "reason": "generated executable retained in original target; not committed"
+    }
+  },
+  "report_sha256": "7db2bf57581528e6e87f5d400e2bebcdc992e50bfa654fb90d09b8dd69204432",
+  "scientific_artifacts_byte_identical": true,
+  "new_designs_created": false,
+  "source_production_edits": false,
+  "publication_state": "local checkpoint only; no push or PR authorized in this checkpoint"
+}
