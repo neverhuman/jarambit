@@ -4,6 +4,7 @@
 import argparse
 import importlib.util
 import json
+import tomllib
 from pathlib import Path
 
 
@@ -13,7 +14,10 @@ CONTRACT = "docs/audit/genotype_phenotype_constant_contract_audit.json"
 LEGACY = "experiments/G16-12-RSV2-04/test_report_provenance.py"
 SELF = "tools/verify_gate_feasibility_audit.py"
 SOURCES = ("crates/genotype/src/lib.rs", "crates/phenotype/src/lib.rs")
-TASK = "G16-12-RSV2-04-p26"
+CONTRACT_TASK = "G16-12-RSV2-04-p26"
+TASK = "G16-12-RSV2-04-p27"
+MANIFEST_REPORT = "docs/audit/WORKSPACE_MANIFEST_PROVENANCE_AUDIT.md"
+MANIFEST_JSON = "docs/audit/workspace_manifest_provenance_audit.json"
 STATUS = "IN_PROGRESS"
 OUTCOME = "PARTIAL"
 
@@ -52,6 +56,56 @@ def record(module, root, path, markdown=False):
     return result
 
 
+def manifest_inventory(module, root):
+    """Read local TOML metadata only; never resolve dependencies or invoke Cargo."""
+    root = Path(root)
+    paths = ["Cargo.toml"] + sorted(p.relative_to(root).as_posix()
+                                     for p in (root / "crates").glob("*/Cargo.toml"))
+    docs = {path: tomllib.loads(module.portable_path(root, path).read_text(encoding="utf-8"))
+            for path in paths}
+    workspace = docs["Cargo.toml"]["workspace"]
+    defaults = {key: workspace["package"][key] for key in ("edition", "version")}
+    require(all(isinstance(value, str) and bool(value) for value in defaults.values()),
+            "workspace edition/version must be nonempty strings")
+    members = workspace["members"]
+    require(isinstance(members, list) and all(isinstance(x, str) for x in members),
+            "invalid workspace members")
+    member_paths = [f"{member}/Cargo.toml" for member in members]
+    for path in member_paths:
+        module.portable_path(root, path)
+    require(len(member_paths) == len(set(member_paths))
+            and sorted(member_paths) == paths[1:], "workspace/member manifest coverage mismatch")
+    sections = ("dependencies", "dev-dependencies", "build-dependencies")
+    records = []
+    for path, doc in docs.items():
+        item = record(module, root, path)
+        item["package"] = None
+        if "package" in doc:
+            package = doc["package"]
+            fields = {"name": package["name"]}
+            for key in ("edition", "version"):
+                declared = package[key]
+                inherited = (isinstance(declared, dict) and set(declared) == {"workspace"}
+                             and declared["workspace"] is True)
+                require(inherited or (isinstance(declared, str) and bool(declared)),
+                        "unsupported edition/version declaration")
+                fields[key] = {"declared": declared,
+                               "effective": defaults[key] if inherited else declared,
+                               "origin": f"workspace.package.{key}" if inherited else f"package.{key}"}
+            item["package"] = fields
+        item["dependency_keys"] = {key: sorted(doc.get(key, {})) for key in sections}
+        item["target_dependency_keys"] = {
+            target: {key: sorted(table.get(key, {})) for key in sections}
+            for target, table in sorted(doc.get("target", {}).items())}
+        item["workspace_dependency_keys"] = sorted(doc.get("workspace", {}).get("dependencies", {}))
+        records.append(item)
+    return {"schema_version": 1, "task": TASK, "status": STATUS, "qualified_count": 0,
+            "assignment_outcome": "COMPLETE", "scope": "Static workspace manifest metadata only",
+            "workspace_resolver": workspace["resolver"], "workspace_members": members,
+            "workspace_package_defaults": defaults, "manifest_count": len(records),
+            "manifests": records}
+
+
 def verify(root):
     root = Path(root).resolve()
     m = legacy_verifier(root)
@@ -72,11 +126,11 @@ def verify(root):
             "unsupported index schema")
     require(index["task"] == TASK, "unexpected task")
     diagnostic(index)
-    require(type(index["report_count"]) is int and index["report_count"] == 16,
-            "expected sixteen reports")
-    expected = [str(path) for _, path in m.REPORTS] + [REPORT]
+    require(type(index["report_count"]) is int and index["report_count"] == 17,
+            "expected seventeen reports")
+    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT]
     require(len(m.REPORTS) == 15, "expected fifteen historical reports")
-    require(isinstance(index["reports"], list) and len(index["reports"]) == 16,
+    require(isinstance(index["reports"], list) and len(index["reports"]) == 17,
             "report coverage mismatch")
     for row, path in zip(index["reports"], expected):
         require(isinstance(row, dict) and row.get("path") == path,
@@ -85,7 +139,8 @@ def verify(root):
         require(row == record(m, root, path, markdown=True), "report fingerprint mismatch")
         require(all(type(row[k]) is int for k in ("bytes", "lines", "tables")),
                 "report counts must be integers")
-    require(index["supplemental_documents"] == [record(m, root, CONTRACT)],
+    require(index["supplemental_documents"] == [record(m, root, CONTRACT),
+                                                   record(m, root, MANIFEST_JSON)],
             "supplemental fingerprint mismatch")
     contract = read_json(CONTRACT)
     require(set(contract) == {"schema_version", "task", "status", "qualified_count",
@@ -94,7 +149,7 @@ def verify(root):
             "invalid contract schema")
     require(type(contract["schema_version"]) is int and contract["schema_version"] == 1,
             "unsupported contract schema")
-    require(contract["task"] == TASK, "unexpected contract task")
+    require(contract["task"] == CONTRACT_TASK, "unexpected contract task")
     diagnostic(contract)
     require(contract["assignment_outcome"] == OUTCOME
             and contract["parity_assessment"] == "NOT_ASSESSED",
@@ -114,12 +169,20 @@ def verify(root):
     text = m.portable_path(root, REPORT).read_text(encoding="utf-8")
     require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in text.splitlines()
             and "qualified_count: 0" in text.splitlines(), "invalid report status")
-    for path in expected + [INDEX, CONTRACT, SELF, LEGACY]:
+    manifest = read_json(MANIFEST_JSON)
+    observed = manifest_inventory(m, root)
+    require(json.dumps(manifest, sort_keys=True) == json.dumps(observed, sort_keys=True),
+            "workspace manifest metadata/fingerprint mismatch")
+    manifest_text = m.portable_path(root, MANIFEST_REPORT).read_text(encoding="utf-8")
+    require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in manifest_text.splitlines()
+            and "qualified_count: 0" in manifest_text.splitlines(), "invalid manifest report status")
+    for path in expected + [INDEX, CONTRACT, MANIFEST_JSON, SELF, LEGACY]:
         require(m.FORBIDDEN_HOME not in m.portable_path(root, path).read_text(encoding="utf-8"),
                 "literal host prefix")
     require(m.verify(root) == 15, "historical index mismatch")
-    return {"task": TASK, "status": STATUS, "assignment_outcome": OUTCOME,
-            "qualified_count": 0, "reports": 16, "source_files": 2,
+    return {"task": TASK, "status": STATUS, "assignment_outcome": "COMPLETE",
+            "qualified_count": 0, "reports": 17, "source_files": 2,
+            "manifest_files": observed["manifest_count"], "prior_contract_assignment_outcome": OUTCOME,
             "parity_assessment": "NOT_ASSESSED"}
 
 
