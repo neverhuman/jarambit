@@ -1,0 +1,91 @@
+{
+  "assessed_count": 3,
+  "champion": null,
+  "designs": [
+    {
+      "all_16_gates": false,
+      "battery_pass_count": 14,
+      "buckling_eigenvalue_a4": 4.839605617544106,
+      "certificate_identity": "7bcb2c12e7ed4a8e6c159a7071b890b8ef3cc97a52354ef7d55c149c8857529c",
+      "family": "p14",
+      "fat_sf": 0.4679147255840555,
+      "g1": 0.45047275,
+      "genome_csv": "out/w410t3/by-content/7bcb2c12e7ed4a8e6c159a7071b890b8ef3cc97a52354ef7d55c149c8857529c/attempt-1792319942172112536/w410t3_r01_p14_c15_genome.csv",
+      "label": "w410t3_r01_p14_c15",
+      "mass_3d_g": 83.0123,
+      "mass_g": 83.047,
+      "qualified": false,
+      "ring_bearing_w_mm": 10.40159366059293,
+      "rs_v2_all_hard": false,
+      "scorecard_md": "out/w410t3/by-content/7bcb2c12e7ed4a8e6c159a7071b890b8ef3cc97a52354ef7d55c149c8857529c/attempt-1792319942172112536/w410t3_r01_p14_c15_master_scorecard.md",
+      "seq_ratio": 1.365,
+      "solid_tip_sf": 0.6361,
+      "strict_hunter_sf": 0.6454,
+      "w_cad": -5.925273
+    },
+    {
+      "all_16_gates": false,
+      "battery_pass_count": 14,
+      "buckling_eigenvalue_a4": 6.788784355228938,
+      "certificate_identity": "1e08e52c7103722d641e07a9b02882d3f757ab32cc0f31f03b62b7f7ccb3f846",
+      "family": "p10",
+      "fat_sf": 0.5069719247950106,
+      "g1": 0.47963749999999994,
+      "genome_csv": "out/w410t3/by-content/1e08e52c7103722d641e07a9b02882d3f757ab32cc0f31f03b62b7f7ccb3f846/attempt-1792318144309260433/w410t3_r01_p10_c01_genome.csv",
+      "label": "w410t3_r01_p10_c01",
+      "mass_3d_g": 83.2231,
+      "mass_g": 83.277,
+      "qualified": false,
+      "ring_bearing_w_mm": 10.40159366059293,
+      "rs_v2_all_hard": false,
+      "scorecard_md": "out/w410t3/by-content/1e08e52c7103722d641e07a9b02882d3f757ab32cc0f31f03b62b7f7ccb3f846/attempt-1792318144309260433/w410t3_r01_p10_c01_master_scorecard.md",
+      "seq_ratio": 1.29,
+      "solid_tip_sf": 0.6823,
+      "strict_hunter_sf": 0.7008,
+      "w_cad": -5.25221
+    },
+    {
+      "all_16_gates": false,
+      "battery_pass_count": 14,
+      "buckling_eigenvalue_a4": 3.6458952646994782,
+      "certificate_identity": "1a8a600d6f7f87cc6ddcff34c52dd41a65696fb61b22f5d491ca48e2f0074800",
+      "family": "p14",
+      "fat_sf": 0.34965508494227154,
+      "g1": 0.16270800000000002,
+      "genome_csv": "out/w410t3/by-content/1a8a600d6f7f87cc6ddcff34c52dd41a65696fb61b22f5d491ca48e2f0074800/attempt-1792322845622712086/w410t3_r02_p14_c23_genome.csv",
+      "label": "w410t3_r02_p14_c23",
+      "mass_3d_g": 100.9973,
+      "mass_g": 100.987,
+      "qualified": false,
+      "ring_bearing_w_mm": 12.808698342720916,
+      "rs_v2_all_hard": false,
+      "scorecard_md": "out/w410t3/by-content/1a8a600d6f7f87cc6ddcff34c52dd41a65696fb61b22f5d491ca48e2f0074800/attempt-1792322845622712086/w410t3_r02_p14_c23_master_scorecard.md",
+      "seq_ratio": 1.749,
+      "solid_tip_sf": 0.2295,
+      "strict_hunter_sf": 0.5162,
+      "w_cad": -9.213385
+    }
+  ],
+  "qualified_count": 0,
+  "schema": "jarambit.auto_evolve.leaderboard.v2",
+  "unverified": [
+    {
+      "certificate_identity": "0a94a6a18b062123d4a2d9c5674f14e040b248402f9d8f655d302a2e391ee405",
+      "label": "w410t3_r02_p10_c45",
+      "reason": "independent certification unverified: evaluator exited exit status: 1; raw artifacts retained in out/w410t3/by-content/0a94a6a18b062123d4a2d9c5674f14e040b248402f9d8f655d302a2e391ee405/attempt-1792321421780834049",
+      "status": "unverified"
+    },
+    {
+      "certificate_identity": "b540b1f92bc000ba233275264aa8580762b8b58465c53d53acb892a0da62351b",
+      "label": "w410t3_r03_p10_c41",
+      "reason": "independent certification unverified: evaluator exited exit status: 1; raw artifacts retained in out/w410t3/by-content/b540b1f92bc000ba233275264aa8580762b8b58465c53d53acb892a0da62351b/attempt-1792325055277421258",
+      "status": "unverified"
+    },
+    {
+      "certificate_identity": "ff157531f7937b79029f93adaf3f04a274344d959421f54ebeab53bef0eebeb0",
+      "label": "w410t3_r03_p14_c24",
+      "reason": "independent certification unverified: evaluator exited exit status: 1; raw artifacts retained in out/w410t3/by-content/ff157531f7937b79029f93adaf3f04a274344d959421f54ebeab53bef0eebeb0/attempt-1792326831837991314",
+      "status": "unverified"
+    }
+  ]
+}

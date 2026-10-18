@@ -274,7 +274,7 @@ def build_insertion(waves, preview=False):
         'Completed independent solves do not imply physical qualification. ' +
         ('All listed leaderboards retain `qualified_count=0` and `champion=null`. No certified winner is established.' if not any(w['qualified'] for w in waves) else
          'Qualification flags retain their recorded scope; promotion requires the separate committed export/certificate checks.'), '',
-        'Three additional `xbabe3` runs recorded in `evidence/evolution_waves/2026-10-17/wave_summary.json` contain non-empty `unverified` lists (`w400c3`: `assessed_count=0`, `unverified_count=4`; `w403c3`: `assessed_count=5`, `unverified_count=1`, best `W_CAD = -5.556243`, best `solid_tip_SF = 0.6708`, battery `11/18`; `w407c3`: `assessed_count=5`, `unverified_count=1`, best `W_CAD = -5.252210`, best `solid_tip_SF = 0.6823`, battery `14/18`) and are excluded from the plotted completed-wave series by `read_board` while retained in committed evidence. Later waves enter only after an actual leaderboard exists and the cited evidence is committed on main. No missing wave or unfinished assessment is imputed. The catalog remains 23 subjects × 18 evaluators (414 cells); wave assessments are a separate denominator.', '',
+        'One `xbabe2` wave (`w320`: `assessed_count=3`, `unverified_count=1`, best `W_CAD = -5.258458`, best `solid_tip_SF = 0.7091`, battery `14/18`) and five `xbabe3` runs (`w400c3`: `assessed_count=0`, `unverified_count=4`; `w403c3`: `assessed_count=5`, `unverified_count=1`, best `W_CAD = -5.556243`, best `solid_tip_SF = 0.6708`, battery `11/18`; `w407c3`: `assessed_count=5`, `unverified_count=1`, best `W_CAD = -5.252210`, best `solid_tip_SF = 0.6823`, battery `14/18`; `w410c3`: `assessed_count=5`, `unverified_count=1`, best `W_CAD = -5.252210`, best `solid_tip_SF = 0.6823`, battery `15/18`; `w410t3`: `assessed_count=3`, `unverified_count=3`, best `W_CAD = -5.252210`, best `solid_tip_SF = 0.6823`, battery `14/18`) recorded in `evidence/evolution_waves/2026-10-17/wave_summary.json` contain non-empty `unverified` lists and are excluded from the plotted completed-wave series by `read_board` while retained in committed evidence. Later waves enter only after an actual leaderboard exists and the cited evidence is committed on main. No missing wave or unfinished assessment is imputed. The catalog remains 23 subjects × 18 evaluators (414 cells); wave assessments are a separate denominator.', '',
         'Sources: ' + '; '.join(f"`{w['source']}` (SHA256 `{w['sha256']}`)" for w in waves) + '.', '']
     return '\n'.join(lines)
 
@@ -328,7 +328,7 @@ def generate(paths, source_root, output, preview=False):
         axes[1].set_ylim(9.5, 18.8)
         axes[1].legend(fontsize=8, loc='lower right')
     if has_tip:
-        axes[2].set_ylim(0.58, 1.05)
+        axes[2].set_ylim(0.18, 1.05)
         axes[2].legend(fontsize=8, loc='upper left')
     axes[3].bar(x-.16, [w['assessed'] for w in waves], .32, color='#007f86', label='Assessed')
     axes[3].bar(x+.16, [w['qualified'] for w in waves], .32, color='#ad4e43', label='Qualified')
@@ -342,7 +342,7 @@ def generate(paths, source_root, output, preview=False):
     for ax in axes:
         ax.set_xticks(x, tick_labels, fontsize=7.5, rotation=30 if len(waves) > 6 else 0)
         ax.set_xlim(-.6, len(waves)-.4)
-    scope = 'LOCAL PREVIEW — UNCOMMITTED INPUTS; NOT PAPER EVIDENCE' if preview else 'Committed automatic-wave observations (xbabe2 w298, w300–w318; xbabe3 w401c3, w402c3, w404c3–w406t3, w407t3–w408t3)'
+    scope = 'LOCAL PREVIEW — UNCOMMITTED INPUTS; NOT PAPER EVIDENCE' if preview else 'Committed automatic-wave observations (xbabe2 w298, w300–w319, w321–w322; xbabe3 w401c3, w402c3, w404c3–w406t3, w407t3–w408t3, w411c3–w411t3)'
     fig.suptitle(scope, fontsize=11.5, fontweight='bold', color='#9b4c36' if preview else '#243641')
     fig.text(.015, .015, 'Selected Stage-2 candidates only; not full-population medians, pass rates, or a controlled comparison across engine commits. All waves have qualified_count=0.', fontsize=8.5)
     fig.tight_layout(rect=(0, .04, 1, .95))
