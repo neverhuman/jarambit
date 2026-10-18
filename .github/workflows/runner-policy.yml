@@ -39,5 +39,6 @@ jobs:
           PY
       - name: Test and enforce local general runners in Rust
         run: |
-          cargo test --locked -p jarambit --bin jarambit runner_policy::tests
-          cargo run --locked -p jarambit --bin jarambit -- check-runner-policy
+          export PATH="$HOME/.cargo/bin:$PATH"
+          cargo test --locked -p jarambit-runner-policy
+          cargo run --locked -p jarambit-runner-policy
