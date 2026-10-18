@@ -440,6 +440,7 @@ fn screen_candidate_stage1(
     let (bw, _) = fem::ring_bearing(&p);
     let (radius, _) = pheno::bore_dimensions(&p);
     let screen_deficit = deficit(f.lat_rob, 260.0)
+        + deficit(f.lat_rob, 358.0)
         + deficit(f.sf_hiker, 1.0)
         + deficit(f.ring_rob, 1500.0)
         + deficit(f.seq_ratio, fem::SEQ_TARGET)
@@ -932,6 +933,44 @@ mod tests {
             .expect("rankable failed candidate");
         assert!(candidate.screen_deficit > 0.0);
     }
+
+    #[test]
+    fn stage1_screen_deficit_penalizes_sub_358n_lateral_shortfall() {
+        let seeds = load_seed_genomes(
+            &repo_root(),
+            Some("evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv"),
+        );
+        let (family, genome) = &seeds[0];
+        let candidate = screen_candidate_stage1(0, 0, family, genome, "test")
+            .expect("seed should be rankable in Stage 1");
+        let fem = qd::evaluate(genome, 0, 0, 2.0)
+            .fem
+            .expect("seed should have a FEM result");
+        assert!(fem.lat_rob < 358.0);
+
+        let deficit = |value: f64, floor: f64| ((floor - value) / floor).max(0.0);
+        let p = pheno::build(genome);
+        let (bearing_width, _) = fem::ring_bearing(&p);
+        let (bore_radius, _) = pheno::bore_dimensions(&p);
+        let prior_deficit = deficit(fem.lat_rob, 260.0)
+            + deficit(fem.sf_hiker, 1.0)
+            + deficit(fem.ring_rob, 1500.0)
+            + deficit(fem.seq_ratio, fem::SEQ_TARGET)
+            + deficit(fem.twist_sf, 1.0)
+            + deficit(fem.twist_body_sf, 1.0)
+            + deficit(fem.twist_tipzone_sf, 1.0)
+            + deficit(fem.hm_twist_sf, 1.0)
+            + deficit(fem.hm_spine_sf, 1.0)
+            + deficit(fem.hm_ringback_sf, 1.0)
+            + deficit(fem.fat_sf, 1.0)
+            + deficit(bearing_width, fem::hm::RING_BEARING_W_MIN_MM)
+            + deficit(bore_radius, fem::hm::RING_EDGE_R_MIN_MM);
+
+        let expected = prior_deficit + deficit(fem.lat_rob, 358.0);
+        assert!((candidate.screen_deficit - expected).abs() < 1e-12);
+        assert!(candidate.screen_deficit > prior_deficit);
+    }
+
     #[test]
     fn offspring_can_explore_stock_and_rail_architecture_inside_existing_bounds() {
         let seeds = load_seed_genomes(
