@@ -77,7 +77,7 @@ def compute_ultralight_weighted_fitness(
     tw_tip_sf = float(em.get('twist_tip_sf', 0.0))
     tw_strict_sf = float(em.get('twist_tipzone_sf_strict', 0.0))
     solid_tip_sf = float(em.get('solid_tip_sf_nodal_max', 0.0))
-    solid_rel_err = float(em.get('solid_tip_dolfinx_rel_err', 0.0))
+    solid_rel_err = float(em.get('solid_tip_dolfinx_rel_err', 1.0))
     xcheck_ok = bool(gates_16.get('dolfinx_cross_check_2pct', solid_rel_err <= 0.02))
     lambda_a4 = float(em.get('buckling_eigenvalue_a4', 0.0))
     seq_cert = float(em.get('seq_ratio_cert', 0.0))
@@ -146,10 +146,10 @@ def compute_ultralight_weighted_fitness(
         }
 
     legacy_26 = {
-        'G16-01:cad_watertight_and_single_solid': {'raw': bool(gates_16.get('cad_watertight_and_single_solid', True)), 'legacy_threshold': True, 'legacy_pass': bool(gates_16.get('cad_watertight_and_single_solid', True)), 'deficit': 0.0 if gates_16.get('cad_watertight_and_single_solid', True) else 1.0},
-        'G16-02:geometric_and_holder_gates': {'raw': bool(gates_16.get('geometric_and_holder_gates', True)), 'legacy_threshold': True, 'legacy_pass': bool(gates_16.get('geometric_and_holder_gates', True)), 'deficit': 0.0 if gates_16.get('geometric_and_holder_gates', True) else 1.0},
-        'G16-03:karambit_ring_and_curved_claw': {'raw': bool(gates_16.get('karambit_ring_and_curved_claw', True)), 'legacy_threshold': True, 'legacy_pass': bool(gates_16.get('karambit_ring_and_curved_claw', True)), 'deficit': 0.0 if gates_16.get('karambit_ring_and_curved_claw', True) else 1.0},
-        'G16-04:c6_aesthetic_floor': {'raw': bool(gates_16.get('c6_aesthetic_floor', True)), 'legacy_threshold': True, 'legacy_pass': bool(gates_16.get('c6_aesthetic_floor', True)), 'deficit': 0.0 if gates_16.get('c6_aesthetic_floor', True) else 1.0},
+        'G16-01:cad_watertight_and_single_solid': {'raw': bool(gates_16.get('cad_watertight_and_single_solid', False)), 'legacy_threshold': True, 'legacy_pass': bool(gates_16.get('cad_watertight_and_single_solid', False)), 'deficit': 0.0 if gates_16.get('cad_watertight_and_single_solid', False) else 1.0},
+        'G16-02:geometric_and_holder_gates': {'raw': bool(gates_16.get('geometric_and_holder_gates', False)), 'legacy_threshold': True, 'legacy_pass': bool(gates_16.get('geometric_and_holder_gates', False)), 'deficit': 0.0 if gates_16.get('geometric_and_holder_gates', False) else 1.0},
+        'G16-03:karambit_ring_and_curved_claw': {'raw': bool(gates_16.get('karambit_ring_and_curved_claw', False)), 'legacy_threshold': True, 'legacy_pass': bool(gates_16.get('karambit_ring_and_curved_claw', False)), 'deficit': 0.0 if gates_16.get('karambit_ring_and_curved_claw', False) else 1.0},
+        'G16-04:c6_aesthetic_floor': {'raw': bool(gates_16.get('c6_aesthetic_floor', False)), 'legacy_threshold': True, 'legacy_pass': bool(gates_16.get('c6_aesthetic_floor', False)), 'deficit': 0.0 if gates_16.get('c6_aesthetic_floor', False) else 1.0},
         'G16-05:cert_hiker_180n': {'raw': round(lat_cert_n, 4), 'legacy_threshold': 180.0, 'legacy_pass': lat_cert_n >= 180.0, 'deficit': round(max(0.0, 180.0 - lat_cert_n), 4)},
         'G16-06:cert_hunter_260n': {'raw': round(lat_cert_n, 4), 'legacy_threshold': 260.0, 'legacy_pass': lat_cert_n >= 260.0, 'deficit': round(max(0.0, 260.0 - lat_cert_n), 4)},
         'G16-07:strict_hunter_260n': {'raw': round(strict_lat_n, 4), 'legacy_threshold': 260.0, 'legacy_pass': strict_lat_n >= 260.0, 'deficit': round(max(0.0, 260.0 - strict_lat_n), 4)},
@@ -160,9 +160,9 @@ def compute_ultralight_weighted_fitness(
         'G16-12:solid_tip_3d_p2_1p82nm': {'raw': round(solid_tip_sf, 4), 'legacy_threshold': 1.0, 'legacy_pass': solid_tip_sf >= 1.0, 'deficit': round(max(0.0, 1.0 - solid_tip_sf), 4)},
         'G16-13:side_a4_buckling_and_support': {'raw': round(lambda_a4, 4), 'legacy_threshold': 1.0, 'legacy_pass': lambda_a4 >= 1.0, 'deficit': round(max(0.0, 1.0 - lambda_a4), 4)},
         'G16-14:failure_sequence_1p2': {'raw': round(seq_cert, 4), 'legacy_threshold': 1.20, 'legacy_pass': seq_cert >= 1.20, 'deficit': round(max(0.0, 1.20 - seq_cert), 4)},
-        'G16-15:plate_gci_valid_3level': {'raw': bool(gates_16.get('plate_gci_valid_3level', True)), 'legacy_threshold': True, 'legacy_pass': bool(gates_16.get('plate_gci_valid_3level', True)), 'deficit': 0.0 if gates_16.get('plate_gci_valid_3level', True) else 1.0},
+        'G16-15:plate_gci_valid_3level': {'raw': bool(gates_16.get('plate_gci_valid_3level', False)), 'legacy_threshold': True, 'legacy_pass': bool(gates_16.get('plate_gci_valid_3level', False)), 'deficit': 0.0 if gates_16.get('plate_gci_valid_3level', False) else 1.0},
         'G16-16:dolfinx_cross_check_2pct': {'raw': round(solid_rel_err, 6), 'legacy_threshold': 0.02, 'legacy_pass': xcheck_ok, 'deficit': round(max(0.0, solid_rel_err - 0.02), 6)},
-        'RSV2-01:aesthetic_and_geometric': {'raw': rs_gates.get('aesthetic_and_geometric', 'pass'), 'legacy_threshold': 'pass', 'legacy_pass': rs_gates.get('aesthetic_and_geometric', 'pass') == 'pass', 'deficit': 0.0 if rs_gates.get('aesthetic_and_geometric', 'pass') == 'pass' else 1.0},
+        'RSV2-01:aesthetic_and_geometric': {'raw': rs_gates.get('aesthetic_and_geometric', 'unverified'), 'legacy_threshold': 'pass', 'legacy_pass': rs_gates.get('aesthetic_and_geometric', 'unverified') == 'pass', 'deficit': 0.0 if rs_gates.get('aesthetic_and_geometric', 'unverified') == 'pass' else 1.0},
         'RSV2-02:floors_828_joint': {'raw': round(lat_cert_n, 4), 'legacy_threshold': 260.0, 'legacy_pass': lat_cert_n >= 260.0 and ring_cert_n >= 1500.0, 'deficit': round(max(0.0, 260.0 - lat_cert_n), 4)},
         'RSV2-03:twist_floor_body_and_tipsub_strict': {'raw': round(tw_strict_sf, 4), 'legacy_threshold': 1.0, 'legacy_pass': tw_body_sf >= 1.0 and tw_strict_sf >= 1.0, 'deficit': round(max(0.0, 1.0 - tw_strict_sf), 4)},
         'RSV2-04:solid_tip_sf': {'raw': round(solid_tip_sf, 4), 'legacy_threshold': 1.0, 'legacy_pass': solid_tip_sf >= 1.0 and xcheck_ok, 'deficit': round(max(0.0, 1.0 - solid_tip_sf), 4)},
