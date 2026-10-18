@@ -5,8 +5,8 @@
 use jarambit_crescent::{
     certification, fem,
     genome::{
-        self, Genome, EA_IN, EA_SP, EDGE_TH, FUL_D, K0, K_N, NECK_L, NG, N_CP, POCKET_D, POCKET_R,
-        RAIL_W, TAPER_X0, T_TIP,
+        self, Genome, COMET_BOW, COMET_W0, EA_IN, EA_SP, EDGE_TH, FUL_D, FUL_S0, K0, K_N, NECK_L,
+        NG, N_CP, POCKET_D, POCKET_R, RAIL_W, TAPER_X0, T_TIP,
     },
     pheno, qd,
 };
@@ -288,6 +288,11 @@ fn spawn_offspring_batch(
                 }
             }
 
+            if fam == "p14" && k % 2 == 0 {
+                child.v[COMET_W0] = parent.v[COMET_W0];
+                child.v[COMET_BOW] = parent.v[COMET_BOW];
+                child.v[FUL_S0] = parent.v[FUL_S0];
+            }
             child.v[EDGE_TH] = child.v[EDGE_TH].clamp(0.12, 0.20);
             if child.rs_v2() {
                 child.v[genome::RING_WALL] =
@@ -843,6 +848,100 @@ mod tests {
             }
         }
     }
+
+    #[test]
+    fn even_p14_offspring_preserve_internal_boundary_genes() {
+        let seeds = load_seed_genomes(
+            &repo_root(),
+            Some("evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv"),
+        );
+        let (family, parent) = &seeds[0];
+        assert_eq!(family, "p14");
+
+        let children = spawn_offspring_batch(
+            std::slice::from_ref(&seeds[0]),
+            32,
+            1,
+            &mut Rng(51815),
+        );
+        assert_eq!(children.len(), 32);
+        for (index, (_, child)) in children.iter().enumerate() {
+            if index % 2 == 0 {
+                for gene in [COMET_W0, COMET_BOW, FUL_S0] {
+                    assert_eq!(
+                        child.v[gene], parent.v[gene],
+                        "even p14 child {index} changed internal-boundary gene {gene}"
+                    );
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn w311_vs_w312_p14_seq_ratio_gci_classification() {
+        use jarambit_crescent::gci::{compute_gci, Level, MeshRef, Observable};
+
+        let observable = Observable {
+            id: "seq".into(),
+            units: "ratio".into(),
+            region: "blade".into(),
+            projection: "plate".into(),
+            metric: "seq_ratio".into(),
+        };
+        let levels = vec![
+            Level::new(
+                MeshRef {
+                    id: "m1".into(),
+                    revision: "r1".into(),
+                    sha256: "a".repeat(64),
+                },
+                0.5,
+                observable.clone(),
+            ),
+            Level::new(
+                MeshRef {
+                    id: "m2".into(),
+                    revision: "r1".into(),
+                    sha256: "b".repeat(64),
+                },
+                1.0,
+                observable.clone(),
+            ),
+            Level::new(
+                MeshRef {
+                    id: "m3".into(),
+                    revision: "r1".into(),
+                    sha256: "c".repeat(64),
+                },
+                2.0,
+                observable,
+            ),
+        ];
+
+        let w311 = compute_gci(
+            1.719034772937246,
+            1.789168040193865,
+            1.9125229406964612,
+            2.0,
+            1.25,
+            Some(&levels),
+        );
+        assert!(w311.admitted());
+        assert_eq!(w311.fit_status.as_str(), "admissible_estimate");
+        assert!((w311.p.unwrap() - 0.8146441858562493).abs() < 1e-12);
+
+        let w312 = compute_gci(
+            1.8133957229798907,
+            1.7837767388307684,
+            1.9109168441593696,
+            2.0,
+            1.25,
+            Some(&levels),
+        );
+        assert!(!w312.admitted());
+        assert_eq!(w312.fit_status.as_str(), "oscillatory");
+    }
+
     #[test]
     fn round_zero_preserves_exact_parents_and_adds_bore_compliant_siblings() {
         let mut parent = Genome::c4_seed(genome::T_MIN);
