@@ -1065,10 +1065,13 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
                 .collect()
         });
 
-        // Sort Stage-1 survivors by lightest mass / highest estimated W_CAD_v2
+        // Sort Stage-1 survivors by W_ULTRALIGHT_v1 global weighted fitness (non-veto),
+        // breaking ties by lower screen_deficit and lighter mass.
         survivors.sort_by(|a, b| {
-            a.screen_deficit
-                .partial_cmp(&b.screen_deficit)
+            stage1_ultralight_weighted_fitness(b)
+                .partial_cmp(&stage1_ultralight_weighted_fitness(a))
+                .filter(|o| !o.is_eq())
+                .or_else(|| a.screen_deficit.partial_cmp(&b.screen_deficit))
                 .filter(|o| !o.is_eq())
                 .or_else(|| a.mass_g.partial_cmp(&b.mass_g))
                 .unwrap_or(std::cmp::Ordering::Equal)
@@ -1150,6 +1153,14 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
         }
 
         round_ultralight_maxima.push(round_best_ultralight);
+
+        // Emit per-generation monotone fitness curve + best_so_far_26_gates.json (and sync to S3 if configured).
+        let python = std::env::var("JARAMBIT_SOLVER_PYTHON").unwrap_or_else(|_| "python3".into());
+        let _ = std::process::Command::new(&python)
+            .arg(root.join("ops/ci/ultralight_weighted_fitness.py"))
+            .args(["--wave-dir", &out_dir.to_string_lossy()])
+            .current_dir(&root)
+            .status();
 
         // Hall-of-Fame elitism: preserve any all-gates qualified genome plus the highest
         // `W_ULTRALIGHT_v1` Stage-2 assessed genome so far (monotone non-decreasing fitness).
@@ -3080,5 +3091,62 @@ mod tests {
         for pair in hof.windows(2) {
             assert!(pair[1] >= pair[0]);
         }
+    }
+    #[test]
+    fn veto_free_selection_retains_best_weighted_candidate_across_rounds() {
+        let screen = replay_screen("xbabe2", "w298");
+        let g_best = screen[0].g.clone();
+        let g_weaker = screen[1].g.clone();
+        let best_unqualified = AssessedDesign {
+            label: "best_unqualified".into(),
+            family: "p14".into(),
+            g: g_best.clone(),
+            mass_g: 56.0,
+            mass_3d_g: 56.0,
+            w_cad: -2.5,
+            g1: 0.45,
+            strict_hunter_sf: 0.92,
+            solid_tip_sf: 1.45,
+            seq_ratio: 1.35,
+            fat_sf: 0.85,
+            ring_bearing_w_mm: 12.2,
+            buckling_eig: 6.5,
+            battery_pass: 16,
+            all_16_gates: false,
+            rs_v2_all_hard: false,
+            genome_csv: PathBuf::from("best.csv"),
+            scorecard_md: PathBuf::from("best.md"),
+        };
+        let weaker_unqualified = AssessedDesign {
+            label: "weaker_unqualified".into(),
+            family: "p10".into(),
+            g: g_weaker,
+            mass_g: 98.0,
+            mass_3d_g: 98.0,
+            ..best_unqualified.clone()
+        };
+        assert!(
+            stage2_ultralight_weighted_fitness(&best_unqualified)
+                > stage2_ultralight_weighted_fitness(&weaker_unqualified)
+        );
+        let assessed = [weaker_unqualified, best_unqualified];
+        let hof_best = assessed
+            .iter()
+            .max_by(|a, b| {
+                stage2_ultralight_weighted_fitness(a)
+                    .partial_cmp(&stage2_ultralight_weighted_fitness(b))
+                    .unwrap_or(std::cmp::Ordering::Equal)
+            })
+            .map(|c| (c.family.clone(), c.g.clone()));
+        let next = replacement_elites(
+            assessed
+                .iter()
+                .filter(|c| c.all_16_gates && c.rs_v2_all_hard)
+                .map(|c| (c.family.clone(), c.g.clone()))
+                .chain(hof_best),
+            &screen,
+            &[],
+        );
+        assert_eq!(next[0].1, g_best);
     }
 }

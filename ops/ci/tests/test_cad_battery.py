@@ -709,6 +709,47 @@ class Records(unittest.TestCase):
             self.assertEqual(by_id['geom.pin']['status'], 'blocked')
 
 
+class UltralightWeightedFitnessTests(unittest.TestCase):
+    def test_w_ultralight_v1_weighted_fitness_and_legacy_26_gate_breakdown(self):
+        from ops.ci.ultralight_weighted_fitness import (
+            ULTRALIGHT_WEIGHTS_V1,
+            compute_ultralight_weighted_fitness,
+        )
+        self.assertAlmostEqual(sum(ULTRALIGHT_WEIGHTS_V1.values()), 100.0, places=9)
+        self.assertEqual(len(ULTRALIGHT_WEIGHTS_V1), 20)
+
+        ev = json.loads(
+            (ROOT / 'evidence' / 'rs_v2' / 'w283_ultrarunner' / 'w283_p14_c01_cad_eval.json').read_text(encoding='utf-8')
+        )
+        ev_light = json.loads(json.dumps(ev))
+        ev_light['engineering_metrics']['mass_3d_g'] = 55.0
+        ev_light['engineering_metrics']['strict_lat_rob_0p0625_n'] = 195.0
+        ev_light['weighted_cad_score']['gates']['strict_hunter_260n'] = False
+
+        ev_heavy = json.loads(json.dumps(ev_light))
+        ev_heavy['engineering_metrics']['mass_3d_g'] = 91.0
+
+        res_light = compute_ultralight_weighted_fitness(ev_light)
+        res_heavy = compute_ultralight_weighted_fitness(ev_heavy)
+
+        self.assertEqual(res_light['metric'], 'W_ULTRALIGHT_v1')
+        self.assertTrue(res_light['veto_free_selection'])
+        self.assertAlmostEqual(res_light['weight_sum_pct'], 100.0, places=6)
+        self.assertEqual(res_light['score_100'], res_light['global_weighted_fitness'])
+        self.assertGreater(res_light['score_100'], 0.0)
+        self.assertLessEqual(res_light['score_100'], 100.0)
+        self.assertGreater(
+            res_light['objectives']['ultralight_mass']['normalized_score'],
+            res_heavy['objectives']['ultralight_mass']['normalized_score'],
+        )
+        self.assertGreater(res_light['score_100'], res_heavy['score_100'])
+        self.assertEqual(len(res_light['legacy_26_gate_breakdown']), 26)
+        g07 = res_light['legacy_26_gate_breakdown']['G16-07:strict_hunter_260n']
+        self.assertFalse(g07['legacy_pass'])
+        self.assertAlmostEqual(g07['legacy_threshold'], 260.0, places=4)
+        self.assertAlmostEqual(g07['deficit'], 65.0, places=4)
+
+
 if __name__ == '__main__':
     unittest.main()
 
