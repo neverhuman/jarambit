@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task": "G16-12-RSV2-04-p31",
+  "status": "IN_PROGRESS",
+  "qualified_count": 0,
+  "assignment_outcome": "COMPLETE",
+  "scope": "Static source byte provenance only",
+  "source_count": 2,
+  "source_files": [
+    {
+      "path": "crates/crescent/src/certification.rs",
+      "sha256": "eeefc8b1ecbf21df85aefb967e351ada4f0070f8b481959afef419379215c4ac",
+      "bytes": 14755,
+      "lines": 364
+    },
+    {
+      "path": "crates/crescent/src/export.rs",
+      "sha256": "575eef5f12aebc81a345ef2fe7f52a51ab73e6f7ed837eb1c5e556f2e81bec06",
+      "bytes": 10067,
+      "lines": 172
+    }
+  ]
+}

@@ -19,9 +19,9 @@ class AuditProvenanceTests(unittest.TestCase):
         root = Path(tmp.name)
         m = audit.legacy_verifier(ROOT)
         paths = [audit.INDEX, audit.REPORT, audit.CONTRACT, audit.MANIFEST_REPORT,
-                 audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON, audit.CLI_REPORT, audit.CLI_JSON, audit.CRESCENT_REPORT, audit.CRESCENT_JSON, audit.LEGACY, audit.SELF,
+                 audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON, audit.CLI_REPORT, audit.CLI_JSON, audit.CRESCENT_REPORT, audit.CRESCENT_JSON, audit.CERT_EXPORT_REPORT, audit.CERT_EXPORT_JSON, audit.LEGACY, audit.SELF,
                  str(m.INDEX_PATH), "Cargo.toml"] + [p.relative_to(ROOT).as_posix()
-                 for p in sorted((ROOT / "crates").glob("*/Cargo.toml"))] + list(audit.SOURCES) + list(audit.DIGEST_SOURCES) + list(audit.CLI_SOURCES) + list(audit.CRESCENT_SOURCES) + [str(p) for _, p in m.REPORTS]
+                 for p in sorted((ROOT / "crates").glob("*/Cargo.toml"))] + list(audit.SOURCES) + list(audit.DIGEST_SOURCES) + list(audit.CLI_SOURCES) + list(audit.CRESCENT_SOURCES) + list(audit.CERT_EXPORT_SOURCES) + [str(p) for _, p in m.REPORTS]
         for path in paths:
             target = root / path
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -41,17 +41,19 @@ class AuditProvenanceTests(unittest.TestCase):
             row, audit.record(m, root, audit.MANIFEST_JSON),
             audit.record(m, root, audit.DIGEST_JSON),
             audit.record(m, root, audit.CLI_JSON),
-            audit.record(m, root, audit.CRESCENT_JSON)]))
+            audit.record(m, root, audit.CRESCENT_JSON),
+            audit.record(m, root, audit.CERT_EXPORT_JSON)]))
 
     def test_current_and_relocated_catalog(self):
         for root in (ROOT, self.snapshot()):
             with self.subTest(root=root.name):
                 result = audit.verify(root)
-                self.assertEqual(result["reports"], 20)
+                self.assertEqual(result["reports"], 21)
                 self.assertEqual(result["source_files"], 2)
                 self.assertEqual(result["digest_source_files"], 2)
                 self.assertEqual(result["cli_source_files"], 2)
                 self.assertEqual(result["crescent_source_files"], 2)
+                self.assertEqual(result["cert_export_source_files"], 2)
                 self.assertEqual(result["manifest_files"], 11)
                 self.assertEqual(result["assignment_outcome"], "COMPLETE")
                 self.assertEqual(result["parity_assessment"], "NOT_ASSESSED")
@@ -61,7 +63,7 @@ class AuditProvenanceTests(unittest.TestCase):
 
     def test_document_corruption(self):
         m = audit.legacy_verifier(ROOT)
-        for path in [str(p) for _, p in m.REPORTS] + [audit.REPORT, audit.CONTRACT, audit.MANIFEST_REPORT, audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON, audit.CLI_REPORT, audit.CLI_JSON, audit.CRESCENT_REPORT, audit.CRESCENT_JSON]:
+        for path in [str(p) for _, p in m.REPORTS] + [audit.REPORT, audit.CONTRACT, audit.MANIFEST_REPORT, audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON, audit.CLI_REPORT, audit.CLI_JSON, audit.CRESCENT_REPORT, audit.CRESCENT_JSON, audit.CERT_EXPORT_REPORT, audit.CERT_EXPORT_JSON]:
             with self.subTest(document=path):
                 root = self.snapshot()
                 p = root / path
@@ -70,7 +72,7 @@ class AuditProvenanceTests(unittest.TestCase):
                     audit.verify(root)
 
     def test_source_corruption(self):
-        for path in audit.SOURCES + audit.DIGEST_SOURCES + audit.CLI_SOURCES + audit.CRESCENT_SOURCES:
+        for path in audit.SOURCES + audit.DIGEST_SOURCES + audit.CLI_SOURCES + audit.CRESCENT_SOURCES + audit.CERT_EXPORT_SOURCES:
             with self.subTest(source=path):
                 root = self.snapshot()
                 p = root / path
@@ -156,7 +158,8 @@ class AuditProvenanceTests(unittest.TestCase):
             audit.record(m, root, audit.CONTRACT), audit.record(m, root, audit.MANIFEST_JSON),
             audit.record(m, root, audit.DIGEST_JSON),
             audit.record(m, root, audit.CLI_JSON),
-            audit.record(m, root, audit.CRESCENT_JSON)]))
+            audit.record(m, root, audit.CRESCENT_JSON),
+            audit.record(m, root, audit.CERT_EXPORT_JSON)]))
 
     def test_manifest_input_changes(self):
         m = audit.legacy_verifier(ROOT)
@@ -237,10 +240,10 @@ class AuditProvenanceTests(unittest.TestCase):
         m = audit.legacy_verifier(root)
         self.change(root, audit.INDEX, lambda d: d.update(supplemental_documents=[
             audit.record(m, root, path) for path in
-            (audit.CONTRACT, audit.MANIFEST_JSON, audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON)]))
+            (audit.CONTRACT, audit.MANIFEST_JSON, audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON, audit.CERT_EXPORT_JSON)]))
 
     def test_digest_receipt_metadata(self):
-        for receipt in (audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON):
+        for receipt in (audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON, audit.CERT_EXPORT_JSON):
             with self.subTest(receipt=receipt):
                 for key, value in [("sha256", "f" * 64), ("bytes", 1), ("lines", 1),
                                    ("path", "../outside.rs")]:
@@ -262,7 +265,7 @@ class AuditProvenanceTests(unittest.TestCase):
 
 
     def test_digest_source_coverage_and_json(self):
-        for receipt in (audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON):
+        for receipt in (audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON, audit.CERT_EXPORT_JSON):
             with self.subTest(receipt=receipt):
                 changes = [lambda d: d["source_files"].pop(),
                            lambda d: d["source_files"].reverse(),
