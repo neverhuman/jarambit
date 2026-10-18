@@ -3,8 +3,7 @@
 import csv
 import json
 import os
-from pathlib import Path
-from run_phase3 import HERE, ROOT, OUT, REQUIREMENTS, verify_sources
+from run_phase3 import HERE, ROOT, OUT, verify_sources
 from run_phase2 import digest
 
 if __name__ == '__main__':
@@ -36,6 +35,10 @@ if __name__ == '__main__':
         for level in row['levels']:
             m=level['metrics']
             assert abs(m['fat_sf']-m['lat_rob']/357.996288224513)<1e-10
+        row['known_other_gate_failures']={str(l['area']):{k:l['metrics'][k] for k in
+            ('hm_twist_sf','hm_spine_sf','hm_ringback_sf') if l['metrics'][k]<1.}
+            for l in row['levels']}
+        row['mass_soft_80g_exceeded']=row['mass_g']>80.
         destination=reviewable/f'{name}.csv';destination.write_bytes(genome.read_bytes())
         row['reviewable_genome']=str(destination.relative_to(ROOT))
         row['sha256'][str(destination.relative_to(ROOT))]=digest(destination)
@@ -69,6 +72,7 @@ if __name__ == '__main__':
         lines.append(f'| {r["name"]} | {fit["fit_status"]} / {fit["p"]} | {s["max_apex_mm"]:.9f} | {s["max_half_angle_deg"]:.9f} | {r["point"]["pass"]} | {r["solid"]["census"]} | {a["buckling_eigenvalue"]:.9f} | {a["supported_seq_ratio"]:.9f} / {a["certified_seq_ratio"]:.9f} |')
     passed=[r['name'] for r in receipt['results'] if r['phase3_scoped_pass']]
     lines += ['', f'Scoped passing candidates: {passed}. Full RS-v2/manufacturing qualification remains **false**. The native GCI/side-A4 executable is reused unchanged from Phase 2; its raw task label remains p2, with Phase-3 inputs and exact mesh/content hashes bound in this receipt.', '',
+              'The explicit prototype construction law, sealed config and each genome are required together. These results do not establish a passing witness through the production CSV-only exporter. Measured human-max shortfalls and the inherited flat-stock/collar inconsistency remain; mass is a soft objective.', '',
               'GCI admission is a checked three-level fit; native `asymptotic_validation` remains `not_established`. Five-level sequence monotonicity is reported separately and no rejected mesh, export or support result is waived.', '',
               'Audit after a completed run:', '```sh',
               'taskset -c 12,13 env CARGO_BUILD_JOBS=2 python3 experiments/G16-06-RSV2-08/audit_phase3.py', '```', '']
