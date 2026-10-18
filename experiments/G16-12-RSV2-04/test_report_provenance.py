@@ -1,4 +1,4 @@
-"""Verify the portable V6..V14 report index using only the standard library."""
+"""Verify historical report provenance and the static measurement-code audit."""
 
 import hashlib
 import json
@@ -7,10 +7,23 @@ import re
 import shutil
 import tempfile
 import unittest
+from unittest.mock import patch
 
 
 REPORT_DIR = PurePosixPath("experiments/G16-12-RSV2-04")
 INDEX_PATH = REPORT_DIR / "UNIFIED_PROTOTYPE_PROVENANCE_INDEX.md"
+AUDIT_PATH = REPORT_DIR / "CERTIFICATION_MEASUREMENT_CODE_AUDIT.md"
+AUDIT_SHA256 = "1409141a8d7c7174245b8ba9b8b901397d11225d7602f56497ccb5ee27230b3a"
+AUDIT_BYTES = 15527  # Filled from the reviewed document, never refreshed by tests.
+AUDIT_TABLE_COUNT = 6
+AUDIT_SCHEMA_SHA256 = "42212ab2618b5be7937ca24f7b0662d57de18a7602d75acecb7a12124c8b26df"
+AUDIT_SOURCES = (
+    "crates/crescent/src/certification.rs",
+    "crates/crescent/src/export.rs",
+    "crates/crescent/src/geom.rs",
+    "crates/crescent/src/fem.rs",
+    "crates/crescent/tests/cert_integrity.rs",
+)
 ROOT = Path(__file__).resolve().parents[2]
 HEADER = ["Version", "Report path", "SHA-256", "Bytes", "Tables", "Table-schema SHA-256"]
 DIGEST = re.compile(r"[0-9a-f]{64}")
@@ -125,6 +138,36 @@ def verify(root):
     return len(rows) - 2
 
 
+def verify_audit(root):
+    """Check the fixed audit document and the exact source bytes it describes."""
+    root = Path(root)
+    data = portable_path(root, str(AUDIT_PATH)).read_bytes()
+    if sha256(data) != AUDIT_SHA256:
+        raise ValueError("audit SHA-256 mismatch")
+    if len(data) != AUDIT_BYTES:
+        raise ValueError("audit byte count mismatch")
+    text = data.decode("utf-8")
+    schema = table_schema(text)
+    if len(schema) != AUDIT_TABLE_COUNT or schema_digest(schema) != AUDIT_SCHEMA_SHA256:
+        raise ValueError("audit table schema mismatch")
+    lines = text.splitlines()
+    start = lines.index("|Source path|SHA-256|") + 2
+    sources = []
+    for line in lines[start:]:
+        if not line.startswith("|"):
+            break
+        relative, digest = cells(line)
+        path = portable_path(root, relative)
+        if relative not in AUDIT_SOURCES or relative in sources or not DIGEST.fullmatch(digest):
+            raise ValueError("invalid audit source provenance row")
+        if sha256(path.read_bytes()) != digest:
+            raise ValueError(f"audit source SHA-256 mismatch: {relative}")
+        sources.append(relative)
+    if set(sources) != set(AUDIT_SOURCES):
+        raise ValueError("incomplete audit source provenance")
+    return len(sources)
+
+
 class ReportProvenanceTests(unittest.TestCase):
     def test_reports_match_index(self):
         self.assertEqual(verify(ROOT), 9)
@@ -135,7 +178,11 @@ class ReportProvenanceTests(unittest.TestCase):
         self.addCleanup(tmp.cleanup)
         root = Path(tmp.name)
         (root / REPORT_DIR).mkdir(parents=True)
-        for path in [INDEX_PATH] + [REPORT_DIR / f"UNIFIED_PROTOTYPE_V{v}_REPORT.md" for v in range(6, 15)]:
+        paths = ([INDEX_PATH, AUDIT_PATH]
+                 + [REPORT_DIR / f"UNIFIED_PROTOTYPE_V{v}_REPORT.md" for v in range(6, 15)]
+                 + [PurePosixPath(path) for path in AUDIT_SOURCES])
+        for path in paths:
+            (root / path).parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / path, root / path)
         return root
 
@@ -153,6 +200,34 @@ class ReportProvenanceTests(unittest.TestCase):
         self.assertFalse((root / ".git").exists())
         self.assertFalse((root / "target").exists())
         self.assertEqual(verify(root), 9)
+        self.assertEqual(verify_audit(root), 5)
+
+    def test_audit_document_and_source_provenance(self):
+        self.assertEqual(verify_audit(ROOT), 5)
+
+    def test_audit_document_tampering_is_rejected(self):
+        root = self.snapshot()
+        path = root / AUDIT_PATH
+        path.write_bytes(path.read_bytes() + b"\nchanged\n")
+        with self.assertRaisesRegex(ValueError, "audit SHA-256 mismatch"):
+            verify_audit(root)
+
+    def test_audit_source_tampering_is_rejected(self):
+        root = self.snapshot()
+        path = root / AUDIT_SOURCES[0]
+        path.write_bytes(path.read_bytes() + b"\n// changed\n")
+        with self.assertRaisesRegex(ValueError, "audit source SHA-256 mismatch"):
+            verify_audit(root)
+
+    def test_audit_schema_is_checked_independently_of_file_digest(self):
+        root = self.snapshot()
+        path = root / AUDIT_PATH
+        data = path.read_bytes().replace(b"|Source path|SHA-256|", b"|Source location|SHA-256|")
+        path.write_bytes(data)
+        # A refreshed file digest must not conceal a stale table-schema anchor.
+        with patch.dict(globals(), {"AUDIT_SHA256": sha256(data), "AUDIT_BYTES": len(data)}):
+            with self.assertRaisesRegex(ValueError, "audit table schema mismatch"):
+                verify_audit(root)
 
     def test_modified_report_is_rejected(self):
         root = self.snapshot()
