@@ -39,9 +39,12 @@ jobs:
           PY
       - name: Test and enforce local general runners in Rust
         run: |
-          toolchain=/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin
-          export PATH="${toolchain}:/home/ubuntu/.cargo/bin:${PATH}"
-          export RUSTC="${toolchain}/rustc"
-          test -x "${toolchain}/cargo" && test -x "$RUSTC"
+          runner_home="$(getent passwd "$(id -un)" | cut -d: -f6)"
+          test -n "$runner_home"
+          export CARGO_HOME="${runner_home}/.cargo"
+          export RUSTUP_HOME="${runner_home}/.rustup"
+          export PATH="${CARGO_HOME}/bin:${PATH}"
+          test -x "${CARGO_HOME}/bin/cargo"
+          cargo --version
           cargo test --locked -p jarambit-runner-policy
           cargo run --locked -p jarambit-runner-policy
