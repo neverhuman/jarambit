@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/genotype","crates/phenotype","crates/physics","crates/monte_carlo","crates/evolve","crates/redteam","crates/docs","crates/crescent","crates/cli","crates/evidence","crates/runner-policy"]
+members = ["crates/genotype","crates/phenotype","crates/physics","crates/monte_carlo","crates/evolve","crates/redteam","crates/docs","crates/crescent","crates/cli","crates/evidence"]
 
 [workspace.package]
 version = "0.1.0"

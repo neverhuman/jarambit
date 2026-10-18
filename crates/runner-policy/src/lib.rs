@@ -225,15 +225,14 @@ pub fn run(root: &Path) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::time::{SystemTime, UNIX_EPOCH};
+    use std::sync::atomic::{AtomicU64, Ordering};
+
+    static NEXT_ID: AtomicU64 = AtomicU64::new(0);
 
     struct Fixture(PathBuf);
     impl Fixture {
         fn new(content: &str, reusable: Option<&str>) -> Self {
-            let nonce = SystemTime::now()
-                .duration_since(UNIX_EPOCH)
-                .unwrap()
-                .as_nanos();
+            let nonce = NEXT_ID.fetch_add(1, Ordering::Relaxed);
             let root = std::env::temp_dir().join(format!(
                 "jarambit-runner-policy-{}-{nonce}",
                 std::process::id()
