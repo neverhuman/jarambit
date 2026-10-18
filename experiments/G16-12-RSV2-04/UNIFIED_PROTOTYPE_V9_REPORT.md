@@ -1,6 +1,6 @@
 # G16-12-RSV2-04 Phase-12: bounded outward tip-control-point sweep
 
-Task `G16-12-RSV2-04-p12`; execution commit `968fa148c290b9c1c01785c3d9ff1be629c7c6a9`; branch `audit/gate-feasibility-bound`; worktree `.`. All native evaluations run on CPUs **10,11**, `CARGO_BUILD_JOBS=2`, faer, requested `nice -n 10` (inherited effective niceness 19). No commit or push attempted. Assignment is frozen in `inputs/assignment.md`.
+Task `G16-12-RSV2-04-p12`; execution commit `968fa148c290b9c1c01785c3d9ff1be629c7c6a9`; branch `audit/gate-feasibility-bound`; worktree `/home/ubuntu/jarambit_wt_diag`. All native evaluations run on CPUs **10,11**, `CARGO_BUILD_JOBS=2`, faer, requested `nice -n 10` (inherited effective niceness 19). No commit or push attempted. Assignment is frozen in `inputs/assignment.md`.
 
 ## Result
 
