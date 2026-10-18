@@ -120,9 +120,14 @@ def collect(paths, source_root, preview=False):
         if not preview:
             expected_shas[source] = sha
             if source_root == ROOT and source.startswith('evidence/evolution_waves/'):
-                log = subprocess.run(['git', 'log', '-n', '1', '--format=%H', 'HEAD', '--', source],
+                log_main = subprocess.run(['git', 'log', '-n', '1', '--format=%H', 'origin/main', '--', source],
                     cwd=source_root, capture_output=True, text=True, check=False)
-                input_commits[source] = log.stdout.strip() if log.returncode == 0 and log.stdout.strip() else base_commit
+                if log_main.returncode == 0 and log_main.stdout.strip():
+                    input_commits[source] = log_main.stdout.strip()
+                else:
+                    log = subprocess.run(['git', 'log', '-n', '1', '--format=%H', 'HEAD', '--', source],
+                        cwd=source_root, capture_output=True, text=True, check=False)
+                    input_commits[source] = log.stdout.strip() if log.returncode == 0 and log.stdout.strip() else base_commit
             else:
                 input_commits[source] = base_commit
         wave = path.parent.name
@@ -174,7 +179,7 @@ def collect(paths, source_root, preview=False):
         waves.append(wave_entry)
     source_commit = base_commit
     if not preview and any(c != base_commit for c in input_commits.values()):
-        ev_log = subprocess.run(['git', 'log', '-n', '1', '--format=%H', 'HEAD', '--', 'evidence/evolution_waves/2026-10-17'],
+        ev_log = subprocess.run(['git', 'log', '-n', '1', '--format=%H', 'origin/main', '--', 'evidence/evolution_waves/2026-10-17'],
             cwd=source_root, capture_output=True, text=True, check=False)
         ev_commit = ev_log.stdout.strip()
         if ev_log.returncode or not ev_commit:
