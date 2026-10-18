@@ -10,6 +10,7 @@ import io
 import json
 import os
 import re
+import shutil
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -138,16 +139,76 @@ def build(name):
     print(pdf.relative_to(ROOT),pdf.stat().st_size,flush=True)
 
 
+def clean_paper_outputs(out):
+    if not out.exists():return
+    for child in out.iterdir():
+        if child.name=='test-pdf-provenance':continue
+        if child.is_dir():shutil.rmtree(child)
+        else:child.unlink()
+
+
+def write_sha256sums(out, names):
+    lines=[]
+    for name in names:
+        for suffix in ('.pdf','.pdf.manifest.json'):
+            filename=f'{name}{suffix}'
+            lines.append(f'{sha(out/filename)}  {filename}')
+    sums_path=out/'SHA256SUMS'
+    sums_path.write_text('\n'.join(lines)+'\n',encoding='utf-8')
+    return sums_path
+
+
+def verify_reproducible(names=('WHITEPAPER','ENGINEERING_GATES_AND_EVOLUTION')):
+    out=ROOT/'target/paper'
+    passes=[]
+    for pass_idx in (1,2):
+        clean_paper_outputs(out)
+        snap={}
+        for name in names:
+            build(name)
+            log_path=out/f'{name}.build.log'
+            log_text=log_path.read_text(encoding='utf-8') if log_path.is_file() else ''
+            if log_text:
+                raise RuntimeError(f'Non-empty PDF build log on pass {pass_idx} for {name}: {log_text}')
+            pdf_bytes=(out/f'{name}.pdf').read_bytes()
+            manifest_bytes=(out/f'{name}.pdf.manifest.json').read_bytes()
+            manifest=json.loads(manifest_bytes.decode('utf-8'))
+            pdf_sha=hashlib.sha256(pdf_bytes).hexdigest()
+            if manifest['output_sha256']!=pdf_sha:
+                raise RuntimeError(f'Manifest output_sha256 mismatch for {name}: {manifest["output_sha256"]} != {pdf_sha}')
+            snap[name]={
+                'pdf_bytes':pdf_bytes,
+                'pdf_sha256':pdf_sha,
+                'manifest_bytes':manifest_bytes,
+                'manifest_sha256':hashlib.sha256(manifest_bytes).hexdigest(),
+            }
+        passes.append(snap)
+    for name in names:
+        if passes[0][name]['pdf_sha256']!=passes[1][name]['pdf_sha256'] or passes[0][name]['pdf_bytes']!=passes[1][name]['pdf_bytes']:
+            raise RuntimeError(f'Non-reproducible PDF across two clean builds for {name}: {passes[0][name]["pdf_sha256"]} != {passes[1][name]["pdf_sha256"]}')
+        if passes[0][name]['manifest_sha256']!=passes[1][name]['manifest_sha256'] or passes[0][name]['manifest_bytes']!=passes[1][name]['manifest_bytes']:
+            raise RuntimeError(f'Non-reproducible manifest across two clean builds for {name}: {passes[0][name]["manifest_sha256"]} != {passes[1][name]["manifest_sha256"]}')
+    sums_path=write_sha256sums(out,names)
+    print(sums_path.read_text(encoding='utf-8'),end='',flush=True)
+    return sums_path
+
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument('--document',choices=['WHITEPAPER','ENGINEERING_GATES_AND_EVOLUTION'])
     p.add_argument('--check-toolchain',action='store_true')
+    p.add_argument('--verify-reproducible',action='store_true')
     args=p.parse_args()
     if args.check_toolchain:
         pandoc_ver,latex_ver=check_toolchain()
         print(f'PDF toolchain OK: {pandoc_ver} | {latex_ver}',flush=True)
         return
-    for name in [args.document] if args.document else ['WHITEPAPER','ENGINEERING_GATES_AND_EVOLUTION']:build(name)
+    names=[args.document] if args.document else ['WHITEPAPER','ENGINEERING_GATES_AND_EVOLUTION']
+    if args.verify_reproducible:
+        verify_reproducible(tuple(names))
+        return
+    for name in names:build(name)
+    write_sha256sums(ROOT/'target/paper',names)
 
 
 if __name__=='__main__':main()
