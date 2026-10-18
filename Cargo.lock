@@ -655,10 +655,9 @@ dependencies = [
  "jarambit-phenotype",
  "jarambit-physics",
  "jarambit-redteam",
+ "jarambit-runner-policy",
  "mimalloc",
- "serde",
  "serde_json",
- "serde_yaml",
 ]
 
 [[package]]
@@ -739,6 +738,14 @@ dependencies = [
  "jarambit-genotype",
  "jarambit-monte-carlo",
  "jarambit-phenotype",
+]
+
+[[package]]
+name = "jarambit-runner-policy"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_yaml",
 ]
 
 [[package]]
