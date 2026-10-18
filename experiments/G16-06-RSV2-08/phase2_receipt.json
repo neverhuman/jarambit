@@ -1813,7 +1813,14 @@
     "independent solid/cross-solver qualification",
     "coarse search failures and fine-backend faer parity failure retained"
   ],
-  "commit_status": "pending; shared Git metadata was read-only at previous delivery",
+  "commit_status": {
+    "numerical_work_committed": true,
+    "commit": "2100b75384ec3c0f19ece97bfa9a492784ee3489",
+    "created_by": "external checkpoint observed during finalization",
+    "required_trailers_verified": true,
+    "local_delivery_metadata_uncommitted": true,
+    "local_commit_blocker": "read-only shared Git index.lock"
+  },
   "sha256": {
     "experiments/G16-06-RSV2-08/candidate.csv": "52b795486b3c7f72ed9c9e06f57888ef166afdc22434118a0a821004ccc016ed",
     "experiments/G16-06-RSV2-08/candidate_config.json": "f3d5921b90dfe712940fbd4fd98346aa78be985fbdaf8f11f874cad7934eebb9",
@@ -1834,5 +1841,6 @@
     "target/G16-06-RSV2-08/phase2/window_search_summary.json": "1e0a9b5920d028e4aa76cff91673b57664c234f3ff3830b630ce906839debd05",
     "target/G16-06-RSV2-08/phase2/convergence_search_summary.json": "a8ef6f63d99cc328d941ca92958cdca9a9ef58216de7e1745a66483709e6dc48",
     "target/G16-06-RSV2-08/phase2/local_search_summary.json": "1f2fa69c833f94312a1f8fb0e48ce1976b9dfae55ad4e06c01f68933808f5cf3"
-  }
+  },
+  "completed_at_utc": "2026-10-18T05:43:55+00:00"
 }

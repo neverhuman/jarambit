@@ -93,3 +93,5 @@ taskset -c 12,13 env CARGO_BUILD_JOBS=2 python3 experiments/G16-06-RSV2-08/phase
 taskset -c 12,13 env CARGO_BUILD_JOBS=2 python3 experiments/G16-06-RSV2-08/phase2_convergence_search.py --local
 taskset -c 12,13 env CARGO_BUILD_JOBS=2 python3 experiments/G16-06-RSV2-08/summarize_phase2.py
 ```
+
+Delivery: Phase-2 code, report and numerical receipt are saved in external checkpoint `2100b75384ec3c0f19ece97bfa9a492784ee3489` with all required Agent-* trailers, verified after it appeared during finalization. Local delivery metadata and lane COMMS remain uncommitted because shared Git metadata is read-only. Both lane milestone logs are updated; shared main COMMS requires captain relay. No PR, push, stacking or deletes. Final source archive: target/G16-06-RSV2-08/phase2-sources-final.tar.gz.
