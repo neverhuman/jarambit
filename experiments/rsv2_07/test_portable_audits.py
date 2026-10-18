@@ -18,6 +18,7 @@ import audit_phase11_wave_receipts as wave_audit
 import audit_phase12_cross_wave as cross_wave_audit
 import audit_phase13_screen_rounds as screen_audit
 import audit_phase14_w319_receipts as w319_audit
+import audit_phase15_gate_s_and_margins as phase15_audit
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -772,6 +773,167 @@ class W319ReceiptAuditTests(unittest.TestCase):
             w319_audit.audit_directory(directory, pins)
         with patch.object(Path, "read_bytes") as read_mock, self.assertRaisesRegex(ValueError, "Invalid pinned artifact path"):
             w319_audit.audit_directory(directory, {"../outside": ("a" * 64, 0)})
+        read_mock.assert_not_called()
+
+
+class Phase15GateSMarginAuditTests(unittest.TestCase):
+    """Artifact/layout subset only; no real Gate S or mechanical-margin evaluation."""
+
+    def setUp(self):
+        self.board = {"schema": "jarambit.auto_evolve.leaderboard.v2", "assessed_count": 4,
+                      "qualified_count": 0, "champion": None, "unverified": [], "designs": []}
+        self.cards = {}
+        for slot in range(4):
+            label = f"w319_fixture_{slot}"
+            identity = hashlib.sha256(label.encode()).hexdigest()
+            key = f"by-content/{identity}/attempt-{slot}/{label}_master_scorecard.md"
+            self.board["designs"].append({"label": label, "family": "fixture", "certificate_identity": identity,
+                                          "scorecard_md": "out/w319/" + key, "qualified": False})
+            tables = []
+            for index, (header, count) in enumerate(phase15_audit.TABLE_LAYOUT):
+                table = ["| " + " | ".join(header) + " |", "|" + "|".join("---" for _ in header) + "|"]
+                for row in range(1, count + 1):
+                    if index == 0:
+                        cells = [f"component_{row}", "opaque", "opaque", "opaque"]
+                    elif index == 1:
+                        cells = [str(row), f"`synthetic_check_{row}`", "opaque observation", "opaque requirement", "**FAIL**"]
+                    else:
+                        cells = [f"`synthetic_evaluator_{row}`", "fixture", "fixture", "**`FAIL`**", "fixture"]
+                    table.append("| " + " | ".join(cells) + " |")
+                tables.append("\n".join(table))
+            self.cards[key] = f"# Master CAD Scorecard — `{label}`\n\n- **Verdict**: **FAIL (Gate Violation)**\n\n" + "\n\n".join(tables) + "\n"
+
+    def payloads(self):
+        files = {"leaderboard.json": json.dumps(self.board, sort_keys=True).encode()}
+        files.update({key: text.encode() for key, text in self.cards.items()})
+        pins = {key: (hashlib.sha256(data).hexdigest(), len(data)) for key, data in files.items()}
+        return files, pins
+
+    def test_synthetic_layouts_and_reference_accounting(self):
+        files, pins = self.payloads()
+        result = phase15_audit.audit_payloads("w319", files, pins)
+        self.assertEqual(result["verified_files"], 5)
+        self.assertEqual(set(result["scorecards"].values()), set(self.cards))
+        label = self.board["designs"][0]["label"]
+        self.assertEqual(phase15_audit.check_layout(next(iter(self.cards.values())), label), [8, 16, 18])
+        self.assertNotIn("margins", result)
+        self.assertNotIn("gate_s_pass_rate", result)
+
+    def test_all_pinned_files_reject_byte_tampering(self):
+        files, pins = self.payloads()
+        for key in files:
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError, "SHA-256/size mismatch"):
+                phase15_audit.audit_payloads("w319", {**files, key: files[key] + b" "}, pins)
+
+    def test_missing_required_synthetic_row_or_whole_table_fails(self):
+        key = next(iter(self.cards))
+        original = self.cards[key]
+        row = next(line for line in original.splitlines() if "`synthetic_check_1`" in line)
+        for changed in (original.replace(row + "\n", ""), original[:original.index("| # |")]):
+            self.cards[key] = changed
+            with self.subTest(changed=changed), self.assertRaisesRegex(ValueError, "[Tt]able"):
+                phase15_audit.audit_payloads("w319", *self.payloads())
+
+    def test_table_header_separator_column_and_ordinal_mismatches_fail(self):
+        key = next(iter(self.cards))
+        original = self.cards[key]
+        variants = [original.replace("| Gate ID |", "| Wrong ID |"),
+                    original.replace("|---|", "|bad|", 1),
+                    original.replace("| 1 | `synthetic_check_1` |", "| 1 | extra | `synthetic_check_1` |"),
+                    original.replace("| 1 | `synthetic_check_1` |", "| 0 | `synthetic_check_1` |")]
+        for changed in variants:
+            self.cards[key] = changed
+            with self.subTest(changed=changed), self.assertRaises(ValueError):
+                phase15_audit.audit_payloads("w319", *self.payloads())
+
+    def test_duplicate_gate_and_evaluator_identifiers_fail(self):
+        key = next(iter(self.cards))
+        original = self.cards[key]
+        for target in ("synthetic_check", "synthetic_evaluator"):
+            self.cards[key] = original.replace(f"`{target}_2`", f"`{target}_1`")
+            with self.subTest(target=target), self.assertRaisesRegex(ValueError, "Duplicate table identifiers"):
+                phase15_audit.audit_payloads("w319", *self.payloads())
+
+    def test_contradictory_or_duplicate_stored_overall_verdict_fails(self):
+        key = next(iter(self.cards))
+        original = self.cards[key]
+        for changed in [original.replace("FAIL (Gate Violation)", "PASS"),
+                        original + "\n- **Verdict**: **FAIL (Gate Violation)**\n"]:
+            self.cards[key] = changed
+            with self.subTest(changed=changed), self.assertRaisesRegex(ValueError, "Stored overall verdict"):
+                phase15_audit.audit_payloads("w319", *self.payloads())
+
+    def test_missing_extra_files_and_malformed_pins_fail(self):
+        files, pins = self.payloads()
+        changed = dict(files)
+        del changed[next(iter(self.cards))]
+        with self.assertRaisesRegex(ValueError, "Exactly five"):
+            phase15_audit.audit_payloads("w319", changed, pins)
+        with self.assertRaisesRegex(ValueError, "Exactly five"):
+            phase15_audit.audit_payloads("w319", {**files, "extra": b""}, pins)
+        for pin in [("Z" * 64, 0), ("a" * 64, True), ("a" * 64, -1)]:
+            with self.subTest(pin=pin), self.assertRaises(ValueError):
+                phase15_audit.audit_payloads("w319", files, {**pins, "leaderboard.json": pin})
+
+    def test_stored_qualification_claims_and_counts_fail_closed(self):
+        for key, value in [("qualified_count", False), ("qualified_count", 1), ("assessed_count", True),
+                           ("assessed_count", 3), ("champion", "fixture"), ("unverified", ["fixture"])]:
+            original = self.board[key]
+            self.board[key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                phase15_audit.audit_payloads("w319", *self.payloads())
+            self.board[key] = original
+        self.board["designs"][0]["qualified"] = True
+        with self.assertRaisesRegex(ValueError, "boolean false"):
+            phase15_audit.audit_payloads("w319", *self.payloads())
+
+    def test_path_identity_title_and_unreferenced_attempt_mismatches_fail(self):
+        design = self.board["designs"][0]
+        original = design["scorecard_md"]
+        for reference in ["../" + original, original.replace("out/w319/", "out/w318/"),
+                          original.replace(design["certificate_identity"], "a" * 64),
+                          original.replace("attempt-0", "attempt-99")]:
+            design["scorecard_md"] = reference
+            with self.subTest(reference=reference), self.assertRaises(ValueError):
+                phase15_audit.audit_payloads("w319", *self.payloads())
+        design["scorecard_md"] = original
+        key = next(iter(self.cards))
+        self.cards[key] = self.cards[key].replace("# Master CAD Scorecard", "# Wrong Title", 1)
+        with self.assertRaisesRegex(ValueError, "title/label"):
+            phase15_audit.audit_payloads("w319", *self.payloads())
+
+    def test_relocated_cli_without_git_or_original_host_files(self):
+        files, pins = self.payloads()
+        directory, reads, output = Path("/portable/fixture"), [], io.StringIO()
+
+        def read(path):
+            key = str(path.relative_to(directory))
+            reads.append(key)
+            return files[key]
+
+        with patch.object(Path, "read_bytes", new=read), patch.object(phase15_audit, "PINS", {"w319": pins}), \
+                patch.object(wave_audit, "default_wave_directory", side_effect=AssertionError("Unexpected Git access")), \
+                patch.object(sys, "argv", ["audit_phase15_gate_s_and_margins.py", "--wave-dir", str(directory)]), \
+                redirect_stdout(output):
+            phase15_audit.main()
+        self.assertEqual(len(reads), 10)
+        self.assertEqual(set(reads), set(files))
+        self.assertIn("artifact subset: PASS; 5 files", output.getvalue())
+        self.assertIn("NOT ASSESSED", output.getvalue())
+
+    def test_mutating_snapshot_and_unsafe_pin_paths_fail(self):
+        files, pins = self.payloads()
+        directory, reads = Path("/portable/fixture"), {}
+
+        def read(path):
+            key = str(path.relative_to(directory))
+            reads[key] = reads.get(key, 0) + 1
+            return files[key] + (b" " if reads[key] > 1 else b"")
+
+        with patch.object(Path, "read_bytes", new=read), self.assertRaisesRegex(ValueError, "changed during audit"):
+            phase15_audit.audit_directories({"w319": directory}, {"w319": pins})
+        with patch.object(Path, "read_bytes") as read_mock, self.assertRaisesRegex(ValueError, "Invalid pinned artifact path"):
+            phase15_audit.audit_directories({"w319": directory}, {"w319": {"../unsafe": ("a" * 64, 0)}})
         read_mock.assert_not_called()
 
 
