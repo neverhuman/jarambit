@@ -1,0 +1,18 @@
+{
+  "best_stage2_26_gate_design": null,
+  "generations_completed": 3,
+  "hall_of_fame_best_so_far": {
+    "certificate_identity": "400e3d630a482f66c015e0609449b8a4675d2597096c1e654f225a447dc7719b",
+    "family": "p14",
+    "fat_sf": 0.49428284249811794,
+    "label": "w501_ul_r01_p14_c01",
+    "mass_g": 83.06500940664549,
+    "qualification_status": "pending independent top-k assessment",
+    "ring_bearing_w_mm": 10.40159366059293,
+    "screen_deficit": 4.1561215756130325,
+    "seq_ratio": 1.3409970401831308,
+    "ultralight_weighted_fitness": 74.01813
+  },
+  "metric": "W_ULTRALIGHT_v1",
+  "schema": "jarambit.ultralight_best_so_far.v1"
+}
