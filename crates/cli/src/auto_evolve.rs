@@ -200,8 +200,14 @@ fn spawn_offspring_batch(
                 debug_assert!(q7_offspring_arm_label(slot).is_some());
                 child.v[..N_CP].copy_from_slice(&Q7_CPS);
                 if slot != 9 {
+                    // Keep the inner hawkbill cutting-edge CPs (0..20) at the concave-safe Q7
+                    // anchor so C.4 concavity (>= 0.97) cannot degrade under random jitter, while
+                    // still jittering spine/handle CPs (20..N_CP).
                     for (idx, cp) in child.v[..N_CP].iter_mut().enumerate() {
-                        *cp = (*cp + rng.range(-0.005, 0.005)).clamp(b[idx].0, b[idx].1);
+                        let delta = rng.range(-0.005, 0.005);
+                        if idx >= 20 {
+                            *cp = (*cp + delta).clamp(b[idx].0, b[idx].1);
+                        }
                     }
                     child.v[TAPER_X0] = rng.range(116.0, 118.0).clamp(b[TAPER_X0].0, b[TAPER_X0].1);
                 } else {
