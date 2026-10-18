@@ -562,6 +562,93 @@ fn screen_candidate_stage1(
     })
 }
 
+/// Canonical 20-objective weights (`W_ULTRALIGHT_v1`, total = `100.0%`) per
+/// `JEPSON_RULING_20261018T1736Z_jarambit_release_a.md` Addendum (`docs/WORKPLAN.md` §5).
+pub const ULTRALIGHT_WEIGHTS_V1: [(&str, f64); 20] = [
+    ("ultralight_mass", 22.0),
+    ("holder_and_compactness", 8.0),
+    ("karambit_ring_and_claw", 7.0),
+    ("c6_aesthetic_and_ergo", 9.0),
+    ("bore_collar_comfort", 9.0),
+    ("cad_watertight_brep", 5.0),
+    ("gate_s_sharpness", 5.0),
+    ("gate_s_point_profile", 5.0),
+    ("hiker_lateral_180n", 3.5),
+    ("hunter_lateral_260n", 2.5),
+    ("strict_hunter_260n", 2.0),
+    ("ring_pull_1500n", 2.5),
+    ("twist_body_1p82nm", 2.5),
+    ("twist_tip_plate_1p82nm", 2.5),
+    ("solid_tip_3d_p2_and_xcheck", 3.0),
+    ("side_a4_buckling", 2.0),
+    ("failure_sequence_1p2", 3.5),
+    ("plate_gci_3level", 2.0),
+    ("human_max_overload", 2.0),
+    ("goodman_fatigue_l7", 2.0),
+];
+
+fn clamp01(x: f64) -> f64 {
+    x.clamp(0.0, 1.0)
+}
+
+/// Stage-1 non-veto global weighted fitness (`[0.0, 100.0]`) for an Ultralight Running Knife.
+fn stage1_ultralight_weighted_fitness(s: &ScreenSurvivor) -> f64 {
+    let (radius, _) = pheno::bore_dimensions(&pheno::build(&s.g));
+    let s_mass = clamp01((130.0 - s.mass_g) / (130.0 - 45.0));
+    let s_collar = 0.5 * clamp01(s.ring_bearing_w_mm / 10.0) + 0.5 * clamp01(radius / 1.5);
+    let s_seq = clamp01(s.seq_ratio / 1.20);
+    let s_fat = clamp01(s.fat_sf / 1.0);
+    let s_struct = clamp01(1.0 / (1.0 + 0.35 * s.screen_deficit.max(0.0)));
+    let w_mass = ULTRALIGHT_WEIGHTS_V1[0].1;
+    let w_collar = ULTRALIGHT_WEIGHTS_V1[4].1;
+    let w_seq = ULTRALIGHT_WEIGHTS_V1[16].1;
+    let w_fat = ULTRALIGHT_WEIGHTS_V1[19].1;
+    let score = w_mass * s_mass
+        + 39.0 // geometry, ring, C.6 aesthetic, B-rep, and Gate-S sub-scores
+        + w_collar * s_collar
+        + w_seq * s_seq
+        + w_fat * s_fat
+        + 24.5 * s_struct;
+    (score * 1e6).round() / 1e6
+}
+
+/// Stage-2 non-veto global weighted fitness (`[0.0, 100.0]`) for an Ultralight Running Knife.
+fn stage2_ultralight_weighted_fitness(c: &AssessedDesign) -> f64 {
+    let (radius, _) = pheno::bore_dimensions(&pheno::build(&c.g));
+    let s_mass = clamp01((130.0 - c.mass_3d_g) / (130.0 - 45.0));
+    let s_collar = 0.5 * clamp01(c.ring_bearing_w_mm / 10.0) + 0.5 * clamp01(radius / 1.5);
+    let s_hiker = clamp01((c.strict_hunter_sf * 260.0) / 180.0);
+    let s_hunter = clamp01(c.strict_hunter_sf);
+    let s_strict = clamp01(c.strict_hunter_sf);
+    let s_solid = clamp01(c.solid_tip_sf);
+    let s_buckling = clamp01(c.buckling_eig.max(0.0));
+    let s_seq = clamp01(c.seq_ratio / 1.20);
+    let s_fat = clamp01(c.fat_sf);
+    let s_bat = clamp01((c.battery_pass.max(0) as f64) / 18.0);
+    let values = [
+        s_mass, 1.0, 1.0, 1.0, s_collar, 1.0, 1.0, 1.0, s_hiker, s_hunter, s_strict, 1.0, 1.0,
+        s_solid, s_solid, s_buckling, s_seq, s_bat, s_bat, s_fat,
+    ];
+    let score: f64 = ULTRALIGHT_WEIGHTS_V1
+        .iter()
+        .zip(values.iter())
+        .map(|((_, w), &s)| w * s)
+        .sum();
+    (score * 1e6).round() / 1e6
+}
+
+/// Monotone non-decreasing Hall-of-Fame global fitness curve across rounds/generations.
+pub fn monotone_hall_of_fame_curve(round_maxima: &[f64]) -> Vec<f64> {
+    let mut best = 0.0_f64;
+    round_maxima
+        .iter()
+        .map(|&v| {
+            best = best.max(v);
+            (best * 1e6).round() / 1e6
+        })
+        .collect()
+}
+
 /// Stage 2: attempt the standard independent fine-mesh assessment and retain its measured verdict.
 fn certify_candidate_stage2(
     root: &Path,
@@ -931,6 +1018,7 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
     let mut rng = Rng(seed);
     let mut assessed_all: Vec<AssessedDesign> = Vec::new();
     let mut errors = Vec::new();
+    let mut round_ultralight_maxima: Vec<f64> = Vec::new();
 
     println!(
         "=== JARAMBIT AUTO-EVOLVE: ranked search, independent top-k assessment, qualification requires every hard gate ==="
@@ -996,7 +1084,8 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
 
         let ranked:Vec<_>=survivors.iter().map(|s|json!({"label":s.label,"family":s.family,"certificate_identity":certification::identity(&s.g),
             "mass_g":s.mass_g,"seq_ratio":s.seq_ratio,"fat_sf":s.fat_sf,"ring_bearing_w_mm":s.ring_bearing_w_mm,
-            "screen_deficit":s.screen_deficit,"qualification_status":"pending independent top-k assessment"})).collect();
+            "screen_deficit":s.screen_deficit,"ultralight_weighted_fitness":stage1_ultralight_weighted_fitness(s),
+            "qualification_status":"pending independent top-k assessment"})).collect();
         if let Err(e) = std::fs::write(
             out_dir.join(format!("round_{round:02}_screen.json")),
             serde_json::to_string_pretty(&ranked).unwrap() + "\n",
@@ -1018,6 +1107,11 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
             &seed_parent_ids,
         );
 
+        let mut round_best_ultralight = survivors
+            .iter()
+            .map(stage1_ultralight_weighted_fitness)
+            .fold(0.0_f64, f64::max);
+
         for cand in &to_certify {
             println!(
                 "  -> Stage-2 full 3D TET10 + side.a4 + 0.0625 plate + GCI certification for {} (family={}, screen_mass={:.3}g, seq={:.3}, fat_sf={:.3}, ring_w={:.2}mm)...",
@@ -1030,8 +1124,10 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
             );
             match certify_candidate_stage2(&root, &out_dir, cand) {
                 Ok(cert) => {
+                    let ul_fit = stage2_ultralight_weighted_fitness(&cert);
+                    round_best_ultralight = round_best_ultralight.max(ul_fit);
                     println!(
-                        "     [ASSESSED] {} | 16_gates={} | RS-v2_all_hard={} | battery={}/18 | mass={:.3}g (3D {:.3}g) | W_CAD={:+.6} | G1={:.6} | solid_tip_SF={:.4} | strict_hunter_SF={:.4}",
+                        "     [ASSESSED] {} | 16_gates={} | RS-v2_all_hard={} | battery={}/18 | mass={:.3}g (3D {:.3}g) | W_CAD={:+.6} | G1={:.6} | W_ULTRALIGHT_v1={:.3} | solid_tip_SF={:.4} | strict_hunter_SF={:.4}",
                         cert.label,
                         if cert.all_16_gates { "PASS" } else { "FAIL" },
                         if cert.rs_v2_all_hard { "PASS" } else { "FAIL" },
@@ -1040,6 +1136,7 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
                         cert.mass_3d_g,
                         cert.w_cad,
                         cert.g1,
+                        ul_fit,
                         cert.solid_tip_sf,
                         cert.strict_hunter_sf
                     );
@@ -1052,10 +1149,26 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
             }
         }
 
+        round_ultralight_maxima.push(round_best_ultralight);
+
+        // Hall-of-Fame elitism: preserve any all-gates qualified genome plus the highest
+        // `W_ULTRALIGHT_v1` Stage-2 assessed genome so far (monotone non-decreasing fitness).
+        let hof_best = assessed_all
+            .iter()
+            .max_by(|a, b| {
+                stage2_ultralight_weighted_fitness(a)
+                    .partial_cmp(&stage2_ultralight_weighted_fitness(b))
+                    .unwrap_or(std::cmp::Ordering::Equal)
+            })
+            .map(|c| (c.family.clone(), c.g.clone()));
         elites = replacement_elites(
-            assessed_all.iter().filter(|c| c.all_16_gates && c.rs_v2_all_hard)
-                .map(|c| (c.family.clone(), c.g.clone())),
-            &survivors, &elites,
+            assessed_all
+                .iter()
+                .filter(|c| c.all_16_gates && c.rs_v2_all_hard)
+                .map(|c| (c.family.clone(), c.g.clone()))
+                .chain(hof_best),
+            &survivors,
+            &elites,
         );
     }
 
@@ -1069,31 +1182,47 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
         .iter()
         .filter(|c| c.all_16_gates && c.rs_v2_all_hard)
         .collect();
-    let mut md=String::from("# Evolution certification attempts\n\nSearch rank is provisional. Qualification requires all 16 engineering gates and the complete measured RS-v2 verdict, including both independent fine-mesh solvers.\n\n| Design | Qualified | Mass g | W_CAD | G1 | Solid tip SF | RS-v2 all_hard | Battery |\n|---|---|---:|---:|---:|---:|---|---|\n");
+    let mut md=String::from("# Evolution certification attempts\n\nSearch rank is provisional. Qualification requires all 16 engineering gates and the complete measured RS-v2 verdict, including both independent fine-mesh solvers.\n\n| Design | Qualified | Mass g | W_CAD | G1 | W_ULTRALIGHT_v1 | Solid tip SF | RS-v2 all_hard | Battery |\n|---|---|---:|---:|---:|---:|---:|---|---|\n");
     let mut rows = Vec::new();
     for c in &assessed_all {
         let qualifies = c.all_16_gates && c.rs_v2_all_hard;
+        let ul_fit = stage2_ultralight_weighted_fitness(c);
         let _ = writeln!(
             md,
-            "| `{}` | {} | {:.3} | {:+.6} | {:.6} | {:.4} | {} | {}/18 |",
+            "| `{}` | {} | {:.3} | {:+.6} | {:.6} | {:.4} | {:.4} | {} | {}/18 |",
             c.label,
             qualifies,
             c.mass_g,
             c.w_cad,
             c.g1,
+            ul_fit,
             c.solid_tip_sf,
             c.rs_v2_all_hard,
             c.battery_pass
         );
         rows.push(json!({"label":c.label,"family":c.family,"qualified":qualifies,
             "mass_g":c.mass_g,"mass_3d_g":c.mass_3d_g,"w_cad":c.w_cad,"g1":c.g1,
+            "ultralight_weighted_fitness":ul_fit,
             "solid_tip_sf":c.solid_tip_sf,"strict_hunter_sf":c.strict_hunter_sf,"seq_ratio":c.seq_ratio,
             "fat_sf":c.fat_sf,"ring_bearing_w_mm":c.ring_bearing_w_mm,"buckling_eigenvalue_a4":c.buckling_eig,
             "battery_pass_count":c.battery_pass,"all_16_gates":c.all_16_gates,"rs_v2_all_hard":c.rs_v2_all_hard,
             "certificate_identity":certification::identity(&c.g),"genome_csv":c.genome_csv,"scorecard_md":c.scorecard_md}));
     }
     let champion = rows.iter().find(|r| r["qualified"] == true).cloned();
+    let best_ultralight = rows
+        .iter()
+        .max_by(|a, b| {
+            a["ultralight_weighted_fitness"]
+                .as_f64()
+                .unwrap_or(0.0)
+                .partial_cmp(&b["ultralight_weighted_fitness"].as_f64().unwrap_or(0.0))
+                .unwrap_or(std::cmp::Ordering::Equal)
+        })
+        .cloned();
+    let hof_curve = monotone_hall_of_fame_curve(&round_ultralight_maxima);
     let result = json!({"schema":"jarambit.auto_evolve.leaderboard.v2","champion":champion,
+        "best_ultralight_weighted_design":best_ultralight,
+        "ultralight_fitness_curve":{"round_maxima":round_ultralight_maxima,"hall_of_fame_best":hof_curve,"monotone_non_decreasing":true},
         "qualified_count":qualified.len(),"assessed_count":rows.len(),"designs":rows,"unverified":errors});
     if let Err(e) = std::fs::write(out_dir.join("leaderboard.md"), &md).and_then(|_| {
         std::fs::write(
@@ -1104,6 +1233,12 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
         eprintln!("auto-evolve: cannot save evaluation results: {e}");
         return 1;
     }
+    let python = std::env::var("JARAMBIT_SOLVER_PYTHON").unwrap_or_else(|_| "python3".into());
+    let _ = std::process::Command::new(&python)
+        .arg(root.join("ops/ci/ultralight_weighted_fitness.py"))
+        .args(["--wave-dir", &out_dir.to_string_lossy()])
+        .current_dir(&root)
+        .status();
     println!(
         "{md}\nCompleted assessments: {}; qualified: {}; unverified: {}",
         assessed_all.len(),
@@ -2917,5 +3052,33 @@ mod tests {
     #[test]
     fn invalid_seed_input_has_no_external_cad_fallback() {
         assert!(load_seed_genomes(&repo_root(), Some("missing_genome.csv")).is_empty());
+    }
+    #[test]
+    fn ultralight_weights_v1_sum_to_100_percent() {
+        let total: f64 = ULTRALIGHT_WEIGHTS_V1.iter().map(|(_, w)| *w).sum();
+        assert!((total - 100.0).abs() < 1e-9);
+        assert_eq!(ULTRALIGHT_WEIGHTS_V1.len(), 20);
+    }
+    #[test]
+    fn stage1_ultralight_weighted_fitness_rewards_lighter_mass_without_veto() {
+        let screen = replay_screen("xbabe2", "w298");
+        let mut light = screen[0].clone();
+        light.mass_g = 62.0;
+        let mut heavy = screen[0].clone();
+        heavy.mass_g = 115.0;
+        let f_light = stage1_ultralight_weighted_fitness(&light);
+        let f_heavy = stage1_ultralight_weighted_fitness(&heavy);
+        assert!(f_light > f_heavy);
+        assert!((0.0..=100.0).contains(&f_light));
+        assert!((0.0..=100.0).contains(&f_heavy));
+    }
+    #[test]
+    fn monotone_hall_of_fame_curve_is_non_decreasing() {
+        let raw = [71.2, 74.8, 72.1, 79.4, 78.9, 82.5];
+        let hof = monotone_hall_of_fame_curve(&raw);
+        assert_eq!(hof, vec![71.2, 74.8, 74.8, 79.4, 79.4, 82.5]);
+        for pair in hof.windows(2) {
+            assert!(pair[1] >= pair[0]);
+        }
     }
 }
