@@ -140,3 +140,17 @@ mod tests {
         );
     }
 }
+
+#[cfg(standalone_version_check)]
+fn main() {
+    let root = std::env::current_dir().unwrap_or_else(|e| {
+        eprintln!("current directory: {e}");
+        std::process::exit(1);
+    });
+    let reference = std::env::args()
+        .nth(1)
+        .filter(|s| !s.is_empty())
+        .or_else(|| std::env::var("GITHUB_REF").ok())
+        .unwrap_or_default();
+    std::process::exit(run(&root, &reference));
+}
