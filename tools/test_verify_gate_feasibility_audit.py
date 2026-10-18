@@ -19,9 +19,9 @@ class AuditProvenanceTests(unittest.TestCase):
         root = Path(tmp.name)
         m = audit.legacy_verifier(ROOT)
         paths = [audit.INDEX, audit.REPORT, audit.CONTRACT, audit.MANIFEST_REPORT,
-                 audit.MANIFEST_JSON, audit.LEGACY, audit.SELF,
+                 audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON, audit.LEGACY, audit.SELF,
                  str(m.INDEX_PATH), "Cargo.toml"] + [p.relative_to(ROOT).as_posix()
-                 for p in sorted((ROOT / "crates").glob("*/Cargo.toml"))] + list(audit.SOURCES) + [str(p) for _, p in m.REPORTS]
+                 for p in sorted((ROOT / "crates").glob("*/Cargo.toml"))] + list(audit.SOURCES) + list(audit.DIGEST_SOURCES) + [str(p) for _, p in m.REPORTS]
         for path in paths:
             target = root / path
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -38,14 +38,16 @@ class AuditProvenanceTests(unittest.TestCase):
         m = audit.legacy_verifier(root)
         row = audit.record(m, root, audit.CONTRACT)
         self.change(root, audit.INDEX, lambda d: d.update(supplemental_documents=[
-            row, audit.record(m, root, audit.MANIFEST_JSON)]))
+            row, audit.record(m, root, audit.MANIFEST_JSON),
+            audit.record(m, root, audit.DIGEST_JSON)]))
 
     def test_current_and_relocated_catalog(self):
         for root in (ROOT, self.snapshot()):
             with self.subTest(root=root.name):
                 result = audit.verify(root)
-                self.assertEqual(result["reports"], 17)
+                self.assertEqual(result["reports"], 18)
                 self.assertEqual(result["source_files"], 2)
+                self.assertEqual(result["digest_source_files"], 2)
                 self.assertEqual(result["manifest_files"], 11)
                 self.assertEqual(result["assignment_outcome"], "COMPLETE")
                 self.assertEqual(result["parity_assessment"], "NOT_ASSESSED")
@@ -55,7 +57,7 @@ class AuditProvenanceTests(unittest.TestCase):
 
     def test_document_corruption(self):
         m = audit.legacy_verifier(ROOT)
-        for path in [str(p) for _, p in m.REPORTS] + [audit.REPORT, audit.CONTRACT, audit.MANIFEST_REPORT, audit.MANIFEST_JSON]:
+        for path in [str(p) for _, p in m.REPORTS] + [audit.REPORT, audit.CONTRACT, audit.MANIFEST_REPORT, audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON]:
             with self.subTest(document=path):
                 root = self.snapshot()
                 p = root / path
@@ -64,7 +66,7 @@ class AuditProvenanceTests(unittest.TestCase):
                     audit.verify(root)
 
     def test_source_corruption(self):
-        for path in audit.SOURCES:
+        for path in audit.SOURCES + audit.DIGEST_SOURCES:
             with self.subTest(source=path):
                 root = self.snapshot()
                 p = root / path
@@ -147,7 +149,8 @@ class AuditProvenanceTests(unittest.TestCase):
     def rebind_manifest(self, root):
         m = audit.legacy_verifier(root)
         self.change(root, audit.INDEX, lambda d: d.update(supplemental_documents=[
-            audit.record(m, root, audit.CONTRACT), audit.record(m, root, audit.MANIFEST_JSON)]))
+            audit.record(m, root, audit.CONTRACT), audit.record(m, root, audit.MANIFEST_JSON),
+            audit.record(m, root, audit.DIGEST_JSON)]))
 
     def test_manifest_input_changes(self):
         m = audit.legacy_verifier(ROOT)
@@ -222,6 +225,53 @@ class AuditProvenanceTests(unittest.TestCase):
         p.write_text(p.read_text().replace('edition = "2021"', 'edition.workspace = 1'))
         with self.assertRaisesRegex(ValueError, "unsupported edition/version declaration"):
             audit.manifest_inventory(m, root)
+
+
+    def rebind_digest(self, root):
+        m = audit.legacy_verifier(root)
+        self.change(root, audit.INDEX, lambda d: d.update(supplemental_documents=[
+            audit.record(m, root, path) for path in
+            (audit.CONTRACT, audit.MANIFEST_JSON, audit.DIGEST_JSON)]))
+
+    def test_digest_receipt_metadata(self):
+        for key, value in [("sha256", "f" * 64), ("bytes", 1), ("lines", 1),
+                           ("path", "../outside.rs")]:
+            with self.subTest(column=key):
+                root = self.snapshot()
+                self.change(root, audit.DIGEST_JSON,
+                            lambda d: d["source_files"][0].update({key: value}))
+                self.rebind_digest(root)
+                with self.assertRaisesRegex(ValueError, "source fingerprint mismatch"):
+                    audit.verify(root)
+        for key, value in [("source_count", 1), ("schema_version", True),
+                           ("qualified_count", True), ("status", "COMPLETE")]:
+            with self.subTest(metadata=key):
+                root = self.snapshot()
+                self.change(root, audit.DIGEST_JSON, lambda d: d.update({key: value}))
+                self.rebind_digest(root)
+                with self.assertRaises(ValueError):
+                    audit.verify(root)
+
+    def test_digest_source_coverage_and_json(self):
+        changes = [lambda d: d["source_files"].pop(),
+                   lambda d: d["source_files"].reverse(),
+                   lambda d: d["source_files"].__setitem__(1, d["source_files"][0])]
+        for i, change in enumerate(changes):
+            with self.subTest(coverage=i):
+                root = self.snapshot()
+                self.change(root, audit.DIGEST_JSON, change)
+                self.rebind_digest(root)
+                with self.assertRaisesRegex(ValueError, "source fingerprint mismatch"):
+                    audit.verify(root)
+        for suffix in [', "task": "duplicate"}', ', "extra": NaN}',
+                       ', "extra": "\\u002fhome\\u002fubuntu"}']:
+            with self.subTest(json=suffix):
+                root = self.snapshot()
+                p = root / audit.DIGEST_JSON
+                p.write_text(p.read_text().rstrip()[:-1] + suffix)
+                self.rebind_digest(root)
+                with self.assertRaises(ValueError):
+                    audit.verify(root)
 
 
 if __name__ == "__main__":

@@ -15,7 +15,11 @@ LEGACY = "experiments/G16-12-RSV2-04/test_report_provenance.py"
 SELF = "tools/verify_gate_feasibility_audit.py"
 SOURCES = ("crates/genotype/src/lib.rs", "crates/phenotype/src/lib.rs")
 CONTRACT_TASK = "G16-12-RSV2-04-p26"
-TASK = "G16-12-RSV2-04-p27"
+MANIFEST_TASK = "G16-12-RSV2-04-p27"
+TASK = "G16-12-RSV2-04-p28"
+DIGEST_REPORT = "docs/audit/EVOLVE_PHYSICS_SOURCE_PROVENANCE_AUDIT.md"
+DIGEST_JSON = "docs/audit/evolve_physics_source_provenance_audit.json"
+DIGEST_SOURCES = ("crates/evolve/src/lib.rs", "crates/physics/src/lib.rs")
 MANIFEST_REPORT = "docs/audit/WORKSPACE_MANIFEST_PROVENANCE_AUDIT.md"
 MANIFEST_JSON = "docs/audit/workspace_manifest_provenance_audit.json"
 STATUS = "IN_PROGRESS"
@@ -99,11 +103,19 @@ def manifest_inventory(module, root):
             for target, table in sorted(doc.get("target", {}).items())}
         item["workspace_dependency_keys"] = sorted(doc.get("workspace", {}).get("dependencies", {}))
         records.append(item)
-    return {"schema_version": 1, "task": TASK, "status": STATUS, "qualified_count": 0,
+    return {"schema_version": 1, "task": MANIFEST_TASK, "status": STATUS, "qualified_count": 0,
             "assignment_outcome": "COMPLETE", "scope": "Static workspace manifest metadata only",
             "workspace_resolver": workspace["resolver"], "workspace_members": members,
             "workspace_package_defaults": defaults, "manifest_count": len(records),
             "manifests": records}
+
+
+def digest_inventory(module, root):
+    """Hash inert source bytes and count UTF-8 lines; never inspect Rust semantics."""
+    return {"schema_version": 1, "task": TASK, "status": STATUS, "qualified_count": 0,
+            "assignment_outcome": "COMPLETE", "scope": "Static source byte provenance only",
+            "source_count": len(DIGEST_SOURCES),
+            "source_files": [record(module, root, path) for path in DIGEST_SOURCES]}
 
 
 def verify(root):
@@ -126,11 +138,11 @@ def verify(root):
             "unsupported index schema")
     require(index["task"] == TASK, "unexpected task")
     diagnostic(index)
-    require(type(index["report_count"]) is int and index["report_count"] == 17,
-            "expected seventeen reports")
-    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT]
+    require(type(index["report_count"]) is int and index["report_count"] == 18,
+            "expected eighteen reports")
+    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT]
     require(len(m.REPORTS) == 15, "expected fifteen historical reports")
-    require(isinstance(index["reports"], list) and len(index["reports"]) == 17,
+    require(isinstance(index["reports"], list) and len(index["reports"]) == 18,
             "report coverage mismatch")
     for row, path in zip(index["reports"], expected):
         require(isinstance(row, dict) and row.get("path") == path,
@@ -140,7 +152,8 @@ def verify(root):
         require(all(type(row[k]) is int for k in ("bytes", "lines", "tables")),
                 "report counts must be integers")
     require(index["supplemental_documents"] == [record(m, root, CONTRACT),
-                                                   record(m, root, MANIFEST_JSON)],
+                                                   record(m, root, MANIFEST_JSON),
+                                                   record(m, root, DIGEST_JSON)],
             "supplemental fingerprint mismatch")
     contract = read_json(CONTRACT)
     require(set(contract) == {"schema_version", "task", "status", "qualified_count",
@@ -176,12 +189,19 @@ def verify(root):
     manifest_text = m.portable_path(root, MANIFEST_REPORT).read_text(encoding="utf-8")
     require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in manifest_text.splitlines()
             and "qualified_count: 0" in manifest_text.splitlines(), "invalid manifest report status")
-    for path in expected + [INDEX, CONTRACT, MANIFEST_JSON, SELF, LEGACY]:
+    digest = read_json(DIGEST_JSON)
+    require(json.dumps(digest, sort_keys=True) == json.dumps(digest_inventory(m, root), sort_keys=True),
+            "source fingerprint mismatch: digest metadata")
+    digest_text = m.portable_path(root, DIGEST_REPORT).read_text(encoding="utf-8")
+    require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in digest_text.splitlines()
+            and "qualified_count: 0" in digest_text.splitlines(), "invalid digest report status")
+    for path in expected + [INDEX, CONTRACT, MANIFEST_JSON, DIGEST_JSON, SELF, LEGACY]:
         require(m.FORBIDDEN_HOME not in m.portable_path(root, path).read_text(encoding="utf-8"),
                 "literal host prefix")
     require(m.verify(root) == 15, "historical index mismatch")
     return {"task": TASK, "status": STATUS, "assignment_outcome": "COMPLETE",
-            "qualified_count": 0, "reports": 17, "source_files": 2,
+            "qualified_count": 0, "reports": 18, "source_files": 2,
+            "digest_source_files": len(DIGEST_SOURCES),
             "manifest_files": observed["manifest_count"], "prior_contract_assignment_outcome": OUTCOME,
             "parity_assessment": "NOT_ASSESSED"}
 
