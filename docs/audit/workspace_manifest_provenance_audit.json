@@ -1,0 +1,397 @@
+{
+  "schema_version": 1,
+  "task": "G16-12-RSV2-04-p27",
+  "status": "IN_PROGRESS",
+  "qualified_count": 0,
+  "assignment_outcome": "COMPLETE",
+  "scope": "Static workspace manifest metadata only",
+  "workspace_resolver": "2",
+  "workspace_members": [
+    "crates/genotype",
+    "crates/phenotype",
+    "crates/physics",
+    "crates/monte_carlo",
+    "crates/evolve",
+    "crates/redteam",
+    "crates/docs",
+    "crates/crescent",
+    "crates/cli",
+    "crates/evidence"
+  ],
+  "workspace_package_defaults": {
+    "edition": "2021",
+    "version": "0.1.0"
+  },
+  "manifest_count": 11,
+  "manifests": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "aa338525eac815da0ddf6557d150c0932f10c170985e9e7ff1cef1b4bcc50a1e",
+      "bytes": 347,
+      "lines": 13,
+      "package": null,
+      "dependency_keys": {
+        "dependencies": [],
+        "dev-dependencies": [],
+        "build-dependencies": []
+      },
+      "target_dependency_keys": {},
+      "workspace_dependency_keys": []
+    },
+    {
+      "path": "crates/cli/Cargo.toml",
+      "sha256": "be4282631bd8747ad295b497fcb5fedde6088967488d7f1fd7aa1c011fbe8f74",
+      "bytes": 590,
+      "lines": 18,
+      "package": {
+        "name": "jarambit",
+        "edition": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "2021",
+          "origin": "workspace.package.edition"
+        },
+        "version": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "0.1.0",
+          "origin": "workspace.package.version"
+        }
+      },
+      "dependency_keys": {
+        "dependencies": [
+          "jarambit-crescent",
+          "jarambit-docs",
+          "jarambit-evidence",
+          "jarambit-evolve",
+          "jarambit-genotype",
+          "jarambit-monte-carlo",
+          "jarambit-phenotype",
+          "jarambit-physics",
+          "jarambit-redteam",
+          "mimalloc",
+          "serde_json"
+        ],
+        "dev-dependencies": [],
+        "build-dependencies": []
+      },
+      "target_dependency_keys": {},
+      "workspace_dependency_keys": []
+    },
+    {
+      "path": "crates/crescent/Cargo.toml",
+      "sha256": "07970e5be1e735f13fcc6a73bc47da51015405a82e9e26b301733875ccf68556",
+      "bytes": 497,
+      "lines": 18,
+      "package": {
+        "name": "jarambit-crescent",
+        "edition": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "2021",
+          "origin": "workspace.package.edition"
+        },
+        "version": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "0.1.0",
+          "origin": "workspace.package.version"
+        }
+      },
+      "dependency_keys": {
+        "dependencies": [
+          "jarambit-evidence",
+          "jarambit-genotype",
+          "jarambit-phenotype",
+          "jarambit-physics",
+          "jarambit-redteam",
+          "serde",
+          "serde_json"
+        ],
+        "dev-dependencies": [
+          "jarambit-physics",
+          "serde_json"
+        ],
+        "build-dependencies": []
+      },
+      "target_dependency_keys": {},
+      "workspace_dependency_keys": []
+    },
+    {
+      "path": "crates/docs/Cargo.toml",
+      "sha256": "43fb035ddd464a871c42bb84d86c66f5fb9b7b6f77f4b12bbe89c8f05f43cc94",
+      "bytes": 125,
+      "lines": 8,
+      "package": {
+        "name": "jarambit-docs",
+        "edition": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "2021",
+          "origin": "workspace.package.edition"
+        },
+        "version": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "0.1.0",
+          "origin": "workspace.package.version"
+        }
+      },
+      "dependency_keys": {
+        "dependencies": [],
+        "dev-dependencies": [],
+        "build-dependencies": []
+      },
+      "target_dependency_keys": {},
+      "workspace_dependency_keys": []
+    },
+    {
+      "path": "crates/evidence/Cargo.toml",
+      "sha256": "e26a3c2d78bd94d147785187d5e69fb3ce93b68b045f7b306a3230b8698aded2",
+      "bytes": 296,
+      "lines": 12,
+      "package": {
+        "name": "jarambit-evidence",
+        "edition": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "2021",
+          "origin": "workspace.package.edition"
+        },
+        "version": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "0.1.0",
+          "origin": "workspace.package.version"
+        }
+      },
+      "dependency_keys": {
+        "dependencies": [
+          "serde",
+          "serde_json",
+          "sha2",
+          "unicode-normalization",
+          "zstd"
+        ],
+        "dev-dependencies": [],
+        "build-dependencies": []
+      },
+      "target_dependency_keys": {},
+      "workspace_dependency_keys": []
+    },
+    {
+      "path": "crates/evolve/Cargo.toml",
+      "sha256": "0dcb86df2ec5963c9e40687427126c368521c559b6f015667b1c57897d0db866",
+      "bytes": 451,
+      "lines": 17,
+      "package": {
+        "name": "jarambit-evolve",
+        "edition": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "2021",
+          "origin": "workspace.package.edition"
+        },
+        "version": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "0.1.0",
+          "origin": "workspace.package.version"
+        }
+      },
+      "dependency_keys": {
+        "dependencies": [
+          "jarambit-evidence",
+          "jarambit-genotype",
+          "jarambit-monte-carlo",
+          "jarambit-phenotype",
+          "jarambit-physics",
+          "jarambit-redteam",
+          "sha2"
+        ],
+        "dev-dependencies": [
+          "serde_json"
+        ],
+        "build-dependencies": []
+      },
+      "target_dependency_keys": {},
+      "workspace_dependency_keys": []
+    },
+    {
+      "path": "crates/genotype/Cargo.toml",
+      "sha256": "5c95bb1aeb4871de5e23479fb4e420224d499d1d826fde033100b3efdb48da27",
+      "bytes": 129,
+      "lines": 8,
+      "package": {
+        "name": "jarambit-genotype",
+        "edition": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "2021",
+          "origin": "workspace.package.edition"
+        },
+        "version": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "0.1.0",
+          "origin": "workspace.package.version"
+        }
+      },
+      "dependency_keys": {
+        "dependencies": [],
+        "dev-dependencies": [],
+        "build-dependencies": []
+      },
+      "target_dependency_keys": {},
+      "workspace_dependency_keys": []
+    },
+    {
+      "path": "crates/monte_carlo/Cargo.toml",
+      "sha256": "aad883b07f303ccd98812c0d51e8e6f877b374594cd5ba4afaaa3f4c020e2137",
+      "bytes": 176,
+      "lines": 8,
+      "package": {
+        "name": "jarambit-monte-carlo",
+        "edition": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "2021",
+          "origin": "workspace.package.edition"
+        },
+        "version": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "0.1.0",
+          "origin": "workspace.package.version"
+        }
+      },
+      "dependency_keys": {
+        "dependencies": [
+          "jarambit-genotype"
+        ],
+        "dev-dependencies": [],
+        "build-dependencies": []
+      },
+      "target_dependency_keys": {},
+      "workspace_dependency_keys": []
+    },
+    {
+      "path": "crates/phenotype/Cargo.toml",
+      "sha256": "2662eac30c48eee8d638a9f86a6758f2eafd4e6aae2b368bdfd6365d4cc7af71",
+      "bytes": 174,
+      "lines": 8,
+      "package": {
+        "name": "jarambit-phenotype",
+        "edition": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "2021",
+          "origin": "workspace.package.edition"
+        },
+        "version": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "0.1.0",
+          "origin": "workspace.package.version"
+        }
+      },
+      "dependency_keys": {
+        "dependencies": [
+          "jarambit-genotype"
+        ],
+        "dev-dependencies": [],
+        "build-dependencies": []
+      },
+      "target_dependency_keys": {},
+      "workspace_dependency_keys": []
+    },
+    {
+      "path": "crates/physics/Cargo.toml",
+      "sha256": "ea2d9a0e999c279e168d48df3825315157131399e48f31c16b35d4061caf4fff",
+      "bytes": 471,
+      "lines": 18,
+      "package": {
+        "name": "jarambit-physics",
+        "edition": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "2021",
+          "origin": "workspace.package.edition"
+        },
+        "version": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "0.1.0",
+          "origin": "workspace.package.version"
+        }
+      },
+      "dependency_keys": {
+        "dependencies": [
+          "faer",
+          "jarambit-genotype",
+          "jarambit-phenotype",
+          "spade"
+        ],
+        "dev-dependencies": [
+          "criterion"
+        ],
+        "build-dependencies": []
+      },
+      "target_dependency_keys": {},
+      "workspace_dependency_keys": []
+    },
+    {
+      "path": "crates/redteam/Cargo.toml",
+      "sha256": "4708f2ca769c6978729d4583974f8d6f4b121bbee8f58aa908c5e14eea13063c",
+      "bytes": 290,
+      "lines": 12,
+      "package": {
+        "name": "jarambit-redteam",
+        "edition": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "2021",
+          "origin": "workspace.package.edition"
+        },
+        "version": {
+          "declared": {
+            "workspace": true
+          },
+          "effective": "0.1.0",
+          "origin": "workspace.package.version"
+        }
+      },
+      "dependency_keys": {
+        "dependencies": [
+          "jarambit-genotype",
+          "jarambit-phenotype"
+        ],
+        "dev-dependencies": [
+          "jarambit-monte-carlo"
+        ],
+        "build-dependencies": []
+      },
+      "target_dependency_keys": {},
+      "workspace_dependency_keys": []
+    }
+  ]
+}
