@@ -13,6 +13,10 @@ import matplotlib.pyplot as plt
 
 final = OUT / 'critical_accepted_summary.json'
 accepted = json.loads(final.read_text()) if final.exists() else []
+web = OUT / 'web_accepted_summary.json'
+if web.exists():
+    accepted += json.loads(web.read_text())
+accepted.sort(key=lambda r:r.get('min_spine_three_areas', 0), reverse=True)
 spine_export = accepted[0]['selected_from'] if accepted else 'follow_export_1'
 fig, axes = plt.subplots(1, 2, figsize=(11, 4), layout='constrained')
 for name, label in [('export_4', 'Original compound point'),
