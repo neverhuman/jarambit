@@ -1453,6 +1453,41 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_returns_single_unassessed_candidate_below_certify_top_five() {
+        let mut base = Genome::c4_seed(genome::T_MIN);
+        base.v[EA_IN] = 14.0;
+        base.clamp();
+        let mut unassessed = base.clone();
+        unassessed.v[TAPER_X0] += 0.5;
+        unassessed.clamp();
+        let mut already_assessed = base;
+        already_assessed.v[EA_SP] += 0.25;
+        already_assessed.clamp();
+
+        let screened = vec![
+            test_screen_survivor("unassessed", "p10", unassessed.clone(), 0.01),
+            test_screen_survivor("already_assessed", "p10", already_assessed.clone(), 0.02),
+        ];
+        let certify_top = 5;
+        let certify_top_novelty = screened.len();
+        assert_eq!(certify_top_novelty, 2);
+        let assessed_ids = [certification::identity(&already_assessed)]
+            .into_iter()
+            .collect();
+
+        let selected = select_stage2_candidates(
+            &screened,
+            certify_top,
+            &assessed_ids,
+            &HashSet::new(),
+        );
+
+        assert_eq!(selected.len(), 1);
+        assert_eq!(selected[0].label, "unassessed");
+        assert_eq!(selected[0].g, unassessed);
+    }
+
+    #[test]
     fn stage2_selection_preserves_distinct_indices_and_inputs_across_mixed_pools() {
         let mut p10_seed = Genome::c4_seed(genome::T_MIN);
         p10_seed.v[EA_IN] = 14.0;
