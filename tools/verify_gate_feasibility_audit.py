@@ -25,7 +25,12 @@ BATTERY_G1_TASK = "G16-12-RSV2-04-p33"
 FEM_BENCH_TASK = "G16-12-RSV2-04-p34"
 CLI_BENCH_TASK = "G16-12-RSV2-04-p35"
 CRESCENT_CORE_TASK = "G16-12-RSV2-04-p36"
-TASK = "G16-12-RSV2-04-p37"
+CLI_MAIN_TASK = "G16-12-RSV2-04-p37"
+TASK = "G16-12-RSV2-04-p38"
+GATES_METRICS_REPORT = "docs/audit/CRESCENT_GATES_METRICS_PROVENANCE_AUDIT.md"
+GATES_METRICS_JSON = "docs/audit/crescent_gates_metrics_provenance_audit.json"
+GATES_METRICS_SOURCES = ("crates/crescent/src/gates.rs", "crates/crescent/src/record.rs")
+REQUESTED_METRICS_PATH = "crates/crescent/src/metrics.rs"
 CLI_MAIN_REPORT = "docs/audit/CLI_MAIN_SOURCE_PROVENANCE_AUDIT.md"
 CLI_MAIN_JSON = "docs/audit/cli_main_source_provenance_audit.json"
 CLI_MAIN_SOURCES = ("crates/cli/src/main.rs", "crates/cli/src/lib.rs")
@@ -177,6 +182,18 @@ def fem_bench_inventory(module, root):
     return missing_source_inventory(module, root, task=FEM_BENCH_TASK, sources=FEM_BENCH_SOURCES)
 
 
+def gates_metrics_inventory(module, root):
+    doc = digest_inventory(module, root, task=TASK, sources=GATES_METRICS_SOURCES)
+    doc["source_selection"] = {
+        "requested_source_paths": [GATES_METRICS_SOURCES[0], REQUESTED_METRICS_PATH],
+        "requested_metrics_path_exists": module.portable_path(root, REQUESTED_METRICS_PATH).exists(),
+        "actual_fallback_path": GATES_METRICS_SOURCES[1],
+        "semantic_equivalence_assessed": False,
+        "selection_basis": "User permits actual files in crates/crescent/src/; file identity only",
+    }
+    return doc
+
+
 def verify(root):
     root = Path(root).resolve()
     m = legacy_verifier(root)
@@ -197,11 +214,11 @@ def verify(root):
             "unsupported index schema")
     require(index["task"] == TASK, "unexpected task")
     diagnostic(index)
-    require(type(index["report_count"]) is int and index["report_count"] == 27,
-            "expected twenty-seven reports")
-    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT, CRESCENT_REPORT, CERT_EXPORT_REPORT, AESTHETIC_GCI_REPORT, BATTERY_G1_REPORT, FEM_BENCH_REPORT, CLI_BENCH_REPORT, CRESCENT_CORE_REPORT, CLI_MAIN_REPORT]
+    require(type(index["report_count"]) is int and index["report_count"] == 28,
+            "expected twenty-eight reports")
+    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT, CRESCENT_REPORT, CERT_EXPORT_REPORT, AESTHETIC_GCI_REPORT, BATTERY_G1_REPORT, FEM_BENCH_REPORT, CLI_BENCH_REPORT, CRESCENT_CORE_REPORT, CLI_MAIN_REPORT, GATES_METRICS_REPORT]
     require(len(m.REPORTS) == 15, "expected fifteen historical reports")
-    require(isinstance(index["reports"], list) and len(index["reports"]) == 27,
+    require(isinstance(index["reports"], list) and len(index["reports"]) == 28,
             "report coverage mismatch")
     for row, path in zip(index["reports"], expected):
         require(isinstance(row, dict) and row.get("path") == path,
@@ -221,7 +238,8 @@ def verify(root):
                                                    record(m, root, FEM_BENCH_JSON),
                                                    record(m, root, CLI_BENCH_JSON),
                                                    record(m, root, CRESCENT_CORE_JSON),
-                                                   record(m, root, CLI_MAIN_JSON)],
+                                                   record(m, root, CLI_MAIN_JSON),
+                                                   record(m, root, GATES_METRICS_JSON)],
             "supplemental fingerprint mismatch")
     contract = read_json(CONTRACT)
     require(set(contract) == {"schema_version", "task", "status", "qualified_count",
@@ -321,21 +339,31 @@ def verify(root):
             and "qualified_count: 0" in crescent_core_text.splitlines(), "invalid crescent core report status")
     cli_main_digest = read_json(CLI_MAIN_JSON)
     require(json.dumps(cli_main_digest, sort_keys=True) == json.dumps(
-        missing_source_inventory(m, root, task=TASK, sources=CLI_MAIN_SOURCES), sort_keys=True),
+        missing_source_inventory(m, root, task=CLI_MAIN_TASK, sources=CLI_MAIN_SOURCES), sort_keys=True),
         "source fingerprint mismatch: CLI main digest metadata")
     cli_main_text = m.portable_path(root, CLI_MAIN_REPORT).read_text(encoding="utf-8")
     require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in cli_main_text.splitlines()
             and "qualified_count: 0" in cli_main_text.splitlines(), "invalid CLI main report status")
+    gates_metrics_digest = read_json(GATES_METRICS_JSON)
+    require(json.dumps(gates_metrics_digest, sort_keys=True) == json.dumps(
+        gates_metrics_inventory(m, root), sort_keys=True),
+        "source fingerprint mismatch: gates/metrics selection metadata")
+    gates_metrics_text = m.portable_path(root, GATES_METRICS_REPORT).read_text(encoding="utf-8")
+    require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in gates_metrics_text.splitlines()
+            and "qualified_count: 0" in gates_metrics_text.splitlines(), "invalid gates/metrics report status")
     for path in expected + [INDEX, CONTRACT, MANIFEST_JSON, DIGEST_JSON, CLI_JSON,
                             CRESCENT_JSON, CERT_EXPORT_JSON, AESTHETIC_GCI_JSON,
                             BATTERY_G1_JSON, FEM_BENCH_JSON, CLI_BENCH_JSON,
-                            CRESCENT_CORE_JSON, CLI_MAIN_JSON, SELF, LEGACY]:
+                            CRESCENT_CORE_JSON, CLI_MAIN_JSON, GATES_METRICS_JSON, SELF, LEGACY]:
         require(m.FORBIDDEN_HOME not in m.portable_path(root, path).read_text(encoding="utf-8"),
                 "literal host prefix")
     require(m.verify(root) == 15, "historical index mismatch")
-    return {"task": TASK, "status": STATUS, "assignment_outcome": cli_main_digest["assignment_outcome"],
+    return {"task": TASK, "status": STATUS, "assignment_outcome": "COMPLETE",
+            "prior_cli_main_assignment_outcome": cli_main_digest["assignment_outcome"],
             "prior_fem_bench_assignment_outcome": fem_bench_digest["assignment_outcome"],
-            "qualified_count": 0, "reports": 27, "source_files": 2,
+            "qualified_count": 0, "reports": 28, "source_files": 2,
+            "gates_metrics_source_files": len(GATES_METRICS_SOURCES),
+            "metrics_fallback_path": GATES_METRICS_SOURCES[1],
             "cli_main_source_files": cli_main_digest["present_source_count"],
             "cli_main_missing_sources": cli_main_digest["missing_sources"],
             "crescent_core_source_files": len(CRESCENT_CORE_SOURCES),
