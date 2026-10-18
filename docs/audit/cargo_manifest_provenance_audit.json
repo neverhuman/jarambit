@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task": "G16-12-RSV2-04-p39",
+  "status": "IN_PROGRESS",
+  "qualified_count": 0,
+  "assignment_outcome": "COMPLETE",
+  "scope": "Static source byte provenance only",
+  "source_count": 3,
+  "source_files": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "aa338525eac815da0ddf6557d150c0932f10c170985e9e7ff1cef1b4bcc50a1e",
+      "bytes": 347,
+      "lines": 13
+    },
+    {
+      "path": "crates/crescent/Cargo.toml",
+      "sha256": "07970e5be1e735f13fcc6a73bc47da51015405a82e9e26b301733875ccf68556",
+      "bytes": 497,
+      "lines": 18
+    },
+    {
+      "path": "crates/cli/Cargo.toml",
+      "sha256": "be4282631bd8747ad295b497fcb5fedde6088967488d7f1fd7aa1c011fbe8f74",
+      "bytes": 590,
+      "lines": 18
+    }
+  ]
+}

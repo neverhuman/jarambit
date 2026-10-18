@@ -19,7 +19,7 @@ class AuditProvenanceTests(unittest.TestCase):
         root = Path(tmp.name)
         m = audit.legacy_verifier(ROOT)
         paths = [audit.INDEX, audit.REPORT, audit.CONTRACT, audit.MANIFEST_REPORT,
-                 audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON, audit.CLI_REPORT, audit.CLI_JSON, audit.CRESCENT_REPORT, audit.CRESCENT_JSON, audit.CERT_EXPORT_REPORT, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_REPORT, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_REPORT, audit.BATTERY_G1_JSON, audit.FEM_BENCH_REPORT, audit.FEM_BENCH_JSON, audit.CLI_BENCH_REPORT, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_REPORT, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_REPORT, audit.CLI_MAIN_JSON, audit.GATES_METRICS_REPORT, audit.GATES_METRICS_JSON, audit.LEGACY, audit.SELF,
+                 audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON, audit.CLI_REPORT, audit.CLI_JSON, audit.CRESCENT_REPORT, audit.CRESCENT_JSON, audit.CERT_EXPORT_REPORT, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_REPORT, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_REPORT, audit.BATTERY_G1_JSON, audit.FEM_BENCH_REPORT, audit.FEM_BENCH_JSON, audit.CLI_BENCH_REPORT, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_REPORT, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_REPORT, audit.CLI_MAIN_JSON, audit.GATES_METRICS_REPORT, audit.GATES_METRICS_JSON, audit.CARGO_MANIFEST_REPORT, audit.CARGO_MANIFEST_JSON, audit.LEGACY, audit.SELF,
                  str(m.INDEX_PATH), "Cargo.toml"] + [p.relative_to(ROOT).as_posix()
                  for p in sorted((ROOT / "crates").glob("*/Cargo.toml"))] + list(audit.SOURCES) + list(audit.DIGEST_SOURCES) + list(audit.CLI_SOURCES) + list(audit.CRESCENT_SOURCES) + list(audit.CERT_EXPORT_SOURCES) + list(audit.AESTHETIC_GCI_SOURCES) + list(audit.BATTERY_G1_SOURCES) + list(audit.FEM_BENCH_SOURCES) + list(audit.CLI_BENCH_SOURCES) + list(audit.CRESCENT_CORE_SOURCES) + list(audit.CLI_MAIN_SOURCES) + list(audit.GATES_METRICS_SOURCES) + [str(p) for _, p in m.REPORTS]
         for path in paths:
@@ -51,13 +51,14 @@ class AuditProvenanceTests(unittest.TestCase):
             audit.record(m, root, audit.CLI_BENCH_JSON),
             audit.record(m, root, audit.CRESCENT_CORE_JSON),
             audit.record(m, root, audit.CLI_MAIN_JSON),
-            audit.record(m, root, audit.GATES_METRICS_JSON)]))
+            audit.record(m, root, audit.GATES_METRICS_JSON),
+            audit.record(m, root, audit.CARGO_MANIFEST_JSON)]))
 
     def test_current_and_relocated_catalog(self):
         for root in (ROOT, self.snapshot()):
             with self.subTest(root=root.name):
                 result = audit.verify(root)
-                self.assertEqual(result["reports"], 28)
+                self.assertEqual(result["reports"], 29)
                 self.assertEqual(result["source_files"], 2)
                 self.assertEqual(result["digest_source_files"], 2)
                 self.assertEqual(result["cli_source_files"], 2)
@@ -70,6 +71,7 @@ class AuditProvenanceTests(unittest.TestCase):
                 self.assertEqual(result["crescent_core_source_files"], 2)
                 self.assertEqual(result["cli_main_source_files"], 1)
                 self.assertEqual(result["gates_metrics_source_files"], 2)
+                self.assertEqual(result["cargo_manifest_source_files"], 3)
                 self.assertEqual(result["prior_cli_main_assignment_outcome"], "PARTIAL")
                 self.assertEqual(result["prior_fem_bench_assignment_outcome"], "PARTIAL")
                 self.assertEqual(result["manifest_files"], 11)
@@ -81,7 +83,7 @@ class AuditProvenanceTests(unittest.TestCase):
 
     def test_document_corruption(self):
         m = audit.legacy_verifier(ROOT)
-        for path in [str(p) for _, p in m.REPORTS] + [audit.REPORT, audit.CONTRACT, audit.MANIFEST_REPORT, audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON, audit.CLI_REPORT, audit.CLI_JSON, audit.CRESCENT_REPORT, audit.CRESCENT_JSON, audit.CERT_EXPORT_REPORT, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_REPORT, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_REPORT, audit.BATTERY_G1_JSON, audit.FEM_BENCH_REPORT, audit.FEM_BENCH_JSON, audit.CLI_BENCH_REPORT, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_REPORT, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_REPORT, audit.CLI_MAIN_JSON, audit.GATES_METRICS_REPORT, audit.GATES_METRICS_JSON]:
+        for path in [str(p) for _, p in m.REPORTS] + [audit.REPORT, audit.CONTRACT, audit.MANIFEST_REPORT, audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON, audit.CLI_REPORT, audit.CLI_JSON, audit.CRESCENT_REPORT, audit.CRESCENT_JSON, audit.CERT_EXPORT_REPORT, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_REPORT, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_REPORT, audit.BATTERY_G1_JSON, audit.FEM_BENCH_REPORT, audit.FEM_BENCH_JSON, audit.CLI_BENCH_REPORT, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_REPORT, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_REPORT, audit.CLI_MAIN_JSON, audit.GATES_METRICS_REPORT, audit.GATES_METRICS_JSON, audit.CARGO_MANIFEST_REPORT, audit.CARGO_MANIFEST_JSON]:
             with self.subTest(document=path):
                 root = self.snapshot()
                 p = root / path
@@ -184,7 +186,8 @@ class AuditProvenanceTests(unittest.TestCase):
             audit.record(m, root, audit.CLI_BENCH_JSON),
             audit.record(m, root, audit.CRESCENT_CORE_JSON),
             audit.record(m, root, audit.CLI_MAIN_JSON),
-            audit.record(m, root, audit.GATES_METRICS_JSON)]))
+            audit.record(m, root, audit.GATES_METRICS_JSON),
+            audit.record(m, root, audit.CARGO_MANIFEST_JSON)]))
 
     def test_manifest_input_changes(self):
         m = audit.legacy_verifier(ROOT)
@@ -265,10 +268,10 @@ class AuditProvenanceTests(unittest.TestCase):
         m = audit.legacy_verifier(root)
         self.change(root, audit.INDEX, lambda d: d.update(supplemental_documents=[
             audit.record(m, root, path) for path in
-            (audit.CONTRACT, audit.MANIFEST_JSON, audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_JSON, audit.FEM_BENCH_JSON, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_JSON, audit.GATES_METRICS_JSON)]))
+            (audit.CONTRACT, audit.MANIFEST_JSON, audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_JSON, audit.FEM_BENCH_JSON, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_JSON, audit.GATES_METRICS_JSON, audit.CARGO_MANIFEST_JSON)]))
 
     def test_digest_receipt_metadata(self):
-        for receipt in (audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_JSON, audit.FEM_BENCH_JSON, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_JSON, audit.GATES_METRICS_JSON):
+        for receipt in (audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_JSON, audit.FEM_BENCH_JSON, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_JSON, audit.GATES_METRICS_JSON, audit.CARGO_MANIFEST_JSON):
             with self.subTest(receipt=receipt):
                 for key, value in [("sha256", "f" * 64), ("bytes", 1), ("lines", 1),
                                    ("path", "../outside.rs")]:
@@ -290,7 +293,7 @@ class AuditProvenanceTests(unittest.TestCase):
 
 
     def test_digest_source_coverage_and_json(self):
-        for receipt in (audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_JSON, audit.FEM_BENCH_JSON, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_JSON, audit.GATES_METRICS_JSON):
+        for receipt in (audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_JSON, audit.FEM_BENCH_JSON, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_JSON, audit.GATES_METRICS_JSON, audit.CARGO_MANIFEST_JSON):
             with self.subTest(receipt=receipt):
                 changes = [lambda d: d["source_files"].pop(),
                            lambda d: d["source_files"].append(d["source_files"][0])]

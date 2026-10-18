@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "task": "G16-12-RSV2-04-p38",
+  "task": "G16-12-RSV2-04-p39",
   "status": "IN_PROGRESS",
   "qualified_count": 0,
-  "report_count": 28,
+  "report_count": 29,
   "reports": [
     {
       "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V5_REPORT.md",
@@ -284,6 +284,16 @@
       "table_schema_sha256": "cf7e35b5b87b3dd6ab0c0640cbf7afb201bace9c586caf3fbb02624a6897492b",
       "status": "IN_PROGRESS",
       "qualified_count": 0
+    },
+    {
+      "path": "docs/audit/CARGO_MANIFEST_PROVENANCE_AUDIT.md",
+      "sha256": "bc13d774b2765445f7a8527d0f616969c6743a08a18a90842148c22c30af6552",
+      "bytes": 4088,
+      "lines": 32,
+      "tables": 1,
+      "table_schema_sha256": "01e15620a681f4ce67bb5d198e46b209d43735e2489410a5d098281f213f537c",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
     }
   ],
   "supplemental_documents": [
@@ -364,6 +374,12 @@
       "sha256": "8752175d099818979c9f263c962f3633deb8da5bc57e87b892b196139536e8a4",
       "bytes": 994,
       "lines": 33
+    },
+    {
+      "path": "docs/audit/cargo_manifest_provenance_audit.json",
+      "sha256": "f446189ab349be085e437572025c73f215f2e53084a606a6cca6f03b665dead9",
+      "bytes": 755,
+      "lines": 29
     }
   ]
 }
