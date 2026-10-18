@@ -714,5 +714,154 @@ class SavedScreenOrderingTests(unittest.TestCase):
         self.assertEqual(saved["qualified_count"], 0)
 
 
+class BirthScreenIdentityJoinTests(unittest.TestCase):
+    def setUp(self):
+        fixture = Round0InventoryTests()
+        fixture.setUp()
+        self.root, self.artifacts, self.documents = fixture.root, fixture.artifacts, fixture.documents
+
+    def payloads(self):
+        return {wave: {name: json.dumps(self.documents[f"out/{wave}/{name}"]).encode() for name in phase20.ROOT_NAMES}
+                for wave in phase20.WAVES}
+
+    def pins(self, payloads):
+        return {wave: {name: tuple(verifier.metadata(data).values()) for name, data in files.items()}
+                for wave, files in payloads.items()}
+
+    def current(self, read=None):
+        payloads = self.payloads()
+        def default_read(path):
+            _, wave, name = path.relative_to(self.artifacts).parts
+            return payloads[wave][name]
+        with patch.object(Path, "read_bytes", new=default_read if read is None else read):
+            return verifier.audit_phase25(self.artifacts, self.pins(payloads))
+
+    def test_membership_is_scoped_to_the_supplied_wave_and_round(self):
+        first = [{"certificate_identity": "a" * 64}]
+        second = [{"certificate_identity": "b" * 64}]
+        result = verifier.births_to_screen_identity_join(first, second)
+        self.assertEqual((result["matched_screen_rows"], result["orphan_screen_rows"]), (0, 1))
+        # The identity exists in a different scope; that cannot repair the first join.
+        self.assertEqual(verifier.births_to_screen_identity_join(second, second)["orphan_screen_rows"], 0)
+        self.assertEqual(verifier.births_to_screen_identity_join(first, second)["orphan_screen_rows"], 1)
+
+    def test_duplicate_identities_do_not_multiply_screen_rows_and_inputs_stay_unchanged(self):
+        births = [{"certificate_identity": "a" * 64}] * 3 + [{"certificate_identity": "b" * 64}]
+        screens = [{"certificate_identity": "a" * 64}] * 2
+        before = deepcopy((births, screens))
+        result = verifier.births_to_screen_identity_join(births, screens)
+        self.assertEqual(result, {"birth_rows": 4, "distinct_birth_identities": 2, "screen_rows": 2,
+                                  "distinct_screen_identities": 1, "matched_screen_rows": 2, "orphan_screen_rows": 0})
+        self.assertEqual((births, screens), before)
+        self.assertEqual(verifier.births_to_screen_identity_join(births, screens), result)
+        self.assertEqual(verifier.births_to_screen_identity_join([], screens)["orphan_screen_rows"], 2)
+        self.assertEqual(verifier.births_to_screen_identity_join(births, [])["orphan_screen_rows"], 0)
+        self.assertEqual(verifier.births_to_screen_identity_join([], [])["screen_rows"], 0)
+
+    def test_join_schema_requires_arrays_and_exact_lowercase_sha256_strings(self):
+        for births, screens in ((None, []), ([], {}), ([None], []), ([{}], [])):
+            with self.subTest(births=births), self.assertRaises(ValueError):
+                verifier.births_to_screen_identity_join(births, screens)
+        for value in (None, True, "A" * 64, "g" * 64, "a" * 63, "a" * 65):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                verifier.births_to_screen_identity_join([], [{"certificate_identity": value}])
+
+    def test_full_receipt_counts_do_not_require_or_read_metric_fields(self):
+        result = self.current()
+        self.assertEqual(len(result["artifacts"]), 30)
+        self.assertTrue(result["join_complete"])
+        self.assertEqual(result["totals"], {"wave_round_pairs": 12, "birth_rows": 24, "screen_rows": 24,
+                                          "matched_screen_rows": 24, "orphan_screen_rows": 0,
+                                          "assessed_count": 23, "unverified_count": 1})
+        for wave in result["waves"].values():
+            self.assertEqual(wave["qualified_count"], 0)
+            self.assertIsNone(wave["champion"])
+        self.assertNotIn(str(self.artifacts), json.dumps(result))
+        self.assertEqual(self.current(), result)
+
+    def test_all_thirty_source_hashes_are_enforced(self):
+        payloads = self.payloads()
+        pins = self.pins(payloads)
+        for wave, files in payloads.items():
+            for name, data in list(files.items()):
+                files[name] = data + b" "
+                with self.subTest(wave=wave, name=name), self.assertRaisesRegex(ValueError, "SHA-256/size mismatch"):
+                    verifier.audit_phase25_payloads(payloads, pins)
+                files[name] = data
+
+    def test_wrong_round_identity_is_rejected_even_if_it_exists_elsewhere(self):
+        other = self.documents["out/w315/round_01_births.json"]["genomes"][0]["certificate_identity"]
+        self.documents["out/w315/round_00_screen.json"][0]["certificate_identity"] = other
+        with self.assertRaisesRegex(ValueError, "Screen identity/birth slot mismatch"):
+            self.current()
+
+    def test_qualified_count_and_champion_are_not_inferred_from_identity_matches(self):
+        board = self.documents["out/w315/leaderboard.json"]
+        original = deepcopy(board)
+        for key, value in (("qualified_count", True), ("qualified_count", 1), ("champion", "fixture")):
+            board.update(deepcopy(original))
+            board[key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                self.current()
+
+    def test_missing_inputs_and_strict_json_errors_fail_after_resigning(self):
+        payloads = self.payloads()
+        pins = self.pins(payloads)
+        with self.assertRaisesRegex(ValueError, "Exactly six"):
+            verifier.audit_phase25_payloads({wave: files for wave, files in payloads.items() if wave != "w315"}, pins)
+        changed = deepcopy(payloads)
+        del changed["w315"]["round_00_births.json"]
+        with self.assertRaisesRegex(ValueError, "Exactly five"):
+            verifier.audit_phase25_payloads(changed, pins)
+        for data in (b'{"a":0,"a":0}', b'{"a":NaN}', b'{"a":1e999}'):
+            payloads["w315"]["round_00_screen.json"] = data
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                verifier.audit_phase25_payloads(payloads, self.pins(payloads))
+
+    def test_source_mutation_during_audit_fails(self):
+        payloads, reads = self.payloads(), {}
+        def read(path):
+            reads[path] = reads.get(path, 0) + 1
+            _, wave, name = path.relative_to(self.artifacts).parts
+            return payloads[wave][name] + (b" " if reads[path] > 1 else b"")
+        with self.assertRaisesRegex(ValueError, "Saved wave bytes changed"):
+            self.current(read=read)
+
+    def test_relocated_readonly_cli_rejects_receipt_drift_and_an_orphan_status(self):
+        current = self.current()
+        saved = deepcopy(current)
+        failure = deepcopy(current)
+        failure.update(join_complete=False, status="fail_orphan_identities")
+        failure["totals"].update(orphan_screen_rows=1, matched_screen_rows=23)
+        args = ["verify_rsv2_07_receipts.py", "--phase", "25", "--repo-root", str(self.root), "--artifact-root", str(self.artifacts)]
+        def read(path):
+            return json.dumps(saved).encode() if path == self.root / verifier.PHASE25_RECEIPT else verifier.report_phase25(current).encode()
+        with patch.object(sys, "argv", args), patch.object(verifier, "audit_phase25", side_effect=lambda root: current), \
+                patch.object(Path, "read_bytes", new=read), patch.object(Path, "write_text") as write, \
+                patch.object(verifier.receipts, "default_wave_directory", side_effect=AssertionError("Unexpected Git discovery")), \
+                redirect_stdout(io.StringIO()) as output:
+            verifier.main()
+            self.assertIn("Phase-25 identity join: PASS", output.getvalue())
+            write.assert_not_called()
+            saved["qualified_count"] = 1
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                verifier.main()
+            self.assertEqual(error.exception.code, 1)
+            current, saved = failure, deepcopy(failure)
+            self.assertIn("**FAIL", verifier.report_phase25(current))
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                verifier.main()
+            self.assertEqual(error.exception.code, 1)
+
+    def test_saved_phase25_outputs_have_no_host_prefix_and_render_exactly(self):
+        root = Path(__file__).resolve().parents[2]
+        paths = (verifier.PHASE25_RECEIPT, verifier.PHASE25_REPORT)
+        verifier.zero_literal_host_prefix({name: (root / name).read_bytes() for name in paths})
+        saved = verifier.load_json((root / verifier.PHASE25_RECEIPT).read_bytes())
+        self.assertEqual((root / verifier.PHASE25_REPORT).read_text(), verifier.report_phase25(saved))
+        self.assertEqual(saved["qualified_count"], 0)
+        self.assertEqual(saved["totals"]["orphan_screen_rows"], 0)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

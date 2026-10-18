@@ -2646,6 +2646,7 @@
     "experiments/rsv2_07/PHASE22_W320_LEADERBOARD_PROVENANCE_AUDIT.md": "508302503726024411b113be3bdfa6e02de964da2b19271d0f64e58bb777f65c",
     "experiments/rsv2_07/PHASE23_COMPLETE_RECEIPT_MANIFEST_AUDIT.md": "2959470b88edc84abdfb60df6709ebdb877ce44beb1b7399cc21955dc18cb31e",
     "experiments/rsv2_07/PHASE24_SCREEN_DEFICIT_ORDERING_AUDIT.md": "13ed0c506b2ee4e1cb1dd4d47365598c2ae1d03bebbf34f890eb6dd5461b3b02",
+    "experiments/rsv2_07/PHASE25_BIRTHS_TO_SCREEN_IDENTITY_JOIN_AUDIT.md": "b1eab5fe7ced2991558d7fabf5b8fa54946e333b7a6a32a9883d490c4294d33b",
     "experiments/rsv2_07/PHASE5_WITNESS_3D_VERIFICATION.md": "9f3fa6c59aad71708143b5a469de23301fe8f9aa5e7d8d3750f637de8e729624",
     "experiments/rsv2_07/PHASE6_UNIFIED_SCORECARD.md": "a425b66d675208c7fffa17e075605bcfbddd234f82456422c1b5d99783799e30",
     "experiments/rsv2_07/PHASE7_SAVED_TRIPLET_GCI_AUDIT.md": "cc945cb4a6f61f147b7f6cadf52ae100c3d66373526a6f0d02d3da7f50fa620b",
@@ -2682,6 +2683,7 @@
     "experiments/rsv2_07/phase21_round0_seed_vs_mutated_inventory_audit.json": "bc665634397714b3af19dda65b3c36b00c1c02d81132957ad8cd3d38b2c7547d",
     "experiments/rsv2_07/phase22_w320_leaderboard_provenance_audit.json": "d3ab2de4cca96bf24d780bbbc9e6a44438e3bd2bc633ba94d725a2474adb3188",
     "experiments/rsv2_07/phase24_screen_deficit_ordering_audit.json": "293cc427a875ebb2f201aacc4e2e83691a9af534109fa2936b76f15590112ba9",
+    "experiments/rsv2_07/phase25_births_to_screen_identity_join_audit.json": "8a69f08721d15a562cbe277f11da40a625bc02ce17e844a1e463e3d72c031f39",
     "experiments/rsv2_07/phase6_cad_check.py": "0aa20b4f69c12e7fb2b50b208623957c1a30479a2e4d717ff3c8df1e48dd31a1",
     "experiments/rsv2_07/phase6_cad_check_as_written.py": "938d642db4f808adf29f511e0d381557e47cfe3b27c1765cc13591691fd4409e",
     "experiments/rsv2_07/phase6_finish.py": "2bd94087db3db54f8797c6428f00ab208bb31e7c02e3c9724ab784bf6be7fc22",
@@ -2720,8 +2722,8 @@
     "experiments/rsv2_07/solid_tip_3d_p5.py": "bc261152ad457329cf2cbb839f0f30ffe877b5f56028456f33e1f3a13b719c79",
     "experiments/rsv2_07/solid_tip_input.rs": "1a60d621c703d85d27a43370216a74e054416489f9dc243142179122e4dbbde8",
     "experiments/rsv2_07/test_portable_audits.py": "cc5edde9f0cfdab79b6e4f5641acb06d8cfb6fce9fda475021b67b6a4df758e6",
-    "experiments/rsv2_07/test_rsv2_07_receipts.py": "93db8fc6d52b640a26a21c3cf4ddb61faef962039a3a485141bb73cd6ea711ef",
-    "experiments/rsv2_07/verify_rsv2_07_receipts.py": "42e564b472fd01b3c8c8297fac21612d36c2b19514f170ed4a64e4812c26d8d3",
+    "experiments/rsv2_07/test_rsv2_07_receipts.py": "2d8cdc1d4513bf5cb0312e1a64acfd616338c1544083984df5cf91b5d2aa4806",
+    "experiments/rsv2_07/verify_rsv2_07_receipts.py": "b66c963d119761e66b14d1aad4fdab1bdebc1ca1771ee466c496d6edc1c2cc42",
     "experiments/rsv2_07/web.py": "d4f8f01791f4b84c3383f33f279944c06a3fe32bf21034c3a686f566fcc04d9a"
   },
   "portability": {
@@ -2821,5 +2823,10 @@
     "task": "RSV2-07-p24",
     "reason": "Bind saved array tuple-order predicate audit and generic regression tests; retain original rows, metrics and qualification statuses",
     "strict_study_files": 93
+  },
+  "phase25_manifest_refresh": {
+    "task": "RSV2-07-p25",
+    "reason": "Bind same-wave/round birth-to-screen identity existence join, shared provenance checks and regression tests; preserve source rows and qualification statuses",
+    "strict_study_files": 95
   }
 }

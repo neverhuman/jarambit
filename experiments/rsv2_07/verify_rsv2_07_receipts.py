@@ -390,11 +390,11 @@ def screen_tuple_order(rows):
             "equal_adjacent_keys": ties, "monotonic_non_decreasing": descending == 0}
 
 
-def audit_phase24_payloads(payloads, pins=None):
+def checked_wave_payloads(payloads, pins=None):
     pins = phase20.ROOT_PINS if pins is None else pins
     require(isinstance(payloads, dict) and set(payloads) == set(pins) == set(phase20.WAVES),
             "Exactly six wave collections are required")
-    artifacts, waves = {}, {}
+    artifacts, all_documents = {}, {}
     for wave in phase20.WAVES:
         files = payloads[wave]
         require(isinstance(files, dict) and set(files) == set(pins[wave]) == phase20.ROOT_NAMES,
@@ -408,9 +408,19 @@ def audit_phase24_payloads(payloads, pins=None):
             require(isinstance(files[name], bytes), "Expected source bytes")
             documents[name] = load_json(pinned(files[name], pins[wave][name], path))
             artifacts[path] = metadata(files[name])
-        assessed, errors = phase20.board_events(wave, documents)
+        phase20.board_events(wave, documents)
+        all_documents[wave] = documents
+    return artifacts, all_documents
+
+
+def audit_phase24_payloads(payloads, pins=None):
+    artifacts, documents_by_wave = checked_wave_payloads(payloads, pins)
+    waves = {}
+    for wave, documents in documents_by_wave.items():
+        board = documents["leaderboard.json"]
         waves[wave] = {"rounds": {str(r): screen_tuple_order(documents[f"round_{r:02}_screen.json"]) for r in (0, 1)},
-                       "assessed_count": len(assessed), "qualified_count": 0, "champion": None, "unverified_count": len(errors)}
+                       "assessed_count": board["assessed_count"], "qualified_count": 0,
+                       "champion": None, "unverified_count": len(board["unverified"])}
     rounds = [row for wave in waves.values() for row in wave["rounds"].values()]
     passed = all(row["monotonic_non_decreasing"] for row in rounds)
     return {"schema": "jarambit.rsv2_07.phase24_saved_screen_ordering.v1", "task": "RSV2-07-p24",
@@ -463,9 +473,88 @@ def report_phase24(document):
     ])
 
 
+PHASE25_RECEIPT = HERE + "phase25_births_to_screen_identity_join_audit.json"
+PHASE25_REPORT = HERE + "PHASE25_BIRTHS_TO_SCREEN_IDENTITY_JOIN_AUDIT.md"
+
+
+def births_to_screen_identity_join(births, screens):
+    """Existence join for one supplied wave/round; never expand duplicate rows."""
+    require(isinstance(births, list) and isinstance(screens, list), "Expected birth and screen arrays")
+    def identities(rows):
+        result = []
+        for row in rows:
+            receipts.fields(row, {"certificate_identity"}, "identity join row")
+            receipts.digest_string(row["certificate_identity"])
+            result.append(row["certificate_identity"])
+        return result
+    born, screened = identities(births), identities(screens)
+    birth_set = set(born)
+    matched = sum(identity in birth_set for identity in screened)
+    return {"birth_rows": len(born), "distinct_birth_identities": len(birth_set),
+            "screen_rows": len(screened), "distinct_screen_identities": len(set(screened)),
+            "matched_screen_rows": matched, "orphan_screen_rows": len(screened) - matched}
+
+
+def audit_phase25_payloads(payloads, pins=None):
+    artifacts, documents_by_wave = checked_wave_payloads(payloads, pins)
+    waves = {}
+    for wave, documents in documents_by_wave.items():
+        board = documents["leaderboard.json"]
+        waves[wave] = {"rounds": {str(r): births_to_screen_identity_join(
+            documents[f"round_{r:02}_births.json"]["genomes"], documents[f"round_{r:02}_screen.json"]) for r in (0, 1)},
+            "qualified_count": 0, "champion": None, "assessed_count": board["assessed_count"],
+            "unverified_count": len(board["unverified"])}
+    pairs = [row for wave in waves.values() for row in wave["rounds"].values()]
+    totals = {key: sum(row[key] for row in pairs) for key in
+              ("birth_rows", "screen_rows", "matched_screen_rows", "orphan_screen_rows")}
+    complete = totals["orphan_screen_rows"] == 0
+    return {"schema": "jarambit.rsv2_07.phase25_birth_screen_join.v1", "task": "RSV2-07-p25",
+            "scope": "saved_same_wave_round_identity_membership_and_provenance_only",
+            "status": "pass_identity_membership" if complete else "fail_orphan_identities", "join_complete": complete,
+            "join_keys": ["wave", "saved_round", "certificate_identity"], "join_kind": "screen_row_existence_join",
+            "artifacts": artifacts, "waves": waves, "qualified_count": 0,
+            "totals": {"wave_round_pairs": len(pairs), **totals,
+                       "assessed_count": sum(row["assessed_count"] for row in waves.values()),
+                       "unverified_count": sum(row["unverified_count"] for row in waves.values())}}
+
+
+def audit_phase25(artifact_root, pins=None):
+    artifact_root = Path(artifact_root)
+    payloads = {wave: {name: (artifact_root / "out" / wave / name).read_bytes() for name in sorted(phase20.ROOT_NAMES)}
+                for wave in phase20.WAVES}
+    current = audit_phase25_payloads(payloads, pins)
+    for wave, files in payloads.items():
+        for name, data in files.items():
+            require((artifact_root / "out" / wave / name).read_bytes() == data, "Saved wave bytes changed during audit")
+    return current
+
+
+def report_phase25(document):
+    totals = document["totals"]
+    rows = [f"| {wave} | {r} | {row['birth_rows']} | {row['screen_rows']} | {row['matched_screen_rows']} | {row['orphan_screen_rows']} | {row['distinct_birth_identities']} | {row['distinct_screen_identities']} |"
+            for wave, saved in document["waves"].items() for r, row in saved["rounds"].items()]
+    artifacts = [f"| {name} | {row['size_bytes']} | {row['sha256']} |" for name, row in document["artifacts"].items()]
+    result = "PASS" if document["join_complete"] else "FAIL"
+    return "\n".join([
+        "# Phase-25 births-to-screen certificate identity join audit", "",
+        f"**{result} for same-wave, same-round identity membership.** Across {totals['wave_round_pairs']} saved wave/round pairs, {totals['screen_rows']} screen rows join against {totals['birth_rows']} birth rows. Matched screen rows: {totals['matched_screen_rows']}; orphan screen rows: {totals['orphan_screen_rows']}. Every saved leaderboard retains qualified_count=0 and champion=null; {totals['assessed_count']} assessed events and {totals['unverified_count']} separate unverified attempt remain recorded.", "",
+        "| Wave | Round | Birth rows | Screen rows | Matched screen rows | Orphan rows | Distinct birth IDs | Distinct screen IDs |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |", *rows, "",
+        "Each screen certificate_identity must occur in the birth set supplied by that same wave and saved round. Identical digests in another wave or round cannot satisfy membership. Each digest requires exactly 64 lowercase hexadecimal characters. Comparison uses the exact saved strings, without prefix matching, case normalization or fresh native identity calculation.", "",
+        "This is an existence join: each screen row is counted once. Repeated birth identities do not create Cartesian row multiplication; repeated screen identities still count as their original number of screen rows. Distinct-identity counts are per wave/round, not global novelty counts. Empty screen arrays have zero orphans; an empty birth array with screens reports those screens as orphans. Rows are never sorted or changed.", "",
+        "All 30 saved root JSON files (two birth/screen pairs and a leaderboard per wave) require the existing reviewed SHA-256 and byte-size pins. A shared provenance helper checks strict JSON, birth/screen schemas, exact same-round birth-slot/family/label bindings and the original assessed/unverified ledger references. Those stronger linkage checks remain in addition to the explicit identity membership counts. Invalid schemas or reference mismatches fail closed before receipt admission.", "",
+        "| Artifact | Bytes | SHA-256 |", "| --- | ---: | --- |", *artifacts, "",
+        "Source bytes are reread after auditing and never written. The scope is rounds 00/01 under out/w315 through out/w320. Output paths are canonical repository-relative paths. --artifact-root supports relocated saved inputs without Git discovery; --repo-root selects the receipt checkout. Normal runs compare the complete receipt and exact report. --write explicitly refreshes these outputs, which are also checked for literal host prefixes. A failed join exits unsuccessfully rather than claiming zero orphans.", "",
+        "Phase-7/8 study hashes and Phase-23's final control-receipt byte bindings are synchronized. The existing Phase-24 receipt and report remain unchanged. No metrics, margins, candidate recommendations, simulations, geometry changes or physical qualification are computed by this join audit.", "",
+        "```sh", "python3 experiments/rsv2_07/verify_rsv2_07_receipts.py --phase 25",
+        "python3 -m unittest discover -s experiments/rsv2_07 -p 'test_*.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs14,15 at inherited nice10 with CARGO_BUILD_JOBS=2.", "",
+    ])
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--phase", type=int, choices=(21, 22, 23, 24), default=21)
+    parser.add_argument("--phase", type=int, choices=(21, 22, 23, 24, 25), default=21)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[2])
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--source-blob", type=Path)
@@ -474,12 +563,15 @@ def main():
     try:
         require(args.phase == 21 or args.source_blob is None, "--source-blob applies only to Phase-21")
         if args.phase == 23:
-            require(args.artifact_root is None, "--artifact-root applies only to Phase-21/22")
+            require(args.artifact_root is None, "--artifact-root is not used by Phase-23")
             current = audit_phase23(args.repo_root)
             receipt_name, report_name, render = PHASE23_RECEIPT, PHASE23_REPORT, report_phase23
         else:
             artifact_root = args.artifact_root if args.artifact_root is not None else receipts.default_wave_directory().parents[1]
-        if args.phase == 24:
+        if args.phase == 25:
+            current = audit_phase25(artifact_root)
+            receipt_name, report_name, render = PHASE25_RECEIPT, PHASE25_REPORT, report_phase25
+        elif args.phase == 24:
             current = audit_phase24(artifact_root)
             receipt_name, report_name, render = PHASE24_RECEIPT, PHASE24_REPORT, report_phase24
         elif args.phase == 22:
@@ -496,15 +588,20 @@ def main():
         else:
             saved = load_json((args.repo_root / receipt_name).read_bytes())
             require(json.dumps(current, sort_keys=True) == json.dumps(saved, sort_keys=True), f"Phase-{args.phase} receipt mismatch")
-        if args.phase in (23, 24):
+        if args.phase in (23, 24, 25):
             outputs = {name: (args.repo_root / name).read_bytes() for name in (receipt_name, report_name)}
             zero_literal_host_prefix(outputs)
             require(outputs[report_name] == render(current).encode(), f"Phase-{args.phase} report mismatch")
         if args.phase == 24:
             require(current["ordering_pass"], "Saved screen order contains descending adjacent pairs")
+        elif args.phase == 25:
+            require(current["join_complete"], "Saved screen identity join contains orphans")
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Phase-{args.phase} inventory: FAIL: {error}\n")
-    if args.phase == 24:
+    if args.phase == 25:
+        print(f"Phase-25 identity join: PASS; {current['totals']['wave_round_pairs']} wave/round pairs; "
+              f"{current['totals']['screen_rows']} screen rows; {current['totals']['orphan_screen_rows']} orphans; qualified_count=0.")
+    elif args.phase == 24:
         print(f"Phase-24 saved screen ordering: PASS; {current['totals']['screen_arrays']} arrays; "
               f"{current['totals']['rows']} rows; {current['totals']['descending_adjacent_pairs']} descending adjacent pairs; qualified_count=0.")
     elif args.phase == 23:
