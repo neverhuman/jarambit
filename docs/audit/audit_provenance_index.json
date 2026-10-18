@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "task": "G16-12-RSV2-04-p35",
+  "task": "G16-12-RSV2-04-p36",
   "status": "IN_PROGRESS",
   "qualified_count": 0,
-  "report_count": 25,
+  "report_count": 26,
   "reports": [
     {
       "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V5_REPORT.md",
@@ -254,6 +254,16 @@
       "table_schema_sha256": "29396a471c510cfe01982098a8b2ab20fe329725212e98f00e78337c1e021aea",
       "status": "IN_PROGRESS",
       "qualified_count": 0
+    },
+    {
+      "path": "docs/audit/CRESCENT_CORE_SOURCE_PROVENANCE_AUDIT.md",
+      "sha256": "ab129e7f7724496095c72a616b35ac39635cde7f0e7d3dec31461f4da0bfb43a",
+      "bytes": 3631,
+      "lines": 29,
+      "tables": 1,
+      "table_schema_sha256": "10c28520d2511883bdd4401d90ed1a5f40c55a50177da02f5f09506ed3cca17b",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
     }
   ],
   "supplemental_documents": [
@@ -316,6 +326,12 @@
       "sha256": "03cbc1b21d97b6ca21bf40a7f837fc11207714182f355078086ff17a563496bf",
       "bytes": 418,
       "lines": 17
+    },
+    {
+      "path": "docs/audit/crescent_core_source_provenance_audit.json",
+      "sha256": "839548e6526d6b396c8274b3284d5023a00709870c55b140ebeb500eb0854a1d",
+      "bytes": 603,
+      "lines": 23
     }
   ]
 }

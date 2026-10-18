@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task": "G16-12-RSV2-04-p36",
+  "status": "IN_PROGRESS",
+  "qualified_count": 0,
+  "assignment_outcome": "COMPLETE",
+  "scope": "Static source byte provenance only",
+  "source_count": 2,
+  "source_files": [
+    {
+      "path": "crates/crescent/src/lib.rs",
+      "sha256": "e96dd9ee4e14e0e15a01e4dc342bdc0af3d480489708a36edbaa383145009828",
+      "bytes": 937,
+      "lines": 31
+    },
+    {
+      "path": "crates/crescent/src/genome.rs",
+      "sha256": "c71c10976edd3305db4c9beb7117139d126878169260b7913048fc9d20545e27",
+      "bytes": 20686,
+      "lines": 252
+    }
+  ]
+}
