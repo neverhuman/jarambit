@@ -4,6 +4,7 @@
 import argparse
 import importlib.util
 import json
+import re
 import tomllib
 from pathlib import Path
 
@@ -27,7 +28,10 @@ CLI_BENCH_TASK = "G16-12-RSV2-04-p35"
 CRESCENT_CORE_TASK = "G16-12-RSV2-04-p36"
 CLI_MAIN_TASK = "G16-12-RSV2-04-p37"
 GATES_METRICS_TASK = "G16-12-RSV2-04-p38"
-TASK = "G16-12-RSV2-04-p39"
+CARGO_MANIFEST_TASK = "G16-12-RSV2-04-p39"
+TASK = "G16-12-RSV2-04-p40"
+HEX64_REPORT = "docs/audit/HEX64_SCHEMA_CONSISTENCY_AUDIT.md"
+HEX64_JSON = "docs/audit/hex64_schema_consistency_audit.json"
 CARGO_MANIFEST_REPORT = "docs/audit/CARGO_MANIFEST_PROVENANCE_AUDIT.md"
 CARGO_MANIFEST_JSON = "docs/audit/cargo_manifest_provenance_audit.json"
 CARGO_MANIFEST_SOURCES = ("Cargo.toml", "crates/crescent/Cargo.toml", "crates/cli/Cargo.toml")
@@ -198,6 +202,54 @@ def gates_metrics_inventory(module, root):
     return doc
 
 
+def sha256_fields(value, pointer=""):
+    """Walk exact sha256 and *_sha256 keys with RFC6901 locations."""
+    if isinstance(value, dict):
+        for key, child in value.items():
+            location = pointer + "/" + key.replace("~", "~0").replace("/", "~1")
+            if key == "sha256" or key.endswith("_sha256"):
+                yield {"pointer": location, "field_name": key,
+                       "valid": isinstance(child, str) and re.fullmatch(r"[0-9a-f]{64}", child) is not None,
+                       "value_type": type(child).__name__}
+            yield from sha256_fields(child, location)
+    elif isinstance(value, list):
+        for i, child in enumerate(value):
+            yield from sha256_fields(child, pointer + "/" + str(i))
+
+
+def hex64_inventory(module, root):
+    """Inspect every actual audit JSON, including this receipt; no null exemptions."""
+    root = Path(root)
+    rows = []
+    for path in sorted((root / "docs/audit").rglob("*.json")):
+        relative = path.relative_to(root).as_posix()
+        data = module.portable_path(root, relative).read_bytes()
+        doc = module.strict_json(data)
+        require(module.FORBIDDEN_HOME.encode() not in data and module.home_occurrences(doc) == 0,
+                "host prefix in audit JSON")
+        fields = list(sha256_fields(doc))
+        rows.append({"path": relative,
+                     "exact_fields": sum(x["field_name"] == "sha256" for x in fields),
+                     "suffix_fields": sum(x["field_name"] != "sha256" for x in fields),
+                     "valid_fields": sum(x["valid"] for x in fields),
+                     "invalid_fields": [x for x in fields if not x["valid"]]})
+    exact = sum(x["exact_fields"] for x in rows)
+    suffix = sum(x["suffix_fields"] for x in rows)
+    invalid = sum(len(x["invalid_fields"]) for x in rows)
+    baseline_documents = len(rows) - int(any(x["path"] == HEX64_JSON for x in rows))
+    baseline_receipts = baseline_documents - int(any(x["path"] == INDEX for x in rows))
+    matches = baseline_receipts == 29
+    return {"schema_version": 1, "task": TASK, "status": STATUS, "qualified_count": 0,
+            "assignment_outcome": "COMPLETE" if invalid == 0 and matches else "PARTIAL",
+            "scope": "Strict recursive SHA-256 field format and actual JSON coverage only",
+            "requested_input_json_receipts": 29, "baseline_json_documents": baseline_documents,
+            "baseline_json_receipts_excluding_index": baseline_receipts,
+            "json_receipt_count_matches_request": matches, "json_document_count": len(rows),
+            "exact_field_count": exact, "suffix_field_count": suffix,
+            "field_count": exact + suffix, "valid_field_count": exact + suffix - invalid,
+            "invalid_field_count": invalid, "schema_pass": invalid == 0, "documents": rows}
+
+
 def verify(root):
     root = Path(root).resolve()
     m = legacy_verifier(root)
@@ -218,11 +270,11 @@ def verify(root):
             "unsupported index schema")
     require(index["task"] == TASK, "unexpected task")
     diagnostic(index)
-    require(type(index["report_count"]) is int and index["report_count"] == 29,
-            "expected twenty-nine reports")
-    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT, CRESCENT_REPORT, CERT_EXPORT_REPORT, AESTHETIC_GCI_REPORT, BATTERY_G1_REPORT, FEM_BENCH_REPORT, CLI_BENCH_REPORT, CRESCENT_CORE_REPORT, CLI_MAIN_REPORT, GATES_METRICS_REPORT, CARGO_MANIFEST_REPORT]
+    require(type(index["report_count"]) is int and index["report_count"] == 30,
+            "expected thirty reports")
+    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT, CRESCENT_REPORT, CERT_EXPORT_REPORT, AESTHETIC_GCI_REPORT, BATTERY_G1_REPORT, FEM_BENCH_REPORT, CLI_BENCH_REPORT, CRESCENT_CORE_REPORT, CLI_MAIN_REPORT, GATES_METRICS_REPORT, CARGO_MANIFEST_REPORT, HEX64_REPORT]
     require(len(m.REPORTS) == 15, "expected fifteen historical reports")
-    require(isinstance(index["reports"], list) and len(index["reports"]) == 29,
+    require(isinstance(index["reports"], list) and len(index["reports"]) == 30,
             "report coverage mismatch")
     for row, path in zip(index["reports"], expected):
         require(isinstance(row, dict) and row.get("path") == path,
@@ -244,7 +296,8 @@ def verify(root):
                                                    record(m, root, CRESCENT_CORE_JSON),
                                                    record(m, root, CLI_MAIN_JSON),
                                                    record(m, root, GATES_METRICS_JSON),
-                                                   record(m, root, CARGO_MANIFEST_JSON)],
+                                                   record(m, root, CARGO_MANIFEST_JSON),
+                                                   record(m, root, HEX64_JSON)],
             "supplemental fingerprint mismatch")
     contract = read_json(CONTRACT)
     require(set(contract) == {"schema_version", "task", "status", "qualified_count",
@@ -358,23 +411,34 @@ def verify(root):
             and "qualified_count: 0" in gates_metrics_text.splitlines(), "invalid gates/metrics report status")
     cargo_manifest_digest = read_json(CARGO_MANIFEST_JSON)
     require(json.dumps(cargo_manifest_digest, sort_keys=True) == json.dumps(
-        digest_inventory(m, root, task=TASK, sources=CARGO_MANIFEST_SOURCES), sort_keys=True),
+        digest_inventory(m, root, task=CARGO_MANIFEST_TASK, sources=CARGO_MANIFEST_SOURCES), sort_keys=True),
         "source fingerprint mismatch: Cargo manifest digest metadata")
     cargo_manifest_text = m.portable_path(root, CARGO_MANIFEST_REPORT).read_text(encoding="utf-8")
     require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in cargo_manifest_text.splitlines()
             and "qualified_count: 0" in cargo_manifest_text.splitlines(), "invalid Cargo manifest report status")
+    hex64 = read_json(HEX64_JSON)
+    observed_hex64 = hex64_inventory(m, root)
+    require(json.dumps(hex64, sort_keys=True) == json.dumps(observed_hex64, sort_keys=True),
+            "hex64 audit inventory mismatch")
+    hex64_text = m.portable_path(root, HEX64_REPORT).read_text(encoding="utf-8")
+    require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in hex64_text.splitlines()
+            and "qualified_count: 0" in hex64_text.splitlines(), "invalid hex64 report status")
     for path in expected + [INDEX, CONTRACT, MANIFEST_JSON, DIGEST_JSON, CLI_JSON,
                             CRESCENT_JSON, CERT_EXPORT_JSON, AESTHETIC_GCI_JSON,
                             BATTERY_G1_JSON, FEM_BENCH_JSON, CLI_BENCH_JSON,
                             CRESCENT_CORE_JSON, CLI_MAIN_JSON, GATES_METRICS_JSON,
-                            CARGO_MANIFEST_JSON, SELF, LEGACY]:
+                            CARGO_MANIFEST_JSON, HEX64_JSON, SELF, LEGACY]:
         require(m.FORBIDDEN_HOME not in m.portable_path(root, path).read_text(encoding="utf-8"),
                 "literal host prefix")
     require(m.verify(root) == 15, "historical index mismatch")
-    return {"task": TASK, "status": STATUS, "assignment_outcome": "COMPLETE",
+    return {"task": TASK, "status": STATUS, "assignment_outcome": hex64["assignment_outcome"],
+            "sha256_schema_pass": hex64["schema_pass"],
+            "invalid_sha256_fields": hex64["invalid_field_count"],
+            "audit_json_documents": hex64["json_document_count"],
+            "json_receipt_count_matches_request": hex64["json_receipt_count_matches_request"],
             "prior_cli_main_assignment_outcome": cli_main_digest["assignment_outcome"],
             "prior_fem_bench_assignment_outcome": fem_bench_digest["assignment_outcome"],
-            "qualified_count": 0, "reports": 29, "source_files": 2,
+            "qualified_count": 0, "reports": 30, "source_files": 2,
             "cargo_manifest_source_files": len(CARGO_MANIFEST_SOURCES),
             "gates_metrics_source_files": len(GATES_METRICS_SOURCES),
             "metrics_fallback_path": GATES_METRICS_SOURCES[1],
@@ -404,7 +468,8 @@ def main():
     except (ValueError, OSError, KeyError, TypeError, UnicodeError) as exc:
         parser.exit(1, f"audit provenance verification failed: {exc}\n")
     print(json.dumps(result, sort_keys=True))
+    return 0 if result["sha256_schema_pass"] and result["json_receipt_count_matches_request"] else 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
