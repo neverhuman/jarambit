@@ -37,6 +37,10 @@ CUMULATIVE_PATHS = tuple(sorted((*SUMMARY_PATHS, SUMMARY_REPORT, SUMMARY_RECEIPT
                                  MANIFEST_CROSS_REPORT, MANIFEST_CROSS_RECEIPT)))
 TABLE_PARITY_RECEIPT = DIRECTORY + "phase33_table_parity_audit.json"
 TABLE_PARITY_REPORT = DIRECTORY + "PHASE33_TABLE_PARITY_AUDIT.md"
+PHASE34_RECEIPT = DIRECTORY + "phase34_cumulative_receipt_table_audit.json"
+PHASE34_REPORT = DIRECTORY + "PHASE34_CUMULATIVE_RECEIPT_TABLE_AUDIT.md"
+PHASE34_PATHS = tuple(sorted((*CUMULATIVE_PATHS, CUMULATIVE_REPORT, CUMULATIVE_RECEIPT,
+                              TABLE_PARITY_REPORT, TABLE_PARITY_RECEIPT)))
 # Absolute POSIX paths, Windows drive paths, UNC paths and file URIs.
 HOST_PATH = re.compile(r"(?<![\w./:])/(?!/)[\w.~-]+|(?<!\w)[A-Za-z]:[\\/]|\\\\[^\\\s]+\\|file://")
 
@@ -535,39 +539,58 @@ def cumulative_receipt_table(repo_root):
             "literal_host_path_count": 0, "artifacts": artifacts}
 
 
-def render_cumulative(document):
+def phase34_cumulative_receipt_table(repo_root):
+    artifacts = artifact_inventory(repo_root, PHASE34_PATHS)
+    return {"schema": "jarambit.rsv2_07_hm.phase34_cumulative_receipt_table.v1", "task": "RSV2-07-p34",
+            "status": "pass", "phases": list(range(26, 34)), "artifact_count": len(artifacts),
+            "digest_basis": "exact working-tree bytes of the sixteen named Phase-26 through Phase-33 outputs",
+            "line_count_rule": "LF-delimited physical lines including an unterminated final line; empty file has zero lines",
+            "total_size_bytes": sum(row["size_bytes"] for row in artifacts.values()),
+            "total_line_count": sum(row["line_count"] for row in artifacts.values()),
+            "literal_host_path_count": 0, "artifacts": artifacts}
+
+
+def render_cumulative(document, phase=32):
+    last_phase = document["phases"][-1]
+    count_word = "twelve" if phase == 32 else "sixteen"
     rows = [f"| {name} | {row['size_bytes']} | {row['line_count']} | {row['sha256']} | {row['literal_host_path_count']} |"
             for name, row in document["artifacts"].items()]
     return "\n".join([
-        "# Phase-32 cumulative receipt table audit", "",
-        f"**PASS for the artifact inventory.** Indexed {document['artifact_count']} Phase-26 through Phase-31 Markdown and JSON files, totaling {document['total_size_bytes']} bytes and {document['total_line_count']} lines. Literal host paths: 0.", "",
+        f"# Phase-{phase} cumulative receipt table audit", "",
+        f"**PASS for the artifact inventory.** Indexed {document['artifact_count']} Phase-26 through Phase-{last_phase} Markdown and JSON files, totaling {document['total_size_bytes']} bytes and {document['total_line_count']} lines. Literal host paths: 0.", "",
         "| Repository-relative artifact | Bytes | Lines | SHA-256 | Literal host paths |",
         "| --- | ---: | ---: | --- | ---: |", *rows, "",
-        "The input set is the fixed twelve named report and receipt files from Phases 26 through 31, sorted by relative path. Hashes and sizes describe exact working-tree bytes. Lines are counted by LF delimiters, plus an unterminated final line; an empty file has zero lines. CRLF is one line ending, and Unicode line separators do not add physical lines. Phase-32 outputs, source scripts and other files are outside this cumulative table.", "",
+        f"The input set is the fixed {count_word} named report and receipt files from Phases 26 through {last_phase}, sorted by relative path. Hashes and sizes describe exact working-tree bytes. Lines are counted by LF delimiters, plus an unterminated final line; an empty file has zero lines. CRLF is one line ending, and Unicode line separators do not add physical lines. Phase-{phase} outputs, source scripts and other files are outside this cumulative table.", "",
         "All inputs must be regular UTF-8 files. JSON is parsed strictly, rejecting duplicate keys and nonfinite numbers. Literal absolute host paths are rejected in raw text and decoded JSON strings. Source bytes and file types are checked again after scanning. This is an inventory of saved artifacts; earlier audit conclusions are preserved, including Phase 26's partial lineage result and Phase 29's snapshot-only parity. Earlier audits are not rerun by this command.", "",
-        "Persisted paths are repository-relative. --repo-root selects a relocated source tree without Git. Normal verification compares the complete saved JSON table and exact report text without writes; --write replaces only the two Phase-32 outputs. Earlier reports and receipts are preserved.", "",
-        "```sh", "python3 scripts/audit_rsv2_07_hm_forensics.py --phase 32",
+        f"Persisted paths are repository-relative. --repo-root selects a relocated source tree without Git. Normal verification compares the complete saved JSON table and exact report text without writes; --write replaces only the two Phase-{phase} outputs. Earlier reports and receipts are preserved.", "",
+        "```sh", f"python3 scripts/audit_rsv2_07_hm_forensics.py --phase {phase}",
         "python3 -m unittest discover -s scripts -p 'test_audit_rsv2_07_hm_forensics.py' -v", "git diff --check", "```", "",
         "Execution uses CPUs 14,15 at nice 10. This is a static cumulative receipt table audit. Changes are left uncommitted.", "",
     ])
 
 
 def run_cumulative(args):
-    require(args.artifact_root is None, "Phase-32 uses saved outputs in --repo-root; --artifact-root is not supported")
-    current = cumulative_receipt_table(args.repo_root)
-    report = render_cumulative(current)
+    phase = int(args.phase)
+    require(args.artifact_root is None, f"Phase-{phase} uses saved outputs in --repo-root; --artifact-root is not supported")
+    if phase == 34:
+        current = phase34_cumulative_receipt_table(args.repo_root)
+        receipt_name, report_name = PHASE34_RECEIPT, PHASE34_REPORT
+    else:
+        current = cumulative_receipt_table(args.repo_root)
+        receipt_name, report_name = CUMULATIVE_RECEIPT, CUMULATIVE_REPORT
+    report = render_cumulative(current, phase)
     receipt = json.dumps(current, indent=2) + "\n"
-    require_portable(report, "Phase-32 report")
-    require_portable(receipt, "Phase-32 receipt")
+    require_portable(report, f"Phase-{phase} report")
+    require_portable(receipt, f"Phase-{phase} receipt")
     if args.write:
         (args.repo_root / DIRECTORY).mkdir(parents=True, exist_ok=True)
-        (args.repo_root / CUMULATIVE_RECEIPT).write_text(receipt, encoding="utf-8")
-        (args.repo_root / CUMULATIVE_REPORT).write_text(report, encoding="utf-8")
+        (args.repo_root / receipt_name).write_text(receipt, encoding="utf-8")
+        (args.repo_root / report_name).write_text(report, encoding="utf-8")
     else:
-        saved = strict_json((args.repo_root / CUMULATIVE_RECEIPT).read_bytes())
-        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-32 saved receipt mismatch")
-        require((args.repo_root / CUMULATIVE_REPORT).read_text(encoding="utf-8") == report, "Phase-32 report mismatch")
-    print(f"LANE: RSV2-07-hm | RSV2-07-p32 | PASS | artifacts={current['artifact_count']} | literal_host_paths=0")
+        saved = strict_json((args.repo_root / receipt_name).read_bytes())
+        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), f"Phase-{phase} saved receipt mismatch")
+        require((args.repo_root / report_name).read_text(encoding="utf-8") == report, f"Phase-{phase} report mismatch")
+    print(f"LANE: RSV2-07-hm | RSV2-07-p{phase} | PASS | artifacts={current['artifact_count']} | literal_host_paths=0")
     return 0
 
 
@@ -703,14 +726,14 @@ def render(document):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33"), default="26")
+    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33", "34"), default="26")
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     try:
         if args.phase == "33":
             return run_table_parity(args)
-        if args.phase == "32":
+        if args.phase in ("32", "34"):
             return run_cumulative(args)
         if args.phase == "31":
             return run_manifest_cross(args)

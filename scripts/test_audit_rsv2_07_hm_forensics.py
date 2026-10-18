@@ -1074,5 +1074,117 @@ class TableParityTests(unittest.TestCase):
         self.assertEqual(error.exception.code, 1)
 
 
+class Phase34CumulativeReceiptTableTests(unittest.TestCase):
+    def setUp(self):
+        self.fixture = CumulativeReceiptTableTests()
+        self.fixture.setUp()
+        self.addCleanup(self.fixture.doCleanups)
+        self.root = self.fixture.root
+        for name in set(audit.PHASE34_PATHS) - set(audit.CUMULATIVE_PATHS):
+            self.fixture.write(name, b'{"status":"saved"}\n' if name.endswith(".json") else b"# Saved report\n")
+
+    def cli(self, *extra):
+        with patch.object(sys, "argv", ["forensics", "--phase", "34", "--repo-root", str(self.root), *extra]), \
+                redirect_stdout(io.StringIO()) as output:
+            result = audit.main()
+        return result, output.getvalue()
+
+    def test_sixteen_files_cover_each_phase_with_exact_digests_sizes_and_lines(self):
+        result = audit.phase34_cumulative_receipt_table(self.root)
+        self.assertEqual(result["phases"], list(range(26, 34)))
+        self.assertEqual(result["artifact_count"], 16)
+        self.assertEqual(list(result["artifacts"]), sorted(audit.PHASE34_PATHS))
+        self.assertEqual(result["total_line_count"], 28)
+        sizes = 0
+        for name, row in result["artifacts"].items():
+            data = (self.root / name).read_bytes()
+            self.assertEqual(row["sha256"], hashlib.sha256(data).hexdigest())
+            self.assertEqual(row["size_bytes"], len(data))
+            self.assertEqual(row["literal_host_path_count"], 0)
+            sizes += len(data)
+        self.assertEqual(result["total_size_bytes"], sizes)
+        for phase in range(26, 34):
+            self.assertEqual(sum(Path(name).name[5:7] == str(phase) for name in result["artifacts"]), 2)
+        self.assertEqual(result, audit.phase34_cumulative_receipt_table(self.root))
+        self.assertNotIn(str(self.root), json.dumps(result))
+
+    def test_phase33_line_count_covers_empty_crlf_and_unterminated_lines(self):
+        for data, expected in ((b"", 0), (b"one", 1), (b"one\n", 1), (b"one\n\n", 2),
+                               (b"a\r\nb\r\n", 2), ("a\u2028b".encode(), 1)):
+            self.fixture.write(audit.TABLE_PARITY_REPORT, data)
+            with self.subTest(data=data):
+                self.assertEqual(audit.phase34_cumulative_receipt_table(self.root)["artifacts"][audit.TABLE_PARITY_REPORT]["line_count"], expected)
+
+    def test_phase34_outputs_other_phases_and_scripts_are_excluded(self):
+        before = audit.phase34_cumulative_receipt_table(self.root)
+        for name in (audit.PHASE34_REPORT, audit.PHASE34_RECEIPT, audit.DIRECTORY + "PHASE35_OTHER.md", audit.SCRIPT_PATHS[0]):
+            self.fixture.write(name, b"outside scope, not JSON")
+        self.assertEqual(audit.phase34_cumulative_receipt_table(self.root), before)
+
+    def test_invalid_utf8_json_and_host_paths_in_new_sources_fail(self):
+        for data in (b"\xff", b'{"x":1,"x":2}', b'{"x":NaN}', b'{"x":1e999}', b"{broken}",
+                     b'{"source":"/home/example/file"}', b'{"source":"\\u002fhome\\u002fexample\\u002ffile"}'):
+            self.fixture.write(audit.TABLE_PARITY_RECEIPT, data)
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                audit.phase34_cumulative_receipt_table(self.root)
+        self.fixture.write(audit.TABLE_PARITY_RECEIPT, b'{}\n')
+        self.fixture.write(audit.TABLE_PARITY_REPORT, b"saved path: /data/file")
+        with self.assertRaisesRegex(ValueError, "Literal host path"):
+            audit.phase34_cumulative_receipt_table(self.root)
+
+    def test_missing_or_symlinked_new_source_fails(self):
+        path = self.root / audit.TABLE_PARITY_RECEIPT
+        path.unlink()
+        with self.assertRaises(FileNotFoundError):
+            audit.phase34_cumulative_receipt_table(self.root)
+        path.symlink_to(Path(audit.CUMULATIVE_RECEIPT).name)
+        with self.assertRaisesRegex(ValueError, "regular summary source"):
+            audit.phase34_cumulative_receipt_table(self.root)
+
+    def test_phase33_source_mutation_during_scan_fails(self):
+        original_read = Path.read_bytes
+        changed = False
+        def read(path):
+            nonlocal changed
+            data = original_read(path)
+            if path == self.root / audit.TABLE_PARITY_RECEIPT and not changed:
+                changed = True
+                path.write_bytes(data + b"\n")
+            return data
+        with patch.object(Path, "read_bytes", new=read), self.assertRaisesRegex(ValueError, "changed during audit"):
+            audit.phase34_cumulative_receipt_table(self.root)
+
+    def test_cli_preserves_sources_writes_only_phase34_outputs_and_checks_readonly(self):
+        before = {path.relative_to(self.root).as_posix(): path.read_bytes() for path in self.root.rglob("*") if path.is_file()}
+        with patch.object(audit.subprocess, "check_output", side_effect=AssertionError("Unexpected Git command")):
+            result, output = self.cli("--write")
+            self.assertEqual(result, 0)
+            self.assertIn("LANE: RSV2-07-hm | RSV2-07-p34 | PASS | artifacts=16 | literal_host_paths=0", output)
+            after = {path.relative_to(self.root).as_posix(): path.read_bytes() for path in self.root.rglob("*") if path.is_file()}
+            self.assertEqual(set(after) - set(before), {audit.PHASE34_RECEIPT, audit.PHASE34_REPORT})
+            for name, data in before.items():
+                self.assertEqual(after[name], data)
+            with patch.object(Path, "write_text", side_effect=AssertionError("Readonly audit wrote")):
+                self.assertEqual(self.cli()[0], 0)
+            original = json.loads(after[audit.PHASE34_RECEIPT])
+            for field, value in (("sha256", "0" * 64), ("size_bytes", 0), ("line_count", 0), ("literal_host_path_count", False)):
+                saved = deepcopy(original)
+                saved["artifacts"][audit.TABLE_PARITY_REPORT][field] = value
+                self.fixture.write(audit.PHASE34_RECEIPT, json.dumps(saved).encode())
+                with self.subTest(field=field), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                    self.cli()
+                self.assertEqual(error.exception.code, 1)
+            self.fixture.write(audit.PHASE34_RECEIPT, after[audit.PHASE34_RECEIPT])
+            self.fixture.write(audit.PHASE34_REPORT, b"changed report\n")
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                self.cli()
+            self.assertEqual(error.exception.code, 1)
+
+    def test_artifact_root_is_rejected_for_phase34(self):
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli("--artifact-root", str(self.root))
+        self.assertEqual(error.exception.code, 1)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

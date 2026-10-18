@@ -1,0 +1,119 @@
+{
+  "schema": "jarambit.rsv2_07_hm.phase34_cumulative_receipt_table.v1",
+  "task": "RSV2-07-p34",
+  "status": "pass",
+  "phases": [
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33
+  ],
+  "artifact_count": 16,
+  "digest_basis": "exact working-tree bytes of the sixteen named Phase-26 through Phase-33 outputs",
+  "line_count_rule": "LF-delimited physical lines including an unterminated final line; empty file has zero lines",
+  "total_size_bytes": 60352,
+  "total_line_count": 1149,
+  "literal_host_path_count": 0,
+  "artifacts": {
+    "docs/audits/rsv2_07_hm/PHASE26_ROUND1_BIRTHS_VS_ELITES_LINEAGE_AUDIT.md": {
+      "sha256": "faa15cb6421fece10670268ccb644846f66d3f153aa943b21be711fbdf8683f9",
+      "size_bytes": 2937,
+      "line_count": 28,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/PHASE27_ARTIFACT_DIGEST_INDEX.md": {
+      "sha256": "bc39415bb1709a746eb0e2366ec34bd0d0cb32e712c07063f0e7057d38aa19fe",
+      "size_bytes": 1832,
+      "line_count": 22,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/PHASE28_SCRIPT_TEST_INVENTORY_AUDIT.md": {
+      "sha256": "ee894ddd7ef378e5d0da6bba2c34d12e4ea3ecbf05d936ab443290904f1b12cb",
+      "size_bytes": 1895,
+      "line_count": 22,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/PHASE29_INDEX_INVENTORY_CROSS_CHECK_AUDIT.md": {
+      "sha256": "cb649896fad00154ed39594c54d52836016f9395395704c35e08fbecc16aaa2b",
+      "size_bytes": 2708,
+      "line_count": 26,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/PHASE30_SUMMARY_MANIFEST_AUDIT.md": {
+      "sha256": "6a074af3222351fd4d172f12c2d4eb89218ab6a445d5e2b0fd505f3b60f0587f",
+      "size_bytes": 2964,
+      "line_count": 28,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/PHASE31_MANIFEST_CROSS_CHECK_AUDIT.md": {
+      "sha256": "38bfd5d4aebc0591e59ca59e2a655de01d4db03e50014526d6a9c206c1736998",
+      "size_bytes": 3342,
+      "line_count": 30,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/PHASE32_CUMULATIVE_RECEIPT_TABLE_AUDIT.md": {
+      "sha256": "132d265c0f39d9ac9402ad2ddce43dd5241425a74bf659277ab14492278879bf",
+      "size_bytes": 3597,
+      "line_count": 32,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/PHASE33_TABLE_PARITY_AUDIT.md": {
+      "sha256": "2460b8d8a059bd0d6fb14b8dd8b680b7d19874fe4848c466ac84f1db0d75ae43",
+      "size_bytes": 3679,
+      "line_count": 34,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/phase26_round1_births_vs_elites_lineage_audit.json": {
+      "sha256": "7c2636077c10d33edb6a4f8b628325cd4f0656ec0d33643eb4ce414fbcae4885",
+      "size_bytes": 2577,
+      "line_count": 80,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/phase27_artifact_digest_index.json": {
+      "sha256": "2b60bf37e70a273baf6ebbf40c6938f8fcedb52fb574fec793286e35f6f50254",
+      "size_bytes": 1103,
+      "line_count": 27,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/phase28_script_test_inventory_audit.json": {
+      "sha256": "141fb81fab478b21a61a897f3969e526f26c0779356790f01f6f6629d243c8b1",
+      "size_bytes": 3328,
+      "line_count": 62,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/phase29_index_inventory_cross_check_audit.json": {
+      "sha256": "65068b69e0994c781636ab4df2f991ee88b63f875bb06906ce81a1ee68f07f71",
+      "size_bytes": 3885,
+      "line_count": 82,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/phase30_summary_manifest_audit.json": {
+      "sha256": "844b5b616ba0f58360022127fb80801ff7d13c5594e40159645cdfad38b47c29",
+      "size_bytes": 2512,
+      "line_count": 67,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/phase31_manifest_cross_check_audit.json": {
+      "sha256": "0ea2a92e33b5584c05b6a347dc0f709292c60791578193866e03b745a20e93fa",
+      "size_bytes": 7383,
+      "line_count": 185,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/phase32_cumulative_receipt_table_audit.json": {
+      "sha256": "fe24474a26e04120197604daf6d26c611a3879ac5a4de3b97afe99f04166efe9",
+      "size_bytes": 3519,
+      "line_count": 93,
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/phase33_table_parity_audit.json": {
+      "sha256": "299c2dfc24c06a4fcc07ac473afd531008f094f8e1fa0db8b617eac04a24d639",
+      "size_bytes": 13091,
+      "line_count": 331,
+      "literal_host_path_count": 0
+    }
+  }
+}
