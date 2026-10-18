@@ -1,0 +1,283 @@
+{
+  "task": "G16-06-RSV2-08-p19",
+  "study_phase": 18,
+  "baseline_commit": "b0f5f5ae29c3d7b0a53146fc728b4288d85d8dcb",
+  "scope": "Phase1..17 reports and corresponding audit receipts, at actual case-sensitive paths; no historical files rewritten.",
+  "indexed_file_count": 33,
+  "all_requested_reports_present": false,
+  "missing_reports": [
+    "experiments/G16-06-RSV2-08/PHASE1.md"
+  ],
+  "qualified_count": 0,
+  "full_qualification": false,
+  "phases": [
+    {
+      "phase": 1,
+      "expected_report_path": "experiments/G16-06-RSV2-08/PHASE1.md",
+      "report": null,
+      "receipt": {
+        "path": "experiments/G16-06-RSV2-08/candidate_receipt.json",
+        "sha256": "14303406c22ed660010050c895ea4e07f28627e407876838a81ffc84f1eec3fa",
+        "bytes": 17099
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 2,
+      "expected_report_path": "experiments/G16-06-RSV2-08/PHASE2.md",
+      "report": {
+        "path": "experiments/G16-06-RSV2-08/PHASE2.md",
+        "sha256": "b177e75b8c1b1dfefc6723408d9349ca89c3aa7176cf09e0648291754961ecd3",
+        "bytes": 10007
+      },
+      "receipt": {
+        "path": "experiments/G16-06-RSV2-08/phase2_receipt.json",
+        "sha256": "721727d090559ad197e5aa631770b9fed0cc4fca86e56a0f043d315d7ad16964",
+        "bytes": 50444
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 3,
+      "expected_report_path": "experiments/G16-06-RSV2-08/PHASE3.md",
+      "report": {
+        "path": "experiments/G16-06-RSV2-08/PHASE3.md",
+        "sha256": "54e936c36b089ff3872a7b091efb948cec923d910cd60da849e5af60f4965dcb",
+        "bytes": 8425
+      },
+      "receipt": {
+        "path": "experiments/G16-06-RSV2-08/phase3_receipt.json",
+        "sha256": "ee3954e6405ac67bb906b8e95d4e16164def713ff3bf183a029c14cfcc7f413a",
+        "bytes": 215213
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 4,
+      "expected_report_path": "experiments/G16-06-RSV2-08/PHASE4.md",
+      "report": {
+        "path": "experiments/G16-06-RSV2-08/PHASE4.md",
+        "sha256": "094b4531f9121a05b5814b2b314b4f1ef17cf71f2038b4316482c4c76979b05e",
+        "bytes": 13507
+      },
+      "receipt": {
+        "path": "experiments/G16-06-RSV2-08/phase4_receipt.json",
+        "sha256": "848636fbe85686746f0de62680fd23688292ec5b9eb1bbb5149621ab325fef66",
+        "bytes": 273919
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 5,
+      "expected_report_path": "experiments/G16-06-RSV2-08/PHASE5.md",
+      "report": {
+        "path": "experiments/G16-06-RSV2-08/PHASE5.md",
+        "sha256": "1609e45452de0cc71b3edb768b97f2fbec168bba1632604dcbbd227973738747",
+        "bytes": 70776
+      },
+      "receipt": {
+        "path": "experiments/G16-06-RSV2-08/phase5_receipt.json",
+        "sha256": "ab505dc254ce9a844301bf3cfdad5f997cfd681d3184f088ad428a6573383e58",
+        "bytes": 2438567
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 6,
+      "expected_report_path": "experiments/G16-06-RSV2-08/PHASE6.md",
+      "report": {
+        "path": "experiments/G16-06-RSV2-08/PHASE6.md",
+        "sha256": "57a86ad4859f61e4ebfef8b18d7297908da40c3b53f69ab6f46bf8436d09ce55",
+        "bytes": 82018
+      },
+      "receipt": {
+        "path": "experiments/G16-06-RSV2-08/phase6_receipt.json",
+        "sha256": "b030eb1f2267abd2fe66960f938618a104123c4fa4426551b80f69a1c2770c25",
+        "bytes": 2514986
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 7,
+      "expected_report_path": "experiments/G16-06-RSV2-08/PHASE7.md",
+      "report": {
+        "path": "experiments/G16-06-RSV2-08/PHASE7.md",
+        "sha256": "18c3ef60e9edf901174300a800e98128e2ce4fefa3398669d148bfa1864c828c",
+        "bytes": 136628
+      },
+      "receipt": {
+        "path": "experiments/G16-06-RSV2-08/phase7_receipt.json",
+        "sha256": "71e751199151a99c61058625d55ad2358485e69e308b101d383b16b7ec8cee4a",
+        "bytes": 4943513
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 8,
+      "expected_report_path": "experiments/G16-06-RSV2-08/PHASE8.md",
+      "report": {
+        "path": "experiments/G16-06-RSV2-08/PHASE8.md",
+        "sha256": "44c3876584adf55ecff5266e4852742faaa6ee74e2d32277e585205c1d98e55e",
+        "bytes": 14110
+      },
+      "receipt": {
+        "path": "experiments/G16-06-RSV2-08/phase8_receipt.json",
+        "sha256": "fecbe9932bfb8d905b38ca87bba137dfd39fcd8c585519e3eabb006c89167b44",
+        "bytes": 483184
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 9,
+      "expected_report_path": "experiments/g16-06-rsv2-08/PHASE9.md",
+      "report": {
+        "path": "experiments/g16-06-rsv2-08/PHASE9.md",
+        "sha256": "351f9fe7f6f0d107494e590c93c8478781e3c0a7a41b9267aa49759526ebfc1e",
+        "bytes": 223897
+      },
+      "receipt": {
+        "path": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "sha256": "cc111ae884ad1f800cbda88491d57d420ead06bb75f12bcbee318ef80287d516",
+        "bytes": 3756637
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 10,
+      "expected_report_path": "experiments/g16-06-rsv2-08/PHASE10.md",
+      "report": {
+        "path": "experiments/g16-06-rsv2-08/PHASE10.md",
+        "sha256": "dab2897315cde615db39bbed66c4b95e53fe5bc52e13534fe69570f69e014219",
+        "bytes": 24007
+      },
+      "receipt": {
+        "path": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sha256": "42ddc1663327794b71578d05fdaed678d0daac97e86dfbb8d4b0c4033fb92615",
+        "bytes": 377339
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 11,
+      "expected_report_path": "experiments/g16-06-rsv2-08/PHASE11.md",
+      "report": {
+        "path": "experiments/g16-06-rsv2-08/PHASE11.md",
+        "sha256": "b4a0dcd19bda7719587b7880b76f67e637d6e5a752590afd2612f56490ec9c83",
+        "bytes": 13645
+      },
+      "receipt": {
+        "path": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "sha256": "26809af6faab94b759bdabad0b3dafe68bf8aaae5068b1276ee35bdd0ffe5d48",
+        "bytes": 212710
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 12,
+      "expected_report_path": "experiments/g16-06-rsv2-08/PHASE12.md",
+      "report": {
+        "path": "experiments/g16-06-rsv2-08/PHASE12.md",
+        "sha256": "4250477a92ab0fe51b32d2acdae7621a04b88a1b8930631cca25a61c940b34aa",
+        "bytes": 10141
+      },
+      "receipt": {
+        "path": "experiments/g16-06-rsv2-08/phase12_receipt.json",
+        "sha256": "43457e945f9d4071ad02dbf48003755af889481309c06e5f0828895b3639639a",
+        "bytes": 116533
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 13,
+      "expected_report_path": "experiments/g16-06-rsv2-08/PHASE13.md",
+      "report": {
+        "path": "experiments/g16-06-rsv2-08/PHASE13.md",
+        "sha256": "7253eaf8ce0737ead6c517ef6db9af904c247d13efbb7bd570ebc63defa9b712",
+        "bytes": 26412
+      },
+      "receipt": {
+        "path": "experiments/g16-06-rsv2-08/phase13_receipt.json",
+        "sha256": "26591423f6dad3332509295a7c97e2aa2ff3d140f274e52751e108fcb675288d",
+        "bytes": 380203
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 14,
+      "expected_report_path": "experiments/g16-06-rsv2-08/PHASE14.md",
+      "report": {
+        "path": "experiments/g16-06-rsv2-08/PHASE14.md",
+        "sha256": "7f7d60ec3df4d0f88c872b39525ba998f9971c9e3d0b091e45277e7f4c833132",
+        "bytes": 18190
+      },
+      "receipt": {
+        "path": "experiments/g16-06-rsv2-08/phase14_receipt.json",
+        "sha256": "50773824742898a463ebb46954ed8d3ebd456a50900f1761378fb3483d833a81",
+        "bytes": 271661
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 15,
+      "expected_report_path": "experiments/G16-06-RSV2-08/PHASE15.md",
+      "report": {
+        "path": "experiments/G16-06-RSV2-08/PHASE15.md",
+        "sha256": "c69286dc0dcc6fe324b8f5f00ad5f16e6bb9aee2492ed52e20c6c675a0a63ef8",
+        "bytes": 5119
+      },
+      "receipt": {
+        "path": "experiments/G16-06-RSV2-08/phase15_gate_s_compliant_joint_audit.json",
+        "sha256": "205a359a7e9f1cd7065b5a35da7b1491fa6a37356a6e20473c4fff9451bfd51d",
+        "bytes": 33243
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 16,
+      "expected_report_path": "experiments/G16-06-RSV2-08/PHASE16.md",
+      "report": {
+        "path": "experiments/G16-06-RSV2-08/PHASE16.md",
+        "sha256": "9cbbf5bacf16c6c1eb9679fa76e4cbd964fb1c66b03a49b40529959b793b96e8",
+        "bytes": 3630
+      },
+      "receipt": {
+        "path": "experiments/G16-06-RSV2-08/phase16_cross_phase_provenance_index.json",
+        "sha256": "34f93fd138eacbe2be39690febb26478b443f22ecb75bbd87734e4daab465120",
+        "bytes": 5327
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 17,
+      "expected_report_path": "experiments/G16-06-RSV2-08/PHASE17.md",
+      "report": {
+        "path": "experiments/G16-06-RSV2-08/PHASE17.md",
+        "sha256": "775eb2f04b0465ea21988ce7a761a1d2b743fcaa7fb1e96fab4141b97d203acb",
+        "bytes": 4403
+      },
+      "receipt": {
+        "path": "experiments/G16-06-RSV2-08/phase17_legacy_path_inventory.json",
+        "sha256": "9d2d21d0d3c89be4ef84089b1548ca6dd9d21f65af43b5930820437c96c6ad15",
+        "bytes": 121352
+      },
+      "qualified_count": 0,
+      "full_qualification": false
+    }
+  ]
+}
