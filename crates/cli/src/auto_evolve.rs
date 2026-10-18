@@ -160,8 +160,8 @@ fn spawn_offspring_batch(
             let mut child = parent.clone();
             let scale = 0.35 / ((round + 1) as f64).sqrt();
 
-            match (k % 8, k % 9 == 8) {
-                (_, true) => {
+            match (k % 8, k % 9 == 8, k % 11 == 9) {
+                (_, true, _) => {
                     // Witness-guided arm: increase the blade-root section controls and use the
                     // retained multi-mesh window witness when this parent's window is enabled.
                     for (idx, delta_lo, delta_hi) in
@@ -188,7 +188,50 @@ fn spawn_offspring_batch(
                         .min(b[genome::RING_WALL].1);
                     child.v[EDGE_TH] = child.v[EDGE_TH].clamp(0.12, 0.20);
                 }
-                (0, false) => {
+                (_, false, true) => {
+                    for (idx, target) in [
+                        (2, 3.0),
+                        (3, 3.0),
+                        (4, 3.0),
+                        (5, 3.0),
+                        (23, 3.0),
+                        (24, 3.0),
+                        (25, 3.0),
+                        (29, 2.0),
+                        (30, 1.73),
+                    ] {
+                        child.v[idx] = (target + rng.range(-0.08, 0.08))
+                            .clamp(b[idx].0, b[idx].1);
+                    }
+                    child.v[40] = rng.range(-0.25, 0.25).clamp(b[40].0, b[40].1);
+                    child.v[genome::RING_WALL] = rng
+                        .range(6.0, 6.4)
+                        .clamp(b[genome::RING_WALL].0, b[genome::RING_WALL].1);
+                    if child.v[genome::WIN_N] >= 1.0 {
+                        child.v[genome::WIN_N] =
+                            1.0_f64.clamp(b[genome::WIN_N].0, b[genome::WIN_N].1);
+                        child.v[genome::WIN_S0] = rng
+                            .range(0.48, 0.52)
+                            .clamp(b[genome::WIN_S0].0, b[genome::WIN_S0].1);
+                        child.v[genome::WIN_S1] = rng
+                            .range(0.82, 0.86)
+                            .clamp(b[genome::WIN_S1].0, b[genome::WIN_S1].1);
+                        child.v[genome::WIN_W] =
+                            3.0_f64.clamp(b[genome::WIN_W].0, b[genome::WIN_W].1);
+                        child.v[genome::WIN_FILL] =
+                            0.65_f64.clamp(b[genome::WIN_FILL].0, b[genome::WIN_FILL].1);
+                    }
+                    child.clamp();
+                    // RING_R_IN is represented by the genome's ring inner diameter (RING_ID).
+                    if child.v[genome::RING_ID] < 24.4 {
+                        child.v[genome::RING_ID] = 24.4;
+                    }
+                    if child.v[genome::RING_WALL] < 5.0 {
+                        child.v[genome::RING_WALL] = 5.0;
+                    }
+                    child.v[EDGE_TH] = child.v[EDGE_TH].clamp(0.12, 0.20);
+                }
+                (0, false, false) => {
                     if child.p1() {
                         child.v[POCKET_D] = (child.v[POCKET_D] + rng.normal() * 0.015 * scale)
                             .clamp(b[POCKET_D].0, b[POCKET_D].1);
@@ -213,7 +256,7 @@ fn spawn_offspring_batch(
                         }
                     }
                 }
-                (1, false) => {
+                (1, false, false) => {
                     // Distal taper & fuller tuning (tip torsion + sequence ratio balance)
                     child.v[TAPER_X0] = (child.v[TAPER_X0] + rng.normal() * 0.8 * scale)
                         .clamp(b[TAPER_X0].0, b[TAPER_X0].1);
@@ -222,7 +265,7 @@ fn spawn_offspring_batch(
                     child.v[FUL_D] = (child.v[FUL_D] + rng.normal() * 0.015 * scale)
                         .clamp(b[FUL_D].0, b[FUL_D].1);
                 }
-                (2, false) => {
+                (2, false, false) => {
                     // Bevel & micro-bevel apex refinement within Gate S law (edge_t <= 0.20 mm)
                     child.v[EDGE_TH] =
                         (child.v[EDGE_TH] + rng.normal() * 0.015 * scale).clamp(0.12, 0.20);
@@ -237,7 +280,7 @@ fn spawn_offspring_batch(
                             rng.range(6.0, b[genome::RING_WALL].1);
                     }
                 }
-                (3, false) => {
+                (3, false, false) => {
                     // Thickness knot fine-tuning (K0..K0+4)
                     for idx in 0..5 {
                         let g_idx = K0 + idx;
@@ -245,7 +288,7 @@ fn spawn_offspring_batch(
                             .clamp(b[g_idx].0, b[g_idx].1);
                     }
                 }
-                (4, false) => {
+                (4, false, false) => {
                     // Outline control point micro-sculpting (within aesthetic Hausdorff corridor)
                     for _ in 0..3 {
                         let cp = ((rng.f64() * (N_CP as f64)) as usize).min(N_CP - 1);
@@ -253,7 +296,7 @@ fn spawn_offspring_batch(
                             (child.v[cp] + rng.normal() * 0.06 * scale).clamp(b[cp].0, b[cp].1);
                     }
                 }
-                (5, false) => {
+                (5, false, false) => {
                     // Multi-gene Gaussian + optional crossover with another elite
                     if k % 12 != 5 && elites.len() > 1 && rng.f64() < 0.5 {
                         let pick =
@@ -277,7 +320,7 @@ fn spawn_offspring_batch(
                         }
                     }
                 }
-                (_, false) => {
+                (_, false, false) => {
                     // Increase section modulus through thickness, taper and grind angles.
                     let reinforcement = if k % 8 == 6 {
                         rng.range(0.5, 0.9)
@@ -969,6 +1012,44 @@ mod tests {
         assert!(child.v[genome::WIN_S1] >= child.v[genome::WIN_S0] + 0.2);
         assert!(child.v[genome::RING_WALL] >= 6.0);
 
+        for (idx, &value) in child.v.iter().enumerate() {
+            if idx == EDGE_TH {
+                assert!((0.12..=0.20).contains(&value));
+            } else {
+                assert!(
+                    (bounds[idx].0..=bounds[idx].1).contains(&value),
+                    "gene {idx} outside legal bounds: {value}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn q7_split_hand_blade_offspring_arm_is_steered_and_legal() {
+        let mut parent = Genome::c4_seed(genome::T_MIN);
+        parent.v[genome::WIN_N] = 2.0;
+        parent.v[genome::WIN_S0] = 0.25;
+        parent.v[genome::WIN_S1] = 0.75;
+        parent.v[genome::WIN_W] = 4.0;
+        parent.v[genome::WIN_FILL] = 0.5;
+        parent.v[genome::RING_WALL] = 6.0;
+        parent.v[EDGE_TH] = 0.18;
+        parent.clamp();
+
+        let children = spawn_offspring_batch(
+            &[("p14".into(), parent)],
+            10,
+            1,
+            &mut Rng(20261018),
+        );
+        let child = &children[9].1;
+        let bounds = genome::bounds();
+
+        assert_eq!(child.v[genome::WIN_N], 1.0);
+        assert_eq!(child.v[genome::WIN_W], 3.0);
+        assert!((0.48..=0.52).contains(&child.v[genome::WIN_S0]));
+        assert!((0.82..=0.86).contains(&child.v[genome::WIN_S1]));
+        assert!((6.0..=6.4).contains(&child.v[genome::RING_WALL]));
         for (idx, &value) in child.v.iter().enumerate() {
             if idx == EDGE_TH {
                 assert!((0.12..=0.20).contains(&value));
