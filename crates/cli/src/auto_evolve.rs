@@ -1225,6 +1225,34 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_deduplicates_identical_genomes_within_single_round() {
+        let mut repeated = Genome::c4_seed(genome::T_MIN);
+        repeated.v[EA_IN] = 14.0;
+        repeated.clamp();
+        let mut unique = repeated.clone();
+        unique.v[TAPER_X0] += 0.5;
+        unique.clamp();
+        let repeated_identity = certification::identity(&repeated);
+        assert_eq!(repeated_identity, certification::identity(&repeated.clone()));
+
+        let screened = vec![
+            test_screen_survivor("repeated_first", "p10", repeated.clone(), 0.01),
+            test_screen_survivor("repeated_second", "p10", repeated, 0.02),
+            test_screen_survivor("unique", "p14", unique, 0.03),
+        ];
+        let selected = select_stage2_candidates(&screened, 3, &HashSet::new(), &HashSet::new());
+
+        assert_eq!(selected.len(), 2);
+        assert_eq!(
+            selected
+                .iter()
+                .filter(|candidate| certification::identity(&candidate.g) == repeated_identity)
+                .count(),
+            1
+        );
+    }
+
+    #[test]
     fn stage2_selection_preserves_screen_deficit_order_on_fill_pass() {
         let mut p10_first = Genome::c4_seed(genome::T_MIN);
         p10_first.v[EA_IN] = 14.0;
