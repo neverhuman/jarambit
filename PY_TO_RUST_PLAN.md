@@ -10,11 +10,11 @@
 | Category | Phase ID | File Count | Lines of Code (LOC) | Target Rust Crate / Disposition |
 |---|---|---:|---:|---|
 | **3D $P_2$ FEM (`dolfinx`/`skfem`), OpenCascade (`OCP`) & Blender (`bpy`) Bindings** | `BOUNDARY-KEEP` | `41` | `9565` | **`KEEP_WITH_REASON`** — Thin Python boundary around C++/PETSc `dolfinx` v0.9.0, `scikit-fem`, OpenCascade `BRepCheck_Analyzer`, and Blender `bpy` |
-| **CI Verifiers, `W_ULTRALIGHT_v1` Fitness & Public Doc Generators (`ops/ci/`)** | `PY-PORT-01` | `60` | `10139` | **`PORT_TO_RUST`** -> `crates/cli` (`jarambit ci ...`) & `crates/evidence` |
+| **CI Verifiers, `W_ULTRALIGHT_v1` Fitness & Public Doc Generators (`ops/ci/`)** | `PY-PORT-01` | `58` | `9990` | **`PORT_TO_RUST`** -> `crates/cli` (`jarambit ci ...`) & `crates/evidence` |
 | **Assurance Catalog, Claim Verification & Global Metric (`assurance/`, `metrics/`)** | `PY-PORT-02` | `21` | `7409` | **`PORT_TO_RUST`** -> `crates/evidence` (`jarambit-evidence`) |
 | **Evolution Wave Summarizers, Structural Experiments & Figures (`evidence/`, `experiments/`, `ops/wave_*`)** | `PY-PORT-03` | `92` | `8547` | **`PORT_TO_RUST`** -> `crates/cli` (`jarambit wave-summary`) & `crates/crescent` |
 | **Paper/Marketing Orchestration, Market Tools, `science_v1` & `sheath` (`ops/render/`, `ops/market/`, `research/`, `sheath/`)** | `PY-PORT-04` | `148` | `23800` | **`PORT_TO_RUST`** -> `crates/cli` & `crates/crescent` |
-| **Total Tracked Python Surface** | **All** | **`362`** | **`59460`** | **`41` kept (`9565` LOC) / `321` scheduled for Rust port (`49895` LOC)** |
+| **Total Tracked Python Surface** | **All** | **`360`** | **`59311`** | **`41` kept (`9565` LOC) / `319` scheduled for Rust port (`49746` LOC)** |
 
 ---
 
@@ -22,10 +22,19 @@
 
 | Task ID | Scope | Target Rust Crate | Owner | Parity Test Requirement | Schedule |
 |---|---|---|---|---|---|
-| `PY-PORT-01` | Port `ops/ci/ultralight_weighted_fitness.py`, `gen_status.py`, `gen_readme.py`, `gen_whitepaper.py`, `verify_figures.py`, `verify_media.py`, `check_runner_policy.py`, `rs_verdicts.py`, and their unit tests (`60` files, `10,139` LOC) to Rust subcommands (including per-objective partial-input fail-close and S3 sync status returncode checks) and delete the Python originals. | `crates/cli` (`jarambit`) + `crates/evidence` | `2291514.agy_jarambit_screen` + `1409298.agy_jarambit_paper` | Byte-identical JSON/Markdown output on committed `evidence/` and `docs/` fixtures (`cargo test --release --locked`). | Post-`v0.31.0` tag (Wave 1) |
+| `PY-PORT-01` | Port `ops/ci/ultralight_weighted_fitness.py`, `gen_status.py`, `gen_readme.py`, `gen_whitepaper.py`, `verify_figures.py`, `verify_media.py`, `rs_verdicts.py`, and their unit tests (`58` files, `9,990` LOC remain in this phase inventory) to Rust subcommands (including per-objective partial-input fail-close and S3 sync status returncode checks) and delete the Python originals. | `crates/cli` (`jarambit`) + `crates/evidence` | `2291514.agy_jarambit_screen` + `1409298.agy_jarambit_paper` | Byte-identical JSON/Markdown output on committed `evidence/` and `docs/` fixtures (`cargo test --release --locked`). | Post-`v0.31.0` tag (Wave 1) |
 | `PY-PORT-02` | Port `assurance/` and `metrics/` Python verification wrappers and tests (`21` files, `7,409` LOC) into `crates/evidence` (`jarambit-evidence`), leaving zero Python in `assurance/` and `metrics/`. | `crates/evidence` (`jarambit-evidence`) | `2132048.codex_jarambit` | All 11 `T00` frozen assurance contracts and `global_G` parity tests pass natively in `cargo test -p jarambit-evidence`. | Post-`v0.31.0` tag (Wave 2) |
 | `PY-PORT-03` | Port `evidence/evolution_waves/2026-10-17/summarize.py`, `experiments/` structural study scripts, and `ops/wave_figures/` / `ops/wave_reports/` (`92` files, `8,547` LOC) to Rust (`crates/cli` & `crates/crescent`). | `crates/cli` + `crates/crescent` | `1574790.jarambit_lane_hm_seq` + `2455097.jarambit_evo3c_pair` | Exact match on `wave_summary.json` and witness CSV/JSON metrics before deleting `.py` scripts. | Post-`v0.31.0` tag (Wave 3) |
 | `PY-PORT-04` | Port non-`bpy` orchestration in `ops/render/`, `ops/market/`, `ops/multihost/`, `ops/science_tests/`, `research/science_v1/`, and `sheath/` (`148` files, `23,800` LOC) to Rust, retaining only thin `bpy`/`dolfinx`/`OCP` C++ kernel adapters listed in `PYTHON_EXCEPTIONS.md`. | `crates/cli` + `crates/crescent` | `1409298.agy_jarambit_paper` + `2291514.agy_jarambit_screen` | Parity tests on figure/PDF/sheath manifests (`cargo test --workspace`). | Post-`v0.31.0` tag (Wave 4) |
+
+### Scoped port receipts
+
+These implementation items do not mark their containing multi-file phase complete. The execution queue calls the runner-policy port `PY-PORT-02`, while the phase table above reserves that ID for the assurance/metrics migration; the queue label is retained here as a scoped work-item ID to avoid falsely closing the assurance phase.
+
+| Queue work item | Scope | Status / evidence |
+|---|---|---|
+| `PY-PORT-01` | `ops/ci/version_check.py` -> `jarambit version-check` | **DONE** in `3367c907bbb0616f3e738f4c06cdca19687848a0`. |
+| `PY-PORT-02` (queue scoped item) | `ops/ci/check_runner_policy.py` and `ops/ci/runner_tests/test_runner_policy.py` -> `jarambit check-runner-policy` | **DONE** in this runner-policy Rust port; the tracked test path is under `ops/ci/runner_tests/`, and the removed Python sources totaled 149 LOC (86 + 63). Canonical assurance/metrics `PY-PORT-02` above remains planned. |
 
 ---
 
@@ -40,13 +49,13 @@
 | Task ID | Jankurai Cap / Finding Group | Owner | Action Plan | ETA |
 |---|---|---|---|---|
 | `JANK-01A` | `no-jankurai-audit-lane-in-ci`, `no-root-agent-instructions`, `missing-agent-readable-docs` | `1409298.agy_jarambit_paper` | Land `.github/workflows/jankurai.yml`, `PYTHON_EXCEPTIONS.md`, and `PY_TO_RUST_PLAN.md` in PR #125; root `AGENTS.md` added in the rust-port follow-up, with a one-command validation entrypoint still open. | PR #125 (`2026-10-18`) |
-| `JANK-01B` | `python-direct-product-truth-or-db-ownership`, `non-optimal-product-language-found`, `python-bad-behavior` | `2291514.agy_jarambit_screen` + `1409298.agy_jarambit_paper` | Execute `PY-PORT-01..04` to remove `321` non-exception Python files (`49,895` LOC) and move all product/CI truth to Rust (`crates/`). | Post-`v0.31.0` |
+| `JANK-01B` | `python-direct-product-truth-or-db-ownership`, `non-optimal-product-language-found`, `python-bad-behavior` | `2291514.agy_jarambit_screen` + `1409298.agy_jarambit_paper` | Execute `PY-PORT-01..04` to remove `319` non-exception Python files (`49,746` LOC) and move all product/CI truth to Rust (`crates/`). | Post-`v0.31.0` |
 | `JANK-01C` | `severe-duplication-in-product-code` (`19` hard / `798` warning copy-code items, primarily across `experiments/` scripts) | `1574790.jarambit_lane_hm_seq` | Consolidate duplicated `experiments/` witness scripts into shared Rust benchmark modules under `crates/crescent` during `PY-PORT-03`. | Post-`v0.31.0` |
 | `JANK-01D` | `no-security-lane-on-high-risk-repo`, `no-secret-or-dependency-scanning-in-ci`, `rust-bad-behavior`, `typescript-bad-behavior`, `ci-bad-behavior` | `2132048.codex_jarambit` | Add `jankurai security run` + Rust/TS lint and dependency scanning gates to CI and burn down the `75` repair-queue findings. | Post-`v0.31.0` |
 
 ---
 
-## 4. Complete Tracked Python File Inventory (`362` Files, `59,460` LOC)
+## 4. Complete Tracked Python File Inventory (`360` Files, `59,311` LOC)
 
 | Path | LOC | Disposition | Phase | Purpose & Migration / Exception Note |
 |---|---:|---|---|---|
@@ -186,7 +195,6 @@
 | `ops/ci/check_claims.py` | 198 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/check_claims.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/check_export_regeneration.py` | 50 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/check_export_regeneration.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/check_json_strict.py` | 27 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/check_json_strict.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
-| `ops/ci/check_runner_policy.py` | 86 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/check_runner_policy.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/claim_admission.py` | 209 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/claim_admission.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/d1_smoke.py` | 42 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/d1_smoke.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/ensure_cargo_cache.py` | 53 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/ensure_cargo_cache.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
@@ -199,7 +207,6 @@
 | `ops/ci/gen_whitepaper.py` | 176 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/gen_whitepaper.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/publication_inventory.py` | 145 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/publication_inventory.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/rs_verdicts.py` | 204 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/rs_verdicts.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
-| `ops/ci/runner_tests/test_runner_policy.py` | 63 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/runner_tests/test_runner_policy.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/runners/xbabe4/register.py` | 16 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/runners/xbabe4/register.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/science_suite.py` | 1080 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/science_suite.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/score_cad.py` | 1115 | `KEEP_WITH_REASON` | `BOUNDARY-KEEP` | 3D P2 tetrahedral FEM (`dolfinx` v0.9.0 / `petsc4py` / `scikit-fem` / `gmsh`) and OpenCascade (`OCP` / `cadquery` `BRepCheck_Analyzer`) C++ kernel bindings (`no workable pure-Rust equivalent`). |

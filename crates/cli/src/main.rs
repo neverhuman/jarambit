@@ -12,6 +12,7 @@ mod bench;
 mod score_cad;
 mod auto_evolve;
 mod version_check;
+mod runner_policy;
 
 /// Validate an existing history header before any append, then open the log.
 /// A fresh path is created with `fresh_header` and only then opened for append.
@@ -37,6 +38,13 @@ fn main() {
         });
         let reference = std::env::var("GITHUB_REF").unwrap_or_default();
         std::process::exit(version_check::run(&root, &reference));
+    }
+    if a.iter().any(|s| s == "check-runner-policy") {
+        let root = std::env::current_dir().unwrap_or_else(|e| {
+            eprintln!("current directory: {e}");
+            std::process::exit(1);
+        });
+        std::process::exit(runner_policy::run(&root));
     }
     if a.iter().any(|s| s == "fem-smoke") {
         let out = a.iter().position(|x| x == "--out").and_then(|i| a.get(i + 1)).cloned().unwrap_or_else(|| "out/fem_smoke".into());
