@@ -2176,12 +2176,14 @@
   },
   "study_sha256": {
     "experiments/rsv2_07/GCI_A4_VERIFICATION.md": "94c246fb42ee344e74a58856e9d26d5ed6784a1b8ec6053d28fbe867b1ae758c",
+    "experiments/rsv2_07/PHASE10_PORTABLE_RECEIPT_AUDIT.md": "c8c258111b9c08545c7f32a505a7cba65fe599121943b27ab4e011884f40cd62",
     "experiments/rsv2_07/PHASE5_WITNESS_3D_VERIFICATION.md": "9f3fa6c59aad71708143b5a469de23301fe8f9aa5e7d8d3750f637de8e729624",
     "experiments/rsv2_07/PHASE6_UNIFIED_SCORECARD.md": "a425b66d675208c7fffa17e075605bcfbddd234f82456422c1b5d99783799e30",
     "experiments/rsv2_07/PHASE7_SAVED_TRIPLET_GCI_AUDIT.md": "cc945cb4a6f61f147b7f6cadf52ae100c3d66373526a6f0d02d3da7f50fa620b",
     "experiments/rsv2_07/PHASE8_SYNTHETIC_GCI_AUDIT.md": "0d0dd71ef0c87b1d1307100dc6635ad68fd10c4678600e08c4550c2174c9d89e",
     "experiments/rsv2_07/REPORT.md": "efda3353ab2d47c3d7cd1eadd9e5fb132a74a343ff097360416f95f0ae6d76e4",
     "experiments/rsv2_07/SOLID_TIP_3D_VERIFICATION.md": "74a9dbbddfddad356cc258a4b2312a40aae638ea672a1f7325b858ef53badacf",
+    "experiments/rsv2_07/audit_phase6.py": "57a9d5aca837e6f3704d23b1c90d902523ef89d560d27ed97a7f28647e66b196",
     "experiments/rsv2_07/audit_phase7.py": "d6a83f15674f9083a4a9b3995293ac8e24768a20a9adb3f719df4f6abd91ec27",
     "experiments/rsv2_07/audit_phase8.py": "93afb9761faabd94f37b11070e7aadef8ff4d7167d2dbf37b536827508471515",
     "experiments/rsv2_07/baseline.csv": "4592719666fee4180fb4aa22a4e0cae57cec359443d705dc4b8dfbf1799c3025",
@@ -2219,6 +2221,7 @@
     "experiments/rsv2_07/results/fine_2.csv": "0faa6b50e7ef8b470f0bd69414b3c768a42d93a39a7d2d0ccbe1159eb641e760",
     "experiments/rsv2_07/results/gci_a4_validation.json": "97b37a3e0e2bf324c88025976c4e2ca51383da00bd0d62789d95effe8e3f04f4",
     "experiments/rsv2_07/results/hotspot_fine_0.csv": "8725e87ca6d4d2d1b254cd1502bfab276bb355d6da1620f7b7388aa4d33198a9",
+    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": "9c5a665c536f955cd44e5f458f363f7c8eb9844a30ce700870bbc4939a9f6469",
     "experiments/rsv2_07/results/phase5_witness_3d_validation.json": "66f3b5112bf1122ddd49fa3c1ad66384d810ee177494b0143233fdf7a895e80a",
     "experiments/rsv2_07/results/phase6_Q7_window_p05.csv": "0055f1b7048fdd66dfc995b7d2e35b2a2e632628d4b3dcd68f6811afc6f9bacc",
     "experiments/rsv2_07/results/phase6_unified_scorecard.json": "5d301a3b33afdd8470441c0094f79e47915f8f9e1161af035b90ac37223f7dd7",
@@ -2230,7 +2233,7 @@
     "experiments/rsv2_07/solid_tip_3d_p4.py": "b7118433b0ad10d9e2e6aae48e3a59c5cbbd3acec9b7cd578cb62a6bb8e213e8",
     "experiments/rsv2_07/solid_tip_3d_p5.py": "bc261152ad457329cf2cbb839f0f30ffe877b5f56028456f33e1f3a13b719c79",
     "experiments/rsv2_07/solid_tip_input.rs": "1a60d621c703d85d27a43370216a74e054416489f9dc243142179122e4dbbde8",
-    "experiments/rsv2_07/test_portable_audits.py": "fe7b903411943563bf0f1de9c19f6386f05a4f31751311f815b555dd339801e3",
+    "experiments/rsv2_07/test_portable_audits.py": "9eff96f5896035637d329d1728ad3b589fec9244d40f4866ccf487b8080a12b1",
     "experiments/rsv2_07/web.py": "d4f8f01791f4b84c3383f33f279944c06a3fe32bf21034c3a686f566fcc04d9a"
   },
   "portability": {
@@ -2255,5 +2258,10 @@
       "newer_source_simulation": "pass",
       "tracked_file_tamper_controls": "pass"
     }
+  },
+  "phase10_manifest_refresh": {
+    "task": "RSV2-07-p10",
+    "reason": "Bind the new portable receipt verifier, report, manifest and updated regression tests",
+    "strict_study_files": 60
   }
 }
