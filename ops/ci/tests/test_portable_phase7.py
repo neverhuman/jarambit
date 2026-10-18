@@ -19,6 +19,7 @@ from ops.ci.g16_06_rsv2_08 import audit_phase10 as phase10
 from ops.ci.g16_06_rsv2_08 import audit_phase11 as phase11
 from ops.ci.g16_06_rsv2_08 import audit_phase12 as phase12
 from ops.ci.g16_06_rsv2_08 import audit_phase13 as phase13
+from ops.ci.g16_06_rsv2_08 import audit_phase14 as phase14
 
 REAL_STAT=Path.stat
 def absent_target(path,*args,**kwargs):
@@ -445,5 +446,116 @@ class PortablePhase13Tests(unittest.TestCase):
     def test_report_mesh_change_rejected(self):
         r=self.document();name=r['results'][0]['name'];text=self.report();changed=text.replace('| '+name+' | 0.25 |','| CHANGED | 0.25 |',1);self.assertNotEqual(text,changed)
         with self.assertRaisesRegex(ValueError,'Report native mesh table mismatch'):phase13.audit_document(ROOT,r,changed)
+
+class PortablePhase14Tests(unittest.TestCase):
+    def document(self):return json.loads((ROOT/phase14.STUDY/'phase14_receipt.json').read_text())
+    def report(self):return (ROOT/phase14.STUDY/'PHASE14.md').read_text()
+    def check(self,r):phase14.audit_document(ROOT,r,self.report())
+
+    def test_default_audit_is_read_only(self):
+        original=Path.open
+        def readonly(p,mode='r',*args,**kwargs):
+            if any(c in mode for c in 'wax+'):raise AssertionError('Audit attempted a write')
+            return original(p,mode,*args,**kwargs)
+        with patch.object(Path,'open',new=readonly),patch('subprocess.run',side_effect=AssertionError('Process launch')),patch('subprocess.Popen',side_effect=AssertionError('Process launch')):
+            r=phase14.audit()
+        self.assertEqual((r['status'],r['cases'],r['mesh_observations']),('pass',16,48))
+
+    def test_without_target_or_worker_environment(self):
+        with patch.object(Path,'stat',new=absent_target),patch('os.sched_getaffinity',return_value={0},create=True),patch.dict('os.environ',{},clear=True):r=phase14.audit()
+        self.assertEqual(r['status'],'pass');self.assertGreater(r['optional_raw_unavailable'],0);self.assertEqual(r['native_replay'],'not_run')
+
+    def test_present_raw_corruption_is_fatal(self):
+        raw=ROOT/self.document()['results'][0]['raw'];real_digest=phase14.digest
+        def corrupt(p):return '0'*64 if p==raw else real_digest(p)
+        def present(p):return True if p==raw else Path.is_file(p)
+        with patch.object(phase14,'exists',side_effect=present),patch.object(phase14,'digest',side_effect=corrupt),self.assertRaisesRegex(ValueError,'Artifact SHA-256 mismatch'):phase14.audit()
+
+    def test_missing_tracked_candidate_is_fatal(self):
+        genome=ROOT/self.document()['results'][0]['genome']
+        def missing(p,*args,**kwargs):
+            if p==genome:raise FileNotFoundError(str(p))
+            return REAL_STAT(p,*args,**kwargs)
+        with patch.object(Path,'stat',new=missing),self.assertRaisesRegex(ValueError,'Missing tracked Phase14 candidate'):self.check(self.document())
+
+    def test_assignment_grid_change_rejected(self):
+        r=self.document();r['grid']['dn37_mm'][-1]=.9
+        with self.assertRaisesRegex(ValueError,'Assignment grid changed'):self.check(r)
+
+    def test_nonuniform_mesh_change_rejected(self):
+        r=self.document();r['areas_coarse_to_fine_mm2'][0]=2.
+        with self.assertRaisesRegex(ValueError,'GCI method/mesh changed'):self.check(r)
+
+    def test_assigned_cp_scaling_change_rejected(self):
+        r=self.document();r['results'][0]['genes'][36]=r['results'][0]['dn37_mm']
+        with self.assertRaisesRegex(ValueError,'Assigned/unassigned gene mismatch'):self.check(r)
+
+    def test_unassigned_gene_change_rejected(self):
+        r=self.document();r['results'][0]['genes'][41]-=.5
+        with self.assertRaisesRegex(ValueError,'Assigned/unassigned gene mismatch'):self.check(r)
+
+    def test_seed_architecture_change_rejected(self):
+        r=self.document();r['seed']['fixed_genes'][41]-=.5
+        with self.assertRaisesRegex(ValueError,'Seed CSV/material mismatch'):self.check(r)
+
+    def test_native_cp_displacement_change_rejected(self):
+        r=self.document();r['results'][0]['control_points'][38][0]+=.1
+        with self.assertRaisesRegex(ValueError,'Native CP displacement mismatch'):self.check(r)
+
+    def test_false_geometry_pass_rejected(self):
+        r=self.document();r['results'][0]['geometry_legal']=True
+        with self.assertRaisesRegex(ValueError,'Native gate verdict mismatch'):self.check(r)
+
+    def test_false_aesthetic_verdict_rejected(self):
+        r=self.document();r['results'][0]['aesthetic_pass']=False
+        with self.assertRaisesRegex(ValueError,'Native gate verdict mismatch'):self.check(r)
+
+    def test_axial_metric_substitution_rejected(self):
+        r=self.document();m=r['results'][0]['levels'][0]['result']['metrics'];m['F_ax']=m['F_lat']
+        with self.assertRaisesRegex(ValueError,'lateral/axial metric identity mismatch'):self.check(r)
+
+    def test_axial_definition_change_rejected(self):
+        r=self.document();r['metric_definitions']['F_ax']='pure axial capacity'
+        with self.assertRaisesRegex(ValueError,'metric definitions changed'):self.check(r)
+
+    def test_gci_observable_substitution_rejected(self):
+        r=self.document();r['results'][0]['tip_gci']['levels'][0]['observable']['metric']='seq_ratio'
+        with self.assertRaisesRegex(ValueError,'GCI levels mismatch'):self.check(r)
+
+    def test_false_torsional_gci_admission_rejected(self):
+        r=self.document();r['results'][0]['torsional_gci']['admitted']=True
+        with self.assertRaisesRegex(ValueError,'GCI admitted mismatch'):self.check(r)
+
+    def test_gci_numeric_corruption_rejected(self):
+        r=self.document();r['results'][0]['tip_gci']['gci_fine']+=.1
+        with self.assertRaisesRegex(ValueError,'GCI gci_fine arithmetic mismatch'):self.check(r)
+
+    def test_missing_mesh_observation_rejected(self):
+        r=self.document();r['results'][0]['levels'].pop()
+        with self.assertRaisesRegex(ValueError,'Three-mesh grid changed'):self.check(r)
+
+    def test_threshold_relaxation_rejected(self):
+        r=self.document();r['thresholds']['lateral_n']=100.
+        with self.assertRaisesRegex(ValueError,'Acceptance thresholds changed'):self.check(r)
+
+    def test_native_gate_s_predicate_change_rejected(self):
+        r=self.document();r['results'][0]['native_gate_s_law_pass']=False
+        with self.assertRaisesRegex(ValueError,'Gate S law predicate changed'):self.check(r)
+
+    def test_phase13_byte_reconstruction_required(self):
+        r=self.document();r['parent_metadata_updates']['13'][0]['before']='0'*64
+        with self.assertRaisesRegex(ValueError,'Phase13 scientific receipt changed'):self.check(r)
+
+    def test_duplicate_grid_cell_rejected(self):
+        r=self.document();r['results'][-1]=r['results'][0]
+        with self.assertRaisesRegex(ValueError,'Cartesian grid coverage mismatch'):self.check(r)
+
+    def test_false_qualification_rejected(self):
+        r=self.document();r['all_gate_qualification']=True
+        with self.assertRaisesRegex(ValueError,'Qualification/source claim changed'):self.check(r)
+
+    def test_report_change_rejected(self):
+        r=self.document();name=r['results'][0]['name'];text=self.report();changed=text.replace('| '+name+' |','| CHANGED |',1)
+        with self.assertRaisesRegex(ValueError,'Report native table mismatch'):phase14.audit_document(ROOT,r,changed)
 
 if __name__=='__main__':unittest.main(verbosity=2)
