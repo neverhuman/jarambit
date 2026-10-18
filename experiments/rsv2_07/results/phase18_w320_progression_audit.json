@@ -112,7 +112,7 @@
     },
     "phase17_receipt": {
       "path": "experiments/rsv2_07/phase17_portable_schema_audit.json",
-      "sha256": "255fbb5649e95e49160f0a5942df22884d9234b61af96fa65b3cd7aea3fec20d",
+      "sha256": "874d2e03ed514446c057617ce9054d200124e54ac1bcd7d8aa2600a56c41eae7",
       "status": "schema_and_registry_verified"
     }
   },

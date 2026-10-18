@@ -1,6 +1,6 @@
 """Portability regressions; filesystem mocks never rename or remove saved evidence."""
 
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from copy import deepcopy
 import hashlib
 import io
@@ -23,6 +23,7 @@ import audit_phase16_xbabe3_waves as xbabe3_audit
 import audit_phase17_portable_schema as schema_audit
 import audit_phase18_w320_progression as w320_audit
 import audit_phase19_w320_r02_provenance as r02_audit
+import audit_phase20_stage2_identity_dedup as dedup_audit
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -1717,6 +1718,214 @@ class Phase19W320R02ProvenanceTests(unittest.TestCase):
         board["qualified_count"] = 1
         with self.assertRaisesRegex(ValueError, "qualification count/champion"):
             r02_audit.audit_payloads(*self.payloads())
+
+
+class Phase20Stage2DedupTests(unittest.TestCase):
+    def setUp(self):
+        self.root = Path("/relocated/saved-repository")
+        self.documents = {}
+        # Six waves with two shared identities, two repeated intermediate identities,
+        # and one final unverified event. CSVs are opaque synthetic identifier data.
+        tags = (("A", "B", "C", "E"), ("A", "B", "D", "G"), ("A", "B", "D", "G"),
+                ("A", "B", "F", "I"), ("A", "B", "H", "K"), ("A", "B", "J", "L"))
+        for wave, wave_tags in zip(dedup_audit.WAVES, tags):
+            designs, errors = [], []
+            for round_id in (0, 1):
+                births, screens = [], []
+                for slot in (1, 2):
+                    tag = wave_tags[round_id * 2 + slot - 1]
+                    identity = hashlib.sha256(tag.encode()).hexdigest()
+                    label = f"{wave}_r{round_id + 1:02}_fixture_c{slot:02}"
+                    births.append({"row": identity + ",opaque", "family": "fixture", "certificate_identity": identity})
+                    screens.append({"label": label, "family": "fixture", "certificate_identity": identity,
+                                    "qualification_status": wave_audit.PENDING})
+                    directory = f"out/{wave}/by-content/{identity}/attempt-1234"
+                    genome = directory + "/" + label + "_genome.csv"
+                    data = ("candidate,marker\n" + identity + ",opaque\n").encode()
+                    self.documents[genome] = data
+                    self.documents[directory + "/nested/bindings.json"] = {
+                        "certificate_identity": identity, "nested": [{"genome_sha256": hashlib.sha256(data).hexdigest()}]}
+                    if wave == "w320" and tag == "L":
+                        errors.append({"label": label, "certificate_identity": identity, "status": "unverified",
+                                       "reason": "synthetic error; raw artifacts retained in " + directory})
+                    else:
+                        designs.append({"label": label, "family": "fixture", "certificate_identity": identity,
+                                        "qualified": False, "genome_csv": genome,
+                                        "scorecard_md": directory + "/" + label + "_master_scorecard.md"})
+                prefix = dedup_audit.ROOT_DIRECTORIES[wave] + f"/round_{round_id:02}"
+                self.documents[prefix + "_births.json"] = {"round": round_id, "seed": 1, "source": "synthetic",
+                                                          "genome_header": "candidate,marker", "genomes": births}
+                self.documents[prefix + "_screen.json"] = screens
+            self.documents[dedup_audit.ROOT_DIRECTORIES[wave] + "/leaderboard.json"] = {
+                "schema": "jarambit.auto_evolve.leaderboard.v2", "designs": designs, "assessed_count": len(designs),
+                "qualified_count": 0, "champion": None, "unverified": errors}
+
+    def payloads(self):
+        return {name: json.dumps(doc).encode() if name.endswith(".json") else doc
+                for name, doc in self.documents.items()}
+
+    def pins(self):
+        files = self.payloads()
+        return {wave: {name: (hashlib.sha256(files[directory + "/" + name]).hexdigest(), len(files[directory + "/" + name]))
+                       for name in dedup_audit.ROOT_NAMES} for wave, directory in dedup_audit.ROOT_DIRECTORIES.items()}
+
+    def current(self, saved=None, files=None, pins=None):
+        files = self.payloads() if files is None else files
+        pins = self.pins() if pins is None else pins
+        # Exercise the real inventory discovery and audit on an in-memory relocated tree.
+        def rglob(path, pattern):
+            return [self.root / name for name in files if name.endswith(".json") and (self.root / name).is_relative_to(path)]
+        def read(path):
+            name = str(path.relative_to(self.root))
+            if name not in files:
+                raise FileNotFoundError(name)
+            return files[name]
+        with patch.object(Path, "read_bytes", new=read), \
+                patch.object(Path, "rglob", new=rglob), patch.object(Path, "is_file", return_value=True):
+            return dedup_audit.audit(self.root, saved, pins)
+
+    def test_cross_wave_accounting_and_recursive_index(self):
+        result = self.current()
+        summary = result["deduplication"]
+        self.assertEqual((summary["assessment_events"], summary["unique_assessed_identities"],
+                          summary["repeat_assessments_beyond_first"], summary["unverified_events"]), (23, 11, 12, 1))
+        self.assertEqual([row["first_seen_identities"] for row in summary["by_wave"].values()], [4, 2, 0, 2, 2, 1])
+        self.assertEqual((result["source_json_files"], result["source_genome_csv_files"], len(result["artifacts"])), (54, 24, 78))
+        self.assertEqual(result["digest_occurrences"], {"certificate_identity": 96, "genome_sha256": 24})
+        self.assertEqual(self.current(result), result)
+        self.assertEqual(self.current(), result)
+        self.assertTrue(any(row["field_location"] == ["nested", 0, "genome_sha256"]
+                            for item in result["digest_index"]["genome_sha256"].values() for row in item["occurrences"]))
+
+    def test_unverified_attempt_is_indexed_but_never_counted_as_assessed(self):
+        result = self.current()
+        error = result["unverified"][0]
+        for kind in dedup_audit.KINDS:
+            item = result["digest_index"][kind][error[kind]]
+            self.assertEqual(item["assessed_events"], [])
+            self.assertEqual(item["unverified_events"], [error["event"]])
+        self.assertNotIn(error["certificate_identity"], {row["certificate_identity"] for row in result["deduplication"]["identities"]})
+
+    def test_digest_walker_matches_exact_keys_and_rejects_invalid_values(self):
+        value = {"other_certificate_identity": "ignored", "rows": [None, {"certificate_identity": "a" * 64}]}
+        self.assertEqual(list(dedup_audit.digest_fields(value)), [("certificate_identity", "a" * 64, ["rows", 1, "certificate_identity"])])
+        for invalid in (None, True, "A" * 64, "g" * 64, "a" * 63, []):
+            with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                list(dedup_audit.digest_fields({"nested": [{"genome_sha256": invalid}]}))
+
+    def test_references_normalize_host_prefix_and_reject_traversal_or_mismatched_identity(self):
+        identity = "a" * 64
+        relative = f"out/w315/by-content/{identity}/attempt-1234/item.csv"
+        for value in (relative, "/original/host/" + relative):
+            self.assertEqual(dedup_audit.reference(value, "w315", identity, "item.csv"), relative)
+        for value in ("../" + relative, "other/" + relative, relative.replace("w315", "w316"),
+                      relative.replace("attempt-1234", "attempt-x"), relative.replace("item.csv", "other.csv"),
+                      relative.replace("/", "//", 1), relative + "/../item.csv", "C:\\" + relative):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                dedup_audit.reference(value, "w315", identity, "item.csv")
+
+    def test_equal_csv_hashes_do_not_merge_different_certificate_identities(self):
+        events = deepcopy(self.current()["assessed"][:2])
+        events[1]["genome_sha256"] = events[0]["genome_sha256"]
+        summary = dedup_audit.summarize(events, [])
+        self.assertEqual((summary["unique_assessed_identities"], summary["unique_assessed_genome_hashes"]), (2, 1))
+
+    def test_same_certificate_with_conflicting_genome_bytes_fails(self):
+        events = deepcopy(self.current()["assessed"])
+        events[4]["genome_sha256"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "conflicting genome CSV bytes"):
+            dedup_audit.summarize(events, [])
+
+    def test_candidate_and_genome_fields_must_bind_to_the_associated_attempt(self):
+        name = next(name for name in self.documents if name.endswith("bindings.json"))
+        for kind in dedup_audit.KINDS:
+            original = deepcopy(self.documents[name])
+            if kind == "certificate_identity":
+                self.documents[name][kind] = "0" * 64
+            else:
+                self.documents[name]["nested"][0][kind] = "0" * 64
+            with self.subTest(kind=kind), self.assertRaisesRegex(ValueError, "binding mismatch"):
+                self.current()
+            self.documents[name] = original
+
+    def test_saved_artifact_tampering_and_missing_inventory_fail(self):
+        saved = self.current()
+        name = next(name for name in self.documents if name.endswith("bindings.json"))
+        files = self.payloads()
+        with self.assertRaisesRegex(ValueError, "Saved artifact digest/size mismatch"):
+            self.current(saved, {**files, name: files[name] + b" "})
+        with self.assertRaisesRegex(ValueError, "Saved file inventory mismatch"):
+            self.current(saved, {key: value for key, value in files.items() if key != name})
+        saved["artifacts"]["out/w315/missing.json"] = {"sha256": "a" * 64, "size_bytes": 0}
+        with self.assertRaisesRegex(ValueError, "Saved file inventory mismatch"):
+            self.current(saved)
+
+    def test_root_pins_and_board_integer_counts_are_enforced(self):
+        pins = self.pins()
+        name = dedup_audit.ROOT_DIRECTORIES["w315"] + "/leaderboard.json"
+        self.documents[name]["assessed_count"] = True
+        with self.assertRaisesRegex(ValueError, "Pinned root bytes mismatch"):
+            self.current(pins=pins)
+        with self.assertRaisesRegex(ValueError, "Assessed event count mismatch"):
+            self.current()
+
+    def test_missing_csv_and_unreferenced_attempt_fail(self):
+        files = self.payloads()
+        name = next(name for name in files if name.endswith("_genome.csv"))
+        with self.assertRaises(FileNotFoundError):
+            self.current(files={key: data for key, data in files.items() if key != name})
+        name = "out/w315/by-content/" + "0" * 64 + "/attempt-1/extra.json"
+        with self.assertRaisesRegex(ValueError, "Unreferenced attempt JSON"):
+            self.current(files={**files, name: b"{}"})
+
+    def test_genome_csv_rejects_duplicate_headers_ragged_rows_and_multiple_records(self):
+        files = self.payloads()
+        name = next(name for name in files if name.endswith("_genome.csv"))
+        for data in (b"a,a\n1,2\n", b"a,b\n1\n", b"a,b\n1,2\n3,4\n"):
+            with self.subTest(data=data), self.assertRaisesRegex(ValueError, "Invalid single-record genome CSV"):
+                self.current(files={**files, name: data})
+
+    def test_strict_json_rejects_duplicate_keys_and_nonfinite_numbers(self):
+        name = next(name for name in self.documents if name.endswith("bindings.json"))
+        files = self.payloads()
+        for data in (b'{"a":1,"a":2}', b'{"a":NaN}', b'{"a":1e999}'):
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                self.current(files={**files, name: data})
+
+    def test_mutation_of_json_inventory_or_bytes_during_audit_fails(self):
+        files, pins = self.payloads(), self.pins()
+        inventory = {name for name in files if name.endswith(".json")}
+        with patch.object(dedup_audit, "json_inventory", side_effect=[inventory, inventory | {"out/w315/extra.json"}]), \
+                patch.object(Path, "read_bytes", new=lambda path: files[str(path.relative_to(self.root))]), \
+                self.assertRaisesRegex(ValueError, "JSON inventory changed"):
+            dedup_audit.audit(self.root, root_pins=pins)
+        reads = {}
+        def read(path):
+            reads[path] = reads.get(path, 0) + 1
+            return files[str(path.relative_to(self.root))] + (b" " if reads[path] > 1 else b"")
+        with patch.object(dedup_audit, "json_inventory", return_value=inventory), \
+                patch.object(Path, "read_bytes", new=read), self.assertRaisesRegex(ValueError, "Source bytes changed"):
+            dedup_audit.audit(self.root, root_pins=pins)
+
+    def test_relocated_cli_is_read_only_and_checks_complete_receipt_without_git(self):
+        current = self.current()
+        args = ["audit_phase20_stage2_identity_dedup.py", "--repo-root", str(self.root), "--artifact-root", str(self.root)]
+        saved = deepcopy(current)
+        with patch.object(dedup_audit, "audit", return_value=current), \
+                patch.object(Path, "read_bytes", new=lambda path: json.dumps(saved).encode()), \
+                patch.object(Path, "write_text") as write, \
+                patch.object(wave_audit, "default_wave_directory", side_effect=AssertionError("Unexpected Git discovery")), \
+                patch.object(sys, "argv", args), redirect_stdout(io.StringIO()) as output:
+            dedup_audit.main()
+            write.assert_not_called()
+            self.assertIn("23 assessed events; 11 distinct identities; 12 repeats", output.getvalue())
+            saved["deduplication"]["assessment_events"] = 99
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                dedup_audit.main()
+            self.assertEqual(error.exception.code, 1)
+        self.assertNotIn(str(self.root), json.dumps(current))
+        for name in current["artifacts"]:
+            schema_audit.portable_path(name)
 
 
 if __name__ == "__main__":

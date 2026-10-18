@@ -2186,6 +2186,7 @@
     "experiments/rsv2_07/PHASE17_PORTABLE_SCHEMA_AUDIT.md": "80629b138590fb239f80918d7cf11c73872c0f2cfb817b84cec031b293a13f2a",
     "experiments/rsv2_07/PHASE18_W320_PROGRESSION_AUDIT.md": "c8fb65286b0a21749849fa2a656483979782057f5dd977b8de8ae875b5d49a15",
     "experiments/rsv2_07/PHASE19_W320_R02_PROVENANCE_AUDIT.md": "501c13aa4b9752c17c121d743dc15f8b1565635e524080ac5eafd2aad39bddc5",
+    "experiments/rsv2_07/PHASE20_STAGE2_IDENTITY_DEDUP_AUDIT.md": "f9db22de38195f4289107f34880f5a63b6c183af3584779c769cb3fd8892de65",
     "experiments/rsv2_07/PHASE5_WITNESS_3D_VERIFICATION.md": "9f3fa6c59aad71708143b5a469de23301fe8f9aa5e7d8d3750f637de8e729624",
     "experiments/rsv2_07/PHASE6_UNIFIED_SCORECARD.md": "a425b66d675208c7fffa17e075605bcfbddd234f82456422c1b5d99783799e30",
     "experiments/rsv2_07/PHASE7_SAVED_TRIPLET_GCI_AUDIT.md": "cc945cb4a6f61f147b7f6cadf52ae100c3d66373526a6f0d02d3da7f50fa620b",
@@ -2201,6 +2202,7 @@
     "experiments/rsv2_07/audit_phase17_portable_schema.py": "f816342e73e6297f92006befa826f6a21eb2497fb6e831721f050832a2724483",
     "experiments/rsv2_07/audit_phase18_w320_progression.py": "1bdbbfe9c67929ba60ba6f73b5e324ef7e4fee4a7e54f9187ad7aecd3dfd7aad",
     "experiments/rsv2_07/audit_phase19_w320_r02_provenance.py": "1cab1635df93c35cdfb190082f7a8f7c2a4aabf5647dba9662c653adfaa9ba4f",
+    "experiments/rsv2_07/audit_phase20_stage2_identity_dedup.py": "279a03c328fa3ae7956c339d93a86a5a56698e6a5a0d5bfbf3b69118bc9ceec1",
     "experiments/rsv2_07/audit_phase6.py": "57a9d5aca837e6f3704d23b1c90d902523ef89d560d27ed97a7f28647e66b196",
     "experiments/rsv2_07/audit_phase7.py": "d6a83f15674f9083a4a9b3995293ac8e24768a20a9adb3f719df4f6abd91ec27",
     "experiments/rsv2_07/audit_phase8.py": "93afb9761faabd94f37b11070e7aadef8ff4d7167d2dbf37b536827508471515",
@@ -2217,7 +2219,7 @@
     "experiments/rsv2_07/generate.py": "fdf458b4f14f867a6c2ec709c71e0a9ae561eb15981ff6270e1c31d1db2a45c5",
     "experiments/rsv2_07/hotspot.py": "759e08f6cdf269f341f014987a2f926dac85b152dfabb09b9754a99404a78d99",
     "experiments/rsv2_07/main.rs": "b9464cd796a415de90880ef8bb6085766fd54dc3a26e302ea4742d78283e83ff",
-    "experiments/rsv2_07/phase17_portable_schema_audit.json": "255fbb5649e95e49160f0a5942df22884d9234b61af96fa65b3cd7aea3fec20d",
+    "experiments/rsv2_07/phase17_portable_schema_audit.json": "874d2e03ed514446c057617ce9054d200124e54ac1bcd7d8aa2600a56c41eae7",
     "experiments/rsv2_07/phase6_cad_check.py": "0aa20b4f69c12e7fb2b50b208623957c1a30479a2e4d717ff3c8df1e48dd31a1",
     "experiments/rsv2_07/phase6_cad_check_as_written.py": "938d642db4f808adf29f511e0d381557e47cfe3b27c1765cc13591691fd4409e",
     "experiments/rsv2_07/phase6_finish.py": "2bd94087db3db54f8797c6428f00ab208bb31e7c02e3c9724ab784bf6be7fc22",
@@ -2240,9 +2242,10 @@
     "experiments/rsv2_07/results/fine_2.csv": "0faa6b50e7ef8b470f0bd69414b3c768a42d93a39a7d2d0ccbe1159eb641e760",
     "experiments/rsv2_07/results/gci_a4_validation.json": "97b37a3e0e2bf324c88025976c4e2ca51383da00bd0d62789d95effe8e3f04f4",
     "experiments/rsv2_07/results/hotspot_fine_0.csv": "8725e87ca6d4d2d1b254cd1502bfab276bb355d6da1620f7b7388aa4d33198a9",
-    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": "3d9aa6464799e87cb362e3ef515bec4f3f43c422a2936114e0bc0ce6d45097e2",
-    "experiments/rsv2_07/results/phase18_w320_progression_audit.json": "5e05d47a46248aadafd9231e35724d130731d78376fc68cf09cc60896f48e314",
-    "experiments/rsv2_07/results/phase19_w320_r02_provenance_audit.json": "ff16878a29dd942c147b6e8d5c3acd0ba49b5357e2db91a4f08f2ff483fa46da",
+    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": "be14448904412c9ac7976ee955da99c546e90eb4c8cef2355964bff2a795c25d",
+    "experiments/rsv2_07/results/phase18_w320_progression_audit.json": "4ca3487cdbc00b65a1c221479ac4cb620eab949e8196f43767fc254812f1b98d",
+    "experiments/rsv2_07/results/phase19_w320_r02_provenance_audit.json": "c27b4bc43b0a37a50fc9cf8326b289b9c0af3cbfc3f91d8fe0fa8e541856c7e6",
+    "experiments/rsv2_07/results/phase20_stage2_identity_dedup_audit.json": "ed95015c3f9b753a78a1756b203f29f2e92f1482d9905aaeae99ee3a5bce4817",
     "experiments/rsv2_07/results/phase5_witness_3d_validation.json": "66f3b5112bf1122ddd49fa3c1ad66384d810ee177494b0143233fdf7a895e80a",
     "experiments/rsv2_07/results/phase6_Q7_window_p05.csv": "0055f1b7048fdd66dfc995b7d2e35b2a2e632628d4b3dcd68f6811afc6f9bacc",
     "experiments/rsv2_07/results/phase6_unified_scorecard.json": "5d301a3b33afdd8470441c0094f79e47915f8f9e1161af035b90ac37223f7dd7",
@@ -2254,7 +2257,7 @@
     "experiments/rsv2_07/solid_tip_3d_p4.py": "b7118433b0ad10d9e2e6aae48e3a59c5cbbd3acec9b7cd578cb62a6bb8e213e8",
     "experiments/rsv2_07/solid_tip_3d_p5.py": "bc261152ad457329cf2cbb839f0f30ffe877b5f56028456f33e1f3a13b719c79",
     "experiments/rsv2_07/solid_tip_input.rs": "1a60d621c703d85d27a43370216a74e054416489f9dc243142179122e4dbbde8",
-    "experiments/rsv2_07/test_portable_audits.py": "b2b0babed49a90f2cd81e761751c6c78a4c1d72b297b8947db98395210a525a8",
+    "experiments/rsv2_07/test_portable_audits.py": "cc5edde9f0cfdab79b6e4f5641acb06d8cfb6fce9fda475021b67b6a4df758e6",
     "experiments/rsv2_07/web.py": "d4f8f01791f4b84c3383f33f279944c06a3fe32bf21034c3a686f566fcc04d9a"
   },
   "portability": {
@@ -2329,5 +2332,10 @@
     "task": "RSV2-07-p19",
     "reason": "Bind w320 r02 attempt provenance, reviewed leaderboard and synchronized Phase-17/18 links; preserve target unverified status",
     "strict_study_files": 81
+  },
+  "phase20_manifest_refresh": {
+    "task": "RSV2-07-p20",
+    "reason": "Bind cross-wave saved digest index, genome-byte deduplication, report and synthetic tests; synchronize Phase-10/17/18/19 receipt links",
+    "strict_study_files": 84
   }
 }
