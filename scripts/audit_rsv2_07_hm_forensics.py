@@ -35,6 +35,8 @@ CUMULATIVE_RECEIPT = DIRECTORY + "phase32_cumulative_receipt_table_audit.json"
 CUMULATIVE_REPORT = DIRECTORY + "PHASE32_CUMULATIVE_RECEIPT_TABLE_AUDIT.md"
 CUMULATIVE_PATHS = tuple(sorted((*SUMMARY_PATHS, SUMMARY_REPORT, SUMMARY_RECEIPT,
                                  MANIFEST_CROSS_REPORT, MANIFEST_CROSS_RECEIPT)))
+TABLE_PARITY_RECEIPT = DIRECTORY + "phase33_table_parity_audit.json"
+TABLE_PARITY_REPORT = DIRECTORY + "PHASE33_TABLE_PARITY_AUDIT.md"
 # Absolute POSIX paths, Windows drive paths, UNC paths and file URIs.
 HOST_PATH = re.compile(r"(?<![\w./:])/(?!/)[\w.~-]+|(?<!\w)[A-Za-z]:[\\/]|\\\\[^\\\s]+\\|file://")
 
@@ -569,6 +571,88 @@ def run_cumulative(args):
     return 0
 
 
+def table_parity(repo_root):
+    repo_root = Path(repo_root)
+    sources = {}
+    for name in (CUMULATIVE_RECEIPT, *CUMULATIVE_PATHS):
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode), f"Expected regular table parity source: {name}")
+        sources[name] = path.read_bytes()
+    documents = {}
+    for name, recompute in ((CUMULATIVE_RECEIPT, cumulative_receipt_table),
+                            (SUMMARY_RECEIPT, summary_manifest), (MANIFEST_CROSS_RECEIPT, manifest_cross_check)):
+        document = strict_json(sources[name])
+        require(json.dumps(document, sort_keys=True) == json.dumps(recompute(repo_root), sort_keys=True),
+                "Saved receipt differs from recomputed metadata: " + name)
+        documents[name] = document
+    table, summary, cross = (documents[name] for name in (CUMULATIVE_RECEIPT, SUMMARY_RECEIPT, MANIFEST_CROSS_RECEIPT))
+    checks, excluded = [], []
+    def compare(name, relation, row):
+        require(name in table["artifacts"], "Linked artifact outside Phase-32 table")
+        expected, observed = digest_pair(table["artifacts"][name]), digest_pair(row)
+        require(expected == observed, "Phase-32 linked receipt digest parity mismatch")
+        checks.append({"path": name, "relation": relation, **expected, "match": True})
+    for relation, rows in (("Phase-30 artifacts", summary["artifacts"]),
+                           ("Phase-31 artifacts", cross["artifacts"]),
+                           ("Phase-31 input receipts", cross["input_receipts"])):
+        for name, row in sorted(rows.items()):
+            compare(name, relation, row)
+    for row in cross["receipt_comparisons"]:
+        if row["path"] in table["artifacts"]:
+            compare(row["path"], "Phase-31 comparison: " + row["relation"], row)
+        else:
+            require(row["path"] in SCRIPT_PATHS, "Unexpected Phase-31 comparison outside artifact table")
+            excluded.append({"path": row["path"], "relation": row["relation"]})
+    for name, data in sources.items():
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode) and path.read_bytes() == data,
+                "Table parity source bytes or type changed during audit")
+    return {"schema": "jarambit.rsv2_07_hm.phase33_table_parity.v1", "task": "RSV2-07-p33", "status": "pass",
+            "input_receipts": {name: {"sha256": hashlib.sha256(sources[name]).hexdigest(), "size_bytes": len(sources[name])}
+                               for name in (CUMULATIVE_RECEIPT, SUMMARY_RECEIPT, MANIFEST_CROSS_RECEIPT)},
+            "live_artifact_count": table["artifact_count"], "live_artifact_digest_parity": True,
+            "artifacts": table["artifacts"], "total_size_bytes": table["total_size_bytes"],
+            "total_line_count": table["total_line_count"], "literal_host_path_count": 0,
+            "receipt_comparison_count": len(checks), "receipt_digest_parity": True, "receipt_comparisons": checks,
+            "excluded_historical_script_comparisons": excluded, "current_script_bytes_checked": False}
+
+
+def render_table_parity(document):
+    rows = [f"| {name} | {row['size_bytes']} | {row['sha256']} | yes |"
+            for name, row in document["artifacts"].items()]
+    return "\n".join([
+        "# Phase-33 table parity audit", "",
+        f"**PASS.** All {document['live_artifact_count']} Phase-26 through Phase-31 artifacts match the Phase-32 table's SHA-256 and byte sizes. All {document['receipt_comparison_count']} shared metadata comparisons with Phase-30 and Phase-31 receipts agree.", "",
+        "| Table artifact | Bytes | SHA-256 | Live parity |", "| --- | ---: | --- | --- |", *rows, "",
+        "Phase 32 is recomputed from its fixed twelve live files and compared in full, including line counts, totals and host-path checks. The Phase-30 manifest and Phase-31 receipt are also recomputed and checked in full using their existing static verifiers. Shared metadata comparisons cover eight Phase-30 artifact rows, eight Phase-31 artifact rows, four Phase-31 input receipt pins and ten Phase-31 comparison rows whose paths occur in the table.", "",
+        "Four Phase-31 comparison rows describe two historical scripts outside the Phase-32 file set. Their saved consistency is checked by the Phase-31 verifier; they are listed separately and are not counted as table comparisons. Current script bytes are outside this audit. No earlier receipt or report is refreshed, and earlier conclusions remain as recorded.", "",
+        "The JSON pins all three input receipts and lists every table comparison. Inputs are parsed strictly and reread to detect changes during scanning. Missing files, symlinks, inconsistent metadata, duplicate keys, nonfinite JSON and host paths in the artifact set fail. Paths in the outputs are repository-relative. --repo-root supports a relocated source tree without Git or source execution.", "",
+        "Normal verification compares the complete saved Phase-33 JSON and exact report text without writes. --write replaces only the two Phase-33 outputs.", "",
+        "```sh", "python3 scripts/audit_rsv2_07_hm_forensics.py --phase 33",
+        "python3 -m unittest discover -s scripts -p 'test_audit_rsv2_07_hm_forensics.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs 14,15 at nice 10. This is a static table parity audit. Changes are left uncommitted.", "",
+    ])
+
+
+def run_table_parity(args):
+    require(args.artifact_root is None, "Phase-33 uses saved outputs in --repo-root; --artifact-root is not supported")
+    current = table_parity(args.repo_root)
+    report = render_table_parity(current)
+    receipt = json.dumps(current, indent=2) + "\n"
+    require_portable(report, "Phase-33 report")
+    require_portable(receipt, "Phase-33 receipt")
+    if args.write:
+        (args.repo_root / DIRECTORY).mkdir(parents=True, exist_ok=True)
+        (args.repo_root / TABLE_PARITY_RECEIPT).write_text(receipt, encoding="utf-8")
+        (args.repo_root / TABLE_PARITY_REPORT).write_text(report, encoding="utf-8")
+    else:
+        saved = strict_json((args.repo_root / TABLE_PARITY_RECEIPT).read_bytes())
+        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-33 saved receipt mismatch")
+        require((args.repo_root / TABLE_PARITY_REPORT).read_text(encoding="utf-8") == report, "Phase-33 report mismatch")
+    print(f"LANE: RSV2-07-hm | RSV2-07-p33 | PASS | live_artifacts={current['live_artifact_count']} | receipt_comparisons={current['receipt_comparison_count']}")
+    return 0
+
+
 def audit(artifact_root):
     artifact_root = Path(artifact_root)
     sources, waves = {}, {}
@@ -619,11 +703,13 @@ def render(document):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32"), default="26")
+    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33"), default="26")
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     try:
+        if args.phase == "33":
+            return run_table_parity(args)
         if args.phase == "32":
             return run_cumulative(args)
         if args.phase == "31":

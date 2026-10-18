@@ -955,5 +955,124 @@ class CumulativeReceiptTableTests(unittest.TestCase):
         self.assertEqual(error.exception.code, 1)
 
 
+class TableParityTests(unittest.TestCase):
+    def setUp(self):
+        self.fixture = ManifestCrossCheckTests()
+        self.fixture.setUp()
+        self.addCleanup(self.fixture.doCleanups)
+        self.root = self.fixture.root
+        for name in (audit.SUMMARY_REPORT, audit.MANIFEST_CROSS_REPORT):
+            self.fixture.write(name, b"# Saved report\n")
+        self.fixture.save(audit.MANIFEST_CROSS_RECEIPT, audit.manifest_cross_check(self.root))
+        self.reindex_table()
+
+    def reindex_table(self):
+        self.fixture.save(audit.CUMULATIVE_RECEIPT, audit.cumulative_receipt_table(self.root))
+
+    def cli(self, *extra):
+        with patch.object(sys, "argv", ["forensics", "--phase", "33", "--repo-root", str(self.root), *extra]), \
+                redirect_stdout(io.StringIO()) as output:
+            result = audit.main()
+        return result, output.getvalue()
+
+    def test_twelve_live_files_and_thirty_shared_receipt_comparisons_match(self):
+        with patch.object(audit.subprocess, "check_output", side_effect=AssertionError("Unexpected Git command")):
+            result = audit.table_parity(self.root)
+        self.assertEqual((result["live_artifact_count"], result["receipt_comparison_count"]), (12, 30))
+        self.assertTrue(result["live_artifact_digest_parity"])
+        self.assertTrue(result["receipt_digest_parity"])
+        self.assertTrue(all(row["match"] for row in result["receipt_comparisons"]))
+        self.assertEqual(len(result["excluded_historical_script_comparisons"]), 4)
+        self.assertEqual({row["path"] for row in result["excluded_historical_script_comparisons"]}, set(audit.SCRIPT_PATHS))
+        self.assertFalse(result["current_script_bytes_checked"])
+        self.assertTrue(all(not (self.root / name).exists() for name in audit.SCRIPT_PATHS))
+        self.assertEqual(result, audit.table_parity(self.root))
+        self.assertNotIn(str(self.root), json.dumps(result))
+
+    def test_live_edits_and_phase32_digest_size_or_type_tampering_fail(self):
+        original = self.fixture.load(audit.CUMULATIVE_RECEIPT)
+        for field, value in (("sha256", "0" * 64), ("size_bytes", 0), ("literal_host_path_count", False)):
+            saved = deepcopy(original)
+            saved["artifacts"][audit.MANIFEST_CROSS_REPORT][field] = value
+            self.fixture.save(audit.CUMULATIVE_RECEIPT, saved)
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "Saved receipt differs"):
+                audit.table_parity(self.root)
+        self.fixture.save(audit.CUMULATIVE_RECEIPT, original)
+        self.fixture.write(audit.MANIFEST_CROSS_REPORT, b"changed live report\n")
+        with self.assertRaisesRegex(ValueError, "Saved receipt differs"):
+            audit.table_parity(self.root)
+
+    def test_phase30_metadata_disagreement_fails_even_after_reindexing_phase32(self):
+        saved = self.fixture.load(audit.SUMMARY_RECEIPT)
+        saved["artifacts"][audit.REPORT]["sha256"] = "0" * 64
+        self.fixture.save(audit.SUMMARY_RECEIPT, saved)
+        self.reindex_table()
+        with self.assertRaisesRegex(ValueError, "Saved receipt differs"):
+            audit.table_parity(self.root)
+
+    def test_phase31_shared_metadata_disagreements_fail_after_reindexing_phase32(self):
+        original = self.fixture.load(audit.MANIFEST_CROSS_RECEIPT)
+        for section, key, field, value in (
+                ("artifacts", audit.REPORT, "sha256", "0" * 64),
+                ("input_receipts", audit.SUMMARY_RECEIPT, "size_bytes", 1),
+                ("receipt_comparisons", 0, "size_bytes", False)):
+            saved = deepcopy(original)
+            saved[section][key][field] = value
+            self.fixture.save(audit.MANIFEST_CROSS_RECEIPT, saved)
+            self.reindex_table()
+            with self.subTest(section=section), self.assertRaisesRegex(ValueError, "Saved receipt differs"):
+                audit.table_parity(self.root)
+
+    def test_source_change_after_receipt_recomputation_fails(self):
+        original_cross = audit.manifest_cross_check
+        def recompute(root):
+            result = original_cross(root)
+            self.fixture.write(audit.MANIFEST_CROSS_REPORT, b"changed after recomputation\n")
+            return result
+        with patch.object(audit, "manifest_cross_check", side_effect=recompute), self.assertRaisesRegex(ValueError, "changed during audit"):
+            audit.table_parity(self.root)
+
+    def test_malformed_missing_or_symlinked_phase32_receipt_fails(self):
+        original = (self.root / audit.CUMULATIVE_RECEIPT).read_bytes()
+        for data in (b'{"x":1,"x":2}', b'{"x":NaN}', b"{broken}"):
+            self.fixture.write(audit.CUMULATIVE_RECEIPT, data)
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                audit.table_parity(self.root)
+        self.fixture.write(audit.CUMULATIVE_RECEIPT, original)
+        path = self.root / audit.CUMULATIVE_RECEIPT
+        path.unlink()
+        with self.assertRaises(FileNotFoundError):
+            audit.table_parity(self.root)
+        path.symlink_to(Path(audit.SUMMARY_RECEIPT).name)
+        with self.assertRaisesRegex(ValueError, "regular table parity source"):
+            audit.table_parity(self.root)
+
+    def test_cli_writes_only_phase33_outputs_and_readonly_rejects_tampering(self):
+        before = {path.relative_to(self.root).as_posix(): path.read_bytes() for path in self.root.rglob("*") if path.is_file()}
+        with patch.object(audit.subprocess, "check_output", side_effect=AssertionError("Unexpected Git command")):
+            result, output = self.cli("--write")
+            self.assertEqual(result, 0)
+            self.assertIn("live_artifacts=12 | receipt_comparisons=30", output)
+            after = {path.relative_to(self.root).as_posix(): path.read_bytes() for path in self.root.rglob("*") if path.is_file()}
+            self.assertEqual(set(after) - set(before), {audit.TABLE_PARITY_REPORT, audit.TABLE_PARITY_RECEIPT})
+            for name, data in before.items():
+                self.assertEqual(after[name], data)
+            with patch.object(Path, "write_text", side_effect=AssertionError("Readonly verifier wrote")):
+                self.assertEqual(self.cli()[0], 0)
+            for name in (audit.TABLE_PARITY_RECEIPT, audit.TABLE_PARITY_REPORT):
+                data = after[name]
+                audit.require_portable(data.decode(), name)
+                self.fixture.write(name, data + b"changed")
+                with self.subTest(name=name), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                    self.cli()
+                self.assertEqual(error.exception.code, 1)
+                self.fixture.write(name, data)
+
+    def test_artifact_root_is_rejected_for_table_parity(self):
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli("--artifact-root", str(self.root))
+        self.assertEqual(error.exception.code, 1)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
