@@ -1382,6 +1382,39 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_orders_equal_shortfall_and_novelty_ties_by_input_index() {
+        let mut center = Genome::c4_seed(genome::T_MIN);
+        center.v[EA_IN] = 14.0;
+        center.clamp();
+        let mut lower_index = center.clone();
+        lower_index.v[TAPER_X0] -= 0.5;
+        lower_index.clamp();
+        let mut higher_index = center.clone();
+        higher_index.v[TAPER_X0] += 0.5;
+        higher_index.clamp();
+
+        let novelty_distance = |candidate: &Genome| (candidate.v[TAPER_X0] - center.v[TAPER_X0]).abs();
+        assert_eq!(novelty_distance(&lower_index), novelty_distance(&higher_index));
+        assert_ne!(
+            certification::identity(&lower_index),
+            certification::identity(&higher_index)
+        );
+        let screened = vec![
+            test_screen_survivor("index_0", "p10", lower_index, 0.125),
+            test_screen_survivor("index_1", "p10", higher_index, 0.125),
+        ];
+        assert_eq!(screened[0].screen_deficit, screened[1].screen_deficit);
+
+        let first = select_stage2_candidates(&screened, 2, &HashSet::new(), &HashSet::new());
+        let second = select_stage2_candidates(&screened, 2, &HashSet::new(), &HashSet::new());
+
+        let labels: Vec<_> = first.iter().map(|candidate| candidate.label.as_str()).collect();
+        let repeated_labels: Vec<_> = second.iter().map(|candidate| candidate.label.as_str()).collect();
+        assert_eq!(labels, ["index_0", "index_1"]);
+        assert_eq!(repeated_labels, labels);
+    }
+
+    #[test]
     fn stage2_selection_returns_fewer_than_certify_top_when_total_unassessed_is_smaller() {
         let mut seed = Genome::c4_seed(genome::T_MIN);
         seed.v[EA_IN] = 14.0;
