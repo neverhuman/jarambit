@@ -10,7 +10,7 @@ import statistics
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
 HEX64 = re.compile(r'^[0-9a-f]{64}$')
-EXPECTED_UNVERIFIED_STAGE1_DIGEST = 'be37fbdcc8f6015ce6a190b233370ddcc0a54c6a09f062fc2c52f73155f1bb1b'
+EXPECTED_UNVERIFIED_STAGE1_DIGEST = '1e3bd397e3b105a8315fd16dbc5c7ee06d4f6a63ed6cbb32da968f549ea343dd'
 
 
 def sha256_file(path):

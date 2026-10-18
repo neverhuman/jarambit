@@ -347,7 +347,7 @@ def generate(paths, source_root, output, preview=False):
     for ax in axes:
         ax.set_xticks(x, tick_labels, fontsize=7.5, rotation=30 if len(waves) > 6 else 0)
         ax.set_xlim(-.6, len(waves)-.4)
-    scope = 'LOCAL PREVIEW — UNCOMMITTED INPUTS; NOT PAPER EVIDENCE' if preview else 'Committed automatic-wave observations (xbabe2 w298, w300–w310; xbabe3 w401c3, w402c3, w404c3)'
+    scope = 'LOCAL PREVIEW — UNCOMMITTED INPUTS; NOT PAPER EVIDENCE' if preview else 'Committed automatic-wave observations (xbabe2 w298, w300–w314; xbabe3 w401c3, w402c3, w404c3)'
     fig.suptitle(scope, fontsize=11.5, fontweight='bold', color='#9b4c36' if preview else '#243641')
     fig.text(.015, .015, 'Selected Stage-2 candidates only; not full-population medians, pass rates, or a controlled comparison across engine commits. All waves have qualified_count=0.', fontsize=8.5)
     fig.tight_layout(rect=(0, .04, 1, .95))

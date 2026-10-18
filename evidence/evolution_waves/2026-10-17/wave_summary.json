@@ -3,7 +3,7 @@
     "w400c3",
     "w403c3"
   ],
-  "plotted_assessed": 72,
+  "plotted_assessed": 80,
   "plotted_completed_waves": [
     "w298",
     "w300",
@@ -19,34 +19,36 @@
     "w310",
     "w311",
     "w312",
+    "w313",
+    "w314",
     "w401c3",
     "w402c3",
     "w404c3"
   ],
   "plotted_qualified": 0,
-  "plotted_stage1_births": 3092,
-  "plotted_stage1_survivors": 2755,
-  "plotted_stage1_unverified_producer_births": 2644,
-  "plotted_stage1_unverified_producer_survivors": 2376,
+  "plotted_stage1_births": 3484,
+  "plotted_stage1_survivors": 3108,
+  "plotted_stage1_unverified_producer_births": 3036,
+  "plotted_stage1_unverified_producer_survivors": 2729,
   "plotted_unverified": 0,
-  "plotted_waves_count": 17,
+  "plotted_waves_count": 19,
   "schema": "jarambit.evolution_waves.summary.v1",
-  "scope": "Size-bounded summary and SHA-256 provenance of completed post-#84 automatic evolution waves across xbabe2 (w298, w300-w312) and xbabe3 (w400c3-w404c3). All 19 Stage-2 leaderboards (77 assessments) and 7 Stage-1 rounds (14 birth/screen JSON files under evidence/evolution_plateau/2026-10-17/) are verified against committed JSON in Git; the remaining 34 Stage-1 rounds (68 birth/screen digests) are explicitly labeled unverified_producer_reported host metadata because raw round_*.json files for those rounds remain outside Git. No design is qualified (qualified_count=0, champion=null).",
+  "scope": "Size-bounded summary and SHA-256 provenance of completed post-#84 automatic evolution waves across xbabe2 (w298, w300-w314) and xbabe3 (w400c3-w404c3). All 21 Stage-2 leaderboards (85 assessments) and 7 Stage-1 rounds (14 birth/screen JSON files under evidence/evolution_plateau/2026-10-17/) are verified against committed JSON in Git; the remaining 38 Stage-1 rounds (76 birth/screen digests) are explicitly labeled unverified_producer_reported host metadata because raw round_*.json files for those rounds remain outside Git. No design is qualified (qualified_count=0, champion=null).",
   "stage1_committed_verified_births": 448,
   "stage1_committed_verified_files": 14,
   "stage1_committed_verified_rounds": 7,
   "stage1_committed_verified_survivors": 379,
-  "stage1_unverified_producer_births": 2880,
-  "stage1_unverified_producer_files": 68,
-  "stage1_unverified_producer_rounds": 34,
-  "stage1_unverified_producer_survivors": 2584,
-  "total_assessed": 77,
+  "stage1_unverified_producer_births": 3272,
+  "stage1_unverified_producer_files": 76,
+  "stage1_unverified_producer_rounds": 38,
+  "stage1_unverified_producer_survivors": 2937,
+  "total_assessed": 85,
   "total_qualified": 0,
-  "total_stage1_births": 3328,
-  "total_stage1_survivors": 2963,
+  "total_stage1_births": 3720,
+  "total_stage1_survivors": 3316,
   "total_unverified": 5,
-  "total_waves": 19,
-  "unverified_producer_stage1_digest_sha256": "be37fbdcc8f6015ce6a190b233370ddcc0a54c6a09f062fc2c52f73155f1bb1b",
+  "total_waves": 21,
+  "unverified_producer_stage1_digest_sha256": "1e3bd397e3b105a8315fd16dbc5c7ee06d4f6a63ed6cbb32da968f549ea343dd",
   "waves": [
     {
       "assessed_count": 6,
@@ -1630,6 +1632,204 @@
       "unverified": [],
       "unverified_count": 0,
       "wave": "w312"
+    },
+    {
+      "assessed_count": 4,
+      "champion": null,
+      "engine_commits": [
+        "1eee4d1287d1b2950e7d3e7ef2d6c23da97d57ee"
+      ],
+      "host": "xbabe2",
+      "leaderboard_bytes": 3974,
+      "leaderboard_md_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w313/leaderboard.md",
+      "leaderboard_md_sha256": "5dd1b73d17b4aeb8dfc9a3fbfd5dbdfb5c7b3070208b42c13f84a6693251650a",
+      "leaderboard_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w313/leaderboard.json",
+      "leaderboard_sha256": "b01a9f23e8d35d9078048fd29a2056e4dceaf632abba25113aefc9984f1fc885",
+      "metrics": {
+        "battery_pass_count": {
+          "max": 14,
+          "median": 14.0,
+          "min": 14
+        },
+        "g1": {
+          "max": 0.44427875000000006,
+          "median": 0.42938443749999994,
+          "min": 0.42881375
+        },
+        "mass_g": {
+          "max": 91.426,
+          "median": 90.5065,
+          "min": 87.588
+        },
+        "solid_tip_sf": {
+          "max": 0.71,
+          "median": 0.70665,
+          "min": 0.7043
+        },
+        "strict_hunter_sf": {
+          "max": 0.6938,
+          "median": 0.679,
+          "min": 0.6642
+        },
+        "w_cad": {
+          "max": -5.224336,
+          "median": -5.3157689999999995,
+          "min": -5.410134
+        }
+      },
+      "qualified_count": 0,
+      "result_md_path": null,
+      "result_md_sha256": null,
+      "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 0,
+      "stage1_rounds": [
+        {
+          "best_screen_deficit": 2.7785845427548255,
+          "birth_families": {
+            "p10": 50,
+            "p14": 50
+          },
+          "births": 100,
+          "births_path": null,
+          "births_sha256": "01a9588fe2da43fa5f7c4c88e2f5e9b76bcad69dde844d42d53199282944ff70",
+          "round": 0,
+          "screen_path": null,
+          "screen_sha256": "f0a287da9baf8e47913f4a1c25305373d8c2b86cca8415f427b2d7bd01b3a29c",
+          "seed": 3130,
+          "survivor_families": {
+            "p10": 40,
+            "p14": 42
+          },
+          "survivors": 82,
+          "unique_births": 88,
+          "verification": "unverified_producer_reported"
+        },
+        {
+          "best_screen_deficit": 2.7720570060829712,
+          "birth_families": {
+            "p10": 72,
+            "p14": 24
+          },
+          "births": 96,
+          "births_path": null,
+          "births_sha256": "df53e660178e0889d0e8756b30c729fe2eb5186745e0dc162a4df8143dafdbc2",
+          "round": 1,
+          "screen_path": null,
+          "screen_sha256": "6ba3c58201d68d89a6cf0b01497ad9166bc72d3f4e1fbab40299afd5293a8742",
+          "seed": 3130,
+          "survivor_families": {
+            "p10": 72,
+            "p14": 24
+          },
+          "survivors": 96,
+          "unique_births": 81,
+          "verification": "unverified_producer_reported"
+        }
+      ],
+      "stage1_survivors_total": 178,
+      "stage1_unverified_producer_rounds": 2,
+      "unverified": [],
+      "unverified_count": 0,
+      "wave": "w313"
+    },
+    {
+      "assessed_count": 4,
+      "champion": null,
+      "engine_commits": [
+        "1eee4d1287d1b2950e7d3e7ef2d6c23da97d57ee"
+      ],
+      "host": "xbabe2",
+      "leaderboard_bytes": 3954,
+      "leaderboard_md_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w314/leaderboard.md",
+      "leaderboard_md_sha256": "0d9aa093f8bdd4af3a11ba4d5603a1750d8d132082bd41cfd1288c8d7da95a3e",
+      "leaderboard_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w314/leaderboard.json",
+      "leaderboard_sha256": "cee1a486e921cb3631e7b7de6f14fb37af806bfb3c887b2238e6aa30740e140b",
+      "metrics": {
+        "battery_pass_count": {
+          "max": 14,
+          "median": 14.0,
+          "min": 14
+        },
+        "g1": {
+          "max": 0.4444645,
+          "median": 0.4331328125,
+          "min": 0.414424625
+        },
+        "mass_g": {
+          "max": 91.445,
+          "median": 89.519,
+          "min": 87.589
+        },
+        "solid_tip_sf": {
+          "max": 0.709,
+          "median": 0.7000500000000001,
+          "min": 0.6896
+        },
+        "strict_hunter_sf": {
+          "max": 0.6869,
+          "median": 0.6796,
+          "min": 0.6742
+        },
+        "w_cad": {
+          "max": -5.320623,
+          "median": -5.3672664999999995,
+          "min": -5.47092
+        }
+      },
+      "qualified_count": 0,
+      "result_md_path": null,
+      "result_md_sha256": null,
+      "stage1_births_total": 196,
+      "stage1_committed_verified_rounds": 0,
+      "stage1_rounds": [
+        {
+          "best_screen_deficit": 2.778259714155404,
+          "birth_families": {
+            "p10": 50,
+            "p14": 50
+          },
+          "births": 100,
+          "births_path": null,
+          "births_sha256": "1dff5e03b37471948ea9fa6a69a76414b7eed35527e655f93e14787c1ffec9ea",
+          "round": 0,
+          "screen_path": null,
+          "screen_sha256": "fbbe1ee2165f134d9b1e58e905d6e7101eaff863f455c95e2cddd4c4268ab725",
+          "seed": 3140,
+          "survivor_families": {
+            "p10": 41,
+            "p14": 41
+          },
+          "survivors": 82,
+          "unique_births": 88,
+          "verification": "unverified_producer_reported"
+        },
+        {
+          "best_screen_deficit": 2.778091154427968,
+          "birth_families": {
+            "p10": 72,
+            "p14": 24
+          },
+          "births": 96,
+          "births_path": null,
+          "births_sha256": "8103a853890ebfb18aa98377c8170c5845cf712306510333620acaf9f1d10cc7",
+          "round": 1,
+          "screen_path": null,
+          "screen_sha256": "a5bbc3651b5e811fecb72be268ffd4e6a3d56d1806d49472be0c97bcdb39fe84",
+          "seed": 3140,
+          "survivor_families": {
+            "p10": 71,
+            "p14": 22
+          },
+          "survivors": 93,
+          "unique_births": 81,
+          "verification": "unverified_producer_reported"
+        }
+      ],
+      "stage1_survivors_total": 175,
+      "stage1_unverified_producer_rounds": 2,
+      "unverified": [],
+      "unverified_count": 0,
+      "wave": "w314"
     },
     {
       "assessed_count": 0,
