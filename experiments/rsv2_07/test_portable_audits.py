@@ -2,6 +2,7 @@
 
 from contextlib import redirect_stdout
 from copy import deepcopy
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -13,6 +14,7 @@ from unittest.mock import patch
 
 import portable_audit as portable
 import audit_phase6 as receipt_audit
+import audit_phase11_wave_receipts as wave_audit
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -199,6 +201,137 @@ class ReceiptAuditTests(unittest.TestCase):
         with patch.object(receipt_audit, "load_json", side_effect=incomplete):
             with self.assertRaisesRegex(ValueError, "Raw manifest coverage mismatch"):
                 receipt_audit.verify()
+
+
+class WaveReceiptAuditTests(unittest.TestCase):
+    def setUp(self):
+        self.docs = {}
+        designs = []
+        for round_id in (0, 1):
+            identity = hashlib.sha256(f"synthetic-{round_id}".encode()).hexdigest()
+            label = f"synthetic_round_{round_id}"
+            self.docs[f"round_{round_id:02}_births.json"] = {
+                "round": round_id, "seed": 1, "source": "synthetic fixture", "genome_header": "a,b",
+                "genomes": [{"row": f"{round_id},1", "family": "synthetic", "certificate_identity": identity}]}
+            screen = {key: 0.0 for key in wave_audit.SCREEN_NUMBERS}
+            screen.update(label=label, family="synthetic", certificate_identity=identity,
+                          qualification_status=wave_audit.PENDING)
+            self.docs[f"round_{round_id:02}_screen.json"] = [screen]
+            design = {key: 0.0 for key in wave_audit.DESIGN_NUMBERS}
+            design.update(label=label, family="synthetic", certificate_identity=identity, qualified=False,
+                          all_16_gates=False, rs_v2_all_hard=False, battery_pass_count=0,
+                          genome_csv="synthetic.csv", scorecard_md="synthetic.md")
+            designs.append(design)
+        self.docs["leaderboard.json"] = {"schema": "jarambit.auto_evolve.leaderboard.v2", "designs": designs,
+                                          "assessed_count": 2, "qualified_count": 0, "champion": None,
+                                          "unverified": []}
+
+    def payloads(self):
+        payloads = {name: json.dumps(doc, sort_keys=True).encode() for name, doc in self.docs.items()}
+        expected = {name: (hashlib.sha256(data).hexdigest(), len(data)) for name, data in payloads.items()}
+        return payloads, expected
+
+    def test_synthetic_wave_accounting(self):
+        payloads, expected = self.payloads()
+        result = wave_audit.audit_payloads(payloads, expected)
+        self.assertEqual((result["births"], result["screens"], result["assessed"]), (2, 2, 2))
+        self.assertEqual((result["qualified"], result["unverified"], result["champion"]), (0, 0, None))
+
+    def test_portable_wave_directory_with_in_memory_files(self):
+        payloads, expected = self.payloads()
+        directory = Path("/synthetic-checkout/saved-wave")
+
+        def read(path):
+            self.assertEqual(path.parent, directory)
+            return payloads[path.name]
+
+        with patch.object(Path, "read_bytes", new=read):
+            self.assertEqual(wave_audit.audit_wave_directory(directory, expected)["assessed"], 2)
+
+    def test_wave_byte_tampering_and_missing_files_fail(self):
+        payloads, expected = self.payloads()
+        payloads["leaderboard.json"] += b" "
+        with self.assertRaisesRegex(ValueError, "SHA-256/size mismatch"):
+            wave_audit.audit_payloads(payloads, expected)
+        del payloads["leaderboard.json"]
+        with self.assertRaisesRegex(ValueError, "Exactly five"):
+            wave_audit.audit_payloads(payloads, expected)
+
+    def test_wave_manifest_digest_and_size_formats(self):
+        payloads, expected = self.payloads()
+        name = "leaderboard.json"
+        for sha, size in [("A" * 64, 1), ("a" * 63, 1), ("a" * 64, -1), ("a" * 64, True)]:
+            changed = {**expected, name: (sha, size)}
+            with self.subTest(sha=sha, size=size), self.assertRaises(ValueError):
+                wave_audit.audit_payloads(payloads, changed)
+
+    def test_missing_wave_qualification_fields_fail(self):
+        del self.docs["leaderboard.json"]["designs"][0]["qualified"]
+        with self.assertRaisesRegex(ValueError, "Missing schema fields"):
+            wave_audit.audit_documents(self.docs)
+
+    def test_wave_qualification_and_unverified_fail_closed(self):
+        for key, value in [("qualified_count", 1), ("qualified_count", False), ("assessed_count", True),
+                           ("champion", {}), ("unverified", ["missing evidence"]), ("unverified", 0)]:
+            changed = deepcopy(self.docs)
+            changed["leaderboard.json"][key] = value
+            with self.subTest(key=key, value=value), self.assertRaises(ValueError):
+                wave_audit.audit_documents(changed)
+        for value in (True, 0, "false"):
+            changed = deepcopy(self.docs)
+            changed["leaderboard.json"]["designs"][0]["qualified"] = value
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, "boolean false"):
+                wave_audit.audit_documents(changed)
+        changed = deepcopy(self.docs)
+        changed["leaderboard.json"]["designs"][0].update(all_16_gates=True, rs_v2_all_hard=True)
+        with self.assertRaisesRegex(ValueError, "Contradictory"):
+            wave_audit.audit_documents(changed)
+
+    def test_stage1_pending_is_not_a_qualification(self):
+        screen = self.docs["round_00_screen.json"][0]
+        screen["qualification_status"] = "qualified"
+        with self.assertRaisesRegex(ValueError, "remain pending"):
+            wave_audit.audit_documents(self.docs)
+        screen["qualification_status"] = wave_audit.PENDING
+        screen["qualified"] = True
+        with self.assertRaisesRegex(ValueError, "boolean false"):
+            wave_audit.audit_documents(self.docs)
+
+    def test_cross_stage_identity_and_label_mismatches_fail(self):
+        changed = deepcopy(self.docs)
+        changed["round_00_screen.json"][0]["certificate_identity"] = "a" * 64
+        with self.assertRaisesRegex(ValueError, "same-round births"):
+            wave_audit.audit_documents(changed)
+        changed = deepcopy(self.docs)
+        changed["leaderboard.json"]["designs"][0]["certificate_identity"] = "a" * 64
+        with self.assertRaisesRegex(ValueError, "identity/screen mismatch"):
+            wave_audit.audit_documents(changed)
+        changed = deepcopy(self.docs)
+        changed["round_01_screen.json"][0]["label"] = changed["round_00_screen.json"][0]["label"]
+        with self.assertRaisesRegex(ValueError, "Duplicate screen label"):
+            wave_audit.audit_documents(changed)
+
+    def test_conflicting_birth_rows_and_csv_width_fail(self):
+        entry = self.docs["round_00_births.json"]["genomes"][0]
+        self.docs["round_01_births.json"]["genomes"].append({**entry, "family": "another", "row": "changed,1"})
+        with self.assertRaisesRegex(ValueError, "Conflicting rows"):
+            wave_audit.audit_documents(self.docs)
+        self.docs["round_01_births.json"]["genomes"].pop()
+        entry["row"] = "one-column"
+        with self.assertRaisesRegex(ValueError, "CSV/header width mismatch"):
+            wave_audit.audit_documents(self.docs)
+
+    def test_mutating_wave_snapshot_fails(self):
+        payloads, expected = self.payloads()
+        calls = {}
+
+        def read(path):
+            calls[path.name] = calls.get(path.name, 0) + 1
+            return payloads[path.name] + (b" " if calls[path.name] > 1 else b"")
+
+        with patch.object(Path, "read_bytes", new=read):
+            with self.assertRaisesRegex(ValueError, "changed during audit"):
+                wave_audit.audit_wave_directory(Path("/synthetic/wave"), expected)
 
 
 if __name__ == "__main__":
