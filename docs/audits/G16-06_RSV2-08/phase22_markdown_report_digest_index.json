@@ -1,0 +1,23 @@
+{
+  "task": "G16-06-RSV2-08-p23",
+  "study_phase": 22,
+  "baseline_commit": "7856869b68099329c11980db845391d2f4fa3a35",
+  "scope": "All tracked PHASE*.md files directly in docs/audits/G16-06_RSV2-08 at the baseline; new untracked report excluded.",
+  "tracked_paths_sha256": "1ab223e05331f03aec309f5d1d281262f82d143734a0d66593a7a05e881e61d9",
+  "file_count": 1,
+  "total_bytes": 3289,
+  "total_lines": 50,
+  "literal_host_path_count": 0,
+  "engineering_qualification_assessed": false,
+  "qualified_count": 0,
+  "full_qualification": false,
+  "files": [
+    {
+      "path": "docs/audits/G16-06_RSV2-08/PHASE21.md",
+      "bytes": 3289,
+      "sha256": "38e165cee4fb781dd8664328ad9456f32fc288ce7d796d59eb683a422d6f5b81",
+      "line_count": 50,
+      "literal_host_path_count": 0
+    }
+  ]
+}
