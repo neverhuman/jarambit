@@ -1755,5 +1755,172 @@ class Hex64DigestFormatTests(unittest.TestCase):
         self.assertEqual(error.exception.code, 1)
 
 
+class CanonicalPathExistenceTests(unittest.TestCase):
+    def setUp(self):
+        scratch = Path(__file__).resolve().parents[1] / "target/rsv2-07/phase39/test-fixtures"
+        scratch.mkdir(parents=True, exist_ok=True)
+        temporary = tempfile.TemporaryDirectory(prefix="paths-", dir=scratch)
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.git("init", "-q")
+        self.write("docs/tracked.md", b"# Tracked fixture\n")
+        self.write("root.txt", b"Tracked root file\n")
+        self.names, self.files = {}, {}
+        for phase in range(19, 39):
+            directory = "experiments/rsv2_07/results/" if phase < 26 else audit.DIRECTORY
+            name = directory + f"phase{phase}_fixture.json"
+            data = b'{"paths":["docs/tracked.md","root.txt"]}\n'
+            self.names[phase], self.files[name] = name, data
+            self.write(name, data)
+        self.git("add", "--", "docs/tracked.md", "root.txt", *self.files)
+
+    def git(self, *args):
+        return audit.subprocess.check_output(["git", "-C", str(self.root), *args], stderr=audit.subprocess.PIPE)
+
+    def write(self, name, data):
+        path = self.root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+
+    def cli(self, *extra):
+        with patch.object(sys, "argv", ["forensics", "--phase", "39", "--repo-root", str(self.root), *extra]), \
+                redirect_stdout(io.StringIO()) as output:
+            result = audit.main()
+        return result, output.getvalue()
+
+    def test_selector_visits_keys_values_arrays_and_embedded_rooted_tokens(self):
+        source = {"docs/tracked.md": ["root.txt", "Check `docs/tracked.md` here.", "docs/my file.md", "w315/label"],
+                  "external": ["https://example.org/docs/outside.md", "/home/example/file.md"],
+                  "unsafe": "../escape.md", "prose": "round birth/screen snapshots"}
+        mentions = audit.repo_path_mentions(source, audit.tracked_file_paths(self.root))
+        self.assertEqual([row["path"] for row in mentions], ["docs/tracked.md", "root.txt", "docs/tracked.md", "docs/my file.md", "w315/label", "../escape.md"])
+        self.assertEqual(mentions[0]["kind"], "object_key")
+        self.assertEqual(mentions[1]["json_path"], ["docs/tracked.md", 0])
+
+    def test_status_distinguishes_missing_untracked_directories_symlinks_and_noncanonical_paths(self):
+        tracked = audit.tracked_file_paths(self.root)
+        self.write("docs/untracked.md", b"untracked\n")
+        (self.root / "docs/empty").mkdir()
+        (self.root / "docs/link.md").symlink_to("tracked.md")
+        (self.root / "linked").symlink_to("docs", target_is_directory=True)
+        expected = {"docs/tracked.md": "existing_tracked_file", "docs/untracked.md": "untracked_file",
+                    "docs/absent.md": "missing", "docs/empty": "directory", "docs/link.md": "symlink",
+                    "linked/tracked.md": "symlinked_parent", "docs/tracked.md/": "file_with_trailing_slash",
+                    "./docs/tracked.md": "noncanonical_relative_path", "../escape.md": "noncanonical_relative_path",
+                    "docs//tracked.md": "noncanonical_relative_path", "C:/file.md": "noncanonical_relative_path"}
+        for name, status in expected.items():
+            with self.subTest(name=name):
+                self.assertEqual(audit.referenced_path_status(self.root, name, tracked)["status"], status)
+        (self.root / "docs/tracked.md").unlink()
+        self.assertEqual(audit.referenced_path_status(self.root, "docs/tracked.md", tracked), {"status": "missing", "tracked": True})
+
+    def test_twenty_phases_record_hashes_all_occurrences_and_tracking_registry(self):
+        result = audit.canonical_path_existence_audit(self.root)
+        self.assertEqual(result["phases"], list(range(19, 39)))
+        self.assertEqual((result["receipt_count"], result["unique_reference_count"], result["reference_occurrences"]), (20, 2, 40))
+        self.assertEqual(result["status_counts"], {"existing_tracked_file": 2})
+        self.assertEqual(result["tracked_path_count"], 22)
+        self.assertEqual(result["status"], "pass")
+        for name, data in self.files.items():
+            self.assertEqual((result["receipts"][name]["sha256"], result["receipts"][name]["size_bytes"]), (hashlib.sha256(data).hexdigest(), len(data)))
+        self.assertEqual(result["paths"]["docs/tracked.md"]["reference_count"], 20)
+        self.assertEqual(result, audit.canonical_path_existence_audit(self.root))
+        self.assertNotIn(str(self.root), json.dumps(result))
+
+    def test_extra_receipts_and_untracked_missing_or_directory_references_record_findings(self):
+        before = audit.canonical_path_existence_audit(self.root)
+        for name in (audit.PATH_EXISTENCE_RECEIPT, audit.DIRECTORY + "phase18_other.json", audit.DIRECTORY + "phase390_other.json"):
+            self.write(name, b"outside scope malformed JSON")
+        self.assertEqual(audit.canonical_path_existence_audit(self.root), before)
+        self.write("docs/untracked.md", b"untracked\n")
+        (self.root / "docs/empty").mkdir()
+        extra = audit.DIRECTORY + "archive/phase20_extra.json"
+        self.write(extra, b'{"paths":["docs/untracked.md","docs/absent.md","docs/empty"]}')
+        self.git("add", "--", extra)
+        result = audit.canonical_path_existence_audit(self.root)
+        self.assertEqual(result["receipt_count"], 21)
+        self.assertEqual(result["nonconforming_path_count"], 3)
+        self.assertEqual(result["status"], "path_existence_findings")
+
+    def test_invalid_json_missing_coverage_and_symlinked_receipts_fail(self):
+        for data in (b"[]", b'{"x":1,"x":2}', b'{"x":NaN}', b"{broken}", b"\xff"):
+            self.write(self.names[38], data)
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                audit.canonical_path_existence_audit(self.root)
+        path = self.root / self.names[38]
+        path.unlink()
+        with self.assertRaisesRegex(ValueError, "coverage must include every phase"):
+            audit.canonical_path_existence_audit(self.root)
+        path.symlink_to(Path(self.names[37]).name)
+        with self.assertRaisesRegex(ValueError, "regular path audit receipt"):
+            audit.canonical_path_existence_audit(self.root)
+
+    def test_receipt_bytes_and_git_registry_changes_during_scan_fail(self):
+        original_read = Path.read_bytes
+        changed = False
+        def read(path):
+            nonlocal changed
+            data = original_read(path)
+            if path == self.root / self.names[38] and not changed:
+                changed = True
+                path.write_bytes(data + b"\n")
+            return data
+        with patch.object(Path, "read_bytes", new=read), self.assertRaisesRegex(ValueError, "Receipt bytes or type changed"):
+            audit.canonical_path_existence_audit(self.root)
+        tracked = audit.tracked_file_paths(self.root)
+        with patch.object(audit, "tracked_file_paths", side_effect=[tracked, tracked | {"added.txt"}]), \
+                self.assertRaisesRegex(ValueError, "Git tracked paths changed"):
+            audit.canonical_path_existence_audit(self.root)
+
+    def test_reference_status_and_receipt_membership_changes_during_scan_fail(self):
+        original_status = audit.referenced_path_status
+        calls = {}
+        def status(root, name, tracked):
+            calls[name] = calls.get(name, 0) + 1
+            return {"status": "missing", "tracked": True} if calls[name] > 1 else original_status(root, name, tracked)
+        with patch.object(audit, "referenced_path_status", side_effect=status), self.assertRaisesRegex(ValueError, "status changed"):
+            audit.canonical_path_existence_audit(self.root)
+        names = audit.phase_receipt_paths(self.root, audit.PATH_RECEIPT_PATTERN)
+        with patch.object(audit, "phase_receipt_paths", side_effect=[names, []]), self.assertRaisesRegex(ValueError, "membership changed"):
+            audit.canonical_path_existence_audit(self.root)
+
+    def test_cli_writes_only_phase39_outputs_checks_readonly_and_records_findings(self):
+        before = {name: (self.root / name).read_bytes() for name in self.files}
+        result, output = self.cli("--write")
+        self.assertEqual(result, 0)
+        self.assertIn("references=2 | nonconforming=0", output)
+        self.assertEqual({path.name for path in (self.root / audit.DIRECTORY).glob("phase39*")}, {Path(audit.PATH_EXISTENCE_RECEIPT).name})
+        for name, data in before.items():
+            self.assertEqual((self.root / name).read_bytes(), data)
+        with patch.object(Path, "write_text", side_effect=AssertionError("Readonly audit wrote")):
+            self.assertEqual(self.cli()[0], 0)
+        receipt = self.root / audit.PATH_EXISTENCE_RECEIPT
+        original = receipt.read_bytes()
+        saved = json.loads(original)
+        saved["paths"]["docs/tracked.md"]["tracked"] = 1
+        receipt.write_text(json.dumps(saved))
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli()
+        self.assertEqual(error.exception.code, 1)
+        receipt.write_bytes(original)
+        report = self.root / audit.PATH_EXISTENCE_REPORT
+        original_report = report.read_bytes()
+        report.write_bytes(original_report + b"changed")
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli()
+        self.assertEqual(error.exception.code, 1)
+        report.write_bytes(original_report)
+        self.write(self.names[19], b'{"path":"docs/missing.md"}')
+        result, output = self.cli("--write")
+        self.assertEqual(result, 2)
+        self.assertIn("| FINDINGS |", output)
+        self.assertEqual(self.cli()[0], 2)
+
+    def test_artifact_root_is_rejected_for_path_existence_audit(self):
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli("--artifact-root", str(self.root))
+        self.assertEqual(error.exception.code, 1)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -53,6 +53,11 @@ HEADING_PATTERN = re.compile(r"PHASE(19|2[0-9]|3[0-6])(?:_[^/]*)?\.md")
 HEX64_RECEIPT = DIRECTORY + "phase38_hex64_digest_format_audit.json"
 HEX64_REPORT = DIRECTORY + "PHASE38_HEX64_DIGEST_FORMAT_AUDIT.md"
 HEX64_RECEIPT_PATTERN = re.compile(r"phase(19|2[0-9]|3[0-7])(?:_[^/]*)?\.json")
+PATH_EXISTENCE_RECEIPT = DIRECTORY + "phase39_canonical_path_existence_audit.json"
+PATH_EXISTENCE_REPORT = DIRECTORY + "PHASE39_CANONICAL_PATH_EXISTENCE_AUDIT.md"
+PATH_RECEIPT_PATTERN = re.compile(r"phase(19|2[0-9]|3[0-8])(?:_[^/]*)?\.json")
+RELATIVE_PATH_LITERAL = re.compile(r"[\w.+~-]+(?:/[\w.+~-]+)+/?")
+RELATIVE_PATH_TOKEN = re.compile(r"(?<![\w/.:\\])[\w.+~-]+(?:/[\w.+~-]+)+/?")
 # Absolute POSIX paths, Windows drive paths, UNC paths and file URIs.
 HOST_PATH = re.compile(r"(?<![\w./:])/(?!/)[\w.~-]+|(?<!\w)[A-Za-z]:[\\/]|\\\\[^\\\s]+\\|file://")
 
@@ -666,6 +671,149 @@ def run_hex64(args):
     return 0 if not current["invalid_field_count"] else 2
 
 
+def tracked_file_paths(repo_root):
+    output = subprocess.check_output(["git", "-C", str(repo_root), "ls-files", "--cached", "-z"], stderr=subprocess.PIPE)
+    return set(name.decode("utf-8") for name in output.split(b"\0") if name)
+
+
+def repo_path_mentions(document, tracked):
+    mentions = []
+    roots = {name.split("/", 1)[0] for name in tracked if "/" in name} | {"out", "target"}
+    def inspect(value, location, kind):
+        if value in tracked or RELATIVE_PATH_LITERAL.fullmatch(value) or re.fullmatch(
+                r"[\w.+~-]+\.(?:jsonl?|md|csv|rs|py|toml|ya?ml|txt|lock|sh|log)", value):
+            candidates = [value]
+        elif value.split("/", 1)[0] in roots and "/" in value and "\n" not in value and "\r" not in value and re.search(r"\.[\w]+$", value):
+            candidates = [value]  # A whole rooted filename may contain spaces.
+        else:
+            candidates = [match[0] for match in RELATIVE_PATH_TOKEN.finditer(value) if match[0].split("/", 1)[0] in roots]
+        for candidate in candidates:
+            mentions.append({"path": candidate, "json_path": location, "kind": kind})
+    def scan(node, location):
+        if isinstance(node, dict):
+            for key, value in sorted(node.items()):
+                here = [*location, key]
+                inspect(key, here, "object_key")
+                scan(value, here)
+        elif isinstance(node, list):
+            for index, value in enumerate(node):
+                scan(value, [*location, index])
+        elif isinstance(node, str):
+            inspect(node, location, "string_value")
+    scan(document, [])
+    return mentions
+
+
+def referenced_path_status(repo_root, name, tracked):
+    parts = name.rstrip("/").split("/")
+    if not name or name.startswith("/") or re.match(r"^[A-Za-z]:", name) or "\\" in name or any(part in ("", ".", "..") for part in parts):
+        return {"status": "noncanonical_relative_path", "tracked": name in tracked}
+    canonical = "/".join(parts)
+    path = repo_root / canonical
+    for parent in path.parents:
+        if parent == repo_root:
+            break
+        if parent.is_symlink():
+            return {"status": "symlinked_parent", "tracked": canonical in tracked}
+    try:
+        mode = path.lstat().st_mode
+    except (FileNotFoundError, NotADirectoryError):
+        return {"status": "missing", "tracked": canonical in tracked}
+    if stat.S_ISLNK(mode):
+        status = "symlink"
+    elif stat.S_ISDIR(mode):
+        status = "directory"
+    elif not stat.S_ISREG(mode):
+        status = "nonregular_file"
+    elif name.endswith("/"):
+        status = "file_with_trailing_slash"
+    elif canonical not in tracked:
+        status = "untracked_file"
+    else:
+        status = "existing_tracked_file"
+    return {"status": status, "tracked": canonical in tracked}
+
+
+def canonical_path_existence_audit(repo_root):
+    repo_root = Path(repo_root).resolve()
+    names = phase_receipt_paths(repo_root, PATH_RECEIPT_PATTERN)
+    tracked = tracked_file_paths(repo_root)
+    sources, receipts, references = {}, {}, {}
+    for name in names:
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode), "Expected regular path audit receipt: " + name)
+        data = path.read_bytes()
+        document = strict_json(data)
+        require(isinstance(document, dict), "Expected top-level JSON object: " + name)
+        mentions = repo_path_mentions(document, tracked)
+        for mention in mentions:
+            references.setdefault(mention["path"], []).append({"receipt": name, "json_path": mention["json_path"], "kind": mention["kind"]})
+        sources[name] = data
+        receipts[name] = {"phase": int(PATH_RECEIPT_PATTERN.fullmatch(path.name)[1]), "sha256": hashlib.sha256(data).hexdigest(),
+                          "size_bytes": len(data), "reference_occurrences": len(mentions)}
+    phases = sorted({row["phase"] for row in receipts.values()})
+    require(phases == list(range(19, 39)), "Path receipt coverage must include every phase from 19 through 38")
+    paths, counts = {}, {}
+    for name, occurrences in sorted(references.items()):
+        result = referenced_path_status(repo_root, name, tracked)
+        paths[name] = {**result, "reference_count": len(occurrences), "references": occurrences}
+        counts[result["status"]] = counts.get(result["status"], 0) + 1
+    require(phase_receipt_paths(repo_root, PATH_RECEIPT_PATTERN) == names, "Receipt membership changed during path audit")
+    require(tracked_file_paths(repo_root) == tracked, "Git tracked paths changed during path audit")
+    for name, row in paths.items():
+        require(referenced_path_status(repo_root, name, tracked) == {"status": row["status"], "tracked": row["tracked"]},
+                "Referenced path status changed during audit")
+    for name, data in sources.items():
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode) and path.read_bytes() == data, "Receipt bytes or type changed during path audit")
+    failures = len(paths) - counts.get("existing_tracked_file", 0)
+    return {"schema": "jarambit.rsv2_07_hm.phase39_canonical_path_existence.v1", "task": "RSV2-07-p39",
+            "status": "pass" if not failures else "path_existence_findings", "search_roots": list(KEYSET_ROOTS),
+            "phases": phases, "receipt_count": len(receipts), "receipts": receipts,
+            "tracked_path_count": len(tracked), "tracked_paths_sha256": hashlib.sha256("\0".join(sorted(tracked)).encode()).hexdigest(),
+            "unique_reference_count": len(paths), "reference_occurrences": sum(row["reference_count"] for row in paths.values()),
+            "status_counts": dict(sorted(counts.items())), "nonconforming_path_count": failures, "paths": paths}
+
+
+def render_path_existence(document):
+    rows = [f"| {name} | {row['status']} | {'yes' if row['tracked'] else 'no'} | {row['reference_count']} |"
+            for name, row in document["paths"].items()]
+    label = "PASS" if not document["nonconforming_path_count"] else "FINDINGS"
+    return "\n".join([
+        "# Phase-39 canonical path existence audit", "",
+        f"**{label}.** Audited {document['receipt_count']} receipts covering phases 19 through 38: {document['unique_reference_count']} distinct path-like references and {document['reference_occurrences']} occurrences. Existing tracked files: {document['status_counts'].get('existing_tracked_file', 0)}. Nonconforming references: {document['nonconforming_path_count']}.", "",
+        "Status counts: " + ", ".join(f"{key}={value}" for key, value in document["status_counts"].items()) + ".", "",
+        "| Referenced relative literal | Observed status | Git tracked | Occurrences |", "| --- | --- | --- | ---: |", *rows, "",
+        "Selection scans object keys and string values recursively, including strings within saved JSON-path component arrays. Whole slash-separated relative literals and bare filenames with common source, report or data extensions are checked. Complete filenames under recognized repository roots may contain spaces. In prose, only slash tokens starting with a Git-tracked root directory, out or target are selected. URLs and absolute host paths are outside scope. This syntactic scan deliberately retains ambiguous whole path-like labels such as wave/label strings; it does not infer a different base directory or silently discard them. Arbitrary prose, filenames with unsupported punctuation and semantic references without a literal path are outside the bounded selector.", "",
+        "Paths are checked from this checkout's repository root. Dot, parent traversal and empty components are noncanonical. A trailing slash is treated as a directory reference. Symlinks and symlinked parents fail the regular-file requirement. A passing reference must currently be a regular file whose canonical relative name appears in git ls-files --cached. Directories, missing files and existing untracked files are findings. Generated out paths are not substituted with common-checkout files or historical Git blobs. This checks existence and tracking only, not file content or digest parity.", "",
+        "The JSON records each source receipt's SHA-256 and size, every selected path's status and all occurrence locations, plus a digest of the tracked path registry. Complete receipt phase coverage is required. Receipt membership and bytes, Git tracked membership and referenced path statuses are checked again after scanning. Earlier reports, receipts and referenced files are preserved. Paths and source locations in the outputs are repository-relative.", "",
+        "Normal verification checks the complete saved JSON and exact report text without writes. --repo-root selects another Git checkout; --write replaces only the two Phase-39 outputs. Exit 0 means every selected reference is an existing tracked file, exit 2 means findings were recorded, and malformed or mismatching evidence exits 1.", "",
+        "```sh", "python3 scripts/audit_rsv2_07_hm_forensics.py --phase 39",
+        "python3 -m unittest discover -s scripts -p 'test_audit_rsv2_07_hm_forensics.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs 14,15 at nice 10. This is a static canonical path existence audit. Changes are left uncommitted.", "",
+    ])
+
+
+def run_path_existence(args):
+    require(args.artifact_root is None, "Phase-39 reads receipts in --repo-root; --artifact-root is not supported")
+    current = canonical_path_existence_audit(args.repo_root)
+    report = render_path_existence(current)
+    receipt = json.dumps(current, indent=2) + "\n"
+    require_portable(report, "Phase-39 report")
+    require_portable(receipt, "Phase-39 receipt")
+    if args.write:
+        (args.repo_root / DIRECTORY).mkdir(parents=True, exist_ok=True)
+        (args.repo_root / PATH_EXISTENCE_RECEIPT).write_text(receipt, encoding="utf-8")
+        (args.repo_root / PATH_EXISTENCE_REPORT).write_text(report, encoding="utf-8")
+    else:
+        saved = strict_json((args.repo_root / PATH_EXISTENCE_RECEIPT).read_bytes())
+        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-39 saved receipt mismatch")
+        require((args.repo_root / PATH_EXISTENCE_REPORT).read_text(encoding="utf-8") == report, "Phase-39 report mismatch")
+    label = "PASS" if not current["nonconforming_path_count"] else "FINDINGS"
+    print(f"LANE: RSV2-07-hm | RSV2-07-p39 | {label} | references={current['unique_reference_count']} | nonconforming={current['nonconforming_path_count']}")
+    return 0 if not current["nonconforming_path_count"] else 2
+
+
 def snapshot_bytes(repo_root, name):
     return subprocess.check_output(["git", "-C", str(repo_root), "show", f"{CROSS_COMMIT}:{name}"],
                                    stderr=subprocess.PIPE)
@@ -1139,11 +1287,13 @@ def render(document):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38"), default="26")
+    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39"), default="26")
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     try:
+        if args.phase == "39":
+            return run_path_existence(args)
         if args.phase == "38":
             return run_hex64(args)
         if args.phase == "37":
