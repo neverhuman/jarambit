@@ -1415,6 +1415,44 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_caps_oversized_novel_pool_at_certify_top_without_duplicates() {
+        let mut p10_first = Genome::c4_seed(genome::T_MIN);
+        p10_first.v[EA_IN] = 14.0;
+        p10_first.clamp();
+        let mut p10_next = p10_first.clone();
+        p10_next.v[TAPER_X0] += 0.5;
+        p10_next.clamp();
+        let mut p14_first = Genome::c4_seed(genome::T_MIN);
+        p14_first.v[EA_IN] = 15.0;
+        p14_first.clamp();
+        let mut p14_next = p14_first.clone();
+        p14_next.v[EA_SP] += 0.25;
+        p14_next.clamp();
+
+        let screened = vec![
+            test_screen_survivor("p10_first", "p10", p10_first.clone(), 0.01),
+            test_screen_survivor("p10_first_duplicate", "p10", p10_first, 0.015),
+            test_screen_survivor("p14_first", "p14", p14_first, 0.02),
+            test_screen_survivor("p10_next", "p10", p10_next, 0.03),
+            test_screen_survivor("p14_next", "p14", p14_next, 0.04),
+        ];
+        let certify_top = 3;
+        let certify_top_novelty = screened.len();
+        assert!(certify_top_novelty > certify_top);
+
+        let selected = select_stage2_candidates(&screened, certify_top, &HashSet::new(), &HashSet::new());
+
+        assert_eq!(selected.len(), certify_top);
+        let selected_identities: HashSet<_> = selected
+            .iter()
+            .map(|candidate| certification::identity(&candidate.g))
+            .collect();
+        assert_eq!(selected_identities.len(), selected.len());
+        let labels: Vec<_> = selected.iter().map(|candidate| candidate.label.as_str()).collect();
+        assert_eq!(labels, ["p10_first", "p14_first", "p10_next"]);
+    }
+
+    #[test]
     fn stage2_selection_returns_fewer_than_certify_top_when_total_unassessed_is_smaller() {
         let mut seed = Genome::c4_seed(genome::T_MIN);
         seed.v[EA_IN] = 14.0;
