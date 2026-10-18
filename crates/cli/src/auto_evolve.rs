@@ -26,6 +26,11 @@ const Q7_CPS: [f64; genome::N_CP] = [
     -0.8918546356656645, 0.0,
 ];
 
+/// Stage-1's 2.0 mm² lateral screen empirically knocks down to about 0.726 at
+/// Stage-2's 0.25/0.125/0.0625 mm² meshes. This margin makes candidates ranked
+/// near zero screen deficit clear the certified 260.0 N hunter floor.
+const SCREEN_LAT_HUNTER_MARGIN_N: f64 = 358.0;
+
 fn repo_root() -> PathBuf {
     let cwd = std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
     if cwd.join("docs/VERSION").is_file() {
@@ -174,7 +179,7 @@ fn spawn_offspring_batch(
             // Keep the legacy witness and reinforcement slots available in the
             // production 12-child cycle; 11-child test batches retain their Q7 slots.
             let q7_slot = matches!(k % 11, 6..=10)
-                && !(candidates_per_elite == 12 && matches!(k % 12, 7 | 8));
+                && !(candidates_per_elite == 12 && k % 12 == 7);
             if q7_slot {
                 let slot = k % 11;
                 child.v[..N_CP].copy_from_slice(&Q7_CPS);
@@ -182,8 +187,7 @@ fn spawn_offspring_batch(
                     for (idx, cp) in child.v[..N_CP].iter_mut().enumerate() {
                         *cp = (*cp + rng.range(-0.005, 0.005)).clamp(b[idx].0, b[idx].1);
                     }
-                    child.v[TAPER_X0] = rng.range(116.0, 118.0)
-                        .clamp(b[TAPER_X0].0, b[TAPER_X0].1);
+                    child.v[TAPER_X0] = rng.range(116.0, 118.0).clamp(b[TAPER_X0].0, b[TAPER_X0].1);
                 } else {
                     child.v[TAPER_X0] = 116.0;
                 }
@@ -246,10 +250,17 @@ fn spawn_offspring_batch(
                         child.v[genome::GRIP_DX] = -0.4;
                     }
                     8 => {
-                        child.v[T_TIP] = rng.range(2.62, 2.75);
-                        child.v[genome::WIN_W] = 6.0;
-                        child.v[genome::WIN_FILL] = rng.range(0.65, 0.70);
-                        child.v[genome::RING_WALL] = rng.range(6.0, 6.05);
+                        child.v[T_TIP] = rng.range(4.0, 4.45).clamp(b[T_TIP].0, b[T_TIP].1);
+                        child.v[TAPER_X0] = rng.range(142.0, 149.0).clamp(b[TAPER_X0].0, b[TAPER_X0].1);
+                        child.v[EA_IN] = rng.range(21.6, 22.0).clamp(b[EA_IN].0, b[EA_IN].1);
+                        child.v[EA_SP] = rng.range(21.6, 22.0).clamp(b[EA_SP].0, b[EA_SP].1);
+                        child.v[genome::RING_WALL] = rng.range(6.02, 6.22).clamp(b[genome::RING_WALL].0, b[genome::RING_WALL].1);
+                        child.v[genome::GRIP_DX] = -0.4;
+                        child.v[genome::WIN_N] = 1.0;
+                        child.v[genome::WIN_S0] = 0.65_f64.clamp(b[genome::WIN_S0].0, b[genome::WIN_S0].1);
+                        child.v[genome::WIN_S1] = 0.85_f64.clamp(b[genome::WIN_S1].0, b[genome::WIN_S1].1);
+                        child.v[genome::WIN_W] = 3.8_f64.clamp(b[genome::WIN_W].0, b[genome::WIN_W].1);
+                        child.v[genome::WIN_FILL] = 0.72_f64.clamp(b[genome::WIN_FILL].0, b[genome::WIN_FILL].1);
                     }
                     9 => {
                         child.v[T_TIP] = rng.range(2.62, 2.85);
@@ -476,7 +487,7 @@ fn screen_candidate_stage1(
     let (bw, _) = fem::ring_bearing(&p);
     let (radius, _) = pheno::bore_dimensions(&p);
     let screen_deficit = deficit(f.lat_rob, 260.0)
-        + deficit(f.lat_rob, 358.0)
+        + deficit(f.lat_rob, SCREEN_LAT_HUNTER_MARGIN_N)
         + deficit(f.sf_hiker, 1.0)
         + deficit(f.ring_rob, 1500.0)
         + deficit(f.seq_ratio, fem::SEQ_TARGET)
@@ -1002,7 +1013,7 @@ mod tests {
             + deficit(bearing_width, fem::hm::RING_BEARING_W_MIN_MM)
             + deficit(bore_radius, fem::hm::RING_EDGE_R_MIN_MM);
 
-        let expected = prior_deficit + deficit(fem.lat_rob, 358.0);
+        let expected = prior_deficit + deficit(fem.lat_rob, SCREEN_LAT_HUNTER_MARGIN_N);
         assert!((candidate.screen_deficit - expected).abs() < 1e-12);
         assert!(candidate.screen_deficit > prior_deficit);
     }
@@ -1032,6 +1043,10 @@ mod tests {
                 let c6_aes = aesthetic::evaluate(c6_genome, &c6_pheno);
                 let c6_rejects = gates::check(c6_genome, &c6_pheno);
                 assert!((0.447..=0.493).contains(&c6_genome.v[genome::WIN_S0]));
+                assert_ne!(&c6_genome.v[..N_CP], &Q7_CPS);
+                for (idx, &q7) in Q7_CPS.iter().enumerate() {
+                    assert!((c6_genome.v[idx] - q7).abs() <= 0.005 + 1e-12, "c6 CP {idx}");
+                }
                 assert!(c6_genome.v[POCKET_D] >= 0.12);
                 assert!(
                     c6_aes.pass && c6_rejects.is_empty(),
@@ -1219,13 +1234,20 @@ mod tests {
         let bounds = genome::bounds();
 
         assert_ne!(&child.v[..N_CP], &Q7_CPS);
-        assert!((2.62..=2.75).contains(&child.v[T_TIP]));
-        assert!((116.0..=118.0).contains(&child.v[TAPER_X0]));
-        assert_eq!(child.v[genome::EA_IN], 18.0);
-        assert_eq!(child.v[genome::EA_SP], 18.0);
-        assert_eq!(child.v[genome::WIN_W], 6.0);
-        assert!((0.65..=0.70).contains(&child.v[genome::WIN_FILL]));
-        assert!(child.v[genome::RING_WALL] >= 6.0);
+        for (idx, &q7) in Q7_CPS.iter().enumerate() {
+            assert!((child.v[idx] - q7).abs() <= 0.005 + 1e-12, "CP {idx}");
+        }
+        assert!((4.0..=4.45).contains(&child.v[T_TIP]));
+        assert!((142.0..=149.0).contains(&child.v[TAPER_X0]));
+        assert!((21.6..=22.0).contains(&child.v[EA_IN]));
+        assert!((21.6..=22.0).contains(&child.v[EA_SP]));
+        assert_eq!(child.v[genome::WIN_N], 1.0);
+        assert_eq!(child.v[genome::WIN_S0], 0.65_f64.clamp(bounds[genome::WIN_S0].0, bounds[genome::WIN_S0].1));
+        assert_eq!(child.v[genome::WIN_S1], 0.85_f64.clamp(bounds[genome::WIN_S1].0, bounds[genome::WIN_S1].1));
+        assert_eq!(child.v[genome::WIN_W], 3.8);
+        assert_eq!(child.v[genome::WIN_FILL], 0.72);
+        assert!((6.02..=6.22).contains(&child.v[genome::RING_WALL]));
+        assert_eq!(child.v[genome::GRIP_DX], -0.4);
         assert!((0.12..=0.20).contains(&child.v[EDGE_TH]));
         for (idx, &value) in child.v.iter().enumerate() {
             if idx != EDGE_TH {
@@ -1233,6 +1255,41 @@ mod tests {
                     (bounds[idx].0..=bounds[idx].1).contains(&value),
                     "gene {idx} outside legal bounds: {value}"
                 );
+            }
+        }
+    }
+
+    #[test]
+    fn q7_c8_steep_grind_arm_passes_gates_and_thickens_distal_tip() {
+        let parent = Genome::c4_seed(genome::T_MIN);
+        let children = spawn_offspring_batch(&[("p15".into(), parent)], 11, 1, &mut Rng(20261018));
+        let candidates = [&children[5].1, &children[7].1, &children[8].1];
+        let built: Vec<_> = candidates.iter().map(|g| pheno::build(g)).collect();
+        let new = &candidates[2];
+        assert!(gates::check(new, &built[2]).is_empty(), "{:?}", gates::check(new, &built[2]));
+        assert!(aesthetic::evaluate(new, &built[2]).pass, "{:?}", aesthetic::evaluate(new, &built[2]).fails);
+        let tip = built[2].tip;
+        let qi = built[2].edge_in.iter().copied().find(|&q| {
+            (q.0 - tip.0).hypot(q.1 - tip.1) >= 2.0
+        }).unwrap_or(built[2].heel);
+        let qs = built[2].edge_sp.iter().rev().copied().find(|&q| {
+            (q.0 - tip.0).hypot(q.1 - tip.1) >= 2.0
+        }).unwrap_or(built[2].heel);
+        let ui = (qi.0 - tip.0, qi.1 - tip.1);
+        let us = (qs.0 - tip.0, qs.1 - tip.1);
+        let ni = (ui.0.hypot(ui.1)).max(1e-12);
+        let ns = (us.0.hypot(us.1)).max(1e-12);
+        let sum = (ui.0 / ni + us.0 / ns, ui.1 / ni + us.1 / ns);
+        let norm = sum.0.hypot(sum.1);
+        let bisector = (sum.0 / norm, sum.1 / norm);
+        for d in [4.0, 6.0, 8.0, 10.0] {
+            let q = (tip.0 + bisector.0 * d, tip.1 + bisector.1 * d);
+            let thick = jarambit_crescent::export::thickness_at(&built[2], q);
+            for i in 0..2 {
+                let other_tip = built[i].tip;
+                let other_q = (other_tip.0 + bisector.0 * d, other_tip.1 + bisector.1 * d);
+                assert!(thick > jarambit_crescent::export::thickness_at(&built[i], other_q),
+                    "c8 thickness {thick} must exceed c{} at d={d}", [5, 7][i]);
             }
         }
     }
@@ -1551,6 +1608,9 @@ mod tests {
                 }
             }
             assert_ne!(&batch[7].1.v[..N_CP], &Q7_CPS);
+            for (idx, &q7) in Q7_CPS.iter().enumerate() {
+                assert!((batch[7].1.v[idx] - q7).abs() <= 0.005 + 1e-12, "batch c7 CP {idx}");
+            }
         }
     }
     #[test]
