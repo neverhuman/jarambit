@@ -17,6 +17,7 @@ PortablePhase7Tests=legacy.PortablePhase7Tests
 from ops.ci.g16_06_rsv2_08 import audit_phase9 as phase9
 from ops.ci.g16_06_rsv2_08 import audit_phase10 as phase10
 from ops.ci.g16_06_rsv2_08 import audit_phase11 as phase11
+from ops.ci.g16_06_rsv2_08 import audit_phase12 as phase12
 
 REAL_STAT=Path.stat
 def absent_target(path,*args,**kwargs):
@@ -269,5 +270,90 @@ class PortablePhase11Tests(unittest.TestCase):
     def test_changed_gate_threshold_rejected(self):
         r=self.document();r['thresholds']['buckling_eigenvalue']=.5
         with self.assertRaisesRegex(ValueError,'A4 acceptance thresholds changed'):self.check(r)
+
+class PortablePhase12Tests(unittest.TestCase):
+    def document(self):return json.loads((ROOT/phase12.STUDY/'phase12_receipt.json').read_text())
+    def report(self):return (ROOT/phase12.STUDY/'PHASE12.md').read_text()
+    def check(self,r):phase12.audit_document(ROOT,r,self.report())
+    def candidate(self,name,values):return dict(name=name,objectives=dict(zip(phase12.OBJECTIVES,values)))
+
+    def test_default_master_audit(self):
+        r=phase12.audit();self.assertEqual((r['status'],r['candidates']),('pass',36))
+        self.assertEqual(set(r['phases']),{'7','8','9','10','11'});self.assertGreater(r['pareto_frontier_count'],0)
+
+    def test_read_only_without_git_or_native_processes(self):
+        original=Path.open
+        def readonly(p,mode='r',*args,**kwargs):
+            if any(c in mode for c in 'wax+'):raise AssertionError('Master audit attempted a write')
+            return original(p,mode,*args,**kwargs)
+        with patch.object(Path,'open',new=readonly),patch('subprocess.run',side_effect=AssertionError('Process launch')),patch('subprocess.Popen',side_effect=AssertionError('Process launch')):
+            self.assertEqual(phase12.audit()['status'],'pass')
+
+    def test_without_target_or_worker_environment(self):
+        with patch.object(Path,'stat',new=absent_target),patch('os.sched_getaffinity',return_value={0},create=True),patch.dict('os.environ',{},clear=True):r=phase12.audit()
+        self.assertEqual(r['status'],'pass');self.assertGreater(r['optional_raw_unavailable'],0)
+        self.assertEqual(r['native_replay'],'not_run')
+
+    def test_chain_failure_is_fatal(self):
+        with patch.object(phase12.phase7,'audit',return_value={'status':'fail'}),self.assertRaisesRegex(ValueError,'Phase7 audit failed'):phase12.audit()
+
+    def test_downstream_failure_is_fatal(self):
+        with patch.object(phase12.phase11,'audit',side_effect=ValueError('A4 raw evidence corrupted')),self.assertRaisesRegex(ValueError,'A4 raw evidence corrupted'):phase12.audit()
+
+    def test_pareto_tradeoffs_layers_and_equal_vectors(self):
+        rows=[self.candidate('A',(3.,3.,3.)),self.candidate('B',(2.,2.,2.)),self.candidate('C',(4.,1.,3.)),self.candidate('D',(3.,3.,3.))]
+        ranked=phase12.pareto_rank(rows)
+        self.assertEqual([(v['name'],v['front']) for v in ranked],[('C',1),('A',1),('D',1),('B',2)])
+        self.assertEqual(ranked[-1]['dominated_by'],['A','D'])
+
+    def test_pareto_independent_of_input_order(self):
+        rows=[self.candidate('Z',(2.,3.,4.)),self.candidate('A',(2.,3.,4.)),self.candidate('B',(1.,2.,3.))]
+        self.assertEqual(phase12.pareto_rank(rows),phase12.pareto_rank(list(reversed(rows))))
+        self.assertEqual([v['name'] for v in phase12.pareto_rank(rows)],['A','Z','B'])
+
+    def test_pareto_has_no_epsilon(self):
+        import math
+        rows=[self.candidate('A',(math.nextafter(1.,2.),1.,1.)),self.candidate('B',(1.,1.,1.))]
+        self.assertEqual([v['front'] for v in phase12.pareto_rank(rows)],[1,2])
+
+    def test_nonfinite_objective_rejected(self):
+        with self.assertRaisesRegex(ValueError,'Nonfinite Pareto objective'):phase12.pareto_rank([self.candidate('A',(float('nan'),1.,1.))])
+
+    def test_cross_phase_certificate_change_rejected(self):
+        r=self.document();r['results'][0]['side_a2']['certified_seq_ratio']+=.01
+        with self.assertRaisesRegex(ValueError,'Cross-phase synthesis mismatch'):self.check(r)
+
+    def test_cross_phase_support_margin_change_rejected(self):
+        r=self.document();r['results'][0]['side_a4']['support_seq_margin']+=.01
+        with self.assertRaisesRegex(ValueError,'Cross-phase synthesis mismatch'):self.check(r)
+
+    def test_tip_metric_substitution_rejected(self):
+        r=self.document();r['results'][0]['objectives']['tip_bending_safety_factor']=r['results'][0]['side_a2']['certified_native_hunter_sf']
+        with self.assertRaisesRegex(ValueError,'Cross-phase synthesis mismatch'):self.check(r)
+
+    def test_false_gci_admission_rejected(self):
+        r=self.document();r['results'][0]['side_a3']['admitted']=True
+        with self.assertRaisesRegex(ValueError,'Cross-phase synthesis mismatch'):self.check(r)
+
+    def test_rank_change_rejected(self):
+        r=self.document();r['pareto_ranking'][0]['rank']=100
+        with self.assertRaisesRegex(ValueError,'Pareto ranking mismatch'):self.check(r)
+
+    def test_frontier_change_rejected(self):
+        r=self.document();r['frontier'].pop()
+        with self.assertRaisesRegex(ValueError,'Pareto frontier mismatch'):self.check(r)
+
+    def test_policy_change_rejected(self):
+        r=self.document();r['pareto_policy']['directions'][0]='minimize'
+        with self.assertRaisesRegex(ValueError,'Objective definition/Pareto policy changed'):self.check(r)
+
+    def test_parent_receipt_reconstruction_required(self):
+        r=self.document();r['parent_metadata_updates']['11'][0]['before']='0'*64
+        with self.assertRaisesRegex(ValueError,'Phase11 scientific receipt changed'):self.check(r)
+
+    def test_report_change_rejected(self):
+        r=self.document();rank=r['pareto_ranking'][0];row=next(v for v in r['results'] if v['name']==rank['name']);text=self.report()
+        old=phase12.summary_line(row,rank);changed=text.replace(old,old.replace(row['name'],'CHANGED'),1);self.assertNotEqual(text,changed)
+        with self.assertRaisesRegex(ValueError,'Report synthesis/Pareto table mismatch'):phase12.audit_document(ROOT,r,changed)
 
 if __name__=='__main__':unittest.main(verbosity=2)

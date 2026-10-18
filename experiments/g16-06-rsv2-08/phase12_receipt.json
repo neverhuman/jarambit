@@ -1,0 +1,3103 @@
+{
+  "task": "G16-06-RSV2-08-p12",
+  "state": "complete",
+  "errors": [],
+  "read_only_master": true,
+  "native_solves_run": 0,
+  "production_sources_changed": false,
+  "execution": {
+    "cpus": [
+      12,
+      13
+    ],
+    "nice": 19,
+    "cargo_build_jobs": 2
+  },
+  "candidate_count": 36,
+  "tip_bending_definition": {
+    "source_phase": 9,
+    "source": "strict.native_hunter_sf",
+    "area_mm2": 0.0625,
+    "formula": "strict.lat_rob_n / 260 N",
+    "scope": "native tip-loaded lateral plate; native stress region, not an isolated annular or independent 3D safety factor"
+  },
+  "pareto_policy": {
+    "objectives": [
+      "certified_seq_ratio",
+      "support_seq_margin",
+      "tip_bending_safety_factor"
+    ],
+    "directions": [
+      "maximize",
+      "maximize",
+      "maximize"
+    ],
+    "dominance": "all >= and at least one >; exact unrounded finite values; no epsilon",
+    "layers": "successively remove all nondominated candidates",
+    "within_front": "descending objective tuple, then ascending candidate name",
+    "ties": "retain every candidate; equal vectors do not dominate each other"
+  },
+  "parent_metadata_updates": {
+    "9": [
+      {
+        "keys": [
+          "sha256",
+          "ops/ci/tests/test_portable_phase7.py"
+        ],
+        "before": "dae7aca897543c59a22941f6bfd9f16b6b23caa8821f89bf3ff980526ac05cc7",
+        "after": "07940ff30ea0449091348db2a22ab6c084f0f05bc00f5cbe44403392313e6a30"
+      }
+    ],
+    "10": [
+      {
+        "keys": [
+          "sha256",
+          "ops/ci/tests/test_portable_phase7.py"
+        ],
+        "before": "dae7aca897543c59a22941f6bfd9f16b6b23caa8821f89bf3ff980526ac05cc7",
+        "after": "07940ff30ea0449091348db2a22ab6c084f0f05bc00f5cbe44403392313e6a30"
+      },
+      {
+        "keys": [
+          "sha256",
+          "experiments/g16-06-rsv2-08/phase9_receipt.json"
+        ],
+        "before": "b51bc018755bda6505ef80c8155479d618a1cb59586be58b9f2f771a1334b96f",
+        "after": "4df072c0b383878fce16497e72ca3db2482d5e4f058c7de616f2fac6135c4566"
+      },
+      {
+        "keys": [
+          "phase9_metadata_update",
+          "current_sha256"
+        ],
+        "before": "dae7aca897543c59a22941f6bfd9f16b6b23caa8821f89bf3ff980526ac05cc7",
+        "after": "07940ff30ea0449091348db2a22ab6c084f0f05bc00f5cbe44403392313e6a30"
+      }
+    ],
+    "11": [
+      {
+        "keys": [
+          "sha256",
+          "ops/ci/tests/test_portable_phase7.py"
+        ],
+        "before": "dae7aca897543c59a22941f6bfd9f16b6b23caa8821f89bf3ff980526ac05cc7",
+        "after": "07940ff30ea0449091348db2a22ab6c084f0f05bc00f5cbe44403392313e6a30"
+      },
+      {
+        "keys": [
+          "sha256",
+          "experiments/g16-06-rsv2-08/phase9_receipt.json"
+        ],
+        "before": "b51bc018755bda6505ef80c8155479d618a1cb59586be58b9f2f771a1334b96f",
+        "after": "4df072c0b383878fce16497e72ca3db2482d5e4f058c7de616f2fac6135c4566"
+      },
+      {
+        "keys": [
+          "sha256",
+          "experiments/g16-06-rsv2-08/phase10_receipt.json"
+        ],
+        "before": "285f60fb74bde889075099b8f54b24e3b7f640165c3f4ff0e64d098b9e37dc1f",
+        "after": "362d2805740d6e9823f86f65deec940cd400fce66c57788d3a9499251ce9e931"
+      },
+      {
+        "keys": [
+          "parent_metadata_updates",
+          "shared_test_sha256_after"
+        ],
+        "before": "dae7aca897543c59a22941f6bfd9f16b6b23caa8821f89bf3ff980526ac05cc7",
+        "after": "07940ff30ea0449091348db2a22ab6c084f0f05bc00f5cbe44403392313e6a30"
+      }
+    ]
+  },
+  "phase_receipts_before_metadata_sha256": {
+    "9": "b51bc018755bda6505ef80c8155479d618a1cb59586be58b9f2f771a1334b96f",
+    "10": "285f60fb74bde889075099b8f54b24e3b7f640165c3f4ff0e64d098b9e37dc1f",
+    "11": "f26603b6d5e48cf6752c7143e77a65ea17b945fc9db253ba7fc5217edcae1451"
+  },
+  "phase_receipts_sha256": {
+    "7": "71e751199151a99c61058625d55ad2358485e69e308b101d383b16b7ec8cee4a",
+    "8": "fecbe9932bfb8d905b38ca87bba137dfd39fcd8c585519e3eabb006c89167b44",
+    "9": "4df072c0b383878fce16497e72ca3db2482d5e4f058c7de616f2fac6135c4566",
+    "10": "362d2805740d6e9823f86f65deec940cd400fce66c57788d3a9499251ce9e931",
+    "11": "d80833cfb90d7a4b5f175ffb2a9e001e8bb2a4b9d66c577655e8e8d13e4044fb"
+  },
+  "phase_reports_sha256": {
+    "7": "18c3ef60e9edf901174300a800e98128e2ce4fefa3398669d148bfa1864c828c",
+    "8": "44c3876584adf55ecff5266e4852742faaa6ee74e2d32277e585205c1d98e55e",
+    "9": "351f9fe7f6f0d107494e590c93c8478781e3c0a7a41b9267aa49759526ebfc1e",
+    "10": "dab2897315cde615db39bbed66c4b95e53fe5bc52e13534fe69570f69e014219",
+    "11": "b4a0dcd19bda7719587b7880b76f67e637d6e5a752590afd2612f56490ec9c83"
+  },
+  "phase_audit_summaries": {
+    "7": {
+      "status": "pass",
+      "cases": 144,
+      "mesh_observations": 720,
+      "control_mesh_observations": 15,
+      "outcome_counts": {
+        "geometry_legal": 144,
+        "gci_admitted": 12,
+        "fine_targets_pass": 0,
+        "all_five_targets_pass": 0,
+        "export_pass": 7,
+        "side_a4_pass": 10,
+        "scoped_joint_pass": 0,
+        "assignment_scoped_joint_pass": 0
+      },
+      "all_gate_qualification": false
+    },
+    "8": {
+      "status": "pass",
+      "cases": 12,
+      "mesh_observations": 60,
+      "replay_mesh_observations": 10,
+      "outcome_counts": {
+        "geometry_legal": 12,
+        "gci_admitted": 6,
+        "fine_targets_pass": 0,
+        "all_five_targets_pass": 0,
+        "export_pass": 1,
+        "side_a4_pass": 2,
+        "scoped_joint_pass": 0,
+        "assignment_scoped_joint_pass": 0
+      },
+      "all_gate_qualification": false
+    },
+    "9": {
+      "status": "pass",
+      "cases": 36,
+      "mesh_observations": 108,
+      "control_mesh_observations": 6,
+      "outcome_counts": {
+        "input_canonical": 36,
+        "aesthetic_pass": 36,
+        "fem_complete": 36,
+        "gate_s_pass": 0,
+        "lateral_fatigue_screen": 0
+      },
+      "all_gate_qualification": false
+    },
+    "10": {
+      "status": "pass",
+      "cases": 36,
+      "mesh_observations": 108,
+      "outcome_counts": {
+        "plate_gci_valid_3level": 36,
+        "seq_ratio_gci_admitted": 0,
+        "sequence_valid": 36,
+        "observable_valid": 36,
+        "phase9_fine_binding": 36
+      },
+      "all_gate_qualification": false
+    },
+    "11": {
+      "status": "pass",
+      "cases": 36,
+      "a4_observations": 36,
+      "outcome_counts": {
+        "a4_complete": 36,
+        "buckling_pass": 36,
+        "support_sequence_pass": 36,
+        "side_a4_pass": 36,
+        "parent_mesh_binding": 36
+      },
+      "all_gate_qualification": false
+    }
+  },
+  "results": [
+    {
+      "name": "local_01_x136_t3.6_ea20.0",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x136_t3.6_ea20.0.csv",
+      "genome_sha256": "cc8b66cd613d8a005ff74344455ed76bdd34ee2d09ca240b92e0fe087674f498",
+      "parameters": {
+        "taper_x0_mm": 136.0,
+        "t_tip_mm": 3.6,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.6343739286576726,
+        "strict_seq_ratio": 2.4548936686880025,
+        "certified_native_hunter_sf": 0.5922849970775631,
+        "strict_native_hunter_sf": 0.6314279030645263,
+        "all_three_min_native_hunter_sf": 0.5922849970775631,
+        "strict_lat_rob_n": 164.17125479677685,
+        "certified_lateral_sf_358": 0.4301511151959955,
+        "strict_lateral_sf_358": 0.45857892401334316,
+        "certified_fatigue_sf": 0.4301555750868315,
+        "strict_fatigue_sf": 0.4585836786492571
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.724304492522511,
+          2.1382303799022324,
+          2.476171382764751
+        ],
+        "mesh_sha256": [
+          "cb0d89637344411307b9e9f3f71e111c68013c0746510d252ca8562998551763",
+          "7800ef98c35089d641c50947e7bb2cdfc31dc70c67c334f73cc20f41435c4619",
+          "feee9ea7ec81c6f4eaf287642fd3dcb3ec71943859c25101a0664931ba59f54a"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.780450573848691,
+        "buckling_margin": 6.780450573848691,
+        "supported_seq_ratio": 2.8057315186873337,
+        "certified_seq_ratio": 2.6343739286576726,
+        "support_seq_margin": 0.1713575900296611,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "cb0d89637344411307b9e9f3f71e111c68013c0746510d252ca8562998551763"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.6343739286576726,
+        "support_seq_margin": 0.1713575900296611,
+        "tip_bending_safety_factor": 0.6314279030645263
+      },
+      "fine_mesh_sha256": "cb0d89637344411307b9e9f3f71e111c68013c0746510d252ca8562998551763",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x136_t3.6_ea21.8",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x136_t3.6_ea21.8.csv",
+      "genome_sha256": "aee5917e7f5823a924ea5933e498059f2099f503b90f65f693ffe6644052f40c",
+      "parameters": {
+        "taper_x0_mm": 136.0,
+        "t_tip_mm": 3.6,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428269493073083,
+        "strict_seq_ratio": 2.088795479946427,
+        "certified_native_hunter_sf": 0.6954161042443517,
+        "strict_native_hunter_sf": 0.74205754411738,
+        "all_three_min_native_hunter_sf": 0.6954161042443517,
+        "strict_lat_rob_n": 192.9349614705188,
+        "certified_lateral_sf_358": 0.5050508019651716,
+        "strict_lateral_sf_358": 0.5389244733813374,
+        "certified_fatigue_sf": 0.5050560384305992,
+        "strict_fatigue_sf": 0.538930061055611
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201518354958774,
+          1.8159612042389637,
+          2.1050135987621323
+        ],
+        "mesh_sha256": [
+          "a43365bacea73a9303a0bf461f97a60222dca473e947e1af9ffe904b9b23d159",
+          "29846b99a17a782234cc3278ea3bcaab507fc649ecd583795df0d74bead3e776",
+          "06633b45ab6077e6e24afa5650da2efe328b4bbd152686f24a1e249e9db35041"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.448967454940174,
+        "buckling_margin": 8.448967454940174,
+        "supported_seq_ratio": 2.645243490750802,
+        "certified_seq_ratio": 2.2428269493073083,
+        "support_seq_margin": 0.4024165414434937,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "a43365bacea73a9303a0bf461f97a60222dca473e947e1af9ffe904b9b23d159"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428269493073083,
+        "support_seq_margin": 0.4024165414434937,
+        "tip_bending_safety_factor": 0.74205754411738
+      },
+      "fine_mesh_sha256": "a43365bacea73a9303a0bf461f97a60222dca473e947e1af9ffe904b9b23d159",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x136_t4.0_ea20.0",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x136_t4.0_ea20.0.csv",
+      "genome_sha256": "b921e1199d0ea55f7a1ed5ac7b0aa910c5826fd08faaaf5e56d53aaa15d6fa05",
+      "parameters": {
+        "taper_x0_mm": 136.0,
+        "t_tip_mm": 4.0,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.6343729600274766,
+        "strict_seq_ratio": 2.4548920338240765,
+        "certified_native_hunter_sf": 0.5922851508562098,
+        "strict_native_hunter_sf": 0.6314280961020521,
+        "all_three_min_native_hunter_sf": 0.5922851508562098,
+        "strict_lat_rob_n": 164.17130498653353,
+        "certified_lateral_sf_358": 0.43015122687881163,
+        "strict_lateral_sf_358": 0.4585790642081942,
+        "certified_fatigue_sf": 0.4301556867708055,
+        "strict_fatigue_sf": 0.4585838188455619
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.72430375433361,
+          2.1382284094348245,
+          2.4761488063691277
+        ],
+        "mesh_sha256": [
+          "478467d1aa13bf286758d7cd1c9a8588ca764e14f39c897cb25107bfec1fbbf5",
+          "b2d47e4760f06e9b910fcd644c5f1db2f647aff04d52e1f111f0e64dc928950c",
+          "5df24596dc274785580f14312b0a139dd3bb5ef9ac70571e5db2283cfe05d129"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.828156475854877,
+        "buckling_margin": 6.828156475854877,
+        "supported_seq_ratio": 2.7719374152950875,
+        "certified_seq_ratio": 2.6343729600274766,
+        "support_seq_margin": 0.13756445526761096,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "478467d1aa13bf286758d7cd1c9a8588ca764e14f39c897cb25107bfec1fbbf5"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.6343729600274766,
+        "support_seq_margin": 0.13756445526761096,
+        "tip_bending_safety_factor": 0.6314280961020521
+      },
+      "fine_mesh_sha256": "478467d1aa13bf286758d7cd1c9a8588ca764e14f39c897cb25107bfec1fbbf5",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x136_t4.0_ea21.8",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x136_t4.0_ea21.8.csv",
+      "genome_sha256": "f4d75e61e51f324e58c97a15335a38313dcf68d93899144fc39822eda05e2d0e",
+      "parameters": {
+        "taper_x0_mm": 136.0,
+        "t_tip_mm": 4.0,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428205846389897,
+        "strict_seq_ratio": 2.0887902495865243,
+        "certified_native_hunter_sf": 0.6954175401543908,
+        "strict_native_hunter_sf": 0.7420595087219954,
+        "all_three_min_native_hunter_sf": 0.6954175401543908,
+        "strict_lat_rob_n": 192.9354722677188,
+        "certified_lateral_sf_358": 0.5050518448048649,
+        "strict_lateral_sf_358": 0.5389259001891586,
+        "certified_fatigue_sf": 0.5050570812811048,
+        "strict_fatigue_sf": 0.5389314878782256
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201469493942817,
+          1.8159491174015303,
+          2.104942918183525
+        ],
+        "mesh_sha256": [
+          "97174b6ae77381a489bf7d83f65b4ccf9caef0cfc10e523be8189a5f28ff8349",
+          "8856d3c32bdc9069e1d0deae6c9ebc4e986fbbf0df8ab2513764f108b232be71",
+          "1b6e769cbe125edddbe487f2822d5bd1852f01ded61e19a7a01b5a91d43b0188"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.54194717614467,
+        "buckling_margin": 8.54194717614467,
+        "supported_seq_ratio": 2.5251540166514554,
+        "certified_seq_ratio": 2.2428205846389897,
+        "support_seq_margin": 0.28233343201246575,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "97174b6ae77381a489bf7d83f65b4ccf9caef0cfc10e523be8189a5f28ff8349"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428205846389897,
+        "support_seq_margin": 0.28233343201246575,
+        "tip_bending_safety_factor": 0.7420595087219954
+      },
+      "fine_mesh_sha256": "97174b6ae77381a489bf7d83f65b4ccf9caef0cfc10e523be8189a5f28ff8349",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x136_t4.4_ea20.0",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x136_t4.4_ea20.0.csv",
+      "genome_sha256": "f5c0c051561a386959890d1fc26e126097a28e19f732d7a7d0abf82774f94b19",
+      "parameters": {
+        "taper_x0_mm": 136.0,
+        "t_tip_mm": 4.4,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.6343727418115055,
+        "strict_seq_ratio": 2.454892136635351,
+        "certified_native_hunter_sf": 0.592285168460152,
+        "strict_native_hunter_sf": 0.6314281185020616,
+        "all_three_min_native_hunter_sf": 0.592285168460152,
+        "strict_lat_rob_n": 164.17131081053603,
+        "certified_lateral_sf_358": 0.43015123966379754,
+        "strict_lateral_sf_358": 0.4585790804763576,
+        "certified_fatigue_sf": 0.4301556995559241,
+        "strict_fatigue_sf": 0.4585838351138939
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.7243036773460747,
+          2.138228104510209,
+          2.4761450229056283
+        ],
+        "mesh_sha256": [
+          "bda196929fe37f0230996fce2e75b8ecc4fb75913d40db0776d7e7c86c7bc294",
+          "c0c0d9f434c0de925af379305146eaf14123b777e68ab07d3ec8bd3731ec8c74",
+          "66ff8b1c72b1f755888cc0f5dec3929065bba835fe8b6df648e330e35a674edb"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.854067000909132,
+        "buckling_margin": 6.854067000909132,
+        "supported_seq_ratio": 2.769677061568026,
+        "certified_seq_ratio": 2.6343727418115055,
+        "support_seq_margin": 0.13530431975652046,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "bda196929fe37f0230996fce2e75b8ecc4fb75913d40db0776d7e7c86c7bc294"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.6343727418115055,
+        "support_seq_margin": 0.13530431975652046,
+        "tip_bending_safety_factor": 0.6314281185020616
+      },
+      "fine_mesh_sha256": "bda196929fe37f0230996fce2e75b8ecc4fb75913d40db0776d7e7c86c7bc294",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x136_t4.4_ea21.8",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x136_t4.4_ea21.8.csv",
+      "genome_sha256": "a61c69300e26a93f868bedd7b6808dcd2534f0b65d9575865cea6275ebecc7d6",
+      "parameters": {
+        "taper_x0_mm": 136.0,
+        "t_tip_mm": 4.4,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428197143082516,
+        "strict_seq_ratio": 2.0887894861712715,
+        "certified_native_hunter_sf": 0.6954177603081565,
+        "strict_native_hunter_sf": 0.7420597836830441,
+        "all_three_min_native_hunter_sf": 0.6954177603081565,
+        "strict_lat_rob_n": 192.9355437575915,
+        "certified_lateral_sf_358": 0.5050520046930745,
+        "strict_lateral_sf_358": 0.5389260998815405,
+        "certified_fatigue_sf": 0.5050572411709724,
+        "strict_fatigue_sf": 0.5389316875726778
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.320146267849647,
+          1.8159471558805198,
+          2.1049205758478804
+        ],
+        "mesh_sha256": [
+          "18e4a445317b510c2dbc4603f74491b6ce43a5333ff8ec397b1886ebaaeb42f1",
+          "cc534ced8d9a71e4a2efb1159ae7e729c63ced34c7d2121167ffe2db64304d96",
+          "379766123cf15c4cc6cd9740c6335289e444c0c6ba356ccf5cf47bee59605215"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.598545764256139,
+        "buckling_margin": 8.598545764256139,
+        "supported_seq_ratio": 2.485052876928695,
+        "certified_seq_ratio": 2.2428197143082516,
+        "support_seq_margin": 0.24223316262044348,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "18e4a445317b510c2dbc4603f74491b6ce43a5333ff8ec397b1886ebaaeb42f1"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428197143082516,
+        "support_seq_margin": 0.24223316262044348,
+        "tip_bending_safety_factor": 0.7420597836830441
+      },
+      "fine_mesh_sha256": "18e4a445317b510c2dbc4603f74491b6ce43a5333ff8ec397b1886ebaaeb42f1",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x142_t3.6_ea20.0",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x142_t3.6_ea20.0.csv",
+      "genome_sha256": "fdfa65653903984d961db4edaf162a547571c2a141a76eaf4898654eb0bffd86",
+      "parameters": {
+        "taper_x0_mm": 142.0,
+        "t_tip_mm": 3.6,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.6343734055458645,
+        "strict_seq_ratio": 2.4548931685758166,
+        "certified_native_hunter_sf": 0.5922850538204214,
+        "strict_native_hunter_sf": 0.6314279727008066,
+        "all_three_min_native_hunter_sf": 0.5922850538204214,
+        "strict_lat_rob_n": 164.17127290220972,
+        "certified_lateral_sf_358": 0.43015115640589263,
+        "strict_lateral_sf_358": 0.458578974587178,
+        "certified_fatigue_sf": 0.43015561629715593,
+        "strict_fatigue_sf": 0.4585837292236164
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.724304184186241,
+          2.138229624539984,
+          2.476164281957175
+        ],
+        "mesh_sha256": [
+          "5dbe1aff4d0fcc5871767570300e80751d362963910435ed16b18163ba4c1b4a",
+          "a4d96fdf2c42f81660810fc30033a38e8c13ff8a884a0fd1c64e984bec82b507",
+          "71955c243e63be68769f2731a59e754a87af97dc317cba0b1b5b6d0e1aa49c64"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.8072747582820785,
+        "buckling_margin": 6.8072747582820785,
+        "supported_seq_ratio": 2.7948103460899563,
+        "certified_seq_ratio": 2.6343734055458645,
+        "support_seq_margin": 0.16043694054409174,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "5dbe1aff4d0fcc5871767570300e80751d362963910435ed16b18163ba4c1b4a"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.6343734055458645,
+        "support_seq_margin": 0.16043694054409174,
+        "tip_bending_safety_factor": 0.6314279727008066
+      },
+      "fine_mesh_sha256": "5dbe1aff4d0fcc5871767570300e80751d362963910435ed16b18163ba4c1b4a",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x142_t3.6_ea21.8",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x142_t3.6_ea21.8.csv",
+      "genome_sha256": "4ffec2f3618499dc286bb6184cea15380a69c05ca62fa3915fce82f6925082f8",
+      "parameters": {
+        "taper_x0_mm": 142.0,
+        "t_tip_mm": 3.6,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428251239698738,
+        "strict_seq_ratio": 2.0887937259135017,
+        "certified_native_hunter_sf": 0.6954164641878232,
+        "strict_native_hunter_sf": 0.742058076194583,
+        "all_three_min_native_hunter_sf": 0.6954164641878232,
+        "strict_lat_rob_n": 192.93509981059157,
+        "certified_lateral_sf_358": 0.5050510633766314,
+        "strict_lateral_sf_358": 0.5389248598061217,
+        "certified_fatigue_sf": 0.5050562998447693,
+        "strict_fatigue_sf": 0.5389304474844018
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201504744578028,
+          1.815957640342048,
+          2.104994281956634
+        ],
+        "mesh_sha256": [
+          "b9665eb8aae54ef9f29b045b418a54e5dc18d0bcbeb0e0cadc97b07290d5a302",
+          "302e7d4073034e868a72d26a2551cb8738bb4b0fb22603bc828c97db7781403e",
+          "a404f0254d33f43dca128726809f383e283dbc0a2a07a7e9ba7266dad8de1589"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.499642601928285,
+        "buckling_margin": 8.499642601928285,
+        "supported_seq_ratio": 2.620257086673168,
+        "certified_seq_ratio": 2.2428251239698738,
+        "support_seq_margin": 0.37743196270329404,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "b9665eb8aae54ef9f29b045b418a54e5dc18d0bcbeb0e0cadc97b07290d5a302"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428251239698738,
+        "support_seq_margin": 0.37743196270329404,
+        "tip_bending_safety_factor": 0.742058076194583
+      },
+      "fine_mesh_sha256": "b9665eb8aae54ef9f29b045b418a54e5dc18d0bcbeb0e0cadc97b07290d5a302",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x142_t4.0_ea20.0",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x142_t4.0_ea20.0.csv",
+      "genome_sha256": "305a35d9f83419c2263436ffd260173e0cec5f4fba6ac17f7478112782f4eaf5",
+      "parameters": {
+        "taper_x0_mm": 142.0,
+        "t_tip_mm": 4.0,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.634372959536279,
+        "strict_seq_ratio": 2.4548927286736286,
+        "certified_native_hunter_sf": 0.5922851569290556,
+        "strict_native_hunter_sf": 0.6314281041599867,
+        "all_three_min_native_hunter_sf": 0.5922851569290556,
+        "strict_lat_rob_n": 164.17130708159655,
+        "certified_lateral_sf_358": 0.4301512312892583,
+        "strict_lateral_sf_358": 0.45857907006032556,
+        "certified_fatigue_sf": 0.43015569118129793,
+        "strict_fatigue_sf": 0.45858382469775383
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.7243037483582504,
+          2.1382283031499485,
+          2.476147444557801
+        ],
+        "mesh_sha256": [
+          "f65254657742870e5e9e6512baf615e5f37770db26802b33db8f1d458219b7e8",
+          "0001702eca2c124f400ac48438cd049f6c5a0a36d84cd89abc3c0355b5d4e742",
+          "6fa167152c919a55f78dd099e36060dfbf39cf3320d37ae85383c9defabf2e77"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.842688444914545,
+        "buckling_margin": 6.842688444914545,
+        "supported_seq_ratio": 2.771200025194123,
+        "certified_seq_ratio": 2.634372959536279,
+        "support_seq_margin": 0.1368270656578443,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "f65254657742870e5e9e6512baf615e5f37770db26802b33db8f1d458219b7e8"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.634372959536279,
+        "support_seq_margin": 0.1368270656578443,
+        "tip_bending_safety_factor": 0.6314281041599867
+      },
+      "fine_mesh_sha256": "f65254657742870e5e9e6512baf615e5f37770db26802b33db8f1d458219b7e8",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x142_t4.0_ea21.8",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x142_t4.0_ea21.8.csv",
+      "genome_sha256": "bc1fa4f71b356faf7f299b190fb2cc1191dc7373f08cab5571fc913718bc1766",
+      "parameters": {
+        "taper_x0_mm": 142.0,
+        "t_tip_mm": 4.0,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428201842039472,
+        "strict_seq_ratio": 2.088789758909232,
+        "certified_native_hunter_sf": 0.6954176010908012,
+        "strict_native_hunter_sf": 0.7420595846730169,
+        "all_three_min_native_hunter_sf": 0.6954176010908012,
+        "strict_lat_rob_n": 192.9354920149844,
+        "certified_lateral_sf_358": 0.5050518890603585,
+        "strict_lateral_sf_358": 0.5389259553491184,
+        "certified_fatigue_sf": 0.5050571255370573,
+        "strict_fatigue_sf": 0.5389315430387572
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201467847968584,
+          1.8159486307994819,
+          2.1049370709563813
+        ],
+        "mesh_sha256": [
+          "74577c4da5713affb13dbc619e9ee639b8964428f301d646a7f2fab8fde2ed2e",
+          "3cb574d1fc48efcab0c5c0c08eff3cc94ec602c8650e3bc9cd6404b84d4c68fa",
+          "dca694143039ceef23040bea82a050418ceef5bc432708f13660210931d0f4c2"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.572135018851444,
+        "buckling_margin": 8.572135018851444,
+        "supported_seq_ratio": 2.5148173598998236,
+        "certified_seq_ratio": 2.2428201842039472,
+        "support_seq_margin": 0.27199717569587634,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "74577c4da5713affb13dbc619e9ee639b8964428f301d646a7f2fab8fde2ed2e"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428201842039472,
+        "support_seq_margin": 0.27199717569587634,
+        "tip_bending_safety_factor": 0.7420595846730169
+      },
+      "fine_mesh_sha256": "74577c4da5713affb13dbc619e9ee639b8964428f301d646a7f2fab8fde2ed2e",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x142_t4.4_ea20.0",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x142_t4.4_ea20.0.csv",
+      "genome_sha256": "4ec21f6b981711109e18bba672359c5fe386a48623fe2650b41c205a008940b0",
+      "parameters": {
+        "taper_x0_mm": 142.0,
+        "t_tip_mm": 4.4,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.634372558437263,
+        "strict_seq_ratio": 2.45489263632778,
+        "certified_native_hunter_sf": 0.5922851691067255,
+        "strict_native_hunter_sf": 0.6314281193824159,
+        "all_three_min_native_hunter_sf": 0.5922851691067255,
+        "strict_lat_rob_n": 164.17131103942813,
+        "certified_lateral_sf_358": 0.430151240133376,
+        "strict_lateral_sf_358": 0.45857908111572104,
+        "certified_fatigue_sf": 0.43015570002550735,
+        "strict_fatigue_sf": 0.45858383575326384
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.724303658081538,
+          2.1382280973068015,
+          2.476144913447092
+        ],
+        "mesh_sha256": [
+          "4414c4c4bbfc10f6c9f78b3a823ba43a0a264c51fadf94aaff88588e84c7863b",
+          "dcb1cedbdcca67e806e681a439d8e729c0ce0b0d36f6a8e0c0320ab6d43e2176",
+          "cf959fb0ed70955148a245615274537c1d82d8fb8611f68a21ec1bde34cbe08c"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.861166428211773,
+        "buckling_margin": 6.861166428211773,
+        "supported_seq_ratio": 2.7698201665791373,
+        "certified_seq_ratio": 2.634372558437263,
+        "support_seq_margin": 0.1354476081418743,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "4414c4c4bbfc10f6c9f78b3a823ba43a0a264c51fadf94aaff88588e84c7863b"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.634372558437263,
+        "support_seq_margin": 0.1354476081418743,
+        "tip_bending_safety_factor": 0.6314281193824159
+      },
+      "fine_mesh_sha256": "4414c4c4bbfc10f6c9f78b3a823ba43a0a264c51fadf94aaff88588e84c7863b",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x142_t4.4_ea21.8",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x142_t4.4_ea21.8.csv",
+      "genome_sha256": "83c7724967885cd2d930fa7ecb6272a021ce7afa2b76eaa9bae389aff044e85c",
+      "parameters": {
+        "taper_x0_mm": 142.0,
+        "t_tip_mm": 4.4,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428195625624734,
+        "strict_seq_ratio": 2.088788941234366,
+        "certified_native_hunter_sf": 0.6954177681210031,
+        "strict_native_hunter_sf": 0.7420597952418332,
+        "all_three_min_native_hunter_sf": 0.6954177681210031,
+        "strict_lat_rob_n": 192.93554676287664,
+        "certified_lateral_sf_358": 0.5050520103672089,
+        "strict_lateral_sf_358": 0.5389261082761917,
+        "certified_fatigue_sf": 0.5050572468451655,
+        "strict_fatigue_sf": 0.5389316959674162
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201462417333016,
+          1.815947080991595,
+          2.1049196825386995
+        ],
+        "mesh_sha256": [
+          "66f925b6d430489c1580d2d182a088fcc632a64443fd6ecd48ec4fd053d67e3b",
+          "d69b1f615fff72fe3a6e44835de12e9d6ab5d8ebe9edd532568d51b6dc3eb7b6",
+          "d8edcbb04d2e0778439076058456268fa68608881574b10b7105e1c446585dd9"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.616046009746684,
+        "buckling_margin": 8.616046009746684,
+        "supported_seq_ratio": 2.4843062203818755,
+        "certified_seq_ratio": 2.2428195625624734,
+        "support_seq_margin": 0.24148665781940215,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "66f925b6d430489c1580d2d182a088fcc632a64443fd6ecd48ec4fd053d67e3b"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428195625624734,
+        "support_seq_margin": 0.24148665781940215,
+        "tip_bending_safety_factor": 0.7420597952418332
+      },
+      "fine_mesh_sha256": "66f925b6d430489c1580d2d182a088fcc632a64443fd6ecd48ec4fd053d67e3b",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x148_t3.6_ea20.0",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x148_t3.6_ea20.0.csv",
+      "genome_sha256": "890043f9c7611ae8e38352cc39a0f1bf3125cb35d890251e721e2293ff97e731",
+      "parameters": {
+        "taper_x0_mm": 148.0,
+        "t_tip_mm": 3.6,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.634372996401958,
+        "strict_seq_ratio": 2.454893105604882,
+        "certified_native_hunter_sf": 0.5922851011843138,
+        "strict_native_hunter_sf": 0.6314280329993496,
+        "all_three_min_native_hunter_sf": 0.5922851011843138,
+        "strict_lat_rob_n": 164.1712885798309,
+        "certified_lateral_sf_358": 0.43015119080425024,
+        "strict_lateral_sf_358": 0.45857901837941595,
+        "certified_fatigue_sf": 0.4301556506958701,
+        "strict_fatigue_sf": 0.4585837730163083
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.7243039344524584,
+          2.1382290696603987,
+          2.476155974791506
+        ],
+        "mesh_sha256": [
+          "d1d2967a14b3f820d6e77eb39c7627a966c8c183c3e2faf084e7542ba0f21815",
+          "6413379ada8456b82a71a1a218f3c9fa16d0392c6d9987ba588119c6ad67c981",
+          "94c054f1dd8b6367b3bb02f8b0f5a3449f9c39ee03117bf1024f7a686a244b9c"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.829901803116703,
+        "buckling_margin": 6.829901803116703,
+        "supported_seq_ratio": 2.7831792555295465,
+        "certified_seq_ratio": 2.634372996401958,
+        "support_seq_margin": 0.14880625912758827,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "d1d2967a14b3f820d6e77eb39c7627a966c8c183c3e2faf084e7542ba0f21815"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.634372996401958,
+        "support_seq_margin": 0.14880625912758827,
+        "tip_bending_safety_factor": 0.6314280329993496
+      },
+      "fine_mesh_sha256": "d1d2967a14b3f820d6e77eb39c7627a966c8c183c3e2faf084e7542ba0f21815",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x148_t3.6_ea21.8",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x148_t3.6_ea21.8.csv",
+      "genome_sha256": "7abd6ca8201947021b4c5bab119b69c7f0930b3bb2d21cf14a518c2ca260da42",
+      "parameters": {
+        "taper_x0_mm": 148.0,
+        "t_tip_mm": 3.6,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428231289124776,
+        "strict_seq_ratio": 2.088792842686911,
+        "certified_native_hunter_sf": 0.6954168981377702,
+        "strict_native_hunter_sf": 0.7420586303294313,
+        "all_three_min_native_hunter_sf": 0.6954168981377702,
+        "strict_lat_rob_n": 192.93524388565214,
+        "certified_lateral_sf_358": 0.5050513785358107,
+        "strict_lateral_sf_358": 0.538925262250425,
+        "certified_fatigue_sf": 0.5050566150072163,
+        "strict_fatigue_sf": 0.5389308499328778
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201490785831678,
+          1.8159546278727163,
+          2.104974781099219
+        ],
+        "mesh_sha256": [
+          "30a086c4482e94c8a402bd231dacc9a22516d4786edf8c895786000f2e9b8860",
+          "1e2b949ea31a6d093a1d8ec7e29c1117a0e315d5d1bf7b176fa72d781136eaa4",
+          "082f3e4f462cece48ba58a126d1ed4ba313309f4bf022ebd870eeb6c9c668b58"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.546501359606568,
+        "buckling_margin": 8.546501359606568,
+        "supported_seq_ratio": 2.592022585959327,
+        "certified_seq_ratio": 2.2428231289124776,
+        "support_seq_margin": 0.3491994570468493,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "30a086c4482e94c8a402bd231dacc9a22516d4786edf8c895786000f2e9b8860"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428231289124776,
+        "support_seq_margin": 0.3491994570468493,
+        "tip_bending_safety_factor": 0.7420586303294313
+      },
+      "fine_mesh_sha256": "30a086c4482e94c8a402bd231dacc9a22516d4786edf8c895786000f2e9b8860",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x148_t4.0_ea20.0",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x148_t4.0_ea20.0.csv",
+      "genome_sha256": "52693c5eb7202fcdace56d95dbde0386d7cf65d8299e795757ced93bd2661508",
+      "parameters": {
+        "taper_x0_mm": 148.0,
+        "t_tip_mm": 4.0,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.634372557969714,
+        "strict_seq_ratio": 2.4548925027255404,
+        "certified_native_hunter_sf": 0.5922851629050325,
+        "strict_native_hunter_sf": 0.6314281114198617,
+        "all_three_min_native_hunter_sf": 0.5922851629050325,
+        "strict_lat_rob_n": 164.17130896916404,
+        "certified_lateral_sf_358": 0.43015123562935326,
+        "strict_lateral_sf_358": 0.45857907533286046,
+        "certified_fatigue_sf": 0.43015569552143795,
+        "strict_fatigue_sf": 0.45858382997034347
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.724303563762921,
+          2.1382282147905083,
+          2.4761462124178313
+        ],
+        "mesh_sha256": [
+          "b0b9baaa31305db87c06cd6dbf35bed549217d8e123869aff9e8379299390c52",
+          "fb3c8d2c2b11e953bc0a178fd1fa365218c6625d3576be61301693add40c0fcc",
+          "ab2baf5ea3a73c2cda3bbadbbb84f5b34f8f9b34cb13274395b3e012ba4aeb5e"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.854319379535871,
+        "buckling_margin": 6.854319379535871,
+        "supported_seq_ratio": 2.7702439348548342,
+        "certified_seq_ratio": 2.634372557969714,
+        "support_seq_margin": 0.1358713768851203,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "b0b9baaa31305db87c06cd6dbf35bed549217d8e123869aff9e8379299390c52"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.634372557969714,
+        "support_seq_margin": 0.1358713768851203,
+        "tip_bending_safety_factor": 0.6314281114198617
+      },
+      "fine_mesh_sha256": "b0b9baaa31305db87c06cd6dbf35bed549217d8e123869aff9e8379299390c52",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x148_t4.0_ea21.8",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x148_t4.0_ea21.8.csv",
+      "genome_sha256": "8f94ab072d64f97f036998c2d781688571db9f1cdf73de141d00704e455e0b65",
+      "parameters": {
+        "taper_x0_mm": 148.0,
+        "t_tip_mm": 4.0,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428198450496053,
+        "strict_seq_ratio": 2.0887896743730607,
+        "certified_native_hunter_sf": 0.6954176635952325,
+        "strict_native_hunter_sf": 0.7420596614819588,
+        "all_three_min_native_hunter_sf": 0.6954176635952325,
+        "strict_lat_rob_n": 192.9355119853093,
+        "certified_lateral_sf_358": 0.5050519344546381,
+        "strict_lateral_sf_358": 0.5389260111321489,
+        "certified_fatigue_sf": 0.5050571709318076,
+        "strict_fatigue_sf": 0.5389315988223662
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201465801862566,
+          1.8159480056000075,
+          2.1049313266380887
+        ],
+        "mesh_sha256": [
+          "d32487bc5897b0816cdc7b29ba1c80474a6726e410959eee7322a6fdcbfeab93",
+          "3aa569e40ad8fea9f803c819315430c28ea53037105c61010104a1ec9bd35949",
+          "407ffd37a4078cdd93b1ef6dfc191f219c52be284487b45bd2d8c9ff424fb8c8"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.600094303964468,
+        "buckling_margin": 8.600094303964468,
+        "supported_seq_ratio": 2.5047561380519037,
+        "certified_seq_ratio": 2.2428198450496053,
+        "support_seq_margin": 0.26193629300229837,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "d32487bc5897b0816cdc7b29ba1c80474a6726e410959eee7322a6fdcbfeab93"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428198450496053,
+        "support_seq_margin": 0.26193629300229837,
+        "tip_bending_safety_factor": 0.7420596614819588
+      },
+      "fine_mesh_sha256": "d32487bc5897b0816cdc7b29ba1c80474a6726e410959eee7322a6fdcbfeab93",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x148_t4.4_ea20.0",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x148_t4.4_ea20.0.csv",
+      "genome_sha256": "f79d29a44d909881b6ba6f21751c03adf4384502861dfec10ea0dbf362f1f193",
+      "parameters": {
+        "taper_x0_mm": 148.0,
+        "t_tip_mm": 4.4,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.634372639652826,
+        "strict_seq_ratio": 2.4548922746713076,
+        "certified_native_hunter_sf": 0.5922851696997462,
+        "strict_native_hunter_sf": 0.6314281201466169,
+        "all_three_min_native_hunter_sf": 0.5922851696997462,
+        "strict_lat_rob_n": 164.17131123812038,
+        "certified_lateral_sf_358": 0.4301512405640615,
+        "strict_lateral_sf_358": 0.4585790816707273,
+        "certified_fatigue_sf": 0.4301557004561973,
+        "strict_fatigue_sf": 0.458583836308276
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.72430353647656,
+          2.1382280954153225,
+          2.476144636170212
+        ],
+        "mesh_sha256": [
+          "1de4b81273959236088c009334958f326f93283742598caee19a077843f0b5a9",
+          "77a075abb3d2374129f44d5fe531608da953ff1e9c286f9676a7f511237e0eff",
+          "d622c32fb94bebe1e9bc9399d27906f00f3f97053839685f64239c4e157de8ca"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.866382293849868,
+        "buckling_margin": 6.866382293849868,
+        "supported_seq_ratio": 2.769834865143165,
+        "certified_seq_ratio": 2.634372639652826,
+        "support_seq_margin": 0.13546222549033882,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "1de4b81273959236088c009334958f326f93283742598caee19a077843f0b5a9"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.634372639652826,
+        "support_seq_margin": 0.13546222549033882,
+        "tip_bending_safety_factor": 0.6314281201466169
+      },
+      "fine_mesh_sha256": "1de4b81273959236088c009334958f326f93283742598caee19a077843f0b5a9",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "local_01_x148_t4.4_ea21.8",
+      "family": "local_01",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/local_01_x148_t4.4_ea21.8.csv",
+      "genome_sha256": "0ead2ac59d4de1d4435bf9bc928177b5968802976dc85d0ea9cca37ade4885a9",
+      "parameters": {
+        "taper_x0_mm": 148.0,
+        "t_tip_mm": 4.4,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428196447086677,
+        "strict_seq_ratio": 2.0887889370186348,
+        "certified_native_hunter_sf": 0.6954177767765158,
+        "strict_native_hunter_sf": 0.7420598063835526,
+        "all_three_min_native_hunter_sf": 0.6954177767765158,
+        "strict_lat_rob_n": 192.93554965972368,
+        "certified_lateral_sf_358": 0.5050520166533355,
+        "strict_lateral_sf_358": 0.5389261163679432,
+        "certified_fatigue_sf": 0.5050572531313572,
+        "strict_fatigue_sf": 0.5389317040592516
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201461749481855,
+          1.815946957087105,
+          2.104917671697477
+        ],
+        "mesh_sha256": [
+          "4c4307a6c530414c07957ec102147ed359aac51aa15e7bdd4f466aa1e2d5ddd6",
+          "9d9952271cc8b0c107211d49476e82ebdb0ad54af4a779a4e25bce30e2b946d2",
+          "5d606727f15a6341a940ce744bf1ce1f243bcd07a98751719a2f988e62baafed"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.632297944364172,
+        "buckling_margin": 8.632297944364172,
+        "supported_seq_ratio": 2.483137056710614,
+        "certified_seq_ratio": 2.2428196447086677,
+        "support_seq_margin": 0.24031741200194645,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "4c4307a6c530414c07957ec102147ed359aac51aa15e7bdd4f466aa1e2d5ddd6"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428196447086677,
+        "support_seq_margin": 0.24031741200194645,
+        "tip_bending_safety_factor": 0.7420598063835526
+      },
+      "fine_mesh_sha256": "4c4307a6c530414c07957ec102147ed359aac51aa15e7bdd4f466aa1e2d5ddd6",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x136_t3.6_ea20.0",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x136_t3.6_ea20.0.csv",
+      "genome_sha256": "e049df6bd5e8510c69a991393a1a849e04a25f934eec526ca94934978f4fd489",
+      "parameters": {
+        "taper_x0_mm": 136.0,
+        "t_tip_mm": 3.6,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.6343739286576726,
+        "strict_seq_ratio": 2.4548936686880025,
+        "certified_native_hunter_sf": 0.5922849970775631,
+        "strict_native_hunter_sf": 0.6314279030645263,
+        "all_three_min_native_hunter_sf": 0.5922849970775631,
+        "strict_lat_rob_n": 164.17125479677685,
+        "certified_lateral_sf_358": 0.4301511151959955,
+        "strict_lateral_sf_358": 0.45857892401334316,
+        "certified_fatigue_sf": 0.4301555750868315,
+        "strict_fatigue_sf": 0.4585836786492571
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.724304492522511,
+          2.1382303799022324,
+          2.476171382764751
+        ],
+        "mesh_sha256": [
+          "cb0d89637344411307b9e9f3f71e111c68013c0746510d252ca8562998551763",
+          "7800ef98c35089d641c50947e7bb2cdfc31dc70c67c334f73cc20f41435c4619",
+          "feee9ea7ec81c6f4eaf287642fd3dcb3ec71943859c25101a0664931ba59f54a"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.780450573848691,
+        "buckling_margin": 6.780450573848691,
+        "supported_seq_ratio": 2.8057315186873337,
+        "certified_seq_ratio": 2.6343739286576726,
+        "support_seq_margin": 0.1713575900296611,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "cb0d89637344411307b9e9f3f71e111c68013c0746510d252ca8562998551763"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.6343739286576726,
+        "support_seq_margin": 0.1713575900296611,
+        "tip_bending_safety_factor": 0.6314279030645263
+      },
+      "fine_mesh_sha256": "cb0d89637344411307b9e9f3f71e111c68013c0746510d252ca8562998551763",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x136_t3.6_ea21.8",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x136_t3.6_ea21.8.csv",
+      "genome_sha256": "ce29630fdd024e14fc26f3c11bd7adf93e9c034218ba1b408b4da18550b5985e",
+      "parameters": {
+        "taper_x0_mm": 136.0,
+        "t_tip_mm": 3.6,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428269493073083,
+        "strict_seq_ratio": 2.088795479946427,
+        "certified_native_hunter_sf": 0.6954161042443517,
+        "strict_native_hunter_sf": 0.74205754411738,
+        "all_three_min_native_hunter_sf": 0.6954161042443517,
+        "strict_lat_rob_n": 192.9349614705188,
+        "certified_lateral_sf_358": 0.5050508019651716,
+        "strict_lateral_sf_358": 0.5389244733813374,
+        "certified_fatigue_sf": 0.5050560384305992,
+        "strict_fatigue_sf": 0.538930061055611
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201518354958774,
+          1.8159612042389637,
+          2.1050135987621323
+        ],
+        "mesh_sha256": [
+          "a43365bacea73a9303a0bf461f97a60222dca473e947e1af9ffe904b9b23d159",
+          "29846b99a17a782234cc3278ea3bcaab507fc649ecd583795df0d74bead3e776",
+          "06633b45ab6077e6e24afa5650da2efe328b4bbd152686f24a1e249e9db35041"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.448967454940174,
+        "buckling_margin": 8.448967454940174,
+        "supported_seq_ratio": 2.645243490750802,
+        "certified_seq_ratio": 2.2428269493073083,
+        "support_seq_margin": 0.4024165414434937,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "a43365bacea73a9303a0bf461f97a60222dca473e947e1af9ffe904b9b23d159"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428269493073083,
+        "support_seq_margin": 0.4024165414434937,
+        "tip_bending_safety_factor": 0.74205754411738
+      },
+      "fine_mesh_sha256": "a43365bacea73a9303a0bf461f97a60222dca473e947e1af9ffe904b9b23d159",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x136_t4.0_ea20.0",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x136_t4.0_ea20.0.csv",
+      "genome_sha256": "4a57784b406fd0a22157a57c95eb6f33f7156173aa2c01f4850c48fee1d3b8fc",
+      "parameters": {
+        "taper_x0_mm": 136.0,
+        "t_tip_mm": 4.0,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.6343729600274766,
+        "strict_seq_ratio": 2.4548920338240765,
+        "certified_native_hunter_sf": 0.5922851508562098,
+        "strict_native_hunter_sf": 0.6314280961020521,
+        "all_three_min_native_hunter_sf": 0.5922851508562098,
+        "strict_lat_rob_n": 164.17130498653353,
+        "certified_lateral_sf_358": 0.43015122687881163,
+        "strict_lateral_sf_358": 0.4585790642081942,
+        "certified_fatigue_sf": 0.4301556867708055,
+        "strict_fatigue_sf": 0.4585838188455619
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.72430375433361,
+          2.1382284094348245,
+          2.4761488063691277
+        ],
+        "mesh_sha256": [
+          "478467d1aa13bf286758d7cd1c9a8588ca764e14f39c897cb25107bfec1fbbf5",
+          "b2d47e4760f06e9b910fcd644c5f1db2f647aff04d52e1f111f0e64dc928950c",
+          "5df24596dc274785580f14312b0a139dd3bb5ef9ac70571e5db2283cfe05d129"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.828156475854877,
+        "buckling_margin": 6.828156475854877,
+        "supported_seq_ratio": 2.7719374152950875,
+        "certified_seq_ratio": 2.6343729600274766,
+        "support_seq_margin": 0.13756445526761096,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "478467d1aa13bf286758d7cd1c9a8588ca764e14f39c897cb25107bfec1fbbf5"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.6343729600274766,
+        "support_seq_margin": 0.13756445526761096,
+        "tip_bending_safety_factor": 0.6314280961020521
+      },
+      "fine_mesh_sha256": "478467d1aa13bf286758d7cd1c9a8588ca764e14f39c897cb25107bfec1fbbf5",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x136_t4.0_ea21.8",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x136_t4.0_ea21.8.csv",
+      "genome_sha256": "2b4cd11b3b5ec697120a81b2f8f18f9511a3b3c14af79e3dc0213de3df548bb4",
+      "parameters": {
+        "taper_x0_mm": 136.0,
+        "t_tip_mm": 4.0,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428205846389897,
+        "strict_seq_ratio": 2.0887902495865243,
+        "certified_native_hunter_sf": 0.6954175401543908,
+        "strict_native_hunter_sf": 0.7420595087219954,
+        "all_three_min_native_hunter_sf": 0.6954175401543908,
+        "strict_lat_rob_n": 192.9354722677188,
+        "certified_lateral_sf_358": 0.5050518448048649,
+        "strict_lateral_sf_358": 0.5389259001891586,
+        "certified_fatigue_sf": 0.5050570812811048,
+        "strict_fatigue_sf": 0.5389314878782256
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201469493942817,
+          1.8159491174015303,
+          2.104942918183525
+        ],
+        "mesh_sha256": [
+          "97174b6ae77381a489bf7d83f65b4ccf9caef0cfc10e523be8189a5f28ff8349",
+          "8856d3c32bdc9069e1d0deae6c9ebc4e986fbbf0df8ab2513764f108b232be71",
+          "1b6e769cbe125edddbe487f2822d5bd1852f01ded61e19a7a01b5a91d43b0188"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.54194717614467,
+        "buckling_margin": 8.54194717614467,
+        "supported_seq_ratio": 2.5251540166514554,
+        "certified_seq_ratio": 2.2428205846389897,
+        "support_seq_margin": 0.28233343201246575,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "97174b6ae77381a489bf7d83f65b4ccf9caef0cfc10e523be8189a5f28ff8349"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428205846389897,
+        "support_seq_margin": 0.28233343201246575,
+        "tip_bending_safety_factor": 0.7420595087219954
+      },
+      "fine_mesh_sha256": "97174b6ae77381a489bf7d83f65b4ccf9caef0cfc10e523be8189a5f28ff8349",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x136_t4.4_ea20.0",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x136_t4.4_ea20.0.csv",
+      "genome_sha256": "bb1538c678136034b736fbf0772c7a4c7b5eefc568f2cb37f1b82412881006c8",
+      "parameters": {
+        "taper_x0_mm": 136.0,
+        "t_tip_mm": 4.4,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.6343727418115055,
+        "strict_seq_ratio": 2.454892136635351,
+        "certified_native_hunter_sf": 0.592285168460152,
+        "strict_native_hunter_sf": 0.6314281185020616,
+        "all_three_min_native_hunter_sf": 0.592285168460152,
+        "strict_lat_rob_n": 164.17131081053603,
+        "certified_lateral_sf_358": 0.43015123966379754,
+        "strict_lateral_sf_358": 0.4585790804763576,
+        "certified_fatigue_sf": 0.4301556995559241,
+        "strict_fatigue_sf": 0.4585838351138939
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.7243036773460747,
+          2.138228104510209,
+          2.4761450229056283
+        ],
+        "mesh_sha256": [
+          "bda196929fe37f0230996fce2e75b8ecc4fb75913d40db0776d7e7c86c7bc294",
+          "c0c0d9f434c0de925af379305146eaf14123b777e68ab07d3ec8bd3731ec8c74",
+          "66ff8b1c72b1f755888cc0f5dec3929065bba835fe8b6df648e330e35a674edb"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.854067000909132,
+        "buckling_margin": 6.854067000909132,
+        "supported_seq_ratio": 2.769677061568026,
+        "certified_seq_ratio": 2.6343727418115055,
+        "support_seq_margin": 0.13530431975652046,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "bda196929fe37f0230996fce2e75b8ecc4fb75913d40db0776d7e7c86c7bc294"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.6343727418115055,
+        "support_seq_margin": 0.13530431975652046,
+        "tip_bending_safety_factor": 0.6314281185020616
+      },
+      "fine_mesh_sha256": "bda196929fe37f0230996fce2e75b8ecc4fb75913d40db0776d7e7c86c7bc294",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x136_t4.4_ea21.8",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x136_t4.4_ea21.8.csv",
+      "genome_sha256": "d159dd1f48c1c5770492000039c8a9c3eef54043f872236e8817dfff3e505784",
+      "parameters": {
+        "taper_x0_mm": 136.0,
+        "t_tip_mm": 4.4,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428197143082516,
+        "strict_seq_ratio": 2.0887894861712715,
+        "certified_native_hunter_sf": 0.6954177603081565,
+        "strict_native_hunter_sf": 0.7420597836830441,
+        "all_three_min_native_hunter_sf": 0.6954177603081565,
+        "strict_lat_rob_n": 192.9355437575915,
+        "certified_lateral_sf_358": 0.5050520046930745,
+        "strict_lateral_sf_358": 0.5389260998815405,
+        "certified_fatigue_sf": 0.5050572411709724,
+        "strict_fatigue_sf": 0.5389316875726778
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.320146267849647,
+          1.8159471558805198,
+          2.1049205758478804
+        ],
+        "mesh_sha256": [
+          "18e4a445317b510c2dbc4603f74491b6ce43a5333ff8ec397b1886ebaaeb42f1",
+          "cc534ced8d9a71e4a2efb1159ae7e729c63ced34c7d2121167ffe2db64304d96",
+          "379766123cf15c4cc6cd9740c6335289e444c0c6ba356ccf5cf47bee59605215"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.598545764256139,
+        "buckling_margin": 8.598545764256139,
+        "supported_seq_ratio": 2.485052876928695,
+        "certified_seq_ratio": 2.2428197143082516,
+        "support_seq_margin": 0.24223316262044348,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "18e4a445317b510c2dbc4603f74491b6ce43a5333ff8ec397b1886ebaaeb42f1"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428197143082516,
+        "support_seq_margin": 0.24223316262044348,
+        "tip_bending_safety_factor": 0.7420597836830441
+      },
+      "fine_mesh_sha256": "18e4a445317b510c2dbc4603f74491b6ce43a5333ff8ec397b1886ebaaeb42f1",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x142_t3.6_ea20.0",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x142_t3.6_ea20.0.csv",
+      "genome_sha256": "50ae00110ef8ec43d176905c89e80df7b105e0e830d8bbb94d409691cbc96b96",
+      "parameters": {
+        "taper_x0_mm": 142.0,
+        "t_tip_mm": 3.6,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.6343734055458645,
+        "strict_seq_ratio": 2.4548931685758166,
+        "certified_native_hunter_sf": 0.5922850538204214,
+        "strict_native_hunter_sf": 0.6314279727008066,
+        "all_three_min_native_hunter_sf": 0.5922850538204214,
+        "strict_lat_rob_n": 164.17127290220972,
+        "certified_lateral_sf_358": 0.43015115640589263,
+        "strict_lateral_sf_358": 0.458578974587178,
+        "certified_fatigue_sf": 0.43015561629715593,
+        "strict_fatigue_sf": 0.4585837292236164
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.724304184186241,
+          2.138229624539984,
+          2.476164281957175
+        ],
+        "mesh_sha256": [
+          "5dbe1aff4d0fcc5871767570300e80751d362963910435ed16b18163ba4c1b4a",
+          "a4d96fdf2c42f81660810fc30033a38e8c13ff8a884a0fd1c64e984bec82b507",
+          "71955c243e63be68769f2731a59e754a87af97dc317cba0b1b5b6d0e1aa49c64"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.8072747582820785,
+        "buckling_margin": 6.8072747582820785,
+        "supported_seq_ratio": 2.7948103460899563,
+        "certified_seq_ratio": 2.6343734055458645,
+        "support_seq_margin": 0.16043694054409174,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "5dbe1aff4d0fcc5871767570300e80751d362963910435ed16b18163ba4c1b4a"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.6343734055458645,
+        "support_seq_margin": 0.16043694054409174,
+        "tip_bending_safety_factor": 0.6314279727008066
+      },
+      "fine_mesh_sha256": "5dbe1aff4d0fcc5871767570300e80751d362963910435ed16b18163ba4c1b4a",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x142_t3.6_ea21.8",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x142_t3.6_ea21.8.csv",
+      "genome_sha256": "c624a515dec4da1811982495efcc8529058f6d385394593ddc86058c60f2f312",
+      "parameters": {
+        "taper_x0_mm": 142.0,
+        "t_tip_mm": 3.6,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428251239698738,
+        "strict_seq_ratio": 2.0887937259135017,
+        "certified_native_hunter_sf": 0.6954164641878232,
+        "strict_native_hunter_sf": 0.742058076194583,
+        "all_three_min_native_hunter_sf": 0.6954164641878232,
+        "strict_lat_rob_n": 192.93509981059157,
+        "certified_lateral_sf_358": 0.5050510633766314,
+        "strict_lateral_sf_358": 0.5389248598061217,
+        "certified_fatigue_sf": 0.5050562998447693,
+        "strict_fatigue_sf": 0.5389304474844018
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201504744578028,
+          1.815957640342048,
+          2.104994281956634
+        ],
+        "mesh_sha256": [
+          "b9665eb8aae54ef9f29b045b418a54e5dc18d0bcbeb0e0cadc97b07290d5a302",
+          "302e7d4073034e868a72d26a2551cb8738bb4b0fb22603bc828c97db7781403e",
+          "a404f0254d33f43dca128726809f383e283dbc0a2a07a7e9ba7266dad8de1589"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.499642601928285,
+        "buckling_margin": 8.499642601928285,
+        "supported_seq_ratio": 2.620257086673168,
+        "certified_seq_ratio": 2.2428251239698738,
+        "support_seq_margin": 0.37743196270329404,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "b9665eb8aae54ef9f29b045b418a54e5dc18d0bcbeb0e0cadc97b07290d5a302"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428251239698738,
+        "support_seq_margin": 0.37743196270329404,
+        "tip_bending_safety_factor": 0.742058076194583
+      },
+      "fine_mesh_sha256": "b9665eb8aae54ef9f29b045b418a54e5dc18d0bcbeb0e0cadc97b07290d5a302",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x142_t4.0_ea20.0",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x142_t4.0_ea20.0.csv",
+      "genome_sha256": "b9ad86762b6ba86e9e7c013b9c8ec926d7baad74728ff6af8af5ac465b5247f2",
+      "parameters": {
+        "taper_x0_mm": 142.0,
+        "t_tip_mm": 4.0,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.634372959536279,
+        "strict_seq_ratio": 2.4548927286736286,
+        "certified_native_hunter_sf": 0.5922851569290556,
+        "strict_native_hunter_sf": 0.6314281041599867,
+        "all_three_min_native_hunter_sf": 0.5922851569290556,
+        "strict_lat_rob_n": 164.17130708159655,
+        "certified_lateral_sf_358": 0.4301512312892583,
+        "strict_lateral_sf_358": 0.45857907006032556,
+        "certified_fatigue_sf": 0.43015569118129793,
+        "strict_fatigue_sf": 0.45858382469775383
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.7243037483582504,
+          2.1382283031499485,
+          2.476147444557801
+        ],
+        "mesh_sha256": [
+          "f65254657742870e5e9e6512baf615e5f37770db26802b33db8f1d458219b7e8",
+          "0001702eca2c124f400ac48438cd049f6c5a0a36d84cd89abc3c0355b5d4e742",
+          "6fa167152c919a55f78dd099e36060dfbf39cf3320d37ae85383c9defabf2e77"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.842688444914545,
+        "buckling_margin": 6.842688444914545,
+        "supported_seq_ratio": 2.771200025194123,
+        "certified_seq_ratio": 2.634372959536279,
+        "support_seq_margin": 0.1368270656578443,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "f65254657742870e5e9e6512baf615e5f37770db26802b33db8f1d458219b7e8"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.634372959536279,
+        "support_seq_margin": 0.1368270656578443,
+        "tip_bending_safety_factor": 0.6314281041599867
+      },
+      "fine_mesh_sha256": "f65254657742870e5e9e6512baf615e5f37770db26802b33db8f1d458219b7e8",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x142_t4.0_ea21.8",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x142_t4.0_ea21.8.csv",
+      "genome_sha256": "7dfc9f3f7302c391787ee4a011662d78635f66e58ed47a69a521217d0c0cbe23",
+      "parameters": {
+        "taper_x0_mm": 142.0,
+        "t_tip_mm": 4.0,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428201842039472,
+        "strict_seq_ratio": 2.088789758909232,
+        "certified_native_hunter_sf": 0.6954176010908012,
+        "strict_native_hunter_sf": 0.7420595846730169,
+        "all_three_min_native_hunter_sf": 0.6954176010908012,
+        "strict_lat_rob_n": 192.9354920149844,
+        "certified_lateral_sf_358": 0.5050518890603585,
+        "strict_lateral_sf_358": 0.5389259553491184,
+        "certified_fatigue_sf": 0.5050571255370573,
+        "strict_fatigue_sf": 0.5389315430387572
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201467847968584,
+          1.8159486307994819,
+          2.1049370709563813
+        ],
+        "mesh_sha256": [
+          "74577c4da5713affb13dbc619e9ee639b8964428f301d646a7f2fab8fde2ed2e",
+          "3cb574d1fc48efcab0c5c0c08eff3cc94ec602c8650e3bc9cd6404b84d4c68fa",
+          "dca694143039ceef23040bea82a050418ceef5bc432708f13660210931d0f4c2"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.572135018851444,
+        "buckling_margin": 8.572135018851444,
+        "supported_seq_ratio": 2.5148173598998236,
+        "certified_seq_ratio": 2.2428201842039472,
+        "support_seq_margin": 0.27199717569587634,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "74577c4da5713affb13dbc619e9ee639b8964428f301d646a7f2fab8fde2ed2e"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428201842039472,
+        "support_seq_margin": 0.27199717569587634,
+        "tip_bending_safety_factor": 0.7420595846730169
+      },
+      "fine_mesh_sha256": "74577c4da5713affb13dbc619e9ee639b8964428f301d646a7f2fab8fde2ed2e",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x142_t4.4_ea20.0",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x142_t4.4_ea20.0.csv",
+      "genome_sha256": "4d83a7a54bf5976c2d9a74abfce38e4881e76ff22aad143b5802023bc911a10e",
+      "parameters": {
+        "taper_x0_mm": 142.0,
+        "t_tip_mm": 4.4,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.634372558437263,
+        "strict_seq_ratio": 2.45489263632778,
+        "certified_native_hunter_sf": 0.5922851691067255,
+        "strict_native_hunter_sf": 0.6314281193824159,
+        "all_three_min_native_hunter_sf": 0.5922851691067255,
+        "strict_lat_rob_n": 164.17131103942813,
+        "certified_lateral_sf_358": 0.430151240133376,
+        "strict_lateral_sf_358": 0.45857908111572104,
+        "certified_fatigue_sf": 0.43015570002550735,
+        "strict_fatigue_sf": 0.45858383575326384
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.724303658081538,
+          2.1382280973068015,
+          2.476144913447092
+        ],
+        "mesh_sha256": [
+          "4414c4c4bbfc10f6c9f78b3a823ba43a0a264c51fadf94aaff88588e84c7863b",
+          "dcb1cedbdcca67e806e681a439d8e729c0ce0b0d36f6a8e0c0320ab6d43e2176",
+          "cf959fb0ed70955148a245615274537c1d82d8fb8611f68a21ec1bde34cbe08c"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.861166428211773,
+        "buckling_margin": 6.861166428211773,
+        "supported_seq_ratio": 2.7698201665791373,
+        "certified_seq_ratio": 2.634372558437263,
+        "support_seq_margin": 0.1354476081418743,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "4414c4c4bbfc10f6c9f78b3a823ba43a0a264c51fadf94aaff88588e84c7863b"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.634372558437263,
+        "support_seq_margin": 0.1354476081418743,
+        "tip_bending_safety_factor": 0.6314281193824159
+      },
+      "fine_mesh_sha256": "4414c4c4bbfc10f6c9f78b3a823ba43a0a264c51fadf94aaff88588e84c7863b",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x142_t4.4_ea21.8",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x142_t4.4_ea21.8.csv",
+      "genome_sha256": "05ca40eef47360d1b98f992d06ea699b09e6d5417e72b6f98be7d92ca4f04d23",
+      "parameters": {
+        "taper_x0_mm": 142.0,
+        "t_tip_mm": 4.4,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428195625624734,
+        "strict_seq_ratio": 2.088788941234366,
+        "certified_native_hunter_sf": 0.6954177681210031,
+        "strict_native_hunter_sf": 0.7420597952418332,
+        "all_three_min_native_hunter_sf": 0.6954177681210031,
+        "strict_lat_rob_n": 192.93554676287664,
+        "certified_lateral_sf_358": 0.5050520103672089,
+        "strict_lateral_sf_358": 0.5389261082761917,
+        "certified_fatigue_sf": 0.5050572468451655,
+        "strict_fatigue_sf": 0.5389316959674162
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201462417333016,
+          1.815947080991595,
+          2.1049196825386995
+        ],
+        "mesh_sha256": [
+          "66f925b6d430489c1580d2d182a088fcc632a64443fd6ecd48ec4fd053d67e3b",
+          "d69b1f615fff72fe3a6e44835de12e9d6ab5d8ebe9edd532568d51b6dc3eb7b6",
+          "d8edcbb04d2e0778439076058456268fa68608881574b10b7105e1c446585dd9"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.616046009746684,
+        "buckling_margin": 8.616046009746684,
+        "supported_seq_ratio": 2.4843062203818755,
+        "certified_seq_ratio": 2.2428195625624734,
+        "support_seq_margin": 0.24148665781940215,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "66f925b6d430489c1580d2d182a088fcc632a64443fd6ecd48ec4fd053d67e3b"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428195625624734,
+        "support_seq_margin": 0.24148665781940215,
+        "tip_bending_safety_factor": 0.7420597952418332
+      },
+      "fine_mesh_sha256": "66f925b6d430489c1580d2d182a088fcc632a64443fd6ecd48ec4fd053d67e3b",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x148_t3.6_ea20.0",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x148_t3.6_ea20.0.csv",
+      "genome_sha256": "4e748247442d09fef27b2b419926475f42ad9b610a2e3bc309aff963e056b739",
+      "parameters": {
+        "taper_x0_mm": 148.0,
+        "t_tip_mm": 3.6,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.634372996401958,
+        "strict_seq_ratio": 2.454893105604882,
+        "certified_native_hunter_sf": 0.5922851011843138,
+        "strict_native_hunter_sf": 0.6314280329993496,
+        "all_three_min_native_hunter_sf": 0.5922851011843138,
+        "strict_lat_rob_n": 164.1712885798309,
+        "certified_lateral_sf_358": 0.43015119080425024,
+        "strict_lateral_sf_358": 0.45857901837941595,
+        "certified_fatigue_sf": 0.4301556506958701,
+        "strict_fatigue_sf": 0.4585837730163083
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.7243039344524584,
+          2.1382290696603987,
+          2.476155974791506
+        ],
+        "mesh_sha256": [
+          "d1d2967a14b3f820d6e77eb39c7627a966c8c183c3e2faf084e7542ba0f21815",
+          "6413379ada8456b82a71a1a218f3c9fa16d0392c6d9987ba588119c6ad67c981",
+          "94c054f1dd8b6367b3bb02f8b0f5a3449f9c39ee03117bf1024f7a686a244b9c"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.829901803116703,
+        "buckling_margin": 6.829901803116703,
+        "supported_seq_ratio": 2.7831792555295465,
+        "certified_seq_ratio": 2.634372996401958,
+        "support_seq_margin": 0.14880625912758827,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "d1d2967a14b3f820d6e77eb39c7627a966c8c183c3e2faf084e7542ba0f21815"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.634372996401958,
+        "support_seq_margin": 0.14880625912758827,
+        "tip_bending_safety_factor": 0.6314280329993496
+      },
+      "fine_mesh_sha256": "d1d2967a14b3f820d6e77eb39c7627a966c8c183c3e2faf084e7542ba0f21815",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x148_t3.6_ea21.8",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x148_t3.6_ea21.8.csv",
+      "genome_sha256": "916f3100ae4d940c0cafc0be3cda9bfb67d04bf4c2cefcc1d9c8de4185e87352",
+      "parameters": {
+        "taper_x0_mm": 148.0,
+        "t_tip_mm": 3.6,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428231289124776,
+        "strict_seq_ratio": 2.088792842686911,
+        "certified_native_hunter_sf": 0.6954168981377702,
+        "strict_native_hunter_sf": 0.7420586303294313,
+        "all_three_min_native_hunter_sf": 0.6954168981377702,
+        "strict_lat_rob_n": 192.93524388565214,
+        "certified_lateral_sf_358": 0.5050513785358107,
+        "strict_lateral_sf_358": 0.538925262250425,
+        "certified_fatigue_sf": 0.5050566150072163,
+        "strict_fatigue_sf": 0.5389308499328778
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201490785831678,
+          1.8159546278727163,
+          2.104974781099219
+        ],
+        "mesh_sha256": [
+          "30a086c4482e94c8a402bd231dacc9a22516d4786edf8c895786000f2e9b8860",
+          "1e2b949ea31a6d093a1d8ec7e29c1117a0e315d5d1bf7b176fa72d781136eaa4",
+          "082f3e4f462cece48ba58a126d1ed4ba313309f4bf022ebd870eeb6c9c668b58"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.546501359606568,
+        "buckling_margin": 8.546501359606568,
+        "supported_seq_ratio": 2.592022585959327,
+        "certified_seq_ratio": 2.2428231289124776,
+        "support_seq_margin": 0.3491994570468493,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "30a086c4482e94c8a402bd231dacc9a22516d4786edf8c895786000f2e9b8860"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428231289124776,
+        "support_seq_margin": 0.3491994570468493,
+        "tip_bending_safety_factor": 0.7420586303294313
+      },
+      "fine_mesh_sha256": "30a086c4482e94c8a402bd231dacc9a22516d4786edf8c895786000f2e9b8860",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x148_t4.0_ea20.0",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x148_t4.0_ea20.0.csv",
+      "genome_sha256": "8376dfac2975cf6caf01b6e4dc8f319142d3a08815337394cddabc640beb90f7",
+      "parameters": {
+        "taper_x0_mm": 148.0,
+        "t_tip_mm": 4.0,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.634372557969714,
+        "strict_seq_ratio": 2.4548925027255404,
+        "certified_native_hunter_sf": 0.5922851629050325,
+        "strict_native_hunter_sf": 0.6314281114198617,
+        "all_three_min_native_hunter_sf": 0.5922851629050325,
+        "strict_lat_rob_n": 164.17130896916404,
+        "certified_lateral_sf_358": 0.43015123562935326,
+        "strict_lateral_sf_358": 0.45857907533286046,
+        "certified_fatigue_sf": 0.43015569552143795,
+        "strict_fatigue_sf": 0.45858382997034347
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.724303563762921,
+          2.1382282147905083,
+          2.4761462124178313
+        ],
+        "mesh_sha256": [
+          "b0b9baaa31305db87c06cd6dbf35bed549217d8e123869aff9e8379299390c52",
+          "fb3c8d2c2b11e953bc0a178fd1fa365218c6625d3576be61301693add40c0fcc",
+          "ab2baf5ea3a73c2cda3bbadbbb84f5b34f8f9b34cb13274395b3e012ba4aeb5e"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.854319379535871,
+        "buckling_margin": 6.854319379535871,
+        "supported_seq_ratio": 2.7702439348548342,
+        "certified_seq_ratio": 2.634372557969714,
+        "support_seq_margin": 0.1358713768851203,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "b0b9baaa31305db87c06cd6dbf35bed549217d8e123869aff9e8379299390c52"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.634372557969714,
+        "support_seq_margin": 0.1358713768851203,
+        "tip_bending_safety_factor": 0.6314281114198617
+      },
+      "fine_mesh_sha256": "b0b9baaa31305db87c06cd6dbf35bed549217d8e123869aff9e8379299390c52",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x148_t4.0_ea21.8",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x148_t4.0_ea21.8.csv",
+      "genome_sha256": "c8ae22947281bf0fb2dea686c6401b277ee9c442d52f51d7aa192f745dc2a22c",
+      "parameters": {
+        "taper_x0_mm": 148.0,
+        "t_tip_mm": 4.0,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428198450496053,
+        "strict_seq_ratio": 2.0887896743730607,
+        "certified_native_hunter_sf": 0.6954176635952325,
+        "strict_native_hunter_sf": 0.7420596614819588,
+        "all_three_min_native_hunter_sf": 0.6954176635952325,
+        "strict_lat_rob_n": 192.9355119853093,
+        "certified_lateral_sf_358": 0.5050519344546381,
+        "strict_lateral_sf_358": 0.5389260111321489,
+        "certified_fatigue_sf": 0.5050571709318076,
+        "strict_fatigue_sf": 0.5389315988223662
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201465801862566,
+          1.8159480056000075,
+          2.1049313266380887
+        ],
+        "mesh_sha256": [
+          "d32487bc5897b0816cdc7b29ba1c80474a6726e410959eee7322a6fdcbfeab93",
+          "3aa569e40ad8fea9f803c819315430c28ea53037105c61010104a1ec9bd35949",
+          "407ffd37a4078cdd93b1ef6dfc191f219c52be284487b45bd2d8c9ff424fb8c8"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.600094303964468,
+        "buckling_margin": 8.600094303964468,
+        "supported_seq_ratio": 2.5047561380519037,
+        "certified_seq_ratio": 2.2428198450496053,
+        "support_seq_margin": 0.26193629300229837,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "d32487bc5897b0816cdc7b29ba1c80474a6726e410959eee7322a6fdcbfeab93"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428198450496053,
+        "support_seq_margin": 0.26193629300229837,
+        "tip_bending_safety_factor": 0.7420596614819588
+      },
+      "fine_mesh_sha256": "d32487bc5897b0816cdc7b29ba1c80474a6726e410959eee7322a6fdcbfeab93",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x148_t4.4_ea20.0",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x148_t4.4_ea20.0.csv",
+      "genome_sha256": "4e2cf948e0829478197068be0e17243e56edd8f26cc8962c83f7467c3fdcbece",
+      "parameters": {
+        "taper_x0_mm": 148.0,
+        "t_tip_mm": 4.4,
+        "ea_in_deg": 20.0,
+        "ea_sp_deg": 20.0
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.634372639652826,
+        "strict_seq_ratio": 2.4548922746713076,
+        "certified_native_hunter_sf": 0.5922851696997462,
+        "strict_native_hunter_sf": 0.6314281201466169,
+        "all_three_min_native_hunter_sf": 0.5922851696997462,
+        "strict_lat_rob_n": 164.17131123812038,
+        "certified_lateral_sf_358": 0.4301512405640615,
+        "strict_lateral_sf_358": 0.4585790816707273,
+        "certified_fatigue_sf": 0.4301557004561973,
+        "strict_fatigue_sf": 0.458583836308276
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.72430353647656,
+          2.1382280954153225,
+          2.476144636170212
+        ],
+        "mesh_sha256": [
+          "1de4b81273959236088c009334958f326f93283742598caee19a077843f0b5a9",
+          "77a075abb3d2374129f44d5fe531608da953ff1e9c286f9676a7f511237e0eff",
+          "d622c32fb94bebe1e9bc9399d27906f00f3f97053839685f64239c4e157de8ca"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 7.866382293849868,
+        "buckling_margin": 6.866382293849868,
+        "supported_seq_ratio": 2.769834865143165,
+        "certified_seq_ratio": 2.634372639652826,
+        "support_seq_margin": 0.13546222549033882,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "1de4b81273959236088c009334958f326f93283742598caee19a077843f0b5a9"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.634372639652826,
+        "support_seq_margin": 0.13546222549033882,
+        "tip_bending_safety_factor": 0.6314281201466169
+      },
+      "fine_mesh_sha256": "1de4b81273959236088c009334958f326f93283742598caee19a077843f0b5a9",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    },
+    {
+      "name": "placement_05_x148_t4.4_ea21.8",
+      "family": "placement_05",
+      "genome": "experiments/g16-06-rsv2-08/phase9_candidates/placement_05_x148_t4.4_ea21.8.csv",
+      "genome_sha256": "8a64f237da0240f62a6003f851065a41be2e1f210c9cd9e902ff4d98d9e22e30",
+      "parameters": {
+        "taper_x0_mm": 148.0,
+        "t_tip_mm": 4.4,
+        "ea_in_deg": 21.8,
+        "ea_sp_deg": 21.8
+      },
+      "side_a2": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+        "certified_seq_ratio": 2.2428196447086677,
+        "strict_seq_ratio": 2.0887889370186348,
+        "certified_native_hunter_sf": 0.6954177767765158,
+        "strict_native_hunter_sf": 0.7420598063835526,
+        "all_three_min_native_hunter_sf": 0.6954177767765158,
+        "strict_lat_rob_n": 192.93554965972368,
+        "certified_lateral_sf_358": 0.5050520166533355,
+        "strict_lateral_sf_358": 0.5389261163679432,
+        "certified_fatigue_sf": 0.5050572531313572,
+        "strict_fatigue_sf": 0.5389317040592516
+      },
+      "side_a3": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+        "sequence_valid": true,
+        "observable_valid": true,
+        "admitted": false,
+        "fit_status": "oscillatory",
+        "reason": "oscillatory_sequence",
+        "p": null,
+        "gci_fine": null,
+        "areas_mm2": [
+          0.25,
+          1.0,
+          4.0
+        ],
+        "sequence_values": [
+          2.3201461749481855,
+          1.815946957087105,
+          2.104917671697477
+        ],
+        "mesh_sha256": [
+          "4c4307a6c530414c07957ec102147ed359aac51aa15e7bdd4f466aa1e2d5ddd6",
+          "9d9952271cc8b0c107211d49476e82ebdb0ad54af4a779a4e25bce30e2b946d2",
+          "5d606727f15a6341a940ce744bf1ce1f243bcd07a98751719a2f988e62baafed"
+        ]
+      },
+      "side_a4": {
+        "source_receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+        "buckling_eigenvalue": 9.632297944364172,
+        "buckling_margin": 8.632297944364172,
+        "supported_seq_ratio": 2.483137056710614,
+        "certified_seq_ratio": 2.2428196447086677,
+        "support_seq_margin": 0.24031741200194645,
+        "buckling_pass": true,
+        "support_sequence_pass": true,
+        "side_a4_pass": true,
+        "mesh_sha256": "4c4307a6c530414c07957ec102147ed359aac51aa15e7bdd4f466aa1e2d5ddd6"
+      },
+      "objectives": {
+        "certified_seq_ratio": 2.2428196447086677,
+        "support_seq_margin": 0.24031741200194645,
+        "tip_bending_safety_factor": 0.7420598063835526
+      },
+      "fine_mesh_sha256": "4c4307a6c530414c07957ec102147ed359aac51aa15e7bdd4f466aa1e2d5ddd6",
+      "gate_s_pass": false,
+      "lateral_fatigue_pass": false,
+      "all_gate_qualification": false
+    }
+  ],
+  "pareto_ranking": [
+    {
+      "name": "local_01_x136_t3.6_ea20.0",
+      "rank": 1,
+      "front": 1,
+      "rank_in_front": 1,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x136_t3.6_ea20.0",
+      "rank": 2,
+      "front": 1,
+      "rank_in_front": 2,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x142_t3.6_ea20.0",
+      "rank": 3,
+      "front": 1,
+      "rank_in_front": 3,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x142_t3.6_ea20.0",
+      "rank": 4,
+      "front": 1,
+      "rank_in_front": 4,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x148_t3.6_ea20.0",
+      "rank": 5,
+      "front": 1,
+      "rank_in_front": 5,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x148_t3.6_ea20.0",
+      "rank": 6,
+      "front": 1,
+      "rank_in_front": 6,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x136_t4.0_ea20.0",
+      "rank": 7,
+      "front": 1,
+      "rank_in_front": 7,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x136_t4.0_ea20.0",
+      "rank": 8,
+      "front": 1,
+      "rank_in_front": 8,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x142_t4.0_ea20.0",
+      "rank": 9,
+      "front": 1,
+      "rank_in_front": 9,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x142_t4.0_ea20.0",
+      "rank": 10,
+      "front": 1,
+      "rank_in_front": 10,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x136_t4.4_ea20.0",
+      "rank": 11,
+      "front": 1,
+      "rank_in_front": 11,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x136_t4.4_ea20.0",
+      "rank": 12,
+      "front": 1,
+      "rank_in_front": 12,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x148_t4.4_ea20.0",
+      "rank": 13,
+      "front": 1,
+      "rank_in_front": 13,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x148_t4.4_ea20.0",
+      "rank": 14,
+      "front": 1,
+      "rank_in_front": 14,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x148_t4.0_ea20.0",
+      "rank": 15,
+      "front": 1,
+      "rank_in_front": 15,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x148_t4.0_ea20.0",
+      "rank": 16,
+      "front": 1,
+      "rank_in_front": 16,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x136_t3.6_ea21.8",
+      "rank": 17,
+      "front": 1,
+      "rank_in_front": 17,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x136_t3.6_ea21.8",
+      "rank": 18,
+      "front": 1,
+      "rank_in_front": 18,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x142_t3.6_ea21.8",
+      "rank": 19,
+      "front": 1,
+      "rank_in_front": 19,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x142_t3.6_ea21.8",
+      "rank": 20,
+      "front": 1,
+      "rank_in_front": 20,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x148_t3.6_ea21.8",
+      "rank": 21,
+      "front": 1,
+      "rank_in_front": 21,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x148_t3.6_ea21.8",
+      "rank": 22,
+      "front": 1,
+      "rank_in_front": 22,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x136_t4.0_ea21.8",
+      "rank": 23,
+      "front": 1,
+      "rank_in_front": 23,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x136_t4.0_ea21.8",
+      "rank": 24,
+      "front": 1,
+      "rank_in_front": 24,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x142_t4.0_ea21.8",
+      "rank": 25,
+      "front": 1,
+      "rank_in_front": 25,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x142_t4.0_ea21.8",
+      "rank": 26,
+      "front": 1,
+      "rank_in_front": 26,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x148_t4.0_ea21.8",
+      "rank": 27,
+      "front": 1,
+      "rank_in_front": 27,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x148_t4.0_ea21.8",
+      "rank": 28,
+      "front": 1,
+      "rank_in_front": 28,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x136_t4.4_ea21.8",
+      "rank": 29,
+      "front": 1,
+      "rank_in_front": 29,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x136_t4.4_ea21.8",
+      "rank": 30,
+      "front": 1,
+      "rank_in_front": 30,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x148_t4.4_ea21.8",
+      "rank": 31,
+      "front": 1,
+      "rank_in_front": 31,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x148_t4.4_ea21.8",
+      "rank": 32,
+      "front": 1,
+      "rank_in_front": 32,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x142_t4.4_ea21.8",
+      "rank": 33,
+      "front": 1,
+      "rank_in_front": 33,
+      "dominated_by": []
+    },
+    {
+      "name": "placement_05_x142_t4.4_ea21.8",
+      "rank": 34,
+      "front": 1,
+      "rank_in_front": 34,
+      "dominated_by": []
+    },
+    {
+      "name": "local_01_x142_t4.4_ea20.0",
+      "rank": 35,
+      "front": 2,
+      "rank_in_front": 1,
+      "dominated_by": [
+        "local_01_x148_t4.4_ea20.0",
+        "placement_05_x148_t4.4_ea20.0"
+      ]
+    },
+    {
+      "name": "placement_05_x142_t4.4_ea20.0",
+      "rank": 36,
+      "front": 2,
+      "rank_in_front": 2,
+      "dominated_by": [
+        "local_01_x148_t4.4_ea20.0",
+        "placement_05_x148_t4.4_ea20.0"
+      ]
+    }
+  ],
+  "frontier": [
+    "local_01_x136_t3.6_ea20.0",
+    "placement_05_x136_t3.6_ea20.0",
+    "local_01_x142_t3.6_ea20.0",
+    "placement_05_x142_t3.6_ea20.0",
+    "local_01_x148_t3.6_ea20.0",
+    "placement_05_x148_t3.6_ea20.0",
+    "local_01_x136_t4.0_ea20.0",
+    "placement_05_x136_t4.0_ea20.0",
+    "local_01_x142_t4.0_ea20.0",
+    "placement_05_x142_t4.0_ea20.0",
+    "local_01_x136_t4.4_ea20.0",
+    "placement_05_x136_t4.4_ea20.0",
+    "local_01_x148_t4.4_ea20.0",
+    "placement_05_x148_t4.4_ea20.0",
+    "local_01_x148_t4.0_ea20.0",
+    "placement_05_x148_t4.0_ea20.0",
+    "local_01_x136_t3.6_ea21.8",
+    "placement_05_x136_t3.6_ea21.8",
+    "local_01_x142_t3.6_ea21.8",
+    "placement_05_x142_t3.6_ea21.8",
+    "local_01_x148_t3.6_ea21.8",
+    "placement_05_x148_t3.6_ea21.8",
+    "local_01_x136_t4.0_ea21.8",
+    "placement_05_x136_t4.0_ea21.8",
+    "local_01_x142_t4.0_ea21.8",
+    "placement_05_x142_t4.0_ea21.8",
+    "local_01_x148_t4.0_ea21.8",
+    "placement_05_x148_t4.0_ea21.8",
+    "local_01_x136_t4.4_ea21.8",
+    "placement_05_x136_t4.4_ea21.8",
+    "local_01_x148_t4.4_ea21.8",
+    "placement_05_x148_t4.4_ea21.8",
+    "local_01_x142_t4.4_ea21.8",
+    "placement_05_x142_t4.4_ea21.8"
+  ],
+  "qualified_frontier": [],
+  "outcome_counts": {
+    "candidates": 36,
+    "sequence_valid": 36,
+    "observable_valid": 36,
+    "gci_admitted": 0,
+    "a4_buckling_pass": 36,
+    "a4_sequence_pass": 36,
+    "a4_joint_pass": 36,
+    "strict_tip_bending_sf_ge_1": 0,
+    "gate_s_pass": 0,
+    "lateral_fatigue_pass": 0,
+    "all_gate_qualification": 0
+  },
+  "all_gate_qualification": false,
+  "sha256": {
+    "experiments/g16-06-rsv2-08/PHASE12.md": "4250477a92ab0fe51b32d2acdae7621a04b88a1b8930631cca25a61c940b34aa",
+    "experiments/g16-06-rsv2-08/build_phase12.py": "368a6b07795b5851997f0ce438b980392b85c4bd83192198e2ec42cfa69e0d6a",
+    "ops/ci/g16_06_rsv2_08/audit_phase12.py": "79d895474e3ebf781bb4e070a50dec1f3298352cadbf54826b9586e9ebf4f83f",
+    "ops/ci/tests/test_portable_phase7.py": "07940ff30ea0449091348db2a22ab6c084f0f05bc00f5cbe44403392313e6a30",
+    "target/g16-06-rsv2-08/phase12/ASSIGNMENT.md": "980e5f3f37019cff5bbd5dc879a49f261cb204ec86951b178203731ae0db7180",
+    "target/g16-06-rsv2-08/phase12/initial-state.json": "20370c030b5949775764bf04c58be4851b043a8a6c4cb1047f33668dba7db06f",
+    "experiments/G16-06-RSV2-08/phase7_receipt.json": "71e751199151a99c61058625d55ad2358485e69e308b101d383b16b7ec8cee4a",
+    "experiments/G16-06-RSV2-08/PHASE7.md": "18c3ef60e9edf901174300a800e98128e2ce4fefa3398669d148bfa1864c828c",
+    "experiments/G16-06-RSV2-08/audit_phase7.py": "8a9d707c3abb09e98d63b704c269f10ac504ef36b12273f2b2bcce74937e0d70",
+    "experiments/G16-06-RSV2-08/phase8_receipt.json": "fecbe9932bfb8d905b38ca87bba137dfd39fcd8c585519e3eabb006c89167b44",
+    "experiments/G16-06-RSV2-08/PHASE8.md": "44c3876584adf55ecff5266e4852742faaa6ee74e2d32277e585205c1d98e55e",
+    "experiments/G16-06-RSV2-08/audit_phase8.py": "226001fb5004e62a401bb85f7b6b3e3874bcf215535c6ac5b2dab0da0c71e173",
+    "experiments/g16-06-rsv2-08/phase9_receipt.json": "4df072c0b383878fce16497e72ca3db2482d5e4f058c7de616f2fac6135c4566",
+    "experiments/g16-06-rsv2-08/PHASE9.md": "351f9fe7f6f0d107494e590c93c8478781e3c0a7a41b9267aa49759526ebfc1e",
+    "ops/ci/g16_06_rsv2_08/audit_phase9.py": "8b668e691427a23a7e14b14b24ea2f601b5d7770015cc7ed8308be9baac823b6",
+    "experiments/g16-06-rsv2-08/phase10_receipt.json": "362d2805740d6e9823f86f65deec940cd400fce66c57788d3a9499251ce9e931",
+    "experiments/g16-06-rsv2-08/PHASE10.md": "dab2897315cde615db39bbed66c4b95e53fe5bc52e13534fe69570f69e014219",
+    "ops/ci/g16_06_rsv2_08/audit_phase10.py": "ccb6bb2383dbf83b51873e5a6c194ceb836597c55463f6916a3b51313b6dac15",
+    "experiments/g16-06-rsv2-08/phase11_receipt.json": "d80833cfb90d7a4b5f175ffb2a9e001e8bb2a4b9d66c577655e8e8d13e4044fb",
+    "experiments/g16-06-rsv2-08/PHASE11.md": "b4a0dcd19bda7719587b7880b76f67e637d6e5a752590afd2612f56490ec9c83",
+    "ops/ci/g16_06_rsv2_08/audit_phase11.py": "ffd7f37224256b1372653dae5f4c55d074d877e13d36818e745d641949e507e6",
+    "experiments/G16-06-RSV2-08/portable_study_audit.py": "efd46d01379bcd6f60b66c1a860371f30a86f7e89c68774fb4b7c74d19d373aa",
+    "target/g16-06-rsv2-08/phase12/parent_receipts_before/phase9_receipt.json": "b51bc018755bda6505ef80c8155479d618a1cb59586be58b9f2f771a1334b96f",
+    "target/g16-06-rsv2-08/phase12/parent_receipts_before/phase10_receipt.json": "285f60fb74bde889075099b8f54b24e3b7f640165c3f4ff0e64d098b9e37dc1f",
+    "target/g16-06-rsv2-08/phase12/parent_receipts_before/phase11_receipt.json": "f26603b6d5e48cf6752c7143e77a65ea17b945fc9db253ba7fc5217edcae1451"
+  }
+}

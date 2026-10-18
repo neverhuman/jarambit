@@ -12474,18 +12474,18 @@
     "target/g16-06-rsv2-08/phase10/measure": "ac0c1fb8ddd738db54f83a8bcf86d9197d1a261c540b86403bae31b8c01094ff",
     "target/g16-06-rsv2-08/phase10/source_provenance.json": "6734cf29e0f18fd8ee3c625b22d491b86a6cc05c358d6ddd066f884968b53947",
     "target/g16-06-rsv2-08/phase10/ASSIGNMENT.md": "dab0c1af3fe575b3c3c286c77b24532782975f5637adb81287236c89e84859d7",
-    "experiments/g16-06-rsv2-08/phase9_receipt.json": "b51bc018755bda6505ef80c8155479d618a1cb59586be58b9f2f771a1334b96f",
+    "experiments/g16-06-rsv2-08/phase9_receipt.json": "4df072c0b383878fce16497e72ca3db2482d5e4f058c7de616f2fac6135c4566",
     "experiments/g16-06-rsv2-08/PHASE9.md": "351f9fe7f6f0d107494e590c93c8478781e3c0a7a41b9267aa49759526ebfc1e",
     "experiments/g16-06-rsv2-08/PHASE10.md": "dab2897315cde615db39bbed66c4b95e53fe5bc52e13534fe69570f69e014219",
     "experiments/g16-06-rsv2-08/finalize_phase10.py": "f0ddeef4d2978f1ba10bdbd39bc8a68e4a52109dec82042d6c25b58869d97c31",
-    "ops/ci/tests/test_portable_phase7.py": "dae7aca897543c59a22941f6bfd9f16b6b23caa8821f89bf3ff980526ac05cc7",
+    "ops/ci/tests/test_portable_phase7.py": "07940ff30ea0449091348db2a22ab6c084f0f05bc00f5cbe44403392313e6a30",
     "ops/ci/g16_06_rsv2_08/audit_phase10.py": "ccb6bb2383dbf83b51873e5a6c194ceb836597c55463f6916a3b51313b6dac15",
     "target/g16-06-rsv2-08/phase10/build_provenance.json": "76b8fc9440aa076a48df520d25fc531dda89d78d0e8fe945f2e3f2aecdd97eff"
   },
   "phase9_metadata_update": {
     "path": "ops/ci/tests/test_portable_phase7.py",
     "original_sha256": "5722721ba14500e27b1f24b91999c00edd1370b48630d52a5be376a4bdeb960f",
-    "current_sha256": "dae7aca897543c59a22941f6bfd9f16b6b23caa8821f89bf3ff980526ac05cc7",
+    "current_sha256": "07940ff30ea0449091348db2a22ab6c084f0f05bc00f5cbe44403392313e6a30",
     "reason": "Phase10 adds tests to the shared requested unittest file; all Phase9 scientific fields unchanged"
   }
 }
