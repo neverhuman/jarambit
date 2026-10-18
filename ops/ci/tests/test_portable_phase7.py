@@ -16,6 +16,7 @@ spec.loader.exec_module(legacy)
 PortablePhase7Tests=legacy.PortablePhase7Tests
 from ops.ci.g16_06_rsv2_08 import audit_phase9 as phase9
 from ops.ci.g16_06_rsv2_08 import audit_phase10 as phase10
+from ops.ci.g16_06_rsv2_08 import audit_phase11 as phase11
 
 REAL_STAT=Path.stat
 def absent_target(path,*args,**kwargs):
@@ -177,5 +178,96 @@ class PortablePhase10Tests(unittest.TestCase):
         e=phase10.compute_gci(1.20,1.18,1.21,2.,1.25,levels=levels)
         self.assertTrue(e.sequence_valid and e.observable_valid)
         self.assertFalse(e.admitted);self.assertEqual(e.fit_status.value,'oscillatory')
+
+class PortablePhase11Tests(unittest.TestCase):
+    def document(self):return json.loads((ROOT/phase11.STUDY/'phase11_receipt.json').read_text())
+    def report(self):return (ROOT/phase11.STUDY/'PHASE11.md').read_text()
+    def check(self,r):phase11.audit_document(ROOT,r,self.report())
+
+    def test_default_audit(self):
+        r=phase11.audit()
+        self.assertEqual((r['status'],r['cases'],r['a4_observations']),('pass',36,36))
+
+    def test_without_target_or_worker_environment(self):
+        with patch.object(Path,'stat',new=absent_target),patch('os.sched_getaffinity',return_value={0},create=True),patch.dict('os.environ',{},clear=True):
+            r=phase11.audit()
+        self.assertEqual(r['status'],'pass');self.assertGreater(r['optional_raw_unavailable'],0)
+        self.assertEqual((r['native_replay'],r['raw_meshes_checked']),('not_run',0))
+
+    def test_present_raw_corruption_is_fatal(self):
+        raw=ROOT/self.document()['results'][0]['raw'];real_digest=phase11.digest
+        def corrupt(p):return '0'*64 if p==raw else real_digest(p)
+        def present(p):return True if p==raw else Path.is_file(p)
+        with patch.object(phase11,'exists',side_effect=present),patch.object(phase11,'digest',side_effect=corrupt),self.assertRaisesRegex(ValueError,'Artifact SHA-256 mismatch'):
+            phase11.audit()
+
+    def test_missing_tracked_genome_is_fatal(self):
+        genome=ROOT/self.document()['results'][0]['genome']
+        def missing(p,*args,**kwargs):
+            if p==genome:raise FileNotFoundError(str(p))
+            return REAL_STAT(p,*args,**kwargs)
+        with patch.object(Path,'stat',new=missing),self.assertRaisesRegex(ValueError,'Missing tracked Phase11 genome'):
+            self.check(self.document())
+
+    def test_eigenvalue_threshold_exact(self):
+        import math
+        self.assertEqual(phase11.verdict(math.nextafter(1.,0.),2.,2.),(False,True))
+        self.assertEqual(phase11.verdict(1.,2.,2.),(True,True))
+
+    def test_support_sequence_threshold_exact(self):
+        import math
+        self.assertEqual(phase11.verdict(2.,math.nextafter(2.,0.),2.),(True,False))
+        self.assertEqual(phase11.verdict(2.,2.,2.),(True,True))
+
+    def test_positive_native_eigenvalue_does_not_pass_buckling(self):
+        self.assertEqual(phase11.verdict(.5,3.,2.),(False,True))
+
+    def test_false_buckling_pass_rejected(self):
+        r=self.document();v=r['results'][0];v['buckling_pass']=not v['buckling_pass']
+        with self.assertRaisesRegex(ValueError,'A4 gate verdict mismatch'):self.check(r)
+
+    def test_false_support_sequence_pass_rejected(self):
+        r=self.document();v=r['results'][0];v['support_sequence_pass']=not v['support_sequence_pass']
+        with self.assertRaisesRegex(ValueError,'A4 gate verdict mismatch'):self.check(r)
+
+    def test_certificate_minimum_change_rejected(self):
+        r=self.document();r['results'][0]['seq_cert_input']+=.01
+        with self.assertRaisesRegex(ValueError,'Certificate sequence minimum changed'):self.check(r)
+
+    def test_support_constant_change_rejected(self):
+        r=self.document();r['results'][0]['a4']['grip_foundation_stiffness']['k_foundation_n_per_mm3']=201.
+        with self.assertRaisesRegex(ValueError,'Grip foundation model changed'):self.check(r)
+
+    def test_mesh_binding_change_rejected(self):
+        r=self.document();r['results'][0]['mesh_sha256']='0'*64
+        with self.assertRaisesRegex(ValueError,'Parent mesh/replay binding mismatch'):self.check(r)
+
+    def test_missing_a4_observation_rejected(self):
+        r=self.document();r['results'][0]['a4']=None
+        with self.assertRaisesRegex(ValueError,'A4 completeness mismatch'):self.check(r)
+
+    def test_changed_margin_rejected(self):
+        r=self.document();r['results'][0]['margins']['sequence']=100.
+        with self.assertRaisesRegex(ValueError,'A4 margin mismatch'):self.check(r)
+
+    def test_prior_receipt_reconstruction_required(self):
+        r=self.document();r['phase10_parent_receipt_sha256']='0'*64
+        with self.assertRaisesRegex(ValueError,'Phase10 changed beyond dependent hash metadata'):self.check(r)
+
+    def test_report_a4_change_rejected(self):
+        r=self.document();v=r['results'][0];a=v['a4'];text=self.report()
+        old=phase11.line([v['name'],a['buckling_eigenvalue'],v['margins']['buckling'],a['supported_seq_ratio'],v['seq_cert_input'],v['margins']['sequence'],v['buckling_pass'],v['support_sequence_pass'],v['side_a4_pass'],a['status']])
+        changed=text.replace(old,old.replace(v['name'],'CHANGED'),1);self.assertNotEqual(text,changed)
+        with self.assertRaisesRegex(ValueError,'Report A4 table mismatch'):phase11.audit_document(ROOT,r,changed)
+
+    def test_report_mesh_change_rejected(self):
+        r=self.document();v=r['results'][0];text=self.report()
+        old='| '+v['name']+' | '+str(v['a4']['n_node'])+' |'
+        changed=text.replace(old,'| CHANGED | '+str(v['a4']['n_node'])+' |',1);self.assertNotEqual(text,changed)
+        with self.assertRaisesRegex(ValueError,'Report A4 mesh table mismatch'):phase11.audit_document(ROOT,r,changed)
+
+    def test_changed_gate_threshold_rejected(self):
+        r=self.document();r['thresholds']['buckling_eigenvalue']=.5
+        with self.assertRaisesRegex(ValueError,'A4 acceptance thresholds changed'):self.check(r)
 
 if __name__=='__main__':unittest.main(verbosity=2)
