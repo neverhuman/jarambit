@@ -15,6 +15,17 @@ use serde_json::{json, Value};
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
+const Q7_CPS: [f64; genome::N_CP] = [
+    0.0, 2.4720345762624114, 3.0, 3.0, 3.0, 3.0, 2.4727688443313927, 1.4582812727496934,
+    0.7542362460948389, 0.9273662522036018, 0.44919959806570164, 0.15399709825071464,
+    0.00598327715607002, 0.18153879059595732, 0.021699284063914397, -0.3821724162115406,
+    1.006980625093307, 0.8631642138621967, -0.11906173746648413, 0.0, 0.0, 0.0, 0.0,
+    3.0, 3.0, 3.0, 1.103243361778542, 0.6220664759723078, 0.21270040153753478, 2.0,
+    1.7300803824233073, 0.8845314429627344, 0.5190470296230849, -0.4393508907352227,
+    -1.8777655284497983, -1.2615199166944122, -0.13376737149017054, -0.8889664255562653,
+    -0.8918546356656645, 0.0,
+];
+
 fn repo_root() -> PathBuf {
     let cwd = std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
     if cwd.join("docs/VERSION").is_file() {
@@ -200,7 +211,9 @@ fn spawn_offspring_batch(
                         (29, 2.0),
                         (30, 1.73),
                     ] {
-                        child.v[idx] = (target + rng.range(-0.08, 0.08))
+                        child.v[idx] = (parent.v[idx]
+                            + 0.35 * (target - parent.v[idx])
+                            + rng.range(-0.08, 0.08))
                             .clamp(b[idx].0, b[idx].1);
                     }
                     child.v[40] = rng.range(-0.25, 0.25).clamp(b[40].0, b[40].1);
@@ -246,12 +259,14 @@ fn spawn_offspring_batch(
                         (29, 2.0),
                         (30, 1.73),
                     ] {
-                        child.v[idx] = (target + rng.range(-0.08, 0.08))
+                        child.v[idx] = (parent.v[idx]
+                            + 0.35 * (target - parent.v[idx])
+                            + rng.range(-0.08, 0.08))
                             .clamp(b[idx].0, b[idx].1);
                     }
                     child.v[40] = rng.range(-0.25, 0.25).clamp(b[40].0, b[40].1);
                     child.v[genome::RING_WALL] = rng
-                        .range(6.8, 7.6)
+                        .range(6.8, 7.0)
                         .clamp(b[genome::RING_WALL].0, b[genome::RING_WALL].1);
                     if child.v[genome::WIN_N] >= 1.0 {
                         child.v[genome::WIN_N] =
@@ -402,6 +417,23 @@ fn spawn_offspring_batch(
                         *offset *= 1.0 - reinforcement;
                     }
                 }
+            }
+
+            // Keep the witness/Q7 cohort on the complete feasibility-tested silhouette. The
+            // ring-wall sample is the only jitter here; it stays inside the verified 6–7 mm band.
+            if matches!(k % 11, 7..=10) {
+                child.v[..N_CP].copy_from_slice(&Q7_CPS);
+                child.v[genome::DROP] = 0.0;
+                child.v[genome::GRIP_DX] = -0.4;
+                child.v[genome::RING_ID] = 24.9;
+                child.v[genome::NECK_FILLET] = 8.0;
+                child.v[genome::SPINE_OFF] = 42.0;
+                child.v[genome::T] = 6.0;
+                child.v[T_TIP] = 2.6;
+                child.v[TAPER_X0] = 115.0;
+                child.v[EA_IN] = 18.0;
+                child.v[EA_SP] = 18.0;
+                child.v[genome::RING_WALL] = rng.range(6.0, 6.05);
             }
 
             if fam == "p14" && k % 2 == 0 {
@@ -972,6 +1004,44 @@ mod tests {
     }
 
     #[test]
+    fn witness_and_q7_offspring_arms_produce_rankable_stage1_survivors() {
+        let seeds = load_seed_genomes(
+            &repo_root(),
+            Some(
+                "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv,evidence/rs_v2/w283_ultrarunner/w283_p10_c02_genome.csv",
+            ),
+        );
+        assert_eq!(seeds.len(), 2);
+        let batch = spawn_offspring_batch(&seeds, 11, 1, &mut Rng(20261018));
+        let mut unrankable = Vec::new();
+
+        for (seed_idx, (family, _)) in seeds.iter().enumerate() {
+            for c in 8..=10 {
+                let idx = seed_idx * 11 + c;
+                let (_, genome) = &batch[idx];
+                let Some(survivor) = screen_candidate_stage1(1, idx, family, genome, "test") else {
+                    let result = qd::evaluate(genome, idx, 1, 2.0);
+                    unrankable.push(format!(
+                        "{family} c={c}: aesthetics {:?}; CAD {:?}; grip={} dx={} drop={} wall={} cp13={}",
+                        result.aes.fails,
+                        result.rejects,
+                        pheno::build(genome).grip_len,
+                        genome.v[genome::GRIP_DX],
+                        genome.v[genome::DROP],
+                        genome.v[genome::RING_WALL],
+                        genome.v[13]
+                    ));
+                    continue;
+                };
+                assert!(survivor.screen_deficit.is_finite());
+                assert!(survivor.ring_bearing_w_mm >= 12.0);
+                assert!(survivor.g.v[genome::RING_WALL] >= 6.0);
+            }
+        }
+        assert!(unrankable.is_empty(), "unrankable offspring: {unrankable:?}");
+    }
+
+    #[test]
     fn offspring_can_explore_stock_and_rail_architecture_inside_existing_bounds() {
         let seeds = load_seed_genomes(
             &repo_root(),
@@ -1053,8 +1123,10 @@ mod tests {
         let child = &children[8].1;
         let bounds = genome::bounds();
 
-        assert!((0.15..=0.30).contains(&(child.v[N_CP + 7] - parent.v[N_CP + 7])));
-        assert!((0.10..=0.25).contains(&(child.v[N_CP + 8] - parent.v[N_CP + 8])));
+        assert_eq!(&child.v[..N_CP], &Q7_CPS);
+        assert_eq!(child.v[TAPER_X0], 115.0);
+        assert_eq!(child.v[genome::EA_IN], 18.0);
+        assert_eq!(child.v[genome::EA_SP], 18.0);
         assert_eq!(child.v[genome::WIN_W], 6.0);
         assert!((0.65..=0.70).contains(&child.v[genome::WIN_FILL]));
         assert!(child.v[genome::RING_WALL] >= 6.0);
@@ -1134,7 +1206,7 @@ mod tests {
         assert_eq!(child.v[genome::WIN_W], 3.0);
         assert!((0.48..=0.52).contains(&child.v[genome::WIN_S0]));
         assert!((0.82..=0.86).contains(&child.v[genome::WIN_S1]));
-        assert!((6.0..=6.4).contains(&child.v[genome::RING_WALL]));
+        assert!((6.0..=6.05).contains(&child.v[genome::RING_WALL]));
         for (idx, &value) in child.v.iter().enumerate() {
             if idx == EDGE_TH {
                 assert!((0.12..=0.20).contains(&value));
@@ -1168,7 +1240,7 @@ mod tests {
         let child = &children[10].1;
         let bounds = genome::bounds();
 
-        assert!((6.8..=7.6).contains(&child.v[genome::RING_WALL]));
+        assert!((6.0..=6.05).contains(&child.v[genome::RING_WALL]));
         assert_eq!(child.v[genome::WIN_N], 1.0);
         assert_eq!(child.v[genome::WIN_W], 3.0);
         assert!((0.48..=0.52).contains(&child.v[genome::WIN_S0]));
@@ -1318,7 +1390,7 @@ mod tests {
                 batch,
                 spawn_offspring_batch(&elites, 8, 1, &mut Rng(20261018))
             );
-            for (_, child) in &batch[6..8] {
+            for (_, child) in &batch[6..7] {
                 assert_eq!(child.p1(), p1);
                 assert!(child.rs_v2());
                 for idx in 0..N_CP {
@@ -1326,7 +1398,6 @@ mod tests {
                     if parent.v[idx] != 0.0 {
                         assert!(child.v[idx].abs() < parent.v[idx].abs());
                     }
-                    assert_eq!(batch[7].1.v[idx], 0.0);
                 }
                 for idx in sections {
                     assert!(child.v[idx] >= parent.v[idx], "section gene {idx}");
@@ -1343,9 +1414,9 @@ mod tests {
                 for idx in removal {
                     assert!(child.v[idx] <= parent.v[idx], "removal gene {idx}");
                     assert!(child.v[idx] >= bounds[idx].0, "removal bound {idx}");
-                    assert_eq!(batch[7].1.v[idx], 0.0);
                 }
             }
+            assert_eq!(&batch[7].1.v[..N_CP], &Q7_CPS);
         }
     }
     #[test]
@@ -1376,7 +1447,11 @@ mod tests {
             assert!(seed.1.v[genome::RING_WALL] < 6.0);
             for candidate in [&sibling, &reinforced] {
                 assert!(candidate.g.v[genome::RING_WALL] >= 6.0);
-                assert!(candidate.g.v[..N_CP].iter().all(|&offset| offset == 0.0));
+                if std::ptr::eq(candidate, &reinforced) {
+                    assert_eq!(&candidate.g.v[..N_CP], &Q7_CPS);
+                } else {
+                    assert!(candidate.g.v[..N_CP].iter().all(|&offset| offset == 0.0));
+                }
                 let p = pheno::build(&candidate.g);
                 assert!(jarambit_crescent::gates::holder_fit(&p.outline).0);
                 let (radius, bearing) = pheno::bore_dimensions(&p);
