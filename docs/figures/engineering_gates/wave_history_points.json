@@ -1,22 +1,24 @@
 {
- "base_commit": "19276875b994cfe23763de300936ee164a3cf5ae",
+ "base_commit": "1eee4d1287d1b2950e7d3e7ef2d6c23da97d57ee",
  "input_commits": {
-  "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/leaderboard.json": "19276875b994cfe23763de300936ee164a3cf5ae",
-  "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json": "19276875b994cfe23763de300936ee164a3cf5ae",
-  "evidence/evolution_waves/2026-10-17/wave_summary.json": "e47e64e2633a3a59c7e6bcfbf215d1ea0a089d08",
-  "evidence/evolution_waves/2026-10-17/xbabe2/out/w300/leaderboard.json": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
-  "evidence/evolution_waves/2026-10-17/xbabe2/out/w301/leaderboard.json": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
-  "evidence/evolution_waves/2026-10-17/xbabe2/out/w302/leaderboard.json": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
-  "evidence/evolution_waves/2026-10-17/xbabe2/out/w303/leaderboard.json": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
-  "evidence/evolution_waves/2026-10-17/xbabe2/out/w304/leaderboard.json": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
-  "evidence/evolution_waves/2026-10-17/xbabe2/out/w305/leaderboard.json": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
-  "evidence/evolution_waves/2026-10-17/xbabe2/out/w306/leaderboard.json": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
-  "evidence/evolution_waves/2026-10-17/xbabe2/out/w307/leaderboard.json": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
-  "evidence/evolution_waves/2026-10-17/xbabe2/out/w308/leaderboard.json": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
-  "evidence/evolution_waves/2026-10-17/xbabe2/out/w309/leaderboard.json": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
-  "evidence/evolution_waves/2026-10-17/xbabe2/out/w310/leaderboard.json": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
-  "evidence/evolution_waves/2026-10-17/xbabe3/out/w402c3/leaderboard.json": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
-  "evidence/evolution_waves/2026-10-17/xbabe3/out/w404c3/leaderboard.json": "3a01409d31b25bb1c33f26a85e105adb89a204e4"
+  "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/leaderboard.json": "1eee4d1287d1b2950e7d3e7ef2d6c23da97d57ee",
+  "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json": "1eee4d1287d1b2950e7d3e7ef2d6c23da97d57ee",
+  "evidence/evolution_waves/2026-10-17/wave_summary.json": "c24b4acc81a1d510daa8ba737ba73d68cdab54a1",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w300/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w301/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w302/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w303/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w304/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w305/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w306/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w307/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w308/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w309/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w310/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json": "c24b4acc81a1d510daa8ba737ba73d68cdab54a1",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json": "c24b4acc81a1d510daa8ba737ba73d68cdab54a1",
+  "evidence/evolution_waves/2026-10-17/xbabe3/out/w402c3/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
+  "evidence/evolution_waves/2026-10-17/xbabe3/out/w404c3/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c"
  },
  "points": [
   {
@@ -672,504 +674,6 @@
    "source": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/leaderboard.json",
    "value": 0.6485,
    "wave": "w298"
-  },
-  {
-   "metric": "mass_g",
-   "pointers": [
-    "/designs/0/mass_g",
-    "/designs/1/mass_g",
-    "/designs/2/mass_g",
-    "/designs/3/mass_g"
-   ],
-   "reduction": "min",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 82.861,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "mass_g",
-   "pointers": [
-    "/designs/0/mass_g",
-    "/designs/1/mass_g",
-    "/designs/2/mass_g",
-    "/designs/3/mass_g"
-   ],
-   "reduction": "median",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 82.869,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "mass_g",
-   "pointers": [
-    "/designs/0/mass_g",
-    "/designs/1/mass_g",
-    "/designs/2/mass_g",
-    "/designs/3/mass_g"
-   ],
-   "reduction": "max",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 83.068,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "w_cad",
-   "pointers": [
-    "/designs/0/w_cad",
-    "/designs/1/w_cad",
-    "/designs/2/w_cad",
-    "/designs/3/w_cad"
-   ],
-   "reduction": "min",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": -5.578128,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "w_cad",
-   "pointers": [
-    "/designs/0/w_cad",
-    "/designs/1/w_cad",
-    "/designs/2/w_cad",
-    "/designs/3/w_cad"
-   ],
-   "reduction": "median",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": -5.5696375,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "w_cad",
-   "pointers": [
-    "/designs/0/w_cad",
-    "/designs/1/w_cad",
-    "/designs/2/w_cad",
-    "/designs/3/w_cad"
-   ],
-   "reduction": "max",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": -5.556243,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "g1",
-   "pointers": [
-    "/designs/0/g1",
-    "/designs/1/g1",
-    "/designs/2/g1",
-    "/designs/3/g1"
-   ],
-   "reduction": "min",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.46324425,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "g1",
-   "pointers": [
-    "/designs/0/g1",
-    "/designs/1/g1",
-    "/designs/2/g1",
-    "/designs/3/g1"
-   ],
-   "reduction": "median",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.46507449999999995,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "g1",
-   "pointers": [
-    "/designs/0/g1",
-    "/designs/1/g1",
-    "/designs/2/g1",
-    "/designs/3/g1"
-   ],
-   "reduction": "max",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.465808625,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "battery_pass_count",
-   "pointers": [
-    "/designs/0/battery_pass_count",
-    "/designs/1/battery_pass_count",
-    "/designs/2/battery_pass_count",
-    "/designs/3/battery_pass_count"
-   ],
-   "reduction": "min",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 11,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "battery_pass_count",
-   "pointers": [
-    "/designs/0/battery_pass_count",
-    "/designs/1/battery_pass_count",
-    "/designs/2/battery_pass_count",
-    "/designs/3/battery_pass_count"
-   ],
-   "reduction": "median",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 11.0,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "battery_pass_count",
-   "pointers": [
-    "/designs/0/battery_pass_count",
-    "/designs/1/battery_pass_count",
-    "/designs/2/battery_pass_count",
-    "/designs/3/battery_pass_count"
-   ],
-   "reduction": "max",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 11,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "solid_tip_sf",
-   "pointers": [
-    "/designs/0/solid_tip_sf",
-    "/designs/1/solid_tip_sf",
-    "/designs/2/solid_tip_sf",
-    "/designs/3/solid_tip_sf"
-   ],
-   "reduction": "min",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.6693,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "solid_tip_sf",
-   "pointers": [
-    "/designs/0/solid_tip_sf",
-    "/designs/1/solid_tip_sf",
-    "/designs/2/solid_tip_sf",
-    "/designs/3/solid_tip_sf"
-   ],
-   "reduction": "median",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.67005,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "solid_tip_sf",
-   "pointers": [
-    "/designs/0/solid_tip_sf",
-    "/designs/1/solid_tip_sf",
-    "/designs/2/solid_tip_sf",
-    "/designs/3/solid_tip_sf"
-   ],
-   "reduction": "max",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.6716,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "strict_hunter_sf",
-   "pointers": [
-    "/designs/0/strict_hunter_sf",
-    "/designs/1/strict_hunter_sf",
-    "/designs/2/strict_hunter_sf",
-    "/designs/3/strict_hunter_sf"
-   ],
-   "reduction": "min",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.645,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "strict_hunter_sf",
-   "pointers": [
-    "/designs/0/strict_hunter_sf",
-    "/designs/1/strict_hunter_sf",
-    "/designs/2/strict_hunter_sf",
-    "/designs/3/strict_hunter_sf"
-   ],
-   "reduction": "median",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.6452,
-   "wave": "w401c3"
-  },
-  {
-   "metric": "strict_hunter_sf",
-   "pointers": [
-    "/designs/0/strict_hunter_sf",
-    "/designs/1/strict_hunter_sf",
-    "/designs/2/strict_hunter_sf",
-    "/designs/3/strict_hunter_sf"
-   ],
-   "reduction": "max",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.6477,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/assessed_count",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 4,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/qualified_count",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/champion",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": null,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/unverified",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": [],
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/0/label",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": "w401c3_r01_p10_c14",
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/0/mass_g",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 82.861,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/0/w_cad",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": -5.576979,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/0/g1",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.4646309999999999,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/0/all_16_gates",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": false,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/0/rs_v2_all_hard",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": false,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/0/qualified",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": false,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/0/battery_pass_count",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 11,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/0/solid_tip_sf",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.6693,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/0/strict_hunter_sf",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.645,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/1/label",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": "w401c3_r02_p10_c15",
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/1/mass_g",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 82.867,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/1/w_cad",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": -5.556243,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/1/g1",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.46551799999999993,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/1/all_16_gates",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": false,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/1/rs_v2_all_hard",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": false,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/1/qualified",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": false,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/1/battery_pass_count",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 11,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/1/solid_tip_sf",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.6708,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/1/strict_hunter_sf",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.6477,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/2/label",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": "w401c3_r02_p10_c27",
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/2/mass_g",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 82.871,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/2/w_cad",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": -5.562296,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/2/g1",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.465808625,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/2/all_16_gates",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": false,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/2/rs_v2_all_hard",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": false,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/2/qualified",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": false,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/2/battery_pass_count",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 11,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/2/solid_tip_sf",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.6716,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/2/strict_hunter_sf",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.6454,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/3/label",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": "w401c3_r01_p14_c35",
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/3/mass_g",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 83.068,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/3/w_cad",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": -5.578128,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/3/g1",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.46324425,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/3/all_16_gates",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": false,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/3/rs_v2_all_hard",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": false,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/3/qualified",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": false,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/3/battery_pass_count",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 11,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/3/solid_tip_sf",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.6693,
-   "wave": "w401c3"
-  },
-  {
-   "pointer": "/designs/3/strict_hunter_sf",
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "value": 0.645,
-   "wave": "w401c3"
   },
   {
    "metric": "mass_g",
@@ -6658,6 +6162,1500 @@
     "/designs/3/mass_g"
    ],
    "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 87.53,
+   "wave": "w311"
+  },
+  {
+   "metric": "mass_g",
+   "pointers": [
+    "/designs/0/mass_g",
+    "/designs/1/mass_g",
+    "/designs/2/mass_g",
+    "/designs/3/mass_g"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 89.4765,
+   "wave": "w311"
+  },
+  {
+   "metric": "mass_g",
+   "pointers": [
+    "/designs/0/mass_g",
+    "/designs/1/mass_g",
+    "/designs/2/mass_g",
+    "/designs/3/mass_g"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 91.413,
+   "wave": "w311"
+  },
+  {
+   "metric": "w_cad",
+   "pointers": [
+    "/designs/0/w_cad",
+    "/designs/1/w_cad",
+    "/designs/2/w_cad",
+    "/designs/3/w_cad"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": -5.471544,
+   "wave": "w311"
+  },
+  {
+   "metric": "w_cad",
+   "pointers": [
+    "/designs/0/w_cad",
+    "/designs/1/w_cad",
+    "/designs/2/w_cad",
+    "/designs/3/w_cad"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": -5.3242864999999995,
+   "wave": "w311"
+  },
+  {
+   "metric": "w_cad",
+   "pointers": [
+    "/designs/0/w_cad",
+    "/designs/1/w_cad",
+    "/designs/2/w_cad",
+    "/designs/3/w_cad"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": -5.262728,
+   "wave": "w311"
+  },
+  {
+   "metric": "g1",
+   "pointers": [
+    "/designs/0/g1",
+    "/designs/1/g1",
+    "/designs/2/g1",
+    "/designs/3/g1"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.4289365,
+   "wave": "w311"
+  },
+  {
+   "metric": "g1",
+   "pointers": [
+    "/designs/0/g1",
+    "/designs/1/g1",
+    "/designs/2/g1",
+    "/designs/3/g1"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.43653343749999995,
+   "wave": "w311"
+  },
+  {
+   "metric": "g1",
+   "pointers": [
+    "/designs/0/g1",
+    "/designs/1/g1",
+    "/designs/2/g1",
+    "/designs/3/g1"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.4442177499999999,
+   "wave": "w311"
+  },
+  {
+   "metric": "battery_pass_count",
+   "pointers": [
+    "/designs/0/battery_pass_count",
+    "/designs/1/battery_pass_count",
+    "/designs/2/battery_pass_count",
+    "/designs/3/battery_pass_count"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 14,
+   "wave": "w311"
+  },
+  {
+   "metric": "battery_pass_count",
+   "pointers": [
+    "/designs/0/battery_pass_count",
+    "/designs/1/battery_pass_count",
+    "/designs/2/battery_pass_count",
+    "/designs/3/battery_pass_count"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 14.5,
+   "wave": "w311"
+  },
+  {
+   "metric": "battery_pass_count",
+   "pointers": [
+    "/designs/0/battery_pass_count",
+    "/designs/1/battery_pass_count",
+    "/designs/2/battery_pass_count",
+    "/designs/3/battery_pass_count"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 15,
+   "wave": "w311"
+  },
+  {
+   "metric": "solid_tip_sf",
+   "pointers": [
+    "/designs/0/solid_tip_sf",
+    "/designs/1/solid_tip_sf",
+    "/designs/2/solid_tip_sf",
+    "/designs/3/solid_tip_sf"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.7042,
+   "wave": "w311"
+  },
+  {
+   "metric": "solid_tip_sf",
+   "pointers": [
+    "/designs/0/solid_tip_sf",
+    "/designs/1/solid_tip_sf",
+    "/designs/2/solid_tip_sf",
+    "/designs/3/solid_tip_sf"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.70665,
+   "wave": "w311"
+  },
+  {
+   "metric": "solid_tip_sf",
+   "pointers": [
+    "/designs/0/solid_tip_sf",
+    "/designs/1/solid_tip_sf",
+    "/designs/2/solid_tip_sf",
+    "/designs/3/solid_tip_sf"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.709,
+   "wave": "w311"
+  },
+  {
+   "metric": "strict_hunter_sf",
+   "pointers": [
+    "/designs/0/strict_hunter_sf",
+    "/designs/1/strict_hunter_sf",
+    "/designs/2/strict_hunter_sf",
+    "/designs/3/strict_hunter_sf"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.6481,
+   "wave": "w311"
+  },
+  {
+   "metric": "strict_hunter_sf",
+   "pointers": [
+    "/designs/0/strict_hunter_sf",
+    "/designs/1/strict_hunter_sf",
+    "/designs/2/strict_hunter_sf",
+    "/designs/3/strict_hunter_sf"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.6769000000000001,
+   "wave": "w311"
+  },
+  {
+   "metric": "strict_hunter_sf",
+   "pointers": [
+    "/designs/0/strict_hunter_sf",
+    "/designs/1/strict_hunter_sf",
+    "/designs/2/strict_hunter_sf",
+    "/designs/3/strict_hunter_sf"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.6842,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/assessed_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 4,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/qualified_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/champion",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": null,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/unverified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": [],
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/0/label",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": "w311_r01_p10_c21",
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/0/mass_g",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 87.53,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/0/w_cad",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": -5.471544,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/0/g1",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.44409012499999995,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/0/all_16_gates",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": false,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/0/rs_v2_all_hard",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": false,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/0/qualified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": false,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/0/battery_pass_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 14,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/0/solid_tip_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.709,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/0/strict_hunter_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.6481,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/1/label",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": "w311_r02_p10_c08",
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/1/mass_g",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 87.54,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/1/w_cad",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": -5.385445,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/1/g1",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.4442177499999999,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/1/all_16_gates",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": false,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/1/rs_v2_all_hard",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": false,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/1/qualified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": false,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/1/battery_pass_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 14,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/1/solid_tip_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.709,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/1/strict_hunter_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.6696,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/2/label",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": "w311_r01_p14_c50",
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/2/mass_g",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 91.413,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/2/w_cad",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": -5.262728,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/2/g1",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.42897675,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/2/all_16_gates",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": false,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/2/rs_v2_all_hard",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": false,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/2/qualified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": false,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/2/battery_pass_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 15,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/2/solid_tip_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.7043,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/2/strict_hunter_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.6842,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/3/label",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": "w311_r02_p14_c39",
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/3/mass_g",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 91.413,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/3/w_cad",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": -5.263128,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/3/g1",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.4289365,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/3/all_16_gates",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": false,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/3/rs_v2_all_hard",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": false,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/3/qualified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": false,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/3/battery_pass_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 15,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/3/solid_tip_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.7042,
+   "wave": "w311"
+  },
+  {
+   "pointer": "/designs/3/strict_hunter_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "value": 0.6842,
+   "wave": "w311"
+  },
+  {
+   "metric": "mass_g",
+   "pointers": [
+    "/designs/0/mass_g",
+    "/designs/1/mass_g",
+    "/designs/2/mass_g",
+    "/designs/3/mass_g"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 87.567,
+   "wave": "w312"
+  },
+  {
+   "metric": "mass_g",
+   "pointers": [
+    "/designs/0/mass_g",
+    "/designs/1/mass_g",
+    "/designs/2/mass_g",
+    "/designs/3/mass_g"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 89.4925,
+   "wave": "w312"
+  },
+  {
+   "metric": "mass_g",
+   "pointers": [
+    "/designs/0/mass_g",
+    "/designs/1/mass_g",
+    "/designs/2/mass_g",
+    "/designs/3/mass_g"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 91.411,
+   "wave": "w312"
+  },
+  {
+   "metric": "w_cad",
+   "pointers": [
+    "/designs/0/w_cad",
+    "/designs/1/w_cad",
+    "/designs/2/w_cad",
+    "/designs/3/w_cad"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": -5.509948,
+   "wave": "w312"
+  },
+  {
+   "metric": "w_cad",
+   "pointers": [
+    "/designs/0/w_cad",
+    "/designs/1/w_cad",
+    "/designs/2/w_cad",
+    "/designs/3/w_cad"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": -5.372534,
+   "wave": "w312"
+  },
+  {
+   "metric": "w_cad",
+   "pointers": [
+    "/designs/0/w_cad",
+    "/designs/1/w_cad",
+    "/designs/2/w_cad",
+    "/designs/3/w_cad"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": -5.262717,
+   "wave": "w312"
+  },
+  {
+   "metric": "g1",
+   "pointers": [
+    "/designs/0/g1",
+    "/designs/1/g1",
+    "/designs/2/g1",
+    "/designs/3/g1"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.40820587499999994,
+   "wave": "w312"
+  },
+  {
+   "metric": "g1",
+   "pointers": [
+    "/designs/0/g1",
+    "/designs/1/g1",
+    "/designs/2/g1",
+    "/designs/3/g1"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.436546125,
+   "wave": "w312"
+  },
+  {
+   "metric": "g1",
+   "pointers": [
+    "/designs/0/g1",
+    "/designs/1/g1",
+    "/designs/2/g1",
+    "/designs/3/g1"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.444179875,
+   "wave": "w312"
+  },
+  {
+   "metric": "battery_pass_count",
+   "pointers": [
+    "/designs/0/battery_pass_count",
+    "/designs/1/battery_pass_count",
+    "/designs/2/battery_pass_count",
+    "/designs/3/battery_pass_count"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 14,
+   "wave": "w312"
+  },
+  {
+   "metric": "battery_pass_count",
+   "pointers": [
+    "/designs/0/battery_pass_count",
+    "/designs/1/battery_pass_count",
+    "/designs/2/battery_pass_count",
+    "/designs/3/battery_pass_count"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 14.0,
+   "wave": "w312"
+  },
+  {
+   "metric": "battery_pass_count",
+   "pointers": [
+    "/designs/0/battery_pass_count",
+    "/designs/1/battery_pass_count",
+    "/designs/2/battery_pass_count",
+    "/designs/3/battery_pass_count"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 14,
+   "wave": "w312"
+  },
+  {
+   "metric": "solid_tip_sf",
+   "pointers": [
+    "/designs/0/solid_tip_sf",
+    "/designs/1/solid_tip_sf",
+    "/designs/2/solid_tip_sf",
+    "/designs/3/solid_tip_sf"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.6478,
+   "wave": "w312"
+  },
+  {
+   "metric": "solid_tip_sf",
+   "pointers": [
+    "/designs/0/solid_tip_sf",
+    "/designs/1/solid_tip_sf",
+    "/designs/2/solid_tip_sf",
+    "/designs/3/solid_tip_sf"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.70665,
+   "wave": "w312"
+  },
+  {
+   "metric": "solid_tip_sf",
+   "pointers": [
+    "/designs/0/solid_tip_sf",
+    "/designs/1/solid_tip_sf",
+    "/designs/2/solid_tip_sf",
+    "/designs/3/solid_tip_sf"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.709,
+   "wave": "w312"
+  },
+  {
+   "metric": "strict_hunter_sf",
+   "pointers": [
+    "/designs/0/strict_hunter_sf",
+    "/designs/1/strict_hunter_sf",
+    "/designs/2/strict_hunter_sf",
+    "/designs/3/strict_hunter_sf"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.6727,
+   "wave": "w312"
+  },
+  {
+   "metric": "strict_hunter_sf",
+   "pointers": [
+    "/designs/0/strict_hunter_sf",
+    "/designs/1/strict_hunter_sf",
+    "/designs/2/strict_hunter_sf",
+    "/designs/3/strict_hunter_sf"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.67865,
+   "wave": "w312"
+  },
+  {
+   "metric": "strict_hunter_sf",
+   "pointers": [
+    "/designs/0/strict_hunter_sf",
+    "/designs/1/strict_hunter_sf",
+    "/designs/2/strict_hunter_sf",
+    "/designs/3/strict_hunter_sf"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.6869,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/assessed_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 4,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/qualified_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/champion",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": null,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/unverified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": [],
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/0/label",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": "w312_r01_p10_c15",
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/0/mass_g",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 87.567,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/0/w_cad",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": -5.373284,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/0/g1",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.444101125,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/0/all_16_gates",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": false,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/0/rs_v2_all_hard",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": false,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/0/qualified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": false,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/0/battery_pass_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 14,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/0/solid_tip_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.709,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/0/strict_hunter_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.6727,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/1/label",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": "w312_r02_p10_c02",
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/1/mass_g",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 87.574,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/1/w_cad",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": -5.371784,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/1/g1",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.444179875,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/1/all_16_gates",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": false,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/1/rs_v2_all_hard",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": false,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/1/qualified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": false,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/1/battery_pass_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 14,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/1/solid_tip_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.709,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/1/strict_hunter_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.6731,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/2/label",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": "w312_r01_p14_c50",
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/2/mass_g",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 91.411,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/2/w_cad",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": -5.262717,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/2/g1",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.428991125,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/2/all_16_gates",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": false,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/2/rs_v2_all_hard",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": false,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/2/qualified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": false,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/2/battery_pass_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 14,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/2/solid_tip_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.7043,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/2/strict_hunter_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.6842,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/3/label",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": "w312_r02_p14_c47",
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/3/mass_g",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 91.411,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/3/w_cad",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": -5.509948,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/3/g1",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.40820587499999994,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/3/all_16_gates",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": false,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/3/rs_v2_all_hard",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": false,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/3/qualified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": false,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/3/battery_pass_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 14,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/3/solid_tip_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.6478,
+   "wave": "w312"
+  },
+  {
+   "pointer": "/designs/3/strict_hunter_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "value": 0.6869,
+   "wave": "w312"
+  },
+  {
+   "metric": "mass_g",
+   "pointers": [
+    "/designs/0/mass_g",
+    "/designs/1/mass_g",
+    "/designs/2/mass_g",
+    "/designs/3/mass_g"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 82.861,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "mass_g",
+   "pointers": [
+    "/designs/0/mass_g",
+    "/designs/1/mass_g",
+    "/designs/2/mass_g",
+    "/designs/3/mass_g"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 82.869,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "mass_g",
+   "pointers": [
+    "/designs/0/mass_g",
+    "/designs/1/mass_g",
+    "/designs/2/mass_g",
+    "/designs/3/mass_g"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 83.068,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "w_cad",
+   "pointers": [
+    "/designs/0/w_cad",
+    "/designs/1/w_cad",
+    "/designs/2/w_cad",
+    "/designs/3/w_cad"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": -5.578128,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "w_cad",
+   "pointers": [
+    "/designs/0/w_cad",
+    "/designs/1/w_cad",
+    "/designs/2/w_cad",
+    "/designs/3/w_cad"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": -5.5696375,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "w_cad",
+   "pointers": [
+    "/designs/0/w_cad",
+    "/designs/1/w_cad",
+    "/designs/2/w_cad",
+    "/designs/3/w_cad"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": -5.556243,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "g1",
+   "pointers": [
+    "/designs/0/g1",
+    "/designs/1/g1",
+    "/designs/2/g1",
+    "/designs/3/g1"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.46324425,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "g1",
+   "pointers": [
+    "/designs/0/g1",
+    "/designs/1/g1",
+    "/designs/2/g1",
+    "/designs/3/g1"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.46507449999999995,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "g1",
+   "pointers": [
+    "/designs/0/g1",
+    "/designs/1/g1",
+    "/designs/2/g1",
+    "/designs/3/g1"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.465808625,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "battery_pass_count",
+   "pointers": [
+    "/designs/0/battery_pass_count",
+    "/designs/1/battery_pass_count",
+    "/designs/2/battery_pass_count",
+    "/designs/3/battery_pass_count"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 11,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "battery_pass_count",
+   "pointers": [
+    "/designs/0/battery_pass_count",
+    "/designs/1/battery_pass_count",
+    "/designs/2/battery_pass_count",
+    "/designs/3/battery_pass_count"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 11.0,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "battery_pass_count",
+   "pointers": [
+    "/designs/0/battery_pass_count",
+    "/designs/1/battery_pass_count",
+    "/designs/2/battery_pass_count",
+    "/designs/3/battery_pass_count"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 11,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "solid_tip_sf",
+   "pointers": [
+    "/designs/0/solid_tip_sf",
+    "/designs/1/solid_tip_sf",
+    "/designs/2/solid_tip_sf",
+    "/designs/3/solid_tip_sf"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.6693,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "solid_tip_sf",
+   "pointers": [
+    "/designs/0/solid_tip_sf",
+    "/designs/1/solid_tip_sf",
+    "/designs/2/solid_tip_sf",
+    "/designs/3/solid_tip_sf"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.67005,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "solid_tip_sf",
+   "pointers": [
+    "/designs/0/solid_tip_sf",
+    "/designs/1/solid_tip_sf",
+    "/designs/2/solid_tip_sf",
+    "/designs/3/solid_tip_sf"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.6716,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "strict_hunter_sf",
+   "pointers": [
+    "/designs/0/strict_hunter_sf",
+    "/designs/1/strict_hunter_sf",
+    "/designs/2/strict_hunter_sf",
+    "/designs/3/strict_hunter_sf"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.645,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "strict_hunter_sf",
+   "pointers": [
+    "/designs/0/strict_hunter_sf",
+    "/designs/1/strict_hunter_sf",
+    "/designs/2/strict_hunter_sf",
+    "/designs/3/strict_hunter_sf"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.6452,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "strict_hunter_sf",
+   "pointers": [
+    "/designs/0/strict_hunter_sf",
+    "/designs/1/strict_hunter_sf",
+    "/designs/2/strict_hunter_sf",
+    "/designs/3/strict_hunter_sf"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.6477,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/assessed_count",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 4,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/qualified_count",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/champion",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": null,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/unverified",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": [],
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/0/label",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": "w401c3_r01_p10_c14",
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/0/mass_g",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 82.861,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/0/w_cad",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": -5.576979,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/0/g1",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.4646309999999999,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/0/all_16_gates",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": false,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/0/rs_v2_all_hard",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": false,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/0/qualified",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": false,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/0/battery_pass_count",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 11,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/0/solid_tip_sf",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.6693,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/0/strict_hunter_sf",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.645,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/1/label",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": "w401c3_r02_p10_c15",
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/1/mass_g",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 82.867,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/1/w_cad",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": -5.556243,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/1/g1",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.46551799999999993,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/1/all_16_gates",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": false,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/1/rs_v2_all_hard",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": false,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/1/qualified",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": false,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/1/battery_pass_count",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 11,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/1/solid_tip_sf",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.6708,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/1/strict_hunter_sf",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.6477,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/2/label",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": "w401c3_r02_p10_c27",
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/2/mass_g",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 82.871,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/2/w_cad",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": -5.562296,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/2/g1",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.465808625,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/2/all_16_gates",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": false,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/2/rs_v2_all_hard",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": false,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/2/qualified",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": false,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/2/battery_pass_count",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 11,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/2/solid_tip_sf",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.6716,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/2/strict_hunter_sf",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.6454,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/3/label",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": "w401c3_r01_p14_c35",
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/3/mass_g",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 83.068,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/3/w_cad",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": -5.578128,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/3/g1",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.46324425,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/3/all_16_gates",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": false,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/3/rs_v2_all_hard",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": false,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/3/qualified",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": false,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/3/battery_pass_count",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 11,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/3/solid_tip_sf",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.6693,
+   "wave": "w401c3"
+  },
+  {
+   "pointer": "/designs/3/strict_hunter_sf",
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "value": 0.645,
+   "wave": "w401c3"
+  },
+  {
+   "metric": "mass_g",
+   "pointers": [
+    "/designs/0/mass_g",
+    "/designs/1/mass_g",
+    "/designs/2/mass_g",
+    "/designs/3/mass_g"
+   ],
+   "reduction": "min",
    "source": "evidence/evolution_waves/2026-10-17/xbabe3/out/w402c3/leaderboard.json",
    "value": 83.072,
    "wave": "w402c3"
@@ -7805,8 +8803,8 @@
  "preview": false,
  "schema": 1,
  "scope": "Selected completed Stage-2 assessments; no new solve or certification.",
- "source_commit": "e47e64e2633a3a59c7e6bcfbf215d1ea0a089d08",
- "summary_sha256": "f295e192f3f0a90d5e5086ecdacde00c14c25d645fefae2cbb6ff2b175992dfe",
+ "source_commit": "c24b4acc81a1d510daa8ba737ba73d68cdab54a1",
+ "summary_sha256": "4987c245886db29033255a723a7f4cdf1939181741c940eb2c9296a0f57769a3",
  "waves": [
   {
    "assessed": 6,
@@ -7830,7 +8828,7 @@
    "solid_tip_sf_median": 0.6527000000000001,
    "solid_tip_sf_min": 0.6361,
    "source": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/leaderboard.json",
-   "source_commit": "19276875b994cfe23763de300936ee164a3cf5ae",
+   "source_commit": "1eee4d1287d1b2950e7d3e7ef2d6c23da97d57ee",
    "stage1_screens": "53/68, 63/64, 63/64",
    "strict_hunter_sf_max": 0.6485,
    "strict_hunter_sf_median": 0.6454,
@@ -7840,39 +8838,6 @@
    "w_cad_median": -5.765577,
    "w_cad_min": -5.937664,
    "wave": "w298"
-  },
-  {
-   "assessed": 4,
-   "battery_pass_count_max": 11,
-   "battery_pass_count_median": 11.0,
-   "battery_pass_count_min": 11,
-   "champion": null,
-   "engine_commits": [
-    "6438f0778cf70812a1e2f5b03a788f6c39cbe0dd"
-   ],
-   "g1_max": 0.465808625,
-   "g1_median": 0.46507449999999995,
-   "g1_min": 0.46324425,
-   "host": "xbabe3",
-   "mass_g_max": 83.068,
-   "mass_g_median": 82.869,
-   "mass_g_min": 82.861,
-   "qualified": 0,
-   "sha256": "1c2916610a51bb5a1114210e29e587791ad5d2849ccf1f9f206e1c5c276a80fe",
-   "solid_tip_sf_max": 0.6716,
-   "solid_tip_sf_median": 0.67005,
-   "solid_tip_sf_min": 0.6693,
-   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
-   "source_commit": "19276875b994cfe23763de300936ee164a3cf5ae",
-   "stage1_screens": "45/52, 47/48",
-   "strict_hunter_sf_max": 0.6477,
-   "strict_hunter_sf_median": 0.6452,
-   "strict_hunter_sf_min": 0.645,
-   "unverified": [],
-   "w_cad_max": -5.556243,
-   "w_cad_median": -5.5696375,
-   "w_cad_min": -5.578128,
-   "wave": "w401c3"
   },
   {
    "assessed": 4,
@@ -7896,7 +8861,7 @@
    "solid_tip_sf_median": 0.67475,
    "solid_tip_sf_min": 0.6596,
    "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w300/leaderboard.json",
-   "source_commit": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
+   "source_commit": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "stage1_screens": "64/100, 92/96*",
    "strict_hunter_sf_max": 0.6712,
    "strict_hunter_sf_median": 0.66445,
@@ -7930,7 +8895,7 @@
    "solid_tip_sf_median": 0.6613,
    "solid_tip_sf_min": 0.639,
    "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w301/leaderboard.json",
-   "source_commit": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
+   "source_commit": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "stage1_screens": "83/100*, 95/96*",
    "strict_hunter_sf_max": 0.6881,
    "strict_hunter_sf_median": 0.6575,
@@ -7963,7 +8928,7 @@
    "solid_tip_sf_median": 0.6747000000000001,
    "solid_tip_sf_min": 0.662,
    "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w302/leaderboard.json",
-   "source_commit": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
+   "source_commit": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "stage1_screens": "81/100*, 92/96*",
    "strict_hunter_sf_max": 0.6842,
    "strict_hunter_sf_median": 0.6702,
@@ -7996,7 +8961,7 @@
    "solid_tip_sf_median": 0.6739999999999999,
    "solid_tip_sf_min": 0.6733,
    "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w303/leaderboard.json",
-   "source_commit": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
+   "source_commit": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "stage1_screens": "82/100*, 94/96*",
    "strict_hunter_sf_max": 0.6558,
    "strict_hunter_sf_median": 0.65195,
@@ -8029,7 +8994,7 @@
    "solid_tip_sf_median": 0.68845,
    "solid_tip_sf_min": 0.6761,
    "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w304/leaderboard.json",
-   "source_commit": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
+   "source_commit": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "stage1_screens": "80/100*, 91/96*",
    "strict_hunter_sf_max": 0.6896,
    "strict_hunter_sf_median": 0.6629,
@@ -8062,7 +9027,7 @@
    "solid_tip_sf_median": 0.6885,
    "solid_tip_sf_min": 0.6581,
    "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w305/leaderboard.json",
-   "source_commit": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
+   "source_commit": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "stage1_screens": "82/100*, 93/96*",
    "strict_hunter_sf_max": 0.7115,
    "strict_hunter_sf_median": 0.6908,
@@ -8095,7 +9060,7 @@
    "solid_tip_sf_median": 0.67405,
    "solid_tip_sf_min": 0.59,
    "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w306/leaderboard.json",
-   "source_commit": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
+   "source_commit": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "stage1_screens": "83/100*, 94/96*",
    "strict_hunter_sf_max": 0.7181,
    "strict_hunter_sf_median": 0.69905,
@@ -8128,7 +9093,7 @@
    "solid_tip_sf_median": 0.66075,
    "solid_tip_sf_min": 0.6323,
    "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w307/leaderboard.json",
-   "source_commit": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
+   "source_commit": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "stage1_screens": "84/100*, 92/96*",
    "strict_hunter_sf_max": 0.7185,
    "strict_hunter_sf_median": 0.7029,
@@ -8161,7 +9126,7 @@
    "solid_tip_sf_median": 0.68405,
    "solid_tip_sf_min": 0.6715,
    "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w308/leaderboard.json",
-   "source_commit": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
+   "source_commit": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "stage1_screens": "83/100*, 94/96*",
    "strict_hunter_sf_max": 0.72,
    "strict_hunter_sf_median": 0.7,
@@ -8194,7 +9159,7 @@
    "solid_tip_sf_median": 0.70905,
    "solid_tip_sf_min": 0.6938,
    "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w309/leaderboard.json",
-   "source_commit": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
+   "source_commit": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "stage1_screens": "86/100*, 92/96*",
    "strict_hunter_sf_max": 0.7219,
    "strict_hunter_sf_median": 0.70715,
@@ -8227,7 +9192,7 @@
    "solid_tip_sf_median": 0.70665,
    "solid_tip_sf_min": 0.6501,
    "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w310/leaderboard.json",
-   "source_commit": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
+   "source_commit": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "stage1_screens": "82/100*, 94/96*",
    "strict_hunter_sf_max": 0.7219,
    "strict_hunter_sf_median": 0.6877,
@@ -8237,6 +9202,105 @@
    "w_cad_median": -5.297276500000001,
    "w_cad_min": -5.38078,
    "wave": "w310"
+  },
+  {
+   "assessed": 4,
+   "battery_pass_count_max": 15,
+   "battery_pass_count_median": 14.5,
+   "battery_pass_count_min": 14,
+   "champion": null,
+   "engine_commits": [
+    "19276875b994cfe23763de300936ee164a3cf5ae"
+   ],
+   "g1_max": 0.4442177499999999,
+   "g1_median": 0.43653343749999995,
+   "g1_min": 0.4289365,
+   "host": "xbabe2",
+   "mass_g_max": 91.413,
+   "mass_g_median": 89.4765,
+   "mass_g_min": 87.53,
+   "qualified": 0,
+   "sha256": "77e9f339e73fcb9f11e90248d71ccca0fc98518a990276e26ba3e40ef0eb7ea4",
+   "solid_tip_sf_max": 0.709,
+   "solid_tip_sf_median": 0.70665,
+   "solid_tip_sf_min": 0.7042,
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json",
+   "source_commit": "c24b4acc81a1d510daa8ba737ba73d68cdab54a1",
+   "stage1_screens": "84/100*, 93/96*",
+   "strict_hunter_sf_max": 0.6842,
+   "strict_hunter_sf_median": 0.6769000000000001,
+   "strict_hunter_sf_min": 0.6481,
+   "unverified": [],
+   "w_cad_max": -5.262728,
+   "w_cad_median": -5.3242864999999995,
+   "w_cad_min": -5.471544,
+   "wave": "w311"
+  },
+  {
+   "assessed": 4,
+   "battery_pass_count_max": 14,
+   "battery_pass_count_median": 14.0,
+   "battery_pass_count_min": 14,
+   "champion": null,
+   "engine_commits": [
+    "19276875b994cfe23763de300936ee164a3cf5ae"
+   ],
+   "g1_max": 0.444179875,
+   "g1_median": 0.436546125,
+   "g1_min": 0.40820587499999994,
+   "host": "xbabe2",
+   "mass_g_max": 91.411,
+   "mass_g_median": 89.4925,
+   "mass_g_min": 87.567,
+   "qualified": 0,
+   "sha256": "5c418e8eb65d2948b65c5a2711cd4b3cd53146ea61587aa975e7ee0e9e9efe2a",
+   "solid_tip_sf_max": 0.709,
+   "solid_tip_sf_median": 0.70665,
+   "solid_tip_sf_min": 0.6478,
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json",
+   "source_commit": "c24b4acc81a1d510daa8ba737ba73d68cdab54a1",
+   "stage1_screens": "84/100*, 96/96*",
+   "strict_hunter_sf_max": 0.6869,
+   "strict_hunter_sf_median": 0.67865,
+   "strict_hunter_sf_min": 0.6727,
+   "unverified": [],
+   "w_cad_max": -5.262717,
+   "w_cad_median": -5.372534,
+   "w_cad_min": -5.509948,
+   "wave": "w312"
+  },
+  {
+   "assessed": 4,
+   "battery_pass_count_max": 11,
+   "battery_pass_count_median": 11.0,
+   "battery_pass_count_min": 11,
+   "champion": null,
+   "engine_commits": [
+    "6438f0778cf70812a1e2f5b03a788f6c39cbe0dd"
+   ],
+   "g1_max": 0.465808625,
+   "g1_median": 0.46507449999999995,
+   "g1_min": 0.46324425,
+   "host": "xbabe3",
+   "mass_g_max": 83.068,
+   "mass_g_median": 82.869,
+   "mass_g_min": 82.861,
+   "qualified": 0,
+   "sha256": "1c2916610a51bb5a1114210e29e587791ad5d2849ccf1f9f206e1c5c276a80fe",
+   "solid_tip_sf_max": 0.6716,
+   "solid_tip_sf_median": 0.67005,
+   "solid_tip_sf_min": 0.6693,
+   "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
+   "source_commit": "1eee4d1287d1b2950e7d3e7ef2d6c23da97d57ee",
+   "stage1_screens": "45/52, 47/48",
+   "strict_hunter_sf_max": 0.6477,
+   "strict_hunter_sf_median": 0.6452,
+   "strict_hunter_sf_min": 0.645,
+   "unverified": [],
+   "w_cad_max": -5.556243,
+   "w_cad_median": -5.5696375,
+   "w_cad_min": -5.578128,
+   "wave": "w401c3"
   },
   {
    "assessed": 4,
@@ -8260,7 +9324,7 @@
    "solid_tip_sf_median": 0.65355,
    "solid_tip_sf_min": 0.6525,
    "source": "evidence/evolution_waves/2026-10-17/xbabe3/out/w402c3/leaderboard.json",
-   "source_commit": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
+   "source_commit": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "stage1_screens": "44/52, 46/48*",
    "strict_hunter_sf_max": 0.6519,
    "strict_hunter_sf_median": 0.6512,
@@ -8293,7 +9357,7 @@
    "solid_tip_sf_median": 0.65345,
    "solid_tip_sf_min": 0.625,
    "source": "evidence/evolution_waves/2026-10-17/xbabe3/out/w404c3/leaderboard.json",
-   "source_commit": "3a01409d31b25bb1c33f26a85e105adb89a204e4",
+   "source_commit": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "stage1_screens": "32/52*, 45/48*, 47/48*",
    "strict_hunter_sf_max": 0.6508,
    "strict_hunter_sf_median": 0.64655,
