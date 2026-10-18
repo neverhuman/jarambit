@@ -683,5 +683,155 @@ class SummaryManifestTests(unittest.TestCase):
         self.assertEqual(error.exception.code, 1)
 
 
+class ManifestCrossCheckTests(unittest.TestCase):
+    def setUp(self):
+        scratch = Path(__file__).resolve().parents[1] / "target/rsv2-07/phase31/test-fixtures"
+        scratch.mkdir(parents=True, exist_ok=True)
+        temporary = tempfile.TemporaryDirectory(prefix="cross-", dir=scratch)
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        for name in audit.SUMMARY_PATHS:
+            self.write(name, b'{"status":"saved"}\n' if name.endswith(".json") else b"# Saved report\n")
+        artifacts = {name: self.metadata((self.root / name).read_bytes()) for name in (audit.REPORT, audit.RECEIPT)}
+        scripts = {name: self.metadata(("historical " + name).encode()) for name in audit.SCRIPT_PATHS}
+        self.save(audit.DIGEST_RECEIPT, {"schema": "jarambit.rsv2_07_hm.phase27_artifact_digest_index.v1",
+            "task": "RSV2-07-p27", "status": "pass", "artifact_count": 2, "artifacts": artifacts})
+        self.save(audit.SCRIPT_RECEIPT, {"schema": "jarambit.rsv2_07_hm.phase28_script_test_inventory.v1",
+            "task": "RSV2-07-p28", "status": "pass", "script_count": 2, "scripts": scripts})
+        entries = {}
+        for source, rows in ((audit.DIGEST_RECEIPT, artifacts), (audit.SCRIPT_RECEIPT, scripts)):
+            for name, row in rows.items():
+                entries[name] = {"source_receipt": source, "snapshot_digest_parity": True,
+                                 **{prefix + key: value for prefix in ("recorded_", "snapshot_", "working_tree_") for key, value in row.items()}}
+        self.save(audit.CROSS_RECEIPT, {"schema": "jarambit.rsv2_07_hm.phase29_index_inventory_cross_check.v1",
+            "task": "RSV2-07-p29", "status": "pass", "entries": entries, "entry_count": 4,
+            "input_receipts": {name: {**self.metadata((self.root / name).read_bytes()), "snapshot_bytes_equal": True}
+                               for name in (audit.DIGEST_RECEIPT, audit.SCRIPT_RECEIPT)},
+            "phase27_paths": sorted(artifacts), "phase28_paths": sorted(scripts), "overlap_paths": [],
+            "disjoint_path_sets": True, "exact_snapshot_digest_parity": True})
+        self.reindex()
+
+    def metadata(self, data):
+        return {"sha256": hashlib.sha256(data).hexdigest(), "size_bytes": len(data)}
+
+    def write(self, name, data):
+        path = self.root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+
+    def save(self, name, document):
+        self.write(name, (json.dumps(document, indent=2) + "\n").encode())
+
+    def load(self, name):
+        return json.loads((self.root / name).read_bytes())
+
+    def reindex(self):
+        self.save(audit.SUMMARY_RECEIPT, audit.summary_manifest(self.root))
+
+    def cli(self, *extra):
+        with patch.object(sys, "argv", ["forensics", "--phase", "31", "--repo-root", str(self.root), *extra]), \
+                redirect_stdout(io.StringIO()) as output:
+            result = audit.main()
+        return result, output.getvalue()
+
+    def test_all_live_artifacts_and_fourteen_linked_metadata_comparisons_match(self):
+        with patch.object(audit.subprocess, "check_output", side_effect=AssertionError("Unexpected Git command")):
+            result = audit.manifest_cross_check(self.root)
+        self.assertEqual((result["live_artifact_count"], result["receipt_comparison_count"]), (8, 14))
+        self.assertTrue(result["live_artifact_digest_parity"])
+        self.assertTrue(result["receipt_digest_parity"])
+        self.assertFalse(result["current_script_bytes_checked"])
+        self.assertTrue(all(row["match"] for row in result["receipt_comparisons"]))
+        self.assertEqual(result["historical_script_paths"], sorted(audit.SCRIPT_PATHS))
+        self.assertTrue(all(not (self.root / name).exists() for name in audit.SCRIPT_PATHS))
+        self.assertEqual(result, audit.manifest_cross_check(self.root))
+        self.assertNotIn(str(self.root), json.dumps(result))
+
+    def test_live_edits_and_manifest_metadata_or_type_tampering_fail(self):
+        self.write(audit.REPORT, b"changed live report\n")
+        with self.assertRaisesRegex(ValueError, "manifest differs from live artifacts"):
+            audit.manifest_cross_check(self.root)
+        self.write(audit.REPORT, b"# Saved report\n")
+        original = self.load(audit.SUMMARY_RECEIPT)
+        for field, value in (("sha256", "0" * 64), ("size_bytes", 0), ("literal_host_path_count", False)):
+            saved = deepcopy(original)
+            saved["artifacts"][audit.REPORT][field] = value
+            self.save(audit.SUMMARY_RECEIPT, saved)
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "manifest differs from live artifacts"):
+                audit.manifest_cross_check(self.root)
+
+    def test_phase27_and_phase29_linked_digest_disagreements_fail_after_reindex(self):
+        for name, table, path, field in (
+                (audit.DIGEST_RECEIPT, "artifacts", audit.REPORT, "sha256"),
+                (audit.CROSS_RECEIPT, "input_receipts", audit.SCRIPT_RECEIPT, "size_bytes"),
+                (audit.CROSS_RECEIPT, "entries", audit.REPORT, "working_tree_sha256"),
+                (audit.CROSS_RECEIPT, "entries", audit.SCRIPT_PATHS[0], "snapshot_sha256")):
+            original = self.load(name)
+            saved = deepcopy(original)
+            saved[table][path][field] = 1 if field == "size_bytes" else "0" * 64
+            self.save(name, saved)
+            self.reindex()
+            with self.subTest(field=field, table=table), self.assertRaisesRegex(ValueError, "Receipt digest parity mismatch"):
+                audit.manifest_cross_check(self.root)
+            self.save(name, original)
+            self.reindex()
+
+    def test_bad_schema_path_sets_and_snapshot_flags_fail_after_reindex(self):
+        original = self.load(audit.CROSS_RECEIPT)
+        for field, value in (("schema", "unknown"), ("entry_count", True), ("disjoint_path_sets", 1),
+                             ("phase27_paths", []), ("entries", {}), ("input_receipts", {}), ("exact_snapshot_digest_parity", False)):
+            saved = deepcopy(original)
+            saved[field] = value
+            self.save(audit.CROSS_RECEIPT, saved)
+            self.reindex()
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                audit.manifest_cross_check(self.root)
+
+    def test_malformed_manifest_and_missing_source_fail(self):
+        original = (self.root / audit.SUMMARY_RECEIPT).read_bytes()
+        for data in (b'{"x":1,"x":2}', b'{"x":NaN}', b"{broken}"):
+            self.write(audit.SUMMARY_RECEIPT, data)
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                audit.manifest_cross_check(self.root)
+        self.write(audit.SUMMARY_RECEIPT, original)
+        (self.root / audit.REPORT).unlink()
+        with self.assertRaises(FileNotFoundError):
+            audit.manifest_cross_check(self.root)
+
+    def test_source_change_after_live_scan_fails(self):
+        original_summary = audit.summary_manifest
+        def scan(root):
+            result = original_summary(root)
+            self.write(audit.REPORT, b"changed after live scan\n")
+            return result
+        with patch.object(audit, "summary_manifest", side_effect=scan), self.assertRaisesRegex(ValueError, "changed during audit"):
+            audit.manifest_cross_check(self.root)
+
+    def test_cli_writes_only_phase31_outputs_and_verifies_readonly_and_tampering(self):
+        before = {path.relative_to(self.root).as_posix(): path.read_bytes() for path in self.root.rglob("*") if path.is_file()}
+        result, output = self.cli("--write")
+        self.assertEqual(result, 0)
+        self.assertIn("live_artifacts=8 | receipt_comparisons=14", output)
+        after = {path.relative_to(self.root).as_posix(): path.read_bytes() for path in self.root.rglob("*") if path.is_file()}
+        self.assertEqual(set(after) - set(before), {audit.MANIFEST_CROSS_REPORT, audit.MANIFEST_CROSS_RECEIPT})
+        for name, data in before.items():
+            self.assertEqual(after[name], data)
+        with patch.object(Path, "write_text", side_effect=AssertionError("Readonly audit wrote")):
+            self.assertEqual(self.cli()[0], 0)
+        for name in (audit.MANIFEST_CROSS_REPORT, audit.MANIFEST_CROSS_RECEIPT):
+            data = after[name]
+            audit.require_portable(data.decode(), name)
+            self.write(name, data + b"changed")
+            with self.subTest(name=name), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                self.cli()
+            self.assertEqual(error.exception.code, 1)
+            self.write(name, data)
+
+    def test_artifact_root_is_rejected_for_manifest_cross_check(self):
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli("--artifact-root", str(self.root))
+        self.assertEqual(error.exception.code, 1)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

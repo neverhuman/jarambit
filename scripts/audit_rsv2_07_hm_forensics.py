@@ -29,6 +29,8 @@ SUMMARY_RECEIPT = DIRECTORY + "phase30_summary_manifest_audit.json"
 SUMMARY_REPORT = DIRECTORY + "PHASE30_SUMMARY_MANIFEST_AUDIT.md"
 SUMMARY_PATHS = tuple(sorted((REPORT, RECEIPT, DIGEST_REPORT, DIGEST_RECEIPT,
                               SCRIPT_REPORT, SCRIPT_RECEIPT, CROSS_REPORT, CROSS_RECEIPT)))
+MANIFEST_CROSS_RECEIPT = DIRECTORY + "phase31_manifest_cross_check_audit.json"
+MANIFEST_CROSS_REPORT = DIRECTORY + "PHASE31_MANIFEST_CROSS_CHECK_AUDIT.md"
 # Absolute POSIX paths, Windows drive paths, UNC paths and file URIs.
 HOST_PATH = re.compile(r"(?<![\w./:])/(?!/)[\w.~-]+|(?<!\w)[A-Za-z]:[\\/]|\\\\[^\\\s]+\\|file://")
 
@@ -405,6 +407,112 @@ def run_summary(args):
     return 0
 
 
+def digest_pair(row, prefix=""):
+    require(isinstance(row, dict) and type(row.get(prefix + "size_bytes")) is int and row[prefix + "size_bytes"] >= 0 and
+            isinstance(row.get(prefix + "sha256"), str) and re.fullmatch(r"[0-9a-f]{64}", row[prefix + "sha256"]) is not None,
+            "Invalid receipt digest metadata")
+    return {"size_bytes": row[prefix + "size_bytes"], "sha256": row[prefix + "sha256"]}
+
+
+def manifest_cross_check(repo_root):
+    repo_root = Path(repo_root)
+    sources = {}
+    for name in (SUMMARY_RECEIPT, *SUMMARY_PATHS):
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode), f"Expected regular manifest source: {name}")
+        sources[name] = path.read_bytes()
+    saved = strict_json(sources[SUMMARY_RECEIPT])
+    live = summary_manifest(repo_root)
+    require(json.dumps(saved, sort_keys=True) == json.dumps(live, sort_keys=True), "Phase-30 manifest differs from live artifacts")
+    documents = {}
+    for name, schema, task in (
+            (DIGEST_RECEIPT, "jarambit.rsv2_07_hm.phase27_artifact_digest_index.v1", "RSV2-07-p27"),
+            (SCRIPT_RECEIPT, "jarambit.rsv2_07_hm.phase28_script_test_inventory.v1", "RSV2-07-p28"),
+            (CROSS_RECEIPT, "jarambit.rsv2_07_hm.phase29_index_inventory_cross_check.v1", "RSV2-07-p29")):
+        document = strict_json(sources[name])
+        require(isinstance(document, dict) and document.get("schema") == schema and
+                document.get("task") == task and document.get("status") == "pass", "Unexpected linked receipt schema or status")
+        documents[name] = document
+    left, right, cross = documents[DIGEST_RECEIPT], documents[SCRIPT_RECEIPT], documents[CROSS_RECEIPT]
+    artifacts, scripts = left.get("artifacts"), right.get("scripts")
+    require(isinstance(artifacts, dict) and bool(artifacts) and set(artifacts) <= set(SUMMARY_PATHS), "Phase-27 registry outside manifest")
+    require(isinstance(scripts, dict) and set(scripts) == set(SCRIPT_PATHS), "Phase-28 script path set mismatch")
+    require(type(left.get("artifact_count")) is int and left["artifact_count"] == len(artifacts) and
+            type(right.get("script_count")) is int and right["script_count"] == len(scripts), "Linked registry count mismatch")
+    entries, inputs = cross.get("entries"), cross.get("input_receipts")
+    require(isinstance(entries, dict) and set(entries) == set(artifacts) | set(scripts) and
+            isinstance(inputs, dict) and set(inputs) == {DIGEST_RECEIPT, SCRIPT_RECEIPT}, "Phase-29 registry path set mismatch")
+    require(cross.get("phase27_paths") == sorted(artifacts) and cross.get("phase28_paths") == sorted(scripts) and
+            cross.get("disjoint_path_sets") is True and cross.get("overlap_paths") == [] and
+            cross.get("exact_snapshot_digest_parity") is True and type(cross.get("entry_count")) is int and
+            cross["entry_count"] == len(entries), "Phase-29 registry invariants mismatch")
+    checks = []
+    def compare(name, relation, expected, observed):
+        require(expected == observed, "Receipt digest parity mismatch: " + relation)
+        checks.append({"path": name, "relation": relation, **expected, "match": True})
+    for name, row in sorted(artifacts.items()):
+        compare(name, "Phase-27 artifact versus Phase-30 manifest", digest_pair(saved["artifacts"][name]), digest_pair(row))
+    for name, row in sorted(inputs.items()):
+        require(isinstance(row, dict) and row.get("snapshot_bytes_equal") is True, "Phase-29 input snapshot flag mismatch")
+        compare(name, "Phase-29 input receipt versus Phase-30 manifest", digest_pair(saved["artifacts"][name]), digest_pair(row))
+    for name, row in sorted(entries.items()):
+        source = DIGEST_RECEIPT if name in artifacts else SCRIPT_RECEIPT
+        require(isinstance(row, dict) and row.get("source_receipt") == source and row.get("snapshot_digest_parity") is True,
+                "Phase-29 entry provenance or snapshot flag mismatch")
+        expected = digest_pair(saved["artifacts"][name] if name in artifacts else scripts[name])
+        for prefix in ("recorded_", "snapshot_", "working_tree_") if name in artifacts else ("recorded_", "snapshot_"):
+            compare(name, "Phase-29 " + prefix.rstrip("_") + " versus " + ("Phase-30 manifest" if name in artifacts else "Phase-28 saved script"),
+                    expected, digest_pair(row, prefix))
+    for name, data in sources.items():
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode) and path.read_bytes() == data,
+                "Manifest cross-check source bytes or type changed during audit")
+    return {"schema": "jarambit.rsv2_07_hm.phase31_manifest_cross_check.v1", "task": "RSV2-07-p31", "status": "pass",
+            "input_receipts": {name: {"sha256": hashlib.sha256(sources[name]).hexdigest(), "size_bytes": len(sources[name])}
+                               for name in (SUMMARY_RECEIPT, DIGEST_RECEIPT, SCRIPT_RECEIPT, CROSS_RECEIPT)},
+            "live_artifact_count": len(live["artifacts"]), "live_artifact_digest_parity": True,
+            "total_size_bytes": live["total_size_bytes"], "total_line_count": live["total_line_count"],
+            "literal_host_path_count": 0, "artifacts": live["artifacts"],
+            "receipt_comparison_count": len(checks), "receipt_digest_parity": True, "receipt_comparisons": checks,
+            "historical_script_paths": sorted(scripts), "current_script_bytes_checked": False}
+
+
+def render_manifest_cross(document):
+    rows = [f"| {name} | {row['size_bytes']} | {row['sha256']} | yes |"
+            for name, row in document["artifacts"].items()]
+    return "\n".join([
+        "# Phase-31 manifest cross-check audit", "",
+        f"**PASS.** All {document['live_artifact_count']} Phase-26 through Phase-29 artifacts match the Phase-30 manifest's SHA-256 and byte sizes. All {document['receipt_comparison_count']} linked receipt metadata comparisons agree.", "",
+        "| Manifest artifact | Bytes | SHA-256 | Live parity |", "| --- | ---: | --- | --- |", *rows, "",
+        "The Phase-30 manifest is recomputed from the fixed eight live artifacts and compared in full, including line counts, total sizes and host-path checks. Phase-27 artifact metadata is compared with the corresponding Phase-30 entries. Phase-29 pins for its Phase-27 and Phase-28 input receipts are compared with Phase-30's hashes of those same receipt files. Its recorded, snapshot and saved working-tree fields for manifest artifacts must also agree with Phase 30.", "",
+        "Phase-28 script paths are outside Phase 30's artifact set. Their historical sizes and hashes are compared with Phase-29's recorded and snapshot fields. Current scripts and Phase-29's saved script working-tree observations are outside this check; extending the scripts does not refresh earlier receipts. The JSON lists every metadata comparison and pins the four input receipts. This audit verifies saved metadata consistency, without fetching Git snapshots or reassessing earlier audit conclusions.", "",
+        "Inputs are parsed strictly and reread to detect changes during the audit. Registry schemas, source references, path sets, counts, snapshot flags, digest formats and integer sizes are checked. Missing files, symlinks, inconsistent metadata, duplicate keys, nonfinite JSON and host paths in the Phase-30 input set fail. Paths in these outputs are repository-relative. --repo-root supports a relocated source tree without Git.", "",
+        "Normal verification compares the complete saved Phase-31 JSON and exact report text without writes. --write replaces only the two Phase-31 outputs. Earlier reports and receipts are preserved.", "",
+        "```sh", "python3 scripts/audit_rsv2_07_hm_forensics.py --phase 31",
+        "python3 -m unittest discover -s scripts -p 'test_audit_rsv2_07_hm_forensics.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs 14,15 at nice 10. This is a static manifest and receipt cross-check. Changes are left uncommitted.", "",
+    ])
+
+
+def run_manifest_cross(args):
+    require(args.artifact_root is None, "Phase-31 uses saved outputs in --repo-root; --artifact-root is not supported")
+    current = manifest_cross_check(args.repo_root)
+    report = render_manifest_cross(current)
+    receipt = json.dumps(current, indent=2) + "\n"
+    require_portable(report, "Phase-31 report")
+    require_portable(receipt, "Phase-31 receipt")
+    if args.write:
+        (args.repo_root / DIRECTORY).mkdir(parents=True, exist_ok=True)
+        (args.repo_root / MANIFEST_CROSS_RECEIPT).write_text(receipt, encoding="utf-8")
+        (args.repo_root / MANIFEST_CROSS_REPORT).write_text(report, encoding="utf-8")
+    else:
+        saved = strict_json((args.repo_root / MANIFEST_CROSS_RECEIPT).read_bytes())
+        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-31 saved receipt mismatch")
+        require((args.repo_root / MANIFEST_CROSS_REPORT).read_text(encoding="utf-8") == report, "Phase-31 report mismatch")
+    print(f"LANE: RSV2-07-hm | RSV2-07-p31 | PASS | live_artifacts={current['live_artifact_count']} | receipt_comparisons={current['receipt_comparison_count']}")
+    return 0
+
+
 def audit(artifact_root):
     artifact_root = Path(artifact_root)
     sources, waves = {}, {}
@@ -455,11 +563,13 @@ def render(document):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30"), default="26")
+    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31"), default="26")
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     try:
+        if args.phase == "31":
+            return run_manifest_cross(args)
         if args.phase == "30":
             return run_summary(args)
         if args.phase == "29":
