@@ -1206,6 +1206,37 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_preserves_screen_deficit_order_on_fill_pass() {
+        let mut p10_first = Genome::c4_seed(genome::T_MIN);
+        p10_first.v[EA_IN] = 14.0;
+        p10_first.clamp();
+        let mut p14_first = Genome::c4_seed(genome::T_MIN);
+        p14_first.v[EA_IN] = 15.0;
+        p14_first.clamp();
+
+        let mut p10_second = p10_first.clone();
+        p10_second.v[TAPER_X0] += 0.5;
+        p10_second.clamp();
+        let mut p14_second = p14_first.clone();
+        p14_second.v[EA_SP] += 0.25;
+        p14_second.clamp();
+
+        let screened = vec![
+            test_screen_survivor("p10_best", "p10", p10_first, 0.01),
+            test_screen_survivor("p14_best", "p14", p14_first, 0.02),
+            test_screen_survivor("p10_next", "p10", p10_second, 0.03),
+            test_screen_survivor("p14_next", "p14", p14_second, 0.04),
+        ];
+        let selected = select_stage2_candidates(&screened, 4, &HashSet::new(), &HashSet::new());
+
+        let labels: Vec<_> = selected.iter().map(|candidate| candidate.label.as_str()).collect();
+        assert_eq!(labels, ["p10_best", "p14_best", "p10_next", "p14_next"]);
+        assert!(selected
+            .windows(2)
+            .all(|pair| pair[0].screen_deficit <= pair[1].screen_deficit));
+    }
+
+    #[test]
     fn stage2_selection_skips_carried_forward_round1_elites_until_fallback() {
         let mut initial_seed = Genome::c4_seed(genome::T_MIN);
         initial_seed.v[EA_IN] = 14.0;
