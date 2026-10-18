@@ -1,5 +1,6 @@
 """Static saved-log, artifact digest and script/test inventory regressions."""
 
+import ast
 from contextlib import redirect_stderr, redirect_stdout
 from copy import deepcopy
 import hashlib
@@ -1181,6 +1182,135 @@ class Phase34CumulativeReceiptTableTests(unittest.TestCase):
             self.assertEqual(error.exception.code, 1)
 
     def test_artifact_root_is_rejected_for_phase34(self):
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli("--artifact-root", str(self.root))
+        self.assertEqual(error.exception.code, 1)
+
+
+class VerifierSelfDigestTests(unittest.TestCase):
+    def setUp(self):
+        self.fixture = ScriptTestInventoryTests()
+        self.fixture.setUp()
+        self.addCleanup(self.fixture.doCleanups)
+        self.root = self.fixture.root
+
+    def cli(self, *extra):
+        with patch.object(sys, "argv", ["forensics", "--phase", "35", "--repo-root", str(self.root), *extra]), \
+                redirect_stdout(io.StringIO()) as output:
+            result = audit.main()
+        return result, output.getvalue()
+
+    def test_function_inventory_tracks_lexical_scope_spans_async_and_duplicate_declarations(self):
+        source = b'''# def ignored(): pass
+text = "def ignored_string(): pass"
+def outer():
+    def inner(): pass
+    return lambda: 1
+class Box:
+    async def method(self):
+        def nested(): pass
+if False:
+    def conditional(): pass
+'''
+        rows = audit.static_function_definitions(source)
+        self.assertEqual([row["qualified_name"] for row in rows], ["outer", "outer.inner", "Box.method", "Box.method.nested", "conditional"])
+        self.assertEqual([(row["line"], row["end_line"]) for row in rows], [(3, 5), (4, 4), (7, 8), (8, 8), (10, 10)])
+        self.assertEqual([row["is_async"] for row in rows], [False, False, True, False, False])
+        duplicate = audit.static_function_definitions(b"def same(): pass\ndef same(): pass\n")
+        self.assertEqual([row["qualified_name"] for row in duplicate], ["same", "same"])
+        self.assertEqual([row["line"] for row in duplicate], [1, 2])
+
+    def test_exact_self_digests_and_inventory_without_executing_source(self):
+        current = audit.verifier_self_digest(self.root)
+        self.assertEqual((current["script_count"], current["function_definition_count"], current["test_class_count"], current["test_method_count"]), (2, 2, 1, 1))
+        for name, data in self.fixture.files.items():
+            row = current["scripts"][name]
+            self.assertEqual((row["size_bytes"], row["sha256"]), (len(data), hashlib.sha256(data).hexdigest()))
+        self.assertEqual(current["scripts"][audit.SCRIPT_PATHS[0]]["function_definitions"], [])
+        self.assertEqual([row["qualified_name"] for row in current["scripts"][audit.SCRIPT_PATHS[1]]["function_definitions"]], ["Example.test_one", "Example.helper"])
+        self.assertEqual(current, audit.verifier_self_digest(self.root))
+        self.assertNotIn(str(self.root), json.dumps(current))
+
+    def test_invalid_syntax_missing_and_symlinked_sources_fail(self):
+        path = self.root / audit.SCRIPT_PATHS[0]
+        path.write_bytes(b"def broken(\n")
+        with self.assertRaises(SyntaxError):
+            audit.verifier_self_digest(self.root)
+        path.unlink()
+        with self.assertRaises(FileNotFoundError):
+            audit.verifier_self_digest(self.root)
+        path.symlink_to(Path(audit.SCRIPT_PATHS[1]).name)
+        with self.assertRaisesRegex(ValueError, "regular script"):
+            audit.verifier_self_digest(self.root)
+
+    def test_changes_between_test_inventory_function_inventory_and_final_read_fail(self):
+        path = self.root / audit.SCRIPT_PATHS[0]
+        original_inventory = audit.script_inventory
+        def inventory(root):
+            result = original_inventory(root)
+            path.write_bytes(path.read_bytes() + b"# edit before function inventory\n")
+            return result
+        with patch.object(audit, "script_inventory", side_effect=inventory), self.assertRaisesRegex(ValueError, "changed before function inventory"):
+            audit.verifier_self_digest(self.root)
+        path.write_bytes(self.fixture.files[audit.SCRIPT_PATHS[0]])
+        original_functions = audit.static_function_definitions
+        def functions(data):
+            result = original_functions(data)
+            path.write_bytes(path.read_bytes() + b"# edit after function inventory\n")
+            return result
+        with patch.object(audit, "static_function_definitions", side_effect=functions), self.assertRaisesRegex(ValueError, "changed during self-digest audit"):
+            audit.verifier_self_digest(self.root)
+
+    def test_cli_writes_only_phase35_outputs_and_readonly_detects_inventory_tampering(self):
+        with patch.object(audit.subprocess, "check_output", side_effect=AssertionError("Unexpected Git command")):
+            result, output = self.cli("--write")
+            self.assertEqual(result, 0)
+            self.assertIn("LANE: RSV2-07-hm | RSV2-07-p35 | PASS | scripts=2 | functions=2 | test_methods=1", output)
+            expected = set(self.fixture.files) | {audit.SELF_DIGEST_REPORT, audit.SELF_DIGEST_RECEIPT}
+            self.assertEqual({path.relative_to(self.root).as_posix() for path in self.root.rglob("*") if path.is_file()}, expected)
+            for name, data in self.fixture.files.items():
+                self.assertEqual((self.root / name).read_bytes(), data)
+            with patch.object(Path, "write_text", side_effect=AssertionError("Readonly audit wrote")):
+                self.assertEqual(self.cli()[0], 0)
+            receipt = self.root / audit.SELF_DIGEST_RECEIPT
+            original = receipt.read_bytes()
+            for field, value in (("function_definition_count", False), ("sha256", "0" * 64), ("size_bytes", 1)):
+                saved = json.loads(original)
+                saved["scripts"][audit.SCRIPT_PATHS[0]][field] = value
+                receipt.write_text(json.dumps(saved))
+                with self.subTest(field=field), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                    self.cli()
+                self.assertEqual(error.exception.code, 1)
+            receipt.write_bytes(original)
+            for name in (audit.SELF_DIGEST_RECEIPT, audit.SELF_DIGEST_REPORT):
+                audit.require_portable((self.root / name).read_text(), name)
+
+    def test_report_or_source_edits_invalidate_saved_self_digest(self):
+        self.cli("--write")
+        path = self.root / audit.SELF_DIGEST_REPORT
+        original = path.read_bytes()
+        path.write_bytes(original + b"changed\n")
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli()
+        self.assertEqual(error.exception.code, 1)
+        path.write_bytes(original)
+        source = self.root / audit.SCRIPT_PATHS[0]
+        source.write_bytes(source.read_bytes() + b"def extra_function(): pass\n")
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli()
+        self.assertEqual(error.exception.code, 1)
+
+    def test_actual_function_totals_match_ast_walk_and_tests_match_unittest_discovery(self):
+        root = Path(__file__).resolve().parents[1]
+        current = audit.verifier_self_digest(root)
+        for name, row in current["scripts"].items():
+            tree = ast.parse((root / name).read_bytes())
+            count = sum(isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) for node in ast.walk(tree))
+            self.assertEqual(row["function_definition_count"], count)
+        discovered = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__]).countTestCases()
+        self.assertEqual(current["test_method_count"], discovered)
+
+    def test_artifact_root_is_rejected_for_self_digest(self):
         with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
             self.cli("--artifact-root", str(self.root))
         self.assertEqual(error.exception.code, 1)

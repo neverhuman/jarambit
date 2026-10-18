@@ -1,0 +1,1225 @@
+{
+  "schema": "jarambit.rsv2_07_hm.phase35_verifier_self_digest.v1",
+  "task": "RSV2-07-p35",
+  "status": "pass",
+  "digest_basis": "exact working-tree bytes of the two named scripts",
+  "test_count_rule": "direct test-prefixed sync or async method declarations in top-level classes explicitly based on unittest.TestCase or TestCase",
+  "limitations": "static declarations only; no import, execution, inheritance, alias resolution or runtime discovery",
+  "script_count": 2,
+  "total_size_bytes": 138005,
+  "test_method_count": 88,
+  "scripts": {
+    "scripts/audit_rsv2_07_hm_forensics.py": {
+      "size_bytes": 63174,
+      "sha256": "565a88f688f3e10acb531c9ef950f8a2e8bb7b8fd6b484a7049fdd93af1e7b17",
+      "test_method_count": 0,
+      "test_classes": {},
+      "function_definitions": [
+        {
+          "qualified_name": "require",
+          "line": 50,
+          "end_line": 52,
+          "is_async": false
+        },
+        {
+          "qualified_name": "object_pairs",
+          "line": 55,
+          "end_line": 60,
+          "is_async": false
+        },
+        {
+          "qualified_name": "finite_float",
+          "line": 63,
+          "end_line": 66,
+          "is_async": false
+        },
+        {
+          "qualified_name": "reject_constant",
+          "line": 69,
+          "end_line": 70,
+          "is_async": false
+        },
+        {
+          "qualified_name": "strict_json",
+          "line": 73,
+          "end_line": 74,
+          "is_async": false
+        },
+        {
+          "qualified_name": "parse_jsonl",
+          "line": 77,
+          "end_line": 84,
+          "is_async": false
+        },
+        {
+          "qualified_name": "read_optional",
+          "line": 87,
+          "end_line": 91,
+          "is_async": false
+        },
+        {
+          "qualified_name": "require_portable",
+          "line": 94,
+          "end_line": 95,
+          "is_async": false
+        },
+        {
+          "qualified_name": "tracked_phase_paths",
+          "line": 98,
+          "end_line": 113,
+          "is_async": false
+        },
+        {
+          "qualified_name": "digest_audit",
+          "line": 116,
+          "end_line": 145,
+          "is_async": false
+        },
+        {
+          "qualified_name": "render_digest",
+          "line": 148,
+          "end_line": 162,
+          "is_async": false
+        },
+        {
+          "qualified_name": "run_digest",
+          "line": 165,
+          "end_line": 180,
+          "is_async": false
+        },
+        {
+          "qualified_name": "static_test_methods",
+          "line": 183,
+          "end_line": 196,
+          "is_async": false
+        },
+        {
+          "qualified_name": "script_inventory",
+          "line": 199,
+          "end_line": 219,
+          "is_async": false
+        },
+        {
+          "qualified_name": "render_scripts",
+          "line": 222,
+          "end_line": 236,
+          "is_async": false
+        },
+        {
+          "qualified_name": "run_scripts",
+          "line": 239,
+          "end_line": 255,
+          "is_async": false
+        },
+        {
+          "qualified_name": "static_function_definitions",
+          "line": 258,
+          "end_line": 272,
+          "is_async": false
+        },
+        {
+          "qualified_name": "static_function_definitions.collect",
+          "line": 260,
+          "end_line": 270,
+          "is_async": false
+        },
+        {
+          "qualified_name": "verifier_self_digest",
+          "line": 275,
+          "end_line": 297,
+          "is_async": false
+        },
+        {
+          "qualified_name": "render_self_digest",
+          "line": 300,
+          "end_line": 315,
+          "is_async": false
+        },
+        {
+          "qualified_name": "run_self_digest",
+          "line": 318,
+          "end_line": 334,
+          "is_async": false
+        },
+        {
+          "qualified_name": "snapshot_bytes",
+          "line": 337,
+          "end_line": 339,
+          "is_async": false
+        },
+        {
+          "qualified_name": "cross_check",
+          "line": 342,
+          "end_line": 398,
+          "is_async": false
+        },
+        {
+          "qualified_name": "render_cross",
+          "line": 401,
+          "end_line": 416,
+          "is_async": false
+        },
+        {
+          "qualified_name": "run_cross",
+          "line": 419,
+          "end_line": 435,
+          "is_async": false
+        },
+        {
+          "qualified_name": "artifact_inventory",
+          "line": 438,
+          "end_line": 456,
+          "is_async": false
+        },
+        {
+          "qualified_name": "summary_manifest",
+          "line": 459,
+          "end_line": 467,
+          "is_async": false
+        },
+        {
+          "qualified_name": "render_summary",
+          "line": 470,
+          "end_line": 484,
+          "is_async": false
+        },
+        {
+          "qualified_name": "run_summary",
+          "line": 487,
+          "end_line": 503,
+          "is_async": false
+        },
+        {
+          "qualified_name": "digest_pair",
+          "line": 506,
+          "end_line": 510,
+          "is_async": false
+        },
+        {
+          "qualified_name": "manifest_cross_check",
+          "line": 513,
+          "end_line": 573,
+          "is_async": false
+        },
+        {
+          "qualified_name": "manifest_cross_check.compare",
+          "line": 546,
+          "end_line": 548,
+          "is_async": false
+        },
+        {
+          "qualified_name": "render_manifest_cross",
+          "line": 576,
+          "end_line": 590,
+          "is_async": false
+        },
+        {
+          "qualified_name": "run_manifest_cross",
+          "line": 593,
+          "end_line": 609,
+          "is_async": false
+        },
+        {
+          "qualified_name": "cumulative_receipt_table",
+          "line": 612,
+          "end_line": 620,
+          "is_async": false
+        },
+        {
+          "qualified_name": "phase34_cumulative_receipt_table",
+          "line": 623,
+          "end_line": 631,
+          "is_async": false
+        },
+        {
+          "qualified_name": "render_cumulative",
+          "line": 634,
+          "end_line": 650,
+          "is_async": false
+        },
+        {
+          "qualified_name": "run_cumulative",
+          "line": 653,
+          "end_line": 675,
+          "is_async": false
+        },
+        {
+          "qualified_name": "table_parity",
+          "line": 678,
+          "end_line": 721,
+          "is_async": false
+        },
+        {
+          "qualified_name": "table_parity.compare",
+          "line": 694,
+          "end_line": 698,
+          "is_async": false
+        },
+        {
+          "qualified_name": "render_table_parity",
+          "line": 724,
+          "end_line": 738,
+          "is_async": false
+        },
+        {
+          "qualified_name": "run_table_parity",
+          "line": 741,
+          "end_line": 757,
+          "is_async": false
+        },
+        {
+          "qualified_name": "audit",
+          "line": 760,
+          "end_line": 786,
+          "is_async": false
+        },
+        {
+          "qualified_name": "render",
+          "line": 789,
+          "end_line": 804,
+          "is_async": false
+        },
+        {
+          "qualified_name": "main",
+          "line": 807,
+          "end_line": 849,
+          "is_async": false
+        }
+      ],
+      "function_definition_count": 45,
+      "test_class_count": 0
+    },
+    "scripts/test_audit_rsv2_07_hm_forensics.py": {
+      "size_bytes": 74831,
+      "sha256": "1b24a77681d6dd7991305d2014bea91d4f3570f93bec9899e531ef1b9adf68db",
+      "test_method_count": 88,
+      "test_classes": {
+        "SavedLogForensicsTests": [
+          "test_six_missing_logs_are_partial_with_null_not_zero_counts",
+          "test_present_records_are_hashed_but_not_given_an_unreviewed_lineage_meaning",
+          "test_empty_file_has_no_records_but_does_not_establish_zero_lineage_counts",
+          "test_jsonl_rejects_duplicate_keys_nonfinite_blank_nonobject_and_invalid_utf8",
+          "test_changed_bytes_or_new_availability_during_audit_fail",
+          "test_read_errors_are_not_reported_as_missing",
+          "test_relocated_readonly_cli_emits_partial_lane_and_checks_receipt_and_report_without_git",
+          "test_explicit_write_only_creates_the_two_requested_outputs_and_still_exits_partial",
+          "test_saved_outputs_remain_partial_and_have_no_literal_host_prefix"
+        ],
+        "ArtifactDigestIndexTests": [
+          "test_sorted_exact_byte_digests_and_deterministic_totals",
+          "test_only_matching_tracked_files_in_directory_are_included",
+          "test_self_outputs_are_explicitly_excluded_even_when_tracked",
+          "test_tracked_local_edits_use_working_tree_bytes",
+          "test_missing_tracked_file_and_empty_inventory_fail",
+          "test_absolute_host_paths_and_json_escaped_host_paths_fail",
+          "test_relative_paths_and_web_links_are_portable",
+          "test_invalid_utf8_and_non_strict_json_fail",
+          "test_symlinked_artifact_is_not_followed",
+          "test_byte_or_membership_mutation_during_scan_fails",
+          "test_cli_writes_only_outputs_then_readonly_verifies_from_other_cwd",
+          "test_saved_receipt_digest_type_and_report_tampering_fail"
+        ],
+        "ScriptTestInventoryTests": [
+          "test_ast_count_distinguishes_methods_helpers_nested_code_and_strings",
+          "test_exact_hash_sizes_and_counts_without_executing_sources",
+          "test_missing_nonregular_or_invalid_python_sources_fail",
+          "test_source_mutation_during_inventory_fails",
+          "test_write_only_creates_requested_outputs_and_readonly_needs_no_git",
+          "test_receipt_type_digest_and_count_tampering_fail",
+          "test_report_tampering_and_source_edits_invalidate_saved_inventory",
+          "test_artifact_root_is_rejected_for_script_inventory",
+          "test_actual_static_declarations_match_current_unittest_discovery"
+        ],
+        "IndexInventoryCrossCheckTests": [
+          "test_disjoint_registries_have_exact_snapshot_and_live_byte_parity",
+          "test_edited_or_missing_live_scripts_do_not_claim_live_parity",
+          "test_overlapping_path_sets_fail_even_with_equal_digests",
+          "test_snapshot_size_and_digest_mismatches_fail",
+          "test_receipt_schema_types_totals_and_digest_formats_fail_closed",
+          "test_malformed_json_or_receipt_bytes_differing_from_snapshot_fail",
+          "test_source_mutation_during_cross_check_fails",
+          "test_cli_writes_only_phase29_outputs_and_checks_readonly_receipt_and_report"
+        ],
+        "SummaryManifestTests": [
+          "test_exact_eight_file_hash_sizes_lines_and_deterministic_totals",
+          "test_line_count_handles_empty_unterminated_crlf_and_unicode_separators",
+          "test_other_phases_scripts_and_own_outputs_are_outside_fixed_scope",
+          "test_invalid_utf8_and_non_strict_json_fail",
+          "test_literal_host_paths_and_escaped_json_host_paths_fail",
+          "test_missing_or_symlinked_source_fails",
+          "test_source_change_during_scan_fails",
+          "test_cli_writes_only_phase30_outputs_and_readonly_rejects_tampering",
+          "test_artifact_root_is_rejected_for_summary_manifest"
+        ],
+        "ManifestCrossCheckTests": [
+          "test_all_live_artifacts_and_fourteen_linked_metadata_comparisons_match",
+          "test_live_edits_and_manifest_metadata_or_type_tampering_fail",
+          "test_phase27_and_phase29_linked_digest_disagreements_fail_after_reindex",
+          "test_bad_schema_path_sets_and_snapshot_flags_fail_after_reindex",
+          "test_malformed_manifest_and_missing_source_fail",
+          "test_source_change_after_live_scan_fails",
+          "test_cli_writes_only_phase31_outputs_and_verifies_readonly_and_tampering",
+          "test_artifact_root_is_rejected_for_manifest_cross_check"
+        ],
+        "CumulativeReceiptTableTests": [
+          "test_exact_twelve_files_hashes_sizes_and_line_totals_are_deterministic",
+          "test_phase31_line_counts_handle_empty_crlf_and_unterminated_lines",
+          "test_own_outputs_other_phases_and_scripts_are_excluded",
+          "test_invalid_utf8_and_strict_json_errors_in_phase31_fail",
+          "test_host_paths_in_phase31_raw_and_escaped_text_fail",
+          "test_missing_or_symlinked_phase31_source_fails",
+          "test_phase31_mutation_during_scan_fails",
+          "test_cli_preserves_sources_verifies_without_git_and_rejects_tampering",
+          "test_artifact_root_is_rejected_for_cumulative_table"
+        ],
+        "TableParityTests": [
+          "test_twelve_live_files_and_thirty_shared_receipt_comparisons_match",
+          "test_live_edits_and_phase32_digest_size_or_type_tampering_fail",
+          "test_phase30_metadata_disagreement_fails_even_after_reindexing_phase32",
+          "test_phase31_shared_metadata_disagreements_fail_after_reindexing_phase32",
+          "test_source_change_after_receipt_recomputation_fails",
+          "test_malformed_missing_or_symlinked_phase32_receipt_fails",
+          "test_cli_writes_only_phase33_outputs_and_readonly_rejects_tampering",
+          "test_artifact_root_is_rejected_for_table_parity"
+        ],
+        "Phase34CumulativeReceiptTableTests": [
+          "test_sixteen_files_cover_each_phase_with_exact_digests_sizes_and_lines",
+          "test_phase33_line_count_covers_empty_crlf_and_unterminated_lines",
+          "test_phase34_outputs_other_phases_and_scripts_are_excluded",
+          "test_invalid_utf8_json_and_host_paths_in_new_sources_fail",
+          "test_missing_or_symlinked_new_source_fails",
+          "test_phase33_source_mutation_during_scan_fails",
+          "test_cli_preserves_sources_writes_only_phase34_outputs_and_checks_readonly",
+          "test_artifact_root_is_rejected_for_phase34"
+        ],
+        "VerifierSelfDigestTests": [
+          "test_function_inventory_tracks_lexical_scope_spans_async_and_duplicate_declarations",
+          "test_exact_self_digests_and_inventory_without_executing_source",
+          "test_invalid_syntax_missing_and_symlinked_sources_fail",
+          "test_changes_between_test_inventory_function_inventory_and_final_read_fail",
+          "test_cli_writes_only_phase35_outputs_and_readonly_detects_inventory_tampering",
+          "test_report_or_source_edits_invalidate_saved_self_digest",
+          "test_actual_function_totals_match_ast_walk_and_tests_match_unittest_discovery",
+          "test_artifact_root_is_rejected_for_self_digest"
+        ]
+      },
+      "function_definitions": [
+        {
+          "qualified_name": "SavedLogForensicsTests.setUp",
+          "line": 19,
+          "end_line": 22,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SavedLogForensicsTests.current",
+          "line": 24,
+          "end_line": 32,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SavedLogForensicsTests.current.read",
+          "line": 26,
+          "end_line": 30,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SavedLogForensicsTests.test_six_missing_logs_are_partial_with_null_not_zero_counts",
+          "line": 34,
+          "end_line": 46,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SavedLogForensicsTests.test_present_records_are_hashed_but_not_given_an_unreviewed_lineage_meaning",
+          "line": 48,
+          "end_line": 56,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SavedLogForensicsTests.test_empty_file_has_no_records_but_does_not_establish_zero_lineage_counts",
+          "line": 58,
+          "end_line": 63,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SavedLogForensicsTests.test_jsonl_rejects_duplicate_keys_nonfinite_blank_nonobject_and_invalid_utf8",
+          "line": 65,
+          "end_line": 71,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SavedLogForensicsTests.test_changed_bytes_or_new_availability_during_audit_fail",
+          "line": 73,
+          "end_line": 84,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SavedLogForensicsTests.test_changed_bytes_or_new_availability_during_audit_fail.read",
+          "line": 76,
+          "end_line": 81,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SavedLogForensicsTests.test_read_errors_are_not_reported_as_missing",
+          "line": 86,
+          "end_line": 88,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SavedLogForensicsTests.test_relocated_readonly_cli_emits_partial_lane_and_checks_receipt_and_report_without_git",
+          "line": 90,
+          "end_line": 113,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SavedLogForensicsTests.test_relocated_readonly_cli_emits_partial_lane_and_checks_receipt_and_report_without_git.read",
+          "line": 95,
+          "end_line": 96,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SavedLogForensicsTests.test_explicit_write_only_creates_the_two_requested_outputs_and_still_exits_partial",
+          "line": 115,
+          "end_line": 124,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SavedLogForensicsTests.test_saved_outputs_remain_partial_and_have_no_literal_host_prefix",
+          "line": 126,
+          "end_line": 132,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.setUp",
+          "line": 136,
+          "end_line": 149,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.git",
+          "line": 151,
+          "end_line": 152,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.write",
+          "line": 154,
+          "end_line": 157,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.cli",
+          "line": 159,
+          "end_line": 163,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.test_sorted_exact_byte_digests_and_deterministic_totals",
+          "line": 165,
+          "end_line": 174,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.test_only_matching_tracked_files_in_directory_are_included",
+          "line": 176,
+          "end_line": 187,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.test_self_outputs_are_explicitly_excluded_even_when_tracked",
+          "line": 189,
+          "end_line": 195,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.test_tracked_local_edits_use_working_tree_bytes",
+          "line": 197,
+          "end_line": 203,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.test_missing_tracked_file_and_empty_inventory_fail",
+          "line": 205,
+          "end_line": 211,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.test_absolute_host_paths_and_json_escaped_host_paths_fail",
+          "line": 213,
+          "end_line": 224,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.test_relative_paths_and_web_links_are_portable",
+          "line": 226,
+          "end_line": 228,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.test_invalid_utf8_and_non_strict_json_fail",
+          "line": 230,
+          "end_line": 235,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.test_symlinked_artifact_is_not_followed",
+          "line": 237,
+          "end_line": 241,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.test_byte_or_membership_mutation_during_scan_fails",
+          "line": 243,
+          "end_line": 258,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.test_byte_or_membership_mutation_during_scan_fails.read",
+          "line": 246,
+          "end_line": 252,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.test_cli_writes_only_outputs_then_readonly_verifies_from_other_cwd",
+          "line": 260,
+          "end_line": 272,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ArtifactDigestIndexTests.test_saved_receipt_digest_type_and_report_tampering_fail",
+          "line": 274,
+          "end_line": 288,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ScriptTestInventoryTests.setUp",
+          "line": 292,
+          "end_line": 305,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ScriptTestInventoryTests.cli",
+          "line": 307,
+          "end_line": 311,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ScriptTestInventoryTests.test_ast_count_distinguishes_methods_helpers_nested_code_and_strings",
+          "line": 313,
+          "end_line": 334,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ScriptTestInventoryTests.test_exact_hash_sizes_and_counts_without_executing_sources",
+          "line": 336,
+          "end_line": 347,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ScriptTestInventoryTests.test_missing_nonregular_or_invalid_python_sources_fail",
+          "line": 349,
+          "end_line": 362,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ScriptTestInventoryTests.test_source_mutation_during_inventory_fails",
+          "line": 364,
+          "end_line": 375,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ScriptTestInventoryTests.test_source_mutation_during_inventory_fails.read",
+          "line": 367,
+          "end_line": 373,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ScriptTestInventoryTests.test_write_only_creates_requested_outputs_and_readonly_needs_no_git",
+          "line": 377,
+          "end_line": 390,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ScriptTestInventoryTests.test_receipt_type_digest_and_count_tampering_fail",
+          "line": 392,
+          "end_line": 401,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ScriptTestInventoryTests.test_report_tampering_and_source_edits_invalidate_saved_inventory",
+          "line": 403,
+          "end_line": 416,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ScriptTestInventoryTests.test_artifact_root_is_rejected_for_script_inventory",
+          "line": 418,
+          "end_line": 421,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ScriptTestInventoryTests.test_actual_static_declarations_match_current_unittest_discovery",
+          "line": 423,
+          "end_line": 428,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.setUp",
+          "line": 432,
+          "end_line": 445,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.save",
+          "line": 447,
+          "end_line": 448,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.read",
+          "line": 450,
+          "end_line": 454,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.current",
+          "line": 456,
+          "end_line": 459,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.test_disjoint_registries_have_exact_snapshot_and_live_byte_parity",
+          "line": 461,
+          "end_line": 473,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.test_edited_or_missing_live_scripts_do_not_claim_live_parity",
+          "line": 475,
+          "end_line": 486,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.test_overlapping_path_sets_fail_even_with_equal_digests",
+          "line": 488,
+          "end_line": 495,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.test_snapshot_size_and_digest_mismatches_fail",
+          "line": 497,
+          "end_line": 505,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.test_receipt_schema_types_totals_and_digest_formats_fail_closed",
+          "line": 507,
+          "end_line": 517,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.test_malformed_json_or_receipt_bytes_differing_from_snapshot_fail",
+          "line": 519,
+          "end_line": 524,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.test_source_mutation_during_cross_check_fails",
+          "line": 526,
+          "end_line": 538,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.test_source_mutation_during_cross_check_fails.read",
+          "line": 528,
+          "end_line": 534,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.test_cli_writes_only_phase29_outputs_and_checks_readonly_receipt_and_report",
+          "line": 540,
+          "end_line": 565,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.test_cli_writes_only_phase29_outputs_and_checks_readonly_receipt_and_report.write",
+          "line": 542,
+          "end_line": 543,
+          "is_async": false
+        },
+        {
+          "qualified_name": "IndexInventoryCrossCheckTests.test_cli_writes_only_phase29_outputs_and_checks_readonly_receipt_and_report.text",
+          "line": 544,
+          "end_line": 545,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SummaryManifestTests.setUp",
+          "line": 569,
+          "end_line": 578,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SummaryManifestTests.write",
+          "line": 580,
+          "end_line": 583,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SummaryManifestTests.cli",
+          "line": 585,
+          "end_line": 589,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SummaryManifestTests.test_exact_eight_file_hash_sizes_lines_and_deterministic_totals",
+          "line": 591,
+          "end_line": 601,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SummaryManifestTests.test_line_count_handles_empty_unterminated_crlf_and_unicode_separators",
+          "line": 603,
+          "end_line": 609,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SummaryManifestTests.test_other_phases_scripts_and_own_outputs_are_outside_fixed_scope",
+          "line": 611,
+          "end_line": 615,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SummaryManifestTests.test_invalid_utf8_and_non_strict_json_fail",
+          "line": 617,
+          "end_line": 621,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SummaryManifestTests.test_literal_host_paths_and_escaped_json_host_paths_fail",
+          "line": 623,
+          "end_line": 631,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SummaryManifestTests.test_missing_or_symlinked_source_fails",
+          "line": 633,
+          "end_line": 640,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SummaryManifestTests.test_source_change_during_scan_fails",
+          "line": 642,
+          "end_line": 653,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SummaryManifestTests.test_source_change_during_scan_fails.read",
+          "line": 645,
+          "end_line": 651,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SummaryManifestTests.test_cli_writes_only_phase30_outputs_and_readonly_rejects_tampering",
+          "line": 655,
+          "end_line": 679,
+          "is_async": false
+        },
+        {
+          "qualified_name": "SummaryManifestTests.test_artifact_root_is_rejected_for_summary_manifest",
+          "line": 681,
+          "end_line": 684,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.setUp",
+          "line": 688,
+          "end_line": 713,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.metadata",
+          "line": 715,
+          "end_line": 716,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.write",
+          "line": 718,
+          "end_line": 721,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.save",
+          "line": 723,
+          "end_line": 724,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.load",
+          "line": 726,
+          "end_line": 727,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.reindex",
+          "line": 729,
+          "end_line": 730,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.cli",
+          "line": 732,
+          "end_line": 736,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.test_all_live_artifacts_and_fourteen_linked_metadata_comparisons_match",
+          "line": 738,
+          "end_line": 749,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.test_live_edits_and_manifest_metadata_or_type_tampering_fail",
+          "line": 751,
+          "end_line": 762,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.test_phase27_and_phase29_linked_digest_disagreements_fail_after_reindex",
+          "line": 764,
+          "end_line": 778,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.test_bad_schema_path_sets_and_snapshot_flags_fail_after_reindex",
+          "line": 780,
+          "end_line": 789,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.test_malformed_manifest_and_missing_source_fail",
+          "line": 791,
+          "end_line": 800,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.test_source_change_after_live_scan_fails",
+          "line": 802,
+          "end_line": 809,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.test_source_change_after_live_scan_fails.scan",
+          "line": 804,
+          "end_line": 807,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.test_cli_writes_only_phase31_outputs_and_verifies_readonly_and_tampering",
+          "line": 811,
+          "end_line": 829,
+          "is_async": false
+        },
+        {
+          "qualified_name": "ManifestCrossCheckTests.test_artifact_root_is_rejected_for_manifest_cross_check",
+          "line": 831,
+          "end_line": 834,
+          "is_async": false
+        },
+        {
+          "qualified_name": "CumulativeReceiptTableTests.setUp",
+          "line": 838,
+          "end_line": 847,
+          "is_async": false
+        },
+        {
+          "qualified_name": "CumulativeReceiptTableTests.write",
+          "line": 849,
+          "end_line": 852,
+          "is_async": false
+        },
+        {
+          "qualified_name": "CumulativeReceiptTableTests.cli",
+          "line": 854,
+          "end_line": 858,
+          "is_async": false
+        },
+        {
+          "qualified_name": "CumulativeReceiptTableTests.test_exact_twelve_files_hashes_sizes_and_line_totals_are_deterministic",
+          "line": 860,
+          "end_line": 873,
+          "is_async": false
+        },
+        {
+          "qualified_name": "CumulativeReceiptTableTests.test_phase31_line_counts_handle_empty_crlf_and_unterminated_lines",
+          "line": 875,
+          "end_line": 881,
+          "is_async": false
+        },
+        {
+          "qualified_name": "CumulativeReceiptTableTests.test_own_outputs_other_phases_and_scripts_are_excluded",
+          "line": 883,
+          "end_line": 887,
+          "is_async": false
+        },
+        {
+          "qualified_name": "CumulativeReceiptTableTests.test_invalid_utf8_and_strict_json_errors_in_phase31_fail",
+          "line": 889,
+          "end_line": 893,
+          "is_async": false
+        },
+        {
+          "qualified_name": "CumulativeReceiptTableTests.test_host_paths_in_phase31_raw_and_escaped_text_fail",
+          "line": 895,
+          "end_line": 903,
+          "is_async": false
+        },
+        {
+          "qualified_name": "CumulativeReceiptTableTests.test_missing_or_symlinked_phase31_source_fails",
+          "line": 905,
+          "end_line": 912,
+          "is_async": false
+        },
+        {
+          "qualified_name": "CumulativeReceiptTableTests.test_phase31_mutation_during_scan_fails",
+          "line": 914,
+          "end_line": 925,
+          "is_async": false
+        },
+        {
+          "qualified_name": "CumulativeReceiptTableTests.test_phase31_mutation_during_scan_fails.read",
+          "line": 917,
+          "end_line": 923,
+          "is_async": false
+        },
+        {
+          "qualified_name": "CumulativeReceiptTableTests.test_cli_preserves_sources_verifies_without_git_and_rejects_tampering",
+          "line": 927,
+          "end_line": 951,
+          "is_async": false
+        },
+        {
+          "qualified_name": "CumulativeReceiptTableTests.test_artifact_root_is_rejected_for_cumulative_table",
+          "line": 953,
+          "end_line": 956,
+          "is_async": false
+        },
+        {
+          "qualified_name": "TableParityTests.setUp",
+          "line": 960,
+          "end_line": 968,
+          "is_async": false
+        },
+        {
+          "qualified_name": "TableParityTests.reindex_table",
+          "line": 970,
+          "end_line": 971,
+          "is_async": false
+        },
+        {
+          "qualified_name": "TableParityTests.cli",
+          "line": 973,
+          "end_line": 977,
+          "is_async": false
+        },
+        {
+          "qualified_name": "TableParityTests.test_twelve_live_files_and_thirty_shared_receipt_comparisons_match",
+          "line": 979,
+          "end_line": 991,
+          "is_async": false
+        },
+        {
+          "qualified_name": "TableParityTests.test_live_edits_and_phase32_digest_size_or_type_tampering_fail",
+          "line": 993,
+          "end_line": 1004,
+          "is_async": false
+        },
+        {
+          "qualified_name": "TableParityTests.test_phase30_metadata_disagreement_fails_even_after_reindexing_phase32",
+          "line": 1006,
+          "end_line": 1012,
+          "is_async": false
+        },
+        {
+          "qualified_name": "TableParityTests.test_phase31_shared_metadata_disagreements_fail_after_reindexing_phase32",
+          "line": 1014,
+          "end_line": 1025,
+          "is_async": false
+        },
+        {
+          "qualified_name": "TableParityTests.test_source_change_after_receipt_recomputation_fails",
+          "line": 1027,
+          "end_line": 1034,
+          "is_async": false
+        },
+        {
+          "qualified_name": "TableParityTests.test_source_change_after_receipt_recomputation_fails.recompute",
+          "line": 1029,
+          "end_line": 1032,
+          "is_async": false
+        },
+        {
+          "qualified_name": "TableParityTests.test_malformed_missing_or_symlinked_phase32_receipt_fails",
+          "line": 1036,
+          "end_line": 1049,
+          "is_async": false
+        },
+        {
+          "qualified_name": "TableParityTests.test_cli_writes_only_phase33_outputs_and_readonly_rejects_tampering",
+          "line": 1051,
+          "end_line": 1070,
+          "is_async": false
+        },
+        {
+          "qualified_name": "TableParityTests.test_artifact_root_is_rejected_for_table_parity",
+          "line": 1072,
+          "end_line": 1075,
+          "is_async": false
+        },
+        {
+          "qualified_name": "Phase34CumulativeReceiptTableTests.setUp",
+          "line": 1079,
+          "end_line": 1085,
+          "is_async": false
+        },
+        {
+          "qualified_name": "Phase34CumulativeReceiptTableTests.cli",
+          "line": 1087,
+          "end_line": 1091,
+          "is_async": false
+        },
+        {
+          "qualified_name": "Phase34CumulativeReceiptTableTests.test_sixteen_files_cover_each_phase_with_exact_digests_sizes_and_lines",
+          "line": 1093,
+          "end_line": 1110,
+          "is_async": false
+        },
+        {
+          "qualified_name": "Phase34CumulativeReceiptTableTests.test_phase33_line_count_covers_empty_crlf_and_unterminated_lines",
+          "line": 1112,
+          "end_line": 1117,
+          "is_async": false
+        },
+        {
+          "qualified_name": "Phase34CumulativeReceiptTableTests.test_phase34_outputs_other_phases_and_scripts_are_excluded",
+          "line": 1119,
+          "end_line": 1123,
+          "is_async": false
+        },
+        {
+          "qualified_name": "Phase34CumulativeReceiptTableTests.test_invalid_utf8_json_and_host_paths_in_new_sources_fail",
+          "line": 1125,
+          "end_line": 1134,
+          "is_async": false
+        },
+        {
+          "qualified_name": "Phase34CumulativeReceiptTableTests.test_missing_or_symlinked_new_source_fails",
+          "line": 1136,
+          "end_line": 1143,
+          "is_async": false
+        },
+        {
+          "qualified_name": "Phase34CumulativeReceiptTableTests.test_phase33_source_mutation_during_scan_fails",
+          "line": 1145,
+          "end_line": 1156,
+          "is_async": false
+        },
+        {
+          "qualified_name": "Phase34CumulativeReceiptTableTests.test_phase33_source_mutation_during_scan_fails.read",
+          "line": 1148,
+          "end_line": 1154,
+          "is_async": false
+        },
+        {
+          "qualified_name": "Phase34CumulativeReceiptTableTests.test_cli_preserves_sources_writes_only_phase34_outputs_and_checks_readonly",
+          "line": 1158,
+          "end_line": 1182,
+          "is_async": false
+        },
+        {
+          "qualified_name": "Phase34CumulativeReceiptTableTests.test_artifact_root_is_rejected_for_phase34",
+          "line": 1184,
+          "end_line": 1187,
+          "is_async": false
+        },
+        {
+          "qualified_name": "VerifierSelfDigestTests.setUp",
+          "line": 1191,
+          "end_line": 1195,
+          "is_async": false
+        },
+        {
+          "qualified_name": "VerifierSelfDigestTests.cli",
+          "line": 1197,
+          "end_line": 1201,
+          "is_async": false
+        },
+        {
+          "qualified_name": "VerifierSelfDigestTests.test_function_inventory_tracks_lexical_scope_spans_async_and_duplicate_declarations",
+          "line": 1203,
+          "end_line": 1221,
+          "is_async": false
+        },
+        {
+          "qualified_name": "VerifierSelfDigestTests.test_exact_self_digests_and_inventory_without_executing_source",
+          "line": 1223,
+          "end_line": 1232,
+          "is_async": false
+        },
+        {
+          "qualified_name": "VerifierSelfDigestTests.test_invalid_syntax_missing_and_symlinked_sources_fail",
+          "line": 1234,
+          "end_line": 1244,
+          "is_async": false
+        },
+        {
+          "qualified_name": "VerifierSelfDigestTests.test_changes_between_test_inventory_function_inventory_and_final_read_fail",
+          "line": 1246,
+          "end_line": 1262,
+          "is_async": false
+        },
+        {
+          "qualified_name": "VerifierSelfDigestTests.test_changes_between_test_inventory_function_inventory_and_final_read_fail.inventory",
+          "line": 1249,
+          "end_line": 1252,
+          "is_async": false
+        },
+        {
+          "qualified_name": "VerifierSelfDigestTests.test_changes_between_test_inventory_function_inventory_and_final_read_fail.functions",
+          "line": 1257,
+          "end_line": 1260,
+          "is_async": false
+        },
+        {
+          "qualified_name": "VerifierSelfDigestTests.test_cli_writes_only_phase35_outputs_and_readonly_detects_inventory_tampering",
+          "line": 1264,
+          "end_line": 1286,
+          "is_async": false
+        },
+        {
+          "qualified_name": "VerifierSelfDigestTests.test_report_or_source_edits_invalidate_saved_self_digest",
+          "line": 1288,
+          "end_line": 1301,
+          "is_async": false
+        },
+        {
+          "qualified_name": "VerifierSelfDigestTests.test_actual_function_totals_match_ast_walk_and_tests_match_unittest_discovery",
+          "line": 1303,
+          "end_line": 1311,
+          "is_async": false
+        },
+        {
+          "qualified_name": "VerifierSelfDigestTests.test_artifact_root_is_rejected_for_self_digest",
+          "line": 1313,
+          "end_line": 1316,
+          "is_async": false
+        }
+      ],
+      "function_definition_count": 135,
+      "test_class_count": 10
+    }
+  },
+  "function_inventory_rule": "all named sync and async function definitions, including class methods and nested functions, with lexical dotted names and source line spans; lambdas excluded",
+  "function_definition_count": 180,
+  "test_class_count": 10
+}

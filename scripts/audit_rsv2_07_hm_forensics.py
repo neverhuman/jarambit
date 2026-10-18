@@ -41,6 +41,8 @@ PHASE34_RECEIPT = DIRECTORY + "phase34_cumulative_receipt_table_audit.json"
 PHASE34_REPORT = DIRECTORY + "PHASE34_CUMULATIVE_RECEIPT_TABLE_AUDIT.md"
 PHASE34_PATHS = tuple(sorted((*CUMULATIVE_PATHS, CUMULATIVE_REPORT, CUMULATIVE_RECEIPT,
                               TABLE_PARITY_REPORT, TABLE_PARITY_RECEIPT)))
+SELF_DIGEST_RECEIPT = DIRECTORY + "phase35_verifier_self_digest_audit.json"
+SELF_DIGEST_REPORT = DIRECTORY + "PHASE35_VERIFIER_SELF_DIGEST_AUDIT.md"
 # Absolute POSIX paths, Windows drive paths, UNC paths and file URIs.
 HOST_PATH = re.compile(r"(?<![\w./:])/(?!/)[\w.~-]+|(?<!\w)[A-Za-z]:[\\/]|\\\\[^\\\s]+\\|file://")
 
@@ -250,6 +252,85 @@ def run_scripts(args):
         require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-28 saved receipt mismatch")
         require((args.repo_root / SCRIPT_REPORT).read_text(encoding="utf-8") == report, "Phase-28 report mismatch")
     print(f"LANE: RSV2-07-hm | RSV2-07-p28 | PASS | scripts={current['script_count']} | test_methods={current['test_method_count']}")
+    return 0
+
+
+def static_function_definitions(data):
+    definitions = []
+    def collect(node, scope=()):
+        for child in ast.iter_child_nodes(node):
+            if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                definitions.append({"qualified_name": ".".join((*scope, child.name)),
+                                    "line": child.lineno, "end_line": child.end_lineno,
+                                    "is_async": isinstance(child, ast.AsyncFunctionDef)})
+                collect(child, (*scope, child.name))
+            elif isinstance(child, ast.ClassDef):
+                collect(child, (*scope, child.name))
+            else:
+                collect(child, scope)
+    collect(ast.parse(data))
+    return definitions
+
+
+def verifier_self_digest(repo_root):
+    repo_root = Path(repo_root)
+    document = script_inventory(repo_root)
+    sources = {}
+    for name, row in document["scripts"].items():
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode), f"Expected regular self-digest source: {name}")
+        data = path.read_bytes()
+        require((len(data), hashlib.sha256(data).hexdigest()) == (row["size_bytes"], row["sha256"]),
+                "Script bytes changed before function inventory")
+        sources[name] = data
+        row["function_definitions"] = static_function_definitions(data)
+        row["function_definition_count"] = len(row["function_definitions"])
+        row["test_class_count"] = len(row["test_classes"])
+    for name, data in sources.items():
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode) and path.read_bytes() == data,
+                "Script bytes or type changed during self-digest audit")
+    document.update({"schema": "jarambit.rsv2_07_hm.phase35_verifier_self_digest.v1", "task": "RSV2-07-p35",
+                     "function_inventory_rule": "all named sync and async function definitions, including class methods and nested functions, with lexical dotted names and source line spans; lambdas excluded",
+                     "function_definition_count": sum(row["function_definition_count"] for row in document["scripts"].values()),
+                     "test_class_count": sum(row["test_class_count"] for row in document["scripts"].values())})
+    return document
+
+
+def render_self_digest(document):
+    rows = [f"| {name} | {row['size_bytes']} | {row['sha256']} | {row['function_definition_count']} | {row['test_class_count']} | {row['test_method_count']} |"
+            for name, row in document["scripts"].items()]
+    return "\n".join([
+        "# Phase-35 verifier self-digest audit", "",
+        f"**PASS.** Inventoried {document['script_count']} scripts, totaling {document['total_size_bytes']} bytes, {document['function_definition_count']} function definitions, {document['test_class_count']} test classes and {document['test_method_count']} test methods.", "",
+        "| Repository-relative source | Bytes | SHA-256 | Functions | Test classes | Test methods |",
+        "| --- | ---: | --- | ---: | ---: | ---: |", *rows, "",
+        "SHA-256 and byte sizes describe the exact final working-tree bytes of the verifier and its test file. The JSON lists every named synchronous and asynchronous function definition, including class methods and nested functions, with lexical dotted names, source line spans and async flags. Lambdas, comments and strings are excluded. Conditional definitions are included statically; duplicate declarations retain separate entries. Lexical names do not imply runtime resolution or reachability.", "",
+        "Test inventory follows the existing rule: direct test-prefixed methods in top-level classes explicitly based on unittest.TestCase or TestCase. Inherited or generated tests and import aliases are outside that count. Sources are parsed without importing or executing them. Inventory counts alone do not assert test execution or coverage.", "",
+        "The two sources are checked for regular file type and stable bytes before and after inventory. Missing sources, symlinks, invalid Python syntax and changes during scanning fail. Report and JSON outputs are outside the input set, so no self-digest cycle exists. Earlier reports and receipts are preserved.", "",
+        "Persisted paths are repository-relative. --repo-root selects a relocated source tree without Git. Normal verification checks the complete saved JSON inventory and exact report text without writes. --write replaces only the two Phase-35 outputs. Regenerate these outputs after deliberate source changes.", "",
+        "```sh", "python3 scripts/audit_rsv2_07_hm_forensics.py --phase 35",
+        "python3 -m unittest discover -s scripts -p 'test_audit_rsv2_07_hm_forensics.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs 14,15 at nice 10. This is a static verifier self-digest audit. Changes are left uncommitted.", "",
+    ])
+
+
+def run_self_digest(args):
+    require(args.artifact_root is None, "Phase-35 reads scripts in --repo-root; --artifact-root is not supported")
+    current = verifier_self_digest(args.repo_root)
+    report = render_self_digest(current)
+    receipt = json.dumps(current, indent=2) + "\n"
+    require_portable(report, "Phase-35 report")
+    require_portable(receipt, "Phase-35 receipt")
+    if args.write:
+        (args.repo_root / DIRECTORY).mkdir(parents=True, exist_ok=True)
+        (args.repo_root / SELF_DIGEST_RECEIPT).write_text(receipt, encoding="utf-8")
+        (args.repo_root / SELF_DIGEST_REPORT).write_text(report, encoding="utf-8")
+    else:
+        saved = strict_json((args.repo_root / SELF_DIGEST_RECEIPT).read_bytes())
+        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-35 saved receipt mismatch")
+        require((args.repo_root / SELF_DIGEST_REPORT).read_text(encoding="utf-8") == report, "Phase-35 report mismatch")
+    print(f"LANE: RSV2-07-hm | RSV2-07-p35 | PASS | scripts={current['script_count']} | functions={current['function_definition_count']} | test_methods={current['test_method_count']}")
     return 0
 
 
@@ -726,11 +807,13 @@ def render(document):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33", "34"), default="26")
+    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33", "34", "35"), default="26")
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     try:
+        if args.phase == "35":
+            return run_self_digest(args)
         if args.phase == "33":
             return run_table_parity(args)
         if args.phase in ("32", "34"):
