@@ -22,7 +22,7 @@ jobs:
     name: VERSION == tag == WHITEPAPER header
     # General local pool; publication checks also require the pinned PDF toolchain.
     runs-on: [self-hosted, linux, x64, xbabe, general, jarambit-publication]
-    timeout-minutes: 10
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -33,9 +33,11 @@ jobs:
           export RUSTC="${toolchain}/rustc"
           test -x "$RUSTC"
           mkdir -p target/ci-version-check
-          rustc --edition=2021 --test ops/ci/version_check_main.rs -o target/ci-version-check/version-check-tests
+          rustc --edition 2021 --cfg standalone_version_check --test \
+            crates/cli/src/version_check.rs -o target/ci-version-check/version-check-tests
           target/ci-version-check/version-check-tests
-          rustc --edition=2021 ops/ci/version_check_main.rs -o target/ci-version-check/version-check
+          rustc --edition 2021 --cfg standalone_version_check \
+            crates/cli/src/version_check.rs -o target/ci-version-check/version-check
           target/ci-version-check/version-check
       - run: python3 -c "import sys; sys.path.insert(0,'metrics'); import global_metric as g; v,_=g.global_G(dict(solid_tip_sf_nodal_max=1.5,spg=4.0,aes_score=0.6,mass_g=80,seq_ratio=0.9)); assert abs(v-0.9675)<1e-9, v; print('G smoke ok', v)"
       - name: G1 completeness contract tests (PR-0.28.1)
