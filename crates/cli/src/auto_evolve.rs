@@ -1491,6 +1491,37 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_returns_empty_when_all_candidates_are_already_assessed() {
+        let mut seed = Genome::c4_seed(genome::T_MIN);
+        seed.v[EA_IN] = 14.0;
+        seed.clamp();
+        let mut novel = seed.clone();
+        novel.v[TAPER_X0] += 0.5;
+        novel.clamp();
+
+        let parent_identities = round_parent_identities(&[("p10".into(), seed.clone())]);
+        let assessed_identities: HashSet<String> = [
+            certification::identity(&seed),
+            certification::identity(&novel),
+        ]
+        .into_iter()
+        .collect();
+        let screened = vec![
+            test_screen_survivor("assessed_novel", "p10", novel, 0.01),
+            test_screen_survivor("assessed_seed", "p10", seed, 0.02),
+        ];
+
+        let selected = select_stage2_candidates(
+            &screened,
+            2,
+            &assessed_identities,
+            &parent_identities,
+        );
+
+        assert!(selected.is_empty());
+    }
+
+    #[test]
     fn round_parent_identities_includes_carried_forward_and_clamped_parents() {
         let mut carried = Genome::c4_seed(genome::T_MIN);
         carried.v[EA_IN] = 14.0;
