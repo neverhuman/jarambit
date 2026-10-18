@@ -1,0 +1,28 @@
+name: jarambit-ci
+services:
+  runner:
+    build: .
+    image: jarambit-runner-xbabe4:2.338.0
+    container_name: jarambit-runner-xbabe4
+    platform: linux/arm64
+    working_dir: /home/runner
+    entrypoint: ["./run.sh"]
+    restart: unless-stopped
+    init: true
+    cpus: 2
+    mem_limit: 4g
+    memswap_limit: 4g
+    pids_limit: 512
+    stop_grace_period: 60s
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - runner-state:/home/runner
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+volumes:
+  runner-state:
+    name: jarambit-xbabe4-runner-state

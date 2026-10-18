@@ -1,0 +1,47 @@
+name: runner-policy
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  local-runners:
+    name: local runner policy (${{ matrix.host }})
+    strategy:
+      fail-fast: false
+      matrix:
+        host: [xbabe1, xbabe2, xbabe3, xbabe4]
+    runs-on: [self-hosted, xbabe, general, '${{ matrix.host }}']
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Verify selected local host and Docker isolation on xbabe4
+        env:
+          EXPECTED_HOST: ${{ matrix.host }}
+        run: |
+          python3 -B - <<'PY'
+          import json, os, platform, re
+          from pathlib import Path
+          host = os.environ['EXPECTED_HOST']
+          name = os.environ['RUNNER_NAME']
+          assert re.fullmatch(re.escape('jarambit-' + host) + r'(?:-[1-9][0-9]*)?', name), name
+          if host == 'xbabe4':
+              assert platform.system() == 'Linux' and Path('/.dockerenv').exists(), 'xbabe4 must run in Docker'
+          print('LOCAL_CI_RUNNER=' + json.dumps({'host': host, 'name': name,
+                'os': platform.system(), 'architecture': platform.machine(),
+                'docker': Path('/.dockerenv').exists()}))
+          PY
+      - name: Install isolated workflow policy dependencies
+        run: |
+          python3 -m venv "$RUNNER_TEMP/runner-policy-env"
+          "$RUNNER_TEMP/runner-policy-env/bin/python" -m pip install -r ops/ci/requirements-runners.txt
+      - name: Enforce local general runners for every workflow job
+        run: |
+          "$RUNNER_TEMP/runner-policy-env/bin/python" -B ops/ci/check_runner_policy.py
+          "$RUNNER_TEMP/runner-policy-env/bin/python" -B -m unittest discover -s ops/ci/runner_tests -v
