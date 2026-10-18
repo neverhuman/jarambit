@@ -25,6 +25,7 @@ SCRIPT_FILES = ('scripts/verify_g16_06_rsv2_08_receipts.py',
                 'scripts/tests/test_verify_g16_06_rsv2_08_receipts.py')
 SCRIPT_CROSS_CHECK = INVENTORY.parent / 'phase25_script_and_inventory_cross_check_audit.json'
 SUMMARY_MANIFEST = INVENTORY.parent / 'phase26_summary_manifest_audit.json'
+MANIFEST_CROSS_CHECK = INVENTORY.parent / 'phase27_manifest_cross_check_audit.json'
 HOST_PATH_PATTERN = re.compile(r'/(?:home|Users|tmp|root|var/tmp|private/tmp)/|[A-Za-z]:[\\/](?:Users|Temp)[\\/]')
 
 
@@ -333,6 +334,61 @@ def verify_summary_manifest(root=ROOT, document=None):
     return dict(status='pass', phases=5, files=10, literal_host_path_count=0)
 
 
+def manifest_parity_record(root, row, summary_records, require_summary=False):
+    relative = PurePosixPath(row['path'])
+    if relative.is_absolute() or '..' in relative.parts or '\\' in row['path'] or relative.as_posix() != row['path']:
+        raise ValueError('Nonportable manifest reference path')
+    data = (Path(root) / row['path']).read_bytes()
+    actual = digest(data)
+    if row['sha256'] != actual or row['bytes'] != len(data):
+        raise ValueError('Live manifest/reference SHA-256 or byte count mismatch')
+    indexed = summary_records.get(row['path'])
+    if require_summary and indexed is None:
+        raise ValueError('Receipt reference missing from summary')
+    if indexed is not None and (indexed['sha256'] != actual or indexed['bytes'] != len(data)):
+        raise ValueError('Manifest reference SHA-256 or byte count mismatch')
+    return dict(path=row['path'], expected_sha256=row['sha256'], actual_sha256=actual,
+                expected_bytes=row['bytes'], actual_bytes=len(data), digest_parity=True, byte_parity=True,
+                in_summary=indexed is not None, summary_reference_parity=True if indexed is not None else None)
+
+
+def generate_manifest_cross_check(root):
+    root = Path(root)
+    verify_summary_manifest(root)
+    raw = (root / SUMMARY_MANIFEST).read_bytes(); summary = strict_json(raw)
+    indexed = {row['path']:row for row in summary['files']}
+    files = [dict(phase=row['phase'], kind=row['kind'], **manifest_parity_record(root,row,indexed,True))
+             for row in summary['files']]
+    phase23 = strict_json((root / CROSS_CHECK).read_bytes())
+    phase24 = strict_json((root / SCRIPT_INVENTORY).read_bytes())
+    phase25 = strict_json((root / SCRIPT_CROSS_CHECK).read_bytes())
+    references = []
+    for owner, rows, sha_key in [(CROSS_CHECK, phase23['source_indexes'], 'expected_sha256'),
+                                 (SCRIPT_CROSS_CHECK, phase25['source_receipts'], 'sha256')]:
+        for row in rows:
+            normalized = dict(path=row['path'], bytes=row['bytes'], sha256=row[sha_key])
+            references.append(dict(owner_receipt=owner.as_posix(), **manifest_parity_record(root,normalized,indexed,True)))
+    scripts = [manifest_parity_record(root,row,indexed) for row in phase24['files']]
+    return dict(task='G16-06-RSV2-08-p28', study_phase=27,
+                scope='Phase26 summary/live byte parity and Phase23/24/25 receipt relationships; current source-dependent metadata.',
+                summary_manifest=dict(path=SUMMARY_MANIFEST.as_posix(), bytes=len(raw), sha256=digest(raw)),
+                summary_file_count=len(files), checked_json_receipt_phases=[23,24,25],
+                direct_receipt_reference_count=len(references), phase24_script_member_count=len(scripts),
+                digest_mismatch_count=0, byte_mismatch_count=0, exact_digest_and_byte_parity=True,
+                engineering_qualification_assessed=False, qualified_count=0, full_qualification=False,
+                file_checks=files, receipt_reference_checks=references, phase24_script_checks=scripts)
+
+
+def verify_manifest_cross_check(root=ROOT, document=None):
+    root = Path(root)
+    if document is None:
+        document = strict_json((root / MANIFEST_CROSS_CHECK).read_bytes())
+    if document != generate_manifest_cross_check(root):
+        raise ValueError('Manifest cross-check coverage, digest/byte parity or metadata mismatch')
+    return dict(status='pass', summary_files=10, receipt_references=4, phase24_script_members=2,
+                digest_mismatch_count=0, byte_mismatch_count=0)
+
+
 def verify_all(root=ROOT):
     result = verify(root)
     result['markdown_reports'] = verify_markdown(root)
@@ -340,6 +396,7 @@ def verify_all(root=ROOT):
     result['script_test_inventory'] = verify_script_inventory(root)
     result['script_and_inventory_cross_check'] = verify_script_cross_check(root)
     result['phase21_to_25_summary'] = verify_summary_manifest(root)
+    result['manifest_cross_check'] = verify_manifest_cross_check(root)
     return result
 
 
@@ -351,6 +408,7 @@ def main():
     parser.add_argument('--write-script-inventory', action='store_true', help='Inventory final script bytes and AST test declarations')
     parser.add_argument('--write-script-cross-check', action='store_true', help='Cross-check the Phase23 and current Phase24 receipts')
     parser.add_argument('--write-summary', action='store_true', help='Summarize the exact Phase21..25 reports and receipts')
+    parser.add_argument('--write-manifest-cross-check', action='store_true', help='Cross-check the Phase26 summary against live files and receipt references')
     args = parser.parse_args()
     if args.write:
         import subprocess
@@ -374,6 +432,8 @@ def main():
         (ROOT / SCRIPT_CROSS_CHECK).write_text(json.dumps(generate_script_cross_check(ROOT), indent=2, allow_nan=False) + '\n')
     if args.write_summary:
         (ROOT / SUMMARY_MANIFEST).write_text(json.dumps(generate_summary_manifest(ROOT), indent=2, allow_nan=False) + '\n')
+    if args.write_manifest_cross_check:
+        (ROOT / MANIFEST_CROSS_CHECK).write_text(json.dumps(generate_manifest_cross_check(ROOT), indent=2, allow_nan=False) + '\n')
     print(json.dumps(verify_all(), sort_keys=True, allow_nan=False))
 
 

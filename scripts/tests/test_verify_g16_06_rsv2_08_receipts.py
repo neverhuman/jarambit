@@ -179,7 +179,8 @@ class MarkdownReportIndexTests(unittest.TestCase):
             files += [r['path'] for r in self.document()['files']]
             for relative in [*files, audit.INVENTORY.as_posix(), audit.MARKDOWN_INDEX.as_posix(), audit.CROSS_CHECK.as_posix(),
                              audit.SCRIPT_INVENTORY.as_posix(), audit.SCRIPT_CROSS_CHECK.as_posix(), *audit.SCRIPT_FILES,
-                             audit.SUMMARY_MANIFEST.as_posix(), *[path.as_posix() for _,_,path in audit.summary_paths()]]:
+                             audit.SUMMARY_MANIFEST.as_posix(), audit.MANIFEST_CROSS_CHECK.as_posix(),
+                             *[path.as_posix() for _,_,path in audit.summary_paths()]]:
                 target = root / relative; target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(ROOT / relative, target)
             self.assertFalse((root / '.git').exists()); self.assertFalse((root / 'target').exists())
@@ -195,6 +196,7 @@ class MarkdownReportIndexTests(unittest.TestCase):
                 self.assertEqual(result['script_test_inventory']['files'],2)
                 self.assertEqual(result['script_and_inventory_cross_check']['unique_members'],32)
                 self.assertEqual(result['phase21_to_25_summary']['files'],10)
+                self.assertEqual(result['manifest_cross_check']['receipt_references'],4)
             victim = root / self.document()['files'][0]['path']; original = victim.read_bytes()
             def absent(path, *args, **kwargs):
                 if path == victim: raise FileNotFoundError(path)
@@ -471,6 +473,66 @@ class PhaseSummaryManifestTests(unittest.TestCase):
         d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
         self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
         for path in [ROOT / audit.SUMMARY_MANIFEST,ROOT / audit.INVENTORY.parent / 'PHASE26.md']:
+            self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
+
+
+class ManifestLiveCrossCheckTests(unittest.TestCase):
+    def document(self):
+        return audit.strict_json((ROOT / audit.MANIFEST_CROSS_CHECK).read_bytes())
+
+    def test_all_live_and_receipt_reference_parity(self):
+        d = self.document(); self.assertEqual(audit.verify_manifest_cross_check()['summary_files'],10)
+        self.assertEqual(d['checked_json_receipt_phases'],[23,24,25])
+        self.assertEqual((len(d['file_checks']),len(d['receipt_reference_checks']),len(d['phase24_script_checks'])),(10,4,2))
+        for row in [*d['file_checks'],*d['receipt_reference_checks'],*d['phase24_script_checks']]:
+            data = (ROOT / row['path']).read_bytes()
+            self.assertEqual(row['expected_sha256'],audit.digest(data))
+            self.assertEqual(row['actual_sha256'],row['expected_sha256'])
+            self.assertEqual(row['expected_bytes'],len(data)); self.assertEqual(row['actual_bytes'],len(data))
+            self.assertTrue(row['digest_parity']); self.assertTrue(row['byte_parity'])
+        self.assertTrue(all(r['summary_reference_parity'] for r in d['receipt_reference_checks']))
+        self.assertTrue(all(not r['in_summary'] for r in d['phase24_script_checks']))
+
+    def test_bad_live_digest_or_size_rejected(self):
+        row = audit.strict_json((ROOT / audit.SUMMARY_MANIFEST).read_bytes())['files'][0]
+        for key,value in [('sha256','0'*64),('bytes',0)]:
+            changed = dict(row); changed[key] = value
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError,'Live manifest/reference'):
+                audit.manifest_parity_record(ROOT,changed,{row['path']:row},True)
+
+    def test_receipt_reference_missing_or_disagrees_with_summary_rejected(self):
+        row = audit.strict_json((ROOT / audit.SUMMARY_MANIFEST).read_bytes())['files'][0]
+        with self.assertRaisesRegex(ValueError,'reference missing from summary'):
+            audit.manifest_parity_record(ROOT,row,{},True)
+        for key,value in [('sha256','0'*64),('bytes',0)]:
+            changed = dict(row); changed[key] = value
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError,'Manifest reference'):
+                audit.manifest_parity_record(ROOT,row,{row['path']:changed},True)
+
+    def test_forged_audit_parity_coverage_and_paths_rejected(self):
+        for key,value in [('exact_digest_and_byte_parity',False),('summary_file_count',9),('byte_mismatch_count',1)]:
+            d = self.document(); d[key] = value
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError,'Manifest cross-check'):
+                audit.verify_manifest_cross_check(document=d)
+        d = self.document(); d['receipt_reference_checks'][0]['expected_sha256'] = '0'*64
+        with self.assertRaisesRegex(ValueError,'Manifest cross-check'):
+            audit.verify_manifest_cross_check(document=d)
+        for path in ['/tmp/input.json','../input.json','docs\\input.json']:
+            with self.subTest(path=path), self.assertRaisesRegex(ValueError,'Nonportable'):
+                audit.manifest_parity_record(ROOT,dict(path=path),{})
+
+    def test_missing_live_file_rejected(self):
+        real = Path.read_bytes; victim = ROOT / audit.INVENTORY.parent / 'PHASE25.md'
+        def missing(path):
+            if path == victim: raise FileNotFoundError(path)
+            return real(path)
+        with patch.object(Path,'read_bytes',new=missing), self.assertRaises(FileNotFoundError):
+            audit.verify_manifest_cross_check()
+
+    def test_static_scope_and_new_output_host_paths(self):
+        d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
+        self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
+        for path in [ROOT / audit.MANIFEST_CROSS_CHECK,ROOT / audit.INVENTORY.parent / 'PHASE27.md']:
             self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
 
 
