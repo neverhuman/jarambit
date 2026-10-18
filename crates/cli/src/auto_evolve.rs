@@ -1253,6 +1253,54 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_excludes_already_assessed_genomes_across_both_pools() {
+        let mut p10_seed = Genome::c4_seed(genome::T_MIN);
+        p10_seed.v[EA_IN] = 14.0;
+        p10_seed.clamp();
+        let mut p14_seed = Genome::c4_seed(genome::T_MIN);
+        p14_seed.v[EA_IN] = 15.0;
+        p14_seed.clamp();
+
+        let mut p10_novel = p10_seed.clone();
+        p10_novel.v[TAPER_X0] += 0.5;
+        p10_novel.clamp();
+        let mut p14_assessed_novel = p14_seed.clone();
+        p14_assessed_novel.v[EA_SP] += 0.25;
+        p14_assessed_novel.clamp();
+
+        let seed_parent_ids = round_parent_identities(&[
+            ("p10".into(), p10_seed.clone()),
+            ("p14".into(), p14_seed.clone()),
+        ]);
+        let assessed_identities: HashSet<String> = [
+            certification::identity(&p14_assessed_novel),
+            certification::identity(&p14_seed),
+        ]
+        .into_iter()
+        .collect();
+        let screened = vec![
+            test_screen_survivor("assessed_novel", "p14", p14_assessed_novel.clone(), 0.001),
+            test_screen_survivor("assessed_seed", "p14", p14_seed.clone(), 0.002),
+            test_screen_survivor("unassessed_novel", "p10", p10_novel.clone(), 0.03),
+            test_screen_survivor("unassessed_seed", "p10", p10_seed.clone(), 0.04),
+        ];
+
+        let selected = select_stage2_candidates(
+            &screened,
+            2,
+            &assessed_identities,
+            &seed_parent_ids,
+        );
+
+        assert_eq!(selected.len(), 2);
+        assert_eq!(selected[0].label, "unassessed_novel");
+        assert_eq!(selected[1].label, "unassessed_seed");
+        assert!(selected.iter().all(|candidate| {
+            !assessed_identities.contains(&certification::identity(&candidate.g))
+        }));
+    }
+
+    #[test]
     fn round_parent_identities_includes_carried_forward_and_clamped_parents() {
         let mut carried = Genome::c4_seed(genome::T_MIN);
         carried.v[EA_IN] = 14.0;
