@@ -175,11 +175,13 @@ def compute_ultralight_weighted_fitness(
     }
 
     failed_legacy = [k for k, v in legacy_26.items() if not v['legacy_pass']]
+    score_100 = round(total_score, 6)
     return {
         'schema': 'jarambit.ultralight_weighted_fitness.v1',
         'metric': 'W_ULTRALIGHT_v1',
         'veto_free_selection': True,
-        'global_weighted_fitness': round(total_score, 6),
+        'score_100': score_100,
+        'global_weighted_fitness': score_100,
         'weight_sum_pct': round(sum(ULTRALIGHT_WEIGHTS_V1.values()), 6),
         'all_26_legacy_hard_gates_pass': len(failed_legacy) == 0,
         'legacy_hard_gates_passed_count': 26 - len(failed_legacy),
@@ -199,28 +201,57 @@ def build_monotone_fitness_curve(
     best_so_far_score = -1.0
     best_so_far_entry: dict[str, Any] | None = None
 
+    # Index any Stage-2 evaluated candidates by label so Stage-2 26-gate breakdowns are included.
+    stage2_by_label: dict[str, dict[str, Any]] = {}
+    for eval_file in sorted(wave_dir.glob('by-content/*/*/*_cad_eval.json')):
+        try:
+            eval_doc = json.loads(eval_file.read_text(encoding='utf-8'))
+            subj = str(eval_doc.get('subject') or '')
+            if subj:
+                rs_file = eval_file.with_name(f'{subj}_rs.json')
+                rs_doc = json.loads(rs_file.read_text(encoding='utf-8')) if rs_file.is_file() else None
+                uwf = eval_doc.get('ultralight_weighted_fitness') or compute_ultralight_weighted_fitness(eval_doc, rs_doc)
+                stage2_by_label[subj] = {
+                    'label': subj,
+                    'genome_sha256': eval_doc.get('genome_sha256'),
+                    'certificate_identity': eval_doc.get('certificate_identity'),
+                    'mass_g': (eval_doc.get('engineering_metrics') or {}).get('mass_g'),
+                    'mass_3d_g': (eval_doc.get('engineering_metrics') or {}).get('mass_3d_g'),
+                    'ultralight_weighted_fitness': float(uwf['global_weighted_fitness']),
+                    'ultralight_fitness_breakdown': uwf,
+                }
+        except Exception:
+            continue
+
     for idx, rf in enumerate(round_files):
         rows = json.loads(rf.read_text(encoding='utf-8'))
         gen_best_score = -1.0
         gen_best_row: dict[str, Any] | None = None
         for r in rows:
-            score = float(r.get('ultralight_weighted_fitness', 0.0))
-            if score == 0.0 and 'mass_g' in r:
-                # Recompute stage-1 proxy score if not yet populated
-                m = float(r['mass_g'])
-                seq = float(r.get('seq_ratio', 1.2))
-                fat = float(r.get('fat_sf', 0.5))
-                bw = float(r.get('ring_bearing_w_mm', 12.0))
-                deficit = float(r.get('screen_deficit', 1.0))
-                s_m = _clamp01((130.0 - m) / (130.0 - 45.0))
-                s_seq = _clamp01(seq / 1.20)
-                s_fat = _clamp01(fat / 1.0)
-                s_bw = _clamp01(bw / 10.0)
-                s_struct = _clamp01(1.0 / (1.0 + 0.35 * deficit))
-                score = round(22.0 * s_m + 31.0 + 9.0 * s_bw + 3.5 * s_seq + 2.0 * s_fat + 32.5 * s_struct, 6)
+            lbl = str(r.get('label') or '')
+            s2 = stage2_by_label.get(lbl)
+            if s2 is not None:
+                score = float(s2['ultralight_weighted_fitness'])
+                cand_row = dict(r, **s2)
+            else:
+                score = float(r.get('ultralight_weighted_fitness', 0.0))
+                if score == 0.0 and 'mass_g' in r:
+                    # Recompute stage-1 proxy score if not yet populated
+                    m = float(r['mass_g'])
+                    seq = float(r.get('seq_ratio', 1.2))
+                    fat = float(r.get('fat_sf', 0.5))
+                    bw = float(r.get('ring_bearing_w_mm', 12.0))
+                    deficit = float(r.get('screen_deficit', 1.0))
+                    s_m = _clamp01((130.0 - m) / (130.0 - 45.0))
+                    s_seq = _clamp01(seq / 1.20)
+                    s_fat = _clamp01(fat / 1.0)
+                    s_bw = _clamp01(bw / 10.0)
+                    s_struct = _clamp01(1.0 / (1.0 + 0.35 * deficit))
+                    score = round(22.0 * s_m + 31.0 + 9.0 * s_bw + 3.5 * s_seq + 2.0 * s_fat + 32.5 * s_struct, 6)
+                cand_row = dict(r, ultralight_weighted_fitness=score)
             if score > gen_best_score:
                 gen_best_score = score
-                gen_best_row = dict(r, ultralight_weighted_fitness=score)
+                gen_best_row = cand_row
         if gen_best_score > best_so_far_score and gen_best_row is not None:
             best_so_far_score = gen_best_score
             best_so_far_entry = gen_best_row
@@ -233,6 +264,21 @@ def build_monotone_fitness_curve(
             'best_so_far_mass_g': best_so_far_entry.get('mass_g') if best_so_far_entry else None,
         })
 
+    best_stage2 = max(
+        stage2_by_label.values(),
+        key=lambda x: float(x.get('ultralight_weighted_fitness', 0.0)),
+        default=None,
+    )
+    best_26_path = wave_dir / 'best_so_far_26_gates.json'
+    best_26_doc = {
+        'schema': 'jarambit.ultralight_best_so_far.v1',
+        'metric': 'W_ULTRALIGHT_v1',
+        'generations_completed': len(generations),
+        'hall_of_fame_best_so_far': best_so_far_entry,
+        'best_stage2_26_gate_design': best_stage2,
+    }
+    best_26_path.write_text(json.dumps(best_26_doc, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+
     curve_doc = {
         'schema': 'jarambit.ultralight_fitness_curve.v1',
         'metric': 'W_ULTRALIGHT_v1',
@@ -242,6 +288,7 @@ def build_monotone_fitness_curve(
         ),
         'generations': generations,
         'best_so_far': best_so_far_entry,
+        'best_stage2_26_gate_design': best_stage2,
     }
     curve_path = wave_dir / 'fitness_curve.json'
     curve_path.write_text(json.dumps(curve_doc, indent=2, sort_keys=True) + '\n', encoding='utf-8')
@@ -273,9 +320,15 @@ def build_monotone_fitness_curve(
     prefix = s3_prefix or os.environ.get('JARAMBIT_S3_PREFIX')
     if prefix:
         prefix = prefix.rstrip('/')
-        subprocess.run(['aws', 's3', 'cp', str(curve_path), f'{prefix}/fitness_curve.json'], check=False)
+        aws_env = dict(os.environ)
+        aws_env.setdefault('AWS_PROFILE', 'veox-jepson')
+        subprocess.run(['aws', 's3', 'cp', str(curve_path), f'{prefix}/fitness_curve.json'], env=aws_env, check=False)
+        subprocess.run(['aws', 's3', 'cp', str(best_26_path), f'{prefix}/best_so_far_26_gates.json'], env=aws_env, check=False)
+        if generations:
+            gen_tag = f'gen_{len(generations):02d}'
+            subprocess.run(['aws', 's3', 'cp', str(best_26_path), f'{prefix}/{gen_tag}_best_so_far_26_gates.json'], env=aws_env, check=False)
         if png_path.is_file():
-            subprocess.run(['aws', 's3', 'cp', str(png_path), f'{prefix}/fitness_curve.png'], check=False)
+            subprocess.run(['aws', 's3', 'cp', str(png_path), f'{prefix}/fitness_curve.png'], env=aws_env, check=False)
     return curve_doc
 
 

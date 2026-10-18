@@ -749,6 +749,8 @@ def evaluate_candidate(
         },
         'weighted_cad_score': w_cad,
     }
+    from ops.ci.ultralight_weighted_fitness import compute_ultralight_weighted_fitness
+    summary['ultralight_weighted_fitness'] = compute_ultralight_weighted_fitness(summary, rs_doc)
     eval_path = out_dir / f'{label}_cad_eval.json'
     eval_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + '\n', encoding='utf-8')
     return summary

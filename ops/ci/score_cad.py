@@ -1064,6 +1064,8 @@ def score_cad(
         'global_fitness_G1': cad_eval['global_fitness_G1'],
         'cad_battery': battery_rec,
     }
+    if 'ultralight_weighted_fitness' in cad_eval:
+        scorecard['ultralight_weighted_fitness'] = cad_eval['ultralight_weighted_fitness']
 
     json_path = out_dir / f'{subj}_master_scorecard.json'
     md_path = out_dir / f'{subj}_master_scorecard.md'
