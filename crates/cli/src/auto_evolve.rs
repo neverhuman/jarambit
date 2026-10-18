@@ -32,12 +32,12 @@ const Q7_CPS: [f64; genome::N_CP] = [
 const SCREEN_LAT_HUNTER_MARGIN_N: f64 = 358.0;
 
 /// Stable labels for the deterministic Q7 split-hand offspring arms.
-#[allow(dead_code)]
 pub fn q7_offspring_arm_label(c: usize) -> Option<&'static str> {
     match c {
-        6 => Some("q7_c6_thick_tip"),
-        7 => Some("q7_c7_steep_grind"),
+        6 => Some("q7_c6_window_pocket"),
+        7 => Some("q7_c7_distal_window"),
         8 => Some("q7_c8_delayed_taper"),
+        9 => Some("q7_c9_reinforced_ring"),
         10 => Some("q7_c10_spine_widened"),
         11 => Some("q7_c11_spine_widened_p1"),
         _ => None,
@@ -197,6 +197,7 @@ fn spawn_offspring_batch(
                 || p1_tip_slot;
             if q7_slot {
                 let slot = if p1_tip_slot { 11 } else { k % 11 };
+                debug_assert!(q7_offspring_arm_label(slot).is_some());
                 child.v[..N_CP].copy_from_slice(&Q7_CPS);
                 if slot != 9 {
                     for (idx, cp) in child.v[..N_CP].iter_mut().enumerate() {
@@ -319,10 +320,15 @@ fn spawn_offspring_batch(
                     }
                     _ => unreachable!(),
                 }
+                // All Q7 split-hand arms stay inside the Gate S bevel and apex limits,
+                // including arms whose individual recipes inherit these genes.
+                child.v[EA_IN] = child.v[EA_IN].clamp(b[EA_IN].0, 18.6);
+                child.v[EA_SP] = child.v[EA_SP].clamp(b[EA_SP].0, 18.6);
+                child.v[EDGE_TH] = child.v[EDGE_TH].clamp(0.12, 0.195);
             } else {
             match (
                 k % 8,
-                k % 9 == 8 || (candidates_per_elite == 12 && k % 12 == 11),
+                k % 9 == 8 || (candidates_per_elite == 12 && k % 12 == 4),
                 k % 11 == 9,
                 k % 11 == 10,
             ) {
@@ -1139,8 +1145,11 @@ mod tests {
             &mut Rng(20261018),
         );
 
-        // Slot 6 remains Q7, slot 7 reaches the legacy reinforcement fallback,
-        // slot 8 reaches the window arm, and slot 11 reaches the P1 Q7 tip arm.
+        // Slot 4 reaches the witness-guided arm, slot 6 remains Q7, slot 7 reaches
+        // the legacy reinforcement fallback, slot 8 reaches the delayed-taper Q7 arm,
+        // and slot 11 reaches the P1 Q7 tip arm.
+        assert!(children[4].1.v[TAPER_X0] > parent.v[TAPER_X0]);
+        assert!(children[4].1.v[EA_IN] > parent.v[EA_IN]);
         assert_ne!(&children[6].1.v[..N_CP], &Q7_CPS);
         assert_ne!(&children[7].1.v[..N_CP], &Q7_CPS);
         assert_eq!(children[7].1.v[TAPER_X0], genome::bounds()[TAPER_X0].1);
@@ -1321,6 +1330,9 @@ mod tests {
         let sum = (ui.0 / ni + us.0 / ns, ui.1 / ni + us.1 / ns);
         let norm = sum.0.hypot(sum.1);
         let bisector = (sum.0 / norm, sum.1 / norm);
+        // Lowering c8 EA_IN/EA_SP from 21.6..22.0 deg to 18.0..18.6 deg for 3D Gate S (S3 <= 25 deg)
+        // keeps c8 thicker than c5 and c7 over the 4..8 mm distal tip zone; at d = 10 mm the
+        // bevel-limited 18.0..18.6 deg grind is overtaken by the steeper/wider c5 and c7 profiles.
         for d in [4.0, 6.0, 8.0] {
             let q = (tip.0 + bisector.0 * d, tip.1 + bisector.1 * d);
             let thick = jarambit_crescent::export::thickness_at(&built[2], q);
@@ -1433,11 +1445,59 @@ mod tests {
     }
 
     #[test]
+    fn q7_all_slots_respect_gate_s_and_bore_bounds_across_stock_extremes() {
+        for (stock_idx, stock) in [genome::T_MIN, genome::t_max()].into_iter().enumerate() {
+            let mut parent = Genome::c4_seed(stock);
+            parent.v[genome::RING_WALL] = 6.0;
+            parent.v[EA_IN] = 22.0;
+            parent.v[EA_SP] = 22.0;
+            parent.v[EDGE_TH] = 0.20;
+            parent.clamp();
+
+            // An 11-child batch exposes Q7 slots 6..=10; production's 12th
+            // child is the dedicated slot 11 arm.
+            let eleven = spawn_offspring_batch(
+                &[("stock_extreme".into(), parent.clone())],
+                11,
+                1,
+                &mut Rng(20261021 + stock_idx as u64),
+            );
+            let twelve = spawn_offspring_batch(
+                &[("stock_extreme".into(), parent)],
+                12,
+                1,
+                &mut Rng(20262021 + stock_idx as u64),
+            );
+            for (slot, child) in (6..=10)
+                .map(|slot| (slot, &eleven[slot].1))
+                .chain(std::iter::once((11, &twelve[11].1)))
+            {
+                assert!(child.v[genome::RING_WALL] >= 6.0, "stock={stock} slot={slot}");
+                assert!(child.v[EA_IN] <= 18.6, "stock={stock} slot={slot} EA_IN");
+                assert!(child.v[EA_SP] <= 18.6, "stock={stock} slot={slot} EA_SP");
+                assert!(child.v[EDGE_TH] <= 0.195, "stock={stock} slot={slot} EDGE_TH");
+                let phenotype = pheno::build(child);
+                assert!(
+                    gates::check(child, &phenotype).is_empty(),
+                    "stock={stock} slot={slot}: {:?}",
+                    gates::check(child, &phenotype)
+                );
+                assert!(
+                    aesthetic::evaluate(child, &phenotype).pass,
+                    "stock={stock} slot={slot}: {:?}",
+                    aesthetic::evaluate(child, &phenotype).fails
+                );
+            }
+        }
+    }
+
+    #[test]
     fn q7_offspring_arm_labels_cover_all_split_hand_slots() {
         let expected = [
-            (6, "q7_c6_thick_tip"),
-            (7, "q7_c7_steep_grind"),
+            (6, "q7_c6_window_pocket"),
+            (7, "q7_c7_distal_window"),
             (8, "q7_c8_delayed_taper"),
+            (9, "q7_c9_reinforced_ring"),
             (10, "q7_c10_spine_widened"),
             (11, "q7_c11_spine_widened_p1"),
         ];
