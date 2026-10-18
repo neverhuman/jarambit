@@ -3,6 +3,8 @@
 import json
 from pathlib import Path
 import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -19,7 +21,7 @@ class AuditProvenanceTests(unittest.TestCase):
         root = Path(tmp.name)
         m = audit.legacy_verifier(ROOT)
         paths = [audit.INDEX, audit.REPORT, audit.CONTRACT, audit.MANIFEST_REPORT,
-                 audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON, audit.CLI_REPORT, audit.CLI_JSON, audit.CRESCENT_REPORT, audit.CRESCENT_JSON, audit.CERT_EXPORT_REPORT, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_REPORT, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_REPORT, audit.BATTERY_G1_JSON, audit.FEM_BENCH_REPORT, audit.FEM_BENCH_JSON, audit.CLI_BENCH_REPORT, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_REPORT, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_REPORT, audit.CLI_MAIN_JSON, audit.GATES_METRICS_REPORT, audit.GATES_METRICS_JSON, audit.CARGO_MANIFEST_REPORT, audit.CARGO_MANIFEST_JSON, audit.LEGACY, audit.SELF,
+                 audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON, audit.CLI_REPORT, audit.CLI_JSON, audit.CRESCENT_REPORT, audit.CRESCENT_JSON, audit.CERT_EXPORT_REPORT, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_REPORT, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_REPORT, audit.BATTERY_G1_JSON, audit.FEM_BENCH_REPORT, audit.FEM_BENCH_JSON, audit.CLI_BENCH_REPORT, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_REPORT, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_REPORT, audit.CLI_MAIN_JSON, audit.GATES_METRICS_REPORT, audit.GATES_METRICS_JSON, audit.CARGO_MANIFEST_REPORT, audit.CARGO_MANIFEST_JSON, audit.HEX64_REPORT, audit.HEX64_JSON, audit.LEGACY, audit.SELF,
                  str(m.INDEX_PATH), "Cargo.toml"] + [p.relative_to(ROOT).as_posix()
                  for p in sorted((ROOT / "crates").glob("*/Cargo.toml"))] + list(audit.SOURCES) + list(audit.DIGEST_SOURCES) + list(audit.CLI_SOURCES) + list(audit.CRESCENT_SOURCES) + list(audit.CERT_EXPORT_SOURCES) + list(audit.AESTHETIC_GCI_SOURCES) + list(audit.BATTERY_G1_SOURCES) + list(audit.FEM_BENCH_SOURCES) + list(audit.CLI_BENCH_SOURCES) + list(audit.CRESCENT_CORE_SOURCES) + list(audit.CLI_MAIN_SOURCES) + list(audit.GATES_METRICS_SOURCES) + [str(p) for _, p in m.REPORTS]
         for path in paths:
@@ -52,13 +54,16 @@ class AuditProvenanceTests(unittest.TestCase):
             audit.record(m, root, audit.CRESCENT_CORE_JSON),
             audit.record(m, root, audit.CLI_MAIN_JSON),
             audit.record(m, root, audit.GATES_METRICS_JSON),
-            audit.record(m, root, audit.CARGO_MANIFEST_JSON)]))
+            audit.record(m, root, audit.CARGO_MANIFEST_JSON),
+            audit.record(m, root, audit.HEX64_JSON)]))
 
     def test_current_and_relocated_catalog(self):
         for root in (ROOT, self.snapshot()):
             with self.subTest(root=root.name):
                 result = audit.verify(root)
-                self.assertEqual(result["reports"], 29)
+                self.assertEqual(result["reports"], 30)
+                self.assertFalse(result["sha256_schema_pass"])
+                self.assertEqual(result["invalid_sha256_fields"], 2)
                 self.assertEqual(result["source_files"], 2)
                 self.assertEqual(result["digest_source_files"], 2)
                 self.assertEqual(result["cli_source_files"], 2)
@@ -75,7 +80,7 @@ class AuditProvenanceTests(unittest.TestCase):
                 self.assertEqual(result["prior_cli_main_assignment_outcome"], "PARTIAL")
                 self.assertEqual(result["prior_fem_bench_assignment_outcome"], "PARTIAL")
                 self.assertEqual(result["manifest_files"], 11)
-                self.assertEqual(result["assignment_outcome"], "COMPLETE")
+                self.assertEqual(result["assignment_outcome"], "PARTIAL")
                 self.assertEqual(result["parity_assessment"], "NOT_ASSESSED")
         root = self.snapshot()
         self.assertFalse((root / ".git").exists())
@@ -83,7 +88,7 @@ class AuditProvenanceTests(unittest.TestCase):
 
     def test_document_corruption(self):
         m = audit.legacy_verifier(ROOT)
-        for path in [str(p) for _, p in m.REPORTS] + [audit.REPORT, audit.CONTRACT, audit.MANIFEST_REPORT, audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON, audit.CLI_REPORT, audit.CLI_JSON, audit.CRESCENT_REPORT, audit.CRESCENT_JSON, audit.CERT_EXPORT_REPORT, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_REPORT, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_REPORT, audit.BATTERY_G1_JSON, audit.FEM_BENCH_REPORT, audit.FEM_BENCH_JSON, audit.CLI_BENCH_REPORT, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_REPORT, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_REPORT, audit.CLI_MAIN_JSON, audit.GATES_METRICS_REPORT, audit.GATES_METRICS_JSON, audit.CARGO_MANIFEST_REPORT, audit.CARGO_MANIFEST_JSON]:
+        for path in [str(p) for _, p in m.REPORTS] + [audit.REPORT, audit.CONTRACT, audit.MANIFEST_REPORT, audit.MANIFEST_JSON, audit.DIGEST_REPORT, audit.DIGEST_JSON, audit.CLI_REPORT, audit.CLI_JSON, audit.CRESCENT_REPORT, audit.CRESCENT_JSON, audit.CERT_EXPORT_REPORT, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_REPORT, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_REPORT, audit.BATTERY_G1_JSON, audit.FEM_BENCH_REPORT, audit.FEM_BENCH_JSON, audit.CLI_BENCH_REPORT, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_REPORT, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_REPORT, audit.CLI_MAIN_JSON, audit.GATES_METRICS_REPORT, audit.GATES_METRICS_JSON, audit.CARGO_MANIFEST_REPORT, audit.CARGO_MANIFEST_JSON, audit.HEX64_REPORT, audit.HEX64_JSON]:
             with self.subTest(document=path):
                 root = self.snapshot()
                 p = root / path
@@ -187,7 +192,8 @@ class AuditProvenanceTests(unittest.TestCase):
             audit.record(m, root, audit.CRESCENT_CORE_JSON),
             audit.record(m, root, audit.CLI_MAIN_JSON),
             audit.record(m, root, audit.GATES_METRICS_JSON),
-            audit.record(m, root, audit.CARGO_MANIFEST_JSON)]))
+            audit.record(m, root, audit.CARGO_MANIFEST_JSON),
+            audit.record(m, root, audit.HEX64_JSON)]))
 
     def test_manifest_input_changes(self):
         m = audit.legacy_verifier(ROOT)
@@ -268,7 +274,7 @@ class AuditProvenanceTests(unittest.TestCase):
         m = audit.legacy_verifier(root)
         self.change(root, audit.INDEX, lambda d: d.update(supplemental_documents=[
             audit.record(m, root, path) for path in
-            (audit.CONTRACT, audit.MANIFEST_JSON, audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_JSON, audit.FEM_BENCH_JSON, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_JSON, audit.GATES_METRICS_JSON, audit.CARGO_MANIFEST_JSON)]))
+            (audit.CONTRACT, audit.MANIFEST_JSON, audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_JSON, audit.FEM_BENCH_JSON, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_JSON, audit.GATES_METRICS_JSON, audit.CARGO_MANIFEST_JSON, audit.HEX64_JSON)]))
 
     def test_digest_receipt_metadata(self):
         for receipt in (audit.DIGEST_JSON, audit.CLI_JSON, audit.CRESCENT_JSON, audit.CERT_EXPORT_JSON, audit.AESTHETIC_GCI_JSON, audit.BATTERY_G1_JSON, audit.FEM_BENCH_JSON, audit.CLI_BENCH_JSON, audit.CRESCENT_CORE_JSON, audit.CLI_MAIN_JSON, audit.GATES_METRICS_JSON, audit.CARGO_MANIFEST_JSON):
@@ -354,6 +360,69 @@ class AuditProvenanceTests(unittest.TestCase):
         (root / audit.REQUESTED_METRICS_PATH).write_text("// synthetic newly appearing requested file\n")
         with self.assertRaisesRegex(ValueError, "source fingerprint mismatch"):
             audit.verify(root)
+
+
+    def test_hex64_strict_values(self):
+        for value in ("0" * 64, "a" * 64, "0123456789abcdef" * 4):
+            self.assertTrue(list(audit.sha256_fields({"sha256": value}))[0]["valid"])
+        for value in (None, True, False, 0, 1, 1.0, {}, [], "", "a" * 63, "a" * 65,
+                      "A" * 64, "g" * 64, "0x" + "a" * 64, " " + "a" * 64,
+                      "a" * 64 + "\n", "ａ" * 64):
+            with self.subTest(value=value):
+                fields = list(audit.sha256_fields({"availability": "missing", "sha256": value}))
+                self.assertEqual(len(fields), 1)
+                self.assertFalse(fields[0]["valid"])
+
+    def test_hex64_recursive_locations(self):
+        doc = {"rows": [{"sha256": "a" * 64}, {"mesh_sha256": "A" * 64}, {"sha256": None}],
+               "escaped/key": {"~": {"sha256": 7}}, "sha256_fields": "ignored"}
+        fields = list(audit.sha256_fields(doc))
+        self.assertEqual([x["pointer"] for x in fields],
+                         ["/rows/0/sha256", "/rows/1/mesh_sha256", "/rows/2/sha256",
+                          "/escaped~1key/~0/sha256"])
+        self.assertEqual(sum(x["valid"] for x in fields), 1)
+
+    def test_hex64_actual_inventory_and_findings(self):
+        m = audit.legacy_verifier(ROOT)
+        doc = audit.hex64_inventory(m, ROOT)
+        self.assertEqual(doc["baseline_json_documents"], 15)
+        self.assertEqual(doc["baseline_json_receipts_excluding_index"], 14)
+        self.assertEqual(doc["json_document_count"], 16)
+        self.assertEqual(doc["exact_field_count"], 82)
+        self.assertEqual(doc["suffix_field_count"], 30)
+        self.assertEqual(doc["valid_field_count"], 110)
+        self.assertEqual(doc["invalid_field_count"], 2)
+        bad = [(row["path"], x["pointer"], x["value_type"])
+               for row in doc["documents"] for x in row["invalid_fields"]]
+        self.assertEqual(bad, [(audit.CLI_MAIN_JSON, "/source_files/1/sha256", "NoneType"),
+                               (audit.FEM_BENCH_JSON, "/source_files/1/sha256", "NoneType")])
+        self.assertFalse(doc["schema_pass"])
+        self.assertFalse(doc["json_receipt_count_matches_request"])
+
+    def test_hex64_extra_json_and_receipt_tampering(self):
+        root = self.snapshot()
+        extra = root / "docs/audit/nested/extra.json"
+        extra.parent.mkdir()
+        extra.write_text('{"nested": [{"sha256": "INVALID"}]}\n')
+        doc = audit.hex64_inventory(audit.legacy_verifier(root), root)
+        self.assertEqual(doc["json_document_count"], 17)
+        self.assertEqual(doc["invalid_field_count"], 3)
+        with self.assertRaisesRegex(ValueError, "hex64 audit inventory mismatch"):
+            audit.verify(root)
+        root = self.snapshot()
+        self.change(root, audit.HEX64_JSON, lambda d: d.update(schema_pass=True))
+        self.rebind_digest(root)
+        with self.assertRaisesRegex(ValueError, "hex64 audit inventory mismatch"):
+            audit.verify(root)
+
+    def test_hex64_cli_reports_strict_failure(self):
+        root = self.snapshot()
+        result = subprocess.run([sys.executable, str(ROOT / audit.SELF), "--root", str(root)],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 1)
+        doc = json.loads(result.stdout)
+        self.assertFalse(doc["sha256_schema_pass"])
+        self.assertEqual(doc["invalid_sha256_fields"], 2)
 
 
 if __name__ == "__main__":

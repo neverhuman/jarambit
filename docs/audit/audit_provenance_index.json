@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "task": "G16-12-RSV2-04-p39",
+  "task": "G16-12-RSV2-04-p40",
   "status": "IN_PROGRESS",
   "qualified_count": 0,
-  "report_count": 29,
+  "report_count": 30,
   "reports": [
     {
       "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V5_REPORT.md",
@@ -294,6 +294,16 @@
       "table_schema_sha256": "01e15620a681f4ce67bb5d198e46b209d43735e2489410a5d098281f213f537c",
       "status": "IN_PROGRESS",
       "qualified_count": 0
+    },
+    {
+      "path": "docs/audit/HEX64_SCHEMA_CONSISTENCY_AUDIT.md",
+      "sha256": "42fff2dd887852fb8b5f106c2432bb795491d0af39d5a0897486b3b8fafa3359",
+      "bytes": 5785,
+      "lines": 56,
+      "tables": 2,
+      "table_schema_sha256": "0927381ca674df6be7561331959b2acba1cbe1c4fbeae1f25263f9837ce1b3ef",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
     }
   ],
   "supplemental_documents": [
@@ -380,6 +390,12 @@
       "sha256": "f446189ab349be085e437572025c73f215f2e53084a606a6cca6f03b665dead9",
       "bytes": 755,
       "lines": 29
+    },
+    {
+      "path": "docs/audit/hex64_schema_consistency_audit.json",
+      "sha256": "6342a053a3fa1b201c46cf15229a2a074e6d81d297551e01d204e5f37ca8acd4",
+      "bytes": 3880,
+      "lines": 147
     }
   ]
 }
