@@ -1453,6 +1453,75 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_preserves_distinct_indices_and_inputs_across_mixed_pools() {
+        let mut p10_seed = Genome::c4_seed(genome::T_MIN);
+        p10_seed.v[EA_IN] = 14.0;
+        p10_seed.clamp();
+        let mut p14_seed = Genome::c4_seed(genome::T_MIN);
+        p14_seed.v[EA_IN] = 15.0;
+        p14_seed.clamp();
+        let mut p10_novel = p10_seed.clone();
+        p10_novel.v[TAPER_X0] += 0.5;
+        p10_novel.clamp();
+        let mut p14_novel = p14_seed.clone();
+        p14_novel.v[EA_SP] += 0.25;
+        p14_novel.clamp();
+
+        let screened = vec![
+            test_screen_survivor("slot_0_seed_p10", "p10", p10_seed.clone(), 0.001),
+            test_screen_survivor("slot_1_novel_p10", "p10", p10_novel, 0.01),
+            test_screen_survivor("slot_2_seed_p14", "p14", p14_seed, 0.002),
+            test_screen_survivor("slot_3_novel_p14", "p14", p14_novel, 0.02),
+        ];
+        let input_snapshot: Vec<_> = screened
+            .iter()
+            .map(|candidate| {
+                (
+                    candidate.label.clone(),
+                    candidate.family.clone(),
+                    candidate.g.clone(),
+                    candidate.screen_deficit,
+                )
+            })
+            .collect();
+        let seed_parent_ids = round_parent_identities(&[
+            ("p10".into(), p10_seed),
+            ("p14".into(), screened[2].g.clone()),
+        ]);
+
+        let selected = select_stage2_candidates(&screened, 3, &HashSet::new(), &seed_parent_ids);
+
+        assert_eq!(selected.len(), 3);
+        let selected_indices: Vec<_> = selected
+            .iter()
+            .map(|candidate| {
+                screened
+                    .iter()
+                    .position(|input| input.label == candidate.label)
+                    .expect("selected survivor must retain its input slot")
+            })
+            .collect();
+        assert_eq!(selected_indices, [1, 3, 0]);
+        assert_eq!(selected_indices.iter().copied().collect::<HashSet<_>>().len(), 3);
+        for (candidate, &index) in selected.iter().zip(&selected_indices) {
+            assert_eq!(candidate.g, screened[index].g);
+            assert_eq!(candidate.screen_deficit, screened[index].screen_deficit);
+        }
+        let after: Vec<_> = screened
+            .iter()
+            .map(|candidate| {
+                (
+                    candidate.label.clone(),
+                    candidate.family.clone(),
+                    candidate.g.clone(),
+                    candidate.screen_deficit,
+                )
+            })
+            .collect();
+        assert_eq!(after, input_snapshot);
+    }
+
+    #[test]
     fn stage2_selection_returns_fewer_than_certify_top_when_total_unassessed_is_smaller() {
         let mut seed = Genome::c4_seed(genome::T_MIN);
         seed.v[EA_IN] = 14.0;
