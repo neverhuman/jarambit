@@ -1,0 +1,286 @@
+{
+  "task": "G16-06-RSV2-08-p26",
+  "study_phase": 25,
+  "scope": "Phase23 member inventory and Phase24 current-script inventory; Phase24 metadata refreshed for authorized source updates.",
+  "source_receipts": [
+    {
+      "path": "docs/audits/G16-06_RSV2-08/phase23_inventory_cross_check_audit.json",
+      "bytes": 11793,
+      "sha256": "5d6c1e1b4046a537ccbecd7f64a9e887b2aa384dd8eed5fdb0b15acbc76e1784"
+    },
+    {
+      "path": "docs/audits/G16-06_RSV2-08/phase24_script_test_inventory_audit.json",
+      "bytes": 1007,
+      "sha256": "b8946ad0147dad5e1292ba8533f5f6a2af065478f287f8725925c6b57c481d60"
+    }
+  ],
+  "phase23_member_count": 30,
+  "phase24_member_count": 2,
+  "unique_member_count": 32,
+  "overlap_paths": [],
+  "overlap_count": 0,
+  "exact_digest_parity": true,
+  "digest_mismatch_count": 0,
+  "total_member_bytes": 18593018,
+  "engineering_qualification_assessed": false,
+  "qualified_count": 0,
+  "full_qualification": false,
+  "members": [
+    {
+      "path": "experiments/G16-06-RSV2-08/phase15_gate_s_compliant_joint_audit.json",
+      "source_receipt": "phase23",
+      "bytes": 33243,
+      "expected_sha256": "205a359a7e9f1cd7065b5a35da7b1491fa6a37356a6e20473c4fff9451bfd51d",
+      "actual_sha256": "205a359a7e9f1cd7065b5a35da7b1491fa6a37356a6e20473c4fff9451bfd51d",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot10_seed1_plate.json",
+      "source_receipt": "phase23",
+      "bytes": 3449,
+      "expected_sha256": "817a71a78e3594b9fdd362179219c447215945142c0c3ff6183852540ccc629f",
+      "actual_sha256": "817a71a78e3594b9fdd362179219c447215945142c0c3ff6183852540ccc629f",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot10_seed1_solid.json",
+      "source_receipt": "phase23",
+      "bytes": 1696,
+      "expected_sha256": "854424b55a5f6898df9eeb0256cb90cc58cb599ec368594b68a5bfecee8d9f0a",
+      "actual_sha256": "854424b55a5f6898df9eeb0256cb90cc58cb599ec368594b68a5bfecee8d9f0a",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot11_seed1_plate.json",
+      "source_receipt": "phase23",
+      "bytes": 3546,
+      "expected_sha256": "17281528c48d4f1fee32a00b582c0908e0ad084e011ef44a1842f76ce85a177a",
+      "actual_sha256": "17281528c48d4f1fee32a00b582c0908e0ad084e011ef44a1842f76ce85a177a",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot11_seed1_solid.json",
+      "source_receipt": "phase23",
+      "bytes": 1693,
+      "expected_sha256": "a533deed272e78ab57070fc3768653d3be853b36059dcd29b92164a724a611d7",
+      "actual_sha256": "a533deed272e78ab57070fc3768653d3be853b36059dcd29b92164a724a611d7",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot8_seed1_plate.json",
+      "source_receipt": "phase23",
+      "bytes": 3417,
+      "expected_sha256": "be80a8291c7d63f6dbfdb7db0b93f0350b702a04c8d6f3d019161ea52a32cd42",
+      "actual_sha256": "be80a8291c7d63f6dbfdb7db0b93f0350b702a04c8d6f3d019161ea52a32cd42",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot8_seed1_solid.json",
+      "source_receipt": "phase23",
+      "bytes": 1695,
+      "expected_sha256": "0a3a1436344b042bc7042c699f8530f3053ae5b025917feffc75d5e6b7ded429",
+      "actual_sha256": "0a3a1436344b042bc7042c699f8530f3053ae5b025917feffc75d5e6b7ded429",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase16_cross_phase_provenance_index.json",
+      "source_receipt": "phase23",
+      "bytes": 5327,
+      "expected_sha256": "34f93fd138eacbe2be39690febb26478b443f22ecb75bbd87734e4daab465120",
+      "actual_sha256": "34f93fd138eacbe2be39690febb26478b443f22ecb75bbd87734e4daab465120",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase17_legacy_path_inventory.json",
+      "source_receipt": "phase23",
+      "bytes": 121352,
+      "expected_sha256": "9d2d21d0d3c89be4ef84089b1548ca6dd9d21f65af43b5930820437c96c6ad15",
+      "actual_sha256": "9d2d21d0d3c89be4ef84089b1548ca6dd9d21f65af43b5930820437c96c6ad15",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase18_complete_study_manifest.json",
+      "source_receipt": "phase23",
+      "bytes": 9886,
+      "expected_sha256": "1b5c2d6deb189b419d330d8166e0f20a0fb9f92c12f73b01e0bf3d369e3b7a52",
+      "actual_sha256": "1b5c2d6deb189b419d330d8166e0f20a0fb9f92c12f73b01e0bf3d369e3b7a52",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase19_solver_environment_audit.json",
+      "source_receipt": "phase23",
+      "bytes": 72253,
+      "expected_sha256": "73d85168599a1f41ddc9c9a533184d231ae293daa4a70eaffc4a12fba926716d",
+      "actual_sha256": "73d85168599a1f41ddc9c9a533184d231ae293daa4a70eaffc4a12fba926716d",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase20_candidate_csv_schema_audit.json",
+      "source_receipt": "phase23",
+      "bytes": 198150,
+      "expected_sha256": "59548ae6e1a65c98bd6fb69535756ddb05511b1858a6d36b1073c6a73ab3f594",
+      "actual_sha256": "59548ae6e1a65c98bd6fb69535756ddb05511b1858a6d36b1073c6a73ab3f594",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase2_receipt.json",
+      "source_receipt": "phase23",
+      "bytes": 50444,
+      "expected_sha256": "721727d090559ad197e5aa631770b9fed0cc4fca86e56a0f043d315d7ad16964",
+      "actual_sha256": "721727d090559ad197e5aa631770b9fed0cc4fca86e56a0f043d315d7ad16964",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase3_receipt.json",
+      "source_receipt": "phase23",
+      "bytes": 215213,
+      "expected_sha256": "ee3954e6405ac67bb906b8e95d4e16164def713ff3bf183a029c14cfcc7f413a",
+      "actual_sha256": "ee3954e6405ac67bb906b8e95d4e16164def713ff3bf183a029c14cfcc7f413a",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase4_receipt.json",
+      "source_receipt": "phase23",
+      "bytes": 273919,
+      "expected_sha256": "848636fbe85686746f0de62680fd23688292ec5b9eb1bbb5149621ab325fef66",
+      "actual_sha256": "848636fbe85686746f0de62680fd23688292ec5b9eb1bbb5149621ab325fef66",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase5_receipt.json",
+      "source_receipt": "phase23",
+      "bytes": 2438567,
+      "expected_sha256": "ab505dc254ce9a844301bf3cfdad5f997cfd681d3184f088ad428a6573383e58",
+      "actual_sha256": "ab505dc254ce9a844301bf3cfdad5f997cfd681d3184f088ad428a6573383e58",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase6_receipt.json",
+      "source_receipt": "phase23",
+      "bytes": 2514986,
+      "expected_sha256": "b030eb1f2267abd2fe66960f938618a104123c4fa4426551b80f69a1c2770c25",
+      "actual_sha256": "b030eb1f2267abd2fe66960f938618a104123c4fa4426551b80f69a1c2770c25",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase7_receipt.json",
+      "source_receipt": "phase23",
+      "bytes": 4943513,
+      "expected_sha256": "71e751199151a99c61058625d55ad2358485e69e308b101d383b16b7ec8cee4a",
+      "actual_sha256": "71e751199151a99c61058625d55ad2358485e69e308b101d383b16b7ec8cee4a",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/G16-06-RSV2-08/phase8_receipt.json",
+      "source_receipt": "phase23",
+      "bytes": 483184,
+      "expected_sha256": "fecbe9932bfb8d905b38ca87bba137dfd39fcd8c585519e3eabb006c89167b44",
+      "actual_sha256": "fecbe9932bfb8d905b38ca87bba137dfd39fcd8c585519e3eabb006c89167b44",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+      "source_receipt": "phase23",
+      "bytes": 377339,
+      "expected_sha256": "42ddc1663327794b71578d05fdaed678d0daac97e86dfbb8d4b0c4033fb92615",
+      "actual_sha256": "42ddc1663327794b71578d05fdaed678d0daac97e86dfbb8d4b0c4033fb92615",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+      "source_receipt": "phase23",
+      "bytes": 212710,
+      "expected_sha256": "26809af6faab94b759bdabad0b3dafe68bf8aaae5068b1276ee35bdd0ffe5d48",
+      "actual_sha256": "26809af6faab94b759bdabad0b3dafe68bf8aaae5068b1276ee35bdd0ffe5d48",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/g16-06-rsv2-08/phase12_receipt.json",
+      "source_receipt": "phase23",
+      "bytes": 116533,
+      "expected_sha256": "43457e945f9d4071ad02dbf48003755af889481309c06e5f0828895b3639639a",
+      "actual_sha256": "43457e945f9d4071ad02dbf48003755af889481309c06e5f0828895b3639639a",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/g16-06-rsv2-08/phase13_receipt.json",
+      "source_receipt": "phase23",
+      "bytes": 380203,
+      "expected_sha256": "26591423f6dad3332509295a7c97e2aa2ff3d140f274e52751e108fcb675288d",
+      "actual_sha256": "26591423f6dad3332509295a7c97e2aa2ff3d140f274e52751e108fcb675288d",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/g16-06-rsv2-08/phase14_receipt.json",
+      "source_receipt": "phase23",
+      "bytes": 271661,
+      "expected_sha256": "50773824742898a463ebb46954ed8d3ebd456a50900f1761378fb3483d833a81",
+      "actual_sha256": "50773824742898a463ebb46954ed8d3ebd456a50900f1761378fb3483d833a81",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+      "source_receipt": "phase23",
+      "bytes": 3756637,
+      "expected_sha256": "cc111ae884ad1f800cbda88491d57d420ead06bb75f12bcbee318ef80287d516",
+      "actual_sha256": "cc111ae884ad1f800cbda88491d57d420ead06bb75f12bcbee318ef80287d516",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/rsv2_07/results/phase5_witness_3d_validation.json",
+      "source_receipt": "phase23",
+      "bytes": 86525,
+      "expected_sha256": "66f3b5112bf1122ddd49fa3c1ad66384d810ee177494b0143233fdf7a895e80a",
+      "actual_sha256": "66f3b5112bf1122ddd49fa3c1ad66384d810ee177494b0143233fdf7a895e80a",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/rsv2_07/results/phase6_unified_scorecard.json",
+      "source_receipt": "phase23",
+      "bytes": 1771599,
+      "expected_sha256": "5d301a3b33afdd8470441c0094f79e47915f8f9e1161af035b90ac37223f7dd7",
+      "actual_sha256": "5d301a3b33afdd8470441c0094f79e47915f8f9e1161af035b90ac37223f7dd7",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/rsv2_07/results/phase7_saved_triplet_gci_audit.json",
+      "source_receipt": "phase23",
+      "bytes": 107915,
+      "expected_sha256": "4051daef7282426642f7cc13a3eed2730181afc65c458357cecb5598247e4555",
+      "actual_sha256": "4051daef7282426642f7cc13a3eed2730181afc65c458357cecb5598247e4555",
+      "digest_parity": true
+    },
+    {
+      "path": "experiments/rsv2_07/results/phase8_synthetic_gci_audit.json",
+      "source_receipt": "phase23",
+      "bytes": 90689,
+      "expected_sha256": "ae05f36d3b520d3cbce7729f9b825c24f4ab56595812dd077e4342eb201b4b98",
+      "actual_sha256": "ae05f36d3b520d3cbce7729f9b825c24f4ab56595812dd077e4342eb201b4b98",
+      "digest_parity": true
+    },
+    {
+      "path": "docs/audits/G16-06_RSV2-08/PHASE21.md",
+      "source_receipt": "phase23",
+      "bytes": 3289,
+      "expected_sha256": "38e165cee4fb781dd8664328ad9456f32fc288ce7d796d59eb683a422d6f5b81",
+      "actual_sha256": "38e165cee4fb781dd8664328ad9456f32fc288ce7d796d59eb683a422d6f5b81",
+      "digest_parity": true
+    },
+    {
+      "path": "scripts/verify_g16_06_rsv2_08_receipts.py",
+      "source_receipt": "phase24",
+      "bytes": 17847,
+      "expected_sha256": "9cc3b10c25e1f8bea70f666baafa9fc5b554abc129529b7e1116e7d6f37e24fa",
+      "actual_sha256": "9cc3b10c25e1f8bea70f666baafa9fc5b554abc129529b7e1116e7d6f37e24fa",
+      "digest_parity": true
+    },
+    {
+      "path": "scripts/tests/test_verify_g16_06_rsv2_08_receipts.py",
+      "source_receipt": "phase24",
+      "bytes": 24538,
+      "expected_sha256": "b57728d98bbe09b35c409a33464faad76c8c689229adb1cb0cc1029c61084726",
+      "actual_sha256": "b57728d98bbe09b35c409a33464faad76c8c689229adb1cb0cc1029c61084726",
+      "digest_parity": true
+    }
+  ]
+}

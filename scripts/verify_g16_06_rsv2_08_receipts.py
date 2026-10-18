@@ -23,6 +23,7 @@ CROSS_CHECK_SHA256 = '5d6c1e1b4046a537ccbecd7f64a9e887b2aa384dd8eed5fdb0b15acbc7
 SCRIPT_INVENTORY = INVENTORY.parent / 'phase24_script_test_inventory_audit.json'
 SCRIPT_FILES = ('scripts/verify_g16_06_rsv2_08_receipts.py',
                 'scripts/tests/test_verify_g16_06_rsv2_08_receipts.py')
+SCRIPT_CROSS_CHECK = INVENTORY.parent / 'phase25_script_and_inventory_cross_check_audit.json'
 HOST_PATH_PATTERN = re.compile(r'/(?:home|Users|tmp|root|var/tmp|private/tmp)/|[A-Za-z]:[\\/](?:Users|Temp)[\\/]')
 
 
@@ -161,10 +162,10 @@ def verify_markdown(root=ROOT, document=None):
                 lines=actual['total_lines'], literal_host_path_count=0)
 
 
-def disjoint_index_entries(json_document, markdown_document):
+def disjoint_index_entries(json_document, markdown_document, labels=('json', 'markdown')):
     entries = []
     seen = set()
-    for label, document in [('json', json_document), ('markdown', markdown_document)]:
+    for label, document in zip(labels, (json_document, markdown_document)):
         local = [row['path'] for row in document['files']]
         if len(local) != len(set(local)):
             raise ValueError('Duplicate path within ' + label + ' index')
@@ -258,11 +259,53 @@ def verify_script_inventory(root=ROOT, document=None):
                 ast_test_method_count=actual['total_ast_test_method_count'])
 
 
+def generate_script_cross_check(root):
+    root = Path(root)
+    verify_cross_check(root)
+    verify_script_inventory(root)
+    inputs = []
+    documents = []
+    for path in (CROSS_CHECK, SCRIPT_INVENTORY):
+        data = (root / path).read_bytes()
+        inputs.append(dict(path=path.as_posix(), bytes=len(data), sha256=digest(data)))
+        documents.append(strict_json(data))
+    phase23 = dict(files=[dict(path=row['path'], bytes=row['bytes'], sha256=row['expected_sha256'])
+                          for row in documents[0]['members']])
+    entries = disjoint_index_entries(phase23, documents[1], labels=('phase23', 'phase24'))
+    members = []
+    for label, row in entries:
+        data = (root / row['path']).read_bytes(); actual = digest(data)
+        if actual != row['sha256'] or len(data) != row['bytes']:
+            raise ValueError('Script/inventory member digest or size mismatch: ' + row['path'])
+        members.append(dict(path=row['path'], source_receipt=label, bytes=len(data),
+                            expected_sha256=row['sha256'], actual_sha256=actual, digest_parity=True))
+    return dict(task='G16-06-RSV2-08-p26', study_phase=25,
+                scope='Phase23 member inventory and Phase24 current-script inventory; Phase24 metadata refreshed for authorized source updates.',
+                source_receipts=inputs, phase23_member_count=len(phase23['files']),
+                phase24_member_count=len(documents[1]['files']), unique_member_count=len(members),
+                overlap_paths=[], overlap_count=0, exact_digest_parity=True, digest_mismatch_count=0,
+                total_member_bytes=sum(row['bytes'] for row in members),
+                engineering_qualification_assessed=False, qualified_count=0, full_qualification=False,
+                members=members)
+
+
+def verify_script_cross_check(root=ROOT, document=None):
+    root = Path(root)
+    if document is None:
+        document = strict_json((root / SCRIPT_CROSS_CHECK).read_bytes())
+    actual = generate_script_cross_check(root)
+    if document != actual:
+        raise ValueError('Phase23/24 cross-check metadata or digest parity mismatch')
+    return dict(status='pass', source_receipts=2, unique_members=actual['unique_member_count'],
+                overlap_count=0, digest_mismatch_count=0, exact_digest_parity=True)
+
+
 def verify_all(root=ROOT):
     result = verify(root)
     result['markdown_reports'] = verify_markdown(root)
     result['inventory_cross_check'] = verify_cross_check(root)
     result['script_test_inventory'] = verify_script_inventory(root)
+    result['script_and_inventory_cross_check'] = verify_script_cross_check(root)
     return result
 
 
@@ -272,6 +315,7 @@ def main():
     parser.add_argument('--write-markdown', action='store_true', help='Generate the Markdown index at its pinned baseline')
     parser.add_argument('--write-cross-check', action='store_true', help='Generate the cross-check from the two unchanged frozen indexes')
     parser.add_argument('--write-script-inventory', action='store_true', help='Inventory final script bytes and AST test declarations')
+    parser.add_argument('--write-script-cross-check', action='store_true', help='Cross-check the Phase23 and current Phase24 receipts')
     args = parser.parse_args()
     if args.write:
         import subprocess
@@ -291,6 +335,8 @@ def main():
         (ROOT / CROSS_CHECK).write_text(json.dumps(generate_cross_check(ROOT), indent=2, allow_nan=False) + '\n')
     if args.write_script_inventory:
         (ROOT / SCRIPT_INVENTORY).write_text(json.dumps(generate_script_inventory(ROOT), indent=2, allow_nan=False) + '\n')
+    if args.write_script_cross_check:
+        (ROOT / SCRIPT_CROSS_CHECK).write_text(json.dumps(generate_script_cross_check(ROOT), indent=2, allow_nan=False) + '\n')
     print(json.dumps(verify_all(), sort_keys=True, allow_nan=False))
 
 
