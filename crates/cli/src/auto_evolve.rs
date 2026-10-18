@@ -257,7 +257,7 @@ fn spawn_offspring_batch(
                         child.v[genome::RING_WALL] = rng.range(6.02, 6.22).clamp(b[genome::RING_WALL].0, b[genome::RING_WALL].1);
                         child.v[genome::GRIP_DX] = -0.4;
                         child.v[genome::WIN_N] = 1.0;
-                        child.v[genome::WIN_S0] = 0.65_f64.clamp(b[genome::WIN_S0].0, b[genome::WIN_S0].1);
+                        child.v[genome::WIN_S0] = 0.50_f64.clamp(b[genome::WIN_S0].0, b[genome::WIN_S0].1);
                         child.v[genome::WIN_S1] = 0.85_f64.clamp(b[genome::WIN_S1].0, b[genome::WIN_S1].1);
                         child.v[genome::WIN_W] = 3.8_f64.clamp(b[genome::WIN_W].0, b[genome::WIN_W].1);
                         child.v[genome::WIN_FILL] = 0.72_f64.clamp(b[genome::WIN_FILL].0, b[genome::WIN_FILL].1);
@@ -1242,7 +1242,7 @@ mod tests {
         assert!((21.6..=22.0).contains(&child.v[EA_IN]));
         assert!((21.6..=22.0).contains(&child.v[EA_SP]));
         assert_eq!(child.v[genome::WIN_N], 1.0);
-        assert_eq!(child.v[genome::WIN_S0], 0.65_f64.clamp(bounds[genome::WIN_S0].0, bounds[genome::WIN_S0].1));
+        assert_eq!(child.v[genome::WIN_S0], 0.50);
         assert_eq!(child.v[genome::WIN_S1], 0.85_f64.clamp(bounds[genome::WIN_S1].0, bounds[genome::WIN_S1].1));
         assert_eq!(child.v[genome::WIN_W], 3.8);
         assert_eq!(child.v[genome::WIN_FILL], 0.72);
