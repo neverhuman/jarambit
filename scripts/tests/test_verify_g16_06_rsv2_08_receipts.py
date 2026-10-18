@@ -909,5 +909,101 @@ class Hex64DigestFormatTests(unittest.TestCase):
         self.assertEqual((ROOT / 'COMMS.md').read_bytes(),before)
 
 
+class CanonicalPathExistenceTests(unittest.TestCase):
+    def document(self):
+        return audit.strict_json((ROOT / audit.CANONICAL_PATH_AUDIT).read_bytes())
+
+    def test_exact_live_coverage_tracking_and_honest_failure_result(self):
+        import subprocess
+        d = self.document(); result = audit.verify_canonical_path_audit()
+        self.assertEqual(result['audit_integrity'],'pass'); self.assertEqual(result['status'],'fail')
+        self.assertEqual([r['phase'] for r in d['files']],list(range(15,33)))
+        self.assertEqual(d['file_count'],18); self.assertEqual(d['phase_count'],18)
+        tracked = set(subprocess.run(['git','ls-files','-z'],cwd=ROOT,check=True,capture_output=True).stdout.decode().split('\0'))
+        references = []
+        for row in d['files']:
+            data = (ROOT / row['path']).read_bytes()
+            self.assertEqual(row['bytes'],len(data)); self.assertEqual(row['sha256'],audit.digest(data))
+            self.assertEqual(row['reference_count'],len(row['references'])); references.extend(row['references'])
+        self.assertEqual(d['reference_count'],len(references))
+        self.assertEqual(d['unique_path_count'],len({r['path'] for r in references}))
+        self.assertEqual(d['total_bytes'],sum(r['bytes'] for r in d['files']))
+        for row in d['paths']:
+            self.assertEqual(row['tracked'],row['path'] in tracked)
+            self.assertEqual(row['exists_as_file'],(ROOT / row['path']).is_file())
+            self.assertEqual(row['passes'],row['canonical'] and row['resolves_within_repo'] and row['tracked'] and row['exists_as_file'])
+            self.assertEqual(row['reference_count'],sum(r['path']==row['path'] for r in references))
+        self.assertEqual(d['failed_paths'],[r['path'] for r in d['paths'] if not r['passes']])
+        self.assertIn('experiments/G16-06-RSV2-08/PHASE1.md',d['failed_paths'])
+        self.assertGreater(d['untracked_path_count'],0); self.assertFalse(d['all_references_resolve_to_existing_tracked_files'])
+
+    def test_recursive_literal_keys_values_and_pointer_escaping(self):
+        d = {'sha256':{'src/lib.rs':'a'*64},'rows':['Cargo.lock','../missing.json','./src/lib.rs'],
+             'json_pointer':'/files/0/path','scope':'describes phase15..32/file paths',
+             'name':'strict_json.reject_constant','version':'0.22.0'}
+        rows = audit.canonical_path_references(d)
+        self.assertEqual(rows,[dict(json_pointer='/rows/0',kind='value',path='Cargo.lock'),
+                               dict(json_pointer='/rows/1',kind='value',path='../missing.json'),
+                               dict(json_pointer='/rows/2',kind='value',path='./src/lib.rs'),
+                               dict(json_pointer='/sha256/src~1lib.rs',kind='key',path='src/lib.rs')])
+
+    def test_existing_untracked_missing_directory_traversal_and_symlink(self):
+        base = ROOT / 'target/G16-06-RSV2-08/phase34'; base.mkdir(parents=True,exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=base) as temp:
+            outer = Path(temp); root = outer / 'repo'; root.mkdir()
+            (root / 'tracked.json').write_text('{}'); (root / 'untracked.json').write_text('{}')
+            (root / 'directory.json').mkdir(); (outer / 'outside.json').write_text('{}')
+            (root / 'escape.json').symlink_to(outer / 'outside.json')
+            tracked = {'tracked.json','missing.json','directory.json','escape.json'}
+            self.assertTrue(audit.canonical_path_record(root,'tracked.json',tracked)['passes'])
+            for relative in ['untracked.json','missing.json','directory.json','../outside.json','./tracked.json','escape.json']:
+                with self.subTest(relative=relative):
+                    self.assertFalse(audit.canonical_path_record(root,relative,tracked)['passes'])
+            self.assertFalse(audit.canonical_path_record(root,'escape.json',tracked)['resolves_within_repo'])
+            self.assertFalse(audit.canonical_path_record(root,'../outside.json',tracked)['canonical'])
+
+    def test_forged_success_path_coverage_source_digest_and_counts_rejected(self):
+        for field,value in [('all_references_resolve_to_existing_tracked_files',True),('failure_count',0),('reference_count',0)]:
+            d = self.document(); d[field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError,'Canonical path coverage'):
+                audit.verify_canonical_path_audit(document=d)
+        d = self.document(); d['files'][0]['sha256'] = '0'*64
+        with self.assertRaisesRegex(ValueError,'source digest'): audit.verify_canonical_path_audit(document=d)
+        for field in ['files','paths','failed_paths']:
+            d = self.document(); d[field].pop()
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError,'Canonical path coverage'):
+                audit.verify_canonical_path_audit(document=d)
+
+    def test_missing_receipt_byte_changes_and_live_file_changes_rejected(self):
+        real = Path.read_bytes; victim = ROOT / audit.HEX64_DIGEST_AUDIT
+        def missing(path):
+            if path == victim: raise FileNotFoundError(path)
+            return real(path)
+        with patch.object(Path,'read_bytes',new=missing), self.assertRaises(FileNotFoundError):
+            audit.verify_canonical_path_audit()
+        def changed(path):
+            data = real(path)
+            return data+b' ' if path == victim else data
+        with patch.object(Path,'read_bytes',new=changed), self.assertRaisesRegex(ValueError,'Canonical path coverage'):
+            audit.verify_canonical_path_audit()
+        is_file = Path.is_file; absent = ROOT / 'Cargo.lock'
+        def removed(path): return False if path == absent else is_file(path)
+        with patch.object(Path,'is_file',new=removed), self.assertRaisesRegex(ValueError,'live existence/tracking'):
+            audit.verify_canonical_path_audit()
+
+    def test_cli_exits_nonzero_and_static_outputs_comms_unchanged(self):
+        d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
+        self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
+        for path in [ROOT / audit.CANONICAL_PATH_AUDIT,ROOT / audit.INVENTORY.parent / 'PHASE33.md']:
+            self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
+        before = (ROOT / 'COMMS.md').read_bytes()
+        with patch.object(sys,'argv',['verifier','--verify-canonical-paths']), patch('builtins.print') as printed, self.assertRaises(SystemExit) as error:
+            audit.main()
+        self.assertEqual(error.exception.code,1)
+        result = audit.strict_json(printed.call_args.args[0])
+        self.assertEqual(result['status'],'fail'); self.assertEqual(result['canonical_path_existence']['audit_integrity'],'pass')
+        self.assertEqual((ROOT / 'COMMS.md').read_bytes(),before)
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

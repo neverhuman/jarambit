@@ -31,6 +31,7 @@ ASSERTION_INVENTORY = INVENTORY.parent / 'phase29_verifier_assertion_inventory_a
 JSON_SCHEMA_KEYSET_AUDIT = INVENTORY.parent / 'phase30_json_schema_keyset_audit.json'
 MARKDOWN_HEADING_AUDIT = INVENTORY.parent / 'phase31_markdown_heading_consistency_audit.json'
 HEX64_DIGEST_AUDIT = INVENTORY.parent / 'phase32_hex64_digest_format_audit.json'
+CANONICAL_PATH_AUDIT = INVENTORY.parent / 'phase33_canonical_path_existence_audit.json'
 HOST_PATH_PATTERN = re.compile(r'/(?:home|Users|tmp|root|var/tmp|private/tmp)/|[A-Za-z]:[\\/](?:Users|Temp)[\\/]')
 
 
@@ -653,6 +654,77 @@ def verify_hex64_digest_audit(root=ROOT, document=None):
     return dict(status='pass',receipts=17,sha256_fields=actual['sha256_field_count'],invalid_fields=0)
 
 
+def canonical_receipt_paths():
+    return hex64_receipt_paths() + [(32,HEX64_DIGEST_AUDIT)]
+
+
+def canonical_path_references(document):
+    references = []
+    def candidate(value):
+        return isinstance(value,str) and re.fullmatch(r'(?:[A-Za-z0-9_.-]+/)*[A-Za-z0-9_.-]+\.[A-Za-z][A-Za-z0-9_-]*',value) is not None and (
+            '/' in value or PurePosixPath(value).suffix in {'.md','.json','.py','.rs','.csv','.toml','.lock','.step','.sh','.txt','.stl','.obj','.yaml','.yml'})
+    def visit(value, pointer=''):
+        if isinstance(value,dict):
+            for key,child in sorted(value.items()):
+                child_pointer = pointer+'/'+key.replace('~','~0').replace('/','~1')
+                if candidate(key): references.append(dict(json_pointer=child_pointer,kind='key',path=key))
+                visit(child,child_pointer)
+        elif isinstance(value,list):
+            for i,child in enumerate(value): visit(child,pointer+'/'+str(i))
+        elif candidate(value): references.append(dict(json_pointer=pointer,kind='value',path=value))
+    visit(document)
+    return references
+
+
+def canonical_path_record(root, relative, tracked):
+    root = Path(root).resolve()
+    path = PurePosixPath(relative)
+    canonical = not path.is_absolute() and '..' not in path.parts and '\\' not in relative and path.as_posix() == relative
+    target = root / relative
+    within = canonical and target.resolve().is_relative_to(root)
+    exists = within and target.is_file()
+    return dict(path=relative,canonical=canonical,resolves_within_repo=within,exists_as_file=exists,
+                tracked=relative in tracked,passes=canonical and within and exists and relative in tracked)
+
+
+def generate_canonical_path_audit(root):
+    import subprocess
+    root = Path(root)
+    verify_hex64_digest_audit(root)
+    raw = subprocess.run(['git','-C',str(root),'ls-files','--cached','-z'],check=True,capture_output=True).stdout
+    tracked = set(raw.decode('utf-8').split('\0')) - {''}
+    files = []; counts = {}
+    for phase,path in canonical_receipt_paths():
+        data = (root / path).read_bytes(); document = strict_json(data)
+        if not isinstance(document,dict): raise ValueError('Path audit receipt must be a top-level JSON object')
+        references = canonical_path_references(document)
+        for row in references: counts[row['path']] = counts.get(row['path'],0)+1
+        files.append(dict(phase=phase,path=path.as_posix(),bytes=len(data),sha256=digest(data),
+                          reference_count=len(references),references=references))
+    paths = [dict(**canonical_path_record(root,relative,tracked),reference_count=counts[relative]) for relative in sorted(counts)]
+    failures = [row['path'] for row in paths if not row['passes']]
+    return dict(task='G16-06-RSV2-08-p34',study_phase=33,
+                scope='File-looking repository-relative literal keys and values in Phase15..32 receipts; live Git index, no optional-evidence exceptions.',
+                phase_count=18,file_count=len(files),total_bytes=sum(r['bytes'] for r in files),
+                reference_count=sum(counts.values()),unique_path_count=len(paths),failure_count=len(failures),
+                missing_file_count=sum(not r['exists_as_file'] for r in paths),
+                untracked_path_count=sum(not r['tracked'] for r in paths),
+                all_references_resolve_to_existing_tracked_files=not failures,failed_paths=failures,
+                engineering_qualification_assessed=False,qualified_count=0,full_qualification=False,files=files,paths=paths)
+
+
+def verify_canonical_path_audit(root=ROOT, document=None):
+    root = Path(root)
+    if document is None:
+        document = strict_json((root / CANONICAL_PATH_AUDIT).read_bytes())
+    actual = generate_canonical_path_audit(root)
+    if document != actual:
+        raise ValueError('Canonical path coverage, source digest or live existence/tracking metadata mismatch')
+    return dict(status='pass' if not actual['failure_count'] else 'fail',audit_integrity='pass',receipts=18,
+                references=actual['reference_count'],unique_paths=actual['unique_path_count'],
+                failed_paths=actual['failure_count'],missing_files=actual['missing_file_count'],untracked_paths=actual['untracked_path_count'])
+
+
 def verify_all(root=ROOT):
     result = verify(root)
     result['markdown_reports'] = verify_markdown(root)
@@ -683,6 +755,8 @@ def main():
     parser.add_argument('--write-json-keysets', action='store_true', help='Audit top-level JSON keys across Phase15..29 receipts')
     parser.add_argument('--write-markdown-headings', action='store_true', help='Audit Phase15..30 report heading structure')
     parser.add_argument('--write-hex64-digests', action='store_true', help='Audit SHA256 field format across Phase15..31 receipts')
+    parser.add_argument('--write-canonical-paths', action='store_true', help='Write live Git-backed Phase15..32 path audit, including failures')
+    parser.add_argument('--verify-canonical-paths', action='store_true', help='Verify live path audit; exit nonzero for any missing/untracked reference')
     args = parser.parse_args()
     if args.write:
         import subprocess
@@ -718,7 +792,15 @@ def main():
         (ROOT / MARKDOWN_HEADING_AUDIT).write_text(json.dumps(generate_markdown_heading_audit(ROOT), indent=2, allow_nan=False) + '\n')
     if args.write_hex64_digests:
         (ROOT / HEX64_DIGEST_AUDIT).write_text(json.dumps(generate_hex64_digest_audit(ROOT), indent=2, allow_nan=False) + '\n')
-    print(json.dumps(verify_all(), sort_keys=True, allow_nan=False))
+    if args.write_canonical_paths:
+        (ROOT / CANONICAL_PATH_AUDIT).write_text(json.dumps(generate_canonical_path_audit(ROOT), indent=2, allow_nan=False) + '\n')
+    result = verify_all()
+    if args.write_canonical_paths or args.verify_canonical_paths:
+        result['canonical_path_existence'] = verify_canonical_path_audit()
+        result['status'] = result['canonical_path_existence']['status']
+    print(json.dumps(result, sort_keys=True, allow_nan=False))
+    if result['status'] != 'pass':
+        raise SystemExit(1)
 
 
 if __name__ == '__main__':

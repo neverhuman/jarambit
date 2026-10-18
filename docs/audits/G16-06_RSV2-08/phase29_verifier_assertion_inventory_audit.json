@@ -6,21 +6,21 @@
   "sources": [
     {
       "path": "scripts/verify_g16_06_rsv2_08_receipts.py",
-      "bytes": 40612,
-      "sha256": "8c74ee580413a3d36cd4bd7ca1c63d18c41cddb44d75b7080c46e06d98c0307f"
+      "bytes": 45742,
+      "sha256": "38cc3a605f421012004fe03cd1da523cb37243a4fbf59d55015080493219edae"
     },
     {
       "path": "scripts/tests/test_verify_g16_06_rsv2_08_receipts.py",
-      "bytes": 56403,
-      "sha256": "738d9a0ea9348d8fe795a986031f199ebcece911642a52aed81116bc1c6b2ca3"
+      "bytes": 63286,
+      "sha256": "8243f25b2d4731caabff5383210a5c814fb697f5db46cb62cd93b9dd2673333e"
     }
   ],
-  "check_function_count": 29,
+  "check_function_count": 32,
   "check_functions": [
     {
       "name": "safe_path",
-      "line": 48,
-      "end_line": 54,
+      "line": 49,
+      "end_line": 55,
       "raise_statement_count": 2,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -28,8 +28,8 @@
     },
     {
       "name": "strict_json.reject_constant",
-      "line": 58,
-      "end_line": 59,
+      "line": 59,
+      "end_line": 60,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 0,
@@ -37,8 +37,8 @@
     },
     {
       "name": "strict_json.finite_float",
-      "line": 60,
-      "end_line": 64,
+      "line": 61,
+      "end_line": 65,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 1,
@@ -46,8 +46,8 @@
     },
     {
       "name": "finite_number_counts.visit",
-      "line": 71,
-      "end_line": 80,
+      "line": 72,
+      "end_line": 81,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 5,
@@ -55,8 +55,8 @@
     },
     {
       "name": "generate",
-      "line": 85,
-      "end_line": 107,
+      "line": 86,
+      "end_line": 108,
       "raise_statement_count": 3,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -64,8 +64,8 @@
     },
     {
       "name": "verify",
-      "line": 110,
-      "end_line": 122,
+      "line": 111,
+      "end_line": 123,
       "raise_statement_count": 2,
       "assert_statement_count": 0,
       "if_statement_count": 3,
@@ -73,8 +73,8 @@
     },
     {
       "name": "markdown_record",
-      "line": 125,
-      "end_line": 131,
+      "line": 126,
+      "end_line": 132,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 1,
@@ -82,8 +82,8 @@
     },
     {
       "name": "generate_markdown",
-      "line": 134,
-      "end_line": 155,
+      "line": 135,
+      "end_line": 156,
       "raise_statement_count": 4,
       "assert_statement_count": 0,
       "if_statement_count": 4,
@@ -91,8 +91,8 @@
     },
     {
       "name": "verify_markdown",
-      "line": 158,
-      "end_line": 169,
+      "line": 159,
+      "end_line": 170,
       "raise_statement_count": 2,
       "assert_statement_count": 0,
       "if_statement_count": 3,
@@ -100,8 +100,8 @@
     },
     {
       "name": "disjoint_index_entries",
-      "line": 172,
-      "end_line": 184,
+      "line": 173,
+      "end_line": 185,
       "raise_statement_count": 2,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -109,8 +109,8 @@
     },
     {
       "name": "generate_cross_check",
-      "line": 187,
-      "end_line": 217,
+      "line": 188,
+      "end_line": 218,
       "raise_statement_count": 2,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -118,8 +118,8 @@
     },
     {
       "name": "verify_cross_check",
-      "line": 220,
-      "end_line": 231,
+      "line": 221,
+      "end_line": 232,
       "raise_statement_count": 2,
       "assert_statement_count": 0,
       "if_statement_count": 3,
@@ -127,8 +127,8 @@
     },
     {
       "name": "verify_script_inventory",
-      "line": 258,
-      "end_line": 266,
+      "line": 259,
+      "end_line": 267,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -136,8 +136,8 @@
     },
     {
       "name": "generate_script_cross_check",
-      "line": 269,
-      "end_line": 296,
+      "line": 270,
+      "end_line": 297,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 1,
@@ -145,8 +145,8 @@
     },
     {
       "name": "verify_script_cross_check",
-      "line": 299,
-      "end_line": 307,
+      "line": 300,
+      "end_line": 308,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -154,8 +154,8 @@
     },
     {
       "name": "verify_summary_manifest",
-      "line": 333,
-      "end_line": 339,
+      "line": 334,
+      "end_line": 340,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -163,8 +163,8 @@
     },
     {
       "name": "manifest_parity_record",
-      "line": 342,
-      "end_line": 357,
+      "line": 343,
+      "end_line": 358,
       "raise_statement_count": 4,
       "assert_statement_count": 0,
       "if_statement_count": 4,
@@ -172,8 +172,8 @@
     },
     {
       "name": "verify_manifest_cross_check",
-      "line": 387,
-      "end_line": 394,
+      "line": 388,
+      "end_line": 395,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -181,8 +181,8 @@
     },
     {
       "name": "cumulative_receipt_record",
-      "line": 407,
-      "end_line": 413,
+      "line": 408,
+      "end_line": 414,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 1,
@@ -190,8 +190,8 @@
     },
     {
       "name": "verify_cumulative_receipt_index",
-      "line": 428,
-      "end_line": 434,
+      "line": 429,
+      "end_line": 435,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -199,8 +199,8 @@
     },
     {
       "name": "verify_assertion_inventory",
-      "line": 492,
-      "end_line": 499,
+      "line": 493,
+      "end_line": 500,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -208,8 +208,8 @@
     },
     {
       "name": "json_schema_key_record",
-      "line": 502,
-      "end_line": 509,
+      "line": 503,
+      "end_line": 510,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 1,
@@ -217,8 +217,8 @@
     },
     {
       "name": "verify_json_schema_keyset_audit",
-      "line": 531,
-      "end_line": 538,
+      "line": 532,
+      "end_line": 539,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -226,8 +226,8 @@
     },
     {
       "name": "generate_markdown_heading_audit",
-      "line": 578,
-      "end_line": 589,
+      "line": 579,
+      "end_line": 590,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 1,
@@ -235,8 +235,8 @@
     },
     {
       "name": "verify_markdown_heading_audit",
-      "line": 592,
-      "end_line": 599,
+      "line": 593,
+      "end_line": 600,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -244,8 +244,8 @@
     },
     {
       "name": "hex64_digest_fields.visit",
-      "line": 609,
-      "end_line": 620,
+      "line": 610,
+      "end_line": 621,
       "raise_statement_count": 2,
       "assert_statement_count": 0,
       "if_statement_count": 4,
@@ -253,8 +253,8 @@
     },
     {
       "name": "hex64_receipt_record",
-      "line": 625,
-      "end_line": 631,
+      "line": 626,
+      "end_line": 632,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 1,
@@ -262,8 +262,26 @@
     },
     {
       "name": "verify_hex64_digest_audit",
-      "line": 646,
-      "end_line": 653,
+      "line": 647,
+      "end_line": 654,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 2,
+      "verification_entrypoint": true
+    },
+    {
+      "name": "generate_canonical_path_audit",
+      "line": 690,
+      "end_line": 713,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 1,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "verify_canonical_path_audit",
+      "line": 716,
+      "end_line": 725,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -271,19 +289,28 @@
     },
     {
       "name": "verify_all",
-      "line": 656,
-      "end_line": 669,
+      "line": 728,
+      "end_line": 741,
       "raise_statement_count": 0,
       "assert_statement_count": 0,
       "if_statement_count": 0,
       "verification_entrypoint": true
+    },
+    {
+      "name": "main",
+      "line": 744,
+      "end_line": 803,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 15,
+      "verification_entrypoint": false
     }
   ],
-  "verification_entrypoint_count": 13,
-  "raise_statement_count": 43,
+  "verification_entrypoint_count": 14,
+  "raise_statement_count": 46,
   "assert_statement_count": 0,
-  "test_class_count": 12,
-  "test_method_count": 77,
+  "test_class_count": 13,
+  "test_method_count": 83,
   "test_classes": [
     {
       "name": "JsonInventoryTests",
@@ -432,6 +459,18 @@
         "test_forged_field_values_pointers_counts_and_coverage_rejected",
         "test_missing_and_byte_changed_receipt_rejected",
         "test_static_outputs_and_comms_unchanged"
+      ]
+    },
+    {
+      "name": "CanonicalPathExistenceTests",
+      "test_method_count": 6,
+      "test_methods": [
+        "test_exact_live_coverage_tracking_and_honest_failure_result",
+        "test_recursive_literal_keys_values_and_pointer_escaping",
+        "test_existing_untracked_missing_directory_traversal_and_symlink",
+        "test_forged_success_path_coverage_source_digest_and_counts_rejected",
+        "test_missing_receipt_byte_changes_and_live_file_changes_rejected",
+        "test_cli_exits_nonzero_and_static_outputs_comms_unchanged"
       ]
     }
   ],

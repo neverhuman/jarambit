@@ -4,7 +4,7 @@
   "scope": "Exact current Phase21..25 report and JSON receipt bytes; Phase24/25 source-dependent metadata refreshed.",
   "phase_count": 5,
   "file_count": 10,
-  "total_bytes": 53632,
+  "total_bytes": 53633,
   "total_lines": 1167,
   "literal_host_path_count": 0,
   "engineering_qualification_assessed": false,
@@ -78,8 +78,8 @@
       "phase": 24,
       "kind": "json",
       "path": "docs/audits/G16-06_RSV2-08/phase24_script_test_inventory_audit.json",
-      "bytes": 1007,
-      "sha256": "3cc69a87aa4c48763ac658d77923fa7cbe96be07535a560759bbc8b60e77b984",
+      "bytes": 1008,
+      "sha256": "ce68820f39f3d7714aabd7b7a104e6affb6fb05db817dd33cb1bd7dc59c81625",
       "line_count": 28,
       "literal_host_path_count": 0
     },
@@ -97,7 +97,7 @@
       "kind": "json",
       "path": "docs/audits/G16-06_RSV2-08/phase25_script_and_inventory_cross_check_audit.json",
       "bytes": 12389,
-      "sha256": "92ef609e53b81fac02e44b508a47f57228f32413d03a4a8fdb58f20c3f748f54",
+      "sha256": "9f9de6e2d002ec2f8ed7874bd4909f3e22528f9b5fdca5cf2cbc20e2b7e6b223",
       "line_count": 286,
       "literal_host_path_count": 0
     }
