@@ -224,7 +224,27 @@ fn spawn_offspring_batch(
                         child.v[EA_IN] = 14.0_f64.clamp(b[EA_IN].0, b[EA_IN].1);
                         child.v[FUL_D] = 0.5_f64.clamp(b[FUL_D].0, b[FUL_D].1);
                     }
-                    7 => child.v[genome::RING_WALL] = rng.range(6.0, 6.05),
+                    7 => {
+                        // Distal-window armB neighborhood from the V7 prototype target.
+                        child.v[genome::WIN_N] = 1.0;
+                        child.v[genome::WIN_S0] = rng.range(0.495, 0.499)
+                            .clamp(b[genome::WIN_S0].0, b[genome::WIN_S0].1);
+                        child.v[genome::WIN_S1] = rng.range(0.82, 0.85)
+                            .clamp(b[genome::WIN_S1].0, b[genome::WIN_S1].1);
+                        child.v[genome::WIN_W] = rng.range(3.01, 3.10)
+                            .clamp(b[genome::WIN_W].0, b[genome::WIN_W].1);
+                        child.v[genome::WIN_FILL] = 0.65_f64
+                            .clamp(b[genome::WIN_FILL].0, b[genome::WIN_FILL].1);
+                        child.v[TAPER_X0] = rng.range(143.5, 144.5)
+                            .clamp(b[TAPER_X0].0, b[TAPER_X0].1);
+                        child.v[T_TIP] = rng.range(2.78, 2.82)
+                            .clamp(b[T_TIP].0, b[T_TIP].1);
+                        child.v[genome::RING_WALL] = rng.range(6.38, 6.42)
+                            .clamp(b[genome::RING_WALL].0, b[genome::RING_WALL].1);
+                        child.v[genome::RING_ID] = rng.range(24.91, 24.99)
+                            .clamp(b[genome::RING_ID].0, b[genome::RING_ID].1);
+                        child.v[genome::GRIP_DX] = -0.4;
+                    }
                     8 => {
                         child.v[T_TIP] = rng.range(2.62, 2.75);
                         child.v[genome::WIN_W] = 6.0;
@@ -1295,6 +1315,42 @@ mod tests {
                 );
             }
         }
+    }
+
+    #[test]
+    fn q7_armb_distal_window_offspring_stays_in_bounds_and_passes_gates() {
+        let mut parent = Genome::c4_seed(genome::T_MIN);
+        parent.v[EDGE_TH] = 0.18;
+        parent.clamp();
+        let children = spawn_offspring_batch(
+            &[("armB".into(), parent)],
+            8,
+            1,
+            &mut Rng(20261018),
+        );
+        let child = &children[7].1;
+        let bounds = genome::bounds();
+
+        assert_eq!(child.v[genome::WIN_N], 1.0);
+        assert!((0.495..0.5).contains(&child.v[genome::WIN_S0]));
+        assert!((3.01..3.10).contains(&child.v[genome::WIN_W]));
+        assert!((143.5..144.5).contains(&child.v[TAPER_X0]));
+        assert!((2.78..2.82).contains(&child.v[T_TIP]));
+        assert!((6.38..6.42).contains(&child.v[genome::RING_WALL]));
+        assert!((24.91..24.99).contains(&child.v[genome::RING_ID]));
+        for (idx, &value) in child.v.iter().enumerate() {
+            if idx == EDGE_TH {
+                assert!((0.12..=0.20).contains(&value));
+            } else {
+                assert!(
+                    (bounds[idx].0..=bounds[idx].1).contains(&value),
+                    "gene {idx} outside legal bounds: {value}"
+                );
+            }
+        }
+        let phenotype = pheno::build(child);
+        let rejects = gates::check(child, &phenotype);
+        assert!(rejects.is_empty(), "armB gate rejects: {rejects:?}");
     }
 
     #[test]
