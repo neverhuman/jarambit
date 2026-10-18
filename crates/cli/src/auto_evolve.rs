@@ -1843,6 +1843,13 @@ mod tests {
     }
 
     #[test]
+    fn round_parent_identities_returns_empty_for_empty_elite_slice() {
+        let identities = round_parent_identities(&[]);
+
+        assert!(identities.is_empty());
+    }
+
+    #[test]
     fn round_parent_identities_tracks_carried_elite_and_offspring_indices_across_rounds() {
         let genome_at = |index: usize| {
             let mut genome = Genome::c4_seed(genome::T_MIN);
