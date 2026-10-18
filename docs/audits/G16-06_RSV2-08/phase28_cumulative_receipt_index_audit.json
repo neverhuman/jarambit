@@ -1,0 +1,130 @@
+{
+  "task": "G16-06-RSV2-08-p29",
+  "study_phase": 28,
+  "scope": "Exact current Phase15..27 JSON receipts; source-dependent metadata refreshed through Phase27.",
+  "phase_count": 13,
+  "file_count": 13,
+  "total_bytes": 488084,
+  "engineering_qualification_assessed": false,
+  "qualified_count": 0,
+  "full_qualification": false,
+  "files": [
+    {
+      "phase": 15,
+      "path": "experiments/G16-06-RSV2-08/phase15_gate_s_compliant_joint_audit.json",
+      "bytes": 33243,
+      "sha256": "205a359a7e9f1cd7065b5a35da7b1491fa6a37356a6e20473c4fff9451bfd51d",
+      "valid_json": true,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 16,
+      "path": "experiments/G16-06-RSV2-08/phase16_cross_phase_provenance_index.json",
+      "bytes": 5327,
+      "sha256": "34f93fd138eacbe2be39690febb26478b443f22ecb75bbd87734e4daab465120",
+      "valid_json": true,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 17,
+      "path": "experiments/G16-06-RSV2-08/phase17_legacy_path_inventory.json",
+      "bytes": 121352,
+      "sha256": "9d2d21d0d3c89be4ef84089b1548ca6dd9d21f65af43b5930820437c96c6ad15",
+      "valid_json": true,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 18,
+      "path": "experiments/G16-06-RSV2-08/phase18_complete_study_manifest.json",
+      "bytes": 9886,
+      "sha256": "1b5c2d6deb189b419d330d8166e0f20a0fb9f92c12f73b01e0bf3d369e3b7a52",
+      "valid_json": true,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 19,
+      "path": "experiments/G16-06-RSV2-08/phase19_solver_environment_audit.json",
+      "bytes": 72253,
+      "sha256": "73d85168599a1f41ddc9c9a533184d231ae293daa4a70eaffc4a12fba926716d",
+      "valid_json": true,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 20,
+      "path": "experiments/G16-06-RSV2-08/phase20_candidate_csv_schema_audit.json",
+      "bytes": 198150,
+      "sha256": "59548ae6e1a65c98bd6fb69535756ddb05511b1858a6d36b1073c6a73ab3f594",
+      "valid_json": true,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 21,
+      "path": "docs/audits/G16-06_RSV2-08/phase21_measurement_json_inventory_audit.json",
+      "bytes": 9672,
+      "sha256": "6de32c8ba3c3a90c535b9eb5caff8766f8f00eb7511c584c114cf6a4b1cd63fa",
+      "valid_json": true,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 22,
+      "path": "docs/audits/G16-06_RSV2-08/phase22_markdown_report_digest_index.json",
+      "bytes": 790,
+      "sha256": "7c81cebd99494529cbc1978df11ffc3f0136b2f837f42232d816ef7239df5f5a",
+      "valid_json": true,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 23,
+      "path": "docs/audits/G16-06_RSV2-08/phase23_inventory_cross_check_audit.json",
+      "bytes": 11793,
+      "sha256": "5d6c1e1b4046a537ccbecd7f64a9e887b2aa384dd8eed5fdb0b15acbc76e1784",
+      "valid_json": true,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 24,
+      "path": "docs/audits/G16-06_RSV2-08/phase24_script_test_inventory_audit.json",
+      "bytes": 1007,
+      "sha256": "1ffc05bb96f11565dc8529ed2bea866b35ca137ed6c05cf928909d545aabcd26",
+      "valid_json": true,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 25,
+      "path": "docs/audits/G16-06_RSV2-08/phase25_script_and_inventory_cross_check_audit.json",
+      "bytes": 12389,
+      "sha256": "11d49d6675e3a4a5595f8ce7ea4e34477c65eb8edc6ace6042e44db5a383ac5a",
+      "valid_json": true,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 26,
+      "path": "docs/audits/G16-06_RSV2-08/phase26_summary_manifest_audit.json",
+      "bytes": 3334,
+      "sha256": "eebabb203fc0eaa5f9fda9d9eff359e6a161218871a1feb6fbfc8a34dd569df9",
+      "valid_json": true,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 27,
+      "path": "docs/audits/G16-06_RSV2-08/phase27_manifest_cross_check_audit.json",
+      "bytes": 8888,
+      "sha256": "eb2246b63c05965d88f0c3a1a5bbd005285b640a3ba742caded6624292af5bbb",
+      "valid_json": true,
+      "qualified_count": 0,
+      "full_qualification": false
+    }
+  ]
+}

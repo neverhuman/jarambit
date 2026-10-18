@@ -179,7 +179,7 @@ class MarkdownReportIndexTests(unittest.TestCase):
             files += [r['path'] for r in self.document()['files']]
             for relative in [*files, audit.INVENTORY.as_posix(), audit.MARKDOWN_INDEX.as_posix(), audit.CROSS_CHECK.as_posix(),
                              audit.SCRIPT_INVENTORY.as_posix(), audit.SCRIPT_CROSS_CHECK.as_posix(), *audit.SCRIPT_FILES,
-                             audit.SUMMARY_MANIFEST.as_posix(), audit.MANIFEST_CROSS_CHECK.as_posix(),
+                             audit.SUMMARY_MANIFEST.as_posix(), audit.MANIFEST_CROSS_CHECK.as_posix(), audit.CUMULATIVE_RECEIPT_INDEX.as_posix(),
                              *[path.as_posix() for _,_,path in audit.summary_paths()]]:
                 target = root / relative; target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(ROOT / relative, target)
@@ -197,6 +197,7 @@ class MarkdownReportIndexTests(unittest.TestCase):
                 self.assertEqual(result['script_and_inventory_cross_check']['unique_members'],32)
                 self.assertEqual(result['phase21_to_25_summary']['files'],10)
                 self.assertEqual(result['manifest_cross_check']['receipt_references'],4)
+                self.assertEqual(result['cumulative_receipt_index']['files'],13)
             victim = root / self.document()['files'][0]['path']; original = victim.read_bytes()
             def absent(path, *args, **kwargs):
                 if path == victim: raise FileNotFoundError(path)
@@ -534,6 +535,66 @@ class ManifestLiveCrossCheckTests(unittest.TestCase):
         self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
         for path in [ROOT / audit.MANIFEST_CROSS_CHECK,ROOT / audit.INVENTORY.parent / 'PHASE27.md']:
             self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
+
+
+class CumulativeReceiptIndexTests(unittest.TestCase):
+    def document(self):
+        return audit.strict_json((ROOT / audit.CUMULATIVE_RECEIPT_INDEX).read_bytes())
+
+    def test_exact_thirteen_receipt_coverage_digests_and_bytes(self):
+        d = self.document(); self.assertEqual(audit.verify_cumulative_receipt_index()['files'],13)
+        self.assertEqual([row['phase'] for row in d['files']],list(range(15,28)))
+        self.assertEqual([(row['phase'],row['path']) for row in d['files']],
+                         [(phase,path.as_posix()) for phase,path in audit.cumulative_receipt_paths()])
+        for row in d['files']:
+            data = (ROOT / row['path']).read_bytes()
+            self.assertEqual(row['sha256'],audit.digest(data)); self.assertEqual(row['bytes'],len(data))
+            self.assertTrue(row['valid_json']); audit.strict_json(data)
+        self.assertEqual(d['total_bytes'],sum(row['bytes'] for row in d['files']))
+
+    def test_omission_duplicate_wrong_phase_and_path_rejected(self):
+        original = self.document()
+        for mutate in [lambda d:d['files'].pop(), lambda d:d['files'].append(copy.deepcopy(d['files'][0])),
+                       lambda d:d['files'][0].__setitem__('phase',14), lambda d:d['files'][0].__setitem__('path','../unexpected.json')]:
+            d = copy.deepcopy(original); mutate(d)
+            with self.assertRaisesRegex(ValueError,'Cumulative receipt phase coverage'):
+                audit.verify_cumulative_receipt_index(document=d)
+
+    def test_forged_hash_size_and_qualification_rejected(self):
+        for key,value in [('sha256','0'*64),('bytes',0),('qualified_count',1),('full_qualification',True)]:
+            d = self.document(); d['files'][0][key] = value
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError,'Cumulative receipt phase coverage'):
+                audit.verify_cumulative_receipt_index(document=d)
+
+    def test_source_qualification_claims_rejected(self):
+        for phase,document in [(15,dict(all_gate_qualification=True)),
+                               (16,dict(full_qualification=True,qualified_count=0)),
+                               (16,dict(full_qualification=False,qualified_count=1))]:
+            with self.subTest(phase=phase,document=document), self.assertRaisesRegex(ValueError,'qualification changed'):
+                audit.cumulative_receipt_record(audit.json.dumps(document).encode(),phase,Path('receipt.json'))
+
+    def test_missing_and_byte_changed_receipt_rejected(self):
+        real = Path.read_bytes; victim = ROOT / audit.MANIFEST_CROSS_CHECK
+        def missing(path):
+            if path == victim: raise FileNotFoundError(path)
+            return real(path)
+        with patch.object(Path,'read_bytes',new=missing), self.assertRaises(FileNotFoundError):
+            audit.verify_cumulative_receipt_index()
+        def changed(path):
+            data = real(path)
+            return data+b' ' if path == victim else data
+        with patch.object(Path,'read_bytes',new=changed), self.assertRaisesRegex(ValueError,'Cumulative receipt phase coverage'):
+            audit.verify_cumulative_receipt_index()
+
+    def test_static_scope_outputs_and_comms_unchanged(self):
+        d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
+        for row in [d,*d['files']]:
+            self.assertEqual(row['qualified_count'],0); self.assertFalse(row['full_qualification'])
+        for path in [ROOT / audit.CUMULATIVE_RECEIPT_INDEX,ROOT / audit.INVENTORY.parent / 'PHASE28.md']:
+            self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
+        before = (ROOT / 'COMMS.md').read_bytes()
+        audit.verify_cumulative_receipt_index()
+        self.assertEqual((ROOT / 'COMMS.md').read_bytes(),before)
 
 
 if __name__ == '__main__':

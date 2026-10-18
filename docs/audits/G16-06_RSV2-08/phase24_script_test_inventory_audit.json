@@ -4,25 +4,25 @@
   "scope": "Exact final verifier and test source bytes; AST only, no source execution.",
   "test_method_definition": "Direct class FunctionDef/AsyncFunctionDef declarations whose names start with test_; standalone and nested helper functions excluded.",
   "file_count": 2,
-  "total_bytes": 55924,
-  "total_ast_test_method_count": 47,
+  "total_bytes": 62528,
+  "total_ast_test_method_count": 53,
   "engineering_qualification_assessed": false,
   "qualified_count": 0,
   "full_qualification": false,
   "files": [
     {
       "path": "scripts/verify_g16_06_rsv2_08_receipts.py",
-      "bytes": 23905,
-      "sha256": "efb755d65b8fc0bf4d2d67646a0036b4fb7bcc354fd2192eb7999c6a3e3a5666",
+      "bytes": 26585,
+      "sha256": "57ea4aa0338e420ccedd154adf5624e1c734e50356e06cc9518c33b58a0c1af7",
       "valid_python_ast": true,
       "ast_test_method_count": 0
     },
     {
       "path": "scripts/tests/test_verify_g16_06_rsv2_08_receipts.py",
-      "bytes": 32019,
-      "sha256": "909832e214e2bbbff59ea590db5808a42f6710639652c4ea0d2b1d5842deaa80",
+      "bytes": 35943,
+      "sha256": "ccf9e8e033c1ade72a027b972f32d51c1388a2fd1a2f77bd88d89cd9a199dfe6",
       "valid_python_ast": true,
-      "ast_test_method_count": 47
+      "ast_test_method_count": 53
     }
   ]
 }

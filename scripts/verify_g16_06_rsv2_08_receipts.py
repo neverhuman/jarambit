@@ -26,6 +26,7 @@ SCRIPT_FILES = ('scripts/verify_g16_06_rsv2_08_receipts.py',
 SCRIPT_CROSS_CHECK = INVENTORY.parent / 'phase25_script_and_inventory_cross_check_audit.json'
 SUMMARY_MANIFEST = INVENTORY.parent / 'phase26_summary_manifest_audit.json'
 MANIFEST_CROSS_CHECK = INVENTORY.parent / 'phase27_manifest_cross_check_audit.json'
+CUMULATIVE_RECEIPT_INDEX = INVENTORY.parent / 'phase28_cumulative_receipt_index_audit.json'
 HOST_PATH_PATTERN = re.compile(r'/(?:home|Users|tmp|root|var/tmp|private/tmp)/|[A-Za-z]:[\\/](?:Users|Temp)[\\/]')
 
 
@@ -389,6 +390,46 @@ def verify_manifest_cross_check(root=ROOT, document=None):
                 digest_mismatch_count=0, byte_mismatch_count=0)
 
 
+def cumulative_receipt_paths():
+    older = ('phase15_gate_s_compliant_joint_audit.json', 'phase16_cross_phase_provenance_index.json',
+             'phase17_legacy_path_inventory.json', 'phase18_complete_study_manifest.json',
+             'phase19_solver_environment_audit.json', 'phase20_candidate_csv_schema_audit.json')
+    paths = tuple(Path('experiments/G16-06-RSV2-08') / name for name in older)
+    paths += (INVENTORY, MARKDOWN_INDEX, CROSS_CHECK, SCRIPT_INVENTORY, SCRIPT_CROSS_CHECK,
+              SUMMARY_MANIFEST, MANIFEST_CROSS_CHECK)
+    return list(zip(range(15,28), paths))
+
+
+def cumulative_receipt_record(data, phase, path):
+    document = strict_json(data)
+    flag = document['all_gate_qualification'] if phase == 15 else document['full_qualification']
+    if flag is not False or (phase > 15 and document['qualified_count'] != 0):
+        raise ValueError('Cumulative receipt qualification changed')
+    return dict(phase=phase, path=path.as_posix(), bytes=len(data), sha256=digest(data),
+                valid_json=True, qualified_count=0, full_qualification=False)
+
+
+def generate_cumulative_receipt_index(root):
+    root = Path(root)
+    verify_manifest_cross_check(root)
+    files = [cumulative_receipt_record((root / path).read_bytes(),phase,path)
+             for phase,path in cumulative_receipt_paths()]
+    return dict(task='G16-06-RSV2-08-p29', study_phase=28,
+                scope='Exact current Phase15..27 JSON receipts; source-dependent metadata refreshed through Phase27.',
+                phase_count=13, file_count=len(files), total_bytes=sum(row['bytes'] for row in files),
+                engineering_qualification_assessed=False, qualified_count=0, full_qualification=False,
+                files=files)
+
+
+def verify_cumulative_receipt_index(root=ROOT, document=None):
+    root = Path(root)
+    if document is None:
+        document = strict_json((root / CUMULATIVE_RECEIPT_INDEX).read_bytes())
+    if document != generate_cumulative_receipt_index(root):
+        raise ValueError('Cumulative receipt phase coverage, SHA-256, bytes or metadata mismatch')
+    return dict(status='pass', phases=13, files=13, qualified_count=0, full_qualification=False)
+
+
 def verify_all(root=ROOT):
     result = verify(root)
     result['markdown_reports'] = verify_markdown(root)
@@ -397,6 +438,7 @@ def verify_all(root=ROOT):
     result['script_and_inventory_cross_check'] = verify_script_cross_check(root)
     result['phase21_to_25_summary'] = verify_summary_manifest(root)
     result['manifest_cross_check'] = verify_manifest_cross_check(root)
+    result['cumulative_receipt_index'] = verify_cumulative_receipt_index(root)
     return result
 
 
@@ -409,6 +451,7 @@ def main():
     parser.add_argument('--write-script-cross-check', action='store_true', help='Cross-check the Phase23 and current Phase24 receipts')
     parser.add_argument('--write-summary', action='store_true', help='Summarize the exact Phase21..25 reports and receipts')
     parser.add_argument('--write-manifest-cross-check', action='store_true', help='Cross-check the Phase26 summary against live files and receipt references')
+    parser.add_argument('--write-cumulative-index', action='store_true', help='Index the exact Phase15..27 receipt digests and byte sizes')
     args = parser.parse_args()
     if args.write:
         import subprocess
@@ -434,6 +477,8 @@ def main():
         (ROOT / SUMMARY_MANIFEST).write_text(json.dumps(generate_summary_manifest(ROOT), indent=2, allow_nan=False) + '\n')
     if args.write_manifest_cross_check:
         (ROOT / MANIFEST_CROSS_CHECK).write_text(json.dumps(generate_manifest_cross_check(ROOT), indent=2, allow_nan=False) + '\n')
+    if args.write_cumulative_index:
+        (ROOT / CUMULATIVE_RECEIPT_INDEX).write_text(json.dumps(generate_cumulative_receipt_index(ROOT), indent=2, allow_nan=False) + '\n')
     print(json.dumps(verify_all(), sort_keys=True, allow_nan=False))
 
 
