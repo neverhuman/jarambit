@@ -24,7 +24,11 @@ AESTHETIC_GCI_TASK = "G16-12-RSV2-04-p32"
 BATTERY_G1_TASK = "G16-12-RSV2-04-p33"
 FEM_BENCH_TASK = "G16-12-RSV2-04-p34"
 CLI_BENCH_TASK = "G16-12-RSV2-04-p35"
-TASK = "G16-12-RSV2-04-p36"
+CRESCENT_CORE_TASK = "G16-12-RSV2-04-p36"
+TASK = "G16-12-RSV2-04-p37"
+CLI_MAIN_REPORT = "docs/audit/CLI_MAIN_SOURCE_PROVENANCE_AUDIT.md"
+CLI_MAIN_JSON = "docs/audit/cli_main_source_provenance_audit.json"
+CLI_MAIN_SOURCES = ("crates/cli/src/main.rs", "crates/cli/src/lib.rs")
 CRESCENT_CORE_REPORT = "docs/audit/CRESCENT_CORE_SOURCE_PROVENANCE_AUDIT.md"
 CRESCENT_CORE_JSON = "docs/audit/crescent_core_source_provenance_audit.json"
 CRESCENT_CORE_SOURCES = ("crates/crescent/src/lib.rs", "crates/crescent/src/genome.rs")
@@ -150,11 +154,11 @@ def digest_inventory(module, root, *, task=DIGEST_TASK, sources=DIGEST_SOURCES):
             "source_files": [record(module, root, path) for path in sources]}
 
 
-def fem_bench_inventory(module, root):
+def missing_source_inventory(module, root, *, task, sources):
     """Record a missing assigned input explicitly; never substitute another file."""
     rows = []
     missing = []
-    for path in FEM_BENCH_SOURCES:
+    for path in sources:
         try:
             row = record(module, root, path)
         except FileNotFoundError:
@@ -162,11 +166,15 @@ def fem_bench_inventory(module, root):
             missing.append(path)
         row["availability"] = "missing" if path in missing else "present"
         rows.append(row)
-    return {"schema_version": 1, "task": FEM_BENCH_TASK, "status": STATUS, "qualified_count": 0,
+    return {"schema_version": 1, "task": task, "status": STATUS, "qualified_count": 0,
             "assignment_outcome": "PARTIAL" if missing else "COMPLETE",
             "scope": "Static source byte provenance only", "source_count": len(rows),
             "present_source_count": len(rows) - len(missing), "missing_sources": missing,
             "source_files": rows}
+
+
+def fem_bench_inventory(module, root):
+    return missing_source_inventory(module, root, task=FEM_BENCH_TASK, sources=FEM_BENCH_SOURCES)
 
 
 def verify(root):
@@ -189,11 +197,11 @@ def verify(root):
             "unsupported index schema")
     require(index["task"] == TASK, "unexpected task")
     diagnostic(index)
-    require(type(index["report_count"]) is int and index["report_count"] == 26,
-            "expected twenty-six reports")
-    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT, CRESCENT_REPORT, CERT_EXPORT_REPORT, AESTHETIC_GCI_REPORT, BATTERY_G1_REPORT, FEM_BENCH_REPORT, CLI_BENCH_REPORT, CRESCENT_CORE_REPORT]
+    require(type(index["report_count"]) is int and index["report_count"] == 27,
+            "expected twenty-seven reports")
+    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT, CRESCENT_REPORT, CERT_EXPORT_REPORT, AESTHETIC_GCI_REPORT, BATTERY_G1_REPORT, FEM_BENCH_REPORT, CLI_BENCH_REPORT, CRESCENT_CORE_REPORT, CLI_MAIN_REPORT]
     require(len(m.REPORTS) == 15, "expected fifteen historical reports")
-    require(isinstance(index["reports"], list) and len(index["reports"]) == 26,
+    require(isinstance(index["reports"], list) and len(index["reports"]) == 27,
             "report coverage mismatch")
     for row, path in zip(index["reports"], expected):
         require(isinstance(row, dict) and row.get("path") == path,
@@ -212,7 +220,8 @@ def verify(root):
                                                    record(m, root, BATTERY_G1_JSON),
                                                    record(m, root, FEM_BENCH_JSON),
                                                    record(m, root, CLI_BENCH_JSON),
-                                                   record(m, root, CRESCENT_CORE_JSON)],
+                                                   record(m, root, CRESCENT_CORE_JSON),
+                                                   record(m, root, CLI_MAIN_JSON)],
             "supplemental fingerprint mismatch")
     contract = read_json(CONTRACT)
     require(set(contract) == {"schema_version", "task", "status", "qualified_count",
@@ -305,21 +314,30 @@ def verify(root):
             and "qualified_count: 0" in cli_bench_text.splitlines(), "invalid CLI bench report status")
     crescent_core_digest = read_json(CRESCENT_CORE_JSON)
     require(json.dumps(crescent_core_digest, sort_keys=True) == json.dumps(
-        digest_inventory(m, root, task=TASK, sources=CRESCENT_CORE_SOURCES), sort_keys=True),
+        digest_inventory(m, root, task=CRESCENT_CORE_TASK, sources=CRESCENT_CORE_SOURCES), sort_keys=True),
         "source fingerprint mismatch: crescent core digest metadata")
     crescent_core_text = m.portable_path(root, CRESCENT_CORE_REPORT).read_text(encoding="utf-8")
     require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in crescent_core_text.splitlines()
             and "qualified_count: 0" in crescent_core_text.splitlines(), "invalid crescent core report status")
+    cli_main_digest = read_json(CLI_MAIN_JSON)
+    require(json.dumps(cli_main_digest, sort_keys=True) == json.dumps(
+        missing_source_inventory(m, root, task=TASK, sources=CLI_MAIN_SOURCES), sort_keys=True),
+        "source fingerprint mismatch: CLI main digest metadata")
+    cli_main_text = m.portable_path(root, CLI_MAIN_REPORT).read_text(encoding="utf-8")
+    require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in cli_main_text.splitlines()
+            and "qualified_count: 0" in cli_main_text.splitlines(), "invalid CLI main report status")
     for path in expected + [INDEX, CONTRACT, MANIFEST_JSON, DIGEST_JSON, CLI_JSON,
                             CRESCENT_JSON, CERT_EXPORT_JSON, AESTHETIC_GCI_JSON,
                             BATTERY_G1_JSON, FEM_BENCH_JSON, CLI_BENCH_JSON,
-                            CRESCENT_CORE_JSON, SELF, LEGACY]:
+                            CRESCENT_CORE_JSON, CLI_MAIN_JSON, SELF, LEGACY]:
         require(m.FORBIDDEN_HOME not in m.portable_path(root, path).read_text(encoding="utf-8"),
                 "literal host prefix")
     require(m.verify(root) == 15, "historical index mismatch")
-    return {"task": TASK, "status": STATUS, "assignment_outcome": "COMPLETE",
+    return {"task": TASK, "status": STATUS, "assignment_outcome": cli_main_digest["assignment_outcome"],
             "prior_fem_bench_assignment_outcome": fem_bench_digest["assignment_outcome"],
-            "qualified_count": 0, "reports": 26, "source_files": 2,
+            "qualified_count": 0, "reports": 27, "source_files": 2,
+            "cli_main_source_files": cli_main_digest["present_source_count"],
+            "cli_main_missing_sources": cli_main_digest["missing_sources"],
             "crescent_core_source_files": len(CRESCENT_CORE_SOURCES),
             "cli_bench_source_files": len(CLI_BENCH_SOURCES),
             "fem_bench_source_files": fem_bench_digest["present_source_count"],
