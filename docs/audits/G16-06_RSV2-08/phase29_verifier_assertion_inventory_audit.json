@@ -1,0 +1,342 @@
+{
+  "task": "G16-06-RSV2-08-p30",
+  "study_phase": 29,
+  "scope": "AST-only verifier guard/verification functions and test declarations; no runtime coverage claim.",
+  "function_selection": "Own-scope explicit Raise/Assert statements or verify/verify_* name; nested function/class/lambda bodies excluded from parent counts.",
+  "sources": [
+    {
+      "path": "scripts/verify_g16_06_rsv2_08_receipts.py",
+      "bytes": 30829,
+      "sha256": "c2a394f125fe144326e8e04dc5b5a2cb9ad7feb366dd292481ff86fdf07ff6ca"
+    },
+    {
+      "path": "scripts/tests/test_verify_g16_06_rsv2_08_receipts.py",
+      "bytes": 40271,
+      "sha256": "a4e8c7c19310aadc4150e96cbf49b17dd9cdaa48faee2b63f85eb56a245f49e8"
+    }
+  ],
+  "check_function_count": 22,
+  "check_functions": [
+    {
+      "name": "safe_path",
+      "line": 45,
+      "end_line": 51,
+      "raise_statement_count": 2,
+      "assert_statement_count": 0,
+      "if_statement_count": 2,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "strict_json.reject_constant",
+      "line": 55,
+      "end_line": 56,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 0,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "strict_json.finite_float",
+      "line": 57,
+      "end_line": 61,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 1,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "finite_number_counts.visit",
+      "line": 68,
+      "end_line": 77,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 5,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "generate",
+      "line": 82,
+      "end_line": 104,
+      "raise_statement_count": 3,
+      "assert_statement_count": 0,
+      "if_statement_count": 2,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "verify",
+      "line": 107,
+      "end_line": 119,
+      "raise_statement_count": 2,
+      "assert_statement_count": 0,
+      "if_statement_count": 3,
+      "verification_entrypoint": true
+    },
+    {
+      "name": "markdown_record",
+      "line": 122,
+      "end_line": 128,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 1,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "generate_markdown",
+      "line": 131,
+      "end_line": 152,
+      "raise_statement_count": 4,
+      "assert_statement_count": 0,
+      "if_statement_count": 4,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "verify_markdown",
+      "line": 155,
+      "end_line": 166,
+      "raise_statement_count": 2,
+      "assert_statement_count": 0,
+      "if_statement_count": 3,
+      "verification_entrypoint": true
+    },
+    {
+      "name": "disjoint_index_entries",
+      "line": 169,
+      "end_line": 181,
+      "raise_statement_count": 2,
+      "assert_statement_count": 0,
+      "if_statement_count": 2,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "generate_cross_check",
+      "line": 184,
+      "end_line": 214,
+      "raise_statement_count": 2,
+      "assert_statement_count": 0,
+      "if_statement_count": 2,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "verify_cross_check",
+      "line": 217,
+      "end_line": 228,
+      "raise_statement_count": 2,
+      "assert_statement_count": 0,
+      "if_statement_count": 3,
+      "verification_entrypoint": true
+    },
+    {
+      "name": "verify_script_inventory",
+      "line": 255,
+      "end_line": 263,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 2,
+      "verification_entrypoint": true
+    },
+    {
+      "name": "generate_script_cross_check",
+      "line": 266,
+      "end_line": 293,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 1,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "verify_script_cross_check",
+      "line": 296,
+      "end_line": 304,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 2,
+      "verification_entrypoint": true
+    },
+    {
+      "name": "verify_summary_manifest",
+      "line": 330,
+      "end_line": 336,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 2,
+      "verification_entrypoint": true
+    },
+    {
+      "name": "manifest_parity_record",
+      "line": 339,
+      "end_line": 354,
+      "raise_statement_count": 4,
+      "assert_statement_count": 0,
+      "if_statement_count": 4,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "verify_manifest_cross_check",
+      "line": 384,
+      "end_line": 391,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 2,
+      "verification_entrypoint": true
+    },
+    {
+      "name": "cumulative_receipt_record",
+      "line": 404,
+      "end_line": 410,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 1,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "verify_cumulative_receipt_index",
+      "line": 425,
+      "end_line": 431,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 2,
+      "verification_entrypoint": true
+    },
+    {
+      "name": "verify_assertion_inventory",
+      "line": 489,
+      "end_line": 496,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 2,
+      "verification_entrypoint": true
+    },
+    {
+      "name": "verify_all",
+      "line": 499,
+      "end_line": 509,
+      "raise_statement_count": 0,
+      "assert_statement_count": 0,
+      "if_statement_count": 0,
+      "verification_entrypoint": true
+    }
+  ],
+  "verification_entrypoint_count": 10,
+  "raise_statement_count": 35,
+  "assert_statement_count": 0,
+  "test_class_count": 9,
+  "test_method_count": 59,
+  "test_classes": [
+    {
+      "name": "JsonInventoryTests",
+      "test_method_count": 10,
+      "test_methods": [
+        "test_complete_snapshot_sizes_hashes_and_finite_values",
+        "test_valid_nested_json_and_strings_are_not_nonfinite_numbers",
+        "test_malformed_json_is_rejected",
+        "test_nonstandard_nonfinite_constants_are_rejected_at_any_depth",
+        "test_json_float_overflow_is_rejected",
+        "test_forged_digest_size_validity_and_qualification_rejected",
+        "test_inventory_digest_is_independently_pinned",
+        "test_scope_coverage_and_nonportable_paths_rejected",
+        "test_static_scope_qualification_and_new_output_paths",
+        "test_relocated_read_only_missing_corrupt_and_nonfinite_inputs"
+      ]
+    },
+    {
+      "name": "MarkdownReportIndexTests",
+      "test_method_count": 7,
+      "test_methods": [
+        "test_index_metrics_and_combined_default_verification",
+        "test_line_count_empty_unterminated_crlf_and_unicode",
+        "test_literal_host_paths_rejected",
+        "test_forged_size_hash_lines_or_host_count_rejected",
+        "test_coverage_and_outside_paths_rejected",
+        "test_index_digest_pin_and_new_files_have_no_literal_host_paths",
+        "test_relocated_combined_read_only_and_missing_corrupt_host_path_reports"
+      ]
+    },
+    {
+      "name": "InventoryCrossCheckTests",
+      "test_method_count": 6,
+      "test_methods": [
+        "test_exact_source_and_member_digest_parity",
+        "test_overlap_rejected_even_when_digests_differ",
+        "test_duplicate_paths_in_either_index_rejected",
+        "test_forged_overlap_counts_and_parity_rejected",
+        "test_cross_audit_and_both_source_index_pins_enforced",
+        "test_static_scope_and_no_literal_host_paths_in_outputs"
+      ]
+    },
+    {
+      "name": "ScriptTestInventoryTests",
+      "test_method_count": 6,
+      "test_methods": [
+        "test_exact_script_hashes_sizes_and_ast_counts",
+        "test_ast_counts_direct_sync_async_and_decorated_methods_without_execution",
+        "test_invalid_python_syntax_is_rejected",
+        "test_forged_bytes_hash_count_and_coverage_rejected",
+        "test_relocated_read_only_missing_and_changed_script",
+        "test_static_scope_and_output_host_path_scan"
+      ]
+    },
+    {
+      "name": "ScriptInventoryCrossCheckTests",
+      "test_method_count": 6,
+      "test_methods": [
+        "test_exact_source_and_all_member_parity",
+        "test_cross_domain_overlap_with_different_digest_rejected",
+        "test_duplicates_within_either_source_rejected",
+        "test_forged_parity_sources_and_counts_rejected",
+        "test_stale_missing_and_changed_source_receipts_rejected",
+        "test_static_scope_and_output_host_paths"
+      ]
+    },
+    {
+      "name": "PhaseSummaryManifestTests",
+      "test_method_count": 6,
+      "test_methods": [
+        "test_complete_five_phase_ten_file_metrics",
+        "test_forged_metrics_and_omitted_file_rejected",
+        "test_forged_paths_are_never_used_as_inputs",
+        "test_missing_report_rejected",
+        "test_changed_and_host_path_injected_report_rejected",
+        "test_static_scope_qualification_and_new_output_host_paths"
+      ]
+    },
+    {
+      "name": "ManifestLiveCrossCheckTests",
+      "test_method_count": 6,
+      "test_methods": [
+        "test_all_live_and_receipt_reference_parity",
+        "test_bad_live_digest_or_size_rejected",
+        "test_receipt_reference_missing_or_disagrees_with_summary_rejected",
+        "test_forged_audit_parity_coverage_and_paths_rejected",
+        "test_missing_live_file_rejected",
+        "test_static_scope_and_new_output_host_paths"
+      ]
+    },
+    {
+      "name": "CumulativeReceiptIndexTests",
+      "test_method_count": 6,
+      "test_methods": [
+        "test_exact_thirteen_receipt_coverage_digests_and_bytes",
+        "test_omission_duplicate_wrong_phase_and_path_rejected",
+        "test_forged_hash_size_and_qualification_rejected",
+        "test_source_qualification_claims_rejected",
+        "test_missing_and_byte_changed_receipt_rejected",
+        "test_static_scope_outputs_and_comms_unchanged"
+      ]
+    },
+    {
+      "name": "VerifierAssertionInventoryTests",
+      "test_method_count": 6,
+      "test_methods": [
+        "test_live_check_functions_sources_and_discovered_test_count",
+        "test_nested_guard_ownership_and_named_dispatcher_selection",
+        "test_invalid_source_syntax_rejected",
+        "test_forged_guard_count_source_digest_and_test_coverage_rejected",
+        "test_missing_inventory_source_rejected",
+        "test_static_outputs_and_comms_unchanged"
+      ]
+    }
+  ],
+  "engineering_qualification_assessed": false,
+  "qualified_count": 0,
+  "full_qualification": false
+}

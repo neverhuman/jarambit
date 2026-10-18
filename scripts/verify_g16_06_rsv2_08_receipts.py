@@ -27,6 +27,7 @@ SCRIPT_CROSS_CHECK = INVENTORY.parent / 'phase25_script_and_inventory_cross_chec
 SUMMARY_MANIFEST = INVENTORY.parent / 'phase26_summary_manifest_audit.json'
 MANIFEST_CROSS_CHECK = INVENTORY.parent / 'phase27_manifest_cross_check_audit.json'
 CUMULATIVE_RECEIPT_INDEX = INVENTORY.parent / 'phase28_cumulative_receipt_index_audit.json'
+ASSERTION_INVENTORY = INVENTORY.parent / 'phase29_verifier_assertion_inventory_audit.json'
 HOST_PATH_PATTERN = re.compile(r'/(?:home|Users|tmp|root|var/tmp|private/tmp)/|[A-Za-z]:[\\/](?:Users|Temp)[\\/]')
 
 
@@ -430,6 +431,71 @@ def verify_cumulative_receipt_index(root=ROOT, document=None):
     return dict(status='pass', phases=13, files=13, qualified_count=0, full_qualification=False)
 
 
+def assertion_function_records(data):
+    tree = ast.parse(data)
+    records = []
+    def owned_nodes(node):
+        for child in ast.iter_child_nodes(node):
+            if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)):
+                continue
+            yield child
+            yield from owned_nodes(child)
+    def functions(node, prefix=''):
+        for child in ast.iter_child_nodes(node):
+            if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                qualified = prefix + child.name
+                nodes = list(owned_nodes(child))
+                raises = sum(isinstance(n, ast.Raise) for n in nodes)
+                asserts = sum(isinstance(n, ast.Assert) for n in nodes)
+                entrypoint = child.name == 'verify' or child.name.startswith('verify_')
+                if raises or asserts or entrypoint:
+                    records.append(dict(name=qualified, line=child.lineno, end_line=child.end_lineno,
+                                        raise_statement_count=raises, assert_statement_count=asserts,
+                                        if_statement_count=sum(isinstance(n,ast.If) for n in nodes),
+                                        verification_entrypoint=entrypoint))
+                functions(child, qualified + '.')
+            elif isinstance(child, ast.ClassDef):
+                functions(child, prefix + child.name + '.')
+            else:
+                functions(child, prefix)
+    functions(tree)
+    return records
+
+
+def generate_assertion_inventory(root):
+    root = Path(root)
+    verify_cumulative_receipt_index(root)
+    verifier = (root / SCRIPT_FILES[0]).read_bytes(); tests = (root / SCRIPT_FILES[1]).read_bytes()
+    functions = assertion_function_records(verifier)
+    classes = []
+    for node in ast.parse(tests).body:
+        if isinstance(node, ast.ClassDef):
+            methods = [method.name for method in node.body
+                       if isinstance(method,(ast.FunctionDef,ast.AsyncFunctionDef)) and method.name.startswith('test_')]
+            if methods:
+                classes.append(dict(name=node.name, test_method_count=len(methods), test_methods=methods))
+    return dict(task='G16-06-RSV2-08-p30', study_phase=29,
+                scope='AST-only verifier guard/verification functions and test declarations; no runtime coverage claim.',
+                function_selection='Own-scope explicit Raise/Assert statements or verify/verify_* name; nested function/class/lambda bodies excluded from parent counts.',
+                sources=[dict(path=path,bytes=len(data),sha256=digest(data)) for path,data in zip(SCRIPT_FILES,(verifier,tests))],
+                check_function_count=len(functions), check_functions=functions,
+                verification_entrypoint_count=sum(row['verification_entrypoint'] for row in functions),
+                raise_statement_count=sum(row['raise_statement_count'] for row in functions),
+                assert_statement_count=sum(row['assert_statement_count'] for row in functions),
+                test_class_count=len(classes), test_method_count=ast_test_method_count(tests), test_classes=classes,
+                engineering_qualification_assessed=False, qualified_count=0, full_qualification=False)
+
+
+def verify_assertion_inventory(root=ROOT, document=None):
+    root = Path(root)
+    if document is None:
+        document = strict_json((root / ASSERTION_INVENTORY).read_bytes())
+    actual = generate_assertion_inventory(root)
+    if document != actual:
+        raise ValueError('Verifier assertion function inventory, source digest or test count mismatch')
+    return dict(status='pass', check_functions=actual['check_function_count'], test_methods=actual['test_method_count'])
+
+
 def verify_all(root=ROOT):
     result = verify(root)
     result['markdown_reports'] = verify_markdown(root)
@@ -439,6 +505,7 @@ def verify_all(root=ROOT):
     result['phase21_to_25_summary'] = verify_summary_manifest(root)
     result['manifest_cross_check'] = verify_manifest_cross_check(root)
     result['cumulative_receipt_index'] = verify_cumulative_receipt_index(root)
+    result['verifier_assertion_inventory'] = verify_assertion_inventory(root)
     return result
 
 
@@ -452,6 +519,7 @@ def main():
     parser.add_argument('--write-summary', action='store_true', help='Summarize the exact Phase21..25 reports and receipts')
     parser.add_argument('--write-manifest-cross-check', action='store_true', help='Cross-check the Phase26 summary against live files and receipt references')
     parser.add_argument('--write-cumulative-index', action='store_true', help='Index the exact Phase15..27 receipt digests and byte sizes')
+    parser.add_argument('--write-assertion-inventory', action='store_true', help='Inventory verifier guard functions and test declarations by AST')
     args = parser.parse_args()
     if args.write:
         import subprocess
@@ -479,6 +547,8 @@ def main():
         (ROOT / MANIFEST_CROSS_CHECK).write_text(json.dumps(generate_manifest_cross_check(ROOT), indent=2, allow_nan=False) + '\n')
     if args.write_cumulative_index:
         (ROOT / CUMULATIVE_RECEIPT_INDEX).write_text(json.dumps(generate_cumulative_receipt_index(ROOT), indent=2, allow_nan=False) + '\n')
+    if args.write_assertion_inventory:
+        (ROOT / ASSERTION_INVENTORY).write_text(json.dumps(generate_assertion_inventory(ROOT), indent=2, allow_nan=False) + '\n')
     print(json.dumps(verify_all(), sort_keys=True, allow_nan=False))
 
 

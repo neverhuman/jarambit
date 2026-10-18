@@ -180,6 +180,7 @@ class MarkdownReportIndexTests(unittest.TestCase):
             for relative in [*files, audit.INVENTORY.as_posix(), audit.MARKDOWN_INDEX.as_posix(), audit.CROSS_CHECK.as_posix(),
                              audit.SCRIPT_INVENTORY.as_posix(), audit.SCRIPT_CROSS_CHECK.as_posix(), *audit.SCRIPT_FILES,
                              audit.SUMMARY_MANIFEST.as_posix(), audit.MANIFEST_CROSS_CHECK.as_posix(), audit.CUMULATIVE_RECEIPT_INDEX.as_posix(),
+                             audit.ASSERTION_INVENTORY.as_posix(),
                              *[path.as_posix() for _,_,path in audit.summary_paths()]]:
                 target = root / relative; target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(ROOT / relative, target)
@@ -198,6 +199,7 @@ class MarkdownReportIndexTests(unittest.TestCase):
                 self.assertEqual(result['phase21_to_25_summary']['files'],10)
                 self.assertEqual(result['manifest_cross_check']['receipt_references'],4)
                 self.assertEqual(result['cumulative_receipt_index']['files'],13)
+                self.assertEqual(result['verifier_assertion_inventory']['test_methods'],audit.ast_test_method_count((root / audit.SCRIPT_FILES[1]).read_bytes()))
             victim = root / self.document()['files'][0]['path']; original = victim.read_bytes()
             def absent(path, *args, **kwargs):
                 if path == victim: raise FileNotFoundError(path)
@@ -594,6 +596,76 @@ class CumulativeReceiptIndexTests(unittest.TestCase):
             self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
         before = (ROOT / 'COMMS.md').read_bytes()
         audit.verify_cumulative_receipt_index()
+        self.assertEqual((ROOT / 'COMMS.md').read_bytes(),before)
+
+
+class VerifierAssertionInventoryTests(unittest.TestCase):
+    def document(self):
+        return audit.strict_json((ROOT / audit.ASSERTION_INVENTORY).read_bytes())
+
+    def test_live_check_functions_sources_and_discovered_test_count(self):
+        d = self.document(); self.assertEqual(audit.verify_assertion_inventory()['status'],'pass')
+        expected = audit.assertion_function_records((ROOT / audit.SCRIPT_FILES[0]).read_bytes())
+        self.assertEqual(d['check_functions'],expected)
+        self.assertIn('verify_assertion_inventory',[row['name'] for row in expected])
+        self.assertEqual(d['check_function_count'],len(expected))
+        discovered = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__]).countTestCases()
+        self.assertEqual(d['test_method_count'],discovered)
+        self.assertEqual(sum(row['test_method_count'] for row in d['test_classes']),discovered)
+        for row in d['sources']:
+            data = (ROOT / row['path']).read_bytes()
+            self.assertEqual(row['sha256'],audit.digest(data)); self.assertEqual(row['bytes'],len(data))
+
+    def test_nested_guard_ownership_and_named_dispatcher_selection(self):
+        source = b'''raise RuntimeError("Never execute")
+def verify_parent():
+    if True: raise ValueError("parent")
+    def child():
+        assert False
+        raise RuntimeError("child")
+    class Nested:
+        def verify_member(self): raise ValueError("member")
+def verify_dispatcher(): pass
+def helper(): return "raise and assert in text"
+'''
+        rows = {row['name']:row for row in audit.assertion_function_records(source)}
+        self.assertEqual(set(rows),{'verify_parent','verify_parent.child','verify_parent.Nested.verify_member','verify_dispatcher'})
+        self.assertEqual((rows['verify_parent']['raise_statement_count'],rows['verify_parent']['assert_statement_count']),(1,0))
+        self.assertEqual((rows['verify_parent.child']['raise_statement_count'],rows['verify_parent.child']['assert_statement_count']),(1,1))
+        self.assertEqual(rows['verify_dispatcher']['raise_statement_count'],0)
+
+    def test_invalid_source_syntax_rejected(self):
+        with self.assertRaises(SyntaxError):
+            audit.assertion_function_records(b'def broken(')
+
+    def test_forged_guard_count_source_digest_and_test_coverage_rejected(self):
+        for key,value in [('check_function_count',0),('test_method_count',0),('raise_statement_count',0)]:
+            d = self.document(); d[key] = value
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError,'assertion function inventory'):
+                audit.verify_assertion_inventory(document=d)
+        for field in ['check_functions','test_classes']:
+            d = self.document(); d[field].pop()
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError,'assertion function inventory'):
+                audit.verify_assertion_inventory(document=d)
+        d = self.document(); d['sources'][0]['sha256'] = '0'*64
+        with self.assertRaisesRegex(ValueError,'source digest'):
+            audit.verify_assertion_inventory(document=d)
+
+    def test_missing_inventory_source_rejected(self):
+        real = Path.read_bytes; victim = ROOT / audit.SCRIPT_FILES[0]
+        def absent(path):
+            if path == victim: raise FileNotFoundError(path)
+            return real(path)
+        with patch.object(Path,'read_bytes',new=absent), self.assertRaises(FileNotFoundError):
+            audit.verify_assertion_inventory()
+
+    def test_static_outputs_and_comms_unchanged(self):
+        d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
+        self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
+        for path in [ROOT / audit.ASSERTION_INVENTORY,ROOT / audit.INVENTORY.parent / 'PHASE29.md']:
+            self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
+        before = (ROOT / 'COMMS.md').read_bytes()
+        audit.verify_assertion_inventory()
         self.assertEqual((ROOT / 'COMMS.md').read_bytes(),before)
 
 

@@ -11,7 +11,7 @@
     {
       "path": "docs/audits/G16-06_RSV2-08/phase24_script_test_inventory_audit.json",
       "bytes": 1007,
-      "sha256": "1ffc05bb96f11565dc8529ed2bea866b35ca137ed6c05cf928909d545aabcd26"
+      "sha256": "6fa75536e45dad883ab2b86c13bfaaeb27d6891440a5083aba4e36c1ad1d86b8"
     }
   ],
   "phase23_member_count": 30,
@@ -21,7 +21,7 @@
   "overlap_count": 0,
   "exact_digest_parity": true,
   "digest_mismatch_count": 0,
-  "total_member_bytes": 18613161,
+  "total_member_bytes": 18621733,
   "engineering_qualification_assessed": false,
   "qualified_count": 0,
   "full_qualification": false,
@@ -269,17 +269,17 @@
     {
       "path": "scripts/verify_g16_06_rsv2_08_receipts.py",
       "source_receipt": "phase24",
-      "bytes": 26585,
-      "expected_sha256": "57ea4aa0338e420ccedd154adf5624e1c734e50356e06cc9518c33b58a0c1af7",
-      "actual_sha256": "57ea4aa0338e420ccedd154adf5624e1c734e50356e06cc9518c33b58a0c1af7",
+      "bytes": 30829,
+      "expected_sha256": "c2a394f125fe144326e8e04dc5b5a2cb9ad7feb366dd292481ff86fdf07ff6ca",
+      "actual_sha256": "c2a394f125fe144326e8e04dc5b5a2cb9ad7feb366dd292481ff86fdf07ff6ca",
       "digest_parity": true
     },
     {
       "path": "scripts/tests/test_verify_g16_06_rsv2_08_receipts.py",
       "source_receipt": "phase24",
-      "bytes": 35943,
-      "expected_sha256": "ccf9e8e033c1ade72a027b972f32d51c1388a2fd1a2f77bd88d89cd9a199dfe6",
-      "actual_sha256": "ccf9e8e033c1ade72a027b972f32d51c1388a2fd1a2f77bd88d89cd9a199dfe6",
+      "bytes": 40271,
+      "expected_sha256": "a4e8c7c19310aadc4150e96cbf49b17dd9cdaa48faee2b63f85eb56a245f49e8",
+      "actual_sha256": "a4e8c7c19310aadc4150e96cbf49b17dd9cdaa48faee2b63f85eb56a245f49e8",
       "digest_parity": true
     }
   ]
