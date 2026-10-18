@@ -161,7 +161,7 @@ def figs(context=None):
     rec_wave = rec_subj.split('_')[0]
     L = [
         f'📄 [White paper](docs/WHITEPAPER.md) · 📐 [Engineering gates & evolution paper](docs/ENGINEERING_GATES_AND_EVOLUTION.md) · '
-        f'📊 [Live status](STATUS.md) · ⚖️ [Patent draft (not filed)](docs/PATENT_DRAFT.md) · 📦 [Release v{v}]({rel}) · 🗺️ [Technology map](TECHNOLOGY_MAP.md)',
+        f'📋 [Work plan](docs/WORKPLAN.md) · 📊 [Live status](STATUS.md) · ⚖️ [Patent draft (not filed)](docs/PATENT_DRAFT.md) · 📦 [Release v{v}]({rel}) · 🗺️ [Technology map](TECHNOLOGY_MAP.md)',
         '',
         f'<img src="{FIG}/fig_readme_mass_vs_wave.png" width="96%" alt="Historical pre-#82 model: selected-candidate mass vs wave w20 through {rec_wave} from committed evidence JSON, with historical screen record {rec_subj} at {em["mass_g"]:.3f} g ({em["mass_3d_g"]:.3f} g 3D) labelled"/>',
         '',
@@ -214,7 +214,7 @@ def release(context=None):
         '- **Full technical papers, tables, and evidence:**',
         f'  - [White paper (`docs/WHITEPAPER.md`)](docs/WHITEPAPER.md) — page-1 summary, `w20`–`{rec_wave}` mass curve, market comparison, `{rec_subj}` 16-gate margin breakdown, and T1→T2 calibration.',
         f'  - [Engineering gates & evolution paper (`docs/ENGINEERING_GATES_AND_EVOLUTION.md`)](docs/ENGINEERING_GATES_AND_EVOLUTION.md) — complete {len(BATTERY_SUBJECTS)}-subject × 18-evaluator CAD battery matrix, Margin-vs-Mass Pareto table, `RS-karambit-v2` gate tables, and 3D CAD/FEM gallery.',
-        f'  - [Live status (`STATUS.md`)](STATUS.md) · [Release notes (`docs/RELEASES.md`)](docs/RELEASES.md) · [Global metric `G1` (`docs/GLOBAL_METRIC.md`)](docs/GLOBAL_METRIC.md) · [Provisional record (`docs/PROVISIONAL.md`)](docs/PROVISIONAL.md) · [Technology map (`TECHNOLOGY_MAP.md`)](TECHNOLOGY_MAP.md).',
+        f'  - [Master work plan (`docs/WORKPLAN.md`)](docs/WORKPLAN.md) · [Live status (`STATUS.md`)](STATUS.md) · [Wave log (`docs/WAVE_LOG.md`)](docs/WAVE_LOG.md) · [Release notes (`docs/RELEASES.md`)](docs/RELEASES.md) · [Global metric `G1` (`docs/GLOBAL_METRIC.md`)](docs/GLOBAL_METRIC.md) · [Provisional record (`docs/PROVISIONAL.md`)](docs/PROVISIONAL.md) · [Technology map (`TECHNOLOGY_MAP.md`)](TECHNOLOGY_MAP.md).',
     ]
     return '\n'.join(L)
 
