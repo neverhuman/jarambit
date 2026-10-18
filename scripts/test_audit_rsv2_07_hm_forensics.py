@@ -1316,5 +1316,147 @@ if False:
         self.assertEqual(error.exception.code, 1)
 
 
+class JsonSchemaKeysetTests(unittest.TestCase):
+    def setUp(self):
+        scratch = Path(__file__).resolve().parents[1] / "target/rsv2-07/phase36/test-fixtures"
+        scratch.mkdir(parents=True, exist_ok=True)
+        temporary = tempfile.TemporaryDirectory(prefix="keysets-", dir=scratch)
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.names = {}
+        self.files = {}
+        for phase in range(19, 36):
+            directory = "experiments/rsv2_07/results/" if phase < 26 else audit.DIRECTORY
+            name = directory + f"phase{phase}_fixture.json"
+            document = {"schema": "fixture", "common": phase, "distinct": None} if phase == 35 else {
+                "schema": "fixture", "common": phase, "nested": {"ignored": True}}
+            data = json.dumps(document).encode() + b"\n"
+            self.names[phase] = name
+            self.files[name] = data
+            self.write(name, data)
+
+    def write(self, name, data):
+        path = self.root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+
+    def cli(self, *extra):
+        with patch.object(sys, "argv", ["forensics", "--phase", "36", "--repo-root", str(self.root), *extra]), \
+                redirect_stdout(io.StringIO()) as output:
+            result = audit.main()
+        return result, output.getvalue()
+
+    def test_all_phases_exact_top_level_keys_groups_frequencies_and_source_hashes(self):
+        current = audit.json_keyset_audit(self.root)
+        self.assertEqual(current["phases"], list(range(19, 36)))
+        self.assertEqual((current["receipt_count"], current["keyset_group_count"]), (17, 2))
+        self.assertEqual(current["common_keys"], ["common", "schema"])
+        self.assertEqual(current["union_keys"], ["common", "distinct", "nested", "schema"])
+        self.assertEqual(current["key_frequencies"], {"common": 17, "distinct": 1, "nested": 16, "schema": 17})
+        self.assertEqual(current["keyset_groups"][0]["receipt_paths"], [self.names[35]])
+        for name, data in self.files.items():
+            row = current["receipts"][name]
+            self.assertEqual((row["sha256"], row["size_bytes"]), (hashlib.sha256(data).hexdigest(), len(data)))
+            self.assertEqual(row["top_level_key_count"], 3)
+            self.assertEqual(row["top_level_keys"], sorted(json.loads(data)))
+        self.assertEqual(current, audit.json_keyset_audit(self.root))
+        self.assertNotIn(str(self.root), json.dumps(current))
+
+    def test_nested_key_or_value_changes_do_not_change_top_level_keyset(self):
+        before = audit.json_keyset_audit(self.root)
+        name = self.names[19]
+        self.write(name, b'{"schema":null,"common":[],"nested":{"other":{"deeper":42}}}')
+        after = audit.json_keyset_audit(self.root)
+        for key in ("top_level_keys", "top_level_key_count", "keyset_group"):
+            self.assertEqual(before["receipts"][name][key], after["receipts"][name][key])
+        self.assertEqual(before["keyset_groups"], after["keyset_groups"])
+        self.assertNotEqual(before["receipts"][name]["sha256"], after["receipts"][name]["sha256"])
+
+    def test_discovery_retains_extra_receipts_but_excludes_wrong_phases_and_other_roots(self):
+        before = audit.json_keyset_audit(self.root)
+        for name in (audit.DIRECTORY + "phase18_fixture.json", audit.KEYSET_RECEIPT,
+                     audit.DIRECTORY + "phase350_fixture.json", audit.DIRECTORY + "PHASE19_fixture.json", "other/phase19_fixture.json"):
+            self.write(name, b"excluded malformed JSON")
+        self.assertEqual(audit.json_keyset_audit(self.root), before)
+        extra = audit.DIRECTORY + "archive/phase25_additional.json"
+        self.write(extra, b'{"common":1,"schema":"another","nested":null}')
+        current = audit.json_keyset_audit(self.root)
+        self.assertEqual(current["receipt_count"], 18)
+        self.assertIn(extra, current["receipts"])
+        self.assertEqual(current["key_frequencies"]["nested"], 17)
+
+    def test_missing_phase_coverage_or_search_directory_fails(self):
+        path = self.root / self.names[19]
+        path.unlink()
+        with self.assertRaisesRegex(ValueError, "coverage must include every phase"):
+            audit.json_keyset_audit(self.root)
+        with patch.object(audit, "KEYSET_ROOTS", ("absent",)), self.assertRaisesRegex(ValueError, "Missing receipt search directory"):
+            audit.json_keyset_audit(self.root)
+
+    def test_nonobject_malformed_duplicate_nonfinite_and_invalid_utf8_fail(self):
+        for data in (b"[]", b"null", b"true", b"3", b'{"x":1,"x":2}', b'{"x":{"k":1,"k":2}}',
+                     b'{"x":NaN}', b'{"x":1e999}', b"{broken}", b"\xff"):
+            self.write(self.names[35], data)
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                audit.json_keyset_audit(self.root)
+
+    def test_changed_receipt_bytes_or_membership_during_scan_fail(self):
+        original_read = Path.read_bytes
+        changed = False
+        def read(path):
+            nonlocal changed
+            data = original_read(path)
+            if path == self.root / self.names[35] and not changed:
+                changed = True
+                path.write_bytes(data + b"\n")
+            return data
+        with patch.object(Path, "read_bytes", new=read), self.assertRaisesRegex(ValueError, "changed during keyset audit"):
+            audit.json_keyset_audit(self.root)
+        names = audit.phase_receipt_paths(self.root)
+        with patch.object(audit, "phase_receipt_paths", side_effect=[names, names + [audit.DIRECTORY + "phase20_added.json"]]), \
+                self.assertRaisesRegex(ValueError, "membership changed"):
+            audit.json_keyset_audit(self.root)
+
+    def test_symlinked_receipt_fails(self):
+        path = self.root / self.names[35]
+        path.unlink()
+        path.symlink_to(Path(self.names[34]).name)
+        with self.assertRaisesRegex(ValueError, "regular keyset source"):
+            audit.json_keyset_audit(self.root)
+
+    def test_cli_writes_only_phase36_outputs_and_readonly_rejects_keyset_tampering(self):
+        with patch.object(audit.subprocess, "check_output", side_effect=AssertionError("Unexpected Git command")):
+            result, output = self.cli("--write")
+            self.assertEqual(result, 0)
+            self.assertIn("LANE: RSV2-07-hm | RSV2-07-p36 | PASS | receipts=17 | keysets=2", output)
+            expected = set(self.files) | {audit.KEYSET_RECEIPT, audit.KEYSET_REPORT}
+            self.assertEqual({path.relative_to(self.root).as_posix() for path in self.root.rglob("*") if path.is_file()}, expected)
+            for name, data in self.files.items():
+                self.assertEqual((self.root / name).read_bytes(), data)
+            with patch.object(Path, "write_text", side_effect=AssertionError("Readonly audit wrote")):
+                self.assertEqual(self.cli()[0], 0)
+            receipt = self.root / audit.KEYSET_RECEIPT
+            original = receipt.read_bytes()
+            for field, value in (("top_level_keys", ["wrong"]), ("top_level_key_count", True), ("sha256", "0" * 64)):
+                saved = json.loads(original)
+                saved["receipts"][self.names[35]][field] = value
+                receipt.write_text(json.dumps(saved))
+                with self.subTest(field=field), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                    self.cli()
+                self.assertEqual(error.exception.code, 1)
+            receipt.write_bytes(original)
+            for name in (audit.KEYSET_RECEIPT, audit.KEYSET_REPORT):
+                audit.require_portable((self.root / name).read_text(), name)
+            self.write(audit.KEYSET_REPORT, b"changed report\n")
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                self.cli()
+            self.assertEqual(error.exception.code, 1)
+
+    def test_artifact_root_is_rejected_for_keyset_audit(self):
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli("--artifact-root", str(self.root))
+        self.assertEqual(error.exception.code, 1)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

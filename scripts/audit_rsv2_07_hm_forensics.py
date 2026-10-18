@@ -43,6 +43,10 @@ PHASE34_PATHS = tuple(sorted((*CUMULATIVE_PATHS, CUMULATIVE_REPORT, CUMULATIVE_R
                               TABLE_PARITY_REPORT, TABLE_PARITY_RECEIPT)))
 SELF_DIGEST_RECEIPT = DIRECTORY + "phase35_verifier_self_digest_audit.json"
 SELF_DIGEST_REPORT = DIRECTORY + "PHASE35_VERIFIER_SELF_DIGEST_AUDIT.md"
+KEYSET_RECEIPT = DIRECTORY + "phase36_json_schema_keyset_audit.json"
+KEYSET_REPORT = DIRECTORY + "PHASE36_JSON_SCHEMA_KEYSET_AUDIT.md"
+KEYSET_ROOTS = ("experiments/rsv2_07", DIRECTORY.rstrip("/"))
+KEYSET_PATTERN = re.compile(r"phase(19|2[0-9]|3[0-5])(?:_[^/]*)?\.json")
 # Absolute POSIX paths, Windows drive paths, UNC paths and file URIs.
 HOST_PATH = re.compile(r"(?<![\w./:])/(?!/)[\w.~-]+|(?<!\w)[A-Za-z]:[\\/]|\\\\[^\\\s]+\\|file://")
 
@@ -331,6 +335,94 @@ def run_self_digest(args):
         require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-35 saved receipt mismatch")
         require((args.repo_root / SELF_DIGEST_REPORT).read_text(encoding="utf-8") == report, "Phase-35 report mismatch")
     print(f"LANE: RSV2-07-hm | RSV2-07-p35 | PASS | scripts={current['script_count']} | functions={current['function_definition_count']} | test_methods={current['test_method_count']}")
+    return 0
+
+
+def phase_receipt_paths(repo_root):
+    repo_root = Path(repo_root)
+    names = []
+    for directory in KEYSET_ROOTS:
+        require((repo_root / directory).is_dir(), "Missing receipt search directory: " + directory)
+        names.extend(path.relative_to(repo_root).as_posix() for path in (repo_root / directory).rglob("phase*.json")
+                     if KEYSET_PATTERN.fullmatch(path.name))
+    return sorted(names)
+
+
+def json_keyset_audit(repo_root):
+    repo_root = Path(repo_root)
+    names = phase_receipt_paths(repo_root)
+    sources, receipts, grouped, frequencies = {}, {}, {}, {}
+    for name in names:
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode), f"Expected regular keyset source: {name}")
+        data = path.read_bytes()
+        document = strict_json(data)
+        require(isinstance(document, dict), "Expected top-level JSON object: " + name)
+        keys = sorted(document)
+        phase = int(KEYSET_PATTERN.fullmatch(path.name)[1])
+        sources[name] = data
+        receipts[name] = {"phase": phase, "sha256": hashlib.sha256(data).hexdigest(), "size_bytes": len(data),
+                          "top_level_key_count": len(keys), "top_level_keys": keys}
+        grouped.setdefault(tuple(keys), []).append(name)
+        for key in keys:
+            frequencies[key] = frequencies.get(key, 0) + 1
+    phases = sorted({row["phase"] for row in receipts.values()})
+    require(phases == list(range(19, 36)), "Receipt coverage must include every phase from 19 through 35")
+    require(phase_receipt_paths(repo_root) == names, "Receipt membership changed during keyset audit")
+    for name, data in sources.items():
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode) and path.read_bytes() == data,
+                "Receipt bytes or type changed during keyset audit")
+    groups = []
+    for number, (keys, paths) in enumerate(sorted(grouped.items()), 1):
+        groups.append({"group": number, "top_level_keys": list(keys), "receipt_paths": paths})
+        for name in paths:
+            receipts[name]["keyset_group"] = number
+    return {"schema": "jarambit.rsv2_07_hm.phase36_json_schema_keyset.v1", "task": "RSV2-07-p36", "status": "pass",
+            "scope": "all phase19 through phase35 JSON receipts recursively beneath the two search roots",
+            "search_roots": list(KEYSET_ROOTS), "phases": phases, "receipt_count": len(receipts),
+            "receipts": receipts, "keyset_group_count": len(groups), "keyset_groups": groups,
+            "union_keys": sorted(frequencies), "common_keys": sorted(key for key, count in frequencies.items() if count == len(receipts)),
+            "key_frequencies": dict(sorted(frequencies.items()))}
+
+
+def render_keysets(document):
+    rows = [f"| {row['phase']} | {name} | {row['top_level_key_count']} | {row['keyset_group']} | {row['size_bytes']} | {row['sha256']} |"
+            for name, row in sorted(document["receipts"].items(), key=lambda item: (item[1]["phase"], item[0]))]
+    groups = [f"- Group {row['group']} ({len(row['receipt_paths'])} {'receipt' if len(row['receipt_paths']) == 1 else 'receipts'}): " + ", ".join(f"`{key}`" for key in row["top_level_keys"])
+              for row in document["keyset_groups"]]
+    return "\n".join([
+        "# Phase-36 JSON schema keyset audit", "",
+        f"**PASS for the key inventory.** Found {document['receipt_count']} JSON receipts covering every phase from 19 through 35, with {document['keyset_group_count']} distinct top-level key sets and {len(document['union_keys'])} distinct keys.", "",
+        "Common top-level keys: " + (", ".join(f"`{key}`" for key in document["common_keys"]) or "none") + ".", "",
+        "| Phase | Repository-relative receipt | Keys | Keyset group | Bytes | SHA-256 |",
+        "| ---: | --- | ---: | ---: | ---: | --- |", *rows, "",
+        "Distinct top-level key sets:", "", *groups, "",
+        "Discovery recursively searches experiments/rsv2_07 and docs/audits/rsv2_07_hm for lowercase phase19 through phase35 JSON filenames, using an exact phase-number boundary. Multiple receipts for a phase are retained individually; at least one receipt per requested phase is required. Other phases and Phase-36 outputs are outside scope. Sources must be regular files and top-level JSON objects. Duplicate keys, nonfinite numbers and malformed JSON fail. Source membership, file types and bytes are checked again after scanning.", "",
+        "Each receipt's sorted top-level keys, key count, byte size, SHA-256 and keyset group are recorded. The JSON also lists the union, intersection and per-key receipt frequencies. Nested keys and values are outside this inventory. Identical key sets do not imply identical value types or semantics. This does not establish compliance with a formal JSON Schema or reassess earlier audit conclusions. Earlier receipts and reports are preserved.", "",
+        "Persisted paths are repository-relative. --repo-root selects a relocated source tree without Git. Normal verification checks the complete saved Phase-36 JSON and exact report text without writes. --write replaces only the two Phase-36 outputs.", "",
+        "```sh", "python3 scripts/audit_rsv2_07_hm_forensics.py --phase 36",
+        "python3 -m unittest discover -s scripts -p 'test_audit_rsv2_07_hm_forensics.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs 14,15 at nice 10. This is a static JSON keyset audit. Changes are left uncommitted.", "",
+    ])
+
+
+def run_keysets(args):
+    require(args.artifact_root is None, "Phase-36 reads receipts in --repo-root; --artifact-root is not supported")
+    current = json_keyset_audit(args.repo_root)
+    report = render_keysets(current)
+    receipt = json.dumps(current, indent=2) + "\n"
+    require_portable(report, "Phase-36 report")
+    require_portable(receipt, "Phase-36 receipt")
+    if args.write:
+        (args.repo_root / DIRECTORY).mkdir(parents=True, exist_ok=True)
+        (args.repo_root / KEYSET_RECEIPT).write_text(receipt, encoding="utf-8")
+        (args.repo_root / KEYSET_REPORT).write_text(report, encoding="utf-8")
+    else:
+        saved = strict_json((args.repo_root / KEYSET_RECEIPT).read_bytes())
+        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-36 saved receipt mismatch")
+        require((args.repo_root / KEYSET_REPORT).read_text(encoding="utf-8") == report, "Phase-36 report mismatch")
+    print(f"LANE: RSV2-07-hm | RSV2-07-p36 | PASS | receipts={current['receipt_count']} | keysets={current['keyset_group_count']}")
     return 0
 
 
@@ -807,11 +899,13 @@ def render(document):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33", "34", "35"), default="26")
+    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36"), default="26")
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     try:
+        if args.phase == "36":
+            return run_keysets(args)
         if args.phase == "35":
             return run_self_digest(args)
         if args.phase == "33":
