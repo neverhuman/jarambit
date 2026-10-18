@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task": "G16-12-RSV2-04-p34",
+  "status": "IN_PROGRESS",
+  "qualified_count": 0,
+  "assignment_outcome": "PARTIAL",
+  "scope": "Static source byte provenance only",
+  "source_count": 2,
+  "present_source_count": 1,
+  "missing_sources": [
+    "crates/crescent/src/bench.rs"
+  ],
+  "source_files": [
+    {
+      "path": "crates/crescent/src/fem.rs",
+      "sha256": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
+      "bytes": 36052,
+      "lines": 500,
+      "availability": "present"
+    },
+    {
+      "path": "crates/crescent/src/bench.rs",
+      "sha256": null,
+      "bytes": null,
+      "lines": null,
+      "availability": "missing"
+    }
+  ]
+}

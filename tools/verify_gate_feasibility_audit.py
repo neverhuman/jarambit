@@ -21,7 +21,11 @@ CLI_TASK = "G16-12-RSV2-04-p29"
 CRESCENT_TASK = "G16-12-RSV2-04-p30"
 CERT_EXPORT_TASK = "G16-12-RSV2-04-p31"
 AESTHETIC_GCI_TASK = "G16-12-RSV2-04-p32"
-TASK = "G16-12-RSV2-04-p33"
+BATTERY_G1_TASK = "G16-12-RSV2-04-p33"
+TASK = "G16-12-RSV2-04-p34"
+FEM_BENCH_REPORT = "docs/audit/FEM_BENCH_SOURCE_PROVENANCE_AUDIT.md"
+FEM_BENCH_JSON = "docs/audit/fem_bench_source_provenance_audit.json"
+FEM_BENCH_SOURCES = ("crates/crescent/src/fem.rs", "crates/crescent/src/bench.rs")
 BATTERY_G1_REPORT = "docs/audit/BATTERY_G1_SOURCE_PROVENANCE_AUDIT.md"
 BATTERY_G1_JSON = "docs/audit/battery_g1_source_provenance_audit.json"
 BATTERY_G1_SOURCES = ("crates/crescent/src/battery.rs", "crates/crescent/src/g1.rs")
@@ -138,6 +142,25 @@ def digest_inventory(module, root, *, task=DIGEST_TASK, sources=DIGEST_SOURCES):
             "source_files": [record(module, root, path) for path in sources]}
 
 
+def fem_bench_inventory(module, root):
+    """Record a missing assigned input explicitly; never substitute another file."""
+    rows = []
+    missing = []
+    for path in FEM_BENCH_SOURCES:
+        try:
+            row = record(module, root, path)
+        except FileNotFoundError:
+            row = {"path": path, "sha256": None, "bytes": None, "lines": None}
+            missing.append(path)
+        row["availability"] = "missing" if path in missing else "present"
+        rows.append(row)
+    return {"schema_version": 1, "task": TASK, "status": STATUS, "qualified_count": 0,
+            "assignment_outcome": "PARTIAL" if missing else "COMPLETE",
+            "scope": "Static source byte provenance only", "source_count": len(rows),
+            "present_source_count": len(rows) - len(missing), "missing_sources": missing,
+            "source_files": rows}
+
+
 def verify(root):
     root = Path(root).resolve()
     m = legacy_verifier(root)
@@ -158,11 +181,11 @@ def verify(root):
             "unsupported index schema")
     require(index["task"] == TASK, "unexpected task")
     diagnostic(index)
-    require(type(index["report_count"]) is int and index["report_count"] == 23,
-            "expected twenty-three reports")
-    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT, CRESCENT_REPORT, CERT_EXPORT_REPORT, AESTHETIC_GCI_REPORT, BATTERY_G1_REPORT]
+    require(type(index["report_count"]) is int and index["report_count"] == 24,
+            "expected twenty-four reports")
+    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT, CRESCENT_REPORT, CERT_EXPORT_REPORT, AESTHETIC_GCI_REPORT, BATTERY_G1_REPORT, FEM_BENCH_REPORT]
     require(len(m.REPORTS) == 15, "expected fifteen historical reports")
-    require(isinstance(index["reports"], list) and len(index["reports"]) == 23,
+    require(isinstance(index["reports"], list) and len(index["reports"]) == 24,
             "report coverage mismatch")
     for row, path in zip(index["reports"], expected):
         require(isinstance(row, dict) and row.get("path") == path,
@@ -178,7 +201,8 @@ def verify(root):
                                                    record(m, root, CRESCENT_JSON),
                                                    record(m, root, CERT_EXPORT_JSON),
                                                    record(m, root, AESTHETIC_GCI_JSON),
-                                                   record(m, root, BATTERY_G1_JSON)],
+                                                   record(m, root, BATTERY_G1_JSON),
+                                                   record(m, root, FEM_BENCH_JSON)],
             "supplemental fingerprint mismatch")
     contract = read_json(CONTRACT)
     require(set(contract) == {"schema_version", "task", "status", "qualified_count",
@@ -250,19 +274,29 @@ def verify(root):
             and "qualified_count: 0" in aesthetic_gci_text.splitlines(), "invalid aesthetic/gci report status")
     battery_g1_digest = read_json(BATTERY_G1_JSON)
     require(json.dumps(battery_g1_digest, sort_keys=True) == json.dumps(
-        digest_inventory(m, root, task=TASK, sources=BATTERY_G1_SOURCES), sort_keys=True),
+        digest_inventory(m, root, task=BATTERY_G1_TASK, sources=BATTERY_G1_SOURCES), sort_keys=True),
         "source fingerprint mismatch: battery/g1 digest metadata")
     battery_g1_text = m.portable_path(root, BATTERY_G1_REPORT).read_text(encoding="utf-8")
     require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in battery_g1_text.splitlines()
             and "qualified_count: 0" in battery_g1_text.splitlines(), "invalid battery/g1 report status")
+    fem_bench_digest = read_json(FEM_BENCH_JSON)
+    require(json.dumps(fem_bench_digest, sort_keys=True) == json.dumps(
+        fem_bench_inventory(m, root), sort_keys=True),
+        "source fingerprint mismatch: fem/bench digest metadata")
+    fem_bench_text = m.portable_path(root, FEM_BENCH_REPORT).read_text(encoding="utf-8")
+    require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in fem_bench_text.splitlines()
+            and "qualified_count: 0" in fem_bench_text.splitlines(), "invalid fem/bench report status")
     for path in expected + [INDEX, CONTRACT, MANIFEST_JSON, DIGEST_JSON, CLI_JSON,
                             CRESCENT_JSON, CERT_EXPORT_JSON, AESTHETIC_GCI_JSON,
-                            BATTERY_G1_JSON, SELF, LEGACY]:
+                            BATTERY_G1_JSON, FEM_BENCH_JSON, SELF, LEGACY]:
         require(m.FORBIDDEN_HOME not in m.portable_path(root, path).read_text(encoding="utf-8"),
                 "literal host prefix")
     require(m.verify(root) == 15, "historical index mismatch")
-    return {"task": TASK, "status": STATUS, "assignment_outcome": "COMPLETE",
-            "qualified_count": 0, "reports": 23, "source_files": 2,
+    return {"task": TASK, "status": STATUS, "assignment_outcome": fem_bench_digest["assignment_outcome"],
+            "qualified_count": 0, "reports": 24, "source_files": 2,
+            "fem_bench_source_files": fem_bench_digest["present_source_count"],
+            "fem_bench_requested_source_files": len(FEM_BENCH_SOURCES),
+            "missing_sources": fem_bench_digest["missing_sources"],
             "battery_g1_source_files": len(BATTERY_G1_SOURCES),
             "aesthetic_gci_source_files": len(AESTHETIC_GCI_SOURCES),
             "cert_export_source_files": len(CERT_EXPORT_SOURCES),

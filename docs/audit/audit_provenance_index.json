@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "task": "G16-12-RSV2-04-p33",
+  "task": "G16-12-RSV2-04-p34",
   "status": "IN_PROGRESS",
   "qualified_count": 0,
-  "report_count": 23,
+  "report_count": 24,
   "reports": [
     {
       "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V5_REPORT.md",
@@ -234,6 +234,16 @@
       "table_schema_sha256": "10c28520d2511883bdd4401d90ed1a5f40c55a50177da02f5f09506ed3cca17b",
       "status": "IN_PROGRESS",
       "qualified_count": 0
+    },
+    {
+      "path": "docs/audit/FEM_BENCH_SOURCE_PROVENANCE_AUDIT.md",
+      "sha256": "4fdbf158da19efa1f277329e5dc668a0a8c24f92c9bcefbd552dae340d784258",
+      "bytes": 3960,
+      "lines": 29,
+      "tables": 1,
+      "table_schema_sha256": "38052eeb38b2ed8a0ad23050c11c8dbc31150224373164f2d60bbb0afb41c7ec",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
     }
   ],
   "supplemental_documents": [
@@ -284,6 +294,12 @@
       "sha256": "2be35162fad5e36f5150bba2775dfc80ef57f7e6ace40da42a673b31a729ce4d",
       "bytes": 607,
       "lines": 23
+    },
+    {
+      "path": "docs/audit/fem_bench_source_provenance_audit.json",
+      "sha256": "b782c8241b28cd452ed15251173b1cc705386003fca53c602c66d44662357240",
+      "bytes": 700,
+      "lines": 29
     }
   ]
 }
