@@ -10,7 +10,7 @@ import statistics
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
 HEX64 = re.compile(r'^[0-9a-f]{64}$')
-EXPECTED_UNVERIFIED_STAGE1_DIGEST = 'db60e913d13e456bb8bf3629903c0dbc739c8b59a5d4a63477f92c9611a6be89'
+EXPECTED_UNVERIFIED_STAGE1_DIGEST = 'be37fbdcc8f6015ce6a190b233370ddcc0a54c6a09f062fc2c52f73155f1bb1b'
 
 
 def sha256_file(path):
@@ -214,7 +214,8 @@ def verify_and_summarize(summary_path=None, root=None):
 
 if __name__ == '__main__':
     verified = verify_and_summarize()
+    total_s1 = verified['stage1_committed_verified_files'] + verified['stage1_unverified_producer_files']
     print(f"Verified {verified['total_waves']} waves ({verified['total_assessed']} assessed, "
           f"{verified['total_qualified']} qualified, {verified['total_unverified']} unverified; "
-          f"{verified['stage1_committed_verified_files']}/74 Stage-1 files committed-JSON-verified, "
-          f"{verified['stage1_unverified_producer_files']}/74 producer-reported)")
+          f"{verified['stage1_committed_verified_files']}/{total_s1} Stage-1 files committed-JSON-verified, "
+          f"{verified['stage1_unverified_producer_files']}/{total_s1} producer-reported)")

@@ -206,6 +206,45 @@ class PdfProvenance(unittest.TestCase):
         self.assertEqual(manifests[0]['output_sha256'], manifests[1]['output_sha256'])
         self.assertEqual(manifests[0]['inputs'], manifests[1]['inputs'])
 
+    def test_verify_reproducible_writes_sha256sums_and_rejects_nondeterminism(self):
+        def capture(command, **kwargs):
+            if command[:3] == ['git', 'rev-parse', 'HEAD']:return self.head+'\n'
+            if command[:2] == ['git', 'show']:return '1792195200\n'
+            if command[:2] == ['pandoc', '--version']:return build_pdf.PINNED_PANDOC_VERSION+'\n'
+            if command[:2] == ['lualatex', '--version']:return build_pdf.PINNED_LUALATEX_VERSION+'\n'
+            return 'neutral tool version\n'
+
+        def render_ok(command, **kwargs):
+            Path(command[command.index('-o')+1]).write_bytes(b'neutral PDF packaging control')
+            return subprocess.CompletedProcess(command, 0)
+
+        with patch.object(build_pdf, 'ROOT', self.root), \
+             patch.object(build_pdf, 'HERE', self.here), \
+             patch.object(build_pdf, '__file__', str(self.here/'build_pdf.py')), \
+             patch.object(build_pdf.subprocess, 'check_output', side_effect=capture), \
+             patch.object(build_pdf.subprocess, 'run', side_effect=render_ok):
+            sums_path = build_pdf.verify_reproducible((NAME,))
+        lines = sums_path.read_text().strip().splitlines()
+        self.assertEqual(len(lines), 2)
+        for line in lines:
+            digest, filename = line.split('  ', 1)
+            self.assertEqual(digest, hashlib.sha256((self.root/'target/paper'/filename).read_bytes()).hexdigest())
+
+        calls = 0
+        def render_nondet(command, **kwargs):
+            nonlocal calls
+            calls += 1
+            Path(command[command.index('-o')+1]).write_bytes(f'neutral pass {calls}'.encode())
+            return subprocess.CompletedProcess(command, 0)
+
+        with patch.object(build_pdf, 'ROOT', self.root), \
+             patch.object(build_pdf, 'HERE', self.here), \
+             patch.object(build_pdf, '__file__', str(self.here/'build_pdf.py')), \
+             patch.object(build_pdf.subprocess, 'check_output', side_effect=capture), \
+             patch.object(build_pdf.subprocess, 'run', side_effect=render_nondet):
+            with self.assertRaisesRegex(RuntimeError, 'Non-reproducible PDF'):
+                build_pdf.verify_reproducible((NAME,))
+
 
 if __name__ == '__main__':unittest.main()
 

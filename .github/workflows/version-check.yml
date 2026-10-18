@@ -21,7 +21,7 @@ jobs:
         shell: bash ops/ci/run_bounded.sh version {0}
     name: VERSION == tag == WHITEPAPER header
     runs-on: [self-hosted, linux, x64, jarambit]  # dedicated jarambit-xbabe2 / jarambit-xbabe3 runners (PR-0.30.0c); the shared neverhuman-lan pool queued for capacity
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -236,4 +236,19 @@ jobs:
           python3 -B -m unittest discover -s assurance/tests -p test_history_observation.py -v
           python3 -B -m unittest discover -s assurance/tests -p test_laboratory.py -v
           python3 -B -m unittest discover -s research/science_v1 -p "test_*.py" -v
+      - name: Build publication PDFs twice and verify byte-identical SHA-256
+        run: |
+          python3 -B ops/render/paper/build_pdf.py --verify-reproducible
+          (cd target/paper && sha256sum -c SHA256SUMS)
+      - name: Upload publication PDFs and SHA-256 manifest artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: publication-pdfs
+          path: |
+            target/paper/WHITEPAPER.pdf
+            target/paper/ENGINEERING_GATES_AND_EVOLUTION.pdf
+            target/paper/WHITEPAPER.pdf.manifest.json
+            target/paper/ENGINEERING_GATES_AND_EVOLUTION.pdf.manifest.json
+            target/paper/SHA256SUMS
+          if-no-files-found: error
 
