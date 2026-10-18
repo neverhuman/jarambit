@@ -446,8 +446,8 @@ fn spawn_offspring_batch(
                     } else {
                         if k % 12 == 5 {
                             // Preserve exploration after formerly "certified" seeds become failures.
-                            // Sample lighter stock (< 5.55 mm) toward the sub-80 g regime and cap
-                            // EDGE_TH at <= 0.175 mm for exported solid Gate S S1 margin.
+                            // Sample lower-band stock (T_MIN..=5.55 mm) and cap EDGE_TH at <= 0.175 mm
+                            // for exported solid Gate S S1 margin.
                             child = child.mutate(rng, 0.08);
                             child.v[genome::T] =
                                 rng.range(b[genome::T].0, 5.55).clamp(b[genome::T].0, b[genome::T].1);
@@ -1120,6 +1120,25 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use jarambit_crescent::{aesthetic, gates};
+
+    fn test_screen_survivor(
+        label: &str,
+        family: &str,
+        g: Genome,
+        screen_deficit: f64,
+    ) -> ScreenSurvivor {
+        ScreenSurvivor {
+            label: label.into(),
+            family: family.into(),
+            g,
+            mass_g: 90.0,
+            seq_ratio: 0.0,
+            fat_sf: 0.0,
+            ring_bearing_w_mm: 12.0,
+            screen_deficit,
+        }
+    }
 
     #[test]
     fn diversity_slot_5_explores_sub_5_55mm_stock_and_caps_edge_th_for_gate_s() {
@@ -1133,7 +1152,7 @@ mod tests {
             );
             let child = &children[5].1;
             assert!(
-                (4.0..=5.55).contains(&child.v[genome::T]),
+                (genome::T_MIN..=5.55).contains(&child.v[genome::T]),
                 "seed={rng_seed}: stock={}",
                 child.v[genome::T]
             );
@@ -1162,23 +1181,11 @@ mod tests {
         p14_offspring.v[EA_SP] += 0.25;
         p14_offspring.clamp();
 
-        let make_survivor = |label: &str, family: &str, g: Genome, screen_deficit| {
-            ScreenSurvivor {
-                label: label.into(),
-                family: family.into(),
-                g,
-                mass_g: 90.0,
-                seq_ratio: 0.0,
-                fat_sf: 0.0,
-                ring_bearing_w_mm: 12.0,
-                screen_deficit,
-            }
-        };
         let screened = vec![
-            make_survivor("p10_seed", "p10", p10_seed.clone(), 0.01),
-            make_survivor("p14_seed", "p14", p14_seed.clone(), 0.02),
-            make_survivor("p10_mutated", "p10", p10_offspring.clone(), 0.03),
-            make_survivor("p14_mutated", "p14", p14_offspring.clone(), 0.04),
+            test_screen_survivor("p10_seed", "p10", p10_seed.clone(), 0.01),
+            test_screen_survivor("p14_seed", "p14", p14_seed.clone(), 0.02),
+            test_screen_survivor("p10_mutated", "p10", p10_offspring.clone(), 0.03),
+            test_screen_survivor("p14_mutated", "p14", p14_offspring.clone(), 0.04),
         ];
         let seed_parent_ids = [&p10_seed, &p14_seed]
             .into_iter()
@@ -1243,25 +1250,13 @@ mod tests {
         let mut p14_novel = round0_clamped.clone();
         p14_novel.v[EA_SP] += 0.25;
         p14_novel.clamp();
-        let make_survivor = |label: &str, family: &str, g: Genome, screen_deficit| {
-            ScreenSurvivor {
-                label: label.into(),
-                family: family.into(),
-                g,
-                mass_g: 90.0,
-                seq_ratio: 0.0,
-                fat_sf: 0.0,
-                ring_bearing_w_mm: 12.0,
-                screen_deficit,
-            }
-        };
         let screened = vec![
-            make_survivor("carried", "p10", carried, 0.01),
-            make_survivor("legacy", "p14", legacy, 0.02),
-            make_survivor("edge_clamped", "p14", edge_clamped, 0.03),
-            make_survivor("round0_clamped", "p14", round0_clamped, 0.04),
-            make_survivor("p10_novel", "p10", p10_novel.clone(), 0.05),
-            make_survivor("p14_novel", "p14", p14_novel.clone(), 0.06),
+            test_screen_survivor("carried", "p10", carried, 0.01),
+            test_screen_survivor("legacy", "p14", legacy, 0.02),
+            test_screen_survivor("edge_clamped", "p14", edge_clamped, 0.03),
+            test_screen_survivor("round0_clamped", "p14", round0_clamped, 0.04),
+            test_screen_survivor("p10_novel", "p10", p10_novel.clone(), 0.05),
+            test_screen_survivor("p14_novel", "p14", p14_novel.clone(), 0.06),
         ];
         let selected = select_stage2_candidates(&screened, 2, &HashSet::new(), &seed_parent_ids);
 
@@ -1271,7 +1266,44 @@ mod tests {
         assert_eq!(selected[0].g, p10_novel);
         assert_eq!(selected[1].g, p14_novel);
     }
-    use jarambit_crescent::{aesthetic, gates};
+
+    #[test]
+    fn stage2_selection_falls_back_to_unassessed_seed_parents_only_when_novel_pool_is_short() {
+        let mut p10_seed = Genome::c4_seed(genome::T_MIN);
+        p10_seed.v[EA_IN] = 14.0;
+        p10_seed.clamp();
+        let mut p14_seed = Genome::c4_seed(genome::T_MIN);
+        p14_seed.v[EA_IN] = 15.0;
+        p14_seed.clamp();
+
+        let mut p10_novel = p10_seed.clone();
+        p10_novel.v[TAPER_X0] += 0.5;
+        p10_novel.clamp();
+
+        let seed_parent_ids = round_parent_identities(&[
+            ("p10".into(), p10_seed.clone()),
+            ("p14".into(), p14_seed.clone()),
+        ]);
+        let screened = vec![
+            test_screen_survivor("p10_seed", "p10", p10_seed.clone(), 0.01),
+            test_screen_survivor("p14_seed", "p14", p14_seed.clone(), 0.02),
+            test_screen_survivor("p10_novel", "p10", p10_novel.clone(), 0.03),
+        ];
+
+        let selected = select_stage2_candidates(&screened, 2, &HashSet::new(), &seed_parent_ids);
+        assert_eq!(selected.len(), 2);
+        assert_eq!(selected[0].label, "p10_novel");
+        assert_eq!(selected[1].label, "p14_seed");
+
+        let mut assessed_ids = HashSet::new();
+        assessed_ids.insert(certification::identity(&p14_seed));
+        let selected_when_p14_assessed =
+            select_stage2_candidates(&screened, 2, &assessed_ids, &seed_parent_ids);
+        assert_eq!(selected_when_p14_assessed.len(), 2);
+        assert_eq!(selected_when_p14_assessed[0].label, "p10_novel");
+        assert_eq!(selected_when_p14_assessed[1].label, "p10_seed");
+    }
+
     #[test]
     fn failed_strength_screen_remains_available_for_top_k_assessment() {
         let root = repo_root();
