@@ -1453,6 +1453,51 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_never_reselects_far_candidate_in_novel_fill_pass() {
+        let center = Genome::c4_seed(genome::T_MIN);
+        let mut far = center.clone();
+        far.v[TAPER_X0] += 5.0;
+        far.clamp();
+        let mut near = center.clone();
+        near.v[EA_SP] += 0.1;
+        near.clamp();
+        let mut fill_candidate = center.clone();
+        fill_candidate.v[TAPER_X0] += 0.2;
+        fill_candidate.clamp();
+        let gene_distance = |candidate: &Genome| {
+            candidate
+                .v
+                .iter()
+                .zip(&center.v)
+                .map(|(value, origin)| (value - origin).powi(2))
+                .sum::<f64>()
+                .sqrt()
+        };
+        assert!(gene_distance(&far) > gene_distance(&near));
+        assert!(gene_distance(&far) > gene_distance(&fill_candidate));
+
+        let screened = vec![
+            test_screen_survivor("farthest_first_pass", "p10", far.clone(), 0.01),
+            test_screen_survivor("near_first_pass", "p14", near, 0.02),
+            test_screen_survivor("farthest_duplicate", "p18", far.clone(), 0.03),
+            test_screen_survivor("fill_candidate", "p10", fill_candidate, 0.04),
+        ];
+        let selected = select_stage2_candidates(&screened, 3, &HashSet::new(), &HashSet::new());
+
+        assert_eq!(selected.len(), 3);
+        let far_identity = certification::identity(&far);
+        assert_eq!(
+            selected
+                .iter()
+                .filter(|candidate| certification::identity(&candidate.g) == far_identity)
+                .count(),
+            1
+        );
+        let labels: Vec<_> = selected.iter().map(|candidate| candidate.label.as_str()).collect();
+        assert_eq!(labels, ["farthest_first_pass", "near_first_pass", "fill_candidate"]);
+    }
+
+    #[test]
     fn stage2_selection_returns_single_unassessed_candidate_below_certify_top_five() {
         let mut base = Genome::c4_seed(genome::T_MIN);
         base.v[EA_IN] = 14.0;
