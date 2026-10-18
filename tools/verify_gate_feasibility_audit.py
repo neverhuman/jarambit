@@ -18,7 +18,11 @@ CONTRACT_TASK = "G16-12-RSV2-04-p26"
 MANIFEST_TASK = "G16-12-RSV2-04-p27"
 DIGEST_TASK = "G16-12-RSV2-04-p28"
 CLI_TASK = "G16-12-RSV2-04-p29"
-TASK = "G16-12-RSV2-04-p30"
+CRESCENT_TASK = "G16-12-RSV2-04-p30"
+TASK = "G16-12-RSV2-04-p31"
+CERT_EXPORT_REPORT = "docs/audit/CERT_EXPORT_SOURCE_PROVENANCE_AUDIT.md"
+CERT_EXPORT_JSON = "docs/audit/cert_export_source_provenance_audit.json"
+CERT_EXPORT_SOURCES = ("crates/crescent/src/certification.rs", "crates/crescent/src/export.rs")
 CRESCENT_REPORT = "docs/audit/CRESCENT_SOURCE_PROVENANCE_AUDIT.md"
 CRESCENT_JSON = "docs/audit/crescent_source_provenance_audit.json"
 CRESCENT_SOURCES = ("crates/crescent/src/lib.rs", "crates/crescent/src/gates.rs")
@@ -146,11 +150,11 @@ def verify(root):
             "unsupported index schema")
     require(index["task"] == TASK, "unexpected task")
     diagnostic(index)
-    require(type(index["report_count"]) is int and index["report_count"] == 20,
-            "expected twenty reports")
-    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT, CRESCENT_REPORT]
+    require(type(index["report_count"]) is int and index["report_count"] == 21,
+            "expected twenty-one reports")
+    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT, CRESCENT_REPORT, CERT_EXPORT_REPORT]
     require(len(m.REPORTS) == 15, "expected fifteen historical reports")
-    require(isinstance(index["reports"], list) and len(index["reports"]) == 20,
+    require(isinstance(index["reports"], list) and len(index["reports"]) == 21,
             "report coverage mismatch")
     for row, path in zip(index["reports"], expected):
         require(isinstance(row, dict) and row.get("path") == path,
@@ -163,7 +167,8 @@ def verify(root):
                                                    record(m, root, MANIFEST_JSON),
                                                    record(m, root, DIGEST_JSON),
                                                    record(m, root, CLI_JSON),
-                                                   record(m, root, CRESCENT_JSON)],
+                                                   record(m, root, CRESCENT_JSON),
+                                                   record(m, root, CERT_EXPORT_JSON)],
             "supplemental fingerprint mismatch")
     contract = read_json(CONTRACT)
     require(set(contract) == {"schema_version", "task", "status", "qualified_count",
@@ -214,18 +219,26 @@ def verify(root):
             and "qualified_count: 0" in cli_text.splitlines(), "invalid CLI report status")
     crescent_digest = read_json(CRESCENT_JSON)
     require(json.dumps(crescent_digest, sort_keys=True) == json.dumps(
-        digest_inventory(m, root, task=TASK, sources=CRESCENT_SOURCES), sort_keys=True),
+        digest_inventory(m, root, task=CRESCENT_TASK, sources=CRESCENT_SOURCES), sort_keys=True),
         "source fingerprint mismatch: crescent digest metadata")
     crescent_text = m.portable_path(root, CRESCENT_REPORT).read_text(encoding="utf-8")
     require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in crescent_text.splitlines()
             and "qualified_count: 0" in crescent_text.splitlines(), "invalid crescent report status")
+    cert_export_digest = read_json(CERT_EXPORT_JSON)
+    require(json.dumps(cert_export_digest, sort_keys=True) == json.dumps(
+        digest_inventory(m, root, task=TASK, sources=CERT_EXPORT_SOURCES), sort_keys=True),
+        "source fingerprint mismatch: certification/export digest metadata")
+    cert_export_text = m.portable_path(root, CERT_EXPORT_REPORT).read_text(encoding="utf-8")
+    require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in cert_export_text.splitlines()
+            and "qualified_count: 0" in cert_export_text.splitlines(), "invalid certification/export report status")
     for path in expected + [INDEX, CONTRACT, MANIFEST_JSON, DIGEST_JSON, CLI_JSON,
-                            CRESCENT_JSON, SELF, LEGACY]:
+                            CRESCENT_JSON, CERT_EXPORT_JSON, SELF, LEGACY]:
         require(m.FORBIDDEN_HOME not in m.portable_path(root, path).read_text(encoding="utf-8"),
                 "literal host prefix")
     require(m.verify(root) == 15, "historical index mismatch")
     return {"task": TASK, "status": STATUS, "assignment_outcome": "COMPLETE",
-            "qualified_count": 0, "reports": 20, "source_files": 2,
+            "qualified_count": 0, "reports": 21, "source_files": 2,
+            "cert_export_source_files": len(CERT_EXPORT_SOURCES),
             "crescent_source_files": len(CRESCENT_SOURCES),
             "cli_source_files": len(CLI_SOURCES),
             "digest_source_files": len(DIGEST_SOURCES),
