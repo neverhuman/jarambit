@@ -25,3 +25,15 @@ Execution affinity: [14, 15]; nice: 10; build jobs: 2. Existing lane target/ reu
 Reproduce acquisition: `taskset -c 14,15 env CARGO_BUILD_JOBS=2 python3 experiments/rsv2_07/phase8_synthetic_gci_check.py`. Verify saved hashes and repeat native checks: `taskset -c 14,15 python3 experiments/rsv2_07/audit_phase8.py`. The verifier imposes no CPU affinity restriction; pair 8,9 can be substituted.
 
 Raw evidence: `target/rsv2-07/phase8/20261018T090024871641Z`. Per-sequence values, sign patterns, native results, IEEE-754 bits and SHA-256 provenance are in `results/phase8_synthetic_gci_audit.json`.
+
+## Phase-9 verifier portability
+
+Default verification is read-only and never builds. All tracked study files must match the strict study manifest; the controlling Phase-7/8 JSON receipts are required and structurally checked rather than circularly hashing themselves. Other source hashes can be verified against actual historical Git blob bytes when the working tree has advanced.
+
+Each present raw artifact must match its recorded SHA-256 and byte size. Missing raw artifacts require a valid recorded digest and non-negative integer size, and are explicitly counted as **manifest-only**. A manifest-only check does not verify absent file bytes.
+
+The 24 synthetic sequences and 39 triplets are checked against the Rust results embedded in this committed receipt, including all recorded float bits, status counts and analytic invariants. Synthetic input bytes are regenerated and bound to their original raw digest and size. If the verified saved native binary exists, it runs twice and must reproduce both recorded output digests and sizes. If it is absent, the command reports **Native replay: NOT RUN** and performs the portable Python checks against the recorded Rust results. It does not claim a fresh Rust execution in a clean checkout.
+
+`phase8_synthetic_gci_check.py --verify` uses the same portable verifier. There is no CPU affinity restriction. Portability regression command: `taskset -c 14,15 python3 experiments/rsv2_07/test_portable_audits.py`.
+
+Validation on CPUs14,15 / nice10: both default commands pass with local raw files (164 Phase-7 and 9 Phase-8 on-disk records). All nine portability regressions pass, including a simulated clean checkout with all raw files missing, plus newer source bytes requiring three Phase-7 and one Phase-8 historical matches. Original acquisition hash observations and synthetic numeric results are unchanged. The paper worktree initially had a different tracked Phase-5 receipt; it was synchronized during this session, without changes to that checkout by this worker. Study-file mismatches remain failures and cannot be treated as historical-source evidence.
