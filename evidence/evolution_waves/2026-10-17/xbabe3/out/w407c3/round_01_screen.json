@@ -1,0 +1,46 @@
+[
+  {
+    "certificate_identity": "1ed418e0f6d930203754d6556cacda6b9987ed5b61f72a0403bb62d75cd42ac9",
+    "family": "p10",
+    "fat_sf": 0.35109687100799175,
+    "label": "w407c3_r02_p10_c08",
+    "mass_g": 98.55428114006233,
+    "qualification_status": "pending independent top-k assessment",
+    "ring_bearing_w_mm": 12.0,
+    "screen_deficit": 4.79654072502242,
+    "seq_ratio": 2.290274437801483
+  },
+  {
+    "certificate_identity": "1ed418e0f6d930203754d6556cacda6b9987ed5b61f72a0403bb62d75cd42ac9",
+    "family": "p10",
+    "fat_sf": 0.35109687100799175,
+    "label": "w407c3_r02_p10_c44",
+    "mass_g": 98.55428114006233,
+    "qualification_status": "pending independent top-k assessment",
+    "ring_bearing_w_mm": 12.0,
+    "screen_deficit": 4.796540725022444,
+    "seq_ratio": 2.290274437801483
+  },
+  {
+    "certificate_identity": "2189852e1b19c65cf3f71192181c920299b93e217fe521c4022a1b3b47b3a739",
+    "family": "p10",
+    "fat_sf": 0.35109687100786147,
+    "label": "w407c3_r02_p10_c32",
+    "mass_g": 98.54431364006233,
+    "qualification_status": "pending independent top-k assessment",
+    "ring_bearing_w_mm": 12.0,
+    "screen_deficit": 4.796541118724319,
+    "seq_ratio": 2.2902697635628435
+  },
+  {
+    "certificate_identity": "f36332f32466e66386ea1d7a14d69c9910dc1356739dc1712447d155850d343c",
+    "family": "p14",
+    "fat_sf": 0.3431222938372549,
+    "label": "w407c3_r02_p14_c20",
+    "mass_g": 98.65687109704729,
+    "qualification_status": "pending independent top-k assessment",
+    "ring_bearing_w_mm": 12.0,
+    "screen_deficit": 4.840771458546773,
+    "seq_ratio": 2.341499903389946
+  }
+]
