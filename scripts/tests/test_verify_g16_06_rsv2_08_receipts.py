@@ -178,7 +178,8 @@ class MarkdownReportIndexTests(unittest.TestCase):
             files = [r['path'] for r in audit.strict_json((ROOT / audit.INVENTORY).read_bytes())['files']]
             files += [r['path'] for r in self.document()['files']]
             for relative in [*files, audit.INVENTORY.as_posix(), audit.MARKDOWN_INDEX.as_posix(), audit.CROSS_CHECK.as_posix(),
-                             audit.SCRIPT_INVENTORY.as_posix(), audit.SCRIPT_CROSS_CHECK.as_posix(), *audit.SCRIPT_FILES]:
+                             audit.SCRIPT_INVENTORY.as_posix(), audit.SCRIPT_CROSS_CHECK.as_posix(), *audit.SCRIPT_FILES,
+                             audit.SUMMARY_MANIFEST.as_posix(), *[path.as_posix() for _,_,path in audit.summary_paths()]]:
                 target = root / relative; target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(ROOT / relative, target)
             self.assertFalse((root / '.git').exists()); self.assertFalse((root / 'target').exists())
@@ -193,6 +194,7 @@ class MarkdownReportIndexTests(unittest.TestCase):
                 self.assertEqual(result['inventory_cross_check']['unique_members'],30)
                 self.assertEqual(result['script_test_inventory']['files'],2)
                 self.assertEqual(result['script_and_inventory_cross_check']['unique_members'],32)
+                self.assertEqual(result['phase21_to_25_summary']['files'],10)
             victim = root / self.document()['files'][0]['path']; original = victim.read_bytes()
             def absent(path, *args, **kwargs):
                 if path == victim: raise FileNotFoundError(path)
@@ -415,6 +417,60 @@ class ScriptInventoryCrossCheckTests(unittest.TestCase):
         d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
         self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
         for path in [ROOT / audit.SCRIPT_CROSS_CHECK,ROOT / audit.INVENTORY.parent / 'PHASE25.md']:
+            self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
+
+
+class PhaseSummaryManifestTests(unittest.TestCase):
+    def document(self):
+        return audit.strict_json((ROOT / audit.SUMMARY_MANIFEST).read_bytes())
+
+    def test_complete_five_phase_ten_file_metrics(self):
+        d = self.document(); self.assertEqual(audit.verify_summary_manifest()['files'],10)
+        self.assertEqual(d['phase_count'],5)
+        self.assertEqual([(r['phase'],r['kind'],r['path']) for r in d['files']],
+                         [(p,k,path.as_posix()) for p,k,path in audit.summary_paths()])
+        for row in d['files']:
+            data = (ROOT / row['path']).read_bytes()
+            self.assertEqual(row['sha256'],audit.digest(data)); self.assertEqual(row['bytes'],len(data))
+            self.assertEqual(row['line_count'],len(data.decode('utf-8').splitlines()))
+            self.assertEqual(row['literal_host_path_count'],0)
+
+    def test_forged_metrics_and_omitted_file_rejected(self):
+        for key,value in [('sha256','0'*64),('bytes',0),('line_count',0),('literal_host_path_count',1)]:
+            d = self.document(); d['files'][0][key] = value
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError,'summary coverage'):
+                audit.verify_summary_manifest(document=d)
+        d = self.document(); d['files'].pop()
+        with self.assertRaisesRegex(ValueError,'summary coverage'):
+            audit.verify_summary_manifest(document=d)
+
+    def test_forged_paths_are_never_used_as_inputs(self):
+        for value in ['/tmp/PHASE21.md','../PHASE21.md','docs/PHASE999.md']:
+            d = self.document(); d['files'][0]['path'] = value
+            with self.subTest(path=value), self.assertRaisesRegex(ValueError,'summary coverage'):
+                audit.verify_summary_manifest(document=d)
+
+    def test_missing_report_rejected(self):
+        real = Path.read_bytes; victim = ROOT / audit.INVENTORY.parent / 'PHASE25.md'
+        def missing(path):
+            if path == victim: raise FileNotFoundError(path)
+            return real(path)
+        with patch.object(Path,'read_bytes',new=missing), self.assertRaises(FileNotFoundError):
+            audit.verify_summary_manifest()
+
+    def test_changed_and_host_path_injected_report_rejected(self):
+        real = Path.read_bytes; victim = ROOT / audit.INVENTORY.parent / 'PHASE25.md'
+        for extra,message in [(b'\nchanged','summary coverage'),(('/'+'home/alice/report').encode(),'Literal host path')]:
+            def changed(path):
+                data = real(path)
+                return data+extra if path == victim else data
+            with self.subTest(extra=extra), patch.object(Path,'read_bytes',new=changed), self.assertRaisesRegex(ValueError,message):
+                audit.verify_summary_manifest()
+
+    def test_static_scope_qualification_and_new_output_host_paths(self):
+        d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
+        self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
+        for path in [ROOT / audit.SUMMARY_MANIFEST,ROOT / audit.INVENTORY.parent / 'PHASE26.md']:
             self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
 
 

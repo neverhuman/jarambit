@@ -24,6 +24,7 @@ SCRIPT_INVENTORY = INVENTORY.parent / 'phase24_script_test_inventory_audit.json'
 SCRIPT_FILES = ('scripts/verify_g16_06_rsv2_08_receipts.py',
                 'scripts/tests/test_verify_g16_06_rsv2_08_receipts.py')
 SCRIPT_CROSS_CHECK = INVENTORY.parent / 'phase25_script_and_inventory_cross_check_audit.json'
+SUMMARY_MANIFEST = INVENTORY.parent / 'phase26_summary_manifest_audit.json'
 HOST_PATH_PATTERN = re.compile(r'/(?:home|Users|tmp|root|var/tmp|private/tmp)/|[A-Za-z]:[\\/](?:Users|Temp)[\\/]')
 
 
@@ -300,12 +301,45 @@ def verify_script_cross_check(root=ROOT, document=None):
                 overlap_count=0, digest_mismatch_count=0, exact_digest_parity=True)
 
 
+def summary_paths():
+    receipts = (INVENTORY, MARKDOWN_INDEX, CROSS_CHECK, SCRIPT_INVENTORY, SCRIPT_CROSS_CHECK)
+    return [(phase, kind, path) for phase, receipt in zip(range(21,26), receipts)
+            for kind, path in [('markdown', INVENTORY.parent / f'PHASE{phase}.md'), ('json', receipt)]]
+
+
+def generate_summary_manifest(root):
+    root = Path(root)
+    verify_script_cross_check(root)
+    files = []
+    for phase, kind, path in summary_paths():
+        data = (root / path).read_bytes()
+        if kind == 'json':
+            strict_json(data)
+        files.append(dict(phase=phase, kind=kind, path=path.as_posix(), **markdown_record(data)))
+    return dict(task='G16-06-RSV2-08-p27', study_phase=26,
+                scope='Exact current Phase21..25 report and JSON receipt bytes; Phase24/25 source-dependent metadata refreshed.',
+                phase_count=5, file_count=len(files), total_bytes=sum(row['bytes'] for row in files),
+                total_lines=sum(row['line_count'] for row in files), literal_host_path_count=0,
+                engineering_qualification_assessed=False, qualified_count=0, full_qualification=False,
+                files=files)
+
+
+def verify_summary_manifest(root=ROOT, document=None):
+    root = Path(root)
+    if document is None:
+        document = strict_json((root / SUMMARY_MANIFEST).read_bytes())
+    if document != generate_summary_manifest(root):
+        raise ValueError('Phase21..25 summary coverage, size, digest, lines or metadata mismatch')
+    return dict(status='pass', phases=5, files=10, literal_host_path_count=0)
+
+
 def verify_all(root=ROOT):
     result = verify(root)
     result['markdown_reports'] = verify_markdown(root)
     result['inventory_cross_check'] = verify_cross_check(root)
     result['script_test_inventory'] = verify_script_inventory(root)
     result['script_and_inventory_cross_check'] = verify_script_cross_check(root)
+    result['phase21_to_25_summary'] = verify_summary_manifest(root)
     return result
 
 
@@ -316,6 +350,7 @@ def main():
     parser.add_argument('--write-cross-check', action='store_true', help='Generate the cross-check from the two unchanged frozen indexes')
     parser.add_argument('--write-script-inventory', action='store_true', help='Inventory final script bytes and AST test declarations')
     parser.add_argument('--write-script-cross-check', action='store_true', help='Cross-check the Phase23 and current Phase24 receipts')
+    parser.add_argument('--write-summary', action='store_true', help='Summarize the exact Phase21..25 reports and receipts')
     args = parser.parse_args()
     if args.write:
         import subprocess
@@ -337,6 +372,8 @@ def main():
         (ROOT / SCRIPT_INVENTORY).write_text(json.dumps(generate_script_inventory(ROOT), indent=2, allow_nan=False) + '\n')
     if args.write_script_cross_check:
         (ROOT / SCRIPT_CROSS_CHECK).write_text(json.dumps(generate_script_cross_check(ROOT), indent=2, allow_nan=False) + '\n')
+    if args.write_summary:
+        (ROOT / SUMMARY_MANIFEST).write_text(json.dumps(generate_summary_manifest(ROOT), indent=2, allow_nan=False) + '\n')
     print(json.dumps(verify_all(), sort_keys=True, allow_nan=False))
 
 

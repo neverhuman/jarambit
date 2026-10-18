@@ -1,0 +1,105 @@
+{
+  "task": "G16-06-RSV2-08-p27",
+  "study_phase": 26,
+  "scope": "Exact current Phase21..25 report and JSON receipt bytes; Phase24/25 source-dependent metadata refreshed.",
+  "phase_count": 5,
+  "file_count": 10,
+  "total_bytes": 53632,
+  "total_lines": 1167,
+  "literal_host_path_count": 0,
+  "engineering_qualification_assessed": false,
+  "qualified_count": 0,
+  "full_qualification": false,
+  "files": [
+    {
+      "phase": 21,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE21.md",
+      "bytes": 3289,
+      "sha256": "38e165cee4fb781dd8664328ad9456f32fc288ce7d796d59eb683a422d6f5b81",
+      "line_count": 50,
+      "literal_host_path_count": 0
+    },
+    {
+      "phase": 21,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase21_measurement_json_inventory_audit.json",
+      "bytes": 9672,
+      "sha256": "6de32c8ba3c3a90c535b9eb5caff8766f8f00eb7511c584c114cf6a4b1cd63fa",
+      "line_count": 277,
+      "literal_host_path_count": 0
+    },
+    {
+      "phase": 22,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE22.md",
+      "bytes": 3259,
+      "sha256": "4916ef26a90510e96a483bc51dbd261d1275b31690f15f0eda5743eba596be61",
+      "line_count": 51,
+      "literal_host_path_count": 0
+    },
+    {
+      "phase": 22,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase22_markdown_report_digest_index.json",
+      "bytes": 790,
+      "sha256": "7c81cebd99494529cbc1978df11ffc3f0136b2f837f42232d816ef7239df5f5a",
+      "line_count": 23,
+      "literal_host_path_count": 0
+    },
+    {
+      "phase": 23,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE23.md",
+      "bytes": 3540,
+      "sha256": "de4901603ed71d2b9110cbfaf0f598f89a342a61fc89adc3d524445c51ff9910",
+      "line_count": 55,
+      "literal_host_path_count": 0
+    },
+    {
+      "phase": 23,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase23_inventory_cross_check_audit.json",
+      "bytes": 11793,
+      "sha256": "5d6c1e1b4046a537ccbecd7f64a9e887b2aa384dd8eed5fdb0b15acbc76e1784",
+      "line_count": 274,
+      "literal_host_path_count": 0
+    },
+    {
+      "phase": 24,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE24.md",
+      "bytes": 3811,
+      "sha256": "db2c7334c854fb07b0f76b84213b8261fff0a7ab8ebb40b9c465a87229d6036a",
+      "line_count": 60,
+      "literal_host_path_count": 0
+    },
+    {
+      "phase": 24,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase24_script_test_inventory_audit.json",
+      "bytes": 1007,
+      "sha256": "225497870ca91249c422047c8aaaeea9361df0c184c9a0d6ba8ac5051afc7f00",
+      "line_count": 28,
+      "literal_host_path_count": 0
+    },
+    {
+      "phase": 25,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE25.md",
+      "bytes": 4082,
+      "sha256": "eb8ef1ee7f0d59797a3f4201c4b1f6c1db7ded09e4cbb20f8795a86ddba50898",
+      "line_count": 63,
+      "literal_host_path_count": 0
+    },
+    {
+      "phase": 25,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase25_script_and_inventory_cross_check_audit.json",
+      "bytes": 12389,
+      "sha256": "8d5770d4f86cbf13649f97cec2369bdb1c986363dcd009744f93db5237bc9050",
+      "line_count": 286,
+      "literal_host_path_count": 0
+    }
+  ]
+}
