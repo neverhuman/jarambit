@@ -1206,6 +1206,25 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_returns_empty_when_certify_top_is_zero() {
+        let mut seed = Genome::c4_seed(genome::T_MIN);
+        seed.v[EA_IN] = 14.0;
+        seed.clamp();
+        let mut novel = seed.clone();
+        novel.v[TAPER_X0] += 0.5;
+        novel.clamp();
+
+        let screened = vec![
+            test_screen_survivor("novel", "p10", novel, 0.01),
+            test_screen_survivor("seed", "p10", seed.clone(), 0.02),
+        ];
+        let seed_parent_ids = round_parent_identities(&[("p10".into(), seed)]);
+        let selected = select_stage2_candidates(&screened, 0, &HashSet::new(), &seed_parent_ids);
+
+        assert!(selected.is_empty());
+    }
+
+    #[test]
     fn stage2_selection_preserves_screen_deficit_order_on_fill_pass() {
         let mut p10_first = Genome::c4_seed(genome::T_MIN);
         p10_first.v[EA_IN] = 14.0;
