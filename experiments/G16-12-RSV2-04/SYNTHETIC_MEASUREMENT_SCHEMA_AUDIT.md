@@ -5,13 +5,13 @@ qualified_count: 0
 
 Task: `G16-12-RSV2-04-p20`. Baseline: `4df1a672b0b652eacccb808aa39c62e3ffb8c38d`.
 
-This receipt covers static source inspection, existing document schemas, exact file digests, and synthetic non-weapon JSON fixtures. No production candidate optimization, design comparison, geometry generation, or physical evaluation is performed. No production source, historical JSON, historical report, or existing archive seal is changed.
+This receipt covers static source inspection, existing document schemas, exact file digests, and synthetic non-weapon JSON fixtures. No production candidate optimization, design comparison, geometry generation, or physical evaluation is performed. No production source, historical JSON, or existing archive seal is changed. Phase21 updates the host-path policy and makes the single worktree reference in V12 portable, refreshing its index byte/hash entry; the original report/index bytes are preserved in the Phase21 receipt.
 
 ## Findings
 
-The assignment names an interface that differs from this checkout. `point_profile` exists, but `edge_profile` and several requested fields do not. All five named root JSON files are absent. The actual recursive tracked inventory contains37 JSON files:36 object roots and1 array root. All37 parse strictly and match the existing Phase4 archive SHA-256 entries. **27 files fail the zero host-home-prefix requirement**, with 340 occurrences in decoded JSON keys/strings. Ten files have no such occurrences.
+The assignment names an interface that differs from this checkout. `point_profile` exists, but `edge_profile` and several requested fields do not. All five named root JSON files are absent. The actual recursive tracked inventory contains37 JSON files:36 object roots and1 array root. All37 parse strictly and match the existing Phase4 archive SHA-256 entries. **27 historical files contain cataloged legacy host-home prefixes**, with340 occurrences in decoded JSON keys/strings. The other10 tracked JSON files have zero occurrences.
 
-The required zero-prefix unittest deliberately reports this existing failure. It is not skipped, marked expected-failure, or weakened to accept a count baseline. Historical evidence remains byte-identical. Diagnostic status stays IN_PROGRESS with qualified_count0; file integrity is distinct from portability or semantic qualification.
+Phase20 applied a blanket zero-prefix test and recorded20 passing tests/1 failure. Task `G16-12-RSV2-04-p21` explicitly revises that policy: the10 portable JSON files and six listed Phase15–20 Markdown reports must have zero occurrences; the27 legacy JSON files must match this exact per-file catalog, byte digests, shape digests and archive-seal entries. No new uncataloged host-path regression is allowed. Matching only the aggregate340 count is insufficient. No test is skipped or marked expected-failure. Diagnostic status stays IN_PROGRESS with qualified_count0; passing this revised provenance policy does not make legacy artifacts portable or establish semantic qualification.
 
 ## Static source and archive binding
 
@@ -127,7 +127,9 @@ Host-prefix counts inspect decoded string values and object keys recursively, so
 
 The extended portable verifier anchors this receipt's SHA-256, bytes, table count and table-schema digest, validates every indexed JSON strictly, checks its byte/shape digests and archive-seal entry, and checks exact tracked inventory coverage. With Git metadata it uses `git ls-files`; in a relocated document fixture without Git it discovers the copied JSON recursively. No network, original checkout path or ignored build output is required.
 
-JSON decoding rejects duplicate keys, NaN/Infinity and numeric overflow to a non-finite value. Synthetic JSON tests cover valid simple records, ambiguous/invalid inputs, boolean-versus-integer shape distinction, and a Unicode-escaped forbidden prefix. Tampering and relocated-copy controls verify the new receipt and archived JSON. A separate strict test requires zero host-home-prefix occurrences in every tracked JSON and currently fails on the27 archived files reported above. The diagnostic inventory does not exempt those files from that requirement.
+JSON decoding rejects duplicate keys, NaN/Infinity and numeric overflow to a non-finite value. Synthetic JSON tests cover valid simple records, ambiguous/invalid inputs, boolean-versus-integer shape distinction, and a Unicode-escaped forbidden prefix. Tampering and relocated-copy controls verify this receipt and archived JSON. The Phase21 policy test requires zero occurrences in the10 cataloged portable JSON files and all six listed Markdown reports. For the27 legacy JSON files, it requires exact per-file catalog consistency, including340 total historical occurrences. A changed legacy file, newly contaminated portable JSON, any contaminated listed Markdown report, or an uncataloged tracked JSON fails validation. Regression subtests inject synthetic host paths into both JSON classes and each of the six Markdown reports; the suite retains21 unittest methods.
+
+The zero-occurrence Markdown scope is `UNIFIED_PROTOTYPE_V12_REPORT.md`, `UNIFIED_PROTOTYPE_V13_REPORT.md`, `UNIFIED_PROTOTYPE_V14_REPORT.md`, `UNIFIED_PROTOTYPE_PROVENANCE_INDEX.md`, `CERTIFICATION_MEASUREMENT_CODE_AUDIT.md`, and `SYNTHETIC_MEASUREMENT_SCHEMA_AUDIT.md`. The Phase21 change touches only provenance policy/tests and portable report wording; all37 JSON byte digests and the catalog above remain unchanged.
 
 Run the requested checks from a repository copy:
 
@@ -136,4 +138,4 @@ nice -n 10 taskset -c 10,11 env CARGO_BUILD_JOBS=2 python3 -m unittest discover 
 git diff --check
 ```
 
-Execution uses CPUs10,11 and jobs2 with the requested niceness increment; inherited effective niceness is19. Results are retained in the task handoff and ignored receipt directory. A failing portability predicate is an audit finding, not a successful qualification. No field-value physics, candidate comparison, external embedded artifact reference, or missing diagnostic file is evaluated or invented. Hash checks establish consistency relative to trusted repository anchors, not authorship or physical validity.
+Execution uses CPUs10,11 and jobs2 with the requested niceness increment; inherited effective niceness is19. Results are retained in the task handoff and ignored receipt directory. The historical blanket portability failure remains an audit finding; passing the revised policy is not a successful qualification. No field-value physics, candidate comparison, external embedded artifact reference, or missing diagnostic file is evaluated or invented. Hash checks establish consistency relative to trusted repository anchors, not authorship or physical validity.
