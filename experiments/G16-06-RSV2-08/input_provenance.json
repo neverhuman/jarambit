@@ -1,0 +1,23 @@
+{
+  "baseline_commit": "21425fe2948ab3941eedbe9710ebc3d29427faae",
+  "inputs": [
+    {
+      "path": ".agent/handoffs/G16-06-RSV2-08.md",
+      "scope": "original 9-line assignment before milestone updates",
+      "sha256": "4a41fdffbb646738943bc62dd112e639f9a11ec912092b382bf25cba5b068aa8",
+      "lines": 9
+    },
+    {
+      "path": "/home/ubuntu/jarambit-audits/2026-10-18-gate-feasibility-bound/REPORT.md",
+      "scope": "complete file read before execution",
+      "sha256": "25aa1b3d46b6b576b846e48f255d6371ed13ad263e394c91d75a5cc7cca6a73d",
+      "lines": 189
+    },
+    {
+      "path": "/home/ubuntu/jarambit_wt_diag/target/gate-feasibility-bound/compound_study/coordinate_sweep.log",
+      "scope": "complete file read before execution",
+      "sha256": "530ba5d119e7aa6edccbb0c40425abafd006924d491fe98c7fec56075636d859",
+      "lines": 16
+    }
+  ]
+}

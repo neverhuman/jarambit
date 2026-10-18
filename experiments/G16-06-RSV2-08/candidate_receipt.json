@@ -1,0 +1,543 @@
+{
+  "qualification_solver": "skyline",
+  "task_pass": true,
+  "export_pass": true,
+  "geometry_legal": true,
+  "full_neck_verified": true,
+  "certification_minimum": {
+    "lat_rob": 376.0620540923634,
+    "fat_sf": 1.0504635563610114,
+    "sf_hunter": 1.4463925157398592,
+    "seq_ratio": 1.309754052926388
+  },
+  "strict": {
+    "lat_rob": 380.39660986232633,
+    "fat_sf": 1.0625713795774483,
+    "sf_hunter": 1.4630638840858705,
+    "seq_ratio": 1.3480962441989264
+  },
+  "thresholds": {
+    "lat_rob": 358.0,
+    "fat_sf": 1.0,
+    "sf_hunter": 1.377,
+    "seq_ratio": 1.25
+  },
+  "coarse_search_observation": {
+    "lat_rob": 310.72188970209464,
+    "fat_sf": 0.8679472383446317,
+    "sf_hunter": 1.1950841911619026,
+    "seq_ratio": 1.2564170926326979
+  },
+  "coarse_meets_task_thresholds": false,
+  "qualification_scope": "audit protocol: minimum of 0.25/0.125 mm2, plus separate strict 0.0625 mm2 check; area=2 is a search observation",
+  "fatigue_identity": true,
+  "native_sources_and_requirements_unchanged": true,
+  "prototype_sources_unchanged": true,
+  "known_other_gate_failures": {
+    "0.25": {
+      "hm_twist_sf": 0.30040022304832587,
+      "hm_spine_sf": 0.44150462632610543
+    },
+    "0.125": {
+      "hm_twist_sf": 0.2613549849048545,
+      "hm_spine_sf": 0.47663617734826785
+    },
+    "0.0625": {
+      "hm_twist_sf": 0.3012367760692796,
+      "hm_spine_sf": 0.49066187222604657
+    }
+  },
+  "all_gate_qualification": false,
+  "unassessed": [
+    "independent 3D P2 solid and cross-solver battery",
+    "plate GCI adjudication",
+    "side.a4 support and buckling battery"
+  ],
+  "construction_scope": "prototype compound section and solid neck; native CSV alone does not reproduce it",
+  "manufacturing_limitation": "Inherited ring collar exceeds flat plate stock; no machining release or process qualification.",
+  "sha256": {
+    "experiments/G16-06-RSV2-08/candidate.csv": "52b795486b3c7f72ed9c9e06f57888ef166afdc22434118a0a821004ccc016ed",
+    "experiments/G16-06-RSV2-08/candidate_config.json": "f3d5921b90dfe712940fbd4fd98346aa78be985fbdaf8f11f874cad7934eebb9",
+    "target/G16-06-RSV2-08/study": "c025e1381f553b32e518642f91cc206df77381ce3c379693904ec3a1f4082253",
+    "target/G16-06-RSV2-08/candidate_validation.json": "28443ebe85f254101abd69c2487e2a384b01a6d33034db86663b1375938911e3"
+  },
+  "prototype_only": true,
+  "branch": "lane/G16-06-RSV2-08",
+  "source_file": "target/G16-06-RSV2-08/candidate_validation.json",
+  "geometry": {
+    "neck_section": {
+      "max_mm": 6.0,
+      "min_mm": 6.0,
+      "samples": 38624,
+      "scope": "material beyond ring transition, before heel, outside edge band"
+    },
+    "heel": [
+      100.7195591625137,
+      -12.536532747342669
+    ],
+    "through_holes": [
+      {
+        "name": "ring",
+        "x_bounds_mm": [
+          -12.45,
+          12.45
+        ]
+      },
+      {
+        "name": "cairn",
+        "x_bounds_mm": [
+          82.6,
+          86.6
+        ]
+      },
+      {
+        "name": "window",
+        "x_bounds_mm": [
+          114.55112485142456,
+          145.18743569490596
+        ]
+      }
+    ],
+    "sharpness": {
+      "complete": true,
+      "max_apex_mm": 0.1951440695707079,
+      "max_half_angle_deg": 24.14732515090265,
+      "pass": true,
+      "samples": 9261
+    },
+    "point": {
+      "monotonic": true,
+      "pass": true,
+      "t_0p25_mm": 0.2500000000000002,
+      "t_1p00_mm": 0.475000000000001,
+      "t_2p00_mm": 0.7749999999999999,
+      "taper_lower_bound_mm": 10.0,
+      "taper_mm": null
+    },
+    "bore_edge_radius_mm": 1.599999999999966,
+    "watertight_census": [
+      0,
+      0,
+      1
+    ],
+    "raster_mass_g": 135.20387381766406
+  },
+  "levels": [
+    {
+      "area_mm2": 2.0,
+      "solver": "skyline",
+      "metrics": {
+        "fat_sf": 0.8679472383446317,
+        "hm_ringback_n": 19889.86359031667,
+        "hm_ringback_sf": 6.6299545301055565,
+        "hm_spine_n": 1913.4379124316763,
+        "hm_spine_sf": 0.5583419645263135,
+        "hm_twist_sf": 0.33871634896369385,
+        "lat_at": [
+          100.36222702596571,
+          -11.838137258606631
+        ],
+        "lat_rob": 310.72188970209464,
+        "nodes": 2832,
+        "ring_rob": 33251.180621621286,
+        "seq_case": "lateral",
+        "seq_ratio": 1.2564170926326979,
+        "sf_hunter": 1.1950841911619026,
+        "tris": 4890,
+        "tw_joint_nmm": 5487.204853211841,
+        "twist_at": [
+          187.2401713939921,
+          -48.8395112973349
+        ],
+        "twist_b_mm": 8.399999999999986,
+        "twist_body_sf": 11.502124595551878,
+        "twist_kc": 1.4338219030261738,
+        "twist_sf": 3.014947721544967,
+        "twist_t_mm": 5.440287633371838,
+        "twist_tipdist": 5.173018487888448,
+        "twist_tipzone_sf": 3.014947721544967
+      },
+      "sequence_cases": {
+        "chord-torsion": {
+          "blade_at": [
+            187.2401713939921,
+            -48.8395112973349
+          ],
+          "blade_stress": 0.09280691003965304,
+          "blade_t": 5.440287633371838,
+          "hand_at": [
+            76.59759669252699,
+            11.945682571150448
+          ],
+          "hand_stress": 0.009945532043894449,
+          "hand_t": 6.0,
+          "ratio": 9.331517874564296
+        },
+        "lateral": {
+          "blade_at": [
+            114.48083766060269,
+            -10.964896240251408
+          ],
+          "blade_stress": 1.9216680357678746,
+          "blade_t": 5.987751644783187,
+          "hand_at": [
+            18.239828012753854,
+            -2.5140726892105367
+          ],
+          "hand_stress": 1.529482563581819,
+          "hand_t": 6.0,
+          "ratio": 1.2564170926326979
+        },
+        "pry": {
+          "blade_at": [
+            119.75524189945111,
+            -13.775008739009973
+          ],
+          "blade_stress": 0.8167295154403594,
+          "hand_at": [
+            76.60896072048017,
+            12.136332029234776
+          ],
+          "hand_stress": 0.3700638933466485,
+          "ratio": 2.2069959542778403
+        }
+      },
+      "seconds": 0.413795049
+    },
+    {
+      "area_mm2": 0.25,
+      "solver": "skyline",
+      "metrics": {
+        "fat_sf": 1.0504635563610114,
+        "hm_ringback_n": 19980.253923681987,
+        "hm_ringback_sf": 6.6600846412273285,
+        "hm_spine_n": 1513.0363544195634,
+        "hm_spine_sf": 0.44150462632610543,
+        "hm_twist_sf": 0.30040022304832587,
+        "lat_at": [
+          118.69035782124138,
+          -12.334074158733898
+        ],
+        "lat_rob": 376.0620540923634,
+        "nodes": 16224,
+        "ring_rob": 32950.66609419743,
+        "seq_case": "lateral",
+        "seq_ratio": 1.309754052926388,
+        "sf_hunter": 1.4463925157398592,
+        "tris": 30802,
+        "tw_joint_nmm": 4866.483613382879,
+        "twist_at": [
+          186.3427366650767,
+          -50.05483205587429
+        ],
+        "twist_b_mm": 8.749999999999986,
+        "twist_body_sf": 11.40021829268225,
+        "twist_kc": 1.4194253455458186,
+        "twist_sf": 2.6738920952653182,
+        "twist_t_mm": 5.415405449975154,
+        "twist_tipdist": 4.140659512770822,
+        "twist_tipzone_sf": 2.6738920952653182
+      },
+      "sequence_cases": {
+        "chord-torsion": {
+          "blade_at": [
+            186.3427366650767,
+            -50.05483205587429
+          ],
+          "blade_stress": 0.10570581438373951,
+          "blade_t": 5.415405449975154,
+          "hand_at": [
+            76.33954876488018,
+            12.093587197778435
+          ],
+          "hand_stress": 0.010748917615880168,
+          "hand_t": 6.0,
+          "ratio": 9.834089176343905
+        },
+        "lateral": {
+          "blade_at": [
+            118.69035782124138,
+            -12.334074158733898
+          ],
+          "blade_stress": 1.9416331747756297,
+          "blade_t": 5.806548840095452,
+          "hand_at": [
+            17.31110529373296,
+            -2.5381582364699278
+          ],
+          "hand_stress": 1.482441051002997,
+          "hand_t": 6.0,
+          "ratio": 1.309754052926388
+        },
+        "pry": {
+          "blade_at": [
+            114.33376036312086,
+            -12.305077624677843
+          ],
+          "blade_stress": 0.9229222361548063,
+          "hand_at": [
+            76.53182395063283,
+            12.14092991489137
+          ],
+          "hand_stress": 0.4102305051779076,
+          "ratio": 2.249765008954066
+        }
+      },
+      "seconds": 11.449198546
+    },
+    {
+      "area_mm2": 0.125,
+      "solver": "skyline",
+      "metrics": {
+        "fat_sf": 1.115233331735176,
+        "hm_ringback_n": 19500.24947607313,
+        "hm_ringback_sf": 6.5000831586910435,
+        "hm_spine_n": 1633.432179772514,
+        "hm_spine_sf": 0.47663617734826785,
+        "hm_twist_sf": 0.2613549849048545,
+        "lat_at": [
+          114.63449926034144,
+          -11.052042056328284
+        ],
+        "lat_rob": 399.2493932654498,
+        "nodes": 31598,
+        "ring_rob": 32335.516837319123,
+        "seq_case": "lateral",
+        "seq_ratio": 1.3100319321749112,
+        "sf_hunter": 1.5355745894824993,
+        "tris": 60806,
+        "tw_joint_nmm": 4233.950755458643,
+        "twist_at": [
+          186.77942267008112,
+          -50.07070558222663
+        ],
+        "twist_b_mm": 8.499999999999986,
+        "twist_body_sf": 12.42912096845718,
+        "twist_kc": 1.4283950813417567,
+        "twist_sf": 2.32634656893332,
+        "twist_t_mm": 5.412355152946908,
+        "twist_tipdist": 4.014063000990612,
+        "twist_tipzone_sf": 2.32634656893332
+      },
+      "sequence_cases": {
+        "chord-torsion": {
+          "blade_at": [
+            186.77942267008112,
+            -50.07070558222663
+          ],
+          "blade_stress": 0.12073482281727019,
+          "blade_t": 5.412355152946908,
+          "hand_at": [
+            76.3818437375673,
+            12.118835820182873
+          ],
+          "hand_stress": 0.011235635060630985,
+          "hand_t": 6.0,
+          "ratio": 10.745705264165977
+        },
+        "lateral": {
+          "blade_at": [
+            114.63449926034144,
+            -11.052042056328284
+          ],
+          "blade_stress": 1.828868302160518,
+          "blade_t": 6.0,
+          "hand_at": [
+            17.265842759465183,
+            -2.375768984977121
+          ],
+          "hand_stress": 1.3960486437336197,
+          "hand_t": 5.995050430297852,
+          "ratio": 1.3100319321749112
+        },
+        "pry": {
+          "blade_at": [
+            119.5391201767197,
+            -13.682370604923179
+          ],
+          "blade_stress": 0.8522146617091745,
+          "hand_at": [
+            76.50611169401704,
+            12.142462543443568
+          ],
+          "hand_stress": 0.43055856500698764,
+          "ratio": 1.9793234439439005
+        }
+      },
+      "seconds": 43.233063026
+    },
+    {
+      "area_mm2": 0.0625,
+      "solver": "skyline",
+      "metrics": {
+        "fat_sf": 1.0625713795774483,
+        "hm_ringback_n": 19030.64708022432,
+        "hm_ringback_sf": 6.3435490267414405,
+        "hm_spine_n": 1681.4982361186617,
+        "hm_spine_sf": 0.49066187222604657,
+        "hm_twist_sf": 0.3012367760692796,
+        "lat_at": [
+          113.66489345374661,
+          -11.237549506113195
+        ],
+        "lat_rob": 380.39660986232633,
+        "nodes": 61424,
+        "ring_rob": 31385.82477429586,
+        "seq_case": "lateral",
+        "seq_ratio": 1.3480962441989264,
+        "sf_hunter": 1.4630638840858705,
+        "tris": 119580,
+        "tw_joint_nmm": 4880.03577232233,
+        "twist_at": [
+          186.36340496772812,
+          -50.12661383084082
+        ],
+        "twist_b_mm": 8.799999999999985,
+        "twist_body_sf": 14.637716120428147,
+        "twist_kc": 1.4175388371482955,
+        "twist_sf": 2.6813383364408403,
+        "twist_t_mm": 5.413590866210188,
+        "twist_tipdist": 4.0659915997543745,
+        "twist_tipzone_sf": 2.6813383364408403
+      },
+      "sequence_cases": {
+        "chord-torsion": {
+          "blade_at": [
+            186.36340496772812,
+            -50.12661383084082
+          ],
+          "blade_stress": 0.1055525490350827,
+          "blade_t": 5.413590866210188,
+          "hand_at": [
+            76.79616840114339,
+            12.112302459659185
+          ],
+          "hand_stress": 0.012252127393599484,
+          "hand_t": 6.0,
+          "ratio": 8.61503848631409
+        },
+        "lateral": {
+          "blade_at": [
+            113.66489345374661,
+            -11.237549506113195
+          ],
+          "blade_stress": 1.9195085893753518,
+          "blade_t": 4.508425758620943,
+          "hand_at": [
+            17.447607252470295,
+            -1.3347006720056342
+          ],
+          "hand_stress": 1.4238661354004243,
+          "hand_t": 6.0,
+          "ratio": 1.3480962441989264
+        },
+        "pry": {
+          "blade_at": [
+            119.51210496137827,
+            -13.670790838162329
+          ],
+          "blade_stress": 0.8371618054982498,
+          "hand_at": [
+            76.45468718078547,
+            12.145527800547963
+          ],
+          "hand_stress": 0.44708509591443124,
+          "ratio": 1.8724887345796837
+        }
+      },
+      "seconds": 158.702643682
+    }
+  ],
+  "native_library_tests": {
+    "command": "taskset -c 12,13 env CARGO_BUILD_JOBS=2 CARGO_INCREMENTAL=0 CARGO_PROFILE_DEV_DEBUG=line-tables-only cargo test --release --locked -p jarambit-crescent --lib",
+    "passed": 38,
+    "failed": 0,
+    "ignored": 0,
+    "seconds": 1545.74,
+    "log_sha256": "689002ad031744b56a8853ab3d1af5e7b82b79abdde7d25c8889d5332fce217c"
+  },
+  "backend_parity": {
+    "area_mm2": 2.0,
+    "scope": "one unbiased coarse faer versus reference skyline sample; native owner bound 1e-9, not fine-mesh or 3D qualification",
+    "tolerance": 1e-09,
+    "metrics": {
+      "lat_rob": {
+        "skyline": 310.72188970209464,
+        "faer": 310.72189234592685,
+        "relative_difference": 8.508676951821803e-09
+      },
+      "fat_sf": {
+        "skyline": 0.8679472383446317,
+        "faer": 0.8679472457297143,
+        "relative_difference": 8.508676744849802e-09
+      },
+      "sf_hunter": {
+        "skyline": 1.1950841911619026,
+        "faer": 1.1950842013304879,
+        "relative_difference": 8.50867687464405e-09
+      },
+      "seq_ratio": {
+        "skyline": 1.2564170926326979,
+        "faer": 1.2564171057943068,
+        "relative_difference": 1.0475509170600457e-08
+      },
+      "twist_sf": {
+        "skyline": 3.014947721544967,
+        "faer": 3.014947721544958,
+        "relative_difference": 3.093212310186395e-15
+      },
+      "twist_body_sf": {
+        "skyline": 11.502124595551878,
+        "faer": 11.502124595744293,
+        "relative_difference": 1.6728646194202014e-11
+      },
+      "twist_tipzone_sf": {
+        "skyline": 3.014947721544967,
+        "faer": 3.014947721544958,
+        "relative_difference": 3.093212310186395e-15
+      },
+      "hm_twist_sf": {
+        "skyline": 0.33871634896369385,
+        "faer": 0.3387163489636928,
+        "relative_difference": 3.1138499119419554e-15
+      },
+      "hm_spine_sf": {
+        "skyline": 0.5583419645263135,
+        "faer": 0.5583419645154436,
+        "relative_difference": 1.946810603143416e-11
+      },
+      "hm_ringback_sf": {
+        "skyline": 6.6299545301055565,
+        "faer": 6.629954530102564,
+        "relative_difference": 4.513263375159349e-13
+      }
+    },
+    "pass": false,
+    "reference_sha256": "47b2309131121d93b6928550b1e208a5a18ae5ec36bd56fc1629b901bad7e904"
+  },
+  "faer_qualification": "not established; parity sample fails the existing 1e-9 owner bar",
+  "selected_search_physical_source_sha256": {
+    "compound.rs": "1ba9dc3eb9713ae3050669aa5c021dff378649f127744e4ffaf639b873879a1d",
+    "prototype_pheno.rs": "e828fe37c033283ef9396e2bd19f11ec6e62e16925e8b2071cad6d707584dacb",
+    "prototype_fem.rs": "cee5f3592cd50449137603c95098dba9d8b52a48f74ad7175fcb2863a8ac6362",
+    "prototype_export.rs": "7c9a8ad43c29acb8455e5e07bde0e2d4e0bdaecff5e02b208f8242ddd7849839",
+    "diagnostic.rs": "3cd438fbd9169f1d37c86845e6fbfba66fb0af44469a6172c9964378fbd358b6"
+  },
+  "canonical_roundtrip_bytes_identical": true,
+  "numeric_genes": 128,
+  "reproducibility": {
+    "build": "taskset -c 12,13 bash experiments/G16-06-RSV2-08/build.sh",
+    "verify": "taskset -c 12,13 env CARGO_BUILD_JOBS=2 python3 experiments/G16-06-RSV2-08/verify_candidate.py",
+    "optional_diagnostic": "taskset -c 12,13 env CARGO_BUILD_JOBS=2 python3 experiments/G16-06-RSV2-08/check_backend_parity.py (expected nonzero; records faer parity failure)",
+    "rustc": "rustc 1.85.1 (4eb161250 2025-03-15)",
+    "cargo": "cargo 1.85.1 (d73d2caf9 2024-12-31)",
+    "cpus": [
+      12,
+      13
+    ],
+    "cargo_build_jobs": 2
+  },
+  "worktree_head_at_receipt": "7de5cf764ca0f5f6be619f9be0a44698569e0b5c",
+  "source_baseline_commit": "21425fe2948ab3941eedbe9710ebc3d29427faae",
+  "working_tree_note": "External checkpoint 7de5cf764ca0f5f6be619f9be0a44698569e0b5c includes the witness harness; final skyline config/helper updates and this receipt remain local on top."
+}

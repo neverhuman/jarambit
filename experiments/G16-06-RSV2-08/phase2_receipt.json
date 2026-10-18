@@ -1,0 +1,1846 @@
+{
+  "task": "G16-06-RSV2-08-p2",
+  "cpus": [
+    12,
+    13
+  ],
+  "cargo_build_jobs": 2,
+  "sealed_G16_15": false,
+  "sealed_G16_13": true,
+  "sealed_plate_gci": {
+    "admitted": false,
+    "asymptotic_validation": "not_established",
+    "f_ext": null,
+    "fit_status": "oscillatory",
+    "gci_fine": null,
+    "levels": [
+      {
+        "h": 0.5,
+        "mesh": {
+          "id": "G16-06-RSV2-08-p2_area_0.25",
+          "revision": "rev1",
+          "sha256": "bf3443fc7aa483dce7cca23659297f718098f4d397a07ef329b0f80f45ffd70d"
+        },
+        "observable": {
+          "id": "plate_seq_ratio",
+          "metric": "seq_ratio",
+          "projection": "plate_cst_dkt",
+          "region": "blade_vs_ring_neck",
+          "units": "ratio"
+        },
+        "refinement": "uniform_h"
+      },
+      {
+        "h": 1.0,
+        "mesh": {
+          "id": "G16-06-RSV2-08-p2_area_1",
+          "revision": "rev1",
+          "sha256": "671c391dccc7c74e64394b1b5646def9dbd3501a78f4b76c9c95a535858d6f73"
+        },
+        "observable": {
+          "id": "plate_seq_ratio",
+          "metric": "seq_ratio",
+          "projection": "plate_cst_dkt",
+          "region": "blade_vs_ring_neck",
+          "units": "ratio"
+        },
+        "refinement": "uniform_h"
+      },
+      {
+        "h": 2.0,
+        "mesh": {
+          "id": "G16-06-RSV2-08-p2_area_4",
+          "revision": "rev1",
+          "sha256": "becf188ce6d9aef56783e83b83809469ee8c35eca4fb68fc52295e772d4a3197"
+        },
+        "observable": {
+          "id": "plate_seq_ratio",
+          "metric": "seq_ratio",
+          "projection": "plate_cst_dkt",
+          "region": "blade_vs_ring_neck",
+          "units": "ratio"
+        },
+        "refinement": "uniform_h"
+      }
+    ],
+    "method_id": "relative_gci.v2",
+    "monotone": false,
+    "observable_valid": true,
+    "p": null,
+    "reason": "oscillatory_sequence",
+    "relative_error_available": false,
+    "sequence_valid": true
+  },
+  "sealed_side_a4": {
+    "bore_flange_k": 100000.0,
+    "bore_radial_k": 50000.0,
+    "bore_tangential_k": 5000.0,
+    "buckling_critical_load_n": 2138.488079260612,
+    "buckling_eigenvalue": 8.224954151002352,
+    "certified_seq_ratio": 1.309754052926388,
+    "changes_seq_ratio": false,
+    "genome_sha256": "52b795486b3c7f72ed9c9e06f57888ef166afdc22434118a0a821004ccc016ed",
+    "grip_foundation_k": 200.0,
+    "mesh_binding": "sha256 of accompanying mesh JSON, not a full D1 report",
+    "mesh_max_area_mm2": 0.25,
+    "mesh_sha256": "0f973526580bb26a9e419e4673b7bb01b6a283bf0f38e3ec4a0196ad51b80970",
+    "n_bore_nodes": 130,
+    "n_elem": 30802,
+    "n_grip_nodes": 8196,
+    "n_node": 16224,
+    "partial_solver_edit": false,
+    "same_mesh_ring_clamp_seq_ratio": 1.309754052926388,
+    "schema": "jarambit.side_report.a4.v1",
+    "solver": "native side_a4 faer sparse Cholesky / K-orthogonal Lanczos",
+    "status": "pass",
+    "supported_blade_peak_mpa_per_n": 1.1757503073464854,
+    "supported_hand_peak_mpa_per_n": 0.3658746074092398,
+    "supported_seq_ratio": 3.2135334990093467,
+    "supported_vs_certified_seq_delta": 1.9037794460829587
+  },
+  "native_G16_15_metadata_valid": true,
+  "assignment_G16_15_requires_admitted": true,
+  "native_sources_and_sealed_inputs_unchanged": true,
+  "source_hash_checks": {
+    "source_sha256": 12,
+    "requirements_sha256": 2,
+    "dependency_source_sha256": 17,
+    "prototype_source_sha256": 21
+  },
+  "window_trials": 60,
+  "geometry_legal": 60,
+  "trials": [
+    {
+      "name": "placement_00",
+      "genes": {
+        "s0": 0.05,
+        "s1": 0.5,
+        "fill": 0.6
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.369605054283566,
+        1.2307348199726684
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_01",
+      "genes": {
+        "s0": 0.05,
+        "s1": 0.5,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.314268273436982,
+        1.1618522657084458
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_02",
+      "genes": {
+        "s0": 0.05,
+        "s1": 0.5,
+        "fill": 0.7
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3777632642849387,
+        1.248921285635755
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_03",
+      "genes": {
+        "s0": 0.05,
+        "s1": 0.525,
+        "fill": 0.6
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3667198411159964,
+        1.2260635371364634
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_04",
+      "genes": {
+        "s0": 0.05,
+        "s1": 0.525,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": true,
+      "coarse_sequence": [
+        1.271508805888111,
+        1.3482997469384523
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_05",
+      "genes": {
+        "s0": 0.05,
+        "s1": 0.525,
+        "fill": 0.7
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3938030025978907,
+        1.254653082044107
+      ],
+      "gci_fit": "admissible_estimate",
+      "gci_admitted": true
+    },
+    {
+      "name": "placement_06",
+      "genes": {
+        "s0": 0.05,
+        "s1": 0.55,
+        "fill": 0.6
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.363223349606711,
+        1.2264688665425938
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_07",
+      "genes": {
+        "s0": 0.05,
+        "s1": 0.55,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3442625510531196,
+        1.3401092308566025
+      ],
+      "gci_fit": "nonpositive_order",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_08",
+      "genes": {
+        "s0": 0.05,
+        "s1": 0.55,
+        "fill": 0.7
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.5569542512685577,
+        1.2397407770146083
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_09",
+      "genes": {
+        "s0": 0.075,
+        "s1": 0.5,
+        "fill": 0.6
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.2954627786900472,
+        1.200821340892711
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_10",
+      "genes": {
+        "s0": 0.075,
+        "s1": 0.5,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3636697547149152,
+        1.2562493146903078
+      ],
+      "gci_fit": "nonpositive_order",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_11",
+      "genes": {
+        "s0": 0.075,
+        "s1": 0.5,
+        "fill": 0.7
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.269757288559548,
+        1.1581935718019818
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_12",
+      "genes": {
+        "s0": 0.075,
+        "s1": 0.525,
+        "fill": 0.6
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.160273926023949,
+        1.2356154014047724
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_13",
+      "genes": {
+        "s0": 0.075,
+        "s1": 0.525,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3578300355540687,
+        1.171808702008747
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_14",
+      "genes": {
+        "s0": 0.075,
+        "s1": 0.525,
+        "fill": 0.7
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3696260530222568,
+        1.2028177341122206
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_15",
+      "genes": {
+        "s0": 0.075,
+        "s1": 0.55,
+        "fill": 0.6
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.1548391455087632,
+        1.2872961590976366
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_16",
+      "genes": {
+        "s0": 0.075,
+        "s1": 0.55,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.29129392691701,
+        1.2472348706997545
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_17",
+      "genes": {
+        "s0": 0.075,
+        "s1": 0.55,
+        "fill": 0.7
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.374707468228388,
+        1.2351860679594928
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_18",
+      "genes": {
+        "s0": 0.1,
+        "s1": 0.5,
+        "fill": 0.6
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.166847531244676,
+        1.2102157293916953
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_19",
+      "genes": {
+        "s0": 0.1,
+        "s1": 0.5,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3236106617532668,
+        1.2064116526565163
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_20",
+      "genes": {
+        "s0": 0.1,
+        "s1": 0.5,
+        "fill": 0.7
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.1918445159469029,
+        1.661286925722812
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_21",
+      "genes": {
+        "s0": 0.1,
+        "s1": 0.525,
+        "fill": 0.6
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.1572687317076147,
+        1.2257411021266542
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_22",
+      "genes": {
+        "s0": 0.1,
+        "s1": 0.525,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.2870092842215677,
+        1.2273820430319764
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_23",
+      "genes": {
+        "s0": 0.1,
+        "s1": 0.525,
+        "fill": 0.7
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.1640479549283935,
+        1.1826559737752613
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_24",
+      "genes": {
+        "s0": 0.1,
+        "s1": 0.55,
+        "fill": 0.6
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.2074867454799678,
+        1.1876075187389143
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_25",
+      "genes": {
+        "s0": 0.1,
+        "s1": 0.55,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.38176449937232,
+        1.2097917575348853
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_26",
+      "genes": {
+        "s0": 0.1,
+        "s1": 0.55,
+        "fill": 0.7
+      },
+      "legal": true,
+      "coarse_targets_pass": true,
+      "coarse_sequence": [
+        1.260620521723746,
+        1.267255040578671
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_27",
+      "genes": {
+        "s0": 0.125,
+        "s1": 0.5,
+        "fill": 0.6
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.1366160482921412,
+        1.2093791718588438
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_28",
+      "genes": {
+        "s0": 0.125,
+        "s1": 0.5,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.1596777755148808,
+        1.158503958657396
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_29",
+      "genes": {
+        "s0": 0.125,
+        "s1": 0.5,
+        "fill": 0.7
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3296108457168234,
+        1.209492790166206
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_30",
+      "genes": {
+        "s0": 0.125,
+        "s1": 0.525,
+        "fill": 0.6
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.1430237040345597,
+        1.1787934264312179
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_31",
+      "genes": {
+        "s0": 0.125,
+        "s1": 0.525,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.0977374356393201,
+        1.2075205231156638
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_32",
+      "genes": {
+        "s0": 0.125,
+        "s1": 0.525,
+        "fill": 0.7
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.1726377818075675,
+        1.225350364712291
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_33",
+      "genes": {
+        "s0": 0.125,
+        "s1": 0.55,
+        "fill": 0.6
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.102965274986158,
+        1.1756457525374473
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_34",
+      "genes": {
+        "s0": 0.125,
+        "s1": 0.55,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.1698163288393406,
+        1.228210307859498
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "placement_35",
+      "genes": {
+        "s0": 0.125,
+        "s1": 0.55,
+        "fill": 0.7
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.1605396211904098,
+        1.1882520082412524
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "fillet_00",
+      "genes": {
+        "width": 5.0,
+        "s0": 0.05,
+        "s1": 0.5,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.2085722743227976,
+        1.151981421807233
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "fillet_01",
+      "genes": {
+        "width": 5.0,
+        "s0": 0.05,
+        "s1": 0.525,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.2250156277847846,
+        1.1991936666791871
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "fillet_02",
+      "genes": {
+        "width": 5.5,
+        "s0": 0.05,
+        "s1": 0.5,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": true,
+      "coarse_sequence": [
+        1.3334582895193372,
+        1.2893417186304892
+      ],
+      "gci_fit": "nonpositive_order",
+      "gci_admitted": false
+    },
+    {
+      "name": "fillet_03",
+      "genes": {
+        "width": 5.5,
+        "s0": 0.05,
+        "s1": 0.525,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.1935586974543906,
+        1.2738463641455424
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "fillet_04",
+      "genes": {
+        "width": 6.5,
+        "s0": 0.05,
+        "s1": 0.5,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.5509015507883561,
+        1.303074874095965
+      ],
+      "gci_fit": "admissible_estimate",
+      "gci_admitted": true
+    },
+    {
+      "name": "fillet_05",
+      "genes": {
+        "width": 6.5,
+        "s0": 0.05,
+        "s1": 0.525,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3316617117086094,
+        1.5077464313276412
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "fillet_06",
+      "genes": {
+        "width": 7.0,
+        "s0": 0.05,
+        "s1": 0.5,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.4180054935577897,
+        1.3690682468546476
+      ],
+      "gci_fit": "admissible_estimate",
+      "gci_admitted": true
+    },
+    {
+      "name": "fillet_07",
+      "genes": {
+        "width": 7.0,
+        "s0": 0.05,
+        "s1": 0.525,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.399255384769196,
+        1.4613426631790387
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_00",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.05,
+        "s1": 0.5,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.314268273436982,
+        1.1618522657084458
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_01",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.05,
+        "s1": 0.502,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3985025104841606,
+        1.2742254121679948
+      ],
+      "gci_fit": "admissible_estimate",
+      "gci_admitted": true
+    },
+    {
+      "name": "local_02",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.05,
+        "s1": 0.505,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.396303496647097,
+        1.3214377604885372
+      ],
+      "gci_fit": "nonpositive_order",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_03",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.05,
+        "s1": 0.51,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.2367096172518255,
+        1.2298053090975065
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_04",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.052,
+        "s1": 0.5,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.5541906257009486,
+        1.31922479924677
+      ],
+      "gci_fit": "admissible_estimate",
+      "gci_admitted": true
+    },
+    {
+      "name": "local_05",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.052,
+        "s1": 0.502,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": true,
+      "coarse_sequence": [
+        1.3504118037252044,
+        1.3136019114669049
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_06",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.052,
+        "s1": 0.505,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.2444726540052313,
+        1.2206949871069568
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_07",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.052,
+        "s1": 0.51,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.228206693956397,
+        1.3246849143579338
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_08",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.055,
+        "s1": 0.5,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3114806353645057,
+        1.2297517380656529
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_09",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.055,
+        "s1": 0.502,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.2196940290691922,
+        1.237600153721599
+      ],
+      "gci_fit": "nonpositive_order",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_10",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.055,
+        "s1": 0.505,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.2254799687468467,
+        1.367137212273128
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_11",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.055,
+        "s1": 0.51,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.2180080826238813,
+        1.2348982471179812
+      ],
+      "gci_fit": "nonpositive_order",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_12",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.06,
+        "s1": 0.5,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3207123384406507,
+        1.2735670099793086
+      ],
+      "gci_fit": "nonpositive_order",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_13",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.06,
+        "s1": 0.502,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.3183261319924173,
+        1.3344295818426555
+      ],
+      "gci_fit": "oscillatory",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_14",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.06,
+        "s1": 0.505,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.269344622528489,
+        1.1652683398382928
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    },
+    {
+      "name": "local_15",
+      "genes": {
+        "width": 6.0,
+        "s0": 0.06,
+        "s1": 0.51,
+        "fill": 0.65
+      },
+      "legal": true,
+      "coarse_targets_pass": false,
+      "coarse_sequence": [
+        1.2700555799663669,
+        1.2061406902916731
+      ],
+      "gci_fit": "not_run",
+      "gci_admitted": false
+    }
+  ],
+  "refinement_observations": [
+    {
+      "name": "fillet_06",
+      "stage": "audit_scope_refine",
+      "area": ".25",
+      "cert_strict_targets_and_monotonic": true,
+      "levels": [
+        {
+          "area": 4.0,
+          "diagnostic_peaks": {
+            "ringback": {
+              "at": [
+                14.3361130657579,
+                -14.18467656936395
+              ],
+              "unit_stress": 0.036738437109413304
+            },
+            "sequence_cases": {
+              "chord-torsion": {
+                "blade_at": [
+                  185.94090667189985,
+                  -50.13298275264583
+                ],
+                "blade_stress": 0.1326752695923393,
+                "blade_t": 4.505796305265463,
+                "hand_at": [
+                  76.59759669252699,
+                  11.945682571150448
+                ],
+                "hand_stress": 0.010066818396126942,
+                "hand_t": 6.0,
+                "ratio": 13.179463895304213
+              },
+              "lateral": {
+                "blade_at": [
+                  114.69475170311546,
+                  -11.24103980337839
+                ],
+                "blade_stress": 2.086557699264429,
+                "blade_t": 5.507299026044263,
+                "hand_at": [
+                  19.83144627002771,
+                  -0.7087643567025297
+                ],
+                "hand_stress": 1.4714736358525913,
+                "hand_t": 6.0,
+                "ratio": 1.4180054935577897
+              },
+              "pry": {
+                "blade_at": [
+                  119.03312863071656,
+                  -13.575423841593476
+                ],
+                "blade_stress": 1.23941038695854,
+                "hand_at": [
+                  76.60896072048017,
+                  12.136332029234776
+                ],
+                "hand_stress": 0.36819721627243823,
+                "ratio": 3.366159037013114
+              }
+            },
+            "spine": {
+              "at": [
+                119.03312863071656,
+                -13.575423841593476
+              ],
+              "unit_stress": 0.6284918158837058
+            }
+          },
+          "metrics": {
+            "fat_sf": 0.9775022711532738,
+            "hm_ringback_n": 20211.812434714055,
+            "hm_ringback_sf": 6.737270811571352,
+            "hm_spine_n": 1181.4798239749862,
+            "hm_spine_sf": 0.34475629529471435,
+            "hm_twist_sf": 0.25081513022681945,
+            "lat_at": [
+              114.69475170311546,
+              -11.24103980337839
+            ],
+            "lat_rob": 349.94218480390333,
+            "nodes": 2064,
+            "ring_rob": 33835.88830161894,
+            "seq_case": "lateral",
+            "seq_ratio": 1.4180054935577897,
+            "sf_hunter": 1.3459314800150128,
+            "tris": 3405,
+            "tw_joint_nmm": 4063.2051096744754,
+            "twist_at": [
+              185.94090667189985,
+              -50.13298275264583
+            ],
+            "twist_b_mm": 9.049999999999983,
+            "twist_body_sf": 15.475518961963363,
+            "twist_kc": 1.354465579288618,
+            "twist_sf": 2.2325302800409204,
+            "twist_t_mm": 4.505796305265463,
+            "twist_tipdist": 4.207898889312934,
+            "twist_tipzone_sf": 2.2325302800409204
+          },
+          "seconds": 0.309742952,
+          "unbiased": true
+        },
+        {
+          "area": 1.0,
+          "diagnostic_peaks": {
+            "ringback": {
+              "at": [
+                14.3361130657579,
+                -14.18467656936395
+              ],
+              "unit_stress": 0.03744114976080105
+            },
+            "sequence_cases": {
+              "chord-torsion": {
+                "blade_at": [
+                  185.70727214727012,
+                  -50.1375287770741
+                ],
+                "blade_stress": 0.10326001343201119,
+                "blade_t": 5.419351801028521,
+                "hand_at": [
+                  76.6011124221044,
+                  12.004664469247485
+                ],
+                "hand_stress": 0.010067868838869013,
+                "hand_t": 6.0,
+                "ratio": 10.256392398891347
+              },
+              "lateral": {
+                "blade_at": [
+                  114.71468895247831,
+                  -11.274596508148178
+                ],
+                "blade_stress": 1.956321835275929,
+                "blade_t": 5.4721413030273744,
+                "hand_at": [
+                  18.475419078954044,
+                  0.16258607565819516
+                ],
+                "hand_stress": 1.428943984180819,
+                "hand_t": 6.0,
+                "ratio": 1.3690682468546476
+              },
+              "pry": {
+                "blade_at": [
+                  129.2220620616868,
+                  -16.42577785165153
+                ],
+                "blade_stress": 0.9466407658136933,
+                "hand_at": [
+                  76.60896072048017,
+                  12.136332029234776
+                ],
+                "hand_stress": 0.3925418531414188,
+                "ratio": 2.4115664565140076
+              }
+            },
+            "spine": {
+              "at": [
+                114.62141208560995,
+                -12.425681418652452
+              ],
+              "unit_stress": 0.48413150099396807
+            }
+          },
+          "metrics": {
+            "fat_sf": 1.042576355866136,
+            "hm_ringback_n": 19832.4678794296,
+            "hm_ringback_sf": 6.6108226264765335,
+            "hm_spine_n": 1533.7783194761619,
+            "hm_spine_sf": 0.4475571402031403,
+            "hm_twist_sf": 0.31086358288658367,
+            "lat_at": [
+              114.71468895247831,
+              -11.274596508148178
+            ],
+            "lat_rob": 373.2384655907154,
+            "nodes": 4519,
+            "ring_rob": 33174.07324981792,
+            "seq_case": "lateral",
+            "seq_ratio": 1.3690682468546476,
+            "sf_hunter": 1.43553255996429,
+            "tris": 8174,
+            "tw_joint_nmm": 5035.990042762655,
+            "twist_at": [
+              185.70727214727012,
+              -50.1375287770741
+            ],
+            "twist_b_mm": 9.199999999999982,
+            "twist_body_sf": 11.50312530535822,
+            "twist_kc": 1.4041375632757602,
+            "twist_sf": 2.767027496023437,
+            "twist_t_mm": 5.419351801028521,
+            "twist_tipdist": 4.301290814677627,
+            "twist_tipzone_sf": 2.767027496023437
+          },
+          "seconds": 0.963140083,
+          "unbiased": true
+        },
+        {
+          "area": 0.25,
+          "diagnostic_peaks": {
+            "ringback": {
+              "at": [
+                13.907468290863884,
+                -14.2358313450267
+              ],
+              "unit_stress": 0.037164211184172576
+            },
+            "sequence_cases": {
+              "chord-torsion": {
+                "blade_at": [
+                  187.13103094281098,
+                  -49.98049150359093
+                ],
+                "blade_stress": 0.1141852533201751,
+                "blade_t": 5.413184518247107,
+                "hand_at": [
+                  76.33954876488018,
+                  12.093587197778435
+                ],
+                "hand_stress": 0.010746443010828496,
+                "hand_t": 6.0,
+                "ratio": 10.625399790899928
+              },
+              "lateral": {
+                "blade_at": [
+                  119.8229001713451,
+                  -12.321099609217129
+                ],
+                "blade_stress": 2.026061752312972,
+                "blade_t": 6.0,
+                "hand_at": [
+                  17.31110529373296,
+                  -2.5381582364699278
+                ],
+                "hand_stress": 1.480955851728826,
+                "hand_t": 6.0,
+                "ratio": 1.3680770766716677
+              },
+              "pry": {
+                "blade_at": [
+                  119.59315060740255,
+                  -13.705530138444876
+                ],
+                "blade_stress": 0.8513893154550463,
+                "hand_at": [
+                  76.53182395063283,
+                  12.14092991489137
+                ],
+                "hand_stress": 0.40962753017483766,
+                "ratio": 2.0784474986133263
+              }
+            },
+            "spine": {
+              "at": [
+                114.47758622436541,
+                -12.365379521665147
+              ],
+              "unit_stress": 0.4578737077056018
+            }
+          },
+          "metrics": {
+            "fat_sf": 1.0066894000614173,
+            "hm_ringback_n": 19980.25456050137,
+            "hm_ringback_sf": 6.660084853500456,
+            "hm_spine_n": 1621.7362724776422,
+            "hm_spine_sf": 0.4732233068216055,
+            "hm_twist_sf": 0.2741206822718941,
+            "lat_at": [
+              119.8229001713451,
+              -12.321099609217129
+            ],
+            "lat_rob": 360.391068616949,
+            "nodes": 16043,
+            "ring_rob": 32950.6678275701,
+            "seq_case": "lateral",
+            "seq_ratio": 1.3680770766716677,
+            "sf_hunter": 1.386119494680573,
+            "tris": 30455,
+            "tw_joint_nmm": 4440.755052804685,
+            "twist_at": [
+              187.13103094281098,
+              -49.98049150359093
+            ],
+            "twist_b_mm": 8.199999999999987,
+            "twist_body_sf": 10.18451546210185,
+            "twist_kc": 1.4399912703792805,
+            "twist_sf": 2.439975303738838,
+            "twist_t_mm": 5.413184518247107,
+            "twist_tipdist": 4.046774089235206,
+            "twist_tipzone_sf": 2.439975303738838
+          },
+          "seconds": 11.100393706,
+          "unbiased": true
+        }
+      ]
+    },
+    {
+      "name": "fillet_06",
+      "stage": "audit_scope_refine",
+      "area": ".125",
+      "cert_strict_targets_and_monotonic": false,
+      "levels": [
+        {
+          "area": 4.0,
+          "diagnostic_peaks": {
+            "ringback": {
+              "at": [
+                14.3361130657579,
+                -14.18467656936395
+              ],
+              "unit_stress": 0.036738437109413304
+            },
+            "sequence_cases": {
+              "chord-torsion": {
+                "blade_at": [
+                  185.94090667189985,
+                  -50.13298275264583
+                ],
+                "blade_stress": 0.1326752695923393,
+                "blade_t": 4.505796305265463,
+                "hand_at": [
+                  76.59759669252699,
+                  11.945682571150448
+                ],
+                "hand_stress": 0.010066818396126942,
+                "hand_t": 6.0,
+                "ratio": 13.179463895304213
+              },
+              "lateral": {
+                "blade_at": [
+                  114.69475170311546,
+                  -11.24103980337839
+                ],
+                "blade_stress": 2.086557699264429,
+                "blade_t": 5.507299026044263,
+                "hand_at": [
+                  19.83144627002771,
+                  -0.7087643567025297
+                ],
+                "hand_stress": 1.4714736358525913,
+                "hand_t": 6.0,
+                "ratio": 1.4180054935577897
+              },
+              "pry": {
+                "blade_at": [
+                  119.03312863071656,
+                  -13.575423841593476
+                ],
+                "blade_stress": 1.23941038695854,
+                "hand_at": [
+                  76.60896072048017,
+                  12.136332029234776
+                ],
+                "hand_stress": 0.36819721627243823,
+                "ratio": 3.366159037013114
+              }
+            },
+            "spine": {
+              "at": [
+                119.03312863071656,
+                -13.575423841593476
+              ],
+              "unit_stress": 0.6284918158837058
+            }
+          },
+          "metrics": {
+            "fat_sf": 0.9775022711532738,
+            "hm_ringback_n": 20211.812434714055,
+            "hm_ringback_sf": 6.737270811571352,
+            "hm_spine_n": 1181.4798239749862,
+            "hm_spine_sf": 0.34475629529471435,
+            "hm_twist_sf": 0.25081513022681945,
+            "lat_at": [
+              114.69475170311546,
+              -11.24103980337839
+            ],
+            "lat_rob": 349.94218480390333,
+            "nodes": 2064,
+            "ring_rob": 33835.88830161894,
+            "seq_case": "lateral",
+            "seq_ratio": 1.4180054935577897,
+            "sf_hunter": 1.3459314800150128,
+            "tris": 3405,
+            "tw_joint_nmm": 4063.2051096744754,
+            "twist_at": [
+              185.94090667189985,
+              -50.13298275264583
+            ],
+            "twist_b_mm": 9.049999999999983,
+            "twist_body_sf": 15.475518961963363,
+            "twist_kc": 1.354465579288618,
+            "twist_sf": 2.2325302800409204,
+            "twist_t_mm": 4.505796305265463,
+            "twist_tipdist": 4.207898889312934,
+            "twist_tipzone_sf": 2.2325302800409204
+          },
+          "seconds": 0.309742952,
+          "unbiased": true
+        },
+        {
+          "area": 1.0,
+          "diagnostic_peaks": {
+            "ringback": {
+              "at": [
+                14.3361130657579,
+                -14.18467656936395
+              ],
+              "unit_stress": 0.03744114976080105
+            },
+            "sequence_cases": {
+              "chord-torsion": {
+                "blade_at": [
+                  185.70727214727012,
+                  -50.1375287770741
+                ],
+                "blade_stress": 0.10326001343201119,
+                "blade_t": 5.419351801028521,
+                "hand_at": [
+                  76.6011124221044,
+                  12.004664469247485
+                ],
+                "hand_stress": 0.010067868838869013,
+                "hand_t": 6.0,
+                "ratio": 10.256392398891347
+              },
+              "lateral": {
+                "blade_at": [
+                  114.71468895247831,
+                  -11.274596508148178
+                ],
+                "blade_stress": 1.956321835275929,
+                "blade_t": 5.4721413030273744,
+                "hand_at": [
+                  18.475419078954044,
+                  0.16258607565819516
+                ],
+                "hand_stress": 1.428943984180819,
+                "hand_t": 6.0,
+                "ratio": 1.3690682468546476
+              },
+              "pry": {
+                "blade_at": [
+                  129.2220620616868,
+                  -16.42577785165153
+                ],
+                "blade_stress": 0.9466407658136933,
+                "hand_at": [
+                  76.60896072048017,
+                  12.136332029234776
+                ],
+                "hand_stress": 0.3925418531414188,
+                "ratio": 2.4115664565140076
+              }
+            },
+            "spine": {
+              "at": [
+                114.62141208560995,
+                -12.425681418652452
+              ],
+              "unit_stress": 0.48413150099396807
+            }
+          },
+          "metrics": {
+            "fat_sf": 1.042576355866136,
+            "hm_ringback_n": 19832.4678794296,
+            "hm_ringback_sf": 6.6108226264765335,
+            "hm_spine_n": 1533.7783194761619,
+            "hm_spine_sf": 0.4475571402031403,
+            "hm_twist_sf": 0.31086358288658367,
+            "lat_at": [
+              114.71468895247831,
+              -11.274596508148178
+            ],
+            "lat_rob": 373.2384655907154,
+            "nodes": 4519,
+            "ring_rob": 33174.07324981792,
+            "seq_case": "lateral",
+            "seq_ratio": 1.3690682468546476,
+            "sf_hunter": 1.43553255996429,
+            "tris": 8174,
+            "tw_joint_nmm": 5035.990042762655,
+            "twist_at": [
+              185.70727214727012,
+              -50.1375287770741
+            ],
+            "twist_b_mm": 9.199999999999982,
+            "twist_body_sf": 11.50312530535822,
+            "twist_kc": 1.4041375632757602,
+            "twist_sf": 2.767027496023437,
+            "twist_t_mm": 5.419351801028521,
+            "twist_tipdist": 4.301290814677627,
+            "twist_tipzone_sf": 2.767027496023437
+          },
+          "seconds": 0.963140083,
+          "unbiased": true
+        },
+        {
+          "area": 0.25,
+          "diagnostic_peaks": {
+            "ringback": {
+              "at": [
+                13.907468290863884,
+                -14.2358313450267
+              ],
+              "unit_stress": 0.037164211184172576
+            },
+            "sequence_cases": {
+              "chord-torsion": {
+                "blade_at": [
+                  187.13103094281098,
+                  -49.98049150359093
+                ],
+                "blade_stress": 0.1141852533201751,
+                "blade_t": 5.413184518247107,
+                "hand_at": [
+                  76.33954876488018,
+                  12.093587197778435
+                ],
+                "hand_stress": 0.010746443010828496,
+                "hand_t": 6.0,
+                "ratio": 10.625399790899928
+              },
+              "lateral": {
+                "blade_at": [
+                  119.8229001713451,
+                  -12.321099609217129
+                ],
+                "blade_stress": 2.026061752312972,
+                "blade_t": 6.0,
+                "hand_at": [
+                  17.31110529373296,
+                  -2.5381582364699278
+                ],
+                "hand_stress": 1.480955851728826,
+                "hand_t": 6.0,
+                "ratio": 1.3680770766716677
+              },
+              "pry": {
+                "blade_at": [
+                  119.59315060740255,
+                  -13.705530138444876
+                ],
+                "blade_stress": 0.8513893154550463,
+                "hand_at": [
+                  76.53182395063283,
+                  12.14092991489137
+                ],
+                "hand_stress": 0.40962753017483766,
+                "ratio": 2.0784474986133263
+              }
+            },
+            "spine": {
+              "at": [
+                114.47758622436541,
+                -12.365379521665147
+              ],
+              "unit_stress": 0.4578737077056018
+            }
+          },
+          "metrics": {
+            "fat_sf": 1.0066894000614173,
+            "hm_ringback_n": 19980.25456050137,
+            "hm_ringback_sf": 6.660084853500456,
+            "hm_spine_n": 1621.7362724776422,
+            "hm_spine_sf": 0.4732233068216055,
+            "hm_twist_sf": 0.2741206822718941,
+            "lat_at": [
+              119.8229001713451,
+              -12.321099609217129
+            ],
+            "lat_rob": 360.391068616949,
+            "nodes": 16043,
+            "ring_rob": 32950.6678275701,
+            "seq_case": "lateral",
+            "seq_ratio": 1.3680770766716677,
+            "sf_hunter": 1.386119494680573,
+            "tris": 30455,
+            "tw_joint_nmm": 4440.755052804685,
+            "twist_at": [
+              187.13103094281098,
+              -49.98049150359093
+            ],
+            "twist_b_mm": 8.199999999999987,
+            "twist_body_sf": 10.18451546210185,
+            "twist_kc": 1.4399912703792805,
+            "twist_sf": 2.439975303738838,
+            "twist_t_mm": 5.413184518247107,
+            "twist_tipdist": 4.046774089235206,
+            "twist_tipzone_sf": 2.439975303738838
+          },
+          "seconds": 11.100393706,
+          "unbiased": true
+        },
+        {
+          "area": 0.125,
+          "diagnostic_peaks": {
+            "ringback": {
+              "at": [
+                13.907468290863884,
+                -14.2358313450267
+              ],
+              "unit_stress": 0.03807902052280972
+            },
+            "sequence_cases": {
+              "chord-torsion": {
+                "blade_at": [
+                  186.77942267008112,
+                  -50.07070558222663
+                ],
+                "blade_stress": 0.1207348229474212,
+                "blade_t": 5.412355152946908,
+                "hand_at": [
+                  76.3818437375673,
+                  12.118835820182873
+                ],
+                "hand_stress": 0.011234722584656274,
+                "hand_t": 6.0,
+                "ratio": 10.746578034095275
+              },
+              "lateral": {
+                "blade_at": [
+                  114.65772389076598,
+                  -11.263586840031694
+                ],
+                "blade_stress": 2.2675382058777904,
+                "blade_t": 5.704392104133096,
+                "hand_at": [
+                  17.265842759465183,
+                  -2.375768984977121
+                ],
+                "hand_stress": 1.3960485940990974,
+                "hand_t": 5.995050430297852,
+                "ratio": 1.6242544961990277
+              },
+              "pry": {
+                "blade_at": [
+                  119.5391201767197,
+                  -13.682370604923179
+                ],
+                "blade_stress": 0.9003281819901461,
+                "hand_at": [
+                  76.50611169401704,
+                  12.142462543443568
+                ],
+                "hand_stress": 0.4305498032429593,
+                "ratio": 2.0911127474887983
+              }
+            },
+            "spine": {
+              "at": [
+                114.2144378227216,
+                -12.284549678439003
+              ],
+              "unit_stress": 0.4629650787485793
+            }
+          },
+          "metrics": {
+            "fat_sf": 0.8994842444710961,
+            "hm_ringback_n": 19500.249476091565,
+            "hm_ringback_sf": 6.500083158697189,
+            "hm_spine_n": 1603.9015340145218,
+            "hm_spine_sf": 0.4680191228522094,
+            "hm_twist_sf": 0.2613549846231162,
+            "lat_at": [
+              114.65772389076598,
+              -11.263586840031694
+            ],
+            "lat_rob": 322.01202083708273,
+            "nodes": 31345,
+            "ring_rob": 32335.516837355077,
+            "seq_case": "lateral",
+            "seq_ratio": 1.6242544961990277,
+            "sf_hunter": 1.2385077724503182,
+            "tris": 60314,
+            "tw_joint_nmm": 4233.950750894483,
+            "twist_at": [
+              186.77942267008112,
+              -50.07070558222663
+            ],
+            "twist_b_mm": 8.499999999999986,
+            "twist_body_sf": 12.429112551731732,
+            "twist_kc": 1.4283950813417567,
+            "twist_sf": 2.32634656642554,
+            "twist_t_mm": 5.412355152946908,
+            "twist_tipdist": 4.014063000990612,
+            "twist_tipzone_sf": 2.32634656642554
+          },
+          "seconds": 42.043824581,
+          "unbiased": true
+        }
+      ]
+    }
+  ],
+  "selected_variants": [],
+  "combined_adjustment_found": false,
+  "scope": "GCI 4/1/.25 plus monotonicity through .125/.0625; unchanged certification min(.25,.125) and strict .0625 task thresholds",
+  "thresholds": {
+    "lat_rob": 358.0,
+    "fat_sf": 1.0,
+    "sf_hunter": 1.377,
+    "seq_ratio": 1.25
+  },
+  "all_gate_qualification": false,
+  "native_gci_tests": {
+    "passed": 2,
+    "failed": 0
+  },
+  "unresolved": [
+    "sealed plate GCI is oscillatory",
+    "human-max twist/spine",
+    "flat-stock/collar manufacturing inconsistency",
+    "independent solid/cross-solver qualification",
+    "coarse search failures and fine-backend faer parity failure retained"
+  ],
+  "commit_status": {
+    "numerical_work_committed": true,
+    "commit": "2100b75384ec3c0f19ece97bfa9a492784ee3489",
+    "created_by": "external checkpoint observed during finalization",
+    "required_trailers_verified": true,
+    "local_delivery_metadata_uncommitted": true,
+    "local_commit_blocker": "read-only shared Git index.lock"
+  },
+  "sha256": {
+    "experiments/G16-06-RSV2-08/candidate.csv": "52b795486b3c7f72ed9c9e06f57888ef166afdc22434118a0a821004ccc016ed",
+    "experiments/G16-06-RSV2-08/candidate_config.json": "f3d5921b90dfe712940fbd4fd98346aa78be985fbdaf8f11f874cad7934eebb9",
+    "experiments/G16-06-RSV2-08/candidate_receipt.json": "14303406c22ed660010050c895ea4e07f28627e407876838a81ffc84f1eec3fa",
+    "experiments/G16-06-RSV2-08/phase2.rs": "a5310d54957cc176de6a10a5ffa2b2cf794e6b477c79c0695af18c350c6f3cd9",
+    "experiments/G16-06-RSV2-08/build_phase2.sh": "c7a5956410489f099369ff226a1a97e80721aea8ed4d444c7f488045542ca96b",
+    "experiments/G16-06-RSV2-08/run_phase2.py": "966e7f2431d82f68307570bf78782c0786652826f65d0c9e2a2b9e6b1a38a07f",
+    "experiments/G16-06-RSV2-08/phase2_window_search.py": "11365938c2cc4a6ee68e3cb048dee101d3998d64a012c27ae4533e9e73c19722",
+    "experiments/G16-06-RSV2-08/phase2_convergence_search.py": "f9525039dc7cb3fe913d28a25192577e65cfb0043e8cef95f5a68bc0722fae53",
+    "experiments/G16-06-RSV2-08/summarize_phase2.py": "7982a660ba72a77d332a7d03b498e18bf617bc0f5855e3b17da4ca75c47d797c",
+    "crates/crescent/src/gci.rs": "ba3333de3828db2f9602d5fbb4078d03ac7bb2f380a85f90910ef8cc5f6f97a9",
+    "crates/physics/src/side_a4.rs": "e3098114941ec52c5f15eff1a64429d5822cc083dde9b38d9e4bfd98e6df0ee3",
+    "target/G16-06-RSV2-08/phase2/study": "848f6a24c8a2187a309838385ab4c81cf7f6a5bda5d3c2a64484ebc43ece0f8c",
+    "target/G16-06-RSV2-08/phase2/sealed-gci.json": "171e453aa9ab8f2de12e44fd376faad1b5dc408fa8c868c9ca2e08c214ca0274",
+    "target/G16-06-RSV2-08/phase2/sealed-a4.json": "fc0835468da1802457aa8e0ddb58a23ad8b1d9ba4f4fd4141ceaf8c210075f81",
+    "target/G16-06-RSV2-08/phase2/sealed-a4.mesh.json": "0f973526580bb26a9e419e4673b7bb01b6a283bf0f38e3ec4a0196ad51b80970",
+    "target/G16-06-RSV2-08/phase2/window_trials.jsonl": "62b500654bc35ada7bdd90b09f7dd5a49252c24c6d5da99bf667cfca2c0e790a",
+    "target/G16-06-RSV2-08/phase2/window_search_summary.json": "1e0a9b5920d028e4aa76cff91673b57664c234f3ff3830b630ce906839debd05",
+    "target/G16-06-RSV2-08/phase2/convergence_search_summary.json": "a8ef6f63d99cc328d941ca92958cdca9a9ef58216de7e1745a66483709e6dc48",
+    "target/G16-06-RSV2-08/phase2/local_search_summary.json": "1f2fa69c833f94312a1f8fb0e48ce1976b9dfae55ad4e06c01f68933808f5cf3"
+  },
+  "completed_at_utc": "2026-10-18T05:43:55+00:00"
+}
