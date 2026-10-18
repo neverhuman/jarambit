@@ -559,5 +559,160 @@ class ReceiptManifestTests(unittest.TestCase):
         self.assertEqual((root / verifier.PHASE23_REPORT).read_text(), verifier.report_phase23(current))
 
 
+class SavedScreenOrderingTests(unittest.TestCase):
+    def setUp(self):
+        fixture = Round0InventoryTests()
+        fixture.setUp()
+        self.documents = fixture.documents
+        self.root, self.artifacts = fixture.root, fixture.artifacts
+        for name, document in self.documents.items():
+            if name.endswith("_screen.json"):
+                for index, row in enumerate(document):
+                    row.update(screen_deficit=float(index), mass_g=float(10 - index))
+
+    def payloads(self):
+        return {wave: {name: json.dumps(self.documents[f"out/{wave}/{name}"]).encode() for name in phase20.ROOT_NAMES}
+                for wave in phase20.WAVES}
+
+    def pins(self, payloads):
+        return {wave: {name: tuple(verifier.metadata(data).values()) for name, data in files.items()}
+                for wave, files in payloads.items()}
+
+    def current(self, read=None):
+        payloads = self.payloads()
+        def default_read(path):
+            parts = path.relative_to(self.artifacts).parts
+            return payloads[parts[1]][parts[2]]
+        with patch.object(Path, "read_bytes", new=default_read if read is None else read):
+            return verifier.audit_phase24(self.artifacts, self.pins(payloads))
+
+    def test_lexicographic_secondary_order_ties_and_readonly_reproducibility(self):
+        rows = [{"screen_deficit": a, "mass_g": b} for a, b in ((0, 9), (1, 1), (1, 1), (1, 2))]
+        before = json.dumps(rows)
+        result = verifier.screen_tuple_order(rows)
+        self.assertEqual(result, {"rows": 4, "adjacent_pairs": 3, "descending_adjacent_pairs": 0,
+                                  "equal_adjacent_keys": 1, "monotonic_non_decreasing": True})
+        self.assertEqual(verifier.screen_tuple_order(rows), result)
+        self.assertEqual(json.dumps(rows), before)
+        zeros = [{"screen_deficit": -0.0, "mass_g": 0.0}, {"screen_deficit": 0.0, "mass_g": -0.0}]
+        before = json.dumps(zeros)
+        self.assertEqual(verifier.screen_tuple_order(zeros)["equal_adjacent_keys"], 1)
+        self.assertEqual(json.dumps(zeros), before)
+
+    def test_primary_and_secondary_descending_pairs_are_recorded_without_repair(self):
+        rows = [{"screen_deficit": a, "mass_g": b} for a, b in ((1, 1), (0, 9), (0, 8))]
+        before = deepcopy(rows)
+        result = verifier.screen_tuple_order(rows)
+        self.assertFalse(result["monotonic_non_decreasing"])
+        self.assertEqual(result["descending_adjacent_pairs"], 2)
+        self.assertEqual(rows, before)
+        for rows in ([], [{"screen_deficit": 0, "mass_g": 0}]):
+            self.assertEqual(verifier.screen_tuple_order(rows)["adjacent_pairs"], 0)
+            self.assertTrue(verifier.screen_tuple_order(rows)["monotonic_non_decreasing"])
+
+    def test_ordering_schema_rejects_nonfinite_boolean_missing_and_nonnumeric_keys(self):
+        variants = [None, {}, [None], [{}], [{"screen_deficit": 0}]]
+        variants.extend([{"screen_deficit": value, "mass_g": 0}] for value in (True, "0", None, float("nan"), float("inf")))
+        variants.extend([{"screen_deficit": 0, "mass_g": value}] for value in (False, "0", float("-inf")))
+        for rows in variants:
+            with self.subTest(rows=rows), self.assertRaises(ValueError):
+                verifier.screen_tuple_order(rows)
+
+    def test_six_wave_receipt_counts_and_stored_qualification_invariants(self):
+        result = self.current()
+        self.assertTrue(result["ordering_pass"])
+        self.assertEqual(len(result["artifacts"]), 30)
+        self.assertEqual((result["totals"]["screen_arrays"], result["totals"]["rows"], result["totals"]["adjacent_pairs"]), (12, 24, 12))
+        self.assertEqual((result["totals"]["assessed_count"], result["totals"]["unverified_count"]), (23, 1))
+        for row in result["waves"].values():
+            self.assertEqual(row["qualified_count"], 0)
+            self.assertIsNone(row["champion"])
+        self.assertNotIn(str(self.artifacts), json.dumps(result))
+        self.assertEqual(self.current(), result)
+
+    def test_all_thirty_pinned_files_reject_tampering(self):
+        payloads = self.payloads()
+        pins = self.pins(payloads)
+        for wave, files in payloads.items():
+            for name, data in list(files.items()):
+                files[name] = data + b" "
+                with self.subTest(wave=wave, name=name), self.assertRaisesRegex(ValueError, "SHA-256/size mismatch"):
+                    verifier.audit_phase24_payloads(payloads, pins)
+                files[name] = data
+
+    def test_missing_wave_or_file_and_invalid_pin_size_fail(self):
+        payloads = self.payloads()
+        pins = self.pins(payloads)
+        with self.assertRaisesRegex(ValueError, "Exactly six"):
+            verifier.audit_phase24_payloads({wave: files for wave, files in payloads.items() if wave != "w315"}, pins)
+        del payloads["w315"]["round_00_screen.json"]
+        with self.assertRaisesRegex(ValueError, "Exactly five"):
+            verifier.audit_phase24_payloads(payloads, pins)
+        payloads = self.payloads()
+        pins["w315"]["leaderboard.json"] = ("a" * 64, True)
+        with self.assertRaisesRegex(ValueError, "Invalid pinned byte size"):
+            verifier.audit_phase24_payloads(payloads, pins)
+
+    def test_strict_json_rejects_duplicate_keys_and_nonfinite_literals_after_resigning(self):
+        payloads = self.payloads()
+        for data in (b'{"a":0,"a":0}', b'{"a":NaN}', b'{"a":1e999}'):
+            payloads["w315"]["round_00_screen.json"] = data
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                verifier.audit_phase24_payloads(payloads, self.pins(payloads))
+
+    def test_stored_qualification_or_status_cannot_be_recast_as_passed(self):
+        board = self.documents["out/w315/leaderboard.json"]
+        original = deepcopy(board)
+        for key, value in (("qualified_count", True), ("qualified_count", 1), ("champion", "fixture")):
+            board.update(deepcopy(original))
+            board[key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                self.current()
+
+    def test_mutation_of_source_bytes_during_audit_fails(self):
+        payloads, reads = self.payloads(), {}
+        def read(path):
+            reads[path] = reads.get(path, 0) + 1
+            _, wave, name = path.relative_to(self.artifacts).parts
+            return payloads[wave][name] + (b" " if reads[path] > 1 else b"")
+        with self.assertRaisesRegex(ValueError, "Saved wave bytes changed"):
+            self.current(read=read)
+
+    def test_relocated_cli_checks_saved_receipt_and_report_and_fails_for_descending_order(self):
+        current = self.current()
+        self.documents["out/w315/round_00_screen.json"].reverse()
+        failure = self.current()
+        saved = deepcopy(current)
+        args = ["verify_rsv2_07_receipts.py", "--phase", "24", "--repo-root", str(self.root), "--artifact-root", str(self.artifacts)]
+        def read(path):
+            return json.dumps(saved).encode() if path == self.root / verifier.PHASE24_RECEIPT else verifier.report_phase24(current).encode()
+        with patch.object(sys, "argv", args), patch.object(verifier, "audit_phase24", side_effect=lambda root: current), \
+                patch.object(Path, "read_bytes", new=read), patch.object(Path, "write_text") as write, \
+                patch.object(verifier.receipts, "default_wave_directory", side_effect=AssertionError("Unexpected Git discovery")), \
+                redirect_stdout(io.StringIO()) as output:
+            verifier.main()
+            self.assertIn("Phase-24 saved screen ordering: PASS", output.getvalue())
+            write.assert_not_called()
+            saved["qualified_count"] = 1
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                verifier.main()
+            self.assertEqual(error.exception.code, 1)
+            current = failure
+            saved = deepcopy(current)
+            self.assertFalse(current["ordering_pass"])
+            self.assertIn("**FAIL", verifier.report_phase24(current))
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                verifier.main()
+            self.assertEqual(error.exception.code, 1)
+
+    def test_saved_phase24_outputs_have_no_host_prefix_and_render_exactly(self):
+        root = Path(__file__).resolve().parents[2]
+        paths = (verifier.PHASE24_RECEIPT, verifier.PHASE24_REPORT)
+        verifier.zero_literal_host_prefix({name: (root / name).read_bytes() for name in paths})
+        saved = verifier.load_json((root / verifier.PHASE24_RECEIPT).read_bytes())
+        self.assertEqual((root / verifier.PHASE24_REPORT).read_text(), verifier.report_phase24(saved))
+        self.assertEqual(saved["qualified_count"], 0)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

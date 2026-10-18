@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Verify saved inventory, w320 schema provenance and the cross-phase receipt catalogue."""
+"""Verify saved inventory, receipt provenance, cross-phase hashes and stored tuple order."""
 
 import argparse
 import hashlib
 import json
+import math
 import re
 from pathlib import Path
 import subprocess
@@ -368,9 +369,103 @@ def report_phase23(document):
     ])
 
 
+PHASE24_RECEIPT = HERE + "phase24_screen_deficit_ordering_audit.json"
+PHASE24_REPORT = HERE + "PHASE24_SCREEN_DEFICIT_ORDERING_AUDIT.md"
+
+
+def screen_tuple_order(rows):
+    """Check adjacent saved keys without sorting, interpreting or changing rows."""
+    require(isinstance(rows, list), "Expected screen array")
+    previous, descending, ties = None, 0, 0
+    for row in rows:
+        receipts.fields(row, {"screen_deficit", "mass_g"}, "screen ordering keys")
+        key = tuple(row[name] for name in ("screen_deficit", "mass_g"))
+        require(all(type(value) is int or type(value) is float and math.isfinite(value) for value in key),
+                "Ordering keys must be finite nonboolean numbers")
+        if previous is not None:
+            descending += previous > key
+            ties += previous == key
+        previous = key
+    return {"rows": len(rows), "adjacent_pairs": max(0, len(rows) - 1), "descending_adjacent_pairs": descending,
+            "equal_adjacent_keys": ties, "monotonic_non_decreasing": descending == 0}
+
+
+def audit_phase24_payloads(payloads, pins=None):
+    pins = phase20.ROOT_PINS if pins is None else pins
+    require(isinstance(payloads, dict) and set(payloads) == set(pins) == set(phase20.WAVES),
+            "Exactly six wave collections are required")
+    artifacts, waves = {}, {}
+    for wave in phase20.WAVES:
+        files = payloads[wave]
+        require(isinstance(files, dict) and set(files) == set(pins[wave]) == phase20.ROOT_NAMES,
+                "Exactly five root files per wave are required")
+        documents = {}
+        for name in sorted(files):
+            path = schema.portable_path(f"out/{wave}/{name}")
+            sha, size = pins[wave][name]
+            require(type(size) is int and size >= 0, "Invalid pinned byte size")
+            schema.digest_metadata(sha, size)
+            require(isinstance(files[name], bytes), "Expected source bytes")
+            documents[name] = load_json(pinned(files[name], pins[wave][name], path))
+            artifacts[path] = metadata(files[name])
+        assessed, errors = phase20.board_events(wave, documents)
+        waves[wave] = {"rounds": {str(r): screen_tuple_order(documents[f"round_{r:02}_screen.json"]) for r in (0, 1)},
+                       "assessed_count": len(assessed), "qualified_count": 0, "champion": None, "unverified_count": len(errors)}
+    rounds = [row for wave in waves.values() for row in wave["rounds"].values()]
+    passed = all(row["monotonic_non_decreasing"] for row in rounds)
+    return {"schema": "jarambit.rsv2_07.phase24_saved_screen_ordering.v1", "task": "RSV2-07-p24",
+            "scope": "saved_array_order_sha256_and_stored_qualification_metadata_only",
+            "status": "pass_saved_key_order" if passed else "fail_saved_key_order", "ordering_pass": passed,
+            "ordering_keys": ["screen_deficit", "mass_g"], "comparison": "exact_lexicographic_non_decreasing",
+            "artifacts": artifacts, "waves": waves, "qualified_count": 0,
+            "totals": {"screen_arrays": len(rounds), "rows": sum(row["rows"] for row in rounds),
+                       "adjacent_pairs": sum(row["adjacent_pairs"] for row in rounds),
+                       "descending_adjacent_pairs": sum(row["descending_adjacent_pairs"] for row in rounds),
+                       "equal_adjacent_keys": sum(row["equal_adjacent_keys"] for row in rounds),
+                       "assessed_count": sum(row["assessed_count"] for row in waves.values()),
+                       "unverified_count": sum(row["unverified_count"] for row in waves.values())},
+            "source_mutation_policy": "source_bytes_reread_by_directory_verifier; no_source_writes",
+            "limitations": ["stored key values are not recalculated or interpreted as margins",
+                            "equal keys do not prove a unique order or stable producer tie-breaking",
+                            "no candidate ranking recommendations or new qualification"]}
+
+
+def audit_phase24(artifact_root, pins=None):
+    artifact_root = Path(artifact_root)
+    payloads = {wave: {name: (artifact_root / "out" / wave / name).read_bytes() for name in sorted(phase20.ROOT_NAMES)}
+                for wave in phase20.WAVES}
+    current = audit_phase24_payloads(payloads, pins)
+    for wave, files in payloads.items():
+        for name, data in files.items():
+            require((artifact_root / "out" / wave / name).read_bytes() == data, "Saved wave bytes changed during audit")
+    return current
+
+
+def report_phase24(document):
+    totals = document["totals"]
+    rows = [f"| {wave} | {r} | {row['rows']} | {row['adjacent_pairs']} | {row['descending_adjacent_pairs']} | {row['equal_adjacent_keys']} | {row['monotonic_non_decreasing']} |"
+            for wave, saved in document["waves"].items() for r, row in saved["rounds"].items()]
+    artifacts = [f"| {name} | {row['size_bytes']} | {row['sha256']} |" for name, row in document["artifacts"].items()]
+    result = "PASS" if document["ordering_pass"] else "FAIL"
+    return "\n".join([
+        "# Phase-24 saved screen tuple ordering provenance audit", "",
+        f"**{result} for saved tuple ordering.** {totals['screen_arrays']} screen arrays across w315–w320 contain {totals['rows']} rows and {totals['adjacent_pairs']} adjacent comparisons. There are {totals['descending_adjacent_pairs']} descending adjacent pairs. Each saved leaderboard retains qualified_count=0 and champion=null; {totals['assessed_count']} assessed events and {totals['unverified_count']} separate unverified attempt remain unchanged.", "",
+        "| Wave | Saved round | Rows | Adjacent pairs | Descending pairs | Equal keys | Non-decreasing |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | --- |", *rows, "",
+        "The checked key is the exact lexicographic tuple (screen_deficit, mass_g). Each row requires both finite, nonboolean numeric fields. A smaller first component permits any second component; the second component orders only equal first components. Equal complete keys are allowed. No tolerance, rounding, deficit recalculation or row sorting is applied, and no candidate labels or key values are copied into this ordering report.", "",
+        "This checks the saved sequence's predicate and byte reproducibility only. Equal keys do not establish a unique order or the producer's stable tie-breaking behavior. No source algorithm is replayed, no engineering margin is derived, and no candidate is selected, recommended or newly qualified. Ordering failures are recorded without repairing source arrays; verification exits unsuccessfully if any descending pair is present.", "",
+        "All 30 saved root files (two birth/screen pairs and a leaderboard per wave) match existing reviewed SHA-256/size pins. Birth/screen schema and same-round label/family/identity linkage are reused from the provenance verifier. The leaderboard count/boolean/null and assessed-versus-unverified checks retain the original statuses. Source bytes are reread after checking; no wave files are written. The fixed scope covers rounds 00/01, not an entire wave-directory census.", "",
+        "| Artifact | Bytes | SHA-256 |", "| --- | ---: | --- |", *artifacts, "",
+        "All emitted paths are repository-relative. --artifact-root selects relocated saved inputs without Git discovery, and --repo-root selects the receipt checkout. Normal runs compare the complete recomputed receipt and exact report; --write explicitly refreshes outputs. Both Phase-24 outputs are checked for literal host prefixes. The Phase-23 catalogue retains its Phase-1..22 scope; its final Phase-7/8 byte bindings and the study hashes are refreshed after adding these outputs.", "",
+        "```sh", "python3 experiments/rsv2_07/verify_rsv2_07_receipts.py --phase 24",
+        "python3 -m unittest discover -s experiments/rsv2_07 -p 'test_*.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs14,15 at inherited nice10 with CARGO_BUILD_JOBS=2. No simulations, geometry changes or physical qualification checks are performed.", "",
+    ])
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--phase", type=int, choices=(21, 22, 23), default=21)
+    parser.add_argument("--phase", type=int, choices=(21, 22, 23, 24), default=21)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[2])
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--source-blob", type=Path)
@@ -384,7 +479,10 @@ def main():
             receipt_name, report_name, render = PHASE23_RECEIPT, PHASE23_REPORT, report_phase23
         else:
             artifact_root = args.artifact_root if args.artifact_root is not None else receipts.default_wave_directory().parents[1]
-        if args.phase == 22:
+        if args.phase == 24:
+            current = audit_phase24(artifact_root)
+            receipt_name, report_name, render = PHASE24_RECEIPT, PHASE24_REPORT, report_phase24
+        elif args.phase == 22:
             current = audit_phase22(args.repo_root, artifact_root)
             receipt_name, report_name, render = PHASE22_RECEIPT, PHASE22_REPORT, report_phase22
         elif args.phase == 21:
@@ -398,13 +496,18 @@ def main():
         else:
             saved = load_json((args.repo_root / receipt_name).read_bytes())
             require(json.dumps(current, sort_keys=True) == json.dumps(saved, sort_keys=True), f"Phase-{args.phase} receipt mismatch")
-        if args.phase == 23:
+        if args.phase in (23, 24):
             outputs = {name: (args.repo_root / name).read_bytes() for name in (receipt_name, report_name)}
             zero_literal_host_prefix(outputs)
-            require(outputs[report_name] == render(current).encode(), "Phase-23 report mismatch")
+            require(outputs[report_name] == render(current).encode(), f"Phase-{args.phase} report mismatch")
+        if args.phase == 24:
+            require(current["ordering_pass"], "Saved screen order contains descending adjacent pairs")
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Phase-{args.phase} inventory: FAIL: {error}\n")
-    if args.phase == 23:
+    if args.phase == 24:
+        print(f"Phase-24 saved screen ordering: PASS; {current['totals']['screen_arrays']} arrays; "
+              f"{current['totals']['rows']} rows; {current['totals']['descending_adjacent_pairs']} descending adjacent pairs; qualified_count=0.")
+    elif args.phase == 23:
         print(f"Phase-23 receipt manifest: PASS; {current['totals']['files']} files; "
               f"{current['host_prefix_audit']['files']} Phase-15..23 host-prefix checks; qualified_count=0 (no new admissions).")
     elif args.phase == 22:
