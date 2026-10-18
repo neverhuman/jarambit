@@ -21,6 +21,7 @@ import audit_phase14_w319_receipts as w319_audit
 import audit_phase15_gate_s_and_margins as phase15_audit
 import audit_phase16_xbabe3_waves as xbabe3_audit
 import audit_phase17_portable_schema as schema_audit
+import audit_phase18_w320_progression as w320_audit
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -1312,6 +1313,171 @@ class Phase17PortableSchemaAuditTests(unittest.TestCase):
         for data in (b'{"schema":1,"schema":2}', b'{"count":NaN}', b'{"count":1e999}'):
             with self.subTest(data=data), self.assertRaises(ValueError):
                 receipt_audit.load_json(data)
+
+
+class Phase18W320ProvenanceTests(unittest.TestCase):
+    def setUp(self):
+        self.documents = {}
+        for round_id, count in ((0, 27), (1, 22)):
+            births, screens = [], []
+            for slot in range(1, count + 1):
+                family = "p10" if (round_id, slot) in ((0, 1), (1, 22)) else "p14" if (round_id, slot) == (0, 27) else "fixture"
+                identity = hashlib.sha256(f"w320-{round_id}-{slot}".encode()).hexdigest()
+                label = f"w320_r{round_id + 1:02}_{family}_c{slot:02}"
+                births.append({"row": f"{round_id},{slot}", "family": family, "certificate_identity": identity})
+                screens.append({**dict.fromkeys(wave_audit.SCREEN_NUMBERS, 0.0), "label": label, "family": family,
+                                "certificate_identity": identity, "qualification_status": wave_audit.PENDING})
+                if label in w320_audit.LABELS:
+                    key = f"by-content/{identity}/attempt-{slot}/{label}_master_scorecard.md"
+                    self.documents[key] = f"# Master CAD Scorecard — `{label}`\n\n- **Verdict**: **FAIL (Gate Violation)**\n"
+            self.documents[f"round_{round_id:02}_births.json"] = {"round": round_id, "seed": 1, "source": "synthetic",
+                                                                  "genome_header": "a,b", "genomes": births}
+            self.documents[f"round_{round_id:02}_screen.json"] = screens
+        self.root, self.directory = Path("/portable/checkout"), Path("/portable/wave")
+        self.baseline_bytes = b"{}"
+        self.context = {"requested_progression_receipt": {"candidate_paths": list(w320_audit.BASELINE_CANDIDATES), "status": "missing"},
+                        "phase17_receipt": {"path": schema_audit.RECEIPT, "sha256": hashlib.sha256(self.baseline_bytes).hexdigest()}}
+
+    def payloads(self):
+        files = {name: (json.dumps(doc).encode() if name.endswith(".json") else doc.encode())
+                 for name, doc in self.documents.items()}
+        return files, {name: (hashlib.sha256(data).hexdigest(), len(data)) for name, data in files.items()}
+
+    def read(self, path):
+        if path == self.root / schema_audit.RECEIPT:
+            return self.baseline_bytes
+        files, _ = self.payloads()
+        return files[str(path.relative_to(self.directory))]
+
+    def current(self):
+        _, pins = self.payloads()
+        with patch.object(Path, "read_bytes", new=lambda path: self.read(path)), patch.object(Path, "exists", return_value=False), \
+                patch.object(w320_audit, "baseline_context", return_value=self.context):
+            return w320_audit.audit(self.root, self.directory, pins)
+
+    def test_two_rounds_and_three_requested_attempts_are_linked(self):
+        result = w320_audit.audit_payloads(*self.payloads())
+        self.assertEqual(result["stage1"], {"births": 49, "pending_screens": 49,
+                                           "rounds": {"0": {"births": 27, "screens": 27}, "1": {"births": 22, "screens": 22}}})
+        self.assertEqual({row["label"] for row in result["stage2_attempts"]}, w320_audit.LABELS)
+
+    def test_all_seven_files_reject_byte_tampering(self):
+        files, pins = self.payloads()
+        for name in files:
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, "SHA-256/size mismatch"):
+                w320_audit.audit_payloads({**files, name: files[name] + b" "}, pins)
+
+    def test_missing_extra_files_and_invalid_pin_metadata_fail(self):
+        files, pins = self.payloads()
+        changed = dict(files)
+        del changed["round_01_screen.json"]
+        with self.assertRaisesRegex(ValueError, "Exactly four"):
+            w320_audit.audit_payloads(changed, pins)
+        with self.assertRaisesRegex(ValueError, "Exactly four"):
+            w320_audit.audit_payloads({**files, "leaderboard.json": b"{}"}, pins)
+        for value in [("a" * 64, True), ("INVALID", 0)]:
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                w320_audit.audit_payloads(files, {**pins, "round_01_screen.json": value})
+
+    def test_exact_birth_position_is_required(self):
+        self.documents["round_00_screen.json"][0]["certificate_identity"] = self.documents["round_00_births.json"]["genomes"][1]["certificate_identity"]
+        with self.assertRaisesRegex(ValueError, "birth slot mismatch"):
+            w320_audit.audit_payloads(*self.payloads())
+
+    def test_attempt_identity_directory_must_match_screen(self):
+        key = next(name for name in self.documents if name.startswith("by-content/"))
+        parts = key.split("/")
+        parts[1] = "a" * 64
+        self.documents["/".join(parts)] = self.documents.pop(key)
+        with self.assertRaisesRegex(ValueError, "identity/screen mismatch"):
+            w320_audit.audit_payloads(*self.payloads())
+
+    def test_scorecard_title_and_verdict_mismatch_fail(self):
+        key = next(name for name in self.documents if name.startswith("by-content/"))
+        original = self.documents[key]
+        for text in [original.replace("# Master CAD", "# Wrong"), original.replace("FAIL (Gate Violation)", "PASS"),
+                     original + "- **Verdict**: **FAIL (Gate Violation)**\n"]:
+            self.documents[key] = text
+            with self.subTest(text=text), self.assertRaises(ValueError):
+                w320_audit.audit_payloads(*self.payloads())
+
+    def test_strict_json_duplicate_and_nonfinite_values_fail(self):
+        files, pins = self.payloads()
+        for data in (b'{"round":1,"round":2}', b'{"bad":NaN}', b'{"bad":1e999}'):
+            files["round_00_births.json"] = data
+            pins["round_00_births.json"] = (hashlib.sha256(data).hexdigest(), len(data))
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                w320_audit.audit_payloads(files, pins)
+
+    def test_missing_leaderboard_does_not_establish_qualification(self):
+        result = self.current()
+        self.assertEqual(result["status"], "partial_provenance_only")
+        self.assertEqual(result["leaderboard"]["assessment_and_qualification_counts"], "not_established")
+        self.assertNotIn("qualified_count", result["leaderboard"])
+        self.assertEqual(result["mechanical_deficit_comparison"], "not_performed")
+        self.assertEqual(result["baseline_context"]["requested_progression_receipt"]["status"], "missing")
+
+    def test_emitted_paths_are_portable_and_unsafe_pin_paths_fail_before_read(self):
+        result = self.current()
+        self.assertNotIn("/portable", json.dumps(result))
+        for name in result["artifacts"]:
+            schema_audit.portable_path(name)
+        with patch.object(Path, "read_bytes") as read, self.assertRaisesRegex(ValueError, "Invalid portable path"):
+            w320_audit.audit(self.root, self.directory, {"../escape": ("a" * 64, 0)})
+        read.assert_not_called()
+
+    def test_new_unpinned_leaderboard_or_progression_receipt_requires_review(self):
+        for present in (self.directory / "leaderboard.json", self.root / w320_audit.BASELINE_CANDIDATES[0]):
+            with self.subTest(present=present), patch.object(Path, "exists", new=lambda path: path == present), \
+                    patch.object(Path, "read_bytes") as read, self.assertRaisesRegex(ValueError, "[Uu]npinned"):
+                w320_audit.audit(self.root, self.directory)
+            read.assert_not_called()
+
+    def test_mutation_or_new_availability_during_audit_fails(self):
+        files, pins = self.payloads()
+        for mode in ("bytes", "availability"):
+            reads, exists = {}, []
+
+            def read(path):
+                reads[path] = reads.get(path, 0) + 1
+                data = self.read(path)
+                return data + (b" " if mode == "bytes" and reads[path] > 1 else b"")
+
+            def present(path):
+                exists.append(path)
+                return mode == "availability" and len(exists) > 3
+
+            with self.subTest(mode=mode), patch.object(Path, "read_bytes", new=read), patch.object(Path, "exists", new=present), \
+                    patch.object(w320_audit, "baseline_context", return_value=self.context), \
+                    self.assertRaisesRegex(ValueError, "changed during audit"):
+                w320_audit.audit(self.root, self.directory, pins)
+
+    def test_relocated_cli_needs_no_git_and_does_not_write(self):
+        current = self.current()
+        args = ["audit_phase18_w320_progression.py", "--repo-root", str(self.root), "--wave-dir", str(self.directory)]
+        output = io.StringIO()
+        with patch.object(w320_audit, "audit", return_value=current), \
+                patch.object(Path, "read_bytes", return_value=json.dumps(current).encode()), patch.object(Path, "write_text") as write, \
+                patch.object(wave_audit, "default_wave_directory", side_effect=AssertionError("Unexpected Git discovery")), \
+                patch.object(sys, "argv", args), redirect_stdout(output):
+            w320_audit.main()
+        write.assert_not_called()
+        self.assertIn("Phase-18: PARTIAL", output.getvalue())
+        self.assertIn("mechanical deficit comparison NOT PERFORMED", output.getvalue())
+
+    def test_baseline_context_validates_phase17_and_requires_all_five_waves(self):
+        source = w320_audit.HERE + "audit_phase15_gate_s_and_margins.py"
+        saved = {"source_sha256": {source: "a" * 64},
+                 "registry": [{"path": f"out/w{wave}/fixture_{slot}", "phases": [15]} for wave in range(315, 320) for slot in range(5)]}
+        current = {"synthetic": "phase17 result"}
+        with patch.object(Path, "read_bytes", new=lambda path: json.dumps(saved).encode()), \
+                patch.object(schema_audit, "audit", return_value=current), patch.object(schema_audit, "check_receipt") as check:
+            context = w320_audit.baseline_context(self.root)
+            check.assert_called_once_with(saved, current)
+            self.assertEqual(context["available_registry_context"]["phase15_references"], 25)
+            saved["registry"].pop()
+            with self.assertRaisesRegex(ValueError, "Invalid Phase-15"):
+                w320_audit.baseline_context(self.root)
 
 
 if __name__ == "__main__":

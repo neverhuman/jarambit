@@ -1,0 +1,106 @@
+{
+  "schema": "jarambit.rsv2_07.phase18_w320_provenance.v1",
+  "task": "RSV2-07-p18",
+  "wave": "w320",
+  "status": "partial_provenance_only",
+  "scope": "saved_artifact_integrity_and_reference_accounting",
+  "artifacts": {
+    "out/w320/by-content/6af25de9e52b5a836fab9764f644300d06f2f1abc056008721103cf27d8a0aac/attempt-1792327910595534301/w320_r01_p14_c27_master_scorecard.md": {
+      "sha256": "f6eb03b5c36fe9e1ff0b7469431c858d9d39a1b0830d5d4352bc42498ed72557",
+      "size_bytes": 6907
+    },
+    "out/w320/by-content/b2cf2b3384f20b399583fdcb3a55c5244bdba55accce6739cf63d4f32d7003cc/attempt-1792326648482434020/w320_r01_p10_c01_master_scorecard.md": {
+      "sha256": "10a050cc49de2347e04016d5a933e9009a16305571c1c81cf3d463b2a7d5a941",
+      "size_bytes": 6907
+    },
+    "out/w320/by-content/dea35f5fb19c5f11bad56e636be1f88434aed9a0fa2547428c2e58619c128599/attempt-1792329315786884441/w320_r02_p10_c22_master_scorecard.md": {
+      "sha256": "eef7003b75b22574d06f663019b9a757930058043dd014766cec036de0db331c",
+      "size_bytes": 6909
+    },
+    "out/w320/round_00_births.json": {
+      "sha256": "f725189be663ee30646a52a84dd049648a7b39c7e39a58e7d9384e5d626e83c7",
+      "size_bytes": 177413
+    },
+    "out/w320/round_00_screen.json": {
+      "sha256": "adb40eb24b76e1ce1120c5255f5db90f69c4824fad1ca19af60b8aa17a6134f5",
+      "size_bytes": 23213
+    },
+    "out/w320/round_01_births.json": {
+      "sha256": "195b11e4828697ea8db1a6898330a62e03adcfd7f12c2671a71e03ef80a0cbdb",
+      "size_bytes": 165083
+    },
+    "out/w320/round_01_screen.json": {
+      "sha256": "a4494238b88b330502a6d36910eacb947df9d511b587cd656c388a682bd1f274",
+      "size_bytes": 20297
+    }
+  },
+  "stage1": {
+    "rounds": {
+      "0": {
+        "births": 104,
+        "screens": 56
+      },
+      "1": {
+        "births": 96,
+        "screens": 49
+      }
+    },
+    "births": 200,
+    "pending_screens": 105
+  },
+  "stage2_attempts": [
+    {
+      "label": "w320_r01_p10_c01",
+      "certificate_identity": "b2cf2b3384f20b399583fdcb3a55c5244bdba55accce6739cf63d4f32d7003cc",
+      "path": "out/w320/by-content/b2cf2b3384f20b399583fdcb3a55c5244bdba55accce6739cf63d4f32d7003cc/attempt-1792326648482434020/w320_r01_p10_c01_master_scorecard.md",
+      "stored_verdict": "FAIL (Gate Violation)",
+      "qualification": "not_established_without_leaderboard"
+    },
+    {
+      "label": "w320_r01_p14_c27",
+      "certificate_identity": "6af25de9e52b5a836fab9764f644300d06f2f1abc056008721103cf27d8a0aac",
+      "path": "out/w320/by-content/6af25de9e52b5a836fab9764f644300d06f2f1abc056008721103cf27d8a0aac/attempt-1792327910595534301/w320_r01_p14_c27_master_scorecard.md",
+      "stored_verdict": "FAIL (Gate Violation)",
+      "qualification": "not_established_without_leaderboard"
+    },
+    {
+      "label": "w320_r02_p10_c22",
+      "certificate_identity": "dea35f5fb19c5f11bad56e636be1f88434aed9a0fa2547428c2e58619c128599",
+      "path": "out/w320/by-content/dea35f5fb19c5f11bad56e636be1f88434aed9a0fa2547428c2e58619c128599/attempt-1792329315786884441/w320_r02_p10_c22_master_scorecard.md",
+      "stored_verdict": "FAIL (Gate Violation)",
+      "qualification": "not_established_without_leaderboard"
+    }
+  ],
+  "leaderboard": {
+    "path": "out/w320/leaderboard.json",
+    "status": "missing",
+    "assessment_and_qualification_counts": "not_established"
+  },
+  "baseline_context": {
+    "requested_progression_receipt": {
+      "candidate_paths": [
+        "experiments/rsv2_07/phase15_w315_w319_progression_audit.json",
+        "experiments/rsv2_07/results/phase15_w315_w319_progression_audit.json"
+      ],
+      "status": "missing"
+    },
+    "available_registry_context": {
+      "phase15_source": "experiments/rsv2_07/audit_phase15_gate_s_and_margins.py",
+      "sha256": "c7f1315b6e0d44144f5a461d5e9999d0d87cb511a110639719f31716e2136971",
+      "phase15_references": 25,
+      "waves": [
+        "w315",
+        "w316",
+        "w317",
+        "w318",
+        "w319"
+      ]
+    },
+    "phase17_receipt": {
+      "path": "experiments/rsv2_07/phase17_portable_schema_audit.json",
+      "sha256": "d074ede3bb260f9edc98cf0ac6b747bccdcc536ea9a391864eaca349c8e6eea0",
+      "status": "schema_and_registry_verified"
+    }
+  },
+  "mechanical_deficit_comparison": "not_performed"
+}
