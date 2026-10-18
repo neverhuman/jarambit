@@ -44,6 +44,25 @@ jobs:
           export CARGO_HOME="${runner_home}/.cargo"
           export RUSTUP_HOME="${runner_home}/.rustup"
           export PATH="${CARGO_HOME}/bin:${PATH}"
+          if ! test -x "${CARGO_HOME}/bin/cargo"; then
+            case "$(uname -m)" in
+              x86_64) rust_target=x86_64-unknown-linux-gnu ;;
+              aarch64) rust_target=aarch64-unknown-linux-gnu ;;
+              *) echo "Unsupported Rust runner architecture: $(uname -m)" >&2; exit 1 ;;
+            esac
+            python3 - "$rust_target" "$RUNNER_TEMP/rustup-init" <<'PY'
+          import sys
+          from urllib.request import urlopen
+          target, destination = sys.argv[1:]
+          url = f'https://static.rust-lang.org/rustup/dist/{target}/rustup-init'
+          with urlopen(url, timeout=60) as response, open(destination, 'wb') as output:
+              output.write(response.read())
+          PY
+            chmod 700 "$RUNNER_TEMP/rustup-init"
+            CARGO_HOME="$CARGO_HOME" RUSTUP_HOME="$RUSTUP_HOME" \
+              "$RUNNER_TEMP/rustup-init" -y --no-modify-path --profile minimal \
+              --default-toolchain 1.85.1 --default-host "$rust_target"
+          fi
           test -x "${CARGO_HOME}/bin/cargo"
           cargo --version
           cargo test --locked -p jarambit-runner-policy
