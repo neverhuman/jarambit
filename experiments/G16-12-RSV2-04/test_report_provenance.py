@@ -1,4 +1,4 @@
-"""Verify twelve diagnostic reports, source bindings, and archival JSON provenance."""
+"""Verify thirteen diagnostic reports, source bindings, and archival JSON provenance."""
 
 import hashlib
 import json
@@ -20,6 +20,9 @@ AUDIT_BYTES = 15527  # Filled from the reviewed document, never refreshed by tes
 AUDIT_TABLE_COUNT = 6
 AUDIT_SCHEMA_SHA256 = "42212ab2618b5be7937ca24f7b0662d57de18a7602d75acecb7a12124c8b26df"
 SCHEMA_AUDIT_PATH = REPORT_DIR / "SYNTHETIC_MEASUREMENT_SCHEMA_AUDIT.md"
+INVARIANT_AUDIT_PATH = REPORT_DIR / "STATIC_GATES_AND_FEM_INVARIANT_AUDIT.md"
+INVARIANT_SOURCES = tuple(f"crates/crescent/src/{name}.rs" for name in
+                          ("gates", "fem", "certification", "export"))
 SCHEMA_AUDIT_SHA256 = '29d2ef4a6910a4fc6346f50ca7fb32b61c18e6958d5bea642ceddfc1cd0e8f60'
 SCHEMA_AUDIT_BYTES = 19029
 SCHEMA_AUDIT_TABLE_COUNT = 6
@@ -30,6 +33,7 @@ TEST_PATH = REPORT_DIR / "test_report_provenance.py"
 REPORTS = tuple((f"V{v}", REPORT_DIR / f"UNIFIED_PROTOTYPE_V{v}_REPORT.md") for v in range(5, 15)) + (
     ("CODE_AUDIT", AUDIT_PATH),
     ("SCHEMA_AUDIT", SCHEMA_AUDIT_PATH),
+    ("INVARIANT_AUDIT", INVARIANT_AUDIT_PATH),
 )
 PORTABLE_MARKDOWN = tuple(path for _, path in REPORTS) + (INDEX_PATH,)
 AUDIT_SOURCES = (
@@ -125,7 +129,7 @@ def portable_path(root, value):
 
 
 def verify(root):
-    """Verify all twelve diagnostic index entries; no Git, target/, or network."""
+    """Verify all thirteen diagnostic index entries; no Git, target/, or network."""
     root = Path(root)
     lines = (root / INDEX_PATH).read_text(encoding="utf-8").splitlines()
     rows = [cells(line) for line in lines if line.strip().startswith("|")]
@@ -194,6 +198,33 @@ def verify_audit(root):
     if set(sources) != set(AUDIT_SOURCES):
         raise ValueError("incomplete audit source provenance")
     return len(sources)
+
+
+def verify_invariant_sources(root):
+    """Verify the four immutable source fingerprints; never execute Rust code."""
+    root = Path(root)
+    text = portable_path(root, str(INVARIANT_AUDIT_PATH)).read_text(encoding="utf-8")
+    lines = text.splitlines()
+    if ("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" not in lines
+            or "qualified_count: 0" not in lines):
+        raise ValueError("invalid invariant audit diagnostic status")
+    start = lines.index("|Source path|SHA-256|Bytes|Lines|") + 2
+    seen = set()
+    for line in lines[start:]:
+        if not line.startswith("|"):
+            break
+        relative, digest, size, count = cells(line)
+        if relative not in INVARIANT_SOURCES or relative in seen or not DIGEST.fullmatch(digest):
+            raise ValueError("invalid invariant source row")
+        data = portable_path(root, relative).read_bytes()
+        if sha256(data) != digest:
+            raise ValueError(f"invariant source SHA-256 mismatch: {relative}")
+        if len(data) != int(size) or len(data.decode("utf-8").splitlines()) != int(count):
+            raise ValueError(f"invariant source byte/line mismatch: {relative}")
+        seen.add(relative)
+    if seen != set(INVARIANT_SOURCES):
+        raise ValueError("incomplete invariant source coverage")
+    return len(seen)
 
 
 def json_shape(value):
@@ -318,7 +349,7 @@ def verify_host_path_policy(root):
 
 class ReportProvenanceTests(unittest.TestCase):
     def test_reports_match_index(self):
-        self.assertEqual(verify(ROOT), 12)
+        self.assertEqual(verify(ROOT), 13)
 
     def snapshot(self):
         # Only small document fixtures; no builds or geometry outputs.
@@ -328,7 +359,7 @@ class ReportProvenanceTests(unittest.TestCase):
         (root / REPORT_DIR).mkdir(parents=True)
         paths = ([INDEX_PATH, TEST_PATH]
                  + [path for _, path in REPORTS]
-                 + [PurePosixPath(path) for path in AUDIT_SOURCES])
+                 + [PurePosixPath(path) for path in dict.fromkeys(AUDIT_SOURCES + INVARIANT_SOURCES)])
         for path in paths:
             (root / path).parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / path, root / path)
@@ -347,11 +378,13 @@ class ReportProvenanceTests(unittest.TestCase):
         root = self.snapshot()
         self.assertFalse((root / ".git").exists())
         self.assertFalse((root / "target").exists())
-        self.assertEqual(verify(root), 12)
+        self.assertEqual(verify(root), 13)
         self.assertEqual(verify_audit(root), 5)
+        self.assertEqual(verify_invariant_sources(root), 4)
 
     def test_audit_document_and_source_provenance(self):
         self.assertEqual(verify_audit(ROOT), 5)
+        self.assertEqual(verify_invariant_sources(ROOT), 4)
 
     def test_audit_document_tampering_is_rejected(self):
         root = self.snapshot()
@@ -366,6 +399,25 @@ class ReportProvenanceTests(unittest.TestCase):
         path.write_bytes(path.read_bytes() + b"\n// changed\n")
         with self.assertRaisesRegex(ValueError, "audit source SHA-256 mismatch"):
             verify_audit(root)
+        for relative in INVARIANT_SOURCES:
+            with self.subTest(invariant_source=relative):
+                root = self.snapshot()
+                path = root / relative
+                path.write_bytes(path.read_bytes() + b"\n// changed\n")
+                with self.assertRaisesRegex(ValueError, "invariant source SHA-256 mismatch"):
+                    verify_invariant_sources(root)
+        for column in (2, 3):
+            with self.subTest(invariant_size_column=column):
+                root = self.snapshot()
+                path = root / INVARIANT_AUDIT_PATH
+                lines = path.read_text(encoding="utf-8").splitlines()
+                i = lines.index("|Source path|SHA-256|Bytes|Lines|") + 2
+                row = cells(lines[i])
+                row[column] = "1"
+                lines[i] = "|" + "|".join(row) + "|"
+                path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "invariant source byte/line mismatch"):
+                    verify_invariant_sources(root)
 
     def test_audit_schema_is_checked_independently_of_file_digest(self):
         root = self.snapshot()
