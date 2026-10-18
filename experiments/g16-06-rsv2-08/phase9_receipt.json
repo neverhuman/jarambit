@@ -101497,7 +101497,7 @@
     "experiments/g16-06-rsv2-08/finalize_phase9.py": "259c8273a22d98787bd36c42ef7697ccff3547bc3b5489c1acb3fa2a480e1c93",
     "ops/ci/g16_06_rsv2_08/__init__.py": "cb9e03226c7c3ca06251fb105cb43c245dc18e14aeec2d283d7697d38c941a65",
     "ops/ci/g16_06_rsv2_08/audit_phase9.py": "8b668e691427a23a7e14b14b24ea2f601b5d7770015cc7ed8308be9baac823b6",
-    "ops/ci/tests/test_portable_phase7.py": "07940ff30ea0449091348db2a22ab6c084f0f05bc00f5cbe44403392313e6a30"
+    "ops/ci/tests/test_portable_phase7.py": "9b2b44812afb0632d6acf68b4003b52967c6551c3248597baac08017efd97db9"
   },
   "section_convergence": {
     "local_01_x136_t3.6_ea20.0": {
