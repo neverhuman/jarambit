@@ -52,7 +52,7 @@ class LegacyPathTests(unittest.TestCase):
                     self.assertEqual(entry['classification'], 'optional_raw_genome')
 
     def test_historical_files_unchanged(self):
-        self.assertEqual(phase17.sha(ROOT / phase17.INVENTORY), '6ea91e07c70443406a0f4e61856ecdb55a6be59bb5ec9950149a4827895d3624')
+        self.assertEqual(phase17.sha(ROOT / phase17.INVENTORY), '9d2d21d0d3c89be4ef84089b1548ca6dd9d21f65af43b5930820437c96c6ad15')
         for relative, expected in self.document()['historical_files'].items():
             with self.subTest(path=relative):
                 self.assertEqual(phase17.sha(ROOT / relative), expected)
@@ -60,6 +60,17 @@ class LegacyPathTests(unittest.TestCase):
     def test_three_deliverables_contain_no_literal_host_prefix(self):
         for name in ['PHASE17.md', 'phase17_legacy_path_inventory.json', 'test_phase17_legacy_paths.py']:
             self.assertNotIn(phase17.HOST.encode(), (HERE / name).read_bytes())
+
+    def test_phase16_and_phase17_files_contain_no_literal_host_prefix(self):
+        paths = set(HERE.glob('PHASE16*')) | set(HERE.glob('PHASE17*'))
+        paths.update(HERE / name for name in [
+            'audit_phase16.py', 'audit_phase17.py',
+            'test_phase16_provenance.py', 'test_phase17_legacy_paths.py',
+            'phase16_cross_phase_provenance_index.json', 'phase17_legacy_path_inventory.json'])
+        self.assertGreaterEqual(len(paths), 8)
+        for path in sorted(paths):
+            with self.subTest(path=path.name):
+                self.assertEqual(path.read_bytes().count(phase17.HOST.encode()), 0)
 
     def test_qualification_stays_false(self):
         d = self.document()

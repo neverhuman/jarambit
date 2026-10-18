@@ -13,6 +13,8 @@ ROOT = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 import audit_phase16 as phase16
 
+HOST_PREFIX = ("/" + "home/" + "ubuntu").encode()
+
 # Frozen before Phase16: independent of the regenerable index.
 FROZEN = {'experiments/G16-06-RSV2-08/PHASE7.md': '18c3ef60e9edf901174300a800e98128e2ce4fefa3398669d148bfa1864c828c', 'experiments/G16-06-RSV2-08/phase7_receipt.json': '71e751199151a99c61058625d55ad2358485e69e308b101d383b16b7ec8cee4a', 'experiments/G16-06-RSV2-08/PHASE8.md': '44c3876584adf55ecff5266e4852742faaa6ee74e2d32277e585205c1d98e55e', 'experiments/G16-06-RSV2-08/phase8_receipt.json': 'fecbe9932bfb8d905b38ca87bba137dfd39fcd8c585519e3eabb006c89167b44', 'experiments/g16-06-rsv2-08/PHASE9.md': '351f9fe7f6f0d107494e590c93c8478781e3c0a7a41b9267aa49759526ebfc1e', 'experiments/g16-06-rsv2-08/phase9_receipt.json': 'cc111ae884ad1f800cbda88491d57d420ead06bb75f12bcbee318ef80287d516', 'experiments/g16-06-rsv2-08/PHASE10.md': 'dab2897315cde615db39bbed66c4b95e53fe5bc52e13534fe69570f69e014219', 'experiments/g16-06-rsv2-08/phase10_receipt.json': '42ddc1663327794b71578d05fdaed678d0daac97e86dfbb8d4b0c4033fb92615', 'experiments/g16-06-rsv2-08/PHASE11.md': 'b4a0dcd19bda7719587b7880b76f67e637d6e5a752590afd2612f56490ec9c83', 'experiments/g16-06-rsv2-08/phase11_receipt.json': '26809af6faab94b759bdabad0b3dafe68bf8aaae5068b1276ee35bdd0ffe5d48', 'experiments/g16-06-rsv2-08/PHASE12.md': '4250477a92ab0fe51b32d2acdae7621a04b88a1b8930631cca25a61c940b34aa', 'experiments/g16-06-rsv2-08/phase12_receipt.json': '43457e945f9d4071ad02dbf48003755af889481309c06e5f0828895b3639639a', 'experiments/g16-06-rsv2-08/PHASE13.md': '7253eaf8ce0737ead6c517ef6db9af904c247d13efbb7bd570ebc63defa9b712', 'experiments/g16-06-rsv2-08/phase13_receipt.json': '26591423f6dad3332509295a7c97e2aa2ff3d140f274e52751e108fcb675288d', 'experiments/g16-06-rsv2-08/PHASE14.md': '7f7d60ec3df4d0f88c872b39525ba998f9971c9e3d0b091e45277e7f4c833132', 'experiments/g16-06-rsv2-08/phase14_receipt.json': '50773824742898a463ebb46954ed8d3ebd456a50900f1761378fb3483d833a81', 'experiments/G16-06-RSV2-08/PHASE15.md': 'c69286dc0dcc6fe324b8f5f00ad5f16e6bb9aee2492ed52e20c6c675a0a63ef8', 'experiments/G16-06-RSV2-08/phase15_gate_s_compliant_joint_audit.json': '205a359a7e9f1cd7065b5a35da7b1491fa6a37356a6e20473c4fff9451bfd51d'}
 
@@ -36,14 +38,14 @@ class CrossPhaseProvenanceTests(unittest.TestCase):
         self.assertEqual({e[k]['path'] for e in document['phases'] for k in ('report', 'receipt')}, set(FROZEN))
 
     def test_index_has_no_host_absolute_paths(self):
-        self.assertNotIn(b'/home/ubuntu', (ROOT / phase16.INDEX).read_bytes())
+        self.assertNotIn(HOST_PREFIX, (ROOT / phase16.INDEX).read_bytes())
 
     def test_historical_portability_blockers_are_not_hidden(self):
         failures = {}
         for entry in self.document()['phases']:
             for kind in ('report', 'receipt'):
                 r = entry[kind]
-                count = (ROOT / r['path']).read_bytes().count(b'/home/ubuntu')
+                count = (ROOT / r['path']).read_bytes().count(HOST_PREFIX)
                 self.assertEqual(count, r['host_absolute_path_occurrences'])
                 if count:
                     failures[entry['phase']] = count

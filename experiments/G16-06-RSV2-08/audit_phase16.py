@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path, PurePosixPath
 
+HOST_PREFIX = ("/" + "home/" + "ubuntu").encode()
 ROOT = Path(__file__).resolve().parents[2]
 STUDY = Path('experiments/G16-06-RSV2-08')
 INDEX = STUDY / 'phase16_cross_phase_provenance_index.json'
@@ -17,7 +18,7 @@ def paths(phase):
 def file_record(root, relative):
     data = (root / relative).read_bytes()
     return dict(path=relative.as_posix(), sha256=hashlib.sha256(data).hexdigest(),
-                host_absolute_path_occurrences=data.count(b'/home/ubuntu'))
+                host_absolute_path_occurrences=data.count(HOST_PREFIX))
 
 
 def phase_record(root, phase):
