@@ -1,0 +1,80 @@
+{
+  "schema": "jarambit.rsv2_07_hm.phase26_lineage_availability.v1",
+  "task": "RSV2-07-p26",
+  "status": "partial_missing_source_logs",
+  "requested_scope": "static_round1_births_vs_round0_elites_counts",
+  "completed_scope": "source_availability_and_strict_jsonl_integrity_only",
+  "lineage_counts_established": false,
+  "missing_logs": 6,
+  "available_logs": 0,
+  "waves": {
+    "w315": {
+      "path": "out/w315/evolution_log.jsonl",
+      "availability": "missing",
+      "sha256": null,
+      "size_bytes": null,
+      "jsonl_records": null,
+      "round0_elites_count": null,
+      "round1_births_count": null,
+      "lineage_status": "missing_source_log"
+    },
+    "w316": {
+      "path": "out/w316/evolution_log.jsonl",
+      "availability": "missing",
+      "sha256": null,
+      "size_bytes": null,
+      "jsonl_records": null,
+      "round0_elites_count": null,
+      "round1_births_count": null,
+      "lineage_status": "missing_source_log"
+    },
+    "w317": {
+      "path": "out/w317/evolution_log.jsonl",
+      "availability": "missing",
+      "sha256": null,
+      "size_bytes": null,
+      "jsonl_records": null,
+      "round0_elites_count": null,
+      "round1_births_count": null,
+      "lineage_status": "missing_source_log"
+    },
+    "w318": {
+      "path": "out/w318/evolution_log.jsonl",
+      "availability": "missing",
+      "sha256": null,
+      "size_bytes": null,
+      "jsonl_records": null,
+      "round0_elites_count": null,
+      "round1_births_count": null,
+      "lineage_status": "missing_source_log"
+    },
+    "w319": {
+      "path": "out/w319/evolution_log.jsonl",
+      "availability": "missing",
+      "sha256": null,
+      "size_bytes": null,
+      "jsonl_records": null,
+      "round0_elites_count": null,
+      "round1_births_count": null,
+      "lineage_status": "missing_source_log"
+    },
+    "w320": {
+      "path": "out/w320/evolution_log.jsonl",
+      "availability": "missing",
+      "sha256": null,
+      "size_bytes": null,
+      "jsonl_records": null,
+      "round0_elites_count": null,
+      "round1_births_count": null,
+      "lineage_status": "missing_source_log"
+    }
+  },
+  "round0_elites_total": null,
+  "round1_births_total": null,
+  "required_evidence": "saved evolution logs and reviewed producer event schema identifying rounds, births and elites",
+  "limitations": [
+    "missing and unclassified counts are null, never inferred zero",
+    "round birth/screen JSON snapshots are not substituted for the requested logs",
+    "no lineage identifiers, metrics, new candidates or simulations are generated"
+  ]
+}
