@@ -76,6 +76,12 @@ pub fn run(root: &Path, reference: &str) -> i32 {
     }
 }
 
+#[cfg(all(standalone_version_check, not(test)))]
+fn main() {
+    let reference = std::env::var("GITHUB_REF").unwrap_or_default();
+    std::process::exit(run(Path::new("."), &reference));
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
