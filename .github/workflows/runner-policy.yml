@@ -39,6 +39,9 @@ jobs:
           PY
       - name: Test and enforce local general runners in Rust
         run: |
-          export PATH="$HOME/.cargo/bin:$PATH"
+          toolchain=/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin
+          export PATH="${toolchain}:/home/ubuntu/.cargo/bin:${PATH}"
+          export RUSTC="${toolchain}/rustc"
+          test -x "${toolchain}/cargo" && test -x "$RUSTC"
           cargo test --locked -p jarambit-runner-policy
           cargo run --locked -p jarambit-runner-policy
