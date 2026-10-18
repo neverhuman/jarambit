@@ -1,14 +1,18 @@
 {
-  "schema": "jarambit.rsv2_07.solid_tip_3d_validation.v1",
-  "status": "incomplete_resource_limit",
-  "timestamp_utc": "20261018T054942Z",
+  "schema": "jarambit.rsv2_07.solid_tip_3d_validation.v2",
+  "task": "RSV2-07-p4",
+  "status": "verified",
+  "timestamp_utc": "20261018T061400Z",
   "prototype_only": true,
   "all_gate_qualification": false,
   "candidate": "experiments/rsv2_07/results/critical_fem_3.csv",
   "candidate_sha256": "070da10ab3c66dced8592aabf4a06ec2c68708a3f92df43e64685bbe6019da15",
-  "source_surface": "target/rsv2-07/cad/critical_fem_3/prototype.mesh.json",
-  "source_surface_sha256": "7d4b2a513efb69f3fcad7de85f66f86697b248b432e9d3581412be23fcc96ffd",
+  "source_surface": "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/critical_fem_3_surface_1mm.json",
+  "source_surface_sha256": "8bacb8c0c2eeed5e9b383346a83ff3215576e5e15f242a232117f9437276881b",
+  "mesh_sha256": "0c878c9c4773ace10b5b8d073a4c00f6429b4271b7c947deff4c45d986242cf6",
   "parameters": {
+    "export_call_max_area_mm2": 1.0,
+    "rs_v2_effective_area_cap_mm2": 0.25,
     "R_CUT_mm": 30,
     "NL": 4,
     "NSUB": 1,
@@ -16,7 +20,7 @@
     "T_Nmm": 1820
   },
   "provenance": {
-    "commit": "c580b03994edebf9b9ec49b35e124ed247d19482",
+    "commit": "55fe93dc6388219cfe08f9fad044178ba9c85b3c",
     "source_and_input_sha256": {
       "Cargo.lock": "a7d57f542f3233c99e86bd0973f79ea894ce007c982fddf9bd5a30414035e41b",
       "Cargo.toml": "aa338525eac815da0ddf6557d150c0932f10c170985e9e7ff1cef1b4bcc50a1e",
@@ -30,6 +34,7 @@
       "crates/cli/src/main.rs": "ba25342ea7332f9c3113c46e9ce6dbc6ca23b3a576e623f60b428e38a02908e5",
       "crates/cli/src/score_cad.rs": "718784568b5c28dec382342c8836a3f127155074474dcf43a5114259a82cafee",
       "crates/crescent/Cargo.toml": "07970e5be1e735f13fcc6a73bc47da51015405a82e9e26b301733875ccf68556",
+      "crates/crescent/examples/export_step.rs": "1cb6d62b3c15692944659199f9de57446440b3e6c1994adcf8813e69d17a1ff8",
       "crates/crescent/src/aesthetic.rs": "30404b5e898613fd36b6ea534d501a57ddf1898567ee545807bd2206c7b5282a",
       "crates/crescent/src/battery.rs": "b84e1f2a5795eddb207142e548541e07d06d8d05a6f56f88a67b801a2afd341d",
       "crates/crescent/src/c4_ref.rs": "54cfcb3fbcd0b726be444d29d830b8cb180f97e1d3d56e78b621d16e2fea7c02",
@@ -77,11 +82,11 @@
       "crates/physics/src/verify.rs": "c384cf06779ed661933f0d43cac1ea4ba5e5120aa7637977f59a6763c46c4814",
       "crates/redteam/Cargo.toml": "4708f2ca769c6978729d4583974f8d6f4b121bbee8f58aa908c5e14eea13063c",
       "crates/redteam/src/lib.rs": "01003176acf8e27c07d7ed3b14e136032cadb965bd6937dc14ed3f6829dd21a0",
-      "experiments/rsv2_07/results/cad_manifest.json": "c27eac1e94102f13ac73c1ad5440c1c22ad2d042d105f831e969794a88c47788",
+      "experiments/rsv2_07/compound.rs": "1a5345182a8e8b575a9a2282f176df681cf0812bd0b3b71f77b7d5e0c769469b",
+      "experiments/rsv2_07/production_surface.rs": "321c4a1aa3f8ba3dfadbab7f873833b6bcb9e82aec07586d38a90515cede0eab",
       "experiments/rsv2_07/results/critical_fem_3.csv": "070da10ab3c66dced8592aabf4a06ec2c68708a3f92df43e64685bbe6019da15",
-      "experiments/rsv2_07/results/validation.json": "d7d0c4f55aaf89a8650055606bc4c7cf13412b59357aff246521eeb88570f508",
-      "experiments/rsv2_07/solid_tip_3d.py": "9106c1e79f4552d488c35d94b2a12468ae887b1ab1857d38ddead1eca1a03f13",
-      "experiments/rsv2_07/solid_tip_input.rs": "1a60d621c703d85d27a43370216a74e054416489f9dc243142179122e4dbbde8",
+      "experiments/rsv2_07/solid_tip_3d.py": "3f2202252b2256c11ebc2517e136563ff5720c60900fbd5f4690ec7996bc0c4d",
+      "experiments/rsv2_07/solid_tip_3d_p4.py": "b7118433b0ad10d9e2e6aae48e3a59c5cbbd3acec9b7cd578cb62a6bb8e213e8",
       "fem_solid/convergence.py": "15c5eac3761959d87180337c75837afd665a25b3188b3ddb62b3e93158f88320",
       "fem_solid/cross_check.py": "32b21c6b4edc64731652c860e0f85d1ee5b4fec45b5869ccd86a677cfe386c98",
       "fem_solid/export_surface.py": "16363689587f64439de931f34b61eae6e2e38c760e35399153331f09726b10c9",
@@ -93,32 +98,14 @@
       "fem_solid/step_mesh_smoke.py": "b79d97ae0346913b6dfd47bc538de4cad77dbe8d66c9ca12523737293e0968f1",
       "fem_solid/step_solid.py": "3461b3290305769377c3c8f660812af11814540399fe608e8e52fbdb9ff9ce44",
       "fem_solid/tip_solid.py": "fdf1cfcd51c78a74519f306587699fd2aebca8468cb718222a935ee0d19f43cb",
-      "target/rsv2-07/cad/critical_fem_3/prototype.mesh.json": "7d4b2a513efb69f3fcad7de85f66f86697b248b432e9d3581412be23fcc96ffd"
+      "target/rsv2-07/solid-tip-3d/20261018T054942Z/critical_fem_3_D1.json": "a1e1feda32046abb53ce581c6f64a3b270cd194001657d44dfc852b4fe55b2cc"
     },
-    "cpus": [
-      14,
-      15
-    ],
-    "CARGO_BUILD_JOBS": 2,
-    "environment": {
-      "JARAMBIT_SOLVER": "faer",
-      "RAYON_NUM_THREADS": "2",
-      "OMP_NUM_THREADS": "1",
-      "OPENBLAS_NUM_THREADS": "1",
-      "MKL_NUM_THREADS": "1",
-      "CARGO_INCREMENTAL": "0",
-      "CARGO_PROFILE_DEV_DEBUG": "line-tables-only"
+    "generated_source_sha256": {
+      "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/harness/compound.rs": "1a5345182a8e8b575a9a2282f176df681cf0812bd0b3b71f77b7d5e0c769469b",
+      "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/harness/modules.rs": "51b882f97269fe02f48b11424ef3daa56157bd7353e864f6bbf670be80bd624b",
+      "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/harness/prototype_export.rs": "601da7e74167259606a9f0c0606cc97881051d51b0c78ec4acca0c7851e7a744",
+      "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/harness/production_surface.rs": "321c4a1aa3f8ba3dfadbab7f873833b6bcb9e82aec07586d38a90515cede0eab"
     },
-    "primary_runtime": {
-      "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
-      "numpy": "2.5.4",
-      "scipy": "1.18.1",
-      "skfem": "12.0.2",
-      "pyamg": "5.3.0",
-      "site_packages": "/home/ubuntu/.venvs/jarambit-sheath/lib/python3.12/site-packages"
-    },
-    "container_image": "ghcr.io/fenics/dolfinx/dolfinx@sha256:628f40dd62c7f37962ccadc5a745f23d52c56b2ac3ad9b9b6a86c567c07aa27b",
-    "container_image_id": "sha256:628f40dd62c7f37962ccadc5a745f23d52c56b2ac3ad9b9b6a86c567c07aa27b",
     "compound_config": {
       "angle": 18.0,
       "apex": 0.175,
@@ -136,34 +123,42 @@
       "radial": true,
       "smooth_heel": true
     },
-    "adapter_binary_sha256": "8232c9f90f791ea2791571bb27968f8f9a787a74a00addea8f2561111433ac5b",
-    "generated_source_sha256": {
-      "target/rsv2-07/solid-tip-3d/20261018T054942Z/harness/compound.rs": "1a5345182a8e8b575a9a2282f176df681cf0812bd0b3b71f77b7d5e0c769469b",
-      "target/rsv2-07/solid-tip-3d/20261018T054942Z/harness/modules.rs": "51b882f97269fe02f48b11424ef3daa56157bd7353e864f6bbf670be80bd624b",
-      "target/rsv2-07/solid-tip-3d/20261018T054942Z/harness/prototype_export.rs": "7c9a8ad43c29acb8455e5e07bde0e2d4e0bdaecff5e02b208f8242ddd7849839",
-      "target/rsv2-07/solid-tip-3d/20261018T054942Z/harness/solid_tip_input.rs": "1a60d621c703d85d27a43370216a74e054416489f9dc243142179122e4dbbde8"
+    "cpu_affinity": [
+      14,
+      15
+    ],
+    "nice": 10,
+    "CARGO_BUILD_JOBS": 2,
+    "primary_address_space_bytes": 68719476736,
+    "environment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "JARAMBIT_SOLVER": "faer",
+      "RAYON_NUM_THREADS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_PROFILE_DEV_DEBUG": "line-tables-only"
     },
-    "surface_selection": {
-      "upper_facets": 597999,
-      "upper_vertices": 304523,
-      "coordinate_values_preserved": true
+    "container_image": "ghcr.io/fenics/dolfinx/dolfinx@sha256:628f40dd62c7f37962ccadc5a745f23d52c56b2ac3ad9b9b6a86c567c07aa27b",
+    "container_image_id": "sha256:628f40dd62c7f37962ccadc5a745f23d52c56b2ac3ad9b9b6a86c567c07aa27b",
+    "primary_runtime": {
+      "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "skfem": "12.0.2",
+      "pyamg": "5.3.0",
+      "site_packages": "/home/ubuntu/.venvs/jarambit-sheath/lib/python3.12/site-packages"
     },
-    "mesh_counts": {
-      "n_tet": 8375520,
-      "n_vertices": 1757165,
-      "n_edges": 10850260,
-      "n_dof": 37822275,
+    "binary_sha256": "ab39bc950c8d5bc649af39a0fd8bf10f2403871d05ba2b7ec5266e634cb58064",
+    "native_mesh_counts": {
+      "n_tet": 87120,
+      "n_vertices": 18820,
+      "n_edges": 114263,
+      "n_dof": 399249,
       "NL": 4,
       "NSUB": 1,
       "R_CUT": 30.0
-    },
-    "orchestration_revision_after_attempt": {
-      "experiments/rsv2_07/solid_tip_3d.py": {
-        "before": "9106c1e79f4552d488c35d94b2a12468ae887b1ab1857d38ddead1eca1a03f13",
-        "after": "3f2202252b2256c11ebc2517e136563ff5720c60900fbd5f4690ec7996bc0c4d"
-      }
-    },
-    "recording_driver_sha256": "3f2202252b2256c11ebc2517e136563ff5720c60900fbd5f4690ec7996bc0c4d"
+    }
   },
   "invocations": [
     {
@@ -176,9 +171,9 @@
         "jarambit-crescent"
       ],
       "exit_code": 0,
-      "wall_seconds": 0.19666337966918945,
-      "log": "target/rsv2-07/solid-tip-3d/20261018T054942Z/cargo-build.log",
-      "log_sha256": "2d5694fb348541fae3d68a033b004800c9c79f8f6edb468d5763b1d8f389597a"
+      "wall_seconds": 0.47264719009399414,
+      "log": "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/cargo-build.log",
+      "log_sha256": "d9e881ecb1f8485c0441e01c53eb38fe4ec49ea502bd170ea9bcfeb708f42b27"
     },
     {
       "argv": [
@@ -187,7 +182,7 @@
         "-O",
         "-C",
         "lto=thin",
-        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d/20261018T054942Z/harness/solid_tip_input.rs",
+        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/harness/production_surface.rs",
         "-L",
         "dependency=/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/release/deps",
         "--extern",
@@ -209,54 +204,53 @@
         "--extern",
         "spade=/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/release/deps/libspade-8aefec192c3eadcf.rlib",
         "-o",
-        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d/20261018T054942Z/solid-tip-input"
+        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/production-surface"
       ],
       "exit_code": 0,
-      "wall_seconds": 14.428070545196533,
-      "log": "target/rsv2-07/solid-tip-3d/20261018T054942Z/rustc.log",
+      "wall_seconds": 11.803882122039795,
+      "log": "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/rustc.log",
       "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
       "argv": [
-        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d/20261018T054942Z/solid-tip-input",
+        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/production-surface",
         "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/experiments/rsv2_07/results/critical_fem_3.csv",
-        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/cad/critical_fem_3/prototype.mesh.json",
-        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d/20261018T054942Z"
+        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d-p4/20261018T061400Z"
       ],
       "exit_code": 0,
-      "wall_seconds": 3.3439993858337402,
-      "log": "target/rsv2-07/solid-tip-3d/20261018T054942Z/adapter.log",
-      "log_sha256": "4d3e55d027a6913f89a211adf4bfd07646282f85c80219fea2c02451a387193d"
+      "wall_seconds": 1.648012399673462,
+      "log": "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/export.log",
+      "log_sha256": "9e475726a759398a30c99db63d9c49b662a310ed83e5cd8098631f554521eafd"
     },
     {
       "argv": [
         "/home/ubuntu/.venvs/jarambit-sheath/bin/python",
         "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/fem_solid/tip_solid.py",
-        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d/20261018T054942Z/critical_fem_3_D1.json",
+        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/critical_fem_3_D1.json",
         "30",
         "4",
         "1",
-        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d/20261018T054942Z/skfem_raw.json"
+        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/skfem_raw.json"
       ],
       "exit_code": 0,
-      "wall_seconds": 122.426513671875,
-      "log": "target/rsv2-07/solid-tip-3d/20261018T054942Z/count.log",
-      "log_sha256": "fc8d26ded65b304df49ae27e9a47c74ce9a354f419a3ff1061aece1d3f8f7878"
+      "wall_seconds": 1.765113115310669,
+      "log": "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/count.log",
+      "log_sha256": "e5a503ee167de8e6be799108c4ed13daee7796d5ef7fbb59703ab3e274c973f8"
     },
     {
       "argv": [
         "/home/ubuntu/.venvs/jarambit-sheath/bin/python",
         "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/fem_solid/tip_solid.py",
-        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d/20261018T054942Z/critical_fem_3_D1.json",
+        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/critical_fem_3_D1.json",
         "30",
         "4",
         "1",
-        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d/20261018T054942Z/skfem_raw.json"
+        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/skfem_raw.json"
       ],
-      "exit_code": -15,
-      "wall_seconds": 623.6380846500397,
-      "log": "target/rsv2-07/solid-tip-3d/20261018T054942Z/skfem.log",
-      "log_sha256": "7bae99175f33b07debfdb37da2914e3cf76731ec4efe65b5c1aaa5c944f9314a"
+      "exit_code": 0,
+      "wall_seconds": 1033.7674190998077,
+      "log": "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/skfem.log",
+      "log_sha256": "2c18179c56680fe37248ef1a75f4a0f0b322bf93ce58c236a7c21559cc8f0379"
     },
     {
       "argv": [
@@ -268,64 +262,138 @@
         "-v",
         "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm:/repo:ro",
         "-v",
+        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d-p4/20261018T061400Z:/work:ro",
+        "-v",
+        "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/container-output:/results:rw",
+        "-v",
         "/home/ubuntu/.venvs/jarambit-sheath/lib/python3.12/site-packages/scipy:/deps/scipy:ro",
         "-v",
         "/home/ubuntu/.venvs/jarambit-sheath/lib/python3.12/site-packages/scipy.libs:/deps/scipy.libs:ro",
+        "-e",
+        "OMP_NUM_THREADS=1",
+        "-e",
+        "OPENBLAS_NUM_THREADS=1",
+        "-e",
+        "MKL_NUM_THREADS=1",
+        "-e",
+        "CARGO_BUILD_JOBS=2",
+        "-e",
+        "PYTHONPATH=/usr/local/dolfinx-real/lib/python3.12/dist-packages:/usr/local/lib:/repo",
+        "-e",
+        "CROSS_CHECK_SIDECAR=/results/sidecar.json",
         "ghcr.io/fenics/dolfinx/dolfinx@sha256:628f40dd62c7f37962ccadc5a745f23d52c56b2ac3ad9b9b6a86c567c07aa27b",
+        "nice",
+        "-n",
+        "10",
         "python3",
         "-c",
-        "import numpy,sys,os,json;sys.path.extend(['/deps','/repo/fem_solid']);import scipy,dolfinx,solve_dolfinx;from petsc4py import PETSc;print(json.dumps(dict(dolfinx=dolfinx.__version__,numpy=numpy.__version__,scipy=scipy.__version__,petsc=PETSc.Sys.getVersion(),reference_model=solve_dolfinx.MODEL_ID,cpus=sorted(os.sched_getaffinity(0)))))"
+        "import numpy,sys,os,json,runpy;sys.path.append('/deps');import scipy,dolfinx;from petsc4py import PETSc;json.dump(dict(dolfinx=dolfinx.__version__,numpy=numpy.__version__,scipy=scipy.__version__,petsc=PETSc.Sys.getVersion(),cpus=sorted(os.sched_getaffinity(0)),nice=os.getpriority(os.PRIO_PROCESS,0)),open('/results/runtime.json','w'));sys.argv=sys.argv[1:];runpy.run_path(sys.argv[0],run_name='__main__')",
+        "/repo/fem_solid/cross_check.py",
+        "/work/solid_mesh.npz",
+        "/work/skfem_raw.json"
       ],
       "exit_code": 0,
-      "wall_seconds": 6.37971568107605,
-      "log": "target/rsv2-07/solid-tip-3d/20261018T054942Z/dolfinx_runtime.log",
-      "log_sha256": "1583205ee24e88769782d9cc78eab4dcb393a617412253471fc72245dca62e16"
+      "wall_seconds": 126.4531660079956,
+      "log": "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/dolfinx.log",
+      "log_sha256": "9d7a3549ba409065ff4493041e708a8c26b392796cc62ed22e625eefaeb21977"
     }
   ],
-  "resources": {
-    "native_counts": {
-      "n_tet": 8375520,
-      "n_vertices": 1757165,
-      "n_edges": 10850260,
-      "n_dof": 37822275,
+  "primary_converged": true,
+  "primary": {
+    "solver": {
+      "algorithm": "skfem_p2_amg_cg",
+      "iterations": 201,
+      "relative_residual": 8.707418890921784e-11,
+      "converged": true,
+      "solve_seconds": 600.4378831386566
+    },
+    "design": "/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/critical_fem_3_D1.json",
+    "T_Nmm": 1820.0,
+    "sallow_joint_MPa": 730.2,
+    "JK2": 0.8819,
+    "plate": {
+      "sigma_per_Nmm": 0.06616082094824804,
+      "at": [
+        187.98,
+        -48.39
+      ],
+      "dist_tip": 4.093976554208186,
+      "t_local": 5.670652232568145,
+      "b_section": 7.95,
+      "kc_3d": 1.466,
+      "sigma_plate_MPa": 120.41269412581144,
+      "sigma_plate_x_kc_MPa": 176.49914327127442,
+      "SF_plate_raw": 6.063933419155027,
+      "SF_plate_d1": 4.13698642648787
+    },
+    "solid": {
+      "PATCH_mm": 2.0,
+      "n_tet": 87120,
+      "n_dof": 399249,
+      "R_CUT": 30.0,
       "NL": 4,
       "NSUB": 1,
-      "R_CUT": 30.0
+      "nodal_avg_peak": {
+        "MPa": 260.9,
+        "at": [
+          189.24,
+          -48.32,
+          0.21
+        ],
+        "dist": 4.25
+      },
+      "nodal_max_peak": {
+        "MPa": 307.3,
+        "at": [
+          189.39,
+          -48.52,
+          -0.15
+        ],
+        "dist": 4.09
+      },
+      "elem_mean_peak": {
+        "MPa": 261.6,
+        "at": [
+          189.37,
+          -48.39,
+          -0.15
+        ]
+      },
+      "SF_solid_nodal_avg": 2.799,
+      "SF_solid_nodal_max": 2.376,
+      "SF_solid_elem_mean": 2.792,
+      "twist_rot_check": null,
+      "wall_s": 1032.3
     },
-    "p2_vector_local_dofs": 30,
-    "native_coo_data_and_indices_bytes": 120607488000,
-    "host_at_recording_bytes": {
-      "MemTotal": 134838861824,
-      "MemAvailable": 90910670848,
-      "SwapTotal": 20937945088,
-      "SwapFree": 6945185792
-    },
-    "primary_rlimit_as_bytes": 25769803776,
-    "assembly_implementation": "/home/ubuntu/.venvs/jarambit-sheath/lib/python3.12/site-packages/skfem/assembly/form/bilinear_form.py",
-    "assembly_implementation_sha256": "189bc49867ed0baf1669e57f6e1876fd0db9fa50950e9faed95f13bdb82e0a8a"
+    "profile_MPa": {
+      "plate_raw": {
+        "4-5": 120.41269412581144,
+        "5-6": 89.78499307982786,
+        "6-8": 88.2585748333025,
+        "8-10": 53.238928106740545,
+        "10-12": 46.749297420788054,
+        "12-15": 38.65995627779612,
+        "15-20": 37.663869917726394,
+        "20-25": 37.746404745895575
+      },
+      "solid_nodal_avg": {
+        "4-5": 260.9,
+        "5-6": 112.2,
+        "6-8": 86.7,
+        "8-10": 70.8,
+        "10-12": 66.1,
+        "12-15": 76.1,
+        "15-20": 47.4,
+        "20-25": 47.0
+      }
+    }
   },
-  "primary_converged": false,
-  "primary_status": "stopped_resource_guard_before_solve",
-  "primary_solver_invoked": true,
-  "resource_guard": {
-    "timestamp_utc": "2026-10-18T06:02:30.343016+00:00",
-    "pid": 221253,
-    "signal": "SIGTERM",
-    "reason": "native stiffness COO arrays alone require 120607488000 bytes, exceeding the observed available host memory and the inherited 24 GiB address-space limit; stop during P2 basis construction before a guaranteed allocation refusal",
-    "coo_bytes": 120607488000,
-    "primary_address_space_limit_bytes": 25769803776,
-    "stack_evidence": "primary_stack_observation_privileged.txt"
-  },
-  "solid_tip_sf_nodal_max": null,
-  "solid_tip_sf_nodal_avg": null,
-  "primary_raw_result_exists": false,
-  "shared_tet_mesh_exists": false,
+  "solid_tip_sf_nodal_max": 2.376,
+  "solid_tip_sf_nodal_avg": 2.799,
   "dolfinx_cross_check": {
-    "within_2pct": null,
-    "status": "not_run_missing_primary_result_and_shared_mesh",
-    "numerical_solver_invoked": false,
-    "runtime_verified": true,
-    "runtime_versions": {
+    "within_2pct": true,
+    "numerical_solver_invoked": true,
+    "runtime": {
       "dolfinx": "0.9.0",
       "numpy": "2.0.2",
       "scipy": "1.18.1",
@@ -334,76 +402,313 @@
         22,
         0
       ],
-      "reference_model": "dolfinx3d_isotropic_linear_elasticity.cg_gamg.v1",
       "cpus": [
         14,
         15
-      ]
+      ],
+      "nice": 10
     },
-    "container_image": "ghcr.io/fenics/dolfinx/dolfinx@sha256:628f40dd62c7f37962ccadc5a745f23d52c56b2ac3ad9b9b6a86c567c07aa27b",
-    "container_image_id": "sha256:628f40dd62c7f37962ccadc5a745f23d52c56b2ac3ad9b9b6a86c567c07aa27b",
-    "reason": "primary did not reach DUMP_MESH; no validated identical mesh or primary SF exists"
+    "raw": {
+      "n_dof": 399249,
+      "ksp_its": 241,
+      "SF_nodal_max": 2.3763,
+      "SF_nodal_avg": 2.7987,
+      "vm_nodal_max_MPa": 307.27,
+      "vm_nodal_avg_MPa": 260.9,
+      "sallow_MPa": 730.17
+    },
+    "relative_errors_vs_primary": {
+      "max": 0.0001262626262628075,
+      "avg": 0.00010718113611996039
+    },
+    "solver_sidecar": {
+      "schema": "jarambit.fem_solid.cross_check_sidecar.v1",
+      "argv": [
+        "/repo/fem_solid/cross_check.py",
+        "/work/solid_mesh.npz",
+        "/work/skfem_raw.json"
+      ],
+      "inputs": {
+        "/work/solid_mesh.npz": "0c878c9c4773ace10b5b8d073a4c00f6429b4271b7c947deff4c45d986242cf6",
+        "/work/skfem_raw.json": "d16f864efa20b8e46c052ed8e5a7ddecfd93463081d62f60660a4fb39b2ee5d6"
+      },
+      "solver": {
+        "ksp_type": "cg",
+        "pc_type": "gamg",
+        "rtol": 1e-10,
+        "atol": 1e-50,
+        "divtol": 10000.0,
+        "max_it": 5000,
+        "prefix": "s07_0ed5b838e21e_0_",
+        "model": "dolfinx3d_isotropic_linear_elasticity.cg_gamg.v1",
+        "effective_options": {
+          "s07_0ed5b838e21e_0_mg_levels_ksp_type": "chebyshev",
+          "s07_0ed5b838e21e_0_mg_levels_pc_type": "jacobi"
+        },
+        "effective_options_sha256": "4db4d5ffb0ca112582bfc5d79d4704d2f4eeb0f5b3621a11e5d0f473b44bd744",
+        "provider": {
+          "versions": {
+            "dolfinx": "0.9.0",
+            "basix": "0.9.0",
+            "ufl": "2024.2.0",
+            "petsc4py": "3.22.0",
+            "mpi4py": "4.0.0",
+            "numpy": "2.0.2"
+          },
+          "dolfinx_git": "4116cca8cf91f1a7e877d38039519349b3e08620",
+          "petsc": "3.22.0",
+          "scalar": "float64",
+          "petsc_int": "int32",
+          "mpi_library": "MPICH Version:      4.2.2",
+          "module_files": {
+            "dolfinx": "/usr/local/dolfinx-real/lib/python3.12/dist-packages/dolfinx/__init__.py",
+            "basix": "/dolfinx-env/lib/python3.12/site-packages/basix/__init__.py",
+            "ufl": "/dolfinx-env/lib/python3.12/site-packages/ufl/__init__.py",
+            "petsc4py": "/dolfinx-env/lib/python3.12/site-packages/petsc4py/__init__.py",
+            "mpi4py": "/dolfinx-env/lib/python3.12/site-packages/mpi4py/__init__.py",
+            "numpy": "/dolfinx-env/lib/python3.12/site-packages/numpy/__init__.py"
+          }
+        },
+        "ksp_its": 241,
+        "ksp_reason": 2,
+        "ksp_residual_norm": 8.241989398940918e-12,
+        "ksp_norm_type": 1
+      },
+      "observable": {
+        "operator": "dg_vm_interpolation.v1",
+        "quantity": "von_mises_stress",
+        "formula": "sqrt(3/2 dev(s):dev(s))",
+        "basis": {
+          "family": "P",
+          "discontinuous": true,
+          "degree": 1,
+          "cell": "tetrahedron",
+          "value_shape": [],
+          "block_size": 1
+        },
+        "sampling": {
+          "kind": "cell_interpolation_points",
+          "reference_points": [
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "interpolation_ident": true,
+          "dofs_per_cell": 4
+        },
+        "map": {
+          "reference_to_physical": "Lagrange coordinate element",
+          "coordinate_degree": 1
+        },
+        "units": "MPa",
+        "unit_system": [
+          "mm",
+          "N",
+          "MPa"
+        ],
+        "frame": "cartesian_xyz_right_handed",
+        "region": {
+          "id": "whole_domain"
+        },
+        "mesh": {
+          "sha256": "5e991448b893f28b7d45cca5224402f47cd21032b8336715659a6adf8bfe351e",
+          "algorithm": "sha256(shape|bytes of x<f8, geometry dofmap<i8, c2v array<i8, offsets<i8)",
+          "coordinate_degree": 1,
+          "cells": 87120,
+          "vertices": 18820,
+          "geometry_nodes": 18820
+        },
+        "not": [
+          "l2_projection",
+          "nodal_smoothing",
+          "volume_weighting"
+        ],
+        "content_hash": "sha256(json.dumps(sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False))",
+        "content_sha256": "8a78aaa1d96dfa0f7e498c95b162b7093d132a1821beba58a76a2386f810fe75",
+        "gci_observable": {
+          "id": "dg_vm_interpolation.v1@8a78aaa1d96dfa0f",
+          "units": "MPa",
+          "region": "whole_domain",
+          "projection": "dg_vm_interpolation.v1",
+          "metric": "von_mises_stress"
+        }
+      },
+      "recovery": [
+        "incident_cell_vertex_max.v1",
+        "incident_cell_vertex_unweighted_mean.v1"
+      ],
+      "roi": {
+        "id": "tip_annulus_roi.v1",
+        "tip_distance": {
+          "min_inclusive": 4.0,
+          "max_exclusive": 15.0
+        },
+        "cut_distance": {
+          "min_exclusive": 3.0
+        },
+        "units": "mm",
+        "empty": "refused"
+      },
+      "roi_vertices": 5720,
+      "legacy_stdout": {
+        "n_dof": 399249,
+        "ksp_its": 241,
+        "SF_nodal_max": 2.3763,
+        "SF_nodal_avg": 2.7987,
+        "vm_nodal_max_MPa": 307.27,
+        "vm_nodal_avg_MPa": 260.9,
+        "sallow_MPa": 730.17
+      }
+    },
+    "relative_errors_vs_dolfinx": {
+      "max": 0.0001262466860245714,
+      "avg": 0.00010719262514729871
+    },
+    "within_2pct_evaluator_denominator": true
+  },
+  "surface_metadata": {
+    "census": [
+      0,
+      0,
+      1
+    ],
+    "compound_config": {
+      "angle": 18.0,
+      "apex": 0.175,
+      "baseline": false,
+      "boundary_tol": 0.001,
+      "core": 0.0,
+      "d0": 0.45,
+      "d1": 0.55,
+      "export_area": 0.25,
+      "grid": 0.025,
+      "point_end": 6.0,
+      "point_lateral": 2.0,
+      "point_shape": 3,
+      "point_slope": 0.3,
+      "radial": true,
+      "smooth_heel": true
+    },
+    "export_call": "export::solid(&p, 1.0)",
+    "production_outer_dp_tolerance_mm": 0.03,
+    "production_rs_v2_area_cap_mm2": 0.25,
+    "solid_triangles": 97396,
+    "solid_vertices": 48694,
+    "upper_triangles": 46700,
+    "uses_study_grid_points": false,
+    "volume_mm3": 29804.811679307248
+  },
+  "phase3_archive": {
+    "report": "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/phase3_SOLID_TIP_3D_VERIFICATION.md",
+    "receipt": "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/phase3_solid_tip_3d_validation.json"
   },
   "verification": {
-    "scientific_sources_and_inputs_unchanged": true,
-    "adapter_binary_and_sources_unchanged": true,
-    "native_count_completed": true,
-    "cpus": [
-      14,
-      15
-    ],
-    "CARGO_BUILD_JOBS": 2,
+    "source_and_binary_unchanged": true,
+    "surface_bound_exactly": true,
+    "identical_mesh_verified": true,
+    "primary_result_unchanged_during_cross_check": true,
     "software_controls": {
       "passed": 2,
       "failed": 0,
       "physical_validation": false,
-      "tests": [
-        "test_refinement_preserves_the_actual_thin_cad_skin",
-        "test_nonconverged_primary_never_certifies"
-      ],
-      "log": "target/rsv2-07/solid-tip-3d/20261018T054942Z/software-controls.log",
-      "log_sha256": "029593fc3c62ae5ab2d4e36acf46daf3f3d0861c21870a9cc07d4f6e27485537"
+      "log": "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/software-controls.log",
+      "log_sha256": "dec5673ee7ead0e86a249ea046dba60aab31a8206a43fedeb035ab8449b4e26d"
     },
-    "report_sha256": "555874a761081d5d6ba5a67a82946e9fdf9d65f6f28d639064faa9ab094fca15"
-  },
-  "surface_validation": {
-    "original_cad_sha256": "7d4b2a513efb69f3fcad7de85f66f86697b248b432e9d3581412be23fcc96ffd",
-    "d1_input_sha256": "a1e1feda32046abb53ce581c6f64a3b270cd194001657d44dfc852b4fe55b2cc",
-    "upper_vertices": 304523,
-    "upper_triangles": 597999,
-    "source_vertex_coordinates_exact": true,
-    "source_triangle_connectivity_exact": true,
-    "positive_projected_triangle_areas": true,
-    "minimum_projected_double_area_mm2": 2.033128821153574e-07,
-    "symmetric_lower_skin_verified": true,
-    "native_plate_mesh_matches_prior_gci": true,
-    "tip_xy": [
-      188.3136890261311,
-      -52.4655532385621
-    ],
-    "t_joint_mm": 6.0
+    "sidecar_inputs_match_actual_artifacts": true,
+    "report_sha256": "74a9dbbddfddad356cc258a4b2312a40aae638ea672a1f7325b858ef53badacf"
   },
   "artifacts_sha256": {
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/primary_resource_limit.json": "2555c491171111f92a1faacd6429a4fb84d3a7fa107f00e0afb1efca7a5917cb",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/surface_validation.json": "79866b2e03409e868ba539ddc9cc82fbb5d459cf7068e3377d0cf915f9699f0d",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/provenance.json": "b1e3bc720c5bdc83e0b88c0ea47f8c15884d1bcf67ffbe89ff3bd18b4d144131",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/primary_process_observation.json": "d8f3d822c3132a5ce3f290b97583c3d97c6f0f954abf53d1b9a6321ddba583e1",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/adapter.log": "4d3e55d027a6913f89a211adf4bfd07646282f85c80219fea2c02451a387193d",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/cargo-build.log": "2d5694fb348541fae3d68a033b004800c9c79f8f6edb468d5763b1d8f389597a",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/skfem.log": "7bae99175f33b07debfdb37da2914e3cf76731ec4efe65b5c1aaa5c944f9314a",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/invocations.json": "2f07e8a67631d75d8f09dfc38f3c4da6534b31474b0ad48dbd7aea9ba6f8b180",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/critical_fem_3_grind_law.json": "d6d6a451c664768ef6d30bbea6a59ca716661e84f0e8b750c4ae73fa592b08da",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/dolfinx_runtime.log": "1583205ee24e88769782d9cc78eab4dcb393a617412253471fc72245dca62e16",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/critical_fem_3_D1.json": "a1e1feda32046abb53ce581c6f64a3b270cd194001657d44dfc852b4fe55b2cc",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/rustc.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/software-controls.log": "029593fc3c62ae5ab2d4e36acf46daf3f3d0861c21870a9cc07d4f6e27485537",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/count.log": "fc8d26ded65b304df49ae27e9a47c74ce9a354f419a3ff1061aece1d3f8f7878",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/primary_stack_observation.txt": "f38e9a30204e8118aaaff732aa83be00ec7ee9534fe7feca51301bae057fc126",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/primary_guard_stop.json": "40af00b17777d3298756c6a765dcb141b5512161a0541bc6c502464b5abf568d",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/primary_stack_observation_privileged.txt": "3b6307e99a45958ad558755450603a93bbd61004254af005acd59578cf67279d",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/harness/compound.rs": "1a5345182a8e8b575a9a2282f176df681cf0812bd0b3b71f77b7d5e0c769469b",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/harness/modules.rs": "51b882f97269fe02f48b11424ef3daa56157bd7353e864f6bbf670be80bd624b",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/harness/prototype_export.rs": "7c9a8ad43c29acb8455e5e07bde0e2d4e0bdaecff5e02b208f8242ddd7849839",
-    "target/rsv2-07/solid-tip-3d/20261018T054942Z/harness/solid_tip_input.rs": "1a60d621c703d85d27a43370216a74e054416489f9dc243142179122e4dbbde8"
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/surface_validation.json": "bbc3d4442f8bcb9206cf20bf10213cdbec834260307090fb09a93341946d281f",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/export.log": "9e475726a759398a30c99db63d9c49b662a310ed83e5cd8098631f554521eafd",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/dolfinx_raw.json": "c649329c0ff6c9fc61b2ae14f106d950e97b555967b7856198b2213c4652b374",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/provenance.json": "38a72b5ae5c90771e74941596b05b9426e30e40a38a8da528c9a46d2ea0fdab6",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/primary_process_observation.json": "225c9177a3308d01915fc69b703f9f02dc09dd99e6d70ac9d095454aa202dc36",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/cargo-build.log": "d9e881ecb1f8485c0441e01c53eb38fe4ec49ea502bd170ea9bcfeb708f42b27",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/critical_fem_3_surface_1mm.json": "8bacb8c0c2eeed5e9b383346a83ff3215576e5e15f242a232117f9437276881b",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/mesh_validation.json": "dc9307f66c27bed14d6980137ab823879e4e4bbc003cfcf844c5c93144404190",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/phase3_solid_tip_3d_validation.json": "c7cd981d5e8cbfc9ec8f750bc704fdb9fe0b8fed8909a27a13566183e03eb38a",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/skfem.log": "2c18179c56680fe37248ef1a75f4a0f0b322bf93ce58c236a7c21559cc8f0379",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/primary_linear_stack_observation.txt": "ef09a26dd030208796bbf6527b2787c2ed0ff55ea23839c03ad8b22ae7d70060",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/invocations.json": "cc2d9b39886457c21ab100f2c57d192ef7e14cc0eb306d7a3eb0b9b03afff49f",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/primary_cg_progress_observation.txt": "cf87c3ad2e058559db9bd462d8f8c71b7762c1372b2935d6260c9b633b513fca",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/primary_cg_progress_2.txt": "c638bbc2926c8ed48e51b428bc9dd86074ea0f272a2e6342ddf3f2b510962460",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/solid_mesh.npz": "0c878c9c4773ace10b5b8d073a4c00f6429b4271b7c947deff4c45d986242cf6",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/critical_fem_3_grind_law.json": "d6d6a451c664768ef6d30bbea6a59ca716661e84f0e8b750c4ae73fa592b08da",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/critical_fem_3_D1.json": "e42da2377076aa0636bd477465624c025d567aea16a2fcc2ea043be949cf456d",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/phase3_SOLID_TIP_3D_VERIFICATION.md": "555874a761081d5d6ba5a67a82946e9fdf9d65f6f28d639064faa9ab094fca15",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/rustc.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/surface_metadata.json": "468b12d53a8cc87e94919e624337a4a12d4e231b6b5b4eaa2e068aca73118d5d",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/software-controls.log": "dec5673ee7ead0e86a249ea046dba60aab31a8206a43fedeb035ab8449b4e26d",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/count.log": "e5a503ee167de8e6be799108c4ed13daee7796d5ef7fbb59703ab3e274c973f8",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/primary_solver_locals_observation.txt": "0ad0c9e7d158139b8a4c36540113dc1a7352e1401dab3273f1bf5e5b31505247",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/primary_stack_observation.txt": "6fac9008f2ec340209ae5ec6df579ba5a1776eb09a1a80c906113531b4e5db81",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/skfem_raw.json": "d16f864efa20b8e46c052ed8e5a7ddecfd93463081d62f60660a4fb39b2ee5d6",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/dolfinx.log": "9d7a3549ba409065ff4493041e708a8c26b392796cc62ed22e625eefaeb21977",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/harness/compound.rs": "1a5345182a8e8b575a9a2282f176df681cf0812bd0b3b71f77b7d5e0c769469b",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/harness/modules.rs": "51b882f97269fe02f48b11424ef3daa56157bd7353e864f6bbf670be80bd624b",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/harness/prototype_export.rs": "601da7e74167259606a9f0c0606cc97881051d51b0c78ec4acca0c7851e7a744",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/harness/production_surface.rs": "321c4a1aa3f8ba3dfadbab7f873833b6bcb9e82aec07586d38a90515cede0eab",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/container-output/sidecar.json": "3a3d36919cfe6117b86c7dda4d80faba0b708ece739bafca78ad9637c67a7be5",
+    "target/rsv2-07/solid-tip-3d-p4/20261018T061400Z/container-output/runtime.json": "46cfcd99455c32533a508322d198b97acd4b4381e3b05b19bde69b7e7354de23"
+  },
+  "assessment": {
+    "G16-12_tip_sf_observed_pass": true,
+    "G16-16_cross_check_observed_pass": true,
+    "conservative_observed_nodal_max_sf": 2.376,
+    "full_battery_invoked": false,
+    "solid_mesh_convergence_established": false,
+    "human_max_twist_closure": false,
+    "manufacturing_qualification": false
+  },
+  "surface_validation": {
+    "bound_surface_equals_export_json": true,
+    "native_plate_context_unchanged": true,
+    "genes_match_canonical_csv": true,
+    "compound_config_unchanged": true,
+    "production_export_body_identical": true,
+    "production_export_body_sha256": "4113cf7e9fc9ee75f1479b9bd5c8542f3324092fd8f6e77de6c324e3510c0920",
+    "native_export_source_sha256": "575eef5f12aebc81a345ef2fe7f52a51ab73e6f7ed837eb1c5e556f2e81bec06",
+    "compound_law_source_sha256": "1a5345182a8e8b575a9a2282f176df681cf0812bd0b3b71f77b7d5e0c769469b",
+    "surface_sha256": "8bacb8c0c2eeed5e9b383346a83ff3215576e5e15f242a232117f9437276881b",
+    "D1_sha256": "e42da2377076aa0636bd477465624c025d567aea16a2fcc2ea043be949cf456d",
+    "upper_triangles": 46700,
+    "upper_referenced_vertices": 24347,
+    "positive_projected_areas": true,
+    "min_projected_double_area_mm2": 0.0011586969401634066
+  },
+  "mesh_validation": {
+    "mesh_sha256": "0c878c9c4773ace10b5b8d073a4c00f6429b4271b7c947deff4c45d986242cf6",
+    "n_tet": 87120,
+    "n_vertices": 18820,
+    "load_vertices": 170,
+    "fixed_vertices": 350,
+    "fixed_edges": 1009,
+    "net_force_n": -4.973799150320701e-14,
+    "chord_torque_nmm": 1819.9999999999984,
+    "transverse_moment_nmm": -4.085620730620576e-14,
+    "finite_nondegenerate_tets": true,
+    "minimum_absolute_six_volume_mm3": 0.0014792781566197258,
+    "positive_oriented_tets": 87120,
+    "E_mpa": 113800.0,
+    "nu": 0.34,
+    "sallow_joint_mpa": 730.1745600000002,
+    "load_and_clamp_vertices_disjoint": true
   }
 }
