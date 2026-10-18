@@ -180,7 +180,7 @@ class MarkdownReportIndexTests(unittest.TestCase):
             for relative in [*files, audit.INVENTORY.as_posix(), audit.MARKDOWN_INDEX.as_posix(), audit.CROSS_CHECK.as_posix(),
                              audit.SCRIPT_INVENTORY.as_posix(), audit.SCRIPT_CROSS_CHECK.as_posix(), *audit.SCRIPT_FILES,
                              audit.SUMMARY_MANIFEST.as_posix(), audit.MANIFEST_CROSS_CHECK.as_posix(), audit.CUMULATIVE_RECEIPT_INDEX.as_posix(),
-                             audit.ASSERTION_INVENTORY.as_posix(), audit.JSON_SCHEMA_KEYSET_AUDIT.as_posix(), audit.MARKDOWN_HEADING_AUDIT.as_posix(),
+                             audit.ASSERTION_INVENTORY.as_posix(), audit.JSON_SCHEMA_KEYSET_AUDIT.as_posix(), audit.MARKDOWN_HEADING_AUDIT.as_posix(), audit.HEX64_DIGEST_AUDIT.as_posix(),
                              *[path.as_posix() for _,path in audit.markdown_heading_paths()],
                              *[path.as_posix() for _,_,path in audit.summary_paths()]]:
                 target = root / relative; target.parent.mkdir(parents=True, exist_ok=True)
@@ -193,6 +193,7 @@ class MarkdownReportIndexTests(unittest.TestCase):
                 return real(path, mode, *args, **kwargs)
             with patch.object(Path, 'open', new=guarded), patch.dict('os.environ',{},clear=True), patch('subprocess.run', side_effect=AssertionError('Process launch')):
                 result = audit.verify_all(root)
+                self.assertEqual(result['hex64_digest_format']['receipts'],17)
                 self.assertEqual(result['markdown_heading_consistency']['reports'],16)
                 self.assertEqual(result['json_schema_keysets']['receipts'],15)
                 self.assertEqual(result['markdown_reports']['status'],'pass')
@@ -822,6 +823,89 @@ class MarkdownHeadingConsistencyTests(unittest.TestCase):
             self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
         before = (ROOT / 'COMMS.md').read_bytes()
         audit.verify_markdown_heading_audit()
+        self.assertEqual((ROOT / 'COMMS.md').read_bytes(),before)
+
+
+class Hex64DigestFormatTests(unittest.TestCase):
+    def document(self):
+        return audit.strict_json((ROOT / audit.HEX64_DIGEST_AUDIT).read_bytes())
+
+    def test_complete_live_phase_coverage_and_digest_field_inventory(self):
+        d = self.document(); self.assertEqual(audit.verify_hex64_digest_audit()['status'],'pass')
+        self.assertEqual([r['phase'] for r in d['files']],list(range(15,32)))
+        self.assertEqual(d['file_count'],17); self.assertEqual(d['phase_count'],17)
+        self.assertEqual([r['path'] for r in d['files']],[p.as_posix() for _,p in audit.hex64_receipt_paths()])
+        def leaves(value,tokens=()):
+            if isinstance(value,dict):
+                for key,child in value.items(): yield from leaves(child,tokens+(key,))
+            elif isinstance(value,list):
+                for i,child in enumerate(value): yield from leaves(child,tokens+(str(i),))
+            elif any('sha256' in token.casefold() for token in tokens):
+                yield '/'+ '/'.join(token.replace('~','~0').replace('/','~1') for token in tokens),value
+        for row in d['files']:
+            data = (ROOT / row['path']).read_bytes()
+            expected = dict(leaves(audit.strict_json(data)))
+            self.assertEqual({r['json_pointer']:r['value'] for r in row['fields']},expected)
+            self.assertEqual(row['sha256_field_count'],len(expected)); self.assertGreater(len(expected),0)
+            self.assertEqual(row['bytes'],len(data)); self.assertEqual(row['sha256'],audit.digest(data))
+            for value in expected.values(): self.assertIsInstance(value,str); self.assertRegex(value,r'^[0-9a-f]{64}$')
+        self.assertEqual(d['sha256_field_count'],sum(r['sha256_field_count'] for r in d['files']))
+        self.assertEqual(d['total_bytes'],sum(r['bytes'] for r in d['files']))
+        self.assertTrue(d['all_sha256_fields_lowercase_hex64']); self.assertEqual(d['invalid_field_count'],0)
+
+    def test_nested_maps_arrays_case_insensitive_names_and_json_pointers(self):
+        h = '0123456789abcdef'*4
+        document = dict(unrelated='not a digest',rows=[dict(expected_sha256=h)],SHA256={'a/b~c':[h,dict(child=h)]})
+        fields = audit.hex64_digest_fields(document)
+        self.assertEqual(fields,[dict(json_pointer='/SHA256/a~1b~0c/0',value=h),
+                                 dict(json_pointer='/SHA256/a~1b~0c/1/child',value=h),
+                                 dict(json_pointer='/rows/0/expected_sha256',value=h)])
+        self.assertEqual(audit.hex64_digest_fields(dict(description='sha256',other=None)),[])
+
+    def test_invalid_digest_values_types_containers_and_json_rejected(self):
+        for value in ['A'*64,'g'*64,'a'*63,'a'*65,'a'*64+'\n',' '+'a'*64,'',None,True,64,{},[]]:
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError,'SHA256'):
+                audit.hex64_digest_fields(dict(input_sha256={'nested':[value]}))
+        for data in [b'[]',b'null',b'{"sha256":NaN}',b'{"sha256":1e999}']:
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                audit.hex64_receipt_record(data,15,Path('receipt.json'))
+
+    def test_forged_field_values_pointers_counts_and_coverage_rejected(self):
+        for field,value in [('value','0'*64),('json_pointer','/omitted')]:
+            d = self.document(); d['files'][0]['fields'][0][field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError,'SHA256 format inventory'):
+                audit.verify_hex64_digest_audit(document=d)
+        for field,value in [('sha256_field_count',0),('invalid_field_count',1),('all_sha256_fields_lowercase_hex64',False)]:
+            d = self.document(); d[field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError,'SHA256 format inventory'):
+                audit.verify_hex64_digest_audit(document=d)
+        for level in ['fields','files']:
+            d = self.document()
+            if level == 'fields': d['files'][0]['fields'].pop()
+            else: d['files'].pop()
+            with self.subTest(level=level), self.assertRaisesRegex(ValueError,'SHA256 format inventory'):
+                audit.verify_hex64_digest_audit(document=d)
+
+    def test_missing_and_byte_changed_receipt_rejected(self):
+        real = Path.read_bytes; victim = ROOT / audit.MARKDOWN_HEADING_AUDIT
+        def missing(path):
+            if path == victim: raise FileNotFoundError(path)
+            return real(path)
+        with patch.object(Path,'read_bytes',new=missing), self.assertRaises(FileNotFoundError):
+            audit.verify_hex64_digest_audit()
+        def changed(path):
+            data = real(path)
+            return data+b' ' if path == victim else data
+        with patch.object(Path,'read_bytes',new=changed), self.assertRaisesRegex(ValueError,'SHA256 format inventory'):
+            audit.verify_hex64_digest_audit()
+
+    def test_static_outputs_and_comms_unchanged(self):
+        d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
+        self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
+        for path in [ROOT / audit.HEX64_DIGEST_AUDIT, ROOT / audit.INVENTORY.parent / 'PHASE32.md']:
+            self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
+        before = (ROOT / 'COMMS.md').read_bytes()
+        audit.verify_hex64_digest_audit()
         self.assertEqual((ROOT / 'COMMS.md').read_bytes(),before)
 
 

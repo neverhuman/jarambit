@@ -30,6 +30,7 @@ CUMULATIVE_RECEIPT_INDEX = INVENTORY.parent / 'phase28_cumulative_receipt_index_
 ASSERTION_INVENTORY = INVENTORY.parent / 'phase29_verifier_assertion_inventory_audit.json'
 JSON_SCHEMA_KEYSET_AUDIT = INVENTORY.parent / 'phase30_json_schema_keyset_audit.json'
 MARKDOWN_HEADING_AUDIT = INVENTORY.parent / 'phase31_markdown_heading_consistency_audit.json'
+HEX64_DIGEST_AUDIT = INVENTORY.parent / 'phase32_hex64_digest_format_audit.json'
 HOST_PATH_PATTERN = re.compile(r'/(?:home|Users|tmp|root|var/tmp|private/tmp)/|[A-Za-z]:[\\/](?:Users|Temp)[\\/]')
 
 
@@ -598,6 +599,60 @@ def verify_markdown_heading_audit(root=ROOT, document=None):
     return dict(status='pass',reports=16,headings=actual['total_headings'],violation_count=0)
 
 
+def hex64_receipt_paths():
+    return cumulative_receipt_paths() + [(28,CUMULATIVE_RECEIPT_INDEX),(29,ASSERTION_INVENTORY),
+                                         (30,JSON_SCHEMA_KEYSET_AUDIT),(31,MARKDOWN_HEADING_AUDIT)]
+
+
+def hex64_digest_fields(document):
+    fields = []
+    def visit(value, pointer='', selected=False):
+        if isinstance(value,(dict,list)):
+            if selected and not value:
+                raise ValueError('Empty SHA256 container at ' + pointer)
+            items = sorted(value.items()) if isinstance(value,dict) else enumerate(value)
+            for key,child in items:
+                token = str(key).replace('~','~0').replace('/','~1')
+                visit(child,pointer+'/'+token,selected or isinstance(key,str) and 'sha256' in key.casefold())
+        elif selected:
+            if not isinstance(value,str) or re.fullmatch(r'[0-9a-f]{64}',value) is None:
+                raise ValueError('Invalid lowercase hex64 SHA256 at ' + pointer)
+            fields.append(dict(json_pointer=pointer,value=value))
+    visit(document)
+    return fields
+
+
+def hex64_receipt_record(data, phase, path):
+    document = strict_json(data)
+    if not isinstance(document,dict):
+        raise ValueError('SHA256 audit receipt must be a top-level JSON object')
+    fields = hex64_digest_fields(document)
+    return dict(phase=phase,path=path.as_posix(),bytes=len(data),sha256=digest(data),
+                sha256_field_count=len(fields),invalid_field_count=0,fields=fields)
+
+
+def generate_hex64_digest_audit(root):
+    root = Path(root)
+    verify_markdown_heading_audit(root)
+    files = [hex64_receipt_record((root / path).read_bytes(),phase,path) for phase,path in hex64_receipt_paths()]
+    return dict(task='G16-06-RSV2-08-p33',study_phase=32,
+                scope='All leaves under keys containing sha256 case-insensitively in Phase15..31 JSON receipts; format only.',
+                required_format='[0-9a-f]{64}',phase_count=17,file_count=len(files),
+                total_bytes=sum(r['bytes'] for r in files),sha256_field_count=sum(r['sha256_field_count'] for r in files),
+                invalid_field_count=0,all_sha256_fields_lowercase_hex64=True,
+                engineering_qualification_assessed=False,qualified_count=0,full_qualification=False,files=files)
+
+
+def verify_hex64_digest_audit(root=ROOT, document=None):
+    root = Path(root)
+    if document is None:
+        document = strict_json((root / HEX64_DIGEST_AUDIT).read_bytes())
+    actual = generate_hex64_digest_audit(root)
+    if document != actual:
+        raise ValueError('SHA256 format inventory coverage, fields, source digest or metadata mismatch')
+    return dict(status='pass',receipts=17,sha256_fields=actual['sha256_field_count'],invalid_fields=0)
+
+
 def verify_all(root=ROOT):
     result = verify(root)
     result['markdown_reports'] = verify_markdown(root)
@@ -610,6 +665,7 @@ def verify_all(root=ROOT):
     result['verifier_assertion_inventory'] = verify_assertion_inventory(root)
     result['json_schema_keysets'] = verify_json_schema_keyset_audit(root)
     result['markdown_heading_consistency'] = verify_markdown_heading_audit(root)
+    result['hex64_digest_format'] = verify_hex64_digest_audit(root)
     return result
 
 
@@ -626,6 +682,7 @@ def main():
     parser.add_argument('--write-assertion-inventory', action='store_true', help='Inventory verifier guard functions and test declarations by AST')
     parser.add_argument('--write-json-keysets', action='store_true', help='Audit top-level JSON keys across Phase15..29 receipts')
     parser.add_argument('--write-markdown-headings', action='store_true', help='Audit Phase15..30 report heading structure')
+    parser.add_argument('--write-hex64-digests', action='store_true', help='Audit SHA256 field format across Phase15..31 receipts')
     args = parser.parse_args()
     if args.write:
         import subprocess
@@ -659,6 +716,8 @@ def main():
         (ROOT / JSON_SCHEMA_KEYSET_AUDIT).write_text(json.dumps(generate_json_schema_keyset_audit(ROOT), indent=2, allow_nan=False) + '\n')
     if args.write_markdown_headings:
         (ROOT / MARKDOWN_HEADING_AUDIT).write_text(json.dumps(generate_markdown_heading_audit(ROOT), indent=2, allow_nan=False) + '\n')
+    if args.write_hex64_digests:
+        (ROOT / HEX64_DIGEST_AUDIT).write_text(json.dumps(generate_hex64_digest_audit(ROOT), indent=2, allow_nan=False) + '\n')
     print(json.dumps(verify_all(), sort_keys=True, allow_nan=False))
 
 

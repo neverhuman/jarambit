@@ -5,7 +5,7 @@
   "summary_manifest": {
     "path": "docs/audits/G16-06_RSV2-08/phase26_summary_manifest_audit.json",
     "bytes": 3334,
-    "sha256": "65214adc5959657447f9bdeb5a433452ac3f2bd83fb88886a92a2e3ff2df5aac"
+    "sha256": "dd71458b82b2f62753503baac506e444e8d8348f71161d74aa3b1e3aca576b53"
   },
   "summary_file_count": 10,
   "checked_json_receipt_phases": [
@@ -117,8 +117,8 @@
       "phase": 24,
       "kind": "json",
       "path": "docs/audits/G16-06_RSV2-08/phase24_script_test_inventory_audit.json",
-      "expected_sha256": "e5b887aaa2a4e997070eee9a2a52098cf3d282281a1538d496afae060d5c09fc",
-      "actual_sha256": "e5b887aaa2a4e997070eee9a2a52098cf3d282281a1538d496afae060d5c09fc",
+      "expected_sha256": "3cc69a87aa4c48763ac658d77923fa7cbe96be07535a560759bbc8b60e77b984",
+      "actual_sha256": "3cc69a87aa4c48763ac658d77923fa7cbe96be07535a560759bbc8b60e77b984",
       "expected_bytes": 1007,
       "actual_bytes": 1007,
       "digest_parity": true,
@@ -143,8 +143,8 @@
       "phase": 25,
       "kind": "json",
       "path": "docs/audits/G16-06_RSV2-08/phase25_script_and_inventory_cross_check_audit.json",
-      "expected_sha256": "a3186e2c884bdcfd9a09ffa719a6fb07fa477fb3cd49ceac8c62df3fc3dad8e8",
-      "actual_sha256": "a3186e2c884bdcfd9a09ffa719a6fb07fa477fb3cd49ceac8c62df3fc3dad8e8",
+      "expected_sha256": "92ef609e53b81fac02e44b508a47f57228f32413d03a4a8fdb58f20c3f748f54",
+      "actual_sha256": "92ef609e53b81fac02e44b508a47f57228f32413d03a4a8fdb58f20c3f748f54",
       "expected_bytes": 12389,
       "actual_bytes": 12389,
       "digest_parity": true,
@@ -193,8 +193,8 @@
     {
       "owner_receipt": "docs/audits/G16-06_RSV2-08/phase25_script_and_inventory_cross_check_audit.json",
       "path": "docs/audits/G16-06_RSV2-08/phase24_script_test_inventory_audit.json",
-      "expected_sha256": "e5b887aaa2a4e997070eee9a2a52098cf3d282281a1538d496afae060d5c09fc",
-      "actual_sha256": "e5b887aaa2a4e997070eee9a2a52098cf3d282281a1538d496afae060d5c09fc",
+      "expected_sha256": "3cc69a87aa4c48763ac658d77923fa7cbe96be07535a560759bbc8b60e77b984",
+      "actual_sha256": "3cc69a87aa4c48763ac658d77923fa7cbe96be07535a560759bbc8b60e77b984",
       "expected_bytes": 1007,
       "actual_bytes": 1007,
       "digest_parity": true,
@@ -206,10 +206,10 @@
   "phase24_script_checks": [
     {
       "path": "scripts/verify_g16_06_rsv2_08_receipts.py",
-      "expected_sha256": "6d2e59c5b285876a437c8c0f567dee3551c19cfb693174dd0ab5c79275d9670a",
-      "actual_sha256": "6d2e59c5b285876a437c8c0f567dee3551c19cfb693174dd0ab5c79275d9670a",
-      "expected_bytes": 37411,
-      "actual_bytes": 37411,
+      "expected_sha256": "8c74ee580413a3d36cd4bd7ca1c63d18c41cddb44d75b7080c46e06d98c0307f",
+      "actual_sha256": "8c74ee580413a3d36cd4bd7ca1c63d18c41cddb44d75b7080c46e06d98c0307f",
+      "expected_bytes": 40612,
+      "actual_bytes": 40612,
       "digest_parity": true,
       "byte_parity": true,
       "in_summary": false,
@@ -217,10 +217,10 @@
     },
     {
       "path": "scripts/tests/test_verify_g16_06_rsv2_08_receipts.py",
-      "expected_sha256": "37b76c844f4b0504cd744fda77b9a9ec698f0658cf7db9c56acaf77539e0115c",
-      "actual_sha256": "37b76c844f4b0504cd744fda77b9a9ec698f0658cf7db9c56acaf77539e0115c",
-      "expected_bytes": 50805,
-      "actual_bytes": 50805,
+      "expected_sha256": "738d9a0ea9348d8fe795a986031f199ebcece911642a52aed81116bc1c6b2ca3",
+      "actual_sha256": "738d9a0ea9348d8fe795a986031f199ebcece911642a52aed81116bc1c6b2ca3",
+      "expected_bytes": 56403,
+      "actual_bytes": 56403,
       "digest_parity": true,
       "byte_parity": true,
       "in_summary": false,
