@@ -175,7 +175,7 @@ Every legal profile gets complete native `certification::measure`, identical eva
 
 Primary report: `experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V8_REPORT.md`; byte-identical target mirror: `target/gate-feasibility-bound/UNIFIED_PROTOTYPE_V8_REPORT.md`. All stable artifacts, executable, scripts, raw geometry/FEM/export receipts, source/control provenance, interpolation plan, diagnostics, `fem_summary.csv`, native GCI results, `verification.json`, `summary.json`, `run_provenance.json`, `REPORT_SHA256`, `SHA256SUMS` and standalone `verify_seal.py` are in `target/gate-feasibility-bound/unified_study_v8/`. Report hash and final artifact count appear in the seal sidecars and both agent tracking files to avoid a self-referential report digest.
 
-Requested external audit mirror could not be written: [Errno 30] Read-only file system: '/home/ubuntu/jarambit-audits/2026-10-18-gate-feasibility-bound/UNIFIED_PROTOTYPE_V8_REPORT.md'. The final report is preserved in the primary worktree path and identical target mirror; the exact delivery failure and intended destination are in `mirror_status.json`. The captain can copy the sealed primary report from this worktree.
+Requested external audit mirror could not be written: [Errno 30] Read-only file system: 'external-audit-mirror/2026-10-18-gate-feasibility-bound/UNIFIED_PROTOTYPE_V8_REPORT.md'. The final report is preserved in the primary worktree path and identical target mirror; the exact delivery failure and intended destination are in `mirror_status.json`. The captain can copy the sealed primary report from this worktree. The destination above is a portable display label; the original host-specific destination is preserved in the original receipt.
 
 Reproduce using the existing lane target:
 

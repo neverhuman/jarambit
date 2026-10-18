@@ -1,6 +1,6 @@
 # G16-12-RSV2-04 Phase-13: native delayed-taper and tip-thickness sweep
 
-Task `G16-12-RSV2-04-p13`, `unified_study_v10`; execution commit `968fa148c290b9c1c01785c3d9ff1be629c7c6a9`; branch `audit/gate-feasibility-bound`; worktree `/home/ubuntu/jarambit_wt_diag`. CPUs **10,11**, `CARGO_BUILD_JOBS=2`, faer solver, requested `nice -n 10`, inherited effective niceness **19**. Assignment is frozen in `inputs/assignment.md`. No commit or push.
+Task `G16-12-RSV2-04-p13`, `unified_study_v10`; execution commit `968fa148c290b9c1c01785c3d9ff1be629c7c6a9`; branch `audit/gate-feasibility-bound`; worktree `.`. CPUs **10,11**, `CARGO_BUILD_JOBS=2`, faer solver, requested `nice -n 10`, inherited effective niceness **19**. Assignment is frozen in `inputs/assignment.md`. No commit or push.
 
 ## Result
 
