@@ -171,10 +171,17 @@ fn spawn_offspring_batch(
                             .clamp(b[idx].0, b[idx].1);
                     }
                     if child.v[genome::WIN_N] >= 1.0 {
+                        child.v[genome::WIN_S0] = rng
+                            .range(0.05, 0.052)
+                            .clamp(b[genome::WIN_S0].0, b[genome::WIN_S0].1);
+                        child.v[genome::WIN_S1] = rng
+                            .range(0.502, 0.525)
+                            .clamp(b[genome::WIN_S1].0, b[genome::WIN_S1].1);
                         child.v[genome::WIN_W] =
                             6.0_f64.clamp(b[genome::WIN_W].0, b[genome::WIN_W].1);
-                        child.v[genome::WIN_FILL] =
-                            0.65_f64.clamp(b[genome::WIN_FILL].0, b[genome::WIN_FILL].1);
+                        child.v[genome::WIN_FILL] = rng
+                            .range(0.65, 0.70)
+                            .clamp(b[genome::WIN_FILL].0, b[genome::WIN_FILL].1);
                     }
                     child.v[genome::RING_WALL] = child.v[genome::RING_WALL]
                         .max(6.0)
@@ -926,6 +933,46 @@ mod tests {
         assert!((0.12..=0.20).contains(&child.v[EDGE_TH]));
         for (idx, &value) in child.v.iter().enumerate() {
             if idx != EDGE_TH {
+                assert!(
+                    (bounds[idx].0..=bounds[idx].1).contains(&value),
+                    "gene {idx} outside legal bounds: {value}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn admissible_gci_window_targets_are_steered_and_legal() {
+        let mut parent = Genome::c4_seed(genome::T_MIN);
+        parent.v[genome::WIN_N] = 2.0;
+        parent.v[genome::WIN_S0] = 0.25;
+        parent.v[genome::WIN_S1] = 0.75;
+        parent.v[genome::WIN_W] = 4.0;
+        parent.v[genome::WIN_FILL] = 0.5;
+        parent.v[genome::RING_WALL] = 6.0;
+        parent.v[EDGE_TH] = 0.18;
+        parent.clamp();
+
+        let children = spawn_offspring_batch(
+            &[("p14".into(), parent)],
+            9,
+            1,
+            &mut Rng(20261018),
+        );
+        let child = &children[8].1;
+        let bounds = genome::bounds();
+
+        assert!((0.05..=0.052).contains(&child.v[genome::WIN_S0]));
+        assert!((0.502..=0.525).contains(&child.v[genome::WIN_S1]));
+        assert_eq!(child.v[genome::WIN_W], 6.0);
+        assert!((0.65..=0.70).contains(&child.v[genome::WIN_FILL]));
+        assert!(child.v[genome::WIN_S1] >= child.v[genome::WIN_S0] + 0.2);
+        assert!(child.v[genome::RING_WALL] >= 6.0);
+
+        for (idx, &value) in child.v.iter().enumerate() {
+            if idx == EDGE_TH {
+                assert!((0.12..=0.20).contains(&value));
+            } else {
                 assert!(
                     (bounds[idx].0..=bounds[idx].1).contains(&value),
                     "gene {idx} outside legal bounds: {value}"
