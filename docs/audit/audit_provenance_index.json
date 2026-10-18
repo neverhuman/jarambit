@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "task": "G16-12-RSV2-04-p26",
+  "status": "IN_PROGRESS",
+  "qualified_count": 0,
+  "report_count": 16,
+  "reports": [
+    {
+      "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V5_REPORT.md",
+      "sha256": "7c252aa9c6176c49a2606fd71c5bf848081554450d190f1193693b5d7a203351",
+      "bytes": 15130,
+      "lines": 134,
+      "tables": 9,
+      "table_schema_sha256": "294819df23ad64010c603cc760a26890d6a386fe58959aed62a283cce09e4c9b",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V6_REPORT.md",
+      "sha256": "8877256d3fd2159b9f65bf07af9fd133c7d25cee46ee349da8c2ff2d9f127ca4",
+      "bytes": 20555,
+      "lines": 196,
+      "tables": 14,
+      "table_schema_sha256": "7802fb6c5d741549afbc159fd1ef34e7e530b0cac32f352e62266fd581707bdb",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V7_REPORT.md",
+      "sha256": "b670e18da2b33d6472cb33e60986c18ecbb62b8c4dc0ec4b6d1f77715dfc8542",
+      "bytes": 21419,
+      "lines": 223,
+      "tables": 16,
+      "table_schema_sha256": "c7901d997d0cc64d6b3023c1d98f54131ac0cbde268f95bb43f13c1224338e9c",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V8_REPORT.md",
+      "sha256": "32ffe2022406b5e5a4f5e64075ab1dfa01861fe2629cd99c004b21934c6eebb9",
+      "bytes": 21073,
+      "lines": 187,
+      "tables": 7,
+      "table_schema_sha256": "02ad7644e6ee7dc742380f48ed23291eb5fe0bbc077dacdc31ab927599711790",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V9_REPORT.md",
+      "sha256": "0349e72721832000535671dbc1803286237ae5932c2ff5982275e9aa737e8b53",
+      "bytes": 17345,
+      "lines": 162,
+      "tables": 10,
+      "table_schema_sha256": "f3aa9c4c96e6c7dca3ba00fb36e3ece34df9ac46a0c70dc2b81462f6c69cf6b6",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V10_REPORT.md",
+      "sha256": "6513ade301bec20a793923d77db4f4e9b514339bdff15287553c9b19a6ee198a",
+      "bytes": 31702,
+      "lines": 248,
+      "tables": 8,
+      "table_schema_sha256": "f1093f661df30a9961dd8bb9ae4034ffd277d52612fc37a448b7d81474b54b5b",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V11_REPORT.md",
+      "sha256": "eeb87c5707f475eff32d2827cb82e6fc8f32b614df3866e05c47346c9cf0ff18",
+      "bytes": 31087,
+      "lines": 214,
+      "tables": 5,
+      "table_schema_sha256": "c26168458065c8479d62ca3cc9a8085ccefea5a0999f9d84cae2ca916526cb25",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V12_REPORT.md",
+      "sha256": "d3d6a70a743afbb9ed4cc8069dea9311f45a08cd096a880213aec4c5931e4b00",
+      "bytes": 24987,
+      "lines": 188,
+      "tables": 6,
+      "table_schema_sha256": "09a884778c9d9c518f0d5505fe7ce43efb7d98ce92ac0888b1b09cc0eaf52369",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V13_REPORT.md",
+      "sha256": "b3175d02f0415168c0e7e65ba88cce3181b5c8dc6f7f78d1c817bb3ea49afbe8",
+      "bytes": 41531,
+      "lines": 313,
+      "tables": 5,
+      "table_schema_sha256": "1a3148ab57966afd1d266f74b08056ec2ee0a2a6bff300182646ad50e67307dd",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V14_REPORT.md",
+      "sha256": "d3a897cc3914c760be4e66373ca3d6924744ac1d9350715d87015871b7c123ee",
+      "bytes": 54507,
+      "lines": 1062,
+      "tables": 31,
+      "table_schema_sha256": "f64088803efe8ec3dccbb86cb5bff46ee94f6aea95c2c208a0df61787829471a",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/CERTIFICATION_MEASUREMENT_CODE_AUDIT.md",
+      "sha256": "1409141a8d7c7174245b8ba9b8b901397d11225d7602f56497ccb5ee27230b3a",
+      "bytes": 15527,
+      "lines": 168,
+      "tables": 6,
+      "table_schema_sha256": "42212ab2618b5be7937ca24f7b0662d57de18a7602d75acecb7a12124c8b26df",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/SYNTHETIC_MEASUREMENT_SCHEMA_AUDIT.md",
+      "sha256": "29d2ef4a6910a4fc6346f50ca7fb32b61c18e6958d5bea642ceddfc1cd0e8f60",
+      "bytes": 19029,
+      "lines": 143,
+      "tables": 6,
+      "table_schema_sha256": "3da8be6624495207947af638fd701ad831223ef6d11d3945aa4f8ab0f5c5edd8",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/STATIC_GATES_AND_FEM_INVARIANT_AUDIT.md",
+      "sha256": "f729f23b66ae4bb022a7b8ce84f16b9115ccef5a7761132a4610fdb1d56f3892",
+      "bytes": 9191,
+      "lines": 84,
+      "tables": 4,
+      "table_schema_sha256": "8070860f447c896ab098ebc07811d607be8a1738765e64d27cf3e21ed2309482",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/STATIC_STAGE1_STAGE2_PIPELINE_AUDIT.md",
+      "sha256": "96e8d433091642d28500760f4470078051c0a33d5473f4b8ac7994139adbb531",
+      "bytes": 10424,
+      "lines": 71,
+      "tables": 3,
+      "table_schema_sha256": "2d3ab14bd97f3ec6a1f802b3c7ff901a564c94da8f2c7a6d1179a5ab2e7860cd",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "experiments/G16-12-RSV2-04/STATIC_CI_EVALUATOR_AND_SOLID_SOLVER_AUDIT.md",
+      "sha256": "1a92c916628c30d80c23408ed505963a5871cedd8d3872adea4c7b435e657a8a",
+      "bytes": 5458,
+      "lines": 42,
+      "tables": 2,
+      "table_schema_sha256": "63790aea9f89d07b6d5f427ef8b351d0e2bc731ea963e35a8ce7eb59a4e89253",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    },
+    {
+      "path": "docs/audit/GENOTYPE_PHENOTYPE_CONSTANT_CONTRACT_AUDIT.md",
+      "sha256": "02eb4844f677d40e2c63b395cea27f21898798960d533c79c8a94bc2d7df6276",
+      "bytes": 4505,
+      "lines": 39,
+      "tables": 1,
+      "table_schema_sha256": "de31a7331d1d7f56676dfe21cdfcdb4013c3de640486e41cea7e1bb1f6257702",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
+    }
+  ],
+  "supplemental_documents": [
+    {
+      "path": "docs/audit/genotype_phenotype_constant_contract_audit.json",
+      "sha256": "df4773aac001b81c75ffa75f882c0c603d74ca72e0e231a899c6ddfd22481c58",
+      "bytes": 1289,
+      "lines": 33
+    }
+  ]
+}
