@@ -3,11 +3,13 @@
 status: IN_PROGRESS
 qualified_count: 0
 
-Task: `G16-12-RSV2-04-p24`. Baseline: `fbc1596`; earlier index tasks: Phase18, Phase21 and Phase22.
+Task: `G16-12-RSV2-04-p25`. Baseline: `94343b5`; earlier index tasks: Phase18, Phase21 and Phase22.
 
-This index covers exactly14 diagnostic reports: V5 throughV14 plus the certification-code, synthetic-schema, static gate/FEM invariant, and static Stage-1/Stage-2 pipeline audit receipts. It verifies document bytes, line counts, table structure and portable paths; it does not generate or evaluate geometry or certify physical claims. IN_PROGRESS and qualified_count0 apply to the provenance receipt for each row, including historical reports without their own metadata declarations. They do not rewrite historical numerical results or claim qualification.
+This index covers exactly15 diagnostic reports: V5 throughV14 plus the certification-code, synthetic-schema, static gate/FEM invariant, static Stage-1/Stage-2 pipeline, and limited CI file-integrity/schema audit receipts. It verifies document bytes, line counts, table structure and portable paths; it does not generate or evaluate geometry or certify physical claims. IN_PROGRESS and qualified_count0 apply to the provenance receipt for each row, including historical reports without their own metadata declarations. They do not rewrite historical numerical results or claim qualification.
 
 Phase21 normalized V12’s worktree reference. Phase22 normalizes remaining host-specific display references in V5,V6,V8,V9,V10,V11, retaining original bytes for all12 reports/index/verifier in its receipt. No numerical table or archived JSON is changed. V8’s external mirror destination is a portable display label, with the original destination preserved.
+
+Phase25 adds a partial file-integrity/schema receipt only. The requested weapon-specific physical qualification and boundary-condition audit was not performed; indexing this receipt does not imply that portion is complete.
 
 ## Report index
 
@@ -29,13 +31,14 @@ Paths use POSIX separators relative to the repository root. All indexed Markdown
 |SCHEMA_AUDIT|experiments/G16-12-RSV2-04/SYNTHETIC_MEASUREMENT_SCHEMA_AUDIT.md|29d2ef4a6910a4fc6346f50ca7fb32b61c18e6958d5bea642ceddfc1cd0e8f60|143|19029|6|3da8be6624495207947af638fd701ad831223ef6d11d3945aa4f8ab0f5c5edd8|IN_PROGRESS|0|
 |INVARIANT_AUDIT|experiments/G16-12-RSV2-04/STATIC_GATES_AND_FEM_INVARIANT_AUDIT.md|f729f23b66ae4bb022a7b8ce84f16b9115ccef5a7761132a4610fdb1d56f3892|84|9191|4|8070860f447c896ab098ebc07811d607be8a1738765e64d27cf3e21ed2309482|IN_PROGRESS|0|
 |PIPELINE_AUDIT|experiments/G16-12-RSV2-04/STATIC_STAGE1_STAGE2_PIPELINE_AUDIT.md|96e8d433091642d28500760f4470078051c0a33d5473f4b8ac7994139adbb531|71|10424|3|2d3ab14bd97f3ec6a1f802b3c7ff901a564c94da8f2c7a6d1179a5ab2e7860cd|IN_PROGRESS|0|
+|CI_AUDIT|experiments/G16-12-RSV2-04/STATIC_CI_EVALUATOR_AND_SOLID_SOLVER_AUDIT.md|1a92c916628c30d80c23408ed505963a5871cedd8d3872adea4c7b435e657a8a|42|5458|2|63790aea9f89d07b6d5f427ef8b351d0e2bc731ea963e35a8ce7eb59a4e89253|IN_PROGRESS|0|
 
 ## Hash, size and schema rules
 
 - SHA-256 hashes exact bytes without newline or encoding normalization. Bytes is their length; Lines is Python `len(text.splitlines())` after UTF-8 decoding. Digests use64 lowercase hexadecimal characters.
 - Each report table requires nonempty header cells, a matching separator row (three or more hyphens per column with optional alignment colons), and consistent data-row widths. Fenced code is ignored; escaped pipes do not split cells.
 - Table schema is an ordered JSON array of objects containing one-based `header_line`, trimmed `headers`, and data-row count `rows`. Hash the UTF-8 serialization from `json.dumps(schema, ensure_ascii=False, sort_keys=True, separators=(",", ":"))`, without a trailing newline. This binds table order, positions, headers, widths and row counts; the file digest binds every cell.
-- Exactly one ordered row for V5 throughV14, CODE_AUDIT, SCHEMA_AUDIT, INVARIANT_AUDIT and PIPELINE_AUDIT is required. Missing, duplicate, reordered or unexpected entries fail. Every row must declare Status `IN_PROGRESS` and `qualified_count` `0`.
+- Exactly one ordered row for V5 throughV14, CODE_AUDIT, SCHEMA_AUDIT, INVARIANT_AUDIT, PIPELINE_AUDIT and CI_AUDIT is required. Missing, duplicate, reordered or unexpected entries fail. Every row must declare Status `IN_PROGRESS` and `qualified_count` `0`.
 - Indexed paths must match assigned filenames, use repository-relative components, and stay inside the chosen root after symlink resolution. Absolute prefixes, traversal/dot/empty components, backslashes, drive/scheme colons, whitespace, percent escapes and fragments are rejected.
 
 ## Verification
@@ -47,7 +50,7 @@ nice -n 10 taskset -c 10,11 env CARGO_BUILD_JOBS=2 python3 -m unittest discover 
 git diff --check
 ```
 
-The tests read fixed reviewed anchors and never refresh them. All14 report files have tampering subtests; index tests exercise missing/duplicate/reordered rows, invalid SHA/line/byte/table counts and schema digests, non-diagnostic status, nonzero qualification, and unsafe paths. Relocated document copies require no original checkout path, ignored build output or network. Source and archival JSON checks are separately retained.
+The tests read fixed reviewed anchors and never refresh them. All15 report files have tampering subtests; index tests exercise missing/duplicate/reordered rows, invalid SHA/line/byte/table counts and schema digests, non-diagnostic status, nonzero qualification, and unsafe paths. Relocated document copies require no original checkout path, ignored build output or network. Source and archival JSON checks are separately retained.
 
 Portable JSON must retain zero decoded host-prefix occurrences. Legacy JSON remains bound to its exact per-file catalog, byte/type-shape digests and archive seal (27 files/340 existing occurrences), with no uncataloged regression. Synthetic host-path injection checks cover every indexed Markdown report, this index, and the verifier source itself. Test fixtures are document copies and synthetic JSON only.
 
