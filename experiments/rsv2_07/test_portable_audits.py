@@ -22,6 +22,7 @@ import audit_phase15_gate_s_and_margins as phase15_audit
 import audit_phase16_xbabe3_waves as xbabe3_audit
 import audit_phase17_portable_schema as schema_audit
 import audit_phase18_w320_progression as w320_audit
+import audit_phase19_w320_r02_provenance as r02_audit
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -1426,12 +1427,19 @@ class Phase18W320ProvenanceTests(unittest.TestCase):
             w320_audit.audit(self.root, self.directory, {"../escape": ("a" * 64, 0)})
         read.assert_not_called()
 
-    def test_new_unpinned_leaderboard_or_progression_receipt_requires_review(self):
-        for present in (self.directory / "leaderboard.json", self.root / w320_audit.BASELINE_CANDIDATES[0]):
+    def test_new_unpinned_progression_receipt_requires_review(self):
+        for present in (self.root / w320_audit.BASELINE_CANDIDATES[0],):
             with self.subTest(present=present), patch.object(Path, "exists", new=lambda path: path == present), \
                     patch.object(Path, "read_bytes") as read, self.assertRaisesRegex(ValueError, "[Uu]npinned"):
                 w320_audit.audit(self.root, self.directory)
             read.assert_not_called()
+
+    def test_unreviewed_leaderboard_bytes_are_rejected(self):
+        present = self.directory / "leaderboard.json"
+        with patch.object(Path, "exists", new=lambda path: path == present), \
+                patch.object(Path, "read_bytes", new=lambda path: b"{}" if path == present else self.read(path)), \
+                self.assertRaisesRegex(ValueError, "Unpinned leaderboard bytes"):
+            w320_audit.audit(self.root, self.directory, self.payloads()[1])
 
     def test_mutation_or_new_availability_during_audit_fails(self):
         files, pins = self.payloads()
@@ -1478,6 +1486,237 @@ class Phase18W320ProvenanceTests(unittest.TestCase):
             saved["registry"].pop()
             with self.assertRaisesRegex(ValueError, "Invalid Phase-15"):
                 w320_audit.baseline_context(self.root)
+
+
+class Phase19W320R02ProvenanceTests(unittest.TestCase):
+    def setUp(self):
+        self.documents = {}
+        designs, error = [], None
+        for round_id, count in ((0, 27), (1, 93)):
+            births, screens = [], []
+            for slot in range(1, count + 1):
+                target = round_id == 1 and slot == 93
+                identity = r02_audit.IDENTITY if target else hashlib.sha256(f"fixture-{round_id}-{slot}".encode()).hexdigest()
+                family = "p14" if target or (round_id, slot) == (0, 27) else "p10" if (round_id, slot) in ((0, 1), (1, 22)) else "fixture"
+                label = f"w320_r{round_id + 1:02}_{family}_c{slot:02}"
+                births.append({"row": f"{round_id},{slot}", "family": family, "certificate_identity": identity})
+                screens.append({"label": label, "family": family, "certificate_identity": identity,
+                                "qualification_status": wave_audit.PENDING, **dict.fromkeys(wave_audit.SCREEN_NUMBERS, 0.0)})
+                if label in w320_audit.LABELS:
+                    designs.append({"label": label, "family": family, "certificate_identity": identity, "qualified": False})
+                if target:
+                    error = {"label": label, "certificate_identity": identity, "status": "unverified", "reason": "synthetic evaluator failure"}
+            self.documents[f"round_{round_id:02}_births.json"] = {"round": round_id, "seed": 1, "source": "synthetic",
+                "genome_header": "a,b", "genomes": births}
+            self.documents[f"round_{round_id:02}_screen.json"] = screens
+        self.documents["leaderboard.json"] = {"schema": "jarambit.auto_evolve.leaderboard.v2", "designs": designs,
+            "assessed_count": 3, "qualified_count": 0, "champion": None, "unverified": [error]}
+        for filename in r02_audit.FILES:
+            name = r02_audit.ATTEMPT + "/" + filename
+            if filename.endswith(".json"):
+                self.documents[name] = {}
+            elif filename.endswith("_genome.csv"):
+                self.documents[name] = b"a,b\n1,93\n"
+            elif filename.endswith(".csv"):
+                self.documents[name] = b"id,marker\nfixture,opaque\n"
+            else:
+                self.documents[name] = b"opaque synthetic bytes"
+        for suffix in ("_D1.json", "_plate_gci.json", "_surface.json"):
+            self.documents[self.key(suffix)]["certificate_identity"] = r02_audit.IDENTITY
+        self.documents[self.key("_D1.json")]["label"] = r02_audit.LABEL + "_D1"
+        self.documents[self.key("_grind_law.json")]["label"] = r02_audit.LABEL
+        self.root, self.directory = Path("/portable/checkout"), Path("/portable/wave")
+        self.context_bytes = {schema_audit.RECEIPT: b'{"synthetic":"phase17"}', w320_audit.RECEIPT: b'{"synthetic":"phase18"}'}
+        self.context = {key: {"path": path, "sha256": hashlib.sha256(self.context_bytes[path]).hexdigest()}
+                        for key, path in (("phase17", schema_audit.RECEIPT), ("phase18", w320_audit.RECEIPT))}
+        self.inventory = {r02_audit.ATTEMPT + "/" + name for name in r02_audit.FILES}
+        self.observed = {"out/w320/" + name: "missing" for name in r02_audit.WATCHED}
+        self.observed["out/w320/leaderboard.json"] = "present_pinned"
+
+    def key(self, suffix):
+        return r02_audit.ATTEMPT + "/" + r02_audit.LABEL + suffix
+
+    def payloads(self):
+        files = {name: json.dumps(doc).encode() if name.endswith(".json") else doc for name, doc in self.documents.items()}
+        return files, {name: (hashlib.sha256(data).hexdigest(), len(data)) for name, data in files.items()}
+
+    def read(self, path):
+        for name, data in self.context_bytes.items():
+            if path == self.root / name:
+                return data
+        return self.payloads()[0][str(path.relative_to(self.directory))]
+
+    def current(self):
+        _, pins = self.payloads()
+        with patch.object(Path, "read_bytes", new=lambda path: self.read(path)), \
+                patch.object(r02_audit, "attempt_inventory", return_value=self.inventory), \
+                patch.object(r02_audit, "availability", return_value=self.observed), \
+                patch.object(r02_audit, "sync_context", return_value=self.context):
+            return r02_audit.audit(self.root, self.directory, pins)
+
+    def test_target_birth_screen_genome_and_formats_agree(self):
+        result = r02_audit.audit_payloads(*self.payloads())
+        self.assertEqual((result["stage1"]["births"], result["stage1"]["pending_screens"]), (120, 120))
+        self.assertEqual(result["stage1"]["target"]["saved_round"], 1)
+        self.assertEqual(result["stage1"]["target"]["birth_position"], 93)
+        self.assertTrue(result["genome_csv_matches_saved_birth"])
+        formats = [record["format"] for record in result["format_checks"].values()]
+        self.assertEqual((formats.count("strict_json_object"), formats.count("csv_single_record"), formats.count("opaque_bytes")), (7, 2, 7))
+
+    def test_every_pinned_file_rejects_byte_tampering(self):
+        files, pins = self.payloads()
+        for name in files:
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, "SHA-256/size mismatch"):
+                r02_audit.audit_payloads({**files, name: files[name] + b" "}, pins)
+
+    def test_missing_extra_files_and_invalid_pins_fail(self):
+        files, pins = self.payloads()
+        changed = dict(files)
+        del changed[self.key("_D1.json")]
+        with self.assertRaisesRegex(ValueError, "twenty-one"):
+            r02_audit.audit_payloads(changed, pins)
+        with self.assertRaisesRegex(ValueError, "twenty-one"):
+            r02_audit.audit_payloads({**files, "extra": b""}, pins)
+        for value in [("A" * 64, 0), ("a" * 64, True), ("a" * 64, -1)]:
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                r02_audit.audit_payloads(files, {**pins, self.key("_D1.json"): value})
+
+    def test_target_must_be_the_93rd_birth_and_matching_screen(self):
+        births = self.documents["round_01_births.json"]["genomes"]
+        screens = self.documents["round_01_screen.json"]
+        births[92]["certificate_identity"] = "a" * 64
+        screens[92]["certificate_identity"] = "a" * 64
+        with self.assertRaisesRegex(ValueError, "Target birth identity"):
+            r02_audit.audit_payloads(*self.payloads())
+
+    def test_json_identity_and_required_d1_label_mismatch_fail(self):
+        document = self.documents[self.key("_D1.json")]
+        document["certificate_identity"] = "a" * 64
+        with self.assertRaisesRegex(ValueError, "JSON candidate identity"):
+            r02_audit.audit_payloads(*self.payloads())
+        document["certificate_identity"] = r02_audit.IDENTITY
+        document["label"] = r02_audit.LABEL
+        with self.assertRaisesRegex(ValueError, "JSON candidate label"):
+            r02_audit.audit_payloads(*self.payloads())
+        del document["label"]
+        with self.assertRaisesRegex(ValueError, "Missing required JSON candidate label"):
+            r02_audit.audit_payloads(*self.payloads())
+
+    def test_genome_csv_must_match_saved_birth_header_and_row(self):
+        for data in (b"a,b\n1,92\n", b"different,b\n1,93\n"):
+            self.documents[self.key("_genome.csv")] = data
+            with self.subTest(data=data), self.assertRaisesRegex(ValueError, "Genome CSV/birth binding"):
+                r02_audit.audit_payloads(*self.payloads())
+
+    def test_csv_duplicate_headers_ragged_rows_and_multiple_records_fail(self):
+        for data in (b"a,a\n1,93\n", b"a,b\n1\n", b"a,b\n1,93\n1,94\n"):
+            self.documents[self.key("_genome.csv")] = data
+            with self.subTest(data=data), self.assertRaisesRegex(ValueError, "CSV header/row shape"):
+                r02_audit.audit_payloads(*self.payloads())
+
+    def test_duplicate_nonfinite_and_nonobject_json_fail(self):
+        files, pins = self.payloads()
+        name = self.key("_runtime.json")
+        for data in (b'{"x":1,"x":2}', b'{"x":NaN}', b'{"x":1e999}', b'[]'):
+            files[name] = data
+            pins[name] = (hashlib.sha256(data).hexdigest(), len(data))
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                r02_audit.audit_payloads(files, pins)
+
+    def test_missing_third_round_and_scorecard_never_establish_completion(self):
+        result = self.current()
+        self.assertEqual(result["status"], "partial_unverified_attempt")
+        self.assertEqual(result["assessment_completion"], "unverified_attempt")
+        self.assertEqual(result["leaderboard"]["assessed_count"], 3)
+        self.assertEqual(result["leaderboard"]["unverified_count"], 1)
+        self.assertEqual(result["leaderboard"]["qualified_count"], 0)
+        self.assertEqual(result["physical_qualification"], "not_established")
+        self.assertEqual(result["observed_outputs"]["out/w320/round_02_births.json"], "missing")
+        self.assertNotIn("/portable", json.dumps(result))
+
+    def test_additional_files_are_explicitly_unpinned(self):
+        extra = r02_audit.ATTEMPT + "/later-output.txt"
+        self.inventory.add(extra)
+        result = self.current()
+        self.assertEqual(result["additional_unpinned_attempt_files"], ["out/w320/" + extra])
+        self.assertNotIn("out/w320/" + extra, result["artifacts"])
+
+    def test_pinned_bytes_inventory_and_receipt_context_mutation_fail(self):
+        _, pins = self.payloads()
+        for mode in ("bytes", "inventory", "context"):
+            reads, inventories = {}, []
+
+            def read(path):
+                reads[path] = reads.get(path, 0) + 1
+                data = self.read(path)
+                changed = mode == "bytes" and path.is_relative_to(self.directory) and reads[path] > 1
+                changed = changed or mode == "context" and path == self.root / schema_audit.RECEIPT
+                return data + (b" " if changed else b"")
+
+            def inventory(path):
+                inventories.append(path)
+                return self.inventory | ({r02_audit.ATTEMPT + "/new.txt"} if mode == "inventory" and len(inventories) > 1 else set())
+
+            with self.subTest(mode=mode), patch.object(Path, "read_bytes", new=read), \
+                    patch.object(r02_audit, "attempt_inventory", side_effect=inventory), \
+                    patch.object(r02_audit, "availability", return_value=self.observed), \
+                    patch.object(r02_audit, "sync_context", return_value=self.context), \
+                    self.assertRaisesRegex(ValueError, "changed during audit"):
+                r02_audit.audit(self.root, self.directory, pins)
+
+    def test_missing_attempt_inventory_fails_before_reading(self):
+        with patch.object(r02_audit, "attempt_inventory", return_value=set()), \
+                patch.object(r02_audit, "availability", return_value=self.observed), patch.object(Path, "read_bytes") as read, \
+                self.assertRaisesRegex(ValueError, "Missing pinned attempt"):
+            r02_audit.audit(self.root, self.directory)
+        read.assert_not_called()
+
+    def test_relocated_read_only_cli_runs_without_git(self):
+        saved = self.current()
+        _, pins = self.payloads()
+        output = io.StringIO()
+
+        def read(path):
+            return json.dumps(saved).encode() if path == self.root / r02_audit.RECEIPT else self.read(path)
+
+        args = ["audit_phase19_w320_r02_provenance.py", "--repo-root", str(self.root), "--wave-dir", str(self.directory)]
+        with patch.object(Path, "read_bytes", new=read), patch.object(Path, "write_text") as write, \
+                patch.object(r02_audit, "PINS", pins), patch.object(r02_audit, "attempt_inventory", return_value=self.inventory), \
+                patch.object(r02_audit, "availability", return_value=self.observed), \
+                patch.object(r02_audit, "sync_context", return_value=self.context), \
+                patch.object(wave_audit, "default_wave_directory", side_effect=AssertionError("Unexpected Git discovery")), \
+                patch.object(sys, "argv", args), redirect_stdout(output):
+            r02_audit.main()
+        write.assert_not_called()
+        self.assertIn("21 pinned files", output.getvalue())
+        self.assertIn("NOT ESTABLISHED", output.getvalue())
+
+    def test_phase17_phase18_schema_sync_rejects_stale_bindings(self):
+        phase17_sha = hashlib.sha256(self.context_bytes[schema_audit.RECEIPT]).hexdigest()
+        current18 = {"status": "partial", "baseline_context": {"phase17_receipt": {"sha256": phase17_sha}}}
+        self.context_bytes[w320_audit.RECEIPT] = json.dumps(current18).encode()
+        with patch.object(Path, "read_bytes", new=lambda path: self.read(path)), patch.object(w320_audit, "audit", return_value=current18):
+            context = r02_audit.sync_context(self.root, self.directory)
+            self.assertEqual(context["status"], "verified_schema_and_provenance_sync")
+            current18["status"] = "stale"
+            with self.assertRaisesRegex(ValueError, "Phase-18 receipt is not synchronized"):
+                r02_audit.sync_context(self.root, self.directory)
+            current18["status"] = "partial"
+            self.context_bytes[schema_audit.RECEIPT] += b" "
+            with self.assertRaisesRegex(ValueError, "Phase-17/18 receipt binding"):
+                r02_audit.sync_context(self.root, self.directory)
+
+    def test_target_error_is_preserved_and_never_becomes_assessed(self):
+        board = self.documents["leaderboard.json"]
+        error = board["unverified"][0]
+        for changed in ([], [{**error, "certificate_identity": "a" * 64}], [{**error, "status": "qualified"}]):
+            board["unverified"] = changed
+            with self.subTest(changed=changed), self.assertRaises(ValueError):
+                r02_audit.audit_payloads(*self.payloads())
+        board["unverified"] = [error]
+        board["qualified_count"] = 1
+        with self.assertRaisesRegex(ValueError, "qualification count/champion"):
+            r02_audit.audit_payloads(*self.payloads())
 
 
 if __name__ == "__main__":

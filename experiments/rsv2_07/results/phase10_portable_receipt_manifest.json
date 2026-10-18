@@ -8,7 +8,7 @@
     "experiments/rsv2_07/PHASE10_PORTABLE_RECEIPT_AUDIT.md": "c8c258111b9c08545c7f32a505a7cba65fe599121943b27ab4e011884f40cd62",
     "experiments/rsv2_07/PHASE6_UNIFIED_SCORECARD.md": "a425b66d675208c7fffa17e075605bcfbddd234f82456422c1b5d99783799e30",
     "experiments/rsv2_07/audit_phase6.py": "57a9d5aca837e6f3704d23b1c90d902523ef89d560d27ed97a7f28647e66b196",
-    "experiments/rsv2_07/test_portable_audits.py": "4bd13a72f1f50bb3afd0a8190d59f779547414f1d54c6271b2e147c9ef7c604b",
+    "experiments/rsv2_07/test_portable_audits.py": "b2b0babed49a90f2cd81e761751c6c78a4c1d72b297b8947db98395210a525a8",
     "experiments/rsv2_07/portable_audit.py": "9ad640ed81546e4ce571270c6143b4ce1da6a4058d7fe65aef2d0856e7b72d4c"
   },
   "raw_artifacts": {

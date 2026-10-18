@@ -1,6 +1,6 @@
 # Phase-18 w320 saved provenance audit
 
-**Partial: seven saved artifact hashes, schema and candidate references pass.** Mechanical deficit progression is not performed. The requested Phase-15 progression JSON and w320 leaderboard are absent. This report does not claim a completed Stage-2 leaderboard, a qualification count or a champion state.
+**Partial: 8 saved artifact hashes, schema and candidate references pass.** Mechanical deficit progression is not performed. The requested Phase-15 progression JSON is absent. The pinned saved leaderboard now reports three assessed rows, zero qualified rows, a null champion and one separate unverified attempt. The unverified attempt is retained as an error record and is not counted as assessed or qualified.
 
 | Saved round | Birth records | Pending screen records |
 | --- | ---: | ---: |
@@ -15,11 +15,11 @@ There are 200 birth records and 105 pending screens. Each screen must match its 
 | w320_r01_p14_c27 | 6af25de9e52b5a836fab9764f644300d06f2f1abc056008721103cf27d8a0aac | FAIL (Gate Violation) |
 | w320_r02_p10_c22 | dea35f5fb19c5f11bad56e636be1f88434aed9a0fa2547428c2e58619c128599 | FAIL (Gate Violation) |
 
-All three named attempt scorecards exist and their pinned paths, identity directories, filenames, titles and single stored FAIL verdicts link to the saved screens. A saved scorecard alone does not supply a completed leaderboard or independently establish physical qualification. External files and performance claims cited within scorecards are not revalidated. Additional later attempts are outside this fixed snapshot.
+All three named attempt scorecards exist and their pinned paths, identity directories, filenames, titles and single stored FAIL verdicts link to the saved screens. A saved scorecard alone does not independently establish physical qualification. A present leaderboard is accepted only against its reviewed digest/size and candidate/error references. External files and performance claims cited within scorecards are not revalidated. Additional attempt artifacts are outside this fixed snapshot.
 
 The requested phase15_w315_w319_progression_audit.json is absent at both repository-relative candidate locations recorded in the JSON receipt. The existing Phase-15 registry and verified Phase-17 schema receipt provide provenance context for 25 references across w315–w319. They are not substituted numerical progression evidence; no deficit improvement or deterioration is inferred. The original Phase-15 scope limits remain in force.
 
-The verifier checks all seven SHA-256 digests and byte sizes and rereads their bytes after validation. Missing files, invalid pins, malformed JSON, reference mismatches or mutation fail closed. The absence of the leaderboard and requested baseline is checked before and after. If either appears later, the saved snapshot requires explicit review instead of silently extending its claims. Phase-17 context is also reread to reject mutation.
+The verifier checks the pinned SHA-256 digests and byte sizes and rereads their bytes after validation. Missing required files, unpinned leaderboard bytes, invalid pins, malformed JSON, reference mismatches or mutation fail closed. Leaderboard availability and absence of the requested baseline are checked before and after. Any new baseline or unreviewed leaderboard requires explicit review. Phase-17 context is also reread to reject mutation.
 
 Only portable repository-relative paths are emitted. --wave-dir accepts a relocated folder and --repo-root a relocated checkout. With both supplied, no Git discovery or original host paths are required. The default wave directory resolves from the common repository. The command is read-only unless --write explicitly updates this report and the Phase-18 JSON receipt. Read-only runs compare the saved receipt against a fresh provenance audit.
 
@@ -39,3 +39,4 @@ Execution uses CPUs14,15 at inherited nice10 and CARGO_BUILD_JOBS=2. The Phase-1
 | out/w320/round_00_screen.json | 23213 | adb40eb24b76e1ce1120c5255f5db90f69c4824fad1ca19af60b8aa17a6134f5 |
 | out/w320/round_01_births.json | 165083 | 195b11e4828697ea8db1a6898330a62e03adcfd7f12c2671a71e03ef80a0cbdb |
 | out/w320/round_01_screen.json | 20297 | a4494238b88b330502a6d36910eacb947df9d511b587cd656c388a682bd1f274 |
+| out/w320/leaderboard.json | 3418 | c86614effb2283001bf9e0cb0293226d2a06fd8e6aac8006b67744b03adb9a7c |
