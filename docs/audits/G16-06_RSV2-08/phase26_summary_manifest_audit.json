@@ -79,7 +79,7 @@
       "kind": "json",
       "path": "docs/audits/G16-06_RSV2-08/phase24_script_test_inventory_audit.json",
       "bytes": 1007,
-      "sha256": "fa5f26b57559ff98592886ceb8aab352f205fa88e18289fa59459570455a18e3",
+      "sha256": "e5b887aaa2a4e997070eee9a2a52098cf3d282281a1538d496afae060d5c09fc",
       "line_count": 28,
       "literal_host_path_count": 0
     },
@@ -97,7 +97,7 @@
       "kind": "json",
       "path": "docs/audits/G16-06_RSV2-08/phase25_script_and_inventory_cross_check_audit.json",
       "bytes": 12389,
-      "sha256": "ce785ca25c35758c3d8554f181f5a327c80241211cdc97854cc301f1c141ccb6",
+      "sha256": "a3186e2c884bdcfd9a09ffa719a6fb07fa477fb3cd49ceac8c62df3fc3dad8e8",
       "line_count": 286,
       "literal_host_path_count": 0
     }

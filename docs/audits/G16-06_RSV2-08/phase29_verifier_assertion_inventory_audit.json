@@ -6,21 +6,21 @@
   "sources": [
     {
       "path": "scripts/verify_g16_06_rsv2_08_receipts.py",
-      "bytes": 33434,
-      "sha256": "9b73877a799f5298a80c7cf55ca806f3c07f08832e7b935cdfa126a8cab9b064"
+      "bytes": 37411,
+      "sha256": "6d2e59c5b285876a437c8c0f567dee3551c19cfb693174dd0ab5c79275d9670a"
     },
     {
       "path": "scripts/tests/test_verify_g16_06_rsv2_08_receipts.py",
-      "bytes": 44874,
-      "sha256": "4c5a991466bff8dcd2a6ff8d523776ab5f574c7d89313ab097e83f337435154a"
+      "bytes": 50805,
+      "sha256": "37b76c844f4b0504cd744fda77b9a9ec698f0658cf7db9c56acaf77539e0115c"
     }
   ],
-  "check_function_count": 24,
+  "check_function_count": 26,
   "check_functions": [
     {
       "name": "safe_path",
-      "line": 46,
-      "end_line": 52,
+      "line": 47,
+      "end_line": 53,
       "raise_statement_count": 2,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -28,8 +28,8 @@
     },
     {
       "name": "strict_json.reject_constant",
-      "line": 56,
-      "end_line": 57,
+      "line": 57,
+      "end_line": 58,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 0,
@@ -37,8 +37,8 @@
     },
     {
       "name": "strict_json.finite_float",
-      "line": 58,
-      "end_line": 62,
+      "line": 59,
+      "end_line": 63,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 1,
@@ -46,8 +46,8 @@
     },
     {
       "name": "finite_number_counts.visit",
-      "line": 69,
-      "end_line": 78,
+      "line": 70,
+      "end_line": 79,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 5,
@@ -55,8 +55,8 @@
     },
     {
       "name": "generate",
-      "line": 83,
-      "end_line": 105,
+      "line": 84,
+      "end_line": 106,
       "raise_statement_count": 3,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -64,8 +64,8 @@
     },
     {
       "name": "verify",
-      "line": 108,
-      "end_line": 120,
+      "line": 109,
+      "end_line": 121,
       "raise_statement_count": 2,
       "assert_statement_count": 0,
       "if_statement_count": 3,
@@ -73,8 +73,8 @@
     },
     {
       "name": "markdown_record",
-      "line": 123,
-      "end_line": 129,
+      "line": 124,
+      "end_line": 130,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 1,
@@ -82,8 +82,8 @@
     },
     {
       "name": "generate_markdown",
-      "line": 132,
-      "end_line": 153,
+      "line": 133,
+      "end_line": 154,
       "raise_statement_count": 4,
       "assert_statement_count": 0,
       "if_statement_count": 4,
@@ -91,8 +91,8 @@
     },
     {
       "name": "verify_markdown",
-      "line": 156,
-      "end_line": 167,
+      "line": 157,
+      "end_line": 168,
       "raise_statement_count": 2,
       "assert_statement_count": 0,
       "if_statement_count": 3,
@@ -100,8 +100,8 @@
     },
     {
       "name": "disjoint_index_entries",
-      "line": 170,
-      "end_line": 182,
+      "line": 171,
+      "end_line": 183,
       "raise_statement_count": 2,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -109,8 +109,8 @@
     },
     {
       "name": "generate_cross_check",
-      "line": 185,
-      "end_line": 215,
+      "line": 186,
+      "end_line": 216,
       "raise_statement_count": 2,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -118,8 +118,8 @@
     },
     {
       "name": "verify_cross_check",
-      "line": 218,
-      "end_line": 229,
+      "line": 219,
+      "end_line": 230,
       "raise_statement_count": 2,
       "assert_statement_count": 0,
       "if_statement_count": 3,
@@ -127,8 +127,8 @@
     },
     {
       "name": "verify_script_inventory",
-      "line": 256,
-      "end_line": 264,
+      "line": 257,
+      "end_line": 265,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -136,8 +136,8 @@
     },
     {
       "name": "generate_script_cross_check",
-      "line": 267,
-      "end_line": 294,
+      "line": 268,
+      "end_line": 295,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 1,
@@ -145,8 +145,8 @@
     },
     {
       "name": "verify_script_cross_check",
-      "line": 297,
-      "end_line": 305,
+      "line": 298,
+      "end_line": 306,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -154,8 +154,8 @@
     },
     {
       "name": "verify_summary_manifest",
-      "line": 331,
-      "end_line": 337,
+      "line": 332,
+      "end_line": 338,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -163,8 +163,8 @@
     },
     {
       "name": "manifest_parity_record",
-      "line": 340,
-      "end_line": 355,
+      "line": 341,
+      "end_line": 356,
       "raise_statement_count": 4,
       "assert_statement_count": 0,
       "if_statement_count": 4,
@@ -172,8 +172,8 @@
     },
     {
       "name": "verify_manifest_cross_check",
-      "line": 385,
-      "end_line": 392,
+      "line": 386,
+      "end_line": 393,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -181,8 +181,8 @@
     },
     {
       "name": "cumulative_receipt_record",
-      "line": 405,
-      "end_line": 411,
+      "line": 406,
+      "end_line": 412,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 1,
@@ -190,8 +190,8 @@
     },
     {
       "name": "verify_cumulative_receipt_index",
-      "line": 426,
-      "end_line": 432,
+      "line": 427,
+      "end_line": 433,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -199,8 +199,8 @@
     },
     {
       "name": "verify_assertion_inventory",
-      "line": 490,
-      "end_line": 497,
+      "line": 491,
+      "end_line": 498,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -208,8 +208,8 @@
     },
     {
       "name": "json_schema_key_record",
-      "line": 500,
-      "end_line": 507,
+      "line": 501,
+      "end_line": 508,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 1,
@@ -217,8 +217,26 @@
     },
     {
       "name": "verify_json_schema_keyset_audit",
-      "line": 529,
-      "end_line": 536,
+      "line": 530,
+      "end_line": 537,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 2,
+      "verification_entrypoint": true
+    },
+    {
+      "name": "generate_markdown_heading_audit",
+      "line": 577,
+      "end_line": 588,
+      "raise_statement_count": 1,
+      "assert_statement_count": 0,
+      "if_statement_count": 1,
+      "verification_entrypoint": false
+    },
+    {
+      "name": "verify_markdown_heading_audit",
+      "line": 591,
+      "end_line": 598,
       "raise_statement_count": 1,
       "assert_statement_count": 0,
       "if_statement_count": 2,
@@ -226,19 +244,19 @@
     },
     {
       "name": "verify_all",
-      "line": 539,
-      "end_line": 550,
+      "line": 601,
+      "end_line": 613,
       "raise_statement_count": 0,
       "assert_statement_count": 0,
       "if_statement_count": 0,
       "verification_entrypoint": true
     }
   ],
-  "verification_entrypoint_count": 11,
-  "raise_statement_count": 37,
+  "verification_entrypoint_count": 12,
+  "raise_statement_count": 39,
   "assert_statement_count": 0,
-  "test_class_count": 10,
-  "test_method_count": 65,
+  "test_class_count": 11,
+  "test_method_count": 71,
   "test_classes": [
     {
       "name": "JsonInventoryTests",
@@ -362,6 +380,18 @@
         "test_nonobject_and_nonfinite_receipts_rejected",
         "test_forged_keys_digest_counts_and_coverage_rejected",
         "test_missing_and_byte_only_changed_receipt_rejected",
+        "test_static_outputs_and_comms_unchanged"
+      ]
+    },
+    {
+      "name": "MarkdownHeadingConsistencyTests",
+      "test_method_count": 6,
+      "test_methods": [
+        "test_exact_live_phase_coverage_and_heading_records",
+        "test_atx_levels_closing_hashes_and_fenced_code_exclusion",
+        "test_inconsistent_titles_levels_empty_duplicates_and_fences",
+        "test_forged_digest_headings_counts_and_coverage_rejected",
+        "test_missing_byte_changed_and_inconsistent_live_report_rejected",
         "test_static_outputs_and_comms_unchanged"
       ]
     }

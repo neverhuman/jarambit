@@ -29,6 +29,7 @@ MANIFEST_CROSS_CHECK = INVENTORY.parent / 'phase27_manifest_cross_check_audit.js
 CUMULATIVE_RECEIPT_INDEX = INVENTORY.parent / 'phase28_cumulative_receipt_index_audit.json'
 ASSERTION_INVENTORY = INVENTORY.parent / 'phase29_verifier_assertion_inventory_audit.json'
 JSON_SCHEMA_KEYSET_AUDIT = INVENTORY.parent / 'phase30_json_schema_keyset_audit.json'
+MARKDOWN_HEADING_AUDIT = INVENTORY.parent / 'phase31_markdown_heading_consistency_audit.json'
 HOST_PATH_PATTERN = re.compile(r'/(?:home|Users|tmp|root|var/tmp|private/tmp)/|[A-Za-z]:[\\/](?:Users|Temp)[\\/]')
 
 
@@ -536,6 +537,67 @@ def verify_json_schema_keyset_audit(root=ROOT, document=None):
     return dict(status='pass', receipts=15, distinct_keysets=actual['distinct_keyset_count'])
 
 
+def markdown_heading_paths():
+    return [(phase, (Path('experiments/G16-06-RSV2-08') if phase < 21 else INVENTORY.parent) / f'PHASE{phase}.md')
+            for phase in range(15,31)]
+
+
+def markdown_heading_record(data, phase, path):
+    text = data.decode('utf-8')
+    headings = []; fence = None
+    for number,line in enumerate(text.splitlines(),1):
+        marker = re.match(r'^ {0,3}(`{3,}|~{3,})(.*)$',line)
+        if fence is not None:
+            if marker and marker[1][0] == fence[0] and len(marker[1]) >= len(fence) and not marker[2].strip():
+                fence = None
+            continue
+        if marker and (marker[1][0] != '`' or '`' not in marker[2]):
+            fence = marker[1]; continue
+        heading = re.match(r'^ {0,3}(#{1,6})(?:[ \t]+(.*)|$)',line)
+        if heading:
+            title = re.sub(r'(?:^[ \t]*|[ \t]+)#+[ \t]*$','',heading[2] or '').strip()
+            headings.append(dict(line=number,level=len(heading[1]),title=title))
+    violations = []
+    h1 = [row for row in headings if row['level'] == 1]
+    if len(h1) != 1: violations.append('Expected exactly one H1')
+    if not headings or headings[0]['level'] != 1: violations.append('First heading must be H1')
+    if not h1 or not h1[0]['title'].startswith(f'G16-06-RSV2-08 Phase {phase} — '):
+        violations.append('Phase title mismatch')
+    if any(not row['title'] for row in headings): violations.append('Empty heading')
+    if any(b['level'] > a['level']+1 for a,b in zip(headings,headings[1:])):
+        violations.append('Skipped heading level')
+    normalized = [' '.join(row['title'].casefold().split()) for row in headings]
+    if len(set(normalized)) != len(normalized): violations.append('Duplicate heading text')
+    if fence is not None: violations.append('Unclosed code fence')
+    return dict(phase=phase,path=path.as_posix(),bytes=len(data),sha256=digest(data),line_count=len(text.splitlines()),
+                heading_count=len(headings),h1_count=len(h1),heading_levels=[r['level'] for r in headings],
+                headings=headings,violation_count=len(violations),violations=violations)
+
+
+def generate_markdown_heading_audit(root):
+    root = Path(root)
+    verify_json_schema_keyset_audit(root)
+    files = [markdown_heading_record((root / path).read_bytes(),phase,path) for phase,path in markdown_heading_paths()]
+    if any(row['violation_count'] for row in files):
+        raise ValueError('Markdown heading structure is inconsistent')
+    return dict(task='G16-06-RSV2-08-p32',study_phase=31,
+                scope='ATX headings outside fenced code in PHASE15..30; no full CommonMark or rendered-anchor claim.',
+                phase_count=16,file_count=len(files),total_bytes=sum(r['bytes'] for r in files),
+                total_lines=sum(r['line_count'] for r in files),total_headings=sum(r['heading_count'] for r in files),
+                violation_count=0,heading_structure_consistent=True,
+                engineering_qualification_assessed=False,qualified_count=0,full_qualification=False,files=files)
+
+
+def verify_markdown_heading_audit(root=ROOT, document=None):
+    root = Path(root)
+    if document is None:
+        document = strict_json((root / MARKDOWN_HEADING_AUDIT).read_bytes())
+    actual = generate_markdown_heading_audit(root)
+    if document != actual:
+        raise ValueError('Markdown heading coverage, structure, source digest or metadata mismatch')
+    return dict(status='pass',reports=16,headings=actual['total_headings'],violation_count=0)
+
+
 def verify_all(root=ROOT):
     result = verify(root)
     result['markdown_reports'] = verify_markdown(root)
@@ -547,6 +609,7 @@ def verify_all(root=ROOT):
     result['cumulative_receipt_index'] = verify_cumulative_receipt_index(root)
     result['verifier_assertion_inventory'] = verify_assertion_inventory(root)
     result['json_schema_keysets'] = verify_json_schema_keyset_audit(root)
+    result['markdown_heading_consistency'] = verify_markdown_heading_audit(root)
     return result
 
 
@@ -562,6 +625,7 @@ def main():
     parser.add_argument('--write-cumulative-index', action='store_true', help='Index the exact Phase15..27 receipt digests and byte sizes')
     parser.add_argument('--write-assertion-inventory', action='store_true', help='Inventory verifier guard functions and test declarations by AST')
     parser.add_argument('--write-json-keysets', action='store_true', help='Audit top-level JSON keys across Phase15..29 receipts')
+    parser.add_argument('--write-markdown-headings', action='store_true', help='Audit Phase15..30 report heading structure')
     args = parser.parse_args()
     if args.write:
         import subprocess
@@ -593,6 +657,8 @@ def main():
         (ROOT / ASSERTION_INVENTORY).write_text(json.dumps(generate_assertion_inventory(ROOT), indent=2, allow_nan=False) + '\n')
     if args.write_json_keysets:
         (ROOT / JSON_SCHEMA_KEYSET_AUDIT).write_text(json.dumps(generate_json_schema_keyset_audit(ROOT), indent=2, allow_nan=False) + '\n')
+    if args.write_markdown_headings:
+        (ROOT / MARKDOWN_HEADING_AUDIT).write_text(json.dumps(generate_markdown_heading_audit(ROOT), indent=2, allow_nan=False) + '\n')
     print(json.dumps(verify_all(), sort_keys=True, allow_nan=False))
 
 

@@ -180,7 +180,8 @@ class MarkdownReportIndexTests(unittest.TestCase):
             for relative in [*files, audit.INVENTORY.as_posix(), audit.MARKDOWN_INDEX.as_posix(), audit.CROSS_CHECK.as_posix(),
                              audit.SCRIPT_INVENTORY.as_posix(), audit.SCRIPT_CROSS_CHECK.as_posix(), *audit.SCRIPT_FILES,
                              audit.SUMMARY_MANIFEST.as_posix(), audit.MANIFEST_CROSS_CHECK.as_posix(), audit.CUMULATIVE_RECEIPT_INDEX.as_posix(),
-                             audit.ASSERTION_INVENTORY.as_posix(), audit.JSON_SCHEMA_KEYSET_AUDIT.as_posix(),
+                             audit.ASSERTION_INVENTORY.as_posix(), audit.JSON_SCHEMA_KEYSET_AUDIT.as_posix(), audit.MARKDOWN_HEADING_AUDIT.as_posix(),
+                             *[path.as_posix() for _,path in audit.markdown_heading_paths()],
                              *[path.as_posix() for _,_,path in audit.summary_paths()]]:
                 target = root / relative; target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(ROOT / relative, target)
@@ -192,6 +193,7 @@ class MarkdownReportIndexTests(unittest.TestCase):
                 return real(path, mode, *args, **kwargs)
             with patch.object(Path, 'open', new=guarded), patch.dict('os.environ',{},clear=True), patch('subprocess.run', side_effect=AssertionError('Process launch')):
                 result = audit.verify_all(root)
+                self.assertEqual(result['markdown_heading_consistency']['reports'],16)
                 self.assertEqual(result['json_schema_keysets']['receipts'],15)
                 self.assertEqual(result['markdown_reports']['status'],'pass')
                 self.assertEqual(result['inventory_cross_check']['unique_members'],30)
@@ -735,6 +737,91 @@ class JsonSchemaKeysetTests(unittest.TestCase):
             self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
         before = (ROOT / 'COMMS.md').read_bytes()
         audit.verify_json_schema_keyset_audit()
+        self.assertEqual((ROOT / 'COMMS.md').read_bytes(),before)
+
+
+class MarkdownHeadingConsistencyTests(unittest.TestCase):
+    def document(self):
+        return audit.strict_json((ROOT / audit.MARKDOWN_HEADING_AUDIT).read_bytes())
+
+    def test_exact_live_phase_coverage_and_heading_records(self):
+        d = self.document(); self.assertEqual(audit.verify_markdown_heading_audit()['status'],'pass')
+        self.assertEqual([r['phase'] for r in d['files']],list(range(15,31)))
+        self.assertEqual(d['file_count'],16); self.assertEqual(d['phase_count'],16)
+        self.assertEqual([r['path'] for r in d['files']],[p.as_posix() for _,p in audit.markdown_heading_paths()])
+        for row in d['files']:
+            data = (ROOT / row['path']).read_bytes(); lines = data.decode().splitlines()
+            self.assertEqual(row['bytes'],len(data)); self.assertEqual(row['sha256'],audit.digest(data))
+            self.assertEqual(row['line_count'],len(lines)); self.assertEqual(row['h1_count'],1)
+            self.assertEqual(row['heading_count'],len(row['headings'])); self.assertEqual(row['violations'],[])
+            self.assertEqual(row['headings'],[dict(line=1,level=1,title=lines[0][2:])])
+        for total,field in [('total_bytes','bytes'),('total_lines','line_count'),('total_headings','heading_count')]:
+            self.assertEqual(d[total],sum(r[field] for r in d['files']))
+        self.assertTrue(d['heading_structure_consistent']); self.assertEqual(d['violation_count'],0)
+
+    def test_atx_levels_closing_hashes_and_fenced_code_exclusion(self):
+        text = "# G16-06-RSV2-08 Phase 15 — Title\n\n```sh\n# ignored\n````\n~~~\n## ignored too\n~~~\n  ## Section ###\n### Child\n## Sibling\n    # indented code\n####### not a heading\n#not-a-heading\n"
+        row = audit.markdown_heading_record(text.encode(),15,Path('PHASE15.md'))
+        self.assertEqual(row['violations'],[])
+        self.assertEqual(row['heading_levels'],[1,2,3,2])
+        self.assertEqual([r['line'] for r in row['headings']],[1,9,10,11])
+        self.assertEqual([r['title'] for r in row['headings']][1:],['Section','Child','Sibling'])
+        with self.assertRaises(UnicodeDecodeError):
+            audit.markdown_heading_record(bytes([255]),15,Path('PHASE15.md'))
+
+    def test_inconsistent_titles_levels_empty_duplicates_and_fences(self):
+        title = '# G16-06-RSV2-08 Phase 15 — Title\n'
+        cases = [('plain text','Expected exactly one H1'),
+                 ('## Section\n'+title,'First heading must be H1'),
+                 (title.replace('Phase 15','Phase 150'),'Phase title mismatch'),
+                 (title+'# Other\n','Expected exactly one H1'),
+                 (title+'### Jump\n','Skipped heading level'),
+                 (title+'## ###\n','Empty heading'),
+                 (title+'## Same\n## SAME\n','Duplicate heading text'),
+                 (title+'```\n# hidden\n','Unclosed code fence')]
+        for text,error in cases:
+            with self.subTest(error=error):
+                row = audit.markdown_heading_record(text.encode(),15,Path('PHASE15.md'))
+                self.assertIn(error,row['violations']); self.assertEqual(row['violation_count'],len(row['violations']))
+
+    def test_forged_digest_headings_counts_and_coverage_rejected(self):
+        for field,value in [('sha256','0'*64),('heading_levels',[]),('headings',[]),('h1_count',0)]:
+            d = self.document(); d['files'][0][field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError,'Markdown heading coverage'):
+                audit.verify_markdown_heading_audit(document=d)
+        for field,value in [('total_headings',0),('heading_structure_consistent',False),('violation_count',1)]:
+            d = self.document(); d[field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError,'Markdown heading coverage'):
+                audit.verify_markdown_heading_audit(document=d)
+        d = self.document(); d['files'].pop()
+        with self.assertRaisesRegex(ValueError,'Markdown heading coverage'):
+            audit.verify_markdown_heading_audit(document=d)
+
+    def test_missing_byte_changed_and_inconsistent_live_report_rejected(self):
+        real = Path.read_bytes; victim = ROOT / audit.INVENTORY.parent / 'PHASE30.md'
+        def missing(path):
+            if path == victim: raise FileNotFoundError(path)
+            return real(path)
+        with patch.object(Path,'read_bytes',new=missing), self.assertRaises(FileNotFoundError):
+            audit.verify_markdown_heading_audit()
+        def changed(path):
+            data = real(path)
+            return data+b' ' if path == victim else data
+        with patch.object(Path,'read_bytes',new=changed), self.assertRaisesRegex(ValueError,'Markdown heading coverage'):
+            audit.verify_markdown_heading_audit()
+        def inconsistent(path):
+            data = real(path)
+            return data+b'\n### Skipped level\n' if path == victim else data
+        with patch.object(Path,'read_bytes',new=inconsistent), self.assertRaisesRegex(ValueError,'heading structure is inconsistent'):
+            audit.verify_markdown_heading_audit()
+
+    def test_static_outputs_and_comms_unchanged(self):
+        d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
+        self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
+        for path in [ROOT / audit.MARKDOWN_HEADING_AUDIT, ROOT / audit.INVENTORY.parent / 'PHASE31.md']:
+            self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
+        before = (ROOT / 'COMMS.md').read_bytes()
+        audit.verify_markdown_heading_audit()
         self.assertEqual((ROOT / 'COMMS.md').read_bytes(),before)
 
 
