@@ -1,0 +1,63 @@
+# Handoff: G16-12-RSV2-04 (Compound Bevel & Wide-Tip Torsion Closure)
+- **Task ID:** `G16-12-RSV2-04` (`G16-10`..`G16-12`, `RSV2-03`..`RSV2-04`, `RSV2-07`)
+- **Complexity class:** `hard`
+- **Assigned screen & worktree & branch:** `1242467.codex_jarambit_gate_diag`, `/home/ubuntu/jarambit_wt_diag`, `audit/gate-feasibility-bound` (CPUs `10,11`)
+- **Current tier & model + effort:** `T2` (`gpt-6.1-sol high`)
+- **Completed milestones:**
+  1. Phase-1 `REPORT.md` (`SHA-256: 25aa1b3d46b6b576b846e48f255d6371ed13ad263e394c91d75a5cc7cca6a73d`)
+  2. Phase-2 `COMPOUND_BEVEL_REPORT.md` (`SHA-256: d1faf274c1cf9cc63dc96c65dc7448e1a92b5cf169dc2f827fa0dfde4c54d83d`): compound bevel + radial point envelope passes exported `sharpness`, `point_profile`, `bore_edge_radius`, and `watertight` on all 4 seeds and raises `twist_tipzone_sf` to `2.53` (`>= 1.00`) and `twist_body_sf` to `13.59` (`>= 8.9011`).
+  3. Phase-3 `target/gate-feasibility-bound/WIDE_TIP_REPORT.md` (`SHA-256: 09e98354187bf05e9ed665857b38fc4bdfb4661f127060530e91bf920da6a569`): executed the legal tip-width / 0.42–0.55 mm micro-bevel study; bounded negative result. Nine planform-legal widened variants and four controls have both required FEM meshes. No tested variant meets the zero-thin-centroid or both HM >=1 targets; both measured exports fail sharpness.
+  4. Phase-4 `target/gate-feasibility-bound/UNIFIED_PROTOTYPE_REPORT.md` (`SHA-256: 7db2bf57581528e6e87f5d400e2bebcdc992e50bfa654fb90d09b8dd69204432`): combined both assigned witness constructions; all three bevel variants evaluated at all four mesh areas and four native export measurements completed. Evaluation complete; no combined all-target pass.
+- **Executed Phase-3 scope:**
+  Test legal planform tip-width expansion (`b(r)` at `r = 4..15 mm`) combined with `d0 = 0.42 mm, d1 = 0.55 mm` micro-bevel so that (a) at `area = 0.25 mm²`, no element centroid at `r >= 4.0 mm` falls inside the thin `0.277 mm` edge strip, and (b) wider tip chord `b` at `r = 4..15 mm` raises both `0.25 mm²` and `0.125 mm²` `hm_twist_sf` and `hm_spine_sf` toward `>= 1.0`. Update `.agent/CHANGELOG.md` and `.agent/handoffs/G16-12-RSV2-04.md`.
+
+- **Next milestone (on T2 `gpt-6.1-sol high`):**
+  Investigate the combined strict spine peak near (113.9511,-12.5098) mm while preserving lateral >=358 N, fatigue >=1 and the requested sequence margin >=1.25 on both certification meshes and the strict mesh. The combined CP7/CP8/point-cap witness does not inherit the source spine pass. Separately repair the actual near-heel export facet around (100.67,-12.76) mm: its 28.543457-degree half-angle persists at h=0.05 and 0.025 mm, inside the linear bevel. Retain native thresholds, masks and loads; use the Phase-4 raw peaks and worst triangles. No source-witness metrics may be pooled into an all-pass claim.
+
+- **Milestone 3a completed (2026-10-18T04:28Z):** isolated `wide_tip_study/` instrumentation/control; two-mesh Phase-2 parity max relative error `2.2248150436068264e-13`; CPU affinity `10,11`, `CARGO_BUILD_JOBS=2` verified in receipt. Screening legal planform changes next.
+
+- **Milestone 3b completed (2026-10-18T04:30Z):** 17 mesh + 54 coordinate + 16 smooth-offset screens retained in `wide_tip_study/`; nine smooth variants geometrically legal. Widest sampled legal station width: 11.059 mm at 4 mm (`smooth_d0.0_a1.0`). Literal zero-thin-centroid condition fails on baseline micro-bevel (787 / 13 total / tip-annulus thin elements at area 0.25). Running two-mesh selected variants, rotation controls and export verification.
+
+- **Milestone 3c completed (2026-10-18T04:33Z):** all nine legal widened variants + four controls have both required meshes. Best HM twist minimum `0.4122410838` (`smooth_d0.0_a0.5`), corresponding spine `0.6517973065`. Matched-control improvement of both factors on both meshes exists (`smooth_d0.5_a0.25`), but neither reaches 1. Every widened case fails zero-thin-centroid clearance even within 4..15 mm. Completing export checks and evidence seal.
+
+## Required Git Commit Trailers (`MODEL_ROUTING_PLAYBOOK.md` §10)
+Every new commit on this lane MUST include these trailers:
+```bash
+git commit -m "<type>(<scope>): <summary>" \
+  --trailer "Agent-Session: <session-or-screen-id>" \
+  --trailer "Agent-Model: <model-id> <effort>" \
+  --trailer "Agent-Task: <task-id>"
+```
+
+- **Integrity correction (2026-10-18T04:34Z):** the Phase-2 handoff previously listed stale hash `7506d5f2241703472ffb154c8edc3e0b6daa60a0a879f1caba907bda9bc22ce7`. The existing report (mtime 04:24:43Z, predating this execution) matches `compound_study/SHA256SUMS`: `d1faf274c1cf9cc63dc96c65dc7448e1a92b5cf169dc2f827fa0dfde4c54d83d`. Corrected the reference; prior report content is untouched. All 13 Phase-3 native clamp roundtrips pass.
+
+- **Milestone 3d completed (2026-10-18T04:39Z): final export, verification and seal.**
+  - Phase-3 report: `target/gate-feasibility-bound/WIDE_TIP_REPORT.md`; SHA-256 `09e98354187bf05e9ed665857b38fc4bdfb4661f127060530e91bf920da6a569`. Raw artifacts and reproduction scripts: `target/gate-feasibility-bound/wide_tip_study/`; all 367 manifest digests verified.
+  - Completed 28 unbiased native FEM evaluations: 26 for all nine legal widened inputs + four controls, plus two Phase-2 parity observations. CPUs `10,11`, `CARGO_BUILD_JOBS=2` verified. All 13 native input-clamp roundtrips pass; 75 production source/requirement digests and eight native dependency digests are unchanged. Removing the two diagnostic hooks reproduces production FEM source exactly.
+  - Best two-mesh HM twist / spine: `0.4122410838 / 0.6517973065` (`smooth_d0.0_a0.5.csv`). The paired `smooth_d0.5_a0.25.csv` improves both factors at both meshes over `drop05_base.csv`, but minima remain `0.3479880012 / 0.6870372479`.
+  - Actual centroid thickness and four-sample element thickness are recorded separately. Best-twist area 0.25: **765 actual thin edge centroids** outside 4 mm (10 within 4..15 mm), versus 762 thin element means. Thus criterion (a) fails independently of the element-mean interpretation. Every legal widened variant has actual thin centroids in that annulus on both meshes.
+  - Native h=0.05 mm export-grid checks: baseline / paired widened maximum half-angle `86.7103259 / 86.6776159` degrees (**FAIL** <=25); apex <=0.20, point profile, bore radius >=1.5 and watertight census all pass. Both h=0.02 attempts were cancelled before any measurement receipt because the native apex scan is expensive; no refinement result is inferred. See `cancelled_export_attempts.json`.
+  - Experiment complete; structural/export closure remains failed. Tracked git status is clean. No production source edits, commit, push or external message was made. The before-push full repository gate was not invoked because no push was requested.
+
+## Phase-4 Assignment (`G16-12-RSV2-04-p4`: Unified Multi-Lane Candidate Evaluation)
+- **Model & Tier:** `T2` (`gpt-6.1-sol high`, CPUs `10,11`, `CARGO_BUILD_JOBS=2`)
+- **Objective:** Combine the two breakthrough witnesses discovered in parallel lanes:
+  1. From `/home/ubuntu/jarambit/.agent/worktrees/lane-G16-06-RSV2-08/experiments/G16-06-RSV2-08/`: `candidate.csv` + `candidate_config.json` (`window_w6.0_fill0.65_r6.4_drop0.0_refined`, which passes `lat_rob = 376.06 / 399.25 / 380.40 N >= 358 N`, `fat_sf = 1.0505 / 1.1152 / 1.0626 >= 1.0`, `sf_hunter >= 1.446`, and `seq_ratio = 1.3098 / 1.3100 / 1.3481 >= 1.25` across `0.25 / 0.125 / 0.0625 mm²`).
+  2. From `/home/ubuntu/jarambit/.agent/worktrees/lane-RSV2-07-hm/target/rsv2-07/v3/hotspot_strict_summary.json` (`hotspot_strict_3`, CP7 `+0.3 mm`, CP8 `+0.2 mm`, `POINT_SHAPE=3`, `POINT_LATERAL=2`, which passes strict `0.0625 mm²` `hm_spine_sf = 1.0414 >= 1.0`, `twist_tipzone_sf = 3.9620 >= 1.0`, `twist_body_sf = 15.3433 >= 1.0`, `hm_ringback_sf >= 6.7`, and `hm_twist_sf = 0.4451`).
+- **Deliverable:** In `target/gate-feasibility-bound/unified_study/`, evaluate the combined construction (full 6.0 mm solid neck + controlled blade window + CP7/CP8 spine hotspot reinforcement + `POINT_SHAPE=3`/`POINT_LATERAL=2` directional point cap + `d0 >= 0.48..0.65 mm` bevel) across `2.0, 0.25, 0.125, 0.0625 mm²` plus native export measurements (`sharpness`, `point_profile`, `bore_radius`, `census`), write `target/gate-feasibility-bound/UNIFIED_PROTOTYPE_REPORT.md` with SHA-256, and update `.agent/handoffs/G16-12-RSV2-04.md` and `.agent/CHANGELOG.md`.
+
+- **Phase-4 milestone 4a completed (2026-10-18T05:10Z):** 19 snapshotted lane inputs, unified source harness and combined canonical input prepared in `unified_study/`. Neck four-mesh and hotspot strict controls reproduce to max relative scalar metric errors `1.29177552328e-13` / `5.73541331848e-14`. Explicit faer override addresses the copied-config / retained-receipt solver mismatch; partial skyline observations are retained. Combined four-mesh bevel cases and native export measurements follow. CPUs 10,11 / jobs=2.
+
+- **Phase-4 milestone 4b completed (2026-10-18T05:11Z):** all three combined bevel variants have all four requested meshes (12 solves + five control solves). Full 6 mm neck / one window / native geometry predicates pass. Fine/strict lateral, fatigue and hunter targets pass, but certification sequence >=1.25 and both human-max >=1 fail. Best two-mesh HM twist/spine among these variants: `0.386575/0.565686` at d0/d1=0.48/0.65; strict spine `0.511348`. Raw `unified_study/fem_summary.json` and individual receipts retain all cases; native exports and report/seal remain.
+
+- **Phase-4 milestone 4c completed (2026-10-18T05:14Z):** all three h=0.05 mm native exports pass apex/point/bore/census but fail half-angle at `28.5434571` degrees, with the same near-heel face wholly inside the linear bevel. One full h=0.025 mm primary export (matching hotspot-source grid) is in progress. Four-mesh FEM remains complete; final report/seal follows this measurement.
+
+- **Phase-4 milestone 4d completed (2026-10-18T05:19Z): final measurements, report and seal.**
+  - Report: `target/gate-feasibility-bound/UNIFIED_PROTOTYPE_REPORT.md`; SHA-256 `7db2bf57581528e6e87f5d400e2bebcdc992e50bfa654fb90d09b8dd69204432`. Matching sidecar: `unified_study/REPORT_SHA256`. All 95 manifest artifacts verified. Reproduction: `taskset -c 10,11 env CARGO_BUILD_JOBS=2 bash target/gate-feasibility-bound/unified_study/reproduce.sh`.
+  - Three combined variants at d0/d1=0.65/1.10, 0.55/0.85 and 0.48/0.65 mm each completed 2.0/0.25/0.125/0.0625 mm² native unbiased FEM (12 evaluations), with five complete witness-control evaluations. The separate stopped skyline control retains three completed observations and is not used for qualification.
+  - Both witnesses reproduce with explicit faer: neck max relative scalar metric error `1.29177552328e-13`; hotspot strict `5.73541331848e-14`. The copied-config / retained-receipt solver discrepancy is documented; all effective complete-run invocations select faer, CPUs 10,11 and jobs=2.
+  - All three combined inputs are canonical, pass unchanged native planform/aesthetic predicates, retain one 175.129120106 mm² blade window and full sampled 6.0 mm neck. CP7/CP8 are the only gene changes (`+0.3/+0.2` mm); directional point cap and coordinate law match the hotspot source exactly.
+  - All fine/strict lateral >=358 N, fatigue >=1 and hunter SF >=1.377 checks pass. Assignment sequence minima `1.236935124 / 1.222186639 / 1.221363356` miss 1.25 although the native 1.20 floor passes on those meshes. The coarse area=2 observations miss lateral/fatigue targets and remain explicit.
+  - Best combined two-mesh HM twist/spine among the three is `0.386575096 / 0.565685833` (d0/d1=0.48/0.65); strict `0.429888472 / 0.511348390`. All combined human-max twist/spine cases fail >=1. The strict source-hotspot spine peak moves from (157.0281,-9.8612) to (113.9511,-12.5098) mm in the combined construction.
+  - All four native export measurements (three h=0.05, primary h=0.025) fail sharpness: `28.5434571059` degrees >25. The finer primary export contains 2,009,692 faces and retains that failure; it was completed, not cancelled. Apex <=0.20, point profile (monotone, taper 5.2 mm), measured bore radius 1.60 mm and positive-volume watertight census [0,0,1] pass in all four.
+  - Verified all 19 stable input snapshots, 77 production source/requirement/build-file digests, eight retained native dependency digests, exact native FEM modulo two observation hooks, canonical inputs, neck/window construction and metric identities. Tracked git status is clean. No production edits, commit, push or external message. Independent 3D/cross-solver/GCI/support qualification remains unassessed; no all-hard or global infeasibility claim.

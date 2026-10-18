@@ -1,0 +1,35 @@
+{
+  "all_19_snapshotted_inputs_verified": true,
+  "all_77_production_source_requirement_build_digests_unchanged": true,
+  "native_fem_diff_only_postcalculation_observation_hooks": true,
+  "directional_point_cap_and_coordinate_law_match_hotspot_source": true,
+  "combined_csv_changes_only_CP7_plus_0p3_CP8_plus_0p2": true,
+  "both_witness_controls_reproduce": {
+    "neck_control": {
+      "all_reported_scalar_metrics_match": true,
+      "max_relative_error": 1.2917755232812739e-13,
+      "areas": [
+        2.0,
+        0.25,
+        0.125,
+        0.0625
+      ]
+    },
+    "hotspot_control": {
+      "all_reported_scalar_metrics_match": true,
+      "max_relative_error": 5.735413318476013e-14,
+      "areas": [
+        0.0625
+      ]
+    }
+  },
+  "three_combined_cases_have_all_four_meshes": true,
+  "all_combined_inputs_canonical_and_native_geometry_legal": true,
+  "solid_6mm_neck_and_one_blade_window_verified": true,
+  "all_combined_runs_cpus_10_11_jobs2_faer_unbiased": true,
+  "native_metric_identities_pass": true,
+  "all_four_export_measurements_complete": true,
+  "fine_export_differs_only_by_grid": true,
+  "any_combined_case_passes_all_assignment_targets": false,
+  "tracked_git_status_clean": true
+}

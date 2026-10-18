@@ -1,0 +1,36 @@
+{
+  "sealed_utc": "2026-10-18T05:18:31.946084+00:00",
+  "commit": "d046093432864ac3cc619dc40c177c452e1e967a",
+  "branch": "audit/gate-feasibility-bound",
+  "rustc": "rustc 1.85.1 (4eb161250 2025-03-15)",
+  "cpu_affinity": [
+    10,
+    11
+  ],
+  "CARGO_BUILD_JOBS": 2,
+  "solver": "faer",
+  "dependency_rlib_sha256": {
+    "target/release/deps/libjarambit_genotype-6307f79668ad49fa.rlib": "46c6d95139c27224853a39c36e6bb6c3ffd284d6b48b2dd75b96560b5dd2c5a5",
+    "target/release/deps/libjarambit_phenotype-972d7a39d35eb90e.rlib": "6fb17ca467ca98818c224afa28666045bc6f9167dc7a86246e47f938aed26552",
+    "target/release/deps/libjarambit_physics-2f567a2086676e86.rlib": "1a1ffd7baad76790da49be8bb9b16f1da03fd49c9fc6b07e734489f48b9c2d4e",
+    "target/release/deps/libjarambit_redteam-e2aa109b27346be6.rlib": "d6309c532934c73deaf70b67c3ee8b6af6da1f8c111fd8034e20569527db2590",
+    "target/release/deps/libjarambit_evidence-5410aab0408101bd.rlib": "17352d9b40c62680e3f646591a63afda456e9d3a9a07251b19835f05d4926cde",
+    "target/release/deps/libserde-e514004e8ed69ba2.rlib": "a4a1129b1f8055cf7f3fb48069f3c3193ec01547daf5924203a4e7bd092b2da7",
+    "target/release/deps/libserde_json-ab02f194e8fc6953.rlib": "7ef5bfffa136fd25012978b2a2c0cfacb18e83637a4e2b9f68cbbbd10140cc55",
+    "target/release/deps/libspade-8aefec192c3eadcf.rlib": "e630184c57a4debf71fa4f62ae39c9369ad0b34a348d3b5867dee2b183aa6f0a"
+  },
+  "dependency_digests_match_retained_phase2": true,
+  "study_binary_sha256": "c611e23786ba8257b47a0344b42295561453bbaec3d35c0f838ac565433fb3d8",
+  "completed_combined_fem_evaluations": 12,
+  "completed_witness_control_evaluations": 5,
+  "completed_export_measurements": 4,
+  "additional_partial_skyline_observations": 3,
+  "source_snapshots_used_for_reproduction": true,
+  "report_sha256": "7db2bf57581528e6e87f5d400e2bebcdc992e50bfa654fb90d09b8dd69204432",
+  "reproduction": "taskset -c 10,11 env CARGO_BUILD_JOBS=2 bash target/gate-feasibility-bound/unified_study/reproduce.sh",
+  "prior_report_sha256": {
+    "REPORT.md": "25aa1b3d46b6b576b846e48f255d6371ed13ad263e394c91d75a5cc7cca6a73d",
+    "COMPOUND_BEVEL_REPORT.md": "d1faf274c1cf9cc63dc96c65dc7448e1a92b5cf169dc2f827fa0dfde4c54d83d",
+    "WIDE_TIP_REPORT.md": "09e98354187bf05e9ed665857b38fc4bdfb4661f127060530e91bf920da6a569"
+  }
+}

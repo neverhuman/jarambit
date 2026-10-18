@@ -1,0 +1,19 @@
+{
+  "neck_control": {
+    "all_reported_scalar_metrics_match": true,
+    "max_relative_error": 1.2917755232812739e-13,
+    "areas": [
+      2.0,
+      0.25,
+      0.125,
+      0.0625
+    ]
+  },
+  "hotspot_control": {
+    "all_reported_scalar_metrics_match": true,
+    "max_relative_error": 5.735413318476013e-14,
+    "areas": [
+      0.0625
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "copied_config_solver": "skyline",
+  "retained_witness_solver": "faer",
+  "action": "Retain partial skyline observations; explicitly select faer to reproduce retained witness and evaluate all combined cases.",
+  "skyline_partial_areas": [
+    2.0,
+    0.25,
+    0.125
+  ],
+  "skyline_partial_status": "cancelled_before_strict_completion",
+  "archive_mapping": {
+    "original_output": "neck_control_fem.json",
+    "archived_partial_output": "neck_skyline_partial.json"
+  },
+  "partial_invocation_metadata_note": "The first runner labelled its requested backend as faer before applying the imported config override; the archived native result correctly records skyline. Complete-run invocation metadata now records the effective faer override."
+}

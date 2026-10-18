@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/home/ubuntu/jarambit_wt_diag/target/gate-feasibility-bound/unified_study/study",
+    "fem",
+    "/home/ubuntu/jarambit_wt_diag/target/gate-feasibility-bound/unified_study/hotspot_control_fem.json",
+    "/home/ubuntu/jarambit_wt_diag/target/gate-feasibility-bound/unified_study/hotspot_control.csv"
+  ],
+  "config": {
+    "STUDY_ANGLE": "18",
+    "STUDY_APEX": "0.175",
+    "STUDY_D0": "0.45",
+    "STUDY_D1": "0.55",
+    "STUDY_POINT_SHAPE": "3",
+    "STUDY_RADIAL": "1",
+    "STUDY_GRID": "0.025",
+    "STUDY_BOUNDARY_TOL": "0.001",
+    "STUDY_SMOOTH_HEEL": "1",
+    "STUDY_POINT_LATERAL": "2",
+    "STUDY_AREAS": ".0625"
+  },
+  "cpu_affinity": [
+    10,
+    11
+  ],
+  "CARGO_BUILD_JOBS": 2,
+  "solver": "faer"
+}
