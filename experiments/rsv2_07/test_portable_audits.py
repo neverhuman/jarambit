@@ -20,6 +20,7 @@ import audit_phase13_screen_rounds as screen_audit
 import audit_phase14_w319_receipts as w319_audit
 import audit_phase15_gate_s_and_margins as phase15_audit
 import audit_phase16_xbabe3_waves as xbabe3_audit
+import audit_phase17_portable_schema as schema_audit
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -1148,6 +1149,169 @@ class Phase16Xbabe3WaveAuditTests(unittest.TestCase):
             pins["w405c3"]["leaderboard.json"] = (hashlib.sha256(data).hexdigest(), len(data))
             with self.subTest(data=data), self.assertRaises(ValueError):
                 xbabe3_audit.audit_payloads(files, pins)
+
+
+class Phase17PortableSchemaAuditTests(unittest.TestCase):
+    def setUp(self):
+        self.root = Path("/portable/checkout")
+        self.artifacts = Path("/portable/saved")
+        self.data = b"synthetic bytes"
+        self.sha = hashlib.sha256(self.data).hexdigest()
+        self.study = schema_audit.HERE + "fixture.json"
+        self.raw = "target/rsv2-07/fixture.bin"
+        self.manifest = {"schema": "jarambit.rsv2_07.portable_receipt_manifest.v1", "task": "RSV2-07-p10",
+                         "files": {self.study: self.sha}, "raw_artifacts": {self.raw: {"sha256": self.sha, "size_bytes": len(self.data)}},
+                         "digest_reference_counts": {"fixture.json": 1}}
+        self.sources = {phase: {"w319": {"fixture.bin": (self.sha, len(self.data))}} for phase in range(11, 17)}
+        self.sources[11] = {"fixture.bin": (self.sha, len(self.data))}
+        self.sources[12] = {"w315": {"fixture.bin": (self.sha, len(self.data))}}
+        self.sources[14] = {"fixture.bin": (self.sha, len(self.data))}
+        self.disk = {self.root / self.study: self.data, self.root / self.raw: self.data}
+        for module, _ in schema_audit.MODULES.values():
+            self.disk[self.root / schema_audit.HERE / (module + ".py")] = b"# synthetic registry module\n"
+        for phase, registry in self.sources.items():
+            for name, _, _ in schema_audit.pin_entries(phase, registry):
+                self.disk[self.artifacts / name] = self.data
+
+    def read(self, path):
+        if path == self.root / schema_audit.MANIFEST:
+            return json.dumps(self.manifest).encode()
+        if path not in self.disk:
+            raise FileNotFoundError(str(path))
+        return self.disk[path]
+
+    def current(self):
+        with patch.object(Path, "read_bytes", new=lambda path: self.read(path)):
+            return schema_audit.audit(self.root, self.artifacts, self.sources)
+
+    def test_seven_profiles_deduplicate_matching_references(self):
+        document = self.current()
+        self.assertEqual([p["phase"] for p in document["phase_profiles"]], list(range(10, 17)))
+        self.assertEqual(document["verification"]["references"], 8)
+        self.assertEqual(document["verification"]["unique_paths"], 6)
+        self.assertEqual(document["verification"]["on_disk"], 6)
+        self.assertEqual(document["verification"]["manifest_only"], 0)
+        self.assertEqual(len(document["source_sha256"]), 7)
+        schema_audit.check_receipt(document, document)
+
+    def test_portable_paths_reject_host_paths_and_noncanonical_forms(self):
+        for name in ("", ".", "/home/fixture", "../fixture", "a/../b", "a//b", "a/./b", "C:/fixture", "a\\b", "a\nb", True):
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                schema_audit.portable_path(name)
+        self.assertEqual(schema_audit.portable_path("evidence/a-b/file.json"), "evidence/a-b/file.json")
+
+    def test_manifest_identity_fields_and_count_types_fail_closed(self):
+        for key, value in [("schema", "wrong"), ("task", "wrong"), ("files", {}), ("raw_artifacts", []),
+                           ("digest_reference_counts", {"fixture.json": True})]:
+            changed = deepcopy(self.manifest)
+            changed[key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                schema_audit.manifest_entries(changed)
+        changed = deepcopy(self.manifest)
+        changed["extra"] = 1
+        with self.assertRaises(ValueError):
+            schema_audit.manifest_entries(changed)
+
+    def test_pin_shape_digest_and_size_types_fail(self):
+        for value in [(self.sha,), (self.sha, None), (self.sha, True), (self.sha, -1), "bad"]:
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                schema_audit.pin_entries(11, {"fixture": value})
+        for sha, size in [("A" * 64, 0), ("g" * 64, 0), (self.sha, True), (self.sha, -1)]:
+            with self.subTest(sha=sha, size=size), self.assertRaises(ValueError):
+                schema_audit.digest_metadata(sha, size)
+        with self.assertRaisesRegex(ValueError, "Invalid wave key"):
+            schema_audit.pin_entries(12, {"../wave": {"fixture": (self.sha, 0)}})
+
+    def test_duplicate_and_conflicting_registry_entries_fail(self):
+        groups = {phase: [("same.bin", self.sha, len(self.data))] for phase in range(10, 17)}
+        for entries in [[("same.bin", self.sha, len(self.data))] * 2,
+                        [("same.bin", "a" * 64, len(self.data))], [("same.bin", self.sha, 999)]]:
+            groups[16] = entries
+            with self.subTest(entries=entries), self.assertRaises(ValueError):
+                schema_audit.merge_entries(groups)
+        groups.pop(16)
+        with self.assertRaisesRegex(ValueError, "Exactly phases"):
+            schema_audit.merge_entries(groups)
+
+    def test_missing_raw_and_wave_bytes_are_manifest_only(self):
+        self.disk.pop(self.root / self.raw)
+        for name in list(self.disk):
+            if name.is_relative_to(self.artifacts):
+                self.disk.pop(name)
+        result = self.current()["verification"]
+        self.assertEqual((result["on_disk"], result["manifest_only"]), (1, 5))
+
+    def test_missing_study_input_never_becomes_manifest_only(self):
+        self.disk.pop(self.root / self.study)
+        self.disk[self.artifacts / self.study] = self.data
+        with self.assertRaisesRegex(ValueError, "Missing study input"):
+            self.current()
+
+    def test_tampered_copy_is_not_masked_by_matching_supplement(self):
+        self.disk[self.root / self.raw] = b"tampered"
+        self.disk[self.artifacts / self.raw] = self.data
+        with self.assertRaisesRegex(ValueError, "SHA-256 mismatch"):
+            self.current()
+
+    def test_size_mismatch_and_malformed_raw_metadata_fail(self):
+        self.manifest["raw_artifacts"][self.raw]["size_bytes"] = len(self.data) + 1
+        with self.assertRaisesRegex(ValueError, "Byte size mismatch"):
+            self.current()
+        self.manifest["raw_artifacts"][self.raw]["size_bytes"] = True
+        with self.assertRaisesRegex(ValueError, "Invalid raw artifact record"):
+            self.current()
+
+    def test_saved_receipt_detects_changed_registry_and_boolean_sizes(self):
+        current = self.current()
+        changed = deepcopy(current)
+        changed["source_sha256"][schema_audit.MANIFEST] = "a" * 64
+        with self.assertRaisesRegex(ValueError, "source_sha256"):
+            schema_audit.check_receipt(changed, current)
+        changed = deepcopy(current)
+        changed["registry"][0]["size_bytes"] = True
+        with self.assertRaisesRegex(ValueError, "registry"):
+            schema_audit.check_receipt(changed, current)
+
+    def test_saved_observations_reject_false_counts_and_modes(self):
+        current = self.current()
+        for key, value in [("on_disk", True), ("unique_paths", 999), ("manifest_only", -1)]:
+            changed = deepcopy(current)
+            changed["verification"][key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                schema_audit.check_receipt(changed, current)
+        changed = deepcopy(current)
+        changed["verification"]["observations"][0]["mode"] = "manifest_only"
+        with self.assertRaisesRegex(ValueError, "observation"):
+            schema_audit.check_receipt(changed, current)
+
+    def test_historical_observations_can_differ_from_clean_checkout(self):
+        saved = self.current()
+        self.disk.pop(self.root / self.raw)
+        current = self.current()
+        self.assertNotEqual(saved["verification"]["on_disk"], current["verification"]["on_disk"])
+        schema_audit.check_receipt(saved, current)
+
+    def test_relocated_read_only_cli_uses_no_git_or_host_paths(self):
+        saved = self.current()
+        self.disk[self.root / schema_audit.RECEIPT] = json.dumps(saved).encode()
+        output = io.StringIO()
+        args = ["audit_phase17_portable_schema.py", "--repo-root", str(self.root), "--artifact-root", str(self.artifacts)]
+        with patch.object(Path, "read_bytes", new=lambda path: self.read(path)), patch.object(Path, "write_text") as write, \
+                patch.object(schema_audit, "registry_sources", return_value=self.sources), \
+                patch.object(portable, "git", side_effect=AssertionError("Unexpected Git access")), \
+                patch.object(sys, "argv", args), redirect_stdout(output):
+            schema_audit.main()
+        write.assert_not_called()
+        self.assertIn("7 phases; 8 references; 6 unique paths; 6 on-disk", output.getvalue())
+        self.assertNotIn("/portable", json.dumps(saved))
+
+    def test_duplicate_nonfinite_json_and_input_read_only_behavior(self):
+        before = deepcopy(self.disk)
+        self.current()
+        self.assertEqual(before, self.disk)
+        for data in (b'{"schema":1,"schema":2}', b'{"count":NaN}', b'{"count":1e999}'):
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                receipt_audit.load_json(data)
 
 
 if __name__ == "__main__":

@@ -2638,6 +2638,7 @@
     "experiments/rsv2_07/PHASE14_W319_WAVE_RECEIPT_AUDIT.md": "a4c203d49dc1279e3c713280e146e1e2f5840b98021a8dfd312583291158e696",
     "experiments/rsv2_07/PHASE15_GATE_S_AND_MARGIN_PROGRESSION_AUDIT.md": "0def6f2a92511e2f4d5e998aa892c8b1cba2d26da39c4405310ecd8851059a29",
     "experiments/rsv2_07/PHASE16_XBABE3_PAIRED_WAVE_RECEIPT_AUDIT.md": "700d9238fb9e7d01c8a842a0819aab5c93150751b3b40f9c88ecb620ebeb4613",
+    "experiments/rsv2_07/PHASE17_PORTABLE_SCHEMA_AUDIT.md": "80629b138590fb239f80918d7cf11c73872c0f2cfb817b84cec031b293a13f2a",
     "experiments/rsv2_07/PHASE5_WITNESS_3D_VERIFICATION.md": "9f3fa6c59aad71708143b5a469de23301fe8f9aa5e7d8d3750f637de8e729624",
     "experiments/rsv2_07/PHASE6_UNIFIED_SCORECARD.md": "a425b66d675208c7fffa17e075605bcfbddd234f82456422c1b5d99783799e30",
     "experiments/rsv2_07/PHASE7_SAVED_TRIPLET_GCI_AUDIT.md": "cc945cb4a6f61f147b7f6cadf52ae100c3d66373526a6f0d02d3da7f50fa620b",
@@ -2650,6 +2651,7 @@
     "experiments/rsv2_07/audit_phase14_w319_receipts.py": "36a3ee7242f3723122eb44cb6ec52d99b2f3ed06e0d6ba1ed37d62eac89fb175",
     "experiments/rsv2_07/audit_phase15_gate_s_and_margins.py": "c7f1315b6e0d44144f5a461d5e9999d0d87cb511a110639719f31716e2136971",
     "experiments/rsv2_07/audit_phase16_xbabe3_waves.py": "5b8c8e5a7e2cc131241c2e1faa4057f62be1e2acc467857549be1dfdd9c63aee",
+    "experiments/rsv2_07/audit_phase17_portable_schema.py": "f816342e73e6297f92006befa826f6a21eb2497fb6e831721f050832a2724483",
     "experiments/rsv2_07/audit_phase6.py": "57a9d5aca837e6f3704d23b1c90d902523ef89d560d27ed97a7f28647e66b196",
     "experiments/rsv2_07/audit_phase7.py": "d6a83f15674f9083a4a9b3995293ac8e24768a20a9adb3f719df4f6abd91ec27",
     "experiments/rsv2_07/audit_phase8.py": "93afb9761faabd94f37b11070e7aadef8ff4d7167d2dbf37b536827508471515",
@@ -2666,6 +2668,7 @@
     "experiments/rsv2_07/generate.py": "fdf458b4f14f867a6c2ec709c71e0a9ae561eb15981ff6270e1c31d1db2a45c5",
     "experiments/rsv2_07/hotspot.py": "759e08f6cdf269f341f014987a2f926dac85b152dfabb09b9754a99404a78d99",
     "experiments/rsv2_07/main.rs": "b9464cd796a415de90880ef8bb6085766fd54dc3a26e302ea4742d78283e83ff",
+    "experiments/rsv2_07/phase17_portable_schema_audit.json": "6a3ec56e10bf60259b6710a14e3e65969abe9740529df73f4eb54cd72f3f8832",
     "experiments/rsv2_07/phase6_cad_check.py": "0aa20b4f69c12e7fb2b50b208623957c1a30479a2e4d717ff3c8df1e48dd31a1",
     "experiments/rsv2_07/phase6_cad_check_as_written.py": "938d642db4f808adf29f511e0d381557e47cfe3b27c1765cc13591691fd4409e",
     "experiments/rsv2_07/phase6_finish.py": "2bd94087db3db54f8797c6428f00ab208bb31e7c02e3c9724ab784bf6be7fc22",
@@ -2688,7 +2691,7 @@
     "experiments/rsv2_07/results/fine_2.csv": "0faa6b50e7ef8b470f0bd69414b3c768a42d93a39a7d2d0ccbe1159eb641e760",
     "experiments/rsv2_07/results/gci_a4_validation.json": "97b37a3e0e2bf324c88025976c4e2ca51383da00bd0d62789d95effe8e3f04f4",
     "experiments/rsv2_07/results/hotspot_fine_0.csv": "8725e87ca6d4d2d1b254cd1502bfab276bb355d6da1620f7b7388aa4d33198a9",
-    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": "de0a9cbfa41e174fb25c7d81390145cce070a5269cc78cce40f721b787431c6a",
+    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": "ca0a59106d09c0755b76ac7a357ed0230ffb843ca988435d4903dd1476cf9718",
     "experiments/rsv2_07/results/phase5_witness_3d_validation.json": "66f3b5112bf1122ddd49fa3c1ad66384d810ee177494b0143233fdf7a895e80a",
     "experiments/rsv2_07/results/phase6_Q7_window_p05.csv": "0055f1b7048fdd66dfc995b7d2e35b2a2e632628d4b3dcd68f6811afc6f9bacc",
     "experiments/rsv2_07/results/phase6_unified_scorecard.json": "5d301a3b33afdd8470441c0094f79e47915f8f9e1161af035b90ac37223f7dd7",
@@ -2700,7 +2703,7 @@
     "experiments/rsv2_07/solid_tip_3d_p4.py": "b7118433b0ad10d9e2e6aae48e3a59c5cbbd3acec9b7cd578cb62a6bb8e213e8",
     "experiments/rsv2_07/solid_tip_3d_p5.py": "bc261152ad457329cf2cbb839f0f30ffe877b5f56028456f33e1f3a13b719c79",
     "experiments/rsv2_07/solid_tip_input.rs": "1a60d621c703d85d27a43370216a74e054416489f9dc243142179122e4dbbde8",
-    "experiments/rsv2_07/test_portable_audits.py": "de55aa3164418f85b151092b03bae637abfdf740135ad6fc3ab565d517fa1ace",
+    "experiments/rsv2_07/test_portable_audits.py": "6b8473d6ee0b79febcac80f14ef49a3488763e7014d5d6af53d60cbd56185908",
     "experiments/rsv2_07/web.py": "d4f8f01791f4b84c3383f33f279944c06a3fe32bf21034c3a686f566fcc04d9a"
   },
   "portability": {
@@ -2760,5 +2763,10 @@
     "task": "RSV2-07-p16",
     "reason": "Bind xbabe3 receipt integrity/accounting verifier, scoped report and synthetic tests; paired physical metrics not assessed",
     "strict_study_files": 72
+  },
+  "phase17_manifest_refresh": {
+    "task": "RSV2-07-p17",
+    "reason": "Bind portable schema and SHA-256 registry audit, report, receipt and updated synthetic tests",
+    "strict_study_files": 75
   }
 }
