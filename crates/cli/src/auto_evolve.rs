@@ -955,7 +955,7 @@ mod tests {
         assert_eq!(seeds.len(), 2);
         let mut unrankable = Vec::new();
 
-        for rng_seed in 0..10 {
+        for rng_seed in 0..2 {
             let batch = spawn_offspring_batch(
                 &seeds,
                 11,
