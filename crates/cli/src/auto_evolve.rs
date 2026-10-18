@@ -1357,6 +1357,45 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_returns_fewer_than_certify_top_when_total_unassessed_is_smaller() {
+        let mut seed = Genome::c4_seed(genome::T_MIN);
+        seed.v[EA_IN] = 14.0;
+        seed.clamp();
+        let mut p10_novel = seed.clone();
+        p10_novel.v[TAPER_X0] += 0.5;
+        p10_novel.clamp();
+        let mut p14_novel = Genome::c4_seed(genome::T_MIN);
+        p14_novel.v[EA_IN] = 15.0;
+        p14_novel.v[EA_SP] += 0.25;
+        p14_novel.clamp();
+
+        let parent_identities = round_parent_identities(&[("p10".into(), seed.clone())]);
+        let screened = vec![
+            test_screen_survivor("p10_novel", "p10", p10_novel.clone(), 0.01),
+            test_screen_survivor("p10_novel_duplicate", "p10", p10_novel.clone(), 0.02),
+            test_screen_survivor("p14_novel", "p14", p14_novel.clone(), 0.03),
+            test_screen_survivor("p10_seed", "p10", seed.clone(), 0.04),
+        ];
+
+        let selected = select_stage2_candidates(
+            &screened,
+            5,
+            &HashSet::new(),
+            &parent_identities,
+        );
+
+        assert_eq!(selected.len(), 3);
+        let selected_identities: HashSet<_> = selected
+            .iter()
+            .map(|candidate| certification::identity(&candidate.g))
+            .collect();
+        assert_eq!(selected_identities.len(), selected.len());
+        assert_eq!(selected[0].label, "p10_novel");
+        assert_eq!(selected[1].label, "p14_novel");
+        assert_eq!(selected[2].label, "p10_seed");
+    }
+
+    #[test]
     fn stage2_selection_skips_carried_forward_round1_elites_until_fallback() {
         let mut initial_seed = Genome::c4_seed(genome::T_MIN);
         initial_seed.v[EA_IN] = 14.0;
