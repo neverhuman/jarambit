@@ -1,0 +1,647 @@
+{
+  "best_stage2_26_gate_design": {
+    "certificate_identity": "184dcebbf965ff1f0854d81522fc05a19d612a363f9ceb26af2f310c3b423892",
+    "genome_sha256": "a1e49b43faeceb4672fa81b79fdf092e0e2a8f46d880a9be3d4a61877ef73fb4",
+    "label": "w322_r01_p14_c66",
+    "mass_3d_g": 112.9347,
+    "mass_g": 112.943,
+    "ultralight_fitness_breakdown": {
+      "all_26_legacy_hard_gates_pass": false,
+      "global_weighted_fitness": 71.010933,
+      "legacy_26_gate_breakdown": {
+        "G16-01:cad_watertight_and_single_solid": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": true,
+          "raw": true
+        },
+        "G16-02:geometric_and_holder_gates": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": true,
+          "raw": true
+        },
+        "G16-03:karambit_ring_and_curved_claw": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": true,
+          "raw": true
+        },
+        "G16-04:c6_aesthetic_floor": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": true,
+          "raw": true
+        },
+        "G16-05:cert_hiker_180n": {
+          "deficit": 0.2,
+          "legacy_pass": false,
+          "legacy_threshold": 180.0,
+          "raw": 179.8
+        },
+        "G16-06:cert_hunter_260n": {
+          "deficit": 80.2,
+          "legacy_pass": false,
+          "legacy_threshold": 260.0,
+          "raw": 179.8
+        },
+        "G16-07:strict_hunter_260n": {
+          "deficit": 68.0,
+          "legacy_pass": false,
+          "legacy_threshold": 260.0,
+          "raw": 192.0
+        },
+        "G16-08:cert_ring_pull_1500n": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": 1500.0,
+          "raw": 21892.9
+        },
+        "G16-09:twist_body_1p82nm": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": 1.0,
+          "raw": 3.027
+        },
+        "G16-10:twist_tip_only_1p82nm": {
+          "deficit": 0.764,
+          "legacy_pass": false,
+          "legacy_threshold": 1.0,
+          "raw": 0.236
+        },
+        "G16-11:twist_tip_submodel_strict_1p82nm": {
+          "deficit": 0.713,
+          "legacy_pass": false,
+          "legacy_threshold": 1.0,
+          "raw": 0.287
+        },
+        "G16-12:solid_tip_3d_p2_1p82nm": {
+          "deficit": 0.6494,
+          "legacy_pass": false,
+          "legacy_threshold": 1.0,
+          "raw": 0.3506
+        },
+        "G16-13:side_a4_buckling_and_support": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": 1.0,
+          "raw": 8.4035
+        },
+        "G16-14:failure_sequence_1p2": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": 1.2,
+          "raw": 1.758
+        },
+        "G16-15:plate_gci_valid_3level": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": true,
+          "raw": true
+        },
+        "G16-16:dolfinx_cross_check_2pct": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": 0.02,
+          "raw": 0.001141
+        },
+        "RSV2-01:aesthetic_and_geometric": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": "pass",
+          "raw": "pass"
+        },
+        "RSV2-02:floors_828_joint": {
+          "deficit": 80.2,
+          "legacy_pass": false,
+          "legacy_threshold": 260.0,
+          "raw": 179.8
+        },
+        "RSV2-03:twist_floor_body_and_tipsub_strict": {
+          "deficit": 0.713,
+          "legacy_pass": false,
+          "legacy_threshold": 1.0,
+          "raw": 0.287
+        },
+        "RSV2-04:solid_tip_sf": {
+          "deficit": 0.6494,
+          "legacy_pass": false,
+          "legacy_threshold": 1.0,
+          "raw": 0.3506
+        },
+        "RSV2-05:strict_hunter_lateral": {
+          "deficit": 68.0,
+          "legacy_pass": false,
+          "legacy_threshold": 260.0,
+          "raw": 192.0
+        },
+        "RSV2-06:seq_hard": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": 1.2,
+          "raw": 1.758
+        },
+        "RSV2-07:human_max": {
+          "deficit": 0.9,
+          "legacy_pass": false,
+          "legacy_threshold": {
+            "hm_spine_sf": 1.0,
+            "hm_twist_sf": 1.0,
+            "ring_edge_r_mm": 1.5
+          },
+          "raw": {
+            "hm_spine_sf": 0.35,
+            "hm_twist_sf": 0.1,
+            "ring_edge_r_mm": 1.125
+          }
+        },
+        "RSV2-08:fatigue": {
+          "deficit": 0.4979,
+          "legacy_pass": false,
+          "legacy_threshold": 1.0,
+          "raw": 0.5021
+        },
+        "RSV2-09:gate_s_sharp_law": {
+          "deficit": 3.05,
+          "legacy_pass": false,
+          "legacy_threshold": {
+            "apex_max_mm": 0.2,
+            "half_angle_max_deg": 25.0
+          },
+          "raw": {
+            "apex_max_mm": 0.25,
+            "half_angle_max_deg": 28.0
+          }
+        },
+        "RSV2-10:gate_s_tip_point_brep": {
+          "deficit": 0.4,
+          "legacy_pass": false,
+          "legacy_threshold": {
+            "monotone": true,
+            "t_0p25_mm": 0.3,
+            "t_1p0_mm": 0.6,
+            "t_2p0_mm": 1.0
+          },
+          "raw": {
+            "monotone": false,
+            "t_0p25_mm": 0.45,
+            "t_1p0_mm": 0.85,
+            "t_2p0_mm": 1.4
+          }
+        }
+      },
+      "legacy_hard_gates_failed": [
+        "G16-05:cert_hiker_180n",
+        "G16-06:cert_hunter_260n",
+        "G16-07:strict_hunter_260n",
+        "G16-10:twist_tip_only_1p82nm",
+        "G16-11:twist_tip_submodel_strict_1p82nm",
+        "G16-12:solid_tip_3d_p2_1p82nm",
+        "RSV2-02:floors_828_joint",
+        "RSV2-03:twist_floor_body_and_tipsub_strict",
+        "RSV2-04:solid_tip_sf",
+        "RSV2-05:strict_hunter_lateral",
+        "RSV2-07:human_max",
+        "RSV2-08:fatigue",
+        "RSV2-09:gate_s_sharp_law",
+        "RSV2-10:gate_s_tip_point_brep"
+      ],
+      "legacy_hard_gates_passed_count": 12,
+      "metric": "W_ULTRALIGHT_v1",
+      "objectives": {
+        "bore_collar_comfort": {
+          "normalized_score": 0.875,
+          "weight_pct": 9.0,
+          "weighted_points": 7.875
+        },
+        "c6_aesthetic_and_ergo": {
+          "normalized_score": 1.0,
+          "weight_pct": 9.0,
+          "weighted_points": 9.0
+        },
+        "cad_watertight_brep": {
+          "normalized_score": 1.0,
+          "weight_pct": 5.0,
+          "weighted_points": 5.0
+        },
+        "failure_sequence_1p2": {
+          "normalized_score": 1.0,
+          "weight_pct": 3.5,
+          "weighted_points": 3.5
+        },
+        "gate_s_point_profile": {
+          "normalized_score": 0.521709,
+          "weight_pct": 5.0,
+          "weighted_points": 2.608543
+        },
+        "gate_s_sharpness": {
+          "normalized_score": 0.846429,
+          "weight_pct": 5.0,
+          "weighted_points": 4.232143
+        },
+        "goodman_fatigue_l7": {
+          "normalized_score": 0.502124,
+          "weight_pct": 2.0,
+          "weighted_points": 1.004248
+        },
+        "hiker_lateral_180n": {
+          "normalized_score": 0.998889,
+          "weight_pct": 3.5,
+          "weighted_points": 3.496111
+        },
+        "holder_and_compactness": {
+          "normalized_score": 1.0,
+          "weight_pct": 8.0,
+          "weighted_points": 8.0
+        },
+        "human_max_overload": {
+          "normalized_score": 0.483333,
+          "weight_pct": 2.0,
+          "weighted_points": 0.966667
+        },
+        "hunter_lateral_260n": {
+          "normalized_score": 0.691538,
+          "weight_pct": 2.5,
+          "weighted_points": 1.728846
+        },
+        "karambit_ring_and_claw": {
+          "normalized_score": 1.0,
+          "weight_pct": 7.0,
+          "weighted_points": 7.0
+        },
+        "plate_gci_3level": {
+          "normalized_score": 1.0,
+          "weight_pct": 2.0,
+          "weighted_points": 2.0
+        },
+        "ring_pull_1500n": {
+          "normalized_score": 1.0,
+          "weight_pct": 2.5,
+          "weighted_points": 2.5
+        },
+        "side_a4_buckling": {
+          "normalized_score": 1.0,
+          "weight_pct": 2.0,
+          "weighted_points": 2.0
+        },
+        "solid_tip_3d_p2_and_xcheck": {
+          "normalized_score": 0.3506,
+          "weight_pct": 3.0,
+          "weighted_points": 1.0518
+        },
+        "strict_hunter_260n": {
+          "normalized_score": 0.738462,
+          "weight_pct": 2.0,
+          "weighted_points": 1.476923
+        },
+        "twist_body_1p82nm": {
+          "normalized_score": 1.0,
+          "weight_pct": 2.5,
+          "weighted_points": 2.5
+        },
+        "twist_tip_plate_1p82nm": {
+          "normalized_score": 0.2615,
+          "weight_pct": 2.5,
+          "weighted_points": 0.65375
+        },
+        "ultralight_mass": {
+          "normalized_score": 0.200768,
+          "weight_pct": 22.0,
+          "weighted_points": 4.416901
+        }
+      },
+      "schema": "jarambit.ultralight_weighted_fitness.v1",
+      "score_100": 71.010933,
+      "veto_free_selection": true,
+      "weight_sum_pct": 100.0
+    },
+    "ultralight_weighted_fitness": 71.010933
+  },
+  "generations_completed": 2,
+  "hall_of_fame_best_so_far": {
+    "certificate_identity": "184dcebbf965ff1f0854d81522fc05a19d612a363f9ceb26af2f310c3b423892",
+    "family": "p14",
+    "fat_sf": 0.6900773073050109,
+    "genome_sha256": "a1e49b43faeceb4672fa81b79fdf092e0e2a8f46d880a9be3d4a61877ef73fb4",
+    "label": "w322_r01_p14_c66",
+    "mass_3d_g": 112.9347,
+    "mass_g": 112.943,
+    "qualification_status": "pending independent top-k assessment",
+    "ring_bearing_w_mm": 12.189558209441849,
+    "screen_deficit": 3.309836169066374,
+    "seq_ratio": 1.2865052247131301,
+    "ultralight_fitness_breakdown": {
+      "all_26_legacy_hard_gates_pass": false,
+      "global_weighted_fitness": 71.010933,
+      "legacy_26_gate_breakdown": {
+        "G16-01:cad_watertight_and_single_solid": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": true,
+          "raw": true
+        },
+        "G16-02:geometric_and_holder_gates": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": true,
+          "raw": true
+        },
+        "G16-03:karambit_ring_and_curved_claw": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": true,
+          "raw": true
+        },
+        "G16-04:c6_aesthetic_floor": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": true,
+          "raw": true
+        },
+        "G16-05:cert_hiker_180n": {
+          "deficit": 0.2,
+          "legacy_pass": false,
+          "legacy_threshold": 180.0,
+          "raw": 179.8
+        },
+        "G16-06:cert_hunter_260n": {
+          "deficit": 80.2,
+          "legacy_pass": false,
+          "legacy_threshold": 260.0,
+          "raw": 179.8
+        },
+        "G16-07:strict_hunter_260n": {
+          "deficit": 68.0,
+          "legacy_pass": false,
+          "legacy_threshold": 260.0,
+          "raw": 192.0
+        },
+        "G16-08:cert_ring_pull_1500n": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": 1500.0,
+          "raw": 21892.9
+        },
+        "G16-09:twist_body_1p82nm": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": 1.0,
+          "raw": 3.027
+        },
+        "G16-10:twist_tip_only_1p82nm": {
+          "deficit": 0.764,
+          "legacy_pass": false,
+          "legacy_threshold": 1.0,
+          "raw": 0.236
+        },
+        "G16-11:twist_tip_submodel_strict_1p82nm": {
+          "deficit": 0.713,
+          "legacy_pass": false,
+          "legacy_threshold": 1.0,
+          "raw": 0.287
+        },
+        "G16-12:solid_tip_3d_p2_1p82nm": {
+          "deficit": 0.6494,
+          "legacy_pass": false,
+          "legacy_threshold": 1.0,
+          "raw": 0.3506
+        },
+        "G16-13:side_a4_buckling_and_support": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": 1.0,
+          "raw": 8.4035
+        },
+        "G16-14:failure_sequence_1p2": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": 1.2,
+          "raw": 1.758
+        },
+        "G16-15:plate_gci_valid_3level": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": true,
+          "raw": true
+        },
+        "G16-16:dolfinx_cross_check_2pct": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": 0.02,
+          "raw": 0.001141
+        },
+        "RSV2-01:aesthetic_and_geometric": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": "pass",
+          "raw": "pass"
+        },
+        "RSV2-02:floors_828_joint": {
+          "deficit": 80.2,
+          "legacy_pass": false,
+          "legacy_threshold": 260.0,
+          "raw": 179.8
+        },
+        "RSV2-03:twist_floor_body_and_tipsub_strict": {
+          "deficit": 0.713,
+          "legacy_pass": false,
+          "legacy_threshold": 1.0,
+          "raw": 0.287
+        },
+        "RSV2-04:solid_tip_sf": {
+          "deficit": 0.6494,
+          "legacy_pass": false,
+          "legacy_threshold": 1.0,
+          "raw": 0.3506
+        },
+        "RSV2-05:strict_hunter_lateral": {
+          "deficit": 68.0,
+          "legacy_pass": false,
+          "legacy_threshold": 260.0,
+          "raw": 192.0
+        },
+        "RSV2-06:seq_hard": {
+          "deficit": 0.0,
+          "legacy_pass": true,
+          "legacy_threshold": 1.2,
+          "raw": 1.758
+        },
+        "RSV2-07:human_max": {
+          "deficit": 0.9,
+          "legacy_pass": false,
+          "legacy_threshold": {
+            "hm_spine_sf": 1.0,
+            "hm_twist_sf": 1.0,
+            "ring_edge_r_mm": 1.5
+          },
+          "raw": {
+            "hm_spine_sf": 0.35,
+            "hm_twist_sf": 0.1,
+            "ring_edge_r_mm": 1.125
+          }
+        },
+        "RSV2-08:fatigue": {
+          "deficit": 0.4979,
+          "legacy_pass": false,
+          "legacy_threshold": 1.0,
+          "raw": 0.5021
+        },
+        "RSV2-09:gate_s_sharp_law": {
+          "deficit": 3.05,
+          "legacy_pass": false,
+          "legacy_threshold": {
+            "apex_max_mm": 0.2,
+            "half_angle_max_deg": 25.0
+          },
+          "raw": {
+            "apex_max_mm": 0.25,
+            "half_angle_max_deg": 28.0
+          }
+        },
+        "RSV2-10:gate_s_tip_point_brep": {
+          "deficit": 0.4,
+          "legacy_pass": false,
+          "legacy_threshold": {
+            "monotone": true,
+            "t_0p25_mm": 0.3,
+            "t_1p0_mm": 0.6,
+            "t_2p0_mm": 1.0
+          },
+          "raw": {
+            "monotone": false,
+            "t_0p25_mm": 0.45,
+            "t_1p0_mm": 0.85,
+            "t_2p0_mm": 1.4
+          }
+        }
+      },
+      "legacy_hard_gates_failed": [
+        "G16-05:cert_hiker_180n",
+        "G16-06:cert_hunter_260n",
+        "G16-07:strict_hunter_260n",
+        "G16-10:twist_tip_only_1p82nm",
+        "G16-11:twist_tip_submodel_strict_1p82nm",
+        "G16-12:solid_tip_3d_p2_1p82nm",
+        "RSV2-02:floors_828_joint",
+        "RSV2-03:twist_floor_body_and_tipsub_strict",
+        "RSV2-04:solid_tip_sf",
+        "RSV2-05:strict_hunter_lateral",
+        "RSV2-07:human_max",
+        "RSV2-08:fatigue",
+        "RSV2-09:gate_s_sharp_law",
+        "RSV2-10:gate_s_tip_point_brep"
+      ],
+      "legacy_hard_gates_passed_count": 12,
+      "metric": "W_ULTRALIGHT_v1",
+      "objectives": {
+        "bore_collar_comfort": {
+          "normalized_score": 0.875,
+          "weight_pct": 9.0,
+          "weighted_points": 7.875
+        },
+        "c6_aesthetic_and_ergo": {
+          "normalized_score": 1.0,
+          "weight_pct": 9.0,
+          "weighted_points": 9.0
+        },
+        "cad_watertight_brep": {
+          "normalized_score": 1.0,
+          "weight_pct": 5.0,
+          "weighted_points": 5.0
+        },
+        "failure_sequence_1p2": {
+          "normalized_score": 1.0,
+          "weight_pct": 3.5,
+          "weighted_points": 3.5
+        },
+        "gate_s_point_profile": {
+          "normalized_score": 0.521709,
+          "weight_pct": 5.0,
+          "weighted_points": 2.608543
+        },
+        "gate_s_sharpness": {
+          "normalized_score": 0.846429,
+          "weight_pct": 5.0,
+          "weighted_points": 4.232143
+        },
+        "goodman_fatigue_l7": {
+          "normalized_score": 0.502124,
+          "weight_pct": 2.0,
+          "weighted_points": 1.004248
+        },
+        "hiker_lateral_180n": {
+          "normalized_score": 0.998889,
+          "weight_pct": 3.5,
+          "weighted_points": 3.496111
+        },
+        "holder_and_compactness": {
+          "normalized_score": 1.0,
+          "weight_pct": 8.0,
+          "weighted_points": 8.0
+        },
+        "human_max_overload": {
+          "normalized_score": 0.483333,
+          "weight_pct": 2.0,
+          "weighted_points": 0.966667
+        },
+        "hunter_lateral_260n": {
+          "normalized_score": 0.691538,
+          "weight_pct": 2.5,
+          "weighted_points": 1.728846
+        },
+        "karambit_ring_and_claw": {
+          "normalized_score": 1.0,
+          "weight_pct": 7.0,
+          "weighted_points": 7.0
+        },
+        "plate_gci_3level": {
+          "normalized_score": 1.0,
+          "weight_pct": 2.0,
+          "weighted_points": 2.0
+        },
+        "ring_pull_1500n": {
+          "normalized_score": 1.0,
+          "weight_pct": 2.5,
+          "weighted_points": 2.5
+        },
+        "side_a4_buckling": {
+          "normalized_score": 1.0,
+          "weight_pct": 2.0,
+          "weighted_points": 2.0
+        },
+        "solid_tip_3d_p2_and_xcheck": {
+          "normalized_score": 0.3506,
+          "weight_pct": 3.0,
+          "weighted_points": 1.0518
+        },
+        "strict_hunter_260n": {
+          "normalized_score": 0.738462,
+          "weight_pct": 2.0,
+          "weighted_points": 1.476923
+        },
+        "twist_body_1p82nm": {
+          "normalized_score": 1.0,
+          "weight_pct": 2.5,
+          "weighted_points": 2.5
+        },
+        "twist_tip_plate_1p82nm": {
+          "normalized_score": 0.2615,
+          "weight_pct": 2.5,
+          "weighted_points": 0.65375
+        },
+        "ultralight_mass": {
+          "normalized_score": 0.200768,
+          "weight_pct": 22.0,
+          "weighted_points": 4.416901
+        }
+      },
+      "schema": "jarambit.ultralight_weighted_fitness.v1",
+      "score_100": 71.010933,
+      "veto_free_selection": true,
+      "weight_sum_pct": 100.0
+    },
+    "ultralight_weighted_fitness": 71.010933
+  },
+  "metric": "W_ULTRALIGHT_v1",
+  "schema": "jarambit.ultralight_best_so_far.v1"
+}
