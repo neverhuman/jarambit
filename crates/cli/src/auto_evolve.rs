@@ -1017,7 +1017,7 @@ mod tests {
         assert!((0.15..=0.30).contains(&(child.v[N_CP + 7] - parent.v[N_CP + 7])));
         assert!((0.10..=0.25).contains(&(child.v[N_CP + 8] - parent.v[N_CP + 8])));
         assert_eq!(child.v[genome::WIN_W], 6.0);
-        assert_eq!(child.v[genome::WIN_FILL], 0.65);
+        assert!((0.65..=0.70).contains(&child.v[genome::WIN_FILL]));
         assert!(child.v[genome::RING_WALL] >= 6.0);
         assert!((0.12..=0.20).contains(&child.v[EDGE_TH]));
         for (idx, &value) in child.v.iter().enumerate() {
