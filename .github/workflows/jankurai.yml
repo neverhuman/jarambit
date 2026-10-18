@@ -1,0 +1,56 @@
+name: jankurai
+
+on:
+  pull_request:
+  push:
+    branches: [main, 'release/**']
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jankurai-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  audit:
+    name: jankurai repo score & repair queue
+    runs-on: [self-hosted, linux, x64, xbabe, general]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Run jankurai audit (report + repair queue)
+        run: |
+          mkdir -p .jankurai
+          JANKURAI_BIN="/home/ubuntu/.jeryu/bin/jankurai"
+          if [ ! -x "$JANKURAI_BIN" ]; then
+            JANKURAI_BIN="$(command -v jankurai || true)"
+          fi
+          test -x "$JANKURAI_BIN"
+          "$JANKURAI_BIN" --version
+          "$JANKURAI_BIN" audit . \
+            --mode standard \
+            --no-badge \
+            --no-score-history \
+            --json .jankurai/repo-score.json \
+            --md .jankurai/repo-score.md \
+            --github-step-summary "${GITHUB_STEP_SUMMARY:-.jankurai/summary.md}" \
+            --repair-queue-jsonl .jankurai/repair-queue.jsonl || true
+          test -s .jankurai/repo-score.json
+          test -s .jankurai/repo-score.md
+          test -f .jankurai/repair-queue.jsonl
+      - name: Upload jankurai audit artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: jankurai-audit-report
+          path: |
+            .jankurai/repo-score.json
+            .jankurai/repo-score.md
+            .jankurai/repair-queue.jsonl
+          if-no-files-found: error
