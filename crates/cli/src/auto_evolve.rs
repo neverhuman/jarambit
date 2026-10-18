@@ -1488,6 +1488,28 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_handles_identical_gene_vectors_with_zero_novelty_distance() {
+        let mut identical = Genome::c4_seed(genome::T_MIN);
+        identical.v[EA_IN] = 14.0;
+        identical.clamp();
+        let screened = vec![
+            test_screen_survivor("index_0", "p10", identical.clone(), 0.01),
+            test_screen_survivor("index_1", "p14", identical.clone(), 0.02),
+            test_screen_survivor("index_2", "p18", identical.clone(), 0.03),
+        ];
+        assert!(screened.iter().all(|candidate| candidate.g.v == identical.v));
+
+        let first = select_stage2_candidates(&screened, 3, &HashSet::new(), &HashSet::new());
+        let second = select_stage2_candidates(&screened, 3, &HashSet::new(), &HashSet::new());
+
+        assert_eq!(first.len(), 1);
+        assert_eq!(first[0].label, "index_0");
+        assert_eq!(first[0].g.v, identical.v);
+        let repeated_labels: Vec<_> = second.iter().map(|candidate| candidate.label.as_str()).collect();
+        assert_eq!(repeated_labels, ["index_0"]);
+    }
+
+    #[test]
     fn stage2_selection_preserves_distinct_indices_and_inputs_across_mixed_pools() {
         let mut p10_seed = Genome::c4_seed(genome::T_MIN);
         p10_seed.v[EA_IN] = 14.0;
