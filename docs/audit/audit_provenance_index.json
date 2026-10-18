@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "task": "G16-12-RSV2-04-p32",
+  "task": "G16-12-RSV2-04-p33",
   "status": "IN_PROGRESS",
   "qualified_count": 0,
-  "report_count": 22,
+  "report_count": 23,
   "reports": [
     {
       "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V5_REPORT.md",
@@ -224,6 +224,16 @@
       "table_schema_sha256": "10c28520d2511883bdd4401d90ed1a5f40c55a50177da02f5f09506ed3cca17b",
       "status": "IN_PROGRESS",
       "qualified_count": 0
+    },
+    {
+      "path": "docs/audit/BATTERY_G1_SOURCE_PROVENANCE_AUDIT.md",
+      "sha256": "36150375fd1519f8edf65e9408e9817f5d2bfe5ec3ace1144cabf1f86c427b85",
+      "bytes": 3392,
+      "lines": 27,
+      "tables": 1,
+      "table_schema_sha256": "10c28520d2511883bdd4401d90ed1a5f40c55a50177da02f5f09506ed3cca17b",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
     }
   ],
   "supplemental_documents": [
@@ -267,6 +277,12 @@
       "path": "docs/audit/aesthetic_gci_source_provenance_audit.json",
       "sha256": "ab84f29ba3d5a3b4e403eef1b001031c567883ea990289e9041b6e065d0c0db5",
       "bytes": 608,
+      "lines": 23
+    },
+    {
+      "path": "docs/audit/battery_g1_source_provenance_audit.json",
+      "sha256": "2be35162fad5e36f5150bba2775dfc80ef57f7e6ace40da42a673b31a729ce4d",
+      "bytes": 607,
       "lines": 23
     }
   ]
