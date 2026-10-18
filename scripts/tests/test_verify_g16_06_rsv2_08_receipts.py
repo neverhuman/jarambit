@@ -177,7 +177,8 @@ class MarkdownReportIndexTests(unittest.TestCase):
             root = Path(temp)
             files = [r['path'] for r in audit.strict_json((ROOT / audit.INVENTORY).read_bytes())['files']]
             files += [r['path'] for r in self.document()['files']]
-            for relative in [*files, audit.INVENTORY.as_posix(), audit.MARKDOWN_INDEX.as_posix(), audit.CROSS_CHECK.as_posix()]:
+            for relative in [*files, audit.INVENTORY.as_posix(), audit.MARKDOWN_INDEX.as_posix(), audit.CROSS_CHECK.as_posix(),
+                             audit.SCRIPT_INVENTORY.as_posix(), *audit.SCRIPT_FILES]:
                 target = root / relative; target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(ROOT / relative, target)
             self.assertFalse((root / '.git').exists()); self.assertFalse((root / 'target').exists())
@@ -190,6 +191,7 @@ class MarkdownReportIndexTests(unittest.TestCase):
                 result = audit.verify_all(root)
                 self.assertEqual(result['markdown_reports']['status'],'pass')
                 self.assertEqual(result['inventory_cross_check']['unique_members'],30)
+                self.assertEqual(result['script_test_inventory']['files'],2)
             victim = root / self.document()['files'][0]['path']; original = victim.read_bytes()
             def absent(path, *args, **kwargs):
                 if path == victim: raise FileNotFoundError(path)
@@ -260,6 +262,84 @@ class InventoryCrossCheckTests(unittest.TestCase):
         d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
         self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
         for path in [ROOT / audit.CROSS_CHECK, ROOT / audit.INVENTORY.parent / 'PHASE23.md']:
+            self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
+
+
+class ScriptTestInventoryTests(unittest.TestCase):
+    def document(self):
+        return audit.strict_json((ROOT / audit.SCRIPT_INVENTORY).read_bytes())
+
+    def test_exact_script_hashes_sizes_and_ast_counts(self):
+        d = self.document()
+        self.assertEqual([row['path'] for row in d['files']],list(audit.SCRIPT_FILES))
+        self.assertEqual(d['file_count'],2)
+        for row in d['files']:
+            data = (ROOT / row['path']).read_bytes()
+            self.assertEqual(row['sha256'],audit.digest(data)); self.assertEqual(row['bytes'],len(data))
+            self.assertEqual(row['ast_test_method_count'],audit.ast_test_method_count(data))
+        self.assertEqual(d['files'][0]['ast_test_method_count'],0)
+        discovered = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__]).countTestCases()
+        self.assertEqual(d['files'][1]['ast_test_method_count'],discovered)
+        self.assertEqual(audit.verify_script_inventory()['status'],'pass')
+
+    def test_ast_counts_direct_sync_async_and_decorated_methods_without_execution(self):
+        source = b'''raise RuntimeError("Must never execute")
+def test_top_level(): pass
+class Example:
+    def test_sync(self): pass
+    async def test_async(self): pass
+    @unknown_decorator
+    def test_decorated(self): pass
+    def helper(self):
+        def test_nested_function(): pass
+'''
+        self.assertEqual(audit.ast_test_method_count(source),3)
+
+    def test_invalid_python_syntax_is_rejected(self):
+        with self.assertRaises(SyntaxError):
+            audit.ast_test_method_count(b'def broken(')
+
+    def test_forged_bytes_hash_count_and_coverage_rejected(self):
+        for key,value in [('bytes',0),('sha256','0'*64),('ast_test_method_count',0),('valid_python_ast',False)]:
+            d = self.document(); d['files'][1][key] = value
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError,'Script inventory'):
+                audit.verify_script_inventory(document=d)
+        d = self.document(); d['files'].pop()
+        with self.assertRaisesRegex(ValueError,'Script inventory'):
+            audit.verify_script_inventory(document=d)
+
+    def test_relocated_read_only_missing_and_changed_script(self):
+        base = ROOT / 'target/G16-06-RSV2-08/phase25'; base.mkdir(parents=True,exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=base) as temp:
+            root = Path(temp)
+            for relative in [*audit.SCRIPT_FILES,audit.SCRIPT_INVENTORY.as_posix()]:
+                target = root / relative; target.parent.mkdir(parents=True,exist_ok=True)
+                shutil.copyfile(ROOT / relative,target)
+            self.assertFalse((root / '.git').exists()); self.assertFalse((root / 'target').exists())
+            real = Path.open
+            def guarded(path,mode='r',*args,**kwargs):
+                if not path.is_relative_to(root) or any(c in mode for c in 'wax+'):
+                    raise AssertionError('Nonlocal read or write')
+                return real(path,mode,*args,**kwargs)
+            with patch.object(Path,'open',new=guarded), patch.dict('os.environ',{},clear=True), patch('subprocess.run',side_effect=AssertionError('Process launch')):
+                self.assertEqual(audit.verify_script_inventory(root)['status'],'pass')
+            victim = root / audit.SCRIPT_FILES[0]
+            def absent(path,*args,**kwargs):
+                if path == victim: raise FileNotFoundError(path)
+                return real(path,*args,**kwargs)
+            with patch.object(Path,'open',new=absent), self.assertRaises(FileNotFoundError):
+                audit.verify_script_inventory(root)
+            victim.write_bytes(victim.read_bytes()+b'\n# Byte change without AST method change\n')
+            with self.assertRaisesRegex(ValueError,'Script inventory'):
+                audit.verify_script_inventory(root)
+            victim.write_bytes(b'def broken(')
+            with self.assertRaises(SyntaxError):
+                audit.verify_script_inventory(root)
+
+    def test_static_scope_and_output_host_path_scan(self):
+        d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
+        self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
+        for path in [ROOT / audit.SCRIPT_INVENTORY,ROOT / audit.INVENTORY.parent / 'PHASE24.md']:
             self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
 
 

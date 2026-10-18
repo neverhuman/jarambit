@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Read-only verification of tracked JSON and Markdown snapshots; no numerical work."""
 import argparse
+import ast
 import fnmatch
 import hashlib
 import json
@@ -19,6 +20,9 @@ MARKDOWN_PATHS_SHA256 = '1ab223e05331f03aec309f5d1d281262f82d143734a0d66593a7a05
 MARKDOWN_INDEX_SHA256 = '7c81cebd99494529cbc1978df11ffc3f0136b2f837f42232d816ef7239df5f5a'
 CROSS_CHECK = INVENTORY.parent / 'phase23_inventory_cross_check_audit.json'
 CROSS_CHECK_SHA256 = '5d6c1e1b4046a537ccbecd7f64a9e887b2aa384dd8eed5fdb0b15acbc76e1784'
+SCRIPT_INVENTORY = INVENTORY.parent / 'phase24_script_test_inventory_audit.json'
+SCRIPT_FILES = ('scripts/verify_g16_06_rsv2_08_receipts.py',
+                'scripts/tests/test_verify_g16_06_rsv2_08_receipts.py')
 HOST_PATH_PATTERN = re.compile(r'/(?:home|Users|tmp|root|var/tmp|private/tmp)/|[A-Za-z]:[\\/](?:Users|Temp)[\\/]')
 
 
@@ -219,10 +223,46 @@ def verify_cross_check(root=ROOT, document=None):
                 overlap_count=0, digest_mismatch_count=0, exact_digest_parity=True)
 
 
+def ast_test_method_count(data):
+    tree = ast.parse(data)
+    return sum(isinstance(method, (ast.FunctionDef, ast.AsyncFunctionDef))
+               and method.name.startswith('test_')
+               for node in ast.walk(tree) if isinstance(node, ast.ClassDef)
+               for method in node.body)
+
+
+def generate_script_inventory(root):
+    root = Path(root)
+    files = []
+    for relative in SCRIPT_FILES:
+        data = (root / relative).read_bytes()
+        files.append(dict(path=relative, bytes=len(data), sha256=digest(data),
+                          valid_python_ast=True, ast_test_method_count=ast_test_method_count(data)))
+    return dict(task='G16-06-RSV2-08-p25', study_phase=24,
+                scope='Exact final verifier and test source bytes; AST only, no source execution.',
+                test_method_definition='Direct class FunctionDef/AsyncFunctionDef declarations whose names start with test_; standalone and nested helper functions excluded.',
+                file_count=len(files), total_bytes=sum(row['bytes'] for row in files),
+                total_ast_test_method_count=sum(row['ast_test_method_count'] for row in files),
+                engineering_qualification_assessed=False, qualified_count=0, full_qualification=False,
+                files=files)
+
+
+def verify_script_inventory(root=ROOT, document=None):
+    root = Path(root)
+    if document is None:
+        document = strict_json((root / SCRIPT_INVENTORY).read_bytes())
+    actual = generate_script_inventory(root)
+    if document != actual:
+        raise ValueError('Script inventory size, SHA-256, AST method count or metadata mismatch')
+    return dict(status='pass', files=actual['file_count'], bytes=actual['total_bytes'],
+                ast_test_method_count=actual['total_ast_test_method_count'])
+
+
 def verify_all(root=ROOT):
     result = verify(root)
     result['markdown_reports'] = verify_markdown(root)
     result['inventory_cross_check'] = verify_cross_check(root)
+    result['script_test_inventory'] = verify_script_inventory(root)
     return result
 
 
@@ -231,6 +271,7 @@ def main():
     parser.add_argument('--write', action='store_true', help='Generate the frozen inventory using read-only Git discovery')
     parser.add_argument('--write-markdown', action='store_true', help='Generate the Markdown index at its pinned baseline')
     parser.add_argument('--write-cross-check', action='store_true', help='Generate the cross-check from the two unchanged frozen indexes')
+    parser.add_argument('--write-script-inventory', action='store_true', help='Inventory final script bytes and AST test declarations')
     args = parser.parse_args()
     if args.write:
         import subprocess
@@ -248,6 +289,8 @@ def main():
         (ROOT / MARKDOWN_INDEX).write_text(json.dumps(generate_markdown(ROOT, paths), indent=2, allow_nan=False) + '\n')
     if args.write_cross_check:
         (ROOT / CROSS_CHECK).write_text(json.dumps(generate_cross_check(ROOT), indent=2, allow_nan=False) + '\n')
+    if args.write_script_inventory:
+        (ROOT / SCRIPT_INVENTORY).write_text(json.dumps(generate_script_inventory(ROOT), indent=2, allow_nan=False) + '\n')
     print(json.dumps(verify_all(), sort_keys=True, allow_nan=False))
 
 
