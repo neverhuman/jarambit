@@ -19,6 +19,7 @@ import audit_phase12_cross_wave as cross_wave_audit
 import audit_phase13_screen_rounds as screen_audit
 import audit_phase14_w319_receipts as w319_audit
 import audit_phase15_gate_s_and_margins as phase15_audit
+import audit_phase16_xbabe3_waves as xbabe3_audit
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -935,6 +936,218 @@ class Phase15GateSMarginAuditTests(unittest.TestCase):
         with patch.object(Path, "read_bytes") as read_mock, self.assertRaisesRegex(ValueError, "Invalid pinned artifact path"):
             phase15_audit.audit_directories({"w319": directory}, {"w319": {"../unsafe": ("a" * 64, 0)}})
         read_mock.assert_not_called()
+
+
+class Phase16Xbabe3WaveAuditTests(unittest.TestCase):
+    def setUp(self):
+        self.waves = {}
+        for wave in xbabe3_audit.WAVES:
+            documents, designs, errors = {}, [], []
+            for round_id in range(3):
+                births, screens = [], []
+                for slot in (1, 2):
+                    identity = hashlib.sha256(f"{wave}-{round_id}-{slot}".encode()).hexdigest()
+                    label = f"{wave}_r{round_id + 1:02}_fixture_c{slot:02}"
+                    births.append({"family": "fixture", "certificate_identity": identity, "row": f"{round_id},{slot}"})
+                    screens.append({**dict.fromkeys(wave_audit.SCREEN_NUMBERS, 0.0), "family": "fixture",
+                                    "certificate_identity": identity, "label": label, "qualification_status": wave_audit.PENDING})
+                    if wave == "w407c3" and round_id == 1 and slot == 2:
+                        errors.append({"label": label, "certificate_identity": identity, "status": "unverified", "reason": "synthetic error"})
+                    else:
+                        designs.append({**dict.fromkeys(wave_audit.DESIGN_NUMBERS, 0.0), "label": label, "family": "fixture",
+                                        "certificate_identity": identity, "qualified": False, "all_16_gates": False,
+                                        "rs_v2_all_hard": False, "battery_pass_count": 0, "genome_csv": "fixture.csv", "scorecard_md": "fixture.md"})
+                documents[f"round_{round_id:02}_births.json"] = {"round": round_id, "seed": 1, "source": "synthetic",
+                    "genome_header": "a,b", "genomes": births}
+                documents[f"round_{round_id:02}_screen.json"] = screens
+            documents["leaderboard.json"] = {"schema": "jarambit.auto_evolve.leaderboard.v2", "designs": designs,
+                "assessed_count": len(designs), "qualified_count": 0, "champion": None, "unverified": errors}
+            documents["leaderboard.md"] = "# Evolution certification attempts\n\n| " + " | ".join(w319_audit.BOARD_HEADER) + " |\n"
+            documents["leaderboard.md"] += "|" + "|".join(["---"] * 8) + "|\n"
+            documents["leaderboard.md"] += "".join(f"| `{d['label']}` | false | opaque | opaque | opaque | opaque | false | opaque |\n" for d in designs)
+            result = f"# {wave} RESULT synthetic fixture\n\nSource `leaderboard.json` (schema jarambit.auto_evolve.leaderboard.v2): assessed {len(designs)}, qualified 0, unverified {len(errors)}\n\n"
+            result += "| " + " | ".join(xbabe3_audit.RESULT_HEADER) + " |\n|" + "|".join(["---"] * 13) + "|\n"
+            result += "".join("| " + " | ".join([d["label"], "False"] + ["opaque"] * 8 + ["False", "False", "opaque"]) + " |\n" for d in designs)
+            result += "\n" + "\n".join(f"- unverified: {e['label']}: {e['reason']}" for e in errors)
+            result += f"\n\n**Summary: assessed {len(designs)}, qualified 0; fixture metadata**\n"
+            documents["RESULT.md"] = result
+            self.waves[wave] = documents
+
+    def payloads(self):
+        files = {wave: {name: (json.dumps(doc, sort_keys=True).encode() if name.endswith(".json") else doc.encode())
+                        for name, doc in documents.items()} for wave, documents in self.waves.items()}
+        pins = {wave: {name: (hashlib.sha256(data).hexdigest(), len(data)) for name, data in wave_files.items()}
+                for wave, wave_files in files.items()}
+        return files, pins
+
+    def test_41_assessments_and_one_separate_unverified_attempt(self):
+        result = xbabe3_audit.audit_payloads(*self.payloads())
+        self.assertEqual(result["totals"], {"births": 42, "screens": 42, "assessed": 41, "qualified": 0, "unverified": 1})
+        self.assertEqual(result["verified_files"], 63)
+        self.assertEqual(result["standalone"], ["w405c3"])
+        self.assertEqual(len(result["pairs"]), 3)
+        self.assertEqual(result["waves"]["w407c3"]["assessed"], 5)
+        self.assertNotIn("structural_comparison", result)
+
+    def test_all_three_rounds_are_accounted_for(self):
+        counts = xbabe3_audit.audit_documents("w406c3", self.waves["w406c3"])
+        self.assertEqual(counts["rounds"], {str(r): {"births": 2, "screens": 2} for r in range(3)})
+        del self.waves["w406c3"]["round_02_screen.json"]
+        with self.assertRaisesRegex(ValueError, "Exactly nine"):
+            xbabe3_audit.audit_documents("w406c3", self.waves["w406c3"])
+
+    def test_each_of_63_artifacts_rejects_byte_tampering(self):
+        files, pins = self.payloads()
+        for wave, wave_files in files.items():
+            for name, original in list(wave_files.items()):
+                wave_files[name] = original + b" "
+                with self.subTest(wave=wave, name=name), self.assertRaisesRegex(ValueError, "SHA-256/size mismatch"):
+                    xbabe3_audit.audit_payloads(files, pins)
+                wave_files[name] = original
+
+    def test_missing_wave_file_and_extra_round_fail(self):
+        files, pins = self.payloads()
+        changed = dict(files)
+        del changed["w408t3"]
+        with self.assertRaisesRegex(ValueError, "Exactly seven"):
+            xbabe3_audit.audit_payloads(changed, pins)
+        files["w408t3"].pop("RESULT.md")
+        with self.assertRaisesRegex(ValueError, "Exactly nine"):
+            xbabe3_audit.audit_payloads(files, pins)
+        files, pins = self.payloads()
+        files["w408t3"]["round_03_screen.json"] = b"[]"
+        with self.assertRaisesRegex(ValueError, "Exactly nine"):
+            xbabe3_audit.audit_payloads(files, pins)
+
+    def test_malformed_digest_and_size_pins_fail(self):
+        files, pins = self.payloads()
+        for pin in [("A" * 64, 0), ("a" * 64, True), ("a" * 64, -1)]:
+            pins["w408t3"]["RESULT.md"] = pin
+            with self.subTest(pin=pin), self.assertRaises(ValueError):
+                xbabe3_audit.audit_payloads(files, pins)
+
+    def test_screen_must_match_exact_birth_position(self):
+        docs = self.waves["w406c3"]
+        docs["round_00_screen.json"][0]["certificate_identity"] = docs["round_00_births.json"]["genomes"][1]["certificate_identity"]
+        with self.assertRaisesRegex(ValueError, "birth slot mismatch"):
+            xbabe3_audit.audit_payloads(*self.payloads())
+
+    def test_assessed_and_screen_identity_must_match(self):
+        self.waves["w406c3"]["leaderboard.json"]["designs"][0]["certificate_identity"] = "a" * 64
+        with self.assertRaisesRegex(ValueError, "identity/screen mismatch"):
+            xbabe3_audit.audit_payloads(*self.payloads())
+
+    def test_zero_qualification_champion_and_boolean_counts_fail_closed(self):
+        board = self.waves["w406c3"]["leaderboard.json"]
+        for key, value in [("qualified_count", False), ("qualified_count", 1), ("champion", {}), ("assessed_count", True), ("assessed_count", 5)]:
+            original = board[key]
+            board[key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                xbabe3_audit.audit_payloads(*self.payloads())
+            board[key] = original
+        board["designs"][0]["qualified"] = True
+        with self.assertRaisesRegex(ValueError, "boolean false"):
+            xbabe3_audit.audit_payloads(*self.payloads())
+
+    def test_unverified_attempt_cannot_be_lost_or_mislinked(self):
+        board = self.waves["w407c3"]["leaderboard.json"]
+        error = board["unverified"][0]
+        board["unverified"] = []
+        with self.assertRaisesRegex(ValueError, "Unverified attempt count"):
+            xbabe3_audit.audit_payloads(*self.payloads())
+        board["unverified"] = [error]
+        for key, value in [("certificate_identity", "a" * 64), ("status", "qualified"), ("reason", "")]:
+            original = error[key]
+            error[key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                xbabe3_audit.audit_payloads(*self.payloads())
+            error[key] = original
+
+    def test_both_markdown_tables_reject_flags_labels_and_missing_rows(self):
+        docs = self.waves["w406c3"]
+        for name in ("leaderboard.md", "RESULT.md"):
+            original = docs[name]
+            label = docs["leaderboard.json"]["designs"][0]["label"]
+            first_row = next(line for line in original.splitlines() if label in line and line.startswith("|"))
+            for changed in [original.replace(label, "wrong_label", 1), original.replace(first_row + "\n", ""),
+                            original.replace("| false |", "| true |", 1) if name == "leaderboard.md" else original.replace("| False |", "| True |", 1)]:
+                docs[name] = changed
+                with self.subTest(name=name, changed=changed), self.assertRaisesRegex(ValueError, "[Mm]arkdown"):
+                    xbabe3_audit.audit_payloads(*self.payloads())
+            docs[name] = original
+
+    def test_result_source_summary_and_error_reporting_must_agree(self):
+        docs = self.waves["w407c3"]
+        original = docs["RESULT.md"]
+        variants = [original.replace("assessed 5, qualified 0, unverified 1", "assessed 6, qualified 0, unverified 0"),
+                    original.replace("**Summary: assessed 5", "**Summary: assessed 6"),
+                    original.replace("- unverified:", "- hidden attempt:")]
+        for changed in variants:
+            docs["RESULT.md"] = changed
+            with self.subTest(changed=changed), self.assertRaisesRegex(ValueError, "RESULT"):
+                xbabe3_audit.audit_payloads(*self.payloads())
+
+    def test_malformed_round_csv_and_duplicate_screen_label_fail(self):
+        docs = self.waves["w406t3"]
+        docs["round_00_births.json"]["genomes"][0]["row"] = "single-column"
+        with self.assertRaisesRegex(ValueError, "CSV/header width"):
+            xbabe3_audit.audit_payloads(*self.payloads())
+        docs["round_00_births.json"]["genomes"][0]["row"] = "0,1"
+        docs["round_00_screen.json"].append(deepcopy(docs["round_00_screen.json"][0]))
+        with self.assertRaisesRegex(ValueError, "Duplicate screen"):
+            xbabe3_audit.audit_payloads(*self.payloads())
+
+    def test_relocated_cli_without_git_or_host_archive(self):
+        files, pins = self.payloads()
+        root, reads, output = Path("/portable/xbabe3/out"), [], io.StringIO()
+
+        def read(path):
+            wave, name = path.relative_to(root).parts
+            reads.append((wave, name))
+            return files[wave][name]
+
+        def glob(path, pattern):
+            return [path / name for name in xbabe3_audit.ROUND_NAMES if name.endswith(pattern.removeprefix("round_*"))]
+
+        with patch.object(Path, "glob", new=glob), patch.object(Path, "read_bytes", new=read), \
+                patch.object(xbabe3_audit, "PINS", pins), \
+                patch.object(wave_audit, "default_wave_directory", side_effect=AssertionError("Unexpected Git discovery")), \
+                patch.object(sys, "argv", ["audit_phase16_xbabe3_waves.py", "--out-root", str(root)]), redirect_stdout(output):
+            xbabe3_audit.main()
+        self.assertEqual(len(reads), 126)
+        self.assertEqual(len(set(reads)), 63)
+        self.assertIn("41 assessed rows; 1 separate unverified attempt", output.getvalue())
+        self.assertIn("paired structural metrics NOT ASSESSED", output.getvalue())
+
+    def test_inventory_and_bytes_changed_during_audit_fail(self):
+        files, pins = self.payloads()
+        root = Path("/portable/xbabe3/out")
+        for mode in ("inventory", "bytes"):
+            reads, globs = {}, []
+
+            def read(path):
+                wave, name = path.relative_to(root).parts
+                reads[path] = reads.get(path, 0) + 1
+                return files[wave][name] + (b" " if mode == "bytes" and reads[path] > 1 else b"")
+
+            def glob(path, pattern):
+                globs.append(path)
+                names = [path / name for name in xbabe3_audit.ROUND_NAMES if name.endswith(pattern.removeprefix("round_*"))]
+                if mode == "inventory" and len(globs) > 14:
+                    names.append(path / "round_03_births.json")
+                return names
+
+            with self.subTest(mode=mode), patch.object(Path, "glob", new=glob), patch.object(Path, "read_bytes", new=read), \
+                    self.assertRaisesRegex(ValueError, "changed during audit"):
+                xbabe3_audit.audit_root(root, pins)
+
+    def test_duplicate_or_nonfinite_json_fails_with_matching_digest(self):
+        files, pins = self.payloads()
+        for data in (b'{"schema":1,"schema":2}', b'{"bad":NaN}', b'{"bad":1e999}'):
+            files["w405c3"]["leaderboard.json"] = data
+            pins["w405c3"]["leaderboard.json"] = (hashlib.sha256(data).hexdigest(), len(data))
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                xbabe3_audit.audit_payloads(files, pins)
 
 
 if __name__ == "__main__":

@@ -2182,6 +2182,7 @@
     "experiments/rsv2_07/PHASE13_STAGE1_SCREEN_TRAJECTORY_AUDIT.md": "c49c3f58164fffa46abe72f2d8901fab78dfcd78932bf5be6620d3fbfc34682c",
     "experiments/rsv2_07/PHASE14_W319_WAVE_RECEIPT_AUDIT.md": "a4c203d49dc1279e3c713280e146e1e2f5840b98021a8dfd312583291158e696",
     "experiments/rsv2_07/PHASE15_GATE_S_AND_MARGIN_PROGRESSION_AUDIT.md": "0def6f2a92511e2f4d5e998aa892c8b1cba2d26da39c4405310ecd8851059a29",
+    "experiments/rsv2_07/PHASE16_XBABE3_PAIRED_WAVE_RECEIPT_AUDIT.md": "700d9238fb9e7d01c8a842a0819aab5c93150751b3b40f9c88ecb620ebeb4613",
     "experiments/rsv2_07/PHASE5_WITNESS_3D_VERIFICATION.md": "9f3fa6c59aad71708143b5a469de23301fe8f9aa5e7d8d3750f637de8e729624",
     "experiments/rsv2_07/PHASE6_UNIFIED_SCORECARD.md": "a425b66d675208c7fffa17e075605bcfbddd234f82456422c1b5d99783799e30",
     "experiments/rsv2_07/PHASE7_SAVED_TRIPLET_GCI_AUDIT.md": "cc945cb4a6f61f147b7f6cadf52ae100c3d66373526a6f0d02d3da7f50fa620b",
@@ -2193,6 +2194,7 @@
     "experiments/rsv2_07/audit_phase13_screen_rounds.py": "7fd0115921247483461e86288c4cc11ef5efe21c5e7df85560486ebe2e893b7c",
     "experiments/rsv2_07/audit_phase14_w319_receipts.py": "36a3ee7242f3723122eb44cb6ec52d99b2f3ed06e0d6ba1ed37d62eac89fb175",
     "experiments/rsv2_07/audit_phase15_gate_s_and_margins.py": "c7f1315b6e0d44144f5a461d5e9999d0d87cb511a110639719f31716e2136971",
+    "experiments/rsv2_07/audit_phase16_xbabe3_waves.py": "5b8c8e5a7e2cc131241c2e1faa4057f62be1e2acc467857549be1dfdd9c63aee",
     "experiments/rsv2_07/audit_phase6.py": "57a9d5aca837e6f3704d23b1c90d902523ef89d560d27ed97a7f28647e66b196",
     "experiments/rsv2_07/audit_phase7.py": "d6a83f15674f9083a4a9b3995293ac8e24768a20a9adb3f719df4f6abd91ec27",
     "experiments/rsv2_07/audit_phase8.py": "93afb9761faabd94f37b11070e7aadef8ff4d7167d2dbf37b536827508471515",
@@ -2231,7 +2233,7 @@
     "experiments/rsv2_07/results/fine_2.csv": "0faa6b50e7ef8b470f0bd69414b3c768a42d93a39a7d2d0ccbe1159eb641e760",
     "experiments/rsv2_07/results/gci_a4_validation.json": "97b37a3e0e2bf324c88025976c4e2ca51383da00bd0d62789d95effe8e3f04f4",
     "experiments/rsv2_07/results/hotspot_fine_0.csv": "8725e87ca6d4d2d1b254cd1502bfab276bb355d6da1620f7b7388aa4d33198a9",
-    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": "74cd9d7a84dbf9010d4f369f19e81bb86fac2c283c500be51f67823894818f72",
+    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": "de0a9cbfa41e174fb25c7d81390145cce070a5269cc78cce40f721b787431c6a",
     "experiments/rsv2_07/results/phase5_witness_3d_validation.json": "66f3b5112bf1122ddd49fa3c1ad66384d810ee177494b0143233fdf7a895e80a",
     "experiments/rsv2_07/results/phase6_Q7_window_p05.csv": "0055f1b7048fdd66dfc995b7d2e35b2a2e632628d4b3dcd68f6811afc6f9bacc",
     "experiments/rsv2_07/results/phase6_unified_scorecard.json": "5d301a3b33afdd8470441c0094f79e47915f8f9e1161af035b90ac37223f7dd7",
@@ -2243,7 +2245,7 @@
     "experiments/rsv2_07/solid_tip_3d_p4.py": "b7118433b0ad10d9e2e6aae48e3a59c5cbbd3acec9b7cd578cb62a6bb8e213e8",
     "experiments/rsv2_07/solid_tip_3d_p5.py": "bc261152ad457329cf2cbb839f0f30ffe877b5f56028456f33e1f3a13b719c79",
     "experiments/rsv2_07/solid_tip_input.rs": "1a60d621c703d85d27a43370216a74e054416489f9dc243142179122e4dbbde8",
-    "experiments/rsv2_07/test_portable_audits.py": "68a7659f4ac2bdb274f0aa0f290cdd24cfa36cd1778d1767ac5b77eeee763438",
+    "experiments/rsv2_07/test_portable_audits.py": "de55aa3164418f85b151092b03bae637abfdf740135ad6fc3ab565d517fa1ace",
     "experiments/rsv2_07/web.py": "d4f8f01791f4b84c3383f33f279944c06a3fe32bf21034c3a686f566fcc04d9a"
   },
   "portability": {
@@ -2298,5 +2300,10 @@
     "task": "RSV2-07-p15",
     "reason": "Bind scoped scorecard artifact/layout verifier, report and synthetic tests; no physical gate or margin evaluation",
     "strict_study_files": 70
+  },
+  "phase16_manifest_refresh": {
+    "task": "RSV2-07-p16",
+    "reason": "Bind xbabe3 receipt integrity/accounting verifier, scoped report and synthetic tests; paired physical metrics not assessed",
+    "strict_study_files": 72
   }
 }
