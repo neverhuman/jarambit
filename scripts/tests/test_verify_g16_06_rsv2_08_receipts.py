@@ -180,7 +180,8 @@ class MarkdownReportIndexTests(unittest.TestCase):
             for relative in [*files, audit.INVENTORY.as_posix(), audit.MARKDOWN_INDEX.as_posix(), audit.CROSS_CHECK.as_posix(),
                              audit.SCRIPT_INVENTORY.as_posix(), audit.SCRIPT_CROSS_CHECK.as_posix(), *audit.SCRIPT_FILES,
                              audit.SUMMARY_MANIFEST.as_posix(), audit.MANIFEST_CROSS_CHECK.as_posix(), audit.CUMULATIVE_RECEIPT_INDEX.as_posix(),
-                             audit.ASSERTION_INVENTORY.as_posix(), audit.JSON_SCHEMA_KEYSET_AUDIT.as_posix(), audit.MARKDOWN_HEADING_AUDIT.as_posix(), audit.HEX64_DIGEST_AUDIT.as_posix(),
+                             audit.ASSERTION_INVENTORY.as_posix(), audit.JSON_SCHEMA_KEYSET_AUDIT.as_posix(), audit.MARKDOWN_HEADING_AUDIT.as_posix(), audit.HEX64_DIGEST_AUDIT.as_posix(), audit.CUMULATIVE_SUMMARY_AUDIT.as_posix(),
+                             *[path.as_posix() for _,_,path in audit.cumulative_summary_paths()],
                              *[path.as_posix() for _,path in audit.markdown_heading_paths()],
                              *[path.as_posix() for _,_,path in audit.summary_paths()]]:
                 target = root / relative; target.parent.mkdir(parents=True, exist_ok=True)
@@ -193,6 +194,8 @@ class MarkdownReportIndexTests(unittest.TestCase):
                 return real(path, mode, *args, **kwargs)
             with patch.object(Path, 'open', new=guarded), patch.dict('os.environ',{},clear=True), patch('subprocess.run', side_effect=AssertionError('Process launch')):
                 result = audit.verify_all(root)
+                self.assertEqual(result['cumulative_summary']['files'],38)
+                self.assertFalse(result['cumulative_summary']['upstream_path_requirement_passed'])
                 self.assertEqual(result['hex64_digest_format']['receipts'],17)
                 self.assertEqual(result['markdown_heading_consistency']['reports'],16)
                 self.assertEqual(result['json_schema_keysets']['receipts'],15)
@@ -1002,6 +1005,85 @@ class CanonicalPathExistenceTests(unittest.TestCase):
         self.assertEqual(error.exception.code,1)
         result = audit.strict_json(printed.call_args.args[0])
         self.assertEqual(result['status'],'fail'); self.assertEqual(result['canonical_path_existence']['audit_integrity'],'pass')
+        self.assertEqual((ROOT / 'COMMS.md').read_bytes(),before)
+
+
+class CumulativeSummaryAuditTests(unittest.TestCase):
+    def document(self):
+        return audit.strict_json((ROOT / audit.CUMULATIVE_SUMMARY_AUDIT).read_bytes())
+
+    def test_exact_nineteen_markdown_json_pairs_and_live_metrics(self):
+        d = self.document(); self.assertEqual(audit.verify_cumulative_summary_audit()['status'],'pass')
+        self.assertEqual(d['phase_count'],19); self.assertEqual(d['file_count'],38)
+        self.assertEqual([(r['phase'],r['kind']) for r in d['files']],[(phase,kind) for phase in range(15,34) for kind in ['markdown','json']])
+        self.assertEqual([r['path'] for r in d['files']],[p.as_posix() for _,_,p in audit.cumulative_summary_paths()])
+        self.assertEqual(len({r['path'] for r in d['files']}),38)
+        for row in d['files']:
+            data = (ROOT / row['path']).read_bytes()
+            self.assertEqual(row['bytes'],len(data)); self.assertEqual(row['sha256'],audit.digest(data))
+            self.assertEqual(row['line_count'],len(data.decode('utf-8').splitlines()))
+            if row['kind']=='json': self.assertIsInstance(audit.strict_json(data),dict)
+
+    def test_phase_kind_and_global_totals_and_canonical_index_digest(self):
+        d = self.document(); rows = d['files']
+        self.assertEqual(d['total_bytes'],sum(r['bytes'] for r in rows))
+        self.assertEqual(d['total_lines'],sum(r['line_count'] for r in rows))
+        self.assertEqual(d['sha256_record_count'],38)
+        self.assertEqual(d['file_index_sha256'],audit.digest(audit.json.dumps(rows,sort_keys=True,separators=(',',':'),ensure_ascii=True).encode()))
+        for key in ['bytes','line_count','file_count']:
+            self.assertEqual(sum(r[key] for r in d['phase_totals']),sum(r[key] for r in d['kind_totals'].values()))
+        self.assertEqual([r['phase'] for r in d['phase_totals']],list(range(15,34)))
+        for group in [*d['phase_totals'],*d['kind_totals'].values()]: self.assertGreater(group['bytes'],0)
+        for kind,group in d['kind_totals'].items():
+            members = [r for r in rows if r['kind']==kind]
+            self.assertEqual(group,dict(file_count=19,bytes=sum(r['bytes'] for r in members),line_count=sum(r['line_count'] for r in members)))
+        for group in d['phase_totals']:
+            members = [r for r in rows if r['phase']==group['phase']]
+            self.assertEqual(group,dict(phase=group['phase'],file_count=2,bytes=sum(r['bytes'] for r in members),line_count=sum(r['line_count'] for r in members)))
+
+    def test_forged_totals_digest_pairs_and_saved_path_verdict_rejected(self):
+        for field,value in [('total_bytes',0),('total_lines',0),('file_index_sha256','0'*64),('upstream_path_requirement_passed',True)]:
+            d = self.document(); d[field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError,'Cumulative summary pair coverage'):
+                audit.verify_cumulative_summary_audit(document=d)
+        d = self.document(); d['files'].pop()
+        with self.assertRaisesRegex(ValueError,'Cumulative summary pair coverage'): audit.verify_cumulative_summary_audit(document=d)
+        d = self.document(); d['phase_totals'][0]['file_count'] = 1
+        with self.assertRaisesRegex(ValueError,'Cumulative summary pair coverage'): audit.verify_cumulative_summary_audit(document=d)
+        d = self.document(); d['kind_totals']['json']['bytes'] = 0
+        with self.assertRaisesRegex(ValueError,'Cumulative summary pair coverage'): audit.verify_cumulative_summary_audit(document=d)
+
+    def test_missing_and_byte_changed_markdown_rejected(self):
+        real = Path.read_bytes; victim = ROOT / audit.INVENTORY.parent / 'PHASE33.md'
+        def missing(path):
+            if path == victim: raise FileNotFoundError(path)
+            return real(path)
+        with patch.object(Path,'read_bytes',new=missing), self.assertRaises(FileNotFoundError):
+            audit.verify_cumulative_summary_audit()
+        def changed(path):
+            data = real(path)
+            return data+b' ' if path == victim else data
+        with patch.object(Path,'read_bytes',new=changed), self.assertRaisesRegex(ValueError,'Cumulative summary pair coverage'):
+            audit.verify_cumulative_summary_audit()
+
+    def test_invalid_json_in_indexed_path_receipt_rejected(self):
+        real = Path.read_bytes; victim = ROOT / audit.CANONICAL_PATH_AUDIT
+        def malformed(path): return b'{' if path == victim else real(path)
+        with patch.object(Path,'read_bytes',new=malformed), self.assertRaises(ValueError):
+            audit.verify_cumulative_summary_audit()
+
+    def test_static_scope_saved_failure_and_comms_unchanged(self):
+        d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
+        self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
+        prior = audit.strict_json((ROOT / audit.CANONICAL_PATH_AUDIT).read_bytes())
+        self.assertEqual(d['upstream_path_requirement_passed'],prior['all_references_resolve_to_existing_tracked_files'])
+        self.assertEqual(d['upstream_path_failure_count'],prior['failure_count'])
+        self.assertFalse(d['upstream_path_requirement_passed']); self.assertGreater(d['upstream_path_failure_count'],0)
+        for path in [ROOT / audit.CUMULATIVE_SUMMARY_AUDIT,ROOT / audit.INVENTORY.parent / 'PHASE34.md']:
+            self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
+        before = (ROOT / 'COMMS.md').read_bytes()
+        with patch('subprocess.run',side_effect=AssertionError('Portable summary must not launch Git')):
+            audit.verify_cumulative_summary_audit()
         self.assertEqual((ROOT / 'COMMS.md').read_bytes(),before)
 
 

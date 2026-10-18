@@ -56,3 +56,15 @@ qualification false. Gates and thresholds are unchanged. Baseline `cd28df0`.
 Execution: CPUs 12,13, nice -n 10 (inherited effective nice 19), CARGO_BUILD_JOBS=2.
 This agent does not commit or push. COMMS.md is not edited. New report and receipt
 literal host-path counts are zero.
+
+Validation result: 83/83 verifier tests and 79/79 historical tests pass. The
+explicit live path command exits 1: audit integrity passes, but the universal
+path requirement fails on 21 of 561 unique paths across 1,001 occurrences in
+18 receipts. Twenty failures are existing untracked target files; PHASE1.md is
+both missing and untracked. All earlier verification stages pass. Source bytes
+109,028; AST records 32 check functions, 14 verification entry points, 46 raises,
+zero asserts and 83 tests in 13 classes. Preservation proof confirms nine prior
+receipts, metadata-only refreshes, unchanged historical evidence and unchanged
+COMMS bytes/SHA-256. Another process committed task files as `2085d27` during
+validation; this agent did not commit or push. Final notes are uncommitted.
+Evidence is under `target/G16-06-RSV2-08/phase34/`.

@@ -4,7 +4,7 @@
   "scope": "Parsed top-level keysets of all Phase15..29 receipts; no nested-key/type/schema-equivalence claim.",
   "phase_count": 15,
   "file_count": 15,
-  "total_bytes": 507645,
+  "total_bytes": 508405,
   "distinct_keyset_count": 15,
   "common_top_level_keys": [
     "task"
@@ -602,7 +602,7 @@
       "phase": 24,
       "path": "docs/audits/G16-06_RSV2-08/phase24_script_test_inventory_audit.json",
       "bytes": 1008,
-      "sha256": "ce68820f39f3d7714aabd7b7a104e6affb6fb05db817dd33cb1bd7dc59c81625",
+      "sha256": "08a2290f5aafa01aa8dd823d83872ee5fd923d5bb81c545b539e0dcec4fcb179",
       "top_level_key_count": 11,
       "top_level_keys": [
         "engineering_qualification_assessed",
@@ -623,7 +623,7 @@
       "phase": 25,
       "path": "docs/audits/G16-06_RSV2-08/phase25_script_and_inventory_cross_check_audit.json",
       "bytes": 12389,
-      "sha256": "9f9de6e2d002ec2f8ed7874bd4909f3e22528f9b5fdca5cf2cbc20e2b7e6b223",
+      "sha256": "a9587368dca819ca145d33db5628990211f27064bff7308aaa3dd70b79f0dca9",
       "top_level_key_count": 16,
       "top_level_keys": [
         "digest_mismatch_count",
@@ -649,7 +649,7 @@
       "phase": 26,
       "path": "docs/audits/G16-06_RSV2-08/phase26_summary_manifest_audit.json",
       "bytes": 3334,
-      "sha256": "09dae649422ffe04ee0879676139ffcb8dcc9a957b3e2d8e7d4a47b16c68dce6",
+      "sha256": "5b80fb91e5572e7f0c0edeb4a764471c81254d4e74149d5fdcfba47073707b60",
       "top_level_key_count": 12,
       "top_level_keys": [
         "engineering_qualification_assessed",
@@ -671,7 +671,7 @@
       "phase": 27,
       "path": "docs/audits/G16-06_RSV2-08/phase27_manifest_cross_check_audit.json",
       "bytes": 8888,
-      "sha256": "48720dd333881162f12c4ef8f0d856a0c407bf388d5215ae7271abb06d335d80",
+      "sha256": "1acb65e4efb3f15d1d4b07ad5c725cf37b40ea538b30e50856ce929b4954afaa",
       "top_level_key_count": 17,
       "top_level_keys": [
         "byte_mismatch_count",
@@ -698,7 +698,7 @@
       "phase": 28,
       "path": "docs/audits/G16-06_RSV2-08/phase28_cumulative_receipt_index_audit.json",
       "bytes": 4385,
-      "sha256": "5026ea61302e6d19d33452d0d97953702feb8704a20859525afd36c0abfe1cc3",
+      "sha256": "b6553164aeec836ea2da915ece66394a230a6bfe41800b07ccaa2cfc8543002f",
       "top_level_key_count": 10,
       "top_level_keys": [
         "engineering_qualification_assessed",
@@ -717,8 +717,8 @@
     {
       "phase": 29,
       "path": "docs/audits/G16-06_RSV2-08/phase29_verifier_assertion_inventory_audit.json",
-      "bytes": 15175,
-      "sha256": "05b87287360807c84929e47c4dfb2c40b78805f1e88bcf26f96353c24924866e",
+      "bytes": 15935,
+      "sha256": "c5648d5dad3782c402ab599684bd4b17689bef8f69921cbd4c127624178623cb",
       "top_level_key_count": 16,
       "top_level_keys": [
         "assert_statement_count",

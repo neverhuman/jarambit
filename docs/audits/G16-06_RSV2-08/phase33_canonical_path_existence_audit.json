@@ -4,7 +4,7 @@
   "scope": "File-looking repository-relative literal keys and values in Phase15..32 receipts; live Git index, no optional-evidence exceptions.",
   "phase_count": 18,
   "file_count": 18,
-  "total_bytes": 731001,
+  "total_bytes": 731761,
   "reference_count": 1001,
   "unique_path_count": 561,
   "failure_count": 21,
@@ -4478,7 +4478,7 @@
       "phase": 24,
       "path": "docs/audits/G16-06_RSV2-08/phase24_script_test_inventory_audit.json",
       "bytes": 1008,
-      "sha256": "ce68820f39f3d7714aabd7b7a104e6affb6fb05db817dd33cb1bd7dc59c81625",
+      "sha256": "08a2290f5aafa01aa8dd823d83872ee5fd923d5bb81c545b539e0dcec4fcb179",
       "reference_count": 2,
       "references": [
         {
@@ -4497,7 +4497,7 @@
       "phase": 25,
       "path": "docs/audits/G16-06_RSV2-08/phase25_script_and_inventory_cross_check_audit.json",
       "bytes": 12389,
-      "sha256": "9f9de6e2d002ec2f8ed7874bd4909f3e22528f9b5fdca5cf2cbc20e2b7e6b223",
+      "sha256": "a9587368dca819ca145d33db5628990211f27064bff7308aaa3dd70b79f0dca9",
       "reference_count": 34,
       "references": [
         {
@@ -4676,7 +4676,7 @@
       "phase": 26,
       "path": "docs/audits/G16-06_RSV2-08/phase26_summary_manifest_audit.json",
       "bytes": 3334,
-      "sha256": "09dae649422ffe04ee0879676139ffcb8dcc9a957b3e2d8e7d4a47b16c68dce6",
+      "sha256": "5b80fb91e5572e7f0c0edeb4a764471c81254d4e74149d5fdcfba47073707b60",
       "reference_count": 10,
       "references": [
         {
@@ -4735,7 +4735,7 @@
       "phase": 27,
       "path": "docs/audits/G16-06_RSV2-08/phase27_manifest_cross_check_audit.json",
       "bytes": 8888,
-      "sha256": "48720dd333881162f12c4ef8f0d856a0c407bf388d5215ae7271abb06d335d80",
+      "sha256": "1acb65e4efb3f15d1d4b07ad5c725cf37b40ea538b30e50856ce929b4954afaa",
       "reference_count": 21,
       "references": [
         {
@@ -4849,7 +4849,7 @@
       "phase": 28,
       "path": "docs/audits/G16-06_RSV2-08/phase28_cumulative_receipt_index_audit.json",
       "bytes": 4385,
-      "sha256": "5026ea61302e6d19d33452d0d97953702feb8704a20859525afd36c0abfe1cc3",
+      "sha256": "b6553164aeec836ea2da915ece66394a230a6bfe41800b07ccaa2cfc8543002f",
       "reference_count": 13,
       "references": [
         {
@@ -4922,8 +4922,8 @@
     {
       "phase": 29,
       "path": "docs/audits/G16-06_RSV2-08/phase29_verifier_assertion_inventory_audit.json",
-      "bytes": 15175,
-      "sha256": "05b87287360807c84929e47c4dfb2c40b78805f1e88bcf26f96353c24924866e",
+      "bytes": 15935,
+      "sha256": "c5648d5dad3782c402ab599684bd4b17689bef8f69921cbd4c127624178623cb",
       "reference_count": 2,
       "references": [
         {
@@ -4942,7 +4942,7 @@
       "phase": 30,
       "path": "docs/audits/G16-06_RSV2-08/phase30_json_schema_keyset_audit.json",
       "bytes": 20772,
-      "sha256": "e3ef9c366b6286fe8948fce39e7acbae30fd8d6fd9e6dc9e97bef2c2088e6df8",
+      "sha256": "e8a4ec97bbba7f77f08818457afe6b94c5d362b5a9b762d305986ec3ea98ea8e",
       "reference_count": 15,
       "references": [
         {
@@ -5115,7 +5115,7 @@
       "phase": 32,
       "path": "docs/audits/G16-06_RSV2-08/phase32_hex64_digest_format_audit.json",
       "bytes": 193486,
-      "sha256": "f00d7fa004ae71513860f67383ebcb118e8e1a983f36911c765a5c666e8ca807",
+      "sha256": "613aa7c8c11ceaffe81c25456e4eec216c6297839e7b1ca5df04bd9528eddb92",
       "reference_count": 17,
       "references": [
         {

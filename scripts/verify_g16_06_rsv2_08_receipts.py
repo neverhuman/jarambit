@@ -32,6 +32,7 @@ JSON_SCHEMA_KEYSET_AUDIT = INVENTORY.parent / 'phase30_json_schema_keyset_audit.
 MARKDOWN_HEADING_AUDIT = INVENTORY.parent / 'phase31_markdown_heading_consistency_audit.json'
 HEX64_DIGEST_AUDIT = INVENTORY.parent / 'phase32_hex64_digest_format_audit.json'
 CANONICAL_PATH_AUDIT = INVENTORY.parent / 'phase33_canonical_path_existence_audit.json'
+CUMULATIVE_SUMMARY_AUDIT = INVENTORY.parent / 'phase34_cumulative_summary_audit.json'
 HOST_PATH_PATTERN = re.compile(r'/(?:home|Users|tmp|root|var/tmp|private/tmp)/|[A-Za-z]:[\\/](?:Users|Temp)[\\/]')
 
 
@@ -725,6 +726,48 @@ def verify_canonical_path_audit(root=ROOT, document=None):
                 failed_paths=actual['failure_count'],missing_files=actual['missing_file_count'],untracked_paths=actual['untracked_path_count'])
 
 
+def cumulative_summary_paths():
+    receipts = canonical_receipt_paths() + [(33,CANONICAL_PATH_AUDIT)]
+    return [(phase,kind,path) for phase,receipt in receipts for kind,path in [
+        ('markdown',(Path('experiments/G16-06-RSV2-08') if phase < 21 else INVENTORY.parent) / f'PHASE{phase}.md'),
+        ('json',receipt)]]
+
+
+def generate_cumulative_summary_audit(root):
+    root = Path(root)
+    verify_hex64_digest_audit(root)
+    files = []
+    for phase,kind,path in cumulative_summary_paths():
+        data = (root / path).read_bytes()
+        if kind == 'json': strict_json(data)
+        files.append(dict(phase=phase,kind=kind,path=path.as_posix(),bytes=len(data),
+                          line_count=len(data.decode('utf-8').splitlines()),sha256=digest(data)))
+    def totals(rows):
+        return dict(file_count=len(rows),bytes=sum(r['bytes'] for r in rows),line_count=sum(r['line_count'] for r in rows))
+    prior = strict_json((root / CANONICAL_PATH_AUDIT).read_bytes())
+    return dict(task='G16-06-RSV2-08-p35',study_phase=34,
+                scope='Exact current PHASE15..33 Markdown/JSON pairs; saved path-audit findings retained, no live Git/path reassessment.',
+                phase_count=19,file_count=len(files),total_bytes=sum(r['bytes'] for r in files),
+                total_lines=sum(r['line_count'] for r in files),sha256_record_count=len(files),
+                file_index_sha256=digest(json.dumps(files,sort_keys=True,separators=(',',':'),ensure_ascii=True).encode()),
+                kind_totals={kind:totals([r for r in files if r['kind']==kind]) for kind in ['markdown','json']},
+                phase_totals=[dict(phase=phase,**totals([r for r in files if r['phase']==phase])) for phase in range(15,34)],
+                upstream_path_requirement_passed=prior['all_references_resolve_to_existing_tracked_files'],
+                upstream_path_failure_count=prior['failure_count'],
+                engineering_qualification_assessed=False,qualified_count=0,full_qualification=False,files=files)
+
+
+def verify_cumulative_summary_audit(root=ROOT, document=None):
+    root = Path(root)
+    if document is None:
+        document = strict_json((root / CUMULATIVE_SUMMARY_AUDIT).read_bytes())
+    actual = generate_cumulative_summary_audit(root)
+    if document != actual:
+        raise ValueError('Cumulative summary pair coverage, source digest, byte/line totals or metadata mismatch')
+    return dict(status='pass',phases=19,files=38,bytes=actual['total_bytes'],lines=actual['total_lines'],
+                upstream_path_requirement_passed=actual['upstream_path_requirement_passed'],upstream_path_failures=actual['upstream_path_failure_count'])
+
+
 def verify_all(root=ROOT):
     result = verify(root)
     result['markdown_reports'] = verify_markdown(root)
@@ -738,6 +781,7 @@ def verify_all(root=ROOT):
     result['json_schema_keysets'] = verify_json_schema_keyset_audit(root)
     result['markdown_heading_consistency'] = verify_markdown_heading_audit(root)
     result['hex64_digest_format'] = verify_hex64_digest_audit(root)
+    result['cumulative_summary'] = verify_cumulative_summary_audit(root)
     return result
 
 
@@ -757,6 +801,7 @@ def main():
     parser.add_argument('--write-hex64-digests', action='store_true', help='Audit SHA256 field format across Phase15..31 receipts')
     parser.add_argument('--write-canonical-paths', action='store_true', help='Write live Git-backed Phase15..32 path audit, including failures')
     parser.add_argument('--verify-canonical-paths', action='store_true', help='Verify live path audit; exit nonzero for any missing/untracked reference')
+    parser.add_argument('--write-cumulative-summary', action='store_true', help='Index exact Phase15..33 Markdown/JSON pairs and totals')
     args = parser.parse_args()
     if args.write:
         import subprocess
@@ -794,6 +839,8 @@ def main():
         (ROOT / HEX64_DIGEST_AUDIT).write_text(json.dumps(generate_hex64_digest_audit(ROOT), indent=2, allow_nan=False) + '\n')
     if args.write_canonical_paths:
         (ROOT / CANONICAL_PATH_AUDIT).write_text(json.dumps(generate_canonical_path_audit(ROOT), indent=2, allow_nan=False) + '\n')
+    if args.write_cumulative_summary:
+        (ROOT / CUMULATIVE_SUMMARY_AUDIT).write_text(json.dumps(generate_cumulative_summary_audit(ROOT), indent=2, allow_nan=False) + '\n')
     result = verify_all()
     if args.write_canonical_paths or args.verify_canonical_paths:
         result['canonical_path_existence'] = verify_canonical_path_audit()

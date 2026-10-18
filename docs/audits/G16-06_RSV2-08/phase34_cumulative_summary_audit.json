@@ -1,0 +1,450 @@
+{
+  "task": "G16-06-RSV2-08-p35",
+  "study_phase": 34,
+  "scope": "Exact current PHASE15..33 Markdown/JSON pairs; saved path-audit findings retained, no live Git/path reassessment.",
+  "phase_count": 19,
+  "file_count": 38,
+  "total_bytes": 1146330,
+  "total_lines": 33340,
+  "sha256_record_count": 38,
+  "file_index_sha256": "eb9ea9cbe88c3c002d1c5158240dc677abba2c729fca3b066ef15047c82985aa",
+  "kind_totals": {
+    "markdown": {
+      "file_count": 19,
+      "bytes": 76456,
+      "line_count": 1141
+    },
+    "json": {
+      "file_count": 19,
+      "bytes": 1069874,
+      "line_count": 32199
+    }
+  },
+  "phase_totals": [
+    {
+      "phase": 15,
+      "file_count": 2,
+      "bytes": 38362,
+      "line_count": 1305
+    },
+    {
+      "phase": 16,
+      "file_count": 2,
+      "bytes": 8957,
+      "line_count": 219
+    },
+    {
+      "phase": 17,
+      "file_count": 2,
+      "bytes": 125755,
+      "line_count": 3287
+    },
+    {
+      "phase": 18,
+      "file_count": 2,
+      "bytes": 13097,
+      "line_count": 338
+    },
+    {
+      "phase": 19,
+      "file_count": 2,
+      "bytes": 76992,
+      "line_count": 3404
+    },
+    {
+      "phase": 20,
+      "file_count": 2,
+      "bytes": 201965,
+      "line_count": 6060
+    },
+    {
+      "phase": 21,
+      "file_count": 2,
+      "bytes": 12961,
+      "line_count": 327
+    },
+    {
+      "phase": 22,
+      "file_count": 2,
+      "bytes": 4049,
+      "line_count": 74
+    },
+    {
+      "phase": 23,
+      "file_count": 2,
+      "bytes": 15333,
+      "line_count": 329
+    },
+    {
+      "phase": 24,
+      "file_count": 2,
+      "bytes": 4819,
+      "line_count": 88
+    },
+    {
+      "phase": 25,
+      "file_count": 2,
+      "bytes": 16471,
+      "line_count": 349
+    },
+    {
+      "phase": 26,
+      "file_count": 2,
+      "bytes": 7601,
+      "line_count": 172
+    },
+    {
+      "phase": 27,
+      "file_count": 2,
+      "bytes": 12912,
+      "line_count": 290
+    },
+    {
+      "phase": 28,
+      "file_count": 2,
+      "bytes": 8446,
+      "line_count": 191
+    },
+    {
+      "phase": 29,
+      "file_count": 2,
+      "bytes": 20175,
+      "line_count": 564
+    },
+    {
+      "phase": 30,
+      "file_count": 2,
+      "bytes": 24442,
+      "line_count": 798
+    },
+    {
+      "phase": 31,
+      "file_count": 2,
+      "bytes": 13328,
+      "line_count": 415
+    },
+    {
+      "phase": 32,
+      "file_count": 2,
+      "bytes": 197464,
+      "line_count": 4800
+    },
+    {
+      "phase": 33,
+      "file_count": 2,
+      "bytes": 343201,
+      "line_count": 10330
+    }
+  ],
+  "upstream_path_requirement_passed": false,
+  "upstream_path_failure_count": 21,
+  "engineering_qualification_assessed": false,
+  "qualified_count": 0,
+  "full_qualification": false,
+  "files": [
+    {
+      "phase": 15,
+      "kind": "markdown",
+      "path": "experiments/G16-06-RSV2-08/PHASE15.md",
+      "bytes": 5119,
+      "line_count": 25,
+      "sha256": "c69286dc0dcc6fe324b8f5f00ad5f16e6bb9aee2492ed52e20c6c675a0a63ef8"
+    },
+    {
+      "phase": 15,
+      "kind": "json",
+      "path": "experiments/G16-06-RSV2-08/phase15_gate_s_compliant_joint_audit.json",
+      "bytes": 33243,
+      "line_count": 1280,
+      "sha256": "205a359a7e9f1cd7065b5a35da7b1491fa6a37356a6e20473c4fff9451bfd51d"
+    },
+    {
+      "phase": 16,
+      "kind": "markdown",
+      "path": "experiments/G16-06-RSV2-08/PHASE16.md",
+      "bytes": 3630,
+      "line_count": 66,
+      "sha256": "9cbbf5bacf16c6c1eb9679fa76e4cbd964fb1c66b03a49b40529959b793b96e8"
+    },
+    {
+      "phase": 16,
+      "kind": "json",
+      "path": "experiments/G16-06-RSV2-08/phase16_cross_phase_provenance_index.json",
+      "bytes": 5327,
+      "line_count": 153,
+      "sha256": "34f93fd138eacbe2be39690febb26478b443f22ecb75bbd87734e4daab465120"
+    },
+    {
+      "phase": 17,
+      "kind": "markdown",
+      "path": "experiments/G16-06-RSV2-08/PHASE17.md",
+      "bytes": 4403,
+      "line_count": 73,
+      "sha256": "775eb2f04b0465ea21988ce7a761a1d2b743fcaa7fb1e96fab4141b97d203acb"
+    },
+    {
+      "phase": 17,
+      "kind": "json",
+      "path": "experiments/G16-06-RSV2-08/phase17_legacy_path_inventory.json",
+      "bytes": 121352,
+      "line_count": 3214,
+      "sha256": "9d2d21d0d3c89be4ef84089b1548ca6dd9d21f65af43b5930820437c96c6ad15"
+    },
+    {
+      "phase": 18,
+      "kind": "markdown",
+      "path": "experiments/G16-06-RSV2-08/PHASE18.md",
+      "bytes": 3211,
+      "line_count": 55,
+      "sha256": "f2eeb5538cc3732a1aee5cd2b2f4bfd4e4074e0fd112507300486fec68e9bfad"
+    },
+    {
+      "phase": 18,
+      "kind": "json",
+      "path": "experiments/G16-06-RSV2-08/phase18_complete_study_manifest.json",
+      "bytes": 9886,
+      "line_count": 283,
+      "sha256": "1b5c2d6deb189b419d330d8166e0f20a0fb9f92c12f73b01e0bf3d369e3b7a52"
+    },
+    {
+      "phase": 19,
+      "kind": "markdown",
+      "path": "experiments/G16-06-RSV2-08/PHASE19.md",
+      "bytes": 4739,
+      "line_count": 74,
+      "sha256": "966a779ad012d5dc224b8521a3d6f36213ad9456fc2ca7ede4cd6cd861bed148"
+    },
+    {
+      "phase": 19,
+      "kind": "json",
+      "path": "experiments/G16-06-RSV2-08/phase19_solver_environment_audit.json",
+      "bytes": 72253,
+      "line_count": 3330,
+      "sha256": "73d85168599a1f41ddc9c9a533184d231ae293daa4a70eaffc4a12fba926716d"
+    },
+    {
+      "phase": 20,
+      "kind": "markdown",
+      "path": "experiments/G16-06-RSV2-08/PHASE20.md",
+      "bytes": 3815,
+      "line_count": 75,
+      "sha256": "d8992957d8eb2eb2c26ce23d05b7e10b5ceabe9c39e2cfa2e03f608a433168c8"
+    },
+    {
+      "phase": 20,
+      "kind": "json",
+      "path": "experiments/G16-06-RSV2-08/phase20_candidate_csv_schema_audit.json",
+      "bytes": 198150,
+      "line_count": 5985,
+      "sha256": "59548ae6e1a65c98bd6fb69535756ddb05511b1858a6d36b1073c6a73ab3f594"
+    },
+    {
+      "phase": 21,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE21.md",
+      "bytes": 3289,
+      "line_count": 50,
+      "sha256": "38e165cee4fb781dd8664328ad9456f32fc288ce7d796d59eb683a422d6f5b81"
+    },
+    {
+      "phase": 21,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase21_measurement_json_inventory_audit.json",
+      "bytes": 9672,
+      "line_count": 277,
+      "sha256": "6de32c8ba3c3a90c535b9eb5caff8766f8f00eb7511c584c114cf6a4b1cd63fa"
+    },
+    {
+      "phase": 22,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE22.md",
+      "bytes": 3259,
+      "line_count": 51,
+      "sha256": "4916ef26a90510e96a483bc51dbd261d1275b31690f15f0eda5743eba596be61"
+    },
+    {
+      "phase": 22,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase22_markdown_report_digest_index.json",
+      "bytes": 790,
+      "line_count": 23,
+      "sha256": "7c81cebd99494529cbc1978df11ffc3f0136b2f837f42232d816ef7239df5f5a"
+    },
+    {
+      "phase": 23,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE23.md",
+      "bytes": 3540,
+      "line_count": 55,
+      "sha256": "de4901603ed71d2b9110cbfaf0f598f89a342a61fc89adc3d524445c51ff9910"
+    },
+    {
+      "phase": 23,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase23_inventory_cross_check_audit.json",
+      "bytes": 11793,
+      "line_count": 274,
+      "sha256": "5d6c1e1b4046a537ccbecd7f64a9e887b2aa384dd8eed5fdb0b15acbc76e1784"
+    },
+    {
+      "phase": 24,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE24.md",
+      "bytes": 3811,
+      "line_count": 60,
+      "sha256": "db2c7334c854fb07b0f76b84213b8261fff0a7ab8ebb40b9c465a87229d6036a"
+    },
+    {
+      "phase": 24,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase24_script_test_inventory_audit.json",
+      "bytes": 1008,
+      "line_count": 28,
+      "sha256": "08a2290f5aafa01aa8dd823d83872ee5fd923d5bb81c545b539e0dcec4fcb179"
+    },
+    {
+      "phase": 25,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE25.md",
+      "bytes": 4082,
+      "line_count": 63,
+      "sha256": "eb8ef1ee7f0d59797a3f4201c4b1f6c1db7ded09e4cbb20f8795a86ddba50898"
+    },
+    {
+      "phase": 25,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase25_script_and_inventory_cross_check_audit.json",
+      "bytes": 12389,
+      "line_count": 286,
+      "sha256": "a9587368dca819ca145d33db5628990211f27064bff7308aaa3dd70b79f0dca9"
+    },
+    {
+      "phase": 26,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE26.md",
+      "bytes": 4267,
+      "line_count": 67,
+      "sha256": "ba32f2f410354b7c3c053b538990749a833a8df13c36316e8a81ccfd1957ba68"
+    },
+    {
+      "phase": 26,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase26_summary_manifest_audit.json",
+      "bytes": 3334,
+      "line_count": 105,
+      "sha256": "5b80fb91e5572e7f0c0edeb4a764471c81254d4e74149d5fdcfba47073707b60"
+    },
+    {
+      "phase": 27,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE27.md",
+      "bytes": 4024,
+      "line_count": 60,
+      "sha256": "ecc19a7ce9924dc9e24b6f729f51f4a6a9a446b8099036e6b564f8c22e79c8a5"
+    },
+    {
+      "phase": 27,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase27_manifest_cross_check_audit.json",
+      "bytes": 8888,
+      "line_count": 230,
+      "sha256": "1acb65e4efb3f15d1d4b07ad5c725cf37b40ea538b30e50856ce929b4954afaa"
+    },
+    {
+      "phase": 28,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE28.md",
+      "bytes": 4061,
+      "line_count": 61,
+      "sha256": "da7e1d620783b9cd467357314fac490cbf4d03ddda174c7286e38f0c3520c870"
+    },
+    {
+      "phase": 28,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase28_cumulative_receipt_index_audit.json",
+      "bytes": 4385,
+      "line_count": 130,
+      "sha256": "b6553164aeec836ea2da915ece66394a230a6bfe41800b07ccaa2cfc8543002f"
+    },
+    {
+      "phase": 29,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE29.md",
+      "bytes": 4240,
+      "line_count": 63,
+      "sha256": "d5ddbd17c73a3607227c7439fb9394e6c996b25df93859e45a4ec43623dcca2d"
+    },
+    {
+      "phase": 29,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase29_verifier_assertion_inventory_audit.json",
+      "bytes": 15935,
+      "line_count": 501,
+      "sha256": "c5648d5dad3782c402ab599684bd4b17689bef8f69921cbd4c127624178623cb"
+    },
+    {
+      "phase": 30,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE30.md",
+      "bytes": 3670,
+      "line_count": 54,
+      "sha256": "d68dfc28b70605b8e25650c6bbe78ac651f6ae93b61c0d4969f19951f93b6de9"
+    },
+    {
+      "phase": 30,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase30_json_schema_keyset_audit.json",
+      "bytes": 20772,
+      "line_count": 744,
+      "sha256": "e8a4ec97bbba7f77f08818457afe6b94c5d362b5a9b762d305986ec3ea98ea8e"
+    },
+    {
+      "phase": 31,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE31.md",
+      "bytes": 4230,
+      "line_count": 62,
+      "sha256": "da1268af745458755b58b718f8b9d4d423d1318e4a9585a25da6f630e0014230"
+    },
+    {
+      "phase": 31,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase31_markdown_heading_consistency_audit.json",
+      "bytes": 9098,
+      "line_count": 353,
+      "sha256": "e719bb993e48061fcf62bdb4033fc7f0355d853da5f6652cec6b056fe65c8c16"
+    },
+    {
+      "phase": 32,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE32.md",
+      "bytes": 3978,
+      "line_count": 57,
+      "sha256": "29ea904ca1145ecf79ef4da603abc51b455121e9545c2fe009cff8d14a49a618"
+    },
+    {
+      "phase": 32,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase32_hex64_digest_format_audit.json",
+      "bytes": 193486,
+      "line_count": 4743,
+      "sha256": "613aa7c8c11ceaffe81c25456e4eec216c6297839e7b1ca5df04bd9528eddb92"
+    },
+    {
+      "phase": 33,
+      "kind": "markdown",
+      "path": "docs/audits/G16-06_RSV2-08/PHASE33.md",
+      "bytes": 5088,
+      "line_count": 70,
+      "sha256": "b94ded893e255dc5adfd892b4451526e5428be3b653829dc5d7d6750668c0552"
+    },
+    {
+      "phase": 33,
+      "kind": "json",
+      "path": "docs/audits/G16-06_RSV2-08/phase33_canonical_path_existence_audit.json",
+      "bytes": 338113,
+      "line_count": 10260,
+      "sha256": "fb02855ae1203ceacd17e465b76321c149100581e0cdd422db5533c93d12bd9f"
+    }
+  ]
+}
