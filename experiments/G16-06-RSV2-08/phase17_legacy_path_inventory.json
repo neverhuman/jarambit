@@ -1,0 +1,3214 @@
+{
+  "task": "G16-06-RSV2-08-p17",
+  "qualified_count": 0,
+  "full_qualification": false,
+  "filename_note": "Assignment Phase7/8 aliases absent; actual immutable receipt filenames used.",
+  "scientific_reference_count": 161,
+  "unmappable_non_evidence_strings": 3,
+  "historical_files": {
+    "experiments/G16-06-RSV2-08/PHASE7.md": "18c3ef60e9edf901174300a800e98128e2ce4fefa3398669d148bfa1864c828c",
+    "experiments/G16-06-RSV2-08/phase7_receipt.json": "71e751199151a99c61058625d55ad2358485e69e308b101d383b16b7ec8cee4a",
+    "experiments/G16-06-RSV2-08/PHASE8.md": "44c3876584adf55ecff5266e4852742faaa6ee74e2d32277e585205c1d98e55e",
+    "experiments/G16-06-RSV2-08/phase8_receipt.json": "fecbe9932bfb8d905b38ca87bba137dfd39fcd8c585519e3eabb006c89167b44",
+    "experiments/g16-06-rsv2-08/PHASE9.md": "351f9fe7f6f0d107494e590c93c8478781e3c0a7a41b9267aa49759526ebfc1e",
+    "experiments/g16-06-rsv2-08/phase9_receipt.json": "cc111ae884ad1f800cbda88491d57d420ead06bb75f12bcbee318ef80287d516",
+    "experiments/g16-06-rsv2-08/PHASE10.md": "dab2897315cde615db39bbed66c4b95e53fe5bc52e13534fe69570f69e014219",
+    "experiments/g16-06-rsv2-08/phase10_receipt.json": "42ddc1663327794b71578d05fdaed678d0daac97e86dfbb8d4b0c4033fb92615",
+    "experiments/g16-06-rsv2-08/PHASE11.md": "b4a0dcd19bda7719587b7880b76f67e637d6e5a752590afd2612f56490ec9c83",
+    "experiments/g16-06-rsv2-08/phase11_receipt.json": "26809af6faab94b759bdabad0b3dafe68bf8aaae5068b1276ee35bdd0ffe5d48",
+    "experiments/g16-06-rsv2-08/PHASE12.md": "4250477a92ab0fe51b32d2acdae7621a04b88a1b8930631cca25a61c940b34aa",
+    "experiments/g16-06-rsv2-08/phase12_receipt.json": "43457e945f9d4071ad02dbf48003755af889481309c06e5f0828895b3639639a",
+    "experiments/g16-06-rsv2-08/PHASE13.md": "7253eaf8ce0737ead6c517ef6db9af904c247d13efbb7bd570ebc63defa9b712",
+    "experiments/g16-06-rsv2-08/phase13_receipt.json": "26591423f6dad3332509295a7c97e2aa2ff3d140f274e52751e108fcb675288d",
+    "experiments/g16-06-rsv2-08/PHASE14.md": "7f7d60ec3df4d0f88c872b39525ba998f9971c9e3d0b091e45277e7f4c833132",
+    "experiments/g16-06-rsv2-08/phase14_receipt.json": "50773824742898a463ebb46954ed8d3ebd456a50900f1761378fb3483d833a81",
+    "experiments/G16-06-RSV2-08/PHASE15.md": "c69286dc0dcc6fe324b8f5f00ad5f16e6bb9aee2492ed52e20c6c675a0a63ef8",
+    "experiments/G16-06-RSV2-08/phase15_gate_s_compliant_joint_audit.json": "205a359a7e9f1cd7065b5a35da7b1491fa6a37356a6e20473c4fff9451bfd51d",
+    "experiments/G16-06-RSV2-08/PHASE16.md": "9cbbf5bacf16c6c1eb9679fa76e4cbd964fb1c66b03a49b40529959b793b96e8",
+    "experiments/G16-06-RSV2-08/audit_phase16.py": "b327336ebc3664d5f14ed83ef199c4ef0360ec8a1ade224efd8c9ad3371c451b",
+    "experiments/G16-06-RSV2-08/test_phase16_provenance.py": "877ea84dabc6e240e62f29968f6d4b1a697ac4316c51ac375eb3ad2a070645a7",
+    "experiments/G16-06-RSV2-08/phase16_cross_phase_provenance_index.json": "34f93fd138eacbe2be39690febb26478b443f22ecb75bbd87734e4daab465120",
+    "experiments/G16-06-RSV2-08/test_candidate_receipt.py": "0e7aa2411b771f089ca4fee3cbfa0dc3df3a38c27640646be88a13bba25c8a24",
+    "experiments/G16-06-RSV2-08/audit_phase7.py": "8a9d707c3abb09e98d63b704c269f10ac504ef36b12273f2b2bcce74937e0d70",
+    "experiments/G16-06-RSV2-08/audit_phase8.py": "226001fb5004e62a401bb85f7b6b3e3874bcf215535c6ac5b2dab0da0c71e173",
+    "experiments/G16-06-RSV2-08/portable_study_audit.py": "efd46d01379bcd6f60b66c1a860371f30a86f7e89c68774fb4b7c74d19d373aa"
+  },
+  "phases": [
+    {
+      "phase": 7,
+      "receipt": "experiments/G16-06-RSV2-08/phase7_receipt.json",
+      "sha256": "71e751199151a99c61058625d55ad2358485e69e308b101d383b16b7ec8cee4a",
+      "legacy_host_string_count": 148,
+      "qualified_count": 0,
+      "full_qualification": false,
+      "entries": [
+        {
+          "keypath": [
+            "results",
+            0,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "bf7a6b5ef2376d4d9615b4aae8bd6bff451f44853817127b38c28ce1e06f78e2",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.00_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            0,
+            "genome"
+          ],
+          "expected_sha256": "173668f1e7216d712f3af84f6af636d596983a6e29097338c344bfd6cecf5c07",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            1,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "3d7ab6fda84ff89acc8f54b152c906f55c725b7bb66b602aec506ecf72799a0e",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.00_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            1,
+            "genome"
+          ],
+          "expected_sha256": "9916f8d476a1680ea1de797aa98669f57fff53341dfe2800237fc92264b8be8a",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            2,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "b7e0b5bed89c43db5bddbee29662d55e8c1317da1e1a0329513f6db1cd23ec86",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.00_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            2,
+            "genome"
+          ],
+          "expected_sha256": "fb0ccc2f4367314bc6f11722c339a652d22a0f4f74711c17129b0042ca751467",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            3,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "751f57528ab6bde8a3121e7c4dd9441e481eab426094358d435245999c35ecd7",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.00_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            3,
+            "genome"
+          ],
+          "expected_sha256": "2e81570490cf21420622a2505554a2d6549dfa1650a87bf644439017c7f1ff8e",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            4,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "ec7eb8ad87fd049997db46118379b2b41dabc747ee7ab69a892b0483d6289082",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.00_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            4,
+            "genome"
+          ],
+          "expected_sha256": "f501b04ee858741c5ffac09649eb783d792396d0f1777c11c5dc30fbae9b47e8",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            5,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "f5d5b5996e9d96dfa467c0e765d044cb0177dda166baf1f8716307c2d95a2ffb",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.00_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            5,
+            "genome"
+          ],
+          "expected_sha256": "85462346946708c1911232a12f39c60fb26861ca74719d20cb458832aa5a337a",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            6,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "ee152d4ef3a81cf1e315fecb33c4454e6c4a0f7e0a460e376807989a0b0d374f",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.00_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            6,
+            "genome"
+          ],
+          "expected_sha256": "606a8f2be359f143456fa53b97bcafbb3753a1dde1adf2db37d59c24ef9ab059",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            7,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "cde8c2764a3045765c8644bc4d32b7c9a3b36f2638a48bbcac104a0637b6586a",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.00_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            7,
+            "genome"
+          ],
+          "expected_sha256": "104f3bcf7c118e46026140d3987fb5b7ff5db00205dd55ad5cc2d1e5836090ac",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            8,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "6d538868429192cb1eae20f28c6499719419ecfeb82c6c1730e05de34d8292e0",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.00_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            8,
+            "genome"
+          ],
+          "expected_sha256": "b24e5dbe8e400bccf2d407da3e6a9355e264f68a01657c942ae911c6391781f4",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            9,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "9e4a4d7243799e4db7e76237bb986460cd71c241d515c86daa0924333d1ed7d2",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.45_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            9,
+            "genome"
+          ],
+          "expected_sha256": "a7e06a75d283d42a49218fb04f57cec391108d60cd66ea64e41f7080c142139f",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            10,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "e9d4fc6a2085d36473d74efb484a91f7c5e26e97d6d843b0f6a5f7b1ef9dc11c",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.45_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            10,
+            "genome"
+          ],
+          "expected_sha256": "5c0e4506368cac55a76a7893d8794c32c3ce74b51a8c05d1c100ab83d2fb3965",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            11,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "45556f5fb0754772094b749e8571b2a4ff20300749c3421d86025e2c79490847",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.45_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            11,
+            "genome"
+          ],
+          "expected_sha256": "3260ff339945a949f5de9d27968d21b51feab2631b969ca1037b19de1c7ca2ff",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            12,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "ab5019e03f411a225530a17b2db932fb07eb6f349382df5e243de14652b4cfb5",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.45_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            12,
+            "genome"
+          ],
+          "expected_sha256": "58ef8b16c677d1bc4939c851f03b4f1bd9e1412c86334f66c987d20ed1d79afa",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            13,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "ac4d89195dc4a2cadddcdcbc44af3700a7a42b953bfb1d2dd1f4dcde83789341",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.45_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            13,
+            "genome"
+          ],
+          "expected_sha256": "83daf372f97b887c96898f7bc2616fffd95f9265de08252ddd18488a3b43e972",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            14,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "d787f503eb4182b69574cdee0878f7fd1938ba5ce917db97198956b4bcfc6f21",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.45_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            14,
+            "genome"
+          ],
+          "expected_sha256": "e26ff88f5aa1afa69c8d49a8be041deec0e3c7423bf4f0aa82400f96243f8645",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            15,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "49f66db0a4187cdd0ed68306fbcc82bbad19789458bfcf632e82fcc03a635385",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.45_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            15,
+            "genome"
+          ],
+          "expected_sha256": "d43e570284eec4cb5c0226e64eb7f9f116244f0f827630521d4be614aff767e1",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            16,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "8efe6179e762d16fa69c72c170e434d05a0efa20a3d3cdf5d985975ed307f758",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.45_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            16,
+            "genome"
+          ],
+          "expected_sha256": "18013c0f151471e1111255cc6f2cb59749ed6a5cd7e7cab9d0f15ffc065f9f08",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            17,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "c85796b10b853780699a645a34b6f69118a3ba3af4a779a6ae7441330a5e4f42",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.45_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            17,
+            "genome"
+          ],
+          "expected_sha256": "d990000706fd02b884c8683f16571721b6d8a65464e8f0d18869c240a2763418",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            18,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "77df0db6adb565cee48aea46faf282867fc1f9dddec98ffe4fe944875706406c",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.75_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            18,
+            "genome"
+          ],
+          "expected_sha256": "d4402e7e21034207b1e99075bf05cc54def6b0940789f179a8d77930667a993e",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            19,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "bc83d5cbe0f9efb38974cc54669e76bb9e551700083ff95d7162ca10c44a4f1e",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.75_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            19,
+            "genome"
+          ],
+          "expected_sha256": "83890fad151b29bbe25de7e7714beb89abc4314caf6958ae329cb20b0f1ec7e9",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            20,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "5c48da365d05b2de46d4b5a9bcfd50bc88dc9e823c98ccdb6b760cadacce3bd7",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.75_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            20,
+            "genome"
+          ],
+          "expected_sha256": "d106e0c7ebe3f97f8ab1f20995a70bddb9d310c06bf1059b3dc9061efaf0fef1",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            21,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "a3a0f13d1e25fe2ad23caca3c656493729d4d0aab92bfafcb6f8121d4590125a",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.75_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            21,
+            "genome"
+          ],
+          "expected_sha256": "0c733a49099a0abea1d34de5c41a8c83b8987f77237afd37c80fab88c90902ae",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            22,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "879b94f8dd3fa67952cf9232eafc4c56e8e60f912db5888eb6e4b287136d72e5",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.75_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            22,
+            "genome"
+          ],
+          "expected_sha256": "efb2f649e05a27eabc6c7dc34c344d79aaa3b76dadf5061095d579f1b50ea487",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            23,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "9c18a3a75905570879c3520eb80eec2417555c140e030455b6321ee4a18be23a",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.75_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            23,
+            "genome"
+          ],
+          "expected_sha256": "1782cf327335ab8415046eebea51cf855726a87578471871f29e943b5fa27f31",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            24,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "14f6da75cd51938e4c03019fe829a22a427d90c0190ff02c449101225d8b47fd",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.75_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            24,
+            "genome"
+          ],
+          "expected_sha256": "6cda85f6181e6eabb048cd8ba7e56f4e783a71be294f9baa3513028ed2529409",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            25,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "29d7547823c11eb99c47e79f075c2ae7008174bb9b750f480f524b6dd90536cd",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.75_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            25,
+            "genome"
+          ],
+          "expected_sha256": "67227b636670d3149d512c188b1cb5cef766b518aa7a69c259bd8606d7ddd981",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            26,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "cf22904694b66b9504113cdf1e1267b74ed1b1ecaf92cd787e09897fd2c8b47a",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f0.75_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            26,
+            "genome"
+          ],
+          "expected_sha256": "d1e66cd8a28fb4a45f29af4ae9eec91790eca9b5df4189a666955351c6e34b21",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            27,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "aea41e92fb44d2cbee02b9252c258f32432d817b5bda5f8610336b73b7f0b242",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f1.05_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            27,
+            "genome"
+          ],
+          "expected_sha256": "e5916a22da82b5ad4707c052ec35e5f38dc03d05572dcd15bf960e416efea68b",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            28,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "8981f94553b73c6fd54fdfd483749c41c59c58aa5eec362f30e9822f61c0b0f1",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f1.05_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            28,
+            "genome"
+          ],
+          "expected_sha256": "9c23e8cc687188fe60ef38dd627ad472d29a071bbc20f3fb10394f4b52e52fc6",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            29,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "4257ad2530bd2b3f995b26187371744baa345aad80e4677b48f274e0c9cfb969",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f1.05_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            29,
+            "genome"
+          ],
+          "expected_sha256": "a3a4768df966cf23e2b28c6312d0008898aea9856d50ab21e4e140a495c4ec38",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            30,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "8d05c4ea8785d03e74bb9e51f1706991fd08575eeaae6f2b1527d123805fed93",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f1.05_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            30,
+            "genome"
+          ],
+          "expected_sha256": "ca7856a813778a93f72d371eba401a8e98765c87e13cc85dfbbe774650de306d",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            31,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "467fc039c4a260e448404db37ebaac5ea9c6576bc05bc6d6acb9fba388dd7199",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f1.05_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            31,
+            "genome"
+          ],
+          "expected_sha256": "c96b84cd94bae171f48b2e39d4f88711921ad4d469905f2940d5dd0a0dd8a284",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            32,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "36029f5def33fe1be9c1a5d8e998d15b06da638e48a557f660b4644f884093a9",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f1.05_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            32,
+            "genome"
+          ],
+          "expected_sha256": "2e1a0409269b418aa3f41083253a0c46eba1d8d055f95338b1e10ba8e4ed8863",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            33,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "9b885bdc6c46bbf15f202c8046bd4cf455a192b9673038345feffe2a079df948",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f1.05_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            33,
+            "genome"
+          ],
+          "expected_sha256": "c5beec50e6c5097515d4280a01551de51c76da16557fa39358f45e92721cf222",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            34,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "4cbde2d9c5180710578337fb2615e9d7357d3e7959326d1974f569ebe8f3cfba",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f1.05_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            34,
+            "genome"
+          ],
+          "expected_sha256": "822c6c9bfff3b0d3622c2e6dc682fcfcba49c15e294526a020830291f86070e9",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            35,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "6928fc0c8341fc0808bbfa29a4bde59f66b5d014cf07f35a188dc63f0462995c",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.20_f1.05_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            35,
+            "genome"
+          ],
+          "expected_sha256": "2a2d539db05fe5ff92b8155807fb796e8d0be7eab7d658ac8580e288273e84fd",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            36,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "dda6ce38584d14b4fef1b94607db33f00e1192dea7235379dc6765321b61a4e6",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.00_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            36,
+            "genome"
+          ],
+          "expected_sha256": "e3d64aae140233381df914bf5d6a235bb195465ec36cbcca566cd0ba7f86e730",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            37,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "65e2dc93d02c53e31fed010620cced2ff13277a4b55c37a085b08b0997f1b17f",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.00_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            37,
+            "genome"
+          ],
+          "expected_sha256": "aaabc4f0f3b6384bb6c602769d9f8b28d2de58d8a1b237c7a76e83bc64028e9b",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            38,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "b133ae50ce041c0f6557654480166d0baf3c3f11250d3239a23561d8a8a8a3ee",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.00_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            38,
+            "genome"
+          ],
+          "expected_sha256": "10a0dedc1f47d330590275a6a2e197f37a5e003844f7ee29cfbad55219c5a4cb",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            39,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "95c2f19905e0a0a892371ea9e8b8f60878057c3ad47c31284faf633b52f78822",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.00_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            39,
+            "genome"
+          ],
+          "expected_sha256": "e62f49d71320dc8239c3f61d7354af0cc5b519e70fd2d754bf49c8ae5cde6695",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            40,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "057c3166856eb1b0be8d73d39bf84c1787dfd495d23119ab28ba5bc0005d79aa",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.00_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            40,
+            "genome"
+          ],
+          "expected_sha256": "74832e90dada4e6ed3d77b43d9a2459782663c4c1edd0c55766addfaf356b49b",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            41,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "b39dc7b6e416156a054e162c23aa784ef83c4f22c3097c863f3f1cbd855ad090",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.00_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            41,
+            "genome"
+          ],
+          "expected_sha256": "3212d2f12bff09af32cd09a1f6ee228a9b6d9b96e5c58b9ff45d34c389194f16",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            42,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "33ece034b184849950917516790cd6d578f67adcfc8d22c9e9e1aea30d5d4d3c",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.00_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            42,
+            "genome"
+          ],
+          "expected_sha256": "e781979421f384802b4c21622a138f8a5ed9a60a1f0a5450a698744a203c1532",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            43,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "fab1c669ec9e1f7d1ff21d56e6e0a8acb087616ec8506e65996b0ec3cc208e6f",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.00_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            43,
+            "genome"
+          ],
+          "expected_sha256": "919e46720b750ddbc540a4a84f977e6b42454db7edf5f8b8531ecb95c3665b63",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            44,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "18dea0fd3a592a1c2ca3fc55e42e67d7bd549aa1bcaddf4ec21b17019ae944c8",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.00_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            44,
+            "genome"
+          ],
+          "expected_sha256": "c96fa6c495e2840c578213f9b3b1df65ff86a2ca0bd48893c8c1e832e30bfa9c",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            45,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "469905edf848517986829a50da012763d247faa6b6574692a3b29b065be2c559",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.45_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            45,
+            "genome"
+          ],
+          "expected_sha256": "087ccb15e2a0148ee9e8da860bd7399a0f68d11932d46ac2cd93527e5f843dc4",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            46,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "356107563a29d18772684bd9f42d6a6a0d64098cc69dac5312c581efdcd723f3",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.45_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            46,
+            "genome"
+          ],
+          "expected_sha256": "806cbf1517e43d6a6ff935ac12cc8d07aa89ee95f1d899f45f7eb1b01569ec04",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            47,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "42459ba31c919bda249f51cf4453b9b29bb20c6073d25a33ec4b37c6b1a62fb4",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.45_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            47,
+            "genome"
+          ],
+          "expected_sha256": "681dbf8af924917a39f29c56d0c21d79447f6c9e86a5ac97c2aba9a4dfff720f",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            48,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "1ff7b065c3a2df9b3ea97e62dd7e6a941498852efcdc4d7315a43e5300e416d2",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.45_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            48,
+            "genome"
+          ],
+          "expected_sha256": "05fb26870d65da32d0b1e2f8aaba25d99945a321725e8c6c8f031ad771140a8e",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            49,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "7485cf364133d5f758a27666e5d012e99660454bc0562a1d4ce3a4b269719f70",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.45_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            49,
+            "genome"
+          ],
+          "expected_sha256": "31895ec1d83706ce4b527fc199a24aea72032502d0a1103f4cecc20f3ba322c4",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            50,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "ce57f61da4253d370a41e20a06c020c568c7dc93deb3a111106aecdce3794bd9",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.45_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            50,
+            "genome"
+          ],
+          "expected_sha256": "997d6a1d659f56a8273f31fbb49cb9041bcc048ea16a0834d4feccadae8da82e",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            51,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "4cff7eee4293064f88ed911bf7f8c9356cc4e5c4eb534009cccacfb6d7399c93",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.45_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            51,
+            "genome"
+          ],
+          "expected_sha256": "19f8f13191fa0e64ca2c8ec4ce842b3bd455a2b0c4d2f2e3d7dc6b71a2de8539",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            52,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "29cb916529c155a5c15be49340e4eb4fe09d75a9e33010f7d6740ee8f707b477",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.45_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            52,
+            "genome"
+          ],
+          "expected_sha256": "31cefb16cd2d338bbf0c75ad566ce558ff7b779b163da2a90bfed1bd6a6ac90c",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            53,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "ac9cace0ae2a241ef16d2ab54a19f1bdfe3f342ec22e49ad8cae7c3697f1b6cb",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.45_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            53,
+            "genome"
+          ],
+          "expected_sha256": "7e9e0b445dd0989b27d6d2adeb5569c4de48771b8775e4cda211e0eb2e0202ca",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            54,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "7c1190335b5450c011a2c02e52d143660226f31576ccb010e020dee3dd6bfa42",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.75_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            54,
+            "genome"
+          ],
+          "expected_sha256": "1a72f6dc73dbc88794a4b49c619fd0746196940947e594a9c7bcba9e28c76104",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            55,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "17a7f1bda357efcba7a866e88a0797fafc9234ae913d41a5de044319db0096f5",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.75_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            55,
+            "genome"
+          ],
+          "expected_sha256": "11cf4ace9d160bbafddb53b9a36a4d4d6e4a6e5b0a3d561e7170ce4483694be7",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            56,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "24bbe4464e14829777611801576c2f6a5f5617fc4d76fd959ae63823f0f64a03",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.75_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            56,
+            "genome"
+          ],
+          "expected_sha256": "6b863ed92db6f504ea2875ac7bc82b6dbfffb6f9f01b64a40e78982668c94c3b",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            57,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "94b0944d3ea8c8ab6f1c7f8a3564d257da93bcdd84445d0b63a1235f8e3458a3",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.75_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            57,
+            "genome"
+          ],
+          "expected_sha256": "08b4ed9edf6188bb6af25ca93913a4c80fb54ea1479ca90298c1df5dd85c04d5",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            58,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "b666f399527ad3b729d218d93bbebbc1463d4f598060c71fd6356d7d12be9d70",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.75_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            58,
+            "genome"
+          ],
+          "expected_sha256": "b0ba65c2937755510ea21eb4fa7b937a064dc1290b3490db327b1fe9ef3a9878",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            59,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "431cb0c06ceac8acbd6380a936d332ece4f9410e6794991f108628a57b23ab6a",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.75_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            59,
+            "genome"
+          ],
+          "expected_sha256": "5f07ff5da5b2d082267152e792cdcdfcfaf649962b5a2fe385e115a19394cc51",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            60,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "10266d95849448cd6d2a1f7c984fa09488c5dfeac5b082005a566ddb1a3be80c",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.75_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            60,
+            "genome"
+          ],
+          "expected_sha256": "7727963b8d95f82e0d2ca7a6114a1e85c663fcb4173381ad3e96197d017ef31b",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            61,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "762d7b93b0ec5e236eff6af3756ffb2c1536be8207411f0914e8f0e9f9823a31",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.75_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            61,
+            "genome"
+          ],
+          "expected_sha256": "c9596e6b6e800f803b88351c73bdb490b2545a9f50d3e90117f03383dece8dd4",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            62,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "cc38f36785b6b1b9e0a8c12a5256033e6d2d3473376df473ad66aeec44c8d657",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.75_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            62,
+            "genome"
+          ],
+          "expected_sha256": "83876c74fff285a3eac583696273e45936927012965d1ea20066ffce397dd250",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            63,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "e7796ad9d9f513632540c3e24ecf165ec914148e331526bbb583cddb556397f5",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f1.05_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            63,
+            "genome"
+          ],
+          "expected_sha256": "821e374050cbd3508b39e63c9ce62660136bdbcf086ed9948d5297ad000e3a7f",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            64,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "93de6b1a783ac486d1f2ceeee2be47c4b165a3f54353112bcaee92cd3cdb0f68",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f1.05_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            64,
+            "genome"
+          ],
+          "expected_sha256": "53138ab32415caeaa51442ff58fdde2227f18e6b6ed482b63c7ce18a53f479b0",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            65,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "b2d279dc33ab2846cc240a0243b41913850aabb552fe4b504dcc1a1e31e16228",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f1.05_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            65,
+            "genome"
+          ],
+          "expected_sha256": "42c4b708d75e8ba6f4f0564998ff8eeada0752c92ce3167fe39efb722e5f8e42",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            66,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "626bf93db00dc92a30066c325fe647447ed9941fbe760a31528a948c919382f5",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f1.05_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            66,
+            "genome"
+          ],
+          "expected_sha256": "9eadfa50f900a5e628d6d33765ab6b6cdd5dad4cebed2a0eb38526a831e1f955",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            67,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "93225c43bad7ceeaa27c2068c2aa510f09b0173c8315546b3b150141ef377cec",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f1.05_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            67,
+            "genome"
+          ],
+          "expected_sha256": "0a867bf3816cec79a0383e36f5a6030de418fd5d9fd359b8a69ef3c4d2542c62",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            68,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "b7037c91ecb49a89f24798726280447d4bceb91e90a2263e54449141a14e5f74",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f1.05_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            68,
+            "genome"
+          ],
+          "expected_sha256": "4ceeacbbde1c2ab40e9b2df2767a783549e8410949a308be64e692b5021aabfd",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            69,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "18f5effe32419ac4e1060541487970e4070865f70d0a87e2f226bfe9d098047a",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f1.05_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            69,
+            "genome"
+          ],
+          "expected_sha256": "db59f312605310067c6921c54afe8d30e9c42ce5a6868663cd530cb6958b0f09",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            70,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "843013c385abcad7b9d1a491bef8651a8dc3591210be29f0c23e87cf5d36bd3e",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f1.05_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            70,
+            "genome"
+          ],
+          "expected_sha256": "a1851a32664d8d9693245944b9d83e27db0e8dad87d161af1dc275509f18ad9f",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            71,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "7305312342df78fa7bfb8721a60351fa2aa0e47af359fd79f663d9404c8e6280",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f1.05_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            71,
+            "genome"
+          ],
+          "expected_sha256": "cb7dac1ea130057ab58fcc8769485ecccf61728748861f966ac71d764c5259ab",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            72,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "b1ca97ae47a238a3e6142449d3fc7438c2192e32cb1a42ba9fd65672eb700eb5",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.00_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            72,
+            "genome"
+          ],
+          "expected_sha256": "e2c7790fe8058df72eb950d420659ed54b2567d5dededb91110ac3df586dd503",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            73,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "cc4f7c1fdf29d652fab3ad9479dbeca735ed7169203d2a672fddad9db1ae796e",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.00_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            73,
+            "genome"
+          ],
+          "expected_sha256": "661b8aff22fdd6b87735fbfd1ed8c246ffd03e18e1210aa6cb45104d324fddd1",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            74,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "1c51fa264c0dbb06e80edf952888597fbcd531add1b2f02c24e2a17a35af52f2",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.00_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            74,
+            "genome"
+          ],
+          "expected_sha256": "a1cddde4e0c8967db57c4825bd7a7212e074644cf96a4695ce1e049a5dd16e9e",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            75,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "605e1e43561faa3277bc6dea304d5941a03702e007f6630b6c5208d5da64d773",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.00_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            75,
+            "genome"
+          ],
+          "expected_sha256": "362ef307c32eb700e7f84fa64271248a496340f307512df4dc1cbe057790004b",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            76,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "f03c9914e51c6c339e7658d1ba7c87336fd4fecef1fe5677fd6446d0bc6b0791",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.00_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            76,
+            "genome"
+          ],
+          "expected_sha256": "645be40879686f99b36bac70aef3b65da362a41e2ca279ba9a9d98326f3c2d80",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            77,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "7a1968f2e79dff868d010eaba320104a9f85b8cfc15220174a1a5017a51ed014",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.00_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            77,
+            "genome"
+          ],
+          "expected_sha256": "fd1feb30e6fa2f581f542cdbc616f44c5cdb454e3c7f24db701a96bfa63ed78c",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            78,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "18c2503c626c9a7bed7a0b0cd472124a1596fdb9a50b4786307a343154789d78",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.00_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            78,
+            "genome"
+          ],
+          "expected_sha256": "8032be5a22f49b365c73845c230ec86e395a8208577c6c82f9a38cf6c65edfb2",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            79,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "094993cc3e81a6bd4778f732beed402711868cb31b646187dae0c207f4309778",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.00_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            79,
+            "genome"
+          ],
+          "expected_sha256": "737bf54c1e98527f26c896baf425bebb9897910282f2207ab1354b63861d0316",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            80,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "e7136990e696c0efb7c90c95785bfea3560fac6744b0be638939100fba242101",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.00_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            80,
+            "genome"
+          ],
+          "expected_sha256": "93c71382da00f4ff4a2a558e4fcf4f31e2bfe1c1f84481e16a237212a40a992b",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            81,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "07c44f750f7d619a7f60072271902273202794e47ebf506a086a0f008b674241",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.45_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            81,
+            "genome"
+          ],
+          "expected_sha256": "21b75aae5adf0f8b2c07cea8fca0229caa41df44de5053310f843893b0511228",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            82,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "a3e47e39350c3844ac62ef3b253761bafbdbdf004d22711c64bc8bd9d7816e18",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.45_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            82,
+            "genome"
+          ],
+          "expected_sha256": "4230e1b3079088052cffda7169db2301b71a5be780eddf8efc4db1a66a9bced3",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            83,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "00b70e40c084fa4363a651f8ffbe5fcdcc2e22d84365ae9f6e30287b646a93cb",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.45_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            83,
+            "genome"
+          ],
+          "expected_sha256": "14dcf02e86895d6d854da63db21bf3ffa19e367b4616a46f63910e6600158835",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            84,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "c661f30198c08c750c8fd3beceb643cc3d0473b6abf231b10e2609f43f7f380d",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.45_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            84,
+            "genome"
+          ],
+          "expected_sha256": "cdad6a8af5f43c1ebc0aa0fac5b620641c158b73a8d8ad78e14e8521f9861d99",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            85,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "6a23d37612e012a1d58b688361e5ed79aa5a2316e0a872776d5e0fe614c73238",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.45_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            85,
+            "genome"
+          ],
+          "expected_sha256": "2117f2c2d8f8ce6c9e55c421d4bbf4b25c9b6fe8f0e49ed5f1b19e765753adc6",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            86,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "b005ca50fb456a61aa6e184714a39bc5d10883226a77ab1c20b80c466efcace8",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.45_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            86,
+            "genome"
+          ],
+          "expected_sha256": "f27e5be08365f1e112414e4901d0fdaf4ea611017ba0d7844d8bc1a5988465d2",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            87,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "ae034028797d00b83e607e96146a0ea167d2e418197643bb1f352f78bae52003",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.45_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            87,
+            "genome"
+          ],
+          "expected_sha256": "fdd456bfcc2aad90a86b638b9358be9efad25593b2d0fe559b17698d05903f43",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            88,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "e96a3dcfd8baab52688c95a442f2b38cc12d79167f7629b81b03da19d01a09f1",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.45_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            88,
+            "genome"
+          ],
+          "expected_sha256": "c903868317c76ddbe09439080934d93ca2be161df91d526155efe6bd2d320a83",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            89,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "2b7aad2b05c175859abf48e6915602c734b0e76f341f301f1f3f8aabc8daf878",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.45_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            89,
+            "genome"
+          ],
+          "expected_sha256": "cb4b6d2c1912cf8391c129a49e881002616ccff737b31ca47f025b3c22161241",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            90,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "a42c1ce89d9106118fe266b8bf6d754f160cac2908c7b10fbbf2fb3730393e7f",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.75_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            90,
+            "genome"
+          ],
+          "expected_sha256": "0ccba3fe9e5576f4f6351149b821ee6a67f245fff4440efaae78f177541b3580",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            91,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "fbd762d294f669224baea3faced64a56fb9f7b7a2e641596a18659856aa12df2",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.75_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            91,
+            "genome"
+          ],
+          "expected_sha256": "a481f541e6d136d040d289544702eed808657bb1db50a79281216deb57da3cb4",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            92,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "b0faf450ad8749d114e165007212af3f6780f2ec59de010ed697ab9efc728f39",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.75_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            92,
+            "genome"
+          ],
+          "expected_sha256": "1372b43a07f4c09f62e67f18fd916909abf054ed0c615245a0d2112fbdd3f078",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            93,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "f3b1c0aa0dda0b6ac05633cdd3a0d28cec0b31e91def1e8ddbfdeeb629b3b7e3",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.75_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            93,
+            "genome"
+          ],
+          "expected_sha256": "f4b5fbf9aae6737462fd0cf3e256f7e89cf2cc640bf8f603cd856be6924fdd0b",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            94,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "50bddea2d14d7b4db31bf58e423deadbb7a63a5792daeed7655556b5e26400c4",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.75_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            94,
+            "genome"
+          ],
+          "expected_sha256": "ba0d3dd8650e336dc261af852f695fa02f4c9a796ea44e7d8c457a4d72dbc2d5",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            95,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "460f12e0043b8e3315b0dfaf997a38d720e42754bdf4281725a34499a776ea26",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.75_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            95,
+            "genome"
+          ],
+          "expected_sha256": "cf7cd325a2e36a66939d1011ef0c6971f04506f593ec113742ead6956c4c5d2f",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            96,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "ab7a617019fb8cd3419bd031e5ba10eb57b4108150467736b5b7914f43114b10",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.75_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            96,
+            "genome"
+          ],
+          "expected_sha256": "ebd1339d38d7271cdcd205ca9b2971c1973735b7ae4b9305ee7c3883bdce5820",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            97,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "606d019780974a2b1b37cbe7c6cae86d2b85140b15a2dbef72d432594e3e2c2a",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.75_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            97,
+            "genome"
+          ],
+          "expected_sha256": "4d11a0a7233a693fa02ccff030381314b00a75b6612c736dc11ef418f13c2c36",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            98,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "6c204e8bf30f6980ace6dab604bbe2d3c0c51fc8272e9c177e9a9cb75176a6e0",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.75_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            98,
+            "genome"
+          ],
+          "expected_sha256": "bb684a1280c2ffc05d2520d698e89e26f2eb85caa360a7de59c2e34ed7fb6f9f",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            99,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "cf6e2362eb2df004fd984068cd11645d979736b4624f3a174bda5700b4a4ef67",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f1.05_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            99,
+            "genome"
+          ],
+          "expected_sha256": "896a76cf01231bf0ee0970aefa35084ef28bb0630d5434b8e856964a74ea4645",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            100,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "185907d20ec5e6cd7eaa9959ae2629000457ffe8421e78db4c28670745a2353e",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f1.05_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            100,
+            "genome"
+          ],
+          "expected_sha256": "a988e28bf1958c65e84187ad49b4f9589344a26a30a7f96cc0e347c7a6076d1d",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            101,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "3d1cfac8c01348fa29e375481056ad2e7fa169494ef932ea097423de5b953a9b",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f1.05_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            101,
+            "genome"
+          ],
+          "expected_sha256": "bb4a1d51a4cc5e187af59765328f111b3f28a9ab7fcf04d4ecac7d00e5c3ae13",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            102,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "237f4b79114286712767db4f71b85dbfe5beb71f64969f9069e026d263b29945",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f1.05_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            102,
+            "genome"
+          ],
+          "expected_sha256": "2e8c13b49f748b60ca4ab1b0fa0e04442d5da7ff6bbe541f4149736b5171fb77",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            103,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "3245b4b1a134cd8394410095a0596f6b1c2eb46ffa85382cfffe9d849871a33a",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f1.05_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            103,
+            "genome"
+          ],
+          "expected_sha256": "fe6523783e1d013a00da53c6a2989002d0dec2584de42410f6ebf26a06c85824",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            104,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "86137597aaf399e3a82f687cf0ee0920f11013c94e208d3639a68d3f267d19f5",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f1.05_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            104,
+            "genome"
+          ],
+          "expected_sha256": "97766951ffebbb6956d7f995e9397f93be05cfb85541afe17f1bfc9e18fc0bcc",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            105,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "dd76faa5bf3aaa084ffd185035f47286666c2402f552b15451f2e5630f030762",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f1.05_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            105,
+            "genome"
+          ],
+          "expected_sha256": "80ddc245ca99c259dcee5faef42abaef9494cd2fd2f2f164ab8b5fb7dbb3d48d",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            106,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "ec7e898fb4781b5c9d097f28545048f662125107fe90c31afd4bff5d6aadbd3d",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f1.05_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            106,
+            "genome"
+          ],
+          "expected_sha256": "2c24d0730da5c7ca541c9e6f7a0d5a6cbaf61d134d479375e20a2fc046ee704c",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            107,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "dc18aefe23d2a9ff11433ba3f54b49d9995a36650274890bc100f0ddf7d0e350",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f1.05_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            107,
+            "genome"
+          ],
+          "expected_sha256": "37a2e6ad6480f1f91bffe26572a17e5ed2ad9042327e81202ee49dd659ce4b80",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            108,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "ad336a8193b1e79fde9a3d6c3c520b3685a0f2cc5099fb864175b7e1296168cb",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.00_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            108,
+            "genome"
+          ],
+          "expected_sha256": "9e530afa82f3ee024f1f1a42713bd75cd3e806b6d7ae78b4037b14d7b75f42b9",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            109,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "ccf3d6bfdf398a62944d35f47b82bdef219d3c9d75f85062cb3ca8d8450ebbc0",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.00_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            109,
+            "genome"
+          ],
+          "expected_sha256": "c506be5f9dde5121890a257bb4e87b5e9b8df82245bb5e7d62ace7cd9a5fde25",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            110,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "919e41341197f3afd00de51f9202a9cbca1a2827425b584ebb0de65ef96d7728",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.00_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            110,
+            "genome"
+          ],
+          "expected_sha256": "60540c5249f69cdd340501131f69941afea96e484e14f063b9df02bc73272fcb",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            111,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "8086b917e026e1a92856a864e6f586a637da69cf14372a43802007240fd04088",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.00_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            111,
+            "genome"
+          ],
+          "expected_sha256": "42d3b60d01224b581d9fe0c9d4553b5bb1d325f9b14ff71e2d42b6325ac28724",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            112,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "37fe274c10bbe9767c994bf8bd89cccb5d7135d7d21ebad24ea4a6d6231b2daa",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.00_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            112,
+            "genome"
+          ],
+          "expected_sha256": "d42f52c5781cc407890475fe526dbef7e56aa63132ee21caec3bf414e1fee25a",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            113,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "95635c39e3e018311261776da0f9589118fb73af037bf97351a5a494fd1595d8",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.00_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            113,
+            "genome"
+          ],
+          "expected_sha256": "90bfedd95f40dc6bb51b32be495f11d17c1f1123077ee269192daa39775df270",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            114,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "41e37221770297bc62fbdc81223595f7149fdf2b15768b4c53dc017080cce514",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.00_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            114,
+            "genome"
+          ],
+          "expected_sha256": "cb69321315a421a39107b8b486835793b0a71868c435df3d411bb9b85e091cb3",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            115,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "f8d764c0645d9bc519e68109dc1a57b813418ba23d06e1ca692235b98e72e95c",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.00_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            115,
+            "genome"
+          ],
+          "expected_sha256": "065f6702de1b0b0b95d9b9d57864868a4d19a08b289115eb99193a9ba6bdaf8c",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            116,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "57c2d50d3eceb9fd5c14b29df719b5948e7196172ba0da13ad047cb905c7827e",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.00_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            116,
+            "genome"
+          ],
+          "expected_sha256": "e84ed532ae8514bc74de91a4a42381f11e18c7def4f51441341c23a18cba3553",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            117,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "9ef7dd64ea2613fc4ae08c19e3e4285e8e9b472eb3cafa78acdb4af5b135fd3b",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.45_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            117,
+            "genome"
+          ],
+          "expected_sha256": "4fae7d9fd465a5f236e3072fe266fda18f53f364776bd47a9a5e24ae22e14f33",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            118,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "6d00c5236550b21a258b6cd2d50cd77070417f79dac38d22028a4f8eccc9025b",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.45_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            118,
+            "genome"
+          ],
+          "expected_sha256": "768078fd22f9257dfd6070ab2c36070b0c6b4de13b47d694d795678a0645a672",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            119,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "8bfe60a518ed317888cbaf79040ab5c70dd4a7fa1d5faa01248d9d63df8a202e",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.45_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            119,
+            "genome"
+          ],
+          "expected_sha256": "3341fe881ab505ba138e43463e30ac9d192ba1758bfbf418ae8322a3b9d7ed47",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            120,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "4690001873ac7f42c7a53ee002f036f052c1e302eb52db66b7efb953c1d21553",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.45_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            120,
+            "genome"
+          ],
+          "expected_sha256": "24abf8cea16c3a167c453b2f3fab304cd5429e0005c042e0bc35da049a6b1d63",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            121,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "8ca580b6a52688c6575361e698bbfeee8ef7d3885eb102f08836e1144ada8c62",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.45_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            121,
+            "genome"
+          ],
+          "expected_sha256": "5691a67c44ce276965e93f29bd89ebdbc0d0e9226fa1e88310e05b1a82673ea7",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            122,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "1e35b5288f80cbad0fbc6bf6eb12d20e9fba7208ce96e1dcdc17f6236360c9ea",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.45_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            122,
+            "genome"
+          ],
+          "expected_sha256": "356eca1874679911de4b42f4ec3d07558335066113d883f485c44904f0ded3aa",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            123,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "a0d99010373a86f977f62cef40f978d560f1cc018243f5810d086e0fcb71b753",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.45_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            123,
+            "genome"
+          ],
+          "expected_sha256": "4b257fcbe426e2be22e5f1ba7563146806bbf91885e9e77991c28d1427d9d7f7",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            124,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "dfd43f7ede990cfdd0f677209c59e26c436198d08b4196e21f9ab56d90e4c5e4",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.45_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            124,
+            "genome"
+          ],
+          "expected_sha256": "dcb70e32b6ed5607aacaf84d20a240c20ab4da34aacdc9e3f3474c300b3ec3d0",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            125,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "a0473bb836e7d59cb64d375ddc39139814c3631df57eed604b5025a6cd013853",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.45_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            125,
+            "genome"
+          ],
+          "expected_sha256": "e1304f0c0639d1a23aeb6c236ca69ddb3d87cd9abfd22beb46c2d113079d180c",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            126,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "70cea7f86bb7063e73d23f201a7fb1b8d9027ed04a0af834956021413c106afd",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.75_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            126,
+            "genome"
+          ],
+          "expected_sha256": "b845f103260f8a663a5bace2f51dcc2f37e081766c9f2cdbcbf492316d2c6ddc",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            127,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "15bd9c7b8f7cc38dc348b70ff6bc4d464112586514eb46ddc756aa507da77c7c",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.75_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            127,
+            "genome"
+          ],
+          "expected_sha256": "2f3992cf75080c422d07ef9323a4487ce09cdd0afc21c59a07eae037b9584b59",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            128,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "dcc4ca4b720f0258598d8b2842e68df31c9b034a6087687dc0d137d6d393753a",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.75_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            128,
+            "genome"
+          ],
+          "expected_sha256": "010f918f927c5ffbf30b8fd4c1bb3399c2025c8cc4c19ff631b5ed000e06bd2b",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            129,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "a7a7793020e60f111b1b2c915f9e503496c9aef9f694f0c33b6b840c2244b5fb",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.75_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            129,
+            "genome"
+          ],
+          "expected_sha256": "dbecb97398823e12e6abb70dd89ba3ba578511b467a2363ddcdb8b95d7cc486e",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            130,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "c75a751cc6b121a53d46d8766046831522b21c4c28f10dfd0c51174a2d5ce599",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.75_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            130,
+            "genome"
+          ],
+          "expected_sha256": "3cacc5038a3d519efb3064464d2286ab886ba271e7cf85f7c340deee5cd19a1e",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            131,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "24f54156bb008e5f51efd04e067611651a178d721fca075cf6fae303fb394558",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.75_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            131,
+            "genome"
+          ],
+          "expected_sha256": "59bde405765969fb1ee48338c9eb5f9cca8a686cb7f8dad916338b9ce9967eb1",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            132,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "765f96cd7ed54eb1aebab0c0159c779f547bcf5b370c57c580cb2099a6a5ab4c",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.75_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            132,
+            "genome"
+          ],
+          "expected_sha256": "e9c0831a24885f202ebdd4ad42ba37699d69574159df70f35ae203fd43b56a97",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            133,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "1e2a389d5ef80320556cf08897e3881520432194fa2d542c5011c8c47ba6c4e6",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.75_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            133,
+            "genome"
+          ],
+          "expected_sha256": "c3b106ca5190880094856134be61771bf6854c65a062424cc125855ec2b0891b",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            134,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "2b39a2ee4ee6679e7379b6e55a46037052e36c3a0faaed1d422dec5776819bd1",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f0.75_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            134,
+            "genome"
+          ],
+          "expected_sha256": "80dfe970b66514031c4f70bba92d0dab6593b88eb811b1b79f37eb545b5ff853",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            135,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "fc875a9a7362495f73743013275839503b1d69cb5d1bdb062bd79619862ea07e",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f1.05_w3.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            135,
+            "genome"
+          ],
+          "expected_sha256": "ed880abe4abc2cc6afdcd2c30850c4d6ac3ddbd6638a6e62805ceeeffc41a50d",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            136,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "932ca7943f63e1b107f6ee60281d3004540f3071d3884de4d944d2dfc45a2770",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f1.05_w3.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            136,
+            "genome"
+          ],
+          "expected_sha256": "1aa308c591a734b3772515647861543e0721d6a1b1820d4fde82e16bf803a529",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            137,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "a10136d3ab826db03d71d0c87363b8ed50d4459cae4da4efcba4a553862db481",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f1.05_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            137,
+            "genome"
+          ],
+          "expected_sha256": "b9906e0ba9eac0d24e4f809f4331b6c877bd12d1faad7a71877893a5b0827ec5",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            138,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "254fbc9a1a38225af12cb41ce37137eb5d7eb2d8a72cb8adc420c63e83a1798a",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f1.05_w4.5_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            138,
+            "genome"
+          ],
+          "expected_sha256": "4c9627cd8d51cc73442d358309430fed744d1979615940e7d5712519a1eea4ef",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            139,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "bd08ae0408d67334ee909fa1a93390ca5a342b217205c8c5d648f9a8554a99bd",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f1.05_w4.5_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            139,
+            "genome"
+          ],
+          "expected_sha256": "aeaf5e37c0a6e1482e69657a90cc6a76eceda100f2811e955d2b22db51acbba5",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            140,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "3f36d3a36c95f784902b52f23942f12ffbf061fc36c47d74f2e08c7e7bf097b0",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f1.05_w4.5_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            140,
+            "genome"
+          ],
+          "expected_sha256": "479f6ab68a6cef355ea9851327ff95487c8b7dfe6afe4afcb6462399fae51706",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            141,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "fde499fb21bdc75fc6316b2526eb41ee47ab1044d0c561860b30ae27753164fa",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f1.05_w6.0_s0.05.csv",
+          "portable_binding_keypath": [
+            "results",
+            141,
+            "genome"
+          ],
+          "expected_sha256": "f1d8702035c4c74c542dd414a5867ed72a0e2a0046a083b1e53363c2a7268388",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            142,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "9a366ab242fa3a265cc5560b34e346517e886c3b269772a8d06265732907a033",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f1.05_w6.0_s0.25.csv",
+          "portable_binding_keypath": [
+            "results",
+            142,
+            "genome"
+          ],
+          "expected_sha256": "e8f093f85d1dde7680d6b3eb07fb28d36b37431edc9b13018f673295f04e7bdd",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            143,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "d9616195f802fc6c160122852372eeb894ac4f3e027a702eae6ac0b3fa8e5df4",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.80_f1.05_w6.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "results",
+            143,
+            "genome"
+          ],
+          "expected_sha256": "a5b6c6717d987c9f7cf68cbcb56d602c5a0fa2196e4f5473453d06fb98738d8f",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "law_effect_controls",
+            0,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "c1a15ecb6813248a8e3d04335978f61bd25a151e40304abfc4a326803ff0dd27",
+          "classification": "optional_raw_genome",
+          "canonical_repository_relative_path": "target/G16-06-RSV2-08/phase7/law_effect_controls/law_baseline.csv",
+          "portable_binding_keypath": [
+            "law_effect_controls",
+            0,
+            "genome"
+          ],
+          "expected_sha256": "651969893263f60e7cc7e6bb78de4e0851b87c571f58d2d9472e53bf46e0535f",
+          "resolution": "optional raw evidence"
+        },
+        {
+          "keypath": [
+            "law_effect_controls",
+            1,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "cdeab4851be1eca5cdf4e77720ad733d570945c826b252c74f6a8e3e4873d462",
+          "classification": "optional_raw_genome",
+          "canonical_repository_relative_path": "target/G16-06-RSV2-08/phase7/law_effect_controls/law_tip_only.csv",
+          "portable_binding_keypath": [
+            "law_effect_controls",
+            1,
+            "genome"
+          ],
+          "expected_sha256": "d40ff41b648c2d23c9b5ba1010c1db108c94205090645f5688713aa981f3b29f",
+          "resolution": "optional raw evidence"
+        },
+        {
+          "keypath": [
+            "law_effect_controls",
+            2,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "6b53da1b7a756e3073841657e54c6f38ce31f816ad3e8d28dc6d6111b274fa96",
+          "classification": "optional_raw_genome",
+          "canonical_repository_relative_path": "target/G16-06-RSV2-08/phase7/law_effect_controls/law_taper_only.csv",
+          "portable_binding_keypath": [
+            "law_effect_controls",
+            2,
+            "genome"
+          ],
+          "expected_sha256": "563cc08a5405164299a423ead1dea8d95857f26392523e2a936b3b84da97dcba",
+          "resolution": "optional raw evidence"
+        },
+        {
+          "keypath": [
+            "delivery",
+            "external_archive_destination"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "7c06ca62eca3765cb4c8765c346075387325e8f2bac67b0a1a0defa8507e4547",
+          "classification": "external_delivery_destination",
+          "canonical_repository_relative_path": null,
+          "resolution": "Historical external directory; not repository evidence or a verifier input"
+        }
+      ]
+    },
+    {
+      "phase": 8,
+      "receipt": "experiments/G16-06-RSV2-08/phase8_receipt.json",
+      "sha256": "fecbe9932bfb8d905b38ca87bba137dfd39fcd8c585519e3eabb006c89167b44",
+      "legacy_host_string_count": 16,
+      "qualified_count": 0,
+      "full_qualification": false,
+      "entries": [
+        {
+          "keypath": [
+            "results",
+            0,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "8f69638ddab272b6e05d640a7995738d33058fd88469c3d5c9c7637ab9ccbe0f",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase8_candidates/r6.40_x138_t2.60.csv",
+          "portable_binding_keypath": [
+            "results",
+            0,
+            "genome"
+          ],
+          "expected_sha256": "69ec3321ab82d3445865b6009ec132e1548811302cf7a332bb5052ad3163c47b",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            1,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "de9ef3d1a7bfa1a5c42fcdb7353fd3997c085fe67c789585381a6357c9551074",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase8_candidates/r6.40_x138_t2.80.csv",
+          "portable_binding_keypath": [
+            "results",
+            1,
+            "genome"
+          ],
+          "expected_sha256": "3cd5df5615dfeb3e4b8cee5bd41aeb7d4656059429e63ab0468d5184c44786b0",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            2,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "2c88688e49488ba11a4e638a451bedee77b634b0d62005ed9501ccc9f07b8a82",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase8_candidates/r6.40_x138_t3.00.csv",
+          "portable_binding_keypath": [
+            "results",
+            2,
+            "genome"
+          ],
+          "expected_sha256": "30dc3de099ddb91a305a57fb04bdc554de3b889ae3e2efd8cb2aa54a401ef014",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            3,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "318fb4a7dac08e69c9a30562e86763beb0a8dce1059c1ac2796297ff69d7e830",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase8_candidates/r6.40_x144_t2.60.csv",
+          "portable_binding_keypath": [
+            "results",
+            3,
+            "genome"
+          ],
+          "expected_sha256": "a191088a99404972e817b1c2202d34915d5d0f53873d53c215e39a1c0cacb81c",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            4,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "ed4d4ff189c188a094dce123bedf8e0e868fb9dec9d218cb180c3300645710ce",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase8_candidates/r6.40_x144_t2.80.csv",
+          "portable_binding_keypath": [
+            "results",
+            4,
+            "genome"
+          ],
+          "expected_sha256": "a5be8af505dbaa5a1e6095c018fe767e087dfbc1c511ab4ba95ac5b51a87ee49",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            5,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "3044a78d9a247ce8106c4b08662ca243dcf7b6e746978bc942c2cd48cfb23a2d",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase8_candidates/r6.40_x144_t3.00.csv",
+          "portable_binding_keypath": [
+            "results",
+            5,
+            "genome"
+          ],
+          "expected_sha256": "7a588eccef6b2aebc0bd02e488f8a47a8033618a26a824945536900244e57a90",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            6,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "95136abbec6f6354f5e6590574e9d0973ca159731b5e53d78a31882ef12de820",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase8_candidates/r6.60_x138_t2.60.csv",
+          "portable_binding_keypath": [
+            "results",
+            6,
+            "genome"
+          ],
+          "expected_sha256": "1b24ecfc32ffd5f0d0f88e508d1b613e1f61a0709d49f60671e5259833ea4e66",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            7,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "5ad61c1fcdc619091b7284fc0c4d2a322ef8b9ea5a4cf5854ca6a3f0139426df",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase8_candidates/r6.60_x138_t2.80.csv",
+          "portable_binding_keypath": [
+            "results",
+            7,
+            "genome"
+          ],
+          "expected_sha256": "59c659a063801744ed66d41b84af24b544ec68fdf8209b8b8bc90c7f2df3de55",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            8,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "5dda73983f03a450fa00086a86178be660e4fe9c901aefaf164737d9fc444420",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase8_candidates/r6.60_x138_t3.00.csv",
+          "portable_binding_keypath": [
+            "results",
+            8,
+            "genome"
+          ],
+          "expected_sha256": "6e571490add6f16bfe8437b701f9a9b04c55dbf36817c7afd5f95b9f9b8eb75f",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            9,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "74536f22313363a043962a6d7b0fb9ddd6e54b5fb4e6a61a464a3d10f070848c",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase8_candidates/r6.60_x144_t2.60.csv",
+          "portable_binding_keypath": [
+            "results",
+            9,
+            "genome"
+          ],
+          "expected_sha256": "5afbe1bca47a647c65788a6f6feb7094f9334b3354a0f441c4b277c92dffbb76",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            10,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "53d127d0a7fb5077b4eceac57b3139efb6fb88481221dffac5ee37da8b813af4",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase8_candidates/r6.60_x144_t2.80.csv",
+          "portable_binding_keypath": [
+            "results",
+            10,
+            "genome"
+          ],
+          "expected_sha256": "facc02819d466948ae3bef6187986fa85e9c8a95b50ae55fed36b819dfe3fc5b",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "results",
+            11,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "44c3a533649b3128555ea1839cef98c6b62e6780caa1f0551ac200ff986be8ea",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase8_candidates/r6.60_x144_t3.00.csv",
+          "portable_binding_keypath": [
+            "results",
+            11,
+            "genome"
+          ],
+          "expected_sha256": "14bb5f6c144f70ceaed6f3b8b2ac5d804cac1b730ef94c0e5931bbdf9ea918d2",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "replay_controls",
+            0,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "b133ae50ce041c0f6557654480166d0baf3c3f11250d3239a23561d8a8a8a3ee",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.40_f0.00_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "replay_controls",
+            0,
+            "genome"
+          ],
+          "expected_sha256": "10a0dedc1f47d330590275a6a2e197f37a5e003844f7ee29cfbad55219c5a4cb",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "replay_controls",
+            1,
+            "gci",
+            "genome"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "1c51fa264c0dbb06e80edf952888597fbcd531add1b2f02c24e2a17a35af52f2",
+          "classification": "tracked_genome",
+          "canonical_repository_relative_path": "experiments/G16-06-RSV2-08/phase7_candidates/r6.60_f0.00_w3.0_s0.45.csv",
+          "portable_binding_keypath": [
+            "replay_controls",
+            1,
+            "genome"
+          ],
+          "expected_sha256": "a1cddde4e0c8967db57c4825bd7a7212e074644cf96a4695ce1e049a5dd16e9e",
+          "resolution": "required tracked evidence"
+        },
+        {
+          "keypath": [
+            "requested_delivery",
+            "external_path"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "7c06ca62eca3765cb4c8765c346075387325e8f2bac67b0a1a0defa8507e4547",
+          "classification": "external_delivery_destination",
+          "canonical_repository_relative_path": null,
+          "resolution": "Historical external directory; not repository evidence or a verifier input"
+        },
+        {
+          "keypath": [
+            "requested_delivery",
+            "commit"
+          ],
+          "string_kind": "value",
+          "original_string_sha256": "c840224fda42618314a2669f015d05adb9f2df8df409af420326cebc16fd5025",
+          "classification": "historical_git_error",
+          "canonical_repository_relative_path": null,
+          "resolution": "Diagnostic text; Git administrative lock is not scientific evidence or a verifier input"
+        }
+      ]
+    },
+    {
+      "phase": 9,
+      "receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+      "sha256": "cc111ae884ad1f800cbda88491d57d420ead06bb75f12bcbee318ef80287d516",
+      "legacy_host_string_count": 0,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 10,
+      "receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+      "sha256": "42ddc1663327794b71578d05fdaed678d0daac97e86dfbb8d4b0c4033fb92615",
+      "legacy_host_string_count": 0,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 11,
+      "receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+      "sha256": "26809af6faab94b759bdabad0b3dafe68bf8aaae5068b1276ee35bdd0ffe5d48",
+      "legacy_host_string_count": 0,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 12,
+      "receipt": "experiments/g16-06-rsv2-08/phase12_receipt.json",
+      "sha256": "43457e945f9d4071ad02dbf48003755af889481309c06e5f0828895b3639639a",
+      "legacy_host_string_count": 0,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 13,
+      "receipt": "experiments/g16-06-rsv2-08/phase13_receipt.json",
+      "sha256": "26591423f6dad3332509295a7c97e2aa2ff3d140f274e52751e108fcb675288d",
+      "legacy_host_string_count": 0,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 14,
+      "receipt": "experiments/g16-06-rsv2-08/phase14_receipt.json",
+      "sha256": "50773824742898a463ebb46954ed8d3ebd456a50900f1761378fb3483d833a81",
+      "legacy_host_string_count": 0,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 15,
+      "receipt": "experiments/G16-06-RSV2-08/phase15_gate_s_compliant_joint_audit.json",
+      "sha256": "205a359a7e9f1cd7065b5a35da7b1491fa6a37356a6e20473c4fff9451bfd51d",
+      "legacy_host_string_count": 0,
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 16,
+      "receipt": "experiments/G16-06-RSV2-08/phase16_cross_phase_provenance_index.json",
+      "sha256": "34f93fd138eacbe2be39690febb26478b443f22ecb75bbd87734e4daab465120",
+      "legacy_host_string_count": 0,
+      "qualified_count": 0,
+      "full_qualification": false
+    }
+  ]
+}
