@@ -1,6 +1,6 @@
 # G16-12-RSV2-04 Phase-14: existing bevel-angle × legal spine sweep
 
-Task `G16-12-RSV2-04-p14`; `unified_study_v11`; execution commit `8904e33d26ada252c8e357ccd7ed18a2330e908b`; branch `audit/gate-feasibility-bound`. Worktree `/home/ubuntu/jarambit_wt_diag`. All native invocations use CPUs **10,11**, `CARGO_BUILD_JOBS=2`, faer, requested `nice -n 10`, inherited effective niceness **19**. No commit or push. Frozen assignment: `inputs/assignment.md`.
+Task `G16-12-RSV2-04-p14`; `unified_study_v11`; execution commit `8904e33d26ada252c8e357ccd7ed18a2330e908b`; branch `audit/gate-feasibility-bound`. Worktree `.`. All native invocations use CPUs **10,11**, `CARGO_BUILD_JOBS=2`, faer, requested `nice -n 10`, inherited effective niceness **19**. No commit or push. Frozen assignment: `inputs/assignment.md`.
 
 ## Result
 

@@ -1,4 +1,4 @@
-"""Verify historical report provenance and the static measurement-code audit."""
+"""Verify twelve diagnostic reports, source bindings, and archival JSON provenance."""
 
 import hashlib
 import json
@@ -20,20 +20,18 @@ AUDIT_BYTES = 15527  # Filled from the reviewed document, never refreshed by tes
 AUDIT_TABLE_COUNT = 6
 AUDIT_SCHEMA_SHA256 = "42212ab2618b5be7937ca24f7b0662d57de18a7602d75acecb7a12124c8b26df"
 SCHEMA_AUDIT_PATH = REPORT_DIR / "SYNTHETIC_MEASUREMENT_SCHEMA_AUDIT.md"
-SCHEMA_AUDIT_SHA256 = '6f45cbe3e228d40179104356edf5a7342facea59fb39b7259259416a4f429930'
-SCHEMA_AUDIT_BYTES = 18441
+SCHEMA_AUDIT_SHA256 = '29d2ef4a6910a4fc6346f50ca7fb32b61c18e6958d5bea642ceddfc1cd0e8f60'
+SCHEMA_AUDIT_BYTES = 19029
 SCHEMA_AUDIT_TABLE_COUNT = 6
 SCHEMA_AUDIT_TABLE_SHA256 = '3da8be6624495207947af638fd701ad831223ef6d11d3945aa4f8ab0f5c5edd8'
 JSON_HEADER = ["Artifact path", "Bytes", "SHA-256", "JSON shape SHA-256", "Host-prefix occurrences", "Root type"]
-FORBIDDEN_HOME = "/home/ubuntu"
-PORTABLE_MARKDOWN = tuple(REPORT_DIR / name for name in (
-    "UNIFIED_PROTOTYPE_V12_REPORT.md",
-    "UNIFIED_PROTOTYPE_V13_REPORT.md",
-    "UNIFIED_PROTOTYPE_V14_REPORT.md",
-    "UNIFIED_PROTOTYPE_PROVENANCE_INDEX.md",
-    "CERTIFICATION_MEASUREMENT_CODE_AUDIT.md",
-    "SYNTHETIC_MEASUREMENT_SCHEMA_AUDIT.md",
-))
+FORBIDDEN_HOME = "/".join(("", "home", "ubuntu"))
+TEST_PATH = REPORT_DIR / "test_report_provenance.py"
+REPORTS = tuple((f"V{v}", REPORT_DIR / f"UNIFIED_PROTOTYPE_V{v}_REPORT.md") for v in range(5, 15)) + (
+    ("CODE_AUDIT", AUDIT_PATH),
+    ("SCHEMA_AUDIT", SCHEMA_AUDIT_PATH),
+)
+PORTABLE_MARKDOWN = tuple(path for _, path in REPORTS) + (INDEX_PATH,)
 AUDIT_SOURCES = (
     "crates/crescent/src/certification.rs",
     "crates/crescent/src/export.rs",
@@ -42,7 +40,8 @@ AUDIT_SOURCES = (
     "crates/crescent/tests/cert_integrity.rs",
 )
 ROOT = Path(__file__).resolve().parents[2]
-HEADER = ["Version", "Report path", "SHA-256", "Bytes", "Tables", "Table-schema SHA-256"]
+HEADER = ["Report", "Report path", "SHA-256", "Lines", "Bytes", "Tables",
+          "Table-schema SHA-256", "Status", "qualified_count"]
 DIGEST = re.compile(r"[0-9a-f]{64}")
 
 
@@ -126,32 +125,44 @@ def portable_path(root, value):
 
 
 def verify(root):
-    """Verify all nine reports relative to root; no Git, target/, or network."""
+    """Verify all twelve diagnostic index entries; no Git, target/, or network."""
     root = Path(root)
     lines = (root / INDEX_PATH).read_text(encoding="utf-8").splitlines()
     rows = [cells(line) for line in lines if line.strip().startswith("|")]
-    if len(rows) != 11 or rows[0] != HEADER or len(rows[1]) != len(HEADER) or not separator(rows[1]):
+    if "status: IN_PROGRESS" not in lines or "qualified_count: 0" not in lines:
+        raise ValueError("invalid index diagnostic status/qualified_count")
+    if (len(rows) != len(REPORTS) + 2 or rows[0] != HEADER
+            or len(rows[1]) != len(HEADER) or not separator(rows[1])):
         raise ValueError("invalid index table schema or coverage")
-    for version, row in zip(range(6, 15), rows[2:]):
+    for (expected_label, expected_path), row in zip(REPORTS, rows[2:]):
         if len(row) != len(HEADER):
             raise ValueError("invalid index row width")
-        label, relative, digest, size, count, table_digest = row
+        label, relative, digest, line_count, size, count, table_digest, status, qualified = row
         path = portable_path(root, relative)
-        expected = str(REPORT_DIR / f"UNIFIED_PROTOTYPE_V{version}_REPORT.md")
-        if label != f"V{version}" or relative != expected:
+        if label != expected_label or relative != str(expected_path):
             raise ValueError("unexpected report path/version, order, duplicate, or missing report")
+        if status != "IN_PROGRESS" or qualified != "0":
+            raise ValueError("invalid report diagnostic status/qualified_count")
         if not DIGEST.fullmatch(digest) or not DIGEST.fullmatch(table_digest):
             raise ValueError("invalid SHA-256 syntax")
-        if not re.fullmatch(r"[1-9][0-9]*", size) or not re.fullmatch(r"[1-9][0-9]*", count):
-            raise ValueError("invalid byte/table count")
+        if not all(re.fullmatch(r"[1-9][0-9]*", field) for field in (line_count, size, count)):
+            raise ValueError("invalid line/byte/table count")
         data = path.read_bytes()
         if sha256(data) != digest:
             raise ValueError(f"SHA-256 mismatch: {relative}")
         if len(data) != int(size):
             raise ValueError(f"byte count mismatch: {relative}")
-        schema = table_schema(data.decode("utf-8"))
+        text = data.decode("utf-8")
+        if len(text.splitlines()) != int(line_count):
+            raise ValueError(f"line count mismatch: {relative}")
+        if FORBIDDEN_HOME in text:
+            raise ValueError(f"host-home prefix in indexed report: {relative}")
+        schema = table_schema(text)
         if len(schema) != int(count) or schema_digest(schema) != table_digest:
             raise ValueError(f"table schema mismatch: {relative}")
+    for relative in (INDEX_PATH, TEST_PATH):
+        if FORBIDDEN_HOME in portable_path(root, str(relative)).read_text(encoding="utf-8"):
+            raise ValueError(f"host-home prefix in provenance file: {relative}")
     return len(rows) - 2
 
 
@@ -298,16 +309,16 @@ def verify_host_path_policy(root):
     legacy = {path: count for path, count in records.items() if count > 0}
     if len(portable) != 10 or len(legacy) != 27 or sum(legacy.values()) != 340:
         raise ValueError("portable/legacy JSON partition differs from reviewed catalog")
-    for relative in PORTABLE_MARKDOWN:
+    for relative in PORTABLE_MARKDOWN + (TEST_PATH,):
         text = portable_path(Path(root), str(relative)).read_text(encoding="utf-8")
         if FORBIDDEN_HOME in text:
-            raise ValueError(f"host-home prefix in portable Markdown: {relative}")
+            raise ValueError(f"host-home prefix in portable report/verifier: {relative}")
     return records
 
 
 class ReportProvenanceTests(unittest.TestCase):
     def test_reports_match_index(self):
-        self.assertEqual(verify(ROOT), 9)
+        self.assertEqual(verify(ROOT), 12)
 
     def snapshot(self):
         # Only small document fixtures; no builds or geometry outputs.
@@ -315,8 +326,8 @@ class ReportProvenanceTests(unittest.TestCase):
         self.addCleanup(tmp.cleanup)
         root = Path(tmp.name)
         (root / REPORT_DIR).mkdir(parents=True)
-        paths = ([INDEX_PATH, AUDIT_PATH]
-                 + [REPORT_DIR / f"UNIFIED_PROTOTYPE_V{v}_REPORT.md" for v in range(6, 15)]
+        paths = ([INDEX_PATH, TEST_PATH]
+                 + [path for _, path in REPORTS]
                  + [PurePosixPath(path) for path in AUDIT_SOURCES])
         for path in paths:
             (root / path).parent.mkdir(parents=True, exist_ok=True)
@@ -336,7 +347,7 @@ class ReportProvenanceTests(unittest.TestCase):
         root = self.snapshot()
         self.assertFalse((root / ".git").exists())
         self.assertFalse((root / "target").exists())
-        self.assertEqual(verify(root), 9)
+        self.assertEqual(verify(root), 12)
         self.assertEqual(verify_audit(root), 5)
 
     def test_audit_document_and_source_provenance(self):
@@ -367,18 +378,23 @@ class ReportProvenanceTests(unittest.TestCase):
                 verify_audit(root)
 
     def test_modified_report_is_rejected(self):
-        root = self.snapshot()
-        path = root / REPORT_DIR / "UNIFIED_PROTOTYPE_V6_REPORT.md"
-        path.write_bytes(path.read_bytes() + b"\nchanged\n")
-        with self.assertRaisesRegex(ValueError, "SHA-256 mismatch"):
-            verify(root)
+        for label, relative in REPORTS:
+            with self.subTest(report=label):
+                root = self.snapshot()
+                path = root / relative
+                path.write_bytes(path.read_bytes() + b"\nchanged\n")
+                with self.assertRaisesRegex(ValueError, "SHA-256 mismatch"):
+                    verify(root)
 
     def test_index_digest_counts_and_schema_are_checked(self):
         for column, value, message in [(2, "f" * 64, "SHA-256 mismatch"),
                                       (2, "NOT-A-HASH", "SHA-256 syntax"),
-                                      (3, "1", "byte count mismatch"),
-                                      (4, "1", "table schema mismatch"),
-                                      (5, "0" * 64, "table schema mismatch")]:
+                                      (3, "1", "line count mismatch"),
+                                      (4, "1", "byte count mismatch"),
+                                      (5, "1", "table schema mismatch"),
+                                      (6, "0" * 64, "table schema mismatch"),
+                                      (7, "COMPLETE", "diagnostic status"),
+                                      (8, "1", "qualified_count")]:
             with self.subTest(column=column, value=value):
                 root = self.snapshot()
                 self.alter_index(root, column, value)
@@ -487,7 +503,7 @@ class ReportProvenanceTests(unittest.TestCase):
         raw = br'{"path":"\u002fhome\u002fubuntu/file"}'
         self.assertNotIn(FORBIDDEN_HOME.encode(), raw)
         self.assertEqual(home_occurrences(strict_json(raw)), 1)
-        for relative in PORTABLE_MARKDOWN:
+        for relative in PORTABLE_MARKDOWN + (TEST_PATH,):
             with self.subTest(markdown=str(relative)):
                 root = self.schema_snapshot()
                 path = root / relative

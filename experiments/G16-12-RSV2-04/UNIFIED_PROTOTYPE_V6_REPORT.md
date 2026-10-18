@@ -2,7 +2,7 @@
 
 **Result: no tested profile closes the joint structural/export objective.** Every supplied grid tuple fails at least one structural target on a required mesh. The finite grids are fully screened hierarchically, with additional complete three-mesh representatives, five-mesh observations and native exports in both arms. This is finite-grid evidence, not a global infeasibility proof.
 
-Execution baseline `f5fc9e54aad9cc348a04bbcc7d09f574b47adad6`, branch `audit/gate-feasibility-bound`, worktree `/home/ubuntu/jarambit_wt_diag`. Commands use `nice -n 10 taskset -c 10,11`, CARGO_BUILD_JOBS=2, faer, CARGO_INCREMENTAL=0 and the existing lane target/dependencies. Effective niceness is 19 because the host already ran at 19. No production source, native loads/masks, four-sample means, material, geometry predicate, acceptance threshold or GCI contract was edited.
+Execution baseline `f5fc9e54aad9cc348a04bbcc7d09f574b47adad6`, branch `audit/gate-feasibility-bound`, worktree `.`. Commands use `nice -n 10 taskset -c 10,11`, CARGO_BUILD_JOBS=2, faer, CARGO_INCREMENTAL=0 and the existing lane target/dependencies. Effective niceness is 19 because the host already ran at 19. No production source, native loads/masks, four-sample means, material, geometry predicate, acceptance threshold or GCI contract was edited.
 
 ## Source assumptions tested against actual geometry
 

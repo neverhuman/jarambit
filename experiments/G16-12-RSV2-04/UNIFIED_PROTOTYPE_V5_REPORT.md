@@ -4,7 +4,7 @@
 
 In 1,106 retained pocketed FEM observations, 0 global lateral blade peaks lie on the flat floor. The floor is present in every profile, but the intended flat-floor fuse does not govern the measured response. The legal CP alternatives also increase worst hand stress rather than lowering it; requested ring widening fails native geometry/domain checks.
 
-Worktree `/home/ubuntu/jarambit_wt_diag`, branch `audit/gate-feasibility-bound`, execution baseline `d046093432864ac3cc619dc40c177c452e1e967a`. Scientific commands use `nice -n 10 taskset -c 10,11`, CARGO_BUILD_JOBS=2, faer, CARGO_INCREMENTAL=0 and the existing lane target/dependencies. The host already ran at niceness 19, so children retain effective niceness 19; receipts record the effective value. No native load, mask, material, solver, four-sample thickness rule, gate or threshold was changed.
+Worktree `.`, branch `audit/gate-feasibility-bound`, execution baseline `d046093432864ac3cc619dc40c177c452e1e967a`. Scientific commands use `nice -n 10 taskset -c 10,11`, CARGO_BUILD_JOBS=2, faer, CARGO_INCREMENTAL=0 and the existing lane target/dependencies. The host already ran at niceness 19, so children retain effective niceness 19; receipts record the effective value. No native load, mask, material, solver, four-sample thickness rule, gate or threshold was changed.
 
 ## Exact construction and reproduced controls
 

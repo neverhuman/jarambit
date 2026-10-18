@@ -131,6 +131,8 @@ JSON decoding rejects duplicate keys, NaN/Infinity and numeric overflow to a non
 
 The zero-occurrence Markdown scope is `UNIFIED_PROTOTYPE_V12_REPORT.md`, `UNIFIED_PROTOTYPE_V13_REPORT.md`, `UNIFIED_PROTOTYPE_V14_REPORT.md`, `UNIFIED_PROTOTYPE_PROVENANCE_INDEX.md`, `CERTIFICATION_MEASUREMENT_CODE_AUDIT.md`, and `SYNTHETIC_MEASUREMENT_SCHEMA_AUDIT.md`. The Phase21 change touches only provenance policy/tests and portable report wording; all37 JSON byte digests and the catalog above remain unchanged.
 
+Phase22 extends the zero-literal host-prefix policy to all12 indexed Markdown reports (V5 throughV14 and both audit receipts), the provenance index, and the verifier source. The verifier constructs its detector dynamically. Index rows record exact line/byte sizes, SHA-256, table schema and diagnostic IN_PROGRESS/qualified_count0 for every report; these provenance labels do not revise historical scientific conclusions. Earlier host-specific display references are normalized with original bytes retained in the Phase22 receipt; all37 archived JSON and their catalog remain unchanged.
+
 Run the requested checks from a repository copy:
 
 ```sh
