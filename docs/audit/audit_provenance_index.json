@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "task": "G16-12-RSV2-04-p36",
+  "task": "G16-12-RSV2-04-p37",
   "status": "IN_PROGRESS",
   "qualified_count": 0,
-  "report_count": 26,
+  "report_count": 27,
   "reports": [
     {
       "path": "experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V5_REPORT.md",
@@ -264,6 +264,16 @@
       "table_schema_sha256": "10c28520d2511883bdd4401d90ed1a5f40c55a50177da02f5f09506ed3cca17b",
       "status": "IN_PROGRESS",
       "qualified_count": 0
+    },
+    {
+      "path": "docs/audit/CLI_MAIN_SOURCE_PROVENANCE_AUDIT.md",
+      "sha256": "a5b2ddea977bf23c9f20fedc6a1dec4b705797864744c5258d47ca64895f748a",
+      "bytes": 4114,
+      "lines": 33,
+      "tables": 1,
+      "table_schema_sha256": "38052eeb38b2ed8a0ad23050c11c8dbc31150224373164f2d60bbb0afb41c7ec",
+      "status": "IN_PROGRESS",
+      "qualified_count": 0
     }
   ],
   "supplemental_documents": [
@@ -332,6 +342,12 @@
       "sha256": "839548e6526d6b396c8274b3284d5023a00709870c55b140ebeb500eb0854a1d",
       "bytes": 603,
       "lines": 23
+    },
+    {
+      "path": "docs/audit/cli_main_source_provenance_audit.json",
+      "sha256": "412a44cb0cd66755fe291b9d2a33a84598587a54a3260f87b51da14185ba54f5",
+      "bytes": 682,
+      "lines": 29
     }
   ]
 }

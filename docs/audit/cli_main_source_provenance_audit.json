@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task": "G16-12-RSV2-04-p37",
+  "status": "IN_PROGRESS",
+  "qualified_count": 0,
+  "assignment_outcome": "PARTIAL",
+  "scope": "Static source byte provenance only",
+  "source_count": 2,
+  "present_source_count": 1,
+  "missing_sources": [
+    "crates/cli/src/lib.rs"
+  ],
+  "source_files": [
+    {
+      "path": "crates/cli/src/main.rs",
+      "sha256": "ba25342ea7332f9c3113c46e9ce6dbc6ca23b3a576e623f60b428e38a02908e5",
+      "bytes": 24616,
+      "lines": 329,
+      "availability": "present"
+    },
+    {
+      "path": "crates/cli/src/lib.rs",
+      "sha256": null,
+      "bytes": null,
+      "lines": null,
+      "availability": "missing"
+    }
+  ]
+}
