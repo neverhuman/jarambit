@@ -15,6 +15,7 @@ from unittest.mock import patch
 import portable_audit as portable
 import audit_phase6 as receipt_audit
 import audit_phase11_wave_receipts as wave_audit
+import audit_phase12_cross_wave as cross_wave_audit
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -203,28 +204,31 @@ class ReceiptAuditTests(unittest.TestCase):
                 receipt_audit.verify()
 
 
+def synthetic_wave_documents():
+    docs, designs = {}, []
+    for round_id in (0, 1):
+        identity = hashlib.sha256(f"synthetic-{round_id}".encode()).hexdigest()
+        label = f"synthetic_round_{round_id}"
+        docs[f"round_{round_id:02}_births.json"] = {
+            "round": round_id, "seed": 1, "source": "synthetic fixture", "genome_header": "a,b",
+            "genomes": [{"row": f"{round_id},1", "family": "synthetic", "certificate_identity": identity}]}
+        screen = {key: 0.0 for key in wave_audit.SCREEN_NUMBERS}
+        screen.update(label=label, family="synthetic", certificate_identity=identity,
+                      qualification_status=wave_audit.PENDING)
+        docs[f"round_{round_id:02}_screen.json"] = [screen]
+        design = {key: 0.0 for key in wave_audit.DESIGN_NUMBERS}
+        design.update(label=label, family="synthetic", certificate_identity=identity, qualified=False,
+                      all_16_gates=False, rs_v2_all_hard=False, battery_pass_count=0,
+                      genome_csv="synthetic.csv", scorecard_md="synthetic.md")
+        designs.append(design)
+    docs["leaderboard.json"] = {"schema": "jarambit.auto_evolve.leaderboard.v2", "designs": designs,
+                               "assessed_count": 2, "qualified_count": 0, "champion": None, "unverified": []}
+    return docs
+
+
 class WaveReceiptAuditTests(unittest.TestCase):
     def setUp(self):
-        self.docs = {}
-        designs = []
-        for round_id in (0, 1):
-            identity = hashlib.sha256(f"synthetic-{round_id}".encode()).hexdigest()
-            label = f"synthetic_round_{round_id}"
-            self.docs[f"round_{round_id:02}_births.json"] = {
-                "round": round_id, "seed": 1, "source": "synthetic fixture", "genome_header": "a,b",
-                "genomes": [{"row": f"{round_id},1", "family": "synthetic", "certificate_identity": identity}]}
-            screen = {key: 0.0 for key in wave_audit.SCREEN_NUMBERS}
-            screen.update(label=label, family="synthetic", certificate_identity=identity,
-                          qualification_status=wave_audit.PENDING)
-            self.docs[f"round_{round_id:02}_screen.json"] = [screen]
-            design = {key: 0.0 for key in wave_audit.DESIGN_NUMBERS}
-            design.update(label=label, family="synthetic", certificate_identity=identity, qualified=False,
-                          all_16_gates=False, rs_v2_all_hard=False, battery_pass_count=0,
-                          genome_csv="synthetic.csv", scorecard_md="synthetic.md")
-            designs.append(design)
-        self.docs["leaderboard.json"] = {"schema": "jarambit.auto_evolve.leaderboard.v2", "designs": designs,
-                                          "assessed_count": 2, "qualified_count": 0, "champion": None,
-                                          "unverified": []}
+        self.docs = synthetic_wave_documents()
 
     def payloads(self):
         payloads = {name: json.dumps(doc, sort_keys=True).encode() for name, doc in self.docs.items()}
@@ -332,6 +336,124 @@ class WaveReceiptAuditTests(unittest.TestCase):
         with patch.object(Path, "read_bytes", new=read):
             with self.assertRaisesRegex(ValueError, "changed during audit"):
                 wave_audit.audit_wave_directory(Path("/synthetic/wave"), expected)
+
+
+class CrossWaveReceiptAuditTests(unittest.TestCase):
+    def setUp(self):
+        self.waves = {wave: synthetic_wave_documents() for wave in cross_wave_audit.PINS}
+
+    def payloads(self):
+        payloads = {wave: {name: json.dumps(doc, sort_keys=True).encode() for name, doc in docs.items()}
+                    for wave, docs in self.waves.items()}
+        pins = {wave: {name: (hashlib.sha256(data).hexdigest(), len(data)) for name, data in files.items()}
+                for wave, files in payloads.items()}
+        return payloads, pins
+
+    def test_assessment_events_and_unique_identities_are_separate(self):
+        result = cross_wave_audit.audit_documents(self.waves)
+        self.assertEqual(result["totals"], {"births": 8, "screens": 8, "assessed": 8, "qualified": 0, "unverified": 0})
+        self.assertEqual(result["unique_assessed_identities"], 2)
+        self.assertEqual(result["birth_identities_in_multiple_waves"], 2)
+        self.assertTrue(all(len(waves) == 4 for waves in result["assessed_identity_waves"].values()))
+
+    def test_stage_linkage_is_checked_in_every_wave(self):
+        self.waves["w317"]["round_00_screen.json"][0]["certificate_identity"] = "a" * 64
+        with self.assertRaisesRegex(ValueError, "same-round births"):
+            cross_wave_audit.audit_documents(self.waves)
+
+    def test_same_identity_cannot_bind_different_cross_wave_rows_or_headers(self):
+        for field in ("row", "header"):
+            changed = deepcopy(self.waves)
+            if field == "row":
+                changed["w316"]["round_00_births.json"]["genomes"][0]["row"] = "changed,1"
+            else:
+                for round_id in (0, 1):
+                    changed["w316"][f"round_{round_id:02}_births.json"]["genome_header"] = "different,b"
+            wave_audit.audit_documents(changed["w316"])
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "Cross-wave identity binding mismatch"):
+                cross_wave_audit.audit_documents(changed)
+
+    def test_equal_rows_may_have_different_source_bound_identities(self):
+        identity = hashlib.sha256(b"different synthetic source context").hexdigest()
+        docs = self.waves["w316"]
+        docs["round_00_births.json"]["genomes"][0]["certificate_identity"] = identity
+        docs["round_00_screen.json"][0]["certificate_identity"] = identity
+        docs["leaderboard.json"]["designs"][0]["certificate_identity"] = identity
+        result = cross_wave_audit.audit_documents(self.waves)
+        self.assertEqual(result["unique_assessed_identities"], 3)
+        self.assertEqual(result["totals"]["assessed"], 8)
+
+    def test_inconsistent_cross_wave_counts_and_qualification_fail(self):
+        for key, value in [("assessed_count", 1), ("assessed_count", True), ("qualified_count", 1),
+                           ("qualified_count", False), ("champion", {}), ("unverified", ["missing evidence"])]:
+            changed = deepcopy(self.waves)
+            changed["w318"]["leaderboard.json"][key] = value
+            with self.subTest(key=key, value=value), self.assertRaises(ValueError):
+                cross_wave_audit.audit_documents(changed)
+        self.waves["w317"]["leaderboard.json"]["designs"][0]["qualified"] = True
+        with self.assertRaisesRegex(ValueError, "boolean false"):
+            cross_wave_audit.audit_documents(self.waves)
+
+    def test_missing_wave_and_file_fail_closed(self):
+        changed = dict(self.waves)
+        del changed["w316"]
+        with self.assertRaisesRegex(ValueError, "Exactly waves"):
+            cross_wave_audit.audit_documents(changed)
+        payloads, pins = self.payloads()
+        del payloads["w315"]["leaderboard.json"]
+        with self.assertRaisesRegex(ValueError, "Exactly five"):
+            cross_wave_audit.audit_payloads(payloads, pins)
+
+    def test_cross_wave_digest_tampering_fails(self):
+        payloads, pins = self.payloads()
+        payloads["w317"]["leaderboard.json"] += b" "
+        with self.assertRaisesRegex(ValueError, "w317: SHA-256/size mismatch"):
+            cross_wave_audit.audit_payloads(payloads, pins)
+        payloads, pins = self.payloads()
+        pins["w315"]["leaderboard.json"] = ("A" * 64, len(payloads["w315"]["leaderboard.json"]))
+        with self.assertRaisesRegex(ValueError, "Invalid SHA-256"):
+            cross_wave_audit.audit_payloads(payloads, pins)
+
+    def test_portable_cross_wave_directories(self):
+        payloads, pins = self.payloads()
+        directories = {wave: Path("/synthetic") / wave for wave in self.waves}
+        calls = []
+
+        def read(path):
+            calls.append(path)
+            return payloads[path.parent.name][path.name]
+
+        with patch.object(Path, "read_bytes", new=read):
+            result = cross_wave_audit.audit_directories(directories, pins)
+        self.assertEqual(result["totals"]["assessed"], 8)
+        self.assertEqual(len(calls), 40)
+
+    def test_cross_wave_mutation_during_audit_fails(self):
+        payloads, pins = self.payloads()
+        calls = {}
+
+        def read(path):
+            calls[path] = calls.get(path, 0) + 1
+            return payloads[path.parent.name][path.name] + (b" " if calls[path] > 1 else b"")
+
+        with patch.object(Path, "read_bytes", new=read):
+            with self.assertRaisesRegex(ValueError, "Cross-wave artifacts changed"):
+                cross_wave_audit.audit_directories({wave: Path("/synthetic") / wave for wave in self.waves}, pins)
+
+    def test_explicit_cli_paths_need_no_git_or_host_wave_data(self):
+        payloads, pins = self.payloads()
+        output = io.StringIO()
+
+        def read(path):
+            return payloads[path.parent.name][path.name]
+
+        args = ["audit_phase12_cross_wave.py", "--archive-root", "/synthetic/archive",
+                "--live-wave-dir", "/synthetic/live/w318"]
+        with patch.object(Path, "read_bytes", new=read), patch.object(cross_wave_audit, "PINS", pins), \
+                patch.object(wave_audit, "default_wave_directory", side_effect=AssertionError("Unexpected Git access")), \
+                patch.object(sys, "argv", args), redirect_stdout(output):
+            cross_wave_audit.main()
+        self.assertIn("20 file digests; 8 assessment events; 2 distinct assessed identities", output.getvalue())
 
 
 if __name__ == "__main__":

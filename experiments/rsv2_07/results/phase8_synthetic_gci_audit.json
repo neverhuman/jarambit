@@ -2632,12 +2632,14 @@
   "study_sha256": {
     "experiments/rsv2_07/GCI_A4_VERIFICATION.md": "94c246fb42ee344e74a58856e9d26d5ed6784a1b8ec6053d28fbe867b1ae758c",
     "experiments/rsv2_07/PHASE10_PORTABLE_RECEIPT_AUDIT.md": "c8c258111b9c08545c7f32a505a7cba65fe599121943b27ab4e011884f40cd62",
+    "experiments/rsv2_07/PHASE11_WAVE_RECEIPT_AUDIT.md": "951fbbe7b821d1c27c96239490991631ab1cd4630c3c13a9bfb75aab7665968d",
     "experiments/rsv2_07/PHASE5_WITNESS_3D_VERIFICATION.md": "9f3fa6c59aad71708143b5a469de23301fe8f9aa5e7d8d3750f637de8e729624",
     "experiments/rsv2_07/PHASE6_UNIFIED_SCORECARD.md": "a425b66d675208c7fffa17e075605bcfbddd234f82456422c1b5d99783799e30",
     "experiments/rsv2_07/PHASE7_SAVED_TRIPLET_GCI_AUDIT.md": "cc945cb4a6f61f147b7f6cadf52ae100c3d66373526a6f0d02d3da7f50fa620b",
     "experiments/rsv2_07/PHASE8_SYNTHETIC_GCI_AUDIT.md": "0d0dd71ef0c87b1d1307100dc6635ad68fd10c4678600e08c4550c2174c9d89e",
     "experiments/rsv2_07/REPORT.md": "efda3353ab2d47c3d7cd1eadd9e5fb132a74a343ff097360416f95f0ae6d76e4",
     "experiments/rsv2_07/SOLID_TIP_3D_VERIFICATION.md": "74a9dbbddfddad356cc258a4b2312a40aae638ea672a1f7325b858ef53badacf",
+    "experiments/rsv2_07/audit_phase11_wave_receipts.py": "f3a2d0acaa31981ac2465b4f80ee88bb1c1ccbcee2eb59d4161b1a9f61ebe9c2",
     "experiments/rsv2_07/audit_phase6.py": "57a9d5aca837e6f3704d23b1c90d902523ef89d560d27ed97a7f28647e66b196",
     "experiments/rsv2_07/audit_phase7.py": "d6a83f15674f9083a4a9b3995293ac8e24768a20a9adb3f719df4f6abd91ec27",
     "experiments/rsv2_07/audit_phase8.py": "93afb9761faabd94f37b11070e7aadef8ff4d7167d2dbf37b536827508471515",
@@ -2676,7 +2678,7 @@
     "experiments/rsv2_07/results/fine_2.csv": "0faa6b50e7ef8b470f0bd69414b3c768a42d93a39a7d2d0ccbe1159eb641e760",
     "experiments/rsv2_07/results/gci_a4_validation.json": "97b37a3e0e2bf324c88025976c4e2ca51383da00bd0d62789d95effe8e3f04f4",
     "experiments/rsv2_07/results/hotspot_fine_0.csv": "8725e87ca6d4d2d1b254cd1502bfab276bb355d6da1620f7b7388aa4d33198a9",
-    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": "465b1261718c53cae04fc2856c0eec00d97a5a9a8a7f74797dc25e16bcc34600",
+    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": "4a872ce373df1913d73f0592a46960dd6aba28b857a25845ba6e0686274a17c2",
     "experiments/rsv2_07/results/phase5_witness_3d_validation.json": "66f3b5112bf1122ddd49fa3c1ad66384d810ee177494b0143233fdf7a895e80a",
     "experiments/rsv2_07/results/phase6_Q7_window_p05.csv": "0055f1b7048fdd66dfc995b7d2e35b2a2e632628d4b3dcd68f6811afc6f9bacc",
     "experiments/rsv2_07/results/phase6_unified_scorecard.json": "5d301a3b33afdd8470441c0094f79e47915f8f9e1161af035b90ac37223f7dd7",
@@ -2688,10 +2690,10 @@
     "experiments/rsv2_07/solid_tip_3d_p4.py": "b7118433b0ad10d9e2e6aae48e3a59c5cbbd3acec9b7cd578cb62a6bb8e213e8",
     "experiments/rsv2_07/solid_tip_3d_p5.py": "bc261152ad457329cf2cbb839f0f30ffe877b5f56028456f33e1f3a13b719c79",
     "experiments/rsv2_07/solid_tip_input.rs": "1a60d621c703d85d27a43370216a74e054416489f9dc243142179122e4dbbde8",
-    "experiments/rsv2_07/test_portable_audits.py": "698f22a7853b7c2a1099aabccb622c0c211709f1cb9428024703eaa07bcd3e5e",
+    "experiments/rsv2_07/test_portable_audits.py": "2ea4bf0603774b8027af684752a0524f4bea67eab71d33d8ecf37a8400a79a47",
     "experiments/rsv2_07/web.py": "d4f8f01791f4b84c3383f33f279944c06a3fe32bf21034c3a686f566fcc04d9a",
-    "experiments/rsv2_07/audit_phase11_wave_receipts.py": "f3a2d0acaa31981ac2465b4f80ee88bb1c1ccbcee2eb59d4161b1a9f61ebe9c2",
-    "experiments/rsv2_07/PHASE11_WAVE_RECEIPT_AUDIT.md": "951fbbe7b821d1c27c96239490991631ab1cd4630c3c13a9bfb75aab7665968d"
+    "experiments/rsv2_07/audit_phase12_cross_wave.py": "c52ac6cb4be0cb982c439c7e6433d6c647c1c90e053b40e93114a3a22bc6c3c7",
+    "experiments/rsv2_07/PHASE12_CROSS_WAVE_PROVENANCE_AUDIT.md": "3bcd1a0a14f687dc3d513a8cb584b402846e2a6093613a78a6f656f0ce8ea8d3"
   },
   "portability": {
     "task": "RSV2-07-p9",
@@ -2725,5 +2727,10 @@
     "task": "RSV2-07-p11",
     "reason": "Bind the portable wave receipt audit, report and updated generic tests",
     "strict_study_files": 62
+  },
+  "phase12_manifest_refresh": {
+    "task": "RSV2-07-p12",
+    "reason": "Bind cross-wave receipt audit, report and updated generic tests",
+    "strict_study_files": 64
   }
 }
