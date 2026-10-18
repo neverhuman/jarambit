@@ -1,0 +1,62 @@
+{
+  "schema": "jarambit.rsv2_07_hm.phase28_script_test_inventory.v1",
+  "task": "RSV2-07-p28",
+  "status": "pass",
+  "digest_basis": "exact working-tree bytes of the two named scripts",
+  "test_count_rule": "direct test-prefixed sync or async method declarations in top-level classes explicitly based on unittest.TestCase or TestCase",
+  "limitations": "static declarations only; no import, execution, inheritance, alias resolution or runtime discovery",
+  "script_count": 2,
+  "total_size_bytes": 43018,
+  "test_method_count": 30,
+  "scripts": {
+    "scripts/audit_rsv2_07_hm_forensics.py": {
+      "size_bytes": 20304,
+      "sha256": "6a1127c8db385b67f676f5dec9603c201a57dd4b76258c7c9213f98f48eef2ce",
+      "test_method_count": 0,
+      "test_classes": {}
+    },
+    "scripts/test_audit_rsv2_07_hm_forensics.py": {
+      "size_bytes": 22714,
+      "sha256": "d3323440090a6b7bfa5ba7f55c1814293eb2793efc8096ed43f41a54e975b58d",
+      "test_method_count": 30,
+      "test_classes": {
+        "SavedLogForensicsTests": [
+          "test_six_missing_logs_are_partial_with_null_not_zero_counts",
+          "test_present_records_are_hashed_but_not_given_an_unreviewed_lineage_meaning",
+          "test_empty_file_has_no_records_but_does_not_establish_zero_lineage_counts",
+          "test_jsonl_rejects_duplicate_keys_nonfinite_blank_nonobject_and_invalid_utf8",
+          "test_changed_bytes_or_new_availability_during_audit_fail",
+          "test_read_errors_are_not_reported_as_missing",
+          "test_relocated_readonly_cli_emits_partial_lane_and_checks_receipt_and_report_without_git",
+          "test_explicit_write_only_creates_the_two_requested_outputs_and_still_exits_partial",
+          "test_saved_outputs_remain_partial_and_have_no_literal_host_prefix"
+        ],
+        "ArtifactDigestIndexTests": [
+          "test_sorted_exact_byte_digests_and_deterministic_totals",
+          "test_only_matching_tracked_files_in_directory_are_included",
+          "test_self_outputs_are_explicitly_excluded_even_when_tracked",
+          "test_tracked_local_edits_use_working_tree_bytes",
+          "test_missing_tracked_file_and_empty_inventory_fail",
+          "test_absolute_host_paths_and_json_escaped_host_paths_fail",
+          "test_relative_paths_and_web_links_are_portable",
+          "test_invalid_utf8_and_non_strict_json_fail",
+          "test_symlinked_artifact_is_not_followed",
+          "test_byte_or_membership_mutation_during_scan_fails",
+          "test_cli_writes_only_outputs_then_readonly_verifies_from_other_cwd",
+          "test_saved_receipt_digest_type_and_report_tampering_fail"
+        ],
+        "ScriptTestInventoryTests": [
+          "test_ast_count_distinguishes_methods_helpers_nested_code_and_strings",
+          "test_exact_hash_sizes_and_counts_without_executing_sources",
+          "test_missing_nonregular_or_invalid_python_sources_fail",
+          "test_source_mutation_during_inventory_fails",
+          "test_write_only_creates_requested_outputs_and_readonly_needs_no_git",
+          "test_receipt_type_digest_and_count_tampering_fail",
+          "test_report_tampering_and_source_edits_invalidate_saved_inventory",
+          "test_artifact_root_is_rejected_for_script_inventory",
+          "test_actual_static_declarations_match_current_unittest_discovery"
+        ]
+      }
+    }
+  }
+}

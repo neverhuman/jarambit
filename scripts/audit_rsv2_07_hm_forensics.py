@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Static Phase-26 saved-log integrity and Phase-27 tracked artifact digests."""
+"""Static saved-log integrity, tracked artifact digests and script/test inventory."""
 
 import argparse
+import ast
 import fnmatch
 import hashlib
 import json
@@ -18,6 +19,9 @@ WAVES = tuple(f"w{number}" for number in range(315, 321))
 DIGEST_RECEIPT = DIRECTORY + "phase27_artifact_digest_index.json"
 DIGEST_REPORT = DIRECTORY + "PHASE27_ARTIFACT_DIGEST_INDEX.md"
 DIGEST_EXCLUSIONS = (DIGEST_REPORT, DIGEST_RECEIPT)
+SCRIPT_RECEIPT = DIRECTORY + "phase28_script_test_inventory_audit.json"
+SCRIPT_REPORT = DIRECTORY + "PHASE28_SCRIPT_TEST_INVENTORY_AUDIT.md"
+SCRIPT_PATHS = ("scripts/audit_rsv2_07_hm_forensics.py", "scripts/test_audit_rsv2_07_hm_forensics.py")
 # Absolute POSIX paths, Windows drive paths, UNC paths and file URIs.
 HOST_PATH = re.compile(r"(?<![\w./:])/(?!/)[\w.~-]+|(?<!\w)[A-Za-z]:[\\/]|\\\\[^\\\s]+\\|file://")
 
@@ -155,6 +159,81 @@ def run_digest(args):
     return 0
 
 
+def static_test_methods(data):
+    classes = {}
+    for node in ast.parse(data).body:
+        if not isinstance(node, ast.ClassDef):
+            continue
+        is_test_case = any(
+            isinstance(base, ast.Name) and base.id == "TestCase" or
+            isinstance(base, ast.Attribute) and isinstance(base.value, ast.Name) and
+            base.value.id == "unittest" and base.attr == "TestCase" for base in node.bases)
+        if is_test_case:
+            classes[node.name] = [method.name for method in node.body
+                                  if isinstance(method, (ast.FunctionDef, ast.AsyncFunctionDef))
+                                  and method.name.startswith("test")]
+    return classes
+
+
+def script_inventory(repo_root):
+    repo_root = Path(repo_root)
+    sources, scripts = {}, {}
+    for name in SCRIPT_PATHS:
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode), f"Expected regular script: {name}")
+        data = path.read_bytes()
+        classes = static_test_methods(data)
+        sources[name] = data
+        scripts[name] = {"size_bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(),
+                         "test_method_count": sum(map(len, classes.values())), "test_classes": classes}
+    for name, data in sources.items():
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode) and path.read_bytes() == data,
+                "Script bytes or type changed during audit")
+    return {"schema": "jarambit.rsv2_07_hm.phase28_script_test_inventory.v1", "task": "RSV2-07-p28",
+            "status": "pass", "digest_basis": "exact working-tree bytes of the two named scripts",
+            "test_count_rule": "direct test-prefixed sync or async method declarations in top-level classes explicitly based on unittest.TestCase or TestCase",
+            "limitations": "static declarations only; no import, execution, inheritance, alias resolution or runtime discovery",
+            "script_count": len(scripts), "total_size_bytes": sum(row["size_bytes"] for row in scripts.values()),
+            "test_method_count": sum(row["test_method_count"] for row in scripts.values()), "scripts": scripts}
+
+
+def render_scripts(document):
+    rows = [f"| {name} | {row['size_bytes']} | {row['sha256']} | {row['test_method_count']} |"
+            for name, row in document["scripts"].items()]
+    return "\n".join([
+        "# Phase-28 script and test inventory audit", "",
+        f"**PASS.** Inventoried {document['script_count']} scripts, totaling {document['total_size_bytes']} bytes and {document['test_method_count']} statically declared test methods.", "",
+        "| Repository-relative script | Bytes | SHA-256 | Test methods |",
+        "| --- | ---: | --- | ---: |", *rows, "",
+        "Sizes and SHA-256 describe exact working-tree bytes after the Phase-28 implementation and tests were written. Both sources are reread to detect changes during the audit. Missing files, nonregular files and invalid Python syntax fail. The output files are outside the input set, so no self-digest cycle exists.", "",
+        "The AST parser counts directly declared synchronous and asynchronous methods whose names start with test, inside top-level classes explicitly based on unittest.TestCase or TestCase. Helpers, top-level functions, nested methods, strings and comments are excluded. Test class and method names are recorded in the JSON receipt. Sources are parsed without importing or executing them. Inherited methods, import aliases, dynamically generated tests and runtime discovery are outside this static count; these counts do not claim test execution or coverage.", "",
+        "Persisted paths are repository-relative. --repo-root selects a relocated source tree without requiring Git. A normal Phase-28 run verifies the complete saved JSON inventory and exact report text without writes. --write replaces only the two Phase-28 output files.", "",
+        "```sh", "python3 scripts/audit_rsv2_07_hm_forensics.py --phase 28",
+        "python3 -m unittest discover -s scripts -p 'test_audit_rsv2_07_hm_forensics.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs 14,15 at nice 10. This is a static script and test inventory audit. Changes are left uncommitted.", "",
+    ])
+
+
+def run_scripts(args):
+    require(args.artifact_root is None, "Phase-28 reads scripts in --repo-root; --artifact-root is not supported")
+    current = script_inventory(args.repo_root)
+    report = render_scripts(current)
+    receipt = json.dumps(current, indent=2) + "\n"
+    require_portable(report, "Phase-28 report")
+    require_portable(receipt, "Phase-28 receipt")
+    if args.write:
+        (args.repo_root / DIRECTORY).mkdir(parents=True, exist_ok=True)
+        (args.repo_root / SCRIPT_RECEIPT).write_text(receipt, encoding="utf-8")
+        (args.repo_root / SCRIPT_REPORT).write_text(report, encoding="utf-8")
+    else:
+        saved = strict_json((args.repo_root / SCRIPT_RECEIPT).read_bytes())
+        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-28 saved receipt mismatch")
+        require((args.repo_root / SCRIPT_REPORT).read_text(encoding="utf-8") == report, "Phase-28 report mismatch")
+    print(f"LANE: RSV2-07-hm | RSV2-07-p28 | PASS | scripts={current['script_count']} | test_methods={current['test_method_count']}")
+    return 0
+
+
 def audit(artifact_root):
     artifact_root = Path(artifact_root)
     sources, waves = {}, {}
@@ -205,11 +284,13 @@ def render(document):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--phase", choices=("26", "27"), default="26")
+    parser.add_argument("--phase", choices=("26", "27", "28"), default="26")
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     try:
+        if args.phase == "28":
+            return run_scripts(args)
         if args.phase == "27":
             require(args.artifact_root is None, "Phase-27 uses tracked files in --repo-root; --artifact-root is not supported")
             return run_digest(args)
@@ -227,7 +308,7 @@ def main():
             saved = strict_json((args.repo_root / RECEIPT).read_bytes())
             require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-26 saved receipt mismatch")
             require((args.repo_root / REPORT).read_text() == render(current), "Phase-26 report mismatch")
-    except (OSError, ValueError, subprocess.CalledProcessError) as error:
+    except (OSError, ValueError, SyntaxError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Phase-{args.phase} static integrity: FAIL: {error}\n")
     print(f"LANE: RSV2-07-hm | RSV2-07-p26 | PARTIAL | missing_logs={current['missing_logs']}/6 | lineage_counts=unestablished")
     return 2

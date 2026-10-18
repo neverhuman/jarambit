@@ -1,4 +1,4 @@
-"""Generic saved-log integrity tests; no historical lineage schema is invented."""
+"""Static saved-log, artifact digest and script/test inventory regressions."""
 
 from contextlib import redirect_stderr, redirect_stdout
 from copy import deepcopy
@@ -285,6 +285,146 @@ class ArtifactDigestIndexTests(unittest.TestCase):
         with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
             self.cli()
         self.assertEqual(error.exception.code, 1)
+
+
+class ScriptTestInventoryTests(unittest.TestCase):
+    def setUp(self):
+        scratch = Path(__file__).resolve().parents[1] / "target/rsv2-07/phase28/test-fixtures"
+        scratch.mkdir(parents=True, exist_ok=True)
+        temporary = tempfile.TemporaryDirectory(prefix="inventory-", dir=scratch)
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.files = {
+            audit.SCRIPT_PATHS[0]: b'raise RuntimeError("Source must never be executed")\n',
+            audit.SCRIPT_PATHS[1]: 'import unittest\n# Unicode byte lengths: α\nclass Example(unittest.TestCase):\n    def test_one(self): pass\n    def helper(self): pass\n'.encode(),
+        }
+        for name, data in self.files.items():
+            path = self.root / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
+
+    def cli(self, *extra):
+        with patch.object(sys, "argv", ["forensics", "--phase", "28", "--repo-root", str(self.root), *extra]), \
+                redirect_stdout(io.StringIO()) as output:
+            result = audit.main()
+        return result, output.getvalue()
+
+    def test_ast_count_distinguishes_methods_helpers_nested_code_and_strings(self):
+        source = b'''
+# def test_comment(self): pass
+text = "def test_string(self): pass"
+def test_top_level(): pass
+class Helper:
+    def test_not_a_testcase(self): pass
+class Actual(unittest.TestCase):
+    def test_sync(self):
+        def test_nested(): pass
+    async def test_async(self): pass
+    def helper(self): pass
+class Imported(TestCase):
+    def test_imported(self): pass
+class Inherited(Actual):
+    def test_indirect(self): pass
+def factory():
+    class Nested(unittest.TestCase):
+        def test_uncreated(self): pass
+'''
+        self.assertEqual(audit.static_test_methods(source), {
+            "Actual": ["test_sync", "test_async"], "Imported": ["test_imported"]})
+
+    def test_exact_hash_sizes_and_counts_without_executing_sources(self):
+        current = audit.script_inventory(self.root)
+        self.assertEqual((current["script_count"], current["test_method_count"]), (2, 1))
+        self.assertEqual(current["total_size_bytes"], sum(map(len, self.files.values())))
+        self.assertEqual(list(current["scripts"]), list(audit.SCRIPT_PATHS))
+        for name, data in self.files.items():
+            self.assertEqual(current["scripts"][name]["sha256"], hashlib.sha256(data).hexdigest())
+            self.assertEqual(current["scripts"][name]["size_bytes"], len(data))
+        self.assertEqual(current["scripts"][audit.SCRIPT_PATHS[0]]["test_method_count"], 0)
+        self.assertEqual(current["scripts"][audit.SCRIPT_PATHS[1]]["test_classes"], {"Example": ["test_one"]})
+        self.assertEqual(current, audit.script_inventory(self.root))
+        self.assertNotIn(str(self.root), json.dumps(current))
+
+    def test_missing_nonregular_or_invalid_python_sources_fail(self):
+        path = self.root / audit.SCRIPT_PATHS[0]
+        path.write_bytes(b"def broken(\n")
+        with self.assertRaises(SyntaxError):
+            audit.script_inventory(self.root)
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli()
+        self.assertEqual(error.exception.code, 1)
+        path.unlink()
+        with self.assertRaises(FileNotFoundError):
+            audit.script_inventory(self.root)
+        path.symlink_to(audit.SCRIPT_PATHS[1].split("/")[-1])
+        with self.assertRaisesRegex(ValueError, "regular script"):
+            audit.script_inventory(self.root)
+
+    def test_source_mutation_during_inventory_fails(self):
+        original_read = Path.read_bytes
+        changed = False
+        def read(path):
+            nonlocal changed
+            data = original_read(path)
+            if path == self.root / audit.SCRIPT_PATHS[0] and not changed:
+                changed = True
+                path.write_bytes(data + b"# changed\n")
+            return data
+        with patch.object(Path, "read_bytes", new=read), self.assertRaisesRegex(ValueError, "changed during audit"):
+            audit.script_inventory(self.root)
+
+    def test_write_only_creates_requested_outputs_and_readonly_needs_no_git(self):
+        with patch.object(audit.subprocess, "check_output", side_effect=AssertionError("Unexpected Git command")):
+            result, output = self.cli("--write")
+            self.assertEqual(result, 0)
+            self.assertIn("LANE: RSV2-07-hm | RSV2-07-p28 | PASS | scripts=2 | test_methods=1", output)
+            expected = set(self.files) | {audit.SCRIPT_RECEIPT, audit.SCRIPT_REPORT}
+            self.assertEqual({path.relative_to(self.root).as_posix() for path in self.root.rglob("*") if path.is_file()}, expected)
+            before = {name: (self.root / name).read_bytes() for name in expected}
+            with patch.object(Path, "write_text", side_effect=AssertionError("Readonly audit wrote")):
+                self.assertEqual(self.cli()[0], 0)
+            for name, data in before.items():
+                self.assertEqual((self.root / name).read_bytes(), data)
+            for name in (audit.SCRIPT_RECEIPT, audit.SCRIPT_REPORT):
+                audit.require_portable((self.root / name).read_text(), name)
+
+    def test_receipt_type_digest_and_count_tampering_fail(self):
+        self.cli("--write")
+        original = (self.root / audit.SCRIPT_RECEIPT).read_bytes()
+        for field, value in (("sha256", "0" * 64), ("size_bytes", 1), ("test_method_count", False)):
+            saved = json.loads(original)
+            saved["scripts"][audit.SCRIPT_PATHS[0]][field] = value
+            (self.root / audit.SCRIPT_RECEIPT).write_text(json.dumps(saved))
+            with self.subTest(field=field), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                self.cli()
+            self.assertEqual(error.exception.code, 1)
+
+    def test_report_tampering_and_source_edits_invalidate_saved_inventory(self):
+        self.cli("--write")
+        report = self.root / audit.SCRIPT_REPORT
+        original = report.read_bytes()
+        report.write_bytes(original + b"changed\n")
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli()
+        self.assertEqual(error.exception.code, 1)
+        report.write_bytes(original)
+        source = self.root / audit.SCRIPT_PATHS[0]
+        source.write_bytes(source.read_bytes() + b"# local edit\n")
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli()
+        self.assertEqual(error.exception.code, 1)
+
+    def test_artifact_root_is_rejected_for_script_inventory(self):
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli("--artifact-root", str(self.root))
+        self.assertEqual(error.exception.code, 1)
+
+    def test_actual_static_declarations_match_current_unittest_discovery(self):
+        root = Path(__file__).resolve().parents[1]
+        current = audit.script_inventory(root)
+        self.assertEqual(current["scripts"][audit.SCRIPT_PATHS[0]]["test_method_count"], 0)
+        discovered = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__]).countTestCases()
+        self.assertEqual(current["scripts"][audit.SCRIPT_PATHS[1]]["test_method_count"], discovered)
 
 
 if __name__ == "__main__":
