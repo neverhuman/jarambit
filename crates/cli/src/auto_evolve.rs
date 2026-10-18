@@ -178,6 +178,15 @@ fn spawn_offspring_batch(
             if q7_slot {
                 let slot = k % 11;
                 child.v[..N_CP].copy_from_slice(&Q7_CPS);
+                if slot != 9 {
+                    for (idx, cp) in child.v[..N_CP].iter_mut().enumerate() {
+                        *cp = (*cp + rng.range(-0.005, 0.005)).clamp(b[idx].0, b[idx].1);
+                    }
+                    child.v[TAPER_X0] = rng.range(116.0, 118.0)
+                        .clamp(b[TAPER_X0].0, b[TAPER_X0].1);
+                } else {
+                    child.v[TAPER_X0] = 116.0;
+                }
                 child.v[genome::DROP] = 0.0;
                 child.v[genome::GRIP_DX] = -0.4;
                 child.v[genome::RING_ID] = 24.9;
@@ -185,24 +194,23 @@ fn spawn_offspring_batch(
                 child.v[genome::SPINE_OFF] = 42.0;
                 child.v[genome::T] = 6.0;
                 child.v[T_TIP] = 2.62;
-                child.v[TAPER_X0] = 116.0;
                 child.v[EA_IN] = 18.0;
                 child.v[EA_SP] = 18.0;
 
                 match slot {
                     6 => {
-                        let variant = (rng.0 % 3) as f64;
+                        let variant = (rng.next_u64() % 3) as f64;
                         child.v[genome::WIN_N] = 1.0;
-                        child.v[genome::WIN_S0] = (0.45 + 0.02 * variant)
+                        child.v[genome::WIN_S0] = (0.45 + 0.02 * variant + rng.range(-0.003, 0.003))
                             .clamp(b[genome::WIN_S0].0, b[genome::WIN_S0].1);
                         child.v[genome::WIN_S1] = 0.84_f64
                             .clamp(b[genome::WIN_S1].0, b[genome::WIN_S1].1);
-                        child.v[genome::WIN_W] = (2.7 + 0.2 * variant)
+                        child.v[genome::WIN_W] = (2.7 + 0.2 * variant + rng.range(-0.02, 0.02))
                             .clamp(b[genome::WIN_W].0, b[genome::WIN_W].1);
-                        child.v[genome::WIN_FILL] = (0.66 + 0.02 * variant)
+                        child.v[genome::WIN_FILL] = (0.66 + 0.02 * variant + rng.range(-0.005, 0.005))
                             .clamp(b[genome::WIN_FILL].0, b[genome::WIN_FILL].1);
                         // The schema names shallow pocket relief POCKET_D; POCKET_W is not a gene.
-                        child.v[POCKET_D] = (0.15 + 0.05 * variant)
+                        child.v[POCKET_D] = (0.15 + 0.05 * variant + rng.range(-0.01, 0.01))
                             .clamp(b[POCKET_D].0, b[POCKET_D].1);
                         child.v[genome::RING_WALL] = 6.20_f64
                             .clamp(b[genome::RING_WALL].0, b[genome::RING_WALL].1);
@@ -210,7 +218,7 @@ fn spawn_offspring_batch(
                             .clamp(b[genome::RING_ID].0, b[genome::RING_ID].1);
                         child.v[genome::GRIP_DX] = -0.4 + child.v[genome::RING_WALL] - 6.0;
                         child.v[TAPER_X0] = 126.0_f64.clamp(b[TAPER_X0].0, b[TAPER_X0].1);
-                        child.v[T_TIP] = (2.65 + 0.08 * variant)
+                        child.v[T_TIP] = (2.65 + 0.08 * variant + rng.range(-0.01, 0.01))
                             .clamp(b[T_TIP].0, b[T_TIP].1);
                         // EA_IN's schema floor is 14.0; FUL_D is bounded to 1.2 (0.6 in P1).
                         child.v[EA_IN] = 14.0_f64.clamp(b[EA_IN].0, b[EA_IN].1);
@@ -448,6 +456,7 @@ fn screen_candidate_stage1(
     let (bw, _) = fem::ring_bearing(&p);
     let (radius, _) = pheno::bore_dimensions(&p);
     let screen_deficit = deficit(f.lat_rob, 260.0)
+        + deficit(f.lat_rob, 358.0)
         + deficit(f.sf_hiker, 1.0)
         + deficit(f.ring_rob, 1500.0)
         + deficit(f.seq_ratio, fem::SEQ_TARGET)
@@ -940,6 +949,44 @@ mod tests {
             .expect("rankable failed candidate");
         assert!(candidate.screen_deficit > 0.0);
     }
+
+    #[test]
+    fn stage1_screen_deficit_penalizes_sub_358n_lateral_shortfall() {
+        let seeds = load_seed_genomes(
+            &repo_root(),
+            Some("evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv"),
+        );
+        let (family, genome) = &seeds[0];
+        let candidate = screen_candidate_stage1(0, 0, family, genome, "test")
+            .expect("seed should be rankable in Stage 1");
+        let fem = qd::evaluate(genome, 0, 0, 2.0)
+            .fem
+            .expect("seed should have a FEM result");
+        assert!(fem.lat_rob < 358.0);
+
+        let deficit = |value: f64, floor: f64| ((floor - value) / floor).max(0.0);
+        let p = pheno::build(genome);
+        let (bearing_width, _) = fem::ring_bearing(&p);
+        let (bore_radius, _) = pheno::bore_dimensions(&p);
+        let prior_deficit = deficit(fem.lat_rob, 260.0)
+            + deficit(fem.sf_hiker, 1.0)
+            + deficit(fem.ring_rob, 1500.0)
+            + deficit(fem.seq_ratio, fem::SEQ_TARGET)
+            + deficit(fem.twist_sf, 1.0)
+            + deficit(fem.twist_body_sf, 1.0)
+            + deficit(fem.twist_tipzone_sf, 1.0)
+            + deficit(fem.hm_twist_sf, 1.0)
+            + deficit(fem.hm_spine_sf, 1.0)
+            + deficit(fem.hm_ringback_sf, 1.0)
+            + deficit(fem.fat_sf, 1.0)
+            + deficit(bearing_width, fem::hm::RING_BEARING_W_MIN_MM)
+            + deficit(bore_radius, fem::hm::RING_EDGE_R_MIN_MM);
+
+        let expected = prior_deficit + deficit(fem.lat_rob, 358.0);
+        assert!((candidate.screen_deficit - expected).abs() < 1e-12);
+        assert!(candidate.screen_deficit > prior_deficit);
+    }
+
     #[test]
     fn witness_and_q7_offspring_arms_produce_rankable_stage1_survivors() {
         let seeds = load_seed_genomes(
@@ -964,7 +1011,7 @@ mod tests {
                 let c6_pheno = pheno::build(c6_genome);
                 let c6_aes = aesthetic::evaluate(c6_genome, &c6_pheno);
                 let c6_rejects = gates::check(c6_genome, &c6_pheno);
-                assert!((0.45..=0.49).contains(&c6_genome.v[genome::WIN_S0]));
+                assert!((0.447..=0.493).contains(&c6_genome.v[genome::WIN_S0]));
                 assert!(c6_genome.v[POCKET_D] >= 0.12);
                 assert!(
                     c6_aes.pass && c6_rejects.is_empty(),
@@ -1024,13 +1071,49 @@ mod tests {
 
         // Slot 6 remains Q7, slot 7 reaches the legacy reinforcement fallback,
         // slot 8 reaches the window witness, and slot 11 reaches the remapped witness.
-        assert_eq!(&children[6].1.v[..N_CP], &Q7_CPS);
+        assert_ne!(&children[6].1.v[..N_CP], &Q7_CPS);
         assert_ne!(&children[7].1.v[..N_CP], &Q7_CPS);
         assert_eq!(children[7].1.v[TAPER_X0], genome::bounds()[TAPER_X0].1);
         assert!(children[8].1.v[TAPER_X0] > parent.v[TAPER_X0]);
         assert!(children[11].1.v[TAPER_X0] > parent.v[TAPER_X0]);
         assert_eq!(children[9].1.v[genome::WIN_N], 1.0);
         assert_eq!(children[10].1.v[genome::WIN_N], 1.0);
+        assert_eq!(&children[9].1.v[..N_CP], &Q7_CPS);
+    }
+
+    #[test]
+    fn q7_offspring_micro_jitter_is_distinct_and_keeps_slot_9_anchor() {
+        let mut first = Genome::c4_seed(genome::T_MIN);
+        first.v[EDGE_TH] = 0.18;
+        first.clamp();
+        let mut second = first.clone();
+        second.v[TAPER_X0] = 132.0;
+        second.clamp();
+        let elites = vec![("p14".into(), first), ("p10".into(), second)];
+        let bounds = genome::bounds();
+
+        for rng_seed in [20261018, 20261019] {
+            let batch = spawn_offspring_batch(&elites, 11, 1, &mut Rng(rng_seed));
+            let mut non_anchor_vectors = Vec::new();
+            for elite_idx in 0..elites.len() {
+                for slot in 6..=10 {
+                    let child = &batch[elite_idx * 11 + slot].1;
+                    if slot == 9 {
+                        assert_eq!(&child.v[..N_CP], &Q7_CPS);
+                    } else {
+                        non_anchor_vectors.push(child.v[..N_CP].to_vec());
+                    }
+                    for (idx, &value) in child.v[..N_CP].iter().enumerate() {
+                        assert!((bounds[idx].0..=bounds[idx].1).contains(&value));
+                    }
+                }
+            }
+            for i in 0..non_anchor_vectors.len() {
+                for j in i + 1..non_anchor_vectors.len() {
+                    assert_ne!(non_anchor_vectors[i], non_anchor_vectors[j]);
+                }
+            }
+        }
     }
 
     #[test]
@@ -1115,9 +1198,9 @@ mod tests {
         let child = &children[8].1;
         let bounds = genome::bounds();
 
-        assert_eq!(&child.v[..N_CP], &Q7_CPS);
+        assert_ne!(&child.v[..N_CP], &Q7_CPS);
         assert!((2.62..=2.75).contains(&child.v[T_TIP]));
-        assert_eq!(child.v[TAPER_X0], 116.0);
+        assert!((116.0..=118.0).contains(&child.v[TAPER_X0]));
         assert_eq!(child.v[genome::EA_IN], 18.0);
         assert_eq!(child.v[genome::EA_SP], 18.0);
         assert_eq!(child.v[genome::WIN_W], 6.0);
@@ -1197,6 +1280,7 @@ mod tests {
 
         assert_eq!(child.v[genome::WIN_N], 1.0);
         assert_eq!(child.v[genome::WIN_W], 3.0);
+        assert_eq!(&child.v[..N_CP], &Q7_CPS);
         assert!((0.48..=0.52).contains(&child.v[genome::WIN_S0]));
         assert!((0.82..=0.86).contains(&child.v[genome::WIN_S1]));
         assert!((2.62..=2.85).contains(&child.v[T_TIP]));
@@ -1410,7 +1494,7 @@ mod tests {
                     assert!(child.v[idx] >= bounds[idx].0, "removal bound {idx}");
                 }
             }
-            assert_eq!(&batch[7].1.v[..N_CP], &Q7_CPS);
+            assert_ne!(&batch[7].1.v[..N_CP], &Q7_CPS);
         }
     }
     #[test]
@@ -1442,7 +1526,9 @@ mod tests {
             for candidate in [&sibling, &reinforced] {
                 assert!(candidate.g.v[genome::RING_WALL] >= 6.0);
                 if std::ptr::eq(candidate, &reinforced) {
-                    assert_eq!(&candidate.g.v[..N_CP], &Q7_CPS);
+                    for (value, baseline) in candidate.g.v[..N_CP].iter().zip(Q7_CPS) {
+                        assert!((value - baseline).abs() <= 0.04);
+                    }
                 } else {
                     assert!(candidate.g.v[..N_CP].iter().all(|&offset| offset == 0.0));
                 }
