@@ -56,6 +56,9 @@ HEX64_RECEIPT_PATTERN = re.compile(r"phase(19|2[0-9]|3[0-7])(?:_[^/]*)?\.json")
 PATH_EXISTENCE_RECEIPT = DIRECTORY + "phase39_canonical_path_existence_audit.json"
 PATH_EXISTENCE_REPORT = DIRECTORY + "PHASE39_CANONICAL_PATH_EXISTENCE_AUDIT.md"
 PATH_RECEIPT_PATTERN = re.compile(r"phase(19|2[0-9]|3[0-8])(?:_[^/]*)?\.json")
+PHASE40_RECEIPT = DIRECTORY + "phase40_cumulative_summary_audit.json"
+PHASE40_REPORT = DIRECTORY + "PHASE40_CUMULATIVE_SUMMARY_AUDIT.md"
+PHASE40_PATTERN = re.compile(r"(?:PHASE(19|2[0-9]|3[0-9])(?:_[^/]*)?\.md|phase(19|2[0-9]|3[0-9])(?:_[^/]*)?\.json)")
 RELATIVE_PATH_LITERAL = re.compile(r"[\w.+~-]+(?:/[\w.+~-]+)+/?")
 RELATIVE_PATH_TOKEN = re.compile(r"(?<![\w/.:\\])[\w.+~-]+(?:/[\w.+~-]+)+/?")
 # Absolute POSIX paths, Windows drive paths, UNC paths and file URIs.
@@ -915,25 +918,123 @@ def run_cross(args):
     return 0
 
 
-def artifact_inventory(repo_root, names):
+def artifact_inventory(repo_root, names, portable_sources=True):
     repo_root = Path(repo_root)
     sources, artifacts = {}, {}
     for name in names:
         path = repo_root / name
         require(stat.S_ISREG(path.lstat().st_mode), f"Expected regular summary source: {name}")
         data = path.read_bytes()
-        require_portable(data.decode("utf-8"), name)
+        text = data.decode("utf-8")
+        if portable_sources:
+            require_portable(text, name)
         if path.suffix == ".json":
-            require_portable(json.dumps(strict_json(data), ensure_ascii=False), name)
+            decoded = strict_json(data)
+            if portable_sources:
+                require_portable(json.dumps(decoded, ensure_ascii=False), name)
         sources[name] = data
         artifacts[name] = {"sha256": hashlib.sha256(data).hexdigest(), "size_bytes": len(data),
-                           "line_count": data.count(b"\n") + int(bool(data) and not data.endswith(b"\n")),
-                           "literal_host_path_count": 0}
+                           "line_count": data.count(b"\n") + int(bool(data) and not data.endswith(b"\n"))}
+        if portable_sources:
+            artifacts[name]["literal_host_path_count"] = 0
     for name, data in sources.items():
         path = repo_root / name
         require(stat.S_ISREG(path.lstat().st_mode) and path.read_bytes() == data,
                 "Summary source bytes or type changed during audit")
     return artifacts
+
+
+def phase40_artifact_pairs(repo_root):
+    repo_root = Path(repo_root)
+    pairs = {}
+    for directory in KEYSET_ROOTS:
+        require((repo_root / directory).is_dir(), "Missing summary search directory: " + directory)
+        for path in (repo_root / directory).rglob("*"):
+            match = PHASE40_PATTERN.fullmatch(path.name)
+            if match is None:
+                continue
+            phase = int(match[1] or match[2])
+            pair = pairs.setdefault((phase, path.stem.lower()), {})
+            kind = "markdown" if path.suffix == ".md" else "json"
+            require(kind not in pair, "Duplicate summary pair member: " + path.name)
+            pair[kind] = path.relative_to(repo_root).as_posix()
+    require({phase for phase, stem in pairs} == set(range(19, 40)),
+            "Summary coverage must include every phase from 19 through 39")
+    require(all(set(pair) == {"markdown", "json"} for pair in pairs.values()),
+            "Every summary artifact must have a matching Markdown/JSON stem pair")
+    return [{"phase": phase, **pairs[(phase, stem)]} for phase, stem in sorted(pairs)]
+
+
+def artifact_manifest_sha256(artifacts):
+    canonical = json.dumps(artifacts, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("ascii")
+    return hashlib.sha256(canonical).hexdigest()
+
+
+def cumulative_summary_audit(repo_root):
+    pairs = phase40_artifact_pairs(repo_root)
+    names = sorted(name for pair in pairs for name in (pair["markdown"], pair["json"]))
+    artifacts = artifact_inventory(repo_root, names, portable_sources=False)
+    require(phase40_artifact_pairs(repo_root) == pairs, "Summary artifact membership changed during audit")
+    pair_totals = []
+    for pair in pairs:
+        members = {name: artifacts[name] for name in (pair["markdown"], pair["json"])}
+        pair_totals.append({**pair, "total_size_bytes": sum(row["size_bytes"] for row in members.values()),
+                            "total_line_count": sum(row["line_count"] for row in members.values()),
+                            "artifact_manifest_sha256": artifact_manifest_sha256(members)})
+    return {"schema": "jarambit.rsv2_07_hm.phase40_cumulative_summary.v1", "task": "RSV2-07-p40",
+            "status": "pass", "phases": list(range(19, 40)), "pair_count": len(pairs),
+            "artifact_count": len(artifacts), "artifacts": artifacts, "pairs": pair_totals,
+            "total_size_bytes": sum(row["size_bytes"] for row in artifacts.values()),
+            "total_line_count": sum(row["line_count"] for row in artifacts.values()),
+            "output_literal_host_path_count": 0,
+            "artifact_manifest_sha256": artifact_manifest_sha256(artifacts),
+            "aggregate_digest_rule": "SHA-256 of the artifacts metadata object serialized by Python json.dumps with sort_keys=True, separators=(',', ':'), ensure_ascii=True, encoded as ASCII without a trailing newline; pair digests use only their two artifact entries",
+            "line_count_rule": "LF-delimited physical lines including an unterminated final line; empty file has zero lines",
+            "scope": "All matching Phase-19 through Phase-39 Markdown/JSON stem pairs recursively under experiments/rsv2_07 and docs/audits/rsv2_07_hm; exact working-tree bytes; Phase-40 outputs excluded"}
+
+
+def render_cumulative_summary(document):
+    rows = [f"| {name} | {row['size_bytes']} | {row['line_count']} | {row['sha256']} |"
+            for name, row in document["artifacts"].items()]
+    pairs = [f"| {row['phase']} | {row['markdown']} | {row['json']} | {row['total_size_bytes']} | {row['total_line_count']} | {row['artifact_manifest_sha256']} |"
+             for row in document["pairs"]]
+    return "\n".join([
+        "# Phase-40 cumulative summary audit", "",
+        f"**PASS for the static inventory.** Indexed {document['pair_count']} Markdown/JSON pairs ({document['artifact_count']} files) covering every phase from 19 through 39: {document['total_size_bytes']} bytes, {document['total_line_count']} physical lines. The new report and JSON contain zero literal host paths.", "",
+        f"Aggregate artifact metadata SHA-256: `{document['artifact_manifest_sha256']}`.", "",
+        "| Repository-relative artifact | Bytes | Lines | SHA-256 |",
+        "| --- | ---: | ---: | --- |", *rows, "",
+        "| Phase | Markdown | JSON | Total bytes | Total lines | Pair metadata SHA-256 |",
+        "| ---: | --- | --- | ---: | ---: | --- |", *pairs, "",
+        "The input set is discovered recursively under experiments/rsv2_07 and docs/audits/rsv2_07_hm. Only PHASE19 through PHASE39 Markdown and phase19 through phase39 JSON filenames match, with a phase-number boundary. Every input needs a counterpart with the same case-insensitive stem; paired files may be in different directories. Additional complete pairs are included, duplicate pair members and incomplete pairs fail, and every phase must be represented. Phase-40 outputs and source scripts are excluded.", "",
+        "Byte counts and individual SHA-256 values describe exact saved file bytes. Line counts use LF delimiters plus an unterminated final line; empty files have zero lines, CRLF counts once, and Unicode separators do not add lines. Global and pair byte/line totals are sums. Aggregate SHA-256 values hash the corresponding artifact metadata object serialized with Python json.dumps(sort_keys=True, separators=(',', ':'), ensure_ascii=True), encoded as ASCII without a trailing newline. Hash values are not added together.", "",
+        "All sources must be regular UTF-8 files. JSON is parsed strictly, rejecting duplicate keys and nonfinite numbers. Source bytes and file types are reread, and discovery is repeated to detect membership changes. Source content is hashed without copying it into the outputs or applying the older host-path heuristic, which flags Phase 22's arithmetic denominator notation. The new outputs are checked for literal host paths in raw text and decoded JSON. Persisted paths are repository-relative; --repo-root supports a relocated source tree without Git. Normal verification compares the complete saved JSON and exact Markdown without writes; --write replaces only the two Phase-40 outputs.", "",
+        "This inventory records saved artifacts without rerunning their analyses or changing their conclusions. Earlier partial results, digest-format findings and path-existence findings remain as recorded. Earlier receipts are preserved; historical script hashes are not refreshed.", "",
+        "```sh", "taskset -c 14,15 python3 -B scripts/audit_rsv2_07_hm_forensics.py --phase 40",
+        "taskset -c 14,15 python3 -B -m unittest discover -s scripts -p 'test_audit_rsv2_07_hm_forensics.py' -v",
+        "git diff --check", "```", "",
+        "Execution uses CPUs 14,15 at inherited nice 10. Changes are left uncommitted.", "",
+    ])
+
+
+def run_cumulative_summary(args):
+    require(args.artifact_root is None, "Phase-40 uses saved outputs in --repo-root; --artifact-root is not supported")
+    current = cumulative_summary_audit(args.repo_root)
+    report = render_cumulative_summary(current)
+    receipt = json.dumps(current, indent=2) + "\n"
+    require_portable(report, "Phase-40 report")
+    require_portable(receipt, "Phase-40 receipt")
+    require_portable(json.dumps(strict_json(receipt), ensure_ascii=False), "Decoded Phase-40 receipt")
+    if args.write:
+        (args.repo_root / DIRECTORY).mkdir(parents=True, exist_ok=True)
+        (args.repo_root / PHASE40_RECEIPT).write_text(receipt, encoding="utf-8")
+        (args.repo_root / PHASE40_REPORT).write_text(report, encoding="utf-8")
+    else:
+        saved = strict_json((args.repo_root / PHASE40_RECEIPT).read_bytes())
+        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-40 saved receipt mismatch")
+        require((args.repo_root / PHASE40_REPORT).read_text(encoding="utf-8") == report, "Phase-40 report mismatch")
+    print(f"LANE: RSV2-07-hm | RSV2-07-p40 | PASS | pairs={current['pair_count']} | artifacts={current['artifact_count']} | bytes={current['total_size_bytes']} | lines={current['total_line_count']}")
+    return 0
 
 
 def summary_manifest(repo_root):
@@ -1287,11 +1388,13 @@ def render(document):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39"), default="26")
+    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"), default="26")
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     try:
+        if args.phase == "40":
+            return run_cumulative_summary(args)
         if args.phase == "39":
             return run_path_existence(args)
         if args.phase == "38":

@@ -1922,5 +1922,174 @@ class CanonicalPathExistenceTests(unittest.TestCase):
         self.assertEqual(error.exception.code, 1)
 
 
+class CumulativeSummaryTests(unittest.TestCase):
+    def setUp(self):
+        scratch = Path(__file__).resolve().parents[1] / "target/rsv2-07/phase40/test-fixtures"
+        scratch.mkdir(parents=True, exist_ok=True)
+        temporary = tempfile.TemporaryDirectory(prefix="summary-", dir=scratch)
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.files, self.names = {}, {}
+        for phase in range(19, 40):
+            directory = "experiments/rsv2_07/" if phase < 26 else audit.DIRECTORY
+            markdown = directory + f"PHASE{phase}_FIXTURE.md"
+            receipt = directory + ("results/" if phase < 21 else "") + f"phase{phase}_fixture.json"
+            self.names[phase] = (markdown, receipt)
+            for name, data in ((markdown, f"# Phase {phase}\r\n\nSaved café\u2028text".encode()),
+                               (receipt, b'{"status":"saved"}\n')):
+                self.files[name] = data
+                self.write(name, data)
+
+    def write(self, name, data):
+        path = self.root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+
+    def cli(self, *extra):
+        with patch.object(sys, "argv", ["forensics", "--phase", "40", "--repo-root", str(self.root), *extra]), \
+                redirect_stdout(io.StringIO()) as output:
+            result = audit.main()
+        return result, output.getvalue()
+
+    def test_all_pairs_have_exact_bytes_lines_digests_and_reproducible_aggregate(self):
+        result = audit.cumulative_summary_audit(self.root)
+        self.assertEqual((result["pair_count"], result["artifact_count"]), (21, 42))
+        self.assertEqual(result["phases"], list(range(19, 40)))
+        expected = {name: {"sha256": hashlib.sha256(data).hexdigest(), "size_bytes": len(data),
+                           "line_count": len(list(io.BytesIO(data)))}
+                    for name, data in sorted(self.files.items())}
+        self.assertEqual(result["artifacts"], expected)
+        self.assertEqual(result["total_size_bytes"], sum(map(len, self.files.values())))
+        self.assertEqual(result["total_line_count"], 84)
+        canonical = json.dumps(expected, ensure_ascii=True, sort_keys=True, separators=(",", ":")).encode("ascii")
+        self.assertEqual(result["artifact_manifest_sha256"], hashlib.sha256(canonical).hexdigest())
+        for pair in result["pairs"]:
+            self.assertEqual((pair["markdown"], pair["json"]), self.names[pair["phase"]])
+            members = {name: expected[name] for name in (pair["markdown"], pair["json"])}
+            self.assertEqual(pair["total_size_bytes"], sum(row["size_bytes"] for row in members.values()))
+            self.assertEqual(pair["total_line_count"], 4)
+            canonical = json.dumps(members, ensure_ascii=True, sort_keys=True, separators=(",", ":")).encode("ascii")
+            self.assertEqual(pair["artifact_manifest_sha256"], hashlib.sha256(canonical).hexdigest())
+        self.assertEqual(result, audit.cumulative_summary_audit(self.root))
+        self.assertNotIn(str(self.root), json.dumps(result))
+
+    def test_selector_excludes_own_outputs_wrong_phases_and_numeric_prefixes(self):
+        before = audit.cumulative_summary_audit(self.root)
+        for name in (audit.PHASE40_RECEIPT, audit.PHASE40_REPORT, audit.DIRECTORY + "phase18_old.json",
+                     audit.DIRECTORY + "PHASE18_OLD.md", audit.DIRECTORY + "phase390_prefix.json",
+                     audit.DIRECTORY + "PHASE190_PREFIX.md", audit.DIRECTORY + "phase41_future.json"):
+            self.write(name, b"invalid out-of-scope data")
+        self.assertEqual(audit.cumulative_summary_audit(self.root), before)
+
+    def test_extra_complete_pairs_are_included_and_empty_markdown_has_zero_lines(self):
+        markdown = audit.DIRECTORY + "archive/PHASE20_EXTRA.md"
+        receipt = "experiments/rsv2_07/results/archive/phase20_extra.json"
+        self.write(markdown, b"")
+        self.write(receipt, b"{}")
+        result = audit.cumulative_summary_audit(self.root)
+        self.assertEqual((result["pair_count"], result["artifact_count"]), (22, 44))
+        self.assertEqual(result["artifacts"][markdown]["line_count"], 0)
+        self.assertEqual(result["artifacts"][receipt]["line_count"], 1)
+        self.assertEqual(result["total_line_count"], 85)
+
+    def test_missing_phase_or_mismatched_pair_stems_fail(self):
+        markdown, receipt = self.names[39]
+        (self.root / receipt).unlink()
+        with self.assertRaisesRegex(ValueError, "matching Markdown/JSON stem pair"):
+            audit.cumulative_summary_audit(self.root)
+        self.write(audit.DIRECTORY + "phase39_different.json", b"{}")
+        with self.assertRaisesRegex(ValueError, "matching Markdown/JSON stem pair"):
+            audit.cumulative_summary_audit(self.root)
+        (self.root / markdown).unlink()
+        (self.root / (audit.DIRECTORY + "phase39_different.json")).unlink()
+        with self.assertRaisesRegex(ValueError, "coverage must include every phase"):
+            audit.cumulative_summary_audit(self.root)
+
+    def test_duplicate_members_in_different_directories_are_rejected(self):
+        self.write(audit.DIRECTORY + "archive/PHASE39_FIXTURE.md", b"duplicate")
+        with self.assertRaisesRegex(ValueError, "Duplicate summary pair member"):
+            audit.cumulative_summary_audit(self.root)
+
+    def test_invalid_json_and_utf8_fail(self):
+        receipt = self.names[39][1]
+        for data in (b'{"x":1,"x":2}', b'{"x":NaN}', b'{"x":1e999}', b"{broken}", b"\xff"):
+            self.write(receipt, data)
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                audit.cumulative_summary_audit(self.root)
+
+    def test_source_notation_and_host_strings_are_hashed_without_copying_into_outputs(self):
+        markdown, receipt = self.names[39]
+        self.write(markdown, b"# Saved result\nThe saved /18 format.\n")
+        self.write(receipt, b'{"raw":"/home/example/private","escaped":"\\u002fhome\\u002fexample"}\n')
+        self.assertEqual(self.cli("--write")[0], 0)
+        result = audit.cumulative_summary_audit(self.root)
+        self.assertEqual(result["artifacts"][receipt]["sha256"], hashlib.sha256((self.root / receipt).read_bytes()).hexdigest())
+        for name in (audit.PHASE40_REPORT, audit.PHASE40_RECEIPT):
+            text = (self.root / name).read_text()
+            audit.require_portable(text, name)
+            self.assertNotIn("/home/example", text)
+
+    def test_symlink_and_directory_sources_fail(self):
+        markdown = self.root / self.names[39][0]
+        markdown.unlink()
+        markdown.symlink_to(Path(self.names[38][0]).name)
+        with self.assertRaisesRegex(ValueError, "Expected regular summary source"):
+            audit.cumulative_summary_audit(self.root)
+        markdown.unlink()
+        markdown.mkdir()
+        with self.assertRaisesRegex(ValueError, "Expected regular summary source"):
+            audit.cumulative_summary_audit(self.root)
+
+    def test_bytes_and_membership_changes_during_scan_fail(self):
+        original_read = Path.read_bytes
+        changed = False
+        def read(path):
+            nonlocal changed
+            data = original_read(path)
+            if path == self.root / self.names[39][1] and not changed:
+                changed = True
+                path.write_bytes(data + b"\n")
+            return data
+        with patch.object(Path, "read_bytes", new=read), self.assertRaisesRegex(ValueError, "changed during audit"):
+            audit.cumulative_summary_audit(self.root)
+        pairs = audit.phase40_artifact_pairs(self.root)
+        with patch.object(audit, "phase40_artifact_pairs", side_effect=[pairs, pairs[:-1]]), \
+                self.assertRaisesRegex(ValueError, "membership changed"):
+            audit.cumulative_summary_audit(self.root)
+
+    def test_cli_writes_only_two_outputs_and_readonly_detects_receipt_and_report_tampering(self):
+        with patch.object(audit.subprocess, "check_output", side_effect=AssertionError("Unexpected Git command")):
+            result, output = self.cli("--write")
+            self.assertEqual(result, 0)
+            self.assertIn("pairs=21 | artifacts=42", output)
+            expected = set(self.files) | {audit.PHASE40_RECEIPT, audit.PHASE40_REPORT}
+            self.assertEqual({path.relative_to(self.root).as_posix() for path in self.root.rglob("*") if path.is_file()}, expected)
+            for name, data in self.files.items():
+                self.assertEqual((self.root / name).read_bytes(), data)
+            with patch.object(Path, "write_text", side_effect=AssertionError("Readonly audit wrote")):
+                self.assertEqual(self.cli()[0], 0)
+            receipt = self.root / audit.PHASE40_RECEIPT
+            original = receipt.read_bytes()
+            saved = json.loads(original)
+            saved["output_literal_host_path_count"] = False
+            receipt.write_text(json.dumps(saved))
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                self.cli()
+            self.assertEqual(error.exception.code, 1)
+            receipt.write_bytes(original)
+            report = self.root / audit.PHASE40_REPORT
+            report.write_bytes(report.read_bytes() + b"changed")
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                self.cli()
+            self.assertEqual(error.exception.code, 1)
+            for name in (audit.PHASE40_RECEIPT, audit.PHASE40_REPORT):
+                audit.require_portable((self.root / name).read_text(), name)
+
+    def test_artifact_root_is_rejected_for_cumulative_summary(self):
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli("--artifact-root", str(self.root))
+        self.assertEqual(error.exception.code, 1)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
