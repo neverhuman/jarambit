@@ -7,6 +7,7 @@ import io
 import json
 from pathlib import Path
 import sys
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -128,6 +129,162 @@ class SavedLogForensicsTests(unittest.TestCase):
         self.assertEqual((root / audit.REPORT).read_text(), audit.render(saved))
         for name in (audit.RECEIPT, audit.REPORT):
             self.assertNotIn(b'/home/' + b'ubuntu', (root / name).read_bytes())
+
+
+class ArtifactDigestIndexTests(unittest.TestCase):
+    def setUp(self):
+        scratch = Path(__file__).resolve().parents[1] / "target/rsv2-07/phase27/test-fixtures"
+        scratch.mkdir(parents=True, exist_ok=True)
+        temporary = tempfile.TemporaryDirectory(prefix="digest-", dir=scratch)
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.git("init", "-q")
+        self.markdown = audit.DIRECTORY + "PHASE01_NOTE.md"
+        self.receipt = audit.DIRECTORY + "phase01_note.json"
+        self.files = {self.markdown: "# Saved audit\n\nOpaque UTF-8: α.\n".encode(),
+                      self.receipt: b'{"status":"partial","count":null}\n'}
+        for name, data in self.files.items():
+            self.write(name, data)
+        self.git("add", "--", *self.files)
+
+    def git(self, *arguments):
+        return audit.subprocess.check_output(["git", "-C", str(self.root), *arguments], stderr=audit.subprocess.PIPE)
+
+    def write(self, name, data):
+        path = self.root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+
+    def cli(self, *extra):
+        with patch.object(sys, "argv", ["forensics", "--phase", "27", "--repo-root", str(self.root), *extra]), \
+                redirect_stdout(io.StringIO()) as output:
+            result = audit.main()
+        return result, output.getvalue()
+
+    def test_sorted_exact_byte_digests_and_deterministic_totals(self):
+        current = audit.digest_audit(self.root)
+        self.assertEqual(list(current["artifacts"]), sorted(self.files))
+        self.assertEqual(current["artifact_count"], 2)
+        self.assertEqual(current["total_size_bytes"], sum(map(len, self.files.values())))
+        for name, data in self.files.items():
+            self.assertEqual(current["artifacts"][name], {
+                "size_bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(), "literal_host_path_count": 0})
+        self.assertEqual(current, audit.digest_audit(self.root))
+        self.assertNotIn(str(self.root), json.dumps(current))
+
+    def test_only_matching_tracked_files_in_directory_are_included(self):
+        baseline = audit.digest_audit(self.root)
+        self.write(audit.DIRECTORY + "phase99_untracked.json", b"invalid JSON")
+        extras = [audit.DIRECTORY + "notes.md", "docs/PHASE99_OUTSIDE.md", audit.DIRECTORY + "phase99_wrong.md"]
+        for name in extras:
+            self.write(name, b"outside scope")
+        self.git("add", "--", *extras)
+        self.assertEqual(audit.digest_audit(self.root), baseline)
+        nested = audit.DIRECTORY + "archive/PHASE02_NOTE.md"
+        self.write(nested, b"nested tracked audit\n")
+        self.git("add", "--", nested)
+        self.assertIn(nested, audit.digest_audit(self.root)["artifacts"])
+
+    def test_self_outputs_are_explicitly_excluded_even_when_tracked(self):
+        baseline = audit.digest_audit(self.root)
+        for name in audit.DIGEST_EXCLUSIONS:
+            self.write(name, b"self output placeholder")
+        self.git("add", "--", *audit.DIGEST_EXCLUSIONS)
+        self.assertEqual(audit.digest_audit(self.root), baseline)
+        self.assertEqual(baseline["excluded_self_outputs"], list(audit.DIGEST_EXCLUSIONS))
+
+    def test_tracked_local_edits_use_working_tree_bytes(self):
+        before = audit.digest_audit(self.root)
+        updated = self.files[self.markdown] + b"Local edit\n"
+        self.write(self.markdown, updated)
+        after = audit.digest_audit(self.root)
+        self.assertNotEqual(before, after)
+        self.assertEqual(after["artifacts"][self.markdown]["sha256"], hashlib.sha256(updated).hexdigest())
+
+    def test_missing_tracked_file_and_empty_inventory_fail(self):
+        (self.root / self.markdown).unlink()
+        with self.assertRaises(FileNotFoundError):
+            audit.digest_audit(self.root)
+        self.git("rm", "--cached", "--", *self.files)
+        with self.assertRaisesRegex(ValueError, "No tracked phase artifacts"):
+            audit.digest_audit(self.root)
+
+    def test_absolute_host_paths_and_json_escaped_host_paths_fail(self):
+        paths = ("/home/example/file", "/Users/example/file", "/root/file", "/tmp/file", "/data/file",
+                 r"C:\Users\example\file", r"\\server\share\file", "file:///saved/file")
+        for text in paths:
+            with self.subTest(text=text):
+                self.write(self.markdown, ("saved path: " + text).encode())
+                with self.assertRaisesRegex(ValueError, "Literal host path"):
+                    audit.digest_audit(self.root)
+        self.write(self.markdown, self.files[self.markdown])
+        self.write(self.receipt, b'{"source":"\\u002fhome\\u002fexample\\u002ffile"}')
+        with self.assertRaisesRegex(ValueError, "Literal host path"):
+            audit.digest_audit(self.root)
+
+    def test_relative_paths_and_web_links_are_portable(self):
+        self.write(self.markdown, b"docs/audits/note.md out/w315/file.json https://example.org/path\n")
+        self.assertEqual(audit.digest_audit(self.root)["literal_host_path_count"], 0)
+
+    def test_invalid_utf8_and_non_strict_json_fail(self):
+        for data in (b"\xff", b'{"x":1,"x":2}', b'{"x":NaN}', b'{"x":1e999}', b"{broken}"):
+            with self.subTest(data=data):
+                self.write(self.receipt, data)
+                with self.assertRaises(ValueError):
+                    audit.digest_audit(self.root)
+
+    def test_symlinked_artifact_is_not_followed(self):
+        (self.root / self.markdown).unlink()
+        (self.root / self.markdown).symlink_to(Path(self.receipt).name)
+        with self.assertRaisesRegex(ValueError, "regular artifact"):
+            audit.digest_audit(self.root)
+
+    def test_byte_or_membership_mutation_during_scan_fails(self):
+        original_read = Path.read_bytes
+        changed = False
+        def read(path):
+            nonlocal changed
+            data = original_read(path)
+            if path == self.root / self.markdown and not changed:
+                changed = True
+                path.write_bytes(data + b"changed\n")
+            return data
+        with patch.object(Path, "read_bytes", new=read), self.assertRaisesRegex(ValueError, "changed during audit"):
+            audit.digest_audit(self.root)
+        original_inventory = audit.tracked_phase_paths
+        with patch.object(audit, "tracked_phase_paths", side_effect=[original_inventory(self.root), []]), \
+                self.assertRaisesRegex(ValueError, "inventory changed"):
+            audit.digest_audit(self.root)
+
+    def test_cli_writes_only_outputs_then_readonly_verifies_from_other_cwd(self):
+        existing = {path.relative_to(self.root) for path in self.root.rglob("*") if path.is_file()}
+        result, output = self.cli("--write")
+        self.assertEqual(result, 0)
+        self.assertIn("LANE: RSV2-07-hm | RSV2-07-p27 | PASS", output)
+        added = {path.relative_to(self.root) for path in self.root.rglob("*") if path.is_file()} - existing
+        self.assertEqual(added, {Path(name) for name in audit.DIGEST_EXCLUSIONS})
+        before = {name: (self.root / name).read_bytes() for name in audit.DIGEST_EXCLUSIONS}
+        with patch.object(Path, "write_text", side_effect=AssertionError("Readonly verifier wrote")):
+            self.assertEqual(self.cli()[0], 0)
+        for name, data in before.items():
+            self.assertEqual((self.root / name).read_bytes(), data)
+            audit.require_portable(data.decode(), name)
+
+    def test_saved_receipt_digest_type_and_report_tampering_fail(self):
+        self.cli("--write")
+        original = (self.root / audit.DIGEST_RECEIPT).read_bytes()
+        for field, value in (("sha256", "0" * 64), ("literal_host_path_count", False), ("size_bytes", 1)):
+            saved = json.loads(original)
+            saved["artifacts"][self.markdown][field] = value
+            self.write(audit.DIGEST_RECEIPT, json.dumps(saved).encode())
+            with self.subTest(field=field), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                self.cli()
+            self.assertEqual(error.exception.code, 1)
+        self.write(audit.DIGEST_RECEIPT, original)
+        self.write(audit.DIGEST_REPORT, b"changed report\n")
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli()
+        self.assertEqual(error.exception.code, 1)
 
 
 if __name__ == "__main__":

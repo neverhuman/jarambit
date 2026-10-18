@@ -1,0 +1,27 @@
+{
+  "schema": "jarambit.rsv2_07_hm.phase27_artifact_digest_index.v1",
+  "task": "RSV2-07-p27",
+  "status": "pass",
+  "scope": "tracked PHASE*.md and phase*.json below docs/audits/rsv2_07_hm/",
+  "digest_basis": "working-tree bytes of paths selected by git ls-files --cached",
+  "excluded_self_outputs": [
+    "docs/audits/rsv2_07_hm/PHASE27_ARTIFACT_DIGEST_INDEX.md",
+    "docs/audits/rsv2_07_hm/phase27_artifact_digest_index.json"
+  ],
+  "exclusion_reason": "The index and report exclude themselves to avoid recursive digests.",
+  "artifact_count": 2,
+  "total_size_bytes": 5514,
+  "literal_host_path_count": 0,
+  "artifacts": {
+    "docs/audits/rsv2_07_hm/PHASE26_ROUND1_BIRTHS_VS_ELITES_LINEAGE_AUDIT.md": {
+      "size_bytes": 2937,
+      "sha256": "faa15cb6421fece10670268ccb644846f66d3f153aa943b21be711fbdf8683f9",
+      "literal_host_path_count": 0
+    },
+    "docs/audits/rsv2_07_hm/phase26_round1_births_vs_elites_lineage_audit.json": {
+      "size_bytes": 2577,
+      "sha256": "7c2636077c10d33edb6a4f8b628325cd4f0656ec0d33643eb4ce414fbcae4885",
+      "literal_host_path_count": 0
+    }
+  }
+}
