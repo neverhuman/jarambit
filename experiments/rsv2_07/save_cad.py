@@ -14,6 +14,8 @@ def digest(path):
 
 
 def main():
+    provenance = json.loads((OUT.parent / 'source_provenance.json').read_text())
+    assert all(digest(ROOT/path) == sha for path, sha in provenance['source_sha256'].items())
     validation = json.loads((HERE / 'results/validation.json').read_text())['validation']
     selected = [max(validation, key=lambda r:min(r['strict_0p0625']['hm_twist_sf'], r['cert_min_0p25_0p125']['hm_twist_sf'])),
                 max(validation, key=lambda r:min(r['strict_0p0625']['hm_spine_sf'], r['cert_min_0p25_0p125']['hm_spine_sf']))]

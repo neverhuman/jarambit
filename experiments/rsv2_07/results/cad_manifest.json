@@ -1,0 +1,63 @@
+[
+  {
+    "candidate": "critical_fem_3",
+    "config": {
+      "angle": 18.0,
+      "apex": 0.175,
+      "baseline": false,
+      "boundary_tol": 0.001,
+      "core": 0.0,
+      "d0": 0.45,
+      "d1": 0.55,
+      "export_area": 0.25,
+      "grid": 0.025,
+      "point_end": 6.0,
+      "point_lateral": 2.0,
+      "point_shape": 3,
+      "point_slope": 0.3,
+      "radial": true,
+      "smooth_heel": true
+    },
+    "metadata": {
+      "census": [
+        0,
+        0,
+        1
+      ],
+      "config": {
+        "angle": 18.0,
+        "apex": 0.175,
+        "baseline": false,
+        "boundary_tol": 0.001,
+        "core": 0.0,
+        "d0": 0.45,
+        "d1": 0.55,
+        "export_area": 0.25,
+        "grid": 0.025,
+        "point_end": 6.0,
+        "point_lateral": 2.0,
+        "point_shape": 3,
+        "point_slope": 0.3,
+        "radial": true,
+        "smooth_heel": true
+      },
+      "prototype_only": true,
+      "triangles": 1218100,
+      "units": "mm",
+      "vertices": 609046,
+      "volume_mm3": 29787.61723731932
+    },
+    "binary_sha256": "e561bd257b11142579281b10161165ba3a9d8540e3d73bb90fec034966eade56",
+    "source_sha256": "24b829c141a0e9794cbbbab1f442efb39f01d9ddb1a94642f1ad70dca04eecc1",
+    "cpus": [
+      14,
+      15
+    ],
+    "CARGO_BUILD_JOBS": 2,
+    "files": {
+      "target/rsv2-07/cad/critical_fem_3/metadata.json": "236e4ded9d613b252c15a6b33eff61626b2e0e532f9fd02ded4bca24fb704460",
+      "target/rsv2-07/cad/critical_fem_3/prototype.stl": "bd0adb9e6fc182db5f114ac01c479b8dd8cfc84ca38aa0b2e902ac23541e1606",
+      "target/rsv2-07/cad/critical_fem_3/prototype.mesh.json": "7d4b2a513efb69f3fcad7de85f66f86697b248b432e9d3581412be23fcc96ffd"
+    }
+  }
+]
