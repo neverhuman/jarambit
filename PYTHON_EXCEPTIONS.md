@@ -1,11 +1,11 @@
 # Python Exceptions Manifest (`PYTHON_EXCEPTIONS.md`)
 
 **Authority:** `JEPSON_RULING_20261018T1940Z_stack_rust_jankurai.md` (`2026-10-18T19:40Z` / `1:40 PM MDT`)
-**Allowed Languages Policy:** Rust (`crates/`) for backend, CLI, tools, and compute; Vite + TypeScript + React (`web/`) for UI. Python is allowed **only** where strictly necessary for C++/Fortran scientific/CAD kernel bindings with no workable pure-Rust equivalent (`dolfinx`/`petsc4py`/`scikit-fem` 3D $P_2$ tetrahedral FEM, `OCP`/`cadquery` OpenCascade B-rep kernel, and embedded Blender `bpy` Cycles scripts). **No new Python files are permitted.** Every existing tracked `.py` file (`363` files, `59,486` LOC) is listed below with its one-line disposition (`KEEP_WITH_REASON` vs `PORT_TO_RUST` under `PY_TO_RUST_PLAN.md` after `v0.31.0`).
+**Allowed Languages Policy:** Rust (`crates/`) for backend, CLI, tools, and compute; Vite + TypeScript + React (`web/`) for UI. Python is allowed **only** where strictly necessary for C++/Fortran scientific/CAD kernel bindings with no workable pure-Rust equivalent (`dolfinx`/`petsc4py`/`scikit-fem` 3D $P_2$ tetrahedral FEM, `OCP`/`cadquery` OpenCascade B-rep kernel, and embedded Blender `bpy` Cycles scripts). **No new Python files are permitted.** Every existing tracked `.py` file (`362` files, `59,460` LOC) is listed below with its one-line disposition (`KEEP_WITH_REASON` vs `PORT_TO_RUST` under `PY_TO_RUST_PLAN.md` after `v0.31.0`).
 
-- **Total Tracked `.py` Files:** `363` (`59486` LOC)
+- **Total Tracked `.py` Files:** `362` (`59460` LOC)
 - **`KEEP_WITH_REASON` (3D $P_2$ `dolfinx`/`skfem` FEM + OpenCascade `OCP` B-rep + Blender `bpy` C++ kernel bindings):** `41` files (`9565` LOC)
-- **`PORT_TO_RUST` (Scheduled for phased Rust migration `PY-PORT-01..04` in `PY_TO_RUST_PLAN.md` without interrupting `v0.31.0` or active evolution waves):** `322` files (`49921` LOC)
+- **`PORT_TO_RUST` (Scheduled for phased Rust migration `PY-PORT-01..04` in `PY_TO_RUST_PLAN.md` without interrupting `v0.31.0` or active evolution waves):** `321` files (`49895` LOC)
 
 | Path | LOC | Disposition | Phase | One-Line Justification |
 |---|---:|---|---|---|
@@ -203,7 +203,6 @@
 | `ops/ci/verify_figures.py` | 50 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/verify_figures.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/verify_genome_export.py` | 132 | `KEEP_WITH_REASON` | `BOUNDARY-KEEP` | 3D P2 tetrahedral FEM (`dolfinx` v0.9.0 / `petsc4py` / `scikit-fem` / `gmsh`) and OpenCascade (`OCP` / `cadquery` `BRepCheck_Analyzer`) C++ kernel bindings (`no workable pure-Rust equivalent`). |
 | `ops/ci/verify_media.py` | 20 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/verify_media.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
-| `ops/ci/version_check.py` | 26 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/version_check.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/d1/make_sfmap.py` | 26 | `KEEP_WITH_REASON` | `BOUNDARY-KEEP` | 3D P2 tetrahedral FEM (`dolfinx` v0.9.0 / `petsc4py` / `scikit-fem` / `gmsh`) and OpenCascade (`OCP` / `cadquery` `BRepCheck_Analyzer`) C++ kernel bindings (`no workable pure-Rust equivalent`). |
 | `ops/market/build.py` | 407 | `PORT_TO_RUST` | `PY-PORT-04` | Render / Paper / Market / Research / Sheath helper (`ops/market/build.py`) — scheduled to port to Rust (`crates/cli` / `crates/crescent`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/market/harvest.py` | 89 | `PORT_TO_RUST` | `PY-PORT-04` | Render / Paper / Market / Research / Sheath helper (`ops/market/harvest.py`) — scheduled to port to Rust (`crates/cli` / `crates/crescent`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
