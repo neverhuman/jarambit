@@ -20,7 +20,8 @@ permissions:
 jobs:
   smoke:
     name: marketing render smoke
-    runs-on: [self-hosted, linux, x64, jarambit]  # jarambit-xbabe2/3 carry ffmpeg (zscale/x264/x265/webp) + pinned Blender 4.2.23 in ~/opt; the shared lan-ci pool has neither
+    # General local pool; rendering requires pinned Blender, ffmpeg, OCP and memcap.
+    runs-on: [self-hosted, linux, x64, xbabe, general, jarambit-render]
     # The real memcap/encoder/Blender tests take ~5 min on xbabe2 and ~8.5 min on a
     # loaded xbabe3 (run 38484376326 was cancelled at 8 min while passing).
     timeout-minutes: 20

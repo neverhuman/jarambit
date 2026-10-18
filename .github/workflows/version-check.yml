@@ -20,7 +20,8 @@ jobs:
       run:
         shell: bash ops/ci/run_bounded.sh version {0}
     name: VERSION == tag == WHITEPAPER header
-    runs-on: [self-hosted, linux, x64, jarambit]  # dedicated jarambit-xbabe2 / jarambit-xbabe3 runners (PR-0.30.0c); the shared neverhuman-lan pool queued for capacity
+    # General local pool; publication checks also require the pinned PDF toolchain.
+    runs-on: [self-hosted, linux, x64, xbabe, general, jarambit-publication]
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4

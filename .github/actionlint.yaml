@@ -1,6 +1,16 @@
-# Custom labels on the neverhuman-lan self-hosted pool.
+# General local pool and its provisioned capabilities (ops/ci/RUNNERS.md).
 self-hosted-runner:
   labels:
     - lan-ci
     - ubuntu24
     - jarambit
+    - xbabe
+    - general
+    - xbabe1
+    - xbabe2
+    - xbabe3
+    - xbabe4
+    - docker
+    - jarambit-d1
+    - jarambit-publication
+    - jarambit-render
