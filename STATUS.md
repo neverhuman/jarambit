@@ -19,7 +19,7 @@ Source: `evidence/rs_v2/w283_ultrarunner/*_{cad_eval,rs,solid_tip}.json`; raw so
   - G1 0.9804 · mass 84.802 g · seq 0.959
 - **Historical CAD battery & calibrated `W_CAD_v2` search (`evidence/cad_battery/*.json`):** 23 subjects × 18 evaluators (0/23 pass all `RS-karambit-v2` hard gates)
   - Lightest historical screen passing certified `seq >= 1.20` + 3D P2 solid-tip `SF >= 1.0`: `w282_p14_c01` · G1 0.8782 (COMPLETE) · mass 75.568 g · seq 1.201 · solid-tip SF 1.4093
-- **Post-#84 automatic evolution ledger (`evidence/evolution_waves/2026-10-17/wave_summary.json`, tracked in `docs/WORKPLAN.md`):** 21 waves (19 plotted completed waves: `w298`, `w300`–`w314`, `w401c3`, `w402c3`, `w404c3`), 3,720 Stage-1 births → 3,316 survivors → 85 Stage-2 assessments (`80` plotted, `5` unverified), `0` qualified (`champion = null`)
+- **Post-#84 automatic evolution ledger (`evidence/evolution_waves/2026-10-17/wave_summary.json`, tracked in `docs/WORKPLAN.md`):** 27 waves (24 plotted completed waves: `w298`, `w300`–`w315`, `w401c3`, `w402c3`, `w404c3`–`w406t3`, `w407t3`), 4,666 Stage-1 births → 3,980 survivors → 118 Stage-2 assessments (`108` plotted, `6` unverified), `0` qualified (`champion = null`)
 
 ## Roadmap milestones (`docs/v1/jarambit_v1_roadmap.json`)
 
