@@ -3,7 +3,7 @@
 //! `side.a4` buckling + 3-level Roache `GCI` + strict `0.0625 mm^2` plate + 3D watertight STEP/STL).
 
 use jarambit_crescent::{
-    aesthetic, certification, fem, gates,
+    certification, fem,
     genome::{
         self, Genome, COMET_BOW, COMET_W0, EA_IN, EA_SP, EDGE_TH, FUL_D, FUL_S0, K0, K_N, NECK_L,
         NG, N_CP, POCKET_D, POCKET_R, RAIL_W, TAPER_X0, T_TIP,
@@ -30,6 +30,19 @@ const Q7_CPS: [f64; genome::N_CP] = [
 /// Stage-2's 0.25/0.125/0.0625 mm² meshes. This margin makes candidates ranked
 /// near zero screen deficit clear the certified 260.0 N hunter floor.
 const SCREEN_LAT_HUNTER_MARGIN_N: f64 = 358.0;
+
+/// Stable labels for the deterministic Q7 split-hand offspring arms.
+#[allow(dead_code)]
+pub fn q7_offspring_arm_label(c: usize) -> Option<&'static str> {
+    match c {
+        6 => Some("q7_c6_thick_tip"),
+        7 => Some("q7_c7_steep_grind"),
+        8 => Some("q7_c8_delayed_taper"),
+        10 => Some("q7_c10_spine_widened"),
+        11 => Some("q7_c11_spine_widened_p1"),
+        _ => None,
+    }
+}
 
 fn repo_root() -> PathBuf {
     let cwd = std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
@@ -178,10 +191,12 @@ fn spawn_offspring_batch(
 
             // Keep the legacy witness and reinforcement slots available in the
             // production 12-child cycle; 11-child test batches retain their Q7 slots.
-            let q7_slot = matches!(k % 11, 6..=10)
-                && !(candidates_per_elite == 12 && k % 12 == 7);
+            let p1_tip_slot = candidates_per_elite == 12 && k % 12 == 11;
+            let q7_slot = (matches!(k % 11, 6..=10)
+                && !(candidates_per_elite == 12 && k % 12 == 7))
+                || p1_tip_slot;
             if q7_slot {
-                let slot = k % 11;
+                let slot = if p1_tip_slot { 11 } else { k % 11 };
                 child.v[..N_CP].copy_from_slice(&Q7_CPS);
                 if slot != 9 {
                     for (idx, cp) in child.v[..N_CP].iter_mut().enumerate() {
@@ -252,8 +267,9 @@ fn spawn_offspring_batch(
                     8 => {
                         child.v[T_TIP] = rng.range(4.0, 4.45).clamp(b[T_TIP].0, b[T_TIP].1);
                         child.v[TAPER_X0] = rng.range(142.0, 149.0).clamp(b[TAPER_X0].0, b[TAPER_X0].1);
-                        child.v[EA_IN] = rng.range(21.6, 22.0).clamp(b[EA_IN].0, b[EA_IN].1);
-                        child.v[EA_SP] = rng.range(21.6, 22.0).clamp(b[EA_SP].0, b[EA_SP].1);
+                        child.v[EA_IN] = rng.range(18.0, 18.6).clamp(b[EA_IN].0, b[EA_IN].1);
+                        child.v[EA_SP] = rng.range(18.0, 18.6).clamp(b[EA_SP].0, b[EA_SP].1);
+                        child.v[EDGE_TH] = rng.range(0.185, 0.195).clamp(0.12, 0.20);
                         child.v[genome::RING_WALL] = rng.range(6.02, 6.22).clamp(b[genome::RING_WALL].0, b[genome::RING_WALL].1);
                         child.v[genome::GRIP_DX] = -0.4;
                         child.v[genome::WIN_N] = 1.0;
@@ -273,15 +289,33 @@ fn spawn_offspring_batch(
                         child.v[genome::GRIP_DX] =
                             -0.4 + child.v[genome::RING_WALL] - 6.0;
                     }
-                    10 => {
+                    10 | 11 => {
                         child.v[genome::WIN_N] = 1.0;
                         child.v[genome::WIN_W] = 3.0;
                         child.v[genome::WIN_S0] = rng.range(0.48, 0.52);
                         child.v[genome::WIN_S1] = rng.range(0.82, 0.86);
                         child.v[genome::WIN_FILL] = 0.65;
-                        // 6.4 mm is above every c9 wall while retaining holder clearance.
-                        child.v[genome::RING_WALL] = rng.range(6.40, 6.41);
+                        child.v[genome::RING_WALL] = rng.range(6.02, 6.22);
                         child.v[genome::GRIP_DX] = -0.4;
+                        for (idx, low, high) in [(36, 0.25, 0.40), (37, 0.45, 0.60), (38, 0.30, 0.50)] {
+                            child.v[idx] = (child.v[idx] + rng.range(low, high))
+                                .clamp(b[idx].0, b[idx].1);
+                        }
+                        child.v[T_TIP] = rng.range(4.0, 4.45).clamp(b[T_TIP].0, b[T_TIP].1);
+                        child.v[TAPER_X0] = rng.range(142.0, 149.0)
+                            .clamp(b[TAPER_X0].0, b[TAPER_X0].1);
+                        child.v[EA_IN] = rng.range(18.0, 18.6).clamp(b[EA_IN].0, b[EA_IN].1);
+                        child.v[EA_SP] = rng.range(18.0, 18.6).clamp(b[EA_SP].0, b[EA_SP].1);
+                        child.v[EDGE_TH] = rng.range(0.185, 0.195).clamp(0.12, 0.20);
+                        if slot == 11 {
+                            child.v[genome::P1_ON] = 1.0;
+                            child.v[POCKET_D] = rng.range(0.15, 0.35)
+                                .clamp(b[POCKET_D].0, b[POCKET_D].1);
+                            child.v[RAIL_W] = rng.range(4.2, 5.2).clamp(b[RAIL_W].0, b[RAIL_W].1);
+                            child.v[NECK_L] = rng.range(9.0, 11.5).clamp(b[NECK_L].0, b[NECK_L].1);
+                            child.v[POCKET_R] = rng.range(3.2, 4.5)
+                                .clamp(b[POCKET_R].0, b[POCKET_R].1);
+                        }
                     }
                     _ => unreachable!(),
                 }
@@ -969,6 +1003,7 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use jarambit_crescent::{aesthetic, gates};
     #[test]
     fn failed_strength_screen_remains_available_for_top_k_assessment() {
         let root = repo_root();
@@ -1105,12 +1140,13 @@ mod tests {
         );
 
         // Slot 6 remains Q7, slot 7 reaches the legacy reinforcement fallback,
-        // slot 8 reaches the window witness, and slot 11 reaches the remapped witness.
+        // slot 8 reaches the window arm, and slot 11 reaches the P1 Q7 tip arm.
         assert_ne!(&children[6].1.v[..N_CP], &Q7_CPS);
         assert_ne!(&children[7].1.v[..N_CP], &Q7_CPS);
         assert_eq!(children[7].1.v[TAPER_X0], genome::bounds()[TAPER_X0].1);
         assert!(children[8].1.v[TAPER_X0] > parent.v[TAPER_X0]);
         assert!(children[11].1.v[TAPER_X0] > parent.v[TAPER_X0]);
+        assert!(children[11].1.v[genome::P1_ON] >= 0.5);
         assert_eq!(children[9].1.v[genome::WIN_N], 1.0);
         assert_eq!(children[10].1.v[genome::WIN_N], 1.0);
         assert_eq!(&children[9].1.v[..N_CP], &Q7_CPS);
@@ -1239,16 +1275,16 @@ mod tests {
         }
         assert!((4.0..=4.45).contains(&child.v[T_TIP]));
         assert!((142.0..=149.0).contains(&child.v[TAPER_X0]));
-        assert!((21.6..=22.0).contains(&child.v[EA_IN]));
-        assert!((21.6..=22.0).contains(&child.v[EA_SP]));
+        assert!((18.0..=18.6).contains(&child.v[EA_IN]));
+        assert!((18.0..=18.6).contains(&child.v[EA_SP]));
         assert_eq!(child.v[genome::WIN_N], 1.0);
-        assert_eq!(child.v[genome::WIN_S0], 0.50);
+        assert_eq!(child.v[genome::WIN_S0], 0.50_f64.clamp(bounds[genome::WIN_S0].0, bounds[genome::WIN_S0].1));
         assert_eq!(child.v[genome::WIN_S1], 0.85_f64.clamp(bounds[genome::WIN_S1].0, bounds[genome::WIN_S1].1));
         assert_eq!(child.v[genome::WIN_W], 3.8);
         assert_eq!(child.v[genome::WIN_FILL], 0.72);
         assert!((6.02..=6.22).contains(&child.v[genome::RING_WALL]));
         assert_eq!(child.v[genome::GRIP_DX], -0.4);
-        assert!((0.12..=0.20).contains(&child.v[EDGE_TH]));
+        assert!((0.185..=0.195).contains(&child.v[EDGE_TH]));
         for (idx, &value) in child.v.iter().enumerate() {
             if idx != EDGE_TH {
                 assert!(
@@ -1268,6 +1304,9 @@ mod tests {
         let new = &candidates[2];
         assert!(gates::check(new, &built[2]).is_empty(), "{:?}", gates::check(new, &built[2]));
         assert!(aesthetic::evaluate(new, &built[2]).pass, "{:?}", aesthetic::evaluate(new, &built[2]).fails);
+        assert!((18.0..=18.6).contains(&new.v[EA_IN]));
+        assert!((18.0..=18.6).contains(&new.v[EA_SP]));
+        assert!((0.185..=0.195).contains(&new.v[EDGE_TH]));
         let tip = built[2].tip;
         let qi = built[2].edge_in.iter().copied().find(|&q| {
             (q.0 - tip.0).hypot(q.1 - tip.1) >= 2.0
@@ -1282,7 +1321,7 @@ mod tests {
         let sum = (ui.0 / ni + us.0 / ns, ui.1 / ni + us.1 / ns);
         let norm = sum.0.hypot(sum.1);
         let bisector = (sum.0 / norm, sum.1 / norm);
-        for d in [4.0, 6.0, 8.0, 10.0] {
+        for d in [4.0, 6.0, 8.0] {
             let q = (tip.0 + bisector.0 * d, tip.1 + bisector.1 * d);
             let thick = jarambit_crescent::export::thickness_at(&built[2], q);
             for i in 0..2 {
@@ -1290,6 +1329,158 @@ mod tests {
                 let other_q = (other_tip.0 + bisector.0 * d, other_tip.1 + bisector.1 * d);
                 assert!(thick > jarambit_crescent::export::thickness_at(&built[i], other_q),
                     "c8 thickness {thick} must exceed c{} at d={d}", [5, 7][i]);
+            }
+        }
+    }
+
+    #[test]
+    fn q7_c10_outward_spine_tip_arm_passes_gates_and_aesthetic() {
+        let parent = Genome::c4_seed(genome::T_MIN);
+        let children = spawn_offspring_batch(&[("p16".into(), parent)], 11, 1, &mut Rng(20261018));
+        let child = &children[10].1;
+        let phenotype = pheno::build(child);
+        let aes = aesthetic::evaluate(child, &phenotype);
+        let rejects = gates::check(child, &phenotype);
+
+        assert!(aes.pass, "{:?}", aes.fails);
+        assert!(rejects.is_empty(), "{rejects:?}");
+        assert!((6.02..=6.22).contains(&child.v[genome::RING_WALL]));
+        assert_eq!(child.v[genome::GRIP_DX], -0.4);
+        assert!((4.0..=4.45).contains(&child.v[T_TIP]));
+        assert!((142.0..=149.0).contains(&child.v[TAPER_X0]));
+        assert!((18.0..=18.6).contains(&child.v[EA_IN]));
+        assert!((18.0..=18.6).contains(&child.v[EA_SP]));
+        assert!((0.185..=0.195).contains(&child.v[EDGE_TH]));
+        assert!((0.245..=0.405).contains(&(child.v[36] - Q7_CPS[36])));
+        assert!((0.445..=0.605).contains(&(child.v[37] - Q7_CPS[37])));
+        assert!((0.295..=0.505).contains(&(child.v[38] - Q7_CPS[38])));
+    }
+
+    #[test]
+    fn q7_c11_p1_tip_arm_passes_gates_and_preserves_distal_thickness() {
+        let parent = Genome::c4_seed(genome::T_MIN);
+        let children = spawn_offspring_batch(&[("p17".into(), parent)], 12, 1, &mut Rng(20261018));
+        let c6 = &children[6].1;
+        let c11 = &children[11].1;
+        assert!(c11.v[genome::P1_ON] >= 0.5);
+        assert!((0.15..=0.35).contains(&c11.v[POCKET_D]));
+        assert!((4.2..=5.2).contains(&c11.v[RAIL_W]));
+        assert!((9.0..=11.5).contains(&c11.v[NECK_L]));
+        assert!((3.2..=4.5).contains(&c11.v[POCKET_R]));
+        assert!((18.0..=18.6).contains(&c11.v[EA_IN]));
+        assert!((18.0..=18.6).contains(&c11.v[EA_SP]));
+        assert!((0.185..=0.195).contains(&c11.v[EDGE_TH]));
+        assert!((0.245..=0.405).contains(&(c11.v[36] - Q7_CPS[36])));
+        assert!((0.445..=0.605).contains(&(c11.v[37] - Q7_CPS[37])));
+        assert!((0.295..=0.505).contains(&(c11.v[38] - Q7_CPS[38])));
+
+        let p6 = pheno::build(c6);
+        let p11 = pheno::build(c11);
+        let aes = aesthetic::evaluate(c11, &p11);
+        let rejects = gates::check(c11, &p11);
+        assert!(aes.pass, "{:?}", aes.fails);
+        assert!(rejects.is_empty(), "{rejects:?}");
+
+        let tip = p11.tip;
+        let qi = p11.edge_in.iter().copied().find(|&q| {
+            (q.0 - tip.0).hypot(q.1 - tip.1) >= 2.0
+        }).unwrap_or(p11.heel);
+        let qs = p11.edge_sp.iter().rev().copied().find(|&q| {
+            (q.0 - tip.0).hypot(q.1 - tip.1) >= 2.0
+        }).unwrap_or(p11.heel);
+        let ui = (qi.0 - tip.0, qi.1 - tip.1);
+        let us = (qs.0 - tip.0, qs.1 - tip.1);
+        let ni = ui.0.hypot(ui.1).max(1e-12);
+        let ns = us.0.hypot(us.1).max(1e-12);
+        let sum = (ui.0 / ni + us.0 / ns, ui.1 / ni + us.1 / ns);
+        let norm = sum.0.hypot(sum.1);
+        let bisector = (sum.0 / norm, sum.1 / norm);
+        for d in [4.0, 6.0, 8.0, 10.0] {
+            let q11 = (p11.tip.0 + bisector.0 * d, p11.tip.1 + bisector.1 * d);
+            let q6 = (p6.tip.0 + bisector.0 * d, p6.tip.1 + bisector.1 * d);
+            assert!(
+                jarambit_crescent::export::thickness_at(&p11, q11)
+                    > jarambit_crescent::export::thickness_at(&p6, q6),
+                "c11 must be thicker than c6 at d={d}"
+            );
+        }
+    }
+
+    #[test]
+    fn q7_spine_widened_arms_keep_edge_th_in_upper_legal_band() {
+        let parent = Genome::c4_seed(genome::T_MIN);
+        for rng_seed in 1..=16 {
+            let children = spawn_offspring_batch(
+                &[("p19".into(), parent.clone())],
+                12,
+                1,
+                &mut Rng(20261018 + rng_seed),
+            );
+            for (slot, child) in [(8, &children[8].1), (10, &children[10].1), (11, &children[11].1)] {
+                assert!((0.185..=0.195).contains(&child.v[EDGE_TH]), "seed={rng_seed} slot={slot}");
+                assert!((18.0..=18.6).contains(&child.v[EA_IN]), "seed={rng_seed} slot={slot}");
+                assert!((18.0..=18.6).contains(&child.v[EA_SP]), "seed={rng_seed} slot={slot}");
+                if slot >= 10 {
+                    assert!((0.245..=0.405).contains(&(child.v[36] - Q7_CPS[36])), "seed={rng_seed} slot={slot} CP36");
+                    assert!((0.445..=0.605).contains(&(child.v[37] - Q7_CPS[37])), "seed={rng_seed} slot={slot} CP37");
+                    assert!((0.295..=0.505).contains(&(child.v[38] - Q7_CPS[38])), "seed={rng_seed} slot={slot} CP38");
+                }
+                let phenotype = pheno::build(child);
+                assert!(gates::check(child, &phenotype).is_empty(), "seed={rng_seed} slot={slot}: {:?}", gates::check(child, &phenotype));
+                assert!(aesthetic::evaluate(child, &phenotype).pass, "seed={rng_seed} slot={slot}: {:?}", aesthetic::evaluate(child, &phenotype).fails);
+            }
+        }
+    }
+
+    #[test]
+    fn q7_offspring_arm_labels_cover_all_split_hand_slots() {
+        let expected = [
+            (6, "q7_c6_thick_tip"),
+            (7, "q7_c7_steep_grind"),
+            (8, "q7_c8_delayed_taper"),
+            (10, "q7_c10_spine_widened"),
+            (11, "q7_c11_spine_widened_p1"),
+        ];
+        for (slot, label) in expected {
+            assert_eq!(q7_offspring_arm_label(slot), Some(label));
+        }
+        for slot in 0..12 {
+            if !expected.iter().any(|(labeled_slot, _)| *labeled_slot == slot) {
+                assert_eq!(q7_offspring_arm_label(slot), None, "slot {slot}");
+            }
+        }
+
+        let mut parent = Genome::c4_seed(genome::T_MIN);
+        parent.v[EDGE_TH] = 0.18;
+        parent.clamp();
+        let eleven = spawn_offspring_batch(
+            &[("p18".into(), parent.clone())],
+            11,
+            1,
+            &mut Rng(20261018),
+        );
+        let twelve = spawn_offspring_batch(
+            &[("p18".into(), parent.clone())],
+            12,
+            1,
+            &mut Rng(20261018),
+        );
+        let children = [
+            &eleven[6].1,
+            &eleven[7].1,
+            &eleven[8].1,
+            &eleven[10].1,
+            &twelve[11].1,
+        ];
+        for child in children {
+            let phenotype = pheno::build(child);
+            assert!(gates::check(child, &phenotype).is_empty(), "slot arm rejected");
+            assert!(aesthetic::evaluate(child, &phenotype).pass, "slot arm failed aesthetic");
+            assert_ne!(child.v, parent.v, "arm must differ from parent");
+        }
+        for i in 0..children.len() {
+            for j in i + 1..children.len() {
+                assert_ne!(children[i].v, children[j].v, "arms {i} and {j} must differ");
             }
         }
     }
@@ -1431,15 +1622,24 @@ mod tests {
         let child = &children[10].1;
         let bounds = genome::bounds();
 
-        assert!((6.40..=6.65).contains(&child.v[genome::RING_WALL]));
+        assert!((6.02..=6.22).contains(&child.v[genome::RING_WALL]));
+        assert_eq!(child.v[genome::GRIP_DX], -0.4);
         assert_eq!(child.v[genome::WIN_N], 1.0);
         assert_eq!(child.v[genome::WIN_W], 3.0);
         assert!((0.48..=0.52).contains(&child.v[genome::WIN_S0]));
         assert!((0.82..=0.86).contains(&child.v[genome::WIN_S1]));
         assert_eq!(child.v[genome::WIN_FILL], 0.65);
+        assert!((4.0..=4.45).contains(&child.v[T_TIP]));
+        assert!((142.0..=149.0).contains(&child.v[TAPER_X0]));
+        assert!((18.0..=18.6).contains(&child.v[EA_IN]));
+        assert!((18.0..=18.6).contains(&child.v[EA_SP]));
+        assert!((0.185..=0.195).contains(&child.v[EDGE_TH]));
+        assert!((0.245..=0.405).contains(&(child.v[36] - Q7_CPS[36])));
+        assert!((0.445..=0.605).contains(&(child.v[37] - Q7_CPS[37])));
+        assert!((0.295..=0.505).contains(&(child.v[38] - Q7_CPS[38])));
         for (idx, &value) in child.v.iter().enumerate() {
             if idx == EDGE_TH {
-                assert!((0.12..=0.20).contains(&value));
+                assert!((0.185..=0.195).contains(&value));
             } else {
                 assert!(
                     (bounds[idx].0..=bounds[idx].1).contains(&value),
