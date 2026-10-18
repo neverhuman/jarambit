@@ -17,7 +17,11 @@ SOURCES = ("crates/genotype/src/lib.rs", "crates/phenotype/src/lib.rs")
 CONTRACT_TASK = "G16-12-RSV2-04-p26"
 MANIFEST_TASK = "G16-12-RSV2-04-p27"
 DIGEST_TASK = "G16-12-RSV2-04-p28"
-TASK = "G16-12-RSV2-04-p29"
+CLI_TASK = "G16-12-RSV2-04-p29"
+TASK = "G16-12-RSV2-04-p30"
+CRESCENT_REPORT = "docs/audit/CRESCENT_SOURCE_PROVENANCE_AUDIT.md"
+CRESCENT_JSON = "docs/audit/crescent_source_provenance_audit.json"
+CRESCENT_SOURCES = ("crates/crescent/src/lib.rs", "crates/crescent/src/gates.rs")
 CLI_REPORT = "docs/audit/CLI_SOURCE_PROVENANCE_AUDIT.md"
 CLI_JSON = "docs/audit/cli_source_provenance_audit.json"
 CLI_SOURCES = ("crates/cli/src/main.rs", "crates/cli/src/auto_evolve.rs")
@@ -142,11 +146,11 @@ def verify(root):
             "unsupported index schema")
     require(index["task"] == TASK, "unexpected task")
     diagnostic(index)
-    require(type(index["report_count"]) is int and index["report_count"] == 19,
-            "expected nineteen reports")
-    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT]
+    require(type(index["report_count"]) is int and index["report_count"] == 20,
+            "expected twenty reports")
+    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT, CRESCENT_REPORT]
     require(len(m.REPORTS) == 15, "expected fifteen historical reports")
-    require(isinstance(index["reports"], list) and len(index["reports"]) == 19,
+    require(isinstance(index["reports"], list) and len(index["reports"]) == 20,
             "report coverage mismatch")
     for row, path in zip(index["reports"], expected):
         require(isinstance(row, dict) and row.get("path") == path,
@@ -158,7 +162,8 @@ def verify(root):
     require(index["supplemental_documents"] == [record(m, root, CONTRACT),
                                                    record(m, root, MANIFEST_JSON),
                                                    record(m, root, DIGEST_JSON),
-                                                   record(m, root, CLI_JSON)],
+                                                   record(m, root, CLI_JSON),
+                                                   record(m, root, CRESCENT_JSON)],
             "supplemental fingerprint mismatch")
     contract = read_json(CONTRACT)
     require(set(contract) == {"schema_version", "task", "status", "qualified_count",
@@ -202,17 +207,26 @@ def verify(root):
             and "qualified_count: 0" in digest_text.splitlines(), "invalid digest report status")
     cli_digest = read_json(CLI_JSON)
     require(json.dumps(cli_digest, sort_keys=True) == json.dumps(
-        digest_inventory(m, root, task=TASK, sources=CLI_SOURCES), sort_keys=True),
+        digest_inventory(m, root, task=CLI_TASK, sources=CLI_SOURCES), sort_keys=True),
         "source fingerprint mismatch: CLI digest metadata")
     cli_text = m.portable_path(root, CLI_REPORT).read_text(encoding="utf-8")
     require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in cli_text.splitlines()
             and "qualified_count: 0" in cli_text.splitlines(), "invalid CLI report status")
-    for path in expected + [INDEX, CONTRACT, MANIFEST_JSON, DIGEST_JSON, CLI_JSON, SELF, LEGACY]:
+    crescent_digest = read_json(CRESCENT_JSON)
+    require(json.dumps(crescent_digest, sort_keys=True) == json.dumps(
+        digest_inventory(m, root, task=TASK, sources=CRESCENT_SOURCES), sort_keys=True),
+        "source fingerprint mismatch: crescent digest metadata")
+    crescent_text = m.portable_path(root, CRESCENT_REPORT).read_text(encoding="utf-8")
+    require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in crescent_text.splitlines()
+            and "qualified_count: 0" in crescent_text.splitlines(), "invalid crescent report status")
+    for path in expected + [INDEX, CONTRACT, MANIFEST_JSON, DIGEST_JSON, CLI_JSON,
+                            CRESCENT_JSON, SELF, LEGACY]:
         require(m.FORBIDDEN_HOME not in m.portable_path(root, path).read_text(encoding="utf-8"),
                 "literal host prefix")
     require(m.verify(root) == 15, "historical index mismatch")
     return {"task": TASK, "status": STATUS, "assignment_outcome": "COMPLETE",
-            "qualified_count": 0, "reports": 19, "source_files": 2,
+            "qualified_count": 0, "reports": 20, "source_files": 2,
+            "crescent_source_files": len(CRESCENT_SOURCES),
             "cli_source_files": len(CLI_SOURCES),
             "digest_source_files": len(DIGEST_SOURCES),
             "manifest_files": observed["manifest_count"], "prior_contract_assignment_outcome": OUTCOME,
