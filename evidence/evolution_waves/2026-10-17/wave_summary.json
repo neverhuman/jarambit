@@ -4,7 +4,7 @@
     "w403c3",
     "w407c3"
   ],
-  "plotted_assessed": 112,
+  "plotted_assessed": 116,
   "plotted_completed_waves": [
     "w298",
     "w300",
@@ -24,6 +24,7 @@
     "w314",
     "w315",
     "w316",
+    "w317",
     "w401c3",
     "w402c3",
     "w404c3",
@@ -33,28 +34,28 @@
     "w407t3"
   ],
   "plotted_qualified": 0,
-  "plotted_stage1_births": 4477,
-  "plotted_stage1_survivors": 3754,
+  "plotted_stage1_births": 4677,
+  "plotted_stage1_survivors": 3787,
   "plotted_stage1_unverified_producer_births": 3036,
   "plotted_stage1_unverified_producer_survivors": 2729,
   "plotted_unverified": 0,
-  "plotted_waves_count": 25,
+  "plotted_waves_count": 26,
   "schema": "jarambit.evolution_waves.summary.v1",
-  "scope": "Size-bounded summary and SHA-256 provenance of completed post-#84 automatic evolution waves across xbabe2 (w298, w300-w315) and xbabe3 (w400c3-w407t3). All 27 Stage-2 leaderboards (118 assessments) and 24 Stage-1 rounds (48 birth/screen JSON files under evidence/evolution_plateau/2026-10-17/ and evidence/evolution_waves/2026-10-17/) are verified against committed JSON in Git; the remaining 38 Stage-1 rounds (76 birth/screen digests) are explicitly labeled unverified_producer_reported host metadata because raw round_*.json files for those rounds remain outside Git. No design is qualified (qualified_count=0, champion=null).",
-  "stage1_committed_verified_births": 1594,
-  "stage1_committed_verified_files": 52,
-  "stage1_committed_verified_rounds": 26,
-  "stage1_committed_verified_survivors": 1077,
+  "scope": "Size-bounded summary and SHA-256 provenance of completed post-#84 automatic evolution waves across xbabe2 (w298, w300-w317) and xbabe3 (w400c3-w407t3). All 29 Stage-2 leaderboards (126 assessments) and 28 Stage-1 rounds (56 birth/screen JSON files under evidence/evolution_plateau/2026-10-17/ and evidence/evolution_waves/2026-10-17/) are verified against committed JSON in Git; the remaining 38 Stage-1 rounds (76 birth/screen digests) are explicitly labeled unverified_producer_reported host metadata because raw round_*.json files for those rounds remain outside Git. No design is qualified (qualified_count=0, champion=null).",
+  "stage1_committed_verified_births": 1794,
+  "stage1_committed_verified_files": 56,
+  "stage1_committed_verified_rounds": 28,
+  "stage1_committed_verified_survivors": 1110,
   "stage1_unverified_producer_births": 3272,
   "stage1_unverified_producer_files": 76,
   "stage1_unverified_producer_rounds": 38,
   "stage1_unverified_producer_survivors": 2937,
-  "total_assessed": 122,
+  "total_assessed": 126,
   "total_qualified": 0,
-  "total_stage1_births": 4866,
-  "total_stage1_survivors": 4014,
+  "total_stage1_births": 5066,
+  "total_stage1_survivors": 4047,
   "total_unverified": 6,
-  "total_waves": 28,
+  "total_waves": 29,
   "unverified_producer_stage1_digest_sha256": "1e3bd397e3b105a8315fd16dbc5c7ee06d4f6a63ed6cbb32da968f549ea343dd",
   "waves": [
     {
@@ -2036,6 +2037,105 @@
       "unverified": [],
       "unverified_count": 0,
       "wave": "w316"
+    },
+    {
+      "assessed_count": 4,
+      "champion": null,
+      "engine_commits": [
+        "0a6aa94664d7b497ab781caf4ab493185b2ed3a2"
+      ],
+      "host": "xbabe2",
+      "leaderboard_bytes": 3955,
+      "leaderboard_md_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.md",
+      "leaderboard_md_sha256": "9e86cb86dd452e95e81abaa0d25820e27051f231bb7f1319c87a0410da3c1cc7",
+      "leaderboard_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+      "leaderboard_sha256": "429efbe4be1db44befc662ed5fe7a4a1de8ebe3cb53beaa0902a88179b72bb0e",
+      "metrics": {
+        "battery_pass_count": {
+          "max": 14,
+          "median": 14.0,
+          "min": 14
+        },
+        "g1": {
+          "max": 0.4443885,
+          "median": 0.33188487499999997,
+          "min": 0.23727737499999996
+        },
+        "mass_g": {
+          "max": 101.876,
+          "median": 96.5085,
+          "min": 87.6
+        },
+        "solid_tip_sf": {
+          "max": 0.7091,
+          "median": 0.46054999999999996,
+          "min": 0.2181
+        },
+        "strict_hunter_sf": {
+          "max": 0.6877,
+          "median": 0.5940000000000001,
+          "min": 0.5138
+        },
+        "w_cad": {
+          "max": -5.258458,
+          "median": -7.333562499999999,
+          "min": -9.300215
+        }
+      },
+      "qualified_count": 0,
+      "result_md_path": null,
+      "result_md_sha256": null,
+      "stage1_births_total": 200,
+      "stage1_committed_verified_rounds": 2,
+      "stage1_rounds": [
+        {
+          "best_screen_deficit": 3.0308334232461056,
+          "birth_families": {
+            "p10": 52,
+            "p14": 52
+          },
+          "births": 104,
+          "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/round_00_births.json",
+          "births_sha256": "aa4f9c4c0a888a9fb723ccd1245bb0a8c10d33be7743767ab53c71edbe73290c",
+          "round": 0,
+          "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/round_00_screen.json",
+          "screen_sha256": "1895c91af815e83e87e5d820705f84537327a50a493b37a7bfdf98b41b8de240",
+          "seed": 3170,
+          "survivor_families": {
+            "p10": 10,
+            "p14": 10
+          },
+          "survivors": 20,
+          "unique_births": 90,
+          "verification": "committed_json_verified"
+        },
+        {
+          "best_screen_deficit": 4.766147989754886,
+          "birth_families": {
+            "p10": 48,
+            "p14": 48
+          },
+          "births": 96,
+          "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/round_01_births.json",
+          "births_sha256": "b5df4627717dc2b76fc0b2f7ad18f92307b9ba82c268ed792d78ea7730efdda8",
+          "round": 1,
+          "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/round_01_screen.json",
+          "screen_sha256": "afd1e87a79c21f6996df5b0774df4b9653a413dafe2a7d83a2bb9b5c65822663",
+          "seed": 3170,
+          "survivor_families": {
+            "p10": 7,
+            "p14": 6
+          },
+          "survivors": 13,
+          "unique_births": 82,
+          "verification": "committed_json_verified"
+        }
+      ],
+      "stage1_survivors_total": 33,
+      "stage1_unverified_producer_rounds": 0,
+      "unverified": [],
+      "unverified_count": 0,
+      "wave": "w317"
     },
     {
       "assessed_count": 0,

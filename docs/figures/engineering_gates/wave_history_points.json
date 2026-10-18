@@ -21,6 +21,7 @@
   "evidence/evolution_waves/2026-10-17/xbabe2/out/w314/leaderboard.json": "4d9655c4f9b3a7519a2dd6cf6a1ba13c9391a402",
   "evidence/evolution_waves/2026-10-17/xbabe2/out/w315/leaderboard.json": "b38642b37e6231cda97b07d73cdadec420e23aba",
   "evidence/evolution_waves/2026-10-17/xbabe2/out/w316/leaderboard.json": "b38642b37e6231cda97b07d73cdadec420e23aba",
+  "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json": "b38642b37e6231cda97b07d73cdadec420e23aba",
   "evidence/evolution_waves/2026-10-17/xbabe3/out/w402c3/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
   "evidence/evolution_waves/2026-10-17/xbabe3/out/w404c3/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
   "evidence/evolution_waves/2026-10-17/xbabe3/out/w405c3/leaderboard.json": "b38642b37e6231cda97b07d73cdadec420e23aba",
@@ -9158,6 +9159,504 @@
     "/designs/3/mass_g"
    ],
    "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 87.6,
+   "wave": "w317"
+  },
+  {
+   "metric": "mass_g",
+   "pointers": [
+    "/designs/0/mass_g",
+    "/designs/1/mass_g",
+    "/designs/2/mass_g",
+    "/designs/3/mass_g"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 96.5085,
+   "wave": "w317"
+  },
+  {
+   "metric": "mass_g",
+   "pointers": [
+    "/designs/0/mass_g",
+    "/designs/1/mass_g",
+    "/designs/2/mass_g",
+    "/designs/3/mass_g"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 101.876,
+   "wave": "w317"
+  },
+  {
+   "metric": "w_cad",
+   "pointers": [
+    "/designs/0/w_cad",
+    "/designs/1/w_cad",
+    "/designs/2/w_cad",
+    "/designs/3/w_cad"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": -9.300215,
+   "wave": "w317"
+  },
+  {
+   "metric": "w_cad",
+   "pointers": [
+    "/designs/0/w_cad",
+    "/designs/1/w_cad",
+    "/designs/2/w_cad",
+    "/designs/3/w_cad"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": -7.333562499999999,
+   "wave": "w317"
+  },
+  {
+   "metric": "w_cad",
+   "pointers": [
+    "/designs/0/w_cad",
+    "/designs/1/w_cad",
+    "/designs/2/w_cad",
+    "/designs/3/w_cad"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": -5.258458,
+   "wave": "w317"
+  },
+  {
+   "metric": "g1",
+   "pointers": [
+    "/designs/0/g1",
+    "/designs/1/g1",
+    "/designs/2/g1",
+    "/designs/3/g1"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.23727737499999996,
+   "wave": "w317"
+  },
+  {
+   "metric": "g1",
+   "pointers": [
+    "/designs/0/g1",
+    "/designs/1/g1",
+    "/designs/2/g1",
+    "/designs/3/g1"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.33188487499999997,
+   "wave": "w317"
+  },
+  {
+   "metric": "g1",
+   "pointers": [
+    "/designs/0/g1",
+    "/designs/1/g1",
+    "/designs/2/g1",
+    "/designs/3/g1"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.4443885,
+   "wave": "w317"
+  },
+  {
+   "metric": "battery_pass_count",
+   "pointers": [
+    "/designs/0/battery_pass_count",
+    "/designs/1/battery_pass_count",
+    "/designs/2/battery_pass_count",
+    "/designs/3/battery_pass_count"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 14,
+   "wave": "w317"
+  },
+  {
+   "metric": "battery_pass_count",
+   "pointers": [
+    "/designs/0/battery_pass_count",
+    "/designs/1/battery_pass_count",
+    "/designs/2/battery_pass_count",
+    "/designs/3/battery_pass_count"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 14.0,
+   "wave": "w317"
+  },
+  {
+   "metric": "battery_pass_count",
+   "pointers": [
+    "/designs/0/battery_pass_count",
+    "/designs/1/battery_pass_count",
+    "/designs/2/battery_pass_count",
+    "/designs/3/battery_pass_count"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 14,
+   "wave": "w317"
+  },
+  {
+   "metric": "solid_tip_sf",
+   "pointers": [
+    "/designs/0/solid_tip_sf",
+    "/designs/1/solid_tip_sf",
+    "/designs/2/solid_tip_sf",
+    "/designs/3/solid_tip_sf"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.2181,
+   "wave": "w317"
+  },
+  {
+   "metric": "solid_tip_sf",
+   "pointers": [
+    "/designs/0/solid_tip_sf",
+    "/designs/1/solid_tip_sf",
+    "/designs/2/solid_tip_sf",
+    "/designs/3/solid_tip_sf"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.46054999999999996,
+   "wave": "w317"
+  },
+  {
+   "metric": "solid_tip_sf",
+   "pointers": [
+    "/designs/0/solid_tip_sf",
+    "/designs/1/solid_tip_sf",
+    "/designs/2/solid_tip_sf",
+    "/designs/3/solid_tip_sf"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.7091,
+   "wave": "w317"
+  },
+  {
+   "metric": "strict_hunter_sf",
+   "pointers": [
+    "/designs/0/strict_hunter_sf",
+    "/designs/1/strict_hunter_sf",
+    "/designs/2/strict_hunter_sf",
+    "/designs/3/strict_hunter_sf"
+   ],
+   "reduction": "min",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.5138,
+   "wave": "w317"
+  },
+  {
+   "metric": "strict_hunter_sf",
+   "pointers": [
+    "/designs/0/strict_hunter_sf",
+    "/designs/1/strict_hunter_sf",
+    "/designs/2/strict_hunter_sf",
+    "/designs/3/strict_hunter_sf"
+   ],
+   "reduction": "median",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.5940000000000001,
+   "wave": "w317"
+  },
+  {
+   "metric": "strict_hunter_sf",
+   "pointers": [
+    "/designs/0/strict_hunter_sf",
+    "/designs/1/strict_hunter_sf",
+    "/designs/2/strict_hunter_sf",
+    "/designs/3/strict_hunter_sf"
+   ],
+   "reduction": "max",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.6877,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/assessed_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 4,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/qualified_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/champion",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": null,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/unverified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": [],
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/0/label",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": "w317_r01_p10_c01",
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/0/mass_g",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 87.6,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/0/w_cad",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": -5.36691,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/0/g1",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.4443885,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/0/all_16_gates",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": false,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/0/rs_v2_all_hard",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": false,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/0/qualified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": false,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/0/battery_pass_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 14,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/0/solid_tip_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.7091,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/0/strict_hunter_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.6742,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/1/label",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": "w317_r01_p14_c27",
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/1/mass_g",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 91.483,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/1/w_cad",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": -5.258458,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/1/g1",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.424383375,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/1/all_16_gates",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": false,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/1/rs_v2_all_hard",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": false,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/1/qualified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": false,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/1/battery_pass_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 14,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/1/solid_tip_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.703,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/1/strict_hunter_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.6877,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/2/label",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": "w317_r02_p14_c96",
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/2/mass_g",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 101.534,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/2/w_cad",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": -9.300215,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/2/g1",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.23938637499999993,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/2/all_16_gates",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": false,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/2/rs_v2_all_hard",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": false,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/2/qualified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": false,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/2/battery_pass_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 14,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/2/solid_tip_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.2181,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/2/strict_hunter_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.5138,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/3/label",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": "w317_r02_p10_c56",
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/3/mass_g",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 101.876,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/3/w_cad",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": -9.300215,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/3/g1",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.23727737499999996,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/3/all_16_gates",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": false,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/3/rs_v2_all_hard",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": false,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/3/qualified",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": false,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/3/battery_pass_count",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 14,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/3/solid_tip_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.2181,
+   "wave": "w317"
+  },
+  {
+   "pointer": "/designs/3/strict_hunter_sf",
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "value": 0.5138,
+   "wave": "w317"
+  },
+  {
+   "metric": "mass_g",
+   "pointers": [
+    "/designs/0/mass_g",
+    "/designs/1/mass_g",
+    "/designs/2/mass_g",
+    "/designs/3/mass_g"
+   ],
+   "reduction": "min",
    "source": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json",
    "value": 82.861,
    "wave": "w401c3"
@@ -13420,7 +13919,7 @@
  "schema": 1,
  "scope": "Selected completed Stage-2 assessments; no new solve or certification.",
  "source_commit": "b38642b37e6231cda97b07d73cdadec420e23aba",
- "summary_sha256": "a14cc5ec669d8cf6632bd4f6fe9a07a7480f7f2df9645be8487cb2d1b709665e",
+ "summary_sha256": "7596385694a8c70373894f89ed09d534f1768d09663881270eec392ca4431ea9",
  "waves": [
   {
    "assessed": 6,
@@ -14017,6 +14516,39 @@
    "w_cad_median": -7.333562499999999,
    "w_cad_min": -9.300215,
    "wave": "w316"
+  },
+  {
+   "assessed": 4,
+   "battery_pass_count_max": 14,
+   "battery_pass_count_median": 14.0,
+   "battery_pass_count_min": 14,
+   "champion": null,
+   "engine_commits": [
+    "0a6aa94664d7b497ab781caf4ab493185b2ed3a2"
+   ],
+   "g1_max": 0.4443885,
+   "g1_median": 0.33188487499999997,
+   "g1_min": 0.23727737499999996,
+   "host": "xbabe2",
+   "mass_g_max": 101.876,
+   "mass_g_median": 96.5085,
+   "mass_g_min": 87.6,
+   "qualified": 0,
+   "sha256": "429efbe4be1db44befc662ed5fe7a4a1de8ebe3cb53beaa0902a88179b72bb0e",
+   "solid_tip_sf_max": 0.7091,
+   "solid_tip_sf_median": 0.46054999999999996,
+   "solid_tip_sf_min": 0.2181,
+   "source": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json",
+   "source_commit": "b38642b37e6231cda97b07d73cdadec420e23aba",
+   "stage1_screens": "20/104, 13/96",
+   "strict_hunter_sf_max": 0.6877,
+   "strict_hunter_sf_median": 0.5940000000000001,
+   "strict_hunter_sf_min": 0.5138,
+   "unverified": [],
+   "w_cad_max": -5.258458,
+   "w_cad_median": -7.333562499999999,
+   "w_cad_min": -9.300215,
+   "wave": "w317"
   },
   {
    "assessed": 4,

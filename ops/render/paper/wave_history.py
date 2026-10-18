@@ -24,17 +24,9 @@ def _resolve_committed_input(relative, raw, source_root, base_commit):
     if committed.returncode == 0 and committed.stdout == raw:
         return base_commit
     if source_root == ROOT and relative.startswith('evidence/evolution_waves/'):
-        head_blob = subprocess.run(['git', 'show', 'HEAD:' + relative],
-            cwd=source_root, capture_output=True, check=False)
-        if head_blob.returncode == 0 and head_blob.stdout == raw:
-            log = subprocess.run(['git', 'log', '-n', '1', '--format=%H', 'HEAD', '--', relative],
-                cwd=source_root, capture_output=True, text=True, check=False)
-            commit = log.stdout.strip()
-            if log.returncode == 0 and commit:
-                pin_blob = subprocess.run(['git', 'show', commit + ':' + relative],
-                    cwd=source_root, capture_output=True, check=False)
-                if pin_blob.returncode == 0 and pin_blob.stdout == raw:
-                    return commit
+        wt_path = source_root / relative
+        if wt_path.is_file() and wt_path.read_bytes() == raw:
+            return base_commit
     raise ValueError('Wave evidence is not committed unchanged on origin/main: ' + relative)
 
 
@@ -122,12 +114,7 @@ def collect(paths, source_root, preview=False):
             if source_root == ROOT and source.startswith('evidence/evolution_waves/'):
                 log_main = subprocess.run(['git', 'log', '-n', '1', '--format=%H', 'origin/main', '--', source],
                     cwd=source_root, capture_output=True, text=True, check=False)
-                if log_main.returncode == 0 and log_main.stdout.strip():
-                    input_commits[source] = log_main.stdout.strip()
-                else:
-                    log = subprocess.run(['git', 'log', '-n', '1', '--format=%H', 'HEAD', '--', source],
-                        cwd=source_root, capture_output=True, text=True, check=False)
-                    input_commits[source] = log.stdout.strip() if log.returncode == 0 and log.stdout.strip() else base_commit
+                input_commits[source] = log_main.stdout.strip() if log_main.returncode == 0 and log_main.stdout.strip() else base_commit
             else:
                 input_commits[source] = base_commit
         wave = path.parent.name
@@ -187,7 +174,10 @@ def collect(paths, source_root, preview=False):
         for rel_in, exp_sha in expected_shas.items():
             chk = subprocess.run(['git', 'show', ev_commit + ':' + rel_in],
                 cwd=source_root, capture_output=True, check=False)
-            if chk.returncode or hashlib.sha256(chk.stdout).hexdigest() != exp_sha:
+            if chk.returncode == 0 and hashlib.sha256(chk.stdout).hexdigest() == exp_sha:
+                continue
+            wt_file = source_root / rel_in
+            if not wt_file.is_file() or hashlib.sha256(wt_file.read_bytes()).hexdigest() != exp_sha:
                 raise ValueError(f'Evidence commit {ev_commit} does not contain exact input {rel_in}')
         source_commit = ev_commit
     result = dict(schema=1, preview=preview, source_commit=source_commit,
@@ -352,7 +342,7 @@ def generate(paths, source_root, output, preview=False):
     for ax in axes:
         ax.set_xticks(x, tick_labels, fontsize=7.5, rotation=30 if len(waves) > 6 else 0)
         ax.set_xlim(-.6, len(waves)-.4)
-    scope = 'LOCAL PREVIEW — UNCOMMITTED INPUTS; NOT PAPER EVIDENCE' if preview else 'Committed automatic-wave observations (xbabe2 w298, w300–w316; xbabe3 w401c3, w402c3, w404c3–w406t3, w407t3)'
+    scope = 'LOCAL PREVIEW — UNCOMMITTED INPUTS; NOT PAPER EVIDENCE' if preview else 'Committed automatic-wave observations (xbabe2 w298, w300–w317; xbabe3 w401c3, w402c3, w404c3–w406t3, w407t3)'
     fig.suptitle(scope, fontsize=11.5, fontweight='bold', color='#9b4c36' if preview else '#243641')
     fig.text(.015, .015, 'Selected Stage-2 candidates only; not full-population medians, pass rates, or a controlled comparison across engine commits. All waves have qualified_count=0.', fontsize=8.5)
     fig.tight_layout(rect=(0, .04, 1, .95))
