@@ -171,92 +171,88 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--verify", action="store_true", help="Verify saved hashes and repeat the synthetic checks")
     args = parser.parse_args()
+    if args.verify:
+        from audit_phase8 import main as verify_saved
+        verify_saved()
+        return
     cases = manufactured_cases()
     payload = (json.dumps(triplets(cases), sort_keys=True) + "\n").encode()
-    if args.verify:
-        saved = json.loads(RECEIPT.read_text())
-        for path, expected in saved["sha256"].items():
-            assert digest(ROOT / path) == expected, f"Changed file: {path}"
-        raw = ROOT / saved["raw_directory"]
-        assert payload == (raw / "input.json").read_bytes()
-        native = raw / "synthetic-gci-probe"
-    else:
-        raw = ROOT / "target/rsv2-07/phase8" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-        raw.mkdir(parents=True, exist_ok=False)
-        env = os.environ.copy()
-        env.setdefault("CARGO_BUILD_JOBS", "2")
-        env.setdefault("CARGO_INCREMENTAL", "0")
-        env.setdefault("CARGO_PROFILE_DEV_DEBUG", "line-tables-only")
-        native, command = build(raw, env)
-        (raw / "build_command.json").write_text(json.dumps(command, indent=2) + "\n")
-        (raw / "input.json").write_bytes(payload)
+    raw = ROOT / "target/rsv2-07/phase8" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    raw.mkdir(parents=True, exist_ok=False)
+    env = os.environ.copy()
+    env.setdefault("CARGO_BUILD_JOBS", "2")
+    env.setdefault("CARGO_INCREMENTAL", "0")
+    env.setdefault("CARGO_PROFILE_DEV_DEBUG", "line-tables-only")
+    native, command = build(raw, env)
+    (raw / "build_command.json").write_text(json.dumps(command, indent=2) + "\n")
+    (raw / "input.json").write_bytes(payload)
     first, second = run_probe(native, payload), run_probe(native, payload)
     assert first == second, "Native output changed between independent process invocations"
     results, counts = evaluate(cases, json.loads(first))
-    if args.verify:
-        assert first == (raw / "native_first.json").read_bytes()
-        assert results == saved["sequences"] and counts == saved["status_counts"]
-    else:
-        (raw / "native_first.json").write_bytes(first)
-        (raw / "native_second.json").write_bytes(second)
-        (raw / "toolchain.txt").write_text(subprocess.check_output(["rustc", "-Vv"], text=True))
-        receipt = {
-            "schema": "jarambit.rsv2_07.phase8_synthetic_gci.v1", "task": "RSV2-07-p8",
-            "execution_status": "complete", "all_checks_pass": True,
-            "timestamp_utc": datetime.now(timezone.utc).isoformat(),
-            "commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
-            "runtime": {"cpu_affinity": sorted(os.sched_getaffinity(0)),
-                        "nice": os.getpriority(os.PRIO_PROCESS, 0), "python": platform.python_version(),
-                        "build_environment": {k: env[k] for k in ("CARGO_BUILD_JOBS", "CARGO_INCREMENTAL", "CARGO_PROFILE_DEV_DEBUG")}},
-            "raw_directory": str(raw.relative_to(ROOT)), "sequence_count": len(cases),
-            "triplet_count": sum(counts.values()), "status_counts": counts,
-            "native_process_replay_bytes_equal": True, "sequences": results,
-        }
-        rows = "\n".join(f"| {name} | {count} |" for name, count in counts.items())
-        REPORT.write_text(
-            "# Phase-8 synthetic GCI arithmetic audit\n\n"
-            f"PASS: 24 synthetic sequences, {sum(counts.values())} triplets, all seven native fit statuses. "
-            "Twelve five-number sequences use f(h)=2+c*h^p with p in "
-            "{0.5,1,1.5,2,2.5,3}, r=2 or sqrt(2), and alternating signs of c. "
-            "Twelve controls cover oscillation, constants, pair plateaus, negative/zero order, "
-            "invalid ratios, precision floor, zero reference and duplicate synthetic identities.\n\n"
-            "| Native status | Triplets |\n|---|---:|\n" + rows + "\n\n"
-            "Inputs are ordered finest to coarsest; five-number cases use slices [0:3] and [2:5]. "
-            "Each triplet checks expected status, monotonicity, error availability and admission. "
-            "Inputs cross the Rust boundary as IEEE-754 bit strings. Native output p, f_ext and "
-            "gci_fine match the existing Python reference bit for bit for every triplet. "
-            "Two independent executions of the same native binary produce identical output bytes.\n\n"
-            "For every polynomial triplet, recovered order and extrapolate agree with the "
-            "manufactured p and f0 within 1e-11 relative/absolute tolerance; relative GCI agrees "
-            "with Fs*abs(c*h^p)/abs(f1) within 1e-11 relative or 1e-13 absolute tolerance. "
-            "Fs=1.25 bounds the known relative error for these test functions. "
-            "This check is not a universal error-bound proof.\n\n"
-            "The assignment's unresolved_difference maps to native unresolved (with a specific reason); "
-            "invalid_grid_ratio maps to invalid_input / invalid_ratio_or_safety_factor. "
-            "Coverage here means all seven FitStatus variants, not exhaustive coverage of every "
-            "error reason or source-code branch. Synthetic level identities are test fixtures. "
-            "Every result retains asymptotic_validation=not_established.\n\n"
-            "These checks use no saved design arrays, geometry or FEM solves and establish no "
-            "physical convergence or design qualification. Bit equality is established for the "
-            "recorded toolchain/platform, not guaranteed across other libm or compiler versions.\n\n"
-            f"Execution affinity: {receipt['runtime']['cpu_affinity']}; nice: {receipt['runtime']['nice']}; "
-            f"build jobs: {env['CARGO_BUILD_JOBS']}. Existing lane target/ reused.\n\n"
-            "Reproduce acquisition: `taskset -c 14,15 env CARGO_BUILD_JOBS=2 python3 "
-            "experiments/rsv2_07/phase8_synthetic_gci_check.py`. Verify saved hashes and repeat "
-            "native checks: `taskset -c 14,15 python3 experiments/rsv2_07/audit_phase8.py`. "
-            "The verifier imposes no CPU affinity restriction; pair 8,9 can be substituted.\n\n"
-            f"Raw evidence: `{raw.relative_to(ROOT)}`. Per-sequence values, sign patterns, native "
-            "results, IEEE-754 bits and SHA-256 provenance are in "
-            "`results/phase8_synthetic_gci_audit.json`.\n"
-        )
-        sources = [ROOT / name for name in (
-            "Cargo.toml", "Cargo.lock", "rust-toolchain.toml", "crates/crescent/Cargo.toml",
-            "crates/crescent/src/gci.rs", "crates/evidence/src/identity.rs", "fem_solid/gci.py",
-            "assurance/testing/contracts.py", "experiments/rsv2_07/phase8_synthetic_gci_probe.rs",
-            "experiments/rsv2_07/phase8_synthetic_gci_check.py", "experiments/rsv2_07/audit_phase8.py")]
-        receipt["sha256"] = {str(path.relative_to(ROOT)): digest(path)
-                             for path in sources + [REPORT] + sorted(raw.iterdir())}
-        RECEIPT.write_text(json.dumps(receipt, indent=2, allow_nan=False) + "\n")
+    (raw / "native_first.json").write_bytes(first)
+    (raw / "native_second.json").write_bytes(second)
+    (raw / "toolchain.txt").write_text(subprocess.check_output(["rustc", "-Vv"], text=True))
+    receipt = {
+        "schema": "jarambit.rsv2_07.phase8_synthetic_gci.v1", "task": "RSV2-07-p8",
+        "execution_status": "complete", "all_checks_pass": True,
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+        "commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
+        "runtime": {"cpu_affinity": sorted(os.sched_getaffinity(0)),
+                    "nice": os.getpriority(os.PRIO_PROCESS, 0), "python": platform.python_version(),
+                    "build_environment": {k: env[k] for k in ("CARGO_BUILD_JOBS", "CARGO_INCREMENTAL", "CARGO_PROFILE_DEV_DEBUG")}},
+        "raw_directory": str(raw.relative_to(ROOT)), "sequence_count": len(cases),
+        "triplet_count": sum(counts.values()), "status_counts": counts,
+        "native_process_replay_bytes_equal": True, "sequences": results,
+    }
+    rows = "\n".join(f"| {name} | {count} |" for name, count in counts.items())
+    REPORT.write_text(
+        "# Phase-8 synthetic GCI arithmetic audit\n\n"
+        f"PASS: 24 synthetic sequences, {sum(counts.values())} triplets, all seven native fit statuses. "
+        "Twelve five-number sequences use f(h)=2+c*h^p with p in "
+        "{0.5,1,1.5,2,2.5,3}, r=2 or sqrt(2), and alternating signs of c. "
+        "Twelve controls cover oscillation, constants, pair plateaus, negative/zero order, "
+        "invalid ratios, precision floor, zero reference and duplicate synthetic identities.\n\n"
+        "| Native status | Triplets |\n|---|---:|\n" + rows + "\n\n"
+        "Inputs are ordered finest to coarsest; five-number cases use slices [0:3] and [2:5]. "
+        "Each triplet checks expected status, monotonicity, error availability and admission. "
+        "Inputs cross the Rust boundary as IEEE-754 bit strings. Native output p, f_ext and "
+        "gci_fine match the existing Python reference bit for bit for every triplet. "
+        "Two independent executions of the same native binary produce identical output bytes.\n\n"
+        "For every polynomial triplet, recovered order and extrapolate agree with the "
+        "manufactured p and f0 within 1e-11 relative/absolute tolerance; relative GCI agrees "
+        "with Fs*abs(c*h^p)/abs(f1) within 1e-11 relative or 1e-13 absolute tolerance. "
+        "Fs=1.25 bounds the known relative error for these test functions. "
+        "This check is not a universal error-bound proof.\n\n"
+        "The assignment's unresolved_difference maps to native unresolved (with a specific reason); "
+        "invalid_grid_ratio maps to invalid_input / invalid_ratio_or_safety_factor. "
+        "Coverage here means all seven FitStatus variants, not exhaustive coverage of every "
+        "error reason or source-code branch. Synthetic level identities are test fixtures. "
+        "Every result retains asymptotic_validation=not_established.\n\n"
+        "These checks use no saved design arrays, geometry or FEM solves and establish no "
+        "physical convergence or design qualification. Bit equality is established for the "
+        "recorded toolchain/platform, not guaranteed across other libm or compiler versions.\n\n"
+        f"Execution affinity: {receipt['runtime']['cpu_affinity']}; nice: {receipt['runtime']['nice']}; "
+        f"build jobs: {env['CARGO_BUILD_JOBS']}. Existing lane target/ reused.\n\n"
+        "Reproduce acquisition: `taskset -c 14,15 env CARGO_BUILD_JOBS=2 python3 "
+        "experiments/rsv2_07/phase8_synthetic_gci_check.py`. Verify saved hashes and repeat "
+        "native checks: `taskset -c 14,15 python3 experiments/rsv2_07/audit_phase8.py`. "
+        "The verifier imposes no CPU affinity restriction; pair 8,9 can be substituted.\n\n"
+        f"Raw evidence: `{raw.relative_to(ROOT)}`. Per-sequence values, sign patterns, native "
+        "results, IEEE-754 bits and SHA-256 provenance are in "
+        "`results/phase8_synthetic_gci_audit.json`.\n"
+    )
+    sources = [ROOT / name for name in (
+        "Cargo.toml", "Cargo.lock", "rust-toolchain.toml", "crates/crescent/Cargo.toml",
+        "crates/crescent/src/gci.rs", "crates/evidence/src/identity.rs", "fem_solid/gci.py",
+        "assurance/testing/contracts.py", "experiments/rsv2_07/phase8_synthetic_gci_probe.rs",
+        "experiments/rsv2_07/phase8_synthetic_gci_check.py", "experiments/rsv2_07/audit_phase8.py")]
+    receipt["sha256"] = {str(path.relative_to(ROOT)): digest(path)
+                         for path in sources + [REPORT] + sorted(raw.iterdir())}
+    from portable_audit import RAW, study_manifest
+    receipt["artifact_bytes"] = {name: (ROOT / name).stat().st_size
+                                 for name in receipt["sha256"] if name.startswith(RAW)}
+    receipt["study_sha256"] = study_manifest(ROOT)
+    RECEIPT.write_text(json.dumps(receipt, indent=2, allow_nan=False) + "\n")
     print(f"PASS: {len(cases)} synthetic sequences; {sum(counts.values())} triplets; seven fit statuses.")
     print("Rust/Python floating-point bits and independent native-process replay agree.")
 
