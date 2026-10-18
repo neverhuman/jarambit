@@ -189,5 +189,232 @@ class Round0InventoryTests(unittest.TestCase):
             self.assertEqual(error.exception.code, 1)
 
 
+class W320SchemaProvenanceTests(unittest.TestCase):
+    def setUp(self):
+        # Share only the opaque identifier/linkage fixture; no saved metrics are used.
+        fixture = Round0InventoryTests()
+        fixture.setUp()
+        self.root, self.artifacts = fixture.root, fixture.artifacts
+        self.documents = {Path(name).name: deepcopy(doc) for name, doc in fixture.documents.items()
+                          if name.startswith("out/w320/")}
+        for r in (0, 1):
+            for row in self.documents[f"round_{r:02}_screen.json"]:
+                row.update(dict.fromkeys(verifier.receipts.SCREEN_NUMBERS, 0.0))
+        for row in self.documents["leaderboard.json"]["designs"]:
+            row.update(dict.fromkeys(verifier.receipts.DESIGN_NUMBERS, 0.0))
+            row.update(mass_g=12.375, w_cad=0.123456789, g1=0.234567891, solid_tip_sf=0.3456789,
+                       rs_v2_all_hard=False, all_16_gates=False, battery_pass_count=7)
+        lines = ["# Evolution certification attempts", "",
+                 "| Design | Qualified | Mass g | W_CAD | G1 | Solid tip SF | RS-v2 all_hard | Battery |",
+                 "|---|---|---:|---:|---:|---:|---|---|"]
+        lines.extend(f"| `{row['label']}` | false | 12.375 | 0.123457 | 0.234568 | 0.3457 | false | 7/18 |"
+                     for row in self.documents["leaderboard.json"]["designs"])
+        self.markdown = "\n".join(lines) + "\n"
+        self.prior = {"waves": {"w320": verifier.wave_inventory("w320", self.documents)}}
+
+    def payloads(self):
+        files = {name: json.dumps(doc).encode() for name, doc in self.documents.items()}
+        files["leaderboard.md"] = self.markdown.encode()
+        return files
+
+    def pins(self, files):
+        return {name: tuple(verifier.metadata(data).values()) for name, data in files.items()}
+
+    def current(self, files=None, pins=None, prior=None, read=None):
+        files = self.payloads() if files is None else files
+        pins = self.pins(files) if pins is None else pins
+        prior = json.dumps(self.prior).encode() if prior is None else prior
+        def default_read(path):
+            if path == self.root / verifier.RECEIPT:
+                return prior
+            name = str(path.relative_to(self.artifacts / "out/w320"))
+            if name not in files:
+                raise FileNotFoundError(name)
+            return files[name]
+        with patch.object(Path, "read_bytes", new=default_read if read is None else read), \
+                patch.object(verifier, "PHASE21_PIN", tuple(verifier.metadata(prior).values())):
+            return verifier.audit_phase22(self.root, self.artifacts, pins)
+
+    def test_six_file_schema_linkage_and_transcription(self):
+        result = self.current()
+        self.assertEqual(result["status"], "pass_saved_schema_and_provenance")
+        self.assertEqual(len(result["artifacts"]), 6)
+        self.assertEqual(result["rounds"], {"0": {"births": 2, "pending_screens": 2}, "1": {"births": 2, "pending_screens": 2}})
+        board = result["leaderboard"]
+        self.assertEqual((board["assessed_count"], board["qualified_count"], board["unverified_count"]), (3, 0, 1))
+        self.assertIsNone(board["champion"])
+        self.assertEqual([row["saved_round"] for row in board["assessed"]], [0, 0, 1])
+        self.assertEqual(result["markdown"]["assessed_rows"], 3)
+        self.assertEqual(result["markdown"]["unverified_representation"], "not_listed_in_assessed_markdown_table")
+        self.assertEqual(result["phase21_receipt"]["seed_lineage_status"], "partial_seed_input_provenance_missing")
+        self.assertNotIn("/relocated", json.dumps(result))
+        for name in result["artifacts"]:
+            verifier.schema.portable_path(name)
+        self.assertEqual(self.current(), result)
+
+    def test_every_source_file_rejects_byte_tampering(self):
+        files = self.payloads()
+        pins = self.pins(files)
+        for name in files:
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, "SHA-256/size mismatch"):
+                verifier.audit_phase22_payloads({**files, name: files[name] + b" "}, pins)
+
+    def test_missing_extra_files_and_invalid_pin_metadata_fail(self):
+        files = self.payloads()
+        pins = self.pins(files)
+        for changed in ({name: data for name, data in files.items() if name != "leaderboard.md"}, {**files, "extra.json": b"{}"}):
+            with self.subTest(names=list(changed)), self.assertRaisesRegex(ValueError, "Exactly six"):
+                verifier.audit_phase22_payloads(changed, pins)
+        for pin in (("A" * 64, 0), ("a" * 64, True), ("a" * 64, -1), ("bad", 0)):
+            with self.subTest(pin=pin), self.assertRaises(ValueError):
+                verifier.audit_phase22_payloads(files, {**pins, "leaderboard.md": pin})
+        with self.assertRaises(FileNotFoundError):
+            self.current({name: data for name, data in files.items() if name != "leaderboard.md"}, pins)
+
+    def test_strict_json_duplicate_keys_nonfinite_and_overflow_fail(self):
+        files = self.payloads()
+        for data in (b'{"a":1,"a":2}', b'{"a":NaN}', b'{"a":Infinity}', b'{"a":1e999}'):
+            changed = {**files, "round_00_screen.json": data}
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                verifier.audit_phase22_payloads(changed, self.pins(changed))
+
+    def test_screen_numeric_fields_require_finite_nonboolean_numbers(self):
+        screen = self.documents["round_00_screen.json"][0]
+        for value in (True, "0", None):
+            screen["mass_g"] = value
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, "Invalid numeric field"):
+                files = self.payloads()
+                verifier.audit_phase22_payloads(files, self.pins(files))
+        del screen["mass_g"]
+        files = self.payloads()
+        with self.assertRaisesRegex(ValueError, "Missing schema fields"):
+            verifier.audit_phase22_payloads(files, self.pins(files))
+
+    def test_assessed_numeric_boolean_and_battery_schema_fields(self):
+        design = self.documents["leaderboard.json"]["designs"][0]
+        original = deepcopy(design)
+        for key, value in (("mass_g", True), ("g1", "0"), ("rs_v2_all_hard", 0),
+                           ("all_16_gates", "false"), ("battery_pass_count", True), ("battery_pass_count", 19)):
+            design.update(original)
+            design[key] = value
+            files = self.payloads()
+            with self.subTest(key=key, value=value), self.assertRaises(ValueError):
+                verifier.audit_phase22_payloads(files, self.pins(files))
+
+    def test_birth_provenance_seed_and_csv_shape_consistency(self):
+        birth = self.documents["round_01_births.json"]
+        original = deepcopy(birth)
+        for key, value in (("seed", True), ("seed", -1), ("seed", 2 ** 64), ("seed", 2),
+                           ("source", "different provenance"), ("genome_header", "a,a")):
+            birth.update(deepcopy(original))
+            birth[key] = value
+            files = self.payloads()
+            with self.subTest(key=key, value=value), self.assertRaises(ValueError):
+                verifier.audit_phase22_payloads(files, self.pins(files))
+        birth.update(deepcopy(original))
+        birth["genomes"][0]["row"] = "ragged"
+        files = self.payloads()
+        with self.assertRaisesRegex(ValueError, "Birth CSV/header width mismatch"):
+            verifier.audit_phase22_payloads(files, self.pins(files))
+
+    def test_screen_same_round_slot_linkage_is_required(self):
+        self.documents["round_00_screen.json"][0]["certificate_identity"] = "0" * 64
+        files = self.payloads()
+        with self.assertRaisesRegex(ValueError, "Screen identity/birth slot mismatch"):
+            verifier.audit_phase22_payloads(files, self.pins(files))
+
+    def test_qualified_count_champion_and_unverified_status_remain_explicit(self):
+        board = self.documents["leaderboard.json"]
+        original = deepcopy(board)
+        for key, value in (("assessed_count", True), ("qualified_count", True), ("qualified_count", 1), ("champion", "fixture")):
+            board.update(deepcopy(original))
+            board[key] = value
+            files = self.payloads()
+            with self.subTest(key=key, value=value), self.assertRaises(ValueError):
+                verifier.audit_phase22_payloads(files, self.pins(files))
+        board.update(deepcopy(original))
+        board["unverified"][0]["status"] = "qualified"
+        files = self.payloads()
+        with self.assertRaisesRegex(ValueError, "Unverified identity/screen mismatch"):
+            verifier.audit_phase22_payloads(files, self.pins(files))
+
+    def test_markdown_title_header_separator_and_row_order(self):
+        files = self.payloads()
+        lines = self.markdown.splitlines()
+        variants = [self.markdown.replace("# Evolution certification attempts", "# Other", 1),
+                    self.markdown.replace("| Mass g |", "| Other |", 1),
+                    self.markdown.replace("|---|---|", "|bad|---|", 1),
+                    "\n".join(lines[:-1]), "\n".join([*lines, lines[-1]]),
+                    "\n".join(lines[:4] + [lines[5], lines[4], lines[6]])]
+        for text in variants:
+            changed = {**files, "leaderboard.md": text.encode()}
+            with self.subTest(text=text[:25]), self.assertRaisesRegex(ValueError, "Markdown"):
+                verifier.audit_phase22_payloads(changed, self.pins(changed))
+
+    def test_all_displayed_saved_values_and_flags_must_match_json(self):
+        files = self.payloads()
+        # Each value below changes one independent table column.
+        for old, new in (("| false | 12.375", "| true | 12.375"), ("| false | 7/18", "| true | 7/18"),
+                         ("12.375", "12.376"), ("0.123457", "0.123456"), ("0.234568", "0.234567"),
+                         ("0.3457", "0.3456"), ("7/18", "8/18"), ("7/18", "7/19")):
+            changed = {**files, "leaderboard.md": self.markdown.replace(old, new, 1).encode()}
+            with self.subTest(old=old), self.assertRaisesRegex(ValueError, "Markdown"):
+                verifier.audit_phase22_payloads(changed, self.pins(changed))
+
+    def test_unverified_attempt_cannot_appear_in_assessed_markdown_table(self):
+        label = self.documents["leaderboard.json"]["unverified"][0]["label"]
+        files = self.payloads()
+        changed = {**files, "leaderboard.md": (self.markdown + f"| `{label}` | false | 0 | 0 | 0 | 0 | false | 0/18 |\n").encode()}
+        with self.assertRaisesRegex(ValueError, "Markdown table/schema mismatch"):
+            verifier.audit_phase22_payloads(changed, self.pins(changed))
+
+    def test_phase21_inventory_binding_cannot_be_silently_changed(self):
+        self.prior["waves"]["w320"]["qualified_count"] = 1
+        with self.assertRaisesRegex(ValueError, "Phase-21 w320 inventory mismatch"):
+            self.current()
+
+    def test_wave_or_prior_receipt_mutation_during_audit_fails(self):
+        files = self.payloads()
+        prior = json.dumps(self.prior).encode()
+        for target in ("wave", "prior"):
+            reads = {}
+            def read(path):
+                reads[path] = reads.get(path, 0) + 1
+                is_prior = path == self.root / verifier.RECEIPT
+                data = prior if is_prior else files[str(path.relative_to(self.artifacts / "out/w320"))]
+                mutate = reads[path] > 1 and ((target == "prior") == is_prior)
+                return data + (b" " if mutate else b"")
+            with self.subTest(target=target), self.assertRaisesRegex(ValueError, "changed during audit"):
+                self.current(read=read)
+
+    def test_relocated_phase22_cli_is_readonly_and_needs_no_git_or_source_blob(self):
+        current = self.current()
+        saved = deepcopy(current)
+        args = ["verify_rsv2_07_receipts.py", "--phase", "22", "--repo-root", str(self.root), "--artifact-root", str(self.artifacts)]
+        with patch.object(sys, "argv", args), patch.object(verifier, "audit_phase22", return_value=current) as audit, \
+                patch.object(Path, "read_bytes", new=lambda path: json.dumps(saved).encode()), patch.object(Path, "write_text") as write, \
+                patch.object(verifier.receipts, "default_wave_directory", side_effect=AssertionError("Unexpected Git discovery")), \
+                patch.object(verifier.subprocess, "check_output", side_effect=AssertionError("Unexpected source access")), \
+                redirect_stdout(io.StringIO()) as output:
+            verifier.main()
+            audit.assert_called_once_with(self.root, self.artifacts)
+            write.assert_not_called()
+            self.assertIn("Phase-22 schema/provenance: PASS", output.getvalue())
+            saved["leaderboard"]["qualified_count"] = 1
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                verifier.main()
+            self.assertEqual(error.exception.code, 1)
+
+    def test_phase22_rejects_unrelated_source_blob_before_reading_inputs(self):
+        args = ["verify_rsv2_07_receipts.py", "--phase", "22", "--source-blob", "unused"]
+        with patch.object(sys, "argv", args), patch.object(Path, "read_bytes") as read, \
+                patch.object(verifier.receipts, "default_wave_directory") as discover, \
+                redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            verifier.main()
+        self.assertEqual(error.exception.code, 1)
+        read.assert_not_called()
+        discover.assert_not_called()
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

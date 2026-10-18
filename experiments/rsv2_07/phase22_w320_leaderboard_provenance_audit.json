@@ -1,0 +1,203 @@
+{
+  "schema": "jarambit.rsv2_07.phase22_w320_provenance.v1",
+  "task": "RSV2-07-p22",
+  "status": "pass_saved_schema_and_provenance",
+  "scope": "static_receipt_schema_linkage_and_transcription_only",
+  "artifacts": {
+    "out/w320/leaderboard.json": {
+      "sha256": "c86614effb2283001bf9e0cb0293226d2a06fd8e6aac8006b67744b03adb9a7c",
+      "size_bytes": 3418
+    },
+    "out/w320/leaderboard.md": {
+      "sha256": "2f994cb80d04604b482645878da23bfc80a4fffd0d707ae7ef7d93d0780b8755",
+      "size_bytes": 590
+    },
+    "out/w320/round_00_births.json": {
+      "sha256": "f725189be663ee30646a52a84dd049648a7b39c7e39a58e7d9384e5d626e83c7",
+      "size_bytes": 177413
+    },
+    "out/w320/round_00_screen.json": {
+      "sha256": "adb40eb24b76e1ce1120c5255f5db90f69c4824fad1ca19af60b8aa17a6134f5",
+      "size_bytes": 23213
+    },
+    "out/w320/round_01_births.json": {
+      "sha256": "195b11e4828697ea8db1a6898330a62e03adcfd7f12c2671a71e03ef80a0cbdb",
+      "size_bytes": 165083
+    },
+    "out/w320/round_01_screen.json": {
+      "sha256": "a4494238b88b330502a6d36910eacb947df9d511b587cd656c388a682bd1f274",
+      "size_bytes": 20297
+    }
+  },
+  "phase21_receipt": {
+    "path": "experiments/rsv2_07/phase21_round0_seed_vs_mutated_inventory_audit.json",
+    "sha256": "bc665634397714b3af19dda65b3c36b00c1c02d81132957ad8cd3d38b2c7547d",
+    "size_bytes": 25515,
+    "w320_inventory_matches": true,
+    "seed_lineage_status": "partial_seed_input_provenance_missing"
+  },
+  "rounds": {
+    "0": {
+      "births": 104,
+      "pending_screens": 56
+    },
+    "1": {
+      "births": 96,
+      "pending_screens": 49
+    }
+  },
+  "leaderboard": {
+    "schema": "jarambit.auto_evolve.leaderboard.v2",
+    "assessed_count": 3,
+    "qualified_count": 0,
+    "champion": null,
+    "assessed": [
+      {
+        "label": "w320_r01_p10_c01",
+        "family": "p10",
+        "certificate_identity": "b2cf2b3384f20b399583fdcb3a55c5244bdba55accce6739cf63d4f32d7003cc",
+        "saved_round": 0
+      },
+      {
+        "label": "w320_r01_p14_c27",
+        "family": "p14",
+        "certificate_identity": "6af25de9e52b5a836fab9764f644300d06f2f1abc056008721103cf27d8a0aac",
+        "saved_round": 0
+      },
+      {
+        "label": "w320_r02_p10_c22",
+        "family": "p10",
+        "certificate_identity": "dea35f5fb19c5f11bad56e636be1f88434aed9a0fa2547428c2e58619c128599",
+        "saved_round": 1
+      }
+    ],
+    "unverified_count": 1,
+    "unverified": [
+      {
+        "label": "w320_r02_p14_c93",
+        "family": "p14",
+        "certificate_identity": "80d912c4dffd42b1d68d8cbbaf85500abdd52dbdffdbf34a0ed866cfa0e84572",
+        "saved_round": 1,
+        "status": "unverified"
+      }
+    ]
+  },
+  "markdown": {
+    "assessed_rows": 3,
+    "columns": 8,
+    "order_and_labels_match_json": true,
+    "stored_flags_match_json": true,
+    "formatted_json_fields": [
+      "mass_g",
+      "w_cad",
+      "g1",
+      "solid_tip_sf",
+      "battery_pass_count"
+    ],
+    "unverified_representation": "not_listed_in_assessed_markdown_table"
+  },
+  "phase21_w320_inventory": {
+    "seed_input_provenance": "not_established_by_saved_wave_documents",
+    "seed_vs_mutated_counts": null,
+    "repeated_identity_reference_inventory": {
+      "round0_births": {
+        "entries": 104,
+        "distinct_identities": 97,
+        "reference_matching_entries": 2,
+        "other_entries": 102,
+        "families": {
+          "p10": {
+            "entries": 52,
+            "distinct_identities": 49,
+            "reference_matching_entries": 1,
+            "other_entries": 51
+          },
+          "p14": {
+            "entries": 52,
+            "distinct_identities": 48,
+            "reference_matching_entries": 1,
+            "other_entries": 51
+          }
+        }
+      },
+      "round0_screens": {
+        "entries": 56,
+        "distinct_identities": 52,
+        "reference_matching_entries": 2,
+        "other_entries": 54,
+        "families": {
+          "p10": {
+            "entries": 28,
+            "distinct_identities": 26,
+            "reference_matching_entries": 1,
+            "other_entries": 27
+          },
+          "p14": {
+            "entries": 28,
+            "distinct_identities": 26,
+            "reference_matching_entries": 1,
+            "other_entries": 27
+          }
+        }
+      },
+      "round0_assessed": {
+        "entries": 2,
+        "distinct_identities": 2,
+        "reference_matching_entries": 2,
+        "other_entries": 0,
+        "families": {
+          "p10": {
+            "entries": 1,
+            "distinct_identities": 1,
+            "reference_matching_entries": 1,
+            "other_entries": 0
+          },
+          "p14": {
+            "entries": 1,
+            "distinct_identities": 1,
+            "reference_matching_entries": 1,
+            "other_entries": 0
+          }
+        }
+      },
+      "later_round_assessed": {
+        "entries": 1,
+        "distinct_identities": 1,
+        "reference_matching_entries": 0,
+        "other_entries": 1,
+        "families": {
+          "p10": {
+            "entries": 1,
+            "distinct_identities": 1,
+            "reference_matching_entries": 0,
+            "other_entries": 1
+          }
+        }
+      },
+      "all_rounds_assessed": {
+        "entries": 3,
+        "distinct_identities": 3,
+        "reference_matching_entries": 2,
+        "other_entries": 1,
+        "families": {
+          "p10": {
+            "entries": 2,
+            "distinct_identities": 2,
+            "reference_matching_entries": 1,
+            "other_entries": 1
+          },
+          "p14": {
+            "entries": 1,
+            "distinct_identities": 1,
+            "reference_matching_entries": 1,
+            "other_entries": 0
+          }
+        }
+      }
+    },
+    "qualified_count": 0,
+    "champion": null,
+    "unverified_events": 1,
+    "round0_unverified_events": 0
+  }
+}
