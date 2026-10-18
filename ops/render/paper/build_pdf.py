@@ -48,14 +48,39 @@ def capture(path, inputs):
     return raw
 
 
+def validate_output_dir(out):
+    out=Path(out)
+    if out.is_symlink() or ROOT.is_symlink():
+        raise ValueError(f'Symlinked output directory rejected: {out}')
+    try:
+        rel=out.relative_to(ROOT)
+    except ValueError as exc:
+        raise ValueError(f'Output directory must be inside ROOT ({ROOT}): {out}') from exc
+    if len(rel.parts)<2 or rel.parts[0]!='target' or rel.parts[-1]!='paper':
+        raise ValueError(f'Output directory must be a target/.../paper path under ROOT: {out}')
+    cur=ROOT
+    for part in rel.parts:
+        cur=cur/part
+        if cur.is_symlink():
+            raise ValueError(f'Symlinked output path component rejected: {cur}')
+    if out.resolve()!=(ROOT.resolve()/rel):
+        raise ValueError(f'Redirected output directory rejected: {out}')
+    if out.exists() and not out.is_dir():
+        raise ValueError(f'Output path is not a directory: {out}')
+    return out
+
+
 def stage(path, raw, renderer_inputs):
+    if path.is_symlink() or path.parent.is_symlink():
+        raise ValueError(f'Symlinked staged path rejected: {path}')
     renderer_inputs[str(path.relative_to(ROOT))]=hashlib.sha256(raw).hexdigest()
     path.write_bytes(raw)
 
 
-def build(name):
+def build(name, out=None):
     pandoc_ver,latex_ver=check_toolchain()
-    out=ROOT/'target/paper';out.mkdir(parents=True,exist_ok=True)
+    out=validate_output_dir(ROOT/'target/paper' if out is None else out)
+    out.mkdir(parents=True,exist_ok=True)
     head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     inputs={};renderer_inputs={}
     source=ROOT/'docs'/f'{name}.md';text=capture(source,inputs).decode('utf-8')
@@ -80,6 +105,8 @@ def build(name):
         manifest=Path(str(path)+'.manifest.json')
         if manifest.is_file():capture(manifest,inputs)
         staged_image=out/'images'/(path.stem+'-'+digest[:12]+('.png' if path.suffix=='.webp' else path.suffix))
+        if staged_image.parent.is_symlink():
+            raise ValueError(f'Symlinked images directory rejected: {staged_image.parent}')
         staged_image.parent.mkdir(exist_ok=True)
         if path.suffix=='.webp':
             from PIL import Image
@@ -100,6 +127,11 @@ def build(name):
     text=re.sub(r'(?<!!)\[([^\]]+)\]\(([^)]+)\)',link,text)
     staged=out/f'{name}.md';stage(staged,text.encode('utf-8'),renderer_inputs)
     pdf=out/f'{name}.pdf'
+    log_file=out/f'{name}.build.log'
+    manifest_file=out/f'{name}.pdf.manifest.json'
+    for out_file in (pdf,log_file,manifest_file):
+        if out_file.is_symlink():
+            raise ValueError(f'Symlinked output file rejected: {out_file}')
     capture(Path(__file__).resolve(),inputs)
     support={}
     for path in (HERE/'publication.lua',HERE/'header.tex'):
@@ -116,9 +148,9 @@ def build(name):
          '--standalone','--lua-filter',str(support['publication.lua']),
          '--include-in-header',str(version_header),'--include-in-header',str(support['header.tex']),'-o',str(pdf)]
     env=dict(os.environ,TEXMFOUTPUT=str(out),SOURCE_DATE_EPOCH=str(epoch),FORCE_SOURCE_DATE='1',TZ='UTC',LC_ALL='C.UTF-8')
-    with (out/f'{name}.build.log').open('w') as log:
+    with log_file.open('w') as log:
         run=subprocess.run(['nice','-n','10']+cmd,cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT)
-    if run.returncode:raise RuntimeError(f'PDF build failed; see {out/name}.build.log')
+    if run.returncode:raise RuntimeError(f'PDF build failed; see {log_file}')
     pandoc_after,latex_after=check_toolchain()
     record={'schema':1,'source_commit':head,'source':str(source.relative_to(ROOT)),
             'source_sha256':inputs[str(source.relative_to(ROOT))],
@@ -135,37 +167,96 @@ def build(name):
     for relative,expected in renderer_inputs.items():
         if sha(ROOT/relative)!=expected:
             raise ValueError('Renderer input changed during PDF build: '+relative)
-    (out/f'{name}.pdf.manifest.json').write_text(json.dumps(record,indent=1,sort_keys=True)+'\n')
+    manifest_file.write_text(json.dumps(record,indent=1,sort_keys=True)+'\n')
     print(pdf.relative_to(ROOT),pdf.stat().st_size,flush=True)
 
 
-def clean_paper_outputs(out):
-    if not out.exists():return
-    for child in out.iterdir():
-        if child.name=='test-pdf-provenance':continue
-        if child.is_dir():shutil.rmtree(child)
-        else:child.unlink()
+def owned_artifact_paths(out, names=('WHITEPAPER','ENGINEERING_GATES_AND_EVOLUTION')):
+    out=validate_output_dir(out)
+    if not out.exists():return []
+    exact={'version.tex','images','SHA256SUMS','texput.log'}
+    for name in names:
+        for suffix in ('.md','.pdf','.pdf.manifest.json','.build.log','.aux','.log','.out'):
+            exact.add(f'{name}{suffix}')
+    found=[]
+    for child in sorted(out.iterdir(),key=lambda p:p.name):
+        if child.name in exact or re.fullmatch(r'(publication-[0-9a-f]{12}\.lua|header-[0-9a-f]{12}\.tex)',child.name):
+            if child.is_symlink():
+                raise ValueError(f'Symlinked artifact path rejected: {child}')
+            if child.is_dir():
+                for sub in child.rglob('*'):
+                    if sub.is_symlink():
+                        raise ValueError(f'Symlinked artifact path rejected: {sub}')
+            found.append(child)
+    return found
+
+
+def next_attempt_dir(out):
+    out=validate_output_dir(out)
+    base=out/'repro-attempts'
+    if base.is_symlink():
+        raise ValueError(f'Symlinked repro-attempts directory rejected: {base}')
+    base.mkdir(parents=True,exist_ok=True)
+    idx=1
+    while True:
+        candidate=base/f'attempt-{idx:04d}'
+        if candidate.is_symlink():
+            raise ValueError(f'Symlinked attempt directory rejected: {candidate}')
+        if not candidate.exists():
+            candidate.mkdir()
+            return candidate
+        idx+=1
+
+
+def clean_paper_outputs(out, names=('WHITEPAPER','ENGINEERING_GATES_AND_EVOLUTION'), dest_dir=None):
+    out=validate_output_dir(out)
+    paths=owned_artifact_paths(out,names)
+    if not paths:return []
+    if dest_dir is None:
+        dest_dir=next_attempt_dir(out)/'preserved'
+    else:
+        dest_dir=Path(dest_dir)
+        if dest_dir.is_symlink():
+            raise ValueError(f'Symlinked preservation directory rejected: {dest_dir}')
+    dest_dir.mkdir(parents=True,exist_ok=False)
+    moved=[]
+    for path in paths:
+        target=dest_dir/path.name
+        path.rename(target)
+        moved.append(target)
+    return moved
 
 
 def write_sha256sums(out, names):
+    out=validate_output_dir(out)
     lines=[]
     for name in names:
         for suffix in ('.pdf','.pdf.manifest.json'):
             filename=f'{name}{suffix}'
-            lines.append(f'{sha(out/filename)}  {filename}')
+            target=out/filename
+            if target.is_symlink():
+                raise ValueError(f'Symlinked checksum target rejected: {target}')
+            lines.append(f'{sha(target)}  {filename}')
     sums_path=out/'SHA256SUMS'
+    if sums_path.is_symlink():
+        raise ValueError(f'Symlinked SHA256SUMS path rejected: {sums_path}')
     sums_path.write_text('\n'.join(lines)+'\n',encoding='utf-8')
     return sums_path
 
 
-def verify_reproducible(names=('WHITEPAPER','ENGINEERING_GATES_AND_EVOLUTION')):
-    out=ROOT/'target/paper'
+def verify_reproducible(names=('WHITEPAPER','ENGINEERING_GATES_AND_EVOLUTION'), out=None):
+    check_toolchain()
+    out=validate_output_dir(ROOT/'target/paper' if out is None else out)
+    out.mkdir(parents=True,exist_ok=True)
+    attempt_dir=next_attempt_dir(out)
+    clean_paper_outputs(out,names,dest_dir=attempt_dir/'pre-existing')
     passes=[]
     for pass_idx in (1,2):
-        clean_paper_outputs(out)
+        if pass_idx==2:
+            clean_paper_outputs(out,names,dest_dir=attempt_dir/'pass-1')
         snap={}
         for name in names:
-            build(name)
+            build(name,out=out)
             log_path=out/f'{name}.build.log'
             log_text=log_path.read_text(encoding='utf-8') if log_path.is_file() else ''
             if log_text:
