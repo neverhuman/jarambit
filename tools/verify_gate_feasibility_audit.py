@@ -20,7 +20,11 @@ DIGEST_TASK = "G16-12-RSV2-04-p28"
 CLI_TASK = "G16-12-RSV2-04-p29"
 CRESCENT_TASK = "G16-12-RSV2-04-p30"
 CERT_EXPORT_TASK = "G16-12-RSV2-04-p31"
-TASK = "G16-12-RSV2-04-p32"
+AESTHETIC_GCI_TASK = "G16-12-RSV2-04-p32"
+TASK = "G16-12-RSV2-04-p33"
+BATTERY_G1_REPORT = "docs/audit/BATTERY_G1_SOURCE_PROVENANCE_AUDIT.md"
+BATTERY_G1_JSON = "docs/audit/battery_g1_source_provenance_audit.json"
+BATTERY_G1_SOURCES = ("crates/crescent/src/battery.rs", "crates/crescent/src/g1.rs")
 AESTHETIC_GCI_REPORT = "docs/audit/AESTHETIC_GCI_SOURCE_PROVENANCE_AUDIT.md"
 AESTHETIC_GCI_JSON = "docs/audit/aesthetic_gci_source_provenance_audit.json"
 AESTHETIC_GCI_SOURCES = ("crates/crescent/src/aesthetic.rs", "crates/crescent/src/gci.rs")
@@ -154,11 +158,11 @@ def verify(root):
             "unsupported index schema")
     require(index["task"] == TASK, "unexpected task")
     diagnostic(index)
-    require(type(index["report_count"]) is int and index["report_count"] == 22,
-            "expected twenty-two reports")
-    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT, CRESCENT_REPORT, CERT_EXPORT_REPORT, AESTHETIC_GCI_REPORT]
+    require(type(index["report_count"]) is int and index["report_count"] == 23,
+            "expected twenty-three reports")
+    expected = [str(path) for _, path in m.REPORTS] + [REPORT, MANIFEST_REPORT, DIGEST_REPORT, CLI_REPORT, CRESCENT_REPORT, CERT_EXPORT_REPORT, AESTHETIC_GCI_REPORT, BATTERY_G1_REPORT]
     require(len(m.REPORTS) == 15, "expected fifteen historical reports")
-    require(isinstance(index["reports"], list) and len(index["reports"]) == 22,
+    require(isinstance(index["reports"], list) and len(index["reports"]) == 23,
             "report coverage mismatch")
     for row, path in zip(index["reports"], expected):
         require(isinstance(row, dict) and row.get("path") == path,
@@ -173,7 +177,8 @@ def verify(root):
                                                    record(m, root, CLI_JSON),
                                                    record(m, root, CRESCENT_JSON),
                                                    record(m, root, CERT_EXPORT_JSON),
-                                                   record(m, root, AESTHETIC_GCI_JSON)],
+                                                   record(m, root, AESTHETIC_GCI_JSON),
+                                                   record(m, root, BATTERY_G1_JSON)],
             "supplemental fingerprint mismatch")
     contract = read_json(CONTRACT)
     require(set(contract) == {"schema_version", "task", "status", "qualified_count",
@@ -238,18 +243,27 @@ def verify(root):
             and "qualified_count: 0" in cert_export_text.splitlines(), "invalid certification/export report status")
     aesthetic_gci_digest = read_json(AESTHETIC_GCI_JSON)
     require(json.dumps(aesthetic_gci_digest, sort_keys=True) == json.dumps(
-        digest_inventory(m, root, task=TASK, sources=AESTHETIC_GCI_SOURCES), sort_keys=True),
+        digest_inventory(m, root, task=AESTHETIC_GCI_TASK, sources=AESTHETIC_GCI_SOURCES), sort_keys=True),
         "source fingerprint mismatch: aesthetic/gci digest metadata")
     aesthetic_gci_text = m.portable_path(root, AESTHETIC_GCI_REPORT).read_text(encoding="utf-8")
     require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in aesthetic_gci_text.splitlines()
             and "qualified_count: 0" in aesthetic_gci_text.splitlines(), "invalid aesthetic/gci report status")
+    battery_g1_digest = read_json(BATTERY_G1_JSON)
+    require(json.dumps(battery_g1_digest, sort_keys=True) == json.dumps(
+        digest_inventory(m, root, task=TASK, sources=BATTERY_G1_SOURCES), sort_keys=True),
+        "source fingerprint mismatch: battery/g1 digest metadata")
+    battery_g1_text = m.portable_path(root, BATTERY_G1_REPORT).read_text(encoding="utf-8")
+    require("status: IN_PROGRESS (diagnostic audit receipt; qualified_count=0)" in battery_g1_text.splitlines()
+            and "qualified_count: 0" in battery_g1_text.splitlines(), "invalid battery/g1 report status")
     for path in expected + [INDEX, CONTRACT, MANIFEST_JSON, DIGEST_JSON, CLI_JSON,
-                            CRESCENT_JSON, CERT_EXPORT_JSON, AESTHETIC_GCI_JSON, SELF, LEGACY]:
+                            CRESCENT_JSON, CERT_EXPORT_JSON, AESTHETIC_GCI_JSON,
+                            BATTERY_G1_JSON, SELF, LEGACY]:
         require(m.FORBIDDEN_HOME not in m.portable_path(root, path).read_text(encoding="utf-8"),
                 "literal host prefix")
     require(m.verify(root) == 15, "historical index mismatch")
     return {"task": TASK, "status": STATUS, "assignment_outcome": "COMPLETE",
-            "qualified_count": 0, "reports": 22, "source_files": 2,
+            "qualified_count": 0, "reports": 23, "source_files": 2,
+            "battery_g1_source_files": len(BATTERY_G1_SOURCES),
             "aesthetic_gci_source_files": len(AESTHETIC_GCI_SOURCES),
             "cert_export_source_files": len(CERT_EXPORT_SOURCES),
             "crescent_source_files": len(CRESCENT_SOURCES),
