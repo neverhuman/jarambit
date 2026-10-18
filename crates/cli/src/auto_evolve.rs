@@ -1441,6 +1441,22 @@ mod tests {
     }
 
     #[test]
+    fn round_parent_identities_preserves_exact_seed_when_ring_wall_is_at_least_six() {
+        let mut seed = Genome::c4_seed(genome::T_MIN);
+        seed.v[genome::RING_WALL] = 6.2;
+        seed.v[EDGE_TH] = 0.16;
+        seed.clamp();
+        assert!(seed.v[genome::RING_WALL] >= 6.0);
+        assert_ne!(seed.v[EDGE_TH], 0.18);
+
+        let expected_identity = certification::identity(&seed);
+        let identities = round_parent_identities(&[("p10".into(), seed)]);
+
+        assert_eq!(identities.len(), 1);
+        assert!(identities.contains(&expected_identity));
+    }
+
+    #[test]
     fn stage2_selection_falls_back_to_unassessed_seed_parents_only_when_novel_pool_is_short() {
         let mut p10_seed = Genome::c4_seed(genome::T_MIN);
         p10_seed.v[EA_IN] = 14.0;
