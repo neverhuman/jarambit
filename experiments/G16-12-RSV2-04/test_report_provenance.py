@@ -20,12 +20,20 @@ AUDIT_BYTES = 15527  # Filled from the reviewed document, never refreshed by tes
 AUDIT_TABLE_COUNT = 6
 AUDIT_SCHEMA_SHA256 = "42212ab2618b5be7937ca24f7b0662d57de18a7602d75acecb7a12124c8b26df"
 SCHEMA_AUDIT_PATH = REPORT_DIR / "SYNTHETIC_MEASUREMENT_SCHEMA_AUDIT.md"
-SCHEMA_AUDIT_SHA256 = "3325da4829c9f2e7969d938e1e7d492879ae457770d842c56ab81c50daa6a50f"
-SCHEMA_AUDIT_BYTES = 17098
+SCHEMA_AUDIT_SHA256 = '6f45cbe3e228d40179104356edf5a7342facea59fb39b7259259416a4f429930'
+SCHEMA_AUDIT_BYTES = 18441
 SCHEMA_AUDIT_TABLE_COUNT = 6
-SCHEMA_AUDIT_TABLE_SHA256 = "3da8be6624495207947af638fd701ad831223ef6d11d3945aa4f8ab0f5c5edd8"
+SCHEMA_AUDIT_TABLE_SHA256 = '3da8be6624495207947af638fd701ad831223ef6d11d3945aa4f8ab0f5c5edd8'
 JSON_HEADER = ["Artifact path", "Bytes", "SHA-256", "JSON shape SHA-256", "Host-prefix occurrences", "Root type"]
 FORBIDDEN_HOME = "/home/ubuntu"
+PORTABLE_MARKDOWN = tuple(REPORT_DIR / name for name in (
+    "UNIFIED_PROTOTYPE_V12_REPORT.md",
+    "UNIFIED_PROTOTYPE_V13_REPORT.md",
+    "UNIFIED_PROTOTYPE_V14_REPORT.md",
+    "UNIFIED_PROTOTYPE_PROVENANCE_INDEX.md",
+    "CERTIFICATION_MEASUREMENT_CODE_AUDIT.md",
+    "SYNTHETIC_MEASUREMENT_SCHEMA_AUDIT.md",
+))
 AUDIT_SOURCES = (
     "crates/crescent/src/certification.rs",
     "crates/crescent/src/export.rs",
@@ -282,6 +290,21 @@ def verify_schema_audit(root):
     return records
 
 
+def verify_host_path_policy(root):
+    # verify_schema_audit checks every actual count against the anchored catalog,
+    # as well as file/shape hashes, archive digests, and complete tracked coverage.
+    records = verify_schema_audit(root)
+    portable = {path: count for path, count in records.items() if count == 0}
+    legacy = {path: count for path, count in records.items() if count > 0}
+    if len(portable) != 10 or len(legacy) != 27 or sum(legacy.values()) != 340:
+        raise ValueError("portable/legacy JSON partition differs from reviewed catalog")
+    for relative in PORTABLE_MARKDOWN:
+        text = portable_path(Path(root), str(relative)).read_text(encoding="utf-8")
+        if FORBIDDEN_HOME in text:
+            raise ValueError(f"host-home prefix in portable Markdown: {relative}")
+    return records
+
+
 class ReportProvenanceTests(unittest.TestCase):
     def test_reports_match_index(self):
         self.assertEqual(verify(ROOT), 9)
@@ -416,14 +439,14 @@ class ReportProvenanceTests(unittest.TestCase):
     def test_schema_audit_and_all_tracked_json_digests(self):
         self.assertEqual(len(verify_schema_audit(ROOT)), 37)
 
-    def test_tracked_json_have_zero_forbidden_home_paths(self):
-        findings = {path: count for path, count in verify_schema_audit(ROOT).items() if count}
-        self.assertEqual(len(findings), 0,
-                         f"{len(findings)} archived JSON files contain {sum(findings.values())} "
-                         f"forbidden-prefix occurrences; see {SCHEMA_AUDIT_PATH}")
+    def test_portable_host_paths_and_exact_legacy_json_catalog(self):
+        records = verify_host_path_policy(ROOT)
+        self.assertEqual(sum(count == 0 for count in records.values()), 10)
+        self.assertEqual(sum(count > 0 for count in records.values()), 27)
+        self.assertEqual(sum(records.values()), 340)
 
     def test_schema_audit_is_portable_without_git(self):
-        self.assertEqual(len(verify_schema_audit(self.schema_snapshot())), 37)
+        self.assertEqual(len(verify_host_path_policy(self.schema_snapshot())), 37)
 
     def test_schema_audit_document_tampering(self):
         root = self.schema_snapshot()
@@ -433,12 +456,22 @@ class ReportProvenanceTests(unittest.TestCase):
             verify_schema_audit(root)
 
     def test_archived_json_tampering(self):
+        records = verify_schema_audit(ROOT)
+        for portable in (False, True):
+            with self.subTest(portable=portable):
+                root = self.schema_snapshot()
+                relative = next(path for path, count in records.items() if (count == 0) == portable)
+                path = root / relative
+                value = strict_json(path.read_bytes())
+                value["uncataloged_host_path"] = FORBIDDEN_HOME + "/synthetic"
+                path.write_text(json.dumps(value), encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "JSON SHA-256"):
+                    verify_host_path_policy(root)
         root = self.schema_snapshot()
-        relative = sorted(tracked_json_paths(root))[0]
-        path = root / relative
-        path.write_bytes(path.read_bytes() + b"\n")
-        with self.assertRaisesRegex(ValueError, "JSON SHA-256"):
-            verify_schema_audit(root)
+        (root / REPORT_DIR / "uncataloged.json").write_text(
+            json.dumps({"path": FORBIDDEN_HOME + "/synthetic"}), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "inventory does not cover"):
+            verify_host_path_policy(root)
 
     def test_synthetic_json_rejects_invalid_or_ambiguous_values(self):
         self.assertEqual(strict_json(b'{"schema":"synthetic.v1","samples":[0,1,null]}')["samples"], [0, 1, None])
@@ -454,6 +487,14 @@ class ReportProvenanceTests(unittest.TestCase):
         raw = br'{"path":"\u002fhome\u002fubuntu/file"}'
         self.assertNotIn(FORBIDDEN_HOME.encode(), raw)
         self.assertEqual(home_occurrences(strict_json(raw)), 1)
+        for relative in PORTABLE_MARKDOWN:
+            with self.subTest(markdown=str(relative)):
+                root = self.schema_snapshot()
+                path = root / relative
+                path.write_text(path.read_text(encoding="utf-8") + "\n" + FORBIDDEN_HOME,
+                                encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "host-home prefix"):
+                    verify_host_path_policy(root)
 
 
 if __name__ == "__main__":

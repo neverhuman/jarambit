@@ -1,6 +1,6 @@
 # G16-12-RSV2-04 Phase-15: Q7 fine-angle and asymmetric spine boundary study
 
-Task `G16-12-RSV2-04-p15`; `unified_study_v12`; execution commit `33870b5a92336193e3f72d09e9ce5cc77be3d440`; branch `audit/gate-feasibility-bound`; worktree `/home/ubuntu/jarambit_wt_diag`. CPUs **10,11**, `CARGO_BUILD_JOBS=2`, faer. Requested nice **10**; actual inherited nice **19**. Lowering to 10 with `os.setpriority` was denied (`PermissionError: EACCES`); no privilege bypass. All receipts record actual affinity and priority. No commit/push.
+Task `G16-12-RSV2-04-p15`; `unified_study_v12`; execution commit `33870b5a92336193e3f72d09e9ce5cc77be3d440`; branch `audit/gate-feasibility-bound`; worktree `.` (repository root). CPUs **10,11**, `CARGO_BUILD_JOBS=2`, faer. Requested nice **10**; actual inherited nice **19**. Lowering to 10 with `os.setpriority` was denied (`PermissionError: EACCES`); no privilege bypass. All receipts record actual affinity and priority. No commit/push.
 
 ## Result
 

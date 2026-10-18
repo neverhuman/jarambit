@@ -2,7 +2,7 @@
 
 Task: `G16-12-RSV2-04-p18`. Baseline committed reports: `e78026a2af16b45b030776daa109eb3b28fef3a4`.
 
-This index verifies document integrity and table structure only. It does not generate or evaluate geometry, interpret measured values, or certify scientific claims. The nine historical reports are unchanged.
+This index verifies document integrity and table structure only. It does not generate or evaluate geometry, interpret measured values, or certify scientific claims. Phase21 replaces V12's single host-specific worktree reference with repository-root wording and refreshes its digest/byte count; the original bytes are preserved in the Phase21 receipt. The other eight reports are unchanged.
 
 ## Report index
 
@@ -16,7 +16,7 @@ All report paths below use POSIX separators and are relative to the repository r
 |V9|experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V9_REPORT.md|930bdb8767434f0b34fe4a5f70d5638c851b261ed793ee73510086e48a8fe570|17373|10|f3aa9c4c96e6c7dca3ba00fb36e3ece34df9ac46a0c70dc2b81462f6c69cf6b6|
 |V10|experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V10_REPORT.md|9183bbecbf3898c16f37a647866b922cce5070db7775224a99182ac42127fb15|31730|8|f1093f661df30a9961dd8bb9ae4034ffd277d52612fc37a448b7d81474b54b5b|
 |V11|experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V11_REPORT.md|91d60f4f64e89a2f221c7a588aaf7d359c4859333733c2c7117a796865500c64|31115|5|c26168458065c8479d62ca3cc9a8085ccefea5a0999f9d84cae2ca916526cb25|
-|V12|experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V12_REPORT.md|c44e4be496ac202e2943a16de02387cf9b16ddd13cfbc00463a1c32ebb77d7ae|24997|6|09a884778c9d9c518f0d5505fe7ce43efb7d98ce92ac0888b1b09cc0eaf52369|
+|V12|experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V12_REPORT.md|d3d6a70a743afbb9ed4cc8069dea9311f45a08cd096a880213aec4c5931e4b00|24987|6|09a884778c9d9c518f0d5505fe7ce43efb7d98ce92ac0888b1b09cc0eaf52369|
 |V13|experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V13_REPORT.md|b3175d02f0415168c0e7e65ba88cce3181b5c8dc6f7f78d1c817bb3ea49afbe8|41531|5|1a3148ab57966afd1d266f74b08056ec2ee0a2a6bff300182646ad50e67307dd|
 |V14|experiments/G16-12-RSV2-04/UNIFIED_PROTOTYPE_V14_REPORT.md|d3a897cc3914c760be4e66373ca3d6924744ac1d9350715d87015871b7c123ee|54507|31|f64088803efe8ec3dccbb86cb5bff46ee94f6aea95c2c208a0df61787829471a|
 
