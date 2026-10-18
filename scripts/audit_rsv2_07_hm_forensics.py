@@ -25,6 +25,10 @@ SCRIPT_PATHS = ("scripts/audit_rsv2_07_hm_forensics.py", "scripts/test_audit_rsv
 CROSS_RECEIPT = DIRECTORY + "phase29_index_inventory_cross_check_audit.json"
 CROSS_REPORT = DIRECTORY + "PHASE29_INDEX_INVENTORY_CROSS_CHECK_AUDIT.md"
 CROSS_COMMIT = "cc1918287761ba7a16683b3b7bbfc8c06cce50b1"
+SUMMARY_RECEIPT = DIRECTORY + "phase30_summary_manifest_audit.json"
+SUMMARY_REPORT = DIRECTORY + "PHASE30_SUMMARY_MANIFEST_AUDIT.md"
+SUMMARY_PATHS = tuple(sorted((REPORT, RECEIPT, DIGEST_REPORT, DIGEST_RECEIPT,
+                              SCRIPT_REPORT, SCRIPT_RECEIPT, CROSS_REPORT, CROSS_RECEIPT)))
 # Absolute POSIX paths, Windows drive paths, UNC paths and file URIs.
 HOST_PATH = re.compile(r"(?<![\w./:])/(?!/)[\w.~-]+|(?<!\w)[A-Za-z]:[\\/]|\\\\[^\\\s]+\\|file://")
 
@@ -338,6 +342,69 @@ def run_cross(args):
     return 0
 
 
+def summary_manifest(repo_root):
+    repo_root = Path(repo_root)
+    sources, artifacts = {}, {}
+    for name in SUMMARY_PATHS:
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode), f"Expected regular summary source: {name}")
+        data = path.read_bytes()
+        require_portable(data.decode("utf-8"), name)
+        if path.suffix == ".json":
+            require_portable(json.dumps(strict_json(data), ensure_ascii=False), name)
+        sources[name] = data
+        artifacts[name] = {"sha256": hashlib.sha256(data).hexdigest(), "size_bytes": len(data),
+                           "line_count": data.count(b"\n") + int(bool(data) and not data.endswith(b"\n")),
+                           "literal_host_path_count": 0}
+    for name, data in sources.items():
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode) and path.read_bytes() == data,
+                "Summary source bytes or type changed during audit")
+    return {"schema": "jarambit.rsv2_07_hm.phase30_summary_manifest.v1", "task": "RSV2-07-p30",
+            "status": "pass", "phases": [26, 27, 28, 29], "artifact_count": len(artifacts),
+            "digest_basis": "exact working-tree bytes of the eight named Phase-26 through Phase-29 outputs",
+            "line_count_rule": "LF-delimited physical lines including an unterminated final line; empty file has zero lines",
+            "total_size_bytes": sum(row["size_bytes"] for row in artifacts.values()),
+            "total_line_count": sum(row["line_count"] for row in artifacts.values()),
+            "literal_host_path_count": 0, "artifacts": artifacts}
+
+
+def render_summary(document):
+    rows = [f"| {name} | {row['size_bytes']} | {row['line_count']} | {row['sha256']} | {row['literal_host_path_count']} |"
+            for name, row in document["artifacts"].items()]
+    return "\n".join([
+        "# Phase-30 summary manifest audit", "",
+        f"**PASS for the artifact inventory.** Indexed {document['artifact_count']} Phase-26 through Phase-29 Markdown and JSON files, totaling {document['total_size_bytes']} bytes and {document['total_line_count']} lines. Literal host paths: 0.", "",
+        "| Repository-relative artifact | Bytes | Lines | SHA-256 | Literal host paths |",
+        "| --- | ---: | ---: | --- | ---: |", *rows, "",
+        "The input set is the fixed eight named report and receipt files from Phases 26 through 29. Hashes and sizes describe exact working-tree bytes. Physical lines are counted by LF delimiters, plus an unterminated final line; an empty file has zero lines. CRLF is one line ending, and Unicode line separators do not add physical lines. Phase-30 outputs, source scripts and other files are outside the input set.", "",
+        "All inputs must be regular UTF-8 files. JSON is parsed strictly, rejecting duplicate keys and nonfinite numbers. Literal absolute host paths are rejected in raw text and decoded JSON strings. Source bytes and file types are checked again after scanning. These checks describe saved artifacts and do not rerun earlier audits or establish their conclusions; Phase 26's partial lineage result and Phase 29's snapshot-only parity remain as recorded.", "",
+        "Persisted paths are repository-relative. --repo-root selects a relocated source tree without requiring Git. Normal verification checks the complete saved JSON manifest and exact report text without writes; --write replaces only the two Phase-30 outputs. The earlier reports and receipts are preserved.", "",
+        "```sh", "python3 scripts/audit_rsv2_07_hm_forensics.py --phase 30",
+        "python3 -m unittest discover -s scripts -p 'test_audit_rsv2_07_hm_forensics.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs 14,15 at nice 10. This is a static summary manifest audit. Changes are left uncommitted.", "",
+    ])
+
+
+def run_summary(args):
+    require(args.artifact_root is None, "Phase-30 uses saved outputs in --repo-root; --artifact-root is not supported")
+    current = summary_manifest(args.repo_root)
+    report = render_summary(current)
+    receipt = json.dumps(current, indent=2) + "\n"
+    require_portable(report, "Phase-30 report")
+    require_portable(receipt, "Phase-30 receipt")
+    if args.write:
+        (args.repo_root / DIRECTORY).mkdir(parents=True, exist_ok=True)
+        (args.repo_root / SUMMARY_RECEIPT).write_text(receipt, encoding="utf-8")
+        (args.repo_root / SUMMARY_REPORT).write_text(report, encoding="utf-8")
+    else:
+        saved = strict_json((args.repo_root / SUMMARY_RECEIPT).read_bytes())
+        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-30 saved receipt mismatch")
+        require((args.repo_root / SUMMARY_REPORT).read_text(encoding="utf-8") == report, "Phase-30 report mismatch")
+    print(f"LANE: RSV2-07-hm | RSV2-07-p30 | PASS | artifacts={current['artifact_count']} | literal_host_paths=0")
+    return 0
+
+
 def audit(artifact_root):
     artifact_root = Path(artifact_root)
     sources, waves = {}, {}
@@ -388,11 +455,13 @@ def render(document):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--phase", choices=("26", "27", "28", "29"), default="26")
+    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30"), default="26")
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     try:
+        if args.phase == "30":
+            return run_summary(args)
         if args.phase == "29":
             return run_cross(args)
         if args.phase == "28":

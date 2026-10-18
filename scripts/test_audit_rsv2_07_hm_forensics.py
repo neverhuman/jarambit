@@ -564,5 +564,124 @@ class IndexInventoryCrossCheckTests(unittest.TestCase):
             self.assertIn("parity=pinned_snapshot", output.getvalue())
 
 
+class SummaryManifestTests(unittest.TestCase):
+    def setUp(self):
+        scratch = Path(__file__).resolve().parents[1] / "target/rsv2-07/phase30/test-fixtures"
+        scratch.mkdir(parents=True, exist_ok=True)
+        temporary = tempfile.TemporaryDirectory(prefix="summary-", dir=scratch)
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.files = {name: b'{"status":"saved"}\n' if name.endswith(".json") else "# Saved α\r\nSecond line\nFinal line".encode()
+                      for name in audit.SUMMARY_PATHS}
+        for name, data in self.files.items():
+            self.write(name, data)
+
+    def write(self, name, data):
+        path = self.root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+
+    def cli(self, *extra):
+        with patch.object(sys, "argv", ["forensics", "--phase", "30", "--repo-root", str(self.root), *extra]), \
+                redirect_stdout(io.StringIO()) as output:
+            result = audit.main()
+        return result, output.getvalue()
+
+    def test_exact_eight_file_hash_sizes_lines_and_deterministic_totals(self):
+        current = audit.summary_manifest(self.root)
+        self.assertEqual((current["phases"], current["artifact_count"]), ([26, 27, 28, 29], 8))
+        self.assertEqual(list(current["artifacts"]), sorted(self.files))
+        self.assertEqual(current["total_size_bytes"], sum(map(len, self.files.values())))
+        self.assertEqual(current["total_line_count"], 16)
+        for name, data in self.files.items():
+            self.assertEqual(current["artifacts"][name], {"sha256": hashlib.sha256(data).hexdigest(),
+                "size_bytes": len(data), "line_count": 1 if name.endswith(".json") else 3, "literal_host_path_count": 0})
+        self.assertEqual(current, audit.summary_manifest(self.root))
+        self.assertNotIn(str(self.root), json.dumps(current))
+
+    def test_line_count_handles_empty_unterminated_crlf_and_unicode_separators(self):
+        cases = ((b"", 0), (b"one", 1), (b"one\n", 1), (b"one\n\n", 2),
+                 (b"a\r\nb\r\n", 2), ("a\u2028b".encode(), 1), (b"a\rb", 1))
+        for data, expected in cases:
+            self.write(audit.REPORT, data)
+            with self.subTest(data=data):
+                self.assertEqual(audit.summary_manifest(self.root)["artifacts"][audit.REPORT]["line_count"], expected)
+
+    def test_other_phases_scripts_and_own_outputs_are_outside_fixed_scope(self):
+        before = audit.summary_manifest(self.root)
+        for name in (audit.DIRECTORY + "PHASE25_OTHER.md", audit.SUMMARY_REPORT, audit.SUMMARY_RECEIPT, audit.SCRIPT_PATHS[0]):
+            self.write(name, b"outside scope, deliberately not JSON")
+        self.assertEqual(audit.summary_manifest(self.root), before)
+
+    def test_invalid_utf8_and_non_strict_json_fail(self):
+        for data in (b"\xff", b'{"x":1,"x":2}', b'{"x":NaN}', b'{"x":1e999}', b"{broken}"):
+            self.write(audit.RECEIPT, data)
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                audit.summary_manifest(self.root)
+
+    def test_literal_host_paths_and_escaped_json_host_paths_fail(self):
+        for data in (b"saved path: /home/example/file", b"saved path: /data/file", b"saved path: C:\\Users\\example\\file"):
+            self.write(audit.REPORT, data)
+            with self.subTest(data=data), self.assertRaisesRegex(ValueError, "Literal host path"):
+                audit.summary_manifest(self.root)
+        self.write(audit.REPORT, self.files[audit.REPORT])
+        self.write(audit.RECEIPT, b'{"source":"\\u002fhome\\u002fexample\\u002ffile"}')
+        with self.assertRaisesRegex(ValueError, "Literal host path"):
+            audit.summary_manifest(self.root)
+
+    def test_missing_or_symlinked_source_fails(self):
+        path = self.root / audit.REPORT
+        path.unlink()
+        with self.assertRaises(FileNotFoundError):
+            audit.summary_manifest(self.root)
+        path.symlink_to(Path(audit.RECEIPT).name)
+        with self.assertRaisesRegex(ValueError, "regular summary source"):
+            audit.summary_manifest(self.root)
+
+    def test_source_change_during_scan_fails(self):
+        original_read = Path.read_bytes
+        changed = False
+        def read(path):
+            nonlocal changed
+            data = original_read(path)
+            if path == self.root / audit.REPORT and not changed:
+                changed = True
+                path.write_bytes(data + b"changed\n")
+            return data
+        with patch.object(Path, "read_bytes", new=read), self.assertRaisesRegex(ValueError, "changed during audit"):
+            audit.summary_manifest(self.root)
+
+    def test_cli_writes_only_phase30_outputs_and_readonly_rejects_tampering(self):
+        with patch.object(audit.subprocess, "check_output", side_effect=AssertionError("Unexpected Git command")):
+            result, output = self.cli("--write")
+            self.assertEqual(result, 0)
+            self.assertIn("LANE: RSV2-07-hm | RSV2-07-p30 | PASS | artifacts=8 | literal_host_paths=0", output)
+            expected = set(self.files) | {audit.SUMMARY_REPORT, audit.SUMMARY_RECEIPT}
+            self.assertEqual({path.relative_to(self.root).as_posix() for path in self.root.rglob("*") if path.is_file()}, expected)
+            for name, data in self.files.items():
+                self.assertEqual((self.root / name).read_bytes(), data)
+            with patch.object(Path, "write_text", side_effect=AssertionError("Readonly audit wrote")):
+                self.assertEqual(self.cli()[0], 0)
+            receipt = self.root / audit.SUMMARY_RECEIPT
+            original = receipt.read_bytes()
+            for field, value in (("sha256", "0" * 64), ("size_bytes", 0), ("line_count", 0), ("literal_host_path_count", False)):
+                saved = json.loads(original)
+                saved["artifacts"][audit.REPORT][field] = value
+                receipt.write_text(json.dumps(saved))
+                with self.subTest(field=field), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                    self.cli()
+                self.assertEqual(error.exception.code, 1)
+            receipt.write_bytes(original)
+            self.write(audit.SUMMARY_REPORT, b"altered report\n")
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                self.cli()
+            self.assertEqual(error.exception.code, 1)
+
+    def test_artifact_root_is_rejected_for_summary_manifest(self):
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli("--artifact-root", str(self.root))
+        self.assertEqual(error.exception.code, 1)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
