@@ -28,6 +28,7 @@ SUMMARY_MANIFEST = INVENTORY.parent / 'phase26_summary_manifest_audit.json'
 MANIFEST_CROSS_CHECK = INVENTORY.parent / 'phase27_manifest_cross_check_audit.json'
 CUMULATIVE_RECEIPT_INDEX = INVENTORY.parent / 'phase28_cumulative_receipt_index_audit.json'
 ASSERTION_INVENTORY = INVENTORY.parent / 'phase29_verifier_assertion_inventory_audit.json'
+JSON_SCHEMA_KEYSET_AUDIT = INVENTORY.parent / 'phase30_json_schema_keyset_audit.json'
 HOST_PATH_PATTERN = re.compile(r'/(?:home|Users|tmp|root|var/tmp|private/tmp)/|[A-Za-z]:[\\/](?:Users|Temp)[\\/]')
 
 
@@ -496,6 +497,45 @@ def verify_assertion_inventory(root=ROOT, document=None):
     return dict(status='pass', check_functions=actual['check_function_count'], test_methods=actual['test_method_count'])
 
 
+def json_schema_key_record(data, phase, path):
+    document = strict_json(data)
+    if not isinstance(document, dict):
+        raise ValueError('Receipt must be a top-level JSON object')
+    keys = sorted(document)
+    return dict(phase=phase, path=path.as_posix(), bytes=len(data), sha256=digest(data),
+                top_level_key_count=len(keys), top_level_keys=keys,
+                keyset_sha256=digest(json.dumps(keys,separators=(',',':'),ensure_ascii=True).encode()))
+
+
+def generate_json_schema_keyset_audit(root):
+    root = Path(root)
+    verify_assertion_inventory(root)
+    paths = cumulative_receipt_paths() + [(28,CUMULATIVE_RECEIPT_INDEX),(29,ASSERTION_INVENTORY)]
+    files = [json_schema_key_record((root / path).read_bytes(),phase,path) for phase,path in paths]
+    groups = {}
+    for row in files:
+        key = row['keyset_sha256']
+        groups.setdefault(key,dict(keyset_sha256=key,top_level_keys=row['top_level_keys'],phases=[]))['phases'].append(row['phase'])
+    keysets = [set(row['top_level_keys']) for row in files]
+    return dict(task='G16-06-RSV2-08-p31', study_phase=30,
+                scope='Parsed top-level keysets of all Phase15..29 receipts; no nested-key/type/schema-equivalence claim.',
+                phase_count=15, file_count=len(files), total_bytes=sum(row['bytes'] for row in files),
+                distinct_keyset_count=len(groups), common_top_level_keys=sorted(set.intersection(*keysets)),
+                union_top_level_keys=sorted(set.union(*keysets)), keyset_groups=list(groups.values()),
+                engineering_qualification_assessed=False, qualified_count=0, full_qualification=False,
+                files=files)
+
+
+def verify_json_schema_keyset_audit(root=ROOT, document=None):
+    root = Path(root)
+    if document is None:
+        document = strict_json((root / JSON_SCHEMA_KEYSET_AUDIT).read_bytes())
+    actual = generate_json_schema_keyset_audit(root)
+    if document != actual:
+        raise ValueError('JSON receipt keyset coverage, keys, source digest or metadata mismatch')
+    return dict(status='pass', receipts=15, distinct_keysets=actual['distinct_keyset_count'])
+
+
 def verify_all(root=ROOT):
     result = verify(root)
     result['markdown_reports'] = verify_markdown(root)
@@ -506,6 +546,7 @@ def verify_all(root=ROOT):
     result['manifest_cross_check'] = verify_manifest_cross_check(root)
     result['cumulative_receipt_index'] = verify_cumulative_receipt_index(root)
     result['verifier_assertion_inventory'] = verify_assertion_inventory(root)
+    result['json_schema_keysets'] = verify_json_schema_keyset_audit(root)
     return result
 
 
@@ -520,6 +561,7 @@ def main():
     parser.add_argument('--write-manifest-cross-check', action='store_true', help='Cross-check the Phase26 summary against live files and receipt references')
     parser.add_argument('--write-cumulative-index', action='store_true', help='Index the exact Phase15..27 receipt digests and byte sizes')
     parser.add_argument('--write-assertion-inventory', action='store_true', help='Inventory verifier guard functions and test declarations by AST')
+    parser.add_argument('--write-json-keysets', action='store_true', help='Audit top-level JSON keys across Phase15..29 receipts')
     args = parser.parse_args()
     if args.write:
         import subprocess
@@ -549,6 +591,8 @@ def main():
         (ROOT / CUMULATIVE_RECEIPT_INDEX).write_text(json.dumps(generate_cumulative_receipt_index(ROOT), indent=2, allow_nan=False) + '\n')
     if args.write_assertion_inventory:
         (ROOT / ASSERTION_INVENTORY).write_text(json.dumps(generate_assertion_inventory(ROOT), indent=2, allow_nan=False) + '\n')
+    if args.write_json_keysets:
+        (ROOT / JSON_SCHEMA_KEYSET_AUDIT).write_text(json.dumps(generate_json_schema_keyset_audit(ROOT), indent=2, allow_nan=False) + '\n')
     print(json.dumps(verify_all(), sort_keys=True, allow_nan=False))
 
 

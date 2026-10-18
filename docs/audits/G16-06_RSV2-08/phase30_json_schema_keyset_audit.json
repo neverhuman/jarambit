@@ -1,0 +1,744 @@
+{
+  "task": "G16-06-RSV2-08-p31",
+  "study_phase": 30,
+  "scope": "Parsed top-level keysets of all Phase15..29 receipts; no nested-key/type/schema-equivalence claim.",
+  "phase_count": 15,
+  "file_count": 15,
+  "total_bytes": 504168,
+  "distinct_keyset_count": 15,
+  "common_top_level_keys": [
+    "task"
+  ],
+  "union_top_level_keys": [
+    "all_gate_qualification",
+    "all_phase_versions_fully_pinned",
+    "all_requested_reports_present",
+    "all_valid_json",
+    "areas_mm2",
+    "assert_statement_count",
+    "baseline_commit",
+    "byte_mismatch_count",
+    "candidate_count_scope",
+    "candidate_file_count",
+    "check_function_count",
+    "check_functions",
+    "checked_json_receipt_phases",
+    "digest_mismatch_count",
+    "direct_receipt_reference_count",
+    "engineering_qualification_assessed",
+    "exact_digest_and_byte_parity",
+    "exact_digest_parity",
+    "expected_primary_solid_settings",
+    "faer_lock_version",
+    "file_checks",
+    "file_count",
+    "filename_note",
+    "files",
+    "floors",
+    "full_qualification",
+    "function_selection",
+    "historical_files",
+    "indexed_file_count",
+    "input_sha256",
+    "json_file_count",
+    "literal_host_path_count",
+    "markdown_file_count",
+    "members",
+    "missing_evidence",
+    "missing_reports",
+    "native_sources_changed",
+    "nonfinite_numeric_values",
+    "outcome_counts",
+    "overlap_count",
+    "overlap_paths",
+    "phase14_model_status",
+    "phase23_member_count",
+    "phase24_member_count",
+    "phase24_script_checks",
+    "phase24_script_member_count",
+    "phase_count",
+    "phase_counts",
+    "phases",
+    "qualified_count",
+    "raise_statement_count",
+    "receipt_reference_checks",
+    "recorded_values_consistent",
+    "results",
+    "runtime",
+    "sample",
+    "schema",
+    "schema_source",
+    "schema_version",
+    "scientific_reference_count",
+    "scope",
+    "sha256",
+    "slots",
+    "source_indexes",
+    "source_provenance",
+    "source_receipts",
+    "sources",
+    "state",
+    "study_phase",
+    "summary_file_count",
+    "summary_manifest",
+    "task",
+    "test_class_count",
+    "test_classes",
+    "test_method_count",
+    "test_method_definition",
+    "total_ast_test_method_count",
+    "total_bytes",
+    "total_lines",
+    "total_member_bytes",
+    "tracked_path_list_sha256",
+    "tracked_paths_sha256",
+    "unique_member_count",
+    "unmappable_non_evidence_strings",
+    "verification_entrypoint_count"
+  ],
+  "keyset_groups": [
+    {
+      "keyset_sha256": "5162cbbfa3f7cef61e53eaa50e01d341e4646fd163e75bcc7909fcfe41547ad8",
+      "top_level_keys": [
+        "all_gate_qualification",
+        "areas_mm2",
+        "floors",
+        "native_sources_changed",
+        "outcome_counts",
+        "phase14_model_status",
+        "results",
+        "runtime",
+        "sample",
+        "sha256",
+        "slots",
+        "source_provenance",
+        "state",
+        "task"
+      ],
+      "phases": [
+        15
+      ]
+    },
+    {
+      "keyset_sha256": "0630cb8eebeabcc2b81829d37102846c7871b8504cdd566f4294765157276a4f",
+      "top_level_keys": [
+        "candidate_count_scope",
+        "full_qualification",
+        "phases",
+        "qualified_count",
+        "schema_version",
+        "task"
+      ],
+      "phases": [
+        16
+      ]
+    },
+    {
+      "keyset_sha256": "a08355652b491b31c4b7e6fc376f6ee9df01d0d00808553ff391a92d32e73836",
+      "top_level_keys": [
+        "filename_note",
+        "full_qualification",
+        "historical_files",
+        "phases",
+        "qualified_count",
+        "scientific_reference_count",
+        "task",
+        "unmappable_non_evidence_strings"
+      ],
+      "phases": [
+        17
+      ]
+    },
+    {
+      "keyset_sha256": "743ac2d2cfa498a0f7d37378255da13598ad66f1206cbfe38426eb053a46c6b7",
+      "top_level_keys": [
+        "all_requested_reports_present",
+        "baseline_commit",
+        "full_qualification",
+        "indexed_file_count",
+        "missing_reports",
+        "phases",
+        "qualified_count",
+        "scope",
+        "study_phase",
+        "task"
+      ],
+      "phases": [
+        18
+      ]
+    },
+    {
+      "keyset_sha256": "89e0b6022f44cd2c05cd0cc5eed50e7d8c559b4e944086edf56afc53a0c1f8c1",
+      "top_level_keys": [
+        "all_phase_versions_fully_pinned",
+        "expected_primary_solid_settings",
+        "faer_lock_version",
+        "full_qualification",
+        "input_sha256",
+        "missing_evidence",
+        "phases",
+        "qualified_count",
+        "recorded_values_consistent",
+        "study_phase",
+        "task"
+      ],
+      "phases": [
+        19
+      ]
+    },
+    {
+      "keyset_sha256": "8969ae8e77544e9aa176ec36d7831eec209a28f7c6f7d2a43573a5ab0158db39",
+      "top_level_keys": [
+        "candidate_file_count",
+        "files",
+        "full_qualification",
+        "phase_counts",
+        "qualified_count",
+        "schema",
+        "schema_source",
+        "scope",
+        "study_phase",
+        "task",
+        "tracked_path_list_sha256"
+      ],
+      "phases": [
+        20
+      ]
+    },
+    {
+      "keyset_sha256": "77c70c5ffc7a1bb443fd06d88efe925f001e58ffebd94340e5d5798d09784c33",
+      "top_level_keys": [
+        "all_valid_json",
+        "baseline_commit",
+        "engineering_qualification_assessed",
+        "file_count",
+        "files",
+        "full_qualification",
+        "nonfinite_numeric_values",
+        "qualified_count",
+        "scope",
+        "study_phase",
+        "task",
+        "total_bytes",
+        "tracked_paths_sha256"
+      ],
+      "phases": [
+        21
+      ]
+    },
+    {
+      "keyset_sha256": "1cda5297812e55f4e32267eaf80e0ef2a63ccc4063ad620ba847810276df8229",
+      "top_level_keys": [
+        "baseline_commit",
+        "engineering_qualification_assessed",
+        "file_count",
+        "files",
+        "full_qualification",
+        "literal_host_path_count",
+        "qualified_count",
+        "scope",
+        "study_phase",
+        "task",
+        "total_bytes",
+        "total_lines",
+        "tracked_paths_sha256"
+      ],
+      "phases": [
+        22
+      ]
+    },
+    {
+      "keyset_sha256": "55abdd9ff486d2b3e701d5f65316f6f96cfeb1c253e2e6cd595bd61baf28f9f9",
+      "top_level_keys": [
+        "digest_mismatch_count",
+        "engineering_qualification_assessed",
+        "exact_digest_parity",
+        "full_qualification",
+        "json_file_count",
+        "markdown_file_count",
+        "members",
+        "overlap_count",
+        "overlap_paths",
+        "qualified_count",
+        "scope",
+        "source_indexes",
+        "study_phase",
+        "task",
+        "total_member_bytes",
+        "unique_member_count"
+      ],
+      "phases": [
+        23
+      ]
+    },
+    {
+      "keyset_sha256": "9e4a581c8606c5ddaeefcaeade62ac74070a220237a5cd8627c87e4f38bd01c3",
+      "top_level_keys": [
+        "engineering_qualification_assessed",
+        "file_count",
+        "files",
+        "full_qualification",
+        "qualified_count",
+        "scope",
+        "study_phase",
+        "task",
+        "test_method_definition",
+        "total_ast_test_method_count",
+        "total_bytes"
+      ],
+      "phases": [
+        24
+      ]
+    },
+    {
+      "keyset_sha256": "9b001c544a4319e23566e9057fb05b0f0fcec2607805f2df446d5f5e310155eb",
+      "top_level_keys": [
+        "digest_mismatch_count",
+        "engineering_qualification_assessed",
+        "exact_digest_parity",
+        "full_qualification",
+        "members",
+        "overlap_count",
+        "overlap_paths",
+        "phase23_member_count",
+        "phase24_member_count",
+        "qualified_count",
+        "scope",
+        "source_receipts",
+        "study_phase",
+        "task",
+        "total_member_bytes",
+        "unique_member_count"
+      ],
+      "phases": [
+        25
+      ]
+    },
+    {
+      "keyset_sha256": "7432c57327181d11ee6c3df45d576dbc9a44c066dda5931eeb53274d1092c312",
+      "top_level_keys": [
+        "engineering_qualification_assessed",
+        "file_count",
+        "files",
+        "full_qualification",
+        "literal_host_path_count",
+        "phase_count",
+        "qualified_count",
+        "scope",
+        "study_phase",
+        "task",
+        "total_bytes",
+        "total_lines"
+      ],
+      "phases": [
+        26
+      ]
+    },
+    {
+      "keyset_sha256": "316cd37263116d5761e5101b0eec61335272dff3cf30d9a93d7aed75cd56bd82",
+      "top_level_keys": [
+        "byte_mismatch_count",
+        "checked_json_receipt_phases",
+        "digest_mismatch_count",
+        "direct_receipt_reference_count",
+        "engineering_qualification_assessed",
+        "exact_digest_and_byte_parity",
+        "file_checks",
+        "full_qualification",
+        "phase24_script_checks",
+        "phase24_script_member_count",
+        "qualified_count",
+        "receipt_reference_checks",
+        "scope",
+        "study_phase",
+        "summary_file_count",
+        "summary_manifest",
+        "task"
+      ],
+      "phases": [
+        27
+      ]
+    },
+    {
+      "keyset_sha256": "70c504639cba6066bbeb690bf86f877e2c1dd4edcf1e9c596a8db9924dfe2c58",
+      "top_level_keys": [
+        "engineering_qualification_assessed",
+        "file_count",
+        "files",
+        "full_qualification",
+        "phase_count",
+        "qualified_count",
+        "scope",
+        "study_phase",
+        "task",
+        "total_bytes"
+      ],
+      "phases": [
+        28
+      ]
+    },
+    {
+      "keyset_sha256": "189e14b3446ad501785be28c788d1ebb9456e728ce364d24fb2546f24a485cae",
+      "top_level_keys": [
+        "assert_statement_count",
+        "check_function_count",
+        "check_functions",
+        "engineering_qualification_assessed",
+        "full_qualification",
+        "function_selection",
+        "qualified_count",
+        "raise_statement_count",
+        "scope",
+        "sources",
+        "study_phase",
+        "task",
+        "test_class_count",
+        "test_classes",
+        "test_method_count",
+        "verification_entrypoint_count"
+      ],
+      "phases": [
+        29
+      ]
+    }
+  ],
+  "engineering_qualification_assessed": false,
+  "qualified_count": 0,
+  "full_qualification": false,
+  "files": [
+    {
+      "phase": 15,
+      "path": "experiments/G16-06-RSV2-08/phase15_gate_s_compliant_joint_audit.json",
+      "bytes": 33243,
+      "sha256": "205a359a7e9f1cd7065b5a35da7b1491fa6a37356a6e20473c4fff9451bfd51d",
+      "top_level_key_count": 14,
+      "top_level_keys": [
+        "all_gate_qualification",
+        "areas_mm2",
+        "floors",
+        "native_sources_changed",
+        "outcome_counts",
+        "phase14_model_status",
+        "results",
+        "runtime",
+        "sample",
+        "sha256",
+        "slots",
+        "source_provenance",
+        "state",
+        "task"
+      ],
+      "keyset_sha256": "5162cbbfa3f7cef61e53eaa50e01d341e4646fd163e75bcc7909fcfe41547ad8"
+    },
+    {
+      "phase": 16,
+      "path": "experiments/G16-06-RSV2-08/phase16_cross_phase_provenance_index.json",
+      "bytes": 5327,
+      "sha256": "34f93fd138eacbe2be39690febb26478b443f22ecb75bbd87734e4daab465120",
+      "top_level_key_count": 6,
+      "top_level_keys": [
+        "candidate_count_scope",
+        "full_qualification",
+        "phases",
+        "qualified_count",
+        "schema_version",
+        "task"
+      ],
+      "keyset_sha256": "0630cb8eebeabcc2b81829d37102846c7871b8504cdd566f4294765157276a4f"
+    },
+    {
+      "phase": 17,
+      "path": "experiments/G16-06-RSV2-08/phase17_legacy_path_inventory.json",
+      "bytes": 121352,
+      "sha256": "9d2d21d0d3c89be4ef84089b1548ca6dd9d21f65af43b5930820437c96c6ad15",
+      "top_level_key_count": 8,
+      "top_level_keys": [
+        "filename_note",
+        "full_qualification",
+        "historical_files",
+        "phases",
+        "qualified_count",
+        "scientific_reference_count",
+        "task",
+        "unmappable_non_evidence_strings"
+      ],
+      "keyset_sha256": "a08355652b491b31c4b7e6fc376f6ee9df01d0d00808553ff391a92d32e73836"
+    },
+    {
+      "phase": 18,
+      "path": "experiments/G16-06-RSV2-08/phase18_complete_study_manifest.json",
+      "bytes": 9886,
+      "sha256": "1b5c2d6deb189b419d330d8166e0f20a0fb9f92c12f73b01e0bf3d369e3b7a52",
+      "top_level_key_count": 10,
+      "top_level_keys": [
+        "all_requested_reports_present",
+        "baseline_commit",
+        "full_qualification",
+        "indexed_file_count",
+        "missing_reports",
+        "phases",
+        "qualified_count",
+        "scope",
+        "study_phase",
+        "task"
+      ],
+      "keyset_sha256": "743ac2d2cfa498a0f7d37378255da13598ad66f1206cbfe38426eb053a46c6b7"
+    },
+    {
+      "phase": 19,
+      "path": "experiments/G16-06-RSV2-08/phase19_solver_environment_audit.json",
+      "bytes": 72253,
+      "sha256": "73d85168599a1f41ddc9c9a533184d231ae293daa4a70eaffc4a12fba926716d",
+      "top_level_key_count": 11,
+      "top_level_keys": [
+        "all_phase_versions_fully_pinned",
+        "expected_primary_solid_settings",
+        "faer_lock_version",
+        "full_qualification",
+        "input_sha256",
+        "missing_evidence",
+        "phases",
+        "qualified_count",
+        "recorded_values_consistent",
+        "study_phase",
+        "task"
+      ],
+      "keyset_sha256": "89e0b6022f44cd2c05cd0cc5eed50e7d8c559b4e944086edf56afc53a0c1f8c1"
+    },
+    {
+      "phase": 20,
+      "path": "experiments/G16-06-RSV2-08/phase20_candidate_csv_schema_audit.json",
+      "bytes": 198150,
+      "sha256": "59548ae6e1a65c98bd6fb69535756ddb05511b1858a6d36b1073c6a73ab3f594",
+      "top_level_key_count": 11,
+      "top_level_keys": [
+        "candidate_file_count",
+        "files",
+        "full_qualification",
+        "phase_counts",
+        "qualified_count",
+        "schema",
+        "schema_source",
+        "scope",
+        "study_phase",
+        "task",
+        "tracked_path_list_sha256"
+      ],
+      "keyset_sha256": "8969ae8e77544e9aa176ec36d7831eec209a28f7c6f7d2a43573a5ab0158db39"
+    },
+    {
+      "phase": 21,
+      "path": "docs/audits/G16-06_RSV2-08/phase21_measurement_json_inventory_audit.json",
+      "bytes": 9672,
+      "sha256": "6de32c8ba3c3a90c535b9eb5caff8766f8f00eb7511c584c114cf6a4b1cd63fa",
+      "top_level_key_count": 13,
+      "top_level_keys": [
+        "all_valid_json",
+        "baseline_commit",
+        "engineering_qualification_assessed",
+        "file_count",
+        "files",
+        "full_qualification",
+        "nonfinite_numeric_values",
+        "qualified_count",
+        "scope",
+        "study_phase",
+        "task",
+        "total_bytes",
+        "tracked_paths_sha256"
+      ],
+      "keyset_sha256": "77c70c5ffc7a1bb443fd06d88efe925f001e58ffebd94340e5d5798d09784c33"
+    },
+    {
+      "phase": 22,
+      "path": "docs/audits/G16-06_RSV2-08/phase22_markdown_report_digest_index.json",
+      "bytes": 790,
+      "sha256": "7c81cebd99494529cbc1978df11ffc3f0136b2f837f42232d816ef7239df5f5a",
+      "top_level_key_count": 13,
+      "top_level_keys": [
+        "baseline_commit",
+        "engineering_qualification_assessed",
+        "file_count",
+        "files",
+        "full_qualification",
+        "literal_host_path_count",
+        "qualified_count",
+        "scope",
+        "study_phase",
+        "task",
+        "total_bytes",
+        "total_lines",
+        "tracked_paths_sha256"
+      ],
+      "keyset_sha256": "1cda5297812e55f4e32267eaf80e0ef2a63ccc4063ad620ba847810276df8229"
+    },
+    {
+      "phase": 23,
+      "path": "docs/audits/G16-06_RSV2-08/phase23_inventory_cross_check_audit.json",
+      "bytes": 11793,
+      "sha256": "5d6c1e1b4046a537ccbecd7f64a9e887b2aa384dd8eed5fdb0b15acbc76e1784",
+      "top_level_key_count": 16,
+      "top_level_keys": [
+        "digest_mismatch_count",
+        "engineering_qualification_assessed",
+        "exact_digest_parity",
+        "full_qualification",
+        "json_file_count",
+        "markdown_file_count",
+        "members",
+        "overlap_count",
+        "overlap_paths",
+        "qualified_count",
+        "scope",
+        "source_indexes",
+        "study_phase",
+        "task",
+        "total_member_bytes",
+        "unique_member_count"
+      ],
+      "keyset_sha256": "55abdd9ff486d2b3e701d5f65316f6f96cfeb1c253e2e6cd595bd61baf28f9f9"
+    },
+    {
+      "phase": 24,
+      "path": "docs/audits/G16-06_RSV2-08/phase24_script_test_inventory_audit.json",
+      "bytes": 1007,
+      "sha256": "fa5f26b57559ff98592886ceb8aab352f205fa88e18289fa59459570455a18e3",
+      "top_level_key_count": 11,
+      "top_level_keys": [
+        "engineering_qualification_assessed",
+        "file_count",
+        "files",
+        "full_qualification",
+        "qualified_count",
+        "scope",
+        "study_phase",
+        "task",
+        "test_method_definition",
+        "total_ast_test_method_count",
+        "total_bytes"
+      ],
+      "keyset_sha256": "9e4a581c8606c5ddaeefcaeade62ac74070a220237a5cd8627c87e4f38bd01c3"
+    },
+    {
+      "phase": 25,
+      "path": "docs/audits/G16-06_RSV2-08/phase25_script_and_inventory_cross_check_audit.json",
+      "bytes": 12389,
+      "sha256": "ce785ca25c35758c3d8554f181f5a327c80241211cdc97854cc301f1c141ccb6",
+      "top_level_key_count": 16,
+      "top_level_keys": [
+        "digest_mismatch_count",
+        "engineering_qualification_assessed",
+        "exact_digest_parity",
+        "full_qualification",
+        "members",
+        "overlap_count",
+        "overlap_paths",
+        "phase23_member_count",
+        "phase24_member_count",
+        "qualified_count",
+        "scope",
+        "source_receipts",
+        "study_phase",
+        "task",
+        "total_member_bytes",
+        "unique_member_count"
+      ],
+      "keyset_sha256": "9b001c544a4319e23566e9057fb05b0f0fcec2607805f2df446d5f5e310155eb"
+    },
+    {
+      "phase": 26,
+      "path": "docs/audits/G16-06_RSV2-08/phase26_summary_manifest_audit.json",
+      "bytes": 3334,
+      "sha256": "5298c8f08932e9c7818a4a68e3445d0e35606e37da52a1ba034c34871ca21767",
+      "top_level_key_count": 12,
+      "top_level_keys": [
+        "engineering_qualification_assessed",
+        "file_count",
+        "files",
+        "full_qualification",
+        "literal_host_path_count",
+        "phase_count",
+        "qualified_count",
+        "scope",
+        "study_phase",
+        "task",
+        "total_bytes",
+        "total_lines"
+      ],
+      "keyset_sha256": "7432c57327181d11ee6c3df45d576dbc9a44c066dda5931eeb53274d1092c312"
+    },
+    {
+      "phase": 27,
+      "path": "docs/audits/G16-06_RSV2-08/phase27_manifest_cross_check_audit.json",
+      "bytes": 8888,
+      "sha256": "3d59dc1ee6360895a4db96e9e1e2de1b28409c7c802b174ecd91693551657181",
+      "top_level_key_count": 17,
+      "top_level_keys": [
+        "byte_mismatch_count",
+        "checked_json_receipt_phases",
+        "digest_mismatch_count",
+        "direct_receipt_reference_count",
+        "engineering_qualification_assessed",
+        "exact_digest_and_byte_parity",
+        "file_checks",
+        "full_qualification",
+        "phase24_script_checks",
+        "phase24_script_member_count",
+        "qualified_count",
+        "receipt_reference_checks",
+        "scope",
+        "study_phase",
+        "summary_file_count",
+        "summary_manifest",
+        "task"
+      ],
+      "keyset_sha256": "316cd37263116d5761e5101b0eec61335272dff3cf30d9a93d7aed75cd56bd82"
+    },
+    {
+      "phase": 28,
+      "path": "docs/audits/G16-06_RSV2-08/phase28_cumulative_receipt_index_audit.json",
+      "bytes": 4385,
+      "sha256": "6164b331a2603c2bbf9bc92f92db6f85a0fa9d08024d8673ee0289e8313b0f30",
+      "top_level_key_count": 10,
+      "top_level_keys": [
+        "engineering_qualification_assessed",
+        "file_count",
+        "files",
+        "full_qualification",
+        "phase_count",
+        "qualified_count",
+        "scope",
+        "study_phase",
+        "task",
+        "total_bytes"
+      ],
+      "keyset_sha256": "70c504639cba6066bbeb690bf86f877e2c1dd4edcf1e9c596a8db9924dfe2c58"
+    },
+    {
+      "phase": 29,
+      "path": "docs/audits/G16-06_RSV2-08/phase29_verifier_assertion_inventory_audit.json",
+      "bytes": 11699,
+      "sha256": "9f08bc88d3d63e8722fff25a29911ae5e8e9bd77f5dd4ffab348a25d40025c0c",
+      "top_level_key_count": 16,
+      "top_level_keys": [
+        "assert_statement_count",
+        "check_function_count",
+        "check_functions",
+        "engineering_qualification_assessed",
+        "full_qualification",
+        "function_selection",
+        "qualified_count",
+        "raise_statement_count",
+        "scope",
+        "sources",
+        "study_phase",
+        "task",
+        "test_class_count",
+        "test_classes",
+        "test_method_count",
+        "verification_entrypoint_count"
+      ],
+      "keyset_sha256": "189e14b3446ad501785be28c788d1ebb9456e728ce364d24fb2546f24a485cae"
+    }
+  ]
+}

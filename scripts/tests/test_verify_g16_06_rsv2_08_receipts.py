@@ -180,7 +180,7 @@ class MarkdownReportIndexTests(unittest.TestCase):
             for relative in [*files, audit.INVENTORY.as_posix(), audit.MARKDOWN_INDEX.as_posix(), audit.CROSS_CHECK.as_posix(),
                              audit.SCRIPT_INVENTORY.as_posix(), audit.SCRIPT_CROSS_CHECK.as_posix(), *audit.SCRIPT_FILES,
                              audit.SUMMARY_MANIFEST.as_posix(), audit.MANIFEST_CROSS_CHECK.as_posix(), audit.CUMULATIVE_RECEIPT_INDEX.as_posix(),
-                             audit.ASSERTION_INVENTORY.as_posix(),
+                             audit.ASSERTION_INVENTORY.as_posix(), audit.JSON_SCHEMA_KEYSET_AUDIT.as_posix(),
                              *[path.as_posix() for _,_,path in audit.summary_paths()]]:
                 target = root / relative; target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(ROOT / relative, target)
@@ -192,6 +192,7 @@ class MarkdownReportIndexTests(unittest.TestCase):
                 return real(path, mode, *args, **kwargs)
             with patch.object(Path, 'open', new=guarded), patch.dict('os.environ',{},clear=True), patch('subprocess.run', side_effect=AssertionError('Process launch')):
                 result = audit.verify_all(root)
+                self.assertEqual(result['json_schema_keysets']['receipts'],15)
                 self.assertEqual(result['markdown_reports']['status'],'pass')
                 self.assertEqual(result['inventory_cross_check']['unique_members'],30)
                 self.assertEqual(result['script_test_inventory']['files'],2)
@@ -666,6 +667,74 @@ def helper(): return "raise and assert in text"
             self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
         before = (ROOT / 'COMMS.md').read_bytes()
         audit.verify_assertion_inventory()
+        self.assertEqual((ROOT / 'COMMS.md').read_bytes(),before)
+
+
+class JsonSchemaKeysetTests(unittest.TestCase):
+    def document(self):
+        return audit.strict_json((ROOT / audit.JSON_SCHEMA_KEYSET_AUDIT).read_bytes())
+
+    def test_complete_live_keys_digests_and_aggregates(self):
+        d = self.document(); self.assertEqual(audit.verify_json_schema_keyset_audit()['status'],'pass')
+        self.assertEqual([r['phase'] for r in d['files']],list(range(15,30)))
+        self.assertEqual(d['file_count'],15); self.assertEqual(d['phase_count'],15)
+        keysets = []; groups = {}
+        for row in d['files']:
+            data = (ROOT / row['path']).read_bytes(); keys = sorted(audit.strict_json(data))
+            self.assertEqual(row['top_level_keys'],keys); self.assertEqual(row['top_level_key_count'],len(keys))
+            self.assertEqual(row['bytes'],len(data)); self.assertEqual(row['sha256'],audit.digest(data))
+            expected = audit.digest(audit.json.dumps(keys,separators=(',',':'),ensure_ascii=True).encode())
+            self.assertEqual(row['keyset_sha256'],expected)
+            keysets.append(set(keys)); groups.setdefault(expected,[]).append(row['phase'])
+        self.assertEqual(d['total_bytes'],sum(r['bytes'] for r in d['files']))
+        self.assertEqual(d['common_top_level_keys'],sorted(set.intersection(*keysets)))
+        self.assertEqual(d['union_top_level_keys'],sorted(set.union(*keysets)))
+        self.assertEqual(d['distinct_keyset_count'],len(groups))
+        self.assertEqual({r['keyset_sha256']:r['phases'] for r in d['keyset_groups']},groups)
+
+    def test_key_order_independence_and_nested_key_exclusion(self):
+        a = audit.json_schema_key_record(b'{"b":{"nested":1},"a":2}',15,Path('receipt.json'))
+        b = audit.json_schema_key_record(b'{"a":3,"b":[]}',15,Path('receipt.json'))
+        self.assertEqual(a['top_level_keys'],['a','b']); self.assertEqual(a['top_level_key_count'],2)
+        self.assertEqual(a['keyset_sha256'],b['keyset_sha256']); self.assertNotEqual(a['sha256'],b['sha256'])
+        empty = audit.json_schema_key_record(b'{}',15,Path('receipt.json'))
+        self.assertEqual(empty['top_level_keys'],[]); self.assertEqual(empty['top_level_key_count'],0)
+
+    def test_nonobject_and_nonfinite_receipts_rejected(self):
+        for data in [b'[]',b'null',b'1',b'"text"',b'{"x":NaN}',b'{"x":Infinity}',b'{"x":1e999}']:
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                audit.json_schema_key_record(data,15,Path('receipt.json'))
+
+    def test_forged_keys_digest_counts_and_coverage_rejected(self):
+        for field,value in [('top_level_keys',[]),('top_level_key_count',0),('keyset_sha256','0'*64),('sha256','0'*64)]:
+            d = self.document(); d['files'][0][field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError,'JSON receipt keyset'):
+                audit.verify_json_schema_keyset_audit(document=d)
+        for field in ['files','keyset_groups','union_top_level_keys']:
+            d = self.document(); d[field].pop()
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError,'JSON receipt keyset'):
+                audit.verify_json_schema_keyset_audit(document=d)
+
+    def test_missing_and_byte_only_changed_receipt_rejected(self):
+        real = Path.read_bytes; victim = ROOT / audit.ASSERTION_INVENTORY
+        def missing(path):
+            if path == victim: raise FileNotFoundError(path)
+            return real(path)
+        with patch.object(Path,'read_bytes',new=missing), self.assertRaises(FileNotFoundError):
+            audit.verify_json_schema_keyset_audit()
+        def changed(path):
+            data = real(path)
+            return data+b' ' if path == victim else data
+        with patch.object(Path,'read_bytes',new=changed), self.assertRaisesRegex(ValueError,'JSON receipt keyset'):
+            audit.verify_json_schema_keyset_audit()
+
+    def test_static_outputs_and_comms_unchanged(self):
+        d = self.document(); self.assertFalse(d['engineering_qualification_assessed'])
+        self.assertEqual(d['qualified_count'],0); self.assertFalse(d['full_qualification'])
+        for path in [ROOT / audit.JSON_SCHEMA_KEYSET_AUDIT, ROOT / audit.INVENTORY.parent / 'PHASE30.md']:
+            self.assertEqual(audit.markdown_record(path.read_bytes())['literal_host_path_count'],0)
+        before = (ROOT / 'COMMS.md').read_bytes()
+        audit.verify_json_schema_keyset_audit()
         self.assertEqual((ROOT / 'COMMS.md').read_bytes(),before)
 
 
