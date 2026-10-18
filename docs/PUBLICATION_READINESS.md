@@ -82,3 +82,64 @@ Neither mode interprets result fields, computes statistics, or validates scienti
 claims. The [neutral controls](../ops/ci/tests/test_source_ledger.py) exercise exact
 byte identities, dirty copies, missing sources, moving refs, mid-read substitution,
 path containment and CLI failure behavior.
+
+## Upgrade the pinned PDF toolchain
+
+Treat a package upgrade as an intentional publication change; retain the exact
+version guard and the neutral reproducibility test.
+
+1. Record the source commit, both current version banners, and installed package
+   versions before upgrading. Coordinate matching packages on every active
+   Jarambit runner host while its affected runners are idle. Inventory the tools
+   through each runner's saved PATH; record font and Pillow versions too.
+
+   ```sh
+   pandoc --version
+   lualatex --version
+   dpkg-query -W pandoc pandoc-data texlive-luatex
+   ```
+
+2. On a branch, update `PINNED_PANDOC_VERSION` and `PINNED_LUALATEX_VERSION` in
+   [`build_pdf.py`](../ops/render/paper/build_pdf.py) to the complete first lines
+   emitted by the upgraded tools, including the TeX Live/distribution suffix.
+   Update the descriptive PDF-toolchain step name in
+   [`version-check.yml`](../.github/workflows/version-check.yml) together with
+   these constants. Keep `--check-toolchain` mandatory.
+
+3. Re-establish the neutral fixture's expected SHA-256 in
+   [`test_pdf_publication_provenance.py`](../ops/ci/tests/test_pdf_publication_provenance.py)
+   only if the upgrade changes it. Preserve the fixture, its mocked commit and
+   epoch. Independently build it in two distinct roots on each runner host;
+   inspect the neutral PDF and logs, and require identical bytes across roots
+   and hosts before accepting a replacement digest. A hash copied from a
+   failing CI assertion alone is insufficient evidence. Then run:
+
+   ```sh
+   python3 -B ops/render/paper/build_pdf.py --check-toolchain
+   python3 -B -m unittest ops.ci.tests.test_pdf_publication_provenance -v
+   ```
+
+4. At one pinned commit and `SOURCE_DATE_EPOCH`, run the end-to-end check in
+   independent worktrees on each runner host, with one builder per lane:
+
+   ```sh
+   python3 -B ops/render/paper/build_pdf.py --verify-reproducible
+   (cd target/paper && sha256sum -c SHA256SUMS)
+   ```
+
+   This compares both PDFs and manifests across two builds within each lane.
+   Prior owned outputs and the first pass are retained under
+   `target/paper/repro-attempts/`; preserve those receipts. Verify every manifest
+   source, staged-input and output hash. Require identical PDFs across roots
+   and hosts; manifest commands and staged Markdown contain local paths, so
+   their hashes may differ between roots. PDF hashes from different source
+   commits need not match because the trailer ID includes that commit. Keep
+   figures and scientific inputs unchanged.
+
+5. Preserve old/new package versions, full tool banners, the neutral digest,
+   source commit/epoch, PDF hashes, manifests and logs in the handoff. Verify
+   the CI `publication-pdfs` artifact belongs to the reviewed commit and matches
+   the local PDFs; record its run and artifact IDs. Require independent review
+   and green required CI before merging. Do not bypass a version or
+   reproducibility failure. Wait for the reserved PR slot's owner to release it
+   and confirm zero open repository PRs before opening a separate change.
