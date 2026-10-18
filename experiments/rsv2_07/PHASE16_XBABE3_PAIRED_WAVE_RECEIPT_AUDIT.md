@@ -60,7 +60,7 @@ Hashes and byte sizes pin all requested document bytes, including opaque perform
 
 ## Source and portability
 
-The audited source is `/home/ubuntu/jarambit/evidence/evolution_waves/2026-10-17/xbabe3/out`. Against the common repository's current HEAD at audit time, **63 of 63 files have identical committed blob bytes and sizes**. This is a saved-receipt provenance check, not a claim that source-run certification was independently repeated. No archive or live wave directory is changed.
+The audited source is `evidence/evolution_waves/2026-10-17/xbabe3/out`. Against the common repository's current HEAD at audit time, **63 of 63 files have identical committed blob bytes and sizes**. This is a saved-receipt provenance check, not a claim that source-run certification was independently repeated. No archive or live wave directory is changed.
 
 The default resolves this archive from the common Git root. `--out-root /relocated/xbabe3/out` supplies a folder with the seven wave directories and bypasses Git discovery and original host paths. Missing files fail; absent evidence is never reported as verified. The fixed pins are not refreshed automatically from supplied files.
 

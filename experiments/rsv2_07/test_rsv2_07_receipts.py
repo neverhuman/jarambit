@@ -12,6 +12,7 @@ from unittest.mock import patch
 
 import audit_phase20_stage2_identity_dedup as phase20
 import verify_rsv2_07_receipts as verifier
+import portable_audit as portable
 
 
 class Round0InventoryTests(unittest.TestCase):
@@ -414,6 +415,148 @@ class W320SchemaProvenanceTests(unittest.TestCase):
         self.assertEqual(error.exception.code, 1)
         read.assert_not_called()
         discover.assert_not_called()
+
+
+class ReceiptManifestTests(unittest.TestCase):
+    def setUp(self):
+        self.root = Path("/relocated/checkout")
+        self.files = {
+            verifier.HERE + "PHASE15_FIXTURE.md": b"# Saved fixture\n",
+            verifier.HERE + "phase17_fixture.json": b'{"schema":"synthetic","qualified_count":0}',
+            verifier.HERE + "results/phase7_saved_triplet_gci_audit.json": b'{"schema":"synthetic"}',
+            verifier.HERE + "results/phase8_synthetic_gci_audit.json": b'{"schema":"synthetic"}',
+            verifier.HERE + "results/cad_manifest.json": b"[]",
+            verifier.HERE + "GCI_A4_VERIFICATION.md": b"# Legacy alias\n",
+            verifier.HERE + "results/gci_a4_validation.json": b'{"schema":"synthetic"}',
+            verifier.HERE + "phase22_fixture.json": b'{"schema":"synthetic","nested":[{"qualified_count":0}]}',
+        }
+
+    def current(self, files=None, read=None):
+        files = self.files if files is None else files
+        def default_read(path):
+            name = str(path.relative_to(self.root))
+            if name not in files:
+                raise FileNotFoundError(name)
+            return files[name]
+        with patch.object(Path, "rglob", new=lambda path, pattern: [self.root / name for name in files]), \
+                patch.object(Path, "is_file", return_value=True), \
+                patch.object(Path, "read_bytes", new=default_read if read is None else read):
+            return verifier.audit_phase23(self.root)
+
+    def test_catalogue_binds_all_current_files_and_documents_coverage_gaps(self):
+        result = self.current()
+        self.assertEqual(result["totals"]["files"], 8)
+        self.assertEqual(set(result["artifacts"]), set(self.files))
+        for name, row in result["artifacts"].items():
+            self.assertEqual((row["sha256"], row["size_bytes"]), (hashlib.sha256(self.files[name]).hexdigest(), len(self.files[name])))
+        self.assertEqual(result["phases"]["1"]["coverage"], "report_and_json")
+        self.assertEqual(result["phases"]["2"]["coverage"], "no_current_dedicated_files")
+        self.assertEqual(result["phases"]["15"]["coverage"], "report_only")
+        self.assertEqual(result["totals"]["explicit_zero_count_fields"], 2)
+        self.assertEqual(result["artifacts"][verifier.HERE + "results/cad_manifest.json"]["phase"], None)
+        self.assertNotIn(str(self.root), json.dumps(result))
+        self.assertEqual(self.current(), result)
+
+    def test_missing_qualification_fields_remain_null_and_nested_fields_are_explicit(self):
+        result = self.current()
+        missing = result["artifacts"][verifier.HERE + "GCI_A4_VERIFICATION.md"]
+        self.assertIsNone(missing["qualified_count"])
+        explicit = result["artifacts"][verifier.HERE + "phase22_fixture.json"]
+        self.assertEqual(explicit["explicit_qualified_count_fields"], [{"field_location": ["nested", 0, "qualified_count"], "value": 0}])
+        for invalid in (True, 1, -1, "0", None):
+            with self.subTest(invalid=invalid), self.assertRaisesRegex(ValueError, "integer zero"):
+                verifier.qualified_count_fields({"nested": [{"qualified_count": invalid}]})
+
+    def test_all_json_documents_are_strict_even_without_a_named_receipt_schema(self):
+        name = verifier.HERE + "results/cad_manifest.json"
+        for data in (b'{"a":1,"a":2}', b'{"a":NaN}', b'{"a":1e999}'):
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                self.current({**self.files, name: data})
+
+    def test_literal_host_prefix_policy_covers_only_requested_historical_range(self):
+        name = verifier.HERE + "PHASE15_FIXTURE.md"
+        with self.assertRaisesRegex(ValueError, "Literal host prefix"):
+            self.current({**self.files, name: self.files[name] + verifier.HOST_PREFIX})
+        older = verifier.HERE + "GCI_A4_VERIFICATION.md"
+        self.assertIn(older, self.current({**self.files, older: self.files[older] + verifier.HOST_PREFIX})["artifacts"])
+
+    def test_unsafe_paths_and_legacy_aliases_are_handled_explicitly(self):
+        self.assertEqual(verifier.receipt_phase(verifier.HERE + "SOLID_TIP_3D_VERIFICATION.md"), 4)
+        self.assertEqual(verifier.receipt_phase(verifier.HERE + "results/gci_a4_validation.json"), 1)
+        for name in ("../escape.json", "/absolute/phase15.json", verifier.HERE + "../escape.json", "other/phase15.json"):
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                verifier.receipt_phase(name)
+
+    def test_control_json_metadata_does_not_change_the_report_or_create_self_hashes(self):
+        current = self.current()
+        changed = deepcopy(current)
+        for name in verifier.INDIRECT_REPORT_RECORDS:
+            changed["artifacts"][name].update(sha256="0" * 64, size_bytes=123456)
+        self.assertEqual(verifier.report_phase23(current), verifier.report_phase23(changed))
+        self.assertIn(verifier.PHASE23_RECEIPT, portable.CONTROL_RECEIPTS)
+        self.assertNotIn(verifier.PHASE23_RECEIPT, current["artifacts"])
+        self.assertNotIn(verifier.PHASE23_REPORT, current["artifacts"])
+        self.assertEqual(current["hash_dependencies"]["phase23_self_hash"], "not_claimed")
+
+    def test_new_missing_and_changed_sources_change_the_saved_catalogue(self):
+        saved = self.current()
+        name = verifier.HERE + "PHASE15_FIXTURE.md"
+        variants = [{**self.files, name: self.files[name] + b" "},
+                    {key: data for key, data in self.files.items() if key != name},
+                    {**self.files, verifier.HERE + "PHASE20_ADDITIONAL.md": b"# Additional saved report\n"}]
+        for files in variants:
+            with self.subTest(paths=list(files)):
+                self.assertNotEqual(saved, self.current(files))
+
+    def test_source_bytes_or_inventory_mutation_fails_closed(self):
+        reads = {}
+        def read(path):
+            reads[path] = reads.get(path, 0) + 1
+            return self.files[str(path.relative_to(self.root))] + (b" " if reads[path] > 1 else b"")
+        with self.assertRaisesRegex(ValueError, "Receipt bytes changed"):
+            self.current(read=read)
+        first = (set(self.files), {name for name in self.files if (verifier.receipt_phase(name) or 0) >= 15}
+                 | {verifier.PHASE23_RECEIPT, verifier.PHASE23_REPORT})
+        second = (first[0] | {verifier.HERE + "PHASE20_EXTRA.md"}, first[1])
+        with patch.object(verifier, "receipt_manifest_paths", side_effect=[first, second]), \
+                self.assertRaisesRegex(ValueError, "Receipt inventory changed"):
+            self.current()
+
+    def test_relocated_phase23_cli_is_readonly_and_checks_its_exact_report_without_git(self):
+        current = self.current()
+        saved = deepcopy(current)
+        output_files = {verifier.PHASE23_REPORT: verifier.report_phase23(current).encode()}
+        args = ["verify_rsv2_07_receipts.py", "--phase", "23", "--repo-root", str(self.root)]
+        def read(path):
+            name = str(path.relative_to(self.root))
+            return json.dumps(saved).encode() if name == verifier.PHASE23_RECEIPT else output_files[name]
+        with patch.object(sys, "argv", args), patch.object(verifier, "audit_phase23", return_value=current), \
+                patch.object(Path, "read_bytes", new=read), patch.object(Path, "write_text") as write, \
+                patch.object(verifier.receipts, "default_wave_directory", side_effect=AssertionError("Unexpected Git discovery")), \
+                redirect_stdout(io.StringIO()) as output:
+            verifier.main()
+            self.assertIn("Phase-23 receipt manifest: PASS", output.getvalue())
+            write.assert_not_called()
+            output_files[verifier.PHASE23_REPORT] += b"changed"
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                verifier.main()
+            self.assertEqual(error.exception.code, 1)
+            output_files[verifier.PHASE23_REPORT] = verifier.report_phase23(current).encode()
+            saved["qualified_count"] = 1
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                verifier.main()
+            self.assertEqual(error.exception.code, 1)
+
+    def test_zero_literal_host_prefix_across_all_phase15_through_phase23_outputs(self):
+        root = Path(__file__).resolve().parents[2]
+        _, paths = verifier.receipt_manifest_paths(root)
+        self.assertTrue(all((root / name).is_file() for name in paths))
+        verifier.zero_literal_host_prefix({name: (root / name).read_bytes() for name in paths})
+        current = verifier.audit_phase23(root)
+        saved = verifier.load_json((root / verifier.PHASE23_RECEIPT).read_bytes())
+        self.assertEqual(current, saved)
+        self.assertEqual(sorted(paths), saved["host_prefix_audit"]["paths"])
+        self.assertEqual((root / verifier.PHASE23_REPORT).read_text(), verifier.report_phase23(current))
 
 
 if __name__ == "__main__":

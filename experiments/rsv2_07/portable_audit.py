@@ -11,6 +11,7 @@ RAW = "target/rsv2-07/"
 CONTROL_RECEIPTS = {
     STUDY + "results/phase7_saved_triplet_gci_audit.json",
     STUDY + "results/phase8_synthetic_gci_audit.json",
+    STUDY + "phase23_complete_receipt_manifest_audit.json",
 }
 
 
@@ -88,8 +89,8 @@ def verify_manifest(root, hashes, sizes, study_hashes, snapshot):
                 f"Invalid study manifest member: {name}")
         require(name not in combined or combined[name] == expected, f"Conflicting manifests: {name}")
         combined[name] = expected
-    # These controlling JSON receipts cannot hash themselves or each other without
-    # a cycle. Their structure is checked here and their content by their verifier.
+    # Phase-7/8 omit each other and Phase-23, which binds their final bytes.
+    # Each controlling receipt is checked by its own verifier without self hashing.
     for name in sorted(CONTROL_RECEIPTS):
         control = json.loads((root / name).read_text())
         require(isinstance(control, dict) and isinstance(control.get("schema"), str),

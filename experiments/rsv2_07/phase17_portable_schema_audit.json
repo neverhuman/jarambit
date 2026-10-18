@@ -3,7 +3,7 @@
   "task": "RSV2-07-p17",
   "scope": "schema_and_sha256_registry_only",
   "source_sha256": {
-    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": "be14448904412c9ac7976ee955da99c546e90eb4c8cef2355964bff2a795c25d",
+    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": "bd4c57541a8b55787bb3a852831738a137380fac4590b54b5806d63a1b661820",
     "experiments/rsv2_07/audit_phase11_wave_receipts.py": "f3a2d0acaa31981ac2465b4f80ee88bb1c1ccbcee2eb59d4161b1a9f61ebe9c2",
     "experiments/rsv2_07/audit_phase12_cross_wave.py": "c52ac6cb4be0cb982c439c7e6433d6c647c1c90e053b40e93114a3a22bc6c3c7",
     "experiments/rsv2_07/audit_phase13_screen_rounds.py": "7fd0115921247483461e86288c4cc11ef5efe21c5e7df85560486ebe2e893b7c",
@@ -713,7 +713,7 @@
     },
     {
       "path": "experiments/rsv2_07/portable_audit.py",
-      "sha256": "9ad640ed81546e4ce571270c6143b4ce1da6a4058d7fe65aef2d0856e7b72d4c",
+      "sha256": "49de82fd7aff32a24109fd1b5c339c31b2a7fb6b07ce24b17ad67703444444f2",
       "size_bytes": null,
       "phases": [
         10

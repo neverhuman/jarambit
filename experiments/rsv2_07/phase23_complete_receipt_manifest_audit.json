@@ -1,0 +1,735 @@
+{
+  "schema": "jarambit.rsv2_07.phase23_receipt_manifest.v1",
+  "task": "RSV2-07-p23",
+  "status": "pass_current_inventory_with_documented_coverage_gaps",
+  "scope": "file_inventory_hashes_explicit_counts_and_host_prefixes_only",
+  "qualified_count": 0,
+  "qualification_basis": "this_manifest_admits_no_candidates; absent_source_fields_remain_null",
+  "artifacts": {
+    "experiments/rsv2_07/GCI_A4_VERIFICATION.md": {
+      "phase": 1,
+      "phase_basis": "legacy_alias",
+      "kind": "markdown_report",
+      "sha256": "94c246fb42ee344e74a58856e9d26d5ed6784a1b8ec6053d28fbe867b1ae758c",
+      "size_bytes": 9884,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE10_PORTABLE_RECEIPT_AUDIT.md": {
+      "phase": 10,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "c8c258111b9c08545c7f32a505a7cba65fe599121943b27ab4e011884f40cd62",
+      "size_bytes": 3626,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE11_WAVE_RECEIPT_AUDIT.md": {
+      "phase": 11,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "951fbbe7b821d1c27c96239490991631ab1cd4630c3c13a9bfb75aab7665968d",
+      "size_bytes": 4838,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE12_CROSS_WAVE_PROVENANCE_AUDIT.md": {
+      "phase": 12,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "3bcd1a0a14f687dc3d513a8cb584b402846e2a6093613a78a6f656f0ce8ea8d3",
+      "size_bytes": 7313,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE13_STAGE1_SCREEN_TRAJECTORY_AUDIT.md": {
+      "phase": 13,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "c49c3f58164fffa46abe72f2d8901fab78dfcd78932bf5be6620d3fbfc34682c",
+      "size_bytes": 7176,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE14_W319_WAVE_RECEIPT_AUDIT.md": {
+      "phase": 14,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "a4c203d49dc1279e3c713280e146e1e2f5840b98021a8dfd312583291158e696",
+      "size_bytes": 7229,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE15_GATE_S_AND_MARGIN_PROGRESSION_AUDIT.md": {
+      "phase": 15,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "a24fabf32aa9119eb2a3d1d992b7e440b98295ae9f4f69c4e87727d2dde9b66c",
+      "size_bytes": 11425,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE16_XBABE3_PAIRED_WAVE_RECEIPT_AUDIT.md": {
+      "phase": 16,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "d39f1816a250bbe15b8bddd92354c5748a25726a2f5adb4cadb306c7d7640eb9",
+      "size_bytes": 13930,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE17_PORTABLE_SCHEMA_AUDIT.md": {
+      "phase": 17,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "80629b138590fb239f80918d7cf11c73872c0f2cfb817b84cec031b293a13f2a",
+      "size_bytes": 3877,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE18_W320_PROGRESSION_AUDIT.md": {
+      "phase": 18,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "c8fb65286b0a21749849fa2a656483979782057f5dd977b8de8ae875b5d49a15",
+      "size_bytes": 4881,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE19_W320_R02_PROVENANCE_AUDIT.md": {
+      "phase": 19,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "501c13aa4b9752c17c121d743dc15f8b1565635e524080ac5eafd2aad39bddc5",
+      "size_bytes": 10705,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE20_STAGE2_IDENTITY_DEDUP_AUDIT.md": {
+      "phase": 20,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "f9db22de38195f4289107f34880f5a63b6c183af3584779c769cb3fd8892de65",
+      "size_bytes": 5855,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE21_ROUND0_SEED_VS_MUTATED_INVENTORY_AUDIT.md": {
+      "phase": 21,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "dbcc651e3aeede360224c7897dfe46b020e49776df79007c8eddd29f41ef4e74",
+      "size_bytes": 4580,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE22_W320_LEADERBOARD_PROVENANCE_AUDIT.md": {
+      "phase": 22,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "508302503726024411b113be3bdfa6e02de964da2b19271d0f64e58bb777f65c",
+      "size_bytes": 4183,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE5_WITNESS_3D_VERIFICATION.md": {
+      "phase": 5,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "9f3fa6c59aad71708143b5a469de23301fe8f9aa5e7d8d3750f637de8e729624",
+      "size_bytes": 9745,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE6_UNIFIED_SCORECARD.md": {
+      "phase": 6,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "a425b66d675208c7fffa17e075605bcfbddd234f82456422c1b5d99783799e30",
+      "size_bytes": 17640,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE7_SAVED_TRIPLET_GCI_AUDIT.md": {
+      "phase": 7,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "cc945cb4a6f61f147b7f6cadf52ae100c3d66373526a6f0d02d3da7f50fa620b",
+      "size_bytes": 3491,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/PHASE8_SYNTHETIC_GCI_AUDIT.md": {
+      "phase": 8,
+      "phase_basis": "numbered_filename",
+      "kind": "markdown_report",
+      "sha256": "0d0dd71ef0c87b1d1307100dc6635ad68fd10c4678600e08c4550c2174c9d89e",
+      "size_bytes": 4738,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/REPORT.md": {
+      "phase": null,
+      "phase_basis": "unassigned_supporting_artifact",
+      "kind": "markdown_report",
+      "sha256": "efda3353ab2d47c3d7cd1eadd9e5fb132a74a343ff097360416f95f0ae6d76e4",
+      "size_bytes": 8224,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/SOLID_TIP_3D_VERIFICATION.md": {
+      "phase": 4,
+      "phase_basis": "legacy_alias",
+      "kind": "markdown_report",
+      "sha256": "74a9dbbddfddad356cc258a4b2312a40aae638ea672a1f7325b858ef53badacf",
+      "size_bytes": 10927,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/phase17_portable_schema_audit.json": {
+      "phase": 17,
+      "phase_basis": "numbered_filename",
+      "kind": "json_receipt",
+      "sha256": "7148edf949413ae93fb41ee501ec774f3a26de6c1ff203d4091ac31eaee2a1c6",
+      "size_bytes": 147276,
+      "schema": "jarambit.rsv2_07.phase17_portable_schema.v1",
+      "declared_task": "RSV2-07-p17",
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/phase21_round0_seed_vs_mutated_inventory_audit.json": {
+      "phase": 21,
+      "phase_basis": "numbered_filename",
+      "kind": "json_receipt",
+      "sha256": "bc665634397714b3af19dda65b3c36b00c1c02d81132957ad8cd3d38b2c7547d",
+      "size_bytes": 25515,
+      "schema": "jarambit.rsv2_07.phase21_round0_inventory.v1",
+      "declared_task": "RSV2-07-p21",
+      "qualified_count": 0,
+      "explicit_qualified_count_fields": [
+        {
+          "field_location": [
+            "waves",
+            "w315",
+            "qualified_count"
+          ],
+          "value": 0
+        },
+        {
+          "field_location": [
+            "waves",
+            "w316",
+            "qualified_count"
+          ],
+          "value": 0
+        },
+        {
+          "field_location": [
+            "waves",
+            "w317",
+            "qualified_count"
+          ],
+          "value": 0
+        },
+        {
+          "field_location": [
+            "waves",
+            "w318",
+            "qualified_count"
+          ],
+          "value": 0
+        },
+        {
+          "field_location": [
+            "waves",
+            "w319",
+            "qualified_count"
+          ],
+          "value": 0
+        },
+        {
+          "field_location": [
+            "waves",
+            "w320",
+            "qualified_count"
+          ],
+          "value": 0
+        },
+        {
+          "field_location": [
+            "qualified_count"
+          ],
+          "value": 0
+        }
+      ],
+      "qualification_field_status": "explicit_zero_fields"
+    },
+    "experiments/rsv2_07/phase22_w320_leaderboard_provenance_audit.json": {
+      "phase": 22,
+      "phase_basis": "numbered_filename",
+      "kind": "json_receipt",
+      "sha256": "d3ab2de4cca96bf24d780bbbc9e6a44438e3bd2bc633ba94d725a2474adb3188",
+      "size_bytes": 5882,
+      "schema": "jarambit.rsv2_07.phase22_w320_provenance.v1",
+      "declared_task": "RSV2-07-p22",
+      "qualified_count": 0,
+      "explicit_qualified_count_fields": [
+        {
+          "field_location": [
+            "leaderboard",
+            "qualified_count"
+          ],
+          "value": 0
+        },
+        {
+          "field_location": [
+            "phase21_w320_inventory",
+            "qualified_count"
+          ],
+          "value": 0
+        }
+      ],
+      "qualification_field_status": "explicit_zero_fields"
+    },
+    "experiments/rsv2_07/results/cad_manifest.json": {
+      "phase": null,
+      "phase_basis": "unassigned_supporting_artifact",
+      "kind": "json_receipt",
+      "sha256": "c27eac1e94102f13ac73c1ad5440c1c22ad2d042d105f831e969794a88c47788",
+      "size_bytes": 1698,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/results/gci_a4_validation.json": {
+      "phase": 1,
+      "phase_basis": "legacy_alias",
+      "kind": "json_receipt",
+      "sha256": "97b37a3e0e2bf324c88025976c4e2ca51383da00bd0d62789d95effe8e3f04f4",
+      "size_bytes": 29346,
+      "schema": "jarambit.rsv2_07.gci_a4_validation.v1",
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": {
+      "phase": 10,
+      "phase_basis": "numbered_filename",
+      "kind": "json_receipt",
+      "sha256": "bd4c57541a8b55787bb3a852831738a137380fac4590b54b5806d63a1b661820",
+      "size_bytes": 39562,
+      "schema": "jarambit.rsv2_07.portable_receipt_manifest.v1",
+      "declared_task": "RSV2-07-p10",
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/results/phase18_w320_progression_audit.json": {
+      "phase": 18,
+      "phase_basis": "numbered_filename",
+      "kind": "json_receipt",
+      "sha256": "462e656995f6fc071ac0c76d25f035cb956268682021be140a926133fd4779dc",
+      "size_bytes": 4629,
+      "schema": "jarambit.rsv2_07.phase18_w320_provenance.v1",
+      "declared_task": "RSV2-07-p18",
+      "qualified_count": 0,
+      "explicit_qualified_count_fields": [
+        {
+          "field_location": [
+            "leaderboard",
+            "qualified_count"
+          ],
+          "value": 0
+        }
+      ],
+      "qualification_field_status": "explicit_zero_fields"
+    },
+    "experiments/rsv2_07/results/phase19_w320_r02_provenance_audit.json": {
+      "phase": 19,
+      "phase_basis": "numbered_filename",
+      "kind": "json_receipt",
+      "sha256": "6e4565583f3b9eb6ee253904180a12c6267b7434a939f78839d669d97ef46edb",
+      "size_bytes": 10527,
+      "schema": "jarambit.rsv2_07.phase19_w320_r02_provenance.v1",
+      "declared_task": "RSV2-07-p19",
+      "qualified_count": 0,
+      "explicit_qualified_count_fields": [
+        {
+          "field_location": [
+            "leaderboard",
+            "qualified_count"
+          ],
+          "value": 0
+        }
+      ],
+      "qualification_field_status": "explicit_zero_fields"
+    },
+    "experiments/rsv2_07/results/phase20_stage2_identity_dedup_audit.json": {
+      "phase": 20,
+      "phase_basis": "numbered_filename",
+      "kind": "json_receipt",
+      "sha256": "ed95015c3f9b753a78a1756b203f29f2e92f1482d9905aaeae99ee3a5bce4817",
+      "size_bytes": 873563,
+      "schema": "jarambit.rsv2_07.phase20_stage2_identity_dedup.v1",
+      "declared_task": "RSV2-07-p20",
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/results/phase5_witness_3d_validation.json": {
+      "phase": 5,
+      "phase_basis": "numbered_filename",
+      "kind": "json_receipt",
+      "sha256": "66f3b5112bf1122ddd49fa3c1ad66384d810ee177494b0143233fdf7a895e80a",
+      "size_bytes": 86525,
+      "schema": "jarambit.rsv2_07.phase5_witness_3d_validation.v1",
+      "declared_task": "RSV2-07-p5",
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/results/phase6_unified_scorecard.json": {
+      "phase": 6,
+      "phase_basis": "numbered_filename",
+      "kind": "json_receipt",
+      "sha256": "5d301a3b33afdd8470441c0094f79e47915f8f9e1161af035b90ac37223f7dd7",
+      "size_bytes": 1771599,
+      "schema": "jarambit.rsv2_07.phase6_unified_scorecard.v1",
+      "declared_task": "RSV2-07-p6",
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/results/phase7_saved_triplet_gci_audit.json": {
+      "phase": 7,
+      "phase_basis": "numbered_filename",
+      "kind": "json_receipt",
+      "sha256": "b0d0b8edd00d61533b2b89e2d4179476fbbeb0704ad831087bcfefd804c8f3a5",
+      "size_bytes": 115493,
+      "schema": "jarambit.rsv2_07.phase7_file_integrity.v1",
+      "declared_task": "RSV2-07-p7",
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/results/phase8_synthetic_gci_audit.json": {
+      "phase": 8,
+      "phase_basis": "numbered_filename",
+      "kind": "json_receipt",
+      "sha256": "b745ef39a38bc9b752f5df554899c56b68f421bbd92038a1d02d4bb4a504b1d8",
+      "size_bytes": 98267,
+      "schema": "jarambit.rsv2_07.phase8_synthetic_gci.v1",
+      "declared_task": "RSV2-07-p8",
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/results/solid_tip_3d_validation.json": {
+      "phase": 4,
+      "phase_basis": "legacy_alias",
+      "kind": "json_receipt",
+      "sha256": "0b98204a73501e3c11683b6b362972ea162d693a0a63bdcb01596e3b5cae1cfc",
+      "size_bytes": 34267,
+      "schema": "jarambit.rsv2_07.solid_tip_3d_validation.v2",
+      "declared_task": "RSV2-07-p4",
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    },
+    "experiments/rsv2_07/results/validation.json": {
+      "phase": null,
+      "phase_basis": "unassigned_supporting_artifact",
+      "kind": "json_receipt",
+      "sha256": "d7d0c4f55aaf89a8650055606bc4c7cf13412b59357aff246521eeb88570f508",
+      "size_bytes": 76329,
+      "schema": null,
+      "declared_task": null,
+      "qualified_count": null,
+      "explicit_qualified_count_fields": [],
+      "qualification_field_status": "not_recorded_as_json_field"
+    }
+  },
+  "phases": {
+    "1": {
+      "reports": [
+        "experiments/rsv2_07/GCI_A4_VERIFICATION.md"
+      ],
+      "json_receipts": [
+        "experiments/rsv2_07/results/gci_a4_validation.json"
+      ],
+      "coverage": "report_and_json"
+    },
+    "2": {
+      "reports": [],
+      "json_receipts": [],
+      "coverage": "no_current_dedicated_files"
+    },
+    "3": {
+      "reports": [],
+      "json_receipts": [],
+      "coverage": "no_current_dedicated_files"
+    },
+    "4": {
+      "reports": [
+        "experiments/rsv2_07/SOLID_TIP_3D_VERIFICATION.md"
+      ],
+      "json_receipts": [
+        "experiments/rsv2_07/results/solid_tip_3d_validation.json"
+      ],
+      "coverage": "report_and_json"
+    },
+    "5": {
+      "reports": [
+        "experiments/rsv2_07/PHASE5_WITNESS_3D_VERIFICATION.md"
+      ],
+      "json_receipts": [
+        "experiments/rsv2_07/results/phase5_witness_3d_validation.json"
+      ],
+      "coverage": "report_and_json"
+    },
+    "6": {
+      "reports": [
+        "experiments/rsv2_07/PHASE6_UNIFIED_SCORECARD.md"
+      ],
+      "json_receipts": [
+        "experiments/rsv2_07/results/phase6_unified_scorecard.json"
+      ],
+      "coverage": "report_and_json"
+    },
+    "7": {
+      "reports": [
+        "experiments/rsv2_07/PHASE7_SAVED_TRIPLET_GCI_AUDIT.md"
+      ],
+      "json_receipts": [
+        "experiments/rsv2_07/results/phase7_saved_triplet_gci_audit.json"
+      ],
+      "coverage": "report_and_json"
+    },
+    "8": {
+      "reports": [
+        "experiments/rsv2_07/PHASE8_SYNTHETIC_GCI_AUDIT.md"
+      ],
+      "json_receipts": [
+        "experiments/rsv2_07/results/phase8_synthetic_gci_audit.json"
+      ],
+      "coverage": "report_and_json"
+    },
+    "9": {
+      "reports": [],
+      "json_receipts": [],
+      "coverage": "no_current_dedicated_files"
+    },
+    "10": {
+      "reports": [
+        "experiments/rsv2_07/PHASE10_PORTABLE_RECEIPT_AUDIT.md"
+      ],
+      "json_receipts": [
+        "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json"
+      ],
+      "coverage": "report_and_json"
+    },
+    "11": {
+      "reports": [
+        "experiments/rsv2_07/PHASE11_WAVE_RECEIPT_AUDIT.md"
+      ],
+      "json_receipts": [],
+      "coverage": "report_only"
+    },
+    "12": {
+      "reports": [
+        "experiments/rsv2_07/PHASE12_CROSS_WAVE_PROVENANCE_AUDIT.md"
+      ],
+      "json_receipts": [],
+      "coverage": "report_only"
+    },
+    "13": {
+      "reports": [
+        "experiments/rsv2_07/PHASE13_STAGE1_SCREEN_TRAJECTORY_AUDIT.md"
+      ],
+      "json_receipts": [],
+      "coverage": "report_only"
+    },
+    "14": {
+      "reports": [
+        "experiments/rsv2_07/PHASE14_W319_WAVE_RECEIPT_AUDIT.md"
+      ],
+      "json_receipts": [],
+      "coverage": "report_only"
+    },
+    "15": {
+      "reports": [
+        "experiments/rsv2_07/PHASE15_GATE_S_AND_MARGIN_PROGRESSION_AUDIT.md"
+      ],
+      "json_receipts": [],
+      "coverage": "report_only"
+    },
+    "16": {
+      "reports": [
+        "experiments/rsv2_07/PHASE16_XBABE3_PAIRED_WAVE_RECEIPT_AUDIT.md"
+      ],
+      "json_receipts": [],
+      "coverage": "report_only"
+    },
+    "17": {
+      "reports": [
+        "experiments/rsv2_07/PHASE17_PORTABLE_SCHEMA_AUDIT.md"
+      ],
+      "json_receipts": [
+        "experiments/rsv2_07/phase17_portable_schema_audit.json"
+      ],
+      "coverage": "report_and_json"
+    },
+    "18": {
+      "reports": [
+        "experiments/rsv2_07/PHASE18_W320_PROGRESSION_AUDIT.md"
+      ],
+      "json_receipts": [
+        "experiments/rsv2_07/results/phase18_w320_progression_audit.json"
+      ],
+      "coverage": "report_and_json"
+    },
+    "19": {
+      "reports": [
+        "experiments/rsv2_07/PHASE19_W320_R02_PROVENANCE_AUDIT.md"
+      ],
+      "json_receipts": [
+        "experiments/rsv2_07/results/phase19_w320_r02_provenance_audit.json"
+      ],
+      "coverage": "report_and_json"
+    },
+    "20": {
+      "reports": [
+        "experiments/rsv2_07/PHASE20_STAGE2_IDENTITY_DEDUP_AUDIT.md"
+      ],
+      "json_receipts": [
+        "experiments/rsv2_07/results/phase20_stage2_identity_dedup_audit.json"
+      ],
+      "coverage": "report_and_json"
+    },
+    "21": {
+      "reports": [
+        "experiments/rsv2_07/PHASE21_ROUND0_SEED_VS_MUTATED_INVENTORY_AUDIT.md"
+      ],
+      "json_receipts": [
+        "experiments/rsv2_07/phase21_round0_seed_vs_mutated_inventory_audit.json"
+      ],
+      "coverage": "report_and_json"
+    },
+    "22": {
+      "reports": [
+        "experiments/rsv2_07/PHASE22_W320_LEADERBOARD_PROVENANCE_AUDIT.md"
+      ],
+      "json_receipts": [
+        "experiments/rsv2_07/phase22_w320_leaderboard_provenance_audit.json"
+      ],
+      "coverage": "report_and_json"
+    }
+  },
+  "totals": {
+    "files": 35,
+    "markdown_reports": 20,
+    "json_receipts": 15,
+    "unassigned_supporting_files": 3,
+    "explicit_zero_count_fields": 11
+  },
+  "host_prefix_audit": {
+    "phase_range": [
+      15,
+      23
+    ],
+    "paths": [
+      "experiments/rsv2_07/PHASE15_GATE_S_AND_MARGIN_PROGRESSION_AUDIT.md",
+      "experiments/rsv2_07/PHASE16_XBABE3_PAIRED_WAVE_RECEIPT_AUDIT.md",
+      "experiments/rsv2_07/PHASE17_PORTABLE_SCHEMA_AUDIT.md",
+      "experiments/rsv2_07/PHASE18_W320_PROGRESSION_AUDIT.md",
+      "experiments/rsv2_07/PHASE19_W320_R02_PROVENANCE_AUDIT.md",
+      "experiments/rsv2_07/PHASE20_STAGE2_IDENTITY_DEDUP_AUDIT.md",
+      "experiments/rsv2_07/PHASE21_ROUND0_SEED_VS_MUTATED_INVENTORY_AUDIT.md",
+      "experiments/rsv2_07/PHASE22_W320_LEADERBOARD_PROVENANCE_AUDIT.md",
+      "experiments/rsv2_07/PHASE23_COMPLETE_RECEIPT_MANIFEST_AUDIT.md",
+      "experiments/rsv2_07/phase17_portable_schema_audit.json",
+      "experiments/rsv2_07/phase21_round0_seed_vs_mutated_inventory_audit.json",
+      "experiments/rsv2_07/phase22_w320_leaderboard_provenance_audit.json",
+      "experiments/rsv2_07/phase23_complete_receipt_manifest_audit.json",
+      "experiments/rsv2_07/results/phase18_w320_progression_audit.json",
+      "experiments/rsv2_07/results/phase19_w320_r02_provenance_audit.json",
+      "experiments/rsv2_07/results/phase20_stage2_identity_dedup_audit.json"
+    ],
+    "files": 16,
+    "literal_matches": 0,
+    "own_outputs": "checked_after_serialization_without_self_hashes"
+  },
+  "hash_dependencies": {
+    "phase23_json_binds": [
+      "experiments/rsv2_07/results/phase7_saved_triplet_gci_audit.json",
+      "experiments/rsv2_07/results/phase8_synthetic_gci_audit.json"
+    ],
+    "phase7_8_study_manifests_omit": "experiments/rsv2_07/phase23_complete_receipt_manifest_audit.json",
+    "phase23_report_defers_control_byte_metadata_to_json": true,
+    "phase23_self_hash": "not_claimed"
+  }
+}

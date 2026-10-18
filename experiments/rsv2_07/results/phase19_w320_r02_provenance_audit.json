@@ -190,11 +190,11 @@
   "receipt_sync": {
     "phase17": {
       "path": "experiments/rsv2_07/phase17_portable_schema_audit.json",
-      "sha256": "874d2e03ed514446c057617ce9054d200124e54ac1bcd7d8aa2600a56c41eae7"
+      "sha256": "7148edf949413ae93fb41ee501ec774f3a26de6c1ff203d4091ac31eaee2a1c6"
     },
     "phase18": {
       "path": "experiments/rsv2_07/results/phase18_w320_progression_audit.json",
-      "sha256": "4ca3487cdbc00b65a1c221479ac4cb620eab949e8196f43767fc254812f1b98d"
+      "sha256": "462e656995f6fc071ac0c76d25f035cb956268682021be140a926133fd4779dc"
     },
     "status": "verified_schema_and_provenance_sync"
   },

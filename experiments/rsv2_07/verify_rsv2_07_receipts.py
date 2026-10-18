@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify saved Round-0 inventory and w320 leaderboard schema/provenance."""
+"""Verify saved inventory, w320 schema provenance and the cross-phase receipt catalogue."""
 
 import argparse
 import hashlib
@@ -243,9 +243,134 @@ def report_phase22(document):
     ])
 
 
+PHASE23_RECEIPT = HERE + "phase23_complete_receipt_manifest_audit.json"
+PHASE23_REPORT = HERE + "PHASE23_COMPLETE_RECEIPT_MANIFEST_AUDIT.md"
+HOST_PREFIX = b"/home/" + b"ubuntu"
+LEGACY_PHASES = {"GCI_A4_VERIFICATION.md": 1, "results/gci_a4_validation.json": 1,
+                 "SOLID_TIP_3D_VERIFICATION.md": 4, "results/solid_tip_3d_validation.json": 4}
+INDIRECT_REPORT_RECORDS = {HERE + "results/phase7_saved_triplet_gci_audit.json",
+                           HERE + "results/phase8_synthetic_gci_audit.json"}
+
+
+def receipt_phase(name):
+    schema.portable_path(name)
+    require(name.startswith(HERE), "Receipt path is outside the study")
+    relative = name.removeprefix(HERE)
+    match = re.match(r"phase([1-9][0-9]*)(?:_|\.)", Path(name).name, re.IGNORECASE)
+    return int(match[1]) if match else LEGACY_PHASES.get(relative)
+
+
+def receipt_manifest_paths(root):
+    sources, host_scope = set(), set()
+    for path in (Path(root) / HERE).rglob("*"):
+        if not path.is_file() or path.suffix not in (".md", ".json"):
+            continue
+        name = str(path.relative_to(root))
+        phase = receipt_phase(name)
+        if phase is None or 1 <= phase <= 22:
+            sources.add(name)
+        if phase is not None and 15 <= phase <= 23:
+            host_scope.add(name)
+    return sources, host_scope | {PHASE23_RECEIPT, PHASE23_REPORT}
+
+
+def zero_literal_host_prefix(payloads):
+    require(isinstance(payloads, dict) and bool(payloads), "Empty host-prefix scan")
+    for name, data in payloads.items():
+        schema.portable_path(name)
+        require(isinstance(data, bytes) and HOST_PREFIX not in data, f"Literal host prefix in {name}")
+
+
+def qualified_count_fields(value, location=()):
+    fields = []
+    if isinstance(value, dict):
+        for key, child in value.items():
+            if key == "qualified_count":
+                require(type(child) is int and child == 0, "Stored qualified_count must be integer zero")
+                fields.append({"field_location": list(location + (key,)), "value": child})
+            fields.extend(qualified_count_fields(child, location + (key,)))
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            fields.extend(qualified_count_fields(child, location + (index,)))
+    return fields
+
+
+def audit_phase23(root):
+    root = Path(root)
+    sources, host_scope = receipt_manifest_paths(root)
+    require(bool(sources), "No study reports or receipts found")
+    own_outputs = {PHASE23_RECEIPT, PHASE23_REPORT}
+    payloads = {name: (root / name).read_bytes() for name in sorted(sources | (host_scope - own_outputs))}
+    zero_literal_host_prefix({name: payloads[name] for name in host_scope - own_outputs})
+    records = {}
+    for name in sorted(sources):
+        data, phase = payloads[name], receipt_phase(name)
+        is_json = name.endswith(".json")
+        document = load_json(data) if is_json else None
+        fields = qualified_count_fields(document)
+        records[name] = {"phase": phase, "phase_basis": "numbered_filename" if re.match(r"phase[0-9]+_", Path(name).name, re.IGNORECASE)
+                         else "legacy_alias" if phase is not None else "unassigned_supporting_artifact",
+                         "kind": "json_receipt" if is_json else "markdown_report", **metadata(data),
+                         "schema": document.get("schema") if isinstance(document, dict) else None,
+                         "declared_task": document.get("task") if isinstance(document, dict) else None,
+                         "qualified_count": 0 if fields else None, "explicit_qualified_count_fields": fields,
+                         "qualification_field_status": "explicit_zero_fields" if fields else "not_recorded_as_json_field"}
+    phases = {}
+    for phase in range(1, 23):
+        reports = [name for name, row in records.items() if row["phase"] == phase and row["kind"] == "markdown_report"]
+        receipts_for_phase = [name for name, row in records.items() if row["phase"] == phase and row["kind"] == "json_receipt"]
+        phases[str(phase)] = {"reports": reports, "json_receipts": receipts_for_phase,
+                              "coverage": "report_and_json" if reports and receipts_for_phase else
+                              "report_only" if reports else "json_only" if receipts_for_phase else "no_current_dedicated_files"}
+    require((sources, host_scope) == receipt_manifest_paths(root), "Receipt inventory changed during audit")
+    for name, data in payloads.items():
+        require((root / name).read_bytes() == data, "Receipt bytes changed during audit")
+    current = {"schema": "jarambit.rsv2_07.phase23_receipt_manifest.v1", "task": "RSV2-07-p23",
+               "status": "pass_current_inventory_with_documented_coverage_gaps", "scope": "file_inventory_hashes_explicit_counts_and_host_prefixes_only",
+               "qualified_count": 0, "qualification_basis": "this_manifest_admits_no_candidates; absent_source_fields_remain_null",
+               "artifacts": records, "phases": phases,
+               "totals": {"files": len(records), "markdown_reports": sum(row["kind"] == "markdown_report" for row in records.values()),
+                          "json_receipts": sum(row["kind"] == "json_receipt" for row in records.values()),
+                          "unassigned_supporting_files": sum(row["phase"] is None for row in records.values()),
+                          "explicit_zero_count_fields": sum(len(row["explicit_qualified_count_fields"]) for row in records.values())},
+               "host_prefix_audit": {"phase_range": [15, 23], "paths": sorted(host_scope), "files": len(host_scope),
+                                     "literal_matches": 0, "own_outputs": "checked_after_serialization_without_self_hashes"},
+               "hash_dependencies": {"phase23_json_binds": sorted(INDIRECT_REPORT_RECORDS),
+                                     "phase7_8_study_manifests_omit": PHASE23_RECEIPT,
+                                     "phase23_report_defers_control_byte_metadata_to_json": True,
+                                     "phase23_self_hash": "not_claimed"}}
+    zero_literal_host_prefix({PHASE23_RECEIPT: (json.dumps(current, indent=2) + "\n").encode(),
+                              PHASE23_REPORT: report_phase23(current).encode()})
+    return current
+
+
+def report_phase23(document):
+    counts = document["totals"]
+    rows = []
+    for name, row in document["artifacts"].items():
+        size, sha = ("See JSON", "Final bytes bound in JSON") if name in INDIRECT_REPORT_RECORDS else (row["size_bytes"], row["sha256"])
+        rows.append(f"| {name} | {row['phase'] if row['phase'] is not None else 'support'} | {size} | {sha} |")
+    coverage = [f"| {phase} | {len(row['reports'])} | {len(row['json_receipts'])} | {row['coverage']} |"
+                for phase, row in document["phases"].items()]
+    return "\n".join([
+        "# Phase-23 complete current receipt manifest audit", "",
+        f"**PASS for current-file inventory and host-prefix hygiene, with coverage gaps recorded.** The catalogue binds {counts['files']} saved files: {counts['markdown_reports']} Markdown reports and {counts['json_receipts']} JSON receipts/manifests. Every entry has exact SHA-256 and byte size in the JSON. {counts['unassigned_supporting_files']} supporting files have no phase number. Missing historical deliverables are not fabricated.", "",
+        "| Phase | Reports | JSON receipts | Current coverage |", "| --- | ---: | ---: | --- |", *coverage, "",
+        "Legacy aliases assign GCI_A4_VERIFICATION.md and results/gci_a4_validation.json to Phase-1, and SOLID_TIP_3D_VERIFICATION.md and results/solid_tip_3d_validation.json to Phase-4. These are catalogue conventions; no distinct Phase-2/3/9 files are invented from shared or overwritten deliverables. The original REPORT.md, validation.json and cad_manifest.json remain unassigned supporting artifacts. A report-only phase does not acquire an invented JSON receipt.", "",
+        f"The manifest's qualified_count=0 means it admits no candidates. Source JSON contains {counts['explicit_zero_count_fields']} explicit qualified_count fields, all checked as integer zero; booleans, nonzero counts and invalid types fail. Missing fields and Markdown qualification text remain unasserted/null in each file record. Existing partial, unverified and incomplete scientific claims are not upgraded. No physical qualification is evaluated.", "",
+        "| Artifact | Phase | Bytes | SHA-256 |", "| --- | ---: | ---: | --- |", *rows, "",
+        "The Phase-23 JSON records final byte digests and sizes for both Phase-7/8 controlling receipts. Their two rows defer to JSON here so this report can itself be hashed by those study manifests without a cycle. Phase-7/8 omit the Phase-23 JSON from their hash maps; its own verifier checks all catalogue entries and this exact rendered report. No receipt claims a self hash. Other catalogue rows show their full byte metadata above.", "",
+        f"The literal user-home prefix scan covers all {document['host_prefix_audit']['files']} current Phase-15 through Phase-23 reports and JSON receipts, including both Phase-23 outputs. Three old machine prefixes in the Phase-15/16 report prose were replaced with repository-relative paths; underlying saved evidence is unchanged. Earlier reports/receipts retain their original bytes and any older host-path evidence, which is outside this requested hygiene range.", "",
+        "The command discovers current Markdown/JSON files recursively under the study, parses all JSON strictly and rereads the inventory and source bytes to catch changes during an audit. Read-only verification compares the complete recomputed manifest and exact report text, so changed, missing and newly added catalogue files require review. --write explicitly refreshes outputs. --repo-root supports a relocated checkout without Git discovery or external saved wave directories. Only metadata, explicit count fields and portable file paths are copied; simulations and engineering analyses are not run.", "",
+        "```sh", "python3 experiments/rsv2_07/verify_rsv2_07_receipts.py --phase 23",
+        "python3 -m unittest discover -s experiments/rsv2_07 -p 'test_*.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs14,15 at inherited nice10 with CARGO_BUILD_JOBS=2. Dependent Phase-10/17/18/19 and controlling study hashes are synchronized.", "",
+    ])
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--phase", type=int, choices=(21, 22), default=21)
+    parser.add_argument("--phase", type=int, choices=(21, 22, 23), default=21)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[2])
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--source-blob", type=Path)
@@ -253,11 +378,16 @@ def main():
     args = parser.parse_args()
     try:
         require(args.phase == 21 or args.source_blob is None, "--source-blob applies only to Phase-21")
-        artifact_root = args.artifact_root if args.artifact_root is not None else receipts.default_wave_directory().parents[1]
+        if args.phase == 23:
+            require(args.artifact_root is None, "--artifact-root applies only to Phase-21/22")
+            current = audit_phase23(args.repo_root)
+            receipt_name, report_name, render = PHASE23_RECEIPT, PHASE23_REPORT, report_phase23
+        else:
+            artifact_root = args.artifact_root if args.artifact_root is not None else receipts.default_wave_directory().parents[1]
         if args.phase == 22:
             current = audit_phase22(args.repo_root, artifact_root)
             receipt_name, report_name, render = PHASE22_RECEIPT, PHASE22_REPORT, report_phase22
-        else:
+        elif args.phase == 21:
             source = args.source_blob.read_bytes() if args.source_blob is not None else subprocess.check_output(
                 ["git", "-C", str(artifact_root), "show", REVISION + ":" + SOURCE], stderr=subprocess.PIPE)
             current = audit(args.repo_root, artifact_root, source)
@@ -268,9 +398,16 @@ def main():
         else:
             saved = load_json((args.repo_root / receipt_name).read_bytes())
             require(json.dumps(current, sort_keys=True) == json.dumps(saved, sort_keys=True), f"Phase-{args.phase} receipt mismatch")
+        if args.phase == 23:
+            outputs = {name: (args.repo_root / name).read_bytes() for name in (receipt_name, report_name)}
+            zero_literal_host_prefix(outputs)
+            require(outputs[report_name] == render(current).encode(), "Phase-23 report mismatch")
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Phase-{args.phase} inventory: FAIL: {error}\n")
-    if args.phase == 22:
+    if args.phase == 23:
+        print(f"Phase-23 receipt manifest: PASS; {current['totals']['files']} files; "
+              f"{current['host_prefix_audit']['files']} Phase-15..23 host-prefix checks; qualified_count=0 (no new admissions).")
+    elif args.phase == 22:
         print("Phase-22 schema/provenance: PASS; 6 pinned files; 3 assessed; qualified_count=0; champion=null; "
               "1 separate unverified attempt; Markdown table covers assessed rows only.")
     else:

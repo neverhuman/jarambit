@@ -16,11 +16,11 @@ Analysis of sharpening thresholds and structural margins to evaluate weapon desi
 
 These are 20 assessment records/scorecards and five leaderboards, for **25 verified files**. Every assessed row is explicitly unqualified, and every referenced scorecard has the matching candidate title and the saved single FAIL (Gate Violation) verdict. Pending or physical qualification claims are not inferred from layout checks. Repeated identities across waves are separate assessment events; no cross-wave performance comparison is made.
 
-The read-only default uses the live saved files under `/home/ubuntu/jarambit/out/w315` through `out/w319`. Their leaderboard digests match the earlier Phase-12/14 pins. The card byte digests are now pinned to the available files; changing either a file or an attempt reference requires an explicit review of the pins. `0` of these 25 live paths are tracked by Git in the common repository. This report does not present the live scorecard bytes as historical committed scorecard copies.
+The read-only default uses the live saved files under `out/w315` through `out/w319`. Their leaderboard digests match the earlier Phase-12/14 pins. The card byte digests are now pinned to the available files; changing either a file or an attempt reference requires an explicit review of the pins. `0` of these 25 live paths are tracked by Git in the common repository. This report does not present the live scorecard bytes as historical committed scorecard copies.
 
 ## Requested archive coverage
 
-The named archive root is `/home/ubuntu/jarambit/evidence/evolution_waves/2026-10-17/xbabe2/out`.
+The named archive root is `evidence/evolution_waves/2026-10-17/xbabe2/out`.
 
 | Wave | Archive directory exists | Referenced attempt scorecards present in archive |
 | --- | --- | ---: |

@@ -9,7 +9,7 @@
     "experiments/rsv2_07/PHASE6_UNIFIED_SCORECARD.md": "a425b66d675208c7fffa17e075605bcfbddd234f82456422c1b5d99783799e30",
     "experiments/rsv2_07/audit_phase6.py": "57a9d5aca837e6f3704d23b1c90d902523ef89d560d27ed97a7f28647e66b196",
     "experiments/rsv2_07/test_portable_audits.py": "cc5edde9f0cfdab79b6e4f5641acb06d8cfb6fce9fda475021b67b6a4df758e6",
-    "experiments/rsv2_07/portable_audit.py": "9ad640ed81546e4ce571270c6143b4ce1da6a4058d7fe65aef2d0856e7b72d4c"
+    "experiments/rsv2_07/portable_audit.py": "49de82fd7aff32a24109fd1b5c339c31b2a7fb6b07ce24b17ad67703444444f2"
   },
   "raw_artifacts": {
     "target/rsv2-07/phase6/20261018T072928Z/build.log": {
