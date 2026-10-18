@@ -171,7 +171,11 @@ fn spawn_offspring_batch(
             let mut child = parent.clone();
             let scale = 0.35 / ((round + 1) as f64).sqrt();
 
-            if matches!(k % 11, 7..=10) {
+            // Keep the legacy witness and reinforcement slots available in the
+            // production 12-child cycle; 11-child test batches retain their Q7 slots.
+            let q7_slot = matches!(k % 11, 6..=10)
+                && !(candidates_per_elite == 12 && matches!(k % 12, 7 | 8));
+            if q7_slot {
                 let slot = k % 11;
                 child.v[..N_CP].copy_from_slice(&Q7_CPS);
                 child.v[genome::DROP] = 0.0;
@@ -180,21 +184,47 @@ fn spawn_offspring_batch(
                 child.v[genome::NECK_FILLET] = 8.0;
                 child.v[genome::SPINE_OFF] = 42.0;
                 child.v[genome::T] = 6.0;
-                child.v[T_TIP] = 2.6;
-                child.v[TAPER_X0] = 115.0;
+                child.v[T_TIP] = 2.62;
+                child.v[TAPER_X0] = 116.0;
                 child.v[EA_IN] = 18.0;
                 child.v[EA_SP] = 18.0;
 
                 match slot {
+                    6 => {
+                        let variant = (rng.0 % 3) as f64;
+                        child.v[genome::WIN_N] = 1.0;
+                        child.v[genome::WIN_S0] = (0.45 + 0.02 * variant)
+                            .clamp(b[genome::WIN_S0].0, b[genome::WIN_S0].1);
+                        child.v[genome::WIN_S1] = 0.84_f64
+                            .clamp(b[genome::WIN_S1].0, b[genome::WIN_S1].1);
+                        child.v[genome::WIN_W] = (2.7 + 0.2 * variant)
+                            .clamp(b[genome::WIN_W].0, b[genome::WIN_W].1);
+                        child.v[genome::WIN_FILL] = (0.66 + 0.02 * variant)
+                            .clamp(b[genome::WIN_FILL].0, b[genome::WIN_FILL].1);
+                        // The schema names shallow pocket relief POCKET_D; POCKET_W is not a gene.
+                        child.v[POCKET_D] = (0.15 + 0.05 * variant)
+                            .clamp(b[POCKET_D].0, b[POCKET_D].1);
+                        child.v[genome::RING_WALL] = 6.20_f64
+                            .clamp(b[genome::RING_WALL].0, b[genome::RING_WALL].1);
+                        child.v[genome::RING_ID] = 25.4_f64
+                            .clamp(b[genome::RING_ID].0, b[genome::RING_ID].1);
+                        child.v[genome::GRIP_DX] = -0.4 + child.v[genome::RING_WALL] - 6.0;
+                        child.v[TAPER_X0] = 126.0_f64.clamp(b[TAPER_X0].0, b[TAPER_X0].1);
+                        child.v[T_TIP] = (2.65 + 0.08 * variant)
+                            .clamp(b[T_TIP].0, b[T_TIP].1);
+                        // EA_IN's schema floor is 14.0; FUL_D is bounded to 1.2 (0.6 in P1).
+                        child.v[EA_IN] = 14.0_f64.clamp(b[EA_IN].0, b[EA_IN].1);
+                        child.v[FUL_D] = 0.5_f64.clamp(b[FUL_D].0, b[FUL_D].1);
+                    }
                     7 => child.v[genome::RING_WALL] = rng.range(6.0, 6.05),
                     8 => {
-                        child.v[T_TIP] = rng.range(2.6, 2.75);
+                        child.v[T_TIP] = rng.range(2.62, 2.75);
                         child.v[genome::WIN_W] = 6.0;
                         child.v[genome::WIN_FILL] = rng.range(0.65, 0.70);
                         child.v[genome::RING_WALL] = rng.range(6.0, 6.05);
                     }
                     9 => {
-                        child.v[T_TIP] = rng.range(2.6, 2.85);
+                        child.v[T_TIP] = rng.range(2.62, 2.85);
                         child.v[genome::WIN_N] = 1.0;
                         child.v[genome::WIN_W] = 3.0;
                         child.v[genome::WIN_S0] = rng.range(0.48, 0.52);
@@ -217,7 +247,12 @@ fn spawn_offspring_batch(
                     _ => unreachable!(),
                 }
             } else {
-            match (k % 8, k % 9 == 8, k % 11 == 9, k % 11 == 10) {
+            match (
+                k % 8,
+                k % 9 == 8 || (candidates_per_elite == 12 && k % 12 == 11),
+                k % 11 == 9,
+                k % 11 == 10,
+            ) {
                 (_, true, _, _) => {
                     // Witness-guided arm: increase the blade-root section controls and use the
                     // retained multi-mesh window witness when this parent's window is enabled.
@@ -924,12 +959,27 @@ mod tests {
                 &mut Rng(20261018 + rng_seed),
             );
             for (seed_idx, (family, _)) in seeds.iter().enumerate() {
+                let c6_idx = seed_idx * 11 + 6;
+                let (_, c6_genome) = &batch[c6_idx];
+                let c6_pheno = pheno::build(c6_genome);
+                let c6_aes = aesthetic::evaluate(c6_genome, &c6_pheno);
+                let c6_rejects = gates::check(c6_genome, &c6_pheno);
+                assert!((0.45..=0.49).contains(&c6_genome.v[genome::WIN_S0]));
+                assert!(c6_genome.v[POCKET_D] >= 0.12);
+                assert!(
+                    c6_aes.pass && c6_rejects.is_empty(),
+                    "rng={rng_seed} {family} c=6: aesthetics {:?}; rejects {:?}",
+                    c6_aes.fails,
+                    c6_rejects,
+                );
                 for c in 7..=10 {
                     let idx = seed_idx * 11 + c;
                     let (_, genome) = &batch[idx];
                     let phenotype = pheno::build(genome);
                     let aes = aesthetic::evaluate(genome, &phenotype);
                     let rejects = gates::check(genome, &phenotype);
+                    assert!(genome.v[T_TIP] > 2.60, "{family} c={c} T_TIP at lower bound");
+                    assert!(genome.v[TAPER_X0] > 115.0, "{family} c={c} TAPER_X0 at lower bound");
                     if !aes.pass || !rejects.is_empty() {
                         unrankable.push(format!(
                             "rng={rng_seed} {family} c={c}: aesthetics {:?}; rejects {:?}; dx={} wall={}",
@@ -956,6 +1006,31 @@ mod tests {
             }
         }
         assert!(unrankable.is_empty(), "unrankable offspring: {unrankable:?}");
+    }
+
+    #[test]
+    fn default_per_elite_12_keeps_witness_and_q7_slots_reachable() {
+        let mut parent = Genome::c4_seed(genome::T_MIN);
+        parent.v[TAPER_X0] = 130.0;
+        parent.v[EA_IN] = 18.0;
+        parent.v[EDGE_TH] = 0.18;
+        parent.clamp();
+        let children = spawn_offspring_batch(
+            &[("p14".into(), parent.clone())],
+            12,
+            1,
+            &mut Rng(20261018),
+        );
+
+        // Slot 6 remains Q7, slot 7 reaches the legacy reinforcement fallback,
+        // slot 8 reaches the window witness, and slot 11 reaches the remapped witness.
+        assert_eq!(&children[6].1.v[..N_CP], &Q7_CPS);
+        assert_ne!(&children[7].1.v[..N_CP], &Q7_CPS);
+        assert_eq!(children[7].1.v[TAPER_X0], genome::bounds()[TAPER_X0].1);
+        assert!(children[8].1.v[TAPER_X0] > parent.v[TAPER_X0]);
+        assert!(children[11].1.v[TAPER_X0] > parent.v[TAPER_X0]);
+        assert_eq!(children[9].1.v[genome::WIN_N], 1.0);
+        assert_eq!(children[10].1.v[genome::WIN_N], 1.0);
     }
 
     #[test]
@@ -1041,8 +1116,8 @@ mod tests {
         let bounds = genome::bounds();
 
         assert_eq!(&child.v[..N_CP], &Q7_CPS);
-        assert!((2.6..=2.75).contains(&child.v[T_TIP]));
-        assert_eq!(child.v[TAPER_X0], 115.0);
+        assert!((2.62..=2.75).contains(&child.v[T_TIP]));
+        assert_eq!(child.v[TAPER_X0], 116.0);
         assert_eq!(child.v[genome::EA_IN], 18.0);
         assert_eq!(child.v[genome::EA_SP], 18.0);
         assert_eq!(child.v[genome::WIN_W], 6.0);
@@ -1073,11 +1148,11 @@ mod tests {
 
         let children = spawn_offspring_batch(
             &[("p14".into(), parent)],
-            18,
+            27,
             1,
             &mut Rng(20261018),
         );
-        let child = &children[17].1;
+        let child = &children[26].1;
         let bounds = genome::bounds();
 
         assert!((0.05..=0.052).contains(&child.v[genome::WIN_S0]));
@@ -1124,7 +1199,7 @@ mod tests {
         assert_eq!(child.v[genome::WIN_W], 3.0);
         assert!((0.48..=0.52).contains(&child.v[genome::WIN_S0]));
         assert!((0.82..=0.86).contains(&child.v[genome::WIN_S1]));
-        assert!((2.6..=2.85).contains(&child.v[T_TIP]));
+        assert!((2.62..=2.85).contains(&child.v[T_TIP]));
         assert!((6.15..=6.35).contains(&child.v[genome::RING_WALL]));
         for (idx, &value) in child.v.iter().enumerate() {
             if idx == EDGE_TH {
@@ -1304,12 +1379,12 @@ mod tests {
             }
             parent.clamp();
             let elites = vec![("section".into(), parent.clone())];
-            let batch = spawn_offspring_batch(&elites, 8, 1, &mut Rng(20261018));
+            let batch = spawn_offspring_batch(&elites, 15, 1, &mut Rng(20261018));
             assert_eq!(
                 batch,
-                spawn_offspring_batch(&elites, 8, 1, &mut Rng(20261018))
+                spawn_offspring_batch(&elites, 15, 1, &mut Rng(20261018))
             );
-            for (_, child) in &batch[6..7] {
+            for (_, child) in &batch[14..15] {
                 assert_eq!(child.p1(), p1);
                 assert!(child.rs_v2());
                 for idx in 0..N_CP {

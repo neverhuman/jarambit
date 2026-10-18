@@ -1,0 +1,2621 @@
+{
+  "schema": "jarambit.rsv2_07.phase8_synthetic_gci.v1",
+  "task": "RSV2-07-p8",
+  "execution_status": "complete",
+  "all_checks_pass": true,
+  "timestamp_utc": "2026-10-18T09:00:26.799237+00:00",
+  "commit": "551f793a32595f815fb8884b0d0e2225645c7862",
+  "runtime": {
+    "cpu_affinity": [
+      14,
+      15
+    ],
+    "nice": 10,
+    "python": "3.12.3",
+    "build_environment": {
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_PROFILE_DEV_DEBUG": "line-tables-only"
+    }
+  },
+  "raw_directory": "target/rsv2-07/phase8/20261018T090024871641Z",
+  "sequence_count": 24,
+  "triplet_count": 39,
+  "status_counts": {
+    "admissible_estimate": 24,
+    "invalid_input": 2,
+    "nonpositive_order": 3,
+    "oscillatory": 3,
+    "precision_limited": 1,
+    "unresolved": 5,
+    "unsupported_sequence": 1
+  },
+  "native_process_replay_bytes_equal": true,
+  "sequences": [
+    {
+      "id": "polynomial_r0x1.0000000000000p+1_p0.5",
+      "r": 2.0,
+      "fs": 1.25,
+      "values": [
+        2.0625,
+        2.0883883476483183,
+        2.125,
+        2.176776695296637,
+        2.25
+      ],
+      "h": [
+        0.25,
+        0.5,
+        1.0,
+        2.0,
+        4.0
+      ],
+      "p_exact": 0.5,
+      "f0_exact": 2.0,
+      "c": 0.125,
+      "level_mode": "valid",
+      "expected": "admissible_estimate",
+      "difference_signs": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": true,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0000000000000027,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.03787878787878614,
+            "levels": [
+              {
+                "h": 1.0,
+                "mesh": {
+                  "id": "synthetic-0",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 2.0,
+                "mesh": {
+                  "id": "synthetic-1",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000002"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 4.0,
+                "mesh": {
+                  "id": "synthetic-2",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000003"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              }
+            ],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": true,
+            "p": 0.5000000000000167,
+            "reason": "checked_relative_estimate",
+            "relative_error_available": true,
+            "sequence_valid": true
+          },
+          "float_bits": {
+            "f_ext": "4000000000000006",
+            "gci_fine": "3fa364d9364d926a",
+            "p": "3fe0000000000096"
+          },
+          "id": "polynomial_r0x1.0000000000000p+1_p0.5/slice0",
+          "known_relative_error": 0.030303030303030304,
+          "analytic_gci": 0.03787878787878788,
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": true,
+            "asymptotic_validation": "not_established",
+            "f_ext": 1.9999999999999984,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.07352941176470679,
+            "levels": [
+              {
+                "h": 1.0,
+                "mesh": {
+                  "id": "synthetic-0",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 2.0,
+                "mesh": {
+                  "id": "synthetic-1",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000002"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 4.0,
+                "mesh": {
+                  "id": "synthetic-2",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000003"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              }
+            ],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": true,
+            "p": 0.4999999999999956,
+            "reason": "checked_relative_estimate",
+            "relative_error_available": true,
+            "sequence_valid": true
+          },
+          "float_bits": {
+            "f_ext": "3ffffffffffffff9",
+            "gci_fine": "3fb2d2d2d2d2d314",
+            "p": "3fdfffffffffffb1"
+          },
+          "id": "polynomial_r0x1.0000000000000p+1_p0.5/slice2",
+          "known_relative_error": 0.058823529411764705,
+          "analytic_gci": 0.07352941176470588,
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "polynomial_r0x1.0000000000000p+1_p1.0",
+      "r": 2.0,
+      "fs": 1.25,
+      "values": [
+        1.96875,
+        1.9375,
+        1.875,
+        1.75,
+        1.5
+      ],
+      "h": [
+        0.25,
+        0.5,
+        1.0,
+        2.0,
+        4.0
+      ],
+      "p_exact": 1.0,
+      "f0_exact": 2.0,
+      "c": -0.125,
+      "level_mode": "valid",
+      "expected": "admissible_estimate",
+      "difference_signs": [
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": true,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.01984126984126984,
+            "levels": [
+              {
+                "h": 1.0,
+                "mesh": {
+                  "id": "synthetic-0",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 2.0,
+                "mesh": {
+                  "id": "synthetic-1",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000002"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 4.0,
+                "mesh": {
+                  "id": "synthetic-2",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000003"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              }
+            ],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": true,
+            "p": 1.0,
+            "reason": "checked_relative_estimate",
+            "relative_error_available": true,
+            "sequence_valid": true
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3f94514514514514",
+            "p": "3ff0000000000000"
+          },
+          "id": "polynomial_r0x1.0000000000000p+1_p1.0/slice0",
+          "known_relative_error": 0.015873015873015872,
+          "analytic_gci": 0.01984126984126984,
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": true,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.08333333333333333,
+            "levels": [
+              {
+                "h": 1.0,
+                "mesh": {
+                  "id": "synthetic-0",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 2.0,
+                "mesh": {
+                  "id": "synthetic-1",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000002"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 4.0,
+                "mesh": {
+                  "id": "synthetic-2",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000003"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              }
+            ],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": true,
+            "p": 1.0,
+            "reason": "checked_relative_estimate",
+            "relative_error_available": true,
+            "sequence_valid": true
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3fb5555555555555",
+            "p": "3ff0000000000000"
+          },
+          "id": "polynomial_r0x1.0000000000000p+1_p1.0/slice2",
+          "known_relative_error": 0.06666666666666667,
+          "analytic_gci": 0.08333333333333333,
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "polynomial_r0x1.0000000000000p+1_p1.5",
+      "r": 2.0,
+      "fs": 1.25,
+      "values": [
+        2.015625,
+        2.044194173824159,
+        2.125,
+        2.353553390593274,
+        3.0
+      ],
+      "h": [
+        0.25,
+        0.5,
+        1.0,
+        2.0,
+        4.0
+      ],
+      "p_exact": 1.5,
+      "f0_exact": 2.0,
+      "c": 0.125,
+      "level_mode": "valid",
+      "expected": "admissible_estimate",
+      "difference_signs": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": true,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.009689922480620063,
+            "levels": [
+              {
+                "h": 1.0,
+                "mesh": {
+                  "id": "synthetic-0",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 2.0,
+                "mesh": {
+                  "id": "synthetic-1",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000002"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 4.0,
+                "mesh": {
+                  "id": "synthetic-2",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000003"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              }
+            ],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": true,
+            "p": 1.500000000000006,
+            "reason": "checked_relative_estimate",
+            "relative_error_available": true,
+            "sequence_valid": true
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3f83d84f613d84c1",
+            "p": "3ff800000000001b"
+          },
+          "id": "polynomial_r0x1.0000000000000p+1_p1.5/slice0",
+          "known_relative_error": 0.007751937984496124,
+          "analytic_gci": 0.009689922480620155,
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": true,
+            "asymptotic_validation": "not_established",
+            "f_ext": 1.9999999999999996,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.07352941176470608,
+            "levels": [
+              {
+                "h": 1.0,
+                "mesh": {
+                  "id": "synthetic-0",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 2.0,
+                "mesh": {
+                  "id": "synthetic-1",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000002"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 4.0,
+                "mesh": {
+                  "id": "synthetic-2",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000003"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              }
+            ],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": true,
+            "p": 1.4999999999999982,
+            "reason": "checked_relative_estimate",
+            "relative_error_available": true,
+            "sequence_valid": true
+          },
+          "float_bits": {
+            "f_ext": "3ffffffffffffffe",
+            "gci_fine": "3fb2d2d2d2d2d2e1",
+            "p": "3ff7fffffffffff8"
+          },
+          "id": "polynomial_r0x1.0000000000000p+1_p1.5/slice2",
+          "known_relative_error": 0.058823529411764705,
+          "analytic_gci": 0.07352941176470588,
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "polynomial_r0x1.0000000000000p+1_p2.0",
+      "r": 2.0,
+      "fs": 1.25,
+      "values": [
+        1.9921875,
+        1.96875,
+        1.875,
+        1.5,
+        0.0
+      ],
+      "h": [
+        0.25,
+        0.5,
+        1.0,
+        2.0,
+        4.0
+      ],
+      "p_exact": 2.0,
+      "f0_exact": 2.0,
+      "c": -0.125,
+      "level_mode": "valid",
+      "expected": "admissible_estimate",
+      "difference_signs": [
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": true,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.004901960784313725,
+            "levels": [
+              {
+                "h": 1.0,
+                "mesh": {
+                  "id": "synthetic-0",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 2.0,
+                "mesh": {
+                  "id": "synthetic-1",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000002"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 4.0,
+                "mesh": {
+                  "id": "synthetic-2",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000003"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              }
+            ],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": true,
+            "p": 2.0,
+            "reason": "checked_relative_estimate",
+            "relative_error_available": true,
+            "sequence_valid": true
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3f74141414141414",
+            "p": "4000000000000000"
+          },
+          "id": "polynomial_r0x1.0000000000000p+1_p2.0/slice0",
+          "known_relative_error": 0.00392156862745098,
+          "analytic_gci": 0.004901960784313725,
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": true,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.08333333333333333,
+            "levels": [
+              {
+                "h": 1.0,
+                "mesh": {
+                  "id": "synthetic-0",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 2.0,
+                "mesh": {
+                  "id": "synthetic-1",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000002"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 4.0,
+                "mesh": {
+                  "id": "synthetic-2",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000003"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              }
+            ],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": true,
+            "p": 2.0,
+            "reason": "checked_relative_estimate",
+            "relative_error_available": true,
+            "sequence_valid": true
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3fb5555555555555",
+            "p": "4000000000000000"
+          },
+          "id": "polynomial_r0x1.0000000000000p+1_p2.0/slice2",
+          "known_relative_error": 0.06666666666666667,
+          "analytic_gci": 0.08333333333333333,
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "polynomial_r0x1.0000000000000p+1_p2.5",
+      "r": 2.0,
+      "fs": 1.25,
+      "values": [
+        2.00390625,
+        2.02209708691208,
+        2.125,
+        2.7071067811865475,
+        6.0
+      ],
+      "h": [
+        0.25,
+        0.5,
+        1.0,
+        2.0,
+        4.0
+      ],
+      "p_exact": 2.5,
+      "f0_exact": 2.0,
+      "c": 0.125,
+      "level_mode": "valid",
+      "expected": "admissible_estimate",
+      "difference_signs": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": true,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.0024366471734893367,
+            "levels": [
+              {
+                "h": 1.0,
+                "mesh": {
+                  "id": "synthetic-0",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 2.0,
+                "mesh": {
+                  "id": "synthetic-1",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000002"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 4.0,
+                "mesh": {
+                  "id": "synthetic-2",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000003"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              }
+            ],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": true,
+            "p": 2.4999999999999836,
+            "reason": "checked_relative_estimate",
+            "relative_error_available": true,
+            "sequence_valid": true
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3f63f604fd813fe6",
+            "p": "4003ffffffffffdb"
+          },
+          "id": "polynomial_r0x1.0000000000000p+1_p2.5/slice0",
+          "known_relative_error": 0.001949317738791423,
+          "analytic_gci": 0.0024366471734892786,
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": true,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.07352941176470588,
+            "levels": [
+              {
+                "h": 1.0,
+                "mesh": {
+                  "id": "synthetic-0",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 2.0,
+                "mesh": {
+                  "id": "synthetic-1",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000002"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 4.0,
+                "mesh": {
+                  "id": "synthetic-2",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000003"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              }
+            ],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": true,
+            "p": 2.5,
+            "reason": "checked_relative_estimate",
+            "relative_error_available": true,
+            "sequence_valid": true
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3fb2d2d2d2d2d2d3",
+            "p": "4004000000000000"
+          },
+          "id": "polynomial_r0x1.0000000000000p+1_p2.5/slice2",
+          "known_relative_error": 0.058823529411764705,
+          "analytic_gci": 0.07352941176470588,
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "polynomial_r0x1.0000000000000p+1_p3.0",
+      "r": 2.0,
+      "fs": 1.25,
+      "values": [
+        1.998046875,
+        1.984375,
+        1.875,
+        1.0,
+        -6.0
+      ],
+      "h": [
+        0.25,
+        0.5,
+        1.0,
+        2.0,
+        4.0
+      ],
+      "p_exact": 3.0,
+      "f0_exact": 2.0,
+      "c": -0.125,
+      "level_mode": "valid",
+      "expected": "admissible_estimate",
+      "difference_signs": [
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": true,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.001221896383186706,
+            "levels": [
+              {
+                "h": 1.0,
+                "mesh": {
+                  "id": "synthetic-0",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 2.0,
+                "mesh": {
+                  "id": "synthetic-1",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000002"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 4.0,
+                "mesh": {
+                  "id": "synthetic-2",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000003"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              }
+            ],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": true,
+            "p": 3.0,
+            "reason": "checked_relative_estimate",
+            "relative_error_available": true,
+            "sequence_valid": true
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3f54050140501406",
+            "p": "4008000000000000"
+          },
+          "id": "polynomial_r0x1.0000000000000p+1_p3.0/slice0",
+          "known_relative_error": 0.0009775171065493646,
+          "analytic_gci": 0.0012218963831867058,
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": true,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.08333333333333336,
+            "levels": [
+              {
+                "h": 1.0,
+                "mesh": {
+                  "id": "synthetic-0",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 2.0,
+                "mesh": {
+                  "id": "synthetic-1",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000002"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              },
+              {
+                "h": 4.0,
+                "mesh": {
+                  "id": "synthetic-2",
+                  "revision": "synthetic-v1",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000003"
+                },
+                "observable": {
+                  "id": "synthetic_scalar",
+                  "metric": "scalar",
+                  "projection": "algebra",
+                  "region": "synthetic",
+                  "units": "dimensionless"
+                },
+                "refinement": "uniform_h"
+              }
+            ],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": true,
+            "p": 3.0,
+            "reason": "checked_relative_estimate",
+            "relative_error_available": true,
+            "sequence_valid": true
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3fb5555555555557",
+            "p": "4008000000000000"
+          },
+          "id": "polynomial_r0x1.0000000000000p+1_p3.0/slice2",
+          "known_relative_error": 0.06666666666666667,
+          "analytic_gci": 0.08333333333333333,
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "polynomial_r0x1.6a09e667f3bcdp+0_p0.5",
+      "r": 1.4142135623730951,
+      "fs": 1.25,
+      "values": [
+        2.0625,
+        2.07432544468767,
+        2.0883883476483183,
+        2.105112051906714,
+        2.125
+      ],
+      "h": [
+        0.25,
+        0.3535533905932738,
+        0.5000000000000001,
+        0.7071067811865477,
+        1.0000000000000002
+      ],
+      "p_exact": 0.5,
+      "f0_exact": 2.0,
+      "c": 0.125,
+      "level_mode": "none",
+      "expected": "admissible_estimate",
+      "difference_signs": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": 1.9999999999999851,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.03787878787879685,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": 0.4999999999998969,
+            "reason": "arithmetic_only",
+            "relative_error_available": true,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": "3fffffffffffffbd",
+            "gci_fine": "3fa364d9364d9872",
+            "p": "3fdffffffffff8bf"
+          },
+          "id": "polynomial_r0x1.6a09e667f3bcdp+0_p0.5/slice0",
+          "known_relative_error": 0.030303030303030304,
+          "analytic_gci": 0.03787878787878788,
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0000000000000053,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.052904640405988614,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": 0.5000000000000289,
+            "reason": "arithmetic_only",
+            "relative_error_available": true,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": "400000000000000c",
+            "gci_fine": "3fab165128b3628d",
+            "p": "3fe0000000000104"
+          },
+          "id": "polynomial_r0x1.6a09e667f3bcdp+0_p0.5/slice2",
+          "known_relative_error": 0.042323712324793504,
+          "analytic_gci": 0.052904640405991986,
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "polynomial_r0x1.6a09e667f3bcdp+0_p1.0",
+      "r": 1.4142135623730951,
+      "fs": 1.25,
+      "values": [
+        1.96875,
+        1.9558058261758409,
+        1.9375,
+        1.9116116523516815,
+        1.875
+      ],
+      "h": [
+        0.25,
+        0.3535533905932738,
+        0.5000000000000001,
+        0.7071067811865477,
+        1.0000000000000002
+      ],
+      "p_exact": 1.0,
+      "f0_exact": 2.0,
+      "c": -0.125,
+      "level_mode": "none",
+      "expected": "admissible_estimate",
+      "difference_signs": [
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": 1.9999999999999987,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.019841269841268928,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": 1.000000000000033,
+            "reason": "arithmetic_only",
+            "relative_error_available": true,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": "3ffffffffffffffa",
+            "gci_fine": "3f9451451451440d",
+            "p": "3ff0000000000095"
+          },
+          "id": "polynomial_r0x1.6a09e667f3bcdp+0_p1.0/slice0",
+          "known_relative_error": 0.015873015873015872,
+          "analytic_gci": 0.01984126984126984,
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.000000000000001,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.04032258064516178,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": 0.999999999999991,
+            "reason": "arithmetic_only",
+            "relative_error_available": true,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": "4000000000000002",
+            "gci_fine": "3fa4a5294a5294ec",
+            "p": "3fefffffffffffaf"
+          },
+          "id": "polynomial_r0x1.6a09e667f3bcdp+0_p1.0/slice2",
+          "known_relative_error": 0.03225806451612903,
+          "analytic_gci": 0.040322580645161296,
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "polynomial_r0x1.6a09e667f3bcdp+0_p1.5",
+      "r": 1.4142135623730951,
+      "fs": 1.25,
+      "values": [
+        2.015625,
+        2.0262780129766784,
+        2.044194173824159,
+        2.07432544468767,
+        2.125
+      ],
+      "h": [
+        0.25,
+        0.3535533905932738,
+        0.5000000000000001,
+        0.7071067811865477,
+        1.0000000000000002
+      ],
+      "p_exact": 1.5,
+      "f0_exact": 2.0,
+      "c": 0.125,
+      "level_mode": "none",
+      "expected": "admissible_estimate",
+      "difference_signs": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.000000000000001,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.009689922480619565,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": 1.5000000000000537,
+            "reason": "arithmetic_only",
+            "relative_error_available": true,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": "4000000000000002",
+            "gci_fine": "3f83d84f613d83a2",
+            "p": "3ff80000000000f2"
+          },
+          "id": "polynomial_r0x1.6a09e667f3bcdp+0_p1.5/slice0",
+          "known_relative_error": 0.007751937984496124,
+          "analytic_gci": 0.009689922480620155,
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": 1.9999999999999984,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.02702420248897202,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": 1.4999999999999682,
+            "reason": "arithmetic_only",
+            "relative_error_available": true,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": "3ffffffffffffff9",
+            "gci_fine": "3f9bac3b878ffdce",
+            "p": "3ff7ffffffffff71"
+          },
+          "id": "polynomial_r0x1.6a09e667f3bcdp+0_p1.5/slice2",
+          "known_relative_error": 0.02161936199117682,
+          "analytic_gci": 0.027024202488971093,
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "polynomial_r0x1.6a09e667f3bcdp+0_p2.0",
+      "r": 1.4142135623730951,
+      "fs": 1.25,
+      "values": [
+        1.9921875,
+        1.984375,
+        1.96875,
+        1.9375,
+        1.875
+      ],
+      "h": [
+        0.25,
+        0.3535533905932738,
+        0.5000000000000001,
+        0.7071067811865477,
+        1.0000000000000002
+      ],
+      "p_exact": 2.0,
+      "f0_exact": 2.0,
+      "c": -0.125,
+      "level_mode": "none",
+      "expected": "admissible_estimate",
+      "difference_signs": [
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.004901960784313725,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": 1.9999999999999998,
+            "reason": "arithmetic_only",
+            "relative_error_available": true,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3f74141414141414",
+            "p": "3fffffffffffffff"
+          },
+          "id": "polynomial_r0x1.6a09e667f3bcdp+0_p2.0/slice0",
+          "known_relative_error": 0.00392156862745098,
+          "analytic_gci": 0.004901960784313725,
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.01984126984126984,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": 1.9999999999999998,
+            "reason": "arithmetic_only",
+            "relative_error_available": true,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3f94514514514514",
+            "p": "3fffffffffffffff"
+          },
+          "id": "polynomial_r0x1.6a09e667f3bcdp+0_p2.0/slice2",
+          "known_relative_error": 0.015873015873015872,
+          "analytic_gci": 0.019841269841269847,
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "polynomial_r0x1.6a09e667f3bcdp+0_p2.5",
+      "r": 1.4142135623730951,
+      "fs": 1.25,
+      "values": [
+        2.00390625,
+        2.0092906805859587,
+        2.02209708691208,
+        2.0525560259533573,
+        2.125
+      ],
+      "h": [
+        0.25,
+        0.3535533905932738,
+        0.5000000000000001,
+        0.7071067811865477,
+        1.0000000000000002
+      ],
+      "p_exact": 2.5,
+      "f0_exact": 2.0,
+      "c": 0.125,
+      "level_mode": "none",
+      "expected": "admissible_estimate",
+      "difference_signs": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.002436647173489163,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": 2.500000000000068,
+            "reason": "arithmetic_only",
+            "relative_error_available": true,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3f63f604fd813e55",
+            "p": "4004000000000099"
+          },
+          "id": "polynomial_r0x1.6a09e667f3bcdp+0_p2.5/slice0",
+          "known_relative_error": 0.001949317738791423,
+          "analytic_gci": 0.0024366471734892786,
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.013659758880459949,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": 2.499999999999999,
+            "reason": "arithmetic_only",
+            "relative_error_available": true,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3f8bf9a5cd4d7520",
+            "p": "4003fffffffffffe"
+          },
+          "id": "polynomial_r0x1.6a09e667f3bcdp+0_p2.5/slice2",
+          "known_relative_error": 0.010927807104368062,
+          "analytic_gci": 0.013659758880459975,
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "polynomial_r0x1.6a09e667f3bcdp+0_p3.0",
+      "r": 1.4142135623730951,
+      "fs": 1.25,
+      "values": [
+        1.998046875,
+        1.99447572827198,
+        1.984375,
+        1.9558058261758406,
+        1.875
+      ],
+      "h": [
+        0.25,
+        0.3535533905932738,
+        0.5000000000000001,
+        0.7071067811865477,
+        1.0000000000000002
+      ],
+      "p_exact": 3.0,
+      "f0_exact": 2.0,
+      "c": -0.125,
+      "level_mode": "none",
+      "expected": "admissible_estimate",
+      "difference_signs": [
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.001221896383186753,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": 2.9999999999999507,
+            "reason": "arithmetic_only",
+            "relative_error_available": true,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": "4000000000000000",
+            "gci_fine": "3f540501405014df",
+            "p": "4007ffffffffff91"
+          },
+          "id": "polynomial_r0x1.6a09e667f3bcdp+0_p3.0/slice0",
+          "known_relative_error": 0.0009775171065493646,
+          "analytic_gci": 0.0012218963831867058,
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": 2.0000000000000004,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.009842519685039512,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": 2.9999999999999813,
+            "reason": "arithmetic_only",
+            "relative_error_available": true,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": "4000000000000001",
+            "gci_fine": "3f842850a142855c",
+            "p": "4007ffffffffffd6"
+          },
+          "id": "polynomial_r0x1.6a09e667f3bcdp+0_p3.0/slice2",
+          "known_relative_error": 0.007874015748031496,
+          "analytic_gci": 0.009842519685039377,
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true,
+            "order_recovered": true,
+            "extrapolate_recovered": true,
+            "known_error_bounded": true,
+            "analytic_gci_agrees": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "oscillatory_three",
+      "values": [
+        2.0,
+        3.0,
+        2.0
+      ],
+      "r": 2.0,
+      "fs": 1.25,
+      "level_mode": "none",
+      "expected": "oscillatory",
+      "difference_signs": [
+        1,
+        -1
+      ],
+      "strictly_monotone": false,
+      "adjacent_sign_change": true,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "oscillatory",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": false,
+            "observable_valid": false,
+            "p": null,
+            "reason": "oscillatory_sequence",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": null
+          },
+          "id": "oscillatory_three/slice0",
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "oscillatory_five",
+      "values": [
+        2.0,
+        1.0,
+        2.0,
+        1.0,
+        2.0
+      ],
+      "r": 1.4142135623730951,
+      "fs": 1.25,
+      "level_mode": "none",
+      "expected": "oscillatory",
+      "difference_signs": [
+        -1,
+        1,
+        -1,
+        1
+      ],
+      "strictly_monotone": false,
+      "adjacent_sign_change": true,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "oscillatory",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": false,
+            "observable_valid": false,
+            "p": null,
+            "reason": "oscillatory_sequence",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": null
+          },
+          "id": "oscillatory_five/slice0",
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "oscillatory",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": false,
+            "observable_valid": false,
+            "p": null,
+            "reason": "oscillatory_sequence",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": null
+          },
+          "id": "oscillatory_five/slice2",
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "constant",
+      "values": [
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0
+      ],
+      "r": 2.0,
+      "fs": 1.25,
+      "level_mode": "none",
+      "expected": "unresolved",
+      "difference_signs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "strictly_monotone": false,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "unresolved",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": false,
+            "observable_valid": false,
+            "p": null,
+            "reason": "all_levels_equal",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": null
+          },
+          "id": "constant/slice0",
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "unresolved",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": false,
+            "observable_valid": false,
+            "p": null,
+            "reason": "all_levels_equal",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": null
+          },
+          "id": "constant/slice2",
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "fine_plateau",
+      "values": [
+        2.0,
+        2.0,
+        3.0
+      ],
+      "r": 2.0,
+      "fs": 1.25,
+      "level_mode": "none",
+      "expected": "unresolved",
+      "difference_signs": [
+        0,
+        1
+      ],
+      "strictly_monotone": false,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "unresolved",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": false,
+            "observable_valid": false,
+            "p": null,
+            "reason": "fine_pair_plateau",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": null
+          },
+          "id": "fine_plateau/slice0",
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "coarse_plateau",
+      "values": [
+        2.0,
+        3.0,
+        3.0
+      ],
+      "r": 2.0,
+      "fs": 1.25,
+      "level_mode": "none",
+      "expected": "unresolved",
+      "difference_signs": [
+        1,
+        0
+      ],
+      "strictly_monotone": false,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "unresolved",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": false,
+            "observable_valid": false,
+            "p": null,
+            "reason": "coarse_pair_plateau",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": null
+          },
+          "id": "coarse_plateau/slice0",
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "negative_order",
+      "values": [
+        2.0,
+        3.0,
+        3.5,
+        3.75,
+        3.875
+      ],
+      "r": 2.0,
+      "fs": 1.25,
+      "level_mode": "none",
+      "expected": "nonpositive_order",
+      "difference_signs": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "nonpositive_order",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": -1.0,
+            "reason": "nonpositive_observed_order",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": "bff0000000000000"
+          },
+          "id": "negative_order/slice0",
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        },
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "nonpositive_order",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": -1.0,
+            "reason": "nonpositive_observed_order",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": "bff0000000000000"
+          },
+          "id": "negative_order/slice2",
+          "slice_start": 2,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "zero_order",
+      "values": [
+        2.0,
+        3.0,
+        4.0
+      ],
+      "r": 2.0,
+      "fs": 1.25,
+      "level_mode": "none",
+      "expected": "nonpositive_order",
+      "difference_signs": [
+        1,
+        1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "nonpositive_order",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": true,
+            "observable_valid": false,
+            "p": 0.0,
+            "reason": "nonpositive_observed_order",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": "0000000000000000"
+          },
+          "id": "zero_order/slice0",
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "ratio_one",
+      "values": [
+        2.0,
+        3.0,
+        5.0
+      ],
+      "r": 1.0,
+      "fs": 1.25,
+      "level_mode": "none",
+      "expected": "invalid_input",
+      "difference_signs": [
+        1,
+        1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "invalid_input",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": false,
+            "observable_valid": false,
+            "p": null,
+            "reason": "invalid_ratio_or_safety_factor",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": null
+          },
+          "id": "ratio_one/slice0",
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "ratio_below_one",
+      "values": [
+        2.0,
+        3.0,
+        5.0
+      ],
+      "r": 0.5,
+      "fs": 1.25,
+      "level_mode": "none",
+      "expected": "invalid_input",
+      "difference_signs": [
+        1,
+        1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "invalid_input",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": false,
+            "observable_valid": false,
+            "p": null,
+            "reason": "invalid_ratio_or_safety_factor",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": null
+          },
+          "id": "ratio_below_one/slice0",
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "precision_floor",
+      "values": [
+        1.0,
+        1.0000000000000002,
+        1.0000000000000009
+      ],
+      "r": 2.0,
+      "fs": 1.25,
+      "level_mode": "none",
+      "expected": "precision_limited",
+      "difference_signs": [
+        1,
+        1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "precision_limited",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": false,
+            "observable_valid": false,
+            "p": null,
+            "reason": "pair_at_precision_floor",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": null
+          },
+          "id": "precision_floor/slice0",
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "zero_reference",
+      "values": [
+        0.0,
+        1.0,
+        3.0
+      ],
+      "r": 2.0,
+      "fs": 1.25,
+      "level_mode": "none",
+      "expected": "unresolved",
+      "difference_signs": [
+        1,
+        1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "unresolved",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": false,
+            "observable_valid": false,
+            "p": null,
+            "reason": "zero_reference_quantity",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": null
+          },
+          "id": "zero_reference/slice0",
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "duplicate_synthetic_content",
+      "values": [
+        2.0,
+        3.0,
+        5.0
+      ],
+      "r": 2.0,
+      "fs": 1.25,
+      "level_mode": "duplicate_content",
+      "expected": "unsupported_sequence",
+      "difference_signs": [
+        1,
+        1
+      ],
+      "strictly_monotone": true,
+      "adjacent_sign_change": false,
+      "triplets": [
+        {
+          "estimate": {
+            "admitted": false,
+            "asymptotic_validation": "not_established",
+            "f_ext": null,
+            "fit_status": "unsupported_sequence",
+            "gci_fine": null,
+            "levels": [],
+            "method_id": "relative_gci.v2",
+            "monotone": false,
+            "observable_valid": false,
+            "p": null,
+            "reason": "duplicate_mesh_content",
+            "relative_error_available": false,
+            "sequence_valid": false
+          },
+          "float_bits": {
+            "f_ext": null,
+            "gci_fine": null,
+            "p": null
+          },
+          "id": "duplicate_synthetic_content/slice0",
+          "slice_start": 0,
+          "checks": {
+            "rust_python_float_bits_equal": true,
+            "metadata_equal": true,
+            "expected_status": true,
+            "expected_monotonicity_and_availability": true
+          }
+        }
+      ]
+    }
+  ],
+  "sha256": {
+    "Cargo.toml": "aa338525eac815da0ddf6557d150c0932f10c170985e9e7ff1cef1b4bcc50a1e",
+    "Cargo.lock": "a7d57f542f3233c99e86bd0973f79ea894ce007c982fddf9bd5a30414035e41b",
+    "rust-toolchain.toml": "ad71865d103fde1926aae4b608bad01a186d581378cbff163fe5f6a9ee1ec712",
+    "crates/crescent/Cargo.toml": "07970e5be1e735f13fcc6a73bc47da51015405a82e9e26b301733875ccf68556",
+    "crates/crescent/src/gci.rs": "ba3333de3828db2f9602d5fbb4078d03ac7bb2f380a85f90910ef8cc5f6f97a9",
+    "crates/evidence/src/identity.rs": "27b99703fc268f28df41d1f973a1c55842d63fbad4759275b4e7e05dbd7b07de",
+    "fem_solid/gci.py": "61889a0e6a6459c8afbafe0c37758584711490b1db232799122eb3af1e4491da",
+    "assurance/testing/contracts.py": "29c3eb1e53aeab32dd8845ff90d3186ad403fd7495f51882a20b17d5d0981f4d",
+    "experiments/rsv2_07/phase8_synthetic_gci_probe.rs": "7e3c9187fd3b5f1072f8a591ffcb029f52488c410e82651907a8fd3867a87312",
+    "experiments/rsv2_07/phase8_synthetic_gci_check.py": "8b645fc6e21f4add238b8c5126386298ebf660d6be2d5f7e8d03728b52400f7f",
+    "experiments/rsv2_07/audit_phase8.py": "00bfc0eab9085cc8e6f6d96293cc63b6afdd893f5fa1f1c2a7b9f17cfe895a81",
+    "experiments/rsv2_07/PHASE8_SYNTHETIC_GCI_AUDIT.md": "941ed823e1e4efdd66a083ad954570f718cfc5c79488ce64a4c96b27768a9a10",
+    "target/rsv2-07/phase8/20261018T090024871641Z/build_command.json": "31269c92d90ea85070230757bce04b4815703b8017bda31d917f603b86a608ad",
+    "target/rsv2-07/phase8/20261018T090024871641Z/cargo.jsonl": "a13aecb47cdeef60ef66249884089f52705f46500ed604657cc2f702535846bf",
+    "target/rsv2-07/phase8/20261018T090024871641Z/cargo.log": "fecede7c2157efe2f16c8c8b9dce94b0fb4dd384dca8207046c8bf7636eb0ffe",
+    "target/rsv2-07/phase8/20261018T090024871641Z/input.json": "622193194c57f83b11c48b4161a2d7bf5b686089bf078a1115a17956c07193e5",
+    "target/rsv2-07/phase8/20261018T090024871641Z/native_first.json": "3600960acca1c06128025490eec31dd446c6c8676f87765a16eb2d00920780c6",
+    "target/rsv2-07/phase8/20261018T090024871641Z/native_second.json": "3600960acca1c06128025490eec31dd446c6c8676f87765a16eb2d00920780c6",
+    "target/rsv2-07/phase8/20261018T090024871641Z/rustc.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "target/rsv2-07/phase8/20261018T090024871641Z/synthetic-gci-probe": "58afba0b67bf8d0e52b816d71b6e74ae6f409b748b8b104f48e5b5b96024813a",
+    "target/rsv2-07/phase8/20261018T090024871641Z/toolchain.txt": "e569d7e196207e57f20aae13320a6b747b909de88c603c401bdb14ee3eeb121c"
+  }
+}
