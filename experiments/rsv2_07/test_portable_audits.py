@@ -17,6 +17,7 @@ import audit_phase6 as receipt_audit
 import audit_phase11_wave_receipts as wave_audit
 import audit_phase12_cross_wave as cross_wave_audit
 import audit_phase13_screen_rounds as screen_audit
+import audit_phase14_w319_receipts as w319_audit
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -604,6 +605,174 @@ class ScreenRoundArtifactTests(unittest.TestCase):
                     patch.object(Path, "is_file", new=is_file), patch.object(Path, "read_bytes", new=read), \
                     self.assertRaisesRegex(ValueError, "changed during audit"):
                 screen_audit.audit_directories(Path("/synthetic/out"), pins)
+
+
+class W319ReceiptAuditTests(unittest.TestCase):
+    def setUp(self):
+        self.docs = synthetic_wave_documents()
+        self.cards, designs = {}, []
+        for round_id in (0, 1):
+            births = self.docs[f"round_{round_id:02}_births.json"]["genomes"]
+            screens = self.docs[f"round_{round_id:02}_screen.json"]
+            birth_template, screen_template = deepcopy(births[0]), deepcopy(screens[0])
+            births.clear()
+            screens.clear()
+            for slot in (1, 2):
+                identity = hashlib.sha256(f"synthetic-w319-{round_id}-{slot}".encode()).hexdigest()
+                label = f"w319_r{round_id + 1:02}_synthetic_c{slot:02}"
+                key = f"by-content/{identity}/attempt-{round_id * 2 + slot}/{label}_master_scorecard.md"
+                births.append({**birth_template, "certificate_identity": identity, "row": f"{round_id},{slot}"})
+                screens.append({**screen_template, "certificate_identity": identity, "label": label})
+                design = {**self.docs["leaderboard.json"]["designs"][round_id], "label": label,
+                          "certificate_identity": identity, "scorecard_md": "out/w319/" + key}
+                designs.append(design)
+                self.cards[key] = f"# Master CAD Scorecard — `{label}`\n\n- **Verdict**: **FAIL (Gate Violation)**\n"
+        self.docs["leaderboard.json"].update(designs=designs, assessed_count=4)
+        self.markdown = "# Evolution certification attempts\n\n| " + " | ".join(w319_audit.BOARD_HEADER) + " |\n"
+        self.markdown += "|---|---|---:|---:|---:|---:|---|---|\n"
+        self.markdown += "".join(f"| `{d['label']}` | false | 0 | 0 | 0 | 0 | false | 0/18 |\n" for d in designs)
+
+    def payloads(self):
+        files = {name: json.dumps(doc, sort_keys=True).encode() for name, doc in self.docs.items()}
+        files["leaderboard.md"] = self.markdown.encode()
+        files.update({name: text.encode() for name, text in self.cards.items()})
+        pins = {name: (hashlib.sha256(data).hexdigest(), len(data)) for name, data in files.items()}
+        return files, pins
+
+    def test_synthetic_receipt_accounting_and_four_card_bindings(self):
+        result = w319_audit.audit_payloads(*self.payloads())
+        self.assertEqual((result["births"], result["screens"], result["assessed"], result["verified_files"]), (4, 4, 4, 10))
+        self.assertEqual((result["qualified"], result["champion"], result["unverified"]), (0, None, 0))
+        self.assertEqual(set(result["scorecards"].values()), set(self.cards))
+
+    def test_every_pinned_file_rejects_byte_tampering(self):
+        payloads, pins = self.payloads()
+        for name in payloads:
+            changed = {**payloads, name: payloads[name] + b" "}
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, "SHA-256/size mismatch"):
+                w319_audit.audit_payloads(changed, pins)
+
+    def test_missing_extra_files_and_invalid_pins_fail(self):
+        payloads, pins = self.payloads()
+        for name in ("leaderboard.json", next(iter(self.cards))):
+            changed = dict(payloads)
+            del changed[name]
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, "Exactly ten"):
+                w319_audit.audit_payloads(changed, pins)
+        with self.assertRaisesRegex(ValueError, "Exactly ten"):
+            w319_audit.audit_payloads({**payloads, "extra.md": b""}, pins)
+        for sha, size in [("A" * 64, 0), ("a" * 64, True), ("a" * 64, -1)]:
+            changed = {**pins, "leaderboard.md": (sha, size)}
+            with self.subTest(sha=sha, size=size), self.assertRaises(ValueError):
+                w319_audit.audit_payloads(payloads, changed)
+
+    def test_birth_slot_and_assessed_screen_linkage_fail(self):
+        screen = self.docs["round_00_screen.json"][0]
+        screen["certificate_identity"] = self.docs["round_00_births.json"]["genomes"][1]["certificate_identity"]
+        self.docs["leaderboard.json"]["designs"][0]["certificate_identity"] = screen["certificate_identity"]
+        with self.assertRaisesRegex(ValueError, "birth slot mismatch"):
+            w319_audit.audit_payloads(*self.payloads())
+        self.docs["leaderboard.json"]["designs"][0]["certificate_identity"] = "a" * 64
+        with self.assertRaisesRegex(ValueError, "identity/screen mismatch"):
+            w319_audit.audit_payloads(*self.payloads())
+
+    def test_qualification_count_champion_and_unverified_fail_closed(self):
+        board = self.docs["leaderboard.json"]
+        for key, value in [("qualified_count", 1), ("qualified_count", False), ("assessed_count", True),
+                           ("champion", {"label": "synthetic"}), ("unverified", ["synthetic-error"])]:
+            original = board[key]
+            board[key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                w319_audit.audit_payloads(*self.payloads())
+            board[key] = original
+        board["designs"][0]["qualified"] = True
+        with self.assertRaisesRegex(ValueError, "boolean false"):
+            w319_audit.audit_payloads(*self.payloads())
+
+    def test_markdown_false_claims_missing_rows_and_wrong_labels_fail(self):
+        original = self.markdown
+        variants = [original.replace("| false |", "| true |", 1),
+                    original.replace("w319_r01_synthetic_c01", "unknown", 1),
+                    "\n".join(original.splitlines()[:-1])]
+        for text in variants:
+            self.markdown = text
+            with self.subTest(text=text), self.assertRaisesRegex(ValueError, "Leaderboard Markdown"):
+                w319_audit.audit_payloads(*self.payloads())
+
+    def test_scorecard_title_and_stored_verdict_mismatch_fail(self):
+        key = next(iter(self.cards))
+        original = self.cards[key]
+        for text in [original.replace("w319_r01_synthetic_c01", "another-label"),
+                     original.replace("FAIL (Gate Violation)", "PASS"),
+                     original + "- **Verdict**: **FAIL (Gate Violation)**\n"]:
+            self.cards[key] = text
+            with self.subTest(text=text), self.assertRaisesRegex(ValueError, "Scorecard"):
+                w319_audit.audit_payloads(*self.payloads())
+
+    def test_scorecard_path_identity_attempt_label_and_traversal_fail(self):
+        design = self.docs["leaderboard.json"]["designs"][0]
+        original = design["scorecard_md"]
+        variants = [original.replace(design["certificate_identity"], "a" * 64),
+                    original.replace("attempt-1", "attempt-x"), original.replace("_c01_master", "_c02_master"),
+                    "../" + original, original.replace("out/", "out/./", 1), original.replace("out/", "out//", 1)]
+        for reference in variants:
+            design["scorecard_md"] = reference
+            with self.subTest(reference=reference), self.assertRaisesRegex(ValueError, "[Ss]corecard"):
+                w319_audit.audit_payloads(*self.payloads())
+
+    def test_absolute_original_references_need_no_original_files(self):
+        for design in self.docs["leaderboard.json"]["designs"]:
+            design["scorecard_md"] = "/original/checkout/" + design["scorecard_md"]
+        self.assertEqual(w319_audit.audit_payloads(*self.payloads())["verified_files"], 10)
+
+    def test_unreferenced_or_missing_attempt_is_rejected(self):
+        key = next(iter(self.cards))
+        self.cards[key.replace("attempt-1", "attempt-99")] = self.cards.pop(key)
+        with self.assertRaisesRegex(ValueError, "Missing or reused assessed scorecard"):
+            w319_audit.audit_payloads(*self.payloads())
+
+    def test_strict_json_duplicate_keys_fail_after_valid_digest(self):
+        payloads, pins = self.payloads()
+        data = b'{"schema":"one","schema":"two"}'
+        payloads["leaderboard.json"] = data
+        pins["leaderboard.json"] = (hashlib.sha256(data).hexdigest(), len(data))
+        with self.assertRaisesRegex(ValueError, "Duplicate"):
+            w319_audit.audit_payloads(payloads, pins)
+
+    def test_relocated_cli_reads_only_ten_pinned_files_without_git(self):
+        payloads, pins = self.payloads()
+        directory = Path("/synthetic/relocated/w319")
+        reads, output = [], io.StringIO()
+
+        def read(path):
+            key = str(path.relative_to(directory))
+            reads.append(key)
+            return payloads[key]
+
+        with patch.object(Path, "read_bytes", new=read), patch.object(w319_audit, "PINS", pins), \
+                patch.object(wave_audit, "default_wave_directory", side_effect=AssertionError("Unexpected Git access")), \
+                patch.object(sys, "argv", ["audit_phase14_w319_receipts.py", "--wave-dir", str(directory)]), \
+                redirect_stdout(output):
+            w319_audit.main()
+        self.assertEqual(len(reads), 20)
+        self.assertEqual(set(reads), set(payloads))
+        self.assertIn("10 pinned file digests", output.getvalue())
+        self.assertIn("qualified_count=0; champion=null", output.getvalue())
+
+    def test_mutating_snapshot_and_unsafe_pin_paths_fail(self):
+        payloads, pins = self.payloads()
+        directory, reads = Path("/synthetic/w319"), {}
+
+        def read(path):
+            key = str(path.relative_to(directory))
+            reads[key] = reads.get(key, 0) + 1
+            return payloads[key] + (b" " if reads[key] > 1 else b"")
+
+        with patch.object(Path, "read_bytes", new=read), self.assertRaisesRegex(ValueError, "changed during audit"):
+            w319_audit.audit_directory(directory, pins)
+        with patch.object(Path, "read_bytes") as read_mock, self.assertRaisesRegex(ValueError, "Invalid pinned artifact path"):
+            w319_audit.audit_directory(directory, {"../outside": ("a" * 64, 0)})
+        read_mock.assert_not_called()
 
 
 if __name__ == "__main__":

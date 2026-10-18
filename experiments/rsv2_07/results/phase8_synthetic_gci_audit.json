@@ -2635,6 +2635,7 @@
     "experiments/rsv2_07/PHASE11_WAVE_RECEIPT_AUDIT.md": "951fbbe7b821d1c27c96239490991631ab1cd4630c3c13a9bfb75aab7665968d",
     "experiments/rsv2_07/PHASE12_CROSS_WAVE_PROVENANCE_AUDIT.md": "3bcd1a0a14f687dc3d513a8cb584b402846e2a6093613a78a6f656f0ce8ea8d3",
     "experiments/rsv2_07/PHASE13_STAGE1_SCREEN_TRAJECTORY_AUDIT.md": "c49c3f58164fffa46abe72f2d8901fab78dfcd78932bf5be6620d3fbfc34682c",
+    "experiments/rsv2_07/PHASE14_W319_WAVE_RECEIPT_AUDIT.md": "a4c203d49dc1279e3c713280e146e1e2f5840b98021a8dfd312583291158e696",
     "experiments/rsv2_07/PHASE5_WITNESS_3D_VERIFICATION.md": "9f3fa6c59aad71708143b5a469de23301fe8f9aa5e7d8d3750f637de8e729624",
     "experiments/rsv2_07/PHASE6_UNIFIED_SCORECARD.md": "a425b66d675208c7fffa17e075605bcfbddd234f82456422c1b5d99783799e30",
     "experiments/rsv2_07/PHASE7_SAVED_TRIPLET_GCI_AUDIT.md": "cc945cb4a6f61f147b7f6cadf52ae100c3d66373526a6f0d02d3da7f50fa620b",
@@ -2644,6 +2645,7 @@
     "experiments/rsv2_07/audit_phase11_wave_receipts.py": "f3a2d0acaa31981ac2465b4f80ee88bb1c1ccbcee2eb59d4161b1a9f61ebe9c2",
     "experiments/rsv2_07/audit_phase12_cross_wave.py": "c52ac6cb4be0cb982c439c7e6433d6c647c1c90e053b40e93114a3a22bc6c3c7",
     "experiments/rsv2_07/audit_phase13_screen_rounds.py": "7fd0115921247483461e86288c4cc11ef5efe21c5e7df85560486ebe2e893b7c",
+    "experiments/rsv2_07/audit_phase14_w319_receipts.py": "36a3ee7242f3723122eb44cb6ec52d99b2f3ed06e0d6ba1ed37d62eac89fb175",
     "experiments/rsv2_07/audit_phase6.py": "57a9d5aca837e6f3704d23b1c90d902523ef89d560d27ed97a7f28647e66b196",
     "experiments/rsv2_07/audit_phase7.py": "d6a83f15674f9083a4a9b3995293ac8e24768a20a9adb3f719df4f6abd91ec27",
     "experiments/rsv2_07/audit_phase8.py": "93afb9761faabd94f37b11070e7aadef8ff4d7167d2dbf37b536827508471515",
@@ -2682,7 +2684,7 @@
     "experiments/rsv2_07/results/fine_2.csv": "0faa6b50e7ef8b470f0bd69414b3c768a42d93a39a7d2d0ccbe1159eb641e760",
     "experiments/rsv2_07/results/gci_a4_validation.json": "97b37a3e0e2bf324c88025976c4e2ca51383da00bd0d62789d95effe8e3f04f4",
     "experiments/rsv2_07/results/hotspot_fine_0.csv": "8725e87ca6d4d2d1b254cd1502bfab276bb355d6da1620f7b7388aa4d33198a9",
-    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": "093ac1a1871720ac04cfb436847c04f21b50fea5e4c4787b3c426651ec291a47",
+    "experiments/rsv2_07/results/phase10_portable_receipt_manifest.json": "86769f034ace43b33f408e5e9b38bcd4a6f035754f11e42a35d76bf5ee675d17",
     "experiments/rsv2_07/results/phase5_witness_3d_validation.json": "66f3b5112bf1122ddd49fa3c1ad66384d810ee177494b0143233fdf7a895e80a",
     "experiments/rsv2_07/results/phase6_Q7_window_p05.csv": "0055f1b7048fdd66dfc995b7d2e35b2a2e632628d4b3dcd68f6811afc6f9bacc",
     "experiments/rsv2_07/results/phase6_unified_scorecard.json": "5d301a3b33afdd8470441c0094f79e47915f8f9e1161af035b90ac37223f7dd7",
@@ -2694,7 +2696,7 @@
     "experiments/rsv2_07/solid_tip_3d_p4.py": "b7118433b0ad10d9e2e6aae48e3a59c5cbbd3acec9b7cd578cb62a6bb8e213e8",
     "experiments/rsv2_07/solid_tip_3d_p5.py": "bc261152ad457329cf2cbb839f0f30ffe877b5f56028456f33e1f3a13b719c79",
     "experiments/rsv2_07/solid_tip_input.rs": "1a60d621c703d85d27a43370216a74e054416489f9dc243142179122e4dbbde8",
-    "experiments/rsv2_07/test_portable_audits.py": "ab6f78a8c4a0725af4ff35e1bfec425ff8b3012534380bf9bc72882eb479324b",
+    "experiments/rsv2_07/test_portable_audits.py": "24474a10f47be87ddb9dfcfff2ebc3081cdbbf8a341367accfe28549afc07f08",
     "experiments/rsv2_07/web.py": "d4f8f01791f4b84c3383f33f279944c06a3fe32bf21034c3a686f566fcc04d9a"
   },
   "portability": {
@@ -2739,5 +2741,10 @@
     "task": "RSV2-07-p13",
     "reason": "Bind Stage-1 artifact integrity audit, scoped report and synthetic tests",
     "strict_study_files": 66
+  },
+  "phase14_manifest_refresh": {
+    "task": "RSV2-07-p14",
+    "reason": "Bind w319 receipt integrity verifier, report and updated synthetic tests",
+    "strict_study_files": 68
   }
 }
