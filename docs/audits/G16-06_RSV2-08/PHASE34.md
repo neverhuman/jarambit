@@ -52,3 +52,17 @@ full qualification false and engineering qualification unassessed. No gate or
 threshold changes. Baseline `2085d27`; CPUs 12,13, nice -n 10 (effective nice 19),
 CARGO_BUILD_JOBS=2. This agent does not commit or push. COMMS.md is unchanged.
 New summary/report literal host-path counts are zero.
+
+Validation result: combined portable verifier PASS; 89/89 verifier tests and
+79/79 historical tests pass. The cumulative index contains 19 pairs, 38 files,
+1,146,330 bytes and 33,340 lines. Its canonical file-index SHA-256 is
+`eb9ea9cbe88c3c002d1c5158240dc677abba2c729fca3b066ef15047c82985aa`.
+The 64-file relocated read-only fixture passes. The separate path audit retains
+21 failures and exits 1; it has not been relaxed by summary verification.
+Source AST metadata records 33 check functions, 15 verification entry points,
+47 raises, zero asserts and 89 tests in 14 classes; source bytes total 118,222.
+Ten prior receipts match baseline bytes; structural checks prove metadata-only
+refreshes and unchanged historical evidence. COMMS bytes/SHA-256, gates and
+thresholds are unchanged. Whitespace and new-output host-path scans pass.
+Evidence is under `target/G16-06-RSV2-08/phase35/`.
+Another process committed task files as `c742b8f` during validation; this agent did not commit or push. Final validation notes remain uncommitted.
