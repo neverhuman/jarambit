@@ -20,10 +20,10 @@ AUDIT_BYTES = 15527  # Filled from the reviewed document, never refreshed by tes
 AUDIT_TABLE_COUNT = 6
 AUDIT_SCHEMA_SHA256 = "42212ab2618b5be7937ca24f7b0662d57de18a7602d75acecb7a12124c8b26df"
 SCHEMA_AUDIT_PATH = REPORT_DIR / "SYNTHETIC_MEASUREMENT_SCHEMA_AUDIT.md"
-SCHEMA_AUDIT_SHA256 = "SCHEMA_AUDIT_FILE_DIGEST"
-SCHEMA_AUDIT_BYTES = 0
-SCHEMA_AUDIT_TABLE_COUNT = 0
-SCHEMA_AUDIT_TABLE_SHA256 = "SCHEMA_AUDIT_TABLE_DIGEST"
+SCHEMA_AUDIT_SHA256 = "3325da4829c9f2e7969d938e1e7d492879ae457770d842c56ab81c50daa6a50f"
+SCHEMA_AUDIT_BYTES = 17098
+SCHEMA_AUDIT_TABLE_COUNT = 6
+SCHEMA_AUDIT_TABLE_SHA256 = "3da8be6624495207947af638fd701ad831223ef6d11d3945aa4f8ab0f5c5edd8"
 JSON_HEADER = ["Artifact path", "Bytes", "SHA-256", "JSON shape SHA-256", "Host-prefix occurrences", "Root type"]
 FORBIDDEN_HOME = "/home/ubuntu"
 AUDIT_SOURCES = (
@@ -418,7 +418,9 @@ class ReportProvenanceTests(unittest.TestCase):
 
     def test_tracked_json_have_zero_forbidden_home_paths(self):
         findings = {path: count for path, count in verify_schema_audit(ROOT).items() if count}
-        self.assertFalse(findings, f"Non-portable historical JSON files ({len(findings)}): {findings}")
+        self.assertEqual(len(findings), 0,
+                         f"{len(findings)} archived JSON files contain {sum(findings.values())} "
+                         f"forbidden-prefix occurrences; see {SCHEMA_AUDIT_PATH}")
 
     def test_schema_audit_is_portable_without_git(self):
         self.assertEqual(len(verify_schema_audit(self.schema_snapshot())), 37)
