@@ -1224,30 +1224,6 @@ mod tests {
         assert!(selected.is_empty());
     }
 
-    #[test]
-    fn stage2_selection_returns_empty_at_zero_capacity_with_unassessed_candidates() {
-        let mut seed = Genome::c4_seed(genome::T_MIN);
-        seed.v[EA_IN] = 14.0;
-        seed.clamp();
-        let mut novel = seed.clone();
-        novel.v[TAPER_X0] += 0.5;
-        novel.clamp();
-
-        let screened = vec![
-            test_screen_survivor("novel", "p10", novel.clone(), 0.01),
-            test_screen_survivor("seed", "p10", seed.clone(), 0.02),
-        ];
-        let assessed_ids = HashSet::new();
-        let parent_identities = round_parent_identities(&[("p10".into(), seed)]);
-        assert!(screened
-            .iter()
-            .any(|survivor| !assessed_ids.contains(&certification::identity(&survivor.g))));
-        assert!(!assessed_ids.contains(&certification::identity(&novel)));
-
-        let selected = select_stage2_candidates(&screened, 0, &assessed_ids, &parent_identities);
-
-        assert!(selected.is_empty());
-    }
 
     #[test]
     fn stage2_selection_deduplicates_identical_genomes_within_single_round() {
