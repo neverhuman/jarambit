@@ -1206,6 +1206,53 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_skips_carried_forward_round1_elites_until_fallback() {
+        let mut initial_seed = Genome::c4_seed(genome::T_MIN);
+        initial_seed.v[EA_IN] = 14.0;
+        initial_seed.clamp();
+        let initial_elites = vec![("p10".into(), initial_seed.clone())];
+        let mut parent_identities = round_parent_identities(&initial_elites);
+
+        let mut round0_genome = initial_seed.clone();
+        round0_genome.v[EA_SP] += 0.25;
+        round0_genome.clamp();
+        let round0_survivors = vec![test_screen_survivor(
+            "round0_mutation",
+            "p10",
+            round0_genome.clone(),
+            0.02,
+        )];
+        let round1_elites = replacement_elites(
+            std::iter::empty(),
+            &round0_survivors,
+            &initial_elites,
+        );
+        assert_eq!(round1_elites.len(), 1);
+        assert_eq!(round1_elites[0].1, round0_genome);
+        parent_identities.extend(round_parent_identities(&round1_elites));
+
+        let mut round1_novel = round1_elites[0].1.clone();
+        round1_novel.v[TAPER_X0] += 0.5;
+        round1_novel.clamp();
+        let round1_survivors = vec![
+            test_screen_survivor("carried_round1_elite", "p10", round1_elites[0].1.clone(), 0.01),
+            test_screen_survivor("round1_novel", "p10", round1_novel.clone(), 0.02),
+        ];
+
+        assert!(parent_identities.contains(&certification::identity(&round1_elites[0].1)));
+        let selected = select_stage2_candidates(
+            &round1_survivors,
+            1,
+            &HashSet::new(),
+            &parent_identities,
+        );
+
+        assert_eq!(selected.len(), 1);
+        assert_eq!(selected[0].label, "round1_novel");
+        assert_eq!(selected[0].g, round1_novel);
+    }
+
+    #[test]
     fn round_parent_identities_includes_carried_forward_and_clamped_parents() {
         let mut carried = Genome::c4_seed(genome::T_MIN);
         carried.v[EA_IN] = 14.0;
