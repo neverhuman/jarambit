@@ -65,5 +65,6 @@ jobs:
           command -v rustc
           cargo --version
           rustc --version
-          cargo test --locked -p jarambit-runner-policy
-          cargo run --locked -p jarambit-runner-policy
+          export CARGO_TARGET_DIR="${GITHUB_WORKSPACE}/target"
+          cargo test --locked --manifest-path crates/runner-policy/Cargo.toml
+          cargo run --locked --manifest-path crates/runner-policy/Cargo.toml
