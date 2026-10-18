@@ -31,6 +31,10 @@ SUMMARY_PATHS = tuple(sorted((REPORT, RECEIPT, DIGEST_REPORT, DIGEST_RECEIPT,
                               SCRIPT_REPORT, SCRIPT_RECEIPT, CROSS_REPORT, CROSS_RECEIPT)))
 MANIFEST_CROSS_RECEIPT = DIRECTORY + "phase31_manifest_cross_check_audit.json"
 MANIFEST_CROSS_REPORT = DIRECTORY + "PHASE31_MANIFEST_CROSS_CHECK_AUDIT.md"
+CUMULATIVE_RECEIPT = DIRECTORY + "phase32_cumulative_receipt_table_audit.json"
+CUMULATIVE_REPORT = DIRECTORY + "PHASE32_CUMULATIVE_RECEIPT_TABLE_AUDIT.md"
+CUMULATIVE_PATHS = tuple(sorted((*SUMMARY_PATHS, SUMMARY_REPORT, SUMMARY_RECEIPT,
+                                 MANIFEST_CROSS_REPORT, MANIFEST_CROSS_RECEIPT)))
 # Absolute POSIX paths, Windows drive paths, UNC paths and file URIs.
 HOST_PATH = re.compile(r"(?<![\w./:])/(?!/)[\w.~-]+|(?<!\w)[A-Za-z]:[\\/]|\\\\[^\\\s]+\\|file://")
 
@@ -344,10 +348,10 @@ def run_cross(args):
     return 0
 
 
-def summary_manifest(repo_root):
+def artifact_inventory(repo_root, names):
     repo_root = Path(repo_root)
     sources, artifacts = {}, {}
-    for name in SUMMARY_PATHS:
+    for name in names:
         path = repo_root / name
         require(stat.S_ISREG(path.lstat().st_mode), f"Expected regular summary source: {name}")
         data = path.read_bytes()
@@ -362,6 +366,11 @@ def summary_manifest(repo_root):
         path = repo_root / name
         require(stat.S_ISREG(path.lstat().st_mode) and path.read_bytes() == data,
                 "Summary source bytes or type changed during audit")
+    return artifacts
+
+
+def summary_manifest(repo_root):
+    artifacts = artifact_inventory(repo_root, SUMMARY_PATHS)
     return {"schema": "jarambit.rsv2_07_hm.phase30_summary_manifest.v1", "task": "RSV2-07-p30",
             "status": "pass", "phases": [26, 27, 28, 29], "artifact_count": len(artifacts),
             "digest_basis": "exact working-tree bytes of the eight named Phase-26 through Phase-29 outputs",
@@ -513,6 +522,53 @@ def run_manifest_cross(args):
     return 0
 
 
+def cumulative_receipt_table(repo_root):
+    artifacts = artifact_inventory(repo_root, CUMULATIVE_PATHS)
+    return {"schema": "jarambit.rsv2_07_hm.phase32_cumulative_receipt_table.v1", "task": "RSV2-07-p32",
+            "status": "pass", "phases": [26, 27, 28, 29, 30, 31], "artifact_count": len(artifacts),
+            "digest_basis": "exact working-tree bytes of the twelve named Phase-26 through Phase-31 outputs",
+            "line_count_rule": "LF-delimited physical lines including an unterminated final line; empty file has zero lines",
+            "total_size_bytes": sum(row["size_bytes"] for row in artifacts.values()),
+            "total_line_count": sum(row["line_count"] for row in artifacts.values()),
+            "literal_host_path_count": 0, "artifacts": artifacts}
+
+
+def render_cumulative(document):
+    rows = [f"| {name} | {row['size_bytes']} | {row['line_count']} | {row['sha256']} | {row['literal_host_path_count']} |"
+            for name, row in document["artifacts"].items()]
+    return "\n".join([
+        "# Phase-32 cumulative receipt table audit", "",
+        f"**PASS for the artifact inventory.** Indexed {document['artifact_count']} Phase-26 through Phase-31 Markdown and JSON files, totaling {document['total_size_bytes']} bytes and {document['total_line_count']} lines. Literal host paths: 0.", "",
+        "| Repository-relative artifact | Bytes | Lines | SHA-256 | Literal host paths |",
+        "| --- | ---: | ---: | --- | ---: |", *rows, "",
+        "The input set is the fixed twelve named report and receipt files from Phases 26 through 31, sorted by relative path. Hashes and sizes describe exact working-tree bytes. Lines are counted by LF delimiters, plus an unterminated final line; an empty file has zero lines. CRLF is one line ending, and Unicode line separators do not add physical lines. Phase-32 outputs, source scripts and other files are outside this cumulative table.", "",
+        "All inputs must be regular UTF-8 files. JSON is parsed strictly, rejecting duplicate keys and nonfinite numbers. Literal absolute host paths are rejected in raw text and decoded JSON strings. Source bytes and file types are checked again after scanning. This is an inventory of saved artifacts; earlier audit conclusions are preserved, including Phase 26's partial lineage result and Phase 29's snapshot-only parity. Earlier audits are not rerun by this command.", "",
+        "Persisted paths are repository-relative. --repo-root selects a relocated source tree without Git. Normal verification compares the complete saved JSON table and exact report text without writes; --write replaces only the two Phase-32 outputs. Earlier reports and receipts are preserved.", "",
+        "```sh", "python3 scripts/audit_rsv2_07_hm_forensics.py --phase 32",
+        "python3 -m unittest discover -s scripts -p 'test_audit_rsv2_07_hm_forensics.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs 14,15 at nice 10. This is a static cumulative receipt table audit. Changes are left uncommitted.", "",
+    ])
+
+
+def run_cumulative(args):
+    require(args.artifact_root is None, "Phase-32 uses saved outputs in --repo-root; --artifact-root is not supported")
+    current = cumulative_receipt_table(args.repo_root)
+    report = render_cumulative(current)
+    receipt = json.dumps(current, indent=2) + "\n"
+    require_portable(report, "Phase-32 report")
+    require_portable(receipt, "Phase-32 receipt")
+    if args.write:
+        (args.repo_root / DIRECTORY).mkdir(parents=True, exist_ok=True)
+        (args.repo_root / CUMULATIVE_RECEIPT).write_text(receipt, encoding="utf-8")
+        (args.repo_root / CUMULATIVE_REPORT).write_text(report, encoding="utf-8")
+    else:
+        saved = strict_json((args.repo_root / CUMULATIVE_RECEIPT).read_bytes())
+        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-32 saved receipt mismatch")
+        require((args.repo_root / CUMULATIVE_REPORT).read_text(encoding="utf-8") == report, "Phase-32 report mismatch")
+    print(f"LANE: RSV2-07-hm | RSV2-07-p32 | PASS | artifacts={current['artifact_count']} | literal_host_paths=0")
+    return 0
+
+
 def audit(artifact_root):
     artifact_root = Path(artifact_root)
     sources, waves = {}, {}
@@ -563,11 +619,13 @@ def render(document):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31"), default="26")
+    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32"), default="26")
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     try:
+        if args.phase == "32":
+            return run_cumulative(args)
         if args.phase == "31":
             return run_manifest_cross(args)
         if args.phase == "30":

@@ -833,5 +833,127 @@ class ManifestCrossCheckTests(unittest.TestCase):
         self.assertEqual(error.exception.code, 1)
 
 
+class CumulativeReceiptTableTests(unittest.TestCase):
+    def setUp(self):
+        scratch = Path(__file__).resolve().parents[1] / "target/rsv2-07/phase32/test-fixtures"
+        scratch.mkdir(parents=True, exist_ok=True)
+        temporary = tempfile.TemporaryDirectory(prefix="cumulative-", dir=scratch)
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.files = {name: b'{"status":"partial"}\n' if name.endswith(".json") else "# Saved α\r\nSecond line\nFinal line".encode()
+                      for name in audit.CUMULATIVE_PATHS}
+        for name, data in self.files.items():
+            self.write(name, data)
+
+    def write(self, name, data):
+        path = self.root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+
+    def cli(self, *extra):
+        with patch.object(sys, "argv", ["forensics", "--phase", "32", "--repo-root", str(self.root), *extra]), \
+                redirect_stdout(io.StringIO()) as output:
+            result = audit.main()
+        return result, output.getvalue()
+
+    def test_exact_twelve_files_hashes_sizes_and_line_totals_are_deterministic(self):
+        current = audit.cumulative_receipt_table(self.root)
+        self.assertEqual(current["phases"], list(range(26, 32)))
+        self.assertEqual(current["artifact_count"], 12)
+        self.assertEqual(list(current["artifacts"]), sorted(self.files))
+        self.assertEqual(current["total_size_bytes"], sum(map(len, self.files.values())))
+        self.assertEqual(current["total_line_count"], 24)
+        for phase in range(26, 32):
+            self.assertEqual(sum(Path(name).name[5:7] == str(phase) for name in current["artifacts"]), 2)
+        for name, data in self.files.items():
+            self.assertEqual(current["artifacts"][name], {"sha256": hashlib.sha256(data).hexdigest(),
+                "size_bytes": len(data), "line_count": 1 if name.endswith(".json") else 3, "literal_host_path_count": 0})
+        self.assertEqual(current, audit.cumulative_receipt_table(self.root))
+        self.assertNotIn(str(self.root), json.dumps(current))
+
+    def test_phase31_line_counts_handle_empty_crlf_and_unterminated_lines(self):
+        for data, expected in ((b"", 0), (b"one", 1), (b"one\n", 1), (b"one\n\n", 2),
+                               (b"a\r\nb\r\n", 2), ("a\u2028b".encode(), 1)):
+            self.write(audit.MANIFEST_CROSS_REPORT, data)
+            with self.subTest(data=data):
+                row = audit.cumulative_receipt_table(self.root)["artifacts"][audit.MANIFEST_CROSS_REPORT]
+                self.assertEqual(row["line_count"], expected)
+
+    def test_own_outputs_other_phases_and_scripts_are_excluded(self):
+        before = audit.cumulative_receipt_table(self.root)
+        for name in (audit.CUMULATIVE_REPORT, audit.CUMULATIVE_RECEIPT, audit.DIRECTORY + "PHASE25_OTHER.md", audit.SCRIPT_PATHS[0]):
+            self.write(name, b"outside scope, not JSON")
+        self.assertEqual(audit.cumulative_receipt_table(self.root), before)
+
+    def test_invalid_utf8_and_strict_json_errors_in_phase31_fail(self):
+        for data in (b"\xff", b'{"x":1,"x":2}', b'{"x":NaN}', b'{"x":1e999}', b"{broken}"):
+            self.write(audit.MANIFEST_CROSS_RECEIPT, data)
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                audit.cumulative_receipt_table(self.root)
+
+    def test_host_paths_in_phase31_raw_and_escaped_text_fail(self):
+        for data in (b"saved path: /home/example/file", b"saved path: /data/file", b"saved path: C:\\Users\\example\\file"):
+            self.write(audit.MANIFEST_CROSS_REPORT, data)
+            with self.subTest(data=data), self.assertRaisesRegex(ValueError, "Literal host path"):
+                audit.cumulative_receipt_table(self.root)
+        self.write(audit.MANIFEST_CROSS_REPORT, self.files[audit.MANIFEST_CROSS_REPORT])
+        self.write(audit.MANIFEST_CROSS_RECEIPT, b'{"source":"\\u002fhome\\u002fexample\\u002ffile"}')
+        with self.assertRaisesRegex(ValueError, "Literal host path"):
+            audit.cumulative_receipt_table(self.root)
+
+    def test_missing_or_symlinked_phase31_source_fails(self):
+        path = self.root / audit.MANIFEST_CROSS_REPORT
+        path.unlink()
+        with self.assertRaises(FileNotFoundError):
+            audit.cumulative_receipt_table(self.root)
+        path.symlink_to(Path(audit.MANIFEST_CROSS_RECEIPT).name)
+        with self.assertRaisesRegex(ValueError, "regular summary source"):
+            audit.cumulative_receipt_table(self.root)
+
+    def test_phase31_mutation_during_scan_fails(self):
+        original_read = Path.read_bytes
+        changed = False
+        def read(path):
+            nonlocal changed
+            data = original_read(path)
+            if path == self.root / audit.MANIFEST_CROSS_RECEIPT and not changed:
+                changed = True
+                path.write_bytes(data + b"\n")
+            return data
+        with patch.object(Path, "read_bytes", new=read), self.assertRaisesRegex(ValueError, "changed during audit"):
+            audit.cumulative_receipt_table(self.root)
+
+    def test_cli_preserves_sources_verifies_without_git_and_rejects_tampering(self):
+        with patch.object(audit.subprocess, "check_output", side_effect=AssertionError("Unexpected Git command")):
+            result, output = self.cli("--write")
+            self.assertEqual(result, 0)
+            self.assertIn("LANE: RSV2-07-hm | RSV2-07-p32 | PASS | artifacts=12 | literal_host_paths=0", output)
+            expected = set(self.files) | {audit.CUMULATIVE_REPORT, audit.CUMULATIVE_RECEIPT}
+            self.assertEqual({path.relative_to(self.root).as_posix() for path in self.root.rglob("*") if path.is_file()}, expected)
+            for name, data in self.files.items():
+                self.assertEqual((self.root / name).read_bytes(), data)
+            with patch.object(Path, "write_text", side_effect=AssertionError("Readonly audit wrote")):
+                self.assertEqual(self.cli()[0], 0)
+            receipt = self.root / audit.CUMULATIVE_RECEIPT
+            original = receipt.read_bytes()
+            for field, value in (("sha256", "0" * 64), ("size_bytes", 0), ("line_count", 0), ("literal_host_path_count", False)):
+                saved = json.loads(original)
+                saved["artifacts"][audit.MANIFEST_CROSS_REPORT][field] = value
+                receipt.write_text(json.dumps(saved))
+                with self.subTest(field=field), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                    self.cli()
+                self.assertEqual(error.exception.code, 1)
+            receipt.write_bytes(original)
+            self.write(audit.CUMULATIVE_REPORT, b"changed report\n")
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                self.cli()
+            self.assertEqual(error.exception.code, 1)
+
+    def test_artifact_root_is_rejected_for_cumulative_table(self):
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli("--artifact-root", str(self.root))
+        self.assertEqual(error.exception.code, 1)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
