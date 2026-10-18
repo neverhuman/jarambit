@@ -1,0 +1,3330 @@
+{
+  "task": "G16-06-RSV2-08-p20",
+  "study_phase": 19,
+  "qualified_count": 0,
+  "full_qualification": false,
+  "recorded_values_consistent": true,
+  "all_phase_versions_fully_pinned": false,
+  "missing_evidence": [
+    "meshio version not recorded",
+    "Python versions absent before Phase15",
+    "Phase7/8 receipts name faer without Cargo.lock version binding",
+    "Phase12/16/17/18 summaries establish no new runtime environment"
+  ],
+  "faer_lock_version": "0.24.4",
+  "expected_primary_solid_settings": {
+    "R_CUT": 30.0,
+    "NL": 4,
+    "NSUB": 1,
+    "PATCH_mm": 2.0,
+    "T_Nmm": 1820.0
+  },
+  "input_sha256": {
+    "Cargo.lock": "a7d57f542f3233c99e86bd0973f79ea894ce007c982fddf9bd5a30414035e41b",
+    "experiments/G16-06-RSV2-08/phase7_receipt.json": "71e751199151a99c61058625d55ad2358485e69e308b101d383b16b7ec8cee4a",
+    "experiments/G16-06-RSV2-08/phase8_receipt.json": "fecbe9932bfb8d905b38ca87bba137dfd39fcd8c585519e3eabb006c89167b44",
+    "experiments/g16-06-rsv2-08/phase9_receipt.json": "cc111ae884ad1f800cbda88491d57d420ead06bb75f12bcbee318ef80287d516",
+    "experiments/g16-06-rsv2-08/phase10_receipt.json": "42ddc1663327794b71578d05fdaed678d0daac97e86dfbb8d4b0c4033fb92615",
+    "experiments/g16-06-rsv2-08/phase11_receipt.json": "26809af6faab94b759bdabad0b3dafe68bf8aaae5068b1276ee35bdd0ffe5d48",
+    "experiments/g16-06-rsv2-08/phase12_receipt.json": "43457e945f9d4071ad02dbf48003755af889481309c06e5f0828895b3639639a",
+    "experiments/g16-06-rsv2-08/phase13_receipt.json": "26591423f6dad3332509295a7c97e2aa2ff3d140f274e52751e108fcb675288d",
+    "experiments/g16-06-rsv2-08/phase14_receipt.json": "50773824742898a463ebb46954ed8d3ebd456a50900f1761378fb3483d833a81",
+    "experiments/G16-06-RSV2-08/phase15_gate_s_compliant_joint_audit.json": "205a359a7e9f1cd7065b5a35da7b1491fa6a37356a6e20473c4fff9451bfd51d",
+    "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot8_seed1_plate.json": "be80a8291c7d63f6dbfdb7db0b93f0350b702a04c8d6f3d019161ea52a32cd42",
+    "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot8_seed1_solid.json": "0a3a1436344b042bc7042c699f8530f3053ae5b025917feffc75d5e6b7ded429",
+    "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot10_seed1_plate.json": "817a71a78e3594b9fdd362179219c447215945142c0c3ff6183852540ccc629f",
+    "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot10_seed1_solid.json": "854424b55a5f6898df9eeb0256cb90cc58cb599ec368594b68a5bfecee8d9f0a",
+    "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot11_seed1_plate.json": "17281528c48d4f1fee32a00b582c0908e0ad084e011ef44a1842f76ce85a177a",
+    "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot11_seed1_solid.json": "a533deed272e78ab57070fc3768653d3be853b36059dcd29b92164a724a611d7",
+    "experiments/G16-06-RSV2-08/phase16_cross_phase_provenance_index.json": "34f93fd138eacbe2be39690febb26478b443f22ecb75bbd87734e4daab465120",
+    "experiments/G16-06-RSV2-08/phase17_legacy_path_inventory.json": "9d2d21d0d3c89be4ef84089b1548ca6dd9d21f65af43b5930820437c96c6ad15",
+    "experiments/G16-06-RSV2-08/phase18_complete_study_manifest.json": "1b5c2d6deb189b419d330d8166e0f20a0fb9f92c12f73b01e0bf3d369e3b7a52"
+  },
+  "phases": [
+    {
+      "phase": 7,
+      "receipt": "experiments/G16-06-RSV2-08/phase7_receipt.json",
+      "execution_scope": "measurement receipt",
+      "native_solver_observations": [
+        {
+          "keypath": [
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            0,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            1,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            2,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            3,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            3,
+            "a4",
+            "solver"
+          ],
+          "value": "native side_a4 faer sparse Cholesky / K-orthogonal Lanczos",
+          "role": "native side-A4"
+        },
+        {
+          "keypath": [
+            "results",
+            4,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            5,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            6,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            7,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            8,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            9,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            10,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            11,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            11,
+            "a4",
+            "solver"
+          ],
+          "value": "native side_a4 faer sparse Cholesky / K-orthogonal Lanczos",
+          "role": "native side-A4"
+        },
+        {
+          "keypath": [
+            "results",
+            12,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            13,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            14,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            15,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            16,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            17,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            18,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            19,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            20,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            21,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            22,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            23,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            24,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            25,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            26,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            27,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            28,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            29,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            30,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            31,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            32,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            33,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            34,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            35,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            36,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            37,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            38,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            38,
+            "a4",
+            "solver"
+          ],
+          "value": "native side_a4 faer sparse Cholesky / K-orthogonal Lanczos",
+          "role": "native side-A4"
+        },
+        {
+          "keypath": [
+            "results",
+            39,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            40,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            41,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            42,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            43,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            44,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            45,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            46,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            47,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            47,
+            "a4",
+            "solver"
+          ],
+          "value": "native side_a4 faer sparse Cholesky / K-orthogonal Lanczos",
+          "role": "native side-A4"
+        },
+        {
+          "keypath": [
+            "results",
+            48,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            49,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            50,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            51,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            52,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            53,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            54,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            55,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            56,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            56,
+            "a4",
+            "solver"
+          ],
+          "value": "native side_a4 faer sparse Cholesky / K-orthogonal Lanczos",
+          "role": "native side-A4"
+        },
+        {
+          "keypath": [
+            "results",
+            57,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            58,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            59,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            60,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            61,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            62,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            63,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            64,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            65,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            66,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            67,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            68,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            69,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            70,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            71,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            72,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            73,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            74,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            74,
+            "a4",
+            "solver"
+          ],
+          "value": "native side_a4 faer sparse Cholesky / K-orthogonal Lanczos",
+          "role": "native side-A4"
+        },
+        {
+          "keypath": [
+            "results",
+            75,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            76,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            77,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            78,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            79,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            80,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            81,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            82,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            83,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            83,
+            "a4",
+            "solver"
+          ],
+          "value": "native side_a4 faer sparse Cholesky / K-orthogonal Lanczos",
+          "role": "native side-A4"
+        },
+        {
+          "keypath": [
+            "results",
+            84,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            85,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            86,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            87,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            88,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            89,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            90,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            91,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            92,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            92,
+            "a4",
+            "solver"
+          ],
+          "value": "native side_a4 faer sparse Cholesky / K-orthogonal Lanczos",
+          "role": "native side-A4"
+        },
+        {
+          "keypath": [
+            "results",
+            93,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            94,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            95,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            96,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            97,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            98,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            99,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            100,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            101,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            102,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            103,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            104,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            105,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            106,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            107,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            108,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            109,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            110,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            110,
+            "a4",
+            "solver"
+          ],
+          "value": "native side_a4 faer sparse Cholesky / K-orthogonal Lanczos",
+          "role": "native side-A4"
+        },
+        {
+          "keypath": [
+            "results",
+            111,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            112,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            113,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            114,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            115,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            116,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            117,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            118,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            119,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            119,
+            "a4",
+            "solver"
+          ],
+          "value": "native side_a4 faer sparse Cholesky / K-orthogonal Lanczos",
+          "role": "native side-A4"
+        },
+        {
+          "keypath": [
+            "results",
+            120,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            121,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            122,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            123,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            124,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            125,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            126,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            127,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            128,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            129,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            130,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            131,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            132,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            133,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            134,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            135,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            136,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            137,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            138,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            139,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            140,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            141,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            142,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            143,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "law_effect_controls",
+            0,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "law_effect_controls",
+            1,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "law_effect_controls",
+            2,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        }
+      ],
+      "native_solver_status": "recorded faer",
+      "faer_version": null,
+      "faer_version_basis": "no lockfile binding in this receipt",
+      "package_versions": {
+        "scikit-fem": null,
+        "scipy": null,
+        "numpy": null,
+        "meshio": null
+      },
+      "package_version_observations": [],
+      "primary_solids": [],
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 8,
+      "receipt": "experiments/G16-06-RSV2-08/phase8_receipt.json",
+      "execution_scope": "measurement receipt",
+      "native_solver_observations": [
+        {
+          "keypath": [
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            0,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            1,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            2,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            3,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            4,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            5,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            5,
+            "a4",
+            "solver"
+          ],
+          "value": "native side_a4 faer sparse Cholesky / K-orthogonal Lanczos",
+          "role": "native side-A4"
+        },
+        {
+          "keypath": [
+            "results",
+            6,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            7,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            8,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            9,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            10,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            11,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            11,
+            "a4",
+            "solver"
+          ],
+          "value": "native side_a4 faer sparse Cholesky / K-orthogonal Lanczos",
+          "role": "native side-A4"
+        },
+        {
+          "keypath": [
+            "replay_controls",
+            0,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "replay_controls",
+            1,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        }
+      ],
+      "native_solver_status": "recorded faer",
+      "faer_version": null,
+      "faer_version_basis": "no lockfile binding in this receipt",
+      "package_versions": {
+        "scikit-fem": null,
+        "scipy": null,
+        "numpy": null,
+        "meshio": null
+      },
+      "package_version_observations": [],
+      "primary_solids": [],
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 9,
+      "receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+      "execution_scope": "measurement receipt",
+      "native_solver_observations": [
+        {
+          "keypath": [
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            0,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            1,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            2,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            3,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            4,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            5,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            6,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            7,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            8,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            9,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            10,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            11,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            12,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            13,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            14,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            15,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            16,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            17,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            18,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            19,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            20,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            21,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            22,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            23,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            24,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            25,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            26,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            27,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            28,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            29,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            30,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            31,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            32,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            33,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            34,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            35,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "early_taper_controls",
+            0,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "early_taper_controls",
+            1,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        }
+      ],
+      "native_solver_status": "recorded faer",
+      "faer_version": "0.24.4",
+      "faer_version_basis": "receipt-bound Cargo.lock",
+      "package_versions": {
+        "scikit-fem": null,
+        "scipy": null,
+        "numpy": null,
+        "meshio": null
+      },
+      "package_version_observations": [],
+      "primary_solids": [],
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 10,
+      "receipt": "experiments/g16-06-rsv2-08/phase10_receipt.json",
+      "execution_scope": "measurement receipt",
+      "native_solver_observations": [
+        {
+          "keypath": [
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            0,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            1,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            2,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            3,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            4,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            5,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            6,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            7,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            8,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            9,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            10,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            11,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            12,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            13,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            14,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            15,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            16,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            17,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            18,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            19,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            20,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            21,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            22,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            23,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            24,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            25,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            26,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            27,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            28,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            29,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            30,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            31,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            32,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            33,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            34,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            35,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        }
+      ],
+      "native_solver_status": "recorded faer",
+      "faer_version": "0.24.4",
+      "faer_version_basis": "receipt-bound Cargo.lock",
+      "package_versions": {
+        "scikit-fem": null,
+        "scipy": null,
+        "numpy": null,
+        "meshio": null
+      },
+      "package_version_observations": [],
+      "primary_solids": [],
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 11,
+      "receipt": "experiments/g16-06-rsv2-08/phase11_receipt.json",
+      "execution_scope": "measurement receipt",
+      "native_solver_observations": [
+        {
+          "keypath": [
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            0,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            1,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            2,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            3,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            4,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            5,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            6,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            7,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            8,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            9,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            10,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            11,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            12,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            13,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            14,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            15,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            16,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            17,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            18,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            19,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            20,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            21,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            22,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            23,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            24,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            25,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            26,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            27,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            28,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            29,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            30,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            31,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            32,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            33,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            34,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            35,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        }
+      ],
+      "native_solver_status": "recorded faer",
+      "faer_version": "0.24.4",
+      "faer_version_basis": "receipt-bound Cargo.lock",
+      "package_versions": {
+        "scikit-fem": null,
+        "scipy": null,
+        "numpy": null,
+        "meshio": null
+      },
+      "package_version_observations": [],
+      "primary_solids": [],
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 12,
+      "receipt": "experiments/g16-06-rsv2-08/phase12_receipt.json",
+      "execution_scope": "saved-data summary; no new numerical solve",
+      "native_solver_observations": [],
+      "native_solver_status": "not recorded here",
+      "faer_version": null,
+      "faer_version_basis": "no lockfile binding in this receipt",
+      "package_versions": {
+        "scikit-fem": null,
+        "scipy": null,
+        "numpy": null,
+        "meshio": null
+      },
+      "package_version_observations": [],
+      "primary_solids": [],
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 13,
+      "receipt": "experiments/g16-06-rsv2-08/phase13_receipt.json",
+      "execution_scope": "measurement receipt",
+      "native_solver_observations": [
+        {
+          "keypath": [
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            0,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            1,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            2,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            3,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            4,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            5,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            6,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            7,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            8,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            9,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            10,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            11,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            12,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            13,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            14,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            15,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            16,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            17,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            18,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            19,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            20,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            21,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            22,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            23,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        }
+      ],
+      "native_solver_status": "recorded faer",
+      "faer_version": "0.24.4",
+      "faer_version_basis": "receipt-bound Cargo.lock",
+      "package_versions": {
+        "scikit-fem": null,
+        "scipy": null,
+        "numpy": null,
+        "meshio": null
+      },
+      "package_version_observations": [],
+      "primary_solids": [],
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 14,
+      "receipt": "experiments/g16-06-rsv2-08/phase14_receipt.json",
+      "execution_scope": "measurement receipt",
+      "native_solver_observations": [
+        {
+          "keypath": [
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            0,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            1,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            2,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            3,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            4,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            5,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            6,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            7,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            8,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            9,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            10,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            11,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            12,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            13,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            14,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        },
+        {
+          "keypath": [
+            "results",
+            15,
+            "solver"
+          ],
+          "value": "faer",
+          "role": "native plate"
+        }
+      ],
+      "native_solver_status": "recorded faer",
+      "faer_version": "0.24.4",
+      "faer_version_basis": "receipt-bound Cargo.lock",
+      "package_versions": {
+        "scikit-fem": null,
+        "scipy": null,
+        "numpy": null,
+        "meshio": null
+      },
+      "package_version_observations": [],
+      "primary_solids": [],
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 15,
+      "receipt": "experiments/G16-06-RSV2-08/phase15_gate_s_compliant_joint_audit.json",
+      "execution_scope": "measurement receipt",
+      "native_solver_observations": [],
+      "native_solver_status": "not recorded here",
+      "faer_version": "0.24.4",
+      "faer_version_basis": "receipt-bound Cargo.lock",
+      "package_versions": {
+        "scikit-fem": "12.0.2",
+        "scipy": "1.18.1",
+        "numpy": "2.5.4",
+        "meshio": null
+      },
+      "package_version_observations": [
+        {
+          "keypath": [
+            "runtime",
+            "versions"
+          ],
+          "value": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "skfem": "12.0.2",
+            "pyamg": "5.3.0"
+          }
+        }
+      ],
+      "primary_solids": [
+        {
+          "path": "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot8_seed1_solid.json",
+          "settings": {
+            "R_CUT": 30.0,
+            "NL": 4,
+            "NSUB": 1,
+            "PATCH_mm": 2.0,
+            "T_Nmm": 1820.0
+          },
+          "solver": {
+            "algorithm": "skfem_p2_amg_cg",
+            "iterations": 182,
+            "relative_residual": 9.287132002310722e-11,
+            "converged": true,
+            "solve_seconds": 1134.2710704803467
+          },
+          "package_versions_basis": "same-phase runtime versions; not independently embedded in each solid JSON"
+        },
+        {
+          "path": "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot10_seed1_solid.json",
+          "settings": {
+            "R_CUT": 30.0,
+            "NL": 4,
+            "NSUB": 1,
+            "PATCH_mm": 2.0,
+            "T_Nmm": 1820.0
+          },
+          "solver": {
+            "algorithm": "skfem_p2_amg_cg",
+            "iterations": 160,
+            "relative_residual": 8.698029366249721e-11,
+            "converged": true,
+            "solve_seconds": 1143.8103609085083
+          },
+          "package_versions_basis": "same-phase runtime versions; not independently embedded in each solid JSON"
+        },
+        {
+          "path": "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot11_seed1_solid.json",
+          "settings": {
+            "R_CUT": 30.0,
+            "NL": 4,
+            "NSUB": 1,
+            "PATCH_mm": 2.0,
+            "T_Nmm": 1820.0
+          },
+          "solver": {
+            "algorithm": "skfem_p2_amg_cg",
+            "iterations": 168,
+            "relative_residual": 9.126246275681005e-11,
+            "converged": true,
+            "solve_seconds": 736.6606135368347
+          },
+          "package_versions_basis": "same-phase runtime versions; not independently embedded in each solid JSON"
+        }
+      ],
+      "qualified_count": 0,
+      "full_qualification": false,
+      "tracked_plate_observations": [
+        {
+          "path": "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot8_seed1_plate.json",
+          "solver": "faer"
+        },
+        {
+          "path": "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot10_seed1_plate.json",
+          "solver": "faer"
+        },
+        {
+          "path": "experiments/G16-06-RSV2-08/phase15_measurements/q7_slot11_seed1_plate.json",
+          "solver": "faer"
+        }
+      ]
+    },
+    {
+      "phase": 16,
+      "receipt": "experiments/G16-06-RSV2-08/phase16_cross_phase_provenance_index.json",
+      "execution_scope": "saved-data summary; no new numerical solve",
+      "native_solver_observations": [],
+      "native_solver_status": "not recorded here",
+      "faer_version": null,
+      "faer_version_basis": "no lockfile binding in this receipt",
+      "package_versions": {
+        "scikit-fem": null,
+        "scipy": null,
+        "numpy": null,
+        "meshio": null
+      },
+      "package_version_observations": [],
+      "primary_solids": [],
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 17,
+      "receipt": "experiments/G16-06-RSV2-08/phase17_legacy_path_inventory.json",
+      "execution_scope": "saved-data summary; no new numerical solve",
+      "native_solver_observations": [],
+      "native_solver_status": "not recorded here",
+      "faer_version": null,
+      "faer_version_basis": "no lockfile binding in this receipt",
+      "package_versions": {
+        "scikit-fem": null,
+        "scipy": null,
+        "numpy": null,
+        "meshio": null
+      },
+      "package_version_observations": [],
+      "primary_solids": [],
+      "qualified_count": 0,
+      "full_qualification": false
+    },
+    {
+      "phase": 18,
+      "receipt": "experiments/G16-06-RSV2-08/phase18_complete_study_manifest.json",
+      "execution_scope": "saved-data summary; no new numerical solve",
+      "native_solver_observations": [],
+      "native_solver_status": "not recorded here",
+      "faer_version": null,
+      "faer_version_basis": "no lockfile binding in this receipt",
+      "package_versions": {
+        "scikit-fem": null,
+        "scipy": null,
+        "numpy": null,
+        "meshio": null
+      },
+      "package_version_observations": [],
+      "primary_solids": [],
+      "qualified_count": 0,
+      "full_qualification": false
+    }
+  ]
+}
