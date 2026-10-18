@@ -1843,6 +1843,53 @@ mod tests {
     }
 
     #[test]
+    fn round_parent_identities_tracks_carried_elite_and_offspring_indices_across_rounds() {
+        let genome_at = |index: usize| {
+            let mut genome = Genome::c4_seed(genome::T_MIN);
+            genome.v[EA_IN] = 14.0 + index as f64 * 0.5;
+            genome.v[genome::RING_WALL] = 6.1;
+            genome.v[EDGE_TH] = 0.18;
+            genome.clamp();
+            genome
+        };
+
+        // Round 0 has two parent indices. Round 1 carries index 1 forward and
+        // promotes offspring index 2; round 2 carries index 2 and promotes 3.
+        let genomes = [genome_at(0), genome_at(1), genome_at(2), genome_at(3)];
+        let round0_elites = vec![
+            ("p10".into(), genomes[0].clone()),
+            ("p14".into(), genomes[1].clone()),
+        ];
+        let mut parent_identities = round_parent_identities(&round0_elites);
+        assert!(parent_identities.contains(&certification::identity(&genomes[0])));
+        assert!(parent_identities.contains(&certification::identity(&genomes[1])));
+        assert!(!parent_identities.contains(&certification::identity(&genomes[2])));
+        assert!(!parent_identities.contains(&certification::identity(&genomes[3])));
+
+        let round1_elites = vec![
+            ("p14".into(), genomes[1].clone()), // carried-forward elite index 1
+            ("p18".into(), genomes[2].clone()), // novel offspring index 2
+        ];
+        parent_identities.extend(round_parent_identities(&round1_elites));
+        assert!(parent_identities.contains(&certification::identity(&genomes[0])));
+        assert!(parent_identities.contains(&certification::identity(&genomes[1])));
+        assert!(parent_identities.contains(&certification::identity(&genomes[2])));
+        assert!(!parent_identities.contains(&certification::identity(&genomes[3])));
+
+        let round2_elites = vec![
+            ("p18".into(), genomes[2].clone()), // carried-forward elite index 2
+            ("p22".into(), genomes[3].clone()), // novel offspring index 3
+        ];
+        parent_identities.extend(round_parent_identities(&round2_elites));
+        for index in 0..genomes.len() {
+            assert!(
+                parent_identities.contains(&certification::identity(&genomes[index])),
+                "missing genome at multi-round input index {index}"
+            );
+        }
+    }
+
+    #[test]
     fn round_parent_identities_zeroes_cps_only_on_ring_wall_clamped_sibling() {
         let mut seed = Genome::c4_seed(genome::T_MIN);
         seed.v[genome::RING_WALL] = 5.5;
