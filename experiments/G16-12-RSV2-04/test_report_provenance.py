@@ -1,4 +1,4 @@
-"""Verify fourteen diagnostic reports, source bindings, and archival JSON provenance."""
+"""Verify fifteen diagnostic reports, source bindings, and archival JSON provenance."""
 
 import hashlib
 import json
@@ -35,6 +35,8 @@ PIPELINE_SOURCES = (
     "crates/crescent/src/export.rs",
     "crates/cli/src/crescent.rs",
 )
+CI_AUDIT_PATH = REPORT_DIR / "STATIC_CI_EVALUATOR_AND_SOLID_SOLVER_AUDIT.md"
+CI_SOURCES = ("ops/ci/evaluate_cad_candidate.py", "fem_solid/tip_solid.py")
 SCHEMA_AUDIT_SHA256 = '29d2ef4a6910a4fc6346f50ca7fb32b61c18e6958d5bea642ceddfc1cd0e8f60'
 SCHEMA_AUDIT_BYTES = 19029
 SCHEMA_AUDIT_TABLE_COUNT = 6
@@ -47,6 +49,7 @@ REPORTS = tuple((f"V{v}", REPORT_DIR / f"UNIFIED_PROTOTYPE_V{v}_REPORT.md") for 
     ("SCHEMA_AUDIT", SCHEMA_AUDIT_PATH),
     ("INVARIANT_AUDIT", INVARIANT_AUDIT_PATH),
     ("PIPELINE_AUDIT", PIPELINE_AUDIT_PATH),
+    ("CI_AUDIT", CI_AUDIT_PATH),
 )
 PORTABLE_MARKDOWN = tuple(path for _, path in REPORTS) + (INDEX_PATH,)
 AUDIT_SOURCES = (
@@ -142,7 +145,7 @@ def portable_path(root, value):
 
 
 def verify(root):
-    """Verify all fourteen diagnostic index entries; no Git, target/, or network."""
+    """Verify all fifteen diagnostic index entries; no Git, target/, or network."""
     root = Path(root)
     lines = (root / INDEX_PATH).read_text(encoding="utf-8").splitlines()
     rows = [cells(line) for line in lines if line.strip().startswith("|")]
@@ -246,6 +249,10 @@ def verify_invariant_sources(root):
 
 def verify_pipeline_sources(root):
     return verify_source_fingerprints(root, PIPELINE_AUDIT_PATH, PIPELINE_SOURCES, "pipeline")
+
+
+def verify_ci_sources(root):
+    return verify_source_fingerprints(root, CI_AUDIT_PATH, CI_SOURCES, "ci")
 
 
 def json_shape(value):
@@ -370,7 +377,7 @@ def verify_host_path_policy(root):
 
 class ReportProvenanceTests(unittest.TestCase):
     def test_reports_match_index(self):
-        self.assertEqual(verify(ROOT), 14)
+        self.assertEqual(verify(ROOT), 15)
 
     def snapshot(self):
         # Only small document fixtures; no builds or geometry outputs.
@@ -380,7 +387,7 @@ class ReportProvenanceTests(unittest.TestCase):
         (root / REPORT_DIR).mkdir(parents=True)
         paths = ([INDEX_PATH, TEST_PATH]
                  + [path for _, path in REPORTS]
-                 + [PurePosixPath(path) for path in dict.fromkeys(AUDIT_SOURCES + INVARIANT_SOURCES + PIPELINE_SOURCES)])
+                 + [PurePosixPath(path) for path in dict.fromkeys(AUDIT_SOURCES + INVARIANT_SOURCES + PIPELINE_SOURCES + CI_SOURCES)])
         for path in paths:
             (root / path).parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / path, root / path)
@@ -399,15 +406,17 @@ class ReportProvenanceTests(unittest.TestCase):
         root = self.snapshot()
         self.assertFalse((root / ".git").exists())
         self.assertFalse((root / "target").exists())
-        self.assertEqual(verify(root), 14)
+        self.assertEqual(verify(root), 15)
         self.assertEqual(verify_audit(root), 5)
         self.assertEqual(verify_invariant_sources(root), 4)
         self.assertEqual(verify_pipeline_sources(root), 9)
+        self.assertEqual(verify_ci_sources(root), 2)
 
     def test_audit_document_and_source_provenance(self):
         self.assertEqual(verify_audit(ROOT), 5)
         self.assertEqual(verify_invariant_sources(ROOT), 4)
         self.assertEqual(verify_pipeline_sources(ROOT), 9)
+        self.assertEqual(verify_ci_sources(ROOT), 2)
 
     def test_audit_document_tampering_is_rejected(self):
         root = self.snapshot()
@@ -461,6 +470,27 @@ class ReportProvenanceTests(unittest.TestCase):
                 path.write_text("\n".join(lines) + "\n", encoding="utf-8")
                 with self.assertRaisesRegex(ValueError, "pipeline source byte/line mismatch"):
                     verify_pipeline_sources(root)
+
+    def test_ci_source_integrity_rejects_tampering(self):
+        for relative in CI_SOURCES:
+            with self.subTest(ci_source=relative):
+                root = self.snapshot()
+                path = root / relative
+                path.write_bytes(path.read_bytes() + b"\n# synthetic change\n")
+                with self.assertRaisesRegex(ValueError, "ci source SHA-256 mismatch"):
+                    verify_ci_sources(root)
+        for column in (2, 3):
+            with self.subTest(ci_size_column=column):
+                root = self.snapshot()
+                path = root / CI_AUDIT_PATH
+                lines = path.read_text(encoding="utf-8").splitlines()
+                i = lines.index("|Source path|SHA-256|Bytes|Lines|") + 2
+                row = cells(lines[i])
+                row[column] = "1"
+                lines[i] = "|" + "|".join(row) + "|"
+                path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "ci source byte/line mismatch"):
+                    verify_ci_sources(root)
 
     def test_audit_schema_is_checked_independently_of_file_digest(self):
         root = self.snapshot()
