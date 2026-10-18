@@ -4,9 +4,9 @@
 
 ### Intelligence-designed titanium utility karambits — evolved, FEM-verified, Monte-Carlo-robust
 
-<img src="docs/render/media/switchback_c10d_rc6_hero.webp" width="96%" alt="Blender Cycles hero film of the SWITCHBACK Rev C.10d rc6 titanium karambit: whole-knife view, serration macro and mesh-to-stress-field science spin"/>
+<img src="docs/figures/whitepaper/blender/hero_oblique.webp" width="96%" alt="Blender Cycles render of the exact committed automatic-assessment genome offspring cert_pipeline_r01_p14_c02, labelled assessed example, not qualified"/>
 
-*Blender Cycles hero film of **SWITCHBACK Rev C.10d rc6** (64.9 g CAD prediction, Gr5 Ti, satin-blue edition). Rendered by the pro-hero pipeline [`ops/render/pro/pro_hero.py`](docs/render/PRO_HERO_PIPELINE.md) / [`jr-film`](docs/render/AUTOFILM.md) (Cycles OptiX, per-shot QA receipts) and cut to this looping WebP by [`ops/render/pro/make_readme_hero.sh`](ops/render/pro/make_readme_hero.sh). Render of a design candidate: not certified, not machined, not tested.*
+*Blender Cycles render of a genome produced by the evolution pipeline: the exact committed automatic-assessment STL of `cert_pipeline_r01_p14_c02`, with geometry unchanged. Rendered by `ops/render/blender/render_paper.py --scene hero_oblique`, and the manifest is checked by `ops/ci/verify_figures.py`. It is an assessed example and **not qualified** (`RS-karambit-v2` FAIL, `champion = null`).*
 
 <!-- GEN:HEAD:BEGIN -->
 [![version](https://img.shields.io/badge/version-v2.0.0-ff6f00?style=for-the-badge)](https://github.com/neverhuman/jarambit/releases/tag/v2.0.0)
@@ -64,6 +64,8 @@ v2.0.0 is the **option (a)** major release that Jepson Taylor chose on 2026-10-1
   | 2 | `w411t3_r01_p10_c11` | 101.108 g / 101.108 g | 74.17 | 13 / 26 met |
   | 3 | `w501_ul_r01_p14_c01` (Stage-1 screen) | 83.065 g (2D) | 74.02 | 3D assessment pending |
 
+  *These scores reproduce from the committed `W_ULTRALIGHT_v1` scorer. That scorer still uses placeholder values for two inputs (`ring_edge_r_mm` 1.125, `t_0p25` 0.45) instead of the measured values (1.5105 and 0.1937 for `w411c3_r02_p10_c12`), so the scores will change when the scorer is fixed or versioned.*
+
   The best designs still miss the hunter-class lateral floor (260 N), tip-twist and solid-tip safety factors at 1.82 N·m, human-maximum loads, fatigue (Goodman SF ≈ 0.5) and the sharp-edge law. The full deficit table is in [`docs/RELEASE_PLAN_MAJOR.md` §4](docs/RELEASE_PLAN_MAJOR.md).
 - **All 26 gate checks are built and verified as checks.** Workplan rows closed in this release are labelled "check built + verified — not all-26 design passed". That label does not mean a design passed.
 - **More of the toolchain is Rust.** The version check (`jarambit version-check`) and the CI runner policy (`jarambit check-runner-policy`, `crates/runner-policy`) were ported from Python to Rust. CI runs only on local self-hosted runners (xbabe1–xbabe4). [jankurai](.github/workflows/jankurai.yml) scores the repository on every PR.
@@ -71,6 +73,13 @@ v2.0.0 is the **option (a)** major release that Jepson Taylor chose on 2026-10-1
 - **Certification-integrity repair (#75–#84).** The v1.0.0 Wave 283 all-hard claims stay withdrawn, and genome-defined CAD now goes through independent scikit-fem P2 + DOLFINx assessment automatically.
 
 Full notes: [`docs/RELEASES.md`](docs/RELEASES.md#v200--2026-10-18-option-a-major-release-weighted-objectives-no-qualified-design).
+
+### Concept render: hand-built design, not pipeline output
+
+<img src="docs/render/media/switchback_c10d_rc6_hero.webp" width="96%" alt="Blender Cycles product film of the hand-built SWITCHBACK Rev C.10d rc6 concept karambit (not produced by the evolution pipeline)"/>
+
+*Our best Blender render is a Cycles product film of **SWITCHBACK Rev C.10d rc6**. This is a **hand-built CAD concept from the render lane (#70)**. It was not produced by `./evolve.sh` / `auto-evolve`: it has no genome CSV, no Stage-2 assessment and no leaderboard entry. It is not certified, not machined and not tested. The science-spin stress field in the film comes from the C.10a rc4 solver mesh and von Mises fields, not from rc6. The on-screen weight badge comes from the render lane's design manifest, which is not committed in this repo. Pipeline: [`ops/render/pro/pro_hero.py`](docs/render/PRO_HERO_PIPELINE.md) / [`jr-film`](docs/render/AUTOFILM.md) (Cycles OptiX, per-shot QA). This looping WebP was cut by [`ops/render/pro/make_readme_hero.sh`](ops/render/pro/make_readme_hero.sh).*
+
 
 **Current committed certification status:** no certified all-16 winner exists. The [automatic #84 proof](evidence/evolve_certifiable/automatic/leaderboard.json) records one completed assessment, zero qualified designs and `champion=null`. The [23-subject ×18-evaluator catalog](evidence/cad_battery/manifest.json) remains **414 cells**, with **0/23 RS-v2 all-hard passes**; the separate automatic assessment does not add a catalog subject. The [paper atlas](docs/ENGINEERING_GATES_AND_EVOLUTION.md#vi-blender-atlas-and-reproducible-publication) renders the committed assessed failure with real gate verdicts and an explicitly empty certified-winner re-render slot. Historical results above retain their original model scope. The #82 withdrawal table records unchanged w283 exports re-certified at `4cd0f994e803`; #84 subsequently changed export construction and did not reissue that catalog.
 
