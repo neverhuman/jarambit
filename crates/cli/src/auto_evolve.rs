@@ -1284,6 +1284,40 @@ mod tests {
     }
 
     #[test]
+    fn stage2_selection_handles_all_novel_candidates_without_seed_fallback() {
+        let mut p10_first = Genome::c4_seed(genome::T_MIN);
+        p10_first.v[EA_IN] = 14.0;
+        p10_first.clamp();
+        let mut p14_first = Genome::c4_seed(genome::T_MIN);
+        p14_first.v[EA_IN] = 15.0;
+        p14_first.clamp();
+        let mut p18_first = Genome::c4_seed(genome::T_MIN);
+        p18_first.v[EA_IN] = 16.0;
+        p18_first.clamp();
+
+        let mut p10_next = p10_first.clone();
+        p10_next.v[TAPER_X0] += 0.5;
+        p10_next.clamp();
+        let mut p14_next = p14_first.clone();
+        p14_next.v[EA_SP] += 0.25;
+        p14_next.clamp();
+
+        let screened = vec![
+            test_screen_survivor("p10_first", "p10", p10_first, 0.01),
+            test_screen_survivor("p14_first", "p14", p14_first, 0.02),
+            test_screen_survivor("p10_next", "p10", p10_next, 0.03),
+            test_screen_survivor("p18_first", "p18", p18_first, 0.04),
+            test_screen_survivor("p14_next", "p14", p14_next, 0.05),
+        ];
+
+        let selected = select_stage2_candidates(&screened, 5, &HashSet::new(), &HashSet::new());
+
+        assert_eq!(selected.len(), 5);
+        let labels: Vec<_> = selected.iter().map(|candidate| candidate.label.as_str()).collect();
+        assert_eq!(labels, ["p10_first", "p14_first", "p18_first", "p10_next", "p14_next"]);
+    }
+
+    #[test]
     fn stage2_selection_skips_carried_forward_round1_elites_until_fallback() {
         let mut initial_seed = Genome::c4_seed(genome::T_MIN);
         initial_seed.v[EA_IN] = 14.0;
