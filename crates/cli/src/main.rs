@@ -11,6 +11,7 @@ mod crescent;
 mod bench;
 mod score_cad;
 mod auto_evolve;
+mod version_check;
 
 /// Validate an existing history header before any append, then open the log.
 /// A fresh path is created with `fresh_header` and only then opened for append.
@@ -29,6 +30,14 @@ fn prepare_history_log(path: &str, resume_or_fork: bool, current_columns: &[&str
 
 fn main() {
     let a: Vec<String> = std::env::args().collect();
+    if a.iter().any(|s| s == "version-check") {
+        let root = std::env::current_dir().unwrap_or_else(|e| {
+            eprintln!("current directory: {e}");
+            std::process::exit(1);
+        });
+        let reference = std::env::var("GITHUB_REF").unwrap_or_default();
+        std::process::exit(version_check::run(&root, &reference));
+    }
     if a.iter().any(|s| s == "fem-smoke") {
         let out = a.iter().position(|x| x == "--out").and_then(|i| a.get(i + 1)).cloned().unwrap_or_else(|| "out/fem_smoke".into());
         let mh1 = a.iter().position(|x| x == "--mh1").and_then(|i| a.get(i + 1)).cloned().unwrap_or_else(|| "out/mh1".into());
