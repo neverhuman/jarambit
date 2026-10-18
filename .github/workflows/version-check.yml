@@ -28,9 +28,8 @@ jobs:
         with:
           persist-credentials: false
       - run: |
-          export PATH="$HOME/.cargo/bin:$PATH"
           toolchain=/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin
-          export PATH="${toolchain}:${PATH}"
+          export PATH="${toolchain}:/home/ubuntu/.cargo/bin:${PATH}"
           export RUSTC="${toolchain}/rustc"
           test -x "$RUSTC"
           mkdir -p target/ci-version-check
