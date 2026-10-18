@@ -22,6 +22,9 @@ DIGEST_EXCLUSIONS = (DIGEST_REPORT, DIGEST_RECEIPT)
 SCRIPT_RECEIPT = DIRECTORY + "phase28_script_test_inventory_audit.json"
 SCRIPT_REPORT = DIRECTORY + "PHASE28_SCRIPT_TEST_INVENTORY_AUDIT.md"
 SCRIPT_PATHS = ("scripts/audit_rsv2_07_hm_forensics.py", "scripts/test_audit_rsv2_07_hm_forensics.py")
+CROSS_RECEIPT = DIRECTORY + "phase29_index_inventory_cross_check_audit.json"
+CROSS_REPORT = DIRECTORY + "PHASE29_INDEX_INVENTORY_CROSS_CHECK_AUDIT.md"
+CROSS_COMMIT = "cc1918287761ba7a16683b3b7bbfc8c06cce50b1"
 # Absolute POSIX paths, Windows drive paths, UNC paths and file URIs.
 HOST_PATH = re.compile(r"(?<![\w./:])/(?!/)[\w.~-]+|(?<!\w)[A-Za-z]:[\\/]|\\\\[^\\\s]+\\|file://")
 
@@ -234,6 +237,107 @@ def run_scripts(args):
     return 0
 
 
+def snapshot_bytes(repo_root, name):
+    return subprocess.check_output(["git", "-C", str(repo_root), "show", f"{CROSS_COMMIT}:{name}"],
+                                   stderr=subprocess.PIPE)
+
+
+def cross_check(repo_root):
+    repo_root = Path(repo_root)
+    sources, documents, inputs = {}, {}, {}
+    for name, schema, task, table, count in (
+            (DIGEST_RECEIPT, "jarambit.rsv2_07_hm.phase27_artifact_digest_index.v1", "RSV2-07-p27", "artifacts", "artifact_count"),
+            (SCRIPT_RECEIPT, "jarambit.rsv2_07_hm.phase28_script_test_inventory.v1", "RSV2-07-p28", "scripts", "script_count")):
+        data = (repo_root / name).read_bytes()
+        sources[name] = data
+        document = strict_json(data)
+        require(isinstance(document, dict) and document.get("schema") == schema and
+                document.get("task") == task and document.get("status") == "pass", "Unexpected input receipt schema or status")
+        rows = document.get(table)
+        require(isinstance(rows, dict) and bool(rows), "Missing or empty input registry")
+        require(type(document.get(count)) is int and document[count] == len(rows), "Registry count mismatch")
+        for path, row in rows.items():
+            require(isinstance(path, str) and not Path(path).is_absolute() and ".." not in Path(path).parts,
+                    "Unsafe registry path")
+            require_portable(path, "registry path")
+            require(isinstance(row, dict) and type(row.get("size_bytes")) is int and row["size_bytes"] >= 0 and
+                    isinstance(row.get("sha256"), str) and re.fullmatch(r"[0-9a-f]{64}", row["sha256"]) is not None,
+                    "Invalid registry digest metadata")
+        require(type(document.get("total_size_bytes")) is int and
+                document["total_size_bytes"] == sum(row["size_bytes"] for row in rows.values()), "Registry byte total mismatch")
+        require(data == snapshot_bytes(repo_root, name), "Input receipt differs from pinned snapshot")
+        inputs[name] = {"size_bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(), "snapshot_bytes_equal": True}
+        documents[name] = rows
+    left, right = documents[DIGEST_RECEIPT], documents[SCRIPT_RECEIPT]
+    overlap = sorted(set(left) & set(right))
+    require(not overlap, "Phase-27 and Phase-28 path sets overlap")
+    require(set(right) == set(SCRIPT_PATHS), "Phase-28 script path set mismatch")
+    require(all(name.startswith(DIRECTORY) and
+                (fnmatch.fnmatchcase(Path(name).name, "PHASE*.md") or fnmatch.fnmatchcase(Path(name).name, "phase*.json"))
+                for name in left), "Phase-27 artifact path outside scope")
+    entries = {}
+    for receipt, rows in documents.items():
+        for name, row in sorted(rows.items()):
+            historical = snapshot_bytes(repo_root, name)
+            digest = hashlib.sha256(historical).hexdigest()
+            require((len(historical), digest) == (row["size_bytes"], row["sha256"]), "Pinned snapshot digest parity mismatch")
+            live = read_optional(repo_root / name)
+            sources[name] = live
+            live_digest = None if live is None else hashlib.sha256(live).hexdigest()
+            live_size = None if live is None else len(live)
+            entries[name] = {"source_receipt": receipt, "recorded_size_bytes": row["size_bytes"],
+                             "recorded_sha256": row["sha256"], "snapshot_size_bytes": len(historical),
+                             "snapshot_sha256": digest, "snapshot_digest_parity": True,
+                             "working_tree_size_bytes": live_size, "working_tree_sha256": live_digest,
+                             "working_tree_digest_parity": (live_size, live_digest) == (row["size_bytes"], row["sha256"])}
+    for name, data in sources.items():
+        require(read_optional(repo_root / name) == data, "Cross-check source bytes changed during audit")
+    drift = sorted(name for name, row in entries.items() if not row["working_tree_digest_parity"])
+    return {"schema": "jarambit.rsv2_07_hm.phase29_index_inventory_cross_check.v1", "task": "RSV2-07-p29",
+            "status": "pass", "parity_scope": "saved registry entries versus pinned Phase-28 Git snapshot",
+            "snapshot_commit": CROSS_COMMIT, "input_receipts": inputs,
+            "phase27_paths": sorted(left), "phase28_paths": sorted(right), "overlap_paths": overlap,
+            "disjoint_path_sets": True, "entry_count": len(entries), "exact_snapshot_digest_parity": True,
+            "working_tree_exact_digest_parity": not drift, "working_tree_drift_paths": drift, "entries": entries}
+
+
+def render_cross(document):
+    rows = [f"| {name} | {row['recorded_size_bytes']} | {row['recorded_sha256']} | yes | {'yes' if row['working_tree_digest_parity'] else 'no'} |"
+            for name, row in document["entries"].items()]
+    return "\n".join([
+        "# Phase-29 index and inventory cross-check audit", "",
+        f"**PASS for the pinned snapshot.** Phase 27 lists {len(document['phase27_paths'])} paths and Phase 28 lists {len(document['phase28_paths'])} paths; their intersection is empty. All {document['entry_count']} recorded sizes and SHA-256 digests exactly match the pinned Git snapshot.", "",
+        f"Snapshot commit: `{document['snapshot_commit']}`. Both input receipt files must also match this snapshot byte for byte. Registry schema, status, counts, byte totals, digest formats and relative path scope are checked. Duplicate keys, nonfinite JSON and overlapping path sets fail.", "",
+        f"**Current working-tree parity: {'PASS' if document['working_tree_exact_digest_parity'] else 'DRIFT'}.** {len(document['working_tree_drift_paths'])} paths differ from the saved registry metadata. Extending the verifier and its tests for Phase 29 changes the script bytes recorded by Phase 28. Snapshot parity does not assert current script parity. The existing Phase-27 and Phase-28 reports and receipts are preserved.", "",
+        "| Registered relative path | Recorded bytes | Recorded SHA-256 | Snapshot parity | Working-tree parity |",
+        "| --- | ---: | --- | --- | --- |", *rows, "",
+        "The JSON records both observed snapshot and current working-tree sizes and hashes. Inputs are reread to detect changes during the audit. This checks the saved registries; it does not rebuild Phase 27's historical file selection, rerun Phase 28's test count, execute source files or infer anything about earlier audit conclusions. Missing current entry files are recorded with null size and digest and fail working-tree parity; missing snapshot evidence fails the audit.", "",
+        "Paths in the outputs are repository-relative. --repo-root selects a relocated Git checkout containing the pinned commit. Normal verification compares the complete saved JSON and exact report text without writes. --write replaces only the two Phase-29 outputs. Exit 0 means disjoint path sets and exact snapshot digest parity; current working-tree drift remains explicit in the output.", "",
+        "```sh", "python3 scripts/audit_rsv2_07_hm_forensics.py --phase 29",
+        "python3 -m unittest discover -s scripts -p 'test_audit_rsv2_07_hm_forensics.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs 14,15 at nice 10. This is a static receipt cross-check. Changes are left uncommitted.", "",
+    ])
+
+
+def run_cross(args):
+    require(args.artifact_root is None, "Phase-29 uses receipts in --repo-root; --artifact-root is not supported")
+    current = cross_check(args.repo_root)
+    report = render_cross(current)
+    receipt = json.dumps(current, indent=2) + "\n"
+    require_portable(report, "Phase-29 report")
+    require_portable(receipt, "Phase-29 receipt")
+    if args.write:
+        (args.repo_root / DIRECTORY).mkdir(parents=True, exist_ok=True)
+        (args.repo_root / CROSS_RECEIPT).write_text(receipt, encoding="utf-8")
+        (args.repo_root / CROSS_REPORT).write_text(report, encoding="utf-8")
+    else:
+        saved = strict_json((args.repo_root / CROSS_RECEIPT).read_bytes())
+        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-29 saved receipt mismatch")
+        require((args.repo_root / CROSS_REPORT).read_text(encoding="utf-8") == report, "Phase-29 report mismatch")
+    print(f"LANE: RSV2-07-hm | RSV2-07-p29 | PASS | parity=pinned_snapshot | entries={current['entry_count']} | overlap=0 | working_tree_drift={len(current['working_tree_drift_paths'])}")
+    return 0
+
+
 def audit(artifact_root):
     artifact_root = Path(artifact_root)
     sources, waves = {}, {}
@@ -284,11 +388,13 @@ def render(document):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--phase", choices=("26", "27", "28"), default="26")
+    parser.add_argument("--phase", choices=("26", "27", "28", "29"), default="26")
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     try:
+        if args.phase == "29":
+            return run_cross(args)
         if args.phase == "28":
             return run_scripts(args)
         if args.phase == "27":

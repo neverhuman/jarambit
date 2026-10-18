@@ -1,0 +1,82 @@
+{
+  "schema": "jarambit.rsv2_07_hm.phase29_index_inventory_cross_check.v1",
+  "task": "RSV2-07-p29",
+  "status": "pass",
+  "parity_scope": "saved registry entries versus pinned Phase-28 Git snapshot",
+  "snapshot_commit": "cc1918287761ba7a16683b3b7bbfc8c06cce50b1",
+  "input_receipts": {
+    "docs/audits/rsv2_07_hm/phase27_artifact_digest_index.json": {
+      "size_bytes": 1103,
+      "sha256": "2b60bf37e70a273baf6ebbf40c6938f8fcedb52fb574fec793286e35f6f50254",
+      "snapshot_bytes_equal": true
+    },
+    "docs/audits/rsv2_07_hm/phase28_script_test_inventory_audit.json": {
+      "size_bytes": 3328,
+      "sha256": "141fb81fab478b21a61a897f3969e526f26c0779356790f01f6f6629d243c8b1",
+      "snapshot_bytes_equal": true
+    }
+  },
+  "phase27_paths": [
+    "docs/audits/rsv2_07_hm/PHASE26_ROUND1_BIRTHS_VS_ELITES_LINEAGE_AUDIT.md",
+    "docs/audits/rsv2_07_hm/phase26_round1_births_vs_elites_lineage_audit.json"
+  ],
+  "phase28_paths": [
+    "scripts/audit_rsv2_07_hm_forensics.py",
+    "scripts/test_audit_rsv2_07_hm_forensics.py"
+  ],
+  "overlap_paths": [],
+  "disjoint_path_sets": true,
+  "entry_count": 4,
+  "exact_snapshot_digest_parity": true,
+  "working_tree_exact_digest_parity": false,
+  "working_tree_drift_paths": [
+    "scripts/audit_rsv2_07_hm_forensics.py",
+    "scripts/test_audit_rsv2_07_hm_forensics.py"
+  ],
+  "entries": {
+    "docs/audits/rsv2_07_hm/PHASE26_ROUND1_BIRTHS_VS_ELITES_LINEAGE_AUDIT.md": {
+      "source_receipt": "docs/audits/rsv2_07_hm/phase27_artifact_digest_index.json",
+      "recorded_size_bytes": 2937,
+      "recorded_sha256": "faa15cb6421fece10670268ccb644846f66d3f153aa943b21be711fbdf8683f9",
+      "snapshot_size_bytes": 2937,
+      "snapshot_sha256": "faa15cb6421fece10670268ccb644846f66d3f153aa943b21be711fbdf8683f9",
+      "snapshot_digest_parity": true,
+      "working_tree_size_bytes": 2937,
+      "working_tree_sha256": "faa15cb6421fece10670268ccb644846f66d3f153aa943b21be711fbdf8683f9",
+      "working_tree_digest_parity": true
+    },
+    "docs/audits/rsv2_07_hm/phase26_round1_births_vs_elites_lineage_audit.json": {
+      "source_receipt": "docs/audits/rsv2_07_hm/phase27_artifact_digest_index.json",
+      "recorded_size_bytes": 2577,
+      "recorded_sha256": "7c2636077c10d33edb6a4f8b628325cd4f0656ec0d33643eb4ce414fbcae4885",
+      "snapshot_size_bytes": 2577,
+      "snapshot_sha256": "7c2636077c10d33edb6a4f8b628325cd4f0656ec0d33643eb4ce414fbcae4885",
+      "snapshot_digest_parity": true,
+      "working_tree_size_bytes": 2577,
+      "working_tree_sha256": "7c2636077c10d33edb6a4f8b628325cd4f0656ec0d33643eb4ce414fbcae4885",
+      "working_tree_digest_parity": true
+    },
+    "scripts/audit_rsv2_07_hm_forensics.py": {
+      "source_receipt": "docs/audits/rsv2_07_hm/phase28_script_test_inventory_audit.json",
+      "recorded_size_bytes": 20304,
+      "recorded_sha256": "6a1127c8db385b67f676f5dec9603c201a57dd4b76258c7c9213f98f48eef2ce",
+      "snapshot_size_bytes": 20304,
+      "snapshot_sha256": "6a1127c8db385b67f676f5dec9603c201a57dd4b76258c7c9213f98f48eef2ce",
+      "snapshot_digest_parity": true,
+      "working_tree_size_bytes": 29068,
+      "working_tree_sha256": "7ddff98d57543fb28ca08cb7c2dc93d52e1cf6da0df6d752be0e208c6435ffa9",
+      "working_tree_digest_parity": false
+    },
+    "scripts/test_audit_rsv2_07_hm_forensics.py": {
+      "source_receipt": "docs/audits/rsv2_07_hm/phase28_script_test_inventory_audit.json",
+      "recorded_size_bytes": 22714,
+      "recorded_sha256": "d3323440090a6b7bfa5ba7f55c1814293eb2793efc8096ed43f41a54e975b58d",
+      "snapshot_size_bytes": 22714,
+      "snapshot_sha256": "d3323440090a6b7bfa5ba7f55c1814293eb2793efc8096ed43f41a54e975b58d",
+      "snapshot_digest_parity": true,
+      "working_tree_size_bytes": 30790,
+      "working_tree_sha256": "dcb4ab59dfecb6a29b4bbfe33e0d9bbd4b24c80d29a2aa4a6ef89be3a2afebeb",
+      "working_tree_digest_parity": false
+    }
+  }
+}

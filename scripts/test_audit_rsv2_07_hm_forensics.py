@@ -427,5 +427,142 @@ def factory():
         self.assertEqual(current["scripts"][audit.SCRIPT_PATHS[1]]["test_method_count"], discovered)
 
 
+class IndexInventoryCrossCheckTests(unittest.TestCase):
+    def setUp(self):
+        self.root = Path("/relocated/checkout")
+        self.artifact = audit.DIRECTORY + "PHASE01_NOTE.md"
+        self.snapshot = {self.artifact: b"# Opaque saved audit\n",
+                         audit.SCRIPT_PATHS[0]: b"opaque saved verifier bytes\n",
+                         audit.SCRIPT_PATHS[1]: b"opaque saved test bytes\n"}
+        self.live = dict(self.snapshot)
+        for name, schema, task, table, count, paths in (
+                (audit.DIGEST_RECEIPT, "jarambit.rsv2_07_hm.phase27_artifact_digest_index.v1", "RSV2-07-p27", "artifacts", "artifact_count", [self.artifact]),
+                (audit.SCRIPT_RECEIPT, "jarambit.rsv2_07_hm.phase28_script_test_inventory.v1", "RSV2-07-p28", "scripts", "script_count", audit.SCRIPT_PATHS)):
+            rows = {path: {"size_bytes": len(self.snapshot[path]), "sha256": hashlib.sha256(self.snapshot[path]).hexdigest()}
+                    for path in paths}
+            self.save(name, {"schema": schema, "task": task, "status": "pass", count: len(rows),
+                             "total_size_bytes": sum(row["size_bytes"] for row in rows.values()), table: rows})
+
+    def save(self, name, document):
+        self.live[name] = self.snapshot[name] = json.dumps(document).encode()
+
+    def read(self, path):
+        name = path.relative_to(self.root).as_posix()
+        if name not in self.live:
+            raise FileNotFoundError(name)
+        return self.live[name]
+
+    def current(self):
+        with patch.object(Path, "read_bytes", new=lambda path: self.read(path)), \
+                patch.object(audit, "snapshot_bytes", side_effect=lambda root, name: self.snapshot[name]):
+            return audit.cross_check(self.root)
+
+    def test_disjoint_registries_have_exact_snapshot_and_live_byte_parity(self):
+        result = self.current()
+        self.assertEqual((result["entry_count"], result["overlap_paths"]), (3, []))
+        self.assertTrue(result["disjoint_path_sets"])
+        self.assertTrue(result["exact_snapshot_digest_parity"])
+        self.assertTrue(result["working_tree_exact_digest_parity"])
+        self.assertEqual(set(result["phase27_paths"]) & set(result["phase28_paths"]), set())
+        for name, row in result["entries"].items():
+            self.assertEqual(row["recorded_sha256"], hashlib.sha256(self.snapshot[name]).hexdigest())
+            self.assertEqual(row["recorded_size_bytes"], len(self.snapshot[name]))
+            self.assertEqual(row["recorded_sha256"], row["snapshot_sha256"])
+        self.assertEqual(result, self.current())
+        self.assertNotIn(str(self.root), json.dumps(result))
+
+    def test_edited_or_missing_live_scripts_do_not_claim_live_parity(self):
+        self.live[audit.SCRIPT_PATHS[0]] += b"edited\n"
+        del self.live[audit.SCRIPT_PATHS[1]]
+        result = self.current()
+        self.assertEqual(result["status"], "pass")
+        self.assertTrue(result["exact_snapshot_digest_parity"])
+        self.assertFalse(result["working_tree_exact_digest_parity"])
+        self.assertEqual(result["working_tree_drift_paths"], list(audit.SCRIPT_PATHS))
+        row = result["entries"][audit.SCRIPT_PATHS[1]]
+        self.assertIsNone(row["working_tree_size_bytes"])
+        self.assertIsNone(row["working_tree_sha256"])
+        self.assertIn("**Current working-tree parity: DRIFT.**", audit.render_cross(result))
+
+    def test_overlapping_path_sets_fail_even_with_equal_digests(self):
+        document = json.loads(self.live[audit.DIGEST_RECEIPT])
+        path = audit.SCRIPT_PATHS[0]
+        document["artifacts"] = {path: {"sha256": hashlib.sha256(self.snapshot[path]).hexdigest(), "size_bytes": len(self.snapshot[path])}}
+        document["total_size_bytes"] = len(self.snapshot[path])
+        self.save(audit.DIGEST_RECEIPT, document)
+        with self.assertRaisesRegex(ValueError, "path sets overlap"):
+            self.current()
+
+    def test_snapshot_size_and_digest_mismatches_fail(self):
+        for field, value in (("size_bytes", 1), ("sha256", "0" * 64)):
+            self.setUp()
+            document = json.loads(self.live[audit.DIGEST_RECEIPT])
+            document["artifacts"][self.artifact][field] = value
+            document["total_size_bytes"] = sum(row["size_bytes"] for row in document["artifacts"].values())
+            self.save(audit.DIGEST_RECEIPT, document)
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "snapshot digest parity mismatch"):
+                self.current()
+
+    def test_receipt_schema_types_totals_and_digest_formats_fail_closed(self):
+        changes = (("schema", "unknown"), ("status", "partial"), ("artifact_count", True), ("total_size_bytes", False),
+                   ("artifacts", {}), ("artifacts", {self.artifact: {"size_bytes": False, "sha256": "0" * 64}}),
+                   ("artifacts", {self.artifact: {"size_bytes": 0, "sha256": "INVALID"}}))
+        original = json.loads(self.live[audit.DIGEST_RECEIPT])
+        for field, value in changes:
+            document = deepcopy(original)
+            document[field] = value
+            self.save(audit.DIGEST_RECEIPT, document)
+            with self.subTest(field=field, value=value), self.assertRaises(ValueError):
+                self.current()
+
+    def test_malformed_json_or_receipt_bytes_differing_from_snapshot_fail(self):
+        original = self.live[audit.DIGEST_RECEIPT]
+        for data in (b'{"x":1,"x":2}', b'{"x":NaN}', b"{broken}", original + b"\n"):
+            self.live[audit.DIGEST_RECEIPT] = data
+            with self.subTest(data=data[:20]), self.assertRaises(ValueError):
+                self.current()
+
+    def test_source_mutation_during_cross_check_fails(self):
+        changed = False
+        def read(path):
+            nonlocal changed
+            data = self.read(path)
+            if path == self.root / self.artifact and not changed:
+                changed = True
+                self.live[self.artifact] += b"changed\n"
+            return data
+        with patch.object(Path, "read_bytes", new=read), \
+                patch.object(audit, "snapshot_bytes", side_effect=lambda root, name: self.snapshot[name]), \
+                self.assertRaisesRegex(ValueError, "changed during audit"):
+            audit.cross_check(self.root)
+
+    def test_cli_writes_only_phase29_outputs_and_checks_readonly_receipt_and_report(self):
+        original = deepcopy(self.live)
+        def write(path, value, **kwargs):
+            self.live[path.relative_to(self.root).as_posix()] = value.encode()
+        def text(path, **kwargs):
+            return self.read(path).decode()
+        args = ["forensics", "--phase", "29", "--repo-root", str(self.root)]
+        with patch.object(Path, "read_bytes", new=lambda path: self.read(path)), patch.object(Path, "read_text", new=text), \
+                patch.object(Path, "write_text", new=write), patch.object(Path, "mkdir"), \
+                patch.object(audit, "snapshot_bytes", side_effect=lambda root, name: self.snapshot[name]), \
+                redirect_stdout(io.StringIO()) as output:
+            with patch.object(sys, "argv", args + ["--write"]):
+                self.assertEqual(audit.main(), 0)
+            self.assertEqual(set(self.live) - set(original), {audit.CROSS_RECEIPT, audit.CROSS_REPORT})
+            for name, data in original.items():
+                self.assertEqual(self.live[name], data)
+            with patch.object(sys, "argv", args), patch.object(Path, "write_text", side_effect=AssertionError("Readonly audit wrote")):
+                self.assertEqual(audit.main(), 0)
+                for name in (audit.CROSS_RECEIPT, audit.CROSS_REPORT):
+                    saved = self.live[name]
+                    self.live[name] += b"changed"
+                    with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                        audit.main()
+                    self.assertEqual(error.exception.code, 1)
+                    self.live[name] = saved
+            self.assertIn("parity=pinned_snapshot", output.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
