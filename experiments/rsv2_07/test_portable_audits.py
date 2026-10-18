@@ -16,6 +16,7 @@ import portable_audit as portable
 import audit_phase6 as receipt_audit
 import audit_phase11_wave_receipts as wave_audit
 import audit_phase12_cross_wave as cross_wave_audit
+import audit_phase13_screen_rounds as screen_audit
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -454,6 +455,155 @@ class CrossWaveReceiptAuditTests(unittest.TestCase):
                 patch.object(sys, "argv", args), redirect_stdout(output):
             cross_wave_audit.main()
         self.assertIn("20 file digests; 8 assessment events; 2 distinct assessed identities", output.getvalue())
+
+
+class ScreenRoundArtifactTests(unittest.TestCase):
+    def setUp(self):
+        self.docs = {}
+        for round_id in range(3):
+            births, screens = [], []
+            for slot in range(1, 10):
+                identity = hashlib.sha256(f"synthetic-{round_id}-{slot}".encode()).hexdigest()
+                births.append({"family": "fixture", "certificate_identity": identity, "row": f"{round_id},{slot}"})
+                screens.append({"family": "fixture", "certificate_identity": identity,
+                                "label": f"w315_r{round_id + 1:02}_fixture_c{slot:02}",
+                                "qualification_status": wave_audit.PENDING})
+            self.docs[f"round_{round_id:02}_births.json"] = {
+                "round": round_id, "seed": 1, "source": "synthetic", "genome_header": "a,b", "genomes": births}
+            self.docs[f"round_{round_id:02}_screen.json"] = screens
+
+    def payloads(self, docs=None):
+        payloads = {name: json.dumps(doc, sort_keys=True).encode() for name, doc in (self.docs if docs is None else docs).items()}
+        pins = {name: (hashlib.sha256(data).hexdigest(), len(data)) for name, data in payloads.items()}
+        return payloads, pins
+
+    def test_three_rounds_and_saved_slot_representation(self):
+        result = screen_audit.audit_documents("w315", self.docs)
+        self.assertEqual(result["unavailable_rounds"], [])
+        for counts in result["rounds"].values():
+            self.assertEqual((counts["births"], counts["screens"]), (9, 9))
+            self.assertTrue(all(value == {"birth_present": True, "screen_present": True}
+                                for value in counts["slots"].values()))
+            self.assertEqual(counts["metric_field_presence"], dict.fromkeys(screen_audit.METRIC_KEYS, 0))
+
+    def test_missing_round_is_unavailable_and_unscreened_slot_is_not_failure(self):
+        self.docs.pop("round_02_births.json")
+        self.docs.pop("round_02_screen.json")
+        self.docs["round_01_screen.json"] = []
+        result = screen_audit.audit_documents("w315", self.docs)
+        self.assertEqual(result["unavailable_rounds"], [2])
+        self.assertFalse(result["rounds"]["1"]["slots"]["c06"]["screen_present"])
+
+    def test_field_presence_is_not_a_performance_statistic(self):
+        self.docs["round_00_screen.json"][0]["lateral_sf"] = 123
+        counts = screen_audit.audit_documents("w315", self.docs)["rounds"]["0"]
+        self.assertEqual(counts["metric_field_presence"]["lateral_sf"], 1)
+        self.assertNotIn("statistics", counts)
+
+    def test_digest_tamper_and_invalid_pins_fail(self):
+        payloads, pins = self.payloads()
+        name = "round_02_screen.json"
+        payloads[name] += b" "
+        with self.assertRaisesRegex(ValueError, "SHA-256/size mismatch"):
+            screen_audit.audit_payloads("w315", payloads, pins)
+        payloads, pins = self.payloads()
+        for pin in [("X" * 64, 1), ("a" * 64, True)]:
+            pins[name] = pin
+            with self.subTest(pin=pin), self.assertRaises(ValueError):
+                screen_audit.audit_payloads("w315", payloads, pins)
+
+    def test_unpinned_file_or_missing_hash_fails(self):
+        payloads, pins = self.payloads()
+        del pins["round_02_births.json"]
+        with self.assertRaisesRegex(ValueError, "coverage mismatch"):
+            screen_audit.audit_payloads("w315", payloads, pins)
+
+    def test_exact_birth_slot_is_checked_even_when_identity_exists(self):
+        row = self.docs["round_00_screen.json"][0]
+        row["certificate_identity"] = self.docs["round_00_births.json"]["genomes"][1]["certificate_identity"]
+        with self.assertRaisesRegex(ValueError, "identity/birth slot mismatch"):
+            screen_audit.audit_documents("w315", self.docs)
+
+    def test_wrong_wave_round_family_and_duplicate_labels_fail(self):
+        for label in ["w316_r01_fixture_c01", "w315_r02_fixture_c01", "w315_r01_other_c01", "w315_r01_fixture_c00"]:
+            changed = deepcopy(self.docs)
+            changed["round_00_screen.json"][0]["label"] = label
+            with self.subTest(label=label), self.assertRaises(ValueError):
+                screen_audit.audit_documents("w315", changed)
+        self.docs["round_00_screen.json"].append(deepcopy(self.docs["round_00_screen.json"][0]))
+        with self.assertRaisesRegex(ValueError, "Duplicate screen"):
+            screen_audit.audit_documents("w315", self.docs)
+
+    def test_incomplete_gapped_rounds_and_conflicting_rows_fail(self):
+        changed = deepcopy(self.docs)
+        del changed["round_01_screen.json"]
+        with self.assertRaisesRegex(ValueError, "Incomplete"):
+            screen_audit.audit_documents("w315", changed)
+        del changed["round_01_births.json"]
+        with self.assertRaisesRegex(ValueError, "contiguous"):
+            screen_audit.audit_documents("w315", changed)
+        entry = self.docs["round_00_births.json"]["genomes"][0]
+        self.docs["round_01_births.json"]["genomes"].append({**entry, "row": "different,1"})
+        with self.assertRaisesRegex(ValueError, "Conflicting identity"):
+            screen_audit.audit_documents("w315", self.docs)
+
+    def test_round_type_csv_and_pending_status_fail_closed(self):
+        for field, value in [("round", False), ("genome_header", "a,a"), ("genomes", {})]:
+            changed = deepcopy(self.docs)
+            changed["round_00_births.json"][field] = value
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                screen_audit.audit_documents("w315", changed)
+        self.docs["round_00_screen.json"][0]["qualification_status"] = "qualified"
+        with self.assertRaisesRegex(ValueError, "remain pending"):
+            screen_audit.audit_documents("w315", self.docs)
+
+    def directory_fixture(self):
+        # No original host paths or wave files are accessed by these tests.
+        payloads, pins = {}, {}
+        for wave in screen_audit.PINS:
+            docs = deepcopy(self.docs)
+            for name, rows in docs.items():
+                if name.endswith("_screen.json"):
+                    for row in rows:
+                        row["label"] = row["label"].replace("w315_", wave + "_")
+            payloads[wave], pins[wave] = self.payloads(docs)
+        return payloads, pins
+
+    def test_relocated_directories_optional_wave_and_missing_required_wave(self):
+        payloads, pins = self.directory_fixture()
+        output = io.StringIO()
+        with patch.object(Path, "is_dir", new=lambda path: path.name != "w319"), \
+                patch.object(Path, "is_file", return_value=True), \
+                patch.object(Path, "read_bytes", new=lambda path: payloads[path.parent.name][path.name]), \
+                patch.object(screen_audit, "PINS", pins), \
+                patch.object(wave_audit, "default_wave_directory", side_effect=AssertionError("Unexpected Git access")), \
+                patch.object(sys, "argv", ["audit_phase13_screen_rounds.py", "--out-root", "/synthetic/out"]), \
+                redirect_stdout(output):
+            screen_audit.main()
+        self.assertIn("24 pinned file digests", output.getvalue())
+        self.assertIn("absent optional waves=['w319']", output.getvalue())
+        with patch.object(Path, "is_dir", return_value=False), self.assertRaisesRegex(ValueError, "Missing required"):
+            screen_audit.audit_directories(Path("/synthetic/out"), pins)
+
+    def test_inventory_and_byte_mutation_during_audit_fail(self):
+        payloads, pins = self.directory_fixture()
+        for mode in ("inventory", "bytes"):
+            reads = {}
+
+            def read(path):
+                reads[path] = reads.get(path, 0) + 1
+                return payloads[path.parent.name][path.name] + (b" " if mode == "bytes" and reads[path] > 1 else b"")
+
+            calls = []
+
+            def is_file(path):
+                calls.append(path)
+                return not (mode == "inventory" and len(calls) > 24 and path.name == "round_02_screen.json")
+
+            with self.subTest(mode=mode), patch.object(Path, "is_dir", new=lambda path: path.name != "w319"), \
+                    patch.object(Path, "is_file", new=is_file), patch.object(Path, "read_bytes", new=read), \
+                    self.assertRaisesRegex(ValueError, "changed during audit"):
+                screen_audit.audit_directories(Path("/synthetic/out"), pins)
 
 
 if __name__ == "__main__":
