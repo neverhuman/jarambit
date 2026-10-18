@@ -1606,5 +1606,154 @@ class MarkdownHeadingConsistencyTests(unittest.TestCase):
         self.assertEqual(error.exception.code, 1)
 
 
+class Hex64DigestFormatTests(unittest.TestCase):
+    def setUp(self):
+        scratch = Path(__file__).resolve().parents[1] / "target/rsv2-07/phase38/test-fixtures"
+        scratch.mkdir(parents=True, exist_ok=True)
+        temporary = tempfile.TemporaryDirectory(prefix="hex64-", dir=scratch)
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.names, self.files = {}, {}
+        self.digest = "0123456789abcdef" * 4
+        for phase in range(19, 38):
+            directory = "experiments/rsv2_07/results/" if phase < 26 else audit.DIRECTORY
+            name = directory + f"phase{phase}_fixture.json"
+            data = json.dumps({"sha256": self.digest, "opaque": phase}).encode() + b"\n"
+            self.names[phase], self.files[name] = name, data
+            self.write(name, data)
+
+    def write(self, name, data):
+        path = self.root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+
+    def cli(self, *extra):
+        with patch.object(sys, "argv", ["forensics", "--phase", "38", "--repo-root", str(self.root), *extra]), \
+                redirect_stdout(io.StringIO()) as output:
+            result = audit.main()
+        return result, output.getvalue()
+
+    def test_lowercase_ascii_hex64_requires_full_string_and_rejects_null_or_other_types(self):
+        for value in (self.digest, "0" * 64, "f" * 64):
+            row = audit.sha256_field_formats({"sha256": value})[0]
+            self.assertTrue(row["is_lowercase_hex64"])
+            self.assertIsNone(row["reason"])
+        for value, reason in ((None, "null_not_digest"), (True, "not_string"), (123, "not_string"),
+                              ({"other": 1}, "not_string"), ([], "not_string"), ("", "wrong_length"),
+                              ("a" * 63, "wrong_length"), ("a" * 65, "wrong_length"),
+                              (self.digest + "\n", "wrong_length"), ("A" * 64, "not_lowercase_hex"),
+                              ("g" * 64, "not_lowercase_hex"), ("é" * 64, "not_lowercase_hex"),
+                              (" " + "a" * 63, "not_lowercase_hex")):
+            with self.subTest(value=value):
+                row = audit.sha256_field_formats({"sha256": value})[0]
+                self.assertFalse(row["is_lowercase_hex64"])
+                self.assertEqual(row["reason"], reason)
+
+    def test_recursion_preserves_key_and_array_paths_and_checks_only_exact_keys(self):
+        source = {"a/b~c": [{"sha256": self.digest}], "sha256": {"sha256": self.digest},
+                  "genome_sha256": 123, "recorded_sha256": "bad", "SHA256": "bad", "text": "sha256"}
+        rows = audit.sha256_field_formats(source)
+        self.assertEqual([row["json_path"] for row in rows], [["a/b~c", 0, "sha256"], ["sha256"], ["sha256", "sha256"]])
+        self.assertEqual([row["is_lowercase_hex64"] for row in rows], [True, False, True])
+        self.assertEqual(rows[1]["reason"], "not_string")
+
+    def test_all_nineteen_phases_have_exact_source_hashes_and_zero_fields_are_explicit(self):
+        current = audit.hex64_digest_audit(self.root)
+        self.assertEqual(current["phases"], list(range(19, 38)))
+        self.assertEqual((current["receipt_count"], current["sha256_field_count"], current["valid_field_count"], current["invalid_field_count"]), (19, 19, 19, 0))
+        self.assertEqual(current["status"], "pass")
+        for name, data in self.files.items():
+            row = current["receipts"][name]
+            self.assertEqual((row["sha256"], row["size_bytes"]), (hashlib.sha256(data).hexdigest(), len(data)))
+            self.assertEqual(row["sha256_fields"][0]["json_path"], ["sha256"])
+        self.assertEqual(current, audit.hex64_digest_audit(self.root))
+        self.assertNotIn(str(self.root), json.dumps(current))
+        self.write(self.names[19], b'{}\n')
+        empty = audit.hex64_digest_audit(self.root)
+        self.assertEqual(empty["receipts"][self.names[19]]["sha256_field_count"], 0)
+        self.assertEqual(empty["sha256_field_count"], 18)
+
+    def test_discovery_includes_extra_receipts_but_excludes_other_phases_and_roots(self):
+        before = audit.hex64_digest_audit(self.root)
+        for name in (audit.HEX64_RECEIPT, audit.DIRECTORY + "phase18_other.json", audit.DIRECTORY + "phase370_other.json",
+                     "other/phase19_other.json"):
+            self.write(name, b"outside scope malformed JSON")
+        self.assertEqual(audit.hex64_digest_audit(self.root), before)
+        self.write(audit.DIRECTORY + "archive/phase20_additional.json", json.dumps({"sha256": self.digest}).encode())
+        self.assertEqual(audit.hex64_digest_audit(self.root)["sha256_field_count"], 20)
+
+    def test_malformed_nonobject_missing_phase_and_symlinked_sources_fail(self):
+        for data in (b"[]", b"null", b'{"sha256":1,"sha256":2}', b'{"x":NaN}', b'{"x":1e999}', b"{broken}", b"\xff"):
+            self.write(self.names[37], data)
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                audit.hex64_digest_audit(self.root)
+        path = self.root / self.names[37]
+        path.unlink()
+        with self.assertRaisesRegex(ValueError, "coverage must include every phase"):
+            audit.hex64_digest_audit(self.root)
+        path.symlink_to(Path(self.names[36]).name)
+        with self.assertRaisesRegex(ValueError, "regular digest format source"):
+            audit.hex64_digest_audit(self.root)
+
+    def test_source_bytes_or_membership_changes_during_scan_fail(self):
+        original_read = Path.read_bytes
+        changed = False
+        def read(path):
+            nonlocal changed
+            data = original_read(path)
+            if path == self.root / self.names[37] and not changed:
+                changed = True
+                path.write_bytes(data + b"\n")
+            return data
+        with patch.object(Path, "read_bytes", new=read), self.assertRaisesRegex(ValueError, "changed during digest format audit"):
+            audit.hex64_digest_audit(self.root)
+        names = audit.phase_receipt_paths(self.root, audit.HEX64_RECEIPT_PATTERN)
+        with patch.object(audit, "phase_receipt_paths", side_effect=[names, names + [audit.DIRECTORY + "phase20_added.json"]]), \
+                self.assertRaisesRegex(ValueError, "membership changed"):
+            audit.hex64_digest_audit(self.root)
+
+    def test_cli_preserves_sources_checks_readonly_tampering_and_records_null_findings(self):
+        with patch.object(audit.subprocess, "check_output", side_effect=AssertionError("Unexpected Git command")):
+            result, output = self.cli("--write")
+            self.assertEqual(result, 0)
+            self.assertIn("receipts=19 | fields=19 | nonconforming=0", output)
+            expected = set(self.files) | {audit.HEX64_RECEIPT, audit.HEX64_REPORT}
+            self.assertEqual({path.relative_to(self.root).as_posix() for path in self.root.rglob("*") if path.is_file()}, expected)
+            for name, data in self.files.items():
+                self.assertEqual((self.root / name).read_bytes(), data)
+            with patch.object(Path, "write_text", side_effect=AssertionError("Readonly audit wrote")):
+                self.assertEqual(self.cli()[0], 0)
+            receipt = self.root / audit.HEX64_RECEIPT
+            original = receipt.read_bytes()
+            saved = json.loads(original)
+            saved["invalid_field_count"] = False
+            receipt.write_text(json.dumps(saved))
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                self.cli()
+            self.assertEqual(error.exception.code, 1)
+            receipt.write_bytes(original)
+            report = self.root / audit.HEX64_REPORT
+            original_report = report.read_bytes()
+            report.write_bytes(original_report + b"changed")
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                self.cli()
+            self.assertEqual(error.exception.code, 1)
+            report.write_bytes(original_report)
+            self.write(self.names[26], b'{"sha256":null}\n')
+            result, output = self.cli("--write")
+            self.assertEqual(result, 2)
+            self.assertIn("| FINDINGS |", output)
+            self.assertEqual(self.cli()[0], 2)
+            saved = json.loads(receipt.read_bytes())
+            self.assertEqual((saved["status"], saved["invalid_field_count"]), ("digest_format_findings", 1))
+            for name in (audit.HEX64_RECEIPT, audit.HEX64_REPORT):
+                audit.require_portable((self.root / name).read_text(), name)
+
+    def test_artifact_root_is_rejected_for_digest_format_audit(self):
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            self.cli("--artifact-root", str(self.root))
+        self.assertEqual(error.exception.code, 1)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

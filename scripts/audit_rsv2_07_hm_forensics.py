@@ -50,6 +50,9 @@ KEYSET_PATTERN = re.compile(r"phase(19|2[0-9]|3[0-5])(?:_[^/]*)?\.json")
 HEADING_RECEIPT = DIRECTORY + "phase37_markdown_heading_consistency_audit.json"
 HEADING_REPORT = DIRECTORY + "PHASE37_MARKDOWN_HEADING_CONSISTENCY_AUDIT.md"
 HEADING_PATTERN = re.compile(r"PHASE(19|2[0-9]|3[0-6])(?:_[^/]*)?\.md")
+HEX64_RECEIPT = DIRECTORY + "phase38_hex64_digest_format_audit.json"
+HEX64_REPORT = DIRECTORY + "PHASE38_HEX64_DIGEST_FORMAT_AUDIT.md"
+HEX64_RECEIPT_PATTERN = re.compile(r"phase(19|2[0-9]|3[0-7])(?:_[^/]*)?\.json")
 # Absolute POSIX paths, Windows drive paths, UNC paths and file URIs.
 HOST_PATH = re.compile(r"(?<![\w./:])/(?!/)[\w.~-]+|(?<!\w)[A-Za-z]:[\\/]|\\\\[^\\\s]+\\|file://")
 
@@ -341,13 +344,13 @@ def run_self_digest(args):
     return 0
 
 
-def phase_receipt_paths(repo_root):
+def phase_receipt_paths(repo_root, pattern=KEYSET_PATTERN):
     repo_root = Path(repo_root)
     names = []
     for directory in KEYSET_ROOTS:
         require((repo_root / directory).is_dir(), "Missing receipt search directory: " + directory)
         names.extend(path.relative_to(repo_root).as_posix() for path in (repo_root / directory).rglob("phase*.json")
-                     if KEYSET_PATTERN.fullmatch(path.name))
+                     if pattern.fullmatch(path.name))
     return sorted(names)
 
 
@@ -556,6 +559,111 @@ def run_headings(args):
     label = "PASS" if not current["issue_count"] else "FINDINGS"
     print(f"LANE: RSV2-07-hm | RSV2-07-p37 | {label} | documents={current['document_count']} | headings={current['heading_count']} | findings={current['issue_count']}")
     return 0 if not current["issue_count"] else 2
+
+
+def sha256_field_formats(document):
+    fields = []
+    def scan(node, path):
+        if isinstance(node, dict):
+            for key, value in sorted(node.items()):
+                here = [*path, key]
+                if key == "sha256":
+                    reason = None
+                    if value is None:
+                        reason = "null_not_digest"
+                    elif not isinstance(value, str):
+                        reason = "not_string"
+                    elif len(value) != 64:
+                        reason = "wrong_length"
+                    elif re.fullmatch(r"[0-9a-f]{64}", value) is None:
+                        reason = "not_lowercase_hex"
+                    fields.append({"json_path": here, "value_type": "null" if value is None else type(value).__name__,
+                                   "string_length": len(value) if isinstance(value, str) else None,
+                                   "is_lowercase_hex64": reason is None, "reason": reason})
+                scan(value, here)
+        elif isinstance(node, list):
+            for number, value in enumerate(node):
+                scan(value, [*path, number])
+    scan(document, [])
+    return fields
+
+
+def hex64_digest_audit(repo_root):
+    repo_root = Path(repo_root)
+    names = phase_receipt_paths(repo_root, HEX64_RECEIPT_PATTERN)
+    sources, receipts = {}, {}
+    for name in names:
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode), "Expected regular digest format source: " + name)
+        data = path.read_bytes()
+        document = strict_json(data)
+        require(isinstance(document, dict), "Expected top-level JSON object: " + name)
+        fields = sha256_field_formats(document)
+        sources[name] = data
+        receipts[name] = {"phase": int(HEX64_RECEIPT_PATTERN.fullmatch(path.name)[1]),
+                          "sha256": hashlib.sha256(data).hexdigest(), "size_bytes": len(data),
+                          "sha256_field_count": len(fields), "valid_field_count": sum(row["is_lowercase_hex64"] for row in fields),
+                          "invalid_field_count": sum(not row["is_lowercase_hex64"] for row in fields), "sha256_fields": fields}
+    phases = sorted({row["phase"] for row in receipts.values()})
+    require(phases == list(range(19, 38)), "Digest receipt coverage must include every phase from 19 through 37")
+    require(phase_receipt_paths(repo_root, HEX64_RECEIPT_PATTERN) == names, "Receipt membership changed during digest format audit")
+    for name, data in sources.items():
+        path = repo_root / name
+        require(stat.S_ISREG(path.lstat().st_mode) and path.read_bytes() == data,
+                "Receipt bytes or type changed during digest format audit")
+    field_count = sum(row["sha256_field_count"] for row in receipts.values())
+    invalid_count = sum(row["invalid_field_count"] for row in receipts.values())
+    return {"schema": "jarambit.rsv2_07_hm.phase38_hex64_digest_format.v1", "task": "RSV2-07-p38",
+            "status": "pass" if not invalid_count else "digest_format_findings", "search_roots": list(KEYSET_ROOTS),
+            "field_rule": "every object property named exactly sha256, recursively through objects and arrays; suffix-named properties are outside scope",
+            "format_rule": "string fully matching [0-9a-f]{64}; null and non-string values are nonconforming",
+            "json_path_rule": "ordered object-key strings and zero-based array-index integers, starting at the root",
+            "phases": phases, "receipt_count": len(receipts), "receipts": receipts,
+            "sha256_field_count": field_count, "valid_field_count": field_count - invalid_count,
+            "invalid_field_count": invalid_count,
+            "receipts_with_findings": sum(bool(row["invalid_field_count"]) for row in receipts.values())}
+
+
+def render_hex64(document):
+    rows = [f"| {row['phase']} | {name} | {row['sha256_field_count']} | {row['valid_field_count']} | {row['invalid_field_count']} |"
+            for name, row in sorted(document["receipts"].items(), key=lambda item: (item[1]["phase"], item[0]))]
+    findings = [f"- {name}: `{json.dumps(field['json_path'], ensure_ascii=False)}` — {field['reason']} ({field['value_type']})."
+                for name, row in document["receipts"].items() for field in row["sha256_fields"] if not field["is_lowercase_hex64"]]
+    label = "PASS" if not document["invalid_field_count"] else "FINDINGS"
+    return "\n".join([
+        "# Phase-38 hex64 digest format audit", "",
+        f"**{label}.** Audited {document['receipt_count']} receipts covering every phase from 19 through 37. Of {document['sha256_field_count']} exact sha256 fields, {document['valid_field_count']} are lowercase 64-character hexadecimal strings and {document['invalid_field_count']} are nonconforming, across {document['receipts_with_findings']} {'receipt' if document['receipts_with_findings'] == 1 else 'receipts'}.", "",
+        "| Phase | Repository-relative receipt | sha256 fields | Valid | Nonconforming |",
+        "| ---: | --- | ---: | ---: | ---: |", *rows, "",
+        "Nonconforming fields:", "", *(findings or ["None."]), "",
+        "Every object property named exactly sha256 is visited recursively through objects and arrays, including a nested sha256 property inside a non-string value. Values must be strings fully matching the ASCII pattern [0-9a-f]{64}; null, numbers, booleans, objects, arrays, uppercase characters, whitespace and wrong lengths are nonconforming. No normalization or substitution is performed. Properties with other names, including genome_sha256, recorded_sha256, snapshot_sha256 and working_tree_sha256, are outside this exact-key check; older receipts also use suffixed names for counters and indexes.", "",
+        "The JSON lists every checked field's path components, value type, string length, validity and reason. Object keys are strings; array indexes are integers, so paths remain unambiguous when keys contain slashes or tildes. Each source receipt is pinned by SHA-256 and byte size. Receipts with no exact sha256 fields are explicitly counted as zero fields. This checks representation only and does not establish digest correctness or availability of missing artifacts. Existing null placeholders are preserved and reported as findings.", "",
+        "Discovery recursively searches experiments/rsv2_07 and docs/audits/rsv2_07_hm for lowercase phase19 through phase37 JSON filenames with an exact phase-number boundary. Complete phase coverage is required; multiple receipts per phase are retained. Phase-38 outputs are excluded. Sources must be regular files and strict JSON objects; duplicate keys, nonfinite numbers and malformed JSON fail. Membership, types and source bytes are checked again after scanning.", "",
+        "Paths in the outputs are repository-relative. --repo-root supports a relocated source tree without Git. Normal verification compares the complete saved JSON and exact report text without writes. --write replaces only the two Phase-38 outputs. Earlier receipts are preserved. Exit 0 means every checked field conforms, exit 2 means format findings were recorded, and malformed or mismatching evidence exits 1.", "",
+        "```sh", "python3 scripts/audit_rsv2_07_hm_forensics.py --phase 38",
+        "python3 -m unittest discover -s scripts -p 'test_audit_rsv2_07_hm_forensics.py' -v", "git diff --check", "```", "",
+        "Execution uses CPUs 14,15 at nice 10. This is a static digest format audit. Changes are left uncommitted.", "",
+    ])
+
+
+def run_hex64(args):
+    require(args.artifact_root is None, "Phase-38 reads receipts in --repo-root; --artifact-root is not supported")
+    current = hex64_digest_audit(args.repo_root)
+    report = render_hex64(current)
+    receipt = json.dumps(current, indent=2) + "\n"
+    require_portable(report, "Phase-38 report")
+    require_portable(receipt, "Phase-38 receipt")
+    if args.write:
+        (args.repo_root / DIRECTORY).mkdir(parents=True, exist_ok=True)
+        (args.repo_root / HEX64_RECEIPT).write_text(receipt, encoding="utf-8")
+        (args.repo_root / HEX64_REPORT).write_text(report, encoding="utf-8")
+    else:
+        saved = strict_json((args.repo_root / HEX64_RECEIPT).read_bytes())
+        require(json.dumps(saved, sort_keys=True) == json.dumps(current, sort_keys=True), "Phase-38 saved receipt mismatch")
+        require((args.repo_root / HEX64_REPORT).read_text(encoding="utf-8") == report, "Phase-38 report mismatch")
+    label = "PASS" if not current["invalid_field_count"] else "FINDINGS"
+    print(f"LANE: RSV2-07-hm | RSV2-07-p38 | {label} | receipts={current['receipt_count']} | fields={current['sha256_field_count']} | nonconforming={current['invalid_field_count']}")
+    return 0 if not current["invalid_field_count"] else 2
 
 
 def snapshot_bytes(repo_root, name):
@@ -1031,11 +1139,13 @@ def render(document):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37"), default="26")
+    parser.add_argument("--phase", choices=("26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38"), default="26")
     parser.add_argument("--artifact-root", type=Path)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     try:
+        if args.phase == "38":
+            return run_hex64(args)
         if args.phase == "37":
             return run_headings(args)
         if args.phase == "36":
