@@ -1,0 +1,509 @@
+{
+  "schema": "jarambit.ei.p1_t01.source_producer_linkage_receipt.v2",
+  "task_id": "JR-EI-P1-T01",
+  "decision_ref": "SC-DEC-183B",
+  "observed_utc": "2026-10-19T15:48:45Z",
+  "steward": {
+    "screen_session": "2740538.captain_jarambit",
+    "window": 1,
+    "agent_model": "Gemini 4 Argon",
+    "lease_claim_receipt": "/home/ubuntu/xbabe2_kicker/captains-20261017/CAPTAIN_JARAMBIT_SC183B_READ_ACK_AND_P1T01_CLAIM_20261019.json"
+  },
+  "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+  "source_head": "97388249afbe65a9974fd1b6b9774d0b70da2e9a",
+  "origin_main_head": "d82ca29e69ebaf11014d0df93d382f982e71dee3",
+  "status": "implemented_unvalidated",
+  "declared_scope": "Bounded read-only source-producer linkage check for JR-EI-P1-T01 separating (a) handoff/erratum byte-integrity checks, (b) assertions copied from the supplied erratum without full-corpus re-scan, (c) independently verified producer facts with exact on-disk file paths, SHA-256 hashes, byte sizes, field/row selectors, and observed values, and (d) unknown/unverified source/revision/time/identity claims. Preserves JR_EI_P1_T01_V2_ERRATUM_LINKAGE_RECEIPT_20261019.json untouched. Does not establish full-corpus admission or native Admiralty daemon execution.",
+  "input_identities": [
+    {
+      "role": "frozen_v2_archive_handoff",
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_20261019.json",
+      "bytes": 664314,
+      "sha256": "b1f884622aaffc9929069424685ed0aaf8b950470b254141336c193f1ec2529e"
+    },
+    {
+      "role": "additive_v2_metadata_erratum",
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_ERRATUM_20261019.json",
+      "bytes": 34300,
+      "sha256": "a3cefc5ce7f841aa6e7b1edfd8503c988dfa1e4e04754b22ea7babc4bcc1ff8a"
+    },
+    {
+      "role": "preserved_initial_p1_t01_linkage_receipt",
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T01_V2_ERRATUM_LINKAGE_RECEIPT_20261019.json",
+      "bytes": 1539,
+      "sha256": "6de99dac9c5b8a7fce2896a9d904b602032dd72020cf93fbefe4699bdc138ea0"
+    },
+    {
+      "role": "frozen_v2_staging_manifest",
+      "path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/index.manifest.sha256.json",
+      "exists": true
+    }
+  ],
+  "deferred_p8_checks": [
+    "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2",
+    "rtk cargo test --release --locked -p jarambit-crescent -- --test-threads=2",
+    "Final P8 exact-head validation against .github/workflows/d1-gates.yml, .github/workflows/version-check.yml, docs/paper/README.md, and web validation scripts"
+  ],
+  "part_a_handoff_and_erratum_byte_integrity_checks": {
+    "verification_method": "Direct read-only SHA-256 and byte-length computation on local filesystem at 2026-10-19T15:48:45Z",
+    "files": [
+      {
+        "label": "JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_20261019.json",
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_20261019.json",
+        "bytes": 664314,
+        "expected_sha256": "b1f884622aaffc9929069424685ed0aaf8b950470b254141336c193f1ec2529e",
+        "observed_sha256": "b1f884622aaffc9929069424685ed0aaf8b950470b254141336c193f1ec2529e",
+        "byte_identical_untouched": true
+      },
+      {
+        "label": "JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_ERRATUM_20261019.json",
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_ERRATUM_20261019.json",
+        "bytes": 34300,
+        "expected_sha256": "a3cefc5ce7f841aa6e7b1edfd8503c988dfa1e4e04754b22ea7babc4bcc1ff8a",
+        "observed_sha256": "a3cefc5ce7f841aa6e7b1edfd8503c988dfa1e4e04754b22ea7babc4bcc1ff8a",
+        "byte_identical_untouched": true
+      },
+      {
+        "label": "JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_20261019.json (frozen V1 on-disk file)",
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_20261019.json",
+        "bytes": 288343,
+        "observed_sha256": "010a91d7e4865cd661d14b56c7c1bf50feccfcc8080c5e65c3040628881bf311",
+        "byte_identical_untouched": true
+      },
+      {
+        "label": "JR_EI_P1_T01_V2_ERRATUM_LINKAGE_RECEIPT_20261019.json (preserved initial receipt)",
+        "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T01_V2_ERRATUM_LINKAGE_RECEIPT_20261019.json",
+        "bytes": 1539,
+        "observed_sha256": "6de99dac9c5b8a7fce2896a9d904b602032dd72020cf93fbefe4699bdc138ea0",
+        "byte_identical_untouched": true
+      }
+    ]
+  },
+  "part_b_assertions_copied_from_supplied_erratum": {
+    "classification_rule": "Claims listed in this section are recorded as assertions copied from JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_20261019.json or JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_ERRATUM_20261019.json and are NOT claimed as newly re-verified across remote hosts or the full 275 MB corpus in this bounded P1-T01 check unless explicitly paired with an entry in part_c_independently_verified_producer_facts.",
+    "copied_assertions": [
+      {
+        "source_document": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_ERRATUM_20261019.json",
+        "json_pointer": "/frozen_base_handoff",
+        "assertion": "V2 staging directory (/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2) contains 223 run packages, 2,864 total staged files (2,408 producer files + 456 per-run MANIFEST.json/run_config.json files), and 274,630,204 bytes with 0 SHA-256 mismatches at V2 creation time.",
+        "verification_status_in_this_step": "copied_from_frozen_v2_and_erratum_not_rescanning_275mb"
+      },
+      {
+        "source_document": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_ERRATUM_20261019.json",
+        "json_pointer": "/errata_items/3_corpus_completeness_predicate_and_explicit_exclusions/selected_source_roots_and_run_predicates",
+        "assertion": "The 223 run packages were collected from 12 selected source roots/globs across xbabe1 (3 runs), xbabe2 (136 runs), and xbabe3 (84 runs), excluding xbabe3:_aborted_crescent_screenquit_0125Z, xbabe3:_aborted_islands_v200_unpatched_0124Z, and xbabe3:_aggregate.",
+        "verification_status_in_this_step": "remote_xbabe1_and_xbabe3_roots_copied_from_erratum_pending_p1_t02_four_worker_inventory; local_xbabe2_excluded_dirs_verified_in_part_c"
+      },
+      {
+        "source_document": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_ERRATUM_20261019.json",
+        "json_pointer": "/errata_items/4_native_producer_source_config_patch_and_executable_binding/retained_host_producer_executables/xbabe3",
+        "assertion": "Retained release executable on remote host xbabe3 at xbabe3:/home/ubuntu/jr_evo_full_20261018/repo/target/release/jarambit has size 10,230,088 bytes, mtime 2026-10-19T01:24:26Z, and sha256 b528c84f1d84aa0ec5b7ea618ff344be74368f8e0f73dbbb3c05adf4e7909998.",
+        "verification_status_in_this_step": "copied_from_erratum_not_reprobed_over_ssh_in_p1_t01"
+      },
+      {
+        "source_document": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_ERRATUM_20261019.json",
+        "json_pointer": "/frozen_base_handoff/immutability_status",
+        "assertion": "Historical V1 handoff variants had SHA-256 digests 081f34e5659ce518ce45ef6ed731840609b221aa3c2f6b1bfbc24322fceacf98 and 62b67373d45f5a1174561591e6ba49508f3ec1d3bce0bed6e2adad2f04807eae prior to the current on-disk V1 file (010a91d7e4865cd661d14b56c7c1bf50feccfcc8080c5e65c3040628881bf311).",
+        "verification_status_in_this_step": "historical_digest_strings_copied_from_erratum; current_on_disk_v1_digest_010a91d7_verified_in_part_a"
+      }
+    ]
+  },
+  "part_c_independently_verified_producer_facts": {
+    "verification_scope": "Bounded read-only inspection of local producer files on xbabe2 (/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c01..c06, /home/ubuntu/jarambit_runs/evo_full_20261018/LOCAL_PERF_PATCH.diff, /home/ubuntu/jr_evo_full_20261018/repo/*, /home/ubuntu/jarambit/evidence/rs_v2/w282_ultrarunner/provenance.json, git blob 009f5ac520fa3afe8ed8025230eef604dbb7f922:crates/crescent/src/qd.rs) and locally staged V2 copies under /home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/.",
+    "c05_history_live_vs_qd_archive_facts": {
+      "producer_history_live_csv": {
+        "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c05/history_live.csv",
+        "staged_v2_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe2_c05/history_live.csv",
+        "bytes": 138761,
+        "sha256": "44516178645a52539103b1003588f680d3ba762b40b79774bba82acaedf01d54",
+        "producer_equals_staged": true,
+        "total_rows": 2132,
+        "header_present": false,
+        "columns_per_row": 14,
+        "selector": "1-based row 2126 (argmax over 0-based col[6] best_fit)",
+        "observed_raw_row": [
+          "531",
+          "1",
+          "64",
+          "54",
+          "24",
+          "8",
+          "1.1468",
+          "3.5247",
+          "73.90",
+          "0.431",
+          "0.002",
+          "90",
+          "73.90",
+          "0.0495"
+        ],
+        "observed_values": {
+          "col0_generation": 531,
+          "col1_island": 1,
+          "col6_best_fit": 1.1468,
+          "col8_best_mass_g": 73.9,
+          "derived_summary_row_selector": "gen531_island1"
+        }
+      },
+      "producer_qd_archive_csv": {
+        "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c05/qd_archive.csv",
+        "staged_v2_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe2_c05/qd_archive.csv",
+        "exact_filename": "qd_archive.csv",
+        "bytes": 5848,
+        "sha256": "359ffb91092d60dbdba052cebd274ad6887f70fc3fc612671028968b94ff47be",
+        "producer_equals_staged": true,
+        "data_rows": 90,
+        "header_columns": [
+          "cell_removal",
+          "cell_mass_bin",
+          "id",
+          "gen",
+          "fit",
+          "spg",
+          "mass_g",
+          "aes_score",
+          "novelty",
+          "relief_frac",
+          "sf_hunter",
+          "n_win"
+        ],
+        "top_3_rows_by_fit_column": [
+          {
+            "selector": "1-based CSV line 62 (id=129248)",
+            "observed_row": {
+              "cell_removal": "6",
+              "cell_mass_bin": "0",
+              "id": "129248",
+              "gen": "529",
+              "fit": "1.1465",
+              "spg": "3.5238",
+              "mass_g": "73.92",
+              "aes_score": "0.4308",
+              "novelty": "0.0015",
+              "relief_frac": "0.0788",
+              "sf_hunter": "1.002",
+              "n_win": "0"
+            }
+          },
+          {
+            "selector": "1-based CSV line 63 (id=121576)",
+            "observed_row": {
+              "cell_removal": "6",
+              "cell_mass_bin": "1",
+              "id": "121576",
+              "gen": "498",
+              "fit": "1.1454",
+              "spg": "3.5195",
+              "mass_g": "74.01",
+              "aes_score": "0.4308",
+              "novelty": "0.0084",
+              "relief_frac": "0.0779",
+              "sf_hunter": "1.002",
+              "n_win": "0"
+            }
+          },
+          {
+            "selector": "1-based CSV line 52 (id=86669)",
+            "observed_row": {
+              "cell_removal": "5",
+              "cell_mass_bin": "1",
+              "id": "86669",
+              "gen": "355",
+              "fit": "1.1298",
+              "spg": "3.4898",
+              "mass_g": "75.39",
+              "aes_score": "0.4297",
+              "novelty": "0.0105",
+              "relief_frac": "0.0650",
+              "sf_hunter": "1.012",
+              "n_win": "0"
+            }
+          }
+        ]
+      }
+    },
+    "xbabe2_crescent_c01_to_c06_producer_tables_and_configs": {
+      "c01": {
+        "history_live_csv": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c01/history_live.csv",
+          "bytes": 123294,
+          "sha256": "8b514085b1713a3ea9c29c1a81e7edbab5b8452376323030c85ea37affdaa82d",
+          "total_rows": 1900,
+          "argmax_col6_selector": "row 1746 (gen=436, island=1, best_fit=1.12, best_mass_g=75.89)"
+        },
+        "qd_archive_csv": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c01/qd_archive.csv",
+          "bytes": 5405,
+          "sha256": "b5becb652a23950bc61bd26b93c25dea836305f324cd361cba13fe26b0e03502",
+          "data_rows": 83,
+          "argmax_fit_selector": "CSV line 69 (id=113955, gen=466, fit=1.12, mass_g=75.9)"
+        },
+        "proc_config_json": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c01/proc_config.json",
+          "exists": false
+        },
+        "stopped_memory": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c01/STOPPED_MEMORY",
+          "exists": false
+        }
+      },
+      "c02": {
+        "history_live_csv": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c02/history_live.csv",
+          "bytes": 4071,
+          "sha256": "b5b1b120a777d43b7ab6d7edbc4ce8a9d98bfef64e3968138c72fbaa58015656",
+          "total_rows": 64,
+          "argmax_col6_selector": "row 61 (gen=15, island=0, best_fit=1.0169, best_mass_g=83.1)"
+        },
+        "qd_archive_csv": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c02/qd_archive.csv",
+          "bytes": 3114,
+          "sha256": "cb60797859cf9fe1797a9088b583d008ba7a8c7186aed7b81617be8d608794e0",
+          "data_rows": 49,
+          "argmax_fit_selector": "CSV line 33 (id=3726, gen=15, fit=1.0169, mass_g=83.1)"
+        },
+        "proc_config_json": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c02/proc_config.json",
+          "bytes": 861,
+          "sha256": "0c6cbd04a056751b85a08e0ddead0eb2dd969da0a987e2eb5b2e69de4891bdee",
+          "selector": "$.added_utc and $.git_sha",
+          "observed_added_utc": "2026-10-19T01:37:03Z",
+          "observed_git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922"
+        },
+        "stopped_memory": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c02/STOPPED_MEMORY",
+          "staged_v2_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe2_c02/STOPPED_MEMORY",
+          "bytes": 52,
+          "sha256": "944cee03641b99571b1972941f5dc94485b566d297c4cc20598724f6c3d6076c",
+          "selector": "full UTF-8 line 1",
+          "observed_text": "stopped_by_executor_memory_relief 2026-10-19T02:01Z"
+        }
+      },
+      "c03": {
+        "history_live_csv": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c03/history_live.csv",
+          "bytes": 4587,
+          "sha256": "6d925fa92a21d1e90ff37fcd29689c8e7e15d6a439c391f931d23f68d953c295",
+          "total_rows": 72,
+          "argmax_col6_selector": "row 64 (gen=15, island=3, best_fit=1.0596, best_mass_g=80.81)"
+        },
+        "qd_archive_csv": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c03/qd_archive.csv",
+          "bytes": 2874,
+          "sha256": "ed132d37db4ea202fb18746f41506e29c2d1519c3d052094cb2c16d1a07bff97",
+          "data_rows": 45,
+          "argmax_fit_selector": "CSV line 32 (id=3898, gen=15, fit=1.0596, mass_g=80.81)"
+        },
+        "proc_config_json": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c03/proc_config.json",
+          "bytes": 861,
+          "sha256": "983c3b8a020abfe8fad81ae117259bdabd6e33f72a11228e4e828befcc00fef2",
+          "selector": "$.added_utc and $.git_sha",
+          "observed_added_utc": "2026-10-19T01:37:08Z",
+          "observed_git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922"
+        },
+        "stopped_memory": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c03/STOPPED_MEMORY",
+          "bytes": 52,
+          "sha256": "944cee03641b99571b1972941f5dc94485b566d297c4cc20598724f6c3d6076c",
+          "selector": "full UTF-8 line 1",
+          "observed_text": "stopped_by_executor_memory_relief 2026-10-19T02:01Z"
+        }
+      },
+      "c04": {
+        "history_live_csv": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c04/history_live.csv",
+          "bytes": 1003,
+          "sha256": "0c418be512c379d1ae3841fca9f87839460155b062eae18b25fccd042326fe6d",
+          "total_rows": 16,
+          "argmax_col6_selector": "row 15 (gen=3, island=2, best_fit=-0.1596, best_mass_g=79.81)"
+        },
+        "qd_archive_csv": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c04/qd_archive.csv",
+          "bytes": 154,
+          "sha256": "dfb4ffa3be0d9f1bfbf6db6b133515db2559c1df728a91eed5859d87a91d663d",
+          "data_rows": 1,
+          "argmax_fit_selector": "CSV line 2 (id=90, gen=0, fit=-0.2239, mass_g=76.11)"
+        },
+        "proc_config_json": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c04/proc_config.json",
+          "bytes": 861,
+          "sha256": "bf0b09a1b0bb84edf0be71a31b2e4f578d2c5c7aeb131bdc7940f44e3f1b7c09",
+          "selector": "$.added_utc and $.git_sha",
+          "observed_added_utc": "2026-10-19T01:44:28Z",
+          "observed_git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922"
+        },
+        "stopped_memory": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c04/STOPPED_MEMORY",
+          "bytes": 52,
+          "sha256": "944cee03641b99571b1972941f5dc94485b566d297c4cc20598724f6c3d6076c",
+          "selector": "full UTF-8 line 1",
+          "observed_text": "stopped_by_executor_memory_relief 2026-10-19T02:01Z"
+        }
+      },
+      "c05": {
+        "proc_config_json": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c05/proc_config.json",
+          "staged_v2_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe2_c05/proc_config.json",
+          "bytes": 861,
+          "sha256": "1b9c7d3c48414896a134e2eb081b2c9d61abe90cbb5270bfc6dfd542566a2828",
+          "producer_equals_staged": true,
+          "selector": "$.added_utc and $.git_sha",
+          "observed_added_utc": "2026-10-19T03:10:18Z",
+          "observed_git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922"
+        },
+        "stopped_memory": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c05/STOPPED_MEMORY",
+          "staged_v2_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe2_c05/STOPPED_MEMORY",
+          "exists_in_producer": false,
+          "exists_in_staged_v2": false
+        }
+      },
+      "c06": {
+        "history_live_csv": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c06/history_live.csv",
+          "bytes": 58750,
+          "sha256": "67e7e375f3b1020b9fa1759d1c893de742ba5bca06e238c585c7814fe8b53d11",
+          "total_rows": 908,
+          "argmax_col6_selector": "row 865 (gen=216, island=0, best_fit=1.1029, best_mass_g=77.32)"
+        },
+        "qd_archive_csv": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c06/qd_archive.csv",
+          "bytes": 5348,
+          "sha256": "f864e4b7b8ff6c9cb65a9a8b71d9a079749eabbf12200b6088f4ab8187e38b29",
+          "data_rows": 83,
+          "argmax_fit_selector": "CSV line 67 (id=52727, gen=216, fit=1.1029, mass_g=77.32)"
+        },
+        "proc_config_json": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c06/proc_config.json",
+          "bytes": 861,
+          "sha256": "e9077cd0afa195cec9de3684bb621a737d7d39a42f15fa27ca14fa5cb7a036a5",
+          "selector": "$.added_utc and $.git_sha",
+          "observed_added_utc": "2026-10-19T03:58:15Z",
+          "observed_git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922"
+        },
+        "stopped_memory": {
+          "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent/c06/STOPPED_MEMORY",
+          "exists": false
+        }
+      }
+    },
+    "xbabe3_crescent_c01_to_c05_staged_v2_facts": {
+      "scope_note": "Verified against local staged V2 files under /home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe3_c01..c05/ (remote xbabe3 filesystem not re-queried in this step).",
+      "c01": {
+        "history_live_staged_sha256": "a546485fc257774fc0dc84369a1034e32f0bd4d628eb8e0619863bf56c7a561e",
+        "history_rows": 2836,
+        "qd_archive_staged_sha256": "eb19a8070f6288b88509174b8b6edb6d5b3835d7470a9baf73b9fb0c342a6989",
+        "qd_argmax_fit_selector": "CSV line 74 (id=148225, gen=607, fit=1.1156, mass_g=76.14)",
+        "proc_config_staged_exists": false
+      },
+      "c02": {
+        "history_live_staged_sha256": "bf5a54af9ddb1bc4f57acc629a170ef088261bf75e28f0ee5556d1ca8eb123e0",
+        "history_rows": 2792,
+        "qd_archive_staged_sha256": "a2080d4132118097d6dd5e12ecc157dd622864c9263a66a85643c10f39e940cf",
+        "qd_argmax_fit_selector": "CSV line 71 (id=135719, gen=556, fit=1.1205, mass_g=76.04)",
+        "proc_config_staged_exists": false
+      },
+      "c03": {
+        "history_live_staged_sha256": "772c94427e3c1cc0d3e991e8120a9643ca82894cc588ae391b9b9ed0ac1bd76f",
+        "history_rows": 2748,
+        "qd_archive_staged_sha256": "e2c4bb7a3e06cbf569f4e2e3a3fb4a662715b9cdf522dd7e564f2b74c1973de3",
+        "qd_argmax_fit_selector": "CSV line 73 (id=164101, gen=672, fit=1.1099, mass_g=76.64)",
+        "proc_config_staged_sha256": "7d908ee4e6c80b75cc2a64d9e31506cc06704c2c308911dc7702319c221bf29d",
+        "observed_added_utc": "2026-10-19T01:37:03Z",
+        "observed_git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922"
+      },
+      "c04": {
+        "history_live_staged_sha256": "865a29b943a9bc94698e106c35cd29f817ae3e68ebdee666bf589d446c443ebd",
+        "history_rows": 2792,
+        "qd_archive_staged_sha256": "e3a63539fd5377d24000827a61e6e0ac4969b42b2200d23ae6302546e5191af3",
+        "qd_argmax_fit_selector": "CSV line 75 (id=166187, gen=681, fit=1.1395, mass_g=74.43)",
+        "proc_config_staged_sha256": "56c469ebc3e56b3533ea77ecc65e2036de2fe0aa5a7aae6859b6066d82650319",
+        "observed_added_utc": "2026-10-19T01:37:08Z",
+        "observed_git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922"
+      },
+      "c05": {
+        "history_live_staged_sha256": "8a19a8096b20cc5851470b8d899267b0cc7cf68268f51834e8554566febc8756",
+        "history_rows": 1412,
+        "qd_archive_staged_sha256": "cf78a10ef5ab35f53fc45433a06ca063fb6286931a227a5e0204031ce26f58f5",
+        "qd_argmax_fit_selector": "CSV line 67 (id=85595, gen=350, fit=1.1037, mass_g=77.17)",
+        "proc_config_staged_sha256": "e97b287b4a06ffe626ad8fc3ece71712c2a5b18948fbc92caa5d98a9c1b3c519",
+        "observed_added_utc": "2026-10-19T03:10:55Z",
+        "observed_git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922"
+      }
+    },
+    "xbabe2_excluded_sibling_directories_verified_on_disk": {
+      "_aborted_crescent_screenquit_0125Z": {
+        "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/_aborted_crescent_screenquit_0125Z",
+        "exists": true,
+        "top_level_entries": [
+          "c01",
+          "run_config.json"
+        ],
+        "entry_count": 2
+      },
+      "_aborted_islands_v200_unpatched_0124Z": {
+        "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/_aborted_islands_v200_unpatched_0124Z",
+        "exists": true,
+        "top_level_entries_summary": "i01..i24, run_config.json, xbabe2_launcher.log",
+        "entry_count": 26
+      },
+      "_aggregate": {
+        "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/_aggregate",
+        "exists": true,
+        "top_level_entries_summary": "16 PNG plots + stage1_screen_all.csv + stage2_assessed_all.csv",
+        "entry_count": 18
+      }
+    },
+    "reference_source_patch_and_local_binary_facts": {
+      "git_blob_qd_rs_at_009f5ac5": {
+        "git_object": "009f5ac520fa3afe8ed8025230eef604dbb7f922:crates/crescent/src/qd.rs",
+        "worktree_copy_path": "/home/ubuntu/jr_evo_full_20261018/repo/crates/crescent/src/qd.rs",
+        "bytes": 27783,
+        "sha256": "4166fc38a8879b869b378247b3fd527ca82854796369765f6f3c680ca0a02311",
+        "git_blob_equals_worktree_copy": true
+      },
+      "local_perf_patch_diff": {
+        "producer_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/LOCAL_PERF_PATCH.diff",
+        "staged_v2_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/_campaign_metadata/evo_full_20261018/LOCAL_PERF_PATCH.diff",
+        "bytes": 1654,
+        "sha256": "1dec91f45b1be660ca08945e78d458ebe8ffad08ff835fe2eb7bab9db9ee5418",
+        "producer_equals_staged": true
+      },
+      "patched_auto_evolve_rs": {
+        "path": "/home/ubuntu/jr_evo_full_20261018/repo/crates/cli/src/auto_evolve.rs",
+        "bytes": 133241,
+        "sha256": "f55b21d6d889b9cdecdc4b688d5909e1c92e10dfe2fb2b5570e008251089a1ba"
+      },
+      "xbabe2_retained_release_executable": {
+        "path": "/home/ubuntu/jr_evo_full_20261018/repo/target/release/jarambit",
+        "bytes": 10230088,
+        "sha256": "32dbb7df90612c000a462c427f27b5037d2c4c4371959c242ba54e24299db3f9"
+      },
+      "w282_ultrarunner_provenance_json": {
+        "path": "/home/ubuntu/jarambit/evidence/rs_v2/w282_ultrarunner/provenance.json",
+        "bytes": 3838,
+        "sha256": "68166f27cabb28e24868cdf96e484493e8b71c4deea16ea53b9265d3b84053ae"
+      }
+    }
+  },
+  "part_d_unknown_and_unverified_claims": {
+    "candidate_identity_unknowns": {
+      "history_live_summary_selectors": "Headerless 14-field history_live.csv rows (such as row 2126 gen531_island1 in evo_full_20261018_xbabe2_c05 with best_fit=1.1468, best_mass_g=73.90, or row 15 gen3_island2 in c04) have no candidate_id column. Those selectors identify only the (generation, island) summary row, NOT a proven candidate identity (candidate_id remains \"unknown\").",
+      "qd_archive_table_row_ids": "Row IDs in qd_archive.csv (e.g., id=129248 at fit=1.1465 in xbabe2_c05, id=113955 in xbabe2_c01, id=3726 in xbabe2_c02, id=3898 in xbabe2_c03, id=52727 in xbabe2_c06) identify rows strictly within that run's retained qd_archive.csv table and do not establish candidate identity for history_live.csv summary rows."
+    },
+    "process_execution_and_termination_timestamp_unknowns": {
+      "config_write_timestamps_are_not_process_start": "proc_config.json:added_utc (e.g., 2026-10-19T03:10:18Z in xbabe2_c05, 2026-10-19T01:37:03Z in xbabe2_c02, 2026-10-19T01:37:08Z in xbabe2_c03, 2026-10-19T01:44:28Z in xbabe2_c04, 2026-10-19T03:58:15Z in xbabe2_c06) and island.json:added_batch_utc record when the configuration file was written, NOT when the OS process started executing (execution_start_utc is \"unknown\").",
+      "stopped_memory_receipts_are_not_process_termination": "STOPPED_MEMORY contents (\"stopped_by_executor_memory_relief 2026-10-19T02:01Z\" in xbabe2_c02..c04) record when the memory-relief stop receipt was written, NOT independently observed kernel process termination (observed_process_termination_utc is \"unknown\").",
+      "c05_unsubstantiated_timestamp_rejected": "evo_full_20261018_xbabe2_c05 has no STOPPED_MEMORY file on disk (stop_receipt_utc is null). The unsubstantiated timestamp 2026-10-18T03:35:04Z is not present in raw producer files and is rejected."
+    },
+    "source_revision_and_binary_provenance_unknowns": {
+      "c01_missing_proc_config": "evo_full_20261018_xbabe2_c01 and evo_full_20261018_xbabe3_c01..c02 have no proc_config.json file; their config_git_sha and config_added_utc are \"unknown\" / null.",
+      "per_process_launch_binary_hash_unknown": "Although /home/ubuntu/jr_evo_full_20261018/repo/target/release/jarambit (sha256: 32dbb7df90612c000a462c427f27b5037d2c4c4371959c242ba54e24299db3f9) is retained on xbabe2 and crates/crescent/src/qd.rs at 009f5ac520fa3afe8ed8025230eef604dbb7f922 matches the 14-column CSV layout, the crescent runs did not emit a per-process executable SHA-256 receipt at launch (per_process_launch_binary_hash_receipt is \"unknown\")."
+    },
+    "corpus_admission_and_runtime_boundary": {
+      "no_full_corpus_admission_from_p1_t01": "This bounded P1-T01 receipt verifies handoff/erratum linkage and the specific local producer files listed in part_c; full four-worker root inventory (JR-EI-P1-T02), aborted-attempt capture (JR-EI-P1-T03), and full corpus reconciliation (JR-EI-P1-T04..T06) remain separate downstream tasks.",
+      "manual_lease_vs_native_admiralty_runtime": "This task was claimed and executed under a manual file-backed lease by 2740538.captain_jarambit (window 1). Live native Admiralty daemon execution remains blocked by ADM-JARAMBIT-LIVE-01/02 (live_admiralty_managed_execution_started = false)."
+    }
+  }
+}

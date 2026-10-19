@@ -177,21 +177,21 @@ pub(crate) fn svg(p: &Value) -> Result<String> {
         .iter()
         .map(|n| Ok((integer(&n["id"])?, n)))
         .collect::<Result<BTreeMap<_, _>>>()?;
-    let mut out=String::from("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1120\" height=\"450\" viewBox=\"0 0 1120 450\"><defs><marker id=\"parent-arrow\" markerWidth=\"7\" markerHeight=\"7\" refX=\"6\" refY=\"3.5\" orient=\"auto\"><path d=\"M0 0 L7 3.5 L0 7 Z\" fill=\"#697983\"/></marker></defs><rect width=\"1120\" height=\"450\" fill=\"#f5f4ef\"/><g font-family=\"Arial, sans-serif\">\n");
+    let mut out = String::from("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1120\" height=\"500\" viewBox=\"0 0 1120 500\"><defs><marker id=\"parent-arrow\" markerWidth=\"7\" markerHeight=\"7\" refX=\"6\" refY=\"3.5\" orient=\"auto\"><path d=\"M0 0 L7 3.5 L0 7 Z\" fill=\"#697983\"/></marker></defs><rect width=\"1120\" height=\"500\" fill=\"#f5f4ef\"/><g font-family=\"Arial, sans-serif\">\n");
     label(
         &mut out,
         20,
-        28,
-        22,
-        "RECORDED PARENT LINKS / HIGHEST HISTORICAL STORED SCORE",
+        32,
+        24,
+        "Run 1 — Recorded Two-Hop Parent Links Around Individual 1095",
         "#132d3b",
     );
     label(
         &mut out,
         20,
-        55,
-        18,
-        "w282 cohort: five retained births, two parent hops; no inferred or imputed ancestry",
+        62,
+        21,
+        "Five retained births across two parent hops; full 3-hop ancestry is in inheritance.svg",
         "#132d3b",
     );
     for edge in edges {
@@ -199,8 +199,8 @@ pub(crate) fn svg(p: &Value) -> Result<String> {
         let child = integer(&edge["child"])?;
         let a = by_id.get(&parent).ok_or("edge parent outside view")?;
         let b = by_id.get(&child).ok_or("edge child outside view")?;
-        let sx = integer(&a["layout"]["x"])? + 205;
-        let sy = integer(&a["layout"]["y"])? + 62;
+        let sx = integer(&a["layout"]["x"])? + 220;
+        let sy = integer(&a["layout"]["y"])? + 68;
         let tx = integer(&b["layout"]["x"])?;
         if tx <= sx {
             return Err("lineage layout must keep parent arrows rightward".into());
@@ -208,9 +208,9 @@ pub(crate) fn svg(p: &Value) -> Result<String> {
         let parent_count = b["parents"].as_array().ok_or("missing parent ports")?.len();
         let ty = integer(&b["layout"]["y"])?
             + if parent_count == 1 {
-                62
+                68
             } else {
-                35 + integer(&edge["parent_ordinal"])? * 45
+                38 + integer(&edge["parent_ordinal"])? * 52
             };
         let bend = (tx - sx) / 2;
         out.push_str(&format!("<path id=\"lineage-edge-{parent}-{child}\" d=\"M{sx} {sy} C{} {sy} {} {ty} {tx} {ty}\" fill=\"none\" stroke=\"#697983\" stroke-width=\"2.5\" marker-end=\"url(#parent-arrow)\"/>\n",sx+bend,tx-bend));
@@ -221,52 +221,43 @@ pub(crate) fn svg(p: &Value) -> Result<String> {
         let y = integer(&node["layout"]["y"])?;
         let focal = node["id"] == p["focal_id"];
         let color = if focal { "#a3442d" } else { "#007e87" };
-        out.push_str(&format!("<g id=\"lineage-node-{id}\"><rect x=\"{x}\" y=\"{y}\" width=\"205\" height=\"125\" rx=\"6\" fill=\"white\" stroke=\"{color}\" stroke-width=\"2\"/>\n"));
+        let op_spelled = match text(&node["operator"])? {
+            "archive_crossover_mutate" => "Archive crossover",
+            "archive_mutate" => "Archive mutation",
+            "crossover_mutate" => "Crossover + mut",
+            "mutate" => "Mutation",
+            other => other,
+        };
+        out.push_str(&format!("<g id=\"lineage-node-{id}\"><rect x=\"{x}\" y=\"{y}\" width=\"220\" height=\"138\" rx=\"6\" fill=\"white\" stroke=\"{color}\" stroke-width=\"2\"/>\n"));
         label(
             &mut out,
             x + 10,
-            y + 24,
-            20,
-            &format!("ID {id} / gen {}", node["generation"]),
+            y + 28,
+            21,
+            &format!("Ind {id} · Gen {}", node["generation"]),
             color,
         );
         label(
             &mut out,
             x + 10,
-            y + 48,
-            17,
-            &format!(
-                "{} / v{}",
-                text(&node["operator"])?,
-                node["operator_version"]
-            ),
+            y + 58,
+            21,
+            op_spelled,
             "#132d3b",
         );
         label(
             &mut out,
             x + 10,
-            y + 72,
-            19,
+            y + 88,
+            21,
             &format!(
-                "stored fit {:.5}",
+                "fit {:+.5}",
                 node["fit"].as_f64().ok_or("missing node fitness")?
             ),
             "#132d3b",
         );
-        label(
-            &mut out,
-            x + 10,
-            y + 94,
-            15,
-            &format!(
-                "FEM {}; legal {}",
-                text(&node["fem_status"])?,
-                node["legal"]
-            ),
-            "#132d3b",
-        );
         let footer = if focal {
-            "later cert_pass_all=false".into()
+            "Fails strict assessment".into()
         } else {
             let outside = omitted
                 .iter()
@@ -274,23 +265,30 @@ pub(crate) fn svg(p: &Value) -> Result<String> {
                 .map(|e| e["parent"].to_string())
                 .collect::<Vec<_>>();
             if outside.is_empty() {
-                "recorded parent links shown".into()
+                "Parent links shown".into()
             } else {
-                format!("outside-view parent: {}", outside.join(","))
+                format!("3rd-hop parent: {}", outside.join(","))
             }
         };
-        label(&mut out, x + 10, y + 115, 14, &footer, color);
+        label(&mut out, x + 10, y + 120, 21, &footer, color);
         out.push_str("</g>\n");
     }
     label(
         &mut out,
         20,
-        420,
-        17,
-        "Two-hop cutoff omits 174 -> 245 and 299 -> 392; both referenced births are retained.",
+        448,
+        21,
+        "Two-hop cutoff omits 174 -> 245 and 299 -> 392; both are included in the 3-hop DAG.",
         "#132d3b",
     );
-    label(&mut out,20,443,17,"Node spacing is layout only. Contextual fitness is not a fixed physical observable or qualification.","#132d3b");
+    label(
+        &mut out,
+        20,
+        482,
+        21,
+        "Node spacing is layout only; search fitness does not establish physical qualification.",
+        "#132d3b",
+    );
     out.push_str("</g></svg>\n");
     Ok(out)
 }

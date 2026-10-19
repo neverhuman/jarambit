@@ -1,8 +1,8 @@
 {
   "figure": "docs/paper/generated/export-identity.svg",
-  "figure_sha256": "ae2aa2eeaae0d377ee2dcca7e96ae932bde746213a50a884b15532b10c5c167a",
+  "figure_sha256": "5957a04019a4be54fab1a642913d7f92baa6a09b53fb522ccc21101db1eeb007",
   "inputs": {
-    "crates/paper-artifacts/src/export_identity.rs": "ab30e74908fbde41fa8942fa981244f00e8120d494c763d9b9bd069a8d957aa4",
+    "crates/paper-artifacts/src/export_identity.rs": "92c0b4bf4cc3dcb2531f84496580fa9fa4527de452d56b771c59a7c65d4790a9",
     "docs/paper/export-inputs.v1.json": "a476cf19fa042863373ab8e41e1b2361c389948efee3a85f25430eb35b6a66fe",
     "docs/paper/figures/v2/hero_dark.scene.json": "0425bd7d2141ebfc00fe28c73bac61bf43fae817582dbadc344f223648166536",
     "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.step": "1a28399c1c6c4a21796a963c91545d120fd99f542818a0e6024b0cd24ca34fa6",

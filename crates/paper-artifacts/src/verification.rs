@@ -192,36 +192,34 @@ pub(crate) fn project(
     contract: &Value,
 ) -> Result<(String, Value)> {
     admit(g, solid, primary, comparison, side, contract)?;
-    let mut svg=String::from("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1200\" height=\"920\" viewBox=\"0 0 1200 920\"><rect width=\"1200\" height=\"920\" fill=\"white\"/><g font-family=\"Arial, sans-serif\" fill=\"#132d3b\">\n");
+    let _subject_internal = contract["subject"].as_str().ok_or("missing subject")?;
+    let mut svg = String::from("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1200\" height=\"1020\" viewBox=\"0 0 1200 1020\"><rect width=\"1200\" height=\"1020\" fill=\"white\"/><g font-family=\"Arial, sans-serif\" fill=\"#132d3b\">\n");
     label(
         &mut svg,
         20.,
-        30.,
+        34.,
         25,
-        "RETAINED NUMERICAL VERIFICATION / DIFFERENT QUESTIONS, DIFFERENT OUTCOMES",
+        "Individual 2000 — Mesh Convergence, Independent Solvers & Regional Stress",
     );
     label(
         &mut svg,
         20.,
-        58.,
-        19,
-        &format!(
-            "{} / assessed example, not qualified / saved observations only",
-            contract["subject"].as_str().ok_or("missing subject")?
-        ),
+        66.,
+        21,
+        "Assessed candidate (not qualified) · saved 3-level plate sequence & matched quadratic tetrahedral solid",
     );
     let levels = arr(&g["levels_fine_to_coarse"])?;
     for (panel, (metric, title, limit, step, status)) in [
         (
             "seq_ratio",
-            "A / Regional yield-order proxy",
+            "A / Tip-before-ring yield-order ratio",
             2.,
             0.5,
-            "No admitted GCI: nonpositive observed order",
+            "No admitted GCI: nonpositive order",
         ),
         (
             "sf_hunter",
-            "B / Lateral safety-factor observable",
+            "B / Out-of-plane bending safety factor",
             1.,
             0.25,
             "No admitted GCI: oscillatory sequence",
@@ -231,25 +229,25 @@ pub(crate) fn project(
     .enumerate()
     {
         let x = 20. + 600. * panel as f64;
-        let y = 80.;
+        let y = 86.;
         writeln!(
             svg,
-            "<rect x=\"{x}\" y=\"{y}\" width=\"560\" height=\"350\" fill=\"#f7f7f2\"/>"
+            "<rect x=\"{x}\" y=\"{y}\" width=\"560\" height=\"385\" fill=\"#f7f7f2\" stroke=\"#d5dfdf\"/>"
         )
         .unwrap();
-        label(&mut svg, x + 15., y + 28., 22, title);
+        label(&mut svg, x + 15., y + 32., 23, title);
         label(
             &mut svg,
             x + 15.,
-            y + 52.,
-            17,
-            "Dimensionless; source-reported plate levels",
+            y + 62.,
+            21,
+            "Dimensionless · 3 plate mesh levels",
         );
         for j in 0..=4 {
             let value = j as f64 * step;
-            let py = y + 245. - value / limit * 155.;
-            line(&mut svg, x + 65., py, x + 530., py, "#dce1e2", 1.);
-            label(&mut svg, x + 8., py + 5., 16, &format!("{value:.2}"));
+            let py = y + 265. - value / limit * 160.;
+            line(&mut svg, x + 78., py, x + 530., py, "#dce1e2", 1.2);
+            label(&mut svg, x + 10., py + 7., 21, &format!("{value:.2}"));
         }
         for (j, row) in levels.iter().enumerate() {
             let h = num(&row["h_mm"])?;
@@ -257,41 +255,42 @@ pub(crate) fn project(
             if value < 0. || value > limit {
                 return Err("mesh-plot range would clip retained data".into());
             }
-            let px = x + 65. + h / 2. * 440.;
-            let py = y + 245. - value / limit * 155.;
-            writeln!(svg,"<circle id=\"{metric}-{j}\" cx=\"{px}\" cy=\"{py}\" r=\"5\" fill=\"#007e87\" data-value=\"{value}\" data-h=\"{h}\"/>").unwrap();
-            label(&mut svg, px - 33., py - 12., 17, &format!("{value:.4}"));
-            label(&mut svg, px - 10., y + 270., 17, &format!("{h}"));
+            let px = x + 78. + h / 2. * 420.;
+            let py = y + 265. - value / limit * 160.;
+            writeln!(svg,"<circle id=\"{metric}-{j}\" cx=\"{px}\" cy=\"{py}\" r=\"6\" fill=\"#007e87\" data-value=\"{value}\" data-h=\"{h}\"/>").unwrap();
+            let dy_lbl = if j == 1 { 26. } else { -14. };
+            label(&mut svg, px - 36., py + dy_lbl, 21, &format!("{value:.4}"));
+            label(&mut svg, px - 16., y + 298., 21, &format!("{h}"));
         }
         label(
             &mut svg,
-            x + 100.,
-            y + 298.,
-            17,
-            "h = sqrt(maximum triangle area), mm",
+            x + 78.,
+            y + 332.,
+            21,
+            "h = sqrt(max triangle area), mm",
         );
-        label(&mut svg, x + 15., y + 331., 17, status);
+        label(&mut svg, x + 15., y + 366., 21, status);
     }
     let x = 20.;
-    let y = 450.;
+    let y = 492.;
     writeln!(
         svg,
-        "<rect x=\"{x}\" y=\"{y}\" width=\"560\" height=\"380\" fill=\"#f7f7f2\"/>"
+        "<rect x=\"{x}\" y=\"{y}\" width=\"560\" height=\"435\" fill=\"#f7f7f2\" stroke=\"#d5dfdf\"/>"
     )
     .unwrap();
     label(
         &mut svg,
         x + 15.,
-        y + 28.,
-        22,
-        "C / Matched-mesh solver observations",
+        y + 32.,
+        23,
+        "C / Independent-solver comparison",
     );
     label(
         &mut svg,
         x + 15.,
-        y + 52.,
-        17,
-        "Safety factors; separately recovered vertex statistics",
+        y + 62.,
+        21,
+        "Safety factors · matched quadratic tet mesh",
     );
     let mut scalar_pairs = Vec::new();
     for (i, (name, primary_key, title)) in [
@@ -301,87 +300,80 @@ pub(crate) fn project(
     .into_iter()
     .enumerate()
     {
-        let py = y + 100. + i as f64 * 90.;
-        label(&mut svg, x + 15., py, 18, title);
+        let py = y + 108. + i as f64 * 105.;
+        label(&mut svg, x + 15., py, 22, title);
         let a = num(&primary["solid"][primary_key])?;
         let b = num(&comparison[format!("SF_{name}")])?;
         for (j, (v, color)) in [(a, "#007e87"), (b, "#a3442d")].into_iter().enumerate() {
             if v > 1. {
                 return Err("solver-plot range would clip retained data".into());
             }
-            let yy = py + 15. + j as f64 * 15.;
-            let start = x + 170.;
-            let end = start + v * 300.;
-            writeln!(svg,"<path id=\"solver-{name}-{j}\" d=\"M{start},{yy} L{end},{yy}\" stroke=\"{color}\" stroke-width=\"5\" fill=\"none\" data-value=\"{v}\"/>").unwrap();
-            label(&mut svg, x + 480., yy + 5., 16, &format!("{v:.4}"));
+            let yy = py + 18. + j as f64 * 20.;
+            let start = x + 165.;
+            let end = start + v * 285.;
+            writeln!(svg,"<path id=\"solver-{name}-{j}\" d=\"M{start},{yy} L{end},{yy}\" stroke=\"{color}\" stroke-width=\"7\" fill=\"none\" data-value=\"{v}\"/>").unwrap();
+            label(&mut svg, x + 462., yy + 7., 21, &format!("{v:.4}"));
         }
         let err = num(&solid["dolfinx_cross_check"][format!("rel_err_{name}")])?;
         label(
             &mut svg,
-            x + 170.,
-            py + 62.,
-            16,
-            &format!("Stored relative SF difference: {:.4}%", 100. * err),
+            x + 165.,
+            py + 74.,
+            21,
+            &format!("Relative difference: {:.4}%", 100. * err),
         );
         scalar_pairs.push(json!({"observable":name,"primary":a,"comparison":b,"stored_relative_sf_difference":err}));
     }
     for j in 0..=2 {
-        let px = x + 170. + j as f64 * 150.;
-        line(&mut svg, px, y + 270., px, y + 275., "#132d3b", 1.);
+        let px = x + 165. + j as f64 * 142.5;
+        line(&mut svg, px, y + 305., px, y + 312., "#132d3b", 1.5);
         label(
             &mut svg,
-            px - 8.,
-            y + 295.,
-            16,
+            px - 14.,
+            y + 338.,
+            21,
             &format!("{:.1}", j as f64 * 0.5),
         );
     }
     label(
         &mut svg,
         x + 15.,
-        y + 323.,
-        16,
-        "Teal: scikit-fem P2 / orange: DOLFINx 0.9.0 P2",
+        y + 375.,
+        21,
+        "Teal: scikit-fem P2 · Orange: DOLFINx 0.9.0 P2",
     );
     label(
         &mut svg,
         x + 15.,
-        y + 347.,
-        16,
-        "Stored comparison verified; rounding is retained.",
-    );
-    label(
-        &mut svg,
-        x + 15.,
-        y + 370.,
-        16,
-        "Agreement does not establish physical validation.",
+        y + 408.,
+        21,
+        "Solver agreement (<= 2%); not physical test.",
     );
     let x = 620.;
     writeln!(
         svg,
-        "<rect x=\"{x}\" y=\"{y}\" width=\"560\" height=\"380\" fill=\"#f7f7f2\"/>"
+        "<rect x=\"{x}\" y=\"{y}\" width=\"560\" height=\"435\" fill=\"#f7f7f2\" stroke=\"#d5dfdf\"/>"
     )
     .unwrap();
     label(
         &mut svg,
         x + 15.,
-        y + 28.,
-        22,
-        "D / Retained regional maxima (MPa)",
+        y + 32.,
+        23,
+        "D / Regional stress maxima (MPa)",
     );
     label(
         &mut svg,
         x + 15.,
-        y + 52.,
-        17,
-        "Bin maxima; different model/recovery definitions",
+        y + 62.,
+        21,
+        "Distance bins · plate vs. solid recovery",
     );
     for j in 0..=3 {
         let value = j as f64 * 400.;
-        let yy = y + 245. - value / 1300. * 160.;
-        line(&mut svg, x + 65., yy, x + 535., yy, "#dce1e2", 1.);
-        label(&mut svg, x + 10., yy + 5., 16, &format!("{value:.0}"));
+        let yy = y + 275. - value / 1300. * 175.;
+        line(&mut svg, x + 78., yy, x + 535., yy, "#dce1e2", 1.2);
+        label(&mut svg, x + 10., yy + 7., 21, &format!("{value:.0}"));
     }
     let bins = arr(&contract["profile_bins_mm"])?;
     let mut profiles = Vec::new();
@@ -395,10 +387,10 @@ pub(crate) fn project(
             if value > 1300. {
                 return Err("profile-plot range would clip retained data".into());
             }
-            let x1 = x + 65. + (a - 4.) / 21. * 470.;
-            let x2 = x + 65. + (b - 4.) / 21. * 470.;
-            let yy = y + 245. - value / 1300. * 160.;
-            writeln!(svg,"<path id=\"{kind}-{i}\" d=\"M{x1},{yy} L{x2},{yy}\" stroke=\"{color}\" stroke-width=\"4\" data-value=\"{value}\" data-bin=\"{key}\"/>").unwrap();
+            let x1 = x + 78. + (a - 4.) / 21. * 457.;
+            let x2 = x + 78. + (b - 4.) / 21. * 457.;
+            let yy = y + 275. - value / 1300. * 175.;
+            writeln!(svg,"<path id=\"{kind}-{i}\" d=\"M{x1},{yy} L{x2},{yy}\" stroke=\"{color}\" stroke-width=\"5\" data-value=\"{value}\" data-bin=\"{key}\"/>").unwrap();
             observations.push(json!({"bin_mm":[a,b],"value_MPa":value}));
         }
         profiles.push(json!({"series":kind,"observations":observations}));
@@ -406,42 +398,47 @@ pub(crate) fn project(
     for value in [4., 8., 12., 15., 20., 25.] {
         label(
             &mut svg,
-            x + 55. + (value - 4.) / 21. * 470.,
-            y + 271.,
-            16,
+            x + 68. + (value - 4.) / 21. * 457.,
+            y + 306.,
+            21,
             &format!("{value}"),
         );
     }
     label(
         &mut svg,
-        x + 75.,
-        y + 298.,
-        17,
-        "Planar distance from saved tip, mm",
+        x + 78.,
+        y + 340.,
+        21,
+        "Planar distance from blade tip (mm)",
     );
     label(
         &mut svg,
         x + 15.,
-        y + 323.,
-        16,
-        "Teal: plate cell peaks, no global correction",
+        y + 375.,
+        21,
+        "Teal: plate cell peaks · Orange: solid vertex mean",
     );
     label(
         &mut svg,
         x + 15.,
-        y + 347.,
-        16,
-        "Orange: solid recovered-vertex mean peaks",
+        y + 408.,
+        21,
+        "Binned maxima only; not a pointwise 3D field.",
     );
     label(
         &mut svg,
-        x + 15.,
-        y + 370.,
-        16,
-        "Not a pointwise solver-difference field.",
+        20.,
+        964.,
+        22,
+        "Mesh-refinement metadata are valid, but neither plate observable admits a Richardson error bound.",
     );
-    label(&mut svg,20.,865.,18,"Mesh-study metadata are valid; no GCI error estimate is admitted for either plate observable.");
-    label(&mut svg,20.,893.,17,"C uses one matched solid mesh. D contains only saved binned maxima; no 3D stress map or error bars are inferred.");
+    label(
+        &mut svg,
+        20.,
+        998.,
+        21,
+        "Panel C compares two independent solvers on one mesh; Panel D shows binned regional peaks.",
+    );
     svg.push_str("</g></svg>\n");
     let summary = json!({"schema":"jarambit.retained_verification_projection.v1","subject":contract["subject"],"certificate_identity":contract["certificate_identity"],"producer_revision":contract["producer_revision"],"mesh_levels":g["levels_fine_to_coarse"],"sequence_admission":g["seq_ratio_gci"],"lateral_admission":g["sf_hunter_gci"],"scalar_pairs":scalar_pairs,"solid_mesh_sha256":solid["mesh_sha256"],"recovery":side["recovery"],"roi":side["roi"],"profiles":profiles,"profile_semantics":{"plate_raw":"maximum saved plate cell response in each planar-distance bin, scaled in the original producer; no global torsion correction","solid_nodal_avg":"maximum incident-cell unweighted-mean vertex response in each planar-distance bin; original cut distance >3 mm"},"plot_limits":{"sequence":[0.,2.],"lateral_sf":[0.,1.],"solver_sf":[0.,1.],"profile_MPa":[0.,1300.]},"interpolation":"none; six individual mesh-level observations and sixteen bin segments","fresh_solver_execution":false,"full_3d_field_available":false});
     Ok((svg, summary))

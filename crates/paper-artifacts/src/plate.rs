@@ -7,27 +7,27 @@ type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 const FIELDS: [(&str, &str, &str, &str); 4] = [
     (
         "env_vm",
-        "A / Stored multi-case envelope",
+        "A / Peak multi-load von Mises envelope",
         "MPa",
-        "Global envelope correction included",
+        "Global envelope factor included",
     ),
     (
         "lat",
-        "B / Lateral unit response",
+        "B / Out-of-plane plate bending response",
         "MPa/N",
-        "DKT surface corner maximum",
+        "Bending surface corner maximum",
     ),
     (
         "ring",
-        "C / Ring unit response",
+        "C / In-plane retention ring traction",
         "MPa/N",
-        "T6 centroid von Mises",
+        "Membrane centroid von Mises",
     ),
     (
         "twist",
-        "D / Torsion unit response",
+        "D / Blade & tip torsional response",
         "MPa/(N mm)",
-        "DKT surface corner maximum",
+        "Torsional surface corner maximum",
     ),
 ];
 const LUT: [[u8; 3]; 5] = [
@@ -255,22 +255,22 @@ pub(crate) fn project(doc: &Value, contract: &Value) -> Result<(String, Value)> 
     let ymin = m.xy.iter().map(|p| p[1]).fold(f64::INFINITY, f64::min);
     let ymax = m.xy.iter().map(|p| p[1]).fold(f64::NEG_INFINITY, f64::max);
     let scale = (500. / (xmax - xmin)).min(185. / (ymax - ymin));
-    let mut s=String::from("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1200\" height=\"860\" viewBox=\"0 0 1200 860\"><rect width=\"1200\" height=\"860\" fill=\"white\"/><g font-family=\"Arial, sans-serif\" fill=\"#132d3b\">\n");
+    let _subject_internal = contract["subject"].as_str().unwrap();
+    let mut s = String::from("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1200\" height=\"960\" viewBox=\"0 0 1200 960\"><rect width=\"1200\" height=\"960\" fill=\"white\"/><g font-family=\"Arial, sans-serif\" fill=\"#132d3b\">\n");
     text(
         &mut s,
         20.,
-        30.,
+        34.,
         25,
-        "RETAINED PLATE FIELDS / ASSESSED EXAMPLE, NOT QUALIFIED",
+        "Individual 2000 — Retained Plate-Element Response Fields (Not Qualified)",
     );
     text(
         &mut s,
         20.,
-        57.,
-        19,
+        66.,
+        21,
         &format!(
-            "{} / {} nodes / {} triangles / separate full-range legends",
-            contract["subject"].as_str().unwrap(),
+            "Assessed candidate · {} nodes · {} triangles · independent full-range scales",
             m.xy.len(),
             m.tris.len()
         ),
@@ -278,22 +278,22 @@ pub(crate) fn project(doc: &Value, contract: &Value) -> Result<(String, Value)> 
     let mut field_summary = serde_json::Map::new();
     for (panel, (field, title, units, description)) in FIELDS.into_iter().enumerate() {
         let x = 20. + 600. * (panel % 2) as f64;
-        let y = 75. + 370. * (panel / 2) as f64;
+        let y = 86. + 405. * (panel / 2) as f64;
         writeln!(
             s,
-            "<rect x=\"{x}\" y=\"{y}\" width=\"560\" height=\"350\" fill=\"#f7f7f2\"/>"
+            "<rect x=\"{x}\" y=\"{y}\" width=\"560\" height=\"385\" fill=\"#f7f7f2\" stroke=\"#d5dfdf\"/>"
         )
         .unwrap();
-        text(&mut s, x + 15., y + 28., 23, title);
+        text(&mut s, x + 15., y + 32., 23, title);
         text(
             &mut s,
             x + 15.,
-            y + 52.,
-            17,
-            &format!("{units} / {description}"),
+            y + 62.,
+            21,
+            &format!("{units} · {description}"),
         );
-        let origin_x = x + 50. + (500. - (xmax - xmin) * scale) / 2. - xmin * scale;
-        let origin_y = y + 67. + (185. - (ymax - ymin) * scale) / 2. + ymax * scale;
+        let origin_x = x + 30. + (500. - (xmax - xmin) * scale) / 2. - xmin * scale;
+        let origin_y = y + 78. + (185. - (ymax - ymin) * scale) / 2. + ymax * scale;
         let mask: Vec<_> = (0..m.tris.len())
             .map(|i| match field {
                 "env_vm" => m.envelope_mask[i],
@@ -329,9 +329,8 @@ pub(crate) fn project(doc: &Value, contract: &Value) -> Result<(String, Value)> 
         }
         s.push_str("</g>\n");
         if field == "lat" || field == "twist" {
-            writeln!(s,"<circle cx=\"{}\" cy=\"{}\" r=\"{}\" fill=\"none\" stroke=\"#a3442d\" stroke-width=\"1.4\" stroke-dasharray=\"4 3\"/>",origin_x+m.tip[0]*scale,origin_y-m.tip[1]*scale,4.*scale).unwrap();
+            writeln!(s,"<circle cx=\"{}\" cy=\"{}\" r=\"{}\" fill=\"none\" stroke=\"#a3442d\" stroke-width=\"1.6\" stroke-dasharray=\"4 3\"/>",origin_x+m.tip[0]*scale,origin_y-m.tip[1]*scale,4.*scale).unwrap();
         }
-        // Same piecewise-linear sRGB mapping as the element fills; no lighting or tone map.
         writeln!(
             s,
             "<defs><linearGradient id=\"lut-{field}\" color-interpolation=\"sRGB\">"
@@ -354,14 +353,14 @@ pub(crate) fn project(doc: &Value, contract: &Value) -> Result<(String, Value)> 
         } else {
             color(0.)
         };
-        writeln!(s,"<rect id=\"legend-{field}\" x=\"{}\" y=\"{}\" width=\"500\" height=\"14\" fill=\"{fill}\"/>",x+50.,y+267.).unwrap();
+        writeln!(s,"<rect id=\"legend-{field}\" x=\"{}\" y=\"{}\" width=\"500\" height=\"16\" fill=\"{fill}\"/>",x+30.,y+282.).unwrap();
         for (j, t) in [0., 0.5, 1.].into_iter().enumerate() {
             let anchor = ["start", "middle", "end"][j];
             writeln!(
                 s,
-                "<text x=\"{}\" y=\"{}\" font-size=\"17\" text-anchor=\"{anchor}\">{:.4}</text>",
-                x + 50. + t * 500.,
-                y + 307.,
+                "<text x=\"{}\" y=\"{}\" font-size=\"21\" text-anchor=\"{anchor}\">{:.4}</text>",
+                x + 30. + t * 500.,
+                y + 325.,
                 t * max
             )
             .unwrap();
@@ -372,15 +371,27 @@ pub(crate) fn project(doc: &Value, contract: &Value) -> Result<(String, Value)> 
             .filter_map(|(i, b)| b.then_some(i))
             .collect();
         let note = if masked.is_empty() {
-            "Dashed circle: capacity excludes tip region".to_string()
+            "Dashed circle: capacity excludes 4 mm tip zone".to_string()
         } else {
-            format!("Gray: {} source-zeroed cells", masked.len())
+            format!("Gray: {} producer-masked elements", masked.len())
         };
-        text(&mut s, x + 15., y + 333., 17, &note);
+        text(&mut s, x + 15., y + 364., 21, &note);
         field_summary.insert(field.into(),json!({"selector":format!("/mesh/{field}"),"units":units,"count":m.tris.len(),"association":"triangle","limits":[0.,max],"clipped_count":0,"masked_cell_ids":masked,"raw_zero_count":m.values[field].iter().filter(|v|**v==0.).count(),"plot_transform":{"scale":scale,"origin_x":origin_x,"origin_y":origin_y,"formula":"svg_x=origin_x+source_x*scale; svg_y=origin_y-source_y*scale"}}));
     }
-    text(&mut s,20.,825.,18,"Cell colors use stored rounded values. Gray is not zero stress. No smoothing, clipping, deformation or new solve.");
-    text(&mut s,20.,850.,17,"Fields are from the retained 0.25 mm2 plate level; not the strict mesh, not solid stress and not physical validation.");
+    text(
+        &mut s,
+        20.,
+        912.,
+        21,
+        "Element colors use saved values without smoothing or clipping; gray denotes producer-masked regions.",
+    );
+    text(
+        &mut s,
+        20.,
+        944.,
+        21,
+        "Fields come from the 0.25 mm2 plate mesh of Individual 2000 (not the refined mesh or 3D solid).",
+    );
     s.push_str("</g></svg>\n");
     let summary = json!({"schema":"jarambit.retained_plate_projection.v1","subject":contract["subject"],"certificate_identity":contract["certificate_identity"],"source":contract["source"],"producer_revision":contract["producer_revision"],"nodes":m.xy.len(),"triangles":m.tris.len(),"palette":{"name":"piecewise-linear viridis anchors","space":"sRGB","knots":LUT,"positions":[0.,0.25,0.5,0.75,1.]},"tip_node":m.tip_node,"tip_coordinate":m.tip,"minimum_tip_mask_threshold_margin_mm":m.min_tip_boundary_margin,"tip_mask_coordinate_error_bound_mm":2.*2_f64.sqrt()*0.0005,"ring_boundary_membership_resolved_by_positive_source_value":m.resolved_ring_boundary,"fields":field_summary,"note":"Lateral and torsion show all raw cells, including the original capacity-excluded tip region. Envelope and ring producer-forced zeros are masked, not colored as zero stress."});
     Ok((s, summary))

@@ -1,0 +1,221 @@
+{
+  "schema": "jarambit.jr_ei_p3_t02.methodology_and_evaluator_exposition.v1",
+  "task_id": "JR-EI-P3-T02",
+  "canonical_title": "Expand genome/decoder and actual mating/mutation explanation",
+  "admiralty_task_id": "jarambit:JR-EI-P3-T02@r2:sha256:e2632df8b13129a114068944b72d61c87e132f4b9dcccc073924e3b892921981",
+  "governing_decisions": [
+    "SC-DEC-183K",
+    "SC-DEC-183L",
+    "SC-DEC-183M"
+  ],
+  "validation_posture": {
+    "state": "implemented_unvalidated",
+    "status": "completed_draft_pending_primary_merge_and_p8_ci",
+    "ci_hold_until_p8": true,
+    "git_push_to_origin_executed": false,
+    "origin_branch_ls_remote_empty_verified": true
+  },
+  "sc183m_erratum_bindings": {
+    "withdrawn_g1_threshold_parenthetical": "dimensionless ratio <= 0.45",
+    "withdrawn_unbound_w283_numbers": {
+      "g1": 0.6929788378349956,
+      "g2": 0.8165475938225951,
+      "g3": 0.6594793678879538,
+      "total": 0.7192900478962451,
+      "comparison_label": "W293 vs W283",
+      "disposition": "WITHDRAWN_UNBOUND_IN_REPOSITORY_PER_SC_DEC_183M"
+    },
+    "a01_erratum_receipt": {
+      "path": "docs/paper/JR_EI_A01_WEB_FALLBACK_CONTRADICTION_FIX_RECEIPT_ERRATUM_20261019.json",
+      "sha256": "806742003b951628d956a3359d778693f72b457249ab23a9d71f97044a7d9fc7",
+      "bytes": 8627
+    }
+  },
+  "genome_and_decoder_contract": {
+    "source_files": {
+      "genome_rs": {
+        "path": "crates/crescent/src/genome.rs",
+        "sha256": "13d8ca4a57c6fb227319b0b12247396bc1d9bd2cb42db4fb2e466bf0ebff6bb6"
+      },
+      "g1_rs": {
+        "path": "crates/crescent/src/g1.rs",
+        "sha256": "88fd8b8322658643018757054f30b4227ca94b5b6796d3c749d203897a63e014"
+      },
+      "global_metric_py": {
+        "path": "metrics/global_metric.py",
+        "sha256": "6550298e27c6918d349e771f086426614669c844a9e677a0df1bb0447110b9e9"
+      },
+      "evaluate_cad_candidate_py": {
+        "path": "ops/ci/evaluate_cad_candidate.py",
+        "sha256": "18595cecc6336053d7304d34ab6d9ffbd4b0542bb9df504323b6bc8ea6887ef0"
+      }
+    },
+    "all_evals_csv_column_count": 146,
+    "all_evals_csv_header_sha256": "2f1469c4d391aca315ddc3204f903fec1e78e57359cf3cdcea2726004555cfb1",
+    "scalar_metadata_column_count": 17,
+    "numeric_f64_gene_count": 128,
+    "categorical_material_column_count": 1,
+    "total_genome_and_material_columns": 129,
+    "gene_blocks": [
+      {
+        "block_id": "A_silhouette_normal_control_points",
+        "gene_index_range": [0, 39],
+        "csv_column_range": [17, 56],
+        "count": 40,
+        "constant_name": "N_CP",
+        "unit": "mm",
+        "description": "Normal displacements relative to C4_SIL reference outline; zone-bounded to +-1.5 mm (ring outer arc), +-2.0 mm (tip approach), and +-3.5 mm (belly/spine/grip)."
+      },
+      {
+        "block_id": "B_core_planform_thickness_bevel_relief_lattice_fuller_texture_edge",
+        "gene_index_range": [40, 89],
+        "csv_column_range": [57, 106],
+        "count": 50,
+        "constant_name": "NG_LEGACY - N_CP",
+        "description": "Planform drop/grip/ring geometry, stock/tip thickness and taper, inside/spine edge bevel angles, comet groove, serration depths, handle relief pocket, dimple lattice, blade fuller, handle flute, surface texture, cord wrap, grip pad, and cutting edge thickness."
+      },
+      {
+        "block_id": "C_wave7_to_16_isogrid_windows_ring_flute_perforations",
+        "gene_index_range": [90, 116],
+        "csv_column_range": [107, 133],
+        "count": 27,
+        "constant_name": "NG_P0 - NG_LEGACY",
+        "description": "Triangular isogrid pocket depth/pitch/rib/angle/rim/extents, pierced skeletonization windows, ring lightening flute, and angled micro-perforation slots."
+      },
+      {
+        "block_id": "D_wave17_d1_p1_continuous_rail_layer",
+        "gene_index_range": [117, 127],
+        "csv_column_range": [134, 144],
+        "count": 11,
+        "constant_name": "NG - NG_P0",
+        "description": "D1 P1 continuous perimeter rail switch (p1_on), rail width (rail_w), solid neck length (neck_l), interior web pocket depth/fillet (pocket_d, pocket_r), active knot count (k_n in {3,4,5}), and 5 interior thickness spline knots (k0..k4)."
+      },
+      {
+        "block_id": "E_categorical_material_grade",
+        "gene_index_range": null,
+        "csv_column_range": [145, 145],
+        "count": 1,
+        "constant_name": "MaterialGrade",
+        "allowed_values": [
+          "Ti-6Al-4V",
+          "Ti-3Al-2.5V"
+        ],
+        "description": "Categorical titanium alloy grade governing density (4.43 vs 4.48 g/cm^3), elastic modulus (113.8 vs 107.0 GPa), and yield strength (880 vs 620 MPa)."
+      }
+    ],
+    "clamp_couplings": [
+      "genes[46] (t_tip) <= genes[45] (t_stock)",
+      "genes[51] (comet_x1) >= genes[50] (comet_x0) + 15.0 (clamped to <= 20.0)",
+      "genes[77] (fuller_s1) >= genes[76] (fuller_s0) + 0.12 (clamped to <= 0.92)",
+      "genes[101] (win_s1) >= genes[100] (win_s0) + 0.12 (clamped to <= 0.90)",
+      "genes[79] (texture_mode) rounded to integer in {0, 1, 2}",
+      "genes[99] (win_n) rounded to integer in {0..8}",
+      "genes[117] (p1_on) thresholded at >= 0.5 to {0.0, 1.0}",
+      "genes[122] (k_n) rounded and clamped to {3.0, 4.0, 5.0}"
+    ]
+  },
+  "mating_and_mutation_operators": {
+    "crossover": {
+      "function": "crates::crescent::genome::Genome::crossover",
+      "silhouette_block_inheritance": "genes[0..40] inherited as a single contiguous 40-point block from parent b with probability 0.5, else from parent a",
+      "feature_gene_inheritance": "genes[40..128] inherited independently per coordinate with probability 0.5 from parent b, else parent a",
+      "material_inheritance": "mat inherited from parent b with probability 0.5, else parent a",
+      "post_clamp": true
+    },
+    "mutate": {
+      "function": "crates::crescent::genome::Genome::mutate",
+      "scale_coarse": 0.15,
+      "scale_fine": 0.04,
+      "operator_selection": "op = (r.f64() * 6.0) as usize in 0..6",
+      "operators": [
+        {
+          "op_index": 0,
+          "name": "sparse_per_gene_gaussian",
+          "description": "Each coordinate i in 0..128 perturbed with probability 0.15 by r.gauss() * (hi - lo) * scale."
+        },
+        {
+          "op_index": 1,
+          "name": "smooth_silhouette_gaussian_bump",
+          "description": "Periodic Gaussian bump across cp00..cp39 with random center in 0..40, width in [1.5, 5.5], and amplitude r.gauss() * 1.2 * (0.3 if fine else 1.0)."
+        },
+        {
+          "op_index": 2,
+          "name": "thickness_taper_relief_and_p1_knot_op",
+          "description": "Perturbs t_stock, t_tip, taper_x0, relief_d, relief_w, plus rail_w, pocket_d, and one knot k0..k4 when p1_on >= 0.5."
+        },
+        {
+          "op_index": 3,
+          "name": "dimple_lattice_op",
+          "description": "Zeros lattice_d with probability 0.15 or perturbs lattice_d, lattice_pitch, lattice_frac, lattice_angle, lattice_handle, lattice_blade."
+        },
+        {
+          "op_index": 4,
+          "name": "fuller_flute_texture_comet_op",
+          "description": "Perturbs fuller_d..flute_d, texture_mode (p=0.3), texture_d..texture_angle, and comet_w0..comet_bow."
+        },
+        {
+          "op_index": 5,
+          "name": "p1_continuous_rail_or_subop_isogrid_windows_rflute_perf",
+          "description": "When p1_on >= 0.5 and r.f64() < 0.7, mutates rail_w, neck_l, pocket_d, pocket_r, k_n, and k0..k4; otherwise selects sub in 0..4 (isogrid, pierced windows, ring flute, or micro-perforation)."
+        }
+      ],
+      "material_flip_probability_when_coarse": 0.03,
+      "post_clamp": true
+    },
+    "recorded_inheritance_subgraph_binding": {
+      "ledger_path": "docs/paper/generated/population/inheritance.json",
+      "ledger_sha256": "337abc826a4032256db7700ba68abdee8aee51ab09817853ee6741a27d99f3df",
+      "focal_public_id": 1095,
+      "focal_generation": 9,
+      "focal_stored_fit": 1.15727,
+      "focal_strict_certification_pass_all": false,
+      "subgraph_node_ids": [174, 245, 299, 392, 413, 526, 1095]
+    }
+  },
+  "fitness_and_evaluator_bindings": {
+    "g1_global_fitness": {
+      "formula": "G = 0.35 * min(solid_tip_SF, 2.0) + 0.35 * (spg / 4.0) + 0.20 * aes_score - 0.05 * (max(0.0, mass_g - 77.0) / 10.0) - 0.05 * (max(0.0, 1.2 - seq_ratio) / 1.2)",
+      "units": "dimensionless",
+      "direction": "higher_is_better",
+      "threshold_cutoff_in_source": null
+    },
+    "w_cad_v2_ultrarunner_karambit": {
+      "weights": {
+        "w_mass": 0.70,
+        "w_karambit": 0.12,
+        "w_survival_buffer_knee_8pct": 0.10,
+        "w_seq_buffer_knee_1p28": 0.05,
+        "w_carry_stability": 0.03
+      },
+      "feasible_formula": "1.0 + 0.70 * s_mass + 0.12 * s_karambit + 0.10 * s_survival + 0.05 * s_seq + 0.03 * s_carry",
+      "infeasible_formula": "-(1.0 + 4.0 * sum(shortfalls)) + 0.10 * s_mass",
+      "direction": "higher_is_better"
+    },
+    "canonical_w283_controlled_probes": [
+      {
+        "candidate": "w283_p14_c01",
+        "public_id": 2001,
+        "source_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json",
+        "source_sha256": "df5557342f59a0e60b703d533638ec731317672f9a5330a32200a3f9262bfdc6",
+        "W_CAD": -3.878704,
+        "global_fitness_G1_G": 0.6239029999999999,
+        "battery_record_G1": 0.623888308291947,
+        "all_engineering_gates_pass": false,
+        "retracted_v1_0_0_preimage_W_CAD": 1.795575,
+        "retracted_v1_0_0_preimage_G1": 0.913854625
+      },
+      {
+        "candidate": "w283_p10_c02",
+        "public_id": null,
+        "source_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_cad_eval.json",
+        "source_sha256": "6eb44dab282bc8c6d42dc2194284e1bb2f999d0460b1091f1085c452abbcdfcf",
+        "W_CAD": -3.964924,
+        "global_fitness_G1_G": 0.6216340416666666,
+        "battery_record_G1": 0.6216318603776162,
+        "all_engineering_gates_pass": false,
+        "retracted_v1_0_0_preimage_W_CAD": 1.816593,
+        "retracted_v1_0_0_preimage_G1": 0.9167193749999998
+      }
+    ]
+  }
+}

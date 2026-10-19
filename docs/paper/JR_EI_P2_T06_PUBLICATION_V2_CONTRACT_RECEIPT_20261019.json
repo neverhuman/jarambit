@@ -1,0 +1,77 @@
+{
+  "schema": "jarambit.ei.phase2_task_receipt.v1",
+  "task_id": "JR-EI-P2-T06",
+  "phase_id": "P2",
+  "depends_on": [
+    "JR-EI-P2-T02",
+    "JR-EI-P2-T03",
+    "JR-EI-P2-T04",
+    "JR-EI-P2-T05"
+  ],
+  "decision_refs": [
+    "SC-DEC-183G",
+    "SC-DEC-183J",
+    "SC-DEC-183K"
+  ],
+  "observed_utc": "2026-10-19T18:36:30Z",
+  "steward": "2740538.captain_jarambit:1",
+  "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+  "branch": "ei/admiralty-primary-20261019",
+  "status": "completed_code_and_receipt_pending_p8_ci",
+  "ci_hold_until_p8": true,
+  "live_export_web_data_invoked": false,
+  "summary": "Emitted docs/paper/publication.v2.json binding all retained cohorts, public IDs, selection receipts, score profiles, population ledgers, and lossless gen800 population accession index with SHA-256 verification via crates/paper-artifacts/examples/publication_v2_audit.rs.",
+  "outputs": [
+    {
+      "path": "docs/paper/publication.v2.json",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/publication.v2.json",
+      "bytes": 4862,
+      "sha256": "5c8c6fe317405c8765e66015447e76bd99ebf955f76dfe06acc00e8f0d78b953"
+    },
+    {
+      "path": "crates/paper-artifacts/examples/publication_v2_audit.rs",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/crates/paper-artifacts/examples/publication_v2_audit.rs",
+      "bytes": 2904,
+      "sha256": "36a2f4397de21d600a419017f8567f527a169f2ed9cd7e264aff584eb523aa8e"
+    }
+  ],
+  "compile_and_audit_verification": {
+    "command": "cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit && cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check",
+    "exit_code": 0
+  },
+  "deferred_p8_checks": [
+    "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2"
+  ],
+  "source_head": "429f12b62b3c82bda6249497aed9f6f13f3b3863",
+  "origin_main_head": "e0ec88dd2dfbd6e4287cb718661a0793b9562183",
+  "input_identities": {
+    "docs/paper/JR_EI_P2_T02_SCORE_PROFILES_AND_DISPLAY_LOSS_RECEIPT_20261019.json": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P2_T02_SCORE_PROFILES_AND_DISPLAY_LOSS_RECEIPT_20261019.json",
+      "bytes": 2603,
+      "sha256": "5732e64f915481de9fab00bfe10a0a0114231c183dc0ad4e164e30f2c775843a"
+    },
+    "docs/paper/JR_EI_P2_T03_HISTORICAL_W282_READER_RECEIPT_20261019.json": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P2_T03_HISTORICAL_W282_READER_RECEIPT_20261019.json",
+      "bytes": 4101,
+      "sha256": "9435a8739a53959f1bc40eccee1eee8854bc09c61cc2e0db4b2c6994eda12a03"
+    },
+    "docs/paper/JR_EI_P2_T04_NEWER_CORPUS_READER_RECEIPT_20261019.json": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P2_T04_NEWER_CORPUS_READER_RECEIPT_20261019.json",
+      "bytes": 3738,
+      "sha256": "a8e2621f96dc1d00e27aeeddda2277c018f7aec9f17755844286396b24be6442"
+    },
+    "docs/paper/JR_EI_P2_T05_LATEST_SNAPSHOT_AND_GEN800_POPULATION_READER_RECEIPT_20261019.json": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P2_T05_LATEST_SNAPSHOT_AND_GEN800_POPULATION_READER_RECEIPT_20261019.json",
+      "bytes": 3834,
+      "sha256": "0224c1aa6afc25b62521d0ba5b76e0e8a0a02ef2b0e7adbf4fa673fba5f21d30"
+    }
+  },
+  "declared_scope": {
+    "phase": "P2",
+    "task_id": "JR-EI-P2-T06",
+    "retained_evidence_only": true,
+    "live_export_web_data_invoked": false,
+    "ci_hold_until_p8": true,
+    "outputs_count": 2
+  }
+}

@@ -1,0 +1,184 @@
+{
+  "schema": "jarambit.population_latest_snapshots.v1",
+  "source_t06_receipt": "docs/paper/JR_EI_P1_T06_NATIVE_SUMMARY_ADMISSION_RECEIPT_20261019.json",
+  "source_t08_receipt": "docs/paper/JR_EI_P1_T08_LOSSLESS_GEN800_POPULATION_ACCESSION_RECEIPT_20261019.json",
+  "v2_staged_native_summaries": {
+    "file_count": 11,
+    "total_rows": 17672,
+    "longest_retained_generation": 708,
+    "internal_generation_gaps": 0,
+    "record_kind": "generation_island_summary_not_birth_cloud"
+  },
+  "completed_gen800_four_island_runs": {
+    "run_count": 10,
+    "summary_rows_per_run": 3204,
+    "total_summary_rows": 32040,
+    "generation_bounds": [
+      0,
+      800
+    ],
+    "lossless_population_rows_per_run": 195456,
+    "lossless_population_total_rows": 1954560,
+    "lossless_compressed_segments_total": 200,
+    "lossless_compressed_bytes_total": 494843141,
+    "runs": [
+      {
+        "public_run_id": 2,
+        "public_label": "Run 2",
+        "package_id": "evo_full_20261018_xbabe1_c01",
+        "row_count": 195456,
+        "legal_true_count": 74874,
+        "generation_range": [
+          0,
+          800
+        ],
+        "original_csv_sha256": "ac6ac8aee11a6e744c69ffcc7fa20d87ae6e78aa0ef2efa2ce5570744b5ac58a",
+        "total_compressed_bytes": 49310376,
+        "legacy_superseded_run_id": 37,
+        "cohort_3_ordinal": 1
+      },
+      {
+        "public_run_id": 3,
+        "public_label": "Run 3",
+        "package_id": "evo_full_20261018_xbabe1_c03",
+        "row_count": 195456,
+        "legal_true_count": 77011,
+        "generation_range": [
+          0,
+          800
+        ],
+        "original_csv_sha256": "4076371886530cfa749eda6cffa8d88caf3be5bd76450c33ce577cecd6fd1fe0",
+        "total_compressed_bytes": 49791636,
+        "legacy_superseded_run_id": 38,
+        "cohort_3_ordinal": 2
+      },
+      {
+        "public_run_id": 4,
+        "public_label": "Run 4",
+        "package_id": "evo_full_20261018_xbabe1_c04",
+        "row_count": 195456,
+        "legal_true_count": 77396,
+        "generation_range": [
+          0,
+          800
+        ],
+        "original_csv_sha256": "b9e42e24177a7c318080b5d8965921945b5b657fc879e606bcbe19be215951d6",
+        "total_compressed_bytes": 48902646,
+        "legacy_superseded_run_id": 39,
+        "cohort_3_ordinal": 3
+      },
+      {
+        "public_run_id": 5,
+        "public_label": "Run 5",
+        "package_id": "evo_full_20261018_xbabe1_c05",
+        "row_count": 195456,
+        "legal_true_count": 77625,
+        "generation_range": [
+          0,
+          800
+        ],
+        "original_csv_sha256": "1efcb3b228e8d682bf8cd8f886bd06f0baa01c2f64ef50b283ea35af022f82c6",
+        "total_compressed_bytes": 50038585,
+        "legacy_superseded_run_id": 40,
+        "cohort_3_ordinal": 4
+      },
+      {
+        "public_run_id": 6,
+        "public_label": "Run 6",
+        "package_id": "evo_full_20261018_xbabe3_c01",
+        "row_count": 195456,
+        "legal_true_count": 70278,
+        "generation_range": [
+          0,
+          800
+        ],
+        "original_csv_sha256": "75552d44073ecba1864ad42cfdd7cfdadfb675cd4eace72783e99cd97f6b1176",
+        "total_compressed_bytes": 49666459,
+        "legacy_superseded_run_id": 41,
+        "cohort_3_ordinal": 5
+      },
+      {
+        "public_run_id": 7,
+        "public_label": "Run 7",
+        "package_id": "evo_full_20261018_xbabe3_c02",
+        "row_count": 195456,
+        "legal_true_count": 74777,
+        "generation_range": [
+          0,
+          800
+        ],
+        "original_csv_sha256": "e442593276e62784800abed28210d2f4774e8143069948c6ef8dd055e56e6989",
+        "total_compressed_bytes": 49990583,
+        "legacy_superseded_run_id": 42,
+        "cohort_3_ordinal": 6
+      },
+      {
+        "public_run_id": 8,
+        "public_label": "Run 8",
+        "package_id": "evo_full_20261018_xbabe3_c03",
+        "row_count": 195456,
+        "legal_true_count": 71550,
+        "generation_range": [
+          0,
+          800
+        ],
+        "original_csv_sha256": "a33071cd6ce3d90c7196e14ee45592d556f58c4e2f3548ef2bf45604a964eb76",
+        "total_compressed_bytes": 48637667,
+        "legacy_superseded_run_id": 43,
+        "cohort_3_ordinal": 7
+      },
+      {
+        "public_run_id": 9,
+        "public_label": "Run 9",
+        "package_id": "evo_full_20261018_xbabe3_c04",
+        "row_count": 195456,
+        "legal_true_count": 76284,
+        "generation_range": [
+          0,
+          800
+        ],
+        "original_csv_sha256": "c3532f95975c217b468fa18034f366d03a10b501331edb32405f8752ca691307",
+        "total_compressed_bytes": 50148309,
+        "legacy_superseded_run_id": 44,
+        "cohort_3_ordinal": 8
+      },
+      {
+        "public_run_id": 10,
+        "public_label": "Run 10",
+        "package_id": "evo_full_20261018_xbabe4_c01",
+        "row_count": 195456,
+        "legal_true_count": 74309,
+        "generation_range": [
+          0,
+          800
+        ],
+        "original_csv_sha256": "6db20267b159bf795db54a9c9ff520ae5d0aa3351693c95eed266277cb4ad81c",
+        "total_compressed_bytes": 49150203,
+        "legacy_superseded_run_id": 45,
+        "cohort_3_ordinal": 9
+      },
+      {
+        "public_run_id": 11,
+        "public_label": "Run 11",
+        "package_id": "evo_full_20261018_xbabe4_c02",
+        "row_count": 195456,
+        "legal_true_count": 80132,
+        "generation_range": [
+          0,
+          800
+        ],
+        "original_csv_sha256": "86e2c256f218e87ef18d7cb14df92724e298d3611bdbb8859b246106ec0e0db0",
+        "total_compressed_bytes": 49206677,
+        "legacy_superseded_run_id": 46,
+        "cohort_3_ordinal": 10
+      }
+    ]
+  },
+  "aborted_crescent_attempts": {
+    "total_attempts": 9,
+    "attempts_with_history_live_csv": 7,
+    "attempts_without_history_live_csv": 2,
+    "total_rows": 216
+  },
+  "public_run_registry_authority": "docs/paper/data/public_ids.v1.json (Run 1 = historical w282; Run 2..Run 11 = ten retained 800-gen native runs)"
+}

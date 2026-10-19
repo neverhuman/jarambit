@@ -133,50 +133,65 @@ pub(crate) fn svg(p: &Value) -> Result<String> {
     {
         return Err("unadmitted weighted plot projection".into());
     }
-    let mut s=String::from("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1200\" height=\"620\" viewBox=\"0 0 1200 620\"><rect width=\"1200\" height=\"620\" fill=\"white\"/><g font-family=\"Arial, sans-serif\" fill=\"#132d3b\">\n");
+    let mut s = String::from("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1200\" height=\"760\" viewBox=\"0 0 1200 760\"><rect width=\"1200\" height=\"760\" fill=\"white\"/><g font-family=\"Arial, sans-serif\" fill=\"#132d3b\">\n");
     label(
         &mut s,
         20.,
-        29.,
-        24,
-        "RETAINED WEIGHTED SUMMARIES / SIX SEPARATE RUN FILES",
+        34.,
+        25,
+        "Retained Weighted Reporting Summaries Across Six Runs (Run 31–Run 36)",
     );
-    label(&mut s,20.,57.,19,"15 saved generation summaries / no full round populations / point-level stage lineage unresolved");
-    writeln!(s,"<circle cx=\"29\" cy=\"82\" r=\"7\" stroke=\"#007e87\" stroke-width=\"3\" fill=\"none\"/><path d=\"M370,76 L382,88 M370,88 L382,76\" stroke=\"#d07b42\" stroke-width=\"3\"/>").unwrap();
-    label(&mut s, 45., 88., 18, "Archive (stored Hall of Fame)");
-    label(&mut s, 392., 88., 18, "Round best");
     label(
         &mut s,
-        665.,
-        88.,
-        18,
-        "Symbols overlap when the saved values coincide",
+        20.,
+        66.,
+        21,
+        "15 saved generation summaries (30 observations) · stage &amp; scorer comparability not established",
+    );
+    writeln!(s,"<circle cx=\"30\" cy=\"96\" r=\"8\" stroke=\"#007e87\" stroke-width=\"3\" fill=\"none\"/><path d=\"M390,90 L402,102 M390,102 L402,90\" stroke=\"#d07b42\" stroke-width=\"3\"/>").unwrap();
+    label(&mut s, 48., 103., 21, "Archive best (Hall of Fame)");
+    label(&mut s, 412., 103., 21, "Round best");
+    label(
+        &mut s,
+        620.,
+        103.,
+        21,
+        "Symbols coincide when archive &amp; round match",
     );
     let runs = p["runs"].as_array().ok_or("missing weighted plot runs")?;
     if runs.len() != 6 {
         return Err("weighted plot facet membership differs".into());
     }
     for (i, run) in runs.iter().enumerate() {
-        let x = 20. + 400. * (i % 3) as f64;
-        let y = 105. + 225. * (i / 3) as f64;
+        let x = 20. + 393. * (i % 3) as f64;
+        let y = 122. + 275. * (i / 3) as f64;
         writeln!(
             s,
-            "<rect x=\"{x}\" y=\"{y}\" width=\"380\" height=\"215\" fill=\"#f7f7f2\"/>"
+            "<rect x=\"{x}\" y=\"{y}\" width=\"374\" height=\"260\" fill=\"#f7f7f2\" stroke=\"#d5dfdf\"/>"
         )
         .unwrap();
         let id = text(&run["id"])?;
+        let pub_run_lbl = match id {
+            "xbabe3/w411c3" => "Run 31",
+            "xbabe3/w411t3" => "Run 32",
+            "xbabe3/w409_ul" => "Run 33",
+            "xbabe2/w322" => "Run 34",
+            "xbabe1/w501_ul" => "Run 35",
+            "xbabe1/w501_xb1" => "Run 36",
+            _ => "Run ?",
+        };
         label(
             &mut s,
-            x + 12.,
-            y + 27.,
-            20,
-            &format!("{id} / n={}", run["generation_rows"]),
+            x + 14.,
+            y + 32.,
+            22,
+            &format!("{pub_run_lbl} (n = {})", run["generation_rows"]),
         );
-        let sx = |g: f64| x + 55. + 305. * g / 2.;
-        let sy = |v: f64| y + 155. - 100. * (v - 70.) / 5.;
+        let sx = |g: f64| x + 78. + 265. * g / 2.;
+        let sy = |v: f64| y + 184. - 115. * (v - 70.) / 5.;
         for tick in [70., 72.5, 75.] {
             let py = sy(tick);
-            label(&mut s, x + 9., py + 6., 17, &format!("{tick}"));
+            label(&mut s, x + 10., py + 7., 21, &format!("{tick:.1}"));
             writeln!(
                 s,
                 "<path d=\"M{},{} H{}\" stroke=\"#d5dfdf\"/>",
@@ -187,7 +202,7 @@ pub(crate) fn svg(p: &Value) -> Result<String> {
             .unwrap();
         }
         for g in 0..=2 {
-            label(&mut s, sx(g as f64) - 5., y + 177., 18, &g.to_string());
+            label(&mut s, sx(g as f64) - 8., y + 214., 21, &g.to_string());
         }
         let points = run["points"]
             .as_array()
@@ -205,7 +220,7 @@ pub(crate) fn svg(p: &Value) -> Result<String> {
                 }
                 let py = sy(value);
                 let selector = format!("{}/{}", text(&point["source_pointer"])?, field);
-                let attrs=format!("data-run=\"{id}\" data-series=\"{series}\" data-source-pointer=\"{selector}\" data-generation=\"{generation}\" data-value=\"{value}\"");
+                let attrs = format!("data-run=\"{id}\" data-series=\"{series}\" data-source-pointer=\"{selector}\" data-generation=\"{generation}\" data-value=\"{value}\"");
                 if series == "archive" {
                     writeln!(s,"<circle {attrs} cx=\"{px}\" cy=\"{py}\" r=\"7\" stroke=\"#007e87\" stroke-width=\"3\" fill=\"none\"/>").unwrap();
                 } else {
@@ -216,18 +231,30 @@ pub(crate) fn svg(p: &Value) -> Result<String> {
         let last = points.last().ok_or("empty weighted plot facet")?;
         label(
             &mut s,
-            x + 12.,
-            y + 204.,
-            16,
+            x + 14.,
+            y + 246.,
+            21,
             &format!(
-                "Last round {:.6} / archive {:.6}",
+                "Final: {:.3} / {:.3}",
                 number(&last["round_best_fitness"])?,
                 number(&last["hall_of_fame_best_so_far"])?
             ),
         );
     }
-    label(&mut s,20.,573.,19,"Vertical: reported fitness, 70-75 (truncated). Horizontal: stored generation, 0-2. Higher is better.");
-    label(&mut s,20.,603.,18,"No interpolation or pooled trajectory. A shared metric name does not establish comparable scorer/stage inputs.");
+    label(
+        &mut s,
+        20.,
+        706.,
+        21,
+        "Vertical: weighted fitness [70.0, 75.0] (truncated). Horizontal: generation 0–2. Higher is better.",
+    );
+    label(
+        &mut s,
+        20.,
+        740.,
+        21,
+        "No interpolation or pooled trajectory across Run 31–Run 36; Run 36 has only 1 saved point.",
+    );
     s.push_str("</g></svg>\n");
     Ok(s)
 }

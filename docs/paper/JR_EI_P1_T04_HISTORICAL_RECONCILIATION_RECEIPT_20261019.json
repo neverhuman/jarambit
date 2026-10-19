@@ -1,0 +1,914 @@
+{
+  "schema": "jarambit.ei.p1_t04_historical_reconciliation_receipt.v1",
+  "task_id": "JR-EI-P1-T04",
+  "admiralty_task_id": "jarambit:JR-EI-P1-T04@r2:sha256:b25ceb21e4ee91553c234c473ff60fe7585c7651281f9b216c6fda405f02f382",
+  "decision_refs": [
+    "SC-DEC-183E",
+    "SC-DEC-183F",
+    "SC-DEC-186A"
+  ],
+  "observed_utc": "2026-10-19T17:39:50Z",
+  "steward": "2740538.captain_jarambit (window 1)",
+  "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+  "branch": "ei/admiralty-primary-20261019",
+  "status": "implemented_unvalidated",
+  "validation_posture": {
+    "ci_hold_until_p8": true,
+    "native_execution_qualified": false,
+    "runtime_mode": "manual-coordination-active",
+    "deferred_p8_checks": [
+      "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2",
+      "cargo run -p paper-artifacts --example paper_artifacts"
+    ]
+  },
+  "producer_binding": {
+    "producer_commit": "82f450f7fb418e28c4b229031920dec5454435f3",
+    "crates_crescent_src_qd_rs_sha256": "fe3d057eeec74c3278b46027265406ec0ee97dd65938ae49cb003e08ee5b3a5f",
+    "run_manifest_sha256_in_jevl": "7358489bfcd54b6ce8c6cf8883e5b45eeaddd2fabedd032000e88355c0bb4af0"
+  },
+  "input_identities": {
+    "evidence_jevl": {
+      "path": "evidence/rs_v2/w282_ultrarunner/search/evidence.jevl",
+      "bytes": 64162,
+      "sha256": "29d4602b1728e179606ac380df69652efea6e45c3daf67a6602cf56a6699b181"
+    },
+    "all_evals_json": {
+      "path": "evidence/rs_v2/w282_ultrarunner/search/all_evals.json",
+      "bytes": 2204188,
+      "sha256": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363"
+    },
+    "all_evals_csv": {
+      "path": "evidence/rs_v2/w282_ultrarunner/search/all_evals.csv",
+      "bytes": 3759969,
+      "sha256": "a28f6d2c8a676661280981733a1e33c80136aba157c7a9d2f5a5c3db444a223c"
+    },
+    "history_csv": {
+      "path": "evidence/rs_v2/w282_ultrarunner/search/history.csv",
+      "bytes": 4444,
+      "sha256": "9fde87c601b0a7fab3bf4b3f66ca3505df19917cb45e7c7bc7994f3e8f59333f"
+    },
+    "qd_archive_csv": {
+      "path": "evidence/rs_v2/w282_ultrarunner/search/qd_archive.csv",
+      "bytes": 821,
+      "sha256": "9d4ce161375faceb7a13c03c021b2fed50a47db96cb9f514552416f41898f28c"
+    },
+    "certification_csv": {
+      "path": "evidence/rs_v2/w282_ultrarunner/search/certification.csv",
+      "bytes": 5439,
+      "sha256": "6f1bd7dcefe427342959e75e2457c5f4fabb17a1573b68f1552fe440563a1cdd"
+    },
+    "provenance_json": {
+      "path": "evidence/rs_v2/w282_ultrarunner/provenance.json",
+      "bytes": 3838,
+      "sha256": "68166f27cabb28e24868cdf96e484493e8b71c4deea16ea53b9265d3b84053ae"
+    },
+    "manifest_json": {
+      "path": "evidence/rs_v2/w282_ultrarunner/manifest.json",
+      "bytes": 4236,
+      "sha256": "543f7e8410214a7e34e4ef55772e9d671221001d0e11a36b4d68d1a0ef0a96cf"
+    },
+    "search_summary_json": {
+      "path": "evidence/rs_v2/w282_ultrarunner/search_summary.json",
+      "bytes": 27769,
+      "sha256": "e4e6cf51da8269833709ef8501ba3b06934cfb5baecc038628f384675b63dd49"
+    }
+  },
+  "reconciled_counts": {
+    "intact_zstd_frames": 19,
+    "torn_tail": false,
+    "exact_eof_bytes": 64162,
+    "total_events": 2207,
+    "event_breakdown": {
+      "run_start": 1,
+      "eval_births": 1984,
+      "elite_reappearances": 192,
+      "migration_events": 12,
+      "gen_end_summaries": 17,
+      "run_end": 1
+    },
+    "births_reconciled_across_jevl_json_csv": 1984,
+    "birth_id_range": [
+      0,
+      1983
+    ],
+    "generations_count": 17,
+    "generation_range": [
+      0,
+      16
+    ],
+    "membership_occurrences_total": 2176,
+    "membership_formula": "4 islands * 32 recorded slots * 17 generations = 2176 (1984 eval births + 192 elite reappearances)",
+    "migration_events_count": 12,
+    "migration_copied_id_occurrences": 24,
+    "fem_status_counts": {
+      "complete": 1455,
+      "not_evaluated": 529,
+      "jevl_to_json_spelling_adapter": {
+        "complete -> complete": 1455,
+        "notevaluated -> not_evaluated": 529
+      }
+    },
+    "legal_births_count": 446,
+    "parent_arity_counts": {
+      "roots_0_parents": 128,
+      "one_parent_mutations": 938,
+      "two_parent_crossovers": 918,
+      "all_parents_from_earlier_generation": true
+    },
+    "genome_csv_schema": {
+      "total_columns": 146,
+      "metadata_and_metric_columns_0_to_16": [
+        "id",
+        "gen",
+        "fit",
+        "spg",
+        "mass_g",
+        "aes_pass",
+        "aes_score",
+        "hausdorff",
+        "emd",
+        "novelty",
+        "lat_rob",
+        "ring_rob",
+        "sf_hunter",
+        "legal",
+        "n_rejects",
+        "relief_frac",
+        "n_win"
+      ],
+      "gene_columns_count_17_to_145": 129,
+      "first_gene_column": "cp00",
+      "last_gene_column": "material",
+      "distinct_serialized_gene_vectors": 1965,
+      "duplicate_serialized_gene_rows": 19
+    },
+    "highest_stored_birth_score": {
+      "id": 1095,
+      "generation": 9,
+      "island": 1,
+      "fit": 1.15727,
+      "parents": [
+        413,
+        526
+      ],
+      "op": "crossover_mutate",
+      "fem_status": "complete",
+      "legal": true,
+      "strict_certification_pass_all": false
+    },
+    "archive_occupancy": {
+      "initial_gen_0_cells": 1,
+      "final_gen_16_cells": 12
+    }
+  },
+  "semantic_preservation_rules": {
+    "snapshot_stage": "pre-migration-after-contextual-rescore",
+    "elite_scores_missing_by_design": "Elite events record (gen, island, id) only; they do not store refreshed contextual fitness and must never be backfilled with original birth fit as if newly observed.",
+    "duplicate_elite_slot_multiplicity": {
+      "duplicate_generation_island_id_keys_count": 9,
+      "duplicate_keys": [
+        {
+          "gen": 9,
+          "island": 1,
+          "id": 245,
+          "occurrences": 2
+        },
+        {
+          "gen": 9,
+          "island": 2,
+          "id": 526,
+          "occurrences": 2
+        },
+        {
+          "gen": 10,
+          "island": 2,
+          "id": 526,
+          "occurrences": 2
+        },
+        {
+          "gen": 11,
+          "island": 2,
+          "id": 526,
+          "occurrences": 2
+        },
+        {
+          "gen": 12,
+          "island": 2,
+          "id": 526,
+          "occurrences": 2
+        },
+        {
+          "gen": 13,
+          "island": 3,
+          "id": 526,
+          "occurrences": 2
+        },
+        {
+          "gen": 14,
+          "island": 3,
+          "id": 526,
+          "occurrences": 2
+        },
+        {
+          "gen": 15,
+          "island": 3,
+          "id": 526,
+          "occurrences": 2
+        },
+        {
+          "gen": 16,
+          "island": 3,
+          "id": 526,
+          "occurrences": 2
+        }
+      ]
+    },
+    "migration_copy_semantics": {
+      "events": [
+        {
+          "ev": "migration",
+          "gen": 4,
+          "from": 0,
+          "to": 1,
+          "ids": [
+            245,
+            498
+          ]
+        },
+        {
+          "ev": "migration",
+          "gen": 4,
+          "from": 1,
+          "to": 2,
+          "ids": [
+            526,
+            413
+          ]
+        },
+        {
+          "ev": "migration",
+          "gen": 4,
+          "from": 2,
+          "to": 3,
+          "ids": [
+            198,
+            312
+          ]
+        },
+        {
+          "ev": "migration",
+          "gen": 4,
+          "from": 3,
+          "to": 0,
+          "ids": [
+            452,
+            591
+          ]
+        },
+        {
+          "ev": "migration",
+          "gen": 8,
+          "from": 0,
+          "to": 1,
+          "ids": [
+            245,
+            498
+          ]
+        },
+        {
+          "ev": "migration",
+          "gen": 8,
+          "from": 1,
+          "to": 2,
+          "ids": [
+            526,
+            245
+          ]
+        },
+        {
+          "ev": "migration",
+          "gen": 8,
+          "from": 2,
+          "to": 3,
+          "ids": [
+            526,
+            413
+          ]
+        },
+        {
+          "ev": "migration",
+          "gen": 8,
+          "from": 3,
+          "to": 0,
+          "ids": [
+            452,
+            591
+          ]
+        },
+        {
+          "ev": "migration",
+          "gen": 12,
+          "from": 0,
+          "to": 1,
+          "ids": [
+            245,
+            498
+          ]
+        },
+        {
+          "ev": "migration",
+          "gen": 12,
+          "from": 1,
+          "to": 2,
+          "ids": [
+            1095,
+            526
+          ]
+        },
+        {
+          "ev": "migration",
+          "gen": 12,
+          "from": 2,
+          "to": 3,
+          "ids": [
+            1237,
+            526
+          ]
+        },
+        {
+          "ev": "migration",
+          "gen": 12,
+          "from": 3,
+          "to": 0,
+          "ids": [
+            526,
+            1143
+          ]
+        }
+      ],
+      "note": "Migration events copy elite IDs across islands after the generation's recorded membership snapshot; overwritten destination slot IDs are not retained in JEV1."
+    }
+  },
+  "frame_inventory": [
+    {
+      "frame_index": 0,
+      "byte_offset": 0,
+      "compressed_bytes": 408,
+      "decompressed_bytes": 677,
+      "fnv1a_u64_hex": "0xd90fa96673024fa3",
+      "event_count": 1,
+      "event_counts": {
+        "run_start": 1
+      }
+    },
+    {
+      "frame_index": 1,
+      "byte_offset": 424,
+      "compressed_bytes": 2827,
+      "decompressed_bytes": 24758,
+      "fnv1a_u64_hex": "0xb9789ad4b04be441",
+      "event_count": 129,
+      "event_counts": {
+        "eval": 128,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 2,
+      "byte_offset": 3267,
+      "compressed_bytes": 3575,
+      "decompressed_bytes": 23948,
+      "fnv1a_u64_hex": "0xb1229f9f9459bc93",
+      "event_count": 129,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 3,
+      "byte_offset": 6858,
+      "compressed_bytes": 3701,
+      "decompressed_bytes": 24210,
+      "fnv1a_u64_hex": "0xea16295c710ccb71",
+      "event_count": 129,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 4,
+      "byte_offset": 10575,
+      "compressed_bytes": 3657,
+      "decompressed_bytes": 24046,
+      "fnv1a_u64_hex": "0x090ad0e0814fabe9",
+      "event_count": 129,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 5,
+      "byte_offset": 14248,
+      "compressed_bytes": 3903,
+      "decompressed_bytes": 24520,
+      "fnv1a_u64_hex": "0x234f951d87e18681",
+      "event_count": 133,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "migration": 4,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 6,
+      "byte_offset": 18167,
+      "compressed_bytes": 3831,
+      "decompressed_bytes": 24240,
+      "fnv1a_u64_hex": "0xa15624b3dd562018",
+      "event_count": 129,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 7,
+      "byte_offset": 22014,
+      "compressed_bytes": 3678,
+      "decompressed_bytes": 24139,
+      "fnv1a_u64_hex": "0x6735ded447fe9286",
+      "event_count": 129,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 8,
+      "byte_offset": 25708,
+      "compressed_bytes": 3851,
+      "decompressed_bytes": 24166,
+      "fnv1a_u64_hex": "0xeb5050231d7f5382",
+      "event_count": 129,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 9,
+      "byte_offset": 29575,
+      "compressed_bytes": 3802,
+      "decompressed_bytes": 24368,
+      "fnv1a_u64_hex": "0x8d5d7872d2694172",
+      "event_count": 133,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "migration": 4,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 10,
+      "byte_offset": 33393,
+      "compressed_bytes": 3804,
+      "decompressed_bytes": 24299,
+      "fnv1a_u64_hex": "0x113e8976c5e65fd5",
+      "event_count": 129,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 11,
+      "byte_offset": 37213,
+      "compressed_bytes": 3818,
+      "decompressed_bytes": 24489,
+      "fnv1a_u64_hex": "0xd5f410c71357d840",
+      "event_count": 129,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 12,
+      "byte_offset": 41047,
+      "compressed_bytes": 3787,
+      "decompressed_bytes": 24517,
+      "fnv1a_u64_hex": "0xe4d459533f512cc1",
+      "event_count": 129,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 13,
+      "byte_offset": 44850,
+      "compressed_bytes": 3867,
+      "decompressed_bytes": 24807,
+      "fnv1a_u64_hex": "0x3a0dc0d756b70048",
+      "event_count": 133,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "migration": 4,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 14,
+      "byte_offset": 48733,
+      "compressed_bytes": 3751,
+      "decompressed_bytes": 24440,
+      "fnv1a_u64_hex": "0x965675cc3221bea3",
+      "event_count": 129,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 15,
+      "byte_offset": 52500,
+      "compressed_bytes": 3804,
+      "decompressed_bytes": 24561,
+      "fnv1a_u64_hex": "0xaa1b732e06c85574",
+      "event_count": 129,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 16,
+      "byte_offset": 56320,
+      "compressed_bytes": 3844,
+      "decompressed_bytes": 24669,
+      "fnv1a_u64_hex": "0x324bfba724d1254b",
+      "event_count": 129,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 17,
+      "byte_offset": 60180,
+      "compressed_bytes": 3886,
+      "decompressed_bytes": 24696,
+      "fnv1a_u64_hex": "0xc5dedf62d75cbae9",
+      "event_count": 129,
+      "event_counts": {
+        "elite": 12,
+        "eval": 116,
+        "gen_end": 1
+      }
+    },
+    {
+      "frame_index": 18,
+      "byte_offset": 64082,
+      "compressed_bytes": 64,
+      "decompressed_bytes": 55,
+      "fnv1a_u64_hex": "0xa62643c9036ffa8c",
+      "event_count": 1,
+      "event_counts": {
+        "run_end": 1
+      }
+    }
+  ],
+  "generation_reconciliation": [
+    {
+      "gen": 0,
+      "births_count": 128,
+      "fem_complete_births": 65,
+      "fem_not_evaluated_births": 63,
+      "legal_births": 3,
+      "elite_reappearances": 0,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 57,
+      "birth_max_fit": 1.14038,
+      "gen_end_fresh_evals_cumulative": 128,
+      "gen_end_appearances_cumulative": 128,
+      "gen_end_archive_cells": 1,
+      "gen_end_best_id": 57,
+      "gen_end_best_fit": 1.1403784129304426
+    },
+    {
+      "gen": 1,
+      "births_count": 116,
+      "fem_complete_births": 80,
+      "fem_not_evaluated_births": 36,
+      "legal_births": 7,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 174,
+      "birth_max_fit": 1.14979,
+      "gen_end_fresh_evals_cumulative": 244,
+      "gen_end_appearances_cumulative": 256,
+      "gen_end_archive_cells": 1,
+      "gen_end_best_id": 174,
+      "gen_end_best_fit": 1.1497894466579506
+    },
+    {
+      "gen": 2,
+      "births_count": 116,
+      "fem_complete_births": 84,
+      "fem_not_evaluated_births": 32,
+      "legal_births": 12,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 245,
+      "birth_max_fit": 1.15388,
+      "gen_end_fresh_evals_cumulative": 360,
+      "gen_end_appearances_cumulative": 384,
+      "gen_end_archive_cells": 1,
+      "gen_end_best_id": 245,
+      "gen_end_best_fit": 1.1538810927569474
+    },
+    {
+      "gen": 3,
+      "births_count": 116,
+      "fem_complete_births": 84,
+      "fem_not_evaluated_births": 32,
+      "legal_births": 18,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 413,
+      "birth_max_fit": 1.15296,
+      "gen_end_fresh_evals_cumulative": 476,
+      "gen_end_appearances_cumulative": 512,
+      "gen_end_archive_cells": 6,
+      "gen_end_best_id": 245,
+      "gen_end_best_fit": 1.1534637112027948
+    },
+    {
+      "gen": 4,
+      "births_count": 116,
+      "fem_complete_births": 87,
+      "fem_not_evaluated_births": 29,
+      "legal_births": 26,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 4,
+      "migration_copied_ids": 8,
+      "birth_max_id": 526,
+      "birth_max_fit": 1.15563,
+      "gen_end_fresh_evals_cumulative": 592,
+      "gen_end_appearances_cumulative": 640,
+      "gen_end_archive_cells": 9,
+      "gen_end_best_id": 526,
+      "gen_end_best_fit": 1.1556328286994177
+    },
+    {
+      "gen": 5,
+      "births_count": 116,
+      "fem_complete_births": 87,
+      "fem_not_evaluated_births": 29,
+      "legal_births": 29,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 641,
+      "birth_max_fit": 1.14934,
+      "gen_end_fresh_evals_cumulative": 708,
+      "gen_end_appearances_cumulative": 768,
+      "gen_end_archive_cells": 10,
+      "gen_end_best_id": 526,
+      "gen_end_best_fit": 1.1555306313389593
+    },
+    {
+      "gen": 6,
+      "births_count": 116,
+      "fem_complete_births": 83,
+      "fem_not_evaluated_births": 33,
+      "legal_births": 24,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 754,
+      "birth_max_fit": 1.15214,
+      "gen_end_fresh_evals_cumulative": 824,
+      "gen_end_appearances_cumulative": 896,
+      "gen_end_archive_cells": 10,
+      "gen_end_best_id": 526,
+      "gen_end_best_fit": 1.1554078419267046
+    },
+    {
+      "gen": 7,
+      "births_count": 116,
+      "fem_complete_births": 87,
+      "fem_not_evaluated_births": 29,
+      "legal_births": 35,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 907,
+      "birth_max_fit": 1.14853,
+      "gen_end_fresh_evals_cumulative": 940,
+      "gen_end_appearances_cumulative": 1024,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 526,
+      "gen_end_best_fit": 1.1553998575820044
+    },
+    {
+      "gen": 8,
+      "births_count": 116,
+      "fem_complete_births": 85,
+      "fem_not_evaluated_births": 31,
+      "legal_births": 28,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 4,
+      "migration_copied_ids": 8,
+      "birth_max_id": 971,
+      "birth_max_fit": 1.1496,
+      "gen_end_fresh_evals_cumulative": 1056,
+      "gen_end_appearances_cumulative": 1152,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 526,
+      "gen_end_best_fit": 1.1553998575820044
+    },
+    {
+      "gen": 9,
+      "births_count": 116,
+      "fem_complete_births": 90,
+      "fem_not_evaluated_births": 26,
+      "legal_births": 38,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1095,
+      "birth_max_fit": 1.15727,
+      "gen_end_fresh_evals_cumulative": 1172,
+      "gen_end_appearances_cumulative": 1280,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.157265759829317
+    },
+    {
+      "gen": 10,
+      "births_count": 116,
+      "fem_complete_births": 84,
+      "fem_not_evaluated_births": 32,
+      "legal_births": 28,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1237,
+      "birth_max_fit": 1.15662,
+      "gen_end_fresh_evals_cumulative": 1288,
+      "gen_end_appearances_cumulative": 1408,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.1571528167935288
+    },
+    {
+      "gen": 11,
+      "births_count": 116,
+      "fem_complete_births": 97,
+      "fem_not_evaluated_births": 19,
+      "legal_births": 31,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1394,
+      "birth_max_fit": 1.15374,
+      "gen_end_fresh_evals_cumulative": 1404,
+      "gen_end_appearances_cumulative": 1536,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.157075758271365
+    },
+    {
+      "gen": 12,
+      "births_count": 116,
+      "fem_complete_births": 88,
+      "fem_not_evaluated_births": 28,
+      "legal_births": 36,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 4,
+      "migration_copied_ids": 8,
+      "birth_max_id": 1489,
+      "birth_max_fit": 1.1544,
+      "gen_end_fresh_evals_cumulative": 1520,
+      "gen_end_appearances_cumulative": 1664,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.157075758271365
+    },
+    {
+      "gen": 13,
+      "births_count": 116,
+      "fem_complete_births": 83,
+      "fem_not_evaluated_births": 33,
+      "legal_births": 37,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1543,
+      "birth_max_fit": 1.15415,
+      "gen_end_fresh_evals_cumulative": 1636,
+      "gen_end_appearances_cumulative": 1792,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.1570362049161886
+    },
+    {
+      "gen": 14,
+      "births_count": 116,
+      "fem_complete_births": 86,
+      "fem_not_evaluated_births": 30,
+      "legal_births": 32,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1655,
+      "birth_max_fit": 1.15211,
+      "gen_end_fresh_evals_cumulative": 1752,
+      "gen_end_appearances_cumulative": 1920,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.1570362049161886
+    },
+    {
+      "gen": 15,
+      "births_count": 116,
+      "fem_complete_births": 90,
+      "fem_not_evaluated_births": 26,
+      "legal_births": 28,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1762,
+      "birth_max_fit": 1.1513,
+      "gen_end_fresh_evals_cumulative": 1868,
+      "gen_end_appearances_cumulative": 2048,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.1570362049161886
+    },
+    {
+      "gen": 16,
+      "births_count": 116,
+      "fem_complete_births": 95,
+      "fem_not_evaluated_births": 21,
+      "legal_births": 34,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1902,
+      "birth_max_fit": 1.15543,
+      "gen_end_fresh_evals_cumulative": 1984,
+      "gen_end_appearances_cumulative": 2176,
+      "gen_end_archive_cells": 12,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.1570362049161886
+    }
+  ],
+  "source_head": "97388249afbe65a9974fd1b6b9774d0b70da2e9a",
+  "origin_main_head": "e0ec88dd2dfbd6e4287cb718661a0793b9562183",
+  "declared_scope": "Reconcile historical w282_ultrarunner 19-frame JEV1 binary event stream (64,162 B, 2,207 events: 1,984 eval births, 192 elite reappearances, 2,176 membership occurrences, 12 migration events / 24 copied-ID occurrences, 17 gen_end summaries) against all_evals.json and 146-column all_evals.csv (1,965 distinct serialized gene vectors).",
+  "deferred_p8_checks": [
+    "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2",
+    "cargo run -p paper-artifacts --example paper_artifacts"
+  ]
+}

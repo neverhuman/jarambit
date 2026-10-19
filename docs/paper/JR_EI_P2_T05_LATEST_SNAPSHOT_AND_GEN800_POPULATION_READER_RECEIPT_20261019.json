@@ -1,0 +1,78 @@
+{
+  "schema": "jarambit.ei.phase2_task_receipt.v1",
+  "task_id": "JR-EI-P2-T05",
+  "phase_id": "P2",
+  "depends_on": [
+    "JR-EI-P1-T06",
+    "JR-EI-P1-T07",
+    "JR-EI-P1-T08",
+    "JR-EI-P2-T01"
+  ],
+  "decision_refs": [
+    "SC-DEC-183G",
+    "SC-DEC-183J",
+    "SC-DEC-183K"
+  ],
+  "observed_utc": "2026-10-19T18:36:30Z",
+  "steward": "2740538.captain_jarambit:1",
+  "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+  "branch": "ei/admiralty-primary-20261019",
+  "status": "completed_code_and_receipt_pending_p8_ci",
+  "ci_hold_until_p8": true,
+  "live_export_web_data_invoked": false,
+  "summary": "Implemented latest snapshot & 10-run lossless compressed generation-800 population accession validation in crates/paper-artifacts/src/{corpus,population}.rs (preserving row 0 of headerless history_live.csv, NaN min_legal_mass_g counters, aborted attempts, 24 separated STL files, and 1,954,560 lossless population rows across 200 .csv.zst segments).",
+  "outputs": [
+    {
+      "path": "crates/paper-artifacts/src/corpus.rs",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/crates/paper-artifacts/src/corpus.rs",
+      "bytes": 16809,
+      "sha256": "8bb4c8ccf17fa2d32d448cffb47632abbaff31ff27f300cef8f11548cb57709c"
+    },
+    {
+      "path": "crates/paper-artifacts/src/population.rs",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/crates/paper-artifacts/src/population.rs",
+      "bytes": 7752,
+      "sha256": "64255fe641f302dc67938b8c690f7627895a6e44c18dbce214f89e0fdcbbbd00"
+    },
+    {
+      "path": "docs/paper/generated/population/latest_snapshots.json",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/generated/population/latest_snapshots.json",
+      "bytes": 5138,
+      "sha256": "daeea520ba8a37b01dab3ec443fc03605a0885eacb1d4d87c73dd75d11e3d36e"
+    }
+  ],
+  "compile_and_audit_verification": {
+    "command": "cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit && cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check",
+    "exit_code": 0
+  },
+  "deferred_p8_checks": [
+    "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2"
+  ],
+  "source_head": "429f12b62b3c82bda6249497aed9f6f13f3b3863",
+  "origin_main_head": "e0ec88dd2dfbd6e4287cb718661a0793b9562183",
+  "input_identities": {
+    "docs/paper/JR_EI_P1_T06_NATIVE_SUMMARY_ADMISSION_RECEIPT_20261019.json": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T06_NATIVE_SUMMARY_ADMISSION_RECEIPT_20261019.json",
+      "bytes": 99050,
+      "sha256": "ca6d6c828aedf84db6712e52bf477df80504303773a678343fc1cf04e94becc4"
+    },
+    "docs/paper/JR_EI_P1_T07_SEALED_SNAPSHOT_INVENTORY_AND_ACCESSION_RECEIPT_20261019.json": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T07_SEALED_SNAPSHOT_INVENTORY_AND_ACCESSION_RECEIPT_20261019.json",
+      "bytes": 12518,
+      "sha256": "47840faf9826a19945ad6d56f62a07f1db0e7d37fea810901c155acf80dd958a"
+    },
+    "docs/paper/JR_EI_P1_T08_LOSSLESS_GEN800_POPULATION_ACCESSION_RECEIPT_20261019.json": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T08_LOSSLESS_GEN800_POPULATION_ACCESSION_RECEIPT_20261019.json",
+      "bytes": 60069,
+      "sha256": "79ba4b6da9df8fda27dfa035f20187499cf032420a5b15e90ccfbaa06a1479a1"
+    }
+  },
+  "declared_scope": {
+    "phase": "P2",
+    "task_id": "JR-EI-P2-T05",
+    "retained_evidence_only": true,
+    "live_export_web_data_invoked": false,
+    "ci_hold_until_p8": true,
+    "outputs_count": 3
+  }
+}

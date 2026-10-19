@@ -1,0 +1,113 @@
+{
+  "schema": "jarambit.ei.phase2_task_receipt.v1",
+  "task_id": "JR-EI-P2-T08",
+  "phase_id": "P2",
+  "depends_on": [
+    "JR-EI-P2-T06",
+    "JR-EI-P2-T07"
+  ],
+  "decision_refs": [
+    "SC-DEC-183G",
+    "SC-DEC-183J",
+    "SC-DEC-183K"
+  ],
+  "observed_utc": "2026-10-19T18:36:30Z",
+  "steward": "2740538.captain_jarambit:1",
+  "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+  "branch": "ei/admiralty-primary-20261019",
+  "status": "completed_code_and_receipt_pending_p8_ci",
+  "ci_hold_until_p8": true,
+  "live_export_web_data_invoked": false,
+  "summary": "Emitted docs/paper/generated/shared_projection.v2.json, docs/paper/generated/overview.md, and all six retained-evidence SVG figures under docs/paper/figures/, and updated README.md and docs/paper/README.md to explicitly separate read-only retained-evidence projection from live export-web-data.",
+  "outputs": [
+    {
+      "path": "docs/paper/generated/shared_projection.v2.json",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/generated/shared_projection.v2.json",
+      "bytes": 1955,
+      "sha256": "2c791e239b69490f2f1ded76c800c79e4aa425cc7d51252c800690099e92e1de"
+    },
+    {
+      "path": "docs/paper/generated/overview.md",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/generated/overview.md",
+      "bytes": 1842,
+      "sha256": "5160e078c66554c804be538cd1e2e1733b0a644f344b331240550a124d3803e7"
+    },
+    {
+      "path": "docs/paper/figures/population-births.svg",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/figures/population-births.svg",
+      "bytes": 159928,
+      "sha256": "9543eab677e1d356e199f37bea5b2d9a07485d13fab9bd5ddd7e9e31123b6b6f"
+    },
+    {
+      "path": "docs/paper/figures/population-membership.svg",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/figures/population-membership.svg",
+      "bytes": 26698,
+      "sha256": "86ebe7e7b98f5ffb9f31e93e13bace48aa6975b872c52ef845021073c047eec5"
+    },
+    {
+      "path": "docs/paper/figures/population-newer.svg",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/figures/population-newer.svg",
+      "bytes": 2566,
+      "sha256": "10a80a31d0fd5223431270b586ff35a15f4c527447e00b675ddac93fb3d67353"
+    },
+    {
+      "path": "docs/paper/figures/population-latest.svg",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/figures/population-latest.svg",
+      "bytes": 6822,
+      "sha256": "839ebf12ed4d220956b235214a517678e2768d98ab4d34e7e2c4ea7b85a17930"
+    },
+    {
+      "path": "docs/paper/figures/fitness-progress.svg",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/figures/fitness-progress.svg",
+      "bytes": 2873,
+      "sha256": "3b4c6465ffe3c5190009abf017dd0e7f749373dbf7319ff1de01ded9d9236b6b"
+    },
+    {
+      "path": "docs/paper/figures/inheritance.svg",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/figures/inheritance.svg",
+      "bytes": 4341,
+      "sha256": "88d6ff186e93ba73537017680ea452aefe5b130859c2a2bcbe1018468137837d"
+    },
+    {
+      "path": "README.md",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/README.md",
+      "bytes": 22172,
+      "sha256": "758783957385170340f02f09e9ec7283e9a2500e1c95337d4e8d0a8c678d5b17"
+    },
+    {
+      "path": "docs/paper/README.md",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/README.md",
+      "bytes": 21507,
+      "sha256": "aa36204f67e3334a60eb21361b3e1401e7105f587d1ecaccce06e060658f2130"
+    }
+  ],
+  "compile_and_audit_verification": {
+    "command": "cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit && cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check",
+    "exit_code": 0
+  },
+  "deferred_p8_checks": [
+    "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2"
+  ],
+  "source_head": "429f12b62b3c82bda6249497aed9f6f13f3b3863",
+  "origin_main_head": "e0ec88dd2dfbd6e4287cb718661a0793b9562183",
+  "input_identities": {
+    "docs/paper/JR_EI_P2_T06_PUBLICATION_V2_CONTRACT_RECEIPT_20261019.json": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P2_T06_PUBLICATION_V2_CONTRACT_RECEIPT_20261019.json",
+      "bytes": 3771,
+      "sha256": "8920c71393c835cc84861b87a510b33ddf07eb16f35b2de649152e8224320d79"
+    },
+    "docs/paper/JR_EI_P2_T07_INHERITANCE_PROJECTION_RECEIPT_20261019.json": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P2_T07_INHERITANCE_PROJECTION_RECEIPT_20261019.json",
+      "bytes": 3707,
+      "sha256": "82c01218941ebee5c869c1cbbda1d3d8ef36848b5664c58d7cbc6a95d6927a99"
+    }
+  },
+  "declared_scope": {
+    "phase": "P2",
+    "task_id": "JR-EI-P2-T08",
+    "retained_evidence_only": true,
+    "live_export_web_data_invoked": false,
+    "ci_hold_until_p8": true,
+    "outputs_count": 10
+  }
+}

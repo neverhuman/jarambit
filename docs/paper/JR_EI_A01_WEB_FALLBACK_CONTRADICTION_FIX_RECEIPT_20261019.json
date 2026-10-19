@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "receipt_id": "JR_EI_A01_WEB_FALLBACK_CONTRADICTION_FIX_RECEIPT_20261019",
+  "packet_id": "Packet 1 (A01)",
+  "task_ids": [
+    "JR-EI-P2-T02",
+    "JR-EI-P7-T01",
+    "JR-EI-P7-T05"
+  ],
+  "directive_refs": [
+    "SC-DEC-183E",
+    "SC-DEC-183F",
+    "SC-DEC-186A"
+  ],
+  "generated_at_utc": "2026-10-19T17:29:30Z",
+  "producer": {
+    "captain": "2740538.captain_jarambit",
+    "window_id": 1,
+    "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+    "branch": "ei/admiralty-primary-20261019"
+  },
+  "validation_posture": {
+    "task_status": "implemented_unvalidated",
+    "ci_hold_until_p8": true,
+    "native_execution_qualified": false,
+    "runtime_mode": "manual-coordination-active",
+    "reason": "Per SC-DEC-183E / SC-DEC-183F (A10), all cargo test / vitest / remote branch pushes are held until Phase P8."
+  },
+  "controlling_audit_inputs": {
+    "web_fallback_contradiction_json": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/web-fallback-contradiction.json",
+      "sha256": "254752d8d08bf134b115a69a95633afb432edcf00d0c303311809e4a08b696dc",
+      "bytes": 2638
+    },
+    "readme_and_publication_completion_audit_md": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/README_AND_PUBLICATION_COMPLETION_AUDIT.md",
+      "sha256": "3acf57b693d765b17bdb2c68c8dbd92f7b623d05b73210e0f8699ea3752bca03",
+      "bytes": 30170
+    },
+    "sc183e_source_erratum_md": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/SC183E_SOURCE_ERRATUM_20261019T1713Z.md",
+      "sha256": "461ae71ec7c79e0abbdc8e76327e157bb4ef60c26582b01376ded165bad7ea7e",
+      "bytes": 5159
+    }
+  },
+  "canonical_source_records": {
+    "w283_p10_c02_cad_eval": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/evidence/rs_v2/w283_ultrarunner/w283_p10_c02_cad_eval.json",
+      "sha256": "6eb44dab69c307a5a90ae1a840fa6450d730718fce48542599999f0d5c2edf1d",
+      "bytes": 7492
+    },
+    "w283_p14_c01_cad_eval": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json",
+      "sha256": "df555734d327afe077ca354764f8fea05e7e574bcaa1964beffb2653e911dffc",
+      "bytes": 7442
+    },
+    "w283_p10_c02_battery": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/evidence/cad_battery/w283_p10_c02.json",
+      "sha256": "0ef3c957ce24758f54344376cc6b0c0558829513f00479bed4f464318fb6925b",
+      "bytes": 12798
+    },
+    "w283_p14_c01_battery": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/evidence/cad_battery/w283_p14_c01.json",
+      "sha256": "ef7741201588390a05c77d115cf74090e7c5b1a3a7a51c6437a32dfc98f86d4e",
+      "bytes": 12757
+    }
+  },
+  "preserved_retracted_artifact": {
+    "path": "/home/ubuntu/jarambit/evidence/ei-admiralty-20261019/retracted_web_defaultDataset_9a3b88ba.ts",
+    "sha256": "9a3b88baad409eea539c54fca64ecbd09a94e300033a0d067521374d7e08b927",
+    "bytes": 484477
+  },
+  "modified_files": {
+    "defaultDataset_ts": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/web/src/data/defaultDataset.ts",
+      "sha256": "a129179249e79233dc896e4842601e35432794654d5c4fb2275f987331b61642",
+      "bytes": 485205
+    },
+    "App_tsx": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/web/src/App.tsx",
+      "sha256": "d659791acf3f11e4f09e7558dd5a561f24a4c64989a7b48c95174e0f1112757b",
+      "bytes": 6461
+    },
+    "GateScorecardPanel_tsx": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/web/src/components/GateScorecardPanel.tsx",
+      "sha256": "3eef8da18b5e47e9ab22b0ed93fa9a77a4279284fe1219bd192bc3e012012999",
+      "bytes": 13008
+    },
+    "studio_test_tsx": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/web/src/__tests__/studio.test.tsx",
+      "sha256": "f3ee898b566e5d401ff269754507978224a19a957bb38fb7072446cf542773f1",
+      "bytes": 7713
+    }
+  },
+  "contradictions_resolved": [
+    {
+      "candidate_id": "w283_p10_c02",
+      "retracted_fallback": {
+        "W_CAD": 0.4535061875349551,
+        "all_engineering_gates_pass": true,
+        "G1_max_thickness_mm": 0.4368
+      },
+      "canonical_committed_source": {
+        "W_CAD": -3.964924,
+        "all_engineering_gates_pass": false,
+        "G1_max_thickness_mm": 0.6216340416666666,
+        "failed_gate": "G1_max_thickness_mm (0.6216340416666666 mm > 0.45 mm ceiling)"
+      },
+      "surfaces_synchronized": [
+        "featured_scorecards.w283_p10_c02",
+        "battery_records[subject=w283_p10_c02]",
+        "subjects[id=w283_p10_c02]",
+        "wave_trajectory[wave=w283_ultrarunner]"
+      ]
+    },
+    {
+      "candidate_id": "w283_p14_c01",
+      "retracted_fallback": {
+        "W_CAD": 0.4718940123338411,
+        "all_engineering_gates_pass": true,
+        "G1_max_thickness_mm": 0.4391
+      },
+      "canonical_committed_source": {
+        "W_CAD": -3.878704,
+        "all_engineering_gates_pass": false,
+        "G1_max_thickness_mm": 0.6239029999999999,
+        "failed_gate": "G1_max_thickness_mm (0.6239029999999999 mm > 0.45 mm ceiling)"
+      },
+      "surfaces_synchronized": [
+        "featured_scorecards.w283_p14_c01",
+        "battery_records[subject=w283_p14_c01]",
+        "subjects[id=w283_p14_c01]",
+        "wave_trajectory[wave=w283_ultrarunner]"
+      ]
+    }
+  ],
+  "ui_hardening_summary": {
+    "App_tsx": "Replaced static FEATURED_QUICK_LINKS with dynamic featuredQuickLinks derived from bundle.featured_scorecards and exposed bundle.source_commit.slice(0, 12) in the header subtitle.",
+    "GateScorecardPanel_tsx": "Bound all 16 gate rows (G1..G16) directly to canonical wCad.gates keys with explicit pass/fail formatting.",
+    "studio_test_tsx": "Updated w283_p10_c02 / w283_p14_c01 assertions to negative W_CAD (-3.964924 / -3.878704) and G1 failure (0.621634 / 0.623903 > 0.45 mm), plus added explicit A01 regression test simulating missing/invalid /data/index.json fallback."
+  }
+}

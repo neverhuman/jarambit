@@ -1,0 +1,21 @@
+{
+  "schema": "jarambit.ei.p0_t05.session_disposition.v1",
+  "task_id": "JR-EI-P0-T05",
+  "observed_utc": "2026-10-19T15:44:42Z",
+  "steward": "2062267.agy_captain_admiralty:0",
+  "inventory_receipt": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P0_T04_SESSION_WORKTREE_INVENTORY_RECEIPT_20261019.json",
+  "inventory_receipt_sha256": "14d785243e80180fb45f82ecd4ef9da509332592742634ac0ae0d8c8ee8add2f",
+  "retired_sessions": [],
+  "preserved_sessions": [
+    "2740538.captain_jarambit",
+    "1409298.agy_jarambit_paper",
+    "2132048.codex_jarambit",
+    "2291514.agy_jarambit_screen",
+    "3242658.jr_evo_b8_refill",
+    "1898175.jr_evo_memlr_xbabe2"
+  ],
+  "blanket_kills": 0,
+  "policy_applied": "No Jarambit session had verified obsolete/released status free of dirty root /home/ubuntu/jarambit state; all 6 live sessions preserved and isolated from /home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019.",
+  "state": "implemented_unvalidated",
+  "ci_policy": "deferred_until_P8"
+}

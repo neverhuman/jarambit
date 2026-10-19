@@ -1,8 +1,8 @@
 {
   "figure": "docs/paper/generated/verification.svg",
-  "figure_sha256": "fe66123fa003077003512bc5f57ab014bfcf12e239670a7550687f6d22cc2516",
+  "figure_sha256": "a4075014d5f31729ed466b5db7212db0371ac7734381b1def7d53fbf7c509b05",
   "inputs": {
-    "crates/paper-artifacts/src/verification.rs": "faa5305dd0b492f71f0d5a8afec6d0e0c13618568cce916fadc17602d47d38ea",
+    "crates/paper-artifacts/src/verification.rs": "9b1b0d2eb243d3883e1251755c7908a0b39335b158574d77b633a892edfe03d5",
     "docs/paper/verification-inputs.v1.json": "f1b80915fd9e70c044cf3bb8a5b92aa836b1ca511457a7785bb513b4a4e19b3b",
     "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_dolfinx_raw.json": "f6a1ec2a523460743473a5b4cb0af2bba6c7aed8f99587a813460a42d174d568",
     "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_dolfinx_sidecar.json": "63b97a1930f6770c7c61cd2f289b40dd7fc272dffd290491814ca6476fbbf4b7",

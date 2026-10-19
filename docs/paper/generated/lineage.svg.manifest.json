@@ -1,9 +1,9 @@
 {
   "figure": "docs/paper/generated/lineage.svg",
-  "figure_sha256": "4f25952e948e998749ad5220901816753d9ef24ea950eac6de23fd4703843a28",
+  "figure_sha256": "f09d825663a62272b53bb9cfbd7bcc4b14fec4f11be7ea8948ee313330f4080c",
   "inputs": {
     "crates/paper-artifacts/src/historical.rs": "137ad9f54818031541c3440ff3d1a0d66c23d175c3a1a09c16a8375dc39ff799",
-    "crates/paper-artifacts/src/lineage.rs": "f51ba75ed109eaf3f4b38331d3723c3d76acefaf13edc81c59058b1691e2996d",
+    "crates/paper-artifacts/src/lineage.rs": "a79e9822a9c393b5b6eb7fd255ca5aa1450726c87c3fb1e7930261446debc532",
     "docs/paper/lineage-inputs.v1.json": "348ae55980e12f6b363ae89628c8ed01d0c691961b05fe5e800f151088a2c7e0",
     "evidence/rs_v2/w282_ultrarunner/manifest.json": "543f7e8410214a7e34e4ef55772e9d671221001d0e11a36b4d68d1a0ef0a96cf",
     "evidence/rs_v2/w282_ultrarunner/provenance.json": "68166f27cabb28e24868cdf96e484493e8b71c4deea16ea53b9265d3b84053ae",

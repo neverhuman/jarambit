@@ -3,12 +3,12 @@
   "certification_strict_pairs": [
     {
       "key": "lat_rob_n",
-      "limit": 200.0,
+      "limit": 300.0,
       "value": 168.90080532626396
     },
     {
       "key": "strict_lat_rob_0p0625_n",
-      "limit": 200.0,
+      "limit": 300.0,
       "value": 168.1786057270672
     },
     {
@@ -213,7 +213,7 @@
     }
   ],
   "fresh_solver_execution": false,
-  "note": "Scalar plots and a labeled support-model schematic; no synthetic fatigue/stability/strict spatial fields, no aggregation or new thresholds.",
+  "note": "Scalar plots, historical CAD subscores/shortfalls, and a labeled support-model schematic; no synthetic fatigue/stability/strict spatial fields, no aggregation or new thresholds.",
   "producer_revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
   "qualification": false,
   "schema": "jarambit.retained_assessment_projection.v1",
@@ -228,5 +228,71 @@
     "supported_blade_peak_MPa_per_N": 2.4942468866430674,
     "supported_hand_peak_MPa_per_N": 0.47941618381763057,
     "supported_lateral_ratio": 5.2026756101164
+  },
+  "weighted_cad_score_breakdown": {
+    "W_CAD": -5.570408,
+    "base_feasible": -1.0,
+    "failed_branch_formula": "base_feasible (-1.0) - shortfall_penalty (4.619108) + 0.1 * s_mass (0.048700) = -5.570408 (conditional failed branch, not unpenalized_quality_score - shortfall_penalty)",
+    "nonzero_shortfalls": [
+      {
+        "key": "twist_tip_strict",
+        "shortfall": 0.471,
+        "title": "Refined tip torsion shortfall"
+      },
+      {
+        "key": "hunter_strict",
+        "shortfall": 0.3530769230769231,
+        "title": "Refined plate bending shortfall"
+      },
+      {
+        "key": "solid_tip_3d",
+        "shortfall": 0.3307,
+        "title": "Quadratic solid tip shortfall"
+      }
+    ],
+    "shortfall_penalty": 4.619108,
+    "subscores": [
+      {
+        "key": "s_mass",
+        "normalized_subscore": 0.486999,
+        "title": "Mass efficiency (w=0.70)",
+        "weight": 0.7,
+        "weight_key": "w_mass",
+        "weighted_contribution": 0.3408993
+      },
+      {
+        "key": "s_karambit",
+        "normalized_subscore": 0.400862,
+        "title": "Ring & claw form (w=0.12)",
+        "weight": 0.12,
+        "weight_key": "w_karambit",
+        "weighted_contribution": 0.04810344
+      },
+      {
+        "key": "s_survival_knee",
+        "normalized_subscore": 0.0,
+        "title": "Refined survival knee (w=0.10)",
+        "weight": 0.1,
+        "weight_key": "w_survival_buffer_knee_8pct",
+        "weighted_contribution": 0.0
+      },
+      {
+        "key": "s_seq_knee",
+        "normalized_subscore": 0.999604,
+        "title": "Tip-first yield knee (w=0.05)",
+        "weight": 0.05,
+        "weight_key": "w_seq_buffer_knee_1p28",
+        "weighted_contribution": 0.0499802
+      },
+      {
+        "key": "s_carry_knee",
+        "normalized_subscore": 0.6,
+        "title": "Carry compactness (w=0.03)",
+        "weight": 0.03,
+        "weight_key": "w_carry_stability",
+        "weighted_contribution": 0.018
+      }
+    ],
+    "unpenalized_quality_score": 1.456983
   }
 }

@@ -1,0 +1,73 @@
+{
+  "schema": "jarambit.ei.p0_t04.session_worktree_inventory.v1",
+  "task_id": "JR-EI-P0-T04",
+  "observed_utc": "2026-10-19T15:44:42Z",
+  "stewards": [
+    "4060655.super_captain:0",
+    "2062267.agy_captain_admiralty:0",
+    "2740538.captain_jarambit:1"
+  ],
+  "worktrees": [
+    {
+      "path": "/home/ubuntu/jarambit",
+      "branch": "feat/crescent-96b-live-campaign",
+      "head": "d82ca29e69ebaf11014d0df93d382f982e71dee3",
+      "dirty_or_untracked_entries": 72,
+      "disposition": "PRESERVE_UNTOUCHED",
+      "reason": "Dirty root worktree with active evolution/paper artifacts; never reset, clean, or overwrite."
+    },
+    {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+      "branch": "ei/admiralty-primary-20261019",
+      "head": "97388249afbe65a9974fd1b6b9774d0b70da2e9a",
+      "dirty_or_untracked_entries": 4,
+      "disposition": "KEEP_ACTIVE_EI_PRIMARY_WORKTREE",
+      "lease_holders": [
+        "4060655.super_captain:0",
+        "2062267.agy_captain_admiralty:0",
+        "2740538.captain_jarambit:1"
+      ],
+      "reason": "Dedicated isolated worktree for Jarambit Engineered Intelligence 60-task workplan (P0-P8)."
+    }
+  ],
+  "screens": [
+    {
+      "session": "2740538.captain_jarambit",
+      "cwd": "/home/ubuntu/jarambit",
+      "disposition": "KEEP",
+      "role": "Jarambit co-steward / P1 archive owner"
+    },
+    {
+      "session": "1409298.agy_jarambit_paper",
+      "cwd": "/home/ubuntu/jarambit",
+      "disposition": "KEEP_PROTECTED",
+      "role": "Existing paper lane; preserve state"
+    },
+    {
+      "session": "2132048.codex_jarambit",
+      "cwd": "/home/ubuntu/jarambit",
+      "disposition": "KEEP_PROTECTED",
+      "role": "Existing codex lane; preserve state"
+    },
+    {
+      "session": "2291514.agy_jarambit_screen",
+      "cwd": "/home/ubuntu/jarambit",
+      "disposition": "KEEP_PROTECTED",
+      "role": "Existing screen lane; preserve state"
+    },
+    {
+      "session": "3242658.jr_evo_b8_refill",
+      "cwd": "/home/ubuntu/jarambit",
+      "disposition": "KEEP_PROTECTED",
+      "role": "Evolution B8 refill lane; preserve state"
+    },
+    {
+      "session": "1898175.jr_evo_memlr_xbabe2",
+      "cwd": "/home/ubuntu/jarambit",
+      "disposition": "KEEP_PROTECTED",
+      "role": "Evolution memlr xbabe2 lane; preserve state"
+    }
+  ],
+  "state": "implemented_unvalidated",
+  "ci_policy": "deferred_until_P8"
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "jarambit.population_newer_events.v1",
+  "source_receipt": "docs/paper/JR_EI_P1_T05_NEWER_BIRTHS_SCREENS_JOIN_RECEIPT_20261019.json",
+  "source_receipt_sha256": "d669229208ff5dd954c2633e8ec2686480aabfcc40da88748b034583b46efbcf",
+  "birth_files_count": 57,
+  "run_directories_count": 24,
+  "total_birth_events": 3649,
+  "joined_screen_rows": 2259,
+  "unscreened_birth_events": 1390,
+  "join_rule": {
+    "candidate_index_base": 1,
+    "keys": [
+      "one_based_candidate_index",
+      "family",
+      "certificate_identity"
+    ],
+    "zero_based_misjoins_rejected": 2247
+  },
+  "unscreened_band_policy": "Displayed in a dedicated unscreened observation band; never zero-filled or treated as failed FEM.",
+  "families": {
+    "evidence/evolution_waves": {
+      "birth_files": 49,
+      "births": 3194,
+      "screens": 1873,
+      "missing_screens": 1321
+    },
+    "evidence/evolution_plateau": {
+      "birth_files": 7,
+      "births": 448,
+      "screens": 379,
+      "missing_screens": 69
+    },
+    "evidence/evolve_certifiable/automatic": {
+      "birth_files": 1,
+      "births": 7,
+      "screens": 7,
+      "missing_screens": 0
+    }
+  }
+}

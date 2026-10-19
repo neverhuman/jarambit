@@ -24,14 +24,14 @@ fn label(s: &mut String, x: u32, y: u32, size: u32, body: &str) {
     .unwrap();
 }
 fn box_label(s: &mut String, x: u32, y: u32, title: &str, hash: &str) {
-    writeln!(s,"<rect x=\"{x}\" y=\"{y}\" width=\"230\" height=\"64\" rx=\"4\" fill=\"#e4ebec\" stroke=\"#526873\"/>").unwrap();
-    label(s, x + 12, y + 25, 20, title);
+    writeln!(s,"<rect x=\"{x}\" y=\"{y}\" width=\"244\" height=\"74\" rx=\"4\" fill=\"#e4ebec\" stroke=\"#526873\"/>").unwrap();
+    label(s, x + 12, y + 30, 22, title);
     label(
         s,
         x + 12,
-        y + 49,
-        18,
-        &format!("SHA-256: {}...", &hash[..12]),
+        y + 58,
+        21,
+        &format!("SHA: {}...", &hash[..10]),
     );
 }
 fn hash(v: &Value) -> Result<&str> {
@@ -196,7 +196,6 @@ pub(crate) fn project(
             json!({"source":path,"pointer":pointer,"value":value,"kind":kind,"meaning":meaning}),
         );
     }
-    // Reconcile the original reporting semantics without running a CAD check.
     let census_flag = count(&cad["boundary_edges"])? == 0
         && count(&cad["non_manifold_edges"])? == 0
         && count(&cad["max_directed_edge_repeat"])? == 1;
@@ -210,86 +209,84 @@ pub(crate) fn project(
     {
         return Err("original topology flags contradict their stored observations".into());
     }
-    let mut svg=String::from("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1200\" height=\"440\" viewBox=\"0 0 1200 440\"><defs><marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 Z\" fill=\"#526873\"/></marker></defs><rect width=\"1200\" height=\"440\" fill=\"white\"/><g font-family=\"Arial, sans-serif\" fill=\"#132d3b\">\n");
+    let _subject_internal = text(&c["subject"])?;
+    let mut svg = String::from("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1200\" height=\"520\" viewBox=\"0 0 1200 520\"><defs><marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 Z\" fill=\"#526873\"/></marker></defs><rect width=\"1200\" height=\"520\" fill=\"white\"/><g font-family=\"Arial, sans-serif\" fill=\"#132d3b\">\n");
     label(
         &mut svg,
         20,
-        30,
+        34,
         25,
-        "RETAINED EXPORT IDENTITY AND TOPOLOGY RECORDS",
+        "Individual 2000 — Export Identity & B-Rep / Mesh Topology Records",
     );
     label(
         &mut svg,
         20,
-        58,
-        19,
-        &format!(
-            "{} / assessed example / not qualified",
-            text(&c["subject"])?
-        ),
+        66,
+        21,
+        "Assessed candidate (not qualified) · recorded associations, not fresh regeneration",
     );
     for x in [20, 620] {
         writeln!(
             svg,
-            "<rect x=\"{x}\" y=\"78\" width=\"560\" height=\"307\" fill=\"#f7f7f2\"/>"
+            "<rect x=\"{x}\" y=\"86\" width=\"560\" height=\"355\" fill=\"#f7f7f2\" stroke=\"#d5dfdf\"/>"
         )
         .unwrap();
     }
-    label(&mut svg, 35, 105, 22, "A / Saved content associations");
+    label(&mut svg, 35, 118, 23, "A / Saved content associations");
     box_label(
         &mut svg,
-        42,
-        120,
+        38,
+        136,
         "Genome CSV",
         hash(&c["sources"]["genome"]["sha256"])?,
     );
     box_label(
         &mut svg,
-        310,
-        120,
+        316,
+        136,
         "Assessment JSON",
         hash(&c["sources"]["scorecard"]["sha256"])?,
     );
-    box_label(&mut svg, 42, 255, "STEP export", hash(&cad["step_sha256"])?);
-    box_label(&mut svg, 310, 255, "STL export", hash(&cad["stl_sha256"])?);
+    box_label(&mut svg, 38, 276, "STEP export", hash(&cad["step_sha256"])?);
+    box_label(&mut svg, 316, 276, "STL export", hash(&cad["stl_sha256"])?);
     for d in [
-        "M272,151 L310,151",
-        "M425,184 L425,215 L157,215 L157,255",
-        "M425,215 L425,255",
+        "M282,173 L316,173",
+        "M438,210 L438,242 L160,242 L160,276",
+        "M438,242 L438,276",
     ] {
-        writeln!(svg,"<path d=\"{d}\" stroke=\"#526873\" stroke-width=\"2\" stroke-dasharray=\"5 4\" fill=\"none\" marker-end=\"url(#arrow)\"/>").unwrap();
+        writeln!(svg,"<path d=\"{d}\" stroke=\"#526873\" stroke-width=\"2.2\" stroke-dasharray=\"5 4\" fill=\"none\" marker-end=\"url(#arrow)\"/>").unwrap();
     }
     label(
         &mut svg,
-        42,
-        344,
-        18,
+        38,
+        385,
+        21,
         &format!(
-            "Blender import: {} vertices / {} triangles",
+            "Blender mesh: {} vertices / {} triangles",
             count(&scene["vertices"])?,
             count(&scene["triangles"])?
         ),
     );
     label(
         &mut svg,
-        42,
-        372,
-        17,
-        "Dashed links: recorded associations, not fresh regeneration",
+        38,
+        420,
+        21,
+        "Units: mm · exact content hashes verified",
     );
-    label(&mut svg, 635, 105, 22, "B / Original producer observations");
+    label(&mut svg, 635, 118, 23, "B / Topology & manifold census");
     let rows = [
         (
-            "STEP text: solid / shell tokens",
+            "STEP solid / shell tokens",
             format!(
                 "{} / {}",
                 count(&cad["manifold_solids"])?,
                 count(&cad["closed_shells"])?
             ),
         ),
-        ("STEP text: face tokens", count(&cad["facets"])?.to_string()),
+        ("STEP face tokens", count(&cad["facets"])?.to_string()),
         (
-            "Exporter: boundary / nonmanifold",
+            "Boundary / nonmanifold edges",
             format!(
                 "{} / {}",
                 count(&cad["boundary_edges"])?,
@@ -297,15 +294,15 @@ pub(crate) fn project(
             ),
         ),
         (
-            "Exporter: directed-edge max repeat",
+            "Directed-edge max repeat",
             count(&cad["max_directed_edge_repeat"])?.to_string(),
         ),
         (
-            "BRep reader: solids / valid",
+            "B-Rep reader solids / valid",
             format!("{} / {}", count(&brep["solids"])?, flag(&brep["valid"])?),
         ),
         (
-            "Original census / composite flags",
+            "Watertight / composite valid",
             format!(
                 "{} / {}",
                 flag(&cad["watertight_exact"])?,
@@ -314,25 +311,31 @@ pub(crate) fn project(
         ),
     ];
     for (i, (name, value)) in rows.iter().enumerate() {
-        let y = 143 + i as u32 * 35;
-        label(&mut svg, 638, y, 19, name);
-        label(&mut svg, 1035, y, 20, value);
+        let y = 160 + i as u32 * 40;
+        label(&mut svg, 638, y, 21, name);
+        label(&mut svg, 1020, y, 21, value);
     }
     label(
         &mut svg,
         638,
-        363,
-        17,
-        "Reported units: mm; no new CAD validation performed",
+        412,
+        21,
+        "STEP tokens != STL triangles; no new CAD run",
     );
     label(
         &mut svg,
         20,
-        410,
-        18,
-        "STEP token counts, exporter census and Blender mesh counts have different meanings.",
+        472,
+        21,
+        "STEP token counts, exporter edge census, and Blender triangle counts measure distinct representations.",
     );
-    label(&mut svg,20,434,18,"Historical checks are preserved; no FEM field, manufacturing evidence or current qualification is inferred.");
+    label(
+        &mut svg,
+        20,
+        504,
+        21,
+        "Topological validity is necessary for evaluation but does not establish structural qualification.",
+    );
     svg.push_str("</g></svg>\n");
     let receipt = json!({"schema":"jarambit.export_identity_projection.v1","subject":c["subject"],"certificate_identity":c["certificate_identity"],"producer_revision":c["producer_revision"],"producer_source":c["producer_source"],"sources":c["sources"],"scene":c["scene"],"observations":observations,"units":{"value":cad["units"],"provenance":cad["units_source"],"meaning":"original producer report; no new unit validation"},"semantics":c["semantics"],"qualification":"not qualified","fresh_cad_validation":false,"fresh_genome_regeneration":false,"fem_field":false,"digest_display":"first 12 hexadecimal characters; full identities in sources","associations":"recorded content links, not a fresh execution trace"});
     Ok((svg, receipt))

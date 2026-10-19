@@ -1,13 +1,17 @@
 \RequirePackage[T1]{fontenc}
 \documentclass[10pt,journal,letterpaper]{IEEEtran}
-% Research white-paper layout: custom single-column opening, IEEEtran body.
-% This modification is not an unmodified IEEE venue submission template.
+% Research white-paper showcase layout: custom single-column opening, IEEEtran two-column body.
+% Venue submission requires the selected venue's unmodified official template.
 \usepackage{tgtermes,tgheros}
 \usepackage{amsmath,amssymb,graphicx,booktabs,array,xcolor,url}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \usepackage{microtype}
-\hypersetup{pdftitle={When CAD Evolves: Executable Genomes, Observed Search, and Engineering Evidence},pdfsubject={Evolutionary CAD and Retained Engineering Evidence},pdfkeywords={CAD, evolutionary computation, verification, provenance, research draft}}
+\hypersetup{
+  pdftitle={Engineered Intelligence: Making Physical Design Executable},
+  pdfsubject={Engineered Intelligence: Executable Representations, Recorded Evolutionary Search, and Traceable Engineering Evidence},
+  pdfkeywords={Engineered Intelligence, computational design, evolutionary computation, CAD, quality diversity, finite elements, evidence provenance, reproducible populations}
+}
 \definecolor{ink}{HTML}{132D3B}
 \definecolor{teal}{HTML}{007E87}
 \definecolor{rust}{HTML}{A3442D}
@@ -15,39 +19,54 @@
 \newcommand{\src}[2]{\href{https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/#1}{#2}}
 \newcommand{\test}[1]{\subsubsection{#1}}
 \input{generated/metrics.tex}
-\graphicspath{{../../target/ieee/paper/}}
+\providecommand{\CohortOneBirths}{1,984}
+\providecommand{\CohortOneFemComplete}{1,455}
+\providecommand{\CohortOneFemNotEvaluated}{529}
+\providecommand{\CohortOneBestFit}{1.15727}
+\providecommand{\CohortOneBestId}{1095}
+\providecommand{\CohortOneBestGen}{9}
+\providecommand{\CohortTwoBirthEvents}{3,649}
+\providecommand{\CohortTwoScreenRows}{2,259}
+\providecommand{\CohortTwoUnscreenedBirths}{1,390}
+\providecommand{\CohortThreeRuns}{10}
+\providecommand{\CohortThreeGenerations}{801}
+\providecommand{\CohortThreeRowsPerRun}{195,456}
+\providecommand{\CohortThreeTotalEvaluations}{1,954,560}
+\providecommand{\CohortThreeLegalEvaluations}{754,236}
+\graphicspath{{../../target/ieee/paper/}{figures/}{drafts_p3_p5/}}
 \interdisplaylinepenalty=2500
-\setlength{\emergencystretch}{1.5em}
+\setlength{\emergencystretch}{2.5em}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\dbltopfraction}{0.92}
+\renewcommand{\textfraction}{0.06}
+\renewcommand{\floatpagefraction}{0.82}
+\renewcommand{\dblfloatpagefraction}{0.82}
 \begin{document}
 \onecolumn
 \thispagestyle{empty}
 \begin{center}
-{\sffamily\color{teal}\small JARAMBIT / RESEARCH WHITE PAPER / 19 OCTOBER 2026}\par\vspace{6mm}
-{\sffamily\bfseries\color{ink}\fontsize{27}{30}\selectfont When CAD Evolves}\par\vspace{4mm}
-{\sffamily\color{ink}\fontsize{15}{19}\selectfont Executable Genomes, Observed Search,\\and Engineering Evidence}\par\vspace{4mm}
+{\sffamily\color{teal}\small JARAMBIT / ENGINEERED INTELLIGENCE RESEARCH WHITE PAPER / 19 OCTOBER 2026}\par\vspace{1.5mm}
+{\sffamily\bfseries\color{ink}\fontsize{23}{26}\selectfont Engineered Intelligence: Making Physical Design Executable}\par\vspace{1mm}
+{\sffamily\color{ink}\fontsize{12.5}{15}\selectfont Executable Genomes, Recorded Inheritance, and Full Population Evidence}\par\vspace{1mm}
 {\small Research draft prepared for Jepson Taylor\quad|\quad Human author approval pending}\par
 \end{center}
-\vspace{3mm}
-\noindent\textbf{Abstract---}Executable representations allow evolutionary search to explore geometric families while preserving a concrete path from genes to CAD and numerical observations. This paper studies Jarambit, a Rust-centered platform linking a parameterized representation, evolutionary search, and multiple assessment stages. A retrospective population contains \BirthCount\ retained births over 17 generations: \FemComplete\ records report completed FEM, while \FemNotEvaluated\ were not evaluated by FEM. Their stored fitness combines legality-dependent penalties with contextual novelty, so population-score changes cannot be read directly as mechanical improvement. The highest stored search score, \HistoricalBestFit, belongs to an individual that did not pass the later strict assessment. The historical producer reports that search passers did not beat its baseline; separately constructed controlled probes supplied the named exported examples. A later weighted reporting cohort provides short summaries whose stage lineage is incomplete and whose values are not comparable with the historical score. For a separately retained assessed export, the reported solid-solver safety factors differ by less than 0.05\%, while neither plate grid-convergence index (GCI) estimate is admitted. These contrasts show why search ranking, numerical agreement, discretization evidence and physical validation require separate interpretations. Agent-assisted representation design and additive manufacturing provide an expansive research direction, while claims of agent superiority, product qualification, and achieved manufacturing precision remain open.
-\par\vspace{3mm}
+\vspace{0.5mm}
+\noindent\textbf{Abstract---}Engineered Intelligence treats physical design as an executable process: a genome defines geometry, numerical models evaluate it, and an automated population search explores alternatives. We present Jarambit, a Rust-centered research system connecting a 128-coordinate geometric genome and categorical material state to CAD decoding, island-based evolutionary search, and multiple finite-element assessment models. Its retained records include \CohortThreeTotalEvaluations\ evaluations across \CohortThreeRuns\ four-island runs spanning generations $0$--$800$ (\text{Run~2}--\text{Run~11}, \CohortThreeRowsPerRun\ births per run, \CohortThreeLegalEvaluations\ search-legal), with complete compact genome and score tables, alongside a reconstructable historical record (\text{Run~1}, \CohortOneBirths\ births across generations $0$--$16$) that exposes parentage, $2{,}176$ island-slot memberships, $192$ elite reappearances, and $12$ inter-island migrations, plus \CohortTwoBirthEvents\ intermediate multi-stage screening proposals (\CohortTwoScreenRows\ joined to Stage-1 observations and \CohortTwoUnscreenedBirths\ unscreened). Source-bound population views show the complete retained search record while keeping different scorers and assessment stages separate. The evidence also exposes a critical limitation: a high search score does not establish later mechanical qualification; the retained historical top-ranked birth (Individual~\CohortOneBestId, $f=\CohortOneBestFit$) and the single assessed automatic-pipeline export (Individual~2000; 1 assessed candidate, 0 qualified) fail strict verification. Matched-mesh quadratic solid solver agreement ($<0.05\%$) and refused plate grid-convergence estimates provide complementary checks rather than proof of physical performance. The contribution is an inspectable connection between representation, search, and engineering evidence.
+\par\vspace{0.5mm}
 \begin{figure}[!h]
 \centering
-\begin{minipage}[b]{.596\textwidth}
-{\sffamily\small\color{teal}A / Assessed evolved example}\par\vspace{2mm}
-\includegraphics[width=\linewidth]{figures/v2/hero_dark.png}
-\end{minipage}\hfill
-\begin{minipage}[b]{.386\textwidth}
-\includegraphics[width=\linewidth]{cover-evolution.png}
-\end{minipage}
-\caption{Executable geometry and observed search. A: exact retained export \code{cert_pipeline_r01_p14_c02}, not qualified; illustrative titanium finish, original mesh faceting preserved. B: all \BirthCount\ historical w282 births, including cases without FEM. C: generation and cumulative maxima of stored contextual fitness; the vertical axis is truncated. Geometry and population come from different cohorts and do not depict one champion's trajectory.}
+\includegraphics[width=\textwidth]{fig1_hero_blender_v2.png}
+\vspace{-2mm}
+\caption{Illustrated assessed export Individual~2000 (single assessed candidate in the automatic certification leaderboard, 1 assessed, 0 qualified, no promoted champion; separate from the 23-subject historical battery, while the \CohortThreeTotalEvaluations\ native search births lack retained Stage-2 CAD assessments). Full-width white-background Cycles raytraced exact CAD surface ($44{,}994$ vertices, $90{,}000$ triangles, zero modifiers; proper $\mathrm{SO}(3)$ camera frame $\det=+1.0$) colored by the dimensionless 5-map percentile composite index in $[0,1]$ across the retained $0.25\,\mathrm{mm}^2$ plate mesh ($25{,}209$ triangles, $13{,}503$ nodes: multi-case envelope plus unit-response lateral, pry, ring-traction, and torsion maps; in the envelope, both lateral and pry unit maps are scaled by $260\,\mathrm{N}$ alongside $1500\,\mathrm{N}$ ring traction and $1.82\,\mathrm{N\cdot m}$ torsion). Detailed provenance and unlit reference plates appear in Sections~\ref{sec:fitness}--\ref{sec:reproducibility}.}
 \label{fig:cover}
 \end{figure}
-\noindent\textbf{Index Terms---}Computational design, evolutionary computation, CAD, quality diversity, finite elements, evidence provenance, agent-assisted engineering, additive manufacturing.
-\vfill
-\noindent{\footnotesize\color{rust}IEEE-style white paper, not an accepted IEEE article. Source baseline: \code{009f5ac520fa3afe8ed8025230eef604dbb7f922}. Retained numerical and software evidence; no new CAD/FEM search or physical experiment performed for this manuscript.}
+\vspace{-2mm}
+\noindent\textbf{Index Terms---}Engineered Intelligence, computational design, evolutionary computation, executable genomes, CAD, quality diversity, finite elements, evidence provenance, reproducible populations.
+\par\vspace{1mm}
+\noindent{\footnotesize\color{rust}IEEE-style research white paper, not an accepted IEEE venue article. Retained computational and software records only; no new CAD/FEM search or physical experiment was executed for this manuscript. Each experimental cohort is bound to its specific producer revision and archival provenance in Section~\ref{sec:reproducibility}, separating reconstructed historical search, multi-stage screening, and the ten-run generation-800 population archive.}
 \clearpage\twocolumn
 \pagestyle{headings}
-\markboth{JARAMBIT: INTELLIGENT CAD AND AUDITABLE ENGINEERING EVIDENCE}{Research white paper / draft}
+\markboth{ENGINEERED INTELLIGENCE: MAKING PHYSICAL DESIGN EXECUTABLE}{Jarambit Research White Paper}
 \input{sections/01-introduction.tex}
 \input{sections/02-background.tex}
 \input{sections/03-genome.tex}

@@ -1,0 +1,77 @@
+{
+  "schema": "jarambit.ei.phase2_task_receipt.v1",
+  "task_id": "JR-EI-P2-T04",
+  "phase_id": "P2",
+  "depends_on": [
+    "JR-EI-P1-T05",
+    "JR-EI-P2-T01",
+    "JR-EI-P2-T02"
+  ],
+  "decision_refs": [
+    "SC-DEC-183G",
+    "SC-DEC-183J",
+    "SC-DEC-183K"
+  ],
+  "observed_utc": "2026-10-19T18:36:30Z",
+  "steward": "2740538.captain_jarambit:1",
+  "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+  "branch": "ei/admiralty-primary-20261019",
+  "status": "completed_code_and_receipt_pending_p8_ci",
+  "ci_hold_until_p8": true,
+  "live_export_web_data_invoked": false,
+  "summary": "Implemented 1-based newer birth/screen corpus join validation (refusing 0-based index off-by-one misjoins) in crates/paper-artifacts/src/{corpus,population}.rs and emitted docs/paper/generated/population/newer_events.json across all 57 birth files in 24 run directories (3,649 births, 2,259 screens, 1,390 unscreened births).",
+  "outputs": [
+    {
+      "path": "crates/paper-artifacts/src/corpus.rs",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/crates/paper-artifacts/src/corpus.rs",
+      "bytes": 16809,
+      "sha256": "8bb4c8ccf17fa2d32d448cffb47632abbaff31ff27f300cef8f11548cb57709c"
+    },
+    {
+      "path": "crates/paper-artifacts/src/population.rs",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/crates/paper-artifacts/src/population.rs",
+      "bytes": 7752,
+      "sha256": "64255fe641f302dc67938b8c690f7627895a6e44c18dbce214f89e0fdcbbbd00"
+    },
+    {
+      "path": "docs/paper/generated/population/newer_events.json",
+      "abs_path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/generated/population/newer_events.json",
+      "bytes": 1164,
+      "sha256": "a25f15e39cbdd524a586bae942b2668dc7043d22f71c1b26b7465c15e8a26f59"
+    }
+  ],
+  "compile_and_audit_verification": {
+    "command": "cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit && cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check",
+    "exit_code": 0
+  },
+  "deferred_p8_checks": [
+    "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2"
+  ],
+  "source_head": "429f12b62b3c82bda6249497aed9f6f13f3b3863",
+  "origin_main_head": "e0ec88dd2dfbd6e4287cb718661a0793b9562183",
+  "input_identities": {
+    "docs/paper/JR_EI_P1_T05_NEWER_BIRTHS_SCREENS_JOIN_RECEIPT_20261019.json": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T05_NEWER_BIRTHS_SCREENS_JOIN_RECEIPT_20261019.json",
+      "bytes": 73379,
+      "sha256": "d669229208ff5dd954c2633e8ec2686480aabfcc40da88748b034583b46efbcf"
+    },
+    "docs/paper/JR_EI_P2_T01_IDENTITY_AND_SELECTION_RECEIPT_20261019.json": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P2_T01_IDENTITY_AND_SELECTION_RECEIPT_20261019.json",
+      "bytes": 3281,
+      "sha256": "efa20b17b62c00682d6e08c14d272446a3a0e7351222cc249258d53ee9d8d303"
+    },
+    "docs/paper/JR_EI_P2_T02_SCORE_PROFILES_AND_DISPLAY_LOSS_RECEIPT_20261019.json": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P2_T02_SCORE_PROFILES_AND_DISPLAY_LOSS_RECEIPT_20261019.json",
+      "bytes": 2603,
+      "sha256": "5732e64f915481de9fab00bfe10a0a0114231c183dc0ad4e164e30f2c775843a"
+    }
+  },
+  "declared_scope": {
+    "phase": "P2",
+    "task_id": "JR-EI-P2-T04",
+    "retained_evidence_only": true,
+    "live_export_web_data_invoked": false,
+    "ci_hold_until_p8": true,
+    "outputs_count": 3
+  }
+}

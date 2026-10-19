@@ -1,0 +1,350 @@
+{
+  "schema": "jarambit.public_ids.v1",
+  "historical_reservation": {
+    "run_public_id": 1,
+    "id_min": 0,
+    "id_max": 1983,
+    "count": 1984,
+    "origin": "Birth",
+    "source_all_evals_json_path": "evidence/rs_v2/w282_ultrarunner/search/all_evals.json",
+    "source_all_evals_json_sha256": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363"
+  },
+  "entity_separation_policy": {
+    "individual_vs_genome": "One genome content hash can belong to multiple birth events; public_id identifies the birth/probe/export record, not unique geometry.",
+    "individual_vs_appearance": "An individual can occupy multiple generation/island slots via elite retention or migration; appearances are keyed by (run_id, segment, frame, event_index).",
+    "public_labels_exclude_hostnames": true
+  },
+  "runs": [
+    {
+      "public_run_id": 1,
+      "public_label": "Run 1",
+      "internal_run_key": "evidence/rs_v2/w282_ultrarunner",
+      "cohort_family": "historical_reconstructable_w282",
+      "producer_commit": "82f450f7fb418e28c4b229031920dec5454435f3",
+      "retained_births": 1984
+    },
+    {
+      "public_run_id": 2,
+      "public_label": "Run 2",
+      "internal_run_key": "evo_full_20261018_xbabe1_c01",
+      "cohort_family": "completed_gen800_four_island_crescent"
+    },
+    {
+      "public_run_id": 3,
+      "public_label": "Run 3",
+      "internal_run_key": "evo_full_20261018_xbabe1_c03",
+      "cohort_family": "completed_gen800_four_island_crescent"
+    },
+    {
+      "public_run_id": 4,
+      "public_label": "Run 4",
+      "internal_run_key": "evo_full_20261018_xbabe1_c04",
+      "cohort_family": "completed_gen800_four_island_crescent"
+    },
+    {
+      "public_run_id": 5,
+      "public_label": "Run 5",
+      "internal_run_key": "evo_full_20261018_xbabe1_c05",
+      "cohort_family": "completed_gen800_four_island_crescent"
+    },
+    {
+      "public_run_id": 6,
+      "public_label": "Run 6",
+      "internal_run_key": "evo_full_20261018_xbabe3_c01",
+      "cohort_family": "completed_gen800_four_island_crescent"
+    },
+    {
+      "public_run_id": 7,
+      "public_label": "Run 7",
+      "internal_run_key": "evo_full_20261018_xbabe3_c02",
+      "cohort_family": "completed_gen800_four_island_crescent"
+    },
+    {
+      "public_run_id": 8,
+      "public_label": "Run 8",
+      "internal_run_key": "evo_full_20261018_xbabe3_c03",
+      "cohort_family": "completed_gen800_four_island_crescent"
+    },
+    {
+      "public_run_id": 9,
+      "public_label": "Run 9",
+      "internal_run_key": "evo_full_20261018_xbabe3_c04",
+      "cohort_family": "completed_gen800_four_island_crescent"
+    },
+    {
+      "public_run_id": 10,
+      "public_label": "Run 10",
+      "internal_run_key": "evo_full_20261018_xbabe4_c01",
+      "cohort_family": "completed_gen800_four_island_crescent"
+    },
+    {
+      "public_run_id": 11,
+      "public_label": "Run 11",
+      "internal_run_key": "evo_full_20261018_xbabe4_c02",
+      "cohort_family": "completed_gen800_four_island_crescent"
+    },
+    {
+      "public_run_id": 31,
+      "public_label": "Run 31",
+      "internal_run_key": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3",
+      "cohort_family": "retained_weighted_reporting_profile_w_ultralight_v1"
+    },
+    {
+      "public_run_id": 32,
+      "public_label": "Run 32",
+      "internal_run_key": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411t3",
+      "cohort_family": "retained_weighted_reporting_profile_w_ultralight_v1"
+    },
+    {
+      "public_run_id": 33,
+      "public_label": "Run 33",
+      "internal_run_key": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe2/w322",
+      "cohort_family": "retained_weighted_reporting_profile_w_ultralight_v1"
+    },
+    {
+      "public_run_id": 34,
+      "public_label": "Run 34",
+      "internal_run_key": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe1/w501_ul",
+      "cohort_family": "retained_weighted_reporting_profile_w_ultralight_v1"
+    },
+    {
+      "public_run_id": 35,
+      "public_label": "Run 35",
+      "internal_run_key": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w409_ul",
+      "cohort_family": "retained_weighted_reporting_profile_w_ultralight_v1"
+    },
+    {
+      "public_run_id": 36,
+      "public_label": "Run 36",
+      "internal_run_key": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe1/w501_xb1",
+      "cohort_family": "retained_weighted_reporting_profile_w_ultralight_v1"
+    }
+  ],
+  "islands": [
+    {
+      "public_island_id": 1,
+      "public_label": "Island 1",
+      "internal_island_index": 0
+    },
+    {
+      "public_island_id": 2,
+      "public_label": "Island 2",
+      "internal_island_index": 1
+    },
+    {
+      "public_island_id": 3,
+      "public_label": "Island 3",
+      "internal_island_index": 2
+    },
+    {
+      "public_island_id": 4,
+      "public_label": "Island 4",
+      "internal_island_index": 3
+    }
+  ],
+  "allocated_individuals": [
+    {
+      "public_id": 174,
+      "public_label": "Individual 174",
+      "origin": "Birth",
+      "source_birth_event_key": "w282_ultrarunner:birth:174",
+      "genome_sha256": null,
+      "certificate_identity": null,
+      "aliases": [
+        "w282:id:174"
+      ]
+    },
+    {
+      "public_id": 245,
+      "public_label": "Individual 245",
+      "origin": "Birth",
+      "source_birth_event_key": "w282_ultrarunner:birth:245",
+      "genome_sha256": null,
+      "certificate_identity": null,
+      "aliases": [
+        "w282:id:245"
+      ]
+    },
+    {
+      "public_id": 299,
+      "public_label": "Individual 299",
+      "origin": "Birth",
+      "source_birth_event_key": "w282_ultrarunner:birth:299",
+      "genome_sha256": null,
+      "certificate_identity": null,
+      "aliases": [
+        "w282:id:299"
+      ]
+    },
+    {
+      "public_id": 392,
+      "public_label": "Individual 392",
+      "origin": "Birth",
+      "source_birth_event_key": "w282_ultrarunner:birth:392",
+      "genome_sha256": null,
+      "certificate_identity": null,
+      "aliases": [
+        "w282:id:392"
+      ]
+    },
+    {
+      "public_id": 413,
+      "public_label": "Individual 413",
+      "origin": "Birth",
+      "source_birth_event_key": "w282_ultrarunner:birth:413",
+      "genome_sha256": null,
+      "certificate_identity": null,
+      "aliases": [
+        "w282:id:413"
+      ]
+    },
+    {
+      "public_id": 526,
+      "public_label": "Individual 526",
+      "origin": "Birth",
+      "source_birth_event_key": "w282_ultrarunner:birth:526",
+      "genome_sha256": null,
+      "certificate_identity": null,
+      "aliases": [
+        "w282:id:526"
+      ]
+    },
+    {
+      "public_id": 1095,
+      "public_label": "Individual 1095",
+      "origin": "Birth",
+      "source_birth_event_key": "w282_ultrarunner:birth:1095",
+      "genome_sha256": null,
+      "certificate_identity": null,
+      "aliases": [
+        "w282:id:1095",
+        "w282:highest_stored_birth_fit"
+      ]
+    },
+    {
+      "public_id": 2000,
+      "public_label": "Individual 2000",
+      "origin": "RetainedExport",
+      "source_birth_event_key": null,
+      "genome_sha256": "a526b2ef73b25e51a56bcfab1f67640bcbe734955b95a6b432a99dab5cd9f654",
+      "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+      "aliases": [
+        "cert_pipeline_r01_p14_c02",
+        "cover_illustrated_assessed_subject"
+      ]
+    },
+    {
+      "public_id": 2001,
+      "public_label": "Individual 2001",
+      "origin": "ControlledProbe",
+      "source_birth_event_key": null,
+      "genome_sha256": "aa54fe9148fe303b2054bc5449f063f507d6feffa07556d144013aa9ded5b009",
+      "certificate_identity": "17576c751c5c0157cac7d098fd821915e54e811c5b7b2f9883889a0d0f11f245",
+      "aliases": [
+        "w283_p14_c01"
+      ]
+    },
+    {
+      "public_id": 2002,
+      "public_label": "Individual 2002",
+      "origin": "RetainedExport",
+      "source_birth_event_key": null,
+      "genome_sha256": "078c27c765791cb8b9f8ce29f2047ea0a8b0f2f76f7a542643f93643ca95b96e",
+      "certificate_identity": "ee2ec73480f12773579cf573ac3cc0838734e8caf40411e6bcba0bb12cf1210b",
+      "aliases": [
+        "w411c3_r02_p10_c12"
+      ]
+    },
+    {
+      "public_id": 2003,
+      "public_label": "Individual 2003",
+      "origin": "RetainedExport",
+      "source_birth_event_key": null,
+      "genome_sha256": "cba561d0a93c89e2081b62e8f6ab114538c7c034a70780d58681a4e41a5512b3",
+      "certificate_identity": "3436c8145643b9f46ffaeca9167e110f5ee67558a40380b44861f839d6b217c5",
+      "aliases": [
+        "w411t3_r01_p10_c11"
+      ]
+    },
+    {
+      "public_id": 2004,
+      "public_label": "Individual 2004",
+      "origin": "RetainedExport",
+      "source_birth_event_key": null,
+      "genome_sha256": "a1e49b43faeceb4672fa81b79fdf092e0e2a8f46d880a9be3d4a61877ef73fb4",
+      "certificate_identity": "184dcebbf965ff1f0854d81522fc05a19d612a363f9ceb26af2f310c3b423892",
+      "aliases": [
+        "w322_r01_p14_c66"
+      ]
+    },
+    {
+      "public_id": 2005,
+      "public_label": "Individual 2005",
+      "origin": "RetainedExport",
+      "source_birth_event_key": null,
+      "genome_sha256": null,
+      "certificate_identity": "400e3d630a482f66c015e0609449b8a4675d2597096c1e654f225a447dc7719b",
+      "aliases": [
+        "w501_ul_r01_p14_c01",
+        "w409_ul_r01_p14_c01"
+      ]
+    },
+    {
+      "public_id": 2006,
+      "public_label": "Individual 2006",
+      "origin": "RetainedExport",
+      "source_birth_event_key": null,
+      "genome_sha256": null,
+      "certificate_identity": "b2cf2b3384f20b399583fdcb3a55c5244bdba55accce6739cf63d4f32d7003cc",
+      "aliases": [
+        "w501_xb1_r01_p10_c01"
+      ]
+    },
+    {
+      "public_id": 2007,
+      "public_label": "Individual 2007",
+      "origin": "ControlledProbe",
+      "source_birth_event_key": null,
+      "genome_sha256": "61594e106aedc7ecd9438e8867d8e743b1a7620f578b39951bf9851077b4fdac",
+      "certificate_identity": "29cc265209093fc44d3bedf788f1210438d27be31ec16e644738453c53f1e25b",
+      "aliases": [
+        "w283_p10_c02"
+      ]
+    },
+    {
+      "public_id": 2008,
+      "public_label": "Individual 2008",
+      "origin": "ControlledProbe",
+      "source_birth_event_key": null,
+      "genome_sha256": null,
+      "certificate_identity": null,
+      "aliases": [
+        "w282_p14_c01"
+      ]
+    },
+    {
+      "public_id": 2009,
+      "public_label": "Individual 2009",
+      "origin": "RetainedExport",
+      "source_birth_event_key": null,
+      "genome_sha256": null,
+      "certificate_identity": null,
+      "aliases": [
+        "w411c3_r01_p10_c11"
+      ]
+    }
+  ],
+  "newer_birth_range_allocation": {
+    "public_id_start": 3000,
+    "public_id_end": 6648,
+    "birth_event_count": 3649,
+    "ordering_rule": "Deterministic (birth_file_relpath_lexicographic, one_based_candidate_index) across the 57 admitted birth files in JR-EI-P1-T05"
+  },
+  "gen800_population_range_allocation": {
+    "public_id_start": 10000,
+    "public_id_end": 1964559,
+    "birth_event_count": 1954560,
+    "ordering_rule": "Deterministic (package_id_lexicographic, candidate_id_0_to_195455) across the 10 admitted gen-800 runs in JR-EI-P1-T08"
+  },
+  "next_individual_id_watermark": 2000000
+}

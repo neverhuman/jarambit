@@ -1,13 +1,16 @@
 mod assessment;
 mod battery;
+pub mod corpus;
 mod export_identity;
 mod historical;
+pub mod identity;
 mod lineage;
 pub mod native_history;
 mod plate;
+pub mod population;
 pub mod publication;
 mod reference;
-mod validation;
+pub mod validation;
 mod verification;
 mod visuals;
 mod weighted_runs;

@@ -1,149 +1,102 @@
-\section{Fitness Objective and Its Engineering Diagnostics}
+% Draft for Section 5 (Fitness Profiles, Priority Groupings, and Stage Semantics)
+\section{Fitness Profiles, Priority Groupings, and Stage Semantics}
 \label{sec:fitness}
-\subsection{What the Existing Weighted Score Means}
-The retained weighted reporting score has the generic form
+
+\subsection{Three Distinct Score Regimes and Forbidden Cross-Profile Splicing}
+Because different search cohorts and assessment stages evaluate different mathematical functions, a common word such as ``fitness'' does not establish comparability across runs. Jarambit's score registry enforces strict separation across three profile families, prohibiting cross-profile splicing:
+\begin{enumerate}
+\item \textbf{Native Quality-Diversity Search Fitness ($f$, Cohort~1 \text{Run~1} and Cohort~3 \text{Run~2}--\text{Run~11}):} In the four-island crescent search engine, native fitness $f$ (higher is better) applies conditional legality and feasibility branches: geometrically illegal or unmeshed candidates receive unbounded negative penalty scores ($f < 0$, down to $-207.23$ in Cohort~1), whereas legal candidates combine normalized mechanical/mass terms with archive-contextual novelty computed against the contemporaneous population and archive. Because novelty is re-evaluated as the archive evolves, $f$ is a contextual search observation rather than an intrinsic physical constant of a genome.
+\item \textbf{Retained Weighted Reporting Profile ($F \in [0,100]$, Cohort~2 Reporting Curves):} In the multi-stage ultralight reporting profile, twenty normalized component terms $s_i \in [0,1]$ are combined with percentage weights summing to $100$:
 \begin{equation}
- F=\sum_{i=1}^{20}w_i s_i,\qquad 0\leq s_i\leq1,\quad \sum_iw_i=100.
+ F = \sum_{i=1}^{20} w_i s_i,\qquad 0\le s_i \le 1,\quad \sum_{i=1}^{20} w_i = 100.
 \end{equation}
-Weights are expressed in percentage points, so $F$ lies on a 0--100 scale and higher is better. This equation describes the aggregation, not proof that each $s_i$ is independently measured, smooth, or physically calibrated. Some components are clipped ratios, Boolean contributions, constants, or proxies. Calling the aggregate continuous should not obscure discontinuities in its inputs or the distinction between continuous-valued output and differentiable behavior.
+The twenty terms are organized into four priority groups:
+  \begin{itemize}
+  \item \emph{Mass and compactness ($30\%$):} ultralight mass and holder/envelope compactness.
+  \item \emph{Form and comfort proxies ($25\%$):} karambit ring/claw archetype, silhouette similarity, and bore-collar geometry proxy.
+  \item \emph{Exported geometry ($15\%$):} watertight single-solid B-rep topology, exported edge sharpness, and point profile.
+  \item \emph{Response and verification ($30\%$):} lateral loads ($180\,\mathrm{N}$ and $260\,\mathrm{N}$ coarse and refined), ring traction ($1500\,\mathrm{N}$), body and local tip torsion ($1.82\,\mathrm{N\cdot m}$), quadratic solid tip response and cross-solver agreement, elastic support/buckling, regional yield-order sequence ($\ge 1.2$), three-level plate mesh study, human-maximum overload, and Goodman fatigue screen.
+  \end{itemize}
+Within the six retained Cohort~2 reporting curves (15 generation summaries), Individual~2002 records the highest retained weighted reporting profile value ($F = 74.207299$, mass $101.139\,\mathrm{g}$ raster / $101.138\,\mathrm{g}$ solid). Several terms in $F$ are clipped ratios, Boolean indicators, or screening proxies; a higher value of $F$ orders candidates for research attention without establishing qualification.
+\item \textbf{Shortfall-Penalized CAD Score ($W_{\text{CAD}}$) and Global Composite ($G_1$):} In 16-gate CAD evaluation, candidates satisfying all 16 legacy engineering gates receive a positive score in $[1.0,2.0]$ weighted by mass ($0.70$), archetype ($0.12$), survival buffer ($0.10$), sequence buffer ($0.05$), and carry stability ($0.03$):
+\begin{equation}
+\begin{aligned}
+ W_{\text{CAD}}^{\text{pass}} &= 1.0 + 0.70\,s_{\text{mass}} + 0.12\,s_{\text{karambit}} \\
+ &\quad + 0.10\,s_{\text{survival}} + 0.05\,s_{\text{seq}} + 0.03\,s_{\text{carry}},
+\end{aligned}
+\end{equation}
+whereas candidates failing any gate receive a negative shortfall penalty:
+\begin{equation}
+ W_{\text{CAD}}^{\text{fail}} = -\left(1.0 + 4.0\sum_{k\in\text{shortfalls}}\Delta_k\right) + 0.10\,s_{\text{mass}} < 0.
+\end{equation}
+Alongside $W_{\text{CAD}}$, the dimensionless composite score $G_1$ (higher is better, with no physical millimeter unit and no $0.45$ cutoff gate) evaluates:
+\begin{equation}
+\begin{aligned}
+ G_1 &= 0.35\,\min(\mathrm{SF}_{\text{solid\_tip}},\,2.0) + 0.35\,\frac{\mathrm{SPG}}{4.0} \\
+ &\quad + 0.20\,s_{\text{aes}} - 0.05\,\frac{\max(0,\,m_g - 77.0)}{10.0} \\
+ &\quad - 0.05\,\frac{\max(0,\,1.2 - r_{\text{seq}})}{1.2}.
+\end{aligned}
+\end{equation}
+For the separately assessed controlled export Individual~2001, $W_{\text{CAD}} = -3.878704$, $G_1 = 0.623903$, and mass $= 75.382\,\mathrm{g}$ ($75.1992\,\mathrm{g}$ 3D solid), meeting $11$ of $16$ legacy gates and failing $5$; for companion controlled export Individual~2007, $W_{\text{CAD}} = -3.964924$, $G_1 = 0.621634$, and mass $= 75.642\,\mathrm{g}$ ($75.5049\,\mathrm{g}$ 3D solid), likewise meeting $11$ of $16$ legacy gates and failing the same $5$ gates while failing grouped verification.
+\end{enumerate}
 
-The selected reporting profile groups the existing terms into mass/compactness, form/comfort proxies, exported geometry, and response/verification. These are explanatory groupings of the retained terms, not newly calibrated objectives. The profile's total reproduces the stored best score. Its labels do not establish subjective comfort, clinical safety, physical performance, or manufacturing readiness.
+\subsection{Reversible Display-Loss Conventions}
+To support minimization-oriented progress plots without altering underlying stored evidence, each profile defines an explicit order-preserving display loss $L$:
+\begin{equation}
+ L_{\text{native}} = -f,\qquad L_{\text{ultralight}} = 100 - F,\qquad L_{\text{CAD}} = -W_{\text{CAD}}.
+\end{equation}
+For cumulative best-so-far series $H_g = \max_{0\le k\le g} r_k$, the corresponding display-loss envelope $-H_g$ or $100 - H_g$ is monotone non-increasing by construction. All figures declare both the display-loss transform and the native score values, preserving negative penalty tails without clipping.
 
-\subsection{Scorer Identity Is Part of the Result}
-At the retained source baseline, native Stage 1 uses a reduced set of observations plus fixed and proxy contributions. Native Stage 2 uses a richer result structure, but still maps several terms to constants or reused quantities. The separate Python reporting scorer consumes another set of inputs and, at this baseline, uses disclosed placeholder values for two geometry inputs. It can therefore produce a score that differs from the native selection function even when the metric name appears similar.
+\subsection{Cohort 3 Cross-Run Trajectory Comparison (\text{Run~2}--\text{Run~11})}
+Table~\ref{tab:cohort3-runs} summarizes the ten retained 800-generation four-island runs in Cohort~3 ($1{,}954{,}560$ total evaluated births and $32{,}040$ generation-by-island summary rows). Every run evaluated $195{,}456$ distinct candidate IDs across $801$ generations ($0$--$800$). Search-legal births range from $70{,}278$ ($35.96\%$, \text{Run~6}) to $80{,}132$ ($41.00\%$, \text{Run~11}), totaling $754{,}236$ ($38.59\%$; mean $75{,}423.6 \pm 2{,}936.55$ sample SD, population SD $2{,}785.86$) across the ten-run ensemble, while run-maximum native fitness reaches $1.1089$ (\text{Run~3}) to $1.1440$ (\text{Run~5}) (mean $1.1250 \pm 0.01285$ sample SD, population SD $0.01220$).
 
-Subsequent implementation change \href{https://github.com/neverhuman/jarambit/pull/135}{PR~135}, merged as \code{72e25a360470}, changes Stage-2 ranking and the archive to the canonical reporting-compatible score. It postdates the retained cohorts. It neither rescores their saved observations nor supplies their missing point-level stage lineage; this retrospective analysis preserves their original values.
+\begin{table}[t]
+\centering
+\caption{Cohort~3 Ten-Run 800-Generation Census (\text{Run~2}--\text{Run~11}; $195{,}456$ Evaluated Births and $3{,}204$ Summary Rows per Run; $1{,}954{,}560$ Total)}
+\label{tab:cohort3-runs}
+\footnotesize
+\setlength{\tabcolsep}{2.4pt}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Run & Legal Births (\%) & Max $f$ & Min $L=-f$ \\
+\midrule
+Run~2  & 74,874 (38.31\%) & 1.1327 & $-1.1327$ \\
+Run~3  & 77,011 (39.40\%) & 1.1089 & $-1.1089$ \\
+Run~4  & 77,396 (39.60\%) & 1.1380 & $-1.1380$ \\
+Run~5  & 77,625 (39.71\%) & 1.1440 & $-1.1440$ \\
+Run~6  & 70,278 (35.96\%) & 1.1156 & $-1.1156$ \\
+Run~7  & 74,777 (38.26\%) & 1.1228 & $-1.1228$ \\
+Run~8  & 71,550 (36.61\%) & 1.1108 & $-1.1108$ \\
+Run~9  & 76,284 (39.03\%) & 1.1408 & $-1.1408$ \\
+Run~10 & 74,309 (38.02\%) & 1.1186 & $-1.1186$ \\
+Run~11 & 80,132 (41.00\%) & 1.1177 & $-1.1177$ \\
+\midrule
+Total / Range & 754,236 (38.59\%) & 1.1089--1.1440 & $-1.1440..{-1.1089}$ \\
+Mean $\pm s$ & $75{,}423.6\pm 2{,}936.6$ & $1.1250\pm 0.0129$ & $-1.1250\pm 0.0129$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-The weighted profile is explicitly a \emph{retained reporting profile}. Its source merges selected-row screening metadata with a substituted assessment profile: for example, the outer and assessed sequence/fatigue observations differ. These differences may be legitimate fidelity effects, but the combined record cannot establish one scorer/stage for every trajectory point. We preserve the source values, label the lineage incomplete, and make no convergence claim from this series. A common metric name or a monotonic envelope is insufficient to establish comparability.
-
-The historical population uses another score entirely. Its admitted producer applies legality-dependent branches and includes novelty calculated from the contemporaneous archive/population. We summarize saved \code{fit} values without rescoring candidates. The source-defined context, evaluation status, and later assessment outcome must accompany interpretation; an increasing recorded maximum alone does not establish improved physical response.
-
-\subsection{Requested Minimization Convention}
-The requested future product direction is a continuously reported weighted objective whose lower value indicates improvement. The present retained evidence instead uses maximization. A display transform $L=100-F$ would reverse direction and preserve ordering within the same scorer version. It would not correct placeholders, remove clipping, calibrate uncertainty, create new observations, or establish that engineering requirements are satisfied. This manuscript and its implementation do not activate a new physical objective.
-
-The distinction between preference and evidential validity remains essential. Soft ranking can preserve an informative but unfavorable candidate for research. It cannot make missing solver evidence valid or turn a provisional record into a qualified design. Qualification and physical validation require their own explicit evidence, independently of the scalar used to allocate research attention.
-
-\subsection{How to Read the Following Tests}
-The following subsections explain every legacy CAD diagnostic. Exact predicate keys and source links appear in the online atlas. The predicate suffixes are historical identities; they are not new load recommendations. The authoritative predicate map remains in \src{ops/ci/evaluate_cad_candidate.py}{the existing evaluator}. We describe observation semantics, shared dependencies and interpretation limits instead of creating a second, drifting authority for requirement constants.
-
-\subsection{Retained Fields and Their Recovery}
-Figure~\ref{fig:plate-fields} displays the retained D1 cell arrays for the cover's assessed example. Its 13,503 nodes and 25,209 triangles belong to the $0.25\,\mathrm{mm}^2$ plate level. Exported capacity summaries take minima over two levels, $0.25$ and $0.125\,\mathrm{mm}^2$; their limiting mesh cannot be inferred from these displayed fields. This is neither a strict-refinement field nor a three-dimensional solid field. The publication projection reads saved arrays and invokes no mechanics solver.
-
-The lateral and torsion arrays contain unit responses. The DKT implementation recovers bending surface von Mises stress at three corners, extrapolated from Gauss observations, and stores the per-element maximum. Their units are respectively MPa/N and MPa/(N\,mm). The ring array stores T6 centroid von Mises response per unit traction resultant, in MPa/N. The envelope is already scaled, in MPa, and includes the producer's global torsion correction. It therefore cannot share a numerical legend with the unit responses. Each panel uses its full stored range; the envelope maximum of $1{,}388.6695$ MPa is a recorded elastic-model stress, not an experimentally demonstrated material response.
-
-The producer forces envelope values to zero inside a 4-mm tip exclusion and ring values to zero in its seated region. We display those cells in gray rather than as zero stress. The 75 envelope cells are recovered from triangle centroids and the identified boundary tip node. Their nearest exclusion-boundary margin exceeds the coordinate-rounding bound. The ring mask covers 14,875 cells; one boundary-adjacent cell is retained because its positive stored coefficient proves it was not source-zeroed. The raw lateral and torsion panels retain the tip region, with its capacity exclusion outlined. Coordinates and coefficients are serialized to three and four decimal places, respectively. Other stored zeros remain rounded source values; they are not proof of zero physical stress. Source hashes, cell IDs, mapping and mask decisions are retained with the figure.
+\subsection{Retained Spatial Plate Fields and Saliency Crops for Individual 2000}
+The retained $0.25\,\mathrm{mm}^2$ plate artifact for Individual~2000 ($13{,}503$ nodes, $25{,}209$ triangles) stores seven per-triangle arrays: five structural demand maps---the scaled multi-case von Mises envelope ($\mathrm{MPa}$, maximum $1{,}388.6695\,\mathrm{MPa}$, with $75$ cells inside the $4\,\mathrm{mm}$ tip exclusion forced to zero by the producer and rendered in neutral gray), unit out-of-plane lateral bending response ($\mathrm{MPa/N}$, $25{,}209$ active cells), unit in-plane tip-pry T6 membrane response ($\mathrm{MPa/N}$, $25{,}209$ active cells; in the multi-case envelope construction, both lateral and pry unit responses are multiplied by $260\,\mathrm{N}$), unit ring-traction T6 centroid response ($\mathrm{MPa/N}$, $10{,}334$ active cells and $14{,}875$ seated-region masked cells, scaled by $1500\,\mathrm{N}$ in the envelope), and unit chord-torsion response ($\mathrm{MPa/(N\,mm)}$, $25{,}209$ active cells, scaled by $1820\,\mathrm{N\,mm}$ in the envelope)---together with two auxiliary fields: per-element safety factor (dimensionless) and local element thickness ($\mathrm{mm}$). Figure~\ref{fig:plate-fields} displays the retained demand maps, while Figures~\ref{fig:hero-composite} and~\ref{fig:saliency-crops} pair the unlit 2D 5-map percentile composite index (combining the multi-case envelope and unit lateral, pry, ring-traction, and torsion maps, with contributor support $q(x)\in\{3/5,4/5,5/5\}$) and $\ge 90\%$ integrated-saliency local crops with whole-object picture-in-picture locators.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{plate-fields.png}
-\caption{Actual retained plate arrays for \code{cert_pipeline_r01_p14_c02}, not qualified. A: stored multi-case envelope. B: lateral unit response. C: ring unit response. D: torsion unit response. Legends have different units and independent full ranges. Each triangle receives its saved value without smoothing, clipping or deformation. Gray marks producer-forced zeros, not zero stress. The dashed tip outline in B and D marks a capacity exclusion while retaining the raw field there. These are $0.25\,\mathrm{mm}^2$ plate-level observations; no strict, solid, fatigue or buckling field is implied.}
+\caption{Individual~2000 retained $0.25\,\mathrm{mm}^2$ plate arrays ($25{,}209$ triangles, $13{,}503$ nodes; single assessed export in the automatic certification leaderboard, 1 assessed, 0 qualified, no promoted champion). A: multi-case stress envelope ($\mathrm{MPa}$). B: unit lateral bending response ($\mathrm{MPa/N}$). C: unit ring-traction response ($\mathrm{MPa/N}$). D: unit torsion response ($\mathrm{MPa/(N\,mm)}$). Gray cells denote producer-masked exclusions ($75$ tip cells in A; $14{,}875$ seated-ring cells in C), not zero physical stress.}
 \label{fig:plate-fields}
 \end{figure*}
 
-\test{G16-01: Export Topology and Identity}
-Figure~\ref{fig:export-identity} joins the assessed example's saved genome, assessment, STEP/STL digests and render metadata. Its original producer records one STEP solid token, one shell token and 55,698 face tokens, alongside an exporter census with zero boundary and nonmanifold edges. The separate OpenCascade record reports one solid and \code{valid=true}. The Blender import instead contains 44,994 vertices and 90,000 triangles: STEP text tokens and render triangles count different representations. The original composite CAD flag is favorable while the example remains unqualified. These are archived observations, not fresh topology checks or deterministic regeneration. The original producer's STEP text/unit interpretation is retained with its source revision; later reader improvements do not retrospectively revalidate this assessment.
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{JR_EI_P4_T01_T02_hero_white_field_composite.png}
+\caption{Individual~2000 unlit 2D plate reference composite and contributor-coverage audit ($25{,}209$ triangles, $13{,}503$ nodes; single assessed export, 1 assessed, 0 qualified, no promoted champion): dimensionless 5-map percentile composite index across the multi-case envelope and unit lateral, pry, ring-traction, and torsion responses, contributor support map $q(x)\in\{3/5,4/5,5/5\}$, ring-neck traction zoom, and blade-belly envelope zoom.}
+\label{fig:hero-composite}
+\end{figure*}
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{export-identity.png}
-\caption{Original export records for the separate assessed example, not qualified. A: saved content associations; dashed arrows do not represent fresh genome regeneration. Hashes are abbreviated to twelve hexadecimal characters; the ledger retains their full values. B: original STEP text-token counts, exporter edge census and B-rep reader findings. Blender import counts are separate from those observations and from the mechanics mesh. No CAD validation, FEM field or manufacturing result is generated by this diagram.}
-\label{fig:export-identity}
+\includegraphics[width=\textwidth]{JR_EI_P4_T04_fem_saliency_crops_and_locators.png}
+\caption{Individual~2000 $\ge 90\%$ area-weighted integrated-saliency local crops with whole-object picture-in-picture locators ($25{,}209$ triangles, $13{,}503$ nodes; Panels A--C): ring traction ($\mathrm{MPa/N}$), terminal blade-tip torsion ($\mathrm{MPa/(N\,mm)}$), and multi-case von Mises envelope ($\mathrm{MPa}$).}
+\label{fig:saliency-crops}
 \end{figure*}
-
-\test{G16-02: Geometry and Holder Compatibility}
-The geometry predicate collects existing dimensions, envelope relationships and holder-related rejection reasons under the recorded decoder. These checks concern representational compatibility. They do not measure retention during motion, population fit or contact pressure. Individual rejection reasons distinguish the different model mismatches hidden by a single Boolean.
-
-\test{G16-03: Shape and Archetype}
-This predicate checks conformity to the represented shape family using phenotype descriptors. A favorable flag means that version's family conditions were reported as met; it establishes neither physical superiority nor comfort. A changed representation requires an explicit review of the predicate definition.
-
-\test{G16-04: Reference-Shape Comparison}
-Figure~\ref{fig:reference} shows the assessed example's saved outline and reference with one common coordinate transform. The historical key \code{c4} contains the producer's C.5 exterior, also re-exported by C.6; the overlay does not audit C.6's additional features. Original rounded descriptors are Hausdorff distance 2.285 mm, curvature-histogram EMD 0.0071 and score 0.4079. The recorded aesthetic flag is favorable, with an empty aesthetic-failure list. These descriptors and flags are preserved, not recomputed from the rounded coordinates. The scalar score and feature-based floor are distinct outputs. Reference resemblance is an authored preference, not measured human approval or comfort.
-
-\begin{figure*}[t]
-\centering\includegraphics[width=\textwidth]{reference.png}
-\caption{Original reference-comparison records for the separate assessed example, not qualified. A: all 4,230 outline and 1,117 reference points, displayed as closed polylines with a common isotropic scale and original relative placement. The reference is the C.5 exterior reused by C.6. B: saved rounded descriptors and original flags/lists. No registration, smoothing, histogram reconstruction, similarity recomputation or FEM is performed. Empty geometric rejections and a favorable aesthetic flag account for the original combined RS shape/geometry pass; they do not establish human fit or physical suitability.}
-\label{fig:reference}
-\end{figure*}
-
-\test{G16-05: Lateral-Response Comparison}
-Panel B of Fig.~\ref{fig:plate-fields} shows the retained unit-response field shared by the lateral comparisons; it is not a separate field for each predicate.
-The legacy comparison postprocesses a plate-model response under its recorded material envelope, region and discretization. Stress recovery and model revision define the observable. The historical use-case label is not a validated operational load specification; this predicate and G16-06 share a response family.
-
-\test{G16-06: Additional Lateral Comparison}
-This second legacy comparison applies a different requirement to the shared response. It adds no independent solver execution or measured capacity. Displaying the field once with both comparisons exposes their dependence.
-
-\test{G16-07: Refined Lateral Observation}
-Figure~\ref{fig:assessment}C shows the assessed example's saved lateral observations: 168.9008 N for certification and 168.1786 N for the strict path. The former summarizes the existing two certification levels; the latter uses the recorded $0.0625\,\mathrm{mm}^2$ strict convention. This pair is not a three-level convergence study. A matched full strict field is unavailable here, so Fig.~\ref{fig:plate-fields}B cannot substitute for it. Missing refined evidence must remain unavailable rather than inheriting a coarse favorable result.
-
-\test{G16-08: Ring-Traction Response}
-Figure~\ref{fig:plate-fields}C shows the saved ring coefficient with its producer-zeroed seated region masked explicitly.
-The ring-traction predicate reads the existing static model's response comparison. As with other modeled capacities, its meaning depends on the represented geometry, constitutive assumption, support and stress observable. A favorable numerical comparison is not a physical proof test. Nor does it establish an injury criterion or the response of a person in contact with the part. The historical diagnostic is valuable as a documented model question, provided the report preserves that scope and does not turn its legacy name into a broad practical-safety claim.
-
-\test{G16-09: Body-Region Torsion}
-Figure~\ref{fig:plate-fields}D displays the raw torsion response; the regional capacity selection and the corrected envelope in panel A are separate postprocessing observations.
-The body torsion diagnostic reads a regional observable from the existing model. The region definition is part of the result: excluding or including a local zone can materially alter which stress values enter the comparison. Stress recovery and averaging conventions also matter. A report therefore needs the region mask, observable type, source field and model identity, not merely a safety-factor number. This body observation should remain separate from local plate and local solid observations even when all derive from a related loading family.
-
-\test{G16-10: Local Plate Torsion}
-This predicate evaluates the existing local region in the plate representation. Its local character does not make it a separate physical experiment, and its plate formulation does not resolve every three-dimensional stress effect. The result can expose a deficiency in the modeled region while still requiring a different model to examine local solid behavior. A viewer should not compare its scalar directly with a solid-element scalar without checking region, recovery and normalization. These details define whether the two numbers answer the same engineering question.
-
-\test{G16-11: Refined Local Torsion}
-Figure~\ref{fig:assessment}C retains the certification and strict local torsion factors, 0.5239 and 0.5287, from the bound RS record. They remain distinct observations; their proximity does not admit a discretization-error estimate. No full strict local field is retained in this publication input set. A coarse plate field cannot replace it, and refinement alone cannot validate the support assumptions or establish a fracture mechanism.
-
-\test{G16-12: Quadratic Local Solid Result}
-Figure~\ref{fig:verification}C--D supplies the matched scalar comparison and regional profiles, not a full solid field. The local three-dimensional submodel uses quadratic tetrahedra, with a native Rust screen and separate assessment tooling. Boundary transfer, mesh identity and stress recovery define its result. Nodal maxima, cell values and averaged fields remain distinct observables; neither computational completion nor cross-solver agreement establishes physical validation.
-
-\test{G16-13: Support and Stability}
-The alternate-support record in Fig.~\ref{fig:assessment}A combines bore-bearing/flange springs with a Winkler grip-pad foundation. This side report has its own DKT/CST assembly, distinct from the T6 in-plane path of the saved ring field. It reports a lateral-only regional ratio of 5.2027 and an eigenvalue of 7.0351. Its certification comparator, 1.4353, is a multi-case minimum with different regions and mesh scope. Their difference cannot isolate a support effect. The record's favorable status is preserved; no mode shape or physical contact calibration is inferred.
-
-The producer applies \code{eigsh} to the operator $\mathbf K_{s}^{-1}\mathbf G$. The API requires a symmetric/Hermitian operator \cite{eigsh}; symmetric $\mathbf K_s$ and $\mathbf G$ alone do not establish Euclidean symmetry of their product. No operator-symmetry check or eigenpair residual is retained. This leaves a numerical-verification question open, rather than proving that the archived eigenvalue is wrong. The publication preserves the original result and flags the assumption for independent investigation.
-
-\begin{figure*}[t]
-\centering\includegraphics[width=\textwidth]{assessment.png}
-\caption{Actual scalar observations and original comparison flags for the assessed example, not qualified. A: labeled support-model schematic and recorded scalars; the eigen-operator audit is open. The supported and certification ratios have different cases/regions. B: saved fatigue and additional-response factors; the in-plane value is record-only. C: certification versus strict scalar observations with separate units; no strict spatial field or error estimate is inferred. D: ten met G16 comparisons and two met RS-v2 groups, with exact ID mappings in the projection receipt. G16-15 is a metadata comparison, and G16-13 retains the stated A4 audit gap. These overlapping flags are not independent experiments or qualification.}
-\label{fig:assessment}
-\end{figure*}
-
-\test{G16-14: Regional Yield-Order Proxy}
-Figure~\ref{fig:verification}A shows this observable across the saved mesh study, including its refused GCI estimate.
-The sequence diagnostic compares regional elastic response limits under the recorded case/region convention. Its numerator and denominator retain those identities. It models neither crack growth, plastic collapse nor dynamic fracture, so a favorable elastic proxy does not demonstrate a physical failure sequence.
-
-\test{G16-15: Mesh and Observable Consistency}
-Figure~\ref{fig:verification}A--B pairs valid mesh-sequence metadata with nonpositive-order and oscillatory observations; neither error estimate is admitted. A convergence comparison also requires stable regions and recovery semantics. Metadata validity, computed estimates and their admission are separate findings, rather than one favorable Boolean.
-
-\test{G16-16: Separate-Solver Consistency}
-Figure~\ref{fig:verification}C retains the separately attributed matched-mesh scalars and their output rounding. Scoped agreement supports implementation consistency. Shared assumptions can still produce shared error, and the comparison alone measures neither discretization uncertainty nor physical accuracy. Copying one result into two records would not constitute independent execution.
-
-\subsection{The Ten Overlapping RS-v2 Groups}
-The grouped requirement implementation is \src{crates/cli/src/bench.rs}{\code{rs_v2_eval}}. These groups reuse observations from the legacy diagnostics and add other model or geometry comparisons. Ten groups plus 16 predicates do not constitute 26 independent experiments. Their exact IDs remain stable even if a presentation changes row order.
-
-\test{RSV2-01: Shape and Geometry}
-The \code{aesthetic_and_geometric} group combines the aesthetic flag and absence of geometric rejections. Figure~\ref{fig:reference}B retains both original inputs and their combined pass for this example. This shared evidence is distinct from a human-fit or appearance study.
-
-\test{RSV2-02: Combined Numerical Response}
-The \code{floors_828_joint} group combines response comparisons under the recorded material-envelope convention. Figure~\ref{fig:plate-fields}A--C shows the separately bound example's shared envelope and unit-response families; Fig.~\ref{fig:assessment}D preserves its original grouped flag. The field view and Boolean comparison have different roles and do not add a new solve for every constituent condition.
-
-\test{RSV2-03: Body and Refined Local Torsion}
-Figure~\ref{fig:assessment}C supplies the local scalar comparison; the raw body response remains in Fig.~\ref{fig:plate-fields}D.
-The \code{twist_floor_body_and_tipsub_strict} group retains both regional comparisons. One favorable body observation must not conceal an unfavorable or unavailable local result. Region identity and refinement scope remain part of the evidence, even when the group is rendered as a single outcome.
-
-\test{RSV2-04: Local Solid Response}
-The \code{solid_tip_sf} group compares the local-solid observation. It does not replace checks of geometry binding, independent execution or discretization. A result may be complete and numerically unfavorable; both facts should remain visible rather than being compressed into a generic successful-test label.
-
-\test{RSV2-05: Refined Lateral Response}
-Figure~\ref{fig:assessment}C shows the retained strict scalar without implying a retained strict field.
-The \code{strict_hunter_lateral} group reuses the refined lateral observation. Its historical name remains an identifier, not a newly established operational scenario. It inherits the refined model's assumptions and uncertainty, and must not be counted independently of G16-07 when discussing evidence volume.
-
-\test{RSV2-06: Regional Yield Order}
-The \code{seq_hard} group reuses the regional yield-order proxy. The legacy word ``hard'' describes a comparison policy in that requirement namespace. It does not turn the elastic proxy into a validated fracture mechanism, nor does it dictate how a separate research-selection scalar must be interpreted.
-
-\test{RSV2-07: Additional Response and Geometry}
-The \code{human_max} group combines existing response and geometry observations. Figure~\ref{fig:assessment}B preserves the assessed example's twist, spine and ring-back factors, 0.0589, 0.2242 and 4.7258. Its in-plane factor, 0.2509, is explicitly record-only in the RS artifact. These are separate model cases, not a new aggregate or a validated bound on human behavior. The grouped finding remains unfavorable; the plot does not supply missing spatial fields or measured human-interface properties.
-
-\test{RSV2-08: Fatigue Model}
-The \code{fatigue} group reads the modified-Goodman screen with Marin-corrected endurance strength. The implemented factor obeys $n_f^{-1}=\sigma_a/S_e+\sigma_m/S_u$; the original zero-to-maximum cycle gives equal alternating and mean stresses. Figure~\ref{fig:assessment}B preserves the saved factor 0.4718. The producer's material/surface and cycle assumptions are model inputs, not measurements of a printed part or a service-life experiment. No per-element fatigue field is retained, so a fatigue heatmap cannot be inferred from this scalar.
-
-\test{RSV2-09: Exported Edge Geometry}
-The \code{gate_s_sharp_law} group assesses recorded exported geometric features. It is a geometry comparison, not an experiment in cutting effectiveness or durability. Nominal decoder intent and measurements on the actual exported representation should remain distinct, especially when export construction changes across revisions.
-
-\test{RSV2-10: Exported Local Profile}
-The \code{gate_s_tip_point_brep} group assesses the exported local profile and its recorded monotonicity. It cannot establish manufactured dimensions or practical performance. The relevant output needs geometry identity and measurement semantics; an attractive image or a parameter's nominal value cannot substitute for those observations.
