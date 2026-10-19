@@ -307,6 +307,11 @@ jobs:
             docs/paper/generated/weighted-runs.svg.manifest.json
             target/ieee/paper/weighted-runs.png
             evidence/evolution_waves/2026-10-18_ultralight_v1/*/*/fitness_curve.json
+            docs/paper/reference-inputs.v1.json
+            docs/paper/generated/reference.svg
+            docs/paper/generated/reference.json
+            docs/paper/generated/reference.svg.manifest.json
+            target/ieee/paper/reference.png
             docs/paper/export-inputs.v1.json
             docs/paper/generated/export-identity.svg
             docs/paper/generated/export-identity.json

@@ -5,6 +5,7 @@ mod historical;
 mod lineage;
 mod plate;
 pub mod publication;
+mod reference;
 mod validation;
 mod verification;
 mod visuals;

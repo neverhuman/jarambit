@@ -89,7 +89,7 @@ Compares decoded geometry with the existing reference and recorded feature check
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
 
-**Visual gap:** Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison. [Complete coverage ledger](visuals.md).
+**Separate assessed-example visual:** [A--B: original 2D reference overlay, saved rounded descriptors and flags; no new measurement or human approval](../paper/generated/reference.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/reference.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="g16-cert_hiker_180n"></a>
 
@@ -312,7 +312,7 @@ Combines existing shape and geometric observations.
 
 **Retained example:** [historical grouped result](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json). Use exact group IDs from `rs_v2_eval` in the implementation; do not infer group identity from table position. [Requirement namespace](../../requirements/RS-karambit-v2.toml).
 
-**Visual gap:** Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison. [Complete coverage ledger](visuals.md).
+**Separate assessed-example visual:** [A--B: original 2D reference overlay, saved rounded descriptors and flags; no new measurement or human approval](../paper/generated/reference.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/reference.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="rsv2-floors_828_joint"></a>
 

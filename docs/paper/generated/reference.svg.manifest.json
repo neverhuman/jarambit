@@ -1,0 +1,22 @@
+{
+  "figure": "docs/paper/generated/reference.svg",
+  "figure_sha256": "2a788b8d6d56eacb8c247a786de419f1c8a9f64c567e421681dde91a3eb12a5b",
+  "inputs": {
+    "crates/cli/src/crescent.rs": "c8f2e1664263e3bb885ca33e27f42dab0fbe0f180116ec890ee4dcd83bdeab22",
+    "crates/crescent/src/aesthetic.rs": "30404b5e898613fd36b6ea534d501a57ddf1898567ee545807bd2206c7b5282a",
+    "crates/crescent/src/c5_ref.rs": "3b57f41e01b82954a4d4e1b6597ae605469d08170688d72875c6a91514576c39",
+    "crates/crescent/src/c6_ref.rs": "44a1c899cd5c0b3a7a5e753d2f67b41a0c3ca50e1dd3ebff7f4a992915406a27",
+    "crates/crescent/src/record.rs": "5cf69d38d9d78766e045ee66427b143e063c5e9e25b6b4adb777582826ecbccb",
+    "crates/paper-artifacts/src/publication.rs": "1cb0ce7add5b7010e736e6752a81fffd8e7f3c6688b71aa208e4b84165ffb6b4",
+    "crates/paper-artifacts/src/reference.rs": "9d0568c508620c33ce9767885b073997d8e9b820847bc9055588f30e49b56e24",
+    "docs/paper/reference-inputs.v1.json": "fe5241020f93b47ee10fb814c05260e69eee942283bbbf54ca9cb05fa4d5e7c5",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_rs.json": "2696a6f5d4dbbcec6a6148c83d5ff48313f7a86682766328be56ea4f203945fb",
+    "evidence/evolve_certifiable/manifest.json": "b9c6b46e724f4886ba365fd5cc3f357c06d74635d4e546ede330a137d1f01f18"
+  },
+  "projection_receipt": "docs/paper/generated/reference.json",
+  "schema": 1,
+  "scope": "Original serialized silhouettes and saved rounded reference descriptors/flags; no new measurement, registration, histogram, FEM or human approval",
+  "script": "crates/paper-artifacts/src/reference.rs"
+}

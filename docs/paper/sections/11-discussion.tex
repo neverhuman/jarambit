@@ -1,8 +1,6 @@
 \section{Discussion}
 \subsection{What a Scalar Cannot Say Alone}
-A weighted score encodes a preference over the observations and proxies supplied to it. It does not reveal all tradeoffs unless its components are inspectable. Two candidates with the same total may have substantially different profiles. A high value may coexist with an unfavorable comparison in a low-weight component. A score can also improve because a proxy or placeholder changes rather than because physical behavior improves.
-
-Retaining the component vector, source identity and model scope makes continuous ranking interpretable. A decreasing loss expresses preference within a stable definition; it does not imply monotonic improvement of every component or guarantee an optimum as compute increases. The historical score and later weighted summaries studied here have different definitions and cannot supply one such trajectory.
+A scalar expresses preference over its supplied observations. Equal totals can hide different component profiles, and an increase can come from a changed proxy rather than physical behavior. Retaining the component vector and model identity exposes these differences. A decreasing loss within a stable definition guarantees neither improvement of every component nor an optimum as compute increases. The historical and weighted scores examined here cannot supply one common trajectory.
 
 \subsection{Claims About Strength, Mass, and Practical Use}
 The retained data include modeled mass and mechanical responses. These are valuable observations, but their practical interpretation remains bounded by model assumptions, manufacturing state and missing validation. A low CAD mass does not establish the mass of a finished assembly, and a modeled safety factor does not establish reliability under an unvalidated use scenario. The historical application should not be used to imply operational suitability from a selected numerical example.

@@ -1161,6 +1161,59 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "docs/paper/generated/export-identity.json".into(),
         serde_json::to_string_pretty(&export_summary)? + "\n",
     );
+    let reference_contract = read(&root, "docs/paper/reference-inputs.v1.json", &mut inputs)?;
+    if reference_contract["subject"] != field_contract["subject"]
+        || reference_contract["certificate_identity"] != field_contract["certificate_identity"]
+        || reference_contract["producer_revision"] != field_contract["producer_revision"]
+    {
+        return Err("reference and assessed-example identity differs".into());
+    }
+    let reference_sources = reference_contract["sources"]
+        .as_object()
+        .ok_or("missing reference sources")?;
+    if reference_sources.len() != 3 {
+        return Err("reference source membership differs".into());
+    }
+    for key in ["d1", "scorecard", "rs"] {
+        let source = &reference_sources[key];
+        let path = text(&source["path"])?;
+        if assessment_manifest["automatic"]["artifacts"][key] != path
+            || inputs.get(path).map(String::as_str) != source["sha256"].as_str()
+        {
+            return Err("reference source binding differs".into());
+        }
+    }
+    let reference_producers = reference_contract["producer_sources"]
+        .as_object()
+        .ok_or("missing reference producer sources")?;
+    let reference_members = [
+        "crates/crescent/src/aesthetic.rs",
+        "crates/crescent/src/c5_ref.rs",
+        "crates/crescent/src/c6_ref.rs",
+        "crates/cli/src/crescent.rs",
+        "crates/crescent/src/record.rs",
+    ];
+    if reference_producers.len() != reference_members.len() {
+        return Err("reference producer membership differs".into());
+    }
+    for path in reference_members {
+        let actual = digest(&fs::read(safe_path(&root, path)?)?);
+        if reference_producers[path].as_str() != Some(actual.as_str()) {
+            return Err("reference producer digest differs".into());
+        }
+        inputs.insert(path.into(), actual);
+    }
+    let (reference_svg, reference_summary) = crate::reference::project(
+        &field_doc,
+        &scalar_docs["scorecard"],
+        &scalar_docs["rs"],
+        &reference_contract,
+    )?;
+    out.insert("docs/paper/generated/reference.svg".into(), reference_svg);
+    out.insert(
+        "docs/paper/generated/reference.json".into(),
+        serde_json::to_string_pretty(&reference_summary)? + "\n",
+    );
     let birth_ids = births
         .iter()
         .map(|r| {
@@ -1358,6 +1411,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "crates/paper-artifacts/src/battery.rs",
         "crates/paper-artifacts/src/export_identity.rs",
         "crates/paper-artifacts/src/weighted_runs.rs",
+        "crates/paper-artifacts/src/reference.rs",
         "crates/paper-artifacts/src/visuals.rs",
         "crates/paper-artifacts/examples/paper_artifacts.rs",
         "crates/paper-artifacts/Cargo.toml",
@@ -1502,6 +1556,27 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     out.insert(
         "docs/paper/generated/weighted-runs.svg.manifest.json".into(),
         serde_json::to_string_pretty(&weighted_manifest)? + "\n",
+    );
+    let mut reference_inputs = BTreeMap::new();
+    for path in [
+        "docs/paper/reference-inputs.v1.json",
+        "evidence/evolve_certifiable/manifest.json",
+        "crates/paper-artifacts/src/reference.rs",
+        "crates/paper-artifacts/src/publication.rs",
+    ] {
+        reference_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    for source in reference_sources.values() {
+        let path = text(&source["path"])?;
+        reference_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    for path in reference_producers.keys() {
+        reference_inputs.insert(path.clone(), inputs[path].clone());
+    }
+    let reference_manifest = json!({"schema":1,"figure":"docs/paper/generated/reference.svg","figure_sha256":digest(out["docs/paper/generated/reference.svg"].as_bytes()),"inputs":reference_inputs,"script":"crates/paper-artifacts/src/reference.rs","projection_receipt":"docs/paper/generated/reference.json","scope":"Original serialized silhouettes and saved rounded reference descriptors/flags; no new measurement, registration, histogram, FEM or human approval"});
+    out.insert(
+        "docs/paper/generated/reference.svg.manifest.json".into(),
+        serde_json::to_string_pretty(&reference_manifest)? + "\n",
     );
     let visual_coverage = crate::visuals::project(entries, &out)?;
     out.insert(
