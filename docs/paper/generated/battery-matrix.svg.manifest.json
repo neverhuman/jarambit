@@ -1,8 +1,8 @@
 {
   "figure": "docs/paper/generated/battery-matrix.svg",
-  "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+  "figure_sha256": "831ae3ffa57df6f8bcd5a26f16d0ca745e00da2bc279f4bd9bc13e881665f669",
   "inputs": {
-    "crates/paper-artifacts/src/battery.rs": "3c9bfbf25e9ce9d967feeabaea7b3b9597e4992bad566dfb654a573fe73001f2",
+    "crates/paper-artifacts/src/battery.rs": "1a727850141d3fcea428f28a67a19d4cbdcf6c934df41376590cf3b004ff93ad",
     "docs/paper/battery-inputs.v1.json": "2cc671fd3ff7c6de1b415c1d2003d4b67bd5442fd89e4653fdd025f3c23f3930",
     "evidence/cad_battery/c10a.json": "22c145c839a298f90e247e219c8bd9ce28724055b60a46b8e98bf20fa1bad783",
     "evidence/cad_battery/c10c.json": "b527272bb0e7584c385f424010299926917f5b5ca9163f08e80a6a0e9cddacf7",

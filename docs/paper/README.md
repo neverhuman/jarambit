@@ -27,6 +27,8 @@ make -C docs/paper check CARGO_TARGET_DIR="$PWD/target/paper-artifacts"
 
 Output: `target/ieee/paper/main.pdf`, source/output SHA-256 lists, tool versions, PDF metadata and logs. The Makefile's check mode verifies 15–20 pages and rejects overfull boxes or unresolved references/citations. The legacy pinned Pandoc target remains separate and unchanged. Byte-identical PDF reproduction across toolchain versions is not claimed.
 
+SVG coordinates derived from platform-dependent transcendental functions are formatted to 0.001 SVG unit before serialization. This display-only rounding absorbs the observed macOS/Linux libm differences; original evidence values, numerical ledgers and reductions are unchanged. The standalone tests retain the exact adjacent-value pairs found by independent review, and Linux CI still requires byte-for-byte generated freshness.
+
 The PDF embeds lossless PNG projections of the generated SVG figures: 3,600 pixels for full-width figures and 2,400 pixels for the narrow cover plot. This avoids duplicate transparency-group dictionary keys encountered when this LuaLaTeX version imports librsvg PDF output, and triangle-edge seams in dense fields. Original SVGs and numerical projections remain inspectable and bound to source receipts. The new field and verification SVGs carry cell/observation IDs. Raster/output hashes accompany the PDF; no data values change during this display conversion.
 
 ## Evidence contract
