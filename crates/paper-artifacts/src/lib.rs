@@ -3,6 +3,7 @@ mod battery;
 mod export_identity;
 mod historical;
 mod lineage;
+pub mod native_history;
 mod plate;
 pub mod publication;
 mod reference;
