@@ -146,6 +146,16 @@ class TestUltralightWeightedFitness(unittest.TestCase):
         self.assertEqual(res['legacy_hard_gates_passed_count'], 0)
         self.assertEqual(len(res['legacy_hard_gates_failed']), 26)
 
+    def test_sharp_apex_within_limit_scores_without_error_and_checks_half_angle(self):
+        # apex <= 0.20 mm used to evaluate an undefined name in the RSV2-09 half-angle check.
+        def rsv2_09(half_angle_deg):
+            doc = {'export_measurements': {'sharpness': {'apex_max_mm': 0.18, 'half_angle_max_deg': half_angle_deg}}}
+            return compute_ultralight_weighted_fitness(doc)['legacy_26_gate_breakdown']['RSV2-09:gate_s_sharp_law']
+
+        self.assertTrue(rsv2_09(20.0)['legacy_pass'])
+        self.assertFalse(rsv2_09(28.0)['legacy_pass'])
+        self.assertEqual(rsv2_09(28.0)['deficit'], 3.0)
+
 
 if __name__ == '__main__':
     unittest.main()
