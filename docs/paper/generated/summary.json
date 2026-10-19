@@ -1,0 +1,255 @@
+{
+  "battery_evaluators": 18,
+  "battery_subjects": 23,
+  "missing": "Weighted cohort CAD geometry and round population files are unavailable in retained cohort",
+  "per_evaluator": {
+    "build.analytic": {
+      "pass": 23
+    },
+    "build.claims": {
+      "pass": 23
+    },
+    "build.dolfinx": {
+      "pass": 23
+    },
+    "build.gci_contracts": {
+      "pass": 23
+    },
+    "gate.rs_v2": {
+      "blocked": 4,
+      "fail": 19
+    },
+    "geom.mass": {
+      "blocked": 4,
+      "pass": 19
+    },
+    "geom.one_solid": {
+      "blocked": 23
+    },
+    "geom.pin": {
+      "blocked": 23
+    },
+    "geom.unit": {
+      "blocked": 23
+    },
+    "plate.gci": {
+      "blocked": 4,
+      "fail": 15,
+      "pass": 4
+    },
+    "plate.l7": {
+      "blocked": 4,
+      "fail": 19
+    },
+    "plate.loads": {
+      "blocked": 4,
+      "fail": 19
+    },
+    "plate.seq": {
+      "blocked": 4,
+      "fail": 9,
+      "pass": 10
+    },
+    "side.a1": {
+      "blocked": 4,
+      "pass": 19
+    },
+    "side.a2": {
+      "blocked": 4,
+      "pass": 19
+    },
+    "side.a3": {
+      "blocked": 4,
+      "pass": 19
+    },
+    "side.a4": {
+      "blocked": 4,
+      "pass": 19
+    },
+    "solid.tip": {
+      "blocked": 3,
+      "pass": 20
+    }
+  },
+  "population_births": 1984,
+  "population_statistics": [
+    {
+      "generation": 0,
+      "max": 1.14038,
+      "median": -3.730205,
+      "min": -205.18655,
+      "n": 128
+    },
+    {
+      "generation": 1,
+      "max": 1.14979,
+      "median": -1.307865,
+      "min": -204.50234,
+      "n": 116
+    },
+    {
+      "generation": 2,
+      "max": 1.15388,
+      "median": -1.281315,
+      "min": -204.58071,
+      "n": 116
+    },
+    {
+      "generation": 3,
+      "max": 1.15296,
+      "median": -1.2726950000000001,
+      "min": -206.44353,
+      "n": 116
+    },
+    {
+      "generation": 4,
+      "max": 1.15563,
+      "median": -0.29451000000000005,
+      "min": -205.01124,
+      "n": 116
+    },
+    {
+      "generation": 5,
+      "max": 1.14934,
+      "median": -0.237125,
+      "min": -204.95296,
+      "n": 116
+    },
+    {
+      "generation": 6,
+      "max": 1.15214,
+      "median": -0.73702,
+      "min": -204.20326,
+      "n": 116
+    },
+    {
+      "generation": 7,
+      "max": 1.14853,
+      "median": -0.26563000000000003,
+      "min": -207.22973,
+      "n": 116
+    },
+    {
+      "generation": 8,
+      "max": 1.1496,
+      "median": -1.0552000000000001,
+      "min": -205.5755,
+      "n": 116
+    },
+    {
+      "generation": 9,
+      "max": 1.15727,
+      "median": -0.24904500000000002,
+      "min": -204.66595,
+      "n": 116
+    },
+    {
+      "generation": 10,
+      "max": 1.15662,
+      "median": -0.366835,
+      "min": -206.11937,
+      "n": 116
+    },
+    {
+      "generation": 11,
+      "max": 1.15374,
+      "median": -0.26464,
+      "min": -205.28209,
+      "n": 116
+    },
+    {
+      "generation": 12,
+      "max": 1.1544,
+      "median": -0.257865,
+      "min": -205.28729,
+      "n": 116
+    },
+    {
+      "generation": 13,
+      "max": 1.15415,
+      "median": -0.268635,
+      "min": -205.93267,
+      "n": 116
+    },
+    {
+      "generation": 14,
+      "max": 1.15211,
+      "median": -0.28581500000000004,
+      "min": -206.26694,
+      "n": 116
+    },
+    {
+      "generation": 15,
+      "max": 1.1513,
+      "median": -0.29151499999999997,
+      "min": -205.56269,
+      "n": 116
+    },
+    {
+      "generation": 16,
+      "max": 1.15543,
+      "median": -0.206115,
+      "min": -206.11326,
+      "n": 116
+    }
+  ],
+  "schema": "jarambit.publication_projection.v1",
+  "science_definitions": 178,
+  "science_family_counts": {
+    "T00": 11,
+    "T01": 18,
+    "T02": 12,
+    "T03": 10,
+    "T04": 12,
+    "T05": 12,
+    "T06": 10,
+    "T07": 13,
+    "T08": 6,
+    "T09": 6,
+    "T10": 5,
+    "T11": 7,
+    "T12": 5,
+    "T13": 7,
+    "T14": 9,
+    "T15": 6,
+    "T16": 6,
+    "T17": 6,
+    "T18": 7,
+    "T19": 10
+  },
+  "scope": "Retained evidence projection; no new scientific execution",
+  "score_direction": "higher_is_better",
+  "source_baseline": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+  "stored_statuses": {
+    "blocked": 112,
+    "fail": 81,
+    "pass": 221
+  },
+  "weighted_best": 74.207299,
+  "weighted_curve": [
+    {
+      "best_so_far_label": "w411c3_r01_p10_c11",
+      "best_so_far_mass_g": 101.108,
+      "generation": 0,
+      "hall_of_fame_best_so_far": 74.167488,
+      "round_best_fitness": 74.167488,
+      "round_file": "round_00_screen.json"
+    },
+    {
+      "best_so_far_label": "w411c3_r02_p10_c12",
+      "best_so_far_mass_g": 101.139,
+      "generation": 1,
+      "hall_of_fame_best_so_far": 74.207299,
+      "round_best_fitness": 74.207299,
+      "round_file": "round_01_screen.json"
+    },
+    {
+      "best_so_far_label": "w411c3_r02_p10_c12",
+      "best_so_far_mass_g": 101.139,
+      "generation": 2,
+      "hall_of_fame_best_so_far": 74.207299,
+      "round_best_fitness": 73.608446,
+      "round_file": "round_02_screen.json"
+    }
+  ]
+}

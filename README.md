@@ -1,12 +1,113 @@
-<div align="center">
+# Jarambit
 
-# 🗡️ jarambit
+**Intelligent CAD research: evolutionary geometry, multi-model numerical assessment, and traceable engineering evidence.**
 
-### Intelligence-designed titanium utility karambits — evolved, FEM-verified, Monte-Carlo-robust
+Jarambit connects a 128-gene CAD representation to plate/membrane FEM, a quadratic 3D solid submodel, convergence studies, separate-solver comparisons, and scientific-assurance controls. The [test atlas](docs/tests/README.md) explains every named CAD diagnostic and evaluator, with implementation and retained-evidence links.
 
-<img src="docs/figures/whitepaper/blender/hero_oblique.webp" width="96%" alt="Blender Cycles render of the exact committed automatic-assessment genome offspring cert_pipeline_r01_p14_c02, labelled assessed example, not qualified"/>
+[Read the new IEEE-style white paper](docs/paper/README.md) · [Explore all tests](docs/tests/README.md) · [Detailed engineering spec](docs/PAPER_AND_README_ENGINEERING_SPEC.md) · [Architecture](TECHNOLOGY_MAP.md)
 
-*Blender Cycles render of a genome produced by the evolution pipeline: the exact committed automatic-assessment STL of `cert_pipeline_r01_p14_c02`, with geometry unchanged. Rendered by `ops/render/blender/render_paper.py --scene hero_oblique`, and the manifest is checked by `ops/ci/verify_figures.py`. It is an assessed example and **not qualified** (`RS-karambit-v2` FAIL, `champion = null`).*
+## Engineering assessments at a glance
+
+| Layer | What is available | What it means |
+|---|---|---|
+| CAD diagnostics | **16 legacy predicates** | Geometry, modeled response, support/stability, convergence and solver consistency |
+| Requirement groups | **10 overlapping RS-v2 groups** | Grouped comparisons that reuse some of the same observations |
+| Historical CAD battery | **18 evaluators × 23 subjects = 414 retained cells** | Software, geometry, numerical findings and result-completeness records |
+| Scientific assurance | **178 definitions across 20 T00–T19 families; 356 required control slots** | A frozen catalog; definitions do not prove execution |
+| Physical validation | **Not established by this evidence** | No qualified product or manufacturing promotion is claimed |
+
+**The engineering depth is in the models, checks, and evidence links—not a combined test count.** All historical battery cells say `fresh_this_lane: false`. Stored outcomes are 221 pass, 81 fail, 112 blocked; four shared software columns account for 92 passes. `solid.tip` passes mean complete records, not favorable strength findings. [Read status meanings and every evaluator](docs/tests/README.md#battery).
+
+![Best retained fitness profile beside its recorded evolutionary trajectory](docs/paper/generated/fitness.svg)
+
+*Selected retained w411c3 reporting cohort: best score 74.207299, higher is better; placeholder inputs remain and no design qualifies. Best-record CAD geometry and full round populations are unavailable in this cohort. The inset and paper separately analyze all 1,984 births retained for historical w282 on its original score scale (asinh vertical transform). [Figure inputs and hashes](docs/paper/generated/manifest.json).*
+
+## A link to every CAD assessment
+
+Each entry explains the question, observation family, implementation, related software controls, retained evidence, and interpretation limits. These inventories overlap; they are not independent physical experiments.
+
+<details>
+<summary>All 16 legacy CAD diagnostics</summary>
+
+| Exact identity | Explanation |
+|---|---|
+| `cad_watertight_and_single_solid` | [G16-01: Export topology and identity](docs/tests/README.md#g16-cad_watertight_and_single_solid) |
+| `geometric_and_holder_gates` | [G16-02: Geometry and holder compatibility](docs/tests/README.md#g16-geometric_and_holder_gates) |
+| `karambit_ring_and_curved_claw` | [G16-03: Shape and archetype](docs/tests/README.md#g16-karambit_ring_and_curved_claw) |
+| `c6_aesthetic_floor` | [G16-04: Reference-shape comparison](docs/tests/README.md#g16-c6_aesthetic_floor) |
+| `cert_hiker_180n` | [G16-05: Lateral-response comparison](docs/tests/README.md#g16-cert_hiker_180n) |
+| `cert_hunter_260n` | [G16-06: Additional lateral comparison](docs/tests/README.md#g16-cert_hunter_260n) |
+| `strict_hunter_260n` | [G16-07: Refined lateral observation](docs/tests/README.md#g16-strict_hunter_260n) |
+| `cert_ring_pull_1500n` | [G16-08: Ring-traction response](docs/tests/README.md#g16-cert_ring_pull_1500n) |
+| `twist_body_1p82nm` | [G16-09: Body-region torsion](docs/tests/README.md#g16-twist_body_1p82nm) |
+| `twist_tip_only_1p82nm` | [G16-10: Local plate torsion](docs/tests/README.md#g16-twist_tip_only_1p82nm) |
+| `twist_tip_submodel_strict_1p82nm` | [G16-11: Refined local torsion](docs/tests/README.md#g16-twist_tip_submodel_strict_1p82nm) |
+| `solid_tip_3d_p2_1p82nm` | [G16-12: Local quadratic solid result](docs/tests/README.md#g16-solid_tip_3d_p2_1p82nm) |
+| `side_a4_buckling_and_support` | [G16-13: Support and stability](docs/tests/README.md#g16-side_a4_buckling_and_support) |
+| `failure_sequence_1p2` | [G16-14: Regional yield-order proxy](docs/tests/README.md#g16-failure_sequence_1p2) |
+| `plate_gci_valid_3level` | [G16-15: Mesh and observable consistency](docs/tests/README.md#g16-plate_gci_valid_3level) |
+| `dolfinx_cross_check_2pct` | [G16-16: Separate-solver consistency](docs/tests/README.md#g16-dolfinx_cross_check_2pct) |
+
+</details>
+
+<details>
+<summary>All ten RS-v2 grouped comparisons</summary>
+
+| Exact identity | Explanation |
+|---|---|
+| `aesthetic_and_geometric` | [RSV2-01: Shape and geometry](docs/tests/README.md#rsv2-aesthetic_and_geometric) |
+| `floors_828_joint` | [RSV2-02: Combined numerical response](docs/tests/README.md#rsv2-floors_828_joint) |
+| `twist_floor_body_and_tipsub_strict` | [RSV2-03: Body and local torsion](docs/tests/README.md#rsv2-twist_floor_body_and_tipsub_strict) |
+| `solid_tip_sf` | [RSV2-04: Local solid response](docs/tests/README.md#rsv2-solid_tip_sf) |
+| `strict_hunter_lateral` | [RSV2-05: Refined lateral response](docs/tests/README.md#rsv2-strict_hunter_lateral) |
+| `seq_hard` | [RSV2-06: Regional yield order](docs/tests/README.md#rsv2-seq_hard) |
+| `human_max` | [RSV2-07: Additional response and geometry](docs/tests/README.md#rsv2-human_max) |
+| `fatigue` | [RSV2-08: Fatigue-model assessment](docs/tests/README.md#rsv2-fatigue) |
+| `gate_s_sharp_law` | [RSV2-09: Exported edge measurements](docs/tests/README.md#rsv2-gate_s_sharp_law) |
+| `gate_s_tip_point_brep` | [RSV2-10: Exported point-profile measurements](docs/tests/README.md#rsv2-gate_s_tip_point_brep) |
+
+</details>
+
+<details>
+<summary>All 18 CAD battery evaluators</summary>
+
+| Exact identity | Explanation |
+|---|---|
+| `build.analytic` | [Analytic software controls](docs/tests/README.md#battery-build.analytic) |
+| `build.gci_contracts` | [Convergence arithmetic controls](docs/tests/README.md#battery-build.gci_contracts) |
+| `build.claims` | [Claim-handling controls](docs/tests/README.md#battery-build.claims) |
+| `build.dolfinx` | [Separate-solver capability](docs/tests/README.md#battery-build.dolfinx) |
+| `geom.unit` | [Export units](docs/tests/README.md#battery-geom.unit) |
+| `geom.one_solid` | [Solid topology](docs/tests/README.md#battery-geom.one_solid) |
+| `geom.mass` | [Mass observation](docs/tests/README.md#battery-geom.mass) |
+| `geom.pin` | [Geometry identity](docs/tests/README.md#battery-geom.pin) |
+| `plate.loads` | [Plate response](docs/tests/README.md#battery-plate.loads) |
+| `plate.seq` | [Sequence proxy](docs/tests/README.md#battery-plate.seq) |
+| `plate.l7` | [Fatigue screen](docs/tests/README.md#battery-plate.l7) |
+| `plate.gci` | [Candidate mesh study](docs/tests/README.md#battery-plate.gci) |
+| `side.a1` | [Legacy side-report record A1](docs/tests/README.md#battery-side.a1) |
+| `side.a2` | [Legacy side-report record A2](docs/tests/README.md#battery-side.a2) |
+| `side.a3` | [Legacy side-report record A3](docs/tests/README.md#battery-side.a3) |
+| `side.a4` | [Support and stability report](docs/tests/README.md#battery-side.a4) |
+| `solid.tip` | [Solid-result completeness](docs/tests/README.md#battery-solid.tip) |
+| `gate.rs_v2` | [Grouped requirement finding](docs/tests/README.md#battery-gate.rs_v2) |
+
+</details>
+
+[All 178 science definitions, challenges and oracles](docs/tests/science.md) · [Historical battery manifest](evidence/cad_battery/manifest.json) · [Separate automatic proof](evidence/evolve_certifiable/automatic/leaderboard.json)
+
+## What it is
+
+Rust CAD and evaluation core, with a Vite + TypeScript + React evidence studio. The current automatic lane ranks candidates using weighted fitness and sends a selected subset to independent assessment. Other lanes retain their own algorithms and score conventions. [Genome and methodology](docs/paper/sections/03-genome.tex) · [Existing operational guide](docs/EVOLUTION_CERTIFICATION.md).
+
+**Score direction:** retained `W_ULTRALIGHT_v1` is higher-is-better. Native Stage 1, native Stage 2 and the reporting scorer use different proxies/constants; a shared label does not make them interchangeable. The desired future lower-is-better convention remains a separate product direction. This documentation change does not implement a new physical objective. [Full interpretation](docs/paper/sections/05-fitness.tex).
+
+## Retained history and corrections
+
+The following generated panels preserve their original model/requirement scope. Historical screen records do not establish a current qualified design. Certification claims from v1.0.0 remain withdrawn; the separate automatic proof records `champion=null`.
+
+<details>
+<summary>Historical generated records, correction table, figures and release details</summary>
 
 <!-- GEN:HEAD:BEGIN -->
 [![version](https://img.shields.io/badge/version-v2.0.0-ff6f00?style=for-the-badge)](https://github.com/neverhuman/jarambit/releases/tag/v2.0.0)
@@ -45,136 +146,6 @@ RS-karambit-v1: screen PASS · promotion FAIL (seq 0.959 < 1.2) · soft: mass 84
 *Interactive 3D CAD & Gate Scorecard Web Studio (`web/` — Vite + TypeScript + React + Three.js, exported by `./target/release/jarambit export-web-data --out-dir web/public/data`): 3D STL/STEP inspection, measured 16-gate `W_CAD_v2` breakdown, failed `RS-karambit-v2` scorecard, and 23-subject × 18-evaluator CAD battery matrix. Wave 283 is rejected.*
 <!-- GEN:FIGS:END -->
 
-> **SWITCHBACK Rev C.9.3 (rc3, current RC)** — [`designs/switchback/C9.3/`](designs/switchback/C9.3/README.md): B-rep STEP, drawings and FEM plates from the hiking-karambit study; all C.9-study gates V1–V8 pass with ≥ 5 % margin (governor V3 spine SF 1.597, 66.773 g). C.9.3 is a release candidate, not the design of record: the gates are the C.9 study set, not an RS-karambit-v2 verdict from this repo, and nothing is machined or tested.
->
-> SWITCHBACK Rev C.9.2 (rc2, previous RC) — [`designs/switchback/C9.2/`](designs/switchback/C9.2/README.md): release candidate, not the design of record; superseded by C.9.3 (its V6 lateral-pry margin was 1.9 %, below the 5 % promotion rule).
-
-</div>
-
-## What's new in v2.0.0
-
-v2.0.0 is the **option (a)** major release that Jepson Taylor chose on 2026-10-18. It ships the pipeline, the verified per-gate checks and an honest frontier report. **No design qualifies under the legacy 26 hard gates** (16 `W_CAD_v2` gates + 10 `RS-karambit-v2` gates). Winner certification moves to the next release.
-
-- **Weighted objectives replace hard vetoes in selection (`W_ULTRALIGHT_v1`).** The evolution loop now ranks candidates with one smooth global fitness on a 0–100 scale, weighted for an ultralight running knife: carry mass and pocketability 30 %, carry ergonomics and ring comfort 25 %, cutting and B-rep geometry 15 %, structural and safety objectives 30 % (normalized `min(1, achieved/target)`). The weights are defined in `crates/cli/src/auto_evolve.rs` (`ULTRALIGHT_WEIGHTS_V1`). Every raw per-gate metric is still logged against its legacy threshold, and fitness is kept monotone with hall-of-fame elitism.
-- **Best-so-far designs** (`evidence/evolution_waves/2026-10-18_ultralight_v1/`, multi-host waves on xbabe1–3):
-
-  | rank | candidate | mass (2D / 3D) | `W_ULTRALIGHT_v1` | legacy 26-gate tally |
-  |---|---|---:|---:|---|
-  | 1 | `w411c3_r02_p10_c12` | 101.139 g / 101.138 g | 74.21 | 13 / 26 met |
-  | 2 | `w411t3_r01_p10_c11` | 101.108 g / 101.108 g | 74.17 | 13 / 26 met |
-  | 3 | `w501_ul_r01_p14_c01` (Stage-1 screen) | 83.065 g (2D) | 74.02 | 3D assessment pending |
-
-  *These scores reproduce from the committed `W_ULTRALIGHT_v1` scorer. That scorer still uses placeholder values for two inputs (`ring_edge_r_mm` 1.125, `t_0p25` 0.45) instead of the measured values (1.5105 and 0.1937 for `w411c3_r02_p10_c12`), so the scores will change when the scorer is fixed or versioned.*
-
-  The best designs still miss the hunter-class lateral floor (260 N), tip-twist and solid-tip safety factors at 1.82 N·m, human-maximum loads, fatigue (Goodman SF ≈ 0.5) and the sharp-edge law. The full deficit table is in [`docs/RELEASE_PLAN_MAJOR.md` §4](docs/RELEASE_PLAN_MAJOR.md).
-- **All 26 gate checks are built and verified as checks.** Workplan rows closed in this release are labelled "check built + verified — not all-26 design passed". That label does not mean a design passed.
-- **More of the toolchain is Rust.** The version check (`jarambit version-check`) and the CI runner policy (`jarambit check-runner-policy`, `crates/runner-policy`) were ported from Python to Rust. CI runs only on local self-hosted runners (xbabe1–xbabe4). [jankurai](.github/workflows/jankurai.yml) scores the repository on every PR.
-- **Stack policy.** The stack is Rust for compute, CLI and tools, plus Vite + TypeScript + React for UI. Python is allowed only where [`PYTHON_EXCEPTIONS.md`](PYTHON_EXCEPTIONS.md) lists it, and the rest is scheduled for porting in [`PY_TO_RUST_PLAN.md`](PY_TO_RUST_PLAN.md).
-- **Certification-integrity repair (#75–#84).** The v1.0.0 Wave 283 all-hard claims stay withdrawn, and genome-defined CAD now goes through independent scikit-fem P2 + DOLFINx assessment automatically.
-
-Full notes: [`docs/RELEASES.md`](docs/RELEASES.md#v200--2026-10-18-option-a-major-release-weighted-objectives-no-qualified-design).
-
-### Concept render: hand-built design, not pipeline output
-
-<img src="docs/render/media/switchback_c10d_rc6_hero.webp" width="96%" alt="Blender Cycles product film of the hand-built SWITCHBACK Rev C.10d rc6 concept karambit (not produced by the evolution pipeline)"/>
-
-*Our best Blender render is a Cycles product film of **SWITCHBACK Rev C.10d rc6**. This is a **hand-built CAD concept from the render lane (#70)**. It was not produced by `./evolve.sh` / `auto-evolve`: it has no genome CSV, no Stage-2 assessment and no leaderboard entry. It is not certified, not machined and not tested. The science-spin stress field in the film comes from the C.10a rc4 solver mesh and von Mises fields, not from rc6. The on-screen weight badge comes from the render lane's design manifest, which is not committed in this repo. Pipeline: [`ops/render/pro/pro_hero.py`](docs/render/PRO_HERO_PIPELINE.md) / [`jr-film`](docs/render/AUTOFILM.md) (Cycles OptiX, per-shot QA). This looping WebP was cut by [`ops/render/pro/make_readme_hero.sh`](ops/render/pro/make_readme_hero.sh).*
-
-
-**Current committed certification status:** no certified all-16 winner exists. The [automatic #84 proof](evidence/evolve_certifiable/automatic/leaderboard.json) records one completed assessment, zero qualified designs and `champion=null`. The [23-subject ×18-evaluator catalog](evidence/cad_battery/manifest.json) remains **414 cells**, with **0/23 RS-v2 all-hard passes**; the separate automatic assessment does not add a catalog subject. The [paper atlas](docs/ENGINEERING_GATES_AND_EVOLUTION.md#vi-blender-atlas-and-reproducible-publication) renders the committed assessed failure with real gate verdicts and an explicitly empty certified-winner re-render slot. Historical results above retain their original model scope. The #82 withdrawal table records unchanged w283 exports re-certified at `4cd0f994e803`; #84 subsequently changed export construction and did not reissue that catalog.
-
-**History source availability:** the audited main snapshot `0c8d169` contains no `out/w301/leaderboard.json` through `out/w308/leaderboard.json`. Those waves remain outside the published history until their source bytes are committed. Local file hashes alone do not make unavailable inputs reproducible; see the [paper's source-availability note](docs/WHITEPAPER.md#history-source-availability).
-
-## What it is
-
-**`jarambit`** is a Rust continuum-mechanics and quality-diversity (QD) evolutionary design engine for **Ti-6Al-4V (`Gr5`) utility/hiking karambits**, with a Vite + TypeScript + React CAD and scorecard studio (`web/`). Each 128-gene crescent candidate is synthesized into a variable-thickness 2.5D/3D solid (`crates/crescent`) and evaluated across a multi-tier finite-element and CAD verification pipeline:
-- **Multi-tier DKT+CST Kirchhoff plate + membrane FEM** (`828 MPa` joint thin+hot yield envelope across `-10..100 °C`, `0.0625 mm²` strict hunter lateral `≥ 260 N`, hiker lateral `≥ 180 N`, ring pull `≥ 1500 N`, `1.82 N·m` chord twist on body and `4–15 mm` tip submodel, and failure-sequence ratio `seq_ratio ≥ 1.20` under `RS-karambit-v2`).
-- **3D quadratic (`P2`, 10-node tetrahedral) solid-tip submodel** (native Rust `crates/physics/src/solid_tet10.rs` screen; independent certification through `fem_solid/` with scikit-fem and the pinned FEniCSx `dolfinx` v0.9.0 container) plus `side.a4` Winkler grip-foundation + radial/tangential bore-pin sequence and linear buckling.
-- **Automatic evolution (`./evolve.sh` → `jarambit auto-evolve`).** Mutated offspring are screened in Rust, ranked by the `W_ULTRALIGHT_v1` weighted global fitness, and the top-k go through independent Stage-2 assessment. Raw per-gate metrics and failed attempts stay in `leaderboard.json`.
-- **Other search lanes:** crescent MAP-Elites + island GA (`jarambit crescent-evolve`, `JARAMBIT_ALL_GATES=1`, `JARAMBIT_CAD_BATTERY=1`) and the legacy NSGA-II Monte Carlo lane (`crates/evolve`, beam surrogate by default, plate FEM with `JARAMBIT_FEM=1` / `JARAMBIT_FINE=1`).
-
-No design is promoted to manufacturing, and human aesthetic sign-off is pending.
-
-## Architecture
-
-| path | language | role |
-|---|---|---|
-| `crates/cli` (`jarambit`) | Rust | CLI: `auto-evolve`, `score-cad`, `cad-battery`, `crescent-evolve`, `crescent-d1`, `export-web-data`, `version-check`, `check-runner-policy` |
-| `crates/crescent` | Rust | 128-gene crescent genome → 2.5D/3D solid, STEP/STL export and ingest, gates, `G1`, GCI, 18-evaluator CAD battery |
-| `crates/physics` | Rust | DKT+CST plate/membrane FEM, P2 tet10 solid, `side.a4` support model, solvers |
-| `crates/genotype`, `crates/phenotype`, `crates/evolve`, `crates/monte_carlo` | Rust | Legacy genotype/phenotype model, NSGA-II lane and Monte Carlo robustness |
-| `crates/evidence`, `crates/redteam`, `crates/docs` | Rust | Claim/evidence reporting, adversarial checks and documentation helpers |
-| `crates/runner-policy` | Rust | CI runner-policy enforcement (local self-hosted pool only) |
-| `web/` | Vite + TypeScript + React + Three.js | Interactive 3D CAD & gate scorecard studio |
-| `fem_solid/`, CAD (`OCP`) and Blender (`bpy`) render scripts | Python (listed exceptions) | Independent FEM cross-checks, OpenCascade B-rep and Cycles renders: see [`PYTHON_EXCEPTIONS.md`](PYTHON_EXCEPTIONS.md) |
-| remaining `ops/`, `assurance/`, `research/` tooling | Python (scheduled for porting) | Generators and audits listed `PORT_TO_RUST` in [`PY_TO_RUST_PLAN.md`](PY_TO_RUST_PLAN.md) |
-
-
-## Install
-
-### Prerequisites
-- **Rust toolchain** (`1.85.1`, pinned in `rust-toolchain.toml` and selected automatically by `rustup`): builds the `jarambit` CLI and every workspace crate under `crates/`.
-- **Node.js 18+ and npm**: builds and tests the Vite + TypeScript + React studio in `web/`.
-- **Python 3.11+**: needed only for the listed Python exceptions (independent scikit-fem/DOLFINx certification, OpenCascade B-rep, Blender renders) and for legacy generators and audits that have not been ported to Rust yet (`ops/ci/*.py`). Packages: `numpy`, `scipy`, `matplotlib`, `Pillow`, `gmsh`, `scikit-fem`. On a PEP 668 Linux host, use a virtual environment: `python3 -m venv .venv && . .venv/bin/activate && pip install numpy scipy matplotlib pillow gmsh scikit-fem`.
-- **Linux Gmsh runtime**: `libGLU.so.1` is required even for headless use (`sudo apt-get install libglu1-mesa` on Debian/Ubuntu).
-- **Docker** *(optional)*: required only to re-run the containerized FEniCSx `dolfinx` v0.9.0 3D P2 solid-tip cross-check (`fem_solid/cross_check.py`).
-- **Blender 4.x with Cycles** *(optional)*: required only to re-render the hero film (`ops/render/pro/jr-film`, see [`docs/render/AUTOFILM.md`](docs/render/AUTOFILM.md)); `ffmpeg` cuts the README WebP (`ops/render/pro/make_readme_hero.sh FILM.mp4 OUT.webp`).
-
-### Build from source
-```bash
-git clone https://github.com/neverhuman/jarambit.git
-cd jarambit
-cargo build --release
-cargo test --release --workspace
-```
-
-## Quick start
-
-The [genome certification guide](docs/EVOLUTION_CERTIFICATION.md) describes solver setup, automatic top-k assessment, retained raw evidence, and qualification status. The catalog results below are historical model snapshots; live scoring requires compatible content-bound evidence.
-
-Native `score-cad` runs a fresh screen and reports the independent solid check as **unverified**. The full independent re-certification uses `python3 ops/ci/evaluate_cad_candidate.py` with scikit-fem and the pinned DOLFINx container; a native screen cannot certify an all-hard pass. Auto-evolve dispatches the full independent evaluator for its selected candidates.
-
-```bash
-# 0. Evolve, rank by W_ULTRALIGHT_v1 weighted fitness, and automatically run independent top-k assessments
-./evolve.sh --rounds 1 --candidates-per-round 6 --top-k-certify 1 --threads 2 --seed 20261017
-
-# 1. Score ANY knife CAD (.step, .stl, 128-gene .csv genome, or catalog ID) in pure Rust across all 16 hard gates + all 18 CAD battery evaluators + combined fitness (W_CAD_v2 + G1)
-./target/release/jarambit score-cad w283_p14_c01 --out-dir /tmp/jarambit_quickstart_scorecard
-./target/release/jarambit score-cad w283_p10_c02 --out-dir /tmp/jarambit_quickstart_scorecard
-./target/release/jarambit score-cad evidence/cert_integrity/recertified/w283_p14_c01/w283_p14_c01.step \
-  --force-standalone-cad --out-dir /tmp/jarambit_quickstart_scorecard
-
-# 2. Run the 23-subject × 18-evaluator CAD battery in pure Rust (or via ops/ci/cad_battery.py)
-./target/release/jarambit cad-battery --all --analytic pass --gci pass --claims pass --out-dir /tmp/jarambit_quickstart_battery
-./target/release/jarambit crescent-d1 \
-  --genomes w283_p14_c01=evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv \
-  --threads 4 --out /tmp/jarambit_quickstart_d1
-
-# 3. Export web bundle + launch the interactive Vite + TypeScript + React 3D CAD & Gate Scorecard Studio (web/)
-./target/release/jarambit export-web-data --out-dir web/public/data
-npm --prefix web install && npm --prefix web test && npm --prefix web run build
-
-# 4. Run a crescent MAP-Elites + island GA evolutionary search with all-gates + live CAD battery enabled
-JARAMBIT_ALL_GATES=1 JARAMBIT_CAD_BATTERY=1 ./target/release/jarambit crescent-evolve \
-  --gens 2 --pop 12 --islands 2 --threads 8 --seed 2934 \
-  --seeds evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv \
-  --out /tmp/jarambit_quickstart_evolve
-
-# 5. Verify the committed 23-subject × 18-evaluator CAD battery and the 178-group (356-control) scientific assurance suite
-python3 -B -m unittest ops.ci.tests.test_cad_battery -v
-python3 -B ops/ci/science_suite.py inventory
-python3 -B -m unittest discover -s research/science_v1 -p "test_*.py" -v
-
-# 6. Verify deterministic figures and public documentation blocks, then clean up quickstart scratch
-./target/release/jarambit version-check
-./target/release/jarambit check-runner-policy
-python3 -B ops/ci/verify_figures.py
-python3 -B ops/ci/gen_readme.py --check
-python3 -B ops/ci/gen_whitepaper.py --check
-python3 -B ops/ci/gen_status.py --check
-rm -rf /tmp/jarambit_quickstart_scorecard /tmp/jarambit_quickstart_d1 /tmp/jarambit_quickstart_battery /tmp/jarambit_quickstart_evolve
-```
-
 <!-- GEN:RELEASE:BEGIN -->
 ## Release v2.0.0 & Documentation
 
@@ -188,6 +159,38 @@ rm -rf /tmp/jarambit_quickstart_scorecard /tmp/jarambit_quickstart_d1 /tmp/jaram
   - [Master work plan (`docs/WORKPLAN.md`)](docs/WORKPLAN.md) · [Live status (`STATUS.md`)](STATUS.md) · [Wave log (`docs/WAVE_LOG.md`)](docs/WAVE_LOG.md) · [Release notes (`docs/RELEASES.md`)](docs/RELEASES.md) · [Global metric `G1` (`docs/GLOBAL_METRIC.md`)](docs/GLOBAL_METRIC.md) · [Provisional record (`docs/PROVISIONAL.md`)](docs/PROVISIONAL.md) · [Technology map (`TECHNOLOGY_MAP.md`)](TECHNOLOGY_MAP.md).
 <!-- GEN:RELEASE:END -->
 
+</details>
+
+## Install
+
+Build the Rust workspace with the toolchain pinned in `rust-toolchain.toml`. The evidence studio uses Node/npm; independent solver and CAD/render bindings require the runtimes listed in [PYTHON_EXCEPTIONS.md](PYTHON_EXCEPTIONS.md). [Stack migration policy](PY_TO_RUST_PLAN.md).
+
+```sh
+cargo build --release --locked
+```
+
+## Quick start
+
+Start by reading the retained evidence and test explanations. Build the evidence studio to inspect existing records:
+
+```sh
+./target/release/jarambit export-web-data --out-dir web/public/data
+npm --prefix web ci
+npm --prefix web test
+npm --prefix web run build
+```
+
+A native screen is not an independent certification. The older Monte Carlo lane uses a beam surrogate by default; plate FEM is opt-in with `JARAMBIT_FEM=1`. See the [assessment guide](docs/EVOLUTION_CERTIFICATION.md) for runtime scope and the [paper build](docs/paper/README.md#format-and-build) for reproducible documentation artifacts.
+
+## Research and project documentation
+
+[New white paper](docs/paper/README.md) · [Engineering spec](docs/PAPER_AND_README_ENGINEERING_SPEC.md) · [Living technical report](docs/WHITEPAPER.md) · [Detailed engineering reference](docs/ENGINEERING_GATES_AND_EVOLUTION.md) · [Work plan](docs/WORKPLAN.md) · [Status](STATUS.md) · [Release notes](docs/RELEASES.md) · [Technology map](TECHNOLOGY_MAP.md)
+
+The hand-built C.10d concept film and its cross-revision field/weight disclosures remain in [the pre-cleanup README at the audited snapshot](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/README.md#concept-render-hand-built-design-not-pipeline-output). It is separate from evolved, assessed evidence.
+
+<details>
+<summary>Historical market comparison and original source caveats</summary>
+
 <!-- MARKET:CENSUS:BEGIN -->
 ## Market weight comparison
 
@@ -199,3 +202,5 @@ The source-audited [October 13, 2026 census](docs/market/2026-10-13/README.md) c
 
 [Transparent material histogram](docs/market/2026-10-13/figures/weight_histogram.png) · [Every weight by exact grade](docs/market/2026-10-13/figures/weight_by_grade.png) · [Catalog by material](docs/market/2026-10-13/qualified_by_material.csv) · [Missing/conditional candidate queue](docs/market/2026-10-13/review_queue.csv)
 <!-- MARKET:CENSUS:END -->
+
+</details>

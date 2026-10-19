@@ -659,6 +659,10 @@ dependencies = [
 [[package]]
 name = "jarambit-docs"
 version = "0.1.0"
+dependencies = [
+ "serde_json",
+ "sha2",
+]
 
 [[package]]
 name = "jarambit-evidence"

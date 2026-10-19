@@ -1,0 +1,447 @@
+{
+  "schema": "jarambit.explanation_catalog.v1",
+  "source_baseline": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+  "authority": "Explanatory metadata only; existing definitions remain authoritative.",
+  "entries": [
+    {
+      "kind": "G16",
+      "id": "cad_watertight_and_single_solid",
+      "title": "G16-01: Export topology and identity",
+      "source": "ops/ci/verify_genome_export.py",
+      "fields": "cad_valid; geometry identity; solid count",
+      "purpose": "Checks whether the assessed export is bound to the candidate and accepted by the recorded topology checks.",
+      "limit": "A valid mesh shell does not prove a valid B-rep solid. Geometry identity, unit interpretation and mass agreement require their own evidence.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "G16",
+      "id": "geometric_and_holder_gates",
+      "title": "G16-02: Geometry and holder compatibility",
+      "source": "crates/crescent/src/gates.rs",
+      "fields": "geometric gates; holder envelope; rejects",
+      "purpose": "Summarizes representation and holder compatibility observations used by the existing evaluator.",
+      "limit": "Envelope and retention proxies are not measured fit, comfort or retention in use.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "G16",
+      "id": "karambit_ring_and_curved_claw",
+      "title": "G16-03: Shape and archetype",
+      "source": "crates/crescent/src/pheno.rs",
+      "fields": "ring dimensions; curve descriptors",
+      "purpose": "Checks conformity with the represented shape family.",
+      "limit": "A shape-family label does not validate a use case, human fit or structural reliability.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "G16",
+      "id": "c6_aesthetic_floor",
+      "title": "G16-04: Reference-shape comparison",
+      "source": "crates/crescent/src/aesthetic.rs",
+      "fields": "aes_score; aes_pass; aes_fails",
+      "purpose": "Compares decoded geometry with the existing reference and recorded feature checks.",
+      "limit": "Automated reference similarity is not human aesthetic approval or an ergonomic experiment.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "G16",
+      "id": "cert_hiker_180n",
+      "title": "G16-05: Lateral-response comparison",
+      "source": "crates/crescent/src/fem.rs",
+      "fields": "lat_rob_cert_n",
+      "purpose": "Compares the retained plate lateral-response observation with one legacy requirement.",
+      "limit": "The historical use-case name does not establish a validated operational load. Shares an observation with the next predicate.",
+      "control": "crates/physics/tests/solver_parity.rs"
+    },
+    {
+      "kind": "G16",
+      "id": "cert_hunter_260n",
+      "title": "G16-06: Additional lateral comparison",
+      "source": "crates/crescent/src/fem.rs",
+      "fields": "lat_rob_cert_n",
+      "purpose": "Applies a second legacy comparison to the same lateral-response family.",
+      "limit": "Two thresholds on one response are not two independent experiments.",
+      "control": "crates/physics/tests/solver_parity.rs"
+    },
+    {
+      "kind": "G16",
+      "id": "strict_hunter_260n",
+      "title": "G16-07: Refined lateral observation",
+      "source": "crates/cli/src/bench.rs",
+      "fields": "strict_lat_rob_0p0625_n",
+      "purpose": "Reads the refined-discretization lateral observation.",
+      "limit": "Smaller elements alone do not establish convergence or model validity.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "G16",
+      "id": "cert_ring_pull_1500n",
+      "title": "G16-08: Ring-traction response",
+      "source": "crates/crescent/src/fem.rs",
+      "fields": "ring_rob_cert_n",
+      "purpose": "Records the existing static ring-traction comparison.",
+      "limit": "A static model result is not a physical proof test or human-injury prediction.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "G16",
+      "id": "twist_body_1p82nm",
+      "title": "G16-09: Body-region torsion",
+      "source": "crates/crescent/src/fem.rs",
+      "fields": "twist_body_sf",
+      "purpose": "Reads the body-region observable from the existing torsion model.",
+      "limit": "Regional boundaries, stress recovery and model identity affect the observable.",
+      "control": "crates/physics/tests/invariance.rs"
+    },
+    {
+      "kind": "G16",
+      "id": "twist_tip_only_1p82nm",
+      "title": "G16-10: Local plate torsion",
+      "source": "crates/crescent/src/fem.rs",
+      "fields": "twist_tip_sf",
+      "purpose": "Reads the local region of the existing plate torsion model.",
+      "limit": "A plate observable does not establish local three-dimensional stress or fracture.",
+      "control": "crates/physics/tests/invariance.rs"
+    },
+    {
+      "kind": "G16",
+      "id": "twist_tip_submodel_strict_1p82nm",
+      "title": "G16-11: Refined local torsion",
+      "source": "crates/crescent/src/fem.rs",
+      "fields": "twist_tipzone_sf_strict",
+      "purpose": "Records the refined local plate observation.",
+      "limit": "Do not substitute the coarse or whole-body field when this observation is missing.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "G16",
+      "id": "solid_tip_3d_p2_1p82nm",
+      "title": "G16-12: Local quadratic solid result",
+      "source": "fem_solid/tip_solid.py",
+      "fields": "solid_tip_sf_nodal_max",
+      "purpose": "Reads the quadratic tetrahedral local-solid model result.",
+      "limit": "Local-model boundary assumptions and stress recovery remain distinct from whole-part physical validation.",
+      "control": "fem_solid/tests/test_tip_regression.py"
+    },
+    {
+      "kind": "G16",
+      "id": "side_a4_buckling_and_support",
+      "title": "G16-13: Support and stability",
+      "source": "crates/physics/src/side_a4.rs",
+      "fields": "status; buckling_eigenvalue; supported sequence",
+      "purpose": "Reports the alternate compliant-support model and its linear stability observation.",
+      "limit": "Linear eigenvalues and idealized support do not establish postbuckling behavior or calibrated hand contact.",
+      "control": "crates/crescent/src/battery.rs"
+    },
+    {
+      "kind": "G16",
+      "id": "failure_sequence_1p2",
+      "title": "G16-14: Regional yield-order proxy",
+      "source": "crates/crescent/src/fem.rs",
+      "fields": "seq_ratio_cert",
+      "purpose": "Compares regional elastic response limits in the recorded model.",
+      "limit": "An elastic yield-order proxy is not a demonstrated fracture sequence or injury criterion.",
+      "control": "fem_solid/tests/test_field_semantics.py"
+    },
+    {
+      "kind": "G16",
+      "id": "plate_gci_valid_3level",
+      "title": "G16-15: Mesh and observable consistency",
+      "source": "crates/crescent/src/gci.rs",
+      "fields": "sequence_valid; observable_valid",
+      "purpose": "Checks whether mesh sequence and observable identity support the stated convergence comparison.",
+      "limit": "Valid metadata does not alone admit an asymptotic discretization-error estimate.",
+      "control": "fem_solid/tests/test_gci_evidence.py"
+    },
+    {
+      "kind": "G16",
+      "id": "dolfinx_cross_check_2pct",
+      "title": "G16-16: Separate-solver consistency",
+      "source": "fem_solid/cross_check.py",
+      "fields": "within_2pct; relative error; mesh identity",
+      "purpose": "Compares separately attributed solver outputs for the matched discretized problem.",
+      "limit": "Solvers sharing geometry, boundary conditions or constitutive assumptions can agree and share error.",
+      "control": "fem_solid/tests/test_dolfinx_verification_record.py"
+    },
+    {
+      "kind": "RSV2",
+      "id": "aesthetic_and_geometric",
+      "title": "RSV2-01: Shape and geometry",
+      "source": "crates/cli/src/bench.rs",
+      "fields": "aesthetic and geometry findings",
+      "purpose": "Combines existing shape and geometric observations.",
+      "limit": "Overlaps G16-02 through G16-04; neither comfort nor aesthetic approval is measured.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "RSV2",
+      "id": "floors_828_joint",
+      "title": "RSV2-02: Combined numerical response",
+      "source": "crates/cli/src/bench.rs",
+      "fields": "joint response observations",
+      "purpose": "Combines the existing response comparisons under the recorded material envelope.",
+      "limit": "Shares plate observations with legacy diagnostics; not a separate solve for each Boolean.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "RSV2",
+      "id": "twist_floor_body_and_tipsub_strict",
+      "title": "RSV2-03: Body and local torsion",
+      "source": "crates/cli/src/bench.rs",
+      "fields": "body and strict local response",
+      "purpose": "Groups body and refined local torsion comparisons.",
+      "limit": "Must preserve the two regional observables and their source identities.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "RSV2",
+      "id": "solid_tip_sf",
+      "title": "RSV2-04: Local solid response",
+      "source": "crates/cli/src/bench.rs",
+      "fields": "solid-tip observation",
+      "purpose": "Groups the local-solid comparison.",
+      "limit": "Completeness, verification and favorable finding are separate facts.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "RSV2",
+      "id": "strict_hunter_lateral",
+      "title": "RSV2-05: Refined lateral response",
+      "source": "crates/cli/src/bench.rs",
+      "fields": "refined lateral observation",
+      "purpose": "Groups the refined lateral comparison.",
+      "limit": "Reuses G16-07; does not add an independent experiment.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "RSV2",
+      "id": "seq_hard",
+      "title": "RSV2-06: Regional yield order",
+      "source": "crates/cli/src/bench.rs",
+      "fields": "regional yield-order proxy",
+      "purpose": "Groups the recorded sequence comparison.",
+      "limit": "Reuses G16-14 and its elastic-model limitations.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "RSV2",
+      "id": "human_max",
+      "title": "RSV2-07: Additional response and geometry",
+      "source": "crates/cli/src/bench.rs",
+      "fields": "additional response and bore observations",
+      "purpose": "Collects additional response and geometry checks defined in the existing requirement implementation.",
+      "limit": "The name is a legacy label, not a validated bound on human behavior or safety.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "RSV2",
+      "id": "fatigue",
+      "title": "RSV2-08: Fatigue-model assessment",
+      "source": "crates/cli/src/bench.rs",
+      "fields": "fat_sf; load-spectrum assumptions",
+      "purpose": "Groups the existing fatigue-model comparison.",
+      "limit": "Mean-stress and material assumptions require process and surface evidence; no service-life experiment is established.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "RSV2",
+      "id": "gate_s_sharp_law",
+      "title": "RSV2-09: Exported edge measurements",
+      "source": "crates/cli/src/bench.rs",
+      "fields": "exported geometry observations",
+      "purpose": "Checks recorded exported-geometry features.",
+      "limit": "Geometry measurements do not establish cutting effectiveness or material durability.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "RSV2",
+      "id": "gate_s_tip_point_brep",
+      "title": "RSV2-10: Exported point-profile measurements",
+      "source": "crates/cli/src/bench.rs",
+      "fields": "exported profile observations",
+      "purpose": "Checks the exported local profile and its recorded monotonicity.",
+      "limit": "A nominal profile is distinct from manufactured dimensions, metrology and physical performance.",
+      "control": "crates/crescent/src/tests.rs"
+    },
+    {
+      "kind": "battery",
+      "id": "build.analytic",
+      "title": "Analytic software controls",
+      "source": "crates/physics/tests/invariance.rs",
+      "fields": "software_contract",
+      "purpose": "References shared analytic/reference controls.",
+      "limit": "Repeated per-subject rows do not establish independent executions.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "build.gci_contracts",
+      "title": "Convergence arithmetic controls",
+      "source": "fem_solid/tests/test_gci.py",
+      "fields": "software_contract",
+      "purpose": "References checks of convergence arithmetic and refusal behavior.",
+      "limit": "A tested formula does not mean this candidate has a converged solution.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "build.claims",
+      "title": "Claim-handling controls",
+      "source": "ops/ci/check_claims.py",
+      "fields": "software_contract",
+      "purpose": "References reporting and evidence-admission controls.",
+      "limit": "A software result does not certify candidate mechanics or physical safety.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "build.dolfinx",
+      "title": "Separate-solver capability",
+      "source": "evidence/cad_battery/dolfinx_cross_check.json",
+      "fields": "shared software/evidence record",
+      "purpose": "References retained solver-comparison capability evidence.",
+      "limit": "Shared evidence is not a fresh candidate-specific cross-check.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "geom.unit",
+      "title": "Export units",
+      "source": "ops/ci/verify_genome_export.py",
+      "fields": "geometry binding",
+      "purpose": "Records whether export unit identity is established.",
+      "limit": "All 23 historical cells are blocked; do not infer units from a plausible size.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "geom.one_solid",
+      "title": "Solid topology",
+      "source": "ops/ci/verify_genome_export.py",
+      "fields": "geometry binding",
+      "purpose": "Records whether the relevant single-solid topology is established.",
+      "limit": "All 23 historical cells are blocked; a current implementation does not repair an old missing receipt.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "geom.mass",
+      "title": "Mass observation",
+      "source": "crates/crescent/src/battery.rs",
+      "fields": "mass value and origin",
+      "purpose": "Records retained mass availability.",
+      "limit": "The 19 genome entries use plate/certification mass, not a STEP-versus-raster consistency test.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "geom.pin",
+      "title": "Geometry identity",
+      "source": "crates/crescent/src/cad_ingest.rs",
+      "fields": "geometry_sha256",
+      "purpose": "Records binding of the observation to the intended CAD.",
+      "limit": "All 23 historical cells are blocked; filenames alone cannot establish identity.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "plate.loads",
+      "title": "Plate response",
+      "source": "crates/crescent/src/fem.rs",
+      "fields": "plate response result",
+      "purpose": "Reports the stored plate-response comparison.",
+      "limit": "Historical results retain their original model and source scope.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "plate.seq",
+      "title": "Sequence proxy",
+      "source": "crates/crescent/src/fem.rs",
+      "fields": "regional response ratio",
+      "purpose": "Reports the retained regional yield-order comparison.",
+      "limit": "An elastic ratio does not establish actual fracture or injury sequence.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "plate.l7",
+      "title": "Fatigue screen",
+      "source": "crates/crescent/src/fem.rs",
+      "fields": "fatigue result",
+      "purpose": "Reports the existing fatigue-screen assessment.",
+      "limit": "Not a measured lifetime; material, surface, spectrum and uncertainty assumptions remain.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "plate.gci",
+      "title": "Candidate mesh study",
+      "source": "fem_solid/gci.py",
+      "fields": "candidate convergence status",
+      "purpose": "Reports the stored convergence-evidence finding.",
+      "limit": "Observable and mesh identity must match; plateau or metadata success is not automatic convergence.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "side.a1",
+      "title": "Legacy side-report record A1",
+      "source": "crates/crescent/examples/g3_side_report.rs",
+      "fields": "shared side report",
+      "purpose": "References the common retained side report.",
+      "limit": "No distinct executed test or separate observable is established by this row.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "side.a2",
+      "title": "Legacy side-report record A2",
+      "source": "crates/crescent/examples/g3_side_report.rs",
+      "fields": "shared side report",
+      "purpose": "References the common retained side report.",
+      "limit": "No distinct executed test or separate observable is established by this row.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "side.a3",
+      "title": "Legacy side-report record A3",
+      "source": "crates/crescent/examples/g3_side_report.rs",
+      "fields": "shared side report",
+      "purpose": "References the common retained side report.",
+      "limit": "No distinct executed test or separate observable is established by this row.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "side.a4",
+      "title": "Support and stability report",
+      "source": "ops/ci/side_a4.py",
+      "fields": "alternate-support record",
+      "purpose": "Records the alternate-support and stability report.",
+      "limit": "A complete report does not calibrate support assumptions against human contact.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "solid.tip",
+      "title": "Solid-result completeness",
+      "source": "fem_solid/tip_solid.py",
+      "fields": "result completeness",
+      "purpose": "Reports whether the retained solid-result record is complete.",
+      "limit": "The 20 stored passes mean complete records, not 20 favorable strength findings.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    },
+    {
+      "kind": "battery",
+      "id": "gate.rs_v2",
+      "title": "Grouped requirement finding",
+      "source": "crates/cli/src/bench.rs",
+      "fields": "all_hard",
+      "purpose": "Reports the combined historical grouped requirement outcome.",
+      "limit": "Nineteen failures and four blocked records are not 23 completed failures.",
+      "control": "ops/ci/tests/test_cad_battery.py"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+\section{Evolutionary Process and Population Evidence}
+\subsection{Existing Lanes and Stages}
+Jarambit contains several evolutionary paths. The automatic lane constructs offspring, performs native screening, ranks candidates, selects a subset for more expensive independent assessment, and retains reports. The crescent quality-diversity lane and the older NSGA-II/Monte Carlo lane have their own representations and evaluation conventions. They should be described by their actual entry points and source revisions rather than folded into a single generic algorithm.
+
+The current automatic implementation is in \src{crates/cli/src/auto_evolve.rs}{auto\_evolve.rs}. Its native Stage 1 and Stage 2 scoring functions differ from the separate reporting scorer. Stage 1 supplies a cheaper screen. Stage 2 invokes the independent assessment path for selected candidates. Selection and qualification remain conceptually distinct: a candidate may be worth retaining for research while lacking the observations or findings required for qualification.
+
+The v2 release describes weighted, non-veto ranking in the selection path. This statement should not be extended into a claim that every possible genome reaches every evaluator, that invalid computations are acceptable evidence, or that all historical search lanes are veto-free. Source paths still determine constructibility, runtime availability, and which observations exist. Evidence validity cannot be inferred from a policy about selection preference.
+
+\subsection{Four Different Collections}
+A birth collection records proposed or evaluated candidates. A survivor collection records candidates retained after selection. An archive records selected representatives under an archive policy. An independent-assessment collection records candidates admitted to an expensive evaluation stage. These sets can overlap while having different denominators and sampling biases. A figure needs to name which set it uses.
+
+The selected w411c3 retained leaderboard contains six assessed entries. That is not the full birth population. Its fitness curve contains three generation records, but the referenced round-screen files are not retained in the same cohort. Consequently, this cohort supports the reported round-best and best-so-far trajectory, not a reconstructed distribution of all births or a population median.
+
+By contrast, the historical w282 \code{all_evals.json} contains \BirthCount\ evaluated births with explicit identifiers and generation fields. The population figure uses every retained record, including rejected candidates, and summarizes the native historical \code{fit} field. It is not a plot of \code{W_ULTRALIGHT_v1}. Keeping these datasets separate makes the evidence more informative than an apparently smoother but semantically mixed history.
+
+\begin{figure*}[t]
+\centering\includegraphics[width=\textwidth]{population.pdf}
+\caption{Historical w282 population behavior from all \BirthCount\ retained evaluated births. Dots show every recorded historical fitness value; lines show generation median and maximum. The vertical coordinate uses asinh(fit), with tick labels in original values, to show both central behavior and extreme negative records. These are evaluated births, not a survivor population, and the metric differs from the weighted cohort on page 1. The full point source, generation counts, reductions, and input hash are retained in the generated publication summary and manifest.}
+\label{fig:population}
+\end{figure*}
+
+\subsection{Best-So-Far Is an Archive Property}
+For a fixed higher-is-better metric, let $r_g$ be the best observed value in generation $g$. A retained Hall of Fame reports
+\begin{equation}
+ H_g=\max(H_{g-1},r_g).
+\end{equation}
+This recurrence guarantees a non-decreasing stored envelope if the archive is preserved and the metric meaning is unchanged. It does not guarantee that the next generation improves, that the median improves, that a physical constraint is met, or that the search approaches a global optimum. A plateau can coexist with continued exploration or with a stalled representation.
+
+For a lower-is-better objective, the corresponding envelope uses a minimum. Merely reversing the display direction of a score does not change the underlying tradeoffs. More importantly, changing an objective, decoder, model, or measurement convention breaks the simple interpretation of one continuous envelope. A version boundary belongs on the plot or requires a separate panel.
+
+\subsection{Population Statistics and Missingness}
+The generation median is computed from sorted finite retained observations; for an even sample count, it is the average of the two central values. The generation maximum is computed within the same generation membership. No interpolation supplies absent births, and no assumed zero replaces a missing score. Unique birth identifiers are checked before the reduction.
+
+Fitness spread is not the same as geometric diversity. A population can contain many shapes with similar scores or many distinct scores from nearly identical shapes. The historical repository also retains genotype and descriptor analyses, but those measures depend on normalization and the active gene set. The current paper's plot makes the narrower statement that the recorded scalar distribution changes over generations. It does not use that distribution as proof of representation coverage.
+
+\subsection{What Scale Would Need to Show}
+Increasing compute can increase the number of candidate evaluations, but the benefit depends on evaluator cost, representation, caching, scheduling, and the fraction of useful observations. This paper has no controlled compute-scaling experiment. It therefore reports no speedup, evaluations-per-hour result, or evidence that massive compute will reliably drive the score toward an ideal.
+
+A credible future scaling study would distinguish proposal count, successful numerical evaluations, independent assessments, and useful retained alternatives, while holding the scientific question and evidence rules fixed. Until such measurements exist, scale remains a system ambition. The immediate methodological requirement is that larger runs preserve the provenance and failure information needed to understand what their increased activity actually produced.

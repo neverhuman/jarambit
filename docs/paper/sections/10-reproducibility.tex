@@ -1,0 +1,30 @@
+\section{Reproducibility and Publication Provenance}
+\subsection{Four Different Reproduction Claims}
+Reconstructing a chart from saved JSON is not the same as rerunning a numerical solver. Rerunning a solver is not the same as validating its physical model. Reproducing a software fixture is not the same as reproducing a manufactured specimen. A paper should state which activity was completed and which outputs were compared.
+
+This manuscript's quantitative projections are reconstructed from retained files. The new Rust documentation module reads a declared battery manifest and its members, the frozen science catalog, the selected weighted curve, and the historical birth dataset. It performs identity and consistency checks and writes deterministic explanatory artifacts. It does not invoke CAD synthesis, mechanics, evolution, qualification or a physical experiment.
+
+\subsection{Input and Output Identities}
+The generated manifest records SHA-256 identities of the input files and output projections. The baseline identifies the source snapshot studied. Original historical records retain their own source commits and freshness flags; those identities are not replaced by the manuscript's baseline. A publication revision says where the bytes were retrieved, while an original execution revision says something about how they were produced.
+
+The figure inputs include exact JSON field selectors and named reductions. The weighted curve uses the retained generation records. The population plot uses each birth's historical \code{fit} and generation. The battery summary selects cells by evaluator ID, never display order. The science index preserves all frozen definitions, not only those with favorable status. These choices make the projection inspectable without claiming that hashes establish physical truth.
+
+\subsection{Determinism and Check Mode}
+The artifact generator has a write mode and a read-only freshness mode. Generation has no clock or network input. Check mode computes the expected projection and compares bytes without rewriting files. Duplicate identities, missing evaluator cells, wrong metric regime, invalid numbers, path escapes and inconsistent Hall-of-Fame recurrences cause errors. Valid numeric zero remains distinct from missing or Boolean data.
+
+The PDF build is a separate publication operation. It uses IEEEtran with a disclosed custom opening page and records tool versions and source/output hashes under the lane-local target directory. This target is not presented as reproducing the repository's older pinned Pandoc/LaTeX PDFs. The manuscript sources and generated quantitative inputs are the primary review artifacts; the PDF is a rendered derivative.
+
+\subsection{Unavailable Sources}
+The weighted cohort does not retain the best candidate's CAD geometry or the referenced round-screen populations. The paper therefore does not produce a candidate-specific winner render or infer a weighted population distribution. Historical wave intervals lacking original bytes remain unavailable. A remembered value, an absolute path on another host, a summary table or a hash alone cannot recreate missing input data.
+
+Source availability should be treated as a property of each claim. A plot can be reproducible from retained observations while the original solver execution is not locally replayed. A numerical record can be retained while the corresponding full birth history is absent. Reporting these states explicitly helps readers decide which conclusions they can independently reconstruct and which require additional artifacts.
+
+\subsection{Claim Register and Human Review}
+The paper's quantitative claims are deliberately narrow: fixed-corpus counts, stored weighted scores, recorded generation values and historical population summaries. Prospective claims about agents, manufacturing or scale are labeled as future work. The red-team receipt examines whether the prose crosses those boundaries. That receipt is an author review, not independent peer review or the repository's required bot approval.
+
+Human authorship and approval remain pending for publication. AI assistance was used to organize the manuscript, prepare prose, implement publication projections and conduct the documented author adversarial review. Responsible human authors must check the content, references, contribution statement and venue-specific disclosure before submission. The manuscript claims no DOI, acceptance, affiliation, award or reproducibility badge.
+
+\subsection{How an Independent Reader Can Start}
+An independent reader can first rebuild the documentation projections, compare their hashes, inspect the generated summary, and verify the atlas links. Next, the reader can examine selected original records and their provenance. Only then should a separate effort attempt solver replay with the required scientific runtime and exact inputs. Physical validation would be another study with specimen identity and measurement uncertainty.
+
+This staged reading path makes the cost of scrutiny proportional to the claim being checked. A reviewer should not need to run a large mechanics workload merely to discover what a displayed pass label means. Conversely, a successful documentation build should not be offered as evidence that the underlying physics has been verified anew.
