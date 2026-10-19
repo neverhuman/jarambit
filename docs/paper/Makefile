@@ -11,10 +11,11 @@ all: artifacts
 	rsvg-convert -w 3600 -o $(OUT)/verification.png generated/verification.svg
 	rsvg-convert -w 3600 -o $(OUT)/assessment.png generated/assessment.svg
 	rsvg-convert -w 3600 -o $(OUT)/battery-matrix.png generated/battery-matrix.svg
+	rsvg-convert -w 3600 -o $(OUT)/lineage.png generated/lineage.svg
 	SOURCE_DATE_EPOCH=1792365255 FORCE_SOURCE_DATE=1 TZ=UTC lualatex -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) main.tex > $(OUT)/build-pass1.log
 	SOURCE_DATE_EPOCH=1792365255 FORCE_SOURCE_DATE=1 TZ=UTC lualatex -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) main.tex > $(OUT)/build-pass2.log
 	shasum -a 256 main.tex references.tex sections/*.tex generated/* *-inputs.v1.json figures/v2/* > $(OUT)/SOURCE_SHA256SUMS
-	shasum -a 256 $(OUT)/main.pdf $(OUT)/fitness.png $(OUT)/population.png $(OUT)/cover-evolution.png $(OUT)/plate-fields.png $(OUT)/verification.png $(OUT)/assessment.png $(OUT)/battery-matrix.png > $(OUT)/OUTPUT_SHA256SUMS
+	shasum -a 256 $(OUT)/main.pdf $(OUT)/fitness.png $(OUT)/population.png $(OUT)/cover-evolution.png $(OUT)/plate-fields.png $(OUT)/verification.png $(OUT)/assessment.png $(OUT)/battery-matrix.png $(OUT)/lineage.png > $(OUT)/OUTPUT_SHA256SUMS
 	lualatex --version > $(OUT)/toolchain.txt
 	rsvg-convert --version >> $(OUT)/toolchain.txt
 	kpsewhich IEEEtran.cls >> $(OUT)/toolchain.txt

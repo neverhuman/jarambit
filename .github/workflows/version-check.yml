@@ -284,6 +284,7 @@ jobs:
             target/ieee/paper/verification.png
             target/ieee/paper/assessment.png
             target/ieee/paper/battery-matrix.png
+            target/ieee/paper/lineage.png
             target/ieee/paper/fitness.png
             target/ieee/paper/population.png
             target/ieee/paper/cover-evolution.png
@@ -296,6 +297,7 @@ jobs:
             docs/paper/verification-inputs.v1.json
             docs/paper/assessment-inputs.v1.json
             docs/paper/battery-inputs.v1.json
+            docs/paper/lineage-inputs.v1.json
             docs/paper/figures/v2/hero_dark.manifest.json
             docs/paper/figures/v2/hero_dark.scene.json
             docs/paper/generated/manifest.json
@@ -311,6 +313,9 @@ jobs:
             docs/paper/generated/battery-matrix.json
             docs/paper/generated/battery-matrix.svg
             docs/paper/generated/battery-matrix.svg.manifest.json
+            docs/paper/generated/lineage.json
+            docs/paper/generated/lineage.svg
+            docs/paper/generated/lineage.svg.manifest.json
           if-no-files-found: error
       - name: Upload publication PDFs and SHA-256 manifest artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

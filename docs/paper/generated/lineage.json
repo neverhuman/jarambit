@@ -1,0 +1,162 @@
+{
+  "assessment_join": {
+    "array": "strict_certification",
+    "boolean_conversion": "original true/false strings",
+    "generation_string": "9",
+    "id_string": "1095",
+    "source": "evidence/rs_v2/w282_ultrarunner/search_summary.json"
+  },
+  "edges": [
+    {
+      "child": 413,
+      "parent": 245,
+      "parent_ordinal": 0,
+      "source_pointer": "/413/parents/0"
+    },
+    {
+      "child": 526,
+      "parent": 413,
+      "parent_ordinal": 0,
+      "source_pointer": "/526/parents/0"
+    },
+    {
+      "child": 526,
+      "parent": 392,
+      "parent_ordinal": 1,
+      "source_pointer": "/526/parents/1"
+    },
+    {
+      "child": 1095,
+      "parent": 413,
+      "parent_ordinal": 0,
+      "source_pointer": "/1095/parents/0"
+    },
+    {
+      "child": 1095,
+      "parent": 526,
+      "parent_ordinal": 1,
+      "source_pointer": "/1095/parents/1"
+    }
+  ],
+  "focal_historical_assessment": {
+    "cert_pass_all": false,
+    "seq_ok": false,
+    "strict_ok": true
+  },
+  "focal_id": 1095,
+  "layout_semantics": "Illustrative node placement; spacing does not encode generation, elapsed time or fitness",
+  "max_parent_hops": 2,
+  "nodes": [
+    {
+      "fem_status": "complete",
+      "fit": 1.15388,
+      "generation": 2,
+      "id": 245,
+      "layout": {
+        "x": 20,
+        "y": 90
+      },
+      "legal": true,
+      "minimum_parent_hops": 2,
+      "operator": "archive_mutate",
+      "operator_version": 1,
+      "parents": [
+        174
+      ],
+      "source_pointer": "/245"
+    },
+    {
+      "fem_status": "complete",
+      "fit": 1.12512,
+      "generation": 3,
+      "id": 392,
+      "layout": {
+        "x": 20,
+        "y": 260
+      },
+      "legal": true,
+      "minimum_parent_hops": 2,
+      "operator": "mutate",
+      "operator_version": 1,
+      "parents": [
+        299
+      ],
+      "source_pointer": "/392"
+    },
+    {
+      "fem_status": "complete",
+      "fit": 1.15296,
+      "generation": 3,
+      "id": 413,
+      "layout": {
+        "x": 310,
+        "y": 90
+      },
+      "legal": true,
+      "minimum_parent_hops": 1,
+      "operator": "archive_mutate",
+      "operator_version": 1,
+      "parents": [
+        245
+      ],
+      "source_pointer": "/413"
+    },
+    {
+      "fem_status": "complete",
+      "fit": 1.15563,
+      "generation": 4,
+      "id": 526,
+      "layout": {
+        "x": 600,
+        "y": 260
+      },
+      "legal": true,
+      "minimum_parent_hops": 1,
+      "operator": "crossover_mutate",
+      "operator_version": 1,
+      "parents": [
+        413,
+        392
+      ],
+      "source_pointer": "/526"
+    },
+    {
+      "fem_status": "complete",
+      "fit": 1.15727,
+      "generation": 9,
+      "id": 1095,
+      "layout": {
+        "x": 890,
+        "y": 175
+      },
+      "legal": true,
+      "minimum_parent_hops": 0,
+      "operator": "crossover_mutate",
+      "operator_version": 1,
+      "parents": [
+        413,
+        526
+      ],
+      "source_pointer": "/1095"
+    }
+  ],
+  "omitted_parent_edges": [
+    {
+      "child": 245,
+      "parent": 174,
+      "parent_source_retained": true,
+      "reason": "outside displayed parent-hop window",
+      "source_pointer": "/245/parents/0"
+    },
+    {
+      "child": 392,
+      "parent": 299,
+      "parent_source_retained": true,
+      "reason": "outside displayed parent-hop window",
+      "source_pointer": "/392/parents/0"
+    }
+  ],
+  "schema": "jarambit.recorded_lineage_projection.v1",
+  "scope": "Recorded parent links, not inferred inheritance, a full ancestry, a fixed physical-objective trajectory or current qualification",
+  "source": "evidence/rs_v2/w282_ultrarunner/search/all_evals.json"
+}

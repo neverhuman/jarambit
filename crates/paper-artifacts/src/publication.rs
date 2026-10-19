@@ -776,6 +776,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
                 ("G16", "side_a4_buckling_and_support") | ("battery", "side.a4") => Some(("assessment", "A: support-model schematic and archived scalars; eigen-operator verification remains open")),
                 ("RSV2", "fatigue") | ("battery", "plate.l7") => Some(("assessment", "B: original fatigue-model scalar; no fatigue field or measured lifetime")),
                 ("RSV2", "human_max") => Some(("assessment", "B: separate recorded response factors; in-plane value remains record-only")),
+                ("RSV2", "floors_828_joint") => Some(("plate-fields", "A--C: shared retained envelope and unit-response families; the original grouped flag is separate from these fields")),
                 _ => None,
             };
             if let Some((figure, panel)) = visual {
@@ -861,6 +862,32 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
             "retained assessment does not support the manuscript's historical finding".into(),
         );
     }
+    let lineage_contract = read(&root, "docs/paper/lineage-inputs.v1.json", &mut inputs)?;
+    if lineage_contract["schema"] != "jarambit.lineage_inputs.v1" {
+        return Err("wrong lineage figure contract".into());
+    }
+    for (key, expected_path) in [
+        ("population", POP),
+        (
+            "summary",
+            "evidence/rs_v2/w282_ultrarunner/search_summary.json",
+        ),
+    ] {
+        if lineage_contract[key]["path"] != expected_path
+            || lineage_contract[key]["sha256"].as_str() != Some(inputs[expected_path].as_str())
+        {
+            return Err("lineage source binding differs".into());
+        }
+    }
+    let lineage = crate::lineage::project(births, &history, &lineage_contract)?;
+    out.insert(
+        "docs/paper/generated/lineage.svg".into(),
+        crate::lineage::svg(&lineage)?,
+    );
+    out.insert(
+        "docs/paper/generated/lineage.json".into(),
+        serde_json::to_string_pretty(&lineage)? + "\n",
+    );
     admit_cover_render(&root, &mut inputs)?;
     let field_contract = read(&root, "docs/paper/field-inputs.v1.json", &mut inputs)?;
     let assessment_manifest = read(
@@ -1232,6 +1259,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "crates/paper-artifacts/src/lib.rs",
         "crates/paper-artifacts/src/validation.rs",
         "crates/paper-artifacts/src/historical.rs",
+        "crates/paper-artifacts/src/lineage.rs",
         "crates/paper-artifacts/src/plate.rs",
         "crates/paper-artifacts/src/verification.rs",
         "crates/paper-artifacts/src/assessment.rs",
@@ -1257,6 +1285,23 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     }
     table.push_str(&format!("\\midrule\nTotal & {} & {} & {}\\\\\\bottomrule\n\\end{{tabular}}\n\\label{{tab:battery}}\n\\end{{table}}\n",counts.get("pass").unwrap_or(&0),counts.get("fail").unwrap_or(&0),counts.get("blocked").unwrap_or(&0)));
     out.insert("docs/paper/generated/battery.tex".into(), table);
+    let mut lineage_inputs = BTreeMap::new();
+    for path in [
+        "docs/paper/lineage-inputs.v1.json",
+        POP,
+        "evidence/rs_v2/w282_ultrarunner/manifest.json",
+        "evidence/rs_v2/w282_ultrarunner/provenance.json",
+        "evidence/rs_v2/w282_ultrarunner/search_summary.json",
+        "crates/paper-artifacts/src/lineage.rs",
+        "crates/paper-artifacts/src/historical.rs",
+    ] {
+        lineage_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    let lineage_manifest = json!({"schema":1,"figure":"docs/paper/generated/lineage.svg","figure_sha256":digest(out["docs/paper/generated/lineage.svg"].as_bytes()),"inputs":lineage_inputs,"script":"crates/paper-artifacts/src/lineage.rs","projection_receipt":"docs/paper/generated/lineage.json","scope":"five saved birth records and five original parent-ID links; two-hop cutoff, no inferred ancestry or geometry join"});
+    out.insert(
+        "docs/paper/generated/lineage.svg.manifest.json".into(),
+        serde_json::to_string_pretty(&lineage_manifest)? + "\n",
+    );
     let mut battery_figure_inputs = BTreeMap::new();
     for path in [
         "docs/paper/battery-inputs.v1.json",
@@ -1334,6 +1379,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         .collect::<BTreeMap<_, _>>();
     let manifest = json!({"schema":"jarambit.publication_manifest.v1","baseline":BASE,"inputs":inputs,"outputs":outputs,"generation":"cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts","scope":"Documentation only; source hashes establish identity, not physical truth",
     "figures": {
+        "lineage.svg":{"contract":"docs/paper/lineage-inputs.v1.json","projection_receipt":"docs/paper/generated/lineage.json","selectors":["/*/id","/*/gen","/*/fit","/*/parents","/*/op","/*/op_version","/*/fem_status","/*/legal"],"membership":"two recorded parent hops from highest historical stored fit, with original parent-list order","scope":"layout does not encode elapsed time or fitness; no inferred inheritance or best-geometry identity"},
         "battery-matrix.svg":{"contract":"docs/paper/battery-inputs.v1.json","projection_receipt":"docs/paper/generated/battery-matrix.json","membership":"manifest subjects and case_ids; exact-ID cell joins","selectors":["/subject","/role","/cases/*/id","/cases/*/status","/cases/*/fresh_this_lane","/cases/*/kind","/cases/*/evidence_path"],"scope":"stored historical labels only; not a FEM heatmap, new assessment or physical reliability estimate"},
         "assessment.svg":{"contract":"docs/paper/assessment-inputs.v1.json","projection_receipt":"docs/paper/generated/assessment.json","selectors":["/buckling_eigenvalue","/supported_seq_ratio","/fat_sf","/hm_*_sf","/strict_lat_rob_0p0625_n","/twist_tipzone_sf_strict","/weighted_cad_score/gates","/gates"],"scope":"saved scalars and overlapping status flags; no solver or new physical evidence","support_audit":"eigsh operator symmetry/eigenpair residual unresolved; no eigenvector retained"},
         "verification.svg":{"contract":"docs/paper/verification-inputs.v1.json","projection_receipt":"docs/paper/generated/verification.json","mesh_selectors":["/levels_fine_to_coarse","/seq_ratio_gci","/sf_hunter_gci"],"solver_selectors":["/solid/SF_solid_nodal_avg","/solid/SF_solid_nodal_max","/SF_nodal_avg","/SF_nodal_max"],"profile_selector":"/profile_MPa","scope":"retained observations; separate recovery definitions and original ROI; no new solve, estimate, interpolation or pointwise difference"},

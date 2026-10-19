@@ -318,6 +318,8 @@ Combines the existing response comparisons under the recorded material envelope.
 
 **Retained example:** [historical grouped result](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json). Use exact group IDs from `rs_v2_eval` in the implementation; do not infer group identity from table position. [Requirement namespace](../../requirements/RS-karambit-v2.toml).
 
+**Separate assessed-example visual:** [A--C: shared retained envelope and unit-response families; the original grouped flag is separate from these fields](../paper/generated/plate-fields.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/plate-fields.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="rsv2-twist_floor_body_and_tipsub_strict"></a>
 
 ### RSV2-03: Body and local torsion
