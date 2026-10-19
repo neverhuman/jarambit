@@ -1,0 +1,133 @@
+{
+  "schema": "jarambit.publication_scene.v1",
+  "subject": "cert_pipeline_r01_p14_c02",
+  "stl_sha256": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022",
+  "import_transform": {
+    "uniform_scale": 0.001,
+    "translation": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ]
+  },
+  "vertices": 44994,
+  "triangles": 90000,
+  "imported_vertices_before_sha256": "3937262fa229d7d2da143232c9a5df820c2bed9341bfdc4745b7f3cfbb49988e",
+  "imported_vertices_after_sha256": "3937262fa229d7d2da143232c9a5df820c2bed9341bfdc4745b7f3cfbb49988e",
+  "faces_before_sha256": "382cf1447b489343c61d3f1c36c083a8835babe46c21b9aee55fae5f04449cba",
+  "faces_after_sha256": "382cf1447b489343c61d3f1c36c083a8835babe46c21b9aee55fae5f04449cba",
+  "mesh_modifiers": [],
+  "geometry_changed": false,
+  "shading": "original flat face normals",
+  "blender": "4.5.3 LTS",
+  "build_hash": "67807e1800cc",
+  "engine": "Cycles CPU",
+  "threads": 4,
+  "samples": 256,
+  "seed": 42,
+  "denoise": true,
+  "resolution": [
+    3600,
+    2800
+  ],
+  "encoding": "lossless RGB PNG, 8 bit",
+  "view_transform": "AgX",
+  "look": "None",
+  "display_device": "sRGB",
+  "exposure": 0,
+  "gamma": 1,
+  "recipe": "dark",
+  "style": {
+    "floor": [
+      0.008,
+      0.014,
+      0.022
+    ],
+    "world": 0.12,
+    "roughness": 0.32
+  },
+  "camera": {
+    "type": "ORTHO",
+    "location": [
+      0.10206425189971924,
+      -0.17790919542312622,
+      0.46000000834465027
+    ],
+    "rotation_euler": [
+      0.29919901490211487,
+      -0.15545938909053802,
+      0.5586910247802734
+    ],
+    "ortho_scale": 0.2726263105869293,
+    "depth_of_field": false
+  },
+  "lights": [
+    {
+      "name": "Broad key",
+      "location": [
+        0.027064252644777298,
+        -0.1379092037677765,
+        0.30000001192092896
+      ],
+      "rotation_euler": [
+        0.4205343425273895,
+        -1.5093113425734828e-09,
+        -0.4636475443840027
+      ],
+      "energy": 1.7000000476837158,
+      "size": 0.25,
+      "color": [
+        0.8799999952316284,
+        0.9399999976158142,
+        1.0
+      ]
+    },
+    {
+      "name": "Warm edge",
+      "location": [
+        0.19706425070762634,
+        0.11209079623222351,
+        0.1599999964237213
+      ],
+      "rotation_euler": [
+        0.8165537714958191,
+        4.975706957566217e-08,
+        2.439335823059082
+      ],
+      "energy": 1.399999976158142,
+      "size": 0.18000000715255737,
+      "color": [
+        1.0,
+        0.8799999952316284,
+        0.7400000095367432
+      ]
+    },
+    {
+      "name": "Soft fill",
+      "location": [
+        0.22706425189971924,
+        -0.057909198105335236,
+        0.14000000059604645
+      ],
+      "rotation_euler": [
+        0.8050112128257751,
+        -4.0599815065434086e-08,
+        1.2924968004226685
+      ],
+      "energy": 0.6499999761581421,
+      "size": 0.20000000298023224,
+      "color": [
+        0.7799999713897705,
+        0.8799999952316284,
+        1.0
+      ]
+    }
+  ],
+  "field": "none; illustrative material finish, not FEM or manufactured surface evidence",
+  "ocio_config_sha256": "aa4142b29b5a472aa5cb895020aa8cb673c95a31660eeee451f8a820694d3b16"
+}

@@ -8,7 +8,7 @@ Source baseline: `009f5ac520fa3afe8ed8025230eef604dbb7f922`, inspected 18 Octobe
 
 ## Format and build
 
-The manuscript uses `IEEEtran` in journal mode, 10 pt, with a custom single-column first page containing title, abstract and quantitative hero. Remaining pages use two columns. This is an **IEEE-style white paper**, not an unmodified venue submission template. A formal submission needs a selected venue's current template, verified authorship, disclosure, references and supported research contribution. No IEEE acceptance, DOI or badge is claimed. [IEEE Access guidance](https://ieeeaccess.ieee.org/authors/submission-guidelines/).
+The manuscript uses `IEEEtran` in journal mode, 10 pt, with a custom single-column first page containing title, abstract, then the Blender render beside actual evolution data. Index terms follow the figure. Remaining pages use two columns. This is an **IEEE-style white paper**, not an unmodified venue submission template. A formal submission needs a selected venue's current template, verified authorship, disclosure, references and supported research contribution. No IEEE acceptance, DOI or badge is claimed. [IEEE Access guidance](https://ieeeaccess.ieee.org/authors/submission-guidelines/).
 
 Dependencies: Rust 1.85.1, locked Cargo dependencies, LuaLaTeX, IEEEtran, TeX Gyre fonts, librsvg `rsvg-convert`, Poppler `pdfinfo`/`pdftoppm`, `make`, and `shasum`. Build from repository root; shell commands here use the desktop's RTK convention:
 
@@ -29,7 +29,7 @@ The `version-check` workflow explicitly tests this standalone Cargo workspace, c
 
 ![Retained reporting summary with incomplete stage lineage](generated/fitness.svg)
 
-The selected w411c3 cohort reports best fitness **74.207299**, higher is better, with placeholder inputs and no qualified design. Its best CAD geometry and full round populations are absent. The reporting producer can substitute assessment values for screening values; point-level stage lineage is incomplete. The figure preserves the recorded profile and short summaries without asserting one homogeneous objective-convergence experiment. The historical inset uses a different score regime. Replacement of this interim cover graphic by the source-bound Blender composition remains unfinished.
+The selected w411c3 cohort reports best fitness **74.207299**, higher is better, with placeholder inputs and no qualified design. Its best CAD geometry and full round populations are absent. The reporting producer can substitute assessment values for screening values; point-level stage lineage is incomplete. This figure now appears in the results section, preserving the recorded profile and short summaries without asserting one homogeneous objective-convergence experiment. The historical inset uses a different score regime.
 
 ![Historical full-birth population behavior](generated/population.svg)
 
@@ -37,6 +37,18 @@ The w282 plot contains **1,984 retained births: 1,455 FEM-complete and 529 not e
 
 ## Manuscript flow
 
-The opening introduces the best retained reporting profile and its limits. The body develops intelligent design and related work; gene/decoder/CAD identity; evolution and population semantics; actual weighted fitness with individual G16 and RS-v2 subsections; all 18 battery evaluators; numerical verification and assurance; retained results; prospective agents; reproducibility; manufacturing limits; and an expansive civilian-use conclusion.
+The opening shows the exact assessed export `cert_pipeline_r01_p14_c02` beside the historical w282 population and its stored search maxima. These are different cohorts. The render is an assessed example, not a best-design identity claim or a qualified product. The body develops intelligent design and related work; gene/decoder/CAD identity; evolution and population semantics; actual weighted fitness with individual G16 and RS-v2 subsections; all 18 battery evaluators; numerical verification and assurance; retained results; prospective agents; reproducibility; manufacturing limits; and an expansive civilian-use conclusion.
+
+## Source-bound Blender cover
+
+[Frozen figure inputs](figure-inputs.v1.json) bind the original STL, assessment and status records. The new lossless [master](figures/v2/hero_dark.png), [scene recipe](figures/v2/hero_dark.scene.json) and [render receipt](figures/v2/hero_dark.manifest.json) preserve the exact export and its original flat face normals. Visible export faceting is retained; the illustrative titanium shader is not evidence of a printed surface. The Rust publication reader checks the render's input/output hashes, subject identity and before/after imported-mesh digests before publishing. CI builds from the committed master and does not run Blender.
+
+Three 1,200-pixel/48-sample lighting proofs preceded the selected 3,600 × 2,800-pixel/256-sample master (Cycles CPU, four threads, seed 42, denoising, AgX). Proofs and logs remain under `target/paper/blender-v2`. To reproduce with the pinned Blender 4.5.3 executable supplied through `BLENDER`:
+
+```sh
+rtk proxy python3 -B ops/render/blender/rerender.py --profile publication --output-root docs/paper/figures/v2 --recipe dark --width 3600 --height 2800 --samples 256
+```
+
+The publication profile requires an explicit isolated output root and applies no typography overlay, clipping, mesh modification or depth of field. The profile extends the existing `rerender.py`/`candidate_scenes.py` bindings. Archived assets, their hashed `render_paper.py`/`paper_scenes.py` sources, and legacy defaults are preserved byte-for-byte. A finished cover does not satisfy the outstanding request for actual assessment heatmaps: retained field semantics and missing full fields still require separate work.
 
 The conclusion treats aerospace fixtures, robotics, thermal management, medical-device research, instruments and energy systems as future opportunities. It does not claim that printing titanium establishes unprecedented tolerances or that a simulation qualifies a product. Stronger publication claims need controlled benign research and independent reconstruction evidence.

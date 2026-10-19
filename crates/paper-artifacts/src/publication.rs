@@ -117,6 +117,226 @@ fn validate_curve(curve: &Value) -> Result<()> {
     Ok(())
 }
 
+fn validate_immutable_scene(scene: &Value) -> Result<()> {
+    if scene["geometry_changed"] != false
+        || scene["mesh_modifiers"]
+            .as_array()
+            .is_none_or(|v| !v.is_empty())
+    {
+        return Err("cover scene must preserve the imported mesh".into());
+    }
+    for (before, after) in [
+        (
+            "imported_vertices_before_sha256",
+            "imported_vertices_after_sha256",
+        ),
+        ("faces_before_sha256", "faces_after_sha256"),
+    ] {
+        let hash = text(&scene[before])?;
+        if hash.len() != 64
+            || !hash.bytes().all(|b| b.is_ascii_hexdigit())
+            || scene[before] != scene[after]
+        {
+            return Err("cover scene geometry digests differ".into());
+        }
+    }
+    Ok(())
+}
+
+fn admit_cover_render(root: &Path, inputs: &mut BTreeMap<String, String>) -> Result<()> {
+    let spec = read(root, "docs/paper/figure-inputs.v1.json", inputs)?;
+    let proof = read(root, "evidence/evolve_certifiable/manifest.json", inputs)?;
+    let render = read(
+        root,
+        "docs/paper/figures/v2/hero_dark.manifest.json",
+        inputs,
+    )?;
+    let scene = read(root, "docs/paper/figures/v2/hero_dark.scene.json", inputs)?;
+    for path in [
+        "docs/paper/figure-inputs.v1.json",
+        "ops/render/blender/candidate_scenes.py",
+        "ops/render/blender/rerender.py",
+        "ops/render/blender/paper_scenes.py",
+    ] {
+        if render["inputs"][path].as_str().is_none() {
+            return Err(format!("missing cover source binding: {path}").into());
+        }
+    }
+    for (path, expected) in render["inputs"]
+        .as_object()
+        .ok_or("missing render inputs")?
+    {
+        let actual = digest(&fs::read(safe_path(root, path)?)?);
+        if expected.as_str() != Some(actual.as_str()) {
+            return Err(format!("cover render input changed: {path}").into());
+        }
+        inputs.insert(path.clone(), actual);
+    }
+    for name in ["hero_dark.png", "hero_dark.scene.json"] {
+        let path = format!("docs/paper/figures/v2/{name}");
+        let actual = digest(&fs::read(safe_path(root, &path)?)?);
+        if render["outputs"][name].as_str() != Some(actual.as_str()) {
+            return Err(format!("cover render output changed: {name}").into());
+        }
+        inputs.insert(path, actual);
+    }
+    for (path, expected) in spec["inputs"].as_object().ok_or("missing figure inputs")? {
+        if inputs.get(path).map(String::as_str) != expected.as_str() {
+            return Err(format!("cover input binding differs: {path}").into());
+        }
+    }
+    if spec["subject"] != proof["automatic"]["label"]
+        || render["subject"] != spec["subject"]
+        || scene["subject"] != spec["subject"]
+        || spec["certificate_identity"] != proof["automatic"]["certificate_identity"]
+        || render["certificate_identity"] != spec["certificate_identity"]
+        || scene["stl_sha256"] != spec["geometry"]["sha256"]
+        || spec["geometry"]["path"] != proof["automatic"]["artifacts"]["stl"]
+    {
+        return Err("cover subject or geometry binding differs".into());
+    }
+    if scene["import_transform"]
+        != json!({"uniform_scale":0.001,"translation":[0,0,0],"rotation":[0,0,0]})
+    {
+        return Err("cover import transform differs".into());
+    }
+    validate_immutable_scene(&scene)
+}
+
+fn cover_evolution(births: &[Value], stats: &[Value]) -> Result<String> {
+    let mut s = svg_start(520, 620);
+    label(&mut s, 18., 30., 23, "B / Historical population", "#007e87");
+    label(
+        &mut s,
+        18.,
+        57.,
+        18,
+        &format!("{} retained births; stored fit", births.len()),
+        "#526873",
+    );
+    let lo = births
+        .iter()
+        .map(|r| number(&r["fit"]))
+        .collect::<Result<Vec<_>>>()?
+        .into_iter()
+        .fold(f64::INFINITY, f64::min);
+    let hi = births
+        .iter()
+        .map(|r| number(&r["fit"]))
+        .collect::<Result<Vec<_>>>()?
+        .into_iter()
+        .fold(f64::NEG_INFINITY, f64::max);
+    let maxg = stats.last().ok_or("empty cover population")?["generation"]
+        .as_u64()
+        .ok_or("invalid cover generation")? as f64;
+    let sx = |g: f64| 70. + 420. * g / maxg.max(1.);
+    let sy = |v: f64| 258. - 172. * (v.asinh() - lo.asinh()) / (hi.asinh() - lo.asinh()).max(1e-9);
+    for value in [-200.0_f64, -10., -1., 0., 1.] {
+        let y = sy(value);
+        s.push_str(&format!("<path d=\"M70 {y}H490\" stroke=\"#d5dfdf\"/>"));
+        label(&mut s, 4., y + 5., 17, &format!("{value:.0}"), "#526873");
+    }
+    for birth in births {
+        let x = sx(number(&birth["gen"])?);
+        let y = sy(number(&birth["fit"])?);
+        if birth["fem_status"] == "complete" {
+            s.push_str(&format!(
+                "<circle cx=\"{x:.2}\" cy=\"{y:.2}\" r=\"1.4\" fill=\"#4e8f9c\" opacity=\".3\"/>"
+            ));
+        } else {
+            s.push_str(&format!(
+                "<path d=\"M{} {}l3 3m0 -3l-3 3\" stroke=\"#b66a30\" opacity=\".5\"/>",
+                x - 1.5,
+                y - 1.5
+            ));
+        }
+    }
+    for g in [0, 4, 8, 12, 16] {
+        label(
+            &mut s,
+            sx(g as f64) - 5.,
+            286.,
+            17,
+            &g.to_string(),
+            "#526873",
+        );
+    }
+    label(
+        &mut s,
+        70.,
+        311.,
+        18,
+        "Generation / asinh vertical axis",
+        "#526873",
+    );
+    label(
+        &mut s,
+        18.,
+        341.,
+        17,
+        "Blue: FEM complete / amber x: no FEM",
+        "#132d3b",
+    );
+    label(
+        &mut s,
+        18.,
+        379.,
+        23,
+        "C / Observed search maxima",
+        "#007e87",
+    );
+    let cy = |v: f64| 528. - 111. * (v - 1.135) / (1.16 - 1.135);
+    for value in [1.14, 1.15, 1.16] {
+        let y = cy(value);
+        s.push_str(&format!("<path d=\"M70 {y}H490\" stroke=\"#d5dfdf\"/>"));
+        label(&mut s, 4., y + 5., 17, &format!("{value:.2}"), "#526873");
+    }
+    let mut cumulative = f64::NEG_INFINITY;
+    let mut generation_points = Vec::new();
+    let mut cumulative_points = Vec::new();
+    for row in stats {
+        let g = number(&row["generation"])?;
+        let value = number(&row["max"])?;
+        cumulative = cumulative.max(value);
+        generation_points.push(format!("{:.2},{:.2}", sx(g), cy(value)));
+        cumulative_points.push(format!("{:.2},{:.2}", sx(g), cy(cumulative)));
+        s.push_str(&format!(
+            "<circle cx=\"{:.2}\" cy=\"{:.2}\" r=\"2.5\" fill=\"#007e87\"/>",
+            sx(g),
+            cy(value)
+        ));
+    }
+    s.push_str(&format!("<polyline points=\"{}\" fill=\"none\" stroke=\"#007e87\" stroke-width=\"2\"/><polyline points=\"{}\" fill=\"none\" stroke=\"#132d3b\" stroke-width=\"2\" stroke-dasharray=\"6 4\"/>",generation_points.join(" "),cumulative_points.join(" ")));
+    for g in [0, 4, 8, 12, 16] {
+        label(
+            &mut s,
+            sx(g as f64) - 5.,
+            551.,
+            17,
+            &g.to_string(),
+            "#526873",
+        );
+    }
+    label(
+        &mut s,
+        18.,
+        580.,
+        17,
+        "Teal: generation / dashed: cumulative",
+        "#132d3b",
+    );
+    label(
+        &mut s,
+        18.,
+        607.,
+        17,
+        "Truncated fit axis; higher is better",
+        "#a3442d",
+    );
+    s.push_str("</g></svg>\n");
+    Ok(s)
+}
+
 fn hero(curve: &Value, births: &[Value]) -> Result<String> {
     validate_curve(curve)?;
     let best = &curve["best_so_far"];
@@ -588,6 +808,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
             "retained assessment does not support the manuscript's historical finding".into(),
         );
     }
+    admit_cover_render(&root, &mut inputs)?;
     let birth_ids = births
         .iter()
         .map(|r| {
@@ -617,6 +838,10 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
             .ok_or("missing historical census generation")?;
         stats.push(json!({"generation":g,"n":values.len(),"min":values.iter().copied().fold(f64::INFINITY,f64::min),"median":median(values)?,"max":values.iter().copied().fold(f64::NEG_INFINITY,f64::max),"fem_complete":census["fem_complete"],"fem_not_evaluated":census["fem_not_evaluated"],"legal":census["legal"],"fem_complete_median":census["fem_complete_median"]}));
     }
+    out.insert(
+        "docs/paper/generated/cover-evolution.svg".into(),
+        cover_evolution(births, &stats)?,
+    );
     let mut popsvg = svg_start(1200, 610);
     label(
         &mut popsvg,
@@ -801,6 +1026,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         .collect::<BTreeMap<_, _>>();
     let manifest = json!({"schema":"jarambit.publication_manifest.v1","baseline":BASE,"inputs":inputs,"outputs":outputs,"generation":"cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts","scope":"Documentation only; source hashes establish identity, not physical truth",
     "figures": {
+        "cover-evolution.svg":{"source":POP,"membership":"all retained births in panel B; per-generation and cumulative maxima of stored fit in panel C","selectors":["/*/id","/*/gen","/*/fit","/*/fem_status"],"population_vertical_transform":"asinh(fit); original-value ticks","maximum_axis_limits":[1.135,1.16],"maximum_axis_truncated":true,"lines":"straight segments between observed generations; no fitted convergence model","producer_revision":history["producer_revision"],"semantics":history["fitness_semantics"]},
         "fitness.svg": {"weighted_source":CURVE,"weighted_selectors":["/best_so_far/ultralight_weighted_fitness","/best_so_far/ultralight_fitness_breakdown/objectives/*/weighted_points","/generations/*/generation","/generations/*/round_best_fitness","/generations/*/hall_of_fame_best_so_far"],"weighted_direction":"higher_is_better","weighted_stage_lineage":"incomplete; reporting producer can substitute assessment values for screening values","population_source":POP,"population_selectors":["/*/id","/*/gen","/*/fit"],"population_reduction":"all retained births; generation maximum and sorted-sample median","population_vertical_transform":"asinh(fit); ticks in original units","regimes":"separate panels; no cross-regime score comparison"},
         "population.svg":{"source":POP,"membership":"all retained births, including not-evaluated penalty records","selectors":["/*/id","/*/gen","/*/fit","/*/fem_status","/*/legal"],"reduction":"generation median and maximum; status census by generation; no imputation","vertical_transform":"asinh(fit); ticks in original units","producer_revision":history["producer_revision"],"producer_qd_sha256":history["producer_qd_sha256"],"semantics":history["fitness_semantics"]}
     }});
@@ -844,6 +1070,24 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn changed_or_unbound_render_geometry_is_refused() {
+        let hash = "a".repeat(64);
+        let scene = json!({"geometry_changed":false,"mesh_modifiers":[],
+            "imported_vertices_before_sha256":hash,"imported_vertices_after_sha256":hash,
+            "faces_before_sha256":hash,"faces_after_sha256":hash});
+        assert!(validate_immutable_scene(&scene).is_ok());
+        for (field, value) in [
+            ("geometry_changed", json!(true)),
+            ("mesh_modifiers", json!(["bevel"])),
+            ("faces_after_sha256", json!("b".repeat(64))),
+            ("imported_vertices_before_sha256", Value::Null),
+        ] {
+            let mut changed = scene.clone();
+            changed[field] = value;
+            assert!(validate_immutable_scene(&changed).is_err());
+        }
+    }
     #[test]
     fn median_handles_zero_even_and_invalid_samples() {
         assert_eq!(median(&[4., 0., 2., 8.]).unwrap(), 3.);
