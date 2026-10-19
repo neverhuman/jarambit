@@ -1,0 +1,17 @@
+{
+  "figure": "docs/paper/generated/lineage.svg",
+  "figure_sha256": "4f25952e948e998749ad5220901816753d9ef24ea950eac6de23fd4703843a28",
+  "inputs": {
+    "crates/paper-artifacts/src/historical.rs": "137ad9f54818031541c3440ff3d1a0d66c23d175c3a1a09c16a8375dc39ff799",
+    "crates/paper-artifacts/src/lineage.rs": "f51ba75ed109eaf3f4b38331d3723c3d76acefaf13edc81c59058b1691e2996d",
+    "docs/paper/lineage-inputs.v1.json": "348ae55980e12f6b363ae89628c8ed01d0c691961b05fe5e800f151088a2c7e0",
+    "evidence/rs_v2/w282_ultrarunner/manifest.json": "543f7e8410214a7e34e4ef55772e9d671221001d0e11a36b4d68d1a0ef0a96cf",
+    "evidence/rs_v2/w282_ultrarunner/provenance.json": "68166f27cabb28e24868cdf96e484493e8b71c4deea16ea53b9265d3b84053ae",
+    "evidence/rs_v2/w282_ultrarunner/search/all_evals.json": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363",
+    "evidence/rs_v2/w282_ultrarunner/search_summary.json": "e4e6cf51da8269833709ef8501ba3b06934cfb5baecc038628f384675b63dd49"
+  },
+  "projection_receipt": "docs/paper/generated/lineage.json",
+  "schema": 1,
+  "scope": "five saved birth records and five original parent-ID links; two-hop cutoff, no inferred ancestry or geometry join",
+  "script": "crates/paper-artifacts/src/lineage.rs"
+}

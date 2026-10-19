@@ -1,0 +1,43 @@
+{
+  "schema": "jarambit.lineage_inputs.v1",
+  "population": {
+    "path": "evidence/rs_v2/w282_ultrarunner/search/all_evals.json",
+    "sha256": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363"
+  },
+  "summary": {
+    "path": "evidence/rs_v2/w282_ultrarunner/search_summary.json",
+    "sha256": "e4e6cf51da8269833709ef8501ba3b06934cfb5baecc038628f384675b63dd49"
+  },
+  "focal_id": 1095,
+  "max_parent_hops": 2,
+  "expected_node_ids": [
+    245,
+    392,
+    413,
+    526,
+    1095
+  ],
+  "layout": {
+    "245": {
+      "x": 20,
+      "y": 90
+    },
+    "392": {
+      "x": 20,
+      "y": 260
+    },
+    "413": {
+      "x": 310,
+      "y": 90
+    },
+    "526": {
+      "x": 600,
+      "y": 260
+    },
+    "1095": {
+      "x": 890,
+      "y": 175
+    }
+  },
+  "scope": "Recorded parent links only; layout spacing is illustrative, no inferred inheritance, geometry binding or current qualification"
+}

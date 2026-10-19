@@ -99,3 +99,12 @@ The [battery figure contract](battery-inputs.v1.json) freezes the corpus manifes
 This is a categorical map of **221 stored passes, 81 failures and 112 blocked records**, with no incomplete labels. Letters distinguish statuses without relying on color. Three source roles are retained: three native CAD records, one archived-not-on-main record and nineteen genomes. Twenty-one subject records cite source revision `6d18ef8c`; the two w283 records cite `4e54019d`. These copied provenance fields do not establish a homogeneous solver regime or a fresh execution. Seven null evidence-path fields remain null in the ledger.
 
 Four shared build columns account for 92 stored pass references. The `solid.tip` pass label denotes record completeness. Neither the colored cells nor their tally establish independent physical tests, favorable strength, or product qualification. The generated aggregate-count table remains available as `generated/battery.tex`; the article uses the full matrix instead.
+
+
+## Actual recorded parent links
+
+![Recorded parent links around the highest historical score](generated/lineage.svg)
+
+The [lineage contract](lineage-inputs.v1.json) binds the original w282 population and historical assessment summary. The [node/edge ledger](generated/lineage.json) retains five births, five original parent-ID links, operator/version fields, generation, contextual fitness, FEM status, legality and exact JSON source pointers. It joins the focal historical assessment by ID 1095 and generation 9, preserving `cert_pass_all=false`.
+
+This is a two-parent-hop view. ID 413 is reused directly by ID 1095 and through ID 526. The cutoff omits links from 174 to 245 and 299 to 392, while recording that both referenced births exist in the source. Node placement is illustrative: edge length does not encode time, generation, fitness or inherited geometry. No best-geometry export or current qualification is inferred. Neutral tests preserve unavailable boundary references without inventing source nodes and refuse contradictory chronology, missing in-window parents, duplicates, untyped IDs and changed focal membership.

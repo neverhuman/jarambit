@@ -24,6 +24,8 @@ Jarambit connects a 128-gene CAD representation to plate/membrane FEM, a quadrat
 
 *Actual historical w282 data: 1,984 retained births, including 1,455 FEM-complete and 529 not-evaluated records; 446 are legal under the recorded search. The plot distinguishes those states and preserves all stored fitness values. Fitness includes legality penalties and contextual novelty. The highest search score did not pass its later strict assessment; the producer's named exported examples came from separate controlled probes. These historical findings do not establish current qualification. [Results and interpretation](docs/paper/sections/08-results.tex) · [Inputs, producer identity and hashes](docs/paper/generated/manifest.json).*
 
+[See the highest stored score's recorded parent links](docs/paper/generated/lineage.svg) · [Birth and assessment selectors](docs/paper/generated/lineage.json). The two-hop view preserves reused parent IDs and its cutoff; it does not bind those births to the separate cover export.
+
 ## A link to every CAD assessment
 
 Each entry explains the question, observation family, implementation, related software controls, retained evidence, and interpretation limits. These inventories overlap; they are not independent physical experiments.

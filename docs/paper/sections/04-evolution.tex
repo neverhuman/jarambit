@@ -2,7 +2,7 @@
 \subsection{Existing Lanes and Stages}
 Jarambit contains several evolutionary paths. The automatic lane constructs offspring, performs native screening, ranks candidates, selects a subset for more expensive independent assessment, and retains reports. The crescent quality-diversity lane and the older NSGA-II/Monte Carlo lane have their own representations and evaluation conventions. They should be described by their actual entry points and source revisions rather than folded into a single generic algorithm.
 
-The current automatic implementation is in \src{crates/cli/src/auto_evolve.rs}{auto\_evolve.rs}. Its native Stage 1 and Stage 2 scoring functions differ from the separate reporting scorer. Stage 1 supplies a cheaper screen. Stage 2 invokes the independent assessment path for selected candidates. Selection and qualification remain conceptually distinct: a candidate may be worth retaining for research while lacking the observations or findings required for qualification.
+At the studied source baseline, \src{crates/cli/src/auto_evolve.rs}{auto\_evolve.rs} implements native Stage 1 and Stage 2 scoring separately from the reporting scorer. Stage 1 screens proposals; Stage 2 invokes independent assessment for selected candidates. The subsequent Stage-2 ranking correction does not retroactively rescore these retained cohorts. Selection and qualification remain distinct: a retained research candidate can lack the evidence required for qualification.
 
 The v2 release describes weighted, non-veto ranking in the selection path. This statement should not be extended into a claim that every possible genome reaches every evaluator, that invalid computations are acceptable evidence, or that all historical search lanes are veto-free. Source paths still determine constructibility, runtime availability, and which observations exist. Evidence validity cannot be inferred from a policy about selection preference.
 
@@ -21,21 +21,24 @@ The original provenance pins producer revision \code{82f450f7fb41}. Its \href{ht
 \label{fig:population}
 \end{figure*}
 
+\subsection{Recorded Parent Links}
+Figure~\ref{fig:lineage} reconstructs two parent hops from ID 1095, the highest stored historical score. Its generation-9 record names parents 413 and 526 from generations 3 and 4. Record 526 itself names 413 and 392, so one retained parent is reused across branches. Record 413 names 245. The two-hop boundary omits links from 174 to 245 and 299 to 392; both referenced births exist in the retained population. All five displayed rows report completed FEM and search-level legality. The focal row nevertheless failed its later strict assessment. These are recorded relationships, not measured trait inheritance or a geometry binding to the cover export.
+
+\begin{figure*}[t]
+\centering\includegraphics[width=\textwidth]{lineage.png}
+\caption{Recorded historical ancestry around the highest stored score. Each node retains its ID, generation, operator/version, contextual fitness, FEM status and legality flag. Arrows follow the original parent lists, preserving reuse of ID 413. Two parent hops are shown; node spacing is illustrative and does not encode generation, elapsed time or fitness. The focal assessment is joined separately by ID and generation. A lineage link does not establish a best-geometry export or current qualification.}
+\label{fig:lineage}
+\end{figure*}
+
 \subsection{Best-So-Far Is an Archive Property}
 For a fixed higher-is-better metric, let $r_g$ be the best observed value in generation $g$. A retained Hall of Fame reports
 \begin{equation}
  H_g=\max(H_{g-1},r_g).
 \end{equation}
-This recurrence guarantees a non-decreasing stored envelope if the archive is preserved and the metric meaning is unchanged. It does not guarantee that the next generation improves, that the median improves, that a physical constraint is met, or that the search approaches a global optimum. A plateau can coexist with continued exploration or with a stalled representation.
-
-For a lower-is-better objective, the corresponding envelope uses a minimum. Merely reversing the display direction of a score does not change the underlying tradeoffs. More importantly, changing an objective, decoder, model, or measurement convention breaks the simple interpretation of one continuous envelope. A version boundary belongs on the plot or requires a separate panel.
+The recurrence preserves an envelope, without guaranteeing improvement in the next generation, its median or a physical observable. A lower-is-better definition uses a minimum. Objective, decoder or model changes require separate interpretation; reversing an axis cannot make heterogeneous observations one convergence experiment.
 
 \subsection{Population Statistics and Missingness}
-The generation median is computed from sorted finite retained observations; for an even sample count, it is the average of the two central values. The generation maximum is computed within the same generation membership. No interpolation supplies absent births, and no assumed zero replaces a missing score. Unique birth identifiers are checked before the reduction.
-
-Fitness spread is not the same as geometric diversity. A population can contain many shapes with similar scores or many distinct scores from nearly identical shapes. The historical repository also retains genotype and descriptor analyses, but those measures depend on normalization and the active gene set. The current paper's plot makes the narrower statement that the recorded scalar distribution changes over generations. It does not use that distribution as proof of representation coverage.
+The generation median uses sorted finite retained scores, averaging the two central values for even membership. Maxima use the same generation membership; unique IDs are checked first. No absent birth is imputed as zero. Score spread is not geometric diversity: this figure describes the retained scalar distribution, not coverage of the represented design family.
 
 \subsection{What Scale Would Need to Show}
-Increasing compute can increase the number of candidate evaluations, but the benefit depends on evaluator cost, representation, caching, scheduling, and the fraction of useful observations. This paper has no controlled compute-scaling experiment. It therefore reports no speedup, evaluations-per-hour result, or evidence that massive compute will reliably drive the score toward an ideal.
-
-A credible future scaling study would distinguish proposal count, successful numerical evaluations, independent assessments, and useful retained alternatives, while holding the scientific question and evidence rules fixed. Until such measurements exist, scale remains a system ambition. The immediate methodological requirement is that larger runs preserve the provenance and failure information needed to understand what their increased activity actually produced.
+No controlled compute-scaling experiment is retained here. Such a study would distinguish proposals, completed numerical evaluations, independent assessments and useful retained alternatives under stable criteria, with evaluator cost and failures reported. Compute scale remains a research direction rather than a measured performance result.
