@@ -592,7 +592,31 @@ fn clamp01(x: f64) -> f64 {
 }
 
 /// Stage-1 non-veto global weighted fitness (`[0.0, 100.0]`) for an Ultralight Running Knife.
+/// Memoized wrapper (evo_full_20261018 local perf patch): the survivor sort comparator called the
+/// uncached scorer (which rebuilds the full phenotype) twice per comparison. The value is a pure
+/// function of the genome and screen metrics, so caching by those exact inputs cannot change ranking.
 fn stage1_ultralight_weighted_fitness(s: &ScreenSurvivor) -> f64 {
+    thread_local! {
+        static CACHE: std::cell::RefCell<std::collections::HashMap<String, f64>> = std::cell::RefCell::new(std::collections::HashMap::new());
+    }
+    let key = format!(
+        "{}|{:x}|{:x}|{:x}|{:x}|{:x}",
+        s.g.csv_row(),
+        s.mass_g.to_bits(),
+        s.ring_bearing_w_mm.to_bits(),
+        s.seq_ratio.to_bits(),
+        s.fat_sf.to_bits(),
+        s.screen_deficit.to_bits()
+    );
+    if let Some(v) = CACHE.with(|c| c.borrow().get(&key).copied()) {
+        return v;
+    }
+    let v = stage1_ultralight_weighted_fitness_uncached(s);
+    CACHE.with(|c| c.borrow_mut().insert(key, v));
+    v
+}
+
+fn stage1_ultralight_weighted_fitness_uncached(s: &ScreenSurvivor) -> f64 {
     let (radius, _) = pheno::bore_dimensions(&pheno::build(&s.g));
     let s_mass = clamp01((130.0 - s.mass_g) / (130.0 - 45.0));
     let s_collar = 0.5 * clamp01(s.ring_bearing_w_mm / 10.0) + 0.5 * clamp01(radius / 1.5);
@@ -3082,6 +3106,50 @@ mod tests {
         assert!(f_light > f_heavy);
         assert!((0.0..=100.0).contains(&f_light));
         assert!((0.0..=100.0).contains(&f_heavy));
+    }
+    #[test]
+    fn stage1_ultralight_fitness_cache_matches_uncached_and_keys_on_inputs() {
+        let screen = replay_screen("xbabe2", "w298");
+        for s in screen.iter().take(6) {
+            let cached_first = stage1_ultralight_weighted_fitness(s);
+            let cached_again = stage1_ultralight_weighted_fitness(s);
+            assert_eq!(cached_first.to_bits(), cached_again.to_bits());
+            assert_eq!(
+                cached_first.to_bits(),
+                stage1_ultralight_weighted_fitness_uncached(s).to_bits()
+            );
+        }
+        // Same genome, different screen metric: the cache must not return the stale value.
+        let base = screen[0].clone();
+        let _ = stage1_ultralight_weighted_fitness(&base);
+        let mut lighter = base.clone();
+        lighter.mass_g = base.mass_g - 20.0;
+        assert_eq!(
+            stage1_ultralight_weighted_fitness(&lighter).to_bits(),
+            stage1_ultralight_weighted_fitness_uncached(&lighter).to_bits()
+        );
+        assert!(
+            stage1_ultralight_weighted_fitness(&lighter) > stage1_ultralight_weighted_fitness(&base)
+        );
+    }
+    #[test]
+    fn stage1_sort_with_cache_orders_like_uncached_sort() {
+        let screen = replay_screen("xbabe2", "w298");
+        let mut a: Vec<_> = screen.iter().take(12).cloned().collect();
+        // Reference order: each uncached score computed exactly once, then a stable sort.
+        let mut b: Vec<(f64, String)> = a
+            .iter()
+            .map(|s| (stage1_ultralight_weighted_fitness_uncached(s), s.label.clone()))
+            .collect();
+        a.sort_by(|x, y| {
+            stage1_ultralight_weighted_fitness(y)
+                .partial_cmp(&stage1_ultralight_weighted_fitness(x))
+                .unwrap()
+        });
+        b.sort_by(|x, y| y.0.partial_cmp(&x.0).unwrap());
+        let la: Vec<_> = a.iter().map(|s| s.label.clone()).collect();
+        let lb: Vec<_> = b.into_iter().map(|(_, l)| l).collect();
+        assert_eq!(la, lb);
     }
     #[test]
     fn monotone_hall_of_fame_curve_is_non_decreasing() {
