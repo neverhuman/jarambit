@@ -1,0 +1,268 @@
+{
+  "comparability": "not_established",
+  "declared_round_files_present": 0,
+  "display": {
+    "fitness_axis_truncated": true,
+    "fitness_range": [
+      70,
+      75
+    ],
+    "generation_range": [
+      0,
+      2
+    ],
+    "point_connections": "none"
+  },
+  "generation_summaries": 15,
+  "imputation": "none",
+  "independent_replications_established": false,
+  "metadata_note": "Null revision fields mean not established by the admitted summaries; no revision or stage is invented from the metric name or filename.",
+  "metric": "W_ULTRALIGHT_v1",
+  "plotted_observations": 30,
+  "point_connections": "none",
+  "point_stage": "not_established",
+  "producer_revision": null,
+  "run_files": 6,
+  "runs": [
+    {
+      "generation_rows": 3,
+      "id": "xbabe1/w501_ul",
+      "points": [
+        {
+          "best_so_far_label": "w501_ul_r01_p14_c01",
+          "declared_round_file": "round_00_screen.json",
+          "generation": 0,
+          "hall_of_fame_best_so_far": 74.01813,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 74.01813,
+          "scorer_revision": null,
+          "source_pointer": "/generations/0"
+        },
+        {
+          "best_so_far_label": "w501_ul_r01_p14_c01",
+          "declared_round_file": "round_01_screen.json",
+          "generation": 1,
+          "hall_of_fame_best_so_far": 74.01813,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 70.474925,
+          "scorer_revision": null,
+          "source_pointer": "/generations/1"
+        },
+        {
+          "best_so_far_label": "w501_ul_r01_p14_c01",
+          "declared_round_file": "round_02_screen.json",
+          "generation": 2,
+          "hall_of_fame_best_so_far": 74.01813,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 70.741214,
+          "scorer_revision": null,
+          "source_pointer": "/generations/2"
+        }
+      ],
+      "qualification_status_pointer": "/best_so_far/qualification_status",
+      "source": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe1/w501_ul/fitness_curve.json",
+      "source_sha256": "f642f4dd04554e174622dee330a09338ecd1d263120df29aad4f9cf7fce7bb0b",
+      "stored_best_label": "w501_ul_r01_p14_c01",
+      "stored_best_score": 74.01813,
+      "stored_qualification_status": "pending independent top-k assessment"
+    },
+    {
+      "generation_rows": 1,
+      "id": "xbabe1/w501_xb1",
+      "points": [
+        {
+          "best_so_far_label": "w501_xb1_r01_p10_c01",
+          "declared_round_file": "round_00_screen.json",
+          "generation": 0,
+          "hall_of_fame_best_so_far": 70.050162,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 70.050162,
+          "scorer_revision": null,
+          "source_pointer": "/generations/0"
+        }
+      ],
+      "qualification_status_pointer": "/best_so_far/qualification_status",
+      "source": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe1/w501_xb1/fitness_curve.json",
+      "source_sha256": "3b38d3ee26d682d151730c1e5859118cbe341635b62b110f8177bc636fa7dcf1",
+      "stored_best_label": "w501_xb1_r01_p10_c01",
+      "stored_best_score": 70.050162,
+      "stored_qualification_status": "pending independent top-k assessment"
+    },
+    {
+      "generation_rows": 2,
+      "id": "xbabe2/w322",
+      "points": [
+        {
+          "best_so_far_label": "w322_r01_p14_c66",
+          "declared_round_file": "round_00_screen.json",
+          "generation": 0,
+          "hall_of_fame_best_so_far": 71.010933,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 71.010933,
+          "scorer_revision": null,
+          "source_pointer": "/generations/0"
+        },
+        {
+          "best_so_far_label": "w322_r01_p14_c66",
+          "declared_round_file": "round_01_screen.json",
+          "generation": 1,
+          "hall_of_fame_best_so_far": 71.010933,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 71.010933,
+          "scorer_revision": null,
+          "source_pointer": "/generations/1"
+        }
+      ],
+      "qualification_status_pointer": "/best_so_far/qualification_status",
+      "source": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe2/w322/fitness_curve.json",
+      "source_sha256": "adea14366952fab800e2bbc2e37db3728c6204aa137a371d47b68fe0808a3a0f",
+      "stored_best_label": "w322_r01_p14_c66",
+      "stored_best_score": 71.010933,
+      "stored_qualification_status": "pending independent top-k assessment"
+    },
+    {
+      "generation_rows": 3,
+      "id": "xbabe3/w409_ul",
+      "points": [
+        {
+          "best_so_far_label": "w409_ul_r01_p14_c01",
+          "declared_round_file": "round_00_screen.json",
+          "generation": 0,
+          "hall_of_fame_best_so_far": 74.01813,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 74.01813,
+          "scorer_revision": null,
+          "source_pointer": "/generations/0"
+        },
+        {
+          "best_so_far_label": "w409_ul_r01_p14_c01",
+          "declared_round_file": "round_01_screen.json",
+          "generation": 1,
+          "hall_of_fame_best_so_far": 74.01813,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 70.1926,
+          "scorer_revision": null,
+          "source_pointer": "/generations/1"
+        },
+        {
+          "best_so_far_label": "w409_ul_r01_p14_c01",
+          "declared_round_file": "round_02_screen.json",
+          "generation": 2,
+          "hall_of_fame_best_so_far": 74.01813,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 70.042883,
+          "scorer_revision": null,
+          "source_pointer": "/generations/2"
+        }
+      ],
+      "qualification_status_pointer": "/best_so_far/qualification_status",
+      "source": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w409_ul/fitness_curve.json",
+      "source_sha256": "f53756a696612fa632740b0b7467412039c15cd494a89b7408d9ad35d9937fcc",
+      "stored_best_label": "w409_ul_r01_p14_c01",
+      "stored_best_score": 74.01813,
+      "stored_qualification_status": "pending independent top-k assessment"
+    },
+    {
+      "generation_rows": 3,
+      "id": "xbabe3/w411c3",
+      "points": [
+        {
+          "best_so_far_label": "w411c3_r01_p10_c11",
+          "declared_round_file": "round_00_screen.json",
+          "generation": 0,
+          "hall_of_fame_best_so_far": 74.167488,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 74.167488,
+          "scorer_revision": null,
+          "source_pointer": "/generations/0"
+        },
+        {
+          "best_so_far_label": "w411c3_r02_p10_c12",
+          "declared_round_file": "round_01_screen.json",
+          "generation": 1,
+          "hall_of_fame_best_so_far": 74.207299,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 74.207299,
+          "scorer_revision": null,
+          "source_pointer": "/generations/1"
+        },
+        {
+          "best_so_far_label": "w411c3_r02_p10_c12",
+          "declared_round_file": "round_02_screen.json",
+          "generation": 2,
+          "hall_of_fame_best_so_far": 74.207299,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 73.608446,
+          "scorer_revision": null,
+          "source_pointer": "/generations/2"
+        }
+      ],
+      "qualification_status_pointer": "/best_so_far/qualification_status",
+      "source": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/fitness_curve.json",
+      "source_sha256": "afe065170218f0f5f20942a9e737e7e91a300244f8e6a99fd3c1d617d16f1412",
+      "stored_best_label": "w411c3_r02_p10_c12",
+      "stored_best_score": 74.207299,
+      "stored_qualification_status": "pending independent top-k assessment"
+    },
+    {
+      "generation_rows": 3,
+      "id": "xbabe3/w411t3",
+      "points": [
+        {
+          "best_so_far_label": "w411t3_r01_p10_c11",
+          "declared_round_file": "round_00_screen.json",
+          "generation": 0,
+          "hall_of_fame_best_so_far": 74.167488,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 74.167488,
+          "scorer_revision": null,
+          "source_pointer": "/generations/0"
+        },
+        {
+          "best_so_far_label": "w411t3_r01_p10_c11",
+          "declared_round_file": "round_01_screen.json",
+          "generation": 1,
+          "hall_of_fame_best_so_far": 74.167488,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 73.432632,
+          "scorer_revision": null,
+          "source_pointer": "/generations/1"
+        },
+        {
+          "best_so_far_label": "w411t3_r01_p10_c11",
+          "declared_round_file": "round_02_screen.json",
+          "generation": 2,
+          "hall_of_fame_best_so_far": 74.167488,
+          "point_stage": "not_established",
+          "producer_revision": null,
+          "round_best_fitness": 72.317249,
+          "scorer_revision": null,
+          "source_pointer": "/generations/2"
+        }
+      ],
+      "qualification_status_pointer": "/best_so_far/qualification_status",
+      "source": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411t3/fitness_curve.json",
+      "source_sha256": "cd18c55876447cc96b2756703a753eca9480d05fabf0f8646a64047a336914f6",
+      "stored_best_label": "w411t3_r01_p10_c11",
+      "stored_best_score": 74.167488,
+      "stored_qualification_status": "pending independent top-k assessment"
+    }
+  ],
+  "schema": "jarambit.weighted_summary_projection.v1",
+  "scope": "Retained reporting summaries, not full populations or homogeneous-objective convergence",
+  "scorer_revision": null
+}

@@ -8,3 +8,4 @@ pub mod publication;
 mod validation;
 mod verification;
 mod visuals;
+mod weighted_runs;

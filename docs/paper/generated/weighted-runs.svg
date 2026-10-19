@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620"><rect width="1200" height="620" fill="white"/><g font-family="Arial, sans-serif" fill="#132d3b">
+<text x="20" y="29" font-size="24">RETAINED WEIGHTED SUMMARIES / SIX SEPARATE RUN FILES</text>
+<text x="20" y="57" font-size="19">15 saved generation summaries / no full round populations / point-level stage lineage unresolved</text>
+<circle cx="29" cy="82" r="7" stroke="#007e87" stroke-width="3" fill="none"/><path d="M370,76 L382,88 M370,88 L382,76" stroke="#d07b42" stroke-width="3"/>
+<text x="45" y="88" font-size="18">Archive (stored Hall of Fame)</text>
+<text x="392" y="88" font-size="18">Round best</text>
+<text x="665" y="88" font-size="18">Symbols overlap when the saved values coincide</text>
+<rect x="20" y="105" width="380" height="215" fill="#f7f7f2"/>
+<text x="32" y="132" font-size="20">xbabe1/w501_ul / n=3</text>
+<text x="29" y="266" font-size="17">70</text>
+<path d="M75,260 H380" stroke="#d5dfdf"/>
+<text x="29" y="216" font-size="17">72.5</text>
+<path d="M75,210 H380" stroke="#d5dfdf"/>
+<text x="29" y="166" font-size="17">75</text>
+<path d="M75,160 H380" stroke="#d5dfdf"/>
+<text x="70" y="282" font-size="18">0</text>
+<text x="222.5" y="282" font-size="18">1</text>
+<text x="375" y="282" font-size="18">2</text>
+<circle data-run="xbabe1/w501_ul" data-series="archive" data-source-pointer="/generations/0/hall_of_fame_best_so_far" data-generation="0" data-value="74.01813" cx="75" cy="179.6374" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe1/w501_ul" data-series="round" data-source-pointer="/generations/0/round_best_fitness" data-generation="0" data-value="74.01813" d="M70,174.6374 L80,184.6374 M70,184.6374 L80,174.6374" stroke="#d07b42" stroke-width="3"/>
+<circle data-run="xbabe1/w501_ul" data-series="archive" data-source-pointer="/generations/1/hall_of_fame_best_so_far" data-generation="1" data-value="74.01813" cx="227.5" cy="179.6374" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe1/w501_ul" data-series="round" data-source-pointer="/generations/1/round_best_fitness" data-generation="1" data-value="70.474925" d="M222.5,245.50150000000002 L232.5,255.50150000000002 M222.5,255.50150000000002 L232.5,245.50150000000002" stroke="#d07b42" stroke-width="3"/>
+<circle data-run="xbabe1/w501_ul" data-series="archive" data-source-pointer="/generations/2/hall_of_fame_best_so_far" data-generation="2" data-value="74.01813" cx="380" cy="179.6374" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe1/w501_ul" data-series="round" data-source-pointer="/generations/2/round_best_fitness" data-generation="2" data-value="70.741214" d="M375,240.17572 L385,250.17572 M375,250.17572 L385,240.17572" stroke="#d07b42" stroke-width="3"/>
+<text x="32" y="309" font-size="16">Last round 70.741214 / archive 74.018130</text>
+<rect x="420" y="105" width="380" height="215" fill="#f7f7f2"/>
+<text x="432" y="132" font-size="20">xbabe1/w501_xb1 / n=1</text>
+<text x="429" y="266" font-size="17">70</text>
+<path d="M475,260 H780" stroke="#d5dfdf"/>
+<text x="429" y="216" font-size="17">72.5</text>
+<path d="M475,210 H780" stroke="#d5dfdf"/>
+<text x="429" y="166" font-size="17">75</text>
+<path d="M475,160 H780" stroke="#d5dfdf"/>
+<text x="470" y="282" font-size="18">0</text>
+<text x="622.5" y="282" font-size="18">1</text>
+<text x="775" y="282" font-size="18">2</text>
+<circle data-run="xbabe1/w501_xb1" data-series="archive" data-source-pointer="/generations/0/hall_of_fame_best_so_far" data-generation="0" data-value="70.050162" cx="475" cy="258.99676" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe1/w501_xb1" data-series="round" data-source-pointer="/generations/0/round_best_fitness" data-generation="0" data-value="70.050162" d="M470,253.99676 L480,263.99676 M470,263.99676 L480,253.99676" stroke="#d07b42" stroke-width="3"/>
+<text x="432" y="309" font-size="16">Last round 70.050162 / archive 70.050162</text>
+<rect x="820" y="105" width="380" height="215" fill="#f7f7f2"/>
+<text x="832" y="132" font-size="20">xbabe2/w322 / n=2</text>
+<text x="829" y="266" font-size="17">70</text>
+<path d="M875,260 H1180" stroke="#d5dfdf"/>
+<text x="829" y="216" font-size="17">72.5</text>
+<path d="M875,210 H1180" stroke="#d5dfdf"/>
+<text x="829" y="166" font-size="17">75</text>
+<path d="M875,160 H1180" stroke="#d5dfdf"/>
+<text x="870" y="282" font-size="18">0</text>
+<text x="1022.5" y="282" font-size="18">1</text>
+<text x="1175" y="282" font-size="18">2</text>
+<circle data-run="xbabe2/w322" data-series="archive" data-source-pointer="/generations/0/hall_of_fame_best_so_far" data-generation="0" data-value="71.010933" cx="875" cy="239.7813400000001" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe2/w322" data-series="round" data-source-pointer="/generations/0/round_best_fitness" data-generation="0" data-value="71.010933" d="M870,234.7813400000001 L880,244.7813400000001 M870,244.7813400000001 L880,234.7813400000001" stroke="#d07b42" stroke-width="3"/>
+<circle data-run="xbabe2/w322" data-series="archive" data-source-pointer="/generations/1/hall_of_fame_best_so_far" data-generation="1" data-value="71.010933" cx="1027.5" cy="239.7813400000001" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe2/w322" data-series="round" data-source-pointer="/generations/1/round_best_fitness" data-generation="1" data-value="71.010933" d="M1022.5,234.7813400000001 L1032.5,244.7813400000001 M1022.5,244.7813400000001 L1032.5,234.7813400000001" stroke="#d07b42" stroke-width="3"/>
+<text x="832" y="309" font-size="16">Last round 71.010933 / archive 71.010933</text>
+<rect x="20" y="330" width="380" height="215" fill="#f7f7f2"/>
+<text x="32" y="357" font-size="20">xbabe3/w409_ul / n=3</text>
+<text x="29" y="491" font-size="17">70</text>
+<path d="M75,485 H380" stroke="#d5dfdf"/>
+<text x="29" y="441" font-size="17">72.5</text>
+<path d="M75,435 H380" stroke="#d5dfdf"/>
+<text x="29" y="391" font-size="17">75</text>
+<path d="M75,385 H380" stroke="#d5dfdf"/>
+<text x="70" y="507" font-size="18">0</text>
+<text x="222.5" y="507" font-size="18">1</text>
+<text x="375" y="507" font-size="18">2</text>
+<circle data-run="xbabe3/w409_ul" data-series="archive" data-source-pointer="/generations/0/hall_of_fame_best_so_far" data-generation="0" data-value="74.01813" cx="75" cy="404.6374" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe3/w409_ul" data-series="round" data-source-pointer="/generations/0/round_best_fitness" data-generation="0" data-value="74.01813" d="M70,399.6374 L80,409.6374 M70,409.6374 L80,399.6374" stroke="#d07b42" stroke-width="3"/>
+<circle data-run="xbabe3/w409_ul" data-series="archive" data-source-pointer="/generations/1/hall_of_fame_best_so_far" data-generation="1" data-value="74.01813" cx="227.5" cy="404.6374" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe3/w409_ul" data-series="round" data-source-pointer="/generations/1/round_best_fitness" data-generation="1" data-value="70.1926" d="M222.5,476.148 L232.5,486.148 M222.5,486.148 L232.5,476.148" stroke="#d07b42" stroke-width="3"/>
+<circle data-run="xbabe3/w409_ul" data-series="archive" data-source-pointer="/generations/2/hall_of_fame_best_so_far" data-generation="2" data-value="74.01813" cx="380" cy="404.6374" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe3/w409_ul" data-series="round" data-source-pointer="/generations/2/round_best_fitness" data-generation="2" data-value="70.042883" d="M375,479.14233999999993 L385,489.14233999999993 M375,489.14233999999993 L385,479.14233999999993" stroke="#d07b42" stroke-width="3"/>
+<text x="32" y="534" font-size="16">Last round 70.042883 / archive 74.018130</text>
+<rect x="420" y="330" width="380" height="215" fill="#f7f7f2"/>
+<text x="432" y="357" font-size="20">xbabe3/w411c3 / n=3</text>
+<text x="429" y="491" font-size="17">70</text>
+<path d="M475,485 H780" stroke="#d5dfdf"/>
+<text x="429" y="441" font-size="17">72.5</text>
+<path d="M475,435 H780" stroke="#d5dfdf"/>
+<text x="429" y="391" font-size="17">75</text>
+<path d="M475,385 H780" stroke="#d5dfdf"/>
+<text x="470" y="507" font-size="18">0</text>
+<text x="622.5" y="507" font-size="18">1</text>
+<text x="775" y="507" font-size="18">2</text>
+<circle data-run="xbabe3/w411c3" data-series="archive" data-source-pointer="/generations/0/hall_of_fame_best_so_far" data-generation="0" data-value="74.167488" cx="475" cy="401.6502399999999" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe3/w411c3" data-series="round" data-source-pointer="/generations/0/round_best_fitness" data-generation="0" data-value="74.167488" d="M470,396.6502399999999 L480,406.6502399999999 M470,406.6502399999999 L480,396.6502399999999" stroke="#d07b42" stroke-width="3"/>
+<circle data-run="xbabe3/w411c3" data-series="archive" data-source-pointer="/generations/1/hall_of_fame_best_so_far" data-generation="1" data-value="74.207299" cx="627.5" cy="400.8540199999999" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe3/w411c3" data-series="round" data-source-pointer="/generations/1/round_best_fitness" data-generation="1" data-value="74.207299" d="M622.5,395.8540199999999 L632.5,405.8540199999999 M622.5,405.8540199999999 L632.5,395.8540199999999" stroke="#d07b42" stroke-width="3"/>
+<circle data-run="xbabe3/w411c3" data-series="archive" data-source-pointer="/generations/2/hall_of_fame_best_so_far" data-generation="2" data-value="74.207299" cx="780" cy="400.8540199999999" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe3/w411c3" data-series="round" data-source-pointer="/generations/2/round_best_fitness" data-generation="2" data-value="73.608446" d="M775,407.83108 L785,417.83108 M775,417.83108 L785,407.83108" stroke="#d07b42" stroke-width="3"/>
+<text x="432" y="534" font-size="16">Last round 73.608446 / archive 74.207299</text>
+<rect x="820" y="330" width="380" height="215" fill="#f7f7f2"/>
+<text x="832" y="357" font-size="20">xbabe3/w411t3 / n=3</text>
+<text x="829" y="491" font-size="17">70</text>
+<path d="M875,485 H1180" stroke="#d5dfdf"/>
+<text x="829" y="441" font-size="17">72.5</text>
+<path d="M875,435 H1180" stroke="#d5dfdf"/>
+<text x="829" y="391" font-size="17">75</text>
+<path d="M875,385 H1180" stroke="#d5dfdf"/>
+<text x="870" y="507" font-size="18">0</text>
+<text x="1022.5" y="507" font-size="18">1</text>
+<text x="1175" y="507" font-size="18">2</text>
+<circle data-run="xbabe3/w411t3" data-series="archive" data-source-pointer="/generations/0/hall_of_fame_best_so_far" data-generation="0" data-value="74.167488" cx="875" cy="401.6502399999999" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe3/w411t3" data-series="round" data-source-pointer="/generations/0/round_best_fitness" data-generation="0" data-value="74.167488" d="M870,396.6502399999999 L880,406.6502399999999 M870,406.6502399999999 L880,396.6502399999999" stroke="#d07b42" stroke-width="3"/>
+<circle data-run="xbabe3/w411t3" data-series="archive" data-source-pointer="/generations/1/hall_of_fame_best_so_far" data-generation="1" data-value="74.167488" cx="1027.5" cy="401.6502399999999" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe3/w411t3" data-series="round" data-source-pointer="/generations/1/round_best_fitness" data-generation="1" data-value="73.432632" d="M1022.5,411.34736000000004 L1032.5,421.34736000000004 M1022.5,421.34736000000004 L1032.5,411.34736000000004" stroke="#d07b42" stroke-width="3"/>
+<circle data-run="xbabe3/w411t3" data-series="archive" data-source-pointer="/generations/2/hall_of_fame_best_so_far" data-generation="2" data-value="74.167488" cx="1180" cy="401.6502399999999" r="7" stroke="#007e87" stroke-width="3" fill="none"/>
+<path data-run="xbabe3/w411t3" data-series="round" data-source-pointer="/generations/2/round_best_fitness" data-generation="2" data-value="72.317249" d="M1175,433.6550199999999 L1185,443.6550199999999 M1175,443.6550199999999 L1185,433.6550199999999" stroke="#d07b42" stroke-width="3"/>
+<text x="832" y="534" font-size="16">Last round 72.317249 / archive 74.167488</text>
+<text x="20" y="573" font-size="19">Vertical: reported fitness, 70-75 (truncated). Horizontal: stored generation, 0-2. Higher is better.</text>
+<text x="20" y="603" font-size="18">No interpolation or pooled trajectory. A shared metric name does not establish comparable scorer/stage inputs.</text>
+</g></svg>

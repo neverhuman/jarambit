@@ -37,7 +37,11 @@ The `version-check` workflow explicitly tests this standalone Cargo workspace, c
 
 ![Retained reporting summary with incomplete stage lineage](generated/fitness.svg)
 
-The selected w411c3 cohort reports best fitness **74.207299**, higher is better, with placeholder inputs and no qualified design. Its best CAD geometry and full round populations are absent. The reporting producer can substitute assessment values for screening values; point-level stage lineage is incomplete. This figure now appears in the results section, preserving the recorded profile and short summaries without asserting one homogeneous objective-convergence experiment. The historical inset uses a different score regime.
+The selected w411c3 cohort reports best fitness **74.207299**, higher is better, with placeholder inputs and no qualified design. Its best CAD geometry and full round populations are absent. The reporting producer can substitute assessment values for screening values; point-level stage lineage is incomplete. This supplementary figure preserves the selected profile and short summaries; the main results now show all six admitted weighted-run summary files without asserting one homogeneous objective-convergence experiment. The historical inset uses a different score regime.
+
+![All fifteen saved generation summaries in six separate run panels](generated/weighted-runs.svg)
+
+The [weighted-summary contract](weighted-inputs.v1.json) freezes all six admitted files and their 15 source rows. The [projection ledger](generated/weighted-runs.json) preserves exact selectors, source labels, best-record identity, retained qualification text and unknown stage/scorer lineage. Teal circles and orange crosses distinguish stored archive and round best, including coincident observations. The 70–75 display is truncated and explicitly labeled. The one-row run receives one observation pair; absent generations are not padded, connected or interpolated. The 15 named round files are absent from these retained directories, so no full populations or uncertainty bands are invented. Six source files do not establish six independent experimental replications. A common metric label does not establish scientific comparability.
 
 ![Historical full-birth population behavior](generated/population.svg)
 
