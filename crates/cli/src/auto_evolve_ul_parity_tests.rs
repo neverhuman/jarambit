@@ -6,7 +6,10 @@
 //! xbabe2 i81-i86 refill scorecards, and fallback-branch variants with both implementations
 //! and requires identical results, so neither copy of the formula can drift silently.
 
-use super::{compute_canonical_ultralight_weighted_fitness, stage2_score_from_scorecard};
+use super::{
+    canonical_ultralight_scores_match, compute_canonical_ultralight_weighted_fitness,
+    stage2_score_from_scorecard,
+};
 use serde_json::{json, Value};
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -18,6 +21,17 @@ fn root() -> PathBuf {
 fn read_json(p: &Path) -> Value {
     serde_json::from_slice(&std::fs::read(p).unwrap_or_else(|e| panic!("{}: {e}", p.display())))
         .unwrap_or_else(|e| panic!("{}: {e}", p.display()))
+}
+
+#[test]
+fn adjacent_six_decimal_scores_allow_binary_rounding_noise() {
+    let lower = 70.000002_f64;
+    let adjacent = 70.000003_f64;
+    assert_eq!(format!("{lower:.6}"), "70.000002");
+    assert_eq!(format!("{adjacent:.6}"), "70.000003");
+    assert!((adjacent - lower) > 1e-6);
+    assert!(canonical_ultralight_scores_match(lower, adjacent));
+    assert!(!canonical_ultralight_scores_match(lower, 70.000004_f64));
 }
 
 /// Every committed `<label>_master_scorecard.json` / `<label>_cad_eval.json` under `evidence/`

@@ -787,6 +787,12 @@ fn compute_canonical_ultralight_weighted_fitness(cad_eval_doc: &Value, rs_doc: &
     (total_score * 1e6).round() / 1e6
 }
 
+const ULTRALIGHT_SCORE_ROUNDING_TOLERANCE: f64 = 1.5e-6;
+
+fn canonical_ultralight_scores_match(stored: f64, recomputed: f64) -> bool {
+    (stored - recomputed).abs() <= ULTRALIGHT_SCORE_ROUNDING_TOLERANCE
+}
+
 fn stage2_score_from_scorecard(cad_eval_doc: &Value, rs_doc: &Value) -> Result<f64, String> {
     let score = compute_canonical_ultralight_weighted_fitness(cad_eval_doc, rs_doc);
     if !score.is_finite() {
@@ -799,7 +805,7 @@ fn stage2_score_from_scorecard(cad_eval_doc: &Value, rs_doc: &Value) -> Result<f
         let stored = value.as_f64().filter(|x| x.is_finite()).ok_or_else(|| {
             "standard assessment unverified: missing/nonfinite W_ULTRALIGHT_v1".to_owned()
         })?;
-        if (stored - score).abs() > 1e-6 {
+        if !canonical_ultralight_scores_match(stored, score) {
             return Err(format!(
                 "standard assessment unverified: stored W_ULTRALIGHT_v1 {stored:.6} disagrees with canonical recomputation {score:.6}"
             ));
