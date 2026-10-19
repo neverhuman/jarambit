@@ -74,6 +74,7 @@ out=Path(a[a.index('--out-dir')+1]);label=a[a.index('--label')+1]
 m=json.loads(Path('evidence/evolve_certifiable/manifest.json').read_text())
 sc=json.loads(Path(m['automatic']['artifacts']['scorecard']).read_text())
 sc['certificate_identity']=out.parent.name
+sc['ultralight_weighted_fitness']={'global_weighted_fitness':74.319}
 mode=os.environ['EVO_TEST_MODE']
 if mode=='identity':sc['certificate_identity']='wrong'
 if mode=='nonfinite':sc['engineering_metrics']['mass_g']=None

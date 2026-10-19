@@ -78,6 +78,7 @@ struct AssessedDesign {
     mass_3d_g: f64,
     w_cad: f64,
     g1: f64,
+    ultralight_fitness: f64,
     strict_hunter_sf: f64,
     solid_tip_sf: f64,
     seq_ratio: f64,
@@ -614,29 +615,8 @@ fn stage1_ultralight_weighted_fitness(s: &ScreenSurvivor) -> f64 {
 
 /// Stage-2 non-veto global weighted fitness (`[0.0, 100.0]`) for an Ultralight Running Knife.
 fn stage2_ultralight_weighted_fitness(c: &AssessedDesign) -> f64 {
-    let (radius, _) = pheno::bore_dimensions(&pheno::build(&c.g));
-    let s_mass = clamp01((130.0 - c.mass_3d_g) / (130.0 - 45.0));
-    let s_collar = 0.5 * clamp01(c.ring_bearing_w_mm / 10.0) + 0.5 * clamp01(radius / 1.5);
-    let s_hiker = clamp01((c.strict_hunter_sf * 260.0) / 180.0);
-    let s_hunter = clamp01(c.strict_hunter_sf);
-    let s_strict = clamp01(c.strict_hunter_sf);
-    let s_solid = clamp01(c.solid_tip_sf);
-    let s_buckling = clamp01(c.buckling_eig.max(0.0));
-    let s_seq = clamp01(c.seq_ratio / 1.20);
-    let s_fat = clamp01(c.fat_sf);
-    let s_bat = clamp01((c.battery_pass.max(0) as f64) / 18.0);
-    let values = [
-        s_mass, 1.0, 1.0, 1.0, s_collar, 1.0, 1.0, 1.0, s_hiker, s_hunter, s_strict, 1.0, 1.0,
-        s_solid, s_solid, s_buckling, s_seq, s_bat, s_bat, s_fat,
-    ];
-    let score: f64 = ULTRALIGHT_WEIGHTS_V1
-        .iter()
-        .zip(values.iter())
-        .map(|((_, w), &s)| w * s)
-        .sum();
-    (score * 1e6).round() / 1e6
+    c.ultralight_fitness
 }
-
 /// Monotone non-decreasing Hall-of-Fame global fitness curve across rounds/generations.
 pub fn monotone_hall_of_fame_curve(round_maxima: &[f64]) -> Vec<f64> {
     let mut best = 0.0_f64;
@@ -716,6 +696,10 @@ fn certify_candidate_stage2(
         == Some(true);
     let w_cad = finite(&wc["W_CAD"], "W_CAD")?;
     let g1_val = finite(&g1["G"], "G1")?;
+    let ultralight_fitness = finite(
+        &sc["ultralight_weighted_fitness"]["global_weighted_fitness"],
+        "W_ULTRALIGHT_v1",
+    )?;
     let mass_g = finite(&em["mass_g"], "raster mass")?;
     let mass_3d_g = finite(&em["mass_3d_g"], "3D mass")?;
     let strict_hunter_sf = finite(&em["sf_hunter_strict"], "strict hunter SF")?;
@@ -738,6 +722,7 @@ fn certify_candidate_stage2(
         mass_3d_g,
         w_cad,
         g1: g1_val,
+        ultralight_fitness,
         strict_hunter_sf,
         solid_tip_sf,
         seq_ratio,
@@ -3105,6 +3090,8 @@ mod tests {
             mass_3d_g: 56.0,
             w_cad: -2.5,
             g1: 0.45,
+            // Synthetic canonical score for Stage-2 ranking regression coverage.
+            ultralight_fitness: 74.319,
             strict_hunter_sf: 0.92,
             solid_tip_sf: 1.45,
             seq_ratio: 1.35,
@@ -3123,12 +3110,38 @@ mod tests {
             g: g_weaker,
             mass_g: 98.0,
             mass_3d_g: 98.0,
+            ultralight_fitness: 70.0,
             ..best_unqualified.clone()
         };
         assert!(
             stage2_ultralight_weighted_fitness(&best_unqualified)
                 > stage2_ultralight_weighted_fitness(&weaker_unqualified)
         );
+        assert_eq!(stage2_ultralight_weighted_fitness(&best_unqualified), 74.319);
+        assert_eq!(stage2_ultralight_weighted_fitness(&weaker_unqualified), 70.0);
+        let lower_canonical_score = AssessedDesign {
+            label: "proxy_preferred_but_lower_wul".into(),
+            ultralight_fitness: 74.319,
+            ..best_unqualified.clone()
+        };
+        let higher_canonical_score = AssessedDesign {
+            label: "canonical_wul_preferred".into(),
+            // The heavier fixture would lose on the old mass proxy, but has a
+            // higher canonical W_ULTRALIGHT_v1 score.
+            mass_3d_g: 130.0,
+            ultralight_fitness: 75.0,
+            ..best_unqualified.clone()
+        };
+        let selected = [&lower_canonical_score, &higher_canonical_score]
+            .into_iter()
+            .max_by(|a, b| {
+                stage2_ultralight_weighted_fitness(a)
+                    .partial_cmp(&stage2_ultralight_weighted_fitness(b))
+                    .unwrap_or(std::cmp::Ordering::Equal)
+            })
+            .unwrap();
+        assert_eq!(selected.label, "canonical_wul_preferred");
+        assert_eq!(selected.ultralight_fitness, 75.0);
         let assessed = [weaker_unqualified, best_unqualified];
         let hof_best = assessed
             .iter()
