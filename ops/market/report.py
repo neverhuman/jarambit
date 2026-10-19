@@ -90,6 +90,10 @@ def main():
         model=r['model'].replace('|','/')
         lines.append(f'| {r["material_family"]} / {r["blade_grade"]} | [{model}]({r["source_url"]}) | {r["blade_length_in"]:.3f} | {mass} | {r["weight_basis"].replace("_"," ")} |')
     (DATA/'README.md').write_text('\n'.join(lines)+'\n')
+    pw,med_g=[r['weight_g'] for r in rows if r['plot_eligible']],s['market_median_g']
+    cs=lambda m:(sum(1 for w in pw if m<w),sum(1 for w in pw if m<w)/len(pw),(med_g-m)/med_g)
+    w411_d=json.loads((ROOT/'evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/best_so_far_26_gates.json').read_text())['best_stage2_26_gate_design']
+    (ef_light_lt,ef_light_lt_f,ef_light_med_f),(ef_top_lt,ef_top_lt_f,ef_top_med_f),(w282_lt,w282_lt_f,w282_med_f),(dor_lt,dor_lt_f,dor_med_f)=cs(90.114),cs(101.172),cs(75.568),cs(84.80)
     snippet=f'''<!-- MARKET:CENSUS:BEGIN -->
 ## Market weight comparison
 
@@ -97,19 +101,15 @@ The source-audited [October 13, 2026 census](docs/market/2026-10-13/README.md) c
 
 ![Karambit market weight and blade-length comparison](docs/market/2026-10-13/figures/market_landscape.png)
 
-**SWITCHBACK C.10a RC4: {bm:.3f} g, CAD prediction.** Nominally lighter than {s['benchmark_lighter_than_count']} of {s['plotted_entries']} plotted entries ({s['benchmark_lighter_than_fraction']:.1%}); {s['benchmark_below_median_fraction']:.1%} below their {s['market_median_g']:.2f} g median. TALIM titanium lists 51.03 g, so this does not support a lightest-overall claim. C.10a is a release candidate, unmanufactured and untested; `g3_tip+00_t60_tt3` remains the historical 84.80 g design of record. Listed commercial lengths use different measurement conventions, and material/weight comparisons establish no performance equivalence.
+**Genome-pipeline, auto-scored `evo_full_20261018` Stage-2 leaders: `ef2i01_r02_p14_c110` at 90.114 g (90.141 g 3D solid, `W_ULTRALIGHT_v1 = 75.252409`, overall and lightest Stage-2 leader) and `xbabe3` leader `ef3i09_r01_p10_c41` at 101.172 g (101.167 g 3D solid, `W_ULTRALIGHT_v1 = 74.470186`).** `ef2i01_r02_p14_c110` (ahead of `ef2i04_r02_p14_c109` at 90.738 g, `W_ULTRALIGHT_v1 = 74.195397`) is nominally lighter than {ef_light_lt} of {s['plotted_entries']} plotted entries ({ef_light_lt_f:.1%}) and {ef_light_med_f:.1%} below their {med_g:.2f} g median; `ef3i09_r01_p10_c41` (and committed cohort leader `{w411_d['label']}` at {w411_d['mass_g']:.3f} g, `W_ULTRALIGHT_v1 = {w411_d['ultralight_fitness_breakdown']['global_weighted_fitness']:.6f}`) is lighter than {ef_top_lt} of {s['plotted_entries']} plotted entries ({ef_top_lt_f:.1%}), {ef_top_med_f:.1%} below median. Historical 16-gate screen record `w282_p14_c01` (75.568 g / 75.323 g 3D solid) is lighter than {w282_lt} of {s['plotted_entries']} plotted entries ({w282_lt_f:.1%}, {w282_med_f:.1%} below median), and `g3_tip+00_t60_tt3` (84.80 g, lighter than {dor_lt} of {s['plotted_entries']} or {dor_lt_f:.1%}, {dor_med_f:.1%} below median) remains the historical design of record. TALIM titanium lists 51.03 g, so this does not support a lightest-overall claim; the frozen October 13 plot marker stays at its historical {bm:.3f} g CAD reference, and all evolved candidates remain unmanufactured and unpromoted. Listed commercial lengths use different measurement conventions, and material/weight comparisons establish no performance equivalence.
 
 [Transparent material histogram](docs/market/2026-10-13/figures/weight_histogram.png) · [Every weight by exact grade](docs/market/2026-10-13/figures/weight_by_grade.png) · [Catalog by material](docs/market/2026-10-13/qualified_by_material.csv) · [Missing/conditional candidate queue](docs/market/2026-10-13/review_queue.csv)
 <!-- MARKET:CENSUS:END -->'''
     readme=ROOT/'README.md'
-    if readme.exists():text=readme.read_text()
-    else:text=(ROOT/'.study/market/base_README.md').read_text()
+    text=readme.read_text() if readme.exists() else (ROOT/'.study/market/base_README.md').read_text()
     if '<!-- MARKET:CENSUS:BEGIN -->' in text:
-        import re
-        text=re.sub(r'<!-- MARKET:CENSUS:BEGIN -->.*?<!-- MARKET:CENSUS:END -->',lambda _:snippet,text,flags=re.S)
+        import re;text=re.sub(r'<!-- MARKET:CENSUS:BEGIN -->.*?<!-- MARKET:CENSUS:END -->',lambda _:snippet,text,flags=re.S)
     else:text=text.replace('<!-- GEN:RELEASE:BEGIN -->',snippet+'\n\n<!-- GEN:RELEASE:BEGIN -->',1)
-    readme.write_text(text)
-    print('Research report and scoped README comparison generated')
-
+    readme.write_text(text);print('Research report and scoped README comparison generated')
 
 if __name__=='__main__':main()
