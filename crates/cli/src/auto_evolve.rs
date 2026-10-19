@@ -3368,3 +3368,7 @@ mod tests {
         assert!((canonical - 83.214839).abs() < 1e-6, "canonical={canonical}");
     }
 }
+
+#[cfg(test)]
+#[path = "auto_evolve_ul_parity_tests.rs"]
+mod ul_parity_tests;
