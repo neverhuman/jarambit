@@ -90,16 +90,33 @@ def main():
         model=r['model'].replace('|','/')
         lines.append(f'| {r["material_family"]} / {r["blade_grade"]} | [{model}]({r["source_url"]}) | {r["blade_length_in"]:.3f} | {mass} | {r["weight_basis"].replace("_"," ")} |')
     (DATA/'README.md').write_text('\n'.join(lines)+'\n')
+    pw = [r['weight_g'] for r in rows if r['plot_eligible']]
+    med_g = s['market_median_g']
+    def cmp_stats(mass_g):
+        lt = sum(1 for w in pw if mass_g < w)
+        return lt, lt / len(pw), (med_g - mass_g) / med_g
+    w411 = json.loads((ROOT / 'evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/best_so_far_26_gates.json').read_text())['best_stage2_26_gate_design']
+    w282_doc = json.loads((ROOT / 'evidence/rs_v2/w282_ultrarunner/w282_p14_c01_cad_eval.json').read_text())
+    w282 = w282_doc['engineering_metrics']
+    w282_lbl = w282_doc['subject']
+    g3 = json.loads((ROOT / 'evidence/rs_v2/g3_tip+00_t60_tt3.json').read_text())
+    w411_m = w411['mass_g']
+    w411_m3d = w411['mass_3d_g']
+    w411_ul = w411['ultralight_weighted_fitness']
+    w282_m = w282['mass_g']
+    w282_m3d = w282['mass_3d_g']
+    g3_m = g3['mass_g']
+    w282_lt, w282_lt_f, w282_med_f = cmp_stats(w282_m)
+    dor_lt, dor_lt_f, dor_med_f = cmp_stats(g3_m)
+    w411_lt, w411_lt_f, w411_med_f = cmp_stats(w411_m)
     snippet=f'''<!-- MARKET:CENSUS:BEGIN -->
 ## Market weight comparison
 
 The source-audited [October 13, 2026 census](docs/market/2026-10-13/README.md) consolidates eight supplied CSVs plus an additional qualifying polymer model. **{s['qualified_entries']} identifiable entries meet the published 3.375 in blade minimum; {s['plotted_entries']} have comparable verified published knife weights.** Color-only duplicates are consolidated; genuine material variants and distinct custom examples remain separate. Missing weights and unresolved candidates stay visible in the evidence tables.
 
-![Karambit market weight and blade-length comparison](docs/market/2026-10-13/figures/market_landscape.png)
+**Committed genome-pipeline Stage-2 designs: `{w282_lbl}` at {w282_m:.3f} g ({w282_m3d:.3f} g 3D solid, historical 16-gate screen record) and `{w411['label']}` at {w411_m:.3f} g ({w411_m3d:.3f} g 3D solid, `W_ULTRALIGHT_v1 = {w411_ul:.6f}`, committed ultralight-v1 Stage-2 leader).** `{w282_lbl}` is nominally lighter than {w282_lt} of {s['plotted_entries']} plotted entries ({w282_lt_f:.1%}) and {w282_med_f:.1%} below their {med_g:.2f} g median; `{g3['label']}` ({g3_m:.2f} g, lighter than {dor_lt} of {s['plotted_entries']} or {dor_lt_f:.1%}, {dor_med_f:.1%} below median) remains the historical design of record; and `{w411['label']}` is lighter than {w411_lt} of {s['plotted_entries']} plotted entries ({w411_lt_f:.1%}), {w411_med_f:.1%} below median. TALIM titanium lists 51.03 g, so this does not support a lightest-overall claim. None is qualified: `{w282_lbl}` passes the 16 legacy gates but fails RS-karambit-v2 (fatigue, Gate-S sharpness and human-max fail; tip-point unverified); 0 candidates pass RS-karambit-v2 all-hard (champion = null). Stage-2 `W_ULTRALIGHT_v1` is for ranking only, not qualification. All are unmanufactured and unpromoted. Listed commercial lengths use different measurement conventions, and material/weight comparisons establish no performance equivalence.
 
-**SWITCHBACK C.10a RC4: {bm:.3f} g, CAD prediction.** Nominally lighter than {s['benchmark_lighter_than_count']} of {s['plotted_entries']} plotted entries ({s['benchmark_lighter_than_fraction']:.1%}); {s['benchmark_below_median_fraction']:.1%} below their {s['market_median_g']:.2f} g median. TALIM titanium lists 51.03 g, so this does not support a lightest-overall claim. C.10a is a release candidate, unmanufactured and untested; `g3_tip+00_t60_tt3` remains the historical 84.80 g design of record. Listed commercial lengths use different measurement conventions, and material/weight comparisons establish no performance equivalence.
-
-[Transparent material histogram](docs/market/2026-10-13/figures/weight_histogram.png) · [Every weight by exact grade](docs/market/2026-10-13/figures/weight_by_grade.png) · [Catalog by material](docs/market/2026-10-13/qualified_by_material.csv) · [Missing/conditional candidate queue](docs/market/2026-10-13/review_queue.csv)
+[Catalog by material](docs/market/2026-10-13/qualified_by_material.csv) · [Complete normalized census](docs/market/2026-10-13/census.csv) · [Exact-grade summary](docs/market/2026-10-13/material_summary.csv) · [Missing/conditional candidate queue](docs/market/2026-10-13/review_queue.csv)
 <!-- MARKET:CENSUS:END -->'''
     readme=ROOT/'README.md'
     if readme.exists():text=readme.read_text()
