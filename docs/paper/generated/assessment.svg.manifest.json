@@ -1,0 +1,19 @@
+{
+  "figure": "docs/paper/generated/assessment.svg",
+  "figure_sha256": "dd61c56092b8f6d964faca96a3cd95dcc1ff976b0e3c6cad006f4f3b706f71a8",
+  "inputs": {
+    "crates/cli/src/bench.rs": "191712f94e18ed8b49612edee84037ef4f9c4f533c3ebbb8342a7b866e7ffa71",
+    "crates/crescent/src/fem.rs": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
+    "crates/paper-artifacts/src/assessment.rs": "416c0b50371b1070ca492612d2123d5f0d08d676d24ddc3baa655c3d7f12bf2e",
+    "docs/paper/assessment-inputs.v1.json": "fac0cd6cc08e731585e243277d401cb4e9a746279f4a544b012d4fae6b928171",
+    "docs/tests/catalog.json": "521f1a3290b58b03f588cc0d8be1426ae01c813bca4405c2652060dcb1ae6ec0",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_a4.json": "788196e1a534b1611df5a777741c7ec77079493c770a73ec2e976f30906cb472",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_rs.json": "2696a6f5d4dbbcec6a6148c83d5ff48313f7a86682766328be56ea4f203945fb",
+    "ops/ci/side_a4.py": "f7a49fa378ca5aa9b0ca661db975723c04f727fde6b5f168822e15593202aeca"
+  },
+  "projection_receipt": "docs/paper/generated/assessment.json",
+  "schema": 1,
+  "scope": "original scalar observations and flags only; support model is schematic; no eigenmode, fatigue field or new qualification",
+  "script": "crates/paper-artifacts/src/assessment.rs"
+}

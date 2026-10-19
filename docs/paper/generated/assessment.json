@@ -1,0 +1,232 @@
+{
+  "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+  "certification_strict_pairs": [
+    {
+      "key": "lat_rob_n",
+      "limit": 200.0,
+      "value": 168.90080532626396
+    },
+    {
+      "key": "strict_lat_rob_0p0625_n",
+      "limit": 200.0,
+      "value": 168.1786057270672
+    },
+    {
+      "key": "twist_tipzone_sf",
+      "limit": 1.0,
+      "value": 0.5239208709757779
+    },
+    {
+      "key": "twist_tipzone_sf_strict",
+      "limit": 1.0,
+      "value": 0.5286982667797165
+    }
+  ],
+  "factors": [
+    {
+      "key": "fat_sf",
+      "record_only": false,
+      "units": "ratio",
+      "value": 0.4717948506224175
+    },
+    {
+      "key": "hm_twist_sf",
+      "record_only": false,
+      "units": "ratio",
+      "value": 0.05886024599851332
+    },
+    {
+      "key": "hm_tip_inplane_sf",
+      "record_only": true,
+      "units": "ratio",
+      "value": 0.2509290477133247
+    },
+    {
+      "key": "hm_spine_sf",
+      "record_only": false,
+      "units": "ratio",
+      "value": 0.22423850126325828
+    },
+    {
+      "key": "hm_ringback_sf",
+      "record_only": false,
+      "units": "ratio",
+      "value": 4.725769505139237
+    }
+  ],
+  "flags": [
+    {
+      "alias": 1,
+      "id": "cad_watertight_and_single_solid",
+      "kind": "G16",
+      "met": true
+    },
+    {
+      "alias": 2,
+      "id": "geometric_and_holder_gates",
+      "kind": "G16",
+      "met": true
+    },
+    {
+      "alias": 3,
+      "id": "karambit_ring_and_curved_claw",
+      "kind": "G16",
+      "met": true
+    },
+    {
+      "alias": 4,
+      "id": "c6_aesthetic_floor",
+      "kind": "G16",
+      "met": true
+    },
+    {
+      "alias": 5,
+      "id": "cert_hiker_180n",
+      "kind": "G16",
+      "met": false
+    },
+    {
+      "alias": 6,
+      "id": "cert_hunter_260n",
+      "kind": "G16",
+      "met": false
+    },
+    {
+      "alias": 7,
+      "id": "strict_hunter_260n",
+      "kind": "G16",
+      "met": false
+    },
+    {
+      "alias": 8,
+      "id": "cert_ring_pull_1500n",
+      "kind": "G16",
+      "met": true
+    },
+    {
+      "alias": 9,
+      "id": "twist_body_1p82nm",
+      "kind": "G16",
+      "met": true
+    },
+    {
+      "alias": 10,
+      "id": "twist_tip_only_1p82nm",
+      "kind": "G16",
+      "met": false
+    },
+    {
+      "alias": 11,
+      "id": "twist_tip_submodel_strict_1p82nm",
+      "kind": "G16",
+      "met": false
+    },
+    {
+      "alias": 12,
+      "id": "solid_tip_3d_p2_1p82nm",
+      "kind": "G16",
+      "met": false
+    },
+    {
+      "alias": 13,
+      "id": "side_a4_buckling_and_support",
+      "kind": "G16",
+      "met": true
+    },
+    {
+      "alias": 14,
+      "id": "failure_sequence_1p2",
+      "kind": "G16",
+      "met": true
+    },
+    {
+      "alias": 15,
+      "id": "plate_gci_valid_3level",
+      "kind": "G16",
+      "met": true
+    },
+    {
+      "alias": 16,
+      "id": "dolfinx_cross_check_2pct",
+      "kind": "G16",
+      "met": true
+    },
+    {
+      "alias": 1,
+      "id": "aesthetic_and_geometric",
+      "kind": "RSV2",
+      "met": true
+    },
+    {
+      "alias": 2,
+      "id": "floors_828_joint",
+      "kind": "RSV2",
+      "met": false
+    },
+    {
+      "alias": 3,
+      "id": "twist_floor_body_and_tipsub_strict",
+      "kind": "RSV2",
+      "met": false
+    },
+    {
+      "alias": 4,
+      "id": "solid_tip_sf",
+      "kind": "RSV2",
+      "met": false
+    },
+    {
+      "alias": 5,
+      "id": "strict_hunter_lateral",
+      "kind": "RSV2",
+      "met": false
+    },
+    {
+      "alias": 6,
+      "id": "seq_hard",
+      "kind": "RSV2",
+      "met": true
+    },
+    {
+      "alias": 7,
+      "id": "human_max",
+      "kind": "RSV2",
+      "met": false
+    },
+    {
+      "alias": 8,
+      "id": "fatigue",
+      "kind": "RSV2",
+      "met": false
+    },
+    {
+      "alias": 9,
+      "id": "gate_s_sharp_law",
+      "kind": "RSV2",
+      "met": false
+    },
+    {
+      "alias": 10,
+      "id": "gate_s_tip_point_brep",
+      "kind": "RSV2",
+      "met": false
+    }
+  ],
+  "fresh_solver_execution": false,
+  "note": "Scalar plots and a labeled support-model schematic; no synthetic fatigue/stability/strict spatial fields, no aggregation or new thresholds.",
+  "producer_revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+  "qualification": false,
+  "schema": "jarambit.retained_assessment_projection.v1",
+  "subject": "cert_pipeline_r01_p14_c02",
+  "support": {
+    "case_region_comparability": false,
+    "certification_multicase_minimum": 1.4353235573963146,
+    "eigen_operator_audit": "open: eigsh applied to K_support^-1 G; Euclidean symmetry and eigenpair residual not established in retained record",
+    "eigenvalue": 7.0350618718604325,
+    "eigenvector_available": false,
+    "source_status": "pass",
+    "supported_blade_peak_MPa_per_N": 2.4942468866430674,
+    "supported_hand_peak_MPa_per_N": 0.47941618381763057,
+    "supported_lateral_ratio": 5.2026756101164
+  }
+}

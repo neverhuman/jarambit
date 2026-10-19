@@ -1,0 +1,26 @@
+{
+  "schema": "jarambit.retained_assessment_contract.v1",
+  "subject": "cert_pipeline_r01_p14_c02",
+  "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+  "producer_revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+  "sources": {
+    "a4": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_a4.json",
+      "sha256": "788196e1a534b1611df5a777741c7ec77079493c770a73ec2e976f30906cb472"
+    },
+    "rs": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_rs.json",
+      "sha256": "2696a6f5d4dbbcec6a6148c83d5ff48313f7a86682766328be56ea4f203945fb"
+    },
+    "scorecard": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+      "sha256": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca"
+    }
+  },
+  "interpretation_sources": {
+    "ops/ci/side_a4.py": "f7a49fa378ca5aa9b0ca661db975723c04f727fde6b5f168822e15593202aeca",
+    "crates/crescent/src/fem.rs": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
+    "crates/cli/src/bench.rs": "191712f94e18ed8b49612edee84037ef4f9c4f533c3ebbb8342a7b866e7ffa71"
+  },
+  "scope": "Saved scalar observations, model schematic and original status flags only; no new mechanics or threshold definitions. Eigenvector, eigenpair residual and fatigue field are not retained."
+}

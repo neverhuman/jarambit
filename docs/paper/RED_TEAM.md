@@ -50,3 +50,13 @@ This is an author adversarial review, not independent peer review, a separate ag
 ## Local broad-gate finding
 
 The 19 October 2026 Rust 1.85.1 release workspace run on `08ed64b1dd31` again failed `tests::d1_knife_fixture_reports_torsion_and_couple`; an isolated exact-test rerun reproduced the assertion at `crates/crescent/src/tests.rs:206`. This scientific source, its mechanics dependencies and the root lock match main `72e25a360470` byte-for-byte. This task preserves the test and requirement definitions and does not claim the workspace gate passed. Later local gate phases remain incomplete. Required PR CI and independent review must resolve merge readiness.
+
+## A4 eigen-operator contract: open P1
+
+**Found 19 October 2026 during scalar-visual admission.** The [original producer](../../ops/ci/side_a4.py) constructs a `LinearOperator` applying `K_support^-1 G_mat`, passes it to `scipy.sparse.linalg.eigsh` without a generalized mass argument or explicit inner-product transform, and reciprocates its selected eigenvalue. The [official API contract](https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.eigsh.html), inspected 19 October, requires the supplied operator to be real symmetric or complex Hermitian. The archived A4 report does not record the SciPy version, operator-symmetry evidence, eigenvector or eigenpair residual.
+
+This is a **verification gap**, not a demonstrated numerical error in the saved value 7.0350618718604325. Even symmetric positive matrices K and G do not generally make K^-1 G Euclidean-symmetric: its transpose is G K^-1. A neutral two-by-two algebra counterexample was recorded under `target/paper-a4-eigen-contract-probe.json`. It contains no CAD model and does not test the archived A4 eigenvalue. An appropriate generalized/self-adjoint formulation could be justified, but that justification is not established by the inspected call or report.
+
+**Disposition:** preserve the original scalar and favorable legacy flag; label them as archived observations with this open audit. Do not call the A4 eigensolve numerically verified or fabricate a buckling mode. The manuscript and figure now say so. Resolution requires the numerical owner's independent assessment of the realized operator/inner product and retained eigenpair residual or an appropriately scoped new verification receipt. No scientific implementation, test, requirement or original evidence is modified by this publication task.
+
+The A4 ratio comparison also changes the modeled case and regional masks: supported lateral-only versus the certification minimum across cases. The publication therefore reports both values but does not attribute their difference solely to compliant supports.
