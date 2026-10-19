@@ -138,3 +138,10 @@ The independent reviewer reproduced a real P1 on `04f8fde2dceafa222c6b1b8b0b8bb2
 The fix formats transformed display coordinates to three decimal places, including grid paths, cross origins and shared text labels. It retains the raw observations and all numerical/projection JSONs unchanged; no rounding is fed back into score reductions or source data. A regression test exercises both actual adjacent-value pairs and bounds display error to half a 0.001 SVG unit. The existing Linux freshness check remains strict rather than accepting platform-specific output drift. Final new-head CI and independent re-review must confirm the fix before merge.
 
 The review's non-blocking matrix clarification is also implemented: `c10a` and `c10c` are explicitly marked as historical hand-built SWITCHBACK CAD, non-genome rows. Source role fields and all 414 original labels are preserved. No reference design is introduced as an evolved winner or promoted into the cover.
+
+
+## 19 October 2026 — Linux manuscript path and runner coverage
+
+Exact-head version-check run `39257112168`, attempt 2, passed all 48 reporting tests/freshness and reached the new PDF build, then failed at `13:23:52Z`. The generated cover PNG exists, but Linux LuaTeX 1.17.0 fails to reopen its basename through output-directory lookup. Both Makefile passes now prepend the absolute output path to `TEXINPUTS`, retaining inherited/default search paths. A neutral one-image probe and the complete copied manuscript pass on Linux with enforced 2 GiB/no-swap/one-CPU bounds; no scientific computation was run. Mac Make checks pass and the PDF is byte-identical to the preceding reviewed local artifact.
+
+The independent review also identified a genuine routing defect: `jarambit-publication` includes xbabe3 without the new manuscript toolchain. Fresh runner-label API results show three eligible instances on provisioned xbabe2 and one on xbabe3. The existing required workflow now additionally selects the actual `xbabe2` label. No check is removed, made optional or bypassed, and no shared runner or host configuration is changed. Fresh resulting-head CI and independent review remain required.

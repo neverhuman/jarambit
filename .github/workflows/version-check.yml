@@ -20,8 +20,9 @@ jobs:
       run:
         shell: bash ops/ci/run_bounded.sh version {0}
     name: VERSION == tag == WHITEPAPER header
-    # General local pool; publication checks also require the pinned PDF toolchain.
-    runs-on: [self-hosted, linux, x64, xbabe, general, jarambit-publication]
+    # Only the xbabe2 publication pool has the full manuscript toolchain.
+    # Keep the PDF build required; do not randomly route it to unprovisioned xbabe3.
+    runs-on: [self-hosted, linux, x64, xbabe, general, jarambit-publication, xbabe2]
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
