@@ -1,0 +1,53 @@
+{
+  "schema": "jarambit.publication_render.v1",
+  "subject": "cert_pipeline_r01_p14_c02",
+  "figure": "docs/paper/figures/v2/hero_dark.png",
+  "figure_sha256": "29e8f64665e961c8129a663fdbbb2af884961f7c68aeb21fe731c272f81d6698",
+  "script": "ops/render/blender/candidate_scenes.py",
+  "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+  "status": "assessed evolved example; not qualified",
+  "command": [
+    "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/tools/blender-4.5.3/mounted/Blender.app/Contents/MacOS/Blender",
+    "-b",
+    "-t",
+    "4",
+    "--python-exit-code",
+    "1",
+    "-P",
+    "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/ops/render/blender/candidate_scenes.py",
+    "--",
+    "--scene",
+    "hero_oblique",
+    "--profile",
+    "publication",
+    "--recipe",
+    "dark",
+    "--output",
+    "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/docs/paper/figures/v2/hero_dark.png",
+    "--samples",
+    "256",
+    "--width",
+    "3600",
+    "--height",
+    "2800"
+  ],
+  "blender": "Blender 4.5.3 LTS",
+  "scene": "hero_dark.scene.json",
+  "inputs": {
+    "docs/paper/figure-inputs.v1.json": "dbce6bf8a075b33b20158a20b74e3dd5f58658c45a33f253f6224a1ffae8b3c4",
+    "ops/render/blender/candidate_scenes.py": "c1c60c5057fc90c8e8fd9442cf8612728f8d320568465310192255a45838bb6d",
+    "ops/render/blender/paper_scenes.py": "683153ca121869179ae2db5d31a56892e84ae352b6a472ba0057ed6235dc9c0a",
+    "ops/render/blender/rerender.py": "bf121cf602df8427918dd42ec60f47df2bc7b8fbb52f8bbc90119a152baa6e1c",
+    "evidence/evolve_certifiable/manifest.json": "b9c6b46e724f4886ba365fd5cc3f357c06d74635d4e546ede330a137d1f01f18",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_rs.json": "2696a6f5d4dbbcec6a6148c83d5ff48313f7a86682766328be56ea4f203945fb",
+    "evidence/evolve_certifiable/automatic/leaderboard.json": "151e18581274a60b4d15581936e09fc02b1a4473e6e9734609a0a0670b47173a"
+  },
+  "outputs": {
+    "hero_dark.png": "29e8f64665e961c8129a663fdbbb2af884961f7c68aeb21fe731c272f81d6698",
+    "hero_dark.scene.json": "0425bd7d2141ebfc00fe28c73bac61bf43fae817582dbadc344f223648166536"
+  },
+  "scope": "Presentation only; exact assessed geometry; no score or field generated"
+}

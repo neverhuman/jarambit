@@ -100,7 +100,7 @@ Each entry explains the question, observation family, implementation, related so
 
 Rust CAD and evaluation core, with a Vite + TypeScript + React evidence studio. The current automatic lane ranks candidates using weighted fitness and sends a selected subset to independent assessment. Other lanes retain their own algorithms and score conventions. [Genome and methodology](docs/paper/sections/03-genome.tex) · [Existing operational guide](docs/EVOLUTION_CERTIFICATION.md).
 
-**Score direction:** retained `W_ULTRALIGHT_v1` is higher-is-better. Native Stage 1, native Stage 2 and the reporting scorer use different proxies/constants; a shared label does not make them interchangeable. The desired future lower-is-better convention remains a separate product direction. This documentation change does not implement a new physical objective. [Full interpretation](docs/paper/sections/05-fitness.tex).
+**Score direction:** retained `W_ULTRALIGHT_v1` is higher-is-better. At the manuscript's source baseline, native Stage 1, native Stage 2 and the reporting scorer used different proxies/constants. [PR #135](https://github.com/neverhuman/jarambit/pull/135) subsequently changed Stage-2 ranking to the canonical score; the retained cohorts keep their original score history and incomplete lineage. The desired future lower-is-better convention remains a separate product direction. [Full interpretation](docs/paper/sections/05-fitness.tex).
 
 ## Retained history and corrections
 

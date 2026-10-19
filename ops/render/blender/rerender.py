@@ -20,7 +20,6 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT/'ops/wave_figures'))
-from ops.ci.evaluate_cad_candidate import validate_solid_artifacts
 import figlib
 
 
@@ -28,6 +27,7 @@ def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def prepare(genome_id, leaderboard, source_root, preview=False):
+    from ops.ci.evaluate_cad_candidate import validate_solid_artifacts
     source_root = source_root.resolve()
     if not preview and source_root != ROOT:
         raise ValueError('Final renders must use the committed inputs in this worktree')
@@ -104,14 +104,75 @@ def prepare(genome_id, leaderboard, source_root, preview=False):
         artifacts={k:str(p) for k,p in assets.items()}, input_sha256={str(p):sha(p) for p in assets.values()})
 
 
+def publication(args, parser):
+    """Isolated, lossless bpy rendering; leave the archived atlas untouched."""
+    if args.genome_id is not None or args.preview or args.leaderboard or args.output_dir:
+        parser.error('publication profile uses only the frozen assessed-example inputs')
+    if args.scene not in (None,'hero_oblique'):
+        parser.error('publication profile currently admits only hero_oblique')
+    if not args.output_root:
+        parser.error('publication rendering requires --output-root')
+    out=Path(args.output_root).resolve()
+    allowed=[(ROOT/'docs/paper/figures/v2').resolve(),(ROOT/'target/paper/blender-v2').resolve()]
+    if not any(out==base or out.is_relative_to(base) for base in allowed):
+        parser.error('publication output must be inside docs/paper/figures/v2 or target/paper/blender-v2')
+    if not (128<=args.width<=4800 and 128<=args.height<=4800 and 1<=args.samples<=1024):
+        parser.error('publication dimensions/samples exceed the bounded render profile')
+    spec_path=ROOT/'docs/paper/figure-inputs.v1.json';spec=json.loads(spec_path.read_text())
+    for path,digest in spec['inputs'].items():
+        if hashlib.sha256((ROOT/path).read_bytes()).hexdigest()!=digest:
+            raise ValueError('publication input changed: '+path)
+    proof=json.loads((ROOT/'evidence/evolve_certifiable/manifest.json').read_text())['automatic']
+    board=json.loads((ROOT/proof['artifacts']['leaderboard']).read_text())
+    rs=json.loads((ROOT/proof['artifacts']['rs']).read_text())
+    if proof['label']!=spec['subject'] or proof['certificate_identity']!=spec['certificate_identity']:
+        raise ValueError('publication subject identity differs')
+    if board['champion'] is not None or board['qualified_count']!=0 or rs['all_hard']:
+        raise ValueError('publication assessed-example status requires editorial readmission')
+    out.mkdir(parents=True,exist_ok=True)
+    name='hero_'+args.recipe;figure=out/(name+'.png')
+    script=ROOT/'ops/render/blender/candidate_scenes.py'
+    bound=[spec_path,script,ROOT/'ops/render/blender/paper_scenes.py',Path(__file__).resolve()]+[ROOT/p for p in spec['inputs']]
+    input_hashes={str(p.relative_to(ROOT)):sha(p) for p in bound}
+    blender=os.environ.get('BLENDER','blender')
+    version=subprocess.check_output([blender,'--version'],text=True).splitlines()[0]
+    cmd=[blender,'-b','-t','4','--python-exit-code','1','-P',str(script),'--',
+         '--scene','hero_oblique','--profile','publication','--recipe',args.recipe,
+         '--output',str(figure),'--samples',str(args.samples),'--width',str(args.width),'--height',str(args.height)]
+    logdir=ROOT/'target/paper/blender-v2';logdir.mkdir(parents=True,exist_ok=True)
+    log_path=logdir/f'{name}-{args.width}x{args.height}-{args.samples}.log'
+    with log_path.open('w') as log:
+        subprocess.run(cmd,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,check=True,timeout=1800)
+    scene_path=figure.with_suffix('.scene.json');scene=json.loads(scene_path.read_text())
+    if scene['geometry_changed'] or scene['stl_sha256']!=spec['geometry']['sha256']:
+        raise ValueError('rendered geometry identity differs')
+    for path,digest in input_hashes.items():
+        if sha(ROOT/path)!=digest:raise ValueError('Input changed during publication render: '+path)
+    receipt={'schema':'jarambit.publication_render.v1','subject':spec['subject'],
+             'figure':str(figure.relative_to(ROOT)),'figure_sha256':sha(figure),
+             'script':str(script.relative_to(ROOT)),
+             'certificate_identity':spec['certificate_identity'],'status':spec['status'],
+             'command':cmd,'blender':version,'scene':scene_path.name,
+             'inputs':input_hashes,
+             'outputs':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in [figure,scene_path]},
+             'scope':'Presentation only; exact assessed geometry; no score or field generated'}
+    figure.with_suffix('.manifest.json').write_text(json.dumps(receipt,indent=2)+'\n')
+    print(figure,figure.stat().st_size,flush=True)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('genome_id');p.add_argument('--leaderboard',type=Path)
+    p.add_argument('genome_id',nargs='?');p.add_argument('--leaderboard',type=Path)
     p.add_argument('--source-root',type=Path,default=ROOT)
     p.add_argument('--preview',action='store_true');p.add_argument('--output-dir',type=Path)
     p.add_argument('--scene');p.add_argument('--samples',type=int,default=48)
     p.add_argument('--plan-only',action='store_true')
+    p.add_argument('--profile',choices=['legacy','publication'],default='legacy')
+    p.add_argument('--output-root');p.add_argument('--recipe',choices=['neutral','dark','editorial'],default='neutral')
+    p.add_argument('--width',type=int,default=1600);p.add_argument('--height',type=int,default=1000)
     args = p.parse_args()
+    if args.profile=='publication':publication(args,p);return
+    if not args.genome_id:p.error('genome_id is required for the legacy assessment renderer')
     if args.samples < 1:p.error('samples must be positive')
     board = args.leaderboard
     if board is None:

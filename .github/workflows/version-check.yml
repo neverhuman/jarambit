@@ -284,6 +284,10 @@ jobs:
             target/ieee/paper/OUTPUT_SHA256SUMS
             target/ieee/paper/toolchain.txt
             target/ieee/paper/pdfinfo.txt
+            docs/paper/figure-inputs.v1.json
+            docs/paper/figures/v2/hero_dark.manifest.json
+            docs/paper/figures/v2/hero_dark.scene.json
+            docs/paper/generated/manifest.json
           if-no-files-found: error
       - name: Upload publication PDFs and SHA-256 manifest artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
