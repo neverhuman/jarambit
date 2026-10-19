@@ -210,7 +210,7 @@ def release(context=None):
         f'with `{100.0 * em["solid_tip_dolfinx_rel_err"]:.3f}%` `dolfinx` v0.9.0 vs. `skfem` agreement, and `side.a4` Winkler+bore supported `seq = {em["seq_ratio_supported_a4"]:.3f}`).',
         f'- **Historical 16-gate `W_CAD_v2` mass progression (`w274` → `{rec_wave}`):** {" → ".join(pareto_chain)}.',
         f'- **Battery total across {len(BATTERY_SUBJECTS)} subjects × 18 evaluators ({len(BATTERY_SUBJECTS) * 18} cells):** `{tot_p} pass`, `{tot_f} fail`, `{tot_b} blocked`{inc_str}.',
-        f'- **Scientific assurance catalog (`T00`–`T19`):** **{n_groups} paired positive/negative control groups ({2 * n_groups} controls)** defined in the committed catalog; run the software controls via `python3 -B ops/ci/science_suite.py`.',
+        f'- **Scientific assurance catalog (`T00`–`T19`):** **{n_groups} definitions with {2 * n_groups} required paired-control slots** in the committed catalog; run the software controls via `python3 -B ops/ci/science_suite.py`. Catalog entries do not establish execution.',
         '- **Full technical papers, tables, and evidence:**',
         f'  - [White paper (`docs/WHITEPAPER.md`)](docs/WHITEPAPER.md) — page-1 summary, `w20`–`{rec_wave}` mass curve, market comparison, `{rec_subj}` 16-gate margin breakdown, and T1→T2 calibration.',
         f'  - [Engineering gates & evolution paper (`docs/ENGINEERING_GATES_AND_EVOLUTION.md`)](docs/ENGINEERING_GATES_AND_EVOLUTION.md) — complete {len(BATTERY_SUBJECTS)}-subject × 18-evaluator CAD battery matrix, Margin-vs-Mass Pareto table, `RS-karambit-v2` gate tables, and 3D CAD/FEM gallery.',
