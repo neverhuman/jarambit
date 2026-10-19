@@ -301,6 +301,12 @@ jobs:
             docs/paper/figures/v2/hero_dark.manifest.json
             docs/paper/figures/v2/hero_dark.scene.json
             docs/paper/generated/manifest.json
+            docs/paper/weighted-inputs.v1.json
+            docs/paper/generated/weighted-runs.svg
+            docs/paper/generated/weighted-runs.json
+            docs/paper/generated/weighted-runs.svg.manifest.json
+            target/ieee/paper/weighted-runs.png
+            evidence/evolution_waves/2026-10-18_ultralight_v1/*/*/fitness_curve.json
             docs/paper/export-inputs.v1.json
             docs/paper/generated/export-identity.svg
             docs/paper/generated/export-identity.json

@@ -1,0 +1,65 @@
+{
+  "schema": "jarambit.weighted_summary_inputs.v1",
+  "metric": "W_ULTRALIGHT_v1",
+  "comparability": "not_established",
+  "point_stage": "not_established",
+  "producer_revision": null,
+  "scorer_revision": null,
+  "display": {
+    "generation_range": [
+      0,
+      2
+    ],
+    "fitness_range": [
+      70,
+      75
+    ],
+    "fitness_axis_truncated": true,
+    "point_connections": "none"
+  },
+  "runs": [
+    {
+      "id": "xbabe1/w501_ul",
+      "path": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe1/w501_ul/fitness_curve.json",
+      "sha256": "f642f4dd04554e174622dee330a09338ecd1d263120df29aad4f9cf7fce7bb0b",
+      "generation_rows": 3,
+      "declared_round_files": "absent_in_retained_tree"
+    },
+    {
+      "id": "xbabe1/w501_xb1",
+      "path": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe1/w501_xb1/fitness_curve.json",
+      "sha256": "3b38d3ee26d682d151730c1e5859118cbe341635b62b110f8177bc636fa7dcf1",
+      "generation_rows": 1,
+      "declared_round_files": "absent_in_retained_tree"
+    },
+    {
+      "id": "xbabe2/w322",
+      "path": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe2/w322/fitness_curve.json",
+      "sha256": "adea14366952fab800e2bbc2e37db3728c6204aa137a371d47b68fe0808a3a0f",
+      "generation_rows": 2,
+      "declared_round_files": "absent_in_retained_tree"
+    },
+    {
+      "id": "xbabe3/w409_ul",
+      "path": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w409_ul/fitness_curve.json",
+      "sha256": "f53756a696612fa632740b0b7467412039c15cd494a89b7408d9ad35d9937fcc",
+      "generation_rows": 3,
+      "declared_round_files": "absent_in_retained_tree"
+    },
+    {
+      "id": "xbabe3/w411c3",
+      "path": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/fitness_curve.json",
+      "sha256": "afe065170218f0f5f20942a9e737e7e91a300244f8e6a99fd3c1d617d16f1412",
+      "generation_rows": 3,
+      "declared_round_files": "absent_in_retained_tree"
+    },
+    {
+      "id": "xbabe3/w411t3",
+      "path": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411t3/fitness_curve.json",
+      "sha256": "cd18c55876447cc96b2756703a753eca9480d05fabf0f8646a64047a336914f6",
+      "generation_rows": 3,
+      "declared_round_files": "absent_in_retained_tree"
+    }
+  ],
+  "scope": "All six retained reporting files and fifteen generation summaries; no birth distributions, CAD bindings, independent replications or homogeneous-objective convergence."
+}

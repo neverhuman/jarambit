@@ -87,7 +87,7 @@ fn label(s: &mut String, x: f64, y: f64, size: usize, content: &str, color: &str
 }
 
 /// Verify the declared metric and the exact retained Hall-of-Fame recurrence.
-fn validate_curve(curve: &Value) -> Result<()> {
+pub(crate) fn validate_curve(curve: &Value) -> Result<()> {
     if text(&curve["metric"])? != "W_ULTRALIGHT_v1" {
         return Err("wrong metric regime".into());
     }
@@ -882,6 +882,54 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         serde_json::to_string_pretty(&lineage)? + "\n",
     );
     admit_cover_render(&root, &mut inputs)?;
+    let weighted_contract = read(&root, "docs/paper/weighted-inputs.v1.json", &mut inputs)?;
+    let weighted_specs = array(&weighted_contract["runs"])?;
+    let mut weighted_docs = BTreeMap::new();
+    for spec in weighted_specs {
+        let id = text(&spec["id"])?;
+        let path = text(&spec["path"])?;
+        let doc = read(&root, path, &mut inputs)?;
+        if inputs[path] != text(&spec["sha256"])? {
+            return Err("weighted summary source digest differs".into());
+        }
+        let parent = Path::new(path)
+            .parent()
+            .ok_or("missing weighted source directory")?;
+        for row in array(&doc["generations"])? {
+            let file = text(&row["round_file"])?;
+            if Path::new(file).components().count() != 1
+                || !matches!(
+                    Path::new(file).components().next(),
+                    Some(Component::Normal(_))
+                )
+            {
+                return Err("unsafe declared weighted round filename".into());
+            }
+            let relative = parent.join(file);
+            if safe_path(
+                &root,
+                relative.to_str().ok_or("invalid weighted round path")?,
+            )?
+            .exists()
+            {
+                return Err(
+                    "weighted population availability changed; review the admitted scope".into(),
+                );
+            }
+        }
+        if weighted_docs.insert(id.to_string(), doc).is_some() {
+            return Err("duplicate weighted summary source".into());
+        }
+    }
+    let weighted_projection = crate::weighted_runs::project(&weighted_docs, &weighted_contract)?;
+    out.insert(
+        "docs/paper/generated/weighted-runs.svg".into(),
+        crate::weighted_runs::svg(&weighted_projection)?,
+    );
+    out.insert(
+        "docs/paper/generated/weighted-runs.json".into(),
+        serde_json::to_string_pretty(&weighted_projection)? + "\n",
+    );
     let field_contract = read(&root, "docs/paper/field-inputs.v1.json", &mut inputs)?;
     let assessment_manifest = read(
         &root,
@@ -1309,6 +1357,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "crates/paper-artifacts/src/assessment.rs",
         "crates/paper-artifacts/src/battery.rs",
         "crates/paper-artifacts/src/export_identity.rs",
+        "crates/paper-artifacts/src/weighted_runs.rs",
         "crates/paper-artifacts/src/visuals.rs",
         "crates/paper-artifacts/examples/paper_artifacts.rs",
         "crates/paper-artifacts/Cargo.toml",
@@ -1437,6 +1486,23 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "docs/paper/generated/export-identity.svg.manifest.json".into(),
         serde_json::to_string_pretty(&export_manifest)? + "\n",
     );
+    let mut weighted_inputs = BTreeMap::new();
+    for path in [
+        "docs/paper/weighted-inputs.v1.json",
+        "crates/paper-artifacts/src/weighted_runs.rs",
+        "crates/paper-artifacts/src/publication.rs",
+    ] {
+        weighted_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    for spec in weighted_specs {
+        let path = text(&spec["path"])?;
+        weighted_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    let weighted_manifest = json!({"schema":1,"figure":"docs/paper/generated/weighted-runs.svg","figure_sha256":digest(out["docs/paper/generated/weighted-runs.svg"].as_bytes()),"inputs":weighted_inputs,"script":"crates/paper-artifacts/src/weighted_runs.rs","projection_receipt":"docs/paper/generated/weighted-runs.json","scope":"six distinct retained reporting files, fifteen saved generation summaries; no interpolation, pooled trajectory or established stage/scorer comparability"});
+    out.insert(
+        "docs/paper/generated/weighted-runs.svg.manifest.json".into(),
+        serde_json::to_string_pretty(&weighted_manifest)? + "\n",
+    );
     let visual_coverage = crate::visuals::project(entries, &out)?;
     out.insert(
         "docs/tests/visuals.md".into(),
@@ -1453,6 +1519,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     let manifest = json!({"schema":"jarambit.publication_manifest.v1","baseline":BASE,"inputs":inputs,"outputs":outputs,"generation":"cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts","scope":"Documentation only; source hashes establish identity, not physical truth",
     "visual_coverage":"docs/tests/visuals.v1.json",
     "figures": {
+        "weighted-runs.svg":{"contract":"docs/paper/weighted-inputs.v1.json","projection_receipt":"docs/paper/generated/weighted-runs.json","membership":"six admitted source files / fifteen generation summaries / thirty saved score observations","selectors":["/generations/*/generation","/generations/*/round_best_fitness","/generations/*/hall_of_fame_best_so_far","/generations/*/best_so_far_label","/generations/*/round_file","/best_so_far/label","/best_so_far/ultralight_weighted_fitness"],"scope":"retained reporting summaries only; stage/scorer lineage not established, no homogeneous-convergence or independent-replication claim"},
         "export-identity.svg":{"contract":"docs/paper/export-inputs.v1.json","projection_receipt":"docs/paper/generated/export-identity.json","selectors":["/cad","/genome_sha256","/genome_csv","/solids","/valid","/vertices","/triangles"],"scope":"stored STEP token counts, original exporter census and BRep observations plus Blender import metadata; no fresh validation or qualification"},
         "lineage.svg":{"contract":"docs/paper/lineage-inputs.v1.json","projection_receipt":"docs/paper/generated/lineage.json","selectors":["/*/id","/*/gen","/*/fit","/*/parents","/*/op","/*/op_version","/*/fem_status","/*/legal"],"membership":"two recorded parent hops from highest historical stored fit, with original parent-list order","scope":"layout does not encode elapsed time or fitness; no inferred inheritance or best-geometry identity"},
         "battery-matrix.svg":{"contract":"docs/paper/battery-inputs.v1.json","projection_receipt":"docs/paper/generated/battery-matrix.json","membership":"manifest subjects and case_ids; exact-ID cell joins","selectors":["/subject","/role","/cases/*/id","/cases/*/status","/cases/*/fresh_this_lane","/cases/*/kind","/cases/*/evidence_path"],"scope":"stored historical labels only; not a FEM heatmap, new assessment or physical reliability estimate"},
