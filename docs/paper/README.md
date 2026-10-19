@@ -25,7 +25,7 @@ env CARGO_TARGET_DIR="$PWD/target/paper-artifacts" cargo run --locked --manifest
 make -C docs/paper check CARGO_TARGET_DIR="$PWD/target/paper-artifacts"
 ```
 
-Output: `target/ieee/paper/main.pdf`, source/output SHA-256 lists, tool versions, PDF metadata and logs. The Makefile's check mode verifies 15–20 pages and rejects overfull boxes or unresolved references/citations. The legacy pinned Pandoc target remains separate and unchanged. Byte-identical PDF reproduction across toolchain versions is not claimed.
+Output: `target/ieee/paper/main.pdf`, source/output SHA-256 lists, tool versions, PDF metadata and logs. The Makefile's check mode verifies 15–20 pages and rejects overfull boxes or unresolved references/citations. The legacy pinned Pandoc target remains separate and unchanged. Byte-identical PDF reproduction across toolchain versions is not claimed. Both LuaLaTeX passes explicitly add the absolute output directory to `TEXINPUTS`, preserving inherited/default search paths. This lets the Linux TeX Live 2023 backend reopen generated PNGs instead of relying on output-directory lookup behavior.
 
 SVG coordinates derived from platform-dependent transcendental functions are formatted to 0.001 SVG unit before serialization. This display-only rounding absorbs the observed macOS/Linux libm differences; original evidence values, numerical ledgers and reductions are unchanged. The standalone tests retain the exact adjacent-value pairs found by independent review, and Linux CI still requires byte-for-byte generated freshness.
 
@@ -37,7 +37,7 @@ The PDF embeds lossless PNG projections of the generated SVG figures: 3,600 pixe
 
 Before publishing, the reader checks that the selected score and label agree with the final retained Hall of Fame, matching Stage-2 identities agree, objective arithmetic reconciles within recorded rounding, and all 26 predicate flags agree with their tally and failed-ID list. These are reporting-consistency checks; they do not establish equivalence between screening and assessment stages or validate the underlying mechanics.
 
-The `version-check` workflow explicitly tests this standalone Cargo workspace, checks generated freshness, and builds the new manuscript. A successful new-paper build is configured to upload `ieee-paper-<commit SHA>` with its PDF and build receipts. This artifact is separate from the older publication PDFs and is available only after that workflow succeeds.
+The `version-check` workflow explicitly tests this standalone Cargo workspace, checks generated freshness, and builds the new manuscript. It retains the required PDF build and selects the existing `xbabe2` publication pool, whose three runner instances share the provisioned toolchain; the broader `jarambit-publication` label also includes unprovisioned xbabe3. A successful new-paper build is configured to upload `ieee-paper-<commit SHA>` with its PDF and build receipts. This artifact is separate from the older publication PDFs and is available only after that workflow succeeds.
 
 ![Retained reporting summary with incomplete stage lineage](generated/fitness.svg)
 
