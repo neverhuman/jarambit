@@ -1066,7 +1066,7 @@ def score_cad(
         'cad_battery': battery_rec,
     }
 
-    if resolved['mode'] == 'genome_backed':
+    if resolved['mode'] == 'genome_backed' and not force_standalone_cad:
         rs_path = out_dir / f'{subj}_rs.json'
         if not rs_path.is_file():
             raise RuntimeError(f'genome-backed scorecard missing RS-v2 receipt: {rs_path}')

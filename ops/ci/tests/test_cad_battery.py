@@ -458,10 +458,20 @@ class Records(unittest.TestCase):
              patch('ops.ci.score_cad.evaluated_genome_spec', return_value={'genome':'fresh.csv'}) as spec, \
              patch('ops.ci.score_cad.build_subject', return_value=bat) as build:
             out = Path(tmp)
+            with self.assertRaisesRegex(RuntimeError, 'missing RS-v2 receipt'):
+                score_cad('w282_p14_c01', out, run_solid=False)
+            fresh.reset_mock()
+            standalone_res = score_cad('w282_p14_c01', out, run_solid=False, force_standalone_cad=True)
+            self.assertNotIn('ultralight_weighted_fitness', standalone_res)
+            direct.reset_mock()
+            (out/'w282_p14_c01_rs.json').write_text(
+                (ROOT/'evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json').read_text()
+            )
             result = score_cad('w282_p14_c01', out, run_solid=False)
             fresh.assert_called_once()
             self.assertEqual(build.call_args.kwargs['custom_spec'], {'genome':'fresh.csv'})
             self.assertFalse(result['weighted_cad_score']['all_engineering_gates_pass'])
+            self.assertIn('global_weighted_fitness', result['ultralight_weighted_fitness'])
             self.assertTrue((out/'w282_p14_c01_master_scorecard.json').is_file())
             result = score_cad('c10a', out, run_solid=False)
             self.assertFalse(result['weighted_cad_score']['all_engineering_gates_pass'])
