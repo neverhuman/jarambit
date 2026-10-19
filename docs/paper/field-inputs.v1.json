@@ -1,0 +1,45 @@
+{
+  "schema": "jarambit.retained_plate_contract.v1",
+  "subject": "cert_pipeline_r01_p14_c02",
+  "source_label": "cert_pipeline_r01_p14_c02_D1",
+  "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+  "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
+  "source_sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+  "producer_revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+  "producer_sources": {
+    "crates/crescent/src/fem.rs": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
+    "crates/cli/src/crescent.rs": "c8f2e1664263e3bb885ca33e27f42dab0fbe0f180116ec890ee4dcd83bdeab22",
+    "crates/physics/src/fine.rs": "b8762847e7452d3bcbfde718e55e13c42d4ac61d9a23abf5a75d2d5c38343096",
+    "crates/crescent/src/pheno.rs": "fd0f556d9054334f26b3d1698979c14696435b1fb85c1c637f5e199d4b4aa19c"
+  },
+  "association": "one stored value per triangle; no interpolation, nodal recovery or new solve",
+  "coordinate_units": "mm",
+  "serialized_coordinate_decimals": 3,
+  "serialized_field_decimals": 4,
+  "tip_exclusion_radius_mm": 4.0,
+  "seated_ring_mask": "triangle centroid x >= 76 + grip_dx - 3; source ring_c forced to zero",
+  "display_fields": {
+    "env_vm": {
+      "units": "MPa",
+      "definition": "stored multi-case plate envelope; includes the producer global torsion correction",
+      "display_mask": "source tip exclusion; forced zeros are not zero stress"
+    },
+    "lat": {
+      "units": "MPa/N",
+      "definition": "per-triangle DKT bending surface von Mises maximum over three extrapolated corners, unit lateral load",
+      "display_mask": "none; source capacity tip exclusion shown as an outline"
+    },
+    "ring": {
+      "units": "MPa/N",
+      "definition": "T6 centroid von Mises unit traction-resultant response after source seated-region zeroing",
+      "display_mask": "source seated-region mask; forced zeros are not zero stress"
+    },
+    "twist": {
+      "units": "MPa/(N mm)",
+      "definition": "per-triangle DKT bending surface von Mises maximum over three extrapolated corners, unit chord torque; before global envelope correction",
+      "display_mask": "none; source capacity tip exclusion shown as an outline"
+    }
+  },
+  "scope": "retained plate fields; not strict-refinement fields, solid FEM, manufacturing or physical validation",
+  "ring_boundary_resolution": "One cell within the coordinate-rounding bound is active because its positive stored ring coefficient proves it was not source-zeroed; zero-valued ambiguous membership must be refused."
+}

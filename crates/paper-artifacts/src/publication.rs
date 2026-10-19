@@ -809,6 +809,52 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         );
     }
     admit_cover_render(&root, &mut inputs)?;
+    let field_contract = read(&root, "docs/paper/field-inputs.v1.json", &mut inputs)?;
+    let assessment_manifest = read(
+        &root,
+        "evidence/evolve_certifiable/manifest.json",
+        &mut inputs,
+    )?;
+    if field_contract["source"] != assessment_manifest["automatic"]["artifacts"]["d1"]
+        || field_contract["subject"] != assessment_manifest["automatic"]["label"]
+        || field_contract["producer_revision"] != assessment_manifest["numerical_kernel_commit"]
+    {
+        return Err("retained plate source or producer differs from assessment manifest".into());
+    }
+    let field_source = text(&field_contract["source"])?;
+    let field_doc = read(&root, field_source, &mut inputs)?;
+    if inputs[field_source] != text(&field_contract["source_sha256"])? {
+        return Err("retained plate source digest differs".into());
+    }
+    let producer_sources = field_contract["producer_sources"]
+        .as_object()
+        .ok_or("missing plate producer sources")?;
+    let expected_producers = [
+        "crates/crescent/src/fem.rs",
+        "crates/cli/src/crescent.rs",
+        "crates/physics/src/fine.rs",
+        "crates/crescent/src/pheno.rs",
+    ];
+    if producer_sources.len() != expected_producers.len()
+        || expected_producers
+            .iter()
+            .any(|path| !producer_sources.contains_key(*path))
+    {
+        return Err("plate interpretation source membership differs".into());
+    }
+    for (path, expected) in producer_sources {
+        let actual = digest(&fs::read(safe_path(&root, path)?)?);
+        if actual != text(expected)? {
+            return Err(format!("plate interpretation source changed: {path}").into());
+        }
+        inputs.insert(path.clone(), actual);
+    }
+    let (plate_svg, plate_summary) = crate::plate::project(&field_doc, &field_contract)?;
+    out.insert("docs/paper/generated/plate-fields.svg".into(), plate_svg);
+    out.insert(
+        "docs/paper/generated/plate-fields.json".into(),
+        serde_json::to_string_pretty(&plate_summary)? + "\n",
+    );
     let birth_ids = births
         .iter()
         .map(|r| {
@@ -999,6 +1045,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "crates/paper-artifacts/src/lib.rs",
         "crates/paper-artifacts/src/validation.rs",
         "crates/paper-artifacts/src/historical.rs",
+        "crates/paper-artifacts/src/plate.rs",
         "crates/paper-artifacts/examples/paper_artifacts.rs",
         "crates/paper-artifacts/Cargo.toml",
         "crates/paper-artifacts/Cargo.lock",
@@ -1020,12 +1067,29 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     }
     table.push_str(&format!("\\midrule\nTotal & {} & {} & {}\\\\\\bottomrule\n\\end{{tabular}}\n\\label{{tab:battery}}\n\\end{{table}}\n",counts.get("pass").unwrap_or(&0),counts.get("fail").unwrap_or(&0),counts.get("blocked").unwrap_or(&0)));
     out.insert("docs/paper/generated/battery.tex".into(), table);
+    let mut plate_inputs = BTreeMap::new();
+    for path in [
+        "docs/paper/field-inputs.v1.json",
+        field_source,
+        "crates/paper-artifacts/src/plate.rs",
+    ] {
+        plate_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    for path in producer_sources.keys() {
+        plate_inputs.insert(path.clone(), inputs[path].clone());
+    }
+    let plate_manifest = json!({"schema":1,"figure":"docs/paper/generated/plate-fields.svg","figure_sha256":digest(out["docs/paper/generated/plate-fields.svg"].as_bytes()),"inputs":plate_inputs,"script":"crates/paper-artifacts/src/plate.rs","projection_receipt":"docs/paper/generated/plate-fields.json","scope":"stored cell values only; no new mechanics, interpolation, clipping or solid field"});
+    out.insert(
+        "docs/paper/generated/plate-fields.svg.manifest.json".into(),
+        serde_json::to_string_pretty(&plate_manifest)? + "\n",
+    );
     let outputs = out
         .iter()
         .map(|(k, v)| (k.clone(), digest(v.as_bytes())))
         .collect::<BTreeMap<_, _>>();
     let manifest = json!({"schema":"jarambit.publication_manifest.v1","baseline":BASE,"inputs":inputs,"outputs":outputs,"generation":"cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts","scope":"Documentation only; source hashes establish identity, not physical truth",
     "figures": {
+        "plate-fields.svg":{"source":field_source,"contract":"docs/paper/field-inputs.v1.json","projection_receipt":"docs/paper/generated/plate-fields.json","selectors":["/mesh/xy","/mesh/tris","/mesh/env_vm","/mesh/lat","/mesh/ring","/mesh/twist"],"association":"one stored rounded value per triangle; no interpolation","limits":"independent zero-to-source-maximum scales; no clipping","masks":"source-forced zeros only; raw unit-response tip region retained","scope":"retained 0.25 mm2 plate mesh, not strict or solid fields"},
         "cover-evolution.svg":{"source":POP,"membership":"all retained births in panel B; per-generation and cumulative maxima of stored fit in panel C","selectors":["/*/id","/*/gen","/*/fit","/*/fem_status"],"population_vertical_transform":"asinh(fit); original-value ticks","maximum_axis_limits":[1.135,1.16],"maximum_axis_truncated":true,"lines":"straight segments between observed generations; no fitted convergence model","producer_revision":history["producer_revision"],"semantics":history["fitness_semantics"]},
         "fitness.svg": {"weighted_source":CURVE,"weighted_selectors":["/best_so_far/ultralight_weighted_fitness","/best_so_far/ultralight_fitness_breakdown/objectives/*/weighted_points","/generations/*/generation","/generations/*/round_best_fitness","/generations/*/hall_of_fame_best_so_far"],"weighted_direction":"higher_is_better","weighted_stage_lineage":"incomplete; reporting producer can substitute assessment values for screening values","population_source":POP,"population_selectors":["/*/id","/*/gen","/*/fit"],"population_reduction":"all retained births; generation maximum and sorted-sample median","population_vertical_transform":"asinh(fit); ticks in original units","regimes":"separate panels; no cross-regime score comparison"},
         "population.svg":{"source":POP,"membership":"all retained births, including not-evaluated penalty records","selectors":["/*/id","/*/gen","/*/fit","/*/fem_status","/*/legal"],"reduction":"generation median and maximum; status census by generation; no imputation","vertical_transform":"asinh(fit); ticks in original units","producer_revision":history["producer_revision"],"producer_qd_sha256":history["producer_qd_sha256"],"semantics":history["fitness_semantics"]}

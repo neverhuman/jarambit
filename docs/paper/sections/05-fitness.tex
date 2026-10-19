@@ -25,6 +25,20 @@ The distinction between preference and evidential validity remains essential. So
 \subsection{How to Read the Following Tests}
 The following subsections explain every legacy CAD diagnostic. Exact predicate keys and source links appear in the online atlas. The predicate suffixes are historical identities; they are not new load recommendations. The authoritative predicate map remains in \src{ops/ci/evaluate_cad_candidate.py}{the existing evaluator}. We describe observation semantics, shared dependencies and interpretation limits instead of creating a second, drifting authority for requirement constants.
 
+\subsection{Retained Fields and Their Recovery}
+Figure~\ref{fig:plate-fields} displays the retained D1 cell arrays for the cover's assessed example. Its 13,503 nodes and 25,209 triangles belong to the $0.25\,\mathrm{mm}^2$ plate level. Exported capacity summaries take minima over two levels, $0.25$ and $0.125\,\mathrm{mm}^2$; their limiting mesh cannot be inferred from these displayed fields. This is neither a strict-refinement field nor a three-dimensional solid field. The publication projection reads saved arrays and invokes no mechanics solver.
+
+The lateral and torsion arrays contain unit responses. The DKT implementation recovers bending surface von Mises stress at three corners, extrapolated from Gauss observations, and stores the per-element maximum. Their units are respectively MPa/N and MPa/(N\,mm). The ring array stores T6 centroid von Mises response per unit traction resultant, in MPa/N. The envelope is already scaled, in MPa, and includes the producer's global torsion correction. It therefore cannot share a numerical legend with the unit responses. Each panel uses its full stored range; the envelope maximum of $1{,}388.6695$ MPa is a recorded elastic-model stress, not an experimentally demonstrated material response.
+
+The producer forces envelope values to zero inside a 4-mm tip exclusion and ring values to zero in its seated region. We display those cells in gray rather than as zero stress. The 75 envelope cells are recovered from triangle centroids and the identified boundary tip node. Their nearest exclusion-boundary margin exceeds the coordinate-rounding bound. The ring mask covers 14,875 cells; one boundary-adjacent cell is retained because its positive stored coefficient proves it was not source-zeroed. The raw lateral and torsion panels retain the tip region, with its capacity exclusion outlined. Coordinates and coefficients are serialized to three and four decimal places, respectively. Other stored zeros remain rounded source values; they are not proof of zero physical stress. Source hashes, cell IDs, mapping and mask decisions are retained with the figure.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{plate-fields.png}
+\caption{Actual retained plate arrays for \code{cert_pipeline_r01_p14_c02}, not qualified. A: stored multi-case envelope. B: lateral unit response. C: ring unit response. D: torsion unit response. Legends have different units and independent full ranges. Each triangle receives its saved value without smoothing, clipping or deformation. Gray marks producer-forced zeros, not zero stress. The dashed tip outline in B and D marks a capacity exclusion while retaining the raw field there. These are $0.25\,\mathrm{mm}^2$ plate-level observations; no strict, solid, fatigue or buckling field is implied.}
+\label{fig:plate-fields}
+\end{figure*}
+
 \test{G16-01: Export Topology and Identity}
 This diagnostic concerns the assessed export's relation to the intended candidate and the topology accepted by the existing export checks. It reads the recorded CAD-validity result rather than inferring validity from a rendered image. Relevant evidence includes exported artifact identity, solid count, topology analysis and conversion context. A watertight triangle shell and a valid B-rep solid are different statements: each representation has its own checks and failure modes. A favorable topology field does not establish unit identity, physical manufacture, or agreement of all mass representations. Those questions require their own observations and bindings.
 
@@ -38,18 +52,22 @@ This predicate describes conformity to the represented shape family, using ring 
 The aesthetic/reference diagnostic compares geometry with the stored reference and associated feature checks. Metrics such as distance or distribution similarity are automated descriptors whose meaning depends on normalization, correspondence and reference identity. They can make a search's appearance bias reproducible. They cannot replace human aesthetic approval or an ergonomic study. The distinction matters when automated similarity is given a positive score contribution: a scalar preference for reference resemblance is a design choice, not an empirical finding about user experience.
 
 \test{G16-05: Lateral-Response Comparison}
+Panel B of Fig.~\ref{fig:plate-fields} shows the retained unit-response field shared by the lateral comparisons; it is not a separate field for each predicate.
 This predicate compares a retained plate-model lateral response with one legacy requirement. The underlying observation is obtained from the recorded continuum model and material envelope; the comparison is a postprocessing statement about that observation. Its interpretation requires the correct region, stress recovery, discretization and model revision. The historical use-case name should not be read as a validated operational load specification. In particular, this predicate and the next reuse a response family. Counting their two Boolean outcomes as two independent engineering experiments would inflate the evidence.
 
 \test{G16-06: Additional Lateral Comparison}
 The second lateral predicate applies another legacy comparison to the related retained response. Its usefulness lies in showing how one modeled observation relates to a different requirement scope. It does not create an additional solver execution or an independently measured capacity. A report should display the observation once, with the separate comparisons clearly attached, so readers can see the dependency. Apparent agreement between the two predicates provides little additional confidence when both are derived from the same inputs and numerical field.
 
 \test{G16-07: Refined Lateral Observation}
+No matched full strict-refinement field is retained in this publication input set; Fig.~\ref{fig:plate-fields}B cannot substitute for it.
 This diagnostic uses the refined-discretization lateral observation rather than silently substituting the cheaper screening result. Its field identity includes the refinement convention in the existing implementation. A smaller element size may change the result, but refinement by itself does not establish an asymptotic error regime. Geometry, material, supports, load definition and the observable must remain matched across a study. If the refined observation is unavailable, the correct public state is unavailable or unverified. A coarse favorable screen cannot stand in for a missing refined assessment.
 
 \test{G16-08: Ring-Traction Response}
+Figure~\ref{fig:plate-fields}C shows the saved ring coefficient with its producer-zeroed seated region masked explicitly.
 The ring-traction predicate reads the existing static model's response comparison. As with other modeled capacities, its meaning depends on the represented geometry, constitutive assumption, support and stress observable. A favorable numerical comparison is not a physical proof test. Nor does it establish an injury criterion or the response of a person in contact with the part. The historical diagnostic is valuable as a documented model question, provided the report preserves that scope and does not turn its legacy name into a broad practical-safety claim.
 
 \test{G16-09: Body-Region Torsion}
+Figure~\ref{fig:plate-fields}D displays the raw torsion response; the regional capacity selection and the corrected envelope in panel A are separate postprocessing observations.
 The body torsion diagnostic reads a regional observable from the existing model. The region definition is part of the result: excluding or including a local zone can materially alter which stress values enter the comparison. Stress recovery and averaging conventions also matter. A report therefore needs the region mask, observable type, source field and model identity, not merely a safety-factor number. This body observation should remain separate from local plate and local solid observations even when all derive from a related loading family.
 
 \test{G16-10: Local Plate Torsion}
@@ -59,6 +77,7 @@ This predicate evaluates the existing local region in the plate representation. 
 The refined local predicate reads the corresponding retained refined observation. It is a distinct evidence requirement even when a coarse value exists. Missing refined evidence must remain explicit. The source records should identify how the local region was transferred, how the observable was recovered, and whether geometry and model assumptions were preserved. Refinement changes numerical resolution; it does not, by itself, validate a support assumption or establish a fracture mechanism. This diagnostic is therefore a more specific numerical observation, not an automatic escalation to physical truth.
 
 \test{G16-12: Quadratic Local Solid Result}
+The displayed plate field is not a solid stress visualization. A matched full solved solid field is unavailable in this publication input set.
 The local solid path uses quadratic tetrahedral elements, with a native Rust screen and separate assessment tooling. Its result refers to a local three-dimensional submodel, not necessarily the whole part. Boundary transfer, mesh identity and the selected stress observable are essential to interpretation. A nodal maximum is not interchangeable with a cell value, an integration-point maximum, or an averaged field. A complete result record can contain an unfavorable comparison. Solver completion, numerical verification and physical validation are three further questions, each requiring its own evidence.
 
 \test{G16-13: Support and Stability}

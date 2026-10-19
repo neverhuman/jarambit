@@ -49,6 +49,18 @@ Three 1,200-pixel/48-sample lighting proofs preceded the selected 3,600 × 2,800
 rtk proxy python3 -B ops/render/blender/rerender.py --profile publication --output-root docs/paper/figures/v2 --recipe dark --width 3600 --height 2800 --samples 256
 ```
 
-The publication profile requires an explicit isolated output root and applies no typography overlay, clipping, mesh modification or depth of field. The profile extends the existing `rerender.py`/`candidate_scenes.py` bindings. Archived assets, their hashed `render_paper.py`/`paper_scenes.py` sources, and legacy defaults are preserved byte-for-byte. A finished cover does not satisfy the outstanding request for actual assessment heatmaps: retained field semantics and missing full fields still require separate work.
+The publication profile requires an explicit isolated output root and applies no typography overlay, clipping, mesh modification or depth of field. The profile extends the existing `rerender.py`/`candidate_scenes.py` bindings. Archived assets, their hashed `render_paper.py`/`paper_scenes.py` sources, and legacy defaults are preserved byte-for-byte.
+
+## Actual retained plate fields
+
+![Actual retained envelope and unit-response fields](generated/plate-fields.svg)
+
+The four-panel numerical figure uses the cover example's original D1 arrays: **13,503 nodes and 25,209 triangles**, with one saved value per triangle. The [field contract](field-inputs.v1.json) freezes source identity, units, producer-source hashes and interpretation. The Rust reader in `crates/paper-artifacts/src/plate.rs` creates [the projection receipt](generated/plate-fields.json), including exact masked cell IDs, units, full-range scales, palette and coordinate transforms. The figure also has a hash manifest checked by the existing figure verifier.
+
+The envelope is already scaled stress (MPa); lateral and ring arrays are unit responses (MPa/N), and torsion is MPa/(N mm). These fields have independent linear legends. No values are clipped, interpolated or smoothed. Gray distinguishes 75 source-zeroed envelope cells and 14,875 source-zeroed ring cells from raw rounded zeros. The original capacity-excluded tip region remains visible in the raw lateral and torsion arrays. A positive stored ring value resolves one cell whose mask membership is ambiguous from rounded coordinates alone; an ambiguous zero would stop generation.
+
+The PDF embeds a 3,600-pixel raster projection (over 500 dpi at publication width) to avoid white seams introduced by some PDF renderers between adjacent vector triangles. The original SVG remains available for cell-level inspection. The cell fills and legend anchors are checked against source values; no lighting or tone mapping is applied to this numerical image.
+
+These are the retained **0.25 mm² plate-level fields**. Exported capacity summaries combine two mesh levels, so the displayed field must not be presented as the limiting capacity mesh, a strict-refinement result or a solid-element field. No full strict, solved solid, buckling-mode or fatigue field is admitted to this publication input set. The manuscript now explains stress recovery and masks alongside G16-05 through G16-12; additional subsection visuals remain outstanding where the necessary observations are absent.
 
 The conclusion treats aerospace fixtures, robotics, thermal management, medical-device research, instruments and energy systems as future opportunities. It does not claim that printing titanium establishes unprecedented tolerances or that a simulation qualifies a product. Stronger publication claims need controlled benign research and independent reconstruction evidence.
