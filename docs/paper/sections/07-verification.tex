@@ -28,7 +28,7 @@ The assessed example retains a distinct three-level study, plotted in Fig.~\ref{
 \end{figure*}
 
 \subsection{Separate Solvers and Shared Error}
-The independent assessment path uses scikit-fem and the pinned DOLFINx environment on matched saved meshes. scikit-fem's published software description explains its finite-element assembly role \cite{skfem}; the repository records the particular assessment setup and its limitations. A meaningful comparison needs independently obtained outputs, not two fields populated from one execution.
+The independent assessment path uses scikit-fem and the pinned DOLFINx environment on matched saved meshes. Their software descriptions explain the assembly framework and problem-solving architecture \cite{skfem,dolfinx}; the repository records the particular assessment setup and its limitations. A meaningful comparison needs separately obtained outputs, not two fields populated from one execution. The DOLFINx preprint version is a methods reference, distinct from the saved solver's software version.
 
 Matched meshes help isolate implementation differences. They also mean that geometry/discretization assumptions can be shared. If two solvers use the same inadequate constitutive model, supports or observation definition, agreement cannot identify that shared inadequacy. Cross-solver consistency is therefore one layer of verification, not a substitute for model validation. The exact problem matched between solvers should be stated alongside any percentage agreement.
 

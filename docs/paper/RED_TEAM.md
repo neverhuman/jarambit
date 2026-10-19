@@ -45,7 +45,7 @@ This is an author adversarial review, not independent peer review, a separate ag
 - Historical cell semantics and source revisions remain heterogeneous. The explanatory projection preserves them rather than reissuing scientific evidence.
 - Publication tooling checks retained data and layout. It does not verify every original solver execution or guarantee physical correctness.
 - Independent exact-head bot approval and required PR CI remain merge conditions. This author review cannot satisfy that approval.
-- The 19-page PDF now embeds lossless high-resolution PNG projections while retaining the original source SVGs. This removes the duplicate `/Group` keys from the former SVG-PDF import path and avoids dense triangle-edge seams. Strict pypdf parsing and final page rendering are recorded in the progress receipt. This is a local parser/layout check, not formal PDF/A validation or cross-toolchain byte-reproducibility proof.
+- The PDF now embeds lossless high-resolution PNG projections while retaining the original source SVGs. This removes the duplicate `/Group` keys from the former SVG-PDF import path and avoids dense triangle-edge seams. Current measured page counts, strict pypdf parsing and final page rendering are recorded in the dated progress receipt. This is a local parser/layout check, not formal PDF/A validation or cross-toolchain byte-reproducibility proof.
 
 ## Local broad-gate finding
 
@@ -60,3 +60,9 @@ This is a **verification gap**, not a demonstrated numerical error in the saved 
 **Disposition:** preserve the original scalar and favorable legacy flag; label them as archived observations with this open audit. Do not call the A4 eigensolve numerically verified or fabricate a buckling mode. The manuscript and figure now say so. Resolution requires the numerical owner's independent assessment of the realized operator/inner product and retained eigenpair residual or an appropriately scoped new verification receipt. No scientific implementation, test, requirement or original evidence is modified by this publication task.
 
 The A4 ratio comparison also changes the modeled case and regional masks: supported lateral-only versus the certification minimum across cases. The publication therefore reports both values but does not attribute their difference solely to compliant supports.
+
+## Related-work and editorial follow-up
+
+The 19 October revision adds primary references for learned CAD-operation sequences, text-conditioned CAD generation, earlier evolutionary hardware and DOLFINx's software architecture. The [source-review register](REFERENCE_REVIEW.md) records exact identities, claim limits and actual review depth. This addresses part of RT-12, not a complete full-text literature audit. The comparison table distinguishes evaluation domains; none of the cited studies becomes a shared benchmark or evidence of agent advantage in Jarambit. The version-specific 2023 DOLFINx preprint is separated from the archived 0.9.0 execution environment.
+
+RT-11's author-facing framing is reduced in the introduction and discussion. The wording now uses *intelligent computational design*, and future experiments are presented as research questions rather than submission advice. The numerical observations and their local limitations remain unchanged. Bibliographic numbering follows first citation; unused venue-guidance bibliography material is removed while the public build README retains the venue link. Independent review, remaining visual coverage, public artifact delivery and the A4 audit stay open.

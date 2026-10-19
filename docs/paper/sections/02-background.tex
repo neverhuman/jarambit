@@ -1,24 +1,45 @@
 \section{Background and Related Research}
-\subsection{Search, Diversity, and Representation}
-Evolutionary design explores a representation by evaluating variants and using outcomes to influence subsequent proposals. A scalar objective answers which candidate is preferred under a particular aggregation of observations. A diversity mechanism asks which different kinds of candidate should remain available. These questions are related but distinct. A method can return a high scalar score while exploring only a narrow part of its representation.
+\subsection{Executable CAD Representations}
+DeepCAD represents a shape as a sequence of CAD operations and learns a Transformer-based model for autoencoding and generation \cite{deepcad}. Text2CAD conditions sequential parametric CAD generation on natural-language descriptions and evaluates visual, parametric and geometric outcomes \cite{text2cad}. These works make construction history part of the generated representation. Jarambit's retained crescent model instead decodes a fixed numerical schema into geometry. It does not learn a general CAD-operation language, and this study supplies no common benchmark against either method.
 
-MAP-Elites organizes retained solutions by user-selected behavioral descriptors, allowing high-performing alternatives to occupy different niches \cite{mapelites}. The relevance here is the distinction between a collection of elites and a population of evaluated births. An archive is selected by construction. Its distribution cannot be treated as an unbiased sample of all proposals, and its occupied cells do not establish that the surrounding space has been exhaustively explored. Jarambit contains a quality-diversity lane, but this paper does not claim that every retained wave uses the same algorithm or descriptor semantics.
+This difference matters when interpreting a genome. More numerical parameters do not necessarily express a new topology or construction strategy. A decoder revision can change the represented family without changing vector length. Representation identity therefore includes schema and decoder, not just gene count. The prospective agent research in Section IX concerns assistance with that representation; it is distinct from the implemented search over its parameters.
 
-Representation itself imposes an inductive bias. A parameter vector makes some changes easy to express and others impossible. Increasing the number of genes may enlarge the search space without making useful variation more accessible. A new decoder can produce a qualitatively different family even if the vector length is unchanged. Meaningful comparison therefore needs the representation version, decoder identity, and evaluator domain, not just a gene count.
+\subsection{Evolutionary Engineering and Diversity}
+Evolutionary engineering predates language-model assistance. Lohn \emph{et al.}'s 2003 ST5 antenna report describes two evolutionary representations, fabricated prototypes and comparison with a hand-designed antenna \cite{st5}. Flight qualification was still pending in that report. Its relevance is the connection between representation, computational assessment and physical comparison, rather than evidence that Jarambit has achieved the same experimental maturity.
+
+MAP-Elites organizes retained solutions by behavioral descriptors, preserving alternatives in different niches \cite{mapelites}. Scalar preference and diversity retention answer different questions: which candidate is preferred, and which alternatives remain available? An archive is selected by construction; its distribution is not the distribution of all proposals. Jarambit contains a quality-diversity lane, but the retained cohorts do not establish a common algorithm or descriptor regime across every wave.
+
+\begin{table}[t]
+\caption{Related methods and their reported evaluation scope. These studies are context, not a common benchmark or a performance ranking.}
+\label{tab:related}
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}p{.20\columnwidth}p{.36\columnwidth}p{.36\columnwidth}@{}}
+\toprule
+Study & Representation/proposal & Evaluation scope \\
+\midrule
+DeepCAD & Learned CAD-operation sequences & Autoencoding and shape generation \\
+Text2CAD & Text-conditioned CAD sequences & Visual, parametric and geometric metrics \\
+ST5 report & Evolved antenna encodings & Simulation, fabrication and prototype comparison \\
+FunSearch & Language-model program proposals & Mathematical/algorithmic evaluators \\
+This study & Fixed CAD schema; retained search & Retrospective rankings and numerical-assessment evidence \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Agents as Proposal Mechanisms}
-FunSearch demonstrates a separation between a language model that proposes programs and an evaluator that judges their outcomes in mathematical and algorithmic settings \cite{funsearch}. That separation motivates an engineering research question: could agents help propose more useful design representations while independent software and numerical checks constrain what can be claimed? The analogy is conceptual. Success in program search does not demonstrate success in CAD, mechanics, manufacturing, or this repository.
+FunSearch separates language-model program proposals from execution-based evaluation in mathematical and algorithmic settings \cite{funsearch}. Text2CAD demonstrates text-conditioned CAD generation, but does not by that fact establish autonomous mechanical validation. Together these studies motivate a question about proposal interfaces and evaluators, not a demonstrated agent advantage in Jarambit. Table~\ref{tab:related} distinguishes their evaluation scopes.
 
-An engineering agent can assist with schema documentation, dimensional consistency, source navigation, test generation, and explanation. More ambitious proposals could change the representation grammar or decoder. Those proposals require stronger review because they can invalidate historical assumptions. The agent must not be treated as independent evidence for its own proposal, and fluent explanation must not substitute for an executed check. Section IX develops this boundary in operational terms at the software-research level.
+An engineering agent could assist with schema documentation, source navigation and typed representation proposals. A proposed grammar or decoder revision also changes the evaluator's domain. Such a proposal needs review and independent assessment before its outcomes can be compared with the original representation. Section IX develops this prospective research boundary.
 
 \subsection{Verification, Validation, and Identity}
-Code verification asks whether an implementation behaves as intended on suitable reference problems. Solution verification concerns numerical error for a specified model and observable. Model validation concerns agreement with the represented physical system within an identified domain. These activities support different claims. NASA's models-and-simulations standard provides a useful credibility context, but no compliance with that standard is asserted here \cite{nasa}.
+Code verification examines implementation against reference problems; solution verification concerns numerical error for a specified model and observable; validation concerns agreement with the physical system in a declared domain. NASA's models-and-simulations standard supplies credibility context, without a claim of compliance here \cite{nasa}.
 
-Separate solvers can reveal implementation differences. Mesh studies can reveal discretization behavior. Neither automatically resolves errors in geometry, constitutive assumptions, supports, or observation definitions. Two solvers that share an incorrect problem specification may agree closely. A refined mesh may converge to a solution of an inadequate model. Conversely, an unfavorable numerical result can still be informative if its identity and uncertainty are well understood.
+The assessment uses scikit-fem for finite-element assembly and a separate DOLFINx path \cite{skfem,dolfinx}. The DOLFINx methods reference describes the software architecture; the archived records identify the specific 0.9.0 environment. A software citation does not certify this model or establish that its outputs were independently reproduced. Matched solvers can share model and discretization errors, which makes their agreement a different observation from convergence or validation.
 
-Identity is necessary throughout this chain. A content hash can establish that two references name the same bytes. It does not establish that those bytes represent the intended physical object, that a solver executed, or that a material property applies to a manufacturing process. The evidence chain therefore needs both content identity and semantic context. This distinction becomes especially important when a render, scorecard, CAD export, and stress field originate from different revisions.
+Content hashes bind bytes, while model identity, execution records and observable definitions supply their meaning. This distinction is essential when geometry, scorecards and fields originate from different revisions.
 
 \subsection{Additive Manufacturing as Opportunity and Constraint}
-Additive manufacturing expands the geometric forms that can be produced directly from digital models. It also introduces process-dependent dimensional, surface, material, and inspection questions. NIST's test-artifact work addresses geometric characterization rather than assuming that digital precision transfers automatically to a printed part \cite{nistartifact}. The relevant promise is the ability to investigate more complex useful forms, coupled with measurement of what was actually made.
+NIST's additive-manufacturing test artifact addresses geometric characterization through manufactured features and measurements \cite{nistartifact}. It supports separating geometric expressiveness, nominal CAD precision and measured process capability. Additive manufacturing may make more complex forms practical to investigate; digital detail alone does not establish as-built accuracy.
 
-Accordingly, this paper separates geometric expressiveness, nominal CAD precision, numerical response, and measured manufacturing accuracy. An increase in the first does not prove an improvement in the others. The eventual scientific contribution of an agent-assisted CAD system would be strongest when those dimensions are measured together, including failures and uncertainty, on a declared application domain.
+This study's contribution lies between these research areas: it reconstructs how retained search rankings relate to subsequent numerical-assessment evidence in one executable CAD system. Learned CAD generation, agent advantage and manufacturing accuracy remain separate empirical questions.

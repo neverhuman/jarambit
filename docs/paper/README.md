@@ -6,6 +6,8 @@ Source baseline: `009f5ac520fa3afe8ed8025230eef604dbb7f922`, inspected 18 Octobe
 
 [Engineering specification](../PAPER_AND_README_ENGINEERING_SPEC.md) · [Complete test atlas](../tests/README.md) · [All 178 science definitions](../tests/science.md) · [Red-team review](RED_TEAM.md) · [Implementation receipt](IMPLEMENTATION_RECEIPT.md)
 
+The related-work section compares executable/learned CAD representations, evolutionary engineering and execution-based program proposals without treating them as a shared benchmark. The [primary-reference review](REFERENCE_REVIEW.md) records the four added sources, verified metadata, supported claims and review depth. DOLFINx's methods preprint and archived software version are identified separately. This is a targeted source check; independent reconstruction and scientific review remain pending.
+
 ## Format and build
 
 The manuscript uses `IEEEtran` in journal mode, 10 pt, with a custom single-column first page containing title, abstract, then the Blender render beside actual evolution data. Index terms follow the figure. Remaining pages use two columns. This is an **IEEE-style white paper**, not an unmodified venue submission template. A formal submission needs a selected venue's current template, verified authorship, disclosure, references and supported research contribution. No IEEE acceptance, DOI or badge is claimed. [IEEE Access guidance](https://ieeeaccess.ieee.org/authors/submission-guidelines/).
