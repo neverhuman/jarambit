@@ -1,0 +1,19 @@
+{
+  "figure": "docs/paper/generated/export-identity.svg",
+  "figure_sha256": "ae2aa2eeaae0d377ee2dcca7e96ae932bde746213a50a884b15532b10c5c167a",
+  "inputs": {
+    "crates/paper-artifacts/src/export_identity.rs": "ab30e74908fbde41fa8942fa981244f00e8120d494c763d9b9bd069a8d957aa4",
+    "docs/paper/export-inputs.v1.json": "a476cf19fa042863373ab8e41e1b2361c389948efee3a85f25430eb35b6a66fe",
+    "docs/paper/figures/v2/hero_dark.scene.json": "0425bd7d2141ebfc00fe28c73bac61bf43fae817582dbadc344f223648166536",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.step": "1a28399c1c6c4a21796a963c91545d120fd99f542818a0e6024b0cd24ca34fa6",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_genome.csv": "a526b2ef73b25e51a56bcfab1f67640bcbe734955b95a6b432a99dab5cd9f654",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_step_check.json": "0368f38bb75ac97fed2f844b3878ec761b709f23063b141a401f0d40561d9ed9",
+    "evidence/evolve_certifiable/manifest.json": "b9c6b46e724f4886ba365fd5cc3f357c06d74635d4e546ede330a137d1f01f18"
+  },
+  "projection_receipt": "docs/paper/generated/export-identity.json",
+  "schema": 1,
+  "scope": "original export record observations and content associations; no fresh CAD validation or genome regeneration",
+  "script": "crates/paper-artifacts/src/export_identity.rs"
+}

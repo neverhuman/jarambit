@@ -41,7 +41,7 @@ Checks whether the assessed export is bound to the candidate and accepted by the
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
 
-**Visual gap:** Subsection topology/identity visual not generated; the cover rendering does not establish topology validity. [Complete coverage ledger](visuals.md).
+**Separate assessed-example visual:** [A--B: retained content associations and original topology records; no fresh CAD validation](../paper/generated/export-identity.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/export-identity.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="g16-geometric_and_holder_gates"></a>
 

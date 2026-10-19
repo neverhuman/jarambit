@@ -2,13 +2,13 @@
 
 Generated with the publication artifacts. [Machine-readable coverage and hashes](visuals.v1.json) · [All test explanations](README.md) · [Paper and build](../paper/README.md).
 
-**37 of 44 catalog entries have subsection visual links; 7 remain unpictured.** This denominator counts links, not unique figures, independent tests or completed FEM heatmaps. Six entries link to the same four-panel retained plate-field asset. Other links show saved scalars/profiles, a support schematic or the historical categorical battery. Main-text figure proximity is not checked by this ledger.
+**38 of 44 catalog entries have subsection visual links; 6 remain unpictured.** This denominator counts links, not unique figures, independent tests or completed FEM heatmaps. Six entries link to the same four-panel retained plate-field asset. Other links show saved scalars/profiles, topology records, a support schematic or the historical categorical battery. Main-text figure proximity is not checked by this ledger.
 
 The separate assessed example is `cert_pipeline_r01_p14_c02`, not qualified. The battery map has its own historical 23-subject binding. The cover beauty render does not replace a missing geometry/measurement subsection visual.
 
 | Catalog explanation | Visual kinds and exact panels | Status |
 |---|---|---|
-| [G16-01: Export topology and identity](README.md#g16-cad_watertight_and_single_solid) | Subsection topology/identity visual not generated; the cover rendering does not establish topology validity. | Missing |
+| [G16-01: Export topology and identity](README.md#g16-cad_watertight_and_single_solid) | [Saved topology records and identity diagram: A--B: retained content associations and original topology records; no fresh CAD validation](../paper/generated/export-identity.svg) ([receipt](../paper/generated/export-identity.json)) | Linked |
 | [G16-02: Geometry and holder compatibility](README.md#g16-geometric_and_holder_gates) | Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison. | Missing |
 | [G16-03: Shape and archetype](README.md#g16-karambit_ring_and_curved_claw) | Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison. | Missing |
 | [G16-04: Reference-shape comparison](README.md#g16-c6_aesthetic_floor) | Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison. | Missing |
