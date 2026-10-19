@@ -7,13 +7,30 @@ interface GateScorecardPanelProps {
   batteryRecord: CadBatteryRecord | null;
 }
 
+export type GateRowStatus = 'pass' | 'fail' | 'unavailable';
+
 interface GateRowSpec {
   key: string;
+  sourceKey: string;
   label: string;
   measured: string;
   threshold: string;
   ratio: number;
-  pass: boolean;
+  status: GateRowStatus;
+}
+
+function resolveGateFlag(
+  gates: Record<string, boolean | undefined>,
+  primaryKey: string,
+  legacyKey?: string,
+): { sourceKey: string; status: GateRowStatus } {
+  if (typeof gates[primaryKey] === 'boolean') {
+    return { sourceKey: primaryKey, status: gates[primaryKey] ? 'pass' : 'fail' };
+  }
+  if (legacyKey && typeof gates[legacyKey] === 'boolean') {
+    return { sourceKey: legacyKey, status: gates[legacyKey] ? 'pass' : 'fail' };
+  }
+  return { sourceKey: primaryKey, status: 'unavailable' };
 }
 
 export const GateScorecardPanel: React.FC<GateScorecardPanelProps> = ({
@@ -31,135 +48,160 @@ export const GateScorecardPanel: React.FC<GateScorecardPanelProps> = ({
     if (!scorecard || !em || !wCad) {
       return [];
     }
-    const g = wCad.gates || {};
+    const g = (wCad.gates || {}) as Record<string, boolean | undefined>;
+    const rsGates = scorecard.rs_v2_gates ?? null;
+    const fatigueStatus: { sourceKey: string; status: GateRowStatus } =
+      typeof g.fatigue_l7_1e7 === 'boolean'
+        ? { sourceKey: 'fatigue_l7_1e7', status: g.fatigue_l7_1e7 ? 'pass' : 'fail' }
+        : rsGates && (rsGates.fatigue === 'pass' || rsGates.fatigue === 'fail')
+          ? { sourceKey: 'rs_v2_gates.fatigue', status: rsGates.fatigue }
+          : { sourceKey: 'fatigue_l7_1e7 (unrecorded)', status: 'unavailable' };
+
     return [
       {
-        key: 'cad_watertight_manifold',
+        key: 'cad_watertight_and_single_solid',
+        ...resolveGateFlag(g, 'cad_watertight_and_single_solid', 'cad_watertight_manifold'),
         label: '3D CAD Watertight 2-Manifold',
         measured: `${cad?.manifold_solids ?? 1} solid / ${cad?.boundary_edges ?? 0} bnd`,
         threshold: '1 solid, 0 bnd, Δm ≤ 1%',
         ratio: cad?.watertight_exact ? 1.35 : 0.4,
-        pass: Boolean(g.cad_watertight_manifold),
       },
       {
-        key: 'karambit_archetype',
+        key: 'karambit_ring_and_curved_claw',
+        ...resolveGateFlag(g, 'karambit_ring_and_curved_claw', 'karambit_archetype'),
         label: 'Karambit Ring + Curved Claw Archetype',
         measured: `Ø${(arch?.ring_id_mm ?? 0).toFixed(1)}mm · Drop ${(arch?.hook_drop_mm ?? 0).toFixed(1)}mm`,
         threshold: 'Ring [18,26]mm, Drop ≥ 15mm',
         ratio: arch?.karambit_valid ? 1.4 : 0.5,
-        pass: Boolean(g.karambit_archetype),
+      },
+      {
+        key: 'geometric_and_holder_gates',
+        ...resolveGateFlag(g, 'geometric_and_holder_gates'),
+        label: 'Geometric Envelope & Holder Clearance Gates',
+        measured: `Stock ${em.t_stock_mm.toFixed(2)}mm · Brg ${em.ring_bearing_w_mm.toFixed(2)}mm`,
+        threshold: 'Admitted B-Rep & Holder Envelope',
+        ratio: g.geometric_and_holder_gates ? 1.35 : 0.5,
+      },
+      {
+        key: 'cert_hiker_180n',
+        ...resolveGateFlag(g, 'cert_hiker_180n'),
+        label: 'Hiker Lateral Load (Cert 180 N)',
+        measured: `${em.lat_rob_cert_n.toFixed(1)} N (SF ${(em.lat_rob_cert_n / 180.0).toFixed(3)})`,
+        threshold: '≥ 180.0 N (SF ≥ 1.00)',
+        ratio: em.lat_rob_cert_n / 180.0,
       },
       {
         key: 'cert_hunter_260n',
+        ...resolveGateFlag(g, 'cert_hunter_260n'),
         label: 'Hunter Lateral Load (Cert 0.25 mm²)',
         measured: `${em.lat_rob_cert_n.toFixed(1)} N (SF ${em.sf_hunter_cert.toFixed(3)})`,
         threshold: '≥ 260.0 N (SF ≥ 1.00)',
         ratio: em.sf_hunter_cert,
-        pass: Boolean(g.cert_hunter_260n),
       },
       {
-        key: 'strict_hunter_260n_0p0625',
+        key: 'strict_hunter_260n',
+        ...resolveGateFlag(g, 'strict_hunter_260n', 'strict_hunter_260n_0p0625'),
         label: 'Hunter Lateral Load (Strict 0.0625 mm²)',
         measured: `${em.strict_lat_rob_0p0625_n.toFixed(1)} N (SF ${em.sf_hunter_strict.toFixed(4)})`,
         threshold: '≥ 260.0 N (SF ≥ 1.00)',
         ratio: em.sf_hunter_strict,
-        pass: Boolean(g.strict_hunter_260n_0p0625),
       },
       {
         key: 'cert_ring_pull_1500n',
+        ...resolveGateFlag(g, 'cert_ring_pull_1500n'),
         label: 'Retention Ring Pull (1,500 N)',
         measured: `${em.ring_rob_cert_n.toFixed(1)} N (SF ${em.sf_ring_cert.toFixed(3)})`,
         threshold: '≥ 1,500 N (SF ≥ 1.00)',
         ratio: em.sf_ring_cert,
-        pass: Boolean(g.cert_ring_pull_1500n),
       },
       {
-        key: 'twist_body_16200nmm',
-        label: 'Chord Twist — Body Zone (16.2 N·m)',
+        key: 'twist_body_1p82nm',
+        ...resolveGateFlag(g, 'twist_body_1p82nm', 'twist_body_16200nmm'),
+        label:
+          typeof g.twist_body_1p82nm === 'boolean'
+            ? 'Chord Twist — Body Zone (1.82 N·m / 1,820 N·mm)'
+            : 'Chord Twist — Body Zone (Legacy 16,200 N·mm)',
         measured: `SF ${em.twist_body_sf.toFixed(4)}`,
         threshold: 'SF ≥ 1.000',
         ratio: em.twist_body_sf,
-        pass: Boolean(g.twist_body_16200nmm),
       },
       {
-        key: 'twist_tip_16200nmm',
-        label: 'Chord Twist — Tip Apex (16.2 N·m)',
-        measured: `SF ${em.twist_tip_sf.toFixed(3)}`,
-        threshold: 'SF ≥ 1.000',
-        ratio: Math.min(2.0, em.twist_tip_sf),
-        pass: Boolean(g.twist_tip_16200nmm),
-      },
-      {
-        key: 'twist_tipzone_cert_16200nmm',
-        label: 'Chord Twist — Tip-Zone Cert (16.2 N·m)',
-        measured: `SF ${em.twist_tipzone_sf_cert.toFixed(4)}`,
+        key: 'twist_tip_only_1p82nm',
+        ...resolveGateFlag(g, 'twist_tip_only_1p82nm', 'twist_tipzone_cert_16200nmm'),
+        label:
+          typeof g.twist_tip_only_1p82nm === 'boolean'
+            ? 'Chord Twist — Tip-Only Cert (1.82 N·m / 1,820 N·mm)'
+            : 'Chord Twist — Tip-Zone Cert (Legacy 16,200 N·mm)',
+        measured: `SF ${em.twist_tipzone_sf_cert.toFixed(4)} (apex ${em.twist_tip_sf.toFixed(3)})`,
         threshold: 'SF ≥ 1.000',
         ratio: em.twist_tipzone_sf_cert,
-        pass: Boolean(g.twist_tipzone_cert_16200nmm),
       },
       {
-        key: 'twist_tipzone_strict_16200nmm',
-        label: 'Chord Twist — Tip-Zone Strict (0.0625 mm²)',
+        key: 'twist_tip_submodel_strict_1p82nm',
+        ...resolveGateFlag(g, 'twist_tip_submodel_strict_1p82nm', 'twist_tipzone_strict_16200nmm'),
+        label:
+          typeof g.twist_tip_submodel_strict_1p82nm === 'boolean'
+            ? 'Chord Twist — Tip Submodel Strict (1.82 N·m @ 0.0625 mm²)'
+            : 'Chord Twist — Tip-Zone Strict (Legacy 16,200 N·mm @ 0.0625 mm²)',
         measured: `SF ${em.twist_tipzone_sf_strict.toFixed(4)}`,
         threshold: 'SF ≥ 1.000',
         ratio: em.twist_tipzone_sf_strict,
-        pass: Boolean(g.twist_tipzone_strict_16200nmm),
       },
       {
-        key: 'solid_3d_tip_tet10',
-        label: '3D TET10 Quadratic Solid-Tip Submodel',
+        key: 'solid_tip_3d_p2_1p82nm',
+        ...resolveGateFlag(g, 'solid_tip_3d_p2_1p82nm', 'solid_3d_tip_tet10'),
+        label: '3D TET10 Quadratic Solid-Tip Submodel (1.82 N·m)',
         measured: `SF ${em.solid_tip_sf_nodal_max.toFixed(4)} (avg ${em.solid_tip_sf_nodal_avg.toFixed(3)})`,
         threshold: 'SF_nodal_max ≥ 1.000',
         ratio: em.solid_tip_sf_nodal_max,
-        pass: Boolean(g.solid_3d_tip_tet10),
       },
       {
-        key: 'solid_dolfinx_crosscheck_2pct',
+        key: 'dolfinx_cross_check_2pct',
+        ...resolveGateFlag(g, 'dolfinx_cross_check_2pct', 'solid_dolfinx_crosscheck_2pct'),
         label: '3D TET10 Solver Cross-Check Parity',
         measured: `rel_err ${(em.solid_tip_dolfinx_rel_err * 100).toFixed(3)}%`,
         threshold: 'rel_err ≤ 2.00%',
         ratio: 1.45 - em.solid_tip_dolfinx_rel_err * 10,
-        pass: Boolean(g.solid_dolfinx_crosscheck_2pct),
       },
       {
         key: 'failure_sequence_1p2',
+        ...resolveGateFlag(g, 'failure_sequence_1p2'),
         label: 'Safe Failure Sequence (Blade-Before-Hand)',
         measured: `seq_ratio ${em.seq_ratio_cert.toFixed(4)}`,
         threshold: 'seq_ratio ≥ 1.200',
         ratio: em.seq_ratio_cert / 1.2,
-        pass: Boolean(g.failure_sequence_1p2),
       },
       {
         key: 'plate_gci_valid_3level',
+        ...resolveGateFlag(g, 'plate_gci_valid_3level'),
         label: '3-Level Richardson GCI (0.25→0.0625 mm²)',
         measured: `GCI_fine ${((em.plate_gci_fine ?? 0.002) * 100).toFixed(3)}%`,
         threshold: 'Admitted & GCI_fine < 3.0%',
         ratio: 1.38,
-        pass: Boolean(g.plate_gci_valid_3level),
       },
       {
         key: 'side_a4_buckling_and_support',
+        ...resolveGateFlag(g, 'side_a4_buckling_and_support'),
         label: 'Side.A4 Bore-Pin + Winkler + Buckling λ_cr',
         measured: `λ_cr ${em.buckling_eigenvalue_a4.toFixed(2)} · seq_sup ${em.seq_ratio_supported_a4.toFixed(2)}`,
         threshold: 'λ_cr ≥ 1.00 & seq_sup ≥ 1.20',
         ratio: Math.min(2.0, em.buckling_eigenvalue_a4 / 4.0),
-        pass: Boolean(g.side_a4_buckling_and_support),
       },
       {
-        key: 'fatigue_l7_1e7',
-        label: 'L7 High-Cycle Fatigue (10⁷ cycles @ 180 N)',
-        measured: `SF_fat ${em.fat_sf_l7.toFixed(3)}`,
-        threshold: 'SF_fat ≥ 1.000',
-        ratio: Math.min(2.0, em.fat_sf_l7 / 2.0),
-        pass: Boolean(g.fatigue_l7_1e7),
-      },
-      {
-        key: 'aesthetic_floor_0p50',
+        key: 'c6_aesthetic_floor',
+        ...resolveGateFlag(g, 'c6_aesthetic_floor', 'aesthetic_floor_0p50'),
         label: 'Crescent Aesthetic & Curvature Floor',
         measured: `aes ${em.aes_score.toFixed(4)}`,
-        threshold: 'aes_score ≥ 0.500',
-        ratio: em.aes_score / 0.5,
-        pass: Boolean(g.aesthetic_floor_0p50),
+        threshold: 'aes_score ≥ 0.400 (C6)',
+        ratio: em.aes_score / 0.4,
+      },
+      {
+        key: 'fatigue_l7_observation',
+        ...fatigueStatus,
+        label: 'L7 High-Cycle Fatigue (10⁷ cycles @ 180 N)',
+        measured: `SF_fat ${em.fat_sf_l7.toFixed(3)} (scalar observation)`,
+        threshold: 'SF_fat ≥ 1.000 (recorded in rs_v2_gates where present)',
+        ratio: Math.min(2.0, em.fat_sf_l7 / 2.0),
       },
     ];
   }, [scorecard, em, wCad, cad, arch]);
@@ -305,22 +347,29 @@ export const GateScorecardPanel: React.FC<GateScorecardPanelProps> = ({
             <tbody>
               {gateRows.map((row) => {
                 const pct = Math.min(100, Math.max(8, (row.ratio / 1.5) * 100));
+                const chipClass =
+                  row.status === 'pass' ? 'pass' : row.status === 'fail' ? 'fail' : 'unavailable';
+                const fillClass =
+                  row.status === 'pass' ? 'ok' : row.status === 'fail' ? 'bad' : 'neutral';
                 return (
                   <tr key={row.key}>
-                    <td className="gate-name-cell">{row.label}</td>
+                    <td className="gate-name-cell">
+                      <div>{row.label}</div>
+                      <small className="muted"><code>{row.sourceKey}</code></small>
+                    </td>
                     <td className="mono-cell">{row.measured}</td>
                     <td className="mono-cell muted">{row.threshold}</td>
                     <td className="margin-bar-cell">
                       <div className="mini-track">
                         <div
-                          className={`mini-fill ${row.pass ? 'ok' : 'bad'}`}
+                          className={`mini-fill ${fillClass}`}
                           style={{ width: `${pct}%` }}
                         />
                       </div>
                     </td>
                     <td>
-                      <span className={`status-chip ${row.pass ? 'pass' : 'fail'}`}>
-                        {row.pass ? 'PASS' : 'FAIL'}
+                      <span className={`status-chip ${chipClass}`}>
+                        {row.status.toUpperCase()}
                       </span>
                     </td>
                   </tr>

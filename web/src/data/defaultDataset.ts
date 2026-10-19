@@ -1266,7 +1266,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.9823103780720044,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/g3_tip+00_t60_tt3.json",
           "fresh_this_lane": false,
@@ -1639,7 +1639,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.8556596062528332,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w271b_11772.json",
           "fresh_this_lane": false,
@@ -2013,7 +2013,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.7559942103507366,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w271b_11860.json",
           "fresh_this_lane": false,
@@ -2388,7 +2388,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.7673006161022223,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w271c_11522.json",
           "fresh_this_lane": false,
@@ -2762,7 +2762,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.8650596508390767,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w272_xbabe3/w272_s2902_c01_rs.json",
           "fresh_this_lane": false,
@@ -3139,7 +3139,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.8574862712771643,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w273_xbabe3/w273_s2903_c04_rs.json",
           "fresh_this_lane": false,
@@ -3516,7 +3516,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.8649917812496298,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w273_xbabe3/w273_s2904_c01_rs.json",
           "fresh_this_lane": false,
@@ -3891,7 +3891,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.7477531120806018,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w274_calibrated/w274_s2905_c01_rs.json",
           "fresh_this_lane": false,
@@ -4267,7 +4267,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.766588692971061,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w275_ultrarunner/w275_s2909_c01_rs.json",
           "fresh_this_lane": false,
@@ -4643,7 +4643,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.7675468070995868,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w276_ultrarunner/w276_s2913_c01_rs.json",
           "fresh_this_lane": false,
@@ -5019,7 +5019,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.7631403843457062,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w277_ultrarunner/w277_s2919_c01_rs.json",
           "fresh_this_lane": false,
@@ -5395,7 +5395,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.7637934090852012,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w278_ultrarunner/w278_s2922_c01_rs.json",
           "fresh_this_lane": false,
@@ -5771,7 +5771,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.7661622138998756,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w279_ultrarunner/w279_s2928_c01_rs.json",
           "fresh_this_lane": false,
@@ -6147,7 +6147,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.7635351934906979,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w280_ultrarunner/w280_s2931_c01_rs.json",
           "fresh_this_lane": false,
@@ -6523,7 +6523,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.7414382874069928,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w281_ultrarunner/w281_s2932_c01_rs.json",
           "fresh_this_lane": false,
@@ -6899,7 +6899,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.7413705452860055,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w282_ultrarunner/w282_p10_c02_rs.json",
           "fresh_this_lane": false,
@@ -7275,7 +7275,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "fat_sf": 0.7318691447783486,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w282_ultrarunner/w282_p14_c01_rs.json",
           "fresh_this_lane": false,
@@ -7466,7 +7466,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "build.analytic",
           "kind": "software_contract",
           "solver": "analytic",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
@@ -7476,7 +7476,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "build.gci_contracts",
           "kind": "software_contract",
           "solver": "gci",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
@@ -7490,7 +7490,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "build.claims",
           "kind": "software_contract",
           "solver": null,
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
@@ -7527,7 +7527,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "build.dolfinx",
           "kind": "software_contract",
           "solver": "solid_dolfinx",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
@@ -7538,7 +7538,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "kind": "gate",
           "reason": "no step bound",
           "solver": null,
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "blocked"
         },
         {
@@ -7549,7 +7549,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "kind": "gate",
           "reason": "no step bound",
           "solver": null,
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "blocked"
         },
         {
@@ -7566,7 +7566,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "geom.mass",
           "kind": "derived",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
@@ -7577,7 +7577,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "kind": "software_contract",
           "reason": "genome is not a native CAD pin",
           "solver": null,
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "blocked"
         },
         {
@@ -7585,32 +7585,32 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "loads": {
               "chord_twist_human_max_sf": {
                 "compared_with": 16200,
-                "value_n_or_sf": 1.0075626078499438
+                "value_n_or_sf": 0.11099883356234613
               },
               "hiker_lateral_n": {
                 "compared_with": 180,
-                "value_n_or_sf": 265.3847673956978
+                "value_n_or_sf": 194.42681634169116
               },
               "hunter_lateral_n": {
                 "compared_with": 260,
-                "value_n_or_sf": 265.3847673956978
+                "value_n_or_sf": 194.42681634169116
               },
               "pry": null,
               "ring_back_sf": {
                 "compared_with": 3000,
-                "value_n_or_sf": 2.145791197557866
+                "value_n_or_sf": 2.8595559328398195
               },
               "ring_pull_n": {
                 "compared_with": 1500,
-                "value_n_or_sf": 14388.145220864477
+                "value_n_or_sf": 15491.856474946993
               },
               "spine_sf": {
                 "compared_with": 3427,
-                "value_n_or_sf": 1.290524117330112
+                "value_n_or_sf": 0.43166014183598034
               },
               "tip_inplane_sf_record_only": {
                 "compared_with": 1000,
-                "value_n_or_sf": 0.5559947950729673
+                "value_n_or_sf": 0.5558736510517096
               }
             },
             "note": "derived from the certify record"
@@ -7618,41 +7618,41 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_rs.json",
           "fresh_this_lane": false,
           "g_inputs": {
-            "spg": 3.50845
+            "spg": 2.57037
           },
           "geometry_sha256": "61594e106aedc7ecd9438e8867d8e743b1a7620f578b39951bf9851077b4fdac",
           "id": "plate.loads",
           "kind": "derived",
-          "reason": "pry safety factor is not in the certify record",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-          "status": "incomplete"
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+          "status": "fail"
         },
         {
           "detail": {
-            "seq_ratio": 1.218953861371059,
+            "seq_ratio": 0.7179476490627898,
             "seq_target": 1.2,
-            "side_report_seq_ratio": 1.218953861371059
+            "side_report_seq_ratio": 0.7179476490627898
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_rs.json",
           "fresh_this_lane": false,
           "g_inputs": {
-            "seq_ratio": 1.218953861371059
+            "seq_ratio": 0.7179476490627898
           },
           "geometry_sha256": "61594e106aedc7ecd9438e8867d8e743b1a7620f578b39951bf9851077b4fdac",
           "id": "plate.seq",
           "kind": "gate",
+          "reason": "below 1.2",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-          "status": "pass"
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+          "status": "fail"
         },
         {
           "detail": {
             "cycles": "1e7",
-            "fat_sf": 1.2815797001898848,
+            "fat_sf": 0.5430972966394524,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_rs.json",
           "fresh_this_lane": false,
@@ -7660,37 +7660,36 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "plate.l7",
           "kind": "derived",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-          "status": "pass"
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+          "status": "fail"
         },
         {
           "detail": {
-            "admitted": false,
-            "discretization_under_3pct": false,
-            "fit_status": "oscillatory",
-            "gci_fine": null,
-            "p": null,
+            "admitted": true,
+            "discretization_under_3pct": true,
+            "fit_status": "admissible_estimate",
+            "gci_fine": 0.006442822289578268,
+            "p": 2.6233982835419463,
             "primary_observable": "seq_ratio",
             "refinement_ratio_r": 2.0,
-            "sf_hunter_fit_status": "oscillatory",
-            "sf_hunter_gci_fine": null,
-            "sf_hunter_p": null
+            "sf_hunter_fit_status": "admissible_estimate",
+            "sf_hunter_gci_fine": 0.017190779522576458,
+            "sf_hunter_p": 1.8854889735835478
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_plate_gci.json",
           "fresh_this_lane": false,
           "geometry_sha256": "61594e106aedc7ecd9438e8867d8e743b1a7620f578b39951bf9851077b4fdac",
           "id": "plate.gci",
           "kind": "derived",
-          "reason": "oscillatory_sequence",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-          "status": "fail"
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+          "status": "pass"
         },
         {
           "detail": {
             "changes_seq_ratio": false,
             "mesh_mm2": 0.25,
-            "sha256": "a0628becd27a5f5749a6398d2cbe9b99fe429f118036549e6cc9d5e41cfc8d18"
+            "sha256": "adaa04ec6949df7b9037cc621d9ce01383dbbb586a24cc777a4d7b9840aa94af"
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_a1a3.json",
           "fresh_this_lane": false,
@@ -7698,14 +7697,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "side.a1",
           "kind": "derived",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
           "detail": {
             "changes_seq_ratio": false,
             "mesh_mm2": 0.25,
-            "sha256": "a0628becd27a5f5749a6398d2cbe9b99fe429f118036549e6cc9d5e41cfc8d18"
+            "sha256": "adaa04ec6949df7b9037cc621d9ce01383dbbb586a24cc777a4d7b9840aa94af"
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_a1a3.json",
           "fresh_this_lane": false,
@@ -7713,14 +7712,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "side.a2",
           "kind": "derived",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
           "detail": {
             "changes_seq_ratio": false,
             "mesh_mm2": 0.25,
-            "sha256": "a0628becd27a5f5749a6398d2cbe9b99fe429f118036549e6cc9d5e41cfc8d18"
+            "sha256": "adaa04ec6949df7b9037cc621d9ce01383dbbb586a24cc777a4d7b9840aa94af"
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_a1a3.json",
           "fresh_this_lane": false,
@@ -7728,21 +7727,21 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "side.a3",
           "kind": "derived",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
           "detail": {
             "bore_support": "radial_pin_bearing_and_flange",
-            "buckling_critical_load_n": 2269.3597467646405,
-            "buckling_eigenvalue": 8.728306718325541,
-            "certified_seq_ratio": 1.218953861371059,
+            "buckling_critical_load_n": 2623.46885008842,
+            "buckling_eigenvalue": 10.090264808032384,
+            "certified_seq_ratio": 0.7179476490627898,
             "changes_seq_ratio": false,
             "default_clamp": "ring-hole nodes fixed in all 5 dofs inside run_b",
             "grip_foundation_stiffness": "winkler_grip_pad_foundation",
             "partial_solver_edit": false,
-            "sha256": "6cdeee4225379950a82fd8ef8810cd1f90cd7eb4470dacf0c831dd989ce39e0f",
-            "supported_seq_ratio": 3.9572571071649456
+            "sha256": "2331b0f0007e5bf45ee1c1123ed4edd547c0dfc7486c49615c9ec6c28f267136",
+            "supported_seq_ratio": 3.7872144876238547
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_a4.json",
           "fresh_this_lane": false,
@@ -7750,49 +7749,49 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "side.a4",
           "kind": "derived",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
           "detail": {
             "NL": 4,
-            "NSUB": 0,
-            "SF_nodal_max": 1.509,
+            "NSUB": 1,
+            "SF_nodal_max": 0.9578,
             "copied_from_another_genome": false,
-            "d1_sha256": "c45c9ec0a62049dfbeae6e1a21f838f11e019489dc1dbc35e1e8eecb803c56b2",
+            "d1_sha256": "f41e6ca2d635ad008a5a3b0c680e50d01faae81743ee3b30660c3727100473a2",
             "entered_as_solver_run": true,
             "genome_data_row_matches_csv": true,
-            "ksp_its": 1,
+            "ksp_its": 130,
             "missing": [],
-            "n_dof": 105921,
-            "n_tet": 22752,
-            "solve_rerun": true
+            "n_dof": 416583,
+            "n_tet": 91008,
+            "solve_rerun": false
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_solid_tip.json",
           "fresh_this_lane": false,
           "g_inputs": {
-            "solid_tip_sf_nodal_max": 1.509
+            "solid_tip_sf_nodal_max": 0.9578
           },
           "geometry_sha256": "61594e106aedc7ecd9438e8867d8e743b1a7620f578b39951bf9851077b4fdac",
           "id": "solid.tip",
           "kind": "solver_run",
           "solver": "solid_skfem_p2",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
           "detail": {
-            "all_hard": true,
+            "all_hard": false,
             "gates": {
               "aesthetic_and_geometric": "pass",
-              "fatigue": "pass",
-              "floors_828_joint": "pass",
-              "gate_s_sharp_law": "pass",
-              "gate_s_tip_point_brep": "pass",
-              "human_max": "pass",
-              "seq_hard": "pass",
-              "solid_tip_sf": "pass",
-              "strict_hunter_lateral": "pass",
+              "fatigue": "fail",
+              "floors_828_joint": "fail",
+              "gate_s_sharp_law": "fail",
+              "gate_s_tip_point_brep": "fail",
+              "human_max": "fail",
+              "seq_hard": "fail",
+              "solid_tip_sf": "fail",
+              "strict_hunter_lateral": "fail",
               "twist_floor_body_and_tipsub_strict": "pass"
             }
           },
@@ -7804,33 +7803,35 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "geometry_sha256": "61594e106aedc7ecd9438e8867d8e743b1a7620f578b39951bf9851077b4fdac",
           "id": "gate.rs_v2",
           "kind": "gate",
+          "reason": "does not pass every hard gate",
           "solver": null,
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-          "status": "pass"
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+          "status": "fail"
         }
       ],
+      "certificate_identity": "29cc265209093fc44d3bedf788f1210438d27be31ec16e644738453c53f1e25b",
       "global_fitness": {
-        "G": 0.9167193749999998,
+        "G": 0.6216318603776162,
         "inputs": {
           "aes_score": 0.4079,
           "mass_g": 75.6415527306541,
-          "seq_ratio": 1.218953861371059,
-          "solid_tip_sf_nodal_max": 1.509,
-          "spg": 3.50845
+          "seq_ratio": 0.7179476490627898,
+          "solid_tip_sf_nodal_max": 0.9578,
+          "spg": 2.57037
         },
         "metric": "G1",
         "missing": [],
         "provisional": false,
         "status": "COMPLETE",
-        "title": "G 0.917 | 75.6 g | jarambit v1.0.0"
+        "title": "G 0.622 | 75.6 g | jarambit v1.0.0"
       },
-      "pass_count": 13,
+      "pass_count": 11,
       "role": "genome",
       "schema": "jarambit.cad_battery.subject.v1",
       "search_fitness": "unchanged",
       "solver_run_count": 1,
       "solver_run_objects": 1,
-      "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+      "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
       "subject": "w283_p10_c02"
     },
     "w283_p14_c01": {
@@ -7842,7 +7843,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "build.analytic",
           "kind": "software_contract",
           "solver": "analytic",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
@@ -7852,7 +7853,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "build.gci_contracts",
           "kind": "software_contract",
           "solver": "gci",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
@@ -7866,7 +7867,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "build.claims",
           "kind": "software_contract",
           "solver": null,
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
@@ -7903,7 +7904,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "build.dolfinx",
           "kind": "software_contract",
           "solver": "solid_dolfinx",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
@@ -7914,7 +7915,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "kind": "gate",
           "reason": "no step bound",
           "solver": null,
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "blocked"
         },
         {
@@ -7925,7 +7926,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "kind": "gate",
           "reason": "no step bound",
           "solver": null,
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "blocked"
         },
         {
@@ -7942,7 +7943,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "geom.mass",
           "kind": "derived",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
@@ -7953,7 +7954,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "kind": "software_contract",
           "reason": "genome is not a native CAD pin",
           "solver": null,
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "blocked"
         },
         {
@@ -7961,32 +7962,32 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "loads": {
               "chord_twist_human_max_sf": {
                 "compared_with": 16200,
-                "value_n_or_sf": 1.0011326769507547
+                "value_n_or_sf": 0.110986187014051
               },
               "hiker_lateral_n": {
                 "compared_with": 180,
-                "value_n_or_sf": 262.0064812139506
+                "value_n_or_sf": 194.81115243123332
               },
               "hunter_lateral_n": {
                 "compared_with": 260,
-                "value_n_or_sf": 262.0064812139506
+                "value_n_or_sf": 194.81115243123332
               },
               "pry": null,
               "ring_back_sf": {
                 "compared_with": 3000,
-                "value_n_or_sf": 2.1457679737004183
+                "value_n_or_sf": 2.859525228086611
               },
               "ring_pull_n": {
                 "compared_with": 1500,
-                "value_n_or_sf": 14387.90677148269
+                "value_n_or_sf": 15491.915610772525
               },
               "spine_sf": {
                 "compared_with": 3427,
-                "value_n_or_sf": 1.2895973616942815
+                "value_n_or_sf": 0.431348153525743
               },
               "tip_inplane_sf_record_only": {
                 "compared_with": 1000,
-                "value_n_or_sf": 0.5554996827649068
+                "value_n_or_sf": 0.5553764837608903
               }
             },
             "note": "derived from the certify record"
@@ -7994,41 +7995,41 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json",
           "fresh_this_lane": false,
           "g_inputs": {
-            "spg": 3.47571
+            "spg": 2.58432
           },
           "geometry_sha256": "aa54fe9148fe303b2054bc5449f063f507d6feffa07556d144013aa9ded5b009",
           "id": "plate.loads",
           "kind": "derived",
-          "reason": "pry safety factor is not in the certify record",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-          "status": "incomplete"
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+          "status": "fail"
         },
         {
           "detail": {
-            "seq_ratio": 1.201187773806636,
+            "seq_ratio": 0.743647399006731,
             "seq_target": 1.2,
-            "side_report_seq_ratio": 1.201187773806636
+            "side_report_seq_ratio": 0.743647399006731
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json",
           "fresh_this_lane": false,
           "g_inputs": {
-            "seq_ratio": 1.201187773806636
+            "seq_ratio": 0.743647399006731
           },
           "geometry_sha256": "aa54fe9148fe303b2054bc5449f063f507d6feffa07556d144013aa9ded5b009",
           "id": "plate.seq",
           "kind": "gate",
+          "reason": "below 1.2",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-          "status": "pass"
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+          "status": "fail"
         },
         {
           "detail": {
             "cycles": "1e7",
-            "fat_sf": 1.2652654895648885,
+            "fat_sf": 0.5441708722663069,
             "label": "screening",
             "load": "0..180 N",
-            "not": "spec §7.3 L7"
+            "not": "spec \u00a77.3 L7"
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json",
           "fresh_this_lane": false,
@@ -8036,8 +8037,8 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "plate.l7",
           "kind": "derived",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-          "status": "pass"
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+          "status": "fail"
         },
         {
           "detail": {
@@ -8059,14 +8060,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "kind": "derived",
           "reason": "oscillatory_sequence",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "fail"
         },
         {
           "detail": {
             "changes_seq_ratio": false,
             "mesh_mm2": 0.25,
-            "sha256": "6716cda9b734f59d364b7e36d652d337c68890eb2ae5f0ed8115913c8d3972b7"
+            "sha256": "4cc376fe1bc87ad01b7c8c2e4e2c0414071a8e52d7f0731fff73ec339afb2c72"
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_a1a3.json",
           "fresh_this_lane": false,
@@ -8074,14 +8075,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "side.a1",
           "kind": "derived",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
           "detail": {
             "changes_seq_ratio": false,
             "mesh_mm2": 0.25,
-            "sha256": "6716cda9b734f59d364b7e36d652d337c68890eb2ae5f0ed8115913c8d3972b7"
+            "sha256": "4cc376fe1bc87ad01b7c8c2e4e2c0414071a8e52d7f0731fff73ec339afb2c72"
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_a1a3.json",
           "fresh_this_lane": false,
@@ -8089,14 +8090,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "side.a2",
           "kind": "derived",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
           "detail": {
             "changes_seq_ratio": false,
             "mesh_mm2": 0.25,
-            "sha256": "6716cda9b734f59d364b7e36d652d337c68890eb2ae5f0ed8115913c8d3972b7"
+            "sha256": "4cc376fe1bc87ad01b7c8c2e4e2c0414071a8e52d7f0731fff73ec339afb2c72"
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_a1a3.json",
           "fresh_this_lane": false,
@@ -8104,21 +8105,21 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "side.a3",
           "kind": "derived",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
           "detail": {
             "bore_support": "radial_pin_bearing_and_flange",
-            "buckling_critical_load_n": 2226.075513400712,
-            "buckling_eigenvalue": 8.561828897695046,
-            "certified_seq_ratio": 1.201187773806636,
+            "buckling_critical_load_n": 1198.0424514916424,
+            "buckling_eigenvalue": 4.6078555826601635,
+            "certified_seq_ratio": 0.743647399006731,
             "changes_seq_ratio": false,
             "default_clamp": "ring-hole nodes fixed in all 5 dofs inside run_b",
             "grip_foundation_stiffness": "winkler_grip_pad_foundation",
             "partial_solver_edit": false,
-            "sha256": "63772779cfefdffe85e54d397f7b879e8575313e6818aab47a0a93074f4f0ef2",
-            "supported_seq_ratio": 4.768302747335477
+            "sha256": "78c627634c97598673724b3634ce1eed80e3e917cad489aed3e5ab3572203694",
+            "supported_seq_ratio": 4.550625489280957
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_a4.json",
           "fresh_this_lane": false,
@@ -8126,49 +8127,49 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "id": "side.a4",
           "kind": "derived",
           "solver": "plate_cst_dkt",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
           "detail": {
             "NL": 4,
-            "NSUB": 0,
-            "SF_nodal_max": 1.509,
+            "NSUB": 1,
+            "SF_nodal_max": 0.9577,
             "copied_from_another_genome": false,
-            "d1_sha256": "2c012cb3a17bac51b13192b02a988cfb3f15ea08a752edf9e88a8cefdc7768cf",
+            "d1_sha256": "efbfcb1ddd68f93349f5fe5ae8270599c0adda88efd13618042b39e09afc836b",
             "entered_as_solver_run": true,
             "genome_data_row_matches_csv": true,
-            "ksp_its": 1,
+            "ksp_its": 130,
             "missing": [],
-            "n_dof": 105921,
-            "n_tet": 22752,
-            "solve_rerun": true
+            "n_dof": 416583,
+            "n_tet": 91008,
+            "solve_rerun": false
           },
           "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_solid_tip.json",
           "fresh_this_lane": false,
           "g_inputs": {
-            "solid_tip_sf_nodal_max": 1.509
+            "solid_tip_sf_nodal_max": 0.9577
           },
           "geometry_sha256": "aa54fe9148fe303b2054bc5449f063f507d6feffa07556d144013aa9ded5b009",
           "id": "solid.tip",
           "kind": "solver_run",
           "solver": "solid_skfem_p2",
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
           "status": "pass"
         },
         {
           "detail": {
-            "all_hard": true,
+            "all_hard": false,
             "gates": {
               "aesthetic_and_geometric": "pass",
-              "fatigue": "pass",
-              "floors_828_joint": "pass",
-              "gate_s_sharp_law": "pass",
-              "gate_s_tip_point_brep": "pass",
-              "human_max": "pass",
-              "seq_hard": "pass",
-              "solid_tip_sf": "pass",
-              "strict_hunter_lateral": "pass",
+              "fatigue": "fail",
+              "floors_828_joint": "fail",
+              "gate_s_sharp_law": "fail",
+              "gate_s_tip_point_brep": "fail",
+              "human_max": "fail",
+              "seq_hard": "fail",
+              "solid_tip_sf": "fail",
+              "strict_hunter_lateral": "fail",
               "twist_floor_body_and_tipsub_strict": "pass"
             }
           },
@@ -8180,33 +8181,35 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "geometry_sha256": "aa54fe9148fe303b2054bc5449f063f507d6feffa07556d144013aa9ded5b009",
           "id": "gate.rs_v2",
           "kind": "gate",
+          "reason": "does not pass every hard gate",
           "solver": null,
-          "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-          "status": "pass"
+          "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+          "status": "fail"
         }
       ],
+      "certificate_identity": "17576c751c5c0157cac7d098fd821915e54e811c5b7b2f9883889a0d0f11f245",
       "global_fitness": {
-        "G": 0.9138546249999999,
+        "G": 0.623888308291947,
         "inputs": {
           "aes_score": 0.4079,
           "mass_g": 75.38207297021373,
-          "seq_ratio": 1.201187773806636,
-          "solid_tip_sf_nodal_max": 1.509,
-          "spg": 3.47571
+          "seq_ratio": 0.743647399006731,
+          "solid_tip_sf_nodal_max": 0.9577,
+          "spg": 2.58432
         },
         "metric": "G1",
         "missing": [],
         "provisional": false,
         "status": "COMPLETE",
-        "title": "G 0.914 | 75.4 g | jarambit v1.0.0"
+        "title": "G 0.624 | 75.4 g | jarambit v1.0.0"
       },
-      "pass_count": 13,
+      "pass_count": 10,
       "role": "genome",
       "schema": "jarambit.cad_battery.subject.v1",
       "search_fitness": "unchanged",
       "solver_run_count": 1,
       "solver_run_objects": 1,
-      "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+      "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
       "subject": "w283_p14_c01"
     }
   },
@@ -8903,7 +8906,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
               "fat_sf": 0.7661622138998756,
               "label": "screening",
               "load": "0..180 N",
-              "not": "spec §7.3 L7"
+              "not": "spec \u00a77.3 L7"
             },
             "evidence_path": "evidence/rs_v2/w279_ultrarunner/w279_s2928_c01_rs.json",
             "fresh_this_lane": false,
@@ -9434,7 +9437,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
               "fat_sf": 0.7635351934906979,
               "label": "screening",
               "load": "0..180 N",
-              "not": "spec §7.3 L7"
+              "not": "spec \u00a77.3 L7"
             },
             "evidence_path": "evidence/rs_v2/w280_ultrarunner/w280_s2931_c01_rs.json",
             "fresh_this_lane": false,
@@ -9953,7 +9956,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
               "fat_sf": 0.7414382874069928,
               "label": "screening",
               "load": "0..180 N",
-              "not": "spec §7.3 L7"
+              "not": "spec \u00a77.3 L7"
             },
             "evidence_path": "evidence/rs_v2/w281_ultrarunner/w281_s2932_c01_rs.json",
             "fresh_this_lane": false,
@@ -10484,7 +10487,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
               "fat_sf": 0.7413705452860055,
               "label": "screening",
               "load": "0..180 N",
-              "not": "spec §7.3 L7"
+              "not": "spec \u00a77.3 L7"
             },
             "evidence_path": "evidence/rs_v2/w282_ultrarunner/w282_p10_c02_rs.json",
             "fresh_this_lane": false,
@@ -11015,7 +11018,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
               "fat_sf": 0.7318691447783486,
               "label": "screening",
               "load": "0..180 N",
-              "not": "spec §7.3 L7"
+              "not": "spec \u00a77.3 L7"
             },
             "evidence_path": "evidence/rs_v2/w282_ultrarunner/w282_p14_c01_rs.json",
             "fresh_this_lane": false,
@@ -11340,14 +11343,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
         "facets": 15580,
         "manifold_solids": 1,
         "mass_3d_g": 75.5049,
-        "mass_raster_g": 75.6416,
+        "mass_raster_g": 75.642,
         "max_directed_edge_repeat": 1,
         "non_manifold_edges": 0,
-        "rel_mass_diff": 0.001807,
-        "step_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02.step",
-        "step_sha256": "18943f7653f3453cbb81081080bb8a02bf66197dd9a494d762571a58b2a2c939",
-        "stl_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02.stl",
-        "stl_sha256": "9d582addfdba7909abdc25dbd73641b69b876717e3a1f0ad9fc08e55282b5b15",
+        "rel_mass_diff": 0.001812,
+        "step_path": "evidence/cert_integrity/recertified/w283_p10_c02/w283_p10_c02.step",
+        "step_sha256": "10714965a66feef04d7777142e3b27dad9c104a73f1068e545be2946c4f5f735",
+        "stl_path": "evidence/cert_integrity/recertified/w283_p10_c02/w283_p10_c02.stl",
+        "stl_sha256": "bff0a92fdc3615b31e021d5283b95857ecef6ff54d204dd7db11389767c1ced9",
         "units": "mm",
         "units_source": "project_convention",
         "watertight_exact": true
@@ -11361,7 +11364,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "build.analytic",
             "kind": "software_contract",
             "solver": "analytic",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
@@ -11371,7 +11374,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "build.gci_contracts",
             "kind": "software_contract",
             "solver": "gci",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
@@ -11385,7 +11388,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "build.claims",
             "kind": "software_contract",
             "solver": null,
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
@@ -11422,7 +11425,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "build.dolfinx",
             "kind": "software_contract",
             "solver": "solid_dolfinx",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
@@ -11433,7 +11436,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "kind": "gate",
             "reason": "no step bound",
             "solver": null,
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "blocked"
           },
           {
@@ -11444,7 +11447,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "kind": "gate",
             "reason": "no step bound",
             "solver": null,
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "blocked"
           },
           {
@@ -11461,7 +11464,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "geom.mass",
             "kind": "derived",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
@@ -11472,7 +11475,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "kind": "software_contract",
             "reason": "genome is not a native CAD pin",
             "solver": null,
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "blocked"
           },
           {
@@ -11480,32 +11483,32 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
               "loads": {
                 "chord_twist_human_max_sf": {
                   "compared_with": 16200,
-                  "value_n_or_sf": 1.0075626078499438
+                  "value_n_or_sf": 0.11099883356234613
                 },
                 "hiker_lateral_n": {
                   "compared_with": 180,
-                  "value_n_or_sf": 265.3847673956978
+                  "value_n_or_sf": 194.42681634169116
                 },
                 "hunter_lateral_n": {
                   "compared_with": 260,
-                  "value_n_or_sf": 265.3847673956978
+                  "value_n_or_sf": 194.42681634169116
                 },
                 "pry": null,
                 "ring_back_sf": {
                   "compared_with": 3000,
-                  "value_n_or_sf": 2.145791197557866
+                  "value_n_or_sf": 2.8595559328398195
                 },
                 "ring_pull_n": {
                   "compared_with": 1500,
-                  "value_n_or_sf": 14388.145220864477
+                  "value_n_or_sf": 15491.856474946993
                 },
                 "spine_sf": {
                   "compared_with": 3427,
-                  "value_n_or_sf": 1.290524117330112
+                  "value_n_or_sf": 0.43166014183598034
                 },
                 "tip_inplane_sf_record_only": {
                   "compared_with": 1000,
-                  "value_n_or_sf": 0.5559947950729673
+                  "value_n_or_sf": 0.5558736510517096
                 }
               },
               "note": "derived from the certify record"
@@ -11513,41 +11516,41 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_rs.json",
             "fresh_this_lane": false,
             "g_inputs": {
-              "spg": 3.50845
+              "spg": 2.57037
             },
             "geometry_sha256": "61594e106aedc7ecd9438e8867d8e743b1a7620f578b39951bf9851077b4fdac",
             "id": "plate.loads",
             "kind": "derived",
-            "reason": "pry safety factor is not in the certify record",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-            "status": "incomplete"
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+            "status": "fail"
           },
           {
             "detail": {
-              "seq_ratio": 1.218953861371059,
+              "seq_ratio": 0.7179476490627898,
               "seq_target": 1.2,
-              "side_report_seq_ratio": 1.218953861371059
+              "side_report_seq_ratio": 0.7179476490627898
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_rs.json",
             "fresh_this_lane": false,
             "g_inputs": {
-              "seq_ratio": 1.218953861371059
+              "seq_ratio": 0.7179476490627898
             },
             "geometry_sha256": "61594e106aedc7ecd9438e8867d8e743b1a7620f578b39951bf9851077b4fdac",
             "id": "plate.seq",
             "kind": "gate",
+            "reason": "below 1.2",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-            "status": "pass"
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+            "status": "fail"
           },
           {
             "detail": {
               "cycles": "1e7",
-              "fat_sf": 1.2815797001898848,
+              "fat_sf": 0.5430972966394524,
               "label": "screening",
               "load": "0..180 N",
-              "not": "spec §7.3 L7"
+              "not": "spec \u00a77.3 L7"
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_rs.json",
             "fresh_this_lane": false,
@@ -11555,37 +11558,36 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "plate.l7",
             "kind": "derived",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-            "status": "pass"
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+            "status": "fail"
           },
           {
             "detail": {
-              "admitted": false,
-              "discretization_under_3pct": false,
-              "fit_status": "oscillatory",
-              "gci_fine": null,
-              "p": null,
+              "admitted": true,
+              "discretization_under_3pct": true,
+              "fit_status": "admissible_estimate",
+              "gci_fine": 0.006442822289578268,
+              "p": 2.6233982835419463,
               "primary_observable": "seq_ratio",
               "refinement_ratio_r": 2.0,
-              "sf_hunter_fit_status": "oscillatory",
-              "sf_hunter_gci_fine": null,
-              "sf_hunter_p": null
+              "sf_hunter_fit_status": "admissible_estimate",
+              "sf_hunter_gci_fine": 0.017190779522576458,
+              "sf_hunter_p": 1.8854889735835478
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_plate_gci.json",
             "fresh_this_lane": false,
             "geometry_sha256": "61594e106aedc7ecd9438e8867d8e743b1a7620f578b39951bf9851077b4fdac",
             "id": "plate.gci",
             "kind": "derived",
-            "reason": "oscillatory_sequence",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-            "status": "fail"
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+            "status": "pass"
           },
           {
             "detail": {
               "changes_seq_ratio": false,
               "mesh_mm2": 0.25,
-              "sha256": "a0628becd27a5f5749a6398d2cbe9b99fe429f118036549e6cc9d5e41cfc8d18"
+              "sha256": "adaa04ec6949df7b9037cc621d9ce01383dbbb586a24cc777a4d7b9840aa94af"
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_a1a3.json",
             "fresh_this_lane": false,
@@ -11593,14 +11595,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "side.a1",
             "kind": "derived",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
             "detail": {
               "changes_seq_ratio": false,
               "mesh_mm2": 0.25,
-              "sha256": "a0628becd27a5f5749a6398d2cbe9b99fe429f118036549e6cc9d5e41cfc8d18"
+              "sha256": "adaa04ec6949df7b9037cc621d9ce01383dbbb586a24cc777a4d7b9840aa94af"
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_a1a3.json",
             "fresh_this_lane": false,
@@ -11608,14 +11610,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "side.a2",
             "kind": "derived",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
             "detail": {
               "changes_seq_ratio": false,
               "mesh_mm2": 0.25,
-              "sha256": "a0628becd27a5f5749a6398d2cbe9b99fe429f118036549e6cc9d5e41cfc8d18"
+              "sha256": "adaa04ec6949df7b9037cc621d9ce01383dbbb586a24cc777a4d7b9840aa94af"
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_a1a3.json",
             "fresh_this_lane": false,
@@ -11623,21 +11625,21 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "side.a3",
             "kind": "derived",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
             "detail": {
               "bore_support": "radial_pin_bearing_and_flange",
-              "buckling_critical_load_n": 2269.3597467646405,
-              "buckling_eigenvalue": 8.728306718325541,
-              "certified_seq_ratio": 1.218953861371059,
+              "buckling_critical_load_n": 2623.46885008842,
+              "buckling_eigenvalue": 10.090264808032384,
+              "certified_seq_ratio": 0.7179476490627898,
               "changes_seq_ratio": false,
               "default_clamp": "ring-hole nodes fixed in all 5 dofs inside run_b",
               "grip_foundation_stiffness": "winkler_grip_pad_foundation",
               "partial_solver_edit": false,
-              "sha256": "6cdeee4225379950a82fd8ef8810cd1f90cd7eb4470dacf0c831dd989ce39e0f",
-              "supported_seq_ratio": 3.9572571071649456
+              "sha256": "2331b0f0007e5bf45ee1c1123ed4edd547c0dfc7486c49615c9ec6c28f267136",
+              "supported_seq_ratio": 3.7872144876238547
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_a4.json",
             "fresh_this_lane": false,
@@ -11645,49 +11647,49 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "side.a4",
             "kind": "derived",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
             "detail": {
               "NL": 4,
-              "NSUB": 0,
-              "SF_nodal_max": 1.509,
+              "NSUB": 1,
+              "SF_nodal_max": 0.9578,
               "copied_from_another_genome": false,
-              "d1_sha256": "c45c9ec0a62049dfbeae6e1a21f838f11e019489dc1dbc35e1e8eecb803c56b2",
+              "d1_sha256": "f41e6ca2d635ad008a5a3b0c680e50d01faae81743ee3b30660c3727100473a2",
               "entered_as_solver_run": true,
               "genome_data_row_matches_csv": true,
-              "ksp_its": 1,
+              "ksp_its": 130,
               "missing": [],
-              "n_dof": 105921,
-              "n_tet": 22752,
-              "solve_rerun": true
+              "n_dof": 416583,
+              "n_tet": 91008,
+              "solve_rerun": false
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_solid_tip.json",
             "fresh_this_lane": false,
             "g_inputs": {
-              "solid_tip_sf_nodal_max": 1.509
+              "solid_tip_sf_nodal_max": 0.9578
             },
             "geometry_sha256": "61594e106aedc7ecd9438e8867d8e743b1a7620f578b39951bf9851077b4fdac",
             "id": "solid.tip",
             "kind": "solver_run",
             "solver": "solid_skfem_p2",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
             "detail": {
-              "all_hard": true,
+              "all_hard": false,
               "gates": {
                 "aesthetic_and_geometric": "pass",
-                "fatigue": "pass",
-                "floors_828_joint": "pass",
-                "gate_s_sharp_law": "pass",
-                "gate_s_tip_point_brep": "pass",
-                "human_max": "pass",
-                "seq_hard": "pass",
-                "solid_tip_sf": "pass",
-                "strict_hunter_lateral": "pass",
+                "fatigue": "fail",
+                "floors_828_joint": "fail",
+                "gate_s_sharp_law": "fail",
+                "gate_s_tip_point_brep": "fail",
+                "human_max": "fail",
+                "seq_hard": "fail",
+                "solid_tip_sf": "fail",
+                "strict_hunter_lateral": "fail",
                 "twist_floor_body_and_tipsub_strict": "pass"
               }
             },
@@ -11699,75 +11701,78 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "geometry_sha256": "61594e106aedc7ecd9438e8867d8e743b1a7620f578b39951bf9851077b4fdac",
             "id": "gate.rs_v2",
             "kind": "gate",
+            "reason": "does not pass every hard gate",
             "solver": null,
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-            "status": "pass"
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+            "status": "fail"
           }
         ],
+        "certificate_identity": "29cc265209093fc44d3bedf788f1210438d27be31ec16e644738453c53f1e25b",
         "global_fitness": {
-          "G": 0.9167193749999998,
+          "G": 0.6216318603776162,
           "inputs": {
             "aes_score": 0.4079,
             "mass_g": 75.6415527306541,
-            "seq_ratio": 1.218953861371059,
-            "solid_tip_sf_nodal_max": 1.509,
-            "spg": 3.50845
+            "seq_ratio": 0.7179476490627898,
+            "solid_tip_sf_nodal_max": 0.9578,
+            "spg": 2.57037
           },
           "metric": "G1",
           "missing": [],
           "provisional": false,
           "status": "COMPLETE",
-          "title": "G 0.917 | 75.6 g | jarambit v1.0.0"
+          "title": "G 0.622 | 75.6 g | jarambit v1.0.0"
         },
-        "pass_count": 13,
+        "pass_count": 11,
         "role": "genome",
         "schema": "jarambit.cad_battery.subject.v1",
         "search_fitness": "unchanged",
         "solver_run_count": 1,
         "solver_run_objects": 1,
-        "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+        "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
         "subject": "w283_p10_c02"
       },
       "engineering_metrics": {
         "aes_pass": true,
         "aes_score": 0.4079,
-        "buckling_eigenvalue_a4": 8.728306718325541,
-        "fat_sf_l7": 1.2815797001898848,
-        "lat_rob_cert_n": 265.3847673956978,
+        "buckling_eigenvalue_a4": 10.090264808032384,
+        "fat_sf_l7": 0.5430972966394524,
+        "lat_rob_cert_n": 194.4,
         "mass_3d_g": 75.5049,
-        "mass_g": 75.6415527306541,
-        "plate_gci_fine": null,
-        "promote_eligible": true,
+        "mass_g": 75.642,
+        "plate_gci_fine": 0.006442822289578268,
+        "promote_eligible": false,
         "ring_bearing_w_mm": 10.199999809265137,
-        "ring_rob_cert_n": 14388.145220864477,
-        "rs_v2_screen_plate_pass": true,
-        "seq_ratio_cert": 1.218953861371059,
-        "seq_ratio_supported_a4": 3.9572571071649456,
-        "sf_hunter_cert": 1.0207,
-        "sf_hunter_strict": 1.0246,
-        "sf_ring_cert": 9.5921,
-        "solid_tip_dolfinx_rel_err": 0.0,
-        "solid_tip_sf_nodal_avg": 1.576,
-        "solid_tip_sf_nodal_max": 1.509,
-        "spg_n_per_g": 3.50845,
-        "strict_lat_rob_0p0625_n": 266.3944,
+        "ring_rob_cert_n": 15491.9,
+        "rs_v2_all_hard": false,
+        "rs_v2_screen_plate_pass": false,
+        "seq_ratio_cert": 0.718,
+        "seq_ratio_supported_a4": 3.7872144876238547,
+        "sf_hunter_cert": 0.748,
+        "sf_hunter_strict": 0.68,
+        "sf_ring_cert": 10.328,
+        "solid_tip_dolfinx_rel_err": 0.000209,
+        "solid_tip_sf_nodal_avg": 1.0158,
+        "solid_tip_sf_nodal_max": 0.9578,
+        "spg_n_per_g": 2.57037,
+        "strict_lat_rob_0p0625_n": 176.8,
         "t_stock_mm": 5.9,
-        "twist_body_sf": 3.000677794009741,
-        "twist_tip_sf": 1.1407568212106332,
-        "twist_tipzone_sf_cert": 1.1407568212106332,
-        "twist_tipzone_sf_strict": 1.1248
+        "twist_body_sf": 3.001,
+        "twist_tip_sf": 0.988,
+        "twist_tipzone_sf_cert": 0.988,
+        "twist_tipzone_sf_strict": 1.002
       },
       "evaluation_mode": "genome_and_3d_cad_full_battery",
-      "genome_csv": "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_genome.csv",
+      "genome_csv": "evidence/cert_integrity/recertified/w283_p10_c02/w283_p10_c02_genome.csv",
       "genome_sha256": "61594e106aedc7ecd9438e8867d8e743b1a7620f578b39951bf9851077b4fdac",
       "global_fitness_G1": {
-        "G": 0.9167193749999998,
+        "G": 0.6216340416666666,
         "inputs": {
           "aes_score": 0.4079,
-          "mass_g": 75.6415527306541,
-          "seq_ratio": 1.218953861371059,
-          "solid_tip_sf_nodal_max": 1.509,
-          "spg": 3.50845
+          "mass_g": 75.642,
+          "seq_ratio": 0.718,
+          "solid_tip_sf_nodal_max": 0.9578,
+          "spg": 2.57037
         },
         "metric": "G1",
         "provisional": false,
@@ -11778,14 +11783,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "metric_version": "G1",
           "missing": [],
           "provisional": false,
-          "seq_gap": 0.0,
-          "spg_n": 0.8771125,
+          "seq_gap": 0.40166666666666667,
+          "spg_n": 0.6425925,
           "status": "COMPLETE",
-          "tip": 1.509,
+          "tip": 0.9578,
           "tip_missing": false,
           "tip_source": "solid_tip_sf_nodal_max"
         },
-        "title": "G 0.917 | 75.6 g | jarambit v1.0.0"
+        "title": "G 0.622 | 75.6 g | jarambit v1.0.0"
       },
       "input_target": "w283_p10_c02",
       "karambit_archetype": {
@@ -11796,64 +11801,64 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
         "karambit_valid": true,
         "ring_id_mm": 24.9,
         "ring_wall_mm": 5.200796830296465,
-        "spine_convex_fraction": 0.9224137931034484,
+        "spine_convex_fraction": 0.9224137931034483,
         "teeth_in": 15,
         "teeth_sp": 14
       },
       "schema": "jarambit.master_cad_scorecard.v1",
-      "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+      "source_commit": "97388249afbe65a9974fd1b6b9774d0b70da2e9a",
       "subject": "w283_p10_c02",
       "weighted_cad_score": {
-        "W_CAD": 1.816593,
-        "all_engineering_gates_pass": true,
+        "W_CAD": -3.964924,
+        "all_engineering_gates_pass": false,
         "components": {
-          "base_feasible": 1.0,
-          "carry_stability_3pct": 0.027064,
+          "base_feasible": -1.0,
+          "carry_stability_3pct": 0.018,
           "karambit_authenticity_12pct": 0.048103,
-          "mass_term_70pct": 0.633816,
-          "seq_buffer_5pct": 0.023418,
-          "shortfall_penalty": 0.0,
-          "survival_buffer_10pct": 0.084192
+          "mass_term_70pct": 0.633798,
+          "seq_buffer_5pct": 0.0,
+          "shortfall_penalty": 3.055467,
+          "survival_buffer_10pct": 0.001612
         },
         "gates": {
           "c6_aesthetic_floor": true,
           "cad_watertight_and_single_solid": true,
           "cert_hiker_180n": true,
-          "cert_hunter_260n": true,
+          "cert_hunter_260n": false,
           "cert_ring_pull_1500n": true,
           "dolfinx_cross_check_2pct": true,
-          "failure_sequence_1p2": true,
+          "failure_sequence_1p2": false,
           "geometric_and_holder_gates": true,
           "karambit_ring_and_curved_claw": true,
           "plate_gci_valid_3level": true,
           "side_a4_buckling_and_support": true,
-          "solid_tip_3d_p2_1p82nm": true,
-          "strict_hunter_260n": true,
+          "solid_tip_3d_p2_1p82nm": false,
+          "strict_hunter_260n": false,
           "twist_body_1p82nm": true,
-          "twist_tip_only_1p82nm": true,
+          "twist_tip_only_1p82nm": false,
           "twist_tip_submodel_strict_1p82nm": true
         },
         "metric": "W_CAD_v2_ultrarunner_karambit",
         "normalized_subscores": {
-          "s_carry_knee": 0.902137,
+          "s_carry_knee": 0.6,
           "s_karambit": 0.400862,
-          "s_mass": 0.905451,
-          "s_seq_knee": 0.468364,
-          "s_survival_knee": 0.841915
+          "s_mass": 0.905425,
+          "s_seq_knee": 0.0,
+          "s_survival_knee": 0.016123
         },
         "shortfalls": {
           "aesthetic": 0.0,
           "cad": 0.0,
           "geometry_gates": 0.0,
-          "hunter_strict": 0.0,
+          "hunter_strict": 0.31999999999999995,
           "karambit_archetype": 0.0,
           "ring_pull": 0.0,
-          "seq_ratio": 0.0,
-          "solid_tip_3d": 0.0,
+          "seq_ratio": 0.40166666666666667,
+          "solid_tip_3d": 0.042200000000000015,
           "twist_body": 0.0,
           "twist_tip_strict": 0.0
         },
-        "unpenalized_quality_score": 1.816593,
+        "unpenalized_quality_score": 1.701514,
         "weights": {
           "w_carry_stability": 0.03,
           "w_karambit": 0.12,
@@ -11861,6 +11866,18 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "w_seq_buffer_knee_1p28": 0.05,
           "w_survival_buffer_knee_8pct": 0.1
         }
+      },
+      "rs_v2_gates": {
+        "aesthetic_and_geometric": "pass",
+        "fatigue": "fail",
+        "floors_828_joint": "fail",
+        "gate_s_sharp_law": "fail",
+        "gate_s_tip_point_brep": "fail",
+        "human_max": "fail",
+        "seq_hard": "fail",
+        "solid_tip_sf": "fail",
+        "strict_hunter_lateral": "fail",
+        "twist_floor_body_and_tipsub_strict": "pass"
       }
     },
     "w283_p14_c01": {
@@ -11871,14 +11888,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
         "facets": 15528,
         "manifold_solids": 1,
         "mass_3d_g": 75.1992,
-        "mass_raster_g": 75.3821,
+        "mass_raster_g": 75.382,
         "max_directed_edge_repeat": 1,
         "non_manifold_edges": 0,
-        "rel_mass_diff": 0.002426,
-        "step_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01.step",
-        "step_sha256": "ca75334a8dba4b98d0a2561e1f2ae197f66735f62b138e89787c90e7f081fd29",
-        "stl_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01.stl",
-        "stl_sha256": "0d3ff71294875fe97a3ce70da59b7311bdbe9c894ee7d227f88fd1d124957db7",
+        "rel_mass_diff": 0.002425,
+        "step_path": "evidence/cert_integrity/recertified/w283_p14_c01/w283_p14_c01.step",
+        "step_sha256": "56709b6750cf33511f865a104dd5b74b7a0a145caba5228c1b3340f16cd6ae6f",
+        "stl_path": "evidence/cert_integrity/recertified/w283_p14_c01/w283_p14_c01.stl",
+        "stl_sha256": "ab25eb8b8d9c399e7e5f7f335b3afd05f5555f8524fe39ee2fa8ed38d93edee6",
         "units": "mm",
         "units_source": "project_convention",
         "watertight_exact": true
@@ -11892,7 +11909,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "build.analytic",
             "kind": "software_contract",
             "solver": "analytic",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
@@ -11902,7 +11919,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "build.gci_contracts",
             "kind": "software_contract",
             "solver": "gci",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
@@ -11916,7 +11933,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "build.claims",
             "kind": "software_contract",
             "solver": null,
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
@@ -11953,7 +11970,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "build.dolfinx",
             "kind": "software_contract",
             "solver": "solid_dolfinx",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
@@ -11964,7 +11981,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "kind": "gate",
             "reason": "no step bound",
             "solver": null,
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "blocked"
           },
           {
@@ -11975,7 +11992,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "kind": "gate",
             "reason": "no step bound",
             "solver": null,
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "blocked"
           },
           {
@@ -11992,7 +12009,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "geom.mass",
             "kind": "derived",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
@@ -12003,7 +12020,7 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "kind": "software_contract",
             "reason": "genome is not a native CAD pin",
             "solver": null,
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "blocked"
           },
           {
@@ -12011,32 +12028,32 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
               "loads": {
                 "chord_twist_human_max_sf": {
                   "compared_with": 16200,
-                  "value_n_or_sf": 1.0011326769507547
+                  "value_n_or_sf": 0.110986187014051
                 },
                 "hiker_lateral_n": {
                   "compared_with": 180,
-                  "value_n_or_sf": 262.0064812139506
+                  "value_n_or_sf": 194.81115243123332
                 },
                 "hunter_lateral_n": {
                   "compared_with": 260,
-                  "value_n_or_sf": 262.0064812139506
+                  "value_n_or_sf": 194.81115243123332
                 },
                 "pry": null,
                 "ring_back_sf": {
                   "compared_with": 3000,
-                  "value_n_or_sf": 2.1457679737004183
+                  "value_n_or_sf": 2.859525228086611
                 },
                 "ring_pull_n": {
                   "compared_with": 1500,
-                  "value_n_or_sf": 14387.90677148269
+                  "value_n_or_sf": 15491.915610772525
                 },
                 "spine_sf": {
                   "compared_with": 3427,
-                  "value_n_or_sf": 1.2895973616942815
+                  "value_n_or_sf": 0.431348153525743
                 },
                 "tip_inplane_sf_record_only": {
                   "compared_with": 1000,
-                  "value_n_or_sf": 0.5554996827649068
+                  "value_n_or_sf": 0.5553764837608903
                 }
               },
               "note": "derived from the certify record"
@@ -12044,41 +12061,41 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json",
             "fresh_this_lane": false,
             "g_inputs": {
-              "spg": 3.47571
+              "spg": 2.58432
             },
             "geometry_sha256": "aa54fe9148fe303b2054bc5449f063f507d6feffa07556d144013aa9ded5b009",
             "id": "plate.loads",
             "kind": "derived",
-            "reason": "pry safety factor is not in the certify record",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-            "status": "incomplete"
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+            "status": "fail"
           },
           {
             "detail": {
-              "seq_ratio": 1.201187773806636,
+              "seq_ratio": 0.743647399006731,
               "seq_target": 1.2,
-              "side_report_seq_ratio": 1.201187773806636
+              "side_report_seq_ratio": 0.743647399006731
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json",
             "fresh_this_lane": false,
             "g_inputs": {
-              "seq_ratio": 1.201187773806636
+              "seq_ratio": 0.743647399006731
             },
             "geometry_sha256": "aa54fe9148fe303b2054bc5449f063f507d6feffa07556d144013aa9ded5b009",
             "id": "plate.seq",
             "kind": "gate",
+            "reason": "below 1.2",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-            "status": "pass"
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+            "status": "fail"
           },
           {
             "detail": {
               "cycles": "1e7",
-              "fat_sf": 1.2652654895648885,
+              "fat_sf": 0.5441708722663069,
               "label": "screening",
               "load": "0..180 N",
-              "not": "spec §7.3 L7"
+              "not": "spec \u00a77.3 L7"
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json",
             "fresh_this_lane": false,
@@ -12086,8 +12103,8 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "plate.l7",
             "kind": "derived",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-            "status": "pass"
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+            "status": "fail"
           },
           {
             "detail": {
@@ -12109,14 +12126,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "kind": "derived",
             "reason": "oscillatory_sequence",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "fail"
           },
           {
             "detail": {
               "changes_seq_ratio": false,
               "mesh_mm2": 0.25,
-              "sha256": "6716cda9b734f59d364b7e36d652d337c68890eb2ae5f0ed8115913c8d3972b7"
+              "sha256": "4cc376fe1bc87ad01b7c8c2e4e2c0414071a8e52d7f0731fff73ec339afb2c72"
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_a1a3.json",
             "fresh_this_lane": false,
@@ -12124,14 +12141,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "side.a1",
             "kind": "derived",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
             "detail": {
               "changes_seq_ratio": false,
               "mesh_mm2": 0.25,
-              "sha256": "6716cda9b734f59d364b7e36d652d337c68890eb2ae5f0ed8115913c8d3972b7"
+              "sha256": "4cc376fe1bc87ad01b7c8c2e4e2c0414071a8e52d7f0731fff73ec339afb2c72"
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_a1a3.json",
             "fresh_this_lane": false,
@@ -12139,14 +12156,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "side.a2",
             "kind": "derived",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
             "detail": {
               "changes_seq_ratio": false,
               "mesh_mm2": 0.25,
-              "sha256": "6716cda9b734f59d364b7e36d652d337c68890eb2ae5f0ed8115913c8d3972b7"
+              "sha256": "4cc376fe1bc87ad01b7c8c2e4e2c0414071a8e52d7f0731fff73ec339afb2c72"
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_a1a3.json",
             "fresh_this_lane": false,
@@ -12154,21 +12171,21 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "side.a3",
             "kind": "derived",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
             "detail": {
               "bore_support": "radial_pin_bearing_and_flange",
-              "buckling_critical_load_n": 2226.075513400712,
-              "buckling_eigenvalue": 8.561828897695046,
-              "certified_seq_ratio": 1.201187773806636,
+              "buckling_critical_load_n": 1198.0424514916424,
+              "buckling_eigenvalue": 4.6078555826601635,
+              "certified_seq_ratio": 0.743647399006731,
               "changes_seq_ratio": false,
               "default_clamp": "ring-hole nodes fixed in all 5 dofs inside run_b",
               "grip_foundation_stiffness": "winkler_grip_pad_foundation",
               "partial_solver_edit": false,
-              "sha256": "63772779cfefdffe85e54d397f7b879e8575313e6818aab47a0a93074f4f0ef2",
-              "supported_seq_ratio": 4.768302747335477
+              "sha256": "78c627634c97598673724b3634ce1eed80e3e917cad489aed3e5ab3572203694",
+              "supported_seq_ratio": 4.550625489280957
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_a4.json",
             "fresh_this_lane": false,
@@ -12176,49 +12193,49 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "id": "side.a4",
             "kind": "derived",
             "solver": "plate_cst_dkt",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
             "detail": {
               "NL": 4,
-              "NSUB": 0,
-              "SF_nodal_max": 1.509,
+              "NSUB": 1,
+              "SF_nodal_max": 0.9577,
               "copied_from_another_genome": false,
-              "d1_sha256": "2c012cb3a17bac51b13192b02a988cfb3f15ea08a752edf9e88a8cefdc7768cf",
+              "d1_sha256": "efbfcb1ddd68f93349f5fe5ae8270599c0adda88efd13618042b39e09afc836b",
               "entered_as_solver_run": true,
               "genome_data_row_matches_csv": true,
-              "ksp_its": 1,
+              "ksp_its": 130,
               "missing": [],
-              "n_dof": 105921,
-              "n_tet": 22752,
-              "solve_rerun": true
+              "n_dof": 416583,
+              "n_tet": 91008,
+              "solve_rerun": false
             },
             "evidence_path": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_solid_tip.json",
             "fresh_this_lane": false,
             "g_inputs": {
-              "solid_tip_sf_nodal_max": 1.509
+              "solid_tip_sf_nodal_max": 0.9577
             },
             "geometry_sha256": "aa54fe9148fe303b2054bc5449f063f507d6feffa07556d144013aa9ded5b009",
             "id": "solid.tip",
             "kind": "solver_run",
             "solver": "solid_skfem_p2",
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
             "status": "pass"
           },
           {
             "detail": {
-              "all_hard": true,
+              "all_hard": false,
               "gates": {
                 "aesthetic_and_geometric": "pass",
-                "fatigue": "pass",
-                "floors_828_joint": "pass",
-                "gate_s_sharp_law": "pass",
-                "gate_s_tip_point_brep": "pass",
-                "human_max": "pass",
-                "seq_hard": "pass",
-                "solid_tip_sf": "pass",
-                "strict_hunter_lateral": "pass",
+                "fatigue": "fail",
+                "floors_828_joint": "fail",
+                "gate_s_sharp_law": "fail",
+                "gate_s_tip_point_brep": "fail",
+                "human_max": "fail",
+                "seq_hard": "fail",
+                "solid_tip_sf": "fail",
+                "strict_hunter_lateral": "fail",
                 "twist_floor_body_and_tipsub_strict": "pass"
               }
             },
@@ -12230,75 +12247,78 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
             "geometry_sha256": "aa54fe9148fe303b2054bc5449f063f507d6feffa07556d144013aa9ded5b009",
             "id": "gate.rs_v2",
             "kind": "gate",
+            "reason": "does not pass every hard gate",
             "solver": null,
-            "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
-            "status": "pass"
+            "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
+            "status": "fail"
           }
         ],
+        "certificate_identity": "17576c751c5c0157cac7d098fd821915e54e811c5b7b2f9883889a0d0f11f245",
         "global_fitness": {
-          "G": 0.9138546249999999,
+          "G": 0.623888308291947,
           "inputs": {
             "aes_score": 0.4079,
             "mass_g": 75.38207297021373,
-            "seq_ratio": 1.201187773806636,
-            "solid_tip_sf_nodal_max": 1.509,
-            "spg": 3.47571
+            "seq_ratio": 0.743647399006731,
+            "solid_tip_sf_nodal_max": 0.9577,
+            "spg": 2.58432
           },
           "metric": "G1",
           "missing": [],
           "provisional": false,
           "status": "COMPLETE",
-          "title": "G 0.914 | 75.4 g | jarambit v1.0.0"
+          "title": "G 0.624 | 75.4 g | jarambit v1.0.0"
         },
-        "pass_count": 13,
+        "pass_count": 10,
         "role": "genome",
         "schema": "jarambit.cad_battery.subject.v1",
         "search_fitness": "unchanged",
         "solver_run_count": 1,
         "solver_run_objects": 1,
-        "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+        "source_commit": "4e54019dd016ddde71b416460b96e0a9b08a95de",
         "subject": "w283_p14_c01"
       },
       "engineering_metrics": {
         "aes_pass": true,
         "aes_score": 0.4079,
-        "buckling_eigenvalue_a4": 8.561828897695046,
-        "fat_sf_l7": 1.2652654895648885,
-        "lat_rob_cert_n": 262.0064812139506,
+        "buckling_eigenvalue_a4": 4.6078555826601635,
+        "fat_sf_l7": 0.5441708722663069,
+        "lat_rob_cert_n": 194.8,
         "mass_3d_g": 75.1992,
-        "mass_g": 75.38207297021373,
+        "mass_g": 75.382,
         "plate_gci_fine": null,
-        "promote_eligible": true,
+        "promote_eligible": false,
         "ring_bearing_w_mm": 10.199999809265137,
-        "ring_rob_cert_n": 14387.90677148269,
-        "rs_v2_screen_plate_pass": true,
-        "seq_ratio_cert": 1.201187773806636,
-        "seq_ratio_supported_a4": 4.768302747335477,
-        "sf_hunter_cert": 1.0077,
-        "sf_hunter_strict": 1.0099,
-        "sf_ring_cert": 9.5919,
-        "solid_tip_dolfinx_rel_err": 0.0,
-        "solid_tip_sf_nodal_avg": 1.576,
-        "solid_tip_sf_nodal_max": 1.509,
-        "spg_n_per_g": 3.47571,
-        "strict_lat_rob_0p0625_n": 262.583,
+        "ring_rob_cert_n": 15491.9,
+        "rs_v2_all_hard": false,
+        "rs_v2_screen_plate_pass": false,
+        "seq_ratio_cert": 0.744,
+        "seq_ratio_supported_a4": 4.550625489280957,
+        "sf_hunter_cert": 0.749,
+        "sf_hunter_strict": 0.6796,
+        "sf_ring_cert": 10.328,
+        "solid_tip_dolfinx_rel_err": 0.000313,
+        "solid_tip_sf_nodal_avg": 1.0156,
+        "solid_tip_sf_nodal_max": 0.9577,
+        "spg_n_per_g": 2.58432,
+        "strict_lat_rob_0p0625_n": 176.7,
         "t_stock_mm": 5.9,
-        "twist_body_sf": 2.9815284620318643,
-        "twist_tip_sf": 1.1405208378606,
-        "twist_tipzone_sf_cert": 1.1405208378606,
-        "twist_tipzone_sf_strict": 1.1246
+        "twist_body_sf": 2.982,
+        "twist_tip_sf": 0.988,
+        "twist_tipzone_sf_cert": 0.988,
+        "twist_tipzone_sf_strict": 1.002
       },
       "evaluation_mode": "genome_and_3d_cad_full_battery",
-      "genome_csv": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv",
+      "genome_csv": "evidence/cert_integrity/recertified/w283_p14_c01/w283_p14_c01_genome.csv",
       "genome_sha256": "aa54fe9148fe303b2054bc5449f063f507d6feffa07556d144013aa9ded5b009",
       "global_fitness_G1": {
-        "G": 0.913854625,
+        "G": 0.6239029999999999,
         "inputs": {
           "aes_score": 0.4079,
-          "mass_g": 75.38207297021373,
-          "seq_ratio": 1.201187773806636,
-          "solid_tip_sf_nodal_max": 1.509,
-          "spg": 3.47571
+          "mass_g": 75.382,
+          "seq_ratio": 0.744,
+          "solid_tip_sf_nodal_max": 0.9577,
+          "spg": 2.58432
         },
         "metric": "G1",
         "provisional": false,
@@ -12309,14 +12329,14 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "metric_version": "G1",
           "missing": [],
           "provisional": false,
-          "seq_gap": 0.0,
-          "spg_n": 0.8689275,
+          "seq_gap": 0.38,
+          "spg_n": 0.64608,
           "status": "COMPLETE",
-          "tip": 1.509,
+          "tip": 0.9577,
           "tip_missing": false,
           "tip_source": "solid_tip_sf_nodal_max"
         },
-        "title": "G 0.914 | 75.4 g | jarambit v1.0.0"
+        "title": "G 0.624 | 75.4 g | jarambit v1.0.0"
       },
       "input_target": "w283_p14_c01",
       "karambit_archetype": {
@@ -12327,64 +12347,64 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
         "karambit_valid": true,
         "ring_id_mm": 24.9,
         "ring_wall_mm": 5.200796830296465,
-        "spine_convex_fraction": 0.9224137931034484,
+        "spine_convex_fraction": 0.9224137931034483,
         "teeth_in": 15,
         "teeth_sp": 14
       },
       "schema": "jarambit.master_cad_scorecard.v1",
-      "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+      "source_commit": "97388249afbe65a9974fd1b6b9774d0b70da2e9a",
       "subject": "w283_p14_c01",
       "weighted_cad_score": {
-        "W_CAD": 1.795575,
-        "all_engineering_gates_pass": true,
+        "W_CAD": -3.878704,
+        "all_engineering_gates_pass": false,
         "components": {
-          "base_feasible": 1.0,
-          "carry_stability_3pct": 0.026815,
+          "base_feasible": -1.0,
+          "carry_stability_3pct": 0.018,
           "karambit_authenticity_12pct": 0.048103,
-          "mass_term_70pct": 0.644242,
-          "seq_buffer_5pct": 0.001941,
-          "shortfall_penalty": 0.0,
-          "survival_buffer_10pct": 0.074474
+          "mass_term_70pct": 0.644245,
+          "seq_buffer_5pct": 0.0,
+          "shortfall_penalty": 2.970738,
+          "survival_buffer_10pct": 0.001612
         },
         "gates": {
           "c6_aesthetic_floor": true,
           "cad_watertight_and_single_solid": true,
           "cert_hiker_180n": true,
-          "cert_hunter_260n": true,
+          "cert_hunter_260n": false,
           "cert_ring_pull_1500n": true,
           "dolfinx_cross_check_2pct": true,
-          "failure_sequence_1p2": true,
+          "failure_sequence_1p2": false,
           "geometric_and_holder_gates": true,
           "karambit_ring_and_curved_claw": true,
           "plate_gci_valid_3level": true,
           "side_a4_buckling_and_support": true,
-          "solid_tip_3d_p2_1p82nm": true,
-          "strict_hunter_260n": true,
+          "solid_tip_3d_p2_1p82nm": false,
+          "strict_hunter_260n": false,
           "twist_body_1p82nm": true,
-          "twist_tip_only_1p82nm": true,
+          "twist_tip_only_1p82nm": false,
           "twist_tip_submodel_strict_1p82nm": true
         },
         "metric": "W_CAD_v2_ultrarunner_karambit",
         "normalized_subscores": {
-          "s_carry_knee": 0.89382,
+          "s_carry_knee": 0.6,
           "s_karambit": 0.400862,
-          "s_mass": 0.920345,
-          "s_seq_knee": 0.038819,
-          "s_survival_knee": 0.744739
+          "s_mass": 0.920349,
+          "s_seq_knee": 0.0,
+          "s_survival_knee": 0.016123
         },
         "shortfalls": {
           "aesthetic": 0.0,
           "cad": 0.0,
           "geometry_gates": 0.0,
-          "hunter_strict": 0.0,
+          "hunter_strict": 0.32038461538461543,
           "karambit_archetype": 0.0,
           "ring_pull": 0.0,
-          "seq_ratio": 0.0,
-          "solid_tip_3d": 0.0,
+          "seq_ratio": 0.38,
+          "solid_tip_3d": 0.042300000000000004,
           "twist_body": 0.0,
           "twist_tip_strict": 0.0
         },
-        "unpenalized_quality_score": 1.795575,
+        "unpenalized_quality_score": 1.71196,
         "weights": {
           "w_carry_stability": 0.03,
           "w_karambit": 0.12,
@@ -12392,11 +12412,23 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
           "w_seq_buffer_knee_1p28": 0.05,
           "w_survival_buffer_knee_8pct": 0.1
         }
+      },
+      "rs_v2_gates": {
+        "aesthetic_and_geometric": "pass",
+        "fatigue": "fail",
+        "floors_828_joint": "fail",
+        "gate_s_sharp_law": "fail",
+        "gate_s_tip_point_brep": "fail",
+        "human_max": "fail",
+        "seq_hard": "fail",
+        "solid_tip_sf": "fail",
+        "strict_hunter_lateral": "fail",
+        "twist_floor_body_and_tipsub_strict": "pass"
       }
     }
   },
   "schema": "jarambit.web_studio_bundle.v1",
-  "source_commit": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+  "source_commit": "97388249afbe65a9974fd1b6b9774d0b70da2e9a",
   "subjects": [
     {
       "all_engineering_gates_pass": false,
@@ -12777,40 +12809,40 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
       "w_cad": 1.797848
     },
     {
-      "all_engineering_gates_pass": true,
+      "all_engineering_gates_pass": false,
       "blocked_count": 3,
-      "fail_count": 1,
-      "g1_score": 0.9138546249999999,
+      "fail_count": 5,
+      "g1_score": 0.623888308291947,
       "g1_status": "COMPLETE",
       "has_scorecard": true,
       "has_stl": true,
       "id": "w283_p14_c01",
-      "incomplete_count": 1,
+      "incomplete_count": 0,
       "kind": "crescent_genome",
       "mass_3d_g": 75.1992,
-      "mass_g": 75.38207297021373,
-      "pass_count": 13,
+      "mass_g": 75.382,
+      "pass_count": 10,
       "role": "genome",
       "solver_run_count": 1,
-      "w_cad": 1.795575
+      "w_cad": -3.878704
     },
     {
-      "all_engineering_gates_pass": true,
+      "all_engineering_gates_pass": false,
       "blocked_count": 3,
-      "fail_count": 1,
-      "g1_score": 0.9167193749999998,
+      "fail_count": 4,
+      "g1_score": 0.6216318603776162,
       "g1_status": "COMPLETE",
       "has_scorecard": true,
       "has_stl": true,
       "id": "w283_p10_c02",
-      "incomplete_count": 1,
+      "incomplete_count": 0,
       "kind": "crescent_genome",
       "mass_3d_g": 75.5049,
-      "mass_g": 75.6415527306541,
-      "pass_count": 13,
+      "mass_g": 75.642,
+      "pass_count": 11,
       "role": "genome",
       "solver_run_count": 1,
-      "w_cad": 1.816593
+      "w_cad": -3.964924
     }
   ],
   "wave_trajectory": [
@@ -12991,26 +13023,26 @@ export const DEFAULT_STUDIO_BUNDLE: WebStudioBundle = {
       "wave": "w282"
     },
     {
-      "g1": 0.916719,
+      "g1": 0.621634,
       "mass_3d_g": 75.505,
       "mass_g": 75.642,
-      "seq_ratio": 1.219,
-      "sf_hunter_strict": 1.0246,
-      "solid_tip_sf": 1.509,
+      "seq_ratio": 0.718,
+      "sf_hunter_strict": 0.68,
+      "solid_tip_sf": 0.9578,
       "subject": "w283_p10_c02",
-      "w_cad": 1.816593,
-      "wave": "w283 (peer)"
+      "w_cad": -3.964924,
+      "wave": "w283 (peer, failed)"
     },
     {
-      "g1": 0.913855,
+      "g1": 0.623903,
       "mass_3d_g": 75.199,
       "mass_g": 75.382,
-      "seq_ratio": 1.201,
-      "sf_hunter_strict": 1.0099,
-      "solid_tip_sf": 1.509,
+      "seq_ratio": 0.744,
+      "sf_hunter_strict": 0.6796,
+      "solid_tip_sf": 0.9577,
       "subject": "w283_p14_c01",
-      "w_cad": 1.795575,
-      "wave": "w283 (record)"
+      "w_cad": -3.878704,
+      "wave": "w283 (failed)"
     }
   ]
 } as unknown as WebStudioBundle;

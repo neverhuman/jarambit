@@ -6,6 +6,56 @@ import { WaveParetoChart } from './components/WaveParetoChart';
 import { DEFAULT_STUDIO_BUNDLE } from './data/defaultDataset';
 import type { MasterScorecard, ParsedMesh3D, WebStudioBundle } from './types';
 
+export type FetchLike = (input: string) => Promise<{
+  ok: boolean;
+  json: () => Promise<unknown>;
+}>;
+
+export function isAdmittedStudioBundle(candidate: unknown): candidate is WebStudioBundle {
+  if (!candidate || typeof candidate !== 'object') return false;
+  const b = candidate as Partial<WebStudioBundle>;
+  return (
+    b.schema === 'jarambit.web_studio_bundle.v1' &&
+    typeof b.source_commit === 'string' &&
+    b.source_commit.length >= 7 &&
+    Array.isArray(b.case_ids) &&
+    Array.isArray(b.subjects) &&
+    b.featured_scorecards != null &&
+    typeof b.featured_scorecards === 'object' &&
+    b.battery_records != null &&
+    typeof b.battery_records === 'object'
+  );
+}
+
+export async function loadStudioBundle(
+  fetchImpl: FetchLike | undefined = typeof fetch !== 'undefined' ? (fetch as FetchLike) : undefined,
+  fallback: WebStudioBundle = DEFAULT_STUDIO_BUNDLE,
+): Promise<WebStudioBundle> {
+  if (!fetchImpl) return fallback;
+  try {
+    const resp = await fetchImpl('/data/index.json');
+    if (!resp.ok) return fallback;
+    const json = await resp.json();
+    if (isAdmittedStudioBundle(json)) {
+      return json;
+    }
+    return fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+export function formatGateHeadlineStatus(
+  id: string,
+  allPass: boolean | null | undefined,
+): 'All 16 Gates Pass' | 'Withdrawn / Gates Fail' | 'Gates Fail' | 'Gates Unavailable' {
+  if (allPass === true) return 'All 16 Gates Pass';
+  if (allPass === false) {
+    return id.startsWith('w283_') ? 'Withdrawn / Gates Fail' : 'Gates Fail';
+  }
+  return 'Gates Unavailable';
+}
+
 export const App: React.FC = () => {
   const [bundle, setBundle] = useState<WebStudioBundle>(DEFAULT_STUDIO_BUNDLE);
   const [selectedSubject, setSelectedSubject] = useState<string>('w283_p14_c01');
@@ -14,18 +64,11 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
-      try {
-        const resp = await fetch('/data/index.json');
-        if (!resp.ok) return;
-        const json = (await resp.json()) as WebStudioBundle;
-        if (!cancelled && json?.schema === 'jarambit.web_studio_bundle.v1') {
-          setBundle(json);
-        }
-      } catch {
-        // Offline or Vitest environment: DEFAULT_STUDIO_BUNDLE is already active
+    loadStudioBundle().then((loaded) => {
+      if (!cancelled) {
+        setBundle(loaded);
       }
-    })();
+    });
     return () => {
       cancelled = true;
     };
@@ -57,13 +100,28 @@ export const App: React.FC = () => {
     setSelectedSubject(id);
   };
 
-  const featuredQuickLinks = [
-    { id: 'w283_p14_c01', tag: '75.20g Record Ultralight' },
-    { id: 'w283_p10_c02', tag: 'Top W_CAD_v2 (+1.8166)' },
-    { id: 'w282_p14_c01', tag: 'w282 Record (75.32g)' },
-    { id: 'w282_p10_c02', tag: 'w282 Peer (+1.7978)' },
-    { id: 'c10a', tag: 'Switchback C10a STEP' },
-  ];
+  const featuredQuickLinks = useMemo(() => {
+    const order = ['w282_p14_c01', 'w282_p10_c02', 'w283_p14_c01', 'w283_p10_c02', 'c10a'];
+    return order.map((id) => {
+      const sc = customScorecards[id] ?? bundle.featured_scorecards[id];
+      const wCad = sc?.weighted_cad_score?.W_CAD;
+      const allPass = sc?.weighted_cad_score?.all_engineering_gates_pass;
+      const mass3d = sc?.cad?.mass_3d_g;
+      const scoreText =
+        wCad != null ? `W_CAD ${wCad >= 0 ? '+' : ''}${wCad.toFixed(4)}` : 'W_CAD unavailable';
+      const statusText = formatGateHeadlineStatus(id, allPass);
+      const massPrefix =
+        id === 'c10a'
+          ? 'Switchback C10a STEP'
+          : mass3d != null
+            ? `${mass3d.toFixed(2)}g`
+            : id;
+      return {
+        id,
+        tag: `${massPrefix} · ${scoreText} (${statusText})`,
+      };
+    });
+  }, [bundle.featured_scorecards, customScorecards]);
 
   return (
     <div className="studio-shell">
@@ -73,7 +131,7 @@ export const App: React.FC = () => {
           <div>
             <h1>3D CAD & Multi-Solver Gate Scorecard Studio</h1>
             <p className="subtitle">
-              Pure-Rust B-Rep STEP/STL Manifold · CST+DKT Plate · Bore-Pin/Winkler Buckling (side.a4) · 3D TET10 Tip Submodel
+              Pure-Rust B-Rep STEP/STL Manifold · CST+DKT Plate · Bore-Pin/Winkler Buckling (side.a4) · 3D TET10 Tip Submodel · Snapshot <code>{bundle.source_commit.slice(0, 12)}</code>
             </p>
           </div>
         </div>

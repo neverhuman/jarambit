@@ -156,6 +156,7 @@ export interface MasterScorecard {
   weighted_cad_score: WeightedCadScore;
   global_fitness_G1: GlobalFitnessG1;
   cad_battery: CadBatteryRecord;
+  rs_v2_gates?: Record<string, 'pass' | 'fail'> | null;
 }
 
 export interface SubjectSummary {
