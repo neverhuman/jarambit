@@ -88,3 +88,14 @@ The supported A4 ratio is lateral-only and uses different regions from the certi
 The fatigue factor is a model scalar, not a retained fatigue field or measured life. The additional in-plane factor stays explicitly record-only. Certification/strict lateral and torsion values have separate units and are not turned into a convergence estimate. Original scientific code, thresholds, weights and evidence remain unchanged.
 
 The conclusion treats aerospace fixtures, robotics, thermal management, medical-device research, instruments and energy systems as future opportunities. It does not claim that printing titanium establishes unprecedented tolerances or that a simulation qualifies a product. Stronger publication claims need controlled benign research and independent reconstruction evidence.
+
+
+## The complete retained battery matrix
+
+![All 414 original battery status labels](generated/battery-matrix.svg)
+
+The [battery figure contract](battery-inputs.v1.json) freezes the corpus manifest and all 23 subject records. The [cell-level projection](generated/battery-matrix.json) preserves each source pointer, original status, kind, solver, evidence path, geometry identity, source-revision field and freshness flag. All 18 evaluator explanations link to their exact-ID matrix column; existing separate assessed-example visuals retain their different subject binding.
+
+This is a categorical map of **221 stored passes, 81 failures and 112 blocked records**, with no incomplete labels. Letters distinguish statuses without relying on color. Three source roles are retained: three native CAD records, one archived-not-on-main record and nineteen genomes. Twenty-one subject records cite source revision `6d18ef8c`; the two w283 records cite `4e54019d`. These copied provenance fields do not establish a homogeneous solver regime or a fresh execution. Seven null evidence-path fields remain null in the ledger.
+
+Four shared build columns account for 92 stored pass references. The `solid.tip` pass label denotes record completeness. Neither the colored cells nor their tally establish independent physical tests, favorable strength, or product qualification. The generated aggregate-count table remains available as `generated/battery.tex`; the article uses the full matrix instead.
