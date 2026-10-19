@@ -55,6 +55,7 @@ from ops.ci.evaluate_cad_candidate import (  # noqa: E402
     compute_weighted_cad_score,
     evaluate_candidate,
 )
+from ops.ci.ultralight_weighted_fitness import compute_ultralight_weighted_fitness  # noqa: E402
 
 SCORECARD_SCHEMA = 'jarambit.master_cad_scorecard.v1'
 TI64_DENSITY_G_PER_MM3 = 0.00443
@@ -1064,6 +1065,15 @@ def score_cad(
         'global_fitness_G1': cad_eval['global_fitness_G1'],
         'cad_battery': battery_rec,
     }
+
+    if resolved['mode'] == 'genome_backed':
+        rs_path = out_dir / f'{subj}_rs.json'
+        if not rs_path.is_file():
+            raise RuntimeError(f'genome-backed scorecard missing RS-v2 receipt: {rs_path}')
+        rs_doc = json.loads(rs_path.read_text(encoding='utf-8'))
+        scorecard['ultralight_weighted_fitness'] = compute_ultralight_weighted_fitness(
+            cad_eval, rs_doc
+        )
 
     json_path = out_dir / f'{subj}_master_scorecard.json'
     md_path = out_dir / f'{subj}_master_scorecard.md'
