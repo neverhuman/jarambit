@@ -75,4 +75,14 @@ The three-level plate study uses maximum areas **0.25, 1 and 4 mm²**, distinct 
 
 The matched solid comparison uses **91,008 tetrahedra / 416,583 DOF**. Saved nodal-maximum SFs are 0.669 and 0.6693; mean-recovery SFs are 0.726 and 0.7263. Reported relative differences retain their rounded-output basis. A common mesh and close scalar agreement do not establish discretization accuracy or physical validation. The profile panel contains original plate-cell and solid recovered-vertex bin maxima with different recovery/region definitions; it is not a full-field solver comparison or a synthetic 3D heatmap. No new FEM execution occurs during publication generation.
 
+## Actual support, fatigue and refined scalar observations
+
+![Saved support, fatigue, refined observations and original flags](generated/assessment.svg)
+
+The [assessment contract](assessment-inputs.v1.json) binds the A4, RS and scorecard records and three interpretation sources, verified against the original kernel revision. The [projection receipt](generated/assessment.json) retains five response/fatigue factors, four certification/strict scalars and all 26 original flags. The flags count overlapping comparisons: this example has ten met G16 comparisons and two met RS groups, and remains unqualified. It is separate from the weighted cohort with thirteen favorable flags.
+
+The supported A4 ratio is lateral-only and uses different regions from the certification multi-case minimum. Their numerical difference does not isolate the effect of support stiffness. The figure labels its two support-model boxes as a schematic and preserves the reported eigenvalue without inventing a mode. The source passes `K_support^-1 G` to `eigsh`; the [SciPy API requires a symmetric/Hermitian operator](https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.eigsh.html). Euclidean symmetry and an eigenpair residual are not established by the retained record. This is an open verification question, not proof that the archived scalar is wrong; see [the author red-team finding](RED_TEAM.md#a4-eigen-operator-contract-open-p1).
+
+The fatigue factor is a model scalar, not a retained fatigue field or measured life. The additional in-plane factor stays explicitly record-only. Certification/strict lateral and torsion values have separate units and are not turned into a convergence estimate. Original scientific code, thresholds, weights and evidence remain unchanged.
+
 The conclusion treats aerospace fixtures, robotics, thermal management, medical-device research, instruments and energy systems as future opportunities. It does not claim that printing titanium establishes unprecedented tolerances or that a simulation qualifies a product. Stronger publication claims need controlled benign research and independent reconstruction evidence.

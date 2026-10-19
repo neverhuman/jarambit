@@ -736,6 +736,10 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
                 ("G16", "failure_sequence_1p2") | ("RSV2", "seq_hard") | ("battery", "plate.seq") => Some(("verification", "A: retained yield-order proxy across mesh levels; no admitted GCI")),
                 ("G16", "plate_gci_valid_3level") | ("battery", "plate.gci") => Some(("verification", "A--B: valid metadata, but nonpositive-order/oscillatory observations and no admitted GCI")),
                 ("G16", "dolfinx_cross_check_2pct") => Some(("verification", "C: original matched-mesh safety-factor observations and stored rounded differences")),
+                ("G16", "strict_hunter_260n" | "twist_tip_submodel_strict_1p82nm") | ("RSV2", "strict_hunter_lateral" | "twist_floor_body_and_tipsub_strict") => Some(("assessment", "C: original certification/strict scalar pairs; no strict full field or error estimate")),
+                ("G16", "side_a4_buckling_and_support") | ("battery", "side.a4") => Some(("assessment", "A: support-model schematic and archived scalars; eigen-operator verification remains open")),
+                ("RSV2", "fatigue") | ("battery", "plate.l7") => Some(("assessment", "B: original fatigue-model scalar; no fatigue field or measured lifetime")),
+                ("RSV2", "human_max") => Some(("assessment", "B: separate recorded response factors; in-plane value remains record-only")),
                 _ => None,
             };
             if let Some((figure, panel)) = visual {
@@ -944,6 +948,64 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     if verification_docs["solid_tip"]["d1_sha256"] != field_contract["source_sha256"] {
         return Err("verification and displayed plate input digests differ".into());
     }
+    let assessment_contract = read(&root, "docs/paper/assessment-inputs.v1.json", &mut inputs)?;
+    if assessment_contract["producer_revision"] != assessment_manifest["numerical_kernel_commit"]
+        || assessment_contract["subject"] != field_contract["subject"]
+        || assessment_contract["certificate_identity"] != field_contract["certificate_identity"]
+    {
+        return Err("assessment scalar identity/producer differs".into());
+    }
+    let scalar_sources = assessment_contract["sources"]
+        .as_object()
+        .ok_or("missing scalar sources")?;
+    if scalar_sources.len() != 3 {
+        return Err("scalar source membership differs".into());
+    }
+    let mut scalar_docs = BTreeMap::new();
+    for key in ["a4", "rs", "scorecard"] {
+        let source = &scalar_sources[key];
+        let path = text(&source["path"])?;
+        if assessment_manifest["automatic"]["artifacts"][key] != path {
+            return Err("scalar artifact path differs".into());
+        }
+        let doc = read(&root, path, &mut inputs)?;
+        if inputs[path] != text(&source["sha256"])? {
+            return Err("scalar artifact digest differs".into());
+        }
+        scalar_docs.insert(key, doc);
+    }
+    let scalar_interpretation = assessment_contract["interpretation_sources"]
+        .as_object()
+        .ok_or("missing scalar interpretation sources")?;
+    if scalar_interpretation.len() != 3 {
+        return Err("scalar interpretation membership differs".into());
+    }
+    for path in [
+        "ops/ci/side_a4.py",
+        "crates/crescent/src/fem.rs",
+        "crates/cli/src/bench.rs",
+    ] {
+        let hash = digest(&fs::read(safe_path(&root, path)?)?);
+        if scalar_interpretation[path].as_str() != Some(hash.as_str()) {
+            return Err("scalar interpretation source changed".into());
+        }
+        inputs.insert(path.into(), hash);
+    }
+    if scalar_docs["a4"]["d1_sha256"] != field_contract["source_sha256"] {
+        return Err("support and displayed plate bindings differ".into());
+    }
+    let (assessment_svg, assessment_summary) = crate::assessment::project(
+        &scalar_docs["a4"],
+        &scalar_docs["rs"],
+        &scalar_docs["scorecard"],
+        &assessment_contract,
+        &catalog,
+    )?;
+    out.insert("docs/paper/generated/assessment.svg".into(), assessment_svg);
+    out.insert(
+        "docs/paper/generated/assessment.json".into(),
+        serde_json::to_string_pretty(&assessment_summary)? + "\n",
+    );
     let birth_ids = births
         .iter()
         .map(|r| {
@@ -1136,6 +1198,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "crates/paper-artifacts/src/historical.rs",
         "crates/paper-artifacts/src/plate.rs",
         "crates/paper-artifacts/src/verification.rs",
+        "crates/paper-artifacts/src/assessment.rs",
         "crates/paper-artifacts/examples/paper_artifacts.rs",
         "crates/paper-artifacts/Cargo.toml",
         "crates/paper-artifacts/Cargo.lock",
@@ -1192,12 +1255,33 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "docs/paper/generated/verification.svg.manifest.json".into(),
         serde_json::to_string_pretty(&verification_manifest)? + "\n",
     );
+    let mut scalar_inputs = BTreeMap::new();
+    for path in [
+        "docs/paper/assessment-inputs.v1.json",
+        "crates/paper-artifacts/src/assessment.rs",
+        "docs/tests/catalog.json",
+    ] {
+        scalar_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    for record in scalar_sources.values() {
+        let path = text(&record["path"])?;
+        scalar_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    for path in scalar_interpretation.keys() {
+        scalar_inputs.insert(path.clone(), inputs[path].clone());
+    }
+    let scalar_manifest = json!({"schema":1,"figure":"docs/paper/generated/assessment.svg","figure_sha256":digest(out["docs/paper/generated/assessment.svg"].as_bytes()),"inputs":scalar_inputs,"script":"crates/paper-artifacts/src/assessment.rs","projection_receipt":"docs/paper/generated/assessment.json","scope":"original scalar observations and flags only; support model is schematic; no eigenmode, fatigue field or new qualification"});
+    out.insert(
+        "docs/paper/generated/assessment.svg.manifest.json".into(),
+        serde_json::to_string_pretty(&scalar_manifest)? + "\n",
+    );
     let outputs = out
         .iter()
         .map(|(k, v)| (k.clone(), digest(v.as_bytes())))
         .collect::<BTreeMap<_, _>>();
     let manifest = json!({"schema":"jarambit.publication_manifest.v1","baseline":BASE,"inputs":inputs,"outputs":outputs,"generation":"cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts","scope":"Documentation only; source hashes establish identity, not physical truth",
     "figures": {
+        "assessment.svg":{"contract":"docs/paper/assessment-inputs.v1.json","projection_receipt":"docs/paper/generated/assessment.json","selectors":["/buckling_eigenvalue","/supported_seq_ratio","/fat_sf","/hm_*_sf","/strict_lat_rob_0p0625_n","/twist_tipzone_sf_strict","/weighted_cad_score/gates","/gates"],"scope":"saved scalars and overlapping status flags; no solver or new physical evidence","support_audit":"eigsh operator symmetry/eigenpair residual unresolved; no eigenvector retained"},
         "verification.svg":{"contract":"docs/paper/verification-inputs.v1.json","projection_receipt":"docs/paper/generated/verification.json","mesh_selectors":["/levels_fine_to_coarse","/seq_ratio_gci","/sf_hunter_gci"],"solver_selectors":["/solid/SF_solid_nodal_avg","/solid/SF_solid_nodal_max","/SF_nodal_avg","/SF_nodal_max"],"profile_selector":"/profile_MPa","scope":"retained observations; separate recovery definitions and original ROI; no new solve, estimate, interpolation or pointwise difference"},
         "plate-fields.svg":{"source":field_source,"contract":"docs/paper/field-inputs.v1.json","projection_receipt":"docs/paper/generated/plate-fields.json","selectors":["/mesh/xy","/mesh/tris","/mesh/env_vm","/mesh/lat","/mesh/ring","/mesh/twist"],"association":"one stored rounded value per triangle; no interpolation","limits":"independent zero-to-source-maximum scales; no clipping","masks":"source-forced zeros only; raw unit-response tip region retained","scope":"retained 0.25 mm2 plate mesh, not strict or solid fields"},
         "cover-evolution.svg":{"source":POP,"membership":"all retained births in panel B; per-generation and cumulative maxima of stored fit in panel C","selectors":["/*/id","/*/gen","/*/fit","/*/fem_status"],"population_vertical_transform":"asinh(fit); original-value ticks","maximum_axis_limits":[1.135,1.16],"maximum_axis_truncated":true,"lines":"straight segments between observed generations; no fitted convergence model","producer_revision":history["producer_revision"],"semantics":history["fitness_semantics"]},

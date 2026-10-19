@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900"><rect width="1200" height="900" fill="white"/><g font-family="Arial, sans-serif" fill="#132d3b">
+<text x="20" y="30" font-size="25">RETAINED ASSESSMENT SCALARS / ORIGINAL FLAGS ARE NOT QUALIFICATION</text>
+<text x="20" y="57" font-size="19">cert_pipeline_r01_p14_c02 / one assessed example / no new solves or thresholds</text>
+<rect x="20" y="75" width="560" height="355" fill="#f7f7f2"/>
+<rect x="620" y="75" width="560" height="355" fill="#f7f7f2"/>
+<rect x="20" y="450" width="560" height="355" fill="#f7f7f2"/>
+<rect x="620" y="450" width="560" height="355" fill="#f7f7f2"/>
+<text x="35" y="105" font-size="22">A / Alternate-support model record</text>
+<text x="35" y="135" font-size="17">Model schematic, not a computed field or mode:</text>
+<rect x="45" y="151" width="470" height="30" fill="#e4ebec" stroke="#526873"/>
+<text x="58" y="172" font-size="17">Bore bearing + flange springs</text>
+<rect x="45" y="190" width="470" height="30" fill="#e4ebec" stroke="#526873"/>
+<text x="58" y="211" font-size="17">Winkler grip-pad foundation</text>
+<text x="45" y="248" font-size="18">Recorded eigenvalue: 7.0351</text>
+<text x="45" y="277" font-size="18">Supported lateral ratio: 5.2027</text>
+<text x="45" y="305" font-size="17">Certification multi-case minimum: 1.4353</text>
+<text x="35" y="342" font-size="17">Cases, regions and mesh scopes differ; no causal delta.</text>
+<text x="35" y="371" font-size="17">Eigen-operator symmetry/residual audit is open.</text>
+<text x="35" y="400" font-size="17">No retained eigenvector; no mode shape inferred.</text>
+<text x="635" y="105" font-size="22">B / Fatigue and additional response factors</text>
+<text x="635" y="157" font-size="16">Fatigue model</text>
+<path id="fat_sf" d="M845,152 L864.3435888755191,152" stroke="#007e87" stroke-width="6" data-value="0.4717948506224175" data-limit="5"/>
+<text x="1063" y="157" font-size="17">0.4718</text>
+<text x="635" y="196" font-size="16">Twist</text>
+<path id="hm_twist_sf" d="M845,191 L847.4132700859391,191" stroke="#007e87" stroke-width="6" data-value="0.05886024599851332" data-limit="5"/>
+<text x="1063" y="196" font-size="17">0.0589</text>
+<text x="635" y="235" font-size="16">In-plane (record only)</text>
+<path id="hm_tip_inplane_sf" d="M845,230 L855.2880909562463,230" stroke="#007e87" stroke-width="6" data-value="0.2509290477133247" data-limit="5"/>
+<text x="1063" y="235" font-size="17">0.2509</text>
+<text x="635" y="274" font-size="16">Spine</text>
+<path id="hm_spine_sf" d="M845,269 L854.1937785517936,269" stroke="#007e87" stroke-width="6" data-value="0.22423850126325828" data-limit="5"/>
+<text x="1063" y="274" font-size="17">0.2242</text>
+<text x="635" y="313" font-size="16">Ring-back</text>
+<path id="hm_ringback_sf" d="M845,308 L1038.7565497107087,308" stroke="#007e87" stroke-width="6" data-value="4.725769505139237" data-limit="5"/>
+<text x="1063" y="313" font-size="17">4.7258</text>
+<path d="M845,345 L845,350" stroke="#526873" stroke-width="1" fill="none"/>
+<text x="840" y="371" font-size="16">0</text>
+<path d="M886,345 L886,350" stroke="#526873" stroke-width="1" fill="none"/>
+<text x="881" y="371" font-size="16">1</text>
+<path d="M968,345 L968,350" stroke="#526873" stroke-width="1" fill="none"/>
+<text x="963" y="371" font-size="16">3</text>
+<path d="M1050,345 L1050,350" stroke="#526873" stroke-width="1" fill="none"/>
+<text x="1045" y="371" font-size="16">5</text>
+<text x="635" y="400" font-size="17">Separate saved cases; no aggregate or fatigue field.</text>
+<text x="35" y="480" font-size="22">C / Certification and strict observations</text>
+<text x="35" y="516" font-size="18">Lateral observation (N)</text>
+<text x="40" y="547" font-size="16">Certification</text>
+<path id="lat_rob_n" d="M190,542 L401.12600665783,542" stroke="#007e87" stroke-width="6" data-value="168.90080532626396" data-limit="200"/>
+<text x="452" y="547" font-size="17">168.9008</text>
+<text x="40" y="574" font-size="16">Strict</text>
+<path id="strict_lat_rob_0p0625_n" d="M190,569 L400.22325715883403,569" stroke="#a3442d" stroke-width="6" data-value="168.1786057270672" data-limit="200"/>
+<text x="452" y="574" font-size="17">168.1786</text>
+<text x="185" y="599" font-size="16">0</text>
+<text x="310" y="599" font-size="16">100</text>
+<text x="435" y="599" font-size="16">200</text>
+<text x="35" y="636" font-size="18">Local torsion safety factor</text>
+<text x="40" y="667" font-size="16">Certification</text>
+<path id="twist_tipzone_sf" d="M190,662 L320.9802177439445,662" stroke="#007e87" stroke-width="6" data-value="0.5239208709757779" data-limit="1"/>
+<text x="452" y="667" font-size="17">0.5239</text>
+<text x="40" y="694" font-size="16">Strict</text>
+<path id="twist_tipzone_sf_strict" d="M190,689 L322.1745666949291,689" stroke="#a3442d" stroke-width="6" data-value="0.5286982667797165" data-limit="1"/>
+<text x="452" y="694" font-size="17">0.5287</text>
+<text x="185" y="719" font-size="16">0</text>
+<text x="310" y="719" font-size="16">0.5</text>
+<text x="435" y="719" font-size="16">1</text>
+<text x="35" y="778" font-size="17">Retained scalars, not an error estimate or strict field.</text>
+<text x="635" y="480" font-size="22">D / Stored comparison flags (overlapping)</text>
+<text x="635" y="510" font-size="17">G16: 10/16 met under original comparisons</text>
+<rect id="flag-G16-cad_watertight_and_single_solid" x="638" y="526" width="53" height="30" fill="#007e87" data-passed="true"/>
+<text x="648" y="547" font-size="16" fill="white">01</text>
+<rect id="flag-G16-geometric_and_holder_gates" x="699" y="526" width="53" height="30" fill="#007e87" data-passed="true"/>
+<text x="709" y="547" font-size="16" fill="white">02</text>
+<rect id="flag-G16-karambit_ring_and_curved_claw" x="760" y="526" width="53" height="30" fill="#007e87" data-passed="true"/>
+<text x="770" y="547" font-size="16" fill="white">03</text>
+<rect id="flag-G16-c6_aesthetic_floor" x="821" y="526" width="53" height="30" fill="#007e87" data-passed="true"/>
+<text x="831" y="547" font-size="16" fill="white">04</text>
+<rect id="flag-G16-cert_hiker_180n" x="882" y="526" width="53" height="30" fill="#a3442d" data-passed="false"/>
+<text x="892" y="547" font-size="16" fill="white">05</text>
+<rect id="flag-G16-cert_hunter_260n" x="943" y="526" width="53" height="30" fill="#a3442d" data-passed="false"/>
+<text x="953" y="547" font-size="16" fill="white">06</text>
+<rect id="flag-G16-strict_hunter_260n" x="1004" y="526" width="53" height="30" fill="#a3442d" data-passed="false"/>
+<text x="1014" y="547" font-size="16" fill="white">07</text>
+<rect id="flag-G16-cert_ring_pull_1500n" x="1065" y="526" width="53" height="30" fill="#007e87" data-passed="true"/>
+<text x="1075" y="547" font-size="16" fill="white">08</text>
+<rect id="flag-G16-twist_body_1p82nm" x="638" y="573" width="53" height="30" fill="#007e87" data-passed="true"/>
+<text x="648" y="594" font-size="16" fill="white">09</text>
+<rect id="flag-G16-twist_tip_only_1p82nm" x="699" y="573" width="53" height="30" fill="#a3442d" data-passed="false"/>
+<text x="709" y="594" font-size="16" fill="white">10</text>
+<rect id="flag-G16-twist_tip_submodel_strict_1p82nm" x="760" y="573" width="53" height="30" fill="#a3442d" data-passed="false"/>
+<text x="770" y="594" font-size="16" fill="white">11</text>
+<rect id="flag-G16-solid_tip_3d_p2_1p82nm" x="821" y="573" width="53" height="30" fill="#a3442d" data-passed="false"/>
+<text x="831" y="594" font-size="16" fill="white">12</text>
+<rect id="flag-G16-side_a4_buckling_and_support" x="882" y="573" width="53" height="30" fill="#007e87" data-passed="true"/>
+<text x="892" y="594" font-size="16" fill="white">13</text>
+<rect id="flag-G16-failure_sequence_1p2" x="943" y="573" width="53" height="30" fill="#007e87" data-passed="true"/>
+<text x="953" y="594" font-size="16" fill="white">14</text>
+<rect id="flag-G16-plate_gci_valid_3level" x="1004" y="573" width="53" height="30" fill="#007e87" data-passed="true"/>
+<text x="1014" y="594" font-size="16" fill="white">15</text>
+<rect id="flag-G16-dolfinx_cross_check_2pct" x="1065" y="573" width="53" height="30" fill="#007e87" data-passed="true"/>
+<text x="1075" y="594" font-size="16" fill="white">16</text>
+<text x="635" y="678" font-size="17">RSV2: 2/10 met under original comparisons</text>
+<rect id="flag-RSV2-aesthetic_and_geometric" x="638" y="694" width="90" height="30" fill="#007e87" data-passed="true"/>
+<text x="648" y="715" font-size="16" fill="white">01</text>
+<rect id="flag-RSV2-floors_828_joint" x="736" y="694" width="90" height="30" fill="#a3442d" data-passed="false"/>
+<text x="746" y="715" font-size="16" fill="white">02</text>
+<rect id="flag-RSV2-twist_floor_body_and_tipsub_strict" x="834" y="694" width="90" height="30" fill="#a3442d" data-passed="false"/>
+<text x="844" y="715" font-size="16" fill="white">03</text>
+<rect id="flag-RSV2-solid_tip_sf" x="932" y="694" width="90" height="30" fill="#a3442d" data-passed="false"/>
+<text x="942" y="715" font-size="16" fill="white">04</text>
+<rect id="flag-RSV2-strict_hunter_lateral" x="1030" y="694" width="90" height="30" fill="#a3442d" data-passed="false"/>
+<text x="1040" y="715" font-size="16" fill="white">05</text>
+<rect id="flag-RSV2-seq_hard" x="638" y="741" width="90" height="30" fill="#007e87" data-passed="true"/>
+<text x="648" y="762" font-size="16" fill="white">06</text>
+<rect id="flag-RSV2-human_max" x="736" y="741" width="90" height="30" fill="#a3442d" data-passed="false"/>
+<text x="746" y="762" font-size="16" fill="white">07</text>
+<rect id="flag-RSV2-fatigue" x="834" y="741" width="90" height="30" fill="#a3442d" data-passed="false"/>
+<text x="844" y="762" font-size="16" fill="white">08</text>
+<rect id="flag-RSV2-gate_s_sharp_law" x="932" y="741" width="90" height="30" fill="#a3442d" data-passed="false"/>
+<text x="942" y="762" font-size="16" fill="white">09</text>
+<rect id="flag-RSV2-gate_s_tip_point_brep" x="1030" y="741" width="90" height="30" fill="#a3442d" data-passed="false"/>
+<text x="1040" y="762" font-size="16" fill="white">10</text>
+<text x="635" y="632" font-size="16">Teal: met / orange: unmet; numbers follow atlas IDs.</text>
+<text x="635" y="655" font-size="16">G16-15: metadata only / G16-13: audit open.</text>
+<text x="20" y="845" font-size="18">These source observations do not establish contact calibration, service life, human-safety bounds or qualification.</text>
+<text x="20" y="875" font-size="17">Original assessment and scientific code are unchanged. Missing fields and the A4 verification gap remain explicit.</text>
+</g></svg>

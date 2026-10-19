@@ -129,6 +129,8 @@ Reads the refined-discretization lateral observation.
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
 
+**Separate assessed-example visual:** [C: original certification/strict scalar pairs; no strict full field or error estimate](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="g16-cert_ring_pull_1500n"></a>
 
 ### G16-08: Ring-traction response
@@ -191,6 +193,8 @@ Records the refined local plate observation.
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
 
+**Separate assessed-example visual:** [C: original certification/strict scalar pairs; no strict full field or error estimate](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="g16-solid_tip_3d_p2_1p82nm"></a>
 
 ### G16-12: Local quadratic solid result
@@ -220,6 +224,8 @@ Reports the alternate compliant-support model and its linear stability observati
 [Current implementation](../../crates/physics/src/side_a4.rs) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/crates/physics/src/side_a4.rs) · [Related software controls](../../crates/crescent/src/battery.rs)
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
+
+**Separate assessed-example visual:** [A: support-model schematic and archived scalars; eigen-operator verification remains open](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="g16-failure_sequence_1p2"></a>
 
@@ -326,6 +332,8 @@ Groups body and refined local torsion comparisons.
 
 **Retained example:** [historical grouped result](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json). Use exact group IDs from `rs_v2_eval` in the implementation; do not infer group identity from table position. [Requirement namespace](../../requirements/RS-karambit-v2.toml).
 
+**Separate assessed-example visual:** [C: original certification/strict scalar pairs; no strict full field or error estimate](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="rsv2-solid_tip_sf"></a>
 
 ### RSV2-04: Local solid response
@@ -355,6 +363,8 @@ Groups the refined lateral comparison.
 [Current implementation](../../crates/cli/src/bench.rs) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/crates/cli/src/bench.rs) · [Related software controls](../../crates/crescent/src/tests.rs)
 
 **Retained example:** [historical grouped result](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json). Use exact group IDs from `rs_v2_eval` in the implementation; do not infer group identity from table position. [Requirement namespace](../../requirements/RS-karambit-v2.toml).
+
+**Separate assessed-example visual:** [C: original certification/strict scalar pairs; no strict full field or error estimate](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="rsv2-seq_hard"></a>
 
@@ -386,6 +396,8 @@ Collects additional response and geometry checks defined in the existing require
 
 **Retained example:** [historical grouped result](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json). Use exact group IDs from `rs_v2_eval` in the implementation; do not infer group identity from table position. [Requirement namespace](../../requirements/RS-karambit-v2.toml).
 
+**Separate assessed-example visual:** [B: separate recorded response factors; in-plane value remains record-only](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="rsv2-fatigue"></a>
 
 ### RSV2-08: Fatigue-model assessment
@@ -399,6 +411,8 @@ Groups the existing fatigue-model comparison.
 [Current implementation](../../crates/cli/src/bench.rs) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/crates/cli/src/bench.rs) · [Related software controls](../../crates/crescent/src/tests.rs)
 
 **Retained example:** [historical grouped result](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json). Use exact group IDs from `rs_v2_eval` in the implementation; do not infer group identity from table position. [Requirement namespace](../../requirements/RS-karambit-v2.toml).
+
+**Separate assessed-example visual:** [B: original fatigue-model scalar; no fatigue field or measured lifetime](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="rsv2-gate_s_sharp_law"></a>
 
@@ -607,6 +621,8 @@ Reports the existing fatigue-screen assessment.
 
 **Historical stored outcomes (23 subjects):** 0 pass / 19 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "plate.l7"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
 
+**Separate assessed-example visual:** [B: original fatigue-model scalar; no fatigue field or measured lifetime](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="battery-plate.gci"></a>
 
 ### Candidate mesh study
@@ -678,6 +694,8 @@ Records the alternate-support and stability report.
 [Current implementation](../../ops/ci/side_a4.py) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/ops/ci/side_a4.py) · [Related software controls](../../ops/ci/tests/test_cad_battery.py)
 
 **Historical stored outcomes (23 subjects):** 19 pass / 0 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "side.a4"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
+
+**Separate assessed-example visual:** [A: support-model schematic and archived scalars; eigen-operator verification remains open](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="battery-solid.tip"></a>
 
