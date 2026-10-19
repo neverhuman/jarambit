@@ -13,7 +13,7 @@ The manuscript uses `IEEEtran` in journal mode, 10 pt, with a custom single-colu
 Dependencies: Rust 1.85.1, locked Cargo dependencies, LuaLaTeX, IEEEtran, TeX Gyre fonts, librsvg `rsvg-convert`, Poppler `pdfinfo`/`pdftoppm`, `make`, and `shasum`. Build from repository root; shell commands here use the desktop's RTK convention:
 
 ```sh
-rtk proxy env CARGO_TARGET_DIR="$PWD/target" cargo run --locked -p jarambit-docs --example paper_artifacts
+rtk proxy env CARGO_TARGET_DIR="$PWD/target" cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts
 rtk proxy make -C docs/paper check
 ```
 
@@ -21,7 +21,7 @@ Output: `target/ieee/paper/main.pdf`, source/output SHA-256 lists, tool versions
 
 ## Evidence contract
 
-`crates/docs/src/publication.rs` generates the explanatory atlas, complete frozen science index, vector figures, numerical macros, summary and hash manifest. `--check` performs no writes. It reads existing evidence without changing it and invokes no CAD, FEM, evolutionary or physical test.
+`crates/paper-artifacts/src/publication.rs` generates the explanatory atlas, complete frozen science index, vector figures, numerical macros, summary and hash manifest. `--check` performs no writes. It reads existing evidence without changing it and invokes no CAD, FEM, evolutionary or physical test.
 
 ![Best retained reporting fitness and evolutionary trajectory](generated/fitness.svg)
 

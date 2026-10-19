@@ -69,14 +69,14 @@ Worktree: `.agent/worktrees/ieee-whitepaper`; branch: `codex/ieee-whitepaper-tes
 | `docs/paper/references.tex` | Checked primary references with resolvable identifiers and URLs. |
 | `docs/paper/generated/` | Rust-generated SVG charts, metrics, summary, source hashes and tables. Never edit a result by hand. |
 | `docs/paper/Makefile` | New build/check target; write binaries/PDFs to `target/ieee/paper/`. Do not alter the legacy PDF builder. |
-| `crates/docs/src/publication.rs` | Publication-only data reader, inventory/curve checks, deterministic renderers and negative controls. |
-| `crates/docs/examples/paper_artifacts.rs` | `--check` read-only freshness mode and explicit write mode. |
-| `crates/docs/{Cargo.toml,src/lib.rs}`, `Cargo.lock` | Minimal documentation dependencies/module registration only. |
+| `crates/paper-artifacts/src/publication.rs` | Publication-only data reader, inventory/curve checks, deterministic renderers and negative controls. |
+| `crates/paper-artifacts/examples/paper_artifacts.rs` | `--check` read-only freshness mode and explicit write mode. |
+| `crates/paper-artifacts/{Cargo.toml,Cargo.lock,src/lib.rs}` | Standalone publication crate and lockfile (leaves root `Cargo.lock` and `crates/docs` untouched). |
 | `docs/paper/RED_TEAM.md` | Author adversarial review, fixes, unresolved scientific limitations and independent-review state. |
 | `docs/paper/IMPLEMENTATION_RECEIPT.md` | Commands, outcomes, page count, visual inspection, artifact identities and handoff. |
 | `COMMS.md` | Append bounded task status and final integration receipt; do not rewrite another lane's history. |
 
-Forbidden write zones: `evidence/**`, `assurance/**`, `requirements/**`, `docs/v1/**`, `designs/**`, `fem/**`, `fem_solid/**`, scientific crates except `crates/docs`, evolution scripts, existing scientific figure/manifests, existing paper generator APIs. No new Python files. Preserve `docs/WHITEPAPER.md` and engineering companion as existing technical references; link the new narrative rather than silently replacing them.
+Forbidden write zones: `evidence/**`, `assurance/**`, `requirements/**`, `docs/v1/**`, `designs/**`, `fem/**`, `fem_solid/**`, all workspace scientific crates (including `crates/docs` and root `Cargo.lock`), evolution scripts, existing scientific figure/manifests, existing paper generator APIs. No new Python files. Preserve `docs/WHITEPAPER.md` and engineering companion as existing technical references; link the new narrative rather than silently replacing them.
 
 Concurrent risks: README/paper lane, COMMS append point and Cargo lock are shared integration surfaces. Before commit, inspect diff scope and upstream head. No parallel write workers are used here. Future parallel work is allowed only for disjoint section files after shared figure IDs and terminology are frozen; one integrator owns `main.tex`, generated outputs, README, manifests and lockfile.
 
@@ -170,8 +170,8 @@ Important edge cases: valid zero is not missing; Boolean is not numeric; duplica
 Commands below run from the lane worktree; prefix each with `rtk`:
 
 ```sh
-cargo test --locked -p jarambit-docs
-cargo run --locked -p jarambit-docs --example paper_artifacts -- --check
+cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml
+cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
 python3 -B ops/ci/gen_readme.py --check
 python3 -B ops/ci/gen_whitepaper.py --check
 python3 -B ops/ci/gen_status.py --check

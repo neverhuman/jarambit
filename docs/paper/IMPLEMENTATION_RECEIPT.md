@@ -19,8 +19,8 @@ Commands run from worktree with RTK prefix and lane-local `CARGO_TARGET_DIR`:
 
 | Check | Result |
 |---|---|
-| `cargo test --locked -p jarambit-docs` | Four tests passed; includes committed-corpus freshness and negative controls for median/type, identity/path and curve semantics |
-| `cargo run --locked -p jarambit-docs --example paper_artifacts -- --check` | Eight projections current; 414 historical cells and 178 definitions reconciled |
+| `cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml` | Four tests passed; includes committed-corpus freshness and negative controls for median/type, identity/path and curve semantics |
+| `cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check` | Eight projections current; 414 historical cells and 178 definitions reconciled |
 | `make -C docs/paper check` | Passed; 16 pages; no overfull boxes, missing glyphs, undefined citations/references or font substitutions in final log |
 | Existing README unittest module | Five tests passed; existing ResourceWarnings concern unclosed reads in unchanged tests |
 | Existing README/whitepaper/status generator freshness | Passed; existing scientific publication outputs unchanged |

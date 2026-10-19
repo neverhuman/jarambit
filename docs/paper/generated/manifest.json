@@ -33,9 +33,9 @@
       "vertical_transform": "asinh(fit); ticks in original units"
     }
   },
-  "generation": "cargo run --locked -p jarambit-docs --example paper_artifacts",
+  "generation": "cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts",
   "inputs": {
-    "Cargo.lock": "b16b17106b3ed9b9f797a56739dc57e6a21ef2568f05527213a779b89bedfa0f",
+    "Cargo.lock": "a7d57f542f3233c99e86bd0973f79ea894ce007c982fddf9bd5a30414035e41b",
     "crates/cli/src/bench.rs": "191712f94e18ed8b49612edee84037ef4f9c4f533c3ebbb8342a7b866e7ffa71",
     "crates/crescent/examples/g3_side_report.rs": "1b51f9a9c09c9c7c94faa171b50e267051ba3df0a6af6873ffe0ff543e57c93f",
     "crates/crescent/src/aesthetic.rs": "30404b5e898613fd36b6ea534d501a57ddf1898567ee545807bd2206c7b5282a",
@@ -46,9 +46,10 @@
     "crates/crescent/src/gci.rs": "ba3333de3828db2f9602d5fbb4078d03ac7bb2f380a85f90910ef8cc5f6f97a9",
     "crates/crescent/src/pheno.rs": "fd0f556d9054334f26b3d1698979c14696435b1fb85c1c637f5e199d4b4aa19c",
     "crates/crescent/src/tests.rs": "b3c6a39fb828cac581ca3810a545853b2c650eb41f101dac46e14a834b80dd79",
-    "crates/docs/Cargo.toml": "b0a251adc9a7a3dd939e195b610fd97331112ca169ba12b231f22a1e56a7d38c",
-    "crates/docs/examples/paper_artifacts.rs": "12c7982834a88cf00293d297d02beff9fb99e2af9d44632014b005ec33142eac",
-    "crates/docs/src/publication.rs": "6cda2eb139da39795d31a98b4b3bb5417ba3e4af19ee35947b3c73280563c881",
+    "crates/paper-artifacts/Cargo.lock": "18336cf0ca6e16fb4248b230ae4b15fc6ca341e86fdfbd5611a0024ee0446e4f",
+    "crates/paper-artifacts/Cargo.toml": "594ac0af1558f03ce22cf25229c5758af3769e0a282ccdd757f2a6ae9ada6dda",
+    "crates/paper-artifacts/examples/paper_artifacts.rs": "bb6d2dc321053a42ffe2fd4b676e9eeec8958eee0f0acc5d4dd64448c10a1931",
+    "crates/paper-artifacts/src/publication.rs": "621d497b2c66d8b144ccd86be90060efa205d10d90386f4c75e28c958d4e0620",
     "crates/physics/src/side_a4.rs": "e3098114941ec52c5f15eff1a64429d5822cc083dde9b38d9e4bfd98e6df0ee3",
     "crates/physics/tests/invariance.rs": "d1c25d235f8bb028abe5378e0ef1c5948d0728372e42ec81ec432ebbcfe52ce8",
     "crates/physics/tests/solver_parity.rs": "4e095bb500478512f777cf0efb4f6f340f2d4927b9b9c356bf397160fde3ec6f",
@@ -101,7 +102,7 @@
     "docs/paper/generated/metrics.tex": "a25e061be8a9f740cd2e84b93d1655d8a1a5ec47a9acf6bd0f0839b3cdf82106",
     "docs/paper/generated/population.svg": "7b027f59a7a85eeb058f03d3532aab2ae3b385ba89a4e7df8032085e627fd574",
     "docs/paper/generated/summary.json": "2ca4effc22fdaee2de4964edb3769356f3b9b5430223ab9e8286f7be2130b6cd",
-    "docs/tests/README.md": "b48f252a9fc09cff1e5568485933a26e7c3fb7ff876457462290632ed81be8de",
+    "docs/tests/README.md": "1fb89ae4f443725c9157089f3d0a6966957ba7ea7546d1e33dc49e6b8fd85042",
     "docs/tests/science.md": "fa1b70a9267eb3a51b293243941a814446824be2335d3341c570e2934f7c348c"
   },
   "schema": "jarambit.publication_manifest.v1",

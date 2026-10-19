@@ -1,5 +1,4 @@
 //! Docs crate: run reports/tables and dependency-free SVG plots for docs/WHITEPAPER.md.
-pub mod publication;
 pub fn results_table(rows: &[(usize, f64, f64, f64)]) -> String {
     let mut s = String::from("| gen | best p05 strength-per-gram (N/g) | pop mean p05 | diversity |\n|---|---|---|---|\n");
     for (g, f, m, d) in rows { s.push_str(&format!("| {g} | {f:.3} | {m:.3} | {d:.3} |\n")); }

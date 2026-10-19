@@ -15,7 +15,7 @@ all: artifacts
 	kpsewhich IEEEtran.cls >> $(OUT)/toolchain.txt
 	pdfinfo $(OUT)/main.pdf > $(OUT)/pdfinfo.txt
 artifacts:
-	cd $(ROOT) && cargo run --locked -p jarambit-docs --example paper_artifacts -- --check
+	cd $(ROOT) && cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
 check: all
 	! rg 'Overfull|LaTeX Warning: (Reference|Citation).*undefined' $(OUT)/main.log
 	awk '/^Pages:/ { if ($$2 < 15 || $$2 > 20) exit 1; found=1 } END { if (!found) exit 1 }' $(OUT)/pdfinfo.txt
