@@ -19,7 +19,7 @@
 <text x="32" y="523" font-size="16" fill="#a3442d">13/26 legacy predicates met; shared observations overlap</text>
 <text x="32" y="552" font-size="16" fill="#a3442d">Reporting profile includes placeholder inputs</text>
 <text x="32" y="580" font-size="16" fill="#526873">Best-record CAD geometry unavailable in retained cohort</text>
-<text x="590" y="37" font-size="16" fill="#007e87">EVOLUTION + POPULATION / SEPARATE REGIMES</text>
+<text x="590" y="37" font-size="16" fill="#007e87">RETAINED SUMMARIES / SEPARATE REGIMES</text>
 <path d="M640 263H1120" stroke="#d5dfdf"/><text x="584" y="268" font-size="15" fill="#526873">73.30</text>
 <path d="M640 212.99999999999946H1120" stroke="#d5dfdf"/><text x="584" y="217.99999999999946" font-size="15" fill="#526873">73.73</text>
 <path d="M640 163.00000000000054H1120" stroke="#d5dfdf"/><text x="584" y="168.00000000000054" font-size="15" fill="#526873">74.17</text>
@@ -28,9 +28,9 @@
 <text x="875" y="287" font-size="16" fill="#526873">1</text>
 <text x="1115" y="287" font-size="16" fill="#526873">2</text>
 <text x="786" y="309" font-size="15" fill="#526873">Generation (zero-based)</text>
-<text x="640" y="82" font-size="17" fill="#526873">A. w411c3 weighted fitness; truncated scale</text>
-<text x="640" y="337" font-size="14" fill="#132d3b">Teal: best-so-far    Orange: round best</text>
-<text x="640" y="370" font-size="16" fill="#526873">B. w282 historical fit; 1984 evaluated births</text>
+<text x="640" y="82" font-size="17" fill="#526873">A. w411c3 reporting summary; truncated scale</text>
+<text x="640" y="337" font-size="14" fill="#132d3b">Stage lineage incomplete; teal: archive / orange: round</text>
+<text x="640" y="370" font-size="16" fill="#526873">B. w282 historical fit; 1984 retained births</text>
 <text x="590" y="508.44320045404106" font-size="13" fill="#526873">-200</text>
 <path d="M640 504.44320045404106H1120" stroke="#d5dfdf"/><text x="590" y="461.5090933769669" font-size="13" fill="#526873">-10</text>
 <path d="M640 457.5090933769669H1120" stroke="#d5dfdf"/><text x="590" y="428.31690891086146" font-size="13" fill="#526873">-1</text>

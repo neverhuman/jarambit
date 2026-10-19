@@ -57,7 +57,7 @@ fn unique<'a>(ids: impl Iterator<Item = &'a str>) -> Result<BTreeSet<String>> {
     }
     Ok(seen)
 }
-fn median(values: &[f64]) -> Result<f64> {
+pub(crate) fn median(values: &[f64]) -> Result<f64> {
     if values.is_empty() || values.iter().any(|v| !v.is_finite()) {
         return Err("invalid median sample".into());
     }
@@ -207,7 +207,7 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         590.,
         37.,
         16,
-        "EVOLUTION + POPULATION / SEPARATE REGIMES",
+        "RETAINED SUMMARIES / SEPARATE REGIMES",
         "#007e87",
     );
     let rows = array(&curve["generations"])?;
@@ -269,7 +269,7 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         640.,
         82.,
         17,
-        "A. w411c3 weighted fitness; truncated scale",
+        "A. w411c3 reporting summary; truncated scale",
         "#526873",
     );
     label(
@@ -277,7 +277,7 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         640.,
         337.,
         14,
-        "Teal: best-so-far    Orange: round best",
+        "Stage lineage incomplete; teal: archive / orange: round",
         "#132d3b",
     );
     label(
@@ -285,7 +285,7 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         640.,
         370.,
         16,
-        &format!("B. w282 historical fit; {} evaluated births", births.len()),
+        &format!("B. w282 historical fit; {} retained births", births.len()),
         "#526873",
     );
     let max_generation = births
@@ -552,6 +552,42 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     validate_weighted_report(&curve, entries)?;
     let births = read(&root, POP, &mut inputs)?;
     let births = array(&births)?;
+    let history_root = "evidence/rs_v2/w282_ultrarunner";
+    let history_manifest = read(&root, &format!("{history_root}/manifest.json"), &mut inputs)?;
+    if inputs[&format!("{history_root}/manifest.json")]
+        != "543f7e8410214a7e34e4ef55772e9d671221001d0e11a36b4d68d1a0ef0a96cf"
+    {
+        return Err("historical population snapshot requires editorial readmission".into());
+    }
+    let provenance = read(
+        &root,
+        &format!("{history_root}/provenance.json"),
+        &mut inputs,
+    )?;
+    let search_summary = read(
+        &root,
+        &format!("{history_root}/search_summary.json"),
+        &mut inputs,
+    )?;
+    for member in [
+        "search/all_evals.json",
+        "provenance.json",
+        "search_summary.json",
+    ] {
+        let path = format!("{history_root}/{member}");
+        if history_manifest["files"][member].as_str() != inputs.get(&path).map(String::as_str) {
+            return Err(format!("historical manifest digest differs: {member}").into());
+        }
+    }
+    if history_manifest["source_commit"] != provenance["source_commit"] {
+        return Err("historical producer revisions differ".into());
+    }
+    let history = crate::historical::context(births, &provenance, &search_summary)?;
+    if history["best_observed"]["strict_assessment"]["cert_pass_all"] != false {
+        return Err(
+            "retained assessment does not support the manuscript's historical finding".into(),
+        );
+    }
     let birth_ids = births
         .iter()
         .map(|r| {
@@ -575,9 +611,13 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     }
     let mut stats = Vec::new();
     for (g, values) in &groups {
-        stats.push(json!({"generation":g,"n":values.len(),"min":values.iter().copied().fold(f64::INFINITY,f64::min),"median":median(values)?,"max":values.iter().copied().fold(f64::NEG_INFINITY,f64::max)}));
+        let census = array(&history["by_generation"])?
+            .iter()
+            .find(|row| row["generation"] == *g)
+            .ok_or("missing historical census generation")?;
+        stats.push(json!({"generation":g,"n":values.len(),"min":values.iter().copied().fold(f64::INFINITY,f64::min),"median":median(values)?,"max":values.iter().copied().fold(f64::NEG_INFINITY,f64::max),"fem_complete":census["fem_complete"],"fem_not_evaluated":census["fem_not_evaluated"],"legal":census["legal"],"fem_complete_median":census["fem_complete_median"]}));
     }
-    let mut popsvg = svg_start(1200, 470);
+    let mut popsvg = svg_start(1200, 610);
     label(
         &mut popsvg,
         32.,
@@ -589,7 +629,20 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         ),
         "#007e87",
     );
-    label(&mut popsvg,32.,69.,17,"Native historical fit; asinh vertical scale, tick labels in original fit. Includes rejected candidates.","#526873");
+    label(&mut popsvg,32.,69.,18,"Stored historical fit; asinh scale with original-value ticks. Penalty-valued records remain visible.","#526873");
+    label(
+        &mut popsvg,
+        32.,
+        96.,
+        18,
+        &format!(
+            "{} FEM-complete / {} not evaluated / {} legal under the recorded search",
+            history["fem_status_counts"]["complete"],
+            history["fem_status_counts"]["not_evaluated"],
+            history["legal_count"]
+        ),
+        "#526873",
+    );
     let lo = stats
         .iter()
         .map(|s| s["min"].as_f64().unwrap())
@@ -600,20 +653,24 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         .fold(f64::NEG_INFINITY, f64::max);
     let maxg = *groups.keys().last().ok_or("empty births")? as f64;
     let sx = |g: f64| 95. + 1040. * g / maxg.max(1.);
-    let sy = |v: f64| 360. - 245. * (v.asinh() - lo.asinh()) / (hi.asinh() - lo.asinh()).max(1e-9);
+    let sy = |v: f64| 360. - 235. * (v.asinh() - lo.asinh()) / (hi.asinh() - lo.asinh()).max(1e-9);
     for v in [-200.0_f64, -100., -10., -1., 0., 1.] {
         let y = sy(v);
         popsvg.push_str(&format!("<path d=\"M95 {y}H1135\" stroke=\"#d5dfdf\"/>"));
         label(&mut popsvg, 10., y + 5., 15, &format!("{v:.2}"), "#526873");
     }
     for row in births {
-        popsvg.push_str(&format!(
-            "<circle cx=\"{:.2}\" cy=\"{:.2}\" r=\"1.8\" fill=\"#78999e\" opacity=\".18\"/>",
-            sx(number(&row["gen"])?),
-            sy(number(&row["fit"])?)
-        ));
+        let x = sx(number(&row["gen"])?);
+        let y = sy(number(&row["fit"])?);
+        if row["fem_status"] == "complete" {
+            popsvg.push_str(&format!(
+                "<circle cx=\"{x:.2}\" cy=\"{y:.2}\" r=\"1.8\" fill=\"#4e8f9c\" opacity=\".25\"/>"
+            ));
+        } else {
+            popsvg.push_str(&format!("<path d=\"M{} {}l4 4m0 -4l-4 4\" stroke=\"#b66a30\" stroke-width=\"1\" opacity=\".5\"/>",x-2.,y-2.));
+        }
     }
-    for (field, color) in [("median", "#d07b42"), ("max", "#007e87")] {
+    for (field, color) in [("median", "#132d3b"), ("max", "#007e87")] {
         let pts = stats
             .iter()
             .map(|s| {
@@ -639,20 +696,84 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
             "#526873",
         );
     }
-    label(&mut popsvg,95.,427.,17,"Teal: generation maximum   Orange: median   Dots: each retained birth   Horizontal axis: generation", "#132d3b");
-    label(&mut popsvg,95.,456.,16,"Historical model: no current qualification inferred; median and per-generation maximum need not improve.", "#a3442d");
+    label(&mut popsvg,95.,422.,18,"Blue dots: FEM complete   Amber crosses: not evaluated   Teal: maximum   Dark: pooled median", "#132d3b");
+    label(
+        &mut popsvg,
+        95.,
+        454.,
+        18,
+        "FEM status by generation (record counts; numbers above bars are total births)",
+        "#526873",
+    );
+    let max_n = stats
+        .iter()
+        .map(|r| r["n"].as_u64().unwrap())
+        .max()
+        .unwrap() as f64;
+    for row in &stats {
+        let x = sx(number(&row["generation"])?);
+        let solved = number(&row["fem_complete"])? * 65. / max_n;
+        let unsolved = number(&row["fem_not_evaluated"])? * 65. / max_n;
+        popsvg.push_str(&format!("<rect x=\"{}\" y=\"{}\" width=\"30\" height=\"{solved}\" fill=\"#4e8f9c\"/><rect x=\"{}\" y=\"{}\" width=\"30\" height=\"{unsolved}\" fill=\"#b66a30\"/>",x-15.,545.-solved,x-15.,545.-solved-unsolved));
+        label(
+            &mut popsvg,
+            x - 13.,
+            545. - solved - unsolved - 7.,
+            15,
+            &row["n"].to_string(),
+            "#526873",
+        );
+        label(
+            &mut popsvg,
+            x - 8.,
+            568.,
+            15,
+            &row["generation"].to_string(),
+            "#526873",
+        );
+    }
+    label(&mut popsvg,95.,599.,17,"Fit includes legality penalties and contextual novelty; these are not fixed physical-performance values.", "#a3442d");
     popsvg.push_str("</g></svg>\n");
     out.insert("docs/paper/generated/population.svg".into(), popsvg);
-    let summary = json!({"schema":"jarambit.publication_projection.v1","source_baseline":BASE,"scope":"Retained evidence projection; no new scientific execution","battery_subjects":files.len(),"battery_evaluators":evaluator_ids.len(),"stored_statuses":counts,"per_evaluator":per,"science_definitions":cases.len(),"science_family_counts":families,"population_births":births.len(),"population_statistics":stats,"weighted_curve":curve["generations"],"weighted_best":curve["best_so_far"]["ultralight_weighted_fitness"],"score_direction":"higher_is_better","missing":"Weighted cohort CAD geometry and round population files are unavailable in retained cohort"});
+    let summary = json!({"schema":"jarambit.publication_projection.v1","source_baseline":BASE,"scope":"Retained evidence projection; no new scientific execution","battery_subjects":files.len(),"battery_evaluators":evaluator_ids.len(),"stored_statuses":counts,"per_evaluator":per,"science_definitions":cases.len(),"science_family_counts":families,"population_births":births.len(),"population_statistics":stats,"historical_context":history,"weighted_curve":curve["generations"],"weighted_best":curve["best_so_far"]["ultralight_weighted_fitness"],"weighted_stage_lineage":"incomplete; retained summaries are not a homogeneous objective-convergence experiment","score_direction":"higher_is_better","missing":"Weighted cohort CAD geometry and round population files are unavailable in retained cohort"});
     out.insert(
         "docs/paper/generated/summary.json".into(),
         serde_json::to_string_pretty(&summary)? + "\n",
     );
     out.insert("docs/paper/generated/metrics.tex".into(),format!("% Generated publication projection; not a solver result.\n\\newcommand{{\\BestFitness}}{{{:.6}}}\n\\newcommand{{\\BatteryPass}}{{{}}}\n\\newcommand{{\\BatteryFail}}{{{}}}\n\\newcommand{{\\BatteryBlocked}}{{{}}}\n\\newcommand{{\\BirthCount}}{{{}}}\n",number(&curve["best_so_far"]["ultralight_weighted_fitness"])?,counts.get("pass").unwrap_or(&0),counts.get("fail").unwrap_or(&0),counts.get("blocked").unwrap_or(&0),births.len()));
+    let metrics = out.get_mut("docs/paper/generated/metrics.tex").unwrap();
+    for (name, value) in [
+        ("FemComplete", &history["fem_status_counts"]["complete"]),
+        (
+            "FemNotEvaluated",
+            &history["fem_status_counts"]["not_evaluated"],
+        ),
+        ("LegalBirths", &history["legal_count"]),
+        ("HistoricalBestId", &history["best_observed"]["id"]),
+        (
+            "HistoricalBestGeneration",
+            &history["best_observed"]["generation"],
+        ),
+    ] {
+        metrics.push_str(&format!("\\newcommand{{\\{name}}}{{{value}}}\n"));
+    }
+    metrics.push_str(&format!(
+        "\\newcommand{{\\HistoricalBestFit}}{{{:.5}}}\n",
+        number(&history["best_observed"]["fit"])?
+    ));
+    let assessed = &history["best_observed"]["strict_assessment"];
+    let all_pass = assessed["cert_pass_all"]
+        .as_bool()
+        .map(|v| v.to_string())
+        .unwrap_or_else(|| "unavailable".into());
+    metrics.push_str(&format!(
+        "\\newcommand{{\\HistoricalBestAllPass}}{{{all_pass}}}\n"
+    ));
     for rel in [
         "crates/paper-artifacts/src/publication.rs",
         "crates/paper-artifacts/src/lib.rs",
         "crates/paper-artifacts/src/validation.rs",
+        "crates/paper-artifacts/src/historical.rs",
         "crates/paper-artifacts/examples/paper_artifacts.rs",
         "crates/paper-artifacts/Cargo.toml",
         "crates/paper-artifacts/Cargo.lock",
@@ -680,8 +801,8 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         .collect::<BTreeMap<_, _>>();
     let manifest = json!({"schema":"jarambit.publication_manifest.v1","baseline":BASE,"inputs":inputs,"outputs":outputs,"generation":"cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts","scope":"Documentation only; source hashes establish identity, not physical truth",
     "figures": {
-        "fitness.svg": {"weighted_source":CURVE,"weighted_selectors":["/best_so_far/ultralight_weighted_fitness","/best_so_far/ultralight_fitness_breakdown/objectives/*/weighted_points","/generations/*/generation","/generations/*/round_best_fitness","/generations/*/hall_of_fame_best_so_far"],"weighted_direction":"higher_is_better","population_source":POP,"population_selectors":["/*/id","/*/gen","/*/fit"],"population_reduction":"all retained births; generation maximum and sorted-sample median","population_vertical_transform":"asinh(fit); ticks in original units","regimes":"separate panels; no cross-regime score comparison"},
-        "population.svg":{"source":POP,"membership":"all retained evaluated births, including rejected candidates","selectors":["/*/id","/*/gen","/*/fit"],"reduction":"generation median and maximum; no interpolation or missing-value imputation","vertical_transform":"asinh(fit); ticks in original units"}
+        "fitness.svg": {"weighted_source":CURVE,"weighted_selectors":["/best_so_far/ultralight_weighted_fitness","/best_so_far/ultralight_fitness_breakdown/objectives/*/weighted_points","/generations/*/generation","/generations/*/round_best_fitness","/generations/*/hall_of_fame_best_so_far"],"weighted_direction":"higher_is_better","weighted_stage_lineage":"incomplete; reporting producer can substitute assessment values for screening values","population_source":POP,"population_selectors":["/*/id","/*/gen","/*/fit"],"population_reduction":"all retained births; generation maximum and sorted-sample median","population_vertical_transform":"asinh(fit); ticks in original units","regimes":"separate panels; no cross-regime score comparison"},
+        "population.svg":{"source":POP,"membership":"all retained births, including not-evaluated penalty records","selectors":["/*/id","/*/gen","/*/fit","/*/fem_status","/*/legal"],"reduction":"generation median and maximum; status census by generation; no imputation","vertical_transform":"asinh(fit); ticks in original units","producer_revision":history["producer_revision"],"producer_qd_sha256":history["producer_qd_sha256"],"semantics":history["fitness_semantics"]}
     }});
     out.insert(
         "docs/paper/generated/manifest.json".into(),

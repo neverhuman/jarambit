@@ -1,4 +1,4 @@
-# Beyond the Shape a Human Would Draw
+# When CAD Evolves
 
 **Research white-paper draft.** Intelligent CAD, evolutionary search, agent-assisted representation research, and auditable engineering evidence. Human author approval and independent scientific review remain pending.
 
@@ -27,13 +27,13 @@ Before publishing, the reader checks that the selected score and label agree wit
 
 The `version-check` workflow explicitly tests this standalone Cargo workspace, checks generated freshness, and builds the new manuscript. A successful new-paper build is configured to upload `ieee-paper-<commit SHA>` with its PDF and build receipts. This artifact is separate from the older publication PDFs and is available only after that workflow succeeds.
 
-![Best retained reporting fitness and evolutionary trajectory](generated/fitness.svg)
+![Retained reporting summary with incomplete stage lineage](generated/fitness.svg)
 
-The selected w411c3 cohort reports best fitness **74.207299**, higher is better, with placeholder inputs and no qualified design. Its best CAD geometry and full round populations are absent from the retained cohort. The figure shows the actual weighted score profile and three recorded generations beside a separately labeled historical full-birth population inset. It does not invent a winner render or weighted population distribution.
+The selected w411c3 cohort reports best fitness **74.207299**, higher is better, with placeholder inputs and no qualified design. Its best CAD geometry and full round populations are absent. The reporting producer can substitute assessment values for screening values; point-level stage lineage is incomplete. The figure preserves the recorded profile and short summaries without asserting one homogeneous objective-convergence experiment. The historical inset uses a different score regime. Replacement of this interim cover graphic by the source-bound Blender composition remains unfinished.
 
 ![Historical full-birth population behavior](generated/population.svg)
 
-The separate w282 plot uses **1,984 retained evaluated births**, including rejected candidates, on its native historical `fit` scale. This scale is not `W_ULTRALIGHT_v1`. Source membership, generation counts and reductions appear in [summary.json](generated/summary.json); input/output hashes appear in [manifest.json](generated/manifest.json).
+The w282 plot contains **1,984 retained births: 1,455 FEM-complete and 529 not evaluated**. Blue dots and amber crosses distinguish these states; stacked bars show their per-generation counts. Its original score includes legality-dependent penalties and contextual novelty and is not `W_ULTRALIGHT_v1`. The highest stored score belongs to ID 1095, which did not pass its later strict assessment. The producer reports that GA passers did not beat the baseline; the named exported examples were controlled probes under the historical model. Source membership, original producer, status composition and the assessment join appear in [summary.json](generated/summary.json); input/output hashes appear in [manifest.json](generated/manifest.json).
 
 ## Manuscript flow
 

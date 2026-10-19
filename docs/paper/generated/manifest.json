@@ -19,16 +19,22 @@
         "/generations/*/round_best_fitness",
         "/generations/*/hall_of_fame_best_so_far"
       ],
-      "weighted_source": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/fitness_curve.json"
+      "weighted_source": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/fitness_curve.json",
+      "weighted_stage_lineage": "incomplete; reporting producer can substitute assessment values for screening values"
     },
     "population.svg": {
-      "membership": "all retained evaluated births, including rejected candidates",
-      "reduction": "generation median and maximum; no interpolation or missing-value imputation",
+      "membership": "all retained births, including not-evaluated penalty records",
+      "producer_qd_sha256": "fe3d057eeec74c3278b46027265406ec0ee97dd65938ae49cb003e08ee5b3a5f",
+      "producer_revision": "82f450f7fb418e28c4b229031920dec5454435f3",
+      "reduction": "generation median and maximum; status census by generation; no imputation",
       "selectors": [
         "/*/id",
         "/*/gen",
-        "/*/fit"
+        "/*/fit",
+        "/*/fem_status",
+        "/*/legal"
       ],
+      "semantics": "Legality-dependent stored score with contextual novelty; not a fixed physical observable",
       "source": "evidence/rs_v2/w282_ultrarunner/search/all_evals.json",
       "vertical_transform": "asinh(fit); ticks in original units"
     }
@@ -49,8 +55,9 @@
     "crates/paper-artifacts/Cargo.lock": "18336cf0ca6e16fb4248b230ae4b15fc6ca341e86fdfbd5611a0024ee0446e4f",
     "crates/paper-artifacts/Cargo.toml": "594ac0af1558f03ce22cf25229c5758af3769e0a282ccdd757f2a6ae9ada6dda",
     "crates/paper-artifacts/examples/paper_artifacts.rs": "71d6b223c1b71e51c92278abd51619e8f62f28f3e7b58184d34542f0025806a9",
-    "crates/paper-artifacts/src/lib.rs": "ee277bef29648e2f33e7c847ffb9555f9f931eb9ca30f1929db18fbc472baca2",
-    "crates/paper-artifacts/src/publication.rs": "36ba1a9bcb2e7a289025c00a99cff8b3b4871cfd5e5ca2b86f408d33c4342b2a",
+    "crates/paper-artifacts/src/historical.rs": "137ad9f54818031541c3440ff3d1a0d66c23d175c3a1a09c16a8375dc39ff799",
+    "crates/paper-artifacts/src/lib.rs": "008054629aa91dbadd145c5a45fe3309d697a5015bbe1a90a141fb6353c41b04",
+    "crates/paper-artifacts/src/publication.rs": "69d6dde401b48593a40b50dd46ce144a5c68e791664b4f2790425cc6bb9b46f3",
     "crates/paper-artifacts/src/validation.rs": "59a5ea4506a29dad7db478bb6bd8f1cfc93c4cb9e451a969ad0ee155648e57a3",
     "crates/physics/src/side_a4.rs": "e3098114941ec52c5f15eff1a64429d5822cc083dde9b38d9e4bfd98e6df0ee3",
     "crates/physics/tests/invariance.rs": "d1c25d235f8bb028abe5378e0ef1c5948d0728372e42ec81ec432ebbcfe52ce8",
@@ -83,7 +90,10 @@
     "evidence/cad_battery/w283_p10_c02.json": "0ef3c957ce24758f54344376cc6b0c0558829513f00479bed4f464318fb6925b",
     "evidence/cad_battery/w283_p14_c01.json": "ef7741201588390a05c77d115cf74090e7c5b1a3a7a51c6437a32dfc98f86d4e",
     "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/fitness_curve.json": "afe065170218f0f5f20942a9e737e7e91a300244f8e6a99fd3c1d617d16f1412",
+    "evidence/rs_v2/w282_ultrarunner/manifest.json": "543f7e8410214a7e34e4ef55772e9d671221001d0e11a36b4d68d1a0ef0a96cf",
+    "evidence/rs_v2/w282_ultrarunner/provenance.json": "68166f27cabb28e24868cdf96e484493e8b71c4deea16ea53b9265d3b84053ae",
     "evidence/rs_v2/w282_ultrarunner/search/all_evals.json": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363",
+    "evidence/rs_v2/w282_ultrarunner/search_summary.json": "e4e6cf51da8269833709ef8501ba3b06934cfb5baecc038628f384675b63dd49",
     "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json": "df555734d327afe077ca354764f8fea05e7e574bcaa1964beffb2653e911dffc",
     "fem_solid/cross_check.py": "32b21c6b4edc64731652c860e0f85d1ee5b4fec45b5869ccd86a677cfe386c98",
     "fem_solid/gci.py": "61889a0e6a6459c8afbafe0c37758584711490b1db232799122eb3af1e4491da",
@@ -100,10 +110,10 @@
   },
   "outputs": {
     "docs/paper/generated/battery.tex": "08076ef743f6aa223afc97ea96c2ee5407e3c37c7489eb72fa2f67c224608413",
-    "docs/paper/generated/fitness.svg": "4e698c16551cd022012f1c1dbb44f61e12402758c5e68adef66e0f17c4fcf527",
-    "docs/paper/generated/metrics.tex": "a25e061be8a9f740cd2e84b93d1655d8a1a5ec47a9acf6bd0f0839b3cdf82106",
-    "docs/paper/generated/population.svg": "7b027f59a7a85eeb058f03d3532aab2ae3b385ba89a4e7df8032085e627fd574",
-    "docs/paper/generated/summary.json": "2ca4effc22fdaee2de4964edb3769356f3b9b5430223ab9e8286f7be2130b6cd",
+    "docs/paper/generated/fitness.svg": "35f5907c2530de410988aa82a6e0cca35d1c25d4aa99c5e1416e2b36b85683af",
+    "docs/paper/generated/metrics.tex": "c2d3afbe5e0694ba681f33fe3af77f55934ad448fc11f36aff59b6487c7f45ea",
+    "docs/paper/generated/population.svg": "20b1f2d323680c773ec257b6119a82e1088ad9a9ff5fcd98c50bcdbbe2965f6c",
+    "docs/paper/generated/summary.json": "b07abef63f50dce56c0719b3a99c3ceacd6ea65120ba699f2621d51eff757390",
     "docs/tests/README.md": "1fb89ae4f443725c9157089f3d0a6966957ba7ea7546d1e33dc49e6b8fd85042",
     "docs/tests/science.md": "fa1b70a9267eb3a51b293243941a814446824be2335d3341c570e2934f7c348c"
   },
