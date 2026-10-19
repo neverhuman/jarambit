@@ -617,6 +617,176 @@ fn stage1_ultralight_weighted_fitness(s: &ScreenSurvivor) -> f64 {
 fn stage2_ultralight_weighted_fitness(c: &AssessedDesign) -> f64 {
     c.ultralight_fitness
 }
+
+/// Compute the canonical `W_ULTRALIGHT_v1` global weighted fitness (`[0.0, 100.0]`)
+/// from a genome-backed scorecard (`cad_eval` / `master_scorecard`) and its RS-v2 receipt,
+/// matching `ops/ci/ultralight_weighted_fitness.py::compute_ultralight_weighted_fitness`.
+fn compute_canonical_ultralight_weighted_fitness(cad_eval_doc: &Value, rs_doc: &Value) -> f64 {
+    let em = cad_eval_doc.get("engineering_metrics").unwrap_or(&Value::Null);
+    let wc = cad_eval_doc.get("weighted_cad_score").unwrap_or(&Value::Null);
+    let gates_16 = wc.get("gates").unwrap_or(&Value::Null);
+    let cad = cad_eval_doc.get("cad").unwrap_or(&Value::Null);
+    let ka = cad_eval_doc.get("karambit_archetype").unwrap_or(&Value::Null);
+    let exp = cad_eval_doc
+        .get("export_measurements")
+        .filter(|v| !v.is_null())
+        .or_else(|| rs_doc.get("export_measurements").filter(|v| !v.is_null()))
+        .unwrap_or(&Value::Null);
+    let rs_gates = cad_eval_doc
+        .get("rs_v2_gates")
+        .filter(|v| !v.is_null())
+        .or_else(|| rs_doc.get("gates").filter(|v| !v.is_null()))
+        .unwrap_or(&Value::Null);
+
+    let f = |obj: &Value, key: &str, default: f64| -> f64 {
+        obj.get(key).and_then(Value::as_f64).unwrap_or(default)
+    };
+    let b = |obj: &Value, key: &str, default: bool| -> bool {
+        obj.get(key).and_then(Value::as_bool).unwrap_or(default)
+    };
+    let pass = |key: &str| -> bool {
+        rs_gates.get(key).and_then(Value::as_str) == Some("pass")
+    };
+
+    let mass_3d_g = em
+        .get("mass_3d_g")
+        .and_then(Value::as_f64)
+        .or_else(|| em.get("mass_g").and_then(Value::as_f64))
+        .unwrap_or(95.0);
+    let lat_cert_n = f(em, "lat_rob_cert_n", 0.0);
+    let strict_lat_n = f(em, "strict_lat_rob_0p0625_n", 0.0);
+    let ring_cert_n = f(em, "ring_rob_cert_n", 0.0);
+    let tw_body_sf = f(
+        em,
+        "twist_body_sf",
+        if b(gates_16, "twist_body_1p82nm", false) {
+            1.0
+        } else {
+            0.0
+        },
+    );
+    let tw_tip_sf = f(em, "twist_tip_sf", 0.0);
+    let tw_strict_sf = f(em, "twist_tipzone_sf_strict", 0.0);
+    let solid_tip_sf = f(em, "solid_tip_sf_nodal_max", 0.0);
+    let solid_rel_err = f(em, "solid_tip_dolfinx_rel_err", 1.0);
+    let xcheck_ok = b(gates_16, "dolfinx_cross_check_2pct", solid_rel_err <= 0.02);
+    let lambda_a4 = f(em, "buckling_eigenvalue_a4", 0.0);
+    let seq_cert = f(em, "seq_ratio_cert", 0.0);
+    let fat_sf = f(em, "fat_sf_l7", 0.0);
+    let ring_bearing_w = f(em, "ring_bearing_w_mm", 12.0);
+
+    let bore = exp.get("bore_radius").unwrap_or(&Value::Null);
+    let ring_edge_r = f(
+        bore,
+        "min_radius_mm",
+        if pass("human_max") { 1.5 } else { 1.125 },
+    );
+    let sharp = exp.get("sharpness").unwrap_or(&Value::Null);
+    let apex_mm = f(
+        sharp,
+        "apex_max_mm",
+        if pass("gate_s_sharp_law") { 0.18 } else { 0.25 },
+    );
+    let half_angle_deg = f(
+        sharp,
+        "half_angle_max_deg",
+        if pass("gate_s_sharp_law") { 20.0 } else { 28.0 },
+    );
+    let pt = exp.get("point_profile").unwrap_or(&Value::Null);
+    let t_025 = f(
+        pt,
+        "t_0p25_mm",
+        if pass("gate_s_tip_point_brep") { 0.25 } else { 0.45 },
+    );
+    let t_100 = f(
+        pt,
+        "t_1p0_mm",
+        if pass("gate_s_tip_point_brep") { 0.50 } else { 0.85 },
+    );
+    let t_200 = f(
+        pt,
+        "t_2p0_mm",
+        if pass("gate_s_tip_point_brep") { 0.85 } else { 1.40 },
+    );
+    let pt_mono = b(pt, "monotone", pass("gate_s_tip_point_brep"));
+
+    let hm_doc = rs_doc.get("human_max").unwrap_or(&Value::Null);
+    let hm_twist_sf = f(
+        hm_doc,
+        "hm_twist_sf",
+        if pass("human_max") { 1.0 } else { 0.10 },
+    );
+    let hm_spine_sf = f(
+        hm_doc,
+        "hm_spine_sf",
+        if pass("human_max") { 1.0 } else { 0.35 },
+    );
+    let hm_ringback_sf = f(hm_doc, "hm_ringback_sf", 1.5);
+
+    let values = [
+        clamp01((130.0 - mass_3d_g) / (130.0 - 45.0)),
+        if b(gates_16, "geometric_and_holder_gates", true) {
+            1.0
+        } else {
+            0.5
+        },
+        if b(
+            gates_16,
+            "karambit_ring_and_curved_claw",
+            b(ka, "karambit_valid", true),
+        ) {
+            1.0
+        } else {
+            0.5
+        },
+        if b(gates_16, "c6_aesthetic_floor", true) {
+            1.0
+        } else {
+            0.5
+        },
+        0.5 * clamp01(ring_bearing_w / 10.0) + 0.5 * clamp01(ring_edge_r / 1.5),
+        if b(
+            gates_16,
+            "cad_watertight_and_single_solid",
+            b(cad, "cad_valid", true),
+        ) {
+            1.0
+        } else {
+            0.0
+        },
+        0.5 * clamp01(0.20 / apex_mm.max(1e-3)) + 0.5 * clamp01(25.0 / half_angle_deg.max(1.0)),
+        0.25 * (clamp01(0.30 / t_025.max(1e-3))
+            + clamp01(0.60 / t_100.max(1e-3))
+            + clamp01(1.00 / t_200.max(1e-3))
+            + if pt_mono { 1.0 } else { 0.0 }),
+        clamp01(lat_cert_n / 180.0),
+        clamp01(lat_cert_n / 260.0),
+        clamp01(strict_lat_n / 260.0),
+        clamp01(ring_cert_n / 1500.0),
+        clamp01(tw_body_sf / 1.0),
+        0.5 * clamp01(tw_tip_sf / 1.0) + 0.5 * clamp01(tw_strict_sf / 1.0),
+        clamp01(solid_tip_sf / 1.0) * (0.8 + 0.2 * if xcheck_ok { 1.0 } else { 0.0 }),
+        clamp01(lambda_a4.max(0.0) / 1.0),
+        clamp01(seq_cert / 1.20),
+        if b(gates_16, "plate_gci_valid_3level", true) {
+            1.0
+        } else {
+            0.5
+        },
+        (clamp01(hm_twist_sf / 1.0)
+            + clamp01(hm_spine_sf / 1.0)
+            + clamp01(hm_ringback_sf / 1.0))
+            / 3.0,
+        clamp01(fat_sf / 1.0),
+    ];
+    let total_score: f64 = ULTRALIGHT_WEIGHTS_V1
+        .iter()
+        .zip(values.iter())
+        .map(|((_, w), &s)| w * clamp01(s))
+        .sum();
+    (total_score * 1e6).round() / 1e6
+}
+
 /// Monotone non-decreasing Hall-of-Fame global fitness curve across rounds/generations.
 pub fn monotone_hall_of_fame_curve(round_maxima: &[f64]) -> Vec<f64> {
     let mut best = 0.0_f64;
@@ -679,6 +849,17 @@ fn certify_candidate_stage2(
             "standard evaluator returned a certificate for a different genome/model".into(),
         );
     }
+    let rs_path = out_dir.join(format!("{}_rs.json", cand.label));
+    if !rs_path.is_file() {
+        return Err(format!(
+            "standard assessment unverified: genome-backed scorecard missing RS-v2 receipt: {}",
+            rs_path.display()
+        ));
+    }
+    let rs_doc: Value =
+        serde_json::from_slice(&std::fs::read(&rs_path).map_err(|e| e.to_string())?)
+            .map_err(|e| format!("standard assessment unverified: invalid RS-v2 receipt: {e}"))?;
+
     let em = sc.get("engineering_metrics").unwrap_or(&Value::Null);
     let wc = sc.get("weighted_cad_score").unwrap_or(&Value::Null);
     let g1 = sc.get("global_fitness_G1").unwrap_or(&Value::Null);
@@ -696,10 +877,18 @@ fn certify_candidate_stage2(
         == Some(true);
     let w_cad = finite(&wc["W_CAD"], "W_CAD")?;
     let g1_val = finite(&g1["G"], "G1")?;
-    let ultralight_fitness = finite(
-        &sc["ultralight_weighted_fitness"]["global_weighted_fitness"],
-        "W_ULTRALIGHT_v1",
-    )?;
+    let ultralight_fitness = if let Some(val) = sc
+        .get("ultralight_weighted_fitness")
+        .and_then(|u| u.get("global_weighted_fitness"))
+    {
+        finite(val, "W_ULTRALIGHT_v1")?
+    } else {
+        let score = compute_canonical_ultralight_weighted_fitness(&sc, &rs_doc);
+        if !score.is_finite() {
+            return Err("standard assessment unverified: missing/nonfinite W_ULTRALIGHT_v1".into());
+        }
+        score
+    };
     let mass_g = finite(&em["mass_g"], "raster mass")?;
     let mass_3d_g = finite(&em["mass_3d_g"], "3D mass")?;
     let strict_hunter_sf = finite(&em["sf_hunter_strict"], "strict hunter SF")?;
@@ -3161,5 +3350,21 @@ mod tests {
             &[],
         );
         assert_eq!(next[0].1, g_best);
+
+        let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let sc_doc: Value = serde_json::from_slice(
+            &std::fs::read(
+                root.join("evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json"),
+            )
+            .unwrap(),
+        )
+        .unwrap();
+        let rs_doc: Value = serde_json::from_slice(
+            &std::fs::read(root.join("evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json"))
+                .unwrap(),
+        )
+        .unwrap();
+        let canonical = compute_canonical_ultralight_weighted_fitness(&sc_doc, &rs_doc);
+        assert!((canonical - 83.214839).abs() < 1e-6, "canonical={canonical}");
     }
 }
