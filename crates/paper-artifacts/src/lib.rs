@@ -6,3 +6,4 @@ mod plate;
 pub mod publication;
 mod validation;
 mod verification;
+mod visuals;
