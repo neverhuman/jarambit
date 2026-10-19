@@ -1,0 +1,49 @@
+{
+  "schema": "jarambit.battery_figure_inputs.v1",
+  "manifest": {
+    "path": "evidence/cad_battery/manifest.json",
+    "sha256": "00dd4000664ce669135e1633d6b7021ef93161f9a1e68786c92ee19018406ee5"
+  },
+  "record_sha256": {
+    "evidence/cad_battery/c10a.json": "22c145c839a298f90e247e219c8bd9ce28724055b60a46b8e98bf20fa1bad783",
+    "evidence/cad_battery/c93.json": "ce36894ecac39d1affcda6bcdb208ac305a566cdc91533ab0c5075e17b460c9d",
+    "evidence/cad_battery/c92.json": "008d62462415609fb4c6583417720d72b3d96f51a2dba0ad3afa7601e9ff8801",
+    "evidence/cad_battery/c10c.json": "b527272bb0e7584c385f424010299926917f5b5ca9163f08e80a6a0e9cddacf7",
+    "evidence/cad_battery/g3.json": "55604777428217265ca66291ef2c4de9e2dccd2e59db686f393e4cba81450617",
+    "evidence/cad_battery/w271b_11772.json": "b057cc08d7ee148115dfb419fb0a44a014a449703d13eccd516c6fc915e6ae58",
+    "evidence/cad_battery/w271b_11860.json": "a681f4f70600a1fca55c08c6f9911ef5684ea4403686aa1991cb3c0a3689d780",
+    "evidence/cad_battery/w271c_11522.json": "41dd74ea07b54f8f7099890bf10c2ec39c5985b29aad94a7f1be6b358981f586",
+    "evidence/cad_battery/w272_s2902_c01.json": "d7faeccc5e68523e734fa07af7cd97973e47828fd1f27c25b1646317f02ad647",
+    "evidence/cad_battery/w273_s2904_c01.json": "bda0d423bc02023f7513b01f73cd81f608850fb48fdd82ff538cc2fa23e7ba25",
+    "evidence/cad_battery/w273_s2903_c04.json": "4894ce40ac7fda546bc9a89d188355f1cfcf2930f6e56723cc8edcf2ff2bfe3d",
+    "evidence/cad_battery/w274_s2905_c01.json": "9abbe27d045433b290cb29fc1dae9df9cbba64c1e1cabfa0d2fdd17f8f4d94e0",
+    "evidence/cad_battery/w275_s2909_c01.json": "000fac66609bf73cb1628e474ab90f801a9c90e8ef9f87a972f4db3ca4439939",
+    "evidence/cad_battery/w276_s2913_c01.json": "b7768c294ae29a4e1dd6d6857eecb65fef4b29894d7f8cac17a94498f5c99b18",
+    "evidence/cad_battery/w277_s2919_c01.json": "27bb14274e0962c0e0a09bd303d06c410e8cc8dcb628433c46ac2a74d31754dd",
+    "evidence/cad_battery/w278_s2922_c01.json": "cfd7379df2c7a8b06cd589fa6801bcf86621ec6ae04cd0aea98bdbb210c53027",
+    "evidence/cad_battery/w279_s2928_c01.json": "81f337c89f8fe08b1ec3fb0046e73a6a7463a3c9b869b1d792013c8bdedf95ec",
+    "evidence/cad_battery/w280_s2931_c01.json": "bd9341933ec76fbe571d1a546a0625f9e3840ed9502e11b8dd65358b7e4b8c96",
+    "evidence/cad_battery/w281_s2932_c01.json": "7532e7d3fc9b68599a73f595eb82be2237928b7c63a4ca9c23bdd8f3e9216c12",
+    "evidence/cad_battery/w282_p14_c01.json": "528fc112a19589657239984791beb22065210ac48bfef2b03d79d40bedb767bb",
+    "evidence/cad_battery/w282_p10_c02.json": "9f2bedce0db3f96f7a434e5c882f839a873e1b53ddc2bcf930cabbc011a0b5b9",
+    "evidence/cad_battery/w283_p14_c01.json": "ef7741201588390a05c77d115cf74090e7c5b1a3a7a51c6437a32dfc98f86d4e",
+    "evidence/cad_battery/w283_p10_c02.json": "0ef3c957ce24758f54344376cc6b0c0558829513f00479bed4f464318fb6925b"
+  },
+  "expected_status_counts": {
+    "pass": 221,
+    "fail": 81,
+    "blocked": 112,
+    "incomplete": 0
+  },
+  "expected_role_counts": {
+    "native_cad": 3,
+    "archived_not_on_main": 1,
+    "genome": 19
+  },
+  "scope": "Frozen historical labels only; no new mechanics, qualification or physical evidence",
+  "manifest_source_revision": "6d18ef8cbe7b995890451a8ac7b93b75c928d150",
+  "expected_record_source_revision_counts": {
+    "6d18ef8cbe7b995890451a8ac7b93b75c928d150": 21,
+    "4e54019dd016ddde71b416460b96e0a9b08a95de": 2
+  }
+}

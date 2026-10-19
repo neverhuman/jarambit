@@ -17,6 +17,21 @@
       ],
       "support_audit": "eigsh operator symmetry/eigenpair residual unresolved; no eigenvector retained"
     },
+    "battery-matrix.svg": {
+      "contract": "docs/paper/battery-inputs.v1.json",
+      "membership": "manifest subjects and case_ids; exact-ID cell joins",
+      "projection_receipt": "docs/paper/generated/battery-matrix.json",
+      "scope": "stored historical labels only; not a FEM heatmap, new assessment or physical reliability estimate",
+      "selectors": [
+        "/subject",
+        "/role",
+        "/cases/*/id",
+        "/cases/*/status",
+        "/cases/*/fresh_this_lane",
+        "/cases/*/kind",
+        "/cases/*/evidence_path"
+      ]
+    },
     "cover-evolution.svg": {
       "lines": "straight segments between observed generations; no fitted convergence model",
       "maximum_axis_limits": [
@@ -126,10 +141,11 @@
     "crates/paper-artifacts/Cargo.toml": "594ac0af1558f03ce22cf25229c5758af3769e0a282ccdd757f2a6ae9ada6dda",
     "crates/paper-artifacts/examples/paper_artifacts.rs": "71d6b223c1b71e51c92278abd51619e8f62f28f3e7b58184d34542f0025806a9",
     "crates/paper-artifacts/src/assessment.rs": "416c0b50371b1070ca492612d2123d5f0d08d676d24ddc3baa655c3d7f12bf2e",
+    "crates/paper-artifacts/src/battery.rs": "3c9bfbf25e9ce9d967feeabaea7b3b9597e4992bad566dfb654a573fe73001f2",
     "crates/paper-artifacts/src/historical.rs": "137ad9f54818031541c3440ff3d1a0d66c23d175c3a1a09c16a8375dc39ff799",
-    "crates/paper-artifacts/src/lib.rs": "a1ff6ceedcd0461fd2e2db7d13d207c593166b081b902071a43a01ab3437b8f8",
+    "crates/paper-artifacts/src/lib.rs": "6441a07052291585f31fea851abf871e84ca50029b253992269cc4ebdecb33b1",
     "crates/paper-artifacts/src/plate.rs": "9c69e2e06bc6ee19341c1e59228b71f6989e543bdedd0efd9eddb5057612743d",
-    "crates/paper-artifacts/src/publication.rs": "493172593a4ec6805a67db4ecf335bc4333b3eb1edf2a2aad4c3a7dc518c4431",
+    "crates/paper-artifacts/src/publication.rs": "68d2dc980d6ef1fb757ec124f489c974ef264d5cc416d6b5ad7bc4d404ced7cb",
     "crates/paper-artifacts/src/validation.rs": "59a5ea4506a29dad7db478bb6bd8f1cfc93c4cb9e451a969ad0ee155648e57a3",
     "crates/paper-artifacts/src/verification.rs": "faa5305dd0b492f71f0d5a8afec6d0e0c13618568cce916fadc17602d47d38ea",
     "crates/physics/src/fine.rs": "b8762847e7452d3bcbfde718e55e13c42d4ac61d9a23abf5a75d2d5c38343096",
@@ -137,6 +153,7 @@
     "crates/physics/tests/invariance.rs": "d1c25d235f8bb028abe5378e0ef1c5948d0728372e42ec81ec432ebbcfe52ce8",
     "crates/physics/tests/solver_parity.rs": "4e095bb500478512f777cf0efb4f6f340f2d4927b9b9c356bf397160fde3ec6f",
     "docs/paper/assessment-inputs.v1.json": "fac0cd6cc08e731585e243277d401cb4e9a746279f4a544b012d4fae6b928171",
+    "docs/paper/battery-inputs.v1.json": "2cc671fd3ff7c6de1b415c1d2003d4b67bd5442fd89e4653fdd025f3c23f3930",
     "docs/paper/field-inputs.v1.json": "93ffdcdae2c2eead22ce858e3eb83af1f61cdb4bafa29e418b6859736c6c8449",
     "docs/paper/figure-inputs.v1.json": "dbce6bf8a075b33b20158a20b74e3dd5f58658c45a33f253f6224a1ffae8b3c4",
     "docs/paper/figures/v2/hero_dark.manifest.json": "54102c53f76000a99fa066c86b7481d5d3d0b547beacf42041e78a9ada977325",
@@ -209,6 +226,9 @@
     "docs/paper/generated/assessment.json": "0be0e88cc05601165b3a8d7b6901ff6e1076531a45bec0a59f62b328feee2cb4",
     "docs/paper/generated/assessment.svg": "dd61c56092b8f6d964faca96a3cd95dcc1ff976b0e3c6cad006f4f3b706f71a8",
     "docs/paper/generated/assessment.svg.manifest.json": "c9716e7464632deb6f91a18a05b47708791022a243ee4b049d12239ce8eb9226",
+    "docs/paper/generated/battery-matrix.json": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+    "docs/paper/generated/battery-matrix.svg": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+    "docs/paper/generated/battery-matrix.svg.manifest.json": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
     "docs/paper/generated/battery.tex": "08076ef743f6aa223afc97ea96c2ee5407e3c37c7489eb72fa2f67c224608413",
     "docs/paper/generated/cover-evolution.svg": "a9716a13503d32fe307eaef88de9c339ded1ba8c38af6a1fa3296f8fd6b74144",
     "docs/paper/generated/fitness.svg": "35f5907c2530de410988aa82a6e0cca35d1c25d4aa99c5e1416e2b36b85683af",
@@ -221,7 +241,7 @@
     "docs/paper/generated/verification.json": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
     "docs/paper/generated/verification.svg": "fe66123fa003077003512bc5f57ab014bfcf12e239670a7550687f6d22cc2516",
     "docs/paper/generated/verification.svg.manifest.json": "a6a965bf5e3924f29d30fce3ef21e2be6ffaa9dcea1a70c925531f078278c305",
-    "docs/tests/README.md": "b3a0c53fb4d87a6c721c4d305aff9d84d4558d2c099d86ea4d98c7a7ece1162d",
+    "docs/tests/README.md": "5263b8d045ad4bad83ecc0038f79e129fa1ce58f0db05c3e548fb6423da9f618",
     "docs/tests/science.md": "fa1b70a9267eb3a51b293243941a814446824be2335d3341c570e2934f7c348c"
   },
   "schema": "jarambit.publication_manifest.v1",

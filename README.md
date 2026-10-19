@@ -18,6 +18,8 @@ Jarambit connects a 128-gene CAD representation to plate/membrane FEM, a quadrat
 
 **The engineering depth is in the models, checks, and evidence links—not a combined test count.** All historical battery cells say `fresh_this_lane: false`. Stored outcomes are 221 pass, 81 fail, 112 blocked; four shared software columns account for 92 passes. `solid.tip` passes mean complete records, not favorable strength findings. [Read status meanings and every evaluator](docs/tests/README.md#battery).
 
+[See all 414 stored cells](docs/paper/generated/battery-matrix.svg) · [Cell-level sources and selectors](docs/paper/generated/battery-matrix.json). The matrix preserves blocked records, original subject roles and the two different retained source-revision fields. It is a categorical evidence map, not a stress heatmap or a count of independent physical tests.
+
 ![Actual historical population, with FEM-complete and not-evaluated records distinguished](docs/paper/generated/population.svg)
 
 *Actual historical w282 data: 1,984 retained births, including 1,455 FEM-complete and 529 not-evaluated records; 446 are legal under the recorded search. The plot distinguishes those states and preserves all stored fitness values. Fitness includes legality penalties and contextual novelty. The highest search score did not pass its later strict assessment; the producer's named exported examples came from separate controlled probes. These historical findings do not establish current qualification. [Results and interpretation](docs/paper/sections/08-results.tex) · [Inputs, producer identity and hashes](docs/paper/generated/manifest.json).*

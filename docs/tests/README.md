@@ -479,6 +479,8 @@ References shared analytic/reference controls.
 
 **Historical stored outcomes (23 subjects):** 23 pass / 0 fail / 0 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "build.analytic"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
 
+**Actual historical-corpus visual:** [all 23 stored labels in the `build.analytic` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
+
 <a id="battery-build.gci_contracts"></a>
 
 ### Convergence arithmetic controls
@@ -492,6 +494,8 @@ References checks of convergence arithmetic and refusal behavior.
 [Current implementation](../../fem_solid/tests/test_gci.py) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/fem_solid/tests/test_gci.py) · [Related software controls](../../ops/ci/tests/test_cad_battery.py)
 
 **Historical stored outcomes (23 subjects):** 23 pass / 0 fail / 0 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "build.gci_contracts"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
+
+**Actual historical-corpus visual:** [all 23 stored labels in the `build.gci_contracts` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
 
 <a id="battery-build.claims"></a>
 
@@ -507,6 +511,8 @@ References reporting and evidence-admission controls.
 
 **Historical stored outcomes (23 subjects):** 23 pass / 0 fail / 0 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "build.claims"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
 
+**Actual historical-corpus visual:** [all 23 stored labels in the `build.claims` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
+
 <a id="battery-build.dolfinx"></a>
 
 ### Separate-solver capability
@@ -520,6 +526,8 @@ References retained solver-comparison capability evidence.
 [Current implementation](../../evidence/cad_battery/dolfinx_cross_check.json) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/evidence/cad_battery/dolfinx_cross_check.json) · [Related software controls](../../ops/ci/tests/test_cad_battery.py)
 
 **Historical stored outcomes (23 subjects):** 23 pass / 0 fail / 0 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "build.dolfinx"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
+
+**Actual historical-corpus visual:** [all 23 stored labels in the `build.dolfinx` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
 
 <a id="battery-geom.unit"></a>
 
@@ -535,6 +543,8 @@ Records whether export unit identity is established.
 
 **Historical stored outcomes (23 subjects):** 0 pass / 0 fail / 23 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "geom.unit"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
 
+**Actual historical-corpus visual:** [all 23 stored labels in the `geom.unit` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
+
 <a id="battery-geom.one_solid"></a>
 
 ### Solid topology
@@ -548,6 +558,8 @@ Records whether the relevant single-solid topology is established.
 [Current implementation](../../ops/ci/verify_genome_export.py) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/ops/ci/verify_genome_export.py) · [Related software controls](../../ops/ci/tests/test_cad_battery.py)
 
 **Historical stored outcomes (23 subjects):** 0 pass / 0 fail / 23 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "geom.one_solid"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
+
+**Actual historical-corpus visual:** [all 23 stored labels in the `geom.one_solid` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
 
 <a id="battery-geom.mass"></a>
 
@@ -563,6 +575,8 @@ Records retained mass availability.
 
 **Historical stored outcomes (23 subjects):** 19 pass / 0 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "geom.mass"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
 
+**Actual historical-corpus visual:** [all 23 stored labels in the `geom.mass` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
+
 <a id="battery-geom.pin"></a>
 
 ### Geometry identity
@@ -576,6 +590,8 @@ Records binding of the observation to the intended CAD.
 [Current implementation](../../crates/crescent/src/cad_ingest.rs) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/crates/crescent/src/cad_ingest.rs) · [Related software controls](../../ops/ci/tests/test_cad_battery.py)
 
 **Historical stored outcomes (23 subjects):** 0 pass / 0 fail / 23 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "geom.pin"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
+
+**Actual historical-corpus visual:** [all 23 stored labels in the `geom.pin` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
 
 <a id="battery-plate.loads"></a>
 
@@ -591,6 +607,8 @@ Reports the stored plate-response comparison.
 
 **Historical stored outcomes (23 subjects):** 0 pass / 19 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "plate.loads"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
 
+**Actual historical-corpus visual:** [all 23 stored labels in the `plate.loads` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
+
 <a id="battery-plate.seq"></a>
 
 ### Sequence proxy
@@ -604,6 +622,8 @@ Reports the retained regional yield-order comparison.
 [Current implementation](../../crates/crescent/src/fem.rs) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/crates/crescent/src/fem.rs) · [Related software controls](../../ops/ci/tests/test_cad_battery.py)
 
 **Historical stored outcomes (23 subjects):** 10 pass / 9 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "plate.seq"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
+
+**Actual historical-corpus visual:** [all 23 stored labels in the `plate.seq` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
 
 **Separate assessed-example visual:** [A: retained yield-order proxy across mesh levels; no admitted GCI](../paper/generated/verification.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/verification.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
@@ -621,6 +641,8 @@ Reports the existing fatigue-screen assessment.
 
 **Historical stored outcomes (23 subjects):** 0 pass / 19 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "plate.l7"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
 
+**Actual historical-corpus visual:** [all 23 stored labels in the `plate.l7` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
+
 **Separate assessed-example visual:** [B: original fatigue-model scalar; no fatigue field or measured lifetime](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="battery-plate.gci"></a>
@@ -636,6 +658,8 @@ Reports the stored convergence-evidence finding.
 [Current implementation](../../fem_solid/gci.py) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/fem_solid/gci.py) · [Related software controls](../../ops/ci/tests/test_cad_battery.py)
 
 **Historical stored outcomes (23 subjects):** 4 pass / 15 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "plate.gci"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
+
+**Actual historical-corpus visual:** [all 23 stored labels in the `plate.gci` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
 
 **Separate assessed-example visual:** [A--B: valid metadata, but nonpositive-order/oscillatory observations and no admitted GCI](../paper/generated/verification.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/verification.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
@@ -653,6 +677,8 @@ References the common retained side report.
 
 **Historical stored outcomes (23 subjects):** 19 pass / 0 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "side.a1"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
 
+**Actual historical-corpus visual:** [all 23 stored labels in the `side.a1` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
+
 <a id="battery-side.a2"></a>
 
 ### Legacy side-report record A2
@@ -666,6 +692,8 @@ References the common retained side report.
 [Current implementation](../../crates/crescent/examples/g3_side_report.rs) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/crates/crescent/examples/g3_side_report.rs) · [Related software controls](../../ops/ci/tests/test_cad_battery.py)
 
 **Historical stored outcomes (23 subjects):** 19 pass / 0 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "side.a2"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
+
+**Actual historical-corpus visual:** [all 23 stored labels in the `side.a2` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
 
 <a id="battery-side.a3"></a>
 
@@ -681,6 +709,8 @@ References the common retained side report.
 
 **Historical stored outcomes (23 subjects):** 19 pass / 0 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "side.a3"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
 
+**Actual historical-corpus visual:** [all 23 stored labels in the `side.a3` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
+
 <a id="battery-side.a4"></a>
 
 ### Support and stability report
@@ -694,6 +724,8 @@ Records the alternate-support and stability report.
 [Current implementation](../../ops/ci/side_a4.py) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/ops/ci/side_a4.py) · [Related software controls](../../ops/ci/tests/test_cad_battery.py)
 
 **Historical stored outcomes (23 subjects):** 19 pass / 0 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "side.a4"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
+
+**Actual historical-corpus visual:** [all 23 stored labels in the `side.a4` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
 
 **Separate assessed-example visual:** [A: support-model schematic and archived scalars; eigen-operator verification remains open](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
@@ -711,6 +743,8 @@ Reports whether the retained solid-result record is complete.
 
 **Historical stored outcomes (23 subjects):** 20 pass / 0 fail / 3 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "solid.tip"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
 
+**Actual historical-corpus visual:** [all 23 stored labels in the `solid.tip` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
+
 **Separate assessed-example visual:** [C--D: matched scalar comparison and binned profiles; no full 3D field](../paper/generated/verification.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/verification.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="battery-gate.rs_v2"></a>
@@ -726,3 +760,5 @@ Reports the combined historical grouped requirement outcome.
 [Current implementation](../../crates/cli/src/bench.rs) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/crates/cli/src/bench.rs) · [Related software controls](../../ops/ci/tests/test_cad_battery.py)
 
 **Historical stored outcomes (23 subjects):** 0 pass / 19 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "gate.rs_v2"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
+
+**Actual historical-corpus visual:** [all 23 stored labels in the `gate.rs_v2` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
