@@ -1,0 +1,630 @@
+{
+  "schema": "jarambit.ei.p5_t01.scientific_identity_and_compact_schemas.v1",
+  "task_id": "JR-EI-P5-T01",
+  "admiralty_task_id": "jarambit:JR-EI-P5-T01@r2:sha256:4434cfb66301840b449eb74a154d42428eeb98131980a98a2bc6dac7fab10364",
+  "title": "Specify reusable scientific identity and compact schemas",
+  "plan_sections": [
+    "12.3",
+    "12.4",
+    "12.7",
+    "6"
+  ],
+  "reused_canonical_identity_contract": {
+    "rust_module": "crates/evidence/src/identity.rs",
+    "canonical_wire_tag": "jarambit.science.canonical.v1",
+    "reused_types": [
+      "ContentRef { id: String, revision: String, sha256: String }",
+      "SubjectRef::Genome { representation: ContentRef, bits: Vec<String> }",
+      "SubjectRef::NativeCad { artifact: ContentRef, geometry_state: ContentRef, format: CadFormat, unit: LengthUnit }",
+      "SubjectRef::Specimen { id: String, passport: ContentRef }",
+      "MaterialState::Identified { passport: ContentRef } | MaterialState::Unknown { reason: String }",
+      "ScientificIdentity { schema: 2, subject, requirements, source, build, cargo_lock, config, evaluator, scenario, objective, descriptor, material, dependencies }",
+      "RuntimeMetadata { host: String, threads: u32, metadata: BTreeMap<String, String> }"
+    ],
+    "invariants": [
+      "RuntimeMetadata never participates in ScientificIdentity::sha256().",
+      "SubjectRef::Genome requires non-empty 16-character lowercase hex IEEE-754 binary64 bit strings and rejects nonfinite floats (NaN, +Inf, -Inf).",
+      "Negative zero (-0.0, bits 0x8000000000000000) is preserved bit-for-bit in canonical_wire (`d8000000000000000;`) and in the binary transport envelope.",
+      "NFC Unicode normalization collision checks apply to all ContentRef IDs and JSON object keys via strict_json."
+    ]
+  },
+  "three_hash_separation_contract": {
+    "scientific_subject_sha256": {
+      "domain": "jarambit.science.canonical.v1",
+      "definition": "SHA-256 over canonical_wire(SubjectRef::Genome { representation, bits }) or full ScientificIdentity::sha256(). Invariant across transport compression or file container.",
+      "precision_recovery_rule": "Never synthesized from rounded decimal CSV/JSON when exact IEEE-754 bits were not recorded; imported rounded historical records bind scientific_subject_sha256 only to the explicitly versioned rounded-import representation."
+    },
+    "transport_envelope_sha256": {
+      "domain": "jarambit.genome.transport.v1",
+      "wire_layout": "transport_domain_separator (\"jarambit.genome.transport.v1\\0\") | genome_schema_version (u16 LE) | decoder_identity_content_ref_sha256 (32B) | material_schema_and_value_tag | gene_count (u16 LE, 128 for crescent) | ordered_f64_little_endian_bits (gene_count * 8B)",
+      "definition": "SHA-256 of the uncompressed deterministic binary/hex transport envelope for a single genome record inside a segment.",
+      "deduplication_rule": "Content deduplication saves genome payload bytes within a segment/run only when the full versioned transport envelope (including decoder_identity and material_schema) matches; every birth event still emits its own Birth record referencing the genome_transport_sha256."
+    },
+    "source_serialization_sha256": {
+      "domain": "raw_producer_bytes",
+      "definition": "SHA-256 of the exact original producer byte slice (e.g. raw CSV row bytes in all_evals.csv or raw JSON object bytes in all_evals.json) prior to compact import.",
+      "historical_bound": "Preserves exact auditability to original producer files on xbabe1..xbabe4 without claiming that decimal-rounded CSV strings preserve all 53 mantissa bits of in-memory f64."
+    }
+  },
+  "schemas": {
+    "run.v1.schema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://jarambit.local/schemas/run.v1.schema.json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "run_uuid",
+        "engine_kind",
+        "engine_schema",
+        "source_commit_ref",
+        "dirty_patch_sha256",
+        "binary_identity_verification_state",
+        "toolchain_ref",
+        "model_refs",
+        "effective_config",
+        "environment_allowlist",
+        "rng_seed_u64",
+        "seed_genomes",
+        "origin_kind",
+        "created_utc"
+      ],
+      "properties": {
+        "schema_version": { "const": "jarambit.archive.run.v1" },
+        "run_uuid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "public_run_id": { "type": ["integer", "null"], "minimum": 0 },
+        "engine_kind": {
+          "type": "string",
+          "enum": ["crescent_native_qd", "auto_evolve_two_stage", "evolve_legacy", "historical_rs_v2"]
+        },
+        "engine_schema": { "type": "string" },
+        "source_commit_ref": { "$ref": "#/$defs/ContentRef" },
+        "dirty_patch_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "binary_identity_verification_state": {
+          "type": "string",
+          "enum": ["verified_at_launch", "unverified_historical_on_disk_binary", "unknown"]
+        },
+        "binary_sha256_if_known": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "toolchain_ref": { "$ref": "#/$defs/ContentRef" },
+        "model_refs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ContentRef" }
+        },
+        "effective_config": { "type": "object" },
+        "environment_allowlist": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "rng_seed_u64": { "type": ["integer", "null"], "minimum": 0 },
+        "seed_genomes": {
+          "type": "array",
+          "description": "Seed genome bytes and hashes stored once per run, not only filesystem paths.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["seed_label", "original_path_hint", "seed_bytes_sha256", "transport_envelope_sha256"],
+            "properties": {
+              "seed_label": { "type": "string" },
+              "original_path_hint": { "type": ["string", "null"] },
+              "seed_bytes_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "transport_envelope_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+            }
+          }
+        },
+        "origin_kind": {
+          "type": "string",
+          "enum": ["fresh_start", "exact_continuation", "warm_start_from_exported_genomes", "deliberate_fork", "retrospective_import"]
+        },
+        "created_utc": { "type": "string" }
+      }
+    },
+    "event_and_genome.v1.schema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://jarambit.local/schemas/event_and_genome.v1.schema.json",
+      "description": "Minimum retained compact records inside *.jsonl.zst segments (§12.3, §12.4).",
+      "oneOf": [
+        { "$ref": "#/$defs/BirthRecord" },
+        { "$ref": "#/$defs/ObservationRecord" },
+        { "$ref": "#/$defs/MembershipRecord" },
+        { "$ref": "#/$defs/SelectionRecord" },
+        { "$ref": "#/$defs/MigrationRecord" },
+        { "$ref": "#/$defs/LifecycleRecord" },
+        { "$ref": "#/$defs/GenerationSummaryRecord" }
+      ],
+      "$defs": {
+        "BirthRecord": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_kind",
+            "event_sequence",
+            "run_uuid",
+            "attempt_id",
+            "producer_birth_id",
+            "generation",
+            "island",
+            "parent_ids",
+            "operator_kind",
+            "operator_version",
+            "recorded_before_evaluation",
+            "genome_state"
+          ],
+          "properties": {
+            "record_kind": { "const": "birth" },
+            "event_sequence": { "type": "integer", "minimum": 0 },
+            "run_uuid": { "type": "string" },
+            "attempt_id": { "type": "string" },
+            "producer_birth_id": { "type": "integer", "minimum": 0 },
+            "public_individual_id": { "type": ["integer", "null"], "minimum": 0 },
+            "generation": { "type": "integer", "minimum": 0 },
+            "island": { "type": ["integer", "null"], "minimum": 0 },
+            "parent_ids": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+            "operator_kind": { "type": ["string", "null"] },
+            "operator_version": { "type": ["string", "null"] },
+            "recorded_before_evaluation": { "type": "boolean" },
+            "genome_state": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["availability", "scientific_subject_sha256", "transport_envelope_sha256", "source_serialization_sha256"],
+              "properties": {
+                "availability": {
+                  "type": "string",
+                  "enum": ["lossless_ieee754_bits", "historical_decimal_serialized", "omitted_in_source_jev1", "invalid_nonfinite_rejected"]
+                },
+                "missing_reason": { "type": ["string", "null"] },
+                "scientific_subject_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+                "transport_envelope_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+                "source_serialization_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+                "material": { "type": ["string", "null"] },
+                "gene_bits_hex": {
+                  "type": ["array", "null"],
+                  "items": { "type": "string", "pattern": "^[0-9a-f]{16}$" }
+                },
+                "historical_raw_decimal_fields": {
+                  "type": ["array", "null"],
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "ObservationRecord": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_kind",
+            "event_sequence",
+            "run_uuid",
+            "attempt_id",
+            "subject_selector",
+            "observation_stage",
+            "evaluator_ref",
+            "score_profile_id",
+            "status",
+            "scalars"
+          ],
+          "properties": {
+            "record_kind": { "const": "observation" },
+            "event_sequence": { "type": "integer", "minimum": 0 },
+            "run_uuid": { "type": "string" },
+            "attempt_id": { "type": "string" },
+            "subject_selector": {
+              "type": "object",
+              "required": ["selector_kind"],
+              "properties": {
+                "selector_kind": { "enum": ["birth_id", "one_based_candidate_index", "specimen_id"] },
+                "birth_id": { "type": ["integer", "null"] },
+                "one_based_candidate_index": { "type": ["integer", "null"], "minimum": 1 },
+                "family": { "type": ["string", "null"] },
+                "certificate_sha256": { "type": ["string", "null"] }
+              }
+            },
+            "observation_stage": {
+              "type": "string",
+              "enum": [
+                "birth_evaluation",
+                "post_contextual_rescore_pre_migration",
+                "stage1_screen",
+                "stage2_assessment",
+                "retrospective_weighted_report"
+              ]
+            },
+            "evaluator_ref": { "$ref": "run.v1.schema.json#/$defs/ContentRef" },
+            "score_profile_id": { "type": "string" },
+            "status": {
+              "type": "string",
+              "enum": ["complete", "not_evaluated", "no_screen_retained", "failed", "blocked", "unknown"]
+            },
+            "raw_source_status_spelling": { "type": ["string", "null"] },
+            "missing_reason": { "type": ["string", "null"] },
+            "precision_kind": {
+              "type": "string",
+              "enum": ["ieee754_f64_bits", "jev1_full_float", "csv_decimal_rounded", "json_display_rounded"]
+            },
+            "scalars": { "type": "object" }
+          }
+        },
+        "MembershipRecord": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_kind",
+            "event_sequence",
+            "run_uuid",
+            "attempt_id",
+            "segment_index",
+            "frame_index",
+            "frame_event_index",
+            "generation",
+            "island",
+            "slot_index",
+            "producer_birth_id",
+            "membership_stage",
+            "current_contextual_score_state"
+          ],
+          "properties": {
+            "record_kind": { "const": "membership" },
+            "event_sequence": { "type": "integer", "minimum": 0 },
+            "run_uuid": { "type": "string" },
+            "attempt_id": { "type": "string" },
+            "segment_index": { "type": "integer", "minimum": 0 },
+            "frame_index": { "type": "integer", "minimum": 0 },
+            "frame_event_index": { "type": "integer", "minimum": 0 },
+            "generation": { "type": "integer", "minimum": 0 },
+            "island": { "type": "integer", "minimum": 0 },
+            "slot_index": { "type": "integer", "minimum": 0 },
+            "producer_birth_id": { "type": "integer", "minimum": 0 },
+            "membership_stage": { "const": "after_contextual_rescoring_before_migration" },
+            "current_contextual_score_state": {
+              "type": "object",
+              "required": ["status"],
+              "properties": {
+                "status": { "enum": ["observed", "unrecorded_in_source_elite_event"] },
+                "value_f64_bits": { "type": ["string", "null"], "pattern": "^[0-9a-f]{16}$" },
+                "note": { "type": "string" }
+              }
+            }
+          }
+        },
+        "SelectionRecord": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_kind",
+            "event_sequence",
+            "decision_role",
+            "actor_authority",
+            "candidate_pool_ref",
+            "selected_ids"
+          ],
+          "properties": {
+            "record_kind": { "const": "selection" },
+            "event_sequence": { "type": "integer", "minimum": 0 },
+            "decision_role": {
+              "enum": ["creation_proposal", "parent_survivor_selection", "assessment_admission", "editorial_illustration"]
+            },
+            "actor_authority": {
+              "enum": ["algorithm", "human", "agent", "mixed", "unknown"]
+            },
+            "candidate_pool_ref": { "type": "string" },
+            "selector_revision": { "type": ["string", "null"] },
+            "tie_breaking_rule": { "type": ["string", "null"] },
+            "selected_ids": { "type": "array", "items": { "type": "string" } },
+            "intervention_reason": { "type": ["string", "null"] }
+          }
+        },
+        "MigrationRecord": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_kind",
+            "event_sequence",
+            "generation",
+            "source_island",
+            "destination_island",
+            "copied_member_ids",
+            "overwritten_destination_ids_status"
+          ],
+          "properties": {
+            "record_kind": { "const": "migration" },
+            "event_sequence": { "type": "integer", "minimum": 0 },
+            "generation": { "type": "integer", "minimum": 0 },
+            "source_island": { "type": "integer", "minimum": 0 },
+            "destination_island": { "type": "integer", "minimum": 0 },
+            "copied_member_ids": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+            "overwritten_destination_ids_status": {
+              "enum": ["observed", "not_retained_in_source"]
+            },
+            "overwritten_destination_ids": {
+              "type": ["array", "null"],
+              "items": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        "LifecycleRecord": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_kind",
+            "event_sequence",
+            "lifecycle_event",
+            "timestamp_kind",
+            "recorded_utc"
+          ],
+          "properties": {
+            "record_kind": { "const": "lifecycle" },
+            "event_sequence": { "type": "integer", "minimum": 0 },
+            "lifecycle_event": {
+              "enum": [
+                "process_started",
+                "proc_config_added",
+                "checkpoint_sealed",
+                "drain_requested",
+                "boundary_sealed",
+                "stopped_by_executor_memory_relief",
+                "process_exit_observed",
+                "storage_fault",
+                "resume_validated",
+                "fork_created"
+              ]
+            },
+            "timestamp_kind": {
+              "enum": ["verified_execution_event", "config_addition_receipt", "executor_relief_receipt", "archive_capture_time"]
+            },
+            "recorded_utc": { "type": "string" }
+          }
+        },
+        "GenerationSummaryRecord": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_kind",
+            "run_uuid",
+            "source_row_index",
+            "headerless_row_zero_retained",
+            "gen",
+            "island",
+            "evals",
+            "aesthetic_pass",
+            "legal",
+            "feasible",
+            "best_fit",
+            "best_spg",
+            "best_mass_g",
+            "best_aes",
+            "best_nov",
+            "archive_cells",
+            "min_legal_mass_g_state",
+            "mean_relief_frac_pass"
+          ],
+          "properties": {
+            "record_kind": { "const": "generation_island_summary" },
+            "run_uuid": { "type": "string" },
+            "source_row_index": { "type": "integer", "minimum": 0 },
+            "headerless_row_zero_retained": { "type": "boolean" },
+            "gen": { "type": "integer", "minimum": 0 },
+            "island": { "type": "integer", "minimum": 0 },
+            "evals": { "type": "integer", "minimum": 0 },
+            "aesthetic_pass": { "type": "integer", "minimum": 0 },
+            "legal": { "type": "integer", "minimum": 0 },
+            "feasible": { "type": "integer", "minimum": 0 },
+            "best_fit": { "type": "number" },
+            "best_spg": { "type": "number" },
+            "best_mass_g": { "type": "number" },
+            "best_aes": { "type": "number" },
+            "best_nov": { "type": "number" },
+            "archive_cells": { "type": "integer", "minimum": 0 },
+            "min_legal_mass_g_state": {
+              "type": "object",
+              "required": ["is_nan", "value"],
+              "properties": {
+                "is_nan": { "type": "boolean" },
+                "value": { "type": ["number", "null"] },
+                "raw_token": { "type": "string" }
+              }
+            },
+            "mean_relief_frac_pass": { "type": "number" }
+          }
+        }
+      }
+    },
+    "segment.v1.schema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://jarambit.local/schemas/segment.v1.schema.json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "run_uuid",
+        "attempt_id",
+        "writer_epoch",
+        "segment_sequence",
+        "previous_segment_stored_sha256",
+        "stored_path",
+        "stored_sha256",
+        "stored_bytes",
+        "logical_payload_sha256",
+        "logical_bytes",
+        "codec_identity",
+        "dictionary_sha256",
+        "event_sequence_first",
+        "event_sequence_last",
+        "record_counts_by_kind",
+        "observed_generation_min",
+        "observed_generation_max",
+        "observation_stages",
+        "scientific_identity_ref",
+        "genome_schema_ref",
+        "score_profile_refs",
+        "capture_utc",
+        "source_byte_bindings",
+        "sealing_receipt_ref"
+      ],
+      "properties": {
+        "schema_version": { "const": "jarambit.archive.segment.v1" },
+        "run_uuid": { "type": "string" },
+        "attempt_id": { "type": "string" },
+        "writer_epoch": { "type": "integer", "minimum": 0 },
+        "segment_sequence": { "type": "integer", "minimum": 0 },
+        "previous_segment_stored_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "stored_path": { "type": "string" },
+        "stored_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "stored_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8388608,
+          "description": "Target ~1 MiB compressed; hard ceiling 8 MiB (8,388,608 bytes) per segment (§12.5)."
+        },
+        "logical_payload_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "logical_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 67108864,
+          "description": "Bounded uncompressed byte ceiling to prevent decompression bombs."
+        },
+        "codec_identity": { "type": "string", "examples": ["zstd-0.13-level-9-no-dict"] },
+        "dictionary_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "event_sequence_first": { "type": "integer", "minimum": 0 },
+        "event_sequence_last": { "type": "integer", "minimum": 0 },
+        "record_counts_by_kind": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "observed_generation_min": { "type": "integer", "minimum": 0 },
+        "observed_generation_max": { "type": "integer", "minimum": 0 },
+        "observation_stages": { "type": "array", "items": { "type": "string" } },
+        "scientific_identity_ref": { "$ref": "run.v1.schema.json#/$defs/ContentRef" },
+        "genome_schema_ref": { "$ref": "run.v1.schema.json#/$defs/ContentRef" },
+        "score_profile_refs": {
+          "type": "array",
+          "items": { "$ref": "run.v1.schema.json#/$defs/ContentRef" }
+        },
+        "capture_utc": { "type": "string" },
+        "source_byte_bindings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["source_path", "source_sha256", "source_bytes", "row_range"],
+            "properties": {
+              "source_path": { "type": "string" },
+              "source_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "source_bytes": { "type": "integer", "minimum": 0 },
+              "row_range": {
+                "type": "array",
+                "items": { "type": "integer", "minimum": 0 },
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          }
+        },
+        "sealing_receipt_ref": { "type": "string" }
+      }
+    },
+    "snapshot.v1.schema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://jarambit.local/schemas/snapshot.v1.schema.json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "snapshot_uuid",
+        "run_uuid",
+        "attempt_membership",
+        "ordered_segment_refs",
+        "checkpoint_refs",
+        "counts_by_record_kind_and_status",
+        "known_gaps",
+        "finite_inventory_roots_and_predicate",
+        "explicit_exclusions",
+        "retained_source_evidence_assets_separation",
+        "execution_state",
+        "completion_scope",
+        "publication_acknowledgment_state",
+        "capture_utc",
+        "importer_revision",
+        "base_handoff_sha256",
+        "additive_erratum_sha256",
+        "custody_lineage"
+      ],
+      "properties": {
+        "schema_version": { "const": "jarambit.archive.snapshot.v1" },
+        "snapshot_uuid": { "type": "string" },
+        "run_uuid": { "type": "string" },
+        "attempt_membership": { "type": "array", "items": { "type": "string" } },
+        "ordered_segment_refs": { "type": "array", "items": { "type": "string" } },
+        "checkpoint_refs": { "type": "array", "items": { "type": "string" } },
+        "counts_by_record_kind_and_status": { "type": "object" },
+        "known_gaps": { "type": "array", "items": { "type": "object" } },
+        "finite_inventory_roots_and_predicate": { "type": "object" },
+        "explicit_exclusions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "retained_source_evidence_assets_separation": {
+          "type": "object",
+          "required": ["retained_stl_certification_render_assets_count", "routine_compact_git_payload_policy"],
+          "properties": {
+            "retained_stl_certification_render_assets_count": {
+              "type": "integer",
+              "description": "Explicitly identifies the 24 STL files (including *_fit.stl) retained as source certification/render evidence, separated from routine compact score/gene Git payloads per JR-N1 / SC-DEC-183K."
+            },
+            "retained_stl_files": { "type": "array", "items": { "type": "string" } },
+            "routine_compact_git_payload_policy": { "type": "string" }
+          }
+        },
+        "execution_state": {
+          "type": "string",
+          "enum": ["completed_horizon", "stopped_memory_relief", "interrupted_or_partial", "unknown"]
+        },
+        "completion_scope": {
+          "type": "string",
+          "enum": [
+            "finite_summary_jev1_qd_selection_only_no_all_evals",
+            "complete_lossless_population_all_evals_admitted",
+            "historical_full_reconstructable_genealogy",
+            "newer_births_and_one_based_screen_joins"
+          ]
+        },
+        "publication_acknowledgment_state": {
+          "type": "string",
+          "enum": [
+            "local_sealed",
+            "transferred_and_verified",
+            "committed_on_archive_branch",
+            "reviewed_merged_accession"
+          ],
+          "description": "local_sealed seals only the declared finite file selection; it never implies full native genome/score Git reproducibility unless completion_scope == complete_lossless_population_all_evals_admitted and JR-EI-P1-T08 chunks are verified."
+        },
+        "capture_utc": { "type": "string" },
+        "importer_revision": { "type": "string" },
+        "base_handoff_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "additive_erratum_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "custody_lineage": {
+          "type": "object",
+          "description": "Preserves all distinct V1/V2 handoff variants per JR-N2 / SC-DEC-183K §2 without overwriting earlier custody.",
+          "properties": {
+            "v1_first_observed_269650b_sha256": {
+              "const": "081f34e5659ce518ce45ef6ed731840609b221aa3c2f6b1bfbc24322fceacf98"
+            },
+            "v1_second_observed_288343b_sha256": {
+              "const": "62b67373d45f5a1174561591e6ba49508f3ec1d3bce0bed6e2adad2f04807eae"
+            },
+            "v1_current_remote_handoff_sha256": {
+              "const": "010a91d7e4865cd661d14b56c7c1bf50feccfcc8080c5e65c3040628881bf311"
+            },
+            "v2_frozen_handoff_664314b_sha256": {
+              "const": "b1f884622aaffc9929069424685ed0aaf8b950470b254141336c193f1ec2529e"
+            },
+            "v2_additive_erratum_34300b_sha256": {
+              "const": "a3cefc5ce7f841aa6e7b1edfd8503c988dfa1e4e04754b22ea7babc4bcc1ff8a"
+            },
+            "t07_staged_index_295_files_sha256": {
+              "const": "dd69650f66a0c6cf29cbfcfc80e1302529717ba7e31a9af6b0b825d13970c49b"
+            }
+          }
+        }
+      }
+    }
+  }
+}

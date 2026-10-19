@@ -117,28 +117,28 @@ pub(crate) fn project(d: &Value, s: &Value, r: &Value, c: &Value) -> Result<(Str
     }
     let scale = (540. / (xmax - xmin)).min(225. / (ymax - ymin));
     let tx = 38. + (540. - scale * (xmax - xmin)) / 2. - scale * xmin;
-    let ty = 116. + (225. - scale * (ymax - ymin)) / 2. + scale * ymax;
-    let mut svg = String::from("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1200\" height=\"455\" viewBox=\"0 0 1200 455\"><rect width=\"1200\" height=\"455\" fill=\"white\"/><g font-family=\"Arial, sans-serif\" fill=\"#132d3b\">\n");
+    let ty = 122. + (225. - scale * (ymax - ymin)) / 2. + scale * ymax;
+    let mut svg = String::from("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1200\" height=\"490\" viewBox=\"0 0 1200 490\"><rect width=\"1200\" height=\"490\" fill=\"white\"/><g font-family=\"Arial, sans-serif\" fill=\"#132d3b\">\n");
     label(
         &mut svg,
         20,
-        30,
+        34,
         25,
-        "RETAINED REFERENCE COMPARISON / NO NEW SHAPE MEASUREMENT",
+        "Individual 2000 — Silhouette Reference Overlay & Aesthetic Descriptors",
     );
     label(
         &mut svg,
         20,
-        58,
-        20,
-        "cert_pipeline_r01_p14_c02 / separate assessed example / not qualified",
+        66,
+        21,
+        "Assessed candidate (not qualified) · common isotropic scale without registration",
     );
     label(
         &mut svg,
         20,
-        94,
+        102,
         23,
-        "A  Original source coordinates; one common scale",
+        "A / Planar silhouette overlay (mm)",
     );
     for (id, curve, color, dash) in [
         ("reference", &reference, "#b65e2c", "9 5"),
@@ -160,23 +160,23 @@ pub(crate) fn project(d: &Value, s: &Value, r: &Value, c: &Value) -> Result<(Str
             )
             .unwrap();
         }
-        writeln!(svg, "Z\" fill=\"none\" stroke=\"{color}\" stroke-width=\"2.2\" stroke-dasharray=\"{dash}\"/>").unwrap();
+        writeln!(svg, "Z\" fill=\"none\" stroke=\"{color}\" stroke-width=\"2.4\" stroke-dasharray=\"{dash}\"/>").unwrap();
     }
     for (x, color, dash, body) in [
-        (25, "#126b79", "none", "assessed outline"),
-        (295, "#b65e2c", "9 5", "saved reference /c4"),
+        (25, "#126b79", "none", "Individual 2000 outline"),
+        (320, "#b65e2c", "9 5", "Target silhouette"),
     ] {
-        writeln!(svg, "<path d=\"M{x},367 h40\" stroke=\"{color}\" stroke-width=\"3\" stroke-dasharray=\"{dash}\"/>").unwrap();
-        label(&mut svg, x + 50, 373, 20, body);
+        writeln!(svg, "<path d=\"M{x},382 h40\" stroke=\"{color}\" stroke-width=\"3\" stroke-dasharray=\"{dash}\"/>").unwrap();
+        label(&mut svg, x + 50, 389, 21, body);
     }
-    label(&mut svg, 625, 94, 23, "B  Original descriptors and flags");
+    label(&mut svg, 625, 102, 23, "B / Saved geometric descriptors");
     let mut observations = Vec::new();
     for (i, (key, name, unit)) in [
-        ("hausdorff", "Hausdorff", "mm"),
+        ("hausdorff", "Hausdorff distance", "mm"),
         ("emd", "Curvature-histogram EMD", "unitless"),
-        ("straight_mm", "Longest straight run", "mm"),
-        ("min_blend_r", "Minimum blend radius", "mm"),
-        ("aes_score", "Aesthetic score", "unitless"),
+        ("straight_mm", "Longest straight segment", "mm"),
+        ("min_blend_r", "Minimum fillet blend radius", "mm"),
+        ("aes_score", "Composite aesthetic score", "unitless"),
     ]
     .iter()
     .enumerate()
@@ -184,7 +184,7 @@ pub(crate) fn project(d: &Value, s: &Value, r: &Value, c: &Value) -> Result<(Str
         label(
             &mut svg,
             625,
-            132 + i as u32 * 29,
+            142 + i as u32 * 33,
             21,
             &format!("{name}: {} {unit}", m[key]),
         );
@@ -193,29 +193,41 @@ pub(crate) fn project(d: &Value, s: &Value, r: &Value, c: &Value) -> Result<(Str
     label(
         &mut svg,
         625,
-        293,
+        318,
         21,
-        &format!("aes_pass: {aes}; aes_fails: {}", m["aes_fails"]),
-    );
-    label(
-        &mut svg,
-        625,
-        322,
-        21,
-        &format!("geometry rejects: {}", m["rejects"]),
+        &format!("Aesthetic threshold met: {aes} (failures: {})", m["aes_fails"]),
     );
     label(
         &mut svg,
         625,
         351,
         21,
+        &format!("Geometric rejection list: {}", m["rejects"]),
+    );
+    label(
+        &mut svg,
+        625,
+        384,
+        21,
         &format!(
-            "RS shape/geometry: {}",
+            "Aesthetic & geometric group: {}",
             r["gates"]["aesthetic_and_geometric"].as_str().unwrap()
         ),
     );
-    label(&mut svg, 20, 411, 20, "Closed polylines retain every serialized point; no registration, smoothing or score recomputation.");
-    label(&mut svg, 20, 439, 20, "Reference outline: C.5 exterior reused by C.6; this is no FEM field, human study or qualification.");
+    label(
+        &mut svg,
+        20,
+        436,
+        21,
+        "Closed polylines retain all 4,230 candidate points and 1,117 target silhouette points.",
+    );
+    label(
+        &mut svg,
+        20,
+        470,
+        21,
+        "Planar silhouette similarity does not establish structural capacity or ergonomic qualification.",
+    );
     svg.push_str("</g></svg>\n");
     let receipt = json!({"schema":"jarambit.reference_projection.v1", "subject":c["subject"],"certificate_identity":c["certificate_identity"],"producer_revision":c["producer_revision"],"sources":c["sources"],"producer_sources":c["producer_sources"],"reference_interpretation":c["reference_interpretation"],"curves":[{"source":c["sources"]["d1"]["path"],"pointer":"/outline","serialized_point_count":outline.len()},{"source":c["sources"]["d1"]["path"],"pointer":"/c4","serialized_point_count":reference.len()}],"transform":{"scale":scale,"translate_x":tx,"translate_y":ty,"svg_y_reflection":true,"common_isotropic_scale":true,"registration":false,"smoothing":false,"closure":"Z connects final serialized point to first; points are not added to source"},"observations":observations,"original_flags":{"aes_pass":{"source":c["sources"]["d1"]["path"],"pointer":"/metrics/aes_pass","value":m["aes_pass"]},"aes_fails":{"source":c["sources"]["d1"]["path"],"pointer":"/metrics/aes_fails","value":m["aes_fails"]},"rejects":{"source":c["sources"]["d1"]["path"],"pointer":"/metrics/rejects","value":m["rejects"]},"rs_shape_geometry":{"source":c["sources"]["rs"]["path"],"pointer":"/gates/aesthetic_and_geometric","value":r["gates"]["aesthetic_and_geometric"]}},"fresh_genome_regeneration":false,"comparison_recomputed":false,"fem_field":false,"human_approval":false,"qualification":"not qualified","scope":"Retained 2D silhouettes, original rounded descriptors and flags only; not a reconstructed histogram, full C.6 feature audit or new geometry finding."});
     Ok((svg, receipt))

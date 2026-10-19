@@ -1,0 +1,104 @@
+{
+  "schema": "jarambit.selection_receipts.v1",
+  "cover_illustration": {
+    "subject_alias": "cert_pipeline_r01_p14_c02",
+    "public_individual_id": 2000,
+    "public_label": "Individual 2000",
+    "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+    "genome_sha256": "a526b2ef73b25e51a56bcfab1f67640bcbe734955b95a6b432a99dab5cd9f654",
+    "qualification_status": "assessed_not_qualified",
+    "champion": null,
+    "qualified_count": 0,
+    "editorial_authority": "human",
+    "selection_rationale": "Selected editorially as the primary illustrated assessed individual because its complete retained bundle (STEP, STL, D1 plate fields, 3-level GCI, quadratic solid tip cross-check, and master scorecard) is committed and hash-bound in evidence/evolve_certifiable/manifest.json."
+  },
+  "decisions": [
+    {
+      "decision_id": "DEC-W282-CREATION",
+      "decision_class": "creation_proposal",
+      "authority": "algorithm",
+      "candidate_pool": "Run 1 (w282_ultrarunner, 1,984 births across generations 0..16)",
+      "evidence_selector": "evidence/rs_v2/w282_ultrarunner/search/all_evals.json[*/op, */op_version, */parents]",
+      "notes": "128 seed births at generation 0, 938 one-parent mutation births, and 918 two-parent crossover births under producer commit 82f450f7fb418e28c4b229031920dec5454435f3."
+    },
+    {
+      "decision_id": "DEC-W282-SURVIVOR-SELECTION",
+      "decision_class": "parent_survivor_selection",
+      "authority": "algorithm",
+      "candidate_pool": "Run 1 4-island x 32-slot population (2,176 membership occurrences, 192 elite reappearances, 12 migration events)",
+      "evidence_selector": "evidence/rs_v2/w282_ultrarunner/search/evidence.jevl",
+      "notes": "Programmatic island survivor retention and tournament parent selection after contextual novelty rescoring and before periodic ring migration."
+    },
+    {
+      "decision_id": "DEC-W282-STRICT-ASSESSMENT",
+      "decision_class": "assessment_admission",
+      "authority": "algorithm",
+      "candidate_pool": "Run 1 top-5 stored birth fitness candidates admitted to strict_certification",
+      "evidence_selector": "evidence/rs_v2/w282_ultrarunner/search_summary.json#/strict_certification",
+      "notes": "Top stored birth score Individual 1095 (gen 9, fit 1.15727) admitted programmatically to strict_certification where cert_pass_all=false, seq_ok=false, strict_ok=true."
+    },
+    {
+      "decision_id": "DEC-NEWER-STAGE1-STAGE2",
+      "decision_class": "assessment_admission",
+      "authority": "algorithm",
+      "candidate_pool": "3,649 newer birth events across 57 birth files in 24 run directories (2,259 Stage-1 screen rows)",
+      "evidence_selector": "docs/paper/JR_EI_P1_T05_NEWER_BIRTHS_SCREENS_JOIN_RECEIPT_20261019.json",
+      "notes": "Stage-1 screening and Stage-2 26-gate evaluation orchestrated by crates/cli/src/auto_evolve.rs."
+    },
+    {
+      "decision_id": "DEC-COVER-EDITORIAL",
+      "decision_class": "editorial_illustration",
+      "authority": "human",
+      "candidate_pool": "evidence/evolve_certifiable/manifest.json (1 assessed automatic candidate, 0 qualified, champion=null)",
+      "evidence_selector": "docs/paper/figure-inputs.v1.json",
+      "notes": "Editorial selection of Individual 2000 (cert_pipeline_r01_p14_c02) for cover and local field figures; does not confer qualification or algorithmic championship."
+    }
+  ],
+  "claims_audit": [
+    {
+      "claim_id": "CLAIM-COVER-SUBJECT",
+      "surface": "main.tex, README.md, figure captions",
+      "statement": "Individual 2000 (cert_pipeline_r01_p14_c02) is an illustrated assessed evolved example, not a qualified champion (champion=null, qualified=0).",
+      "status": "demonstrated",
+      "selection_authority": "human",
+      "named_pool": "evidence/evolve_certifiable/manifest.json",
+      "source_selector": "evidence/evolve_certifiable/manifest.json#/automatic"
+    },
+    {
+      "claim_id": "CLAIM-W282-HIGHEST-BIRTH-FIT",
+      "surface": "04-evolution.tex, 08-results.tex, README.md",
+      "statement": "Individual 1095 at generation 9 has the highest stored birth fitness (1.15727) among the 1,984 retained births in Run 1 (w282_ultrarunner), and recorded cert_pass_all=false in later strict assessment.",
+      "status": "demonstrated",
+      "selection_authority": "algorithm",
+      "named_pool": "Run 1 (evidence/rs_v2/w282_ultrarunner/search/all_evals.json, 1,984 births)",
+      "source_selector": "evidence/rs_v2/w282_ultrarunner/search_summary.json#/strict_certification"
+    },
+    {
+      "claim_id": "CLAIM-WEIGHTED-SUMMARY-74P207299",
+      "surface": "05-fitness.tex, 08-results.tex, README.md",
+      "statement": "Individual 2002 (w411c3_r02_p10_c12) records W_ULTRALIGHT_v1 = 74.207299 across the six retained 2026-10-18 ultralight reporting curves (15 generation summaries).",
+      "status": "derived-reporting",
+      "selection_authority": "algorithm",
+      "named_pool": "docs/paper/weighted-inputs.v1.json (6 reporting files, 15 generation summaries)",
+      "source_selector": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/fitness_curve.json#/best_so_far"
+    },
+    {
+      "claim_id": "CLAIM-W283-WITHDRAWN-PROBE",
+      "surface": "web/src/data/defaultDataset.ts, README.md",
+      "statement": "Individual 2001 (w283_p14_c01) is a historical controlled probe with W_CAD = -3.878704, G1 = 0.623903, and all_engineering_gates_pass = false.",
+      "status": "demonstrated",
+      "selection_authority": "unknown",
+      "named_pool": "evidence/rs_v2/w283_ultrarunner",
+      "source_selector": "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json"
+    },
+    {
+      "claim_id": "CLAIM-GEN800-TEN-RUNS",
+      "surface": "08-results.tex, 10-reproducibility.tex, README.md",
+      "statement": "Ten 4-island native crescent runs reached generation 800 (3,204 summary rows and 195,456 evaluated births each = 1,954,560 total births losslessly archived in 200 zstd segments); this does not establish fleet-wide completion or physical qualification.",
+      "status": "demonstrated",
+      "selection_authority": "algorithm",
+      "named_pool": "JR-EI-P1-T08 10 completed gen-800 crescent runs",
+      "source_selector": "docs/paper/JR_EI_P1_T08_LOSSLESS_GEN800_POPULATION_ACCESSION_RECEIPT_20261019.json"
+    }
+  ]
+}

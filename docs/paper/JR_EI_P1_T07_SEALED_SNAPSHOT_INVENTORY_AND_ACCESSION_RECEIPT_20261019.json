@@ -1,0 +1,269 @@
+{
+  "schema": "jarambit.ei.p1_t07_sealed_snapshot_inventory_and_accession_receipt.v1",
+  "task_id": "JR-EI-P1-T07",
+  "admiralty_task_id": "jarambit:JR-EI-P1-T07@r2:sha256:e156080a26c9e8fff7c9a152cb3985c48cf143e3724e526ebf4bd35cc29fa4b0",
+  "depends_on": [
+    "JR-EI-P1-T02",
+    "JR-EI-P1-T03",
+    "JR-EI-P1-T04",
+    "JR-EI-P1-T05",
+    "JR-EI-P1-T06"
+  ],
+  "decision_refs": [
+    "SC-DEC-183E",
+    "SC-DEC-183F",
+    "SC-DEC-186A"
+  ],
+  "observed_utc": "2026-10-19T17:44:30Z",
+  "steward": "2740538.captain_jarambit (window 1)",
+  "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+  "branch": "ei/admiralty-primary-20261019",
+  "status": "implemented_unvalidated",
+  "validation_posture": {
+    "ci_hold_until_p8": true,
+    "native_execution_qualified": false,
+    "runtime_mode": "manual-coordination-active",
+    "publication_acknowledgment_state": "local_sealed",
+    "deferred_p8_checks": [
+      "cargo test -p paper-artifacts",
+      "cargo test -p jarambit-evidence"
+    ]
+  },
+  "upstream_phase1_receipts": {
+    "JR_EI_P1_T01": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T01_SOURCE_PRODUCER_LINKAGE_RECEIPT_V2_20261019.json",
+      "bytes": 29958,
+      "sha256": "48be513e03cb1e797054df99d32fd5660fb4e196a6d6981aeab840b0a02d6ea9"
+    },
+    "JR_EI_P1_T02": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T02_FOUR_WORKER_ROOT_INVENTORY_RECEIPT_20261019.json",
+      "bytes": 25176,
+      "sha256": "aa1dd3d15cbd8d13052160e28f6edff2a86edc3fdf49e34b011909717cb75006"
+    },
+    "JR_EI_P1_T03_V1_preserved": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T03_ABORTED_ATTEMPTS_CAPTURE_RECEIPT_20261019.json",
+      "bytes": 15200,
+      "sha256": "6f708d94b62f2bbc02becd06bb80de758f7c5b711590704ddee47e3b8d129667"
+    },
+    "JR_EI_P1_T03_V2_active": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T03_ABORTED_ATTEMPTS_CAPTURE_RECEIPT_V2_20261019.json",
+      "bytes": 48280,
+      "sha256": "4ac44ace3bd1216472e9faf8464539d99d9e6e78791102c0ea5623ec29636479"
+    },
+    "JR_EI_P1_T04": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T04_HISTORICAL_RECONCILIATION_RECEIPT_20261019.json",
+      "bytes": 24651,
+      "sha256": "db394bfa6a0420d74b337fa2caadf3d905757ade0af5d427b7ffe0f060d97159"
+    },
+    "JR_EI_P1_T05": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T05_NEWER_BIRTHS_SCREENS_JOIN_RECEIPT_20261019.json",
+      "bytes": 73251,
+      "sha256": "e8dfc6a6a9e7d98440a0d3d4756bcb8262a43ae0fdffc1593c9a562da73d0392"
+    },
+    "JR_EI_P1_T06": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T06_NATIVE_SUMMARY_ADMISSION_RECEIPT_20261019.json",
+      "bytes": 98794,
+      "sha256": "3c7660950bfb622f6a88da991776554e06d8da1490cd971d2035877c7caacd0f"
+    }
+  },
+  "preserved_handoffs_and_errata": {
+    "v1_handoff_variant_a_preserved": {
+      "sha256": "081f34e5ce3f7ff56381c74e4786efbe2619d6d0e3c785bd307cc5844a9c9320",
+      "disposition": "PRESERVED_SUPERSEDED"
+    },
+    "v1_handoff_variant_b_preserved": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_20261019.json",
+      "bytes": 288343,
+      "sha256": "010a91d7e4865cd661d14b56c7c1bf50feccfcc8080c5e65c3040628881bf311"
+    },
+    "v2_handoff_frozen": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_20261019.json",
+      "bytes": 664314,
+      "sha256": "b1f884622aaffc9929069424685ed0aaf8b950470b254141336c193f1ec2529e"
+    },
+    "v2_additive_erratum": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_ERRATUM_20261019.json",
+      "bytes": 34300,
+      "sha256": "a3cefc5ce7f841aa6e7b1edfd8503c988dfa1e4e04754b22ea7babc4bcc1ff8a"
+    }
+  },
+  "durable_custody_and_staging_packages": {
+    "target_working_copy_is_not_sole_custody": true,
+    "v2_staging_package": {
+      "root": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives",
+      "index": {
+        "path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/index.manifest.sha256.json",
+        "bytes": 664132,
+        "sha256": "51441aa9bbae7b748489c131dd458c39d28b178363647a66150852e39fc6e29d"
+      },
+      "selected_run_packages": 223,
+      "predicate_selected_producer_files": 2408,
+      "total_bound_files_with_generated_manifests": 2864,
+      "total_bytes": 274630204,
+      "package_counts_by_worker": {
+        "xbabe1": 3,
+        "xbabe2": 136,
+        "xbabe3": 84,
+        "xbabe4": 0
+      }
+    },
+    "aborted_attempts_additive_package_v1": {
+      "root": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-aborted-attempts-v1",
+      "index": {
+        "path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-aborted-attempts-v1/index.aborted_attempts.sha256.json",
+        "bytes": 80840,
+        "sha256": "ced22d3923db2d8c36dc1a2639b300bdce95f6245a555099fbdde327423ac803"
+      },
+      "aborted_roots_count": 6,
+      "aborted_crescent_attempts": 9,
+      "aborted_crescent_with_history_live_csv": 7,
+      "aborted_crescent_missing_history_live_csv": 2,
+      "aborted_crescent_history_rows": 216,
+      "aborted_island_round_00_birth_files": 40,
+      "aborted_island_round_00_genomes": 4100,
+      "total_files": 168,
+      "total_bytes": 7730258
+    },
+    "gen800_and_xbabe4_compact_accession_package_v1": {
+      "root": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-gen800-accession-v1",
+      "index": {
+        "path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-gen800-accession-v1/index.gen800_accession.sha256.json",
+        "bytes": 119035,
+        "sha256": "dd69650f66a0c6cf29cbfcfc80e1302529717ba7e31a9af6b0b825d13970c49b"
+      },
+      "completed_gen_800_crescent_runs": 10,
+      "completed_gen_800_by_host": {
+        "xbabe1": [
+          "c01",
+          "c03",
+          "c04",
+          "c05"
+        ],
+        "xbabe3": [
+          "c01",
+          "c02",
+          "c03",
+          "c04"
+        ],
+        "xbabe4": [
+          "c01",
+          "c02"
+        ]
+      },
+      "xbabe4_stage1_island_packages": 4,
+      "total_compact_files_staged": 295,
+      "total_compact_bytes_staged": 190807895
+    }
+  },
+  "reconciled_three_view_truth_set": {
+    "view_1_historical_w282_reconstructable_experiment": {
+      "source_dir": "evidence/rs_v2/w282_ultrarunner",
+      "producer_commit": "82f450f7fb418e28c4b229031920dec5454435f3",
+      "evidence_jevl_sha256": "29d4602b1728e179606ac380df69652efea6e45c3daf67a6602cf56a6699b181",
+      "evidence_jevl_bytes": 64162,
+      "births": 1984,
+      "membership_occurrences": 2176,
+      "elite_reappearances": 192,
+      "migration_events": 12,
+      "migration_copied_id_occurrences": 24,
+      "gen_end_summaries": 17,
+      "distinct_serialized_gene_vectors": 1965
+    },
+    "view_2_repository_wide_newer_births_and_screens": {
+      "containing_run_directories": 24,
+      "birth_files": 57,
+      "distinct_birth_file_hashes": 57,
+      "birth_events_total": 3649,
+      "screen_rows_total": 2259,
+      "birth_minus_screen_missing_observations": 1390,
+      "one_based_exact_joins": 2259,
+      "zero_based_misjoins_negative_fixture_count": 2247,
+      "by_family": {
+        "evidence/evolution_waves": {
+          "birth_files": 49,
+          "births": 3194,
+          "screens": 1873,
+          "missing_screens": 1321
+        },
+        "evidence/evolution_plateau": {
+          "birth_files": 7,
+          "births": 448,
+          "screens": 379,
+          "missing_screens": 69
+        },
+        "evidence/evolve_certifiable/automatic": {
+          "birth_files": 1,
+          "births": 7,
+          "screens": 7,
+          "missing_screens": 0
+        }
+      }
+    },
+    "view_3_latest_campaign_native_and_island_archives": {
+      "v2_staged_native_histories_count": 11,
+      "v2_staged_native_history_rows": 17672,
+      "v2_longest_retained_generation": 708,
+      "completed_gen_800_native_runs_across_fleet": 10,
+      "completed_gen_800_total_history_rows": 32040,
+      "aborted_native_histories_with_rows": 7,
+      "aborted_native_histories_missing_null": 2,
+      "aborted_native_history_rows": 216
+    }
+  },
+  "explicit_exclusions_and_limitations": [
+    "Heavy per-run all_evals.csv (~377-385 MB each) and all_evals.json (~218 MB each) for the 10 completed gen-800 crescent runs remain on their producer hosts with SHA-256 and byte counts bound in index.gen800_accession.sha256.json rather than committed raw into ordinary Git.",
+    "Heavy CAD/FEM solver outputs (.step, .stl, _D1.json, _solid_mesh.npz, _surface.json) in routine search directories are excluded from compact history packages per Section 12.6.",
+    "Live xbabe2 islands i81..i88 continue advancing in Round 2 Stage-2 certification after the 14:07Z V2 snapshot; post-snapshot mutations remain live in /home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/.",
+    "Native crescent JEV1 logs omit full 129-gene vectors on Eval events and do not include a resumable production native checkpoint; only completed runs that wrote terminal all_evals.csv/all_evals.json or exported QD archive rows retain full genes."
+  ],
+  "safety_and_integrity_checks": {
+    "unsafe_paths_or_escaping_symlinks": 0,
+    "decompression_bomb_or_corrupt_jevl_frames": 0,
+    "duplicate_event_keys_in_native_histories": 0,
+    "unbound_files_in_accession_indexes": 0
+  },
+  "input_identities": {
+    "JR_EI_P1_T01": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T01_SOURCE_PRODUCER_LINKAGE_RECEIPT_V2_20261019.json",
+      "bytes": 29958,
+      "sha256": "48be513e03cb1e797054df99d32fd5660fb4e196a6d6981aeab840b0a02d6ea9"
+    },
+    "JR_EI_P1_T02": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T02_FOUR_WORKER_ROOT_INVENTORY_RECEIPT_20261019.json",
+      "bytes": 25176,
+      "sha256": "aa1dd3d15cbd8d13052160e28f6edff2a86edc3fdf49e34b011909717cb75006"
+    },
+    "JR_EI_P1_T03_V1_preserved": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T03_ABORTED_ATTEMPTS_CAPTURE_RECEIPT_20261019.json",
+      "bytes": 15200,
+      "sha256": "6f708d94b62f2bbc02becd06bb80de758f7c5b711590704ddee47e3b8d129667"
+    },
+    "JR_EI_P1_T03_V2_active": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T03_ABORTED_ATTEMPTS_CAPTURE_RECEIPT_V2_20261019.json",
+      "bytes": 48280,
+      "sha256": "4ac44ace3bd1216472e9faf8464539d99d9e6e78791102c0ea5623ec29636479"
+    },
+    "JR_EI_P1_T04": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T04_HISTORICAL_RECONCILIATION_RECEIPT_20261019.json",
+      "bytes": 24651,
+      "sha256": "db394bfa6a0420d74b337fa2caadf3d905757ade0af5d427b7ffe0f060d97159"
+    },
+    "JR_EI_P1_T05": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T05_NEWER_BIRTHS_SCREENS_JOIN_RECEIPT_20261019.json",
+      "bytes": 73251,
+      "sha256": "e8dfc6a6a9e7d98440a0d3d4756bcb8262a43ae0fdffc1593c9a562da73d0392"
+    },
+    "JR_EI_P1_T06": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T06_NATIVE_SUMMARY_ADMISSION_RECEIPT_20261019.json",
+      "bytes": 98794,
+      "sha256": "3c7660950bfb622f6a88da991776554e06d8da1490cd971d2035877c7caacd0f"
+    }
+  },
+  "source_head": "97388249afbe65a9974fd1b6b9774d0b70da2e9a",
+  "origin_main_head": "e0ec88dd2dfbd6e4287cb718661a0793b9562183",
+  "declared_scope": "Seal finite Phase-1 snapshot inventory and durable compact raw-package accession across V2 staging (223 packages, 2,864 files), aborted attempts V1 (168 files, 7,730,258 B), and gen-800 + xbabe4 compact accession V1 (10 completed gen-800 crescent runs + 4 xbabe4 Stage-1 islands, 295 compact files, 190,807,895 B).",
+  "deferred_p8_checks": [
+    "cargo test -p paper-artifacts",
+    "cargo test -p jarambit-evidence"
+  ]
+}

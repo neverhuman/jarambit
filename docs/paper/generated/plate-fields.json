@@ -88,8 +88,8 @@
       ],
       "plot_transform": {
         "formula": "svg_x=origin_x+source_x*scale; svg_y=origin_y-source_y*scale",
-        "origin_x": 112.13640075061954,
-        "origin_y": 191.74285789320385,
+        "origin_x": 92.13640075061954,
+        "origin_y": 213.74285789320385,
         "scale": 2.3874667545254433
       },
       "raw_zero_count": 75,
@@ -107,8 +107,8 @@
       "masked_cell_ids": [],
       "plot_transform": {
         "formula": "svg_x=origin_x+source_x*scale; svg_y=origin_y-source_y*scale",
-        "origin_x": 712.1364007506196,
-        "origin_y": 191.74285789320385,
+        "origin_x": 692.1364007506196,
+        "origin_y": 213.74285789320385,
         "scale": 2.3874667545254433
       },
       "raw_zero_count": 1091,
@@ -15002,8 +15002,8 @@
       ],
       "plot_transform": {
         "formula": "svg_x=origin_x+source_x*scale; svg_y=origin_y-source_y*scale",
-        "origin_x": 112.13640075061954,
-        "origin_y": 561.7428578932039,
+        "origin_x": 92.13640075061954,
+        "origin_y": 618.7428578932039,
         "scale": 2.3874667545254433
       },
       "raw_zero_count": 14875,
@@ -15021,8 +15021,8 @@
       "masked_cell_ids": [],
       "plot_transform": {
         "formula": "svg_x=origin_x+source_x*scale; svg_y=origin_y-source_y*scale",
-        "origin_x": 712.1364007506196,
-        "origin_y": 561.7428578932039,
+        "origin_x": 692.1364007506196,
+        "origin_y": 618.7428578932039,
         "scale": 2.3874667545254433
       },
       "raw_zero_count": 1822,

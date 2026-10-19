@@ -1,0 +1,155 @@
+{
+  "cohorts": {
+    "cohort_1_historical_17gen": {
+      "births": 1984,
+      "distinct_serialized_gene_vectors": 1965,
+      "duplicate_slot_keys": 9,
+      "elite_reappearances": 192,
+      "fem_evaluated_births": 1455,
+      "legal_births": 446,
+      "membership_occurrences": 2176,
+      "migration_copied_ids": 24,
+      "migration_events": 12,
+      "migration_generations": [
+        4,
+        8,
+        12
+      ],
+      "not_evaluated_births": 529,
+      "producer_commit": "82f450f7fb418e28c4b229031920dec5454435f3",
+      "public_run_ids": [
+        1
+      ],
+      "reader_label": "Cohort 1 (Historical 17-Gen Reconstruction)",
+      "source_dir": "evidence/rs_v2/w282_ultrarunner"
+    },
+    "cohort_2_newer_screening": {
+      "birth_events": 3649,
+      "birth_files": 57,
+      "join_index_base": 1,
+      "joined_screen_rows": 2259,
+      "reader_label": "Cohort 2 (Intermediate Screening Corpus)",
+      "run_directories": 24,
+      "selected_run_31_reporting_curve": {
+        "internal_run_key": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3",
+        "point_stage_provenance": "unknown",
+        "points": [
+          {
+            "best_so_far_internal_alias": "w411c3_r01_p10_c11",
+            "best_so_far_public_individual_id": 2009,
+            "best_so_far_public_label": "Individual 2009",
+            "declared_round_file": "round_00_screen.json",
+            "generation": 0,
+            "hall_of_fame_best_so_far": 74.167488,
+            "point_stage_provenance": "unknown",
+            "round_best_fitness": 74.167488,
+            "round_one_based": 1,
+            "source_pointer": "/generations/0"
+          },
+          {
+            "best_so_far_internal_alias": "w411c3_r02_p10_c12",
+            "best_so_far_public_individual_id": 2002,
+            "best_so_far_public_label": "Individual 2002",
+            "declared_round_file": "round_01_screen.json",
+            "generation": 1,
+            "hall_of_fame_best_so_far": 74.207299,
+            "point_stage_provenance": "unknown",
+            "round_best_fitness": 74.207299,
+            "round_one_based": 2,
+            "source_pointer": "/generations/1"
+          },
+          {
+            "best_so_far_internal_alias": "w411c3_r02_p10_c12",
+            "best_so_far_public_individual_id": 2002,
+            "best_so_far_public_label": "Individual 2002",
+            "declared_round_file": "round_02_screen.json",
+            "generation": 2,
+            "hall_of_fame_best_so_far": 74.207299,
+            "point_stage_provenance": "unknown",
+            "round_best_fitness": 73.608446,
+            "round_one_based": 3,
+            "source_pointer": "/generations/2"
+          }
+        ],
+        "public_label": "Run 31",
+        "public_run_id": 31,
+        "selected_internal_alias": "w411c3_r02_p10_c12",
+        "selected_public_individual_id": 2002,
+        "selected_public_label": "Individual 2002",
+        "source_relpath": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/fitness_curve.json",
+        "source_sha256": "afe065170218f0f5f20942a9e737e7e91a300244f8e6a99fd3c1d617d16f1412"
+      },
+      "unscreened_birth_events": 1390,
+      "zero_based_misjoins_rejected": 2247
+    },
+    "cohort_3_gen800_population": {
+      "aborted_attempts": 9,
+      "aborted_attempts_with_csv": 7,
+      "aborted_summary_rows": 216,
+      "archive_index_relpath": "artifacts/versioned-evolution-archives-gen800-population-v1/index.gen800_population.sha256.json",
+      "archive_index_sha256": "66c84ed4cdc943df885da4cdd72d25c0054195d9d8b9a01e1c35b6f3119c38cf",
+      "completed_runs": 10,
+      "compressed_bytes": 494843141,
+      "density_contract_relpath": "docs/paper/data/gen800_population_density_and_traces.v1.json",
+      "density_contract_sha256": "1ce4cc9292cd11f887ae5ce8f6a9d7626351b256a71ee04957890042d13263a1",
+      "fem_status_inferred": false,
+      "generations_per_run": 801,
+      "legacy_superseded_run_ids": [
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46
+      ],
+      "legal_rows_with_negative_fit": 610051,
+      "legal_rows_with_nonnegative_fit": 144185,
+      "public_run_ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "reader_label": "Cohort 3 (Ten Retained 800-Gen Runs: Run 2–Run 11)",
+      "rows_per_run": 195456,
+      "separated_stl_bytes": 62331126,
+      "separated_stl_files": 24,
+      "total_legal_rows": 754236,
+      "total_penalty_rows": 1200324,
+      "total_rows": 1954560,
+      "uncompressed_csv_bytes": 3811896749,
+      "v2_staged_summary_files": 11,
+      "v2_staged_summary_rows": 17672,
+      "zstd_segments": 200
+    }
+  },
+  "figures_sha256": {
+    "docs/paper/figures/fitness-progress.svg": "ee43532c8c63939d0bc6f7dda23b0b0fc7ecd2dd6968f561d4f36a41c3b02d60",
+    "docs/paper/figures/inheritance.svg": "790327013833120ac5e4f2703d20e464baaa98374c48de049104a6d2f16f0e42",
+    "docs/paper/figures/population-births.svg": "7bfb9f1d0f71972dedae621baf9ff7487e8ecabf30779a26e55d5c104ed9035b",
+    "docs/paper/figures/population-latest.svg": "76a886d2da5ca80499a4a17ef35d42a78b25bb269f7ab7a22bb61ce6fb2b997e",
+    "docs/paper/figures/population-membership.svg": "0d872c623ec134a91359ff20ec1bbe81df2e712801760ffbba0802e01a635d12",
+    "docs/paper/figures/population-newer.svg": "eb6d5cce390c6b1847ec60e8e3234b9be0d28965c218953d43e7638557db59fd"
+  },
+  "generator": "cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts",
+  "live_export_web_data_invoked": false,
+  "qualification_scope": {
+    "assessed_count": 1,
+    "champion": null,
+    "cohort_stage2_note": "Cohort 1 top-ranked Individual 1095 (fit=+1.157270) later failed strict assessment (cert_pass_all=false); Cohort 2 and Cohort 3 per-birth Stage-2 3D solid/plate certification records are absent from retained search logs (missing retained assessments, not proof that no computation ever occurred).",
+    "qualified_count": 0,
+    "source_relpath": "evidence/evolve_certifiable/automatic/leaderboard.json"
+  },
+  "qualified_candidate_count": 0,
+  "schema": "jarambit.shared_projection.v2"
+}

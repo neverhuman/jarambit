@@ -1,126 +1,97 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900"><rect width="1200" height="900" fill="white"/><g font-family="Arial, sans-serif" fill="#132d3b">
-<text x="20" y="30" font-size="25">RETAINED ASSESSMENT SCALARS / ORIGINAL FLAGS ARE NOT QUALIFICATION</text>
-<text x="20" y="57" font-size="19">cert_pipeline_r01_p14_c02 / one assessed example / no new solves or thresholds</text>
-<rect x="20" y="75" width="560" height="355" fill="#f7f7f2"/>
-<rect x="620" y="75" width="560" height="355" fill="#f7f7f2"/>
-<rect x="20" y="450" width="560" height="355" fill="#f7f7f2"/>
-<rect x="620" y="450" width="560" height="355" fill="#f7f7f2"/>
-<text x="35" y="105" font-size="22">A / Alternate-support model record</text>
-<text x="35" y="135" font-size="17">Model schematic, not a computed field or mode:</text>
-<rect x="45" y="151" width="470" height="30" fill="#e4ebec" stroke="#526873"/>
-<text x="58" y="172" font-size="17">Bore bearing + flange springs</text>
-<rect x="45" y="190" width="470" height="30" fill="#e4ebec" stroke="#526873"/>
-<text x="58" y="211" font-size="17">Winkler grip-pad foundation</text>
-<text x="45" y="248" font-size="18">Recorded eigenvalue: 7.0351</text>
-<text x="45" y="277" font-size="18">Supported lateral ratio: 5.2027</text>
-<text x="45" y="305" font-size="17">Certification multi-case minimum: 1.4353</text>
-<text x="35" y="342" font-size="17">Cases, regions and mesh scopes differ; no causal delta.</text>
-<text x="35" y="371" font-size="17">Eigen-operator symmetry/residual audit is open.</text>
-<text x="35" y="400" font-size="17">No retained eigenvector; no mode shape inferred.</text>
-<text x="635" y="105" font-size="22">B / Fatigue and additional response factors</text>
-<text x="635" y="157" font-size="16">Fatigue model</text>
-<path id="fat_sf" d="M845,152 L864.3435888755191,152" stroke="#007e87" stroke-width="6" data-value="0.4717948506224175" data-limit="5"/>
-<text x="1063" y="157" font-size="17">0.4718</text>
-<text x="635" y="196" font-size="16">Twist</text>
-<path id="hm_twist_sf" d="M845,191 L847.4132700859391,191" stroke="#007e87" stroke-width="6" data-value="0.05886024599851332" data-limit="5"/>
-<text x="1063" y="196" font-size="17">0.0589</text>
-<text x="635" y="235" font-size="16">In-plane (record only)</text>
-<path id="hm_tip_inplane_sf" d="M845,230 L855.2880909562463,230" stroke="#007e87" stroke-width="6" data-value="0.2509290477133247" data-limit="5"/>
-<text x="1063" y="235" font-size="17">0.2509</text>
-<text x="635" y="274" font-size="16">Spine</text>
-<path id="hm_spine_sf" d="M845,269 L854.1937785517936,269" stroke="#007e87" stroke-width="6" data-value="0.22423850126325828" data-limit="5"/>
-<text x="1063" y="274" font-size="17">0.2242</text>
-<text x="635" y="313" font-size="16">Ring-back</text>
-<path id="hm_ringback_sf" d="M845,308 L1038.7565497107087,308" stroke="#007e87" stroke-width="6" data-value="4.725769505139237" data-limit="5"/>
-<text x="1063" y="313" font-size="17">4.7258</text>
-<path d="M845,345 L845,350" stroke="#526873" stroke-width="1" fill="none"/>
-<text x="840" y="371" font-size="16">0</text>
-<path d="M886,345 L886,350" stroke="#526873" stroke-width="1" fill="none"/>
-<text x="881" y="371" font-size="16">1</text>
-<path d="M968,345 L968,350" stroke="#526873" stroke-width="1" fill="none"/>
-<text x="963" y="371" font-size="16">3</text>
-<path d="M1050,345 L1050,350" stroke="#526873" stroke-width="1" fill="none"/>
-<text x="1045" y="371" font-size="16">5</text>
-<text x="635" y="400" font-size="17">Separate saved cases; no aggregate or fatigue field.</text>
-<text x="35" y="480" font-size="22">C / Certification and strict observations</text>
-<text x="35" y="516" font-size="18">Lateral observation (N)</text>
-<text x="40" y="547" font-size="16">Certification</text>
-<path id="lat_rob_n" d="M190,542 L401.12600665783,542" stroke="#007e87" stroke-width="6" data-value="168.90080532626396" data-limit="200"/>
-<text x="452" y="547" font-size="17">168.9008</text>
-<text x="40" y="574" font-size="16">Strict</text>
-<path id="strict_lat_rob_0p0625_n" d="M190,569 L400.22325715883403,569" stroke="#a3442d" stroke-width="6" data-value="168.1786057270672" data-limit="200"/>
-<text x="452" y="574" font-size="17">168.1786</text>
-<text x="185" y="599" font-size="16">0</text>
-<text x="310" y="599" font-size="16">100</text>
-<text x="435" y="599" font-size="16">200</text>
-<text x="35" y="636" font-size="18">Local torsion safety factor</text>
-<text x="40" y="667" font-size="16">Certification</text>
-<path id="twist_tipzone_sf" d="M190,662 L320.9802177439445,662" stroke="#007e87" stroke-width="6" data-value="0.5239208709757779" data-limit="1"/>
-<text x="452" y="667" font-size="17">0.5239</text>
-<text x="40" y="694" font-size="16">Strict</text>
-<path id="twist_tipzone_sf_strict" d="M190,689 L322.1745666949291,689" stroke="#a3442d" stroke-width="6" data-value="0.5286982667797165" data-limit="1"/>
-<text x="452" y="694" font-size="17">0.5287</text>
-<text x="185" y="719" font-size="16">0</text>
-<text x="310" y="719" font-size="16">0.5</text>
-<text x="435" y="719" font-size="16">1</text>
-<text x="35" y="778" font-size="17">Retained scalars, not an error estimate or strict field.</text>
-<text x="635" y="480" font-size="22">D / Stored comparison flags (overlapping)</text>
-<text x="635" y="510" font-size="17">G16: 10/16 met under original comparisons</text>
-<rect id="flag-G16-cad_watertight_and_single_solid" x="638" y="526" width="53" height="30" fill="#007e87" data-passed="true"/>
-<text x="648" y="547" font-size="16" fill="white">01</text>
-<rect id="flag-G16-geometric_and_holder_gates" x="699" y="526" width="53" height="30" fill="#007e87" data-passed="true"/>
-<text x="709" y="547" font-size="16" fill="white">02</text>
-<rect id="flag-G16-karambit_ring_and_curved_claw" x="760" y="526" width="53" height="30" fill="#007e87" data-passed="true"/>
-<text x="770" y="547" font-size="16" fill="white">03</text>
-<rect id="flag-G16-c6_aesthetic_floor" x="821" y="526" width="53" height="30" fill="#007e87" data-passed="true"/>
-<text x="831" y="547" font-size="16" fill="white">04</text>
-<rect id="flag-G16-cert_hiker_180n" x="882" y="526" width="53" height="30" fill="#a3442d" data-passed="false"/>
-<text x="892" y="547" font-size="16" fill="white">05</text>
-<rect id="flag-G16-cert_hunter_260n" x="943" y="526" width="53" height="30" fill="#a3442d" data-passed="false"/>
-<text x="953" y="547" font-size="16" fill="white">06</text>
-<rect id="flag-G16-strict_hunter_260n" x="1004" y="526" width="53" height="30" fill="#a3442d" data-passed="false"/>
-<text x="1014" y="547" font-size="16" fill="white">07</text>
-<rect id="flag-G16-cert_ring_pull_1500n" x="1065" y="526" width="53" height="30" fill="#007e87" data-passed="true"/>
-<text x="1075" y="547" font-size="16" fill="white">08</text>
-<rect id="flag-G16-twist_body_1p82nm" x="638" y="573" width="53" height="30" fill="#007e87" data-passed="true"/>
-<text x="648" y="594" font-size="16" fill="white">09</text>
-<rect id="flag-G16-twist_tip_only_1p82nm" x="699" y="573" width="53" height="30" fill="#a3442d" data-passed="false"/>
-<text x="709" y="594" font-size="16" fill="white">10</text>
-<rect id="flag-G16-twist_tip_submodel_strict_1p82nm" x="760" y="573" width="53" height="30" fill="#a3442d" data-passed="false"/>
-<text x="770" y="594" font-size="16" fill="white">11</text>
-<rect id="flag-G16-solid_tip_3d_p2_1p82nm" x="821" y="573" width="53" height="30" fill="#a3442d" data-passed="false"/>
-<text x="831" y="594" font-size="16" fill="white">12</text>
-<rect id="flag-G16-side_a4_buckling_and_support" x="882" y="573" width="53" height="30" fill="#007e87" data-passed="true"/>
-<text x="892" y="594" font-size="16" fill="white">13</text>
-<rect id="flag-G16-failure_sequence_1p2" x="943" y="573" width="53" height="30" fill="#007e87" data-passed="true"/>
-<text x="953" y="594" font-size="16" fill="white">14</text>
-<rect id="flag-G16-plate_gci_valid_3level" x="1004" y="573" width="53" height="30" fill="#007e87" data-passed="true"/>
-<text x="1014" y="594" font-size="16" fill="white">15</text>
-<rect id="flag-G16-dolfinx_cross_check_2pct" x="1065" y="573" width="53" height="30" fill="#007e87" data-passed="true"/>
-<text x="1075" y="594" font-size="16" fill="white">16</text>
-<text x="635" y="678" font-size="17">RSV2: 2/10 met under original comparisons</text>
-<rect id="flag-RSV2-aesthetic_and_geometric" x="638" y="694" width="90" height="30" fill="#007e87" data-passed="true"/>
-<text x="648" y="715" font-size="16" fill="white">01</text>
-<rect id="flag-RSV2-floors_828_joint" x="736" y="694" width="90" height="30" fill="#a3442d" data-passed="false"/>
-<text x="746" y="715" font-size="16" fill="white">02</text>
-<rect id="flag-RSV2-twist_floor_body_and_tipsub_strict" x="834" y="694" width="90" height="30" fill="#a3442d" data-passed="false"/>
-<text x="844" y="715" font-size="16" fill="white">03</text>
-<rect id="flag-RSV2-solid_tip_sf" x="932" y="694" width="90" height="30" fill="#a3442d" data-passed="false"/>
-<text x="942" y="715" font-size="16" fill="white">04</text>
-<rect id="flag-RSV2-strict_hunter_lateral" x="1030" y="694" width="90" height="30" fill="#a3442d" data-passed="false"/>
-<text x="1040" y="715" font-size="16" fill="white">05</text>
-<rect id="flag-RSV2-seq_hard" x="638" y="741" width="90" height="30" fill="#007e87" data-passed="true"/>
-<text x="648" y="762" font-size="16" fill="white">06</text>
-<rect id="flag-RSV2-human_max" x="736" y="741" width="90" height="30" fill="#a3442d" data-passed="false"/>
-<text x="746" y="762" font-size="16" fill="white">07</text>
-<rect id="flag-RSV2-fatigue" x="834" y="741" width="90" height="30" fill="#a3442d" data-passed="false"/>
-<text x="844" y="762" font-size="16" fill="white">08</text>
-<rect id="flag-RSV2-gate_s_sharp_law" x="932" y="741" width="90" height="30" fill="#a3442d" data-passed="false"/>
-<text x="942" y="762" font-size="16" fill="white">09</text>
-<rect id="flag-RSV2-gate_s_tip_point_brep" x="1030" y="741" width="90" height="30" fill="#a3442d" data-passed="false"/>
-<text x="1040" y="762" font-size="16" fill="white">10</text>
-<text x="635" y="632" font-size="16">Teal: met / orange: unmet; numbers follow atlas IDs.</text>
-<text x="635" y="655" font-size="16">G16-15: metadata only / G16-13: audit open.</text>
-<text x="20" y="845" font-size="18">These source observations do not establish contact calibration, service life, human-safety bounds or qualification.</text>
-<text x="20" y="875" font-size="17">Original assessment and scientific code are unchanged. Missing fields and the A4 verification gap remain explicit.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1180" viewBox="0 0 1200 1180"><rect width="1200" height="1180" fill="white"/><g font-family="Arial, sans-serif" fill="#132d3b">
+<text x="20" y="36" font-size="25">Individual 2000 — Retained Structural Scalars &amp; Historical CAD Subscores</text>
+<text x="20" y="68" font-size="21">Assessed candidate (not qualified) · saved solver observations &amp; historical shortfall branch</text>
+<rect x="20" y="90" width="560" height="485" fill="#f7f7f2" stroke="#d5dfdf"/>
+<rect x="620" y="90" width="560" height="485" fill="#f7f7f2" stroke="#d5dfdf"/>
+<rect x="20" y="595" width="560" height="485" fill="#f7f7f2" stroke="#d5dfdf"/>
+<rect x="620" y="595" width="560" height="485" fill="#f7f7f2" stroke="#d5dfdf"/>
+<text x="35" y="125" font-size="23">A / Alternate-support buckling model</text>
+<text x="35" y="158" font-size="21">Support schematic (no mode shape retained):</text>
+<rect x="42" y="174" width="510" height="38" fill="#e4ebec" stroke="#526873"/>
+<text x="56" y="200" font-size="21">Radial pin bearing + flange springs</text>
+<rect x="42" y="222" width="510" height="38" fill="#e4ebec" stroke="#526873"/>
+<text x="56" y="248" font-size="21">Winkler grip-pad elastic foundation</text>
+<text x="42" y="296" font-size="22">Buckling eigenvalue: 7.0351</text>
+<text x="42" y="332" font-size="22">Supported yield-order ratio: 5.2027</text>
+<text x="42" y="368" font-size="21">Multi-case minimum ratio: 1.4353</text>
+<text x="35" y="416" font-size="21">Load cases, regions &amp; mesh scopes differ.</text>
+<text x="35" y="448" font-size="21">Generalized eigen-operator symmetry open.</text>
+<text x="35" y="480" font-size="21">No spatial eigenvector retained in archive.</text>
+<text x="635" y="125" font-size="23">B / Cyclic fatigue &amp; overload factors</text>
+<text x="635" y="189" font-size="21">Goodman fatigue</text>
+<path id="fat_sf" d="M835,182 L855.287178576764,182" stroke="#007e87" stroke-width="6" data-value="0.4717948506224175" data-limit="5"/>
+<text x="1062" y="189" font-size="21">0.4718</text>
+<text x="635" y="241" font-size="21">Torsion overload</text>
+<path id="hm_twist_sf" d="M835,234 L837.5309905779361,234" stroke="#007e87" stroke-width="6" data-value="0.05886024599851332" data-limit="5"/>
+<text x="1062" y="241" font-size="21">0.0589</text>
+<text x="635" y="293" font-size="21">In-plane (record)</text>
+<path id="hm_tip_inplane_sf" d="M835,286 L845.7899490516729,286" stroke="#007e87" stroke-width="6" data-value="0.2509290477133247" data-limit="5"/>
+<text x="1062" y="293" font-size="21">0.2509</text>
+<text x="635" y="345" font-size="21">Spine bending</text>
+<path id="hm_spine_sf" d="M835,338 L844.6422555543201,338" stroke="#007e87" stroke-width="6" data-value="0.22423850126325828" data-limit="5"/>
+<text x="1062" y="345" font-size="21">0.2242</text>
+<text x="635" y="397" font-size="21">Ring traction</text>
+<path id="hm_ringback_sf" d="M835,390 L1038.2080887209872,390" stroke="#007e87" stroke-width="6" data-value="4.725769505139237" data-limit="5"/>
+<text x="1062" y="397" font-size="21">4.7258</text>
+<path d="M835,435 L835,443" stroke="#526873" stroke-width="1.5" fill="none"/>
+<text x="827" y="470" font-size="21">0</text>
+<path d="M878,435 L878,443" stroke="#526873" stroke-width="1.5" fill="none"/>
+<text x="870" y="470" font-size="21">1</text>
+<path d="M964,435 L964,443" stroke="#526873" stroke-width="1.5" fill="none"/>
+<text x="956" y="470" font-size="21">3</text>
+<path d="M1050,435 L1050,443" stroke="#526873" stroke-width="1.5" fill="none"/>
+<text x="1042" y="470" font-size="21">5</text>
+<text x="635" y="516" font-size="21">Separate load cases; no spatial fatigue field.</text>
+<text x="35" y="630" font-size="23">C / Coarse vs. refined mesh scalars</text>
+<text x="35" y="676" font-size="22">Out-of-plane plate bending capacity (N)</text>
+<text x="40" y="717" font-size="21">Coarse mesh</text>
+<path id="lat_rob_n" d="M195,710 L330.1206442610112,710" stroke="#007e87" stroke-width="6" data-value="168.90080532626396" data-limit="300"/>
+<text x="448" y="717" font-size="21">168.9008</text>
+<text x="40" y="755" font-size="21">Refined mesh</text>
+<path id="strict_lat_rob_0p0625_n" d="M195,748 L329.54288458165377,748" stroke="#a3442d" stroke-width="6" data-value="168.1786057270672" data-limit="300"/>
+<text x="448" y="755" font-size="21">168.1786</text>
+<text x="185" y="790" font-size="21">0</text>
+<text x="305" y="790" font-size="21">150</text>
+<text x="425" y="790" font-size="21">300</text>
+<text x="35" y="841" font-size="22">Local tip torsion safety factor</text>
+<text x="40" y="882" font-size="21">Coarse mesh</text>
+<path id="twist_tipzone_sf" d="M195,875 L320.7410090341867,875" stroke="#007e87" stroke-width="6" data-value="0.5239208709757779" data-limit="1"/>
+<text x="448" y="882" font-size="21">0.5239</text>
+<text x="40" y="920" font-size="21">Refined mesh</text>
+<path id="twist_tipzone_sf_strict" d="M195,913 L321.887584027132,913" stroke="#a3442d" stroke-width="6" data-value="0.5286982667797165" data-limit="1"/>
+<text x="448" y="920" font-size="21">0.5287</text>
+<text x="185" y="955" font-size="21">0</text>
+<text x="305" y="955" font-size="21">0.5</text>
+<text x="425" y="955" font-size="21">1</text>
+<text x="35" y="1045" font-size="21">Saved scalars only; no spatial strict-mesh field.</text>
+<text x="635" y="630" font-size="23">D / Historical CAD subscores &amp; shortfalls</text>
+<text x="635" y="662" font-size="21">Branch W_CAD = -5.570408 (unpenalized = +1.4570)</text>
+<text x="635" y="709" font-size="21">Mass efficiency (w=0.70)</text>
+<path id="subscore-s_mass" d="M925,702 L988.30987,702" stroke="#007e87" stroke-width="8" data-subscore="s_mass" data-value="0.486999" data-weight="0.7"/>
+<text x="1065" y="709" font-size="21">0.4870</text>
+<text x="635" y="747" font-size="21">Ring &amp; claw form (w=0.12)</text>
+<path id="subscore-s_karambit" d="M925,740 L977.11206,740" stroke="#007e87" stroke-width="8" data-subscore="s_karambit" data-value="0.400862" data-weight="0.12"/>
+<text x="1065" y="747" font-size="21">0.4009</text>
+<text x="635" y="785" font-size="21">Refined survival knee (w=0.10)</text>
+<path id="subscore-s_survival_knee" d="M925,778 L925,778" stroke="#007e87" stroke-width="8" data-subscore="s_survival_knee" data-value="0" data-weight="0.1"/>
+<text x="1065" y="785" font-size="21">0.0000</text>
+<text x="635" y="823" font-size="21">Tip-first yield knee (w=0.05)</text>
+<path id="subscore-s_seq_knee" d="M925,816 L1054.94852,816" stroke="#007e87" stroke-width="8" data-subscore="s_seq_knee" data-value="0.999604" data-weight="0.05"/>
+<text x="1065" y="823" font-size="21">0.9996</text>
+<text x="635" y="861" font-size="21">Carry compactness (w=0.03)</text>
+<path id="subscore-s_carry_knee" d="M925,854 L1003,854" stroke="#007e87" stroke-width="8" data-subscore="s_carry_knee" data-value="0.6" data-weight="0.03"/>
+<text x="1065" y="861" font-size="21">0.6000</text>
+<text x="635" y="908" font-size="22">Non-zero constraint shortfalls (7 others = 0):</text>
+<text x="635" y="951" font-size="21">Refined tip torsion shortfall</text>
+<path id="shortfall-twist_tip_strict" d="M925,944 L986.23,944" stroke="#a3442d" stroke-width="8" data-shortfall="twist_tip_strict" data-value="0.471"/>
+<text x="1065" y="951" font-size="21">0.4710</text>
+<text x="635" y="989" font-size="21">Refined plate bending shortfall</text>
+<path id="shortfall-hunter_strict" d="M925,982 L970.9,982" stroke="#a3442d" stroke-width="8" data-shortfall="hunter_strict" data-value="0.3530769230769231"/>
+<text x="1065" y="989" font-size="21">0.3531</text>
+<text x="635" y="1027" font-size="21">Quadratic solid tip shortfall</text>
+<path id="shortfall-solid_tip_3d" d="M925,1020 L967.991,1020" stroke="#a3442d" stroke-width="8" data-shortfall="solid_tip_3d" data-value="0.3307"/>
+<text x="1065" y="1027" font-size="21">0.3307</text>
+<text x="635" y="1055" font-size="21">Failed branch: base -1.0 - pen 4.6191 + 0.1·s_mass.</text>
+<text x="20" y="1118" font-size="22">Saved structural observations do not establish contact calibration, service life, or qualification.</text>
+<text x="20" y="1154" font-size="21">All panels bind Individual 2000; 20-term weighted profile of Individual 2002 (Run 31) is in fitness.svg.</text>
 </g></svg>

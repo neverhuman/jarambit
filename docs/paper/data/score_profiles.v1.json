@@ -1,0 +1,225 @@
+{
+  "schema": "jarambit.score_profiles.v1",
+  "cross_profile_splicing_allowed": false,
+  "profiles": [
+    {
+      "profile_id": "historical_w282_native_qd_fit",
+      "title": "Historical w282 Native QD Fitness (Conditional Legality + Novelty)",
+      "producer_commit": "82f450f7fb418e28c4b229031920dec5454435f3",
+      "producer_source_path": "crates/crescent/src/qd.rs",
+      "producer_source_sha256": "fe3d057eeec74c3278b46027265406ec0ee97dd65938ae49cb003e08ee5b3a5f",
+      "native_direction": "higher_is_better",
+      "observation_stage": "post_rescore_gen_end",
+      "display_loss_transform": "negated_native_fit",
+      "display_loss_formula": "L = -f (order-preserving negation; retains unbounded legality penalty domain)",
+      "conditional_branches": "Illegal/infeasible candidates receive negative penalty scores; feasible candidates combine mechanical/mass terms with archive-contextual novelty."
+    },
+    {
+      "profile_id": "W_ULTRALIGHT_v1",
+      "title": "Ultralight Weighted Reporting Profile (0\u2013100 Scale)",
+      "producer_commit": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+      "producer_source_path": "crates/paper-artifacts/src/validation.rs",
+      "native_direction": "higher_is_better",
+      "observation_stage": "reporting_curve_summary",
+      "display_loss_transform": "bounded_100_minus_F",
+      "display_loss_formula": "L = 100 - F for bounded F in [0, 100]",
+      "priority_groups": [
+        {
+          "group": "Mass + compactness",
+          "weight_pct": 30.0,
+          "objectives": [
+            "ultralight_mass",
+            "holder_and_compactness"
+          ]
+        },
+        {
+          "group": "Form + comfort proxies",
+          "weight_pct": 25.0,
+          "objectives": [
+            "karambit_ring_and_claw",
+            "c6_aesthetic_and_ergo",
+            "bore_collar_comfort"
+          ]
+        },
+        {
+          "group": "Exported geometry",
+          "weight_pct": 15.0,
+          "objectives": [
+            "cad_watertight_brep",
+            "gate_s_sharpness",
+            "gate_s_point_profile"
+          ]
+        },
+        {
+          "group": "Response + verification",
+          "weight_pct": 30.0,
+          "objectives": [
+            "hiker_lateral_180n",
+            "hunter_lateral_260n",
+            "strict_hunter_260n",
+            "ring_pull_1500n",
+            "twist_body_1p82nm",
+            "twist_tip_plate_1p82nm",
+            "solid_tip_3d_p2_and_xcheck",
+            "side_a4_buckling",
+            "failure_sequence_1p2",
+            "plate_gci_3level",
+            "human_max_overload",
+            "goodman_fatigue_l7"
+          ]
+        }
+      ]
+    },
+    {
+      "profile_id": "W_CAD_v2",
+      "title": "Stage-2 CAD Evaluation Weighted Score (Shortfall-Penalized)",
+      "producer_commit": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+      "producer_source_path": "ops/ci/evaluate_cad_candidate.py",
+      "native_direction": "higher_is_better",
+      "observation_stage": "stage2_cad_eval",
+      "display_loss_transform": "negated_native_fit",
+      "display_loss_formula": "L = -W_CAD (retains negative shortfall penalty values without clipping)"
+    }
+  ],
+  "progress_series": [
+    {
+      "series_id": "run1_w282_gen_end_max",
+      "public_run_id": 1,
+      "profile_id": "historical_w282_native_qd_fit",
+      "observation_stage": "post_rescore_gen_end",
+      "source_path": "evidence/rs_v2/w282_ultrarunner/search/evidence.jevl",
+      "points": [
+        {
+          "generation": 0,
+          "generation_best_native": 1.1403784129304426,
+          "cumulative_best_native": 1.1403784129304426,
+          "display_loss": -1.140378
+        },
+        {
+          "generation": 1,
+          "generation_best_native": 1.1497894466579506,
+          "cumulative_best_native": 1.1497894466579506,
+          "display_loss": -1.149789
+        },
+        {
+          "generation": 2,
+          "generation_best_native": 1.1538810927569474,
+          "cumulative_best_native": 1.1538810927569474,
+          "display_loss": -1.153881
+        },
+        {
+          "generation": 3,
+          "generation_best_native": 1.1534637112027948,
+          "cumulative_best_native": 1.1538810927569474,
+          "display_loss": -1.153881
+        },
+        {
+          "generation": 4,
+          "generation_best_native": 1.1556328286994177,
+          "cumulative_best_native": 1.1556328286994177,
+          "display_loss": -1.155633
+        },
+        {
+          "generation": 5,
+          "generation_best_native": 1.1555306313389593,
+          "cumulative_best_native": 1.1556328286994177,
+          "display_loss": -1.155633
+        },
+        {
+          "generation": 6,
+          "generation_best_native": 1.1554078419267046,
+          "cumulative_best_native": 1.1556328286994177,
+          "display_loss": -1.155633
+        },
+        {
+          "generation": 7,
+          "generation_best_native": 1.1553998575820044,
+          "cumulative_best_native": 1.1556328286994177,
+          "display_loss": -1.155633
+        },
+        {
+          "generation": 8,
+          "generation_best_native": 1.1553998575820044,
+          "cumulative_best_native": 1.1556328286994177,
+          "display_loss": -1.155633
+        },
+        {
+          "generation": 9,
+          "generation_best_native": 1.157265759829317,
+          "cumulative_best_native": 1.157265759829317,
+          "display_loss": -1.157266
+        },
+        {
+          "generation": 10,
+          "generation_best_native": 1.1571528167935288,
+          "cumulative_best_native": 1.157265759829317,
+          "display_loss": -1.157266
+        },
+        {
+          "generation": 11,
+          "generation_best_native": 1.157075758271365,
+          "cumulative_best_native": 1.157265759829317,
+          "display_loss": -1.157266
+        },
+        {
+          "generation": 12,
+          "generation_best_native": 1.157075758271365,
+          "cumulative_best_native": 1.157265759829317,
+          "display_loss": -1.157266
+        },
+        {
+          "generation": 13,
+          "generation_best_native": 1.1570362049161886,
+          "cumulative_best_native": 1.157265759829317,
+          "display_loss": -1.157266
+        },
+        {
+          "generation": 14,
+          "generation_best_native": 1.1570362049161886,
+          "cumulative_best_native": 1.157265759829317,
+          "display_loss": -1.157266
+        },
+        {
+          "generation": 15,
+          "generation_best_native": 1.1570362049161886,
+          "cumulative_best_native": 1.157265759829317,
+          "display_loss": -1.157266
+        },
+        {
+          "generation": 16,
+          "generation_best_native": 1.1570362049161886,
+          "cumulative_best_native": 1.157265759829317,
+          "display_loss": -1.157266
+        }
+      ]
+    },
+    {
+      "series_id": "w411c3_ultralight_reporting",
+      "public_run_id": 31,
+      "profile_id": "W_ULTRALIGHT_v1",
+      "observation_stage": "reporting_curve_summary",
+      "source_path": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/fitness_curve.json",
+      "source_sha256": "afe065170218f0f5f20942a9e737e7e91a300244f8e6a99fd3c1d617d16f1412",
+      "points": [
+        {
+          "generation": 0,
+          "generation_best_native": 74.167488,
+          "cumulative_best_native": 74.167488,
+          "display_loss": 25.832512
+        },
+        {
+          "generation": 1,
+          "generation_best_native": 74.207299,
+          "cumulative_best_native": 74.207299,
+          "display_loss": 25.792701
+        },
+        {
+          "generation": 2,
+          "generation_best_native": 73.608446,
+          "cumulative_best_native": 74.207299,
+          "display_loss": 25.792701
+        }
+      ]
+    }
+  ]
+}

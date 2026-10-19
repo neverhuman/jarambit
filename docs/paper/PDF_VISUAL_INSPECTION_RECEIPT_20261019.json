@@ -1,0 +1,60 @@
+{
+  "schema": "jarambit.pdf_visual_inspection_receipt.v1",
+  "receipt_id": "PDF_VISUAL_INSPECTION_RECEIPT_20261019",
+  "created_at": "2026-10-19T20:30:10Z",
+  "directives": [
+    "SC-DEC-183W",
+    "SC-DEC-183X",
+    "SC-DEC-183Y"
+  ],
+  "pdf_paths": [
+    "docs/paper/main.pdf",
+    "target/ieee/paper/main.pdf"
+  ],
+  "pdf_sha256": "4ecdeccb5d612fa345dc63e3695c0ebee67c500f62372da3211d179a3e3fafc2",
+  "pdf_bytes": 8123617,
+  "page_count": 20,
+  "page_budget_range": [
+    15,
+    20
+  ],
+  "overfull_hbox_count": 0,
+  "undefined_reference_or_citation_count": 0,
+  "hero_image": {
+    "path": "docs/paper/figures/fig1_hero_blender_v2.png",
+    "sha256": "882c92d660a05872f3f482a2b0ad78df02725bd06d3d513ff867568d5081d333",
+    "bytes": 855353,
+    "raw_cycles_render_sha256": "ec4152699a31932750a88c8df875447f5d4282b8fb262f5a596c0032b0030e27",
+    "raw_cycles_render_bytes": 2081724,
+    "all_four_receipt_copies_identical": true
+  },
+  "visual_page_inspection": {
+    "rendered_dpi": 150,
+    "inspected_pngs": [
+      "/tmp/main_page_clean-01.png",
+      "/tmp/main_page_clean-02.png",
+      "/tmp/main_page_clean-06.png",
+      "/tmp/main_page_clean-15.png"
+    ],
+    "page_1_verification": "Title ('Engineered Intelligence: Making Physical Design Executable'), ~190-word abstract, full-width white-background exact-CAD Blender hero (fig1_hero_blender_v2.png), caption, Index Terms, and required rust-colored IEEE/source-status note all fit cleanly on Page 1 with no spillover.",
+    "page_2_verification": "Two-column Section I (Introduction) begins at the top of Page 2; no blank or near-blank Page 2.",
+    "source_parity_verification": {
+      "raw_native_csv_bytes": 3811896749,
+      "compressed_zst_bytes": 494843141,
+      "w283_p14_c01_public_id": "Individual 2001",
+      "w283_p14_c01_mass_g": 75.382,
+      "w283_p14_c01_mass_3d_g": 75.1992,
+      "w283_p14_c01_w_cad": -3.878704,
+      "w283_p14_c01_g1": 0.6239029999999999,
+      "w283_p14_c01_gates": "11 true / 5 false",
+      "w283_p10_c02_public_id": "Individual 2007",
+      "w283_p10_c02_mass_g": 75.642,
+      "w283_p10_c02_mass_3d_g": 75.5049,
+      "w283_p10_c02_w_cad": -3.964924,
+      "w283_p10_c02_g1": 0.6216340416666666,
+      "w283_p10_c02_gates": "11 true / 5 false",
+      "automatic_leaderboard_scope": "assessed_count=1, qualified_count=0, champion=null (distinct from 23-subject historical battery)",
+      "envelope_load_scaling": "Both lat and pry unit-response maps (MPa/N) scaled by 260 N (floors::HUNTER_LATERAL_N) in crates/crescent/src/fem.rs:389-390"
+    }
+  }
+}

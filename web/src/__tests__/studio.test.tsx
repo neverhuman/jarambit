@@ -1,6 +1,6 @@
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { App, formatGateHeadlineStatus, loadStudioBundle } from '../App';
+import { App, formatGateHeadlineStatus, isAdmittedStudioBundle, loadStudioBundle } from '../App';
 import { BatteryMatrixGrid } from '../components/BatteryMatrixGrid';
 import { buildParametricKarambitMesh, CadViewer3D } from '../components/CadViewer3D';
 import { GateScorecardPanel } from '../components/GateScorecardPanel';
@@ -237,7 +237,7 @@ END-ISO-10303-21;`;
       6,
     );
 
-    // 2. Malformed JSON / schema-invalid payload
+    // 2. Schema-invalid payload
     const resInvalid = await loadStudioBundle(async () => {
       calls += 1;
       return {
@@ -248,12 +248,63 @@ END-ISO-10303-21;`;
     expect(calls).toBe(2);
     expect(resInvalid).toBe(DEFAULT_STUDIO_BUNDLE);
 
+    // 2b. Genuine JSON parse rejection (res.json() throws SyntaxError on malformed JSON text)
+    const resSyntaxError = await loadStudioBundle(async () => {
+      calls += 1;
+      return {
+        ok: true,
+        json: async () => JSON.parse('{malformed json'),
+      };
+    });
+    expect(calls).toBe(3);
+    expect(resSyntaxError).toBe(DEFAULT_STUDIO_BUNDLE);
+
+    // 2c. Nested shape refusal: subjects: [null] or malformed nested scorecard missing numeric fields
+    const nullSubjectBundle = {
+      ...DEFAULT_STUDIO_BUNDLE,
+      subjects: [null],
+    };
+    expect(isAdmittedStudioBundle(nullSubjectBundle)).toBe(false);
+    const resNullSubject = await loadStudioBundle(async () => {
+      calls += 1;
+      return {
+        ok: true,
+        json: async () => nullSubjectBundle,
+      };
+    });
+    expect(calls).toBe(4);
+    expect(resNullSubject).toBe(DEFAULT_STUDIO_BUNDLE);
+
+    const malformedScorecardBundle = {
+      ...DEFAULT_STUDIO_BUNDLE,
+      featured_scorecards: {
+        ...DEFAULT_STUDIO_BUNDLE.featured_scorecards,
+        w283_p14_c01: {
+          subject: 'w283_p14_c01',
+          cad: {},
+          engineering_metrics: {},
+          weighted_cad_score: { all_engineering_gates_pass: false, W_CAD: 'not-a-number', gates: {} },
+          global_fitness_G1: { G: 0.5 },
+        },
+      },
+    };
+    expect(isAdmittedStudioBundle(malformedScorecardBundle)).toBe(false);
+    const resMalformedScorecard = await loadStudioBundle(async () => {
+      calls += 1;
+      return {
+        ok: true,
+        json: async () => malformedScorecardBundle,
+      };
+    });
+    expect(calls).toBe(5);
+    expect(resMalformedScorecard).toBe(DEFAULT_STUDIO_BUNDLE);
+
     // 3. Network rejection (Promise.reject)
     const resRejected = await loadStudioBundle(async () => {
       calls += 1;
       throw new Error('network offline');
     });
-    expect(calls).toBe(3);
+    expect(calls).toBe(6);
     expect(resRejected).toBe(DEFAULT_STUDIO_BUNDLE);
 
     // 4. Valid source-bound bundle
@@ -261,6 +312,7 @@ END-ISO-10303-21;`;
       ...DEFAULT_STUDIO_BUNDLE,
       source_commit: 'e0ec88dd2dfbd6e4287cb718661a0793b9562183',
     };
+    expect(isAdmittedStudioBundle(validBundle)).toBe(true);
     const resValid = await loadStudioBundle(async () => {
       calls += 1;
       return {
@@ -268,7 +320,7 @@ END-ISO-10303-21;`;
         json: async () => validBundle,
       };
     });
-    expect(calls).toBe(4);
+    expect(calls).toBe(7);
     expect(resValid).toBe(validBundle);
     expect(resValid.source_commit).toBe('e0ec88dd2dfbd6e4287cb718661a0793b9562183');
 

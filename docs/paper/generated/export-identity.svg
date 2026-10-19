@@ -1,40 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="440" viewBox="0 0 1200 440"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#526873"/></marker></defs><rect width="1200" height="440" fill="white"/><g font-family="Arial, sans-serif" fill="#132d3b">
-<text x="20" y="30" font-size="25">RETAINED EXPORT IDENTITY AND TOPOLOGY RECORDS</text>
-<text x="20" y="58" font-size="19">cert_pipeline_r01_p14_c02 / assessed example / not qualified</text>
-<rect x="20" y="78" width="560" height="307" fill="#f7f7f2"/>
-<rect x="620" y="78" width="560" height="307" fill="#f7f7f2"/>
-<text x="35" y="105" font-size="22">A / Saved content associations</text>
-<rect x="42" y="120" width="230" height="64" rx="4" fill="#e4ebec" stroke="#526873"/>
-<text x="54" y="145" font-size="20">Genome CSV</text>
-<text x="54" y="169" font-size="18">SHA-256: a526b2ef73b2...</text>
-<rect x="310" y="120" width="230" height="64" rx="4" fill="#e4ebec" stroke="#526873"/>
-<text x="322" y="145" font-size="20">Assessment JSON</text>
-<text x="322" y="169" font-size="18">SHA-256: 2f696866a6a5...</text>
-<rect x="42" y="255" width="230" height="64" rx="4" fill="#e4ebec" stroke="#526873"/>
-<text x="54" y="280" font-size="20">STEP export</text>
-<text x="54" y="304" font-size="18">SHA-256: 1a28399c1c6c...</text>
-<rect x="310" y="255" width="230" height="64" rx="4" fill="#e4ebec" stroke="#526873"/>
-<text x="322" y="280" font-size="20">STL export</text>
-<text x="322" y="304" font-size="18">SHA-256: 8e4987c422b2...</text>
-<path d="M272,151 L310,151" stroke="#526873" stroke-width="2" stroke-dasharray="5 4" fill="none" marker-end="url(#arrow)"/>
-<path d="M425,184 L425,215 L157,215 L157,255" stroke="#526873" stroke-width="2" stroke-dasharray="5 4" fill="none" marker-end="url(#arrow)"/>
-<path d="M425,215 L425,255" stroke="#526873" stroke-width="2" stroke-dasharray="5 4" fill="none" marker-end="url(#arrow)"/>
-<text x="42" y="344" font-size="18">Blender import: 44994 vertices / 90000 triangles</text>
-<text x="42" y="372" font-size="17">Dashed links: recorded associations, not fresh regeneration</text>
-<text x="635" y="105" font-size="22">B / Original producer observations</text>
-<text x="638" y="143" font-size="19">STEP text: solid / shell tokens</text>
-<text x="1035" y="143" font-size="20">1 / 1</text>
-<text x="638" y="178" font-size="19">STEP text: face tokens</text>
-<text x="1035" y="178" font-size="20">55698</text>
-<text x="638" y="213" font-size="19">Exporter: boundary / nonmanifold</text>
-<text x="1035" y="213" font-size="20">0 / 0</text>
-<text x="638" y="248" font-size="19">Exporter: directed-edge max repeat</text>
-<text x="1035" y="248" font-size="20">1</text>
-<text x="638" y="283" font-size="19">BRep reader: solids / valid</text>
-<text x="1035" y="283" font-size="20">1 / true</text>
-<text x="638" y="318" font-size="19">Original census / composite flags</text>
-<text x="1035" y="318" font-size="20">true / true</text>
-<text x="638" y="363" font-size="17">Reported units: mm; no new CAD validation performed</text>
-<text x="20" y="410" font-size="18">STEP token counts, exporter census and Blender mesh counts have different meanings.</text>
-<text x="20" y="434" font-size="18">Historical checks are preserved; no FEM field, manufacturing evidence or current qualification is inferred.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#526873"/></marker></defs><rect width="1200" height="520" fill="white"/><g font-family="Arial, sans-serif" fill="#132d3b">
+<text x="20" y="34" font-size="25">Individual 2000 — Export Identity &amp; B-Rep / Mesh Topology Records</text>
+<text x="20" y="66" font-size="21">Assessed candidate (not qualified) · recorded associations, not fresh regeneration</text>
+<rect x="20" y="86" width="560" height="355" fill="#f7f7f2" stroke="#d5dfdf"/>
+<rect x="620" y="86" width="560" height="355" fill="#f7f7f2" stroke="#d5dfdf"/>
+<text x="35" y="118" font-size="23">A / Saved content associations</text>
+<rect x="38" y="136" width="244" height="74" rx="4" fill="#e4ebec" stroke="#526873"/>
+<text x="50" y="166" font-size="22">Genome CSV</text>
+<text x="50" y="194" font-size="21">SHA: a526b2ef73...</text>
+<rect x="316" y="136" width="244" height="74" rx="4" fill="#e4ebec" stroke="#526873"/>
+<text x="328" y="166" font-size="22">Assessment JSON</text>
+<text x="328" y="194" font-size="21">SHA: 2f696866a6...</text>
+<rect x="38" y="276" width="244" height="74" rx="4" fill="#e4ebec" stroke="#526873"/>
+<text x="50" y="306" font-size="22">STEP export</text>
+<text x="50" y="334" font-size="21">SHA: 1a28399c1c...</text>
+<rect x="316" y="276" width="244" height="74" rx="4" fill="#e4ebec" stroke="#526873"/>
+<text x="328" y="306" font-size="22">STL export</text>
+<text x="328" y="334" font-size="21">SHA: 8e4987c422...</text>
+<path d="M282,173 L316,173" stroke="#526873" stroke-width="2.2" stroke-dasharray="5 4" fill="none" marker-end="url(#arrow)"/>
+<path d="M438,210 L438,242 L160,242 L160,276" stroke="#526873" stroke-width="2.2" stroke-dasharray="5 4" fill="none" marker-end="url(#arrow)"/>
+<path d="M438,242 L438,276" stroke="#526873" stroke-width="2.2" stroke-dasharray="5 4" fill="none" marker-end="url(#arrow)"/>
+<text x="38" y="385" font-size="21">Blender mesh: 44994 vertices / 90000 triangles</text>
+<text x="38" y="420" font-size="21">Units: mm · exact content hashes verified</text>
+<text x="635" y="118" font-size="23">B / Topology &amp; manifold census</text>
+<text x="638" y="160" font-size="21">STEP solid / shell tokens</text>
+<text x="1020" y="160" font-size="21">1 / 1</text>
+<text x="638" y="200" font-size="21">STEP face tokens</text>
+<text x="1020" y="200" font-size="21">55698</text>
+<text x="638" y="240" font-size="21">Boundary / nonmanifold edges</text>
+<text x="1020" y="240" font-size="21">0 / 0</text>
+<text x="638" y="280" font-size="21">Directed-edge max repeat</text>
+<text x="1020" y="280" font-size="21">1</text>
+<text x="638" y="320" font-size="21">B-Rep reader solids / valid</text>
+<text x="1020" y="320" font-size="21">1 / true</text>
+<text x="638" y="360" font-size="21">Watertight / composite valid</text>
+<text x="1020" y="360" font-size="21">true / true</text>
+<text x="638" y="412" font-size="21">STEP tokens != STL triangles; no new CAD run</text>
+<text x="20" y="472" font-size="21">STEP token counts, exporter edge census, and Blender triangle counts measure distinct representations.</text>
+<text x="20" y="504" font-size="21">Topological validity is necessary for evaluation but does not establish structural qualification.</text>
 </g></svg>

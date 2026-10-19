@@ -228,6 +228,120 @@ pub(crate) fn validate_weighted_report(curve: &Value, catalog: &[Value]) -> Resu
     Ok(())
 }
 
+/// Reversible display-loss transform for a declared score profile (`JR-EI-P2-T06`).
+/// Never clips out-of-range native scores or mixes distinct profile stages.
+pub fn compute_display_loss(native_score: f64, transform: &str) -> Result<f64> {
+    if !native_score.is_finite() {
+        return Err("score_profiles: nonfinite native score".into());
+    }
+    match transform {
+        "bounded_100_minus_F" => {
+            if !(0.0..=100.0).contains(&native_score) {
+                return Err("score_profiles: bounded_100_minus_F requires F in [0, 100]".into());
+            }
+            Ok(100.0 - native_score)
+        }
+        "negated_native_fit" => Ok(-native_score),
+        _ => Err(format!("score_profiles: unsupported display_loss transform '{transform}'").into()),
+    }
+}
+
+/// Validate `docs/paper/data/score_profiles.v1.json` (`JR-EI-P2-T06`).
+pub fn validate_score_profiles(doc: &Value) -> Result<Value> {
+    if doc["schema"].as_str() != Some("jarambit.score_profiles.v1") {
+        return Err("score_profiles: unsupported schema".into());
+    }
+    if doc["cross_profile_splicing_allowed"].as_bool() != Some(false) {
+        return Err("score_profiles: cross_profile_splicing_allowed must be false".into());
+    }
+    let profiles = doc["profiles"]
+        .as_array()
+        .ok_or("score_profiles: missing profiles array")?;
+    if profiles.is_empty() {
+        return Err("score_profiles: profiles array cannot be empty".into());
+    }
+    let mut seen_ids = BTreeSet::new();
+    for p in profiles {
+        let pid = text(&p["profile_id"])?;
+        if !seen_ids.insert(pid.to_string()) {
+            return Err(format!("score_profiles: duplicate profile_id {pid}").into());
+        }
+        text(&p["native_direction"])?;
+        text(&p["observation_stage"])?;
+        let transform = text(&p["display_loss_transform"])?;
+        if !["bounded_100_minus_F", "negated_native_fit"].contains(&transform) {
+            return Err(format!("score_profiles: invalid transform {transform}").into());
+        }
+        if pid == "W_ULTRALIGHT_v1" {
+            let groups = p["priority_groups"]
+                .as_array()
+                .ok_or("score_profiles: missing W_ULTRALIGHT_v1 priority_groups")?;
+            if groups.len() != REPORT_GROUPS.len() {
+                return Err("score_profiles: W_ULTRALIGHT_v1 group count mismatch".into());
+            }
+            let mut total_w = 0.0;
+            for (g, (expected_name, _, expected_w)) in groups.iter().zip(REPORT_GROUPS.iter()) {
+                if text(&g["group"])? != *expected_name {
+                    return Err("score_profiles: group name mismatch".into());
+                }
+                let w = number(&g["weight_pct"])?;
+                if (w - *expected_w).abs() > 1e-9 {
+                    return Err("score_profiles: group weight mismatch".into());
+                }
+                total_w += w;
+            }
+            if (total_w - 100.0).abs() > 1e-9 {
+                return Err("score_profiles: priority weights must sum to 100".into());
+            }
+        }
+    }
+    let series = doc["progress_series"]
+        .as_array()
+        .ok_or("score_profiles: missing progress_series")?;
+    if series.is_empty() {
+        return Err("score_profiles: progress_series cannot be empty".into());
+    }
+    for s in series {
+        let pid = text(&s["profile_id"])?;
+        if !seen_ids.contains(pid) {
+            return Err(format!("score_profiles: unknown series profile_id {pid}").into());
+        }
+        let p_def = profiles
+            .iter()
+            .find(|p| p["profile_id"].as_str() == Some(pid))
+            .unwrap();
+        let transform = text(&p_def["display_loss_transform"])?;
+        if s["observation_stage"] != p_def["observation_stage"] {
+            return Err("score_profiles: progress_series stage differs from profile stage".into());
+        }
+        let pts = s["points"]
+            .as_array()
+            .ok_or("score_profiles: missing series points")?;
+        if pts.is_empty() {
+            return Err("score_profiles: empty series points".into());
+        }
+        let mut best_so_far = f64::NEG_INFINITY;
+        for pt in pts {
+            let gen_max = number(&pt["generation_best_native"])?;
+            let cum_best = number(&pt["cumulative_best_native"])?;
+            let loss = number(&pt["display_loss"])?;
+            best_so_far = best_so_far.max(gen_max);
+            if (cum_best - best_so_far).abs() > SCORE_TOLERANCE {
+                return Err("score_profiles: cumulative_best_native recurrence mismatch".into());
+            }
+            let expected_loss = compute_display_loss(cum_best, transform)?;
+            if (loss - expected_loss).abs() > SCORE_TOLERANCE {
+                return Err("score_profiles: reversible display_loss mismatch".into());
+            }
+        }
+    }
+    Ok(serde_json::json!({
+        "schema": "jarambit.score_profiles_validation.v1",
+        "profile_count": seen_ids.len(),
+        "series_count": series.len(),
+    }))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -348,5 +462,36 @@ mod tests {
         validate_weighted_report(&curve, &catalog).unwrap();
         curve["best_stage2_26_gate_design"] = Value::Null;
         validate_weighted_report(&curve, &catalog).unwrap();
+    }
+
+    #[test]
+    fn score_profiles_enforce_reversible_display_loss_and_refuse_stage_splicing() {
+        let mut doc = json!({
+            "schema": "jarambit.score_profiles.v1",
+            "cross_profile_splicing_allowed": false,
+            "profiles": [
+                {
+                    "profile_id": "historical_w282_native_qd_fit",
+                    "native_direction": "higher_is_better",
+                    "observation_stage": "post_rescore_gen_end",
+                    "display_loss_transform": "negated_native_fit"
+                }
+            ],
+            "progress_series": [
+                {
+                    "series_id": "w282_gen_end",
+                    "profile_id": "historical_w282_native_qd_fit",
+                    "observation_stage": "post_rescore_gen_end",
+                    "points": [
+                        { "generation": 0, "generation_best_native": 1.14, "cumulative_best_native": 1.14, "display_loss": -1.14 },
+                        { "generation": 1, "generation_best_native": 1.15, "cumulative_best_native": 1.15, "display_loss": -1.15 }
+                    ]
+                }
+            ]
+        });
+        assert!(validate_score_profiles(&doc).is_ok());
+        doc["progress_series"][0]["observation_stage"] = json!("stage1_screen");
+        assert!(validate_score_profiles(&doc).is_err());
+        assert!(compute_display_loss(-3.8, "bounded_100_minus_F").is_err());
     }
 }

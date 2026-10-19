@@ -1,0 +1,555 @@
+{
+  "schema": "jarambit.ei.p1_t02.four_worker_root_inventory_receipt.v1",
+  "task_id": "JR-EI-P1-T02",
+  "decision_ref": "SC-DEC-183C",
+  "observed_utc": "2026-10-19T16:04:40Z",
+  "steward": {
+    "screen_session": "2740538.captain_jarambit",
+    "window": 1,
+    "agent_model": "Gemini 4 Argon"
+  },
+  "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+  "source_head": "97388249afbe65a9974fd1b6b9774d0b70da2e9a",
+  "origin_main_head": "d82ca29e69ebaf11014d0df93d382f982e71dee3",
+  "status": "implemented_unvalidated",
+  "declared_scope": "Direct read-only four-worker root and file membership inventory across xbabe1, xbabe2, xbabe3, and xbabe4 (JR-EI-P1-T02, plan sections 4.3 and 13.6). Records exact per-host OS/architecture, home directory paths, repository worktrees, release binary SHA-256 digests, active/completed/aborted evolution run roots, and explicit V2 archive inclusion vs exclusion/unavailability states. Explicitly establishes that frozen V2 (223 packages) included 0 packages from xbabe4 and 0 evo_full_20261018/xbabe1/crescent packages, and that post-snapshot completions occurred on xbabe1, xbabe3, and xbabe4.",
+  "input_identities": [
+    {
+      "role": "p1_t01_producer_linkage_receipt_v2",
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/JR_EI_P1_T01_SOURCE_PRODUCER_LINKAGE_RECEIPT_V2_20261019.json",
+      "bytes": 29958,
+      "sha256": "48be513e03cb1e797054df99d32fd5660fb4e196a6d6981aeab840b0a02d6ea9"
+    },
+    {
+      "role": "frozen_v2_archive_handoff",
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_20261019.json",
+      "bytes": 664314,
+      "sha256": "b1f884622aaffc9929069424685ed0aaf8b950470b254141336c193f1ec2529e"
+    },
+    {
+      "role": "additive_v2_metadata_erratum",
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_ERRATUM_20261019.json",
+      "bytes": 34300,
+      "sha256": "a3cefc5ce7f841aa6e7b1edfd8503c988dfa1e4e04754b22ea7babc4bcc1ff8a"
+    }
+  ],
+  "deferred_p8_checks": [
+    "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2",
+    "rtk cargo test --release --locked -p jarambit-crescent -- --test-threads=2",
+    "Final P8 exact-head validation against .github/workflows/d1-gates.yml, .github/workflows/version-check.yml, docs/paper/README.md, and web validation scripts"
+  ],
+  "four_worker_completeness_truth": {
+    "v2_archive_includes_all_four_workers": false,
+    "v2_archive_package_counts_by_worker": {
+      "xbabe1": 3,
+      "xbabe2": 136,
+      "xbabe3": 84,
+      "xbabe4": 0,
+      "total": 223
+    },
+    "all_four_workers_ready_for_identical_stage2_execution": false,
+    "fourth_worker_xbabe4_root_cause_and_status": "xbabe4 (Mac-Studio.local, Darwin arm64) uses home directory /Users/agent rather than /home/ubuntu. All /home/ubuntu/* paths are absent on xbabe4. Direct read-only inspection of /Users/agent/jarambit_runs/evo_full_20261018/xbabe4 verified 2 completed 800-generation crescent runs (c01, c02 with full all_evals.csv/all_evals.json), 4 Stage-1-only auto-evolve islands (i01..i04 with 5 rounds of births/screen JSONs but 0 Stage-2 3D FEM scorecards), and 2 aborted crescent directories (_aborted_xbabe4_gens60_0047Z, _aborted_xbabe4_noseeds_0046Z). None of xbabe4's runs were staged into the frozen V2 223-package handoff.",
+    "unarchived_completed_crescent_all_evals_discovered": "Direct inspection across all 4 workers revealed that 10 native crescent runs reached generation 800 (3,204 history_live.csv rows) and wrote full all_evals.csv (~377-385 MB each) and all_evals.json (~218 MB each): xbabe1 c01/c03/c04/c05 (4 runs, unarchived in V2), xbabe3 c01/c02/c03/c04 (4 runs, completed after the 14:07Z V2 snapshot which captured their earlier in-progress history_live.csv), and xbabe4 c01/c02 (2 runs, unarchived in V2)."
+  },
+  "workers": {
+    "xbabe1": {
+      "hostname": "xbabe1",
+      "os_sysname": "Linux",
+      "arch": "x86_64",
+      "home_dir": "/home/ubuntu",
+      "ssh_reachable": true,
+      "engine_repositories_and_binaries": {
+        "primary_repo": {
+          "path": "/home/ubuntu/jarambit",
+          "exists": true,
+          "release_binary_path": "/home/ubuntu/jarambit/target/release/jarambit",
+          "release_binary_exists": true,
+          "release_binary_bytes": 10202264,
+          "release_binary_sha256": "76e333ee0753f412006553dfe9dd9f90c424c27b136c2f7f8f015869d0ecb24a"
+        },
+        "campaign_repo": {
+          "path": "/home/ubuntu/jr_evo_full_20261018/repo",
+          "exists": true,
+          "git_head": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "dirty_files": [
+            "M crates/cli/src/auto_evolve.rs"
+          ],
+          "release_binary_path": "/home/ubuntu/jr_evo_full_20261018/repo/target/release/jarambit",
+          "release_binary_exists": true,
+          "release_binary_bytes": 10234792,
+          "release_binary_sha256": "61fb6d625df9dc4d3caec0c08ea91b1b19791a45420d5e5af5007af0e7dee37b"
+        }
+      },
+      "roots": {
+        "/home/ubuntu/jarambit/out": {
+          "exists": true,
+          "entries": [
+            "w501_ul",
+            "w501_ul.log",
+            "w501_xb1",
+            "w501_xb1.log",
+            "w502_rescore_and_w503.log",
+            "w502_rescore_tail.log",
+            "w502_xb1",
+            "w502_xb1.log",
+            "w503_xb1.log"
+          ],
+          "v2_archive_disposition": "INCLUDED_IN_V2 (3 run directories: w501_ul, w501_xb1, w502_xb1 under W_ULTRALIGHT_v1; root-level .log files excluded)"
+        },
+        "/home/ubuntu/jarambit/evidence/rs_v2": {
+          "exists": true,
+          "entry_count": 19,
+          "v2_archive_disposition": "NOT_COLLECTED_FROM_XBABE1 (tracked git copy; collected from xbabe2)"
+        },
+        "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe1": {
+          "exists": true,
+          "manifest_json": {
+            "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe1/MANIFEST.json",
+            "bytes": 2811,
+            "sha256": "83e2f30a96a3f7a8ab2775b4cc03d181e78f4b42ea422f54047c9ee7ff4cfd8d"
+          },
+          "islands_root": {
+            "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe1/islands",
+            "exists": false,
+            "island_count": 0
+          },
+          "crescent_root": {
+            "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe1/crescent",
+            "exists": true,
+            "v2_archive_disposition": "EXCLUDED_NOT_IN_V2_223_PACKAGES",
+            "runs": {
+              "c01": {
+                "file_count": 11,
+                "history_live_rows": 3204,
+                "history_live_sha256": "c5e32f790cc1b2d0628e5e0b29e48fd5725e9fb8f456177b70bf9dd94e28464c",
+                "qd_archive_sha256": "403b5f570e12c084230eea95440758df4058e34b578bb87f4040cbc17067a469",
+                "max_generation": 800,
+                "best_fit_col6": 1.1327,
+                "has_all_evals_csv": true,
+                "all_evals_csv_bytes": 383105475,
+                "has_all_evals_json": true,
+                "all_evals_json_bytes": 217937003,
+                "has_proc_config": false,
+                "has_stopped_memory": false
+              },
+              "c02": {
+                "file_count": 6,
+                "history_live_rows": 44,
+                "history_live_sha256": "343f1e89a8f2b3846cc5db540a9799d12c610e531c72303528e61fc19a749175",
+                "qd_archive_sha256": "5ac112826283d3ffd039dfe8bb90c9cf280a5614b63fef4f96cbf5d5eab158e7",
+                "max_generation": 10,
+                "best_fit_col6": 1.0822,
+                "has_all_evals_csv": false,
+                "has_all_evals_json": false,
+                "has_proc_config": false,
+                "has_stopped_memory": true
+              },
+              "c03": {
+                "file_count": 12,
+                "history_live_rows": 3204,
+                "history_live_sha256": "4e3f330d9a8f5d35b7f4deafc3c53eb6a517ea500d88ef48e440ea056c1ed690",
+                "qd_archive_sha256": "d8c2a439f57935823ed179043f22577d3fbc9cbb0079ab654859c1411fa2d3c0",
+                "max_generation": 800,
+                "best_fit_col6": 1.1089,
+                "has_all_evals_csv": true,
+                "all_evals_csv_bytes": 385322474,
+                "has_all_evals_json": true,
+                "all_evals_json_bytes": 218073475,
+                "has_proc_config": true,
+                "has_stopped_memory": false
+              },
+              "c04": {
+                "file_count": 36,
+                "history_live_rows": 3204,
+                "history_live_sha256": "a45128c513d4205cbccccfad6bb36410274864da6c5525c8c705a76329d0f7cf",
+                "qd_archive_sha256": "3e07c26d80608890a78b34f6fa084594fa7b43c2b1af39b11197fbb8c96bd282",
+                "max_generation": 800,
+                "best_fit_col6": 1.138,
+                "has_all_evals_csv": true,
+                "all_evals_csv_bytes": 377177096,
+                "has_all_evals_json": true,
+                "all_evals_json_bytes": 217680693,
+                "exported_fit_genomes_count": 6,
+                "has_proc_config": true,
+                "has_stopped_memory": false
+              },
+              "c05": {
+                "file_count": 12,
+                "history_live_rows": 3204,
+                "history_live_sha256": "9975db4d6b9fd6232df175ad79e3687569f55d750499a583a07bb5933ea69885",
+                "qd_archive_sha256": "9687e935a1df7ef66706b3144db12adb33aeb418a93e716b4028bd66c6f1331b",
+                "max_generation": 800,
+                "best_fit_col6": 1.144,
+                "has_all_evals_csv": true,
+                "all_evals_csv_bytes": 383117362,
+                "has_all_evals_json": true,
+                "all_evals_json_bytes": 217698956,
+                "has_proc_config": true,
+                "has_stopped_memory": false
+              }
+            }
+          }
+        },
+        "/home/ubuntu/jarambit_runs/evo_full_20261018/_aborted_xbabe1_gens60_0047Z": {
+          "exists": true,
+          "subdirectories": [
+            "crescent/c01",
+            "crescent/c02"
+          ],
+          "v2_archive_disposition": "EXCLUDED_ABORTED_ATTEMPT (scheduled for JR-EI-P1-T03 capture)"
+        },
+        "/home/ubuntu/jarambit_evo3/out": {
+          "exists": false
+        },
+        "/home/ubuntu/jarambit_evo3c/out": {
+          "exists": false
+        },
+        "/home/ubuntu/jarambit_evo3u/out": {
+          "exists": false
+        }
+      }
+    },
+    "xbabe2": {
+      "hostname": "xbabe2",
+      "os_sysname": "Linux",
+      "arch": "x86_64",
+      "home_dir": "/home/ubuntu",
+      "ssh_reachable": true,
+      "engine_repositories_and_binaries": {
+        "primary_repo": {
+          "path": "/home/ubuntu/jarambit",
+          "exists": true,
+          "release_binary_exists": false
+        },
+        "campaign_repo": {
+          "path": "/home/ubuntu/jr_evo_full_20261018/repo",
+          "exists": true,
+          "git_head": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "dirty_files": [
+            "M crates/cli/src/auto_evolve.rs"
+          ],
+          "release_binary_path": "/home/ubuntu/jr_evo_full_20261018/repo/target/release/jarambit",
+          "release_binary_exists": true,
+          "release_binary_bytes": 10230088,
+          "release_binary_sha256": "32dbb7df90612c000a462c427f27b5037d2c4c4371959c242ba54e24299db3f9"
+        }
+      },
+      "roots": {
+        "/home/ubuntu/jarambit/evidence/rs_v2": {
+          "exists": true,
+          "entry_count": 20,
+          "v2_archive_disposition": "INCLUDED_IN_V2 (1 historical_native_fit run w282_ultrarunner + 11 RS-karambit-v2 runs w272_xbabe3..w281_ultrarunner, w283_ultrarunner)"
+        },
+        "/home/ubuntu/jarambit/evidence/evolve_certifiable": {
+          "exists": true,
+          "v2_archive_disposition": "INCLUDED_IN_V2 (1 W_CAD_v2 run)"
+        },
+        "/home/ubuntu/jarambit/out": {
+          "exists": true,
+          "v2_archive_disposition": "INCLUDED_IN_V2 (33 W_CAD_v2 runs w284..w316 with fallback to evidence/evolution_waves/2026-10-17/xbabe2/out + 9 W_ULTRALIGHT_v1 runs w317..w325)"
+        },
+        "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2": {
+          "exists": true,
+          "manifest_json": {
+            "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/MANIFEST.json",
+            "bytes": 67726,
+            "sha256": "57a4f38eff1962ff4660749e25441ce6419d7e13c546dba4258e8763018fed5e"
+          },
+          "crescent_root": {
+            "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/crescent",
+            "exists": true,
+            "run_ids": [
+              "c01",
+              "c02",
+              "c03",
+              "c04",
+              "c05",
+              "c06"
+            ],
+            "history_live_rows_by_run": {
+              "c01": 1900,
+              "c02": 64,
+              "c03": 72,
+              "c04": 16,
+              "c05": 2132,
+              "c06": 908
+            },
+            "has_any_completed_all_evals_csv": false,
+            "v2_archive_disposition": "INCLUDED_IN_V2 (6 crescent_native_qd_fit runs; byte-identical to V2 staging)"
+          },
+          "islands_root": {
+            "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands",
+            "exists": true,
+            "island_dir_count": 86,
+            "island_range": "i01..i78, i81..i88 (i79..i80 never created)",
+            "with_fitness_curve_json_at_1603z": 39,
+            "v2_archive_disposition": "INCLUDED_IN_V2 (86 W_ULTRALIGHT_v1 runs captured at 14:07Z; i81..i88 remain actively running in Round 2 Stage-2 certification so live on-disk files have advanced post-snapshot)"
+          },
+          "excluded_aborted_and_aggregate_dirs": {
+            "_aborted_crescent_screenquit_0125Z": [
+              "c01",
+              "run_config.json"
+            ],
+            "_aborted_islands_v200_unpatched_0124Z": "i01..i24, run_config.json, xbabe2_launcher.log",
+            "_aggregate": "16 PNG plots + stage1_screen_all.csv + stage2_assessed_all.csv"
+          }
+        }
+      }
+    },
+    "xbabe3": {
+      "hostname": "xbabe3",
+      "os_sysname": "Linux",
+      "arch": "x86_64",
+      "home_dir": "/home/ubuntu",
+      "ssh_reachable": true,
+      "engine_repositories_and_binaries": {
+        "primary_repo": {
+          "path": "/home/ubuntu/jarambit",
+          "exists": true,
+          "release_binary_exists": false
+        },
+        "campaign_repo": {
+          "path": "/home/ubuntu/jr_evo_full_20261018/repo",
+          "exists": true,
+          "git_head": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "dirty_files": [
+            "M crates/cli/src/auto_evolve.rs"
+          ],
+          "release_binary_path": "/home/ubuntu/jr_evo_full_20261018/repo/target/release/jarambit",
+          "release_binary_exists": true,
+          "release_binary_bytes": 10230088,
+          "release_binary_sha256": "b528c84f1d84aa0ec5b7ea618ff344be74368f8e0f73dbbb3c05adf4e7909998"
+        }
+      },
+      "roots": {
+        "/home/ubuntu/jarambit_evo3/out": {
+          "exists": true,
+          "entry_count": 29,
+          "range": "w284x3..w312x3",
+          "v2_archive_disposition": "INCLUDED_IN_V2 (29 W_CAD_v2 runs)"
+        },
+        "/home/ubuntu/jarambit_evo3c/out": {
+          "exists": true,
+          "entry_count": 30,
+          "selected_runs": "w400c3..w412t3 (21 runs)",
+          "excluded_entries": [
+            "PAIR_w406.md..PAIR_w412.md",
+            "seeds",
+            "stage2_test",
+            "w409_ul",
+            "w409_ul.log"
+          ],
+          "v2_archive_disposition": "PARTIALLY_INCLUDED_IN_V2 (21 w400c3..w412t3 runs included; w409_ul and stage2_test excluded by glob)"
+        },
+        "/home/ubuntu/jarambit_evo3u/out": {
+          "exists": true,
+          "entry_count": 3,
+          "selected_runs": "w413c3, w413t3 (2 runs)",
+          "excluded_entries": [
+            "PAIR_w413.md"
+          ],
+          "v2_archive_disposition": "INCLUDED_IN_V2 (2 W_ULTRALIGHT_v1 runs)"
+        },
+        "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe3": {
+          "exists": true,
+          "manifest_json": {
+            "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe3/MANIFEST.json",
+            "bytes": 15745,
+            "sha256": "c197c45c2e6eb6daab0890aaea0d423e7dac3d8298e25160d205357658a56883"
+          },
+          "crescent_root": {
+            "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe3/crescent",
+            "exists": true,
+            "v2_archive_disposition": "INCLUDED_IN_V2_AS_1407Z_IN_PROGRESS_SNAPSHOT (since 14:07Z, c01..c04 completed gen 800 / 3204 rows and wrote full all_evals.csv + all_evals.json on xbabe3; c05 advanced from 1412 to 1740 rows)",
+            "live_1603z_runs": {
+              "c01": {
+                "file_count": 11,
+                "history_live_rows": 3204,
+                "v2_staged_rows": 2836,
+                "history_live_sha256": "d032f0718937564f42b6acc03dfc138894b91d7fa267ad52cb657b76b7c2ba5b",
+                "qd_archive_sha256": "7e300d2b958010d675f3d290c52883ddefa57b369a09b3f0d8f1a6ff401ae1f9",
+                "max_generation": 800,
+                "best_fit_col6": 1.1156,
+                "has_all_evals_csv": true,
+                "all_evals_csv_bytes": 384808219,
+                "has_all_evals_json": true,
+                "all_evals_json_bytes": 217850572
+              },
+              "c02": {
+                "file_count": 11,
+                "history_live_rows": 3204,
+                "v2_staged_rows": 2792,
+                "history_live_sha256": "1008ef9a47a2455df4d4aad3d5a8998b671e02c29c0fea3d8f6d00531fc94b49",
+                "qd_archive_sha256": "d60243f16029b8d3495a196982e5e30e4cd8f302fccc5ab6fab007534f0cb6ff",
+                "max_generation": 800,
+                "best_fit_col6": 1.1228,
+                "has_all_evals_csv": true,
+                "all_evals_csv_bytes": 381765717,
+                "has_all_evals_json": true,
+                "all_evals_json_bytes": 217532622
+              },
+              "c03": {
+                "file_count": 36,
+                "history_live_rows": 3204,
+                "v2_staged_rows": 2748,
+                "history_live_sha256": "3ecae3e7603e49b44d7826dbb61412c7eada4a006a24ed2fc66cb0b9752d9988",
+                "qd_archive_sha256": "c0e77e25176ec6d44fd2b6837e8636f4bc8b11bc9c6f6b7f21487180af9c9f65",
+                "max_generation": 800,
+                "best_fit_col6": 1.1108,
+                "has_all_evals_csv": true,
+                "all_evals_csv_bytes": 377698296,
+                "has_all_evals_json": true,
+                "all_evals_json_bytes": 217965842
+              },
+              "c04": {
+                "file_count": 36,
+                "history_live_rows": 3204,
+                "v2_staged_rows": 2792,
+                "history_live_sha256": "7cc225bdb1405a52f5ffcdbf0d99dc5016ec51107ab205d89c9550ddcd73249e",
+                "qd_archive_sha256": "991aeb8911c402daf3a1fbfa4d5ddc89db96f76abe588997eecce04be4cd1b99",
+                "max_generation": 800,
+                "best_fit_col6": 1.1408,
+                "has_all_evals_csv": true,
+                "all_evals_csv_bytes": 380387911,
+                "has_all_evals_json": true,
+                "all_evals_json_bytes": 217849124,
+                "exported_fit_genomes_count": 6
+              },
+              "c05": {
+                "file_count": 6,
+                "history_live_rows": 1740,
+                "v2_staged_rows": 1412,
+                "history_live_sha256": "3cedb2fa249913b70ecbb9401e0f0e7f99b2c16651b84db40ced60382b7e55d9",
+                "qd_archive_sha256": "4c04758948d50ed512a1050be938b18fe9b15dcc394d3b80b803f0bdc4cfb984",
+                "max_generation": 434,
+                "best_fit_col6": 1.106,
+                "has_all_evals_csv": false,
+                "has_all_evals_json": false
+              }
+            }
+          },
+          "islands_root": {
+            "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe3/islands",
+            "exists": true,
+            "island_dir_count": 16,
+            "island_range": "i01..i16",
+            "with_fitness_curve_json": 10,
+            "v2_archive_disposition": "INCLUDED_IN_V2 (16 W_ULTRALIGHT_v1 runs)"
+          },
+          "excluded_aborted_and_aggregate_dirs": {
+            "_aborted_crescent_screenquit_0125Z": [
+              "c01",
+              "c02",
+              "run_config.json"
+            ],
+            "_aborted_islands_v200_unpatched_0124Z": "i01..i16, run_config.json, xbabe3_launcher.log",
+            "_aggregate": "14 PNG plots + stage1_screen_all.csv + stage2_assessed_all.csv"
+          }
+        }
+      }
+    },
+    "xbabe4": {
+      "hostname": "Mac-Studio.local",
+      "os_sysname": "Darwin",
+      "arch": "arm64",
+      "home_dir": "/Users/agent",
+      "ssh_reachable": true,
+      "linux_home_ubuntu_paths_exist": false,
+      "engine_repositories_and_binaries": {
+        "primary_repo": {
+          "path": "/Users/agent/jarambit",
+          "exists": false
+        },
+        "campaign_repo": {
+          "path": "/Users/agent/jr_evo_full_20261018/repo",
+          "exists": true,
+          "git_head": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "dirty_files": [
+            "M crates/cli/src/auto_evolve.rs"
+          ],
+          "release_binary_path": "/Users/agent/jr_evo_full_20261018/repo/target/release/jarambit",
+          "release_binary_exists": true,
+          "release_binary_bytes": 6540656,
+          "release_binary_sha256": "be001f99a4227dabbb4ddf2fe1c44f79586d504e0879b4e00e78be5b20f77cd2"
+        }
+      },
+      "roots": {
+        "/Users/agent/jarambit_runs/evo_full_20261018/xbabe4": {
+          "exists": true,
+          "v2_archive_disposition": "EXCLUDED_0_OF_6_RUNS_IN_V2_223_PACKAGES",
+          "manifest_json": {
+            "path": "/Users/agent/jarambit_runs/evo_full_20261018/xbabe4/MANIFEST.json",
+            "bytes": 4970,
+            "sha256": "0dbd6e0504821a0b057c54c0057a2d909e8bb75b5dfc73a060f7b486ffb31a80"
+          },
+          "crescent_root": {
+            "path": "/Users/agent/jarambit_runs/evo_full_20261018/xbabe4/crescent",
+            "exists": true,
+            "runs": {
+              "c01": {
+                "file_count": 35,
+                "history_live_rows": 3204,
+                "history_live_sha256": "008324fd912a0225cef1101ad2ee4a09d210fb009d8a23db703c2857f7a8d213",
+                "qd_archive_sha256": "6d3236fb18e0a7db96b0f590bf2146e752154b6e68ce6b962118d3260447667d",
+                "max_generation": 800,
+                "best_fit_col6": 1.1186,
+                "has_all_evals_csv": true,
+                "all_evals_csv_bytes": 377583811,
+                "has_all_evals_json": true,
+                "all_evals_json_bytes": 218011952,
+                "exported_fit_genomes_count": 6,
+                "has_proc_config": false,
+                "has_stopped_memory": false
+              },
+              "c02": {
+                "file_count": 11,
+                "history_live_rows": 3204,
+                "history_live_sha256": "f08bcb4dfaa46f7f335eafed91868e465a1ca1113067696df13053dfe91b2df5",
+                "qd_archive_sha256": "3b1f6132d73ad70aa32a768110c1121d9db49eb038c8a561e0ea3b73d1621a37",
+                "max_generation": 800,
+                "best_fit_col6": 1.1177,
+                "has_all_evals_csv": true,
+                "all_evals_csv_bytes": 380930388,
+                "has_all_evals_json": true,
+                "all_evals_json_bytes": 217974459,
+                "has_proc_config": false,
+                "has_stopped_memory": false
+              }
+            }
+          },
+          "islands_root": {
+            "path": "/Users/agent/jarambit_runs/evo_full_20261018/xbabe4/islands",
+            "exists": true,
+            "island_dir_count": 4,
+            "island_ids": [
+              "i01",
+              "i02",
+              "i03",
+              "i04"
+            ],
+            "with_fitness_curve_json": 4,
+            "rounds_screened_per_island": 5,
+            "stage2_scorecards_per_island": 0,
+            "capability_limitation": "Stage-1 screening completed all 5 rounds (round_00..round_04 births and screen JSONs) on all 4 islands, but 0 Stage-2 3D TET10 scorecards were produced on Darwin arm64."
+          }
+        },
+        "/Users/agent/jarambit_runs/evo_full_20261018/_aborted_xbabe4_gens60_0047Z": {
+          "exists": true,
+          "subdirectories": [
+            "crescent/c01",
+            "crescent/c02"
+          ],
+          "v2_archive_disposition": "EXCLUDED_ABORTED_ATTEMPT (scheduled for JR-EI-P1-T03 capture)"
+        },
+        "/Users/agent/jarambit_runs/evo_full_20261018/_aborted_xbabe4_noseeds_0046Z": {
+          "exists": true,
+          "subdirectories": [
+            "crescent/c01",
+            "crescent/c02"
+          ],
+          "v2_archive_disposition": "EXCLUDED_ABORTED_ATTEMPT (scheduled for JR-EI-P1-T03 capture)"
+        }
+      }
+    }
+  }
+}

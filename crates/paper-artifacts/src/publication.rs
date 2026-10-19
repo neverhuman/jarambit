@@ -211,12 +211,12 @@ fn admit_cover_render(root: &Path, inputs: &mut BTreeMap<String, String>) -> Res
 
 fn cover_evolution(births: &[Value], stats: &[Value]) -> Result<String> {
     let mut s = svg_start(520, 620);
-    label(&mut s, 18., 30., 23, "B / Historical population", "#007e87");
+    label(&mut s, 18., 30., 23, "B / Run 1 Historical Population", "#007e87");
     label(
         &mut s,
         18.,
         57.,
-        18,
+        21,
         &format!("{} retained births; stored fit", births.len()),
         "#526873",
     );
@@ -235,15 +235,15 @@ fn cover_evolution(births: &[Value], stats: &[Value]) -> Result<String> {
     let maxg = stats.last().ok_or("empty cover population")?["generation"]
         .as_u64()
         .ok_or("invalid cover generation")? as f64;
-    let sx = |g: f64| 70. + 420. * g / maxg.max(1.);
+    let sx = |g: f64| 82. + 410. * g / maxg.max(1.);
     let sy = |v: f64| 258. - 172. * (v.asinh() - lo.asinh()) / (hi.asinh() - lo.asinh()).max(1e-9);
     for value in [-200.0_f64, -10., -1., 0., 1.] {
         let y = sy(value);
         s.push_str(&format!(
-            "<path d=\"M70 {}H490\" stroke=\"#d5dfdf\"/>",
+            "<path d=\"M82 {}H492\" stroke=\"#d5dfdf\"/>",
             svg_coord(y)
         ));
-        label(&mut s, 4., y + 5., 17, &format!("{value:.0}"), "#526873");
+        label(&mut s, 4., y + 6., 21, &format!("{value:.0}"), "#526873");
     }
     for birth in births {
         let x = sx(number(&birth["gen"])?);
@@ -263,18 +263,18 @@ fn cover_evolution(births: &[Value], stats: &[Value]) -> Result<String> {
     for g in [0, 4, 8, 12, 16] {
         label(
             &mut s,
-            sx(g as f64) - 5.,
+            sx(g as f64) - 6.,
             286.,
-            17,
+            21,
             &g.to_string(),
             "#526873",
         );
     }
     label(
         &mut s,
-        70.,
-        311.,
-        18,
+        82.,
+        312.,
+        21,
         "Generation / asinh vertical axis",
         "#526873",
     );
@@ -282,7 +282,7 @@ fn cover_evolution(births: &[Value], stats: &[Value]) -> Result<String> {
         &mut s,
         18.,
         341.,
-        17,
+        21,
         "Blue: FEM complete / amber x: no FEM",
         "#132d3b",
     );
@@ -291,17 +291,17 @@ fn cover_evolution(births: &[Value], stats: &[Value]) -> Result<String> {
         18.,
         379.,
         23,
-        "C / Observed search maxima",
+        "C / Run 1 Observed Search Maxima",
         "#007e87",
     );
     let cy = |v: f64| 528. - 111. * (v - 1.135) / (1.16 - 1.135);
     for value in [1.14, 1.15, 1.16] {
         let y = cy(value);
         s.push_str(&format!(
-            "<path d=\"M70 {}H490\" stroke=\"#d5dfdf\"/>",
+            "<path d=\"M82 {}H492\" stroke=\"#d5dfdf\"/>",
             svg_coord(y)
         ));
-        label(&mut s, 4., y + 5., 17, &format!("{value:.2}"), "#526873");
+        label(&mut s, 4., y + 6., 21, &format!("{value:.2}"), "#526873");
     }
     let mut cumulative = f64::NEG_INFINITY;
     let mut generation_points = Vec::new();
@@ -322,9 +322,9 @@ fn cover_evolution(births: &[Value], stats: &[Value]) -> Result<String> {
     for g in [0, 4, 8, 12, 16] {
         label(
             &mut s,
-            sx(g as f64) - 5.,
-            551.,
-            17,
+            sx(g as f64) - 6.,
+            553.,
+            21,
             &g.to_string(),
             "#526873",
         );
@@ -332,16 +332,16 @@ fn cover_evolution(births: &[Value], stats: &[Value]) -> Result<String> {
     label(
         &mut s,
         18.,
-        580.,
-        17,
+        582.,
+        21,
         "Teal: generation / dashed: cumulative",
         "#132d3b",
     );
     label(
         &mut s,
         18.,
-        607.,
-        17,
+        609.,
+        21,
         "Truncated fit axis; higher is better",
         "#a3442d",
     );
@@ -357,34 +357,52 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         .as_object()
         .ok_or("missing objective profile")?;
     let mut sum = 0.0;
-    let mut s = svg_start(1200, 620);
+    let mut s = svg_start(1200, 1140);
     label(
         &mut s,
-        32.,
-        37.,
-        16,
-        "RETAINED FITNESS / NOT PHYSICAL QUALIFICATION",
+        24.,
+        34.,
+        24,
+        "INDIVIDUAL 2002 (RUN 31) — 20-TERM WEIGHTED OBJECTIVE PROFILE",
         "#007e87",
     );
-    label(&mut s, 32., 113., 67, &format!("{f:.2}"), "#132d3b");
     label(
         &mut s,
-        230.,
-        108.,
-        20,
-        "/ 100 · higher is better",
-        "#526873",
+        24.,
+        64.,
+        22,
+        &format!("Total F = {f:.6} / 100.00 (101.139 g; 24/26 checks passed; not physical qualification)"),
+        "#132d3b",
     );
-    label(&mut s, 32., 149., 19, text(&best["label"])?, "#132d3b");
-    label(
-        &mut s,
-        32.,
-        181.,
-        17,
-        "Best reported profile in selected w411c3 cohort",
-        "#526873",
-    );
-    for (i, (name, keys, cap)) in REPORT_GROUPS.iter().enumerate() {
+
+    let term_title = |key: &str| -> &'static str {
+        match key {
+            "ultralight_mass" => "Ultralight mass (101.14 g)",
+            "holder_and_compactness" => "Envelope & compactness",
+            "karambit_ring_and_claw" => "Ring & claw curvature",
+            "c6_aesthetic_and_ergo" => "Silhouette concordance",
+            "bore_collar_comfort" => "Bore collar comfort",
+            "cad_watertight_brep" => "Watertight single-solid B-Rep",
+            "gate_s_sharpness" => "Bevel sharpness angle",
+            "gate_s_point_profile" => "Tip point angle & radius",
+            "hiker_lateral_180n" => "180 N lateral bend",
+            "hunter_lateral_260n" => "260 N lateral bend",
+            "strict_hunter_260n" => "Strict 260 N bend (FAIL)",
+            "ring_pull_1500n" => "1500 N ring pull",
+            "twist_body_1p82nm" => "1.82 N·m body torsion",
+            "twist_tip_plate_1p82nm" => "1.82 N·m tip plate torsion",
+            "solid_tip_3d_p2_and_xcheck" => "3D P2 tip & cross-check",
+            "side_a4_buckling" => "Lateral buckling λ",
+            "failure_sequence_1p2" => "Yield sequence ratio",
+            "plate_gci_3level" => "3-level mesh convergence",
+            "human_max_overload" => "Overload reserve",
+            "goodman_fatigue_l7" => "Goodman fatigue life",
+            _ => "Objective term",
+        }
+    };
+
+    let mut cur_y = 104.0;
+    for (name, keys, cap) in REPORT_GROUPS.iter() {
         let points = keys
             .iter()
             .map(|k| number(&terms[*k]["weighted_points"]))
@@ -392,17 +410,39 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
             .iter()
             .sum::<f64>();
         sum += points;
-        let y = 237. + i as f64 * 70.;
-        label(&mut s, 32., y, 17, name, "#132d3b");
         label(
             &mut s,
-            382.,
-            y,
-            17,
-            &format!("{points:.2} / {cap:.0}"),
-            "#526873",
+            24.,
+            cur_y,
+            22,
+            &format!("{name}: {points:.2} / {cap:.0} pts"),
+            "#007e87",
         );
-        s.push_str(&format!("<rect x=\"32\" y=\"{}\" width=\"445\" height=\"14\" rx=\"7\" fill=\"#dce4e3\"/><rect x=\"32\" y=\"{}\" width=\"{}\" height=\"14\" rx=\"7\" fill=\"#007e87\"/>\n", y+12., y+12., 445. * points / cap));
+        cur_y += 28.0;
+        for &k in *keys {
+            let w_pct = number(&terms[k]["weight_pct"])?;
+            let pts = number(&terms[k]["weighted_points"])?;
+            let norm = number(&terms[k]["normalized_score"])?;
+            label(&mut s, 32., cur_y, 21, term_title(k), "#132d3b");
+            let bar_w = 130.0 * norm.clamp(0.0, 1.0);
+            let bar_col = if norm < 0.999 { "#a3442d" } else { "#007e87" };
+            s.push_str(&format!(
+                "<rect x=\"330\" y=\"{}\" width=\"130\" height=\"16\" rx=\"4\" fill=\"#dce4e3\"/><rect x=\"330\" y=\"{}\" width=\"{}\" height=\"16\" rx=\"4\" fill=\"{bar_col}\"/>\n",
+                svg_coord(cur_y - 15.0),
+                svg_coord(cur_y - 15.0),
+                svg_coord(bar_w)
+            ));
+            label(
+                &mut s,
+                470.,
+                cur_y,
+                21,
+                &format!("{pts:.2}/{w_pct:.0}"),
+                "#526873",
+            );
+            cur_y += 38.0;
+        }
+        cur_y += 10.0;
     }
     if (sum - f).abs() > 0.00001 {
         return Err("profile sum differs from displayed fitness".into());
@@ -412,34 +452,28 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         .ok_or("missing legacy tally")?;
     label(
         &mut s,
-        32.,
-        523.,
-        16,
-        &format!("{tally}/26 legacy predicates met; shared observations overlap"),
+        24.,
+        1060.,
+        21,
+        &format!("Individual 2002 (Run 31): {tally}/26 threshold checks met; strict 260 N bend & mass fail."),
         "#a3442d",
     );
     label(
         &mut s,
-        32.,
-        552.,
-        16,
-        "Reporting profile includes placeholder inputs",
-        "#a3442d",
-    );
-    label(
-        &mut s,
-        32.,
-        580.,
-        16,
-        "Best-record CAD geometry unavailable in retained cohort",
+        24.,
+        1094.,
+        21,
+        "Note: Individual 2000 (assessed example) is evaluated under its own continuous CAD score in assessment.svg.",
         "#526873",
     );
+
+    // Right column Panel A: Run 31 3-generation trajectory
     label(
         &mut s,
-        590.,
-        37.,
-        16,
-        "RETAINED SUMMARIES / SEPARATE REGIMES",
+        620.,
+        104.,
+        23,
+        "A. Run 31 Weighted Trajectory (Gen 0–2)",
         "#007e87",
     );
     let rows = array(&curve["generations"])?;
@@ -451,13 +485,13 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
     let lo = (values.iter().copied().fold(f64::INFINITY, f64::min) * 2.).floor() / 2. - 0.2;
     let hi = (values.iter().copied().fold(f64::NEG_INFINITY, f64::max) * 2.).ceil() / 2. + 0.1;
     let maxg = number(&rows.last().ok_or("empty curve")?["generation"])?.max(1.);
-    let sx = |g: f64| 640. + 480. * g / maxg;
-    let sy = |f: f64| 263. - 150. * (f - lo) / (hi - lo);
+    let sx = |g: f64| 710. + 440. * g / maxg;
+    let sy = |f: f64| 380. - 220. * (f - lo) / (hi - lo);
     for i in 0..4 {
         let v = lo + (hi - lo) * i as f64 / 3.;
         let y = sy(v);
-        s.push_str(&format!("<path d=\"M640 {y}H1120\" stroke=\"#d5dfdf\"/>"));
-        label(&mut s, 584., y + 5., 15, &format!("{v:.2}"), "#526873");
+        s.push_str(&format!("<path d=\"M710 {}H1150\" stroke=\"#d5dfdf\"/>", svg_coord(y)));
+        label(&mut s, 620., y + 7., 21, &format!("{v:.2}"), "#526873");
     }
     for (field, color) in [
         ("round_best_fitness", "#d07b42"),
@@ -486,39 +520,41 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         }
     }
     for r in rows {
+        let g = number(&r["generation"])?;
         label(
             &mut s,
-            sx(number(&r["generation"])?) - 5.,
-            287.,
-            16,
-            &r["generation"].to_string(),
+            sx(g) - 18.,
+            416.,
+            21,
+            &format!("G{}", g as u64),
             "#526873",
         );
     }
-    label(&mut s, 786., 309., 15, "Generation (zero-based)", "#526873");
     label(
         &mut s,
-        640.,
-        82.,
-        17,
-        "A. w411c3 reporting summary; truncated scale",
-        "#526873",
-    );
-    label(
-        &mut s,
-        640.,
-        337.,
-        14,
-        "Stage lineage incomplete; teal: archive / orange: round",
+        620.,
+        454.,
+        21,
+        "Teal: archive best (Ind 2009 G0 -> Ind 2002 G1–G2)",
         "#132d3b",
     );
     label(
         &mut s,
-        640.,
-        370.,
-        16,
-        &format!("B. w282 historical fit; {} retained births", births.len()),
+        620.,
+        486.,
+        21,
+        "Orange: round best (74.17, 74.21, 73.61)",
         "#526873",
+    );
+
+    // Right column Panel B: Run 1 historical fit
+    label(
+        &mut s,
+        620.,
+        556.,
+        23,
+        &format!("B. Run 1 Historical Search ({} Births)", births.len()),
+        "#007e87",
     );
     let max_generation = births
         .iter()
@@ -540,19 +576,19 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         .copied()
         .fold(f64::NEG_INFINITY, f64::max)
         .asinh();
-    let px = |g: f64| 640. + 480. * g / max_generation;
-    let py = |f: f64| 505. - 110. * (f.asinh() - fit_lo) / (fit_hi - fit_lo).max(1e-9);
+    let px = |g: f64| 710. + 440. * g / max_generation;
+    let py = |f: f64| 860. - 250. * (f.asinh() - fit_lo) / (fit_hi - fit_lo).max(1e-9);
     for tick in [-200.0_f64, -10., -1., 1.] {
         label(
             &mut s,
-            590.,
-            py(tick) + 4.,
-            13,
+            620.,
+            py(tick) + 7.,
+            21,
             &format!("{tick:.0}"),
             "#526873",
         );
         s.push_str(&format!(
-            "<path d=\"M640 {}H1120\" stroke=\"#d5dfdf\"/>",
+            "<path d=\"M710 {}H1150\" stroke=\"#d5dfdf\"/>",
             svg_coord(py(tick))
         ));
     }
@@ -561,7 +597,7 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         let g = b["gen"].as_u64().ok_or("invalid birth generation")?;
         gen_values.entry(g).or_default().push(f);
         s.push_str(&format!(
-            "<circle cx=\"{:.2}\" cy=\"{:.2}\" r=\"1.2\" fill=\"#78999e\" opacity=\".18\"/>",
+            "<circle cx=\"{:.2}\" cy=\"{:.2}\" r=\"1.5\" fill=\"#78999e\" opacity=\".22\"/>",
             px(g as f64),
             py(f)
         ));
@@ -583,34 +619,34 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
             .collect::<Result<Vec<_>>>()?
             .join(" ");
         s.push_str(&format!(
-            "<polyline points=\"{points}\" stroke=\"{color}\" stroke-width=\"2\" fill=\"none\"/>"
+            "<polyline points=\"{points}\" stroke=\"{color}\" stroke-width=\"2.5\" fill=\"none\"/>"
         ));
     }
     for g in [0., 8., 16.] {
-        label(&mut s, px(g) - 4., 526., 13, &format!("{g:.0}"), "#526873");
+        label(&mut s, px(g) - 14., 896., 21, &format!("G{g:.0}"), "#526873");
     }
     label(
         &mut s,
-        640.,
-        550.,
-        14,
-        "Generation; asinh vertical scale, ticks in original fit",
+        620.,
+        936.,
+        21,
+        "Asinh vertical scale; ticks in original fit units",
         "#526873",
     );
     label(
         &mut s,
-        640.,
-        575.,
-        14,
-        "Teal: generation max    Orange: median    Dots: births",
+        620.,
+        968.,
+        21,
+        "Teal: gen max (Ind 1095 at G9) / Orange: median",
         "#132d3b",
     );
     label(
         &mut s,
-        640.,
-        600.,
-        14,
-        "Historical data; no current qualification inferred",
+        620.,
+        1000.,
+        21,
+        "Separate search regime; no qualification inferred",
         "#a3442d",
     );
     s.push_str("</g></svg>\n");
@@ -1259,24 +1295,24 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "docs/paper/generated/cover-evolution.svg".into(),
         cover_evolution(births, &stats)?,
     );
-    let mut popsvg = svg_start(1200, 610);
+    let mut popsvg = svg_start(1200, 680);
     label(
         &mut popsvg,
         32.,
-        37.,
-        20,
+        40.,
+        24,
         &format!(
-            "POPULATION BEHAVIOR / {} RETAINED BIRTHS / HISTORICAL w282",
+            "RUN 1 HISTORICAL POPULATION — ALL {} RETAINED BIRTH EVALUATIONS",
             births.len()
         ),
         "#007e87",
     );
-    label(&mut popsvg,32.,69.,18,"Stored historical fit; asinh scale with original-value ticks. Penalty-valued records remain visible.","#526873");
+    label(&mut popsvg,32.,72.,21,"Stored historical fit; asinh scale with original-value ticks. Penalty-valued records remain visible.","#526873");
     label(
         &mut popsvg,
         32.,
-        96.,
-        18,
+        102.,
+        21,
         &format!(
             "{} FEM-complete / {} not evaluated / {} legal under the recorded search",
             history["fem_status_counts"]["complete"],
@@ -1294,25 +1330,25 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         .map(|s| s["max"].as_f64().unwrap())
         .fold(f64::NEG_INFINITY, f64::max);
     let maxg = *groups.keys().last().ok_or("empty births")? as f64;
-    let sx = |g: f64| 95. + 1040. * g / maxg.max(1.);
-    let sy = |v: f64| 360. - 235. * (v.asinh() - lo.asinh()) / (hi.asinh() - lo.asinh()).max(1e-9);
+    let sx = |g: f64| 120. + 1020. * g / maxg.max(1.);
+    let sy = |v: f64| 380. - 245. * (v.asinh() - lo.asinh()) / (hi.asinh() - lo.asinh()).max(1e-9);
     for v in [-200.0_f64, -100., -10., -1., 0., 1.] {
         let y = sy(v);
         popsvg.push_str(&format!(
-            "<path d=\"M95 {}H1135\" stroke=\"#d5dfdf\"/>",
+            "<path d=\"M120 {}H1140\" stroke=\"#d5dfdf\"/>",
             svg_coord(y)
         ));
-        label(&mut popsvg, 10., y + 5., 15, &format!("{v:.2}"), "#526873");
+        label(&mut popsvg, 10., y + 7., 21, &format!("{v:.1}"), "#526873");
     }
     for row in births {
         let x = sx(number(&row["gen"])?);
         let y = sy(number(&row["fit"])?);
         if row["fem_status"] == "complete" {
             popsvg.push_str(&format!(
-                "<circle cx=\"{x:.2}\" cy=\"{y:.2}\" r=\"1.8\" fill=\"#4e8f9c\" opacity=\".25\"/>"
+                "<circle cx=\"{x:.2}\" cy=\"{y:.2}\" r=\"2.0\" fill=\"#4e8f9c\" opacity=\".28\"/>"
             ));
         } else {
-            popsvg.push_str(&format!("<path d=\"M{} {}l4 4m0 -4l-4 4\" stroke=\"#b66a30\" stroke-width=\"1\" opacity=\".5\"/>",svg_coord(x-2.),svg_coord(y-2.)));
+            popsvg.push_str(&format!("<path d=\"M{} {}l4 4m0 -4l-4 4\" stroke=\"#b66a30\" stroke-width=\"1.2\" opacity=\".55\"/>",svg_coord(x-2.),svg_coord(y-2.)));
         }
     }
     for (field, color) in [("median", "#132d3b"), ("max", "#007e87")] {
@@ -1328,26 +1364,26 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
             .collect::<Vec<_>>()
             .join(" ");
         popsvg.push_str(&format!(
-            "<polyline points=\"{pts}\" stroke=\"{color}\" stroke-width=\"3\" fill=\"none\"/>"
+            "<polyline points=\"{pts}\" stroke=\"{color}\" stroke-width=\"3.2\" fill=\"none\"/>"
         ));
     }
     for g in groups.keys().step_by((groups.len() / 8).max(1)) {
         label(
             &mut popsvg,
-            sx(*g as f64) - 5.,
-            390.,
-            15,
-            &g.to_string(),
+            sx(*g as f64) - 16.,
+            414.,
+            21,
+            &format!("G{g}"),
             "#526873",
         );
     }
-    label(&mut popsvg,95.,422.,18,"Blue dots: FEM complete   Amber crosses: not evaluated   Teal: maximum   Dark: pooled median", "#132d3b");
+    label(&mut popsvg,32.,450.,21,"Blue dots: FEM complete · Amber crosses: not evaluated · Teal: generation max · Dark: median", "#132d3b");
     label(
         &mut popsvg,
-        95.,
-        454.,
-        18,
-        "FEM status by generation (record counts; numbers above bars are total births)",
+        32.,
+        482.,
+        21,
+        "FEM evaluation status by generation (G0 = 128 births; G1–G16 = 116 births/gen)",
         "#526873",
     );
     let max_n = stats
@@ -1356,28 +1392,23 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         .max()
         .unwrap() as f64;
     for row in &stats {
-        let x = sx(number(&row["generation"])?);
-        let solved = number(&row["fem_complete"])? * 65. / max_n;
-        let unsolved = number(&row["fem_not_evaluated"])? * 65. / max_n;
-        popsvg.push_str(&format!("<rect x=\"{}\" y=\"{}\" width=\"30\" height=\"{solved}\" fill=\"#4e8f9c\"/><rect x=\"{}\" y=\"{}\" width=\"30\" height=\"{unsolved}\" fill=\"#b66a30\"/>",x-15.,545.-solved,x-15.,545.-solved-unsolved));
-        label(
-            &mut popsvg,
-            x - 13.,
-            545. - solved - unsolved - 7.,
-            15,
-            &row["n"].to_string(),
-            "#526873",
-        );
-        label(
-            &mut popsvg,
-            x - 8.,
-            568.,
-            15,
-            &row["generation"].to_string(),
-            "#526873",
-        );
+        let g = row["generation"].as_u64().unwrap();
+        let x = sx(g as f64);
+        let solved = number(&row["fem_complete"])? * 80. / max_n;
+        let unsolved = number(&row["fem_not_evaluated"])? * 80. / max_n;
+        popsvg.push_str(&format!("<rect x=\"{}\" y=\"{}\" width=\"32\" height=\"{solved}\" fill=\"#4e8f9c\"/><rect x=\"{}\" y=\"{}\" width=\"32\" height=\"{unsolved}\" fill=\"#b66a30\"/>",x-16.,590.-solved,x-16.,590.-solved-unsolved));
+        if g % 2 == 0 {
+            label(
+                &mut popsvg,
+                x - 16.,
+                620.,
+                21,
+                &format!("G{g}"),
+                "#526873",
+            );
+        }
     }
-    label(&mut popsvg,95.,599.,17,"Fit includes legality penalties and contextual novelty; these are not fixed physical-performance values.", "#a3442d");
+    label(&mut popsvg,32.,658.,21,"Search fit includes legality penalties and novelty; not a physical qualification score.", "#a3442d");
     popsvg.push_str("</g></svg>\n");
     out.insert("docs/paper/generated/population.svg".into(), popsvg);
     let summary = json!({"schema":"jarambit.publication_projection.v1","source_baseline":BASE,"scope":"Retained evidence projection; no new scientific execution","battery_subjects":files.len(),"battery_evaluators":evaluator_ids.len(),"stored_statuses":counts,"per_evaluator":per,"science_definitions":cases.len(),"science_family_counts":families,"population_births":births.len(),"population_statistics":stats,"historical_context":history,"weighted_curve":curve["generations"],"weighted_best":curve["best_so_far"]["ultralight_weighted_fitness"],"weighted_stage_lineage":"incomplete; retained summaries are not a homogeneous objective-convergence experiment","score_direction":"higher_is_better","missing":"Weighted cohort CAD geometry and round population files are unavailable in retained cohort"});
@@ -1603,6 +1634,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "docs/tests/visuals.v1.json".into(),
         serde_json::to_string_pretty(&visual_coverage)? + "\n",
     );
+    crate::population::generate_v2_outputs(&root, &mut out, &mut inputs)?;
     let outputs = out
         .iter()
         .map(|(k, v)| (k.clone(), digest(v.as_bytes())))
@@ -1619,7 +1651,13 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "plate-fields.svg":{"source":field_source,"contract":"docs/paper/field-inputs.v1.json","projection_receipt":"docs/paper/generated/plate-fields.json","selectors":["/mesh/xy","/mesh/tris","/mesh/env_vm","/mesh/lat","/mesh/ring","/mesh/twist"],"association":"one stored rounded value per triangle; no interpolation","limits":"independent zero-to-source-maximum scales; no clipping","masks":"source-forced zeros only; raw unit-response tip region retained","scope":"retained 0.25 mm2 plate mesh, not strict or solid fields"},
         "cover-evolution.svg":{"source":POP,"membership":"all retained births in panel B; per-generation and cumulative maxima of stored fit in panel C","selectors":["/*/id","/*/gen","/*/fit","/*/fem_status"],"population_vertical_transform":"asinh(fit); original-value ticks","maximum_axis_limits":[1.135,1.16],"maximum_axis_truncated":true,"lines":"straight segments between observed generations; no fitted convergence model","producer_revision":history["producer_revision"],"semantics":history["fitness_semantics"]},
         "fitness.svg": {"weighted_source":CURVE,"weighted_selectors":["/best_so_far/ultralight_weighted_fitness","/best_so_far/ultralight_fitness_breakdown/objectives/*/weighted_points","/generations/*/generation","/generations/*/round_best_fitness","/generations/*/hall_of_fame_best_so_far"],"weighted_direction":"higher_is_better","weighted_stage_lineage":"incomplete; reporting producer can substitute assessment values for screening values","population_source":POP,"population_selectors":["/*/id","/*/gen","/*/fit"],"population_reduction":"all retained births; generation maximum and sorted-sample median","population_vertical_transform":"asinh(fit); ticks in original units","regimes":"separate panels; no cross-regime score comparison"},
-        "population.svg":{"source":POP,"membership":"all retained births, including not-evaluated penalty records","selectors":["/*/id","/*/gen","/*/fit","/*/fem_status","/*/legal"],"reduction":"generation median and maximum; status census by generation; no imputation","vertical_transform":"asinh(fit); ticks in original units","producer_revision":history["producer_revision"],"producer_qd_sha256":history["producer_qd_sha256"],"semantics":history["fitness_semantics"]}
+        "population.svg":{"source":POP,"membership":"all retained births, including not-evaluated penalty records","selectors":["/*/id","/*/gen","/*/fit","/*/fem_status","/*/legal"],"reduction":"generation median and maximum; status census by generation; no imputation","vertical_transform":"asinh(fit); ticks in original units","producer_revision":history["producer_revision"],"producer_qd_sha256":history["producer_qd_sha256"],"semantics":history["fitness_semantics"]},
+        "population-births.svg":{"source":POP,"projection_receipt":"docs/paper/generated/population/historical_births.json","membership":"all 1,984 historical w282 births in Run 1 (1,455 FEM-complete + 529 not-evaluated; 446 legal)","vertical_transform":"asinh(fit); ticks in original units"},
+        "population-membership.svg":{"source":POP,"projection_receipt":"docs/paper/generated/population/historical_membership.json","membership":"all 2,176 island-membership occurrences in Run 1 (1,984 births + 192 elite reappearances) and 12 ring migrations at G4, G8, G12 (24 copied IDs)"},
+        "population-newer.svg":{"contract":"docs/paper/JR_EI_P1_T05_NEWER_BIRTHS_SCREENS_JOIN_RECEIPT_20261019.json","projection_receipt":"docs/paper/generated/population/newer_events.json","membership":"57 birth files across 24 run directories (3,649 births = 2,259 1-based joined screens + 1,390 unscreened births); proportional 0..3,200 common scale"},
+        "population-latest.svg":{"contract":"docs/paper/data/gen800_population_density_and_traces.v1.json","projection_receipt":"docs/paper/generated/population/latest_snapshots.json","membership":"all 1,954,560 evaluations across 10 retained 800-gen runs (Run 2..Run 11, superseding legacy Run 37..Run 46; 195,456 rows/run, 754,236 legal + 1,200,324 penalty) in 32x8 density cloud + quantile/best traces; no FEM status inferred"},
+        "fitness-progress.svg":{"contract":"docs/paper/data/score_profiles.v1.json","projection_receipt":"docs/paper/generated/shared_projection.v2.json","membership":"three separate numerical-axis panels for Cohort 1 (Run 1, 17-gen), Cohort 2 (weighted summaries), and Cohort 3 (Run 2..Run 11, 10 retained 800-gen runs qd_fit)"},
+        "inheritance.svg":{"contract":"docs/paper/generated/population/inheritance.json","projection_receipt":"docs/paper/generated/population/inheritance.json","membership":"7-node 3-hop ancestry DAG and 128-coordinate gene diffs around Individual 1095 (Cohort 1, Run 1); Cohort 2/3 parent_ids unavailable_in_source"}
     }});
     out.insert(
         "docs/paper/generated/manifest.json".into(),

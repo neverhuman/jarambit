@@ -1,0 +1,1657 @@
+{
+  "changed_coordinate_definition": "exact_numeric_delta_ne_0_across_csv_columns_17_to_144",
+  "csv_genome_column_count": 129,
+  "focal_public_id": 1095,
+  "focal_subgraph_nodes": [
+    {
+      "csv_gene_serialization_sha256": "ffdbc6ca0e45c32c8ddc8ce80c8343d1ba69000e8c4b6621f2308eaa1c8a4d7c",
+      "fem_status": "complete",
+      "generation": 1,
+      "legal": true,
+      "material_category": "Ti-6Al-4V",
+      "minimum_parent_hops_from_focal": 3,
+      "operator": "archive_crossover_mutate",
+      "operator_version": 1,
+      "public_id": 174,
+      "public_label": "Individual 174",
+      "recorded_parents": [
+        57,
+        61
+      ],
+      "stored_fit": 1.14979
+    },
+    {
+      "csv_gene_serialization_sha256": "06e628c82c61b1c2ceb1a66ac252bae99f85a59090bb670ca409cb0fb85d4f1c",
+      "fem_status": "complete",
+      "generation": 2,
+      "legal": true,
+      "material_category": "Ti-6Al-4V",
+      "minimum_parent_hops_from_focal": 2,
+      "operator": "archive_mutate",
+      "operator_version": 1,
+      "public_id": 245,
+      "public_label": "Individual 245",
+      "recorded_parents": [
+        174
+      ],
+      "stored_fit": 1.15388
+    },
+    {
+      "csv_gene_serialization_sha256": "288c197350035521251cfb59829fb2d3ded3ea54ec8ee398cf4c0d036ac51af5",
+      "fem_status": "complete",
+      "generation": 2,
+      "legal": true,
+      "material_category": "Ti-6Al-4V",
+      "minimum_parent_hops_from_focal": 3,
+      "operator": "archive_mutate",
+      "operator_version": 1,
+      "public_id": 299,
+      "public_label": "Individual 299",
+      "recorded_parents": [
+        174
+      ],
+      "stored_fit": 1.14855
+    },
+    {
+      "csv_gene_serialization_sha256": "ca8da093865404151cbb6ecbeb5b0790e5fc2f4b8ddbb629a3698bcc0681d8e1",
+      "fem_status": "complete",
+      "generation": 3,
+      "legal": true,
+      "material_category": "Ti-6Al-4V",
+      "minimum_parent_hops_from_focal": 2,
+      "operator": "mutate",
+      "operator_version": 1,
+      "public_id": 392,
+      "public_label": "Individual 392",
+      "recorded_parents": [
+        299
+      ],
+      "stored_fit": 1.12512
+    },
+    {
+      "csv_gene_serialization_sha256": "e69cf90b575f38add7d87c15f02140a28c6f8f1c5780b7398547759bb43e0314",
+      "fem_status": "complete",
+      "generation": 3,
+      "legal": true,
+      "material_category": "Ti-6Al-4V",
+      "minimum_parent_hops_from_focal": 1,
+      "operator": "archive_mutate",
+      "operator_version": 1,
+      "public_id": 413,
+      "public_label": "Individual 413",
+      "recorded_parents": [
+        245
+      ],
+      "stored_fit": 1.15296
+    },
+    {
+      "csv_gene_serialization_sha256": "963abade76a9d396720f27d39df746bdc42eb1899cc6f2bbefe9bfcfa8014c33",
+      "fem_status": "complete",
+      "generation": 4,
+      "legal": true,
+      "material_category": "Ti-6Al-4V",
+      "minimum_parent_hops_from_focal": 1,
+      "operator": "crossover_mutate",
+      "operator_version": 1,
+      "public_id": 526,
+      "public_label": "Individual 526",
+      "recorded_parents": [
+        413,
+        392
+      ],
+      "stored_fit": 1.15563
+    },
+    {
+      "csv_gene_serialization_sha256": "7a82ae0653b4f1478101a0763a9d3bd6a344ff0fde59f0c6a14b2a0fc654bd1c",
+      "fem_status": "complete",
+      "generation": 9,
+      "legal": true,
+      "material_category": "Ti-6Al-4V",
+      "minimum_parent_hops_from_focal": 0,
+      "operator": "crossover_mutate",
+      "operator_version": 1,
+      "public_id": 1095,
+      "public_label": "Individual 1095",
+      "recorded_parents": [
+        413,
+        526
+      ],
+      "stored_fit": 1.15727
+    }
+  ],
+  "fourth_hop_induced_closure_edges": [
+    {
+      "changed_f64_gene_count": 2,
+      "child_id": 299,
+      "child_operator": "archive_mutate",
+      "identical_f64_gene_count": 126,
+      "l2_gene_distance": 0.169369,
+      "l2_gene_distance_exact": 0.1693685113716576,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 0.129784,
+      "min_hops_to_focal": 4,
+      "parent_id": 174,
+      "parent_ordinal": 0,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 1.3702158625567813,
+          "csv_column_index": 85,
+          "delta": -0.129784,
+          "delta_exact": -0.1297841374432187,
+          "gene_index": 68,
+          "gene_name": "lattice_d",
+          "parent_val": 1.5
+        },
+        {
+          "child_val": 6.90881989851296,
+          "csv_column_index": 86,
+          "delta": 0.10882,
+          "delta_exact": 0.10881989851296048,
+          "gene_index": 69,
+          "gene_name": "lattice_pitch",
+          "parent_val": 6.8
+        }
+      ],
+      "within_3_hop_edge_horizon": false
+    }
+  ],
+  "gene_coordinate_count": 128,
+  "induced_subgraph_edge_count": 8,
+  "induced_subgraph_parent_child_gene_diffs": [
+    {
+      "changed_f64_gene_count": 24,
+      "child_id": 245,
+      "child_operator": "archive_mutate",
+      "identical_f64_gene_count": 104,
+      "l2_gene_distance": 0.604263,
+      "l2_gene_distance_exact": 0.6042631602903563,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 0.361541,
+      "min_hops_to_focal": 3,
+      "parent_id": 174,
+      "parent_ordinal": 0,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 1.95175976952384,
+          "csv_column_index": 18,
+          "delta": -0.000049,
+          "delta_exact": -0.000049077932622765275,
+          "gene_index": 1,
+          "gene_name": "cp01",
+          "parent_val": 1.9518088474564628
+        },
+        {
+          "child_val": 1.5820265339636135,
+          "csv_column_index": 19,
+          "delta": -3e-6,
+          "delta_exact": -3.278240046977743e-6,
+          "gene_index": 2,
+          "gene_name": "cp02",
+          "parent_val": 1.5820298122036605
+        },
+        {
+          "child_val": 0.8133821702524813,
+          "csv_column_index": 20,
+          "delta": -0.0,
+          "delta_exact": -1.5216323900890671e-7,
+          "gene_index": 3,
+          "gene_name": "cp03",
+          "parent_val": 0.8133823224157203
+        },
+        {
+          "child_val": 0.34142665835421515,
+          "csv_column_index": 21,
+          "delta": -0.0,
+          "delta_exact": -4.907872108717015e-9,
+          "gene_index": 4,
+          "gene_name": "cp04",
+          "parent_val": 0.34142666326208726
+        },
+        {
+          "child_val": -0.4791905812601209,
+          "csv_column_index": 22,
+          "delta": -0.0,
+          "delta_exact": -1.0999962052338219e-10,
+          "gene_index": 5,
+          "gene_name": "cp05",
+          "parent_val": -0.47919058115012125
+        },
+        {
+          "child_val": -1.2454611986124446,
+          "csv_column_index": 23,
+          "delta": -0.0,
+          "delta_exact": -1.7130741269966165e-12,
+          "gene_index": 6,
+          "gene_name": "cp06",
+          "parent_val": -1.2454611986107316
+        },
+        {
+          "child_val": -1.313858330862375,
+          "csv_column_index": 24,
+          "delta": -0.0,
+          "delta_exact": -1.865174681370263e-14,
+          "gene_index": 7,
+          "gene_name": "cp07",
+          "parent_val": -1.3138583308623564
+        },
+        {
+          "child_val": -0.3329939125063566,
+          "csv_column_index": 25,
+          "delta": -0.0,
+          "delta_exact": -1.1102230246251565e-16,
+          "gene_index": 8,
+          "gene_name": "cp08",
+          "parent_val": -0.3329939125063565
+        },
+        {
+          "child_val": 1.4153146583542515,
+          "csv_column_index": 40,
+          "delta": -0.0,
+          "delta_exact": -6.496581050896566e-11,
+          "gene_index": 23,
+          "gene_name": "cp23",
+          "parent_val": 1.4153146584192173
+        },
+        {
+          "child_val": 1.488403751917278,
+          "csv_column_index": 41,
+          "delta": -0.0,
+          "delta_exact": -3.0407358853068445e-9,
+          "gene_index": 24,
+          "gene_name": "cp24",
+          "parent_val": 1.4884037549580138
+        },
+        {
+          "child_val": 0.3737013532214035,
+          "csv_column_index": 42,
+          "delta": -0.0,
+          "delta_exact": -9.889780377969615e-8,
+          "gene_index": 25,
+          "gene_name": "cp25",
+          "parent_val": 0.3737014521192073
+        },
+        {
+          "child_val": 0.035071482728768616,
+          "csv_column_index": 43,
+          "delta": -2e-6,
+          "delta_exact": -2.235162535585422e-6,
+          "gene_index": 26,
+          "gene_name": "cp26",
+          "parent_val": 0.0350737178913042
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    },
+    {
+      "changed_f64_gene_count": 2,
+      "child_id": 299,
+      "child_operator": "archive_mutate",
+      "identical_f64_gene_count": 126,
+      "l2_gene_distance": 0.169369,
+      "l2_gene_distance_exact": 0.1693685113716576,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 0.129784,
+      "min_hops_to_focal": 4,
+      "parent_id": 174,
+      "parent_ordinal": 0,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 1.3702158625567813,
+          "csv_column_index": 85,
+          "delta": -0.129784,
+          "delta_exact": -0.1297841374432187,
+          "gene_index": 68,
+          "gene_name": "lattice_d",
+          "parent_val": 1.5
+        },
+        {
+          "child_val": 6.90881989851296,
+          "csv_column_index": 86,
+          "delta": 0.10882,
+          "delta_exact": 0.10881989851296048,
+          "gene_index": 69,
+          "gene_name": "lattice_pitch",
+          "parent_val": 6.8
+        }
+      ],
+      "within_3_hop_edge_horizon": false
+    },
+    {
+      "changed_f64_gene_count": 8,
+      "child_id": 392,
+      "child_operator": "mutate",
+      "identical_f64_gene_count": 120,
+      "l2_gene_distance": 4.962176,
+      "l2_gene_distance_exact": 4.962175647357888,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 4.850458,
+      "min_hops_to_focal": 3,
+      "parent_id": 299,
+      "parent_ordinal": 0,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 8.738672881088993,
+          "csv_column_index": 69,
+          "delta": -0.894505,
+          "delta_exact": -0.8945047243794715,
+          "gene_index": 52,
+          "gene_name": "comet_w0",
+          "parent_val": 9.633177605468465
+        },
+        {
+          "child_val": 0.22676297957988922,
+          "csv_column_index": 71,
+          "delta": 0.226763,
+          "delta_exact": 0.22676297957988922,
+          "gene_index": 54,
+          "gene_name": "comet_bow",
+          "parent_val": 0.0
+        },
+        {
+          "child_val": 4.3105430149260915,
+          "csv_column_index": 92,
+          "delta": -0.408744,
+          "delta_exact": -0.408743975228,
+          "gene_index": 75,
+          "gene_name": "fuller_w",
+          "parent_val": 4.7192869901540915
+        },
+        {
+          "child_val": 0.699286668873239,
+          "csv_column_index": 94,
+          "delta": -0.101969,
+          "delta_exact": -0.10196915194997114,
+          "gene_index": 77,
+          "gene_name": "fuller_s1",
+          "parent_val": 0.8012558208232101
+        },
+        {
+          "child_val": 0.47382294027674765,
+          "csv_column_index": 95,
+          "delta": 0.12896,
+          "delta_exact": 0.12896017835027895,
+          "gene_index": 78,
+          "gene_name": "flute_d",
+          "parent_val": 0.3448627619264687
+        },
+        {
+          "child_val": 0.23796247776260604,
+          "csv_column_index": 96,
+          "delta": -0.109089,
+          "delta_exact": -0.10908931892417051,
+          "gene_index": 79,
+          "gene_name": "texture_mode",
+          "parent_val": 0.34705179668677655
+        },
+        {
+          "child_val": 2.800094169831545,
+          "csv_column_index": 98,
+          "delta": -0.196673,
+          "delta_exact": -0.19667258151065692,
+          "gene_index": 81,
+          "gene_name": "texture_pitch",
+          "parent_val": 2.996766751342202
+        },
+        {
+          "child_val": -2.8756161097827153,
+          "csv_column_index": 99,
+          "delta": 4.850458,
+          "delta_exact": 4.850458364704352,
+          "gene_index": 82,
+          "gene_name": "texture_angle",
+          "parent_val": -7.726074474487067
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    },
+    {
+      "changed_f64_gene_count": 5,
+      "child_id": 413,
+      "child_operator": "archive_mutate",
+      "identical_f64_gene_count": 123,
+      "l2_gene_distance": 5.38548,
+      "l2_gene_distance_exact": 5.3854804221039165,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 5.371762,
+      "min_hops_to_focal": 2,
+      "parent_id": 245,
+      "parent_ordinal": 0,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 5.9924350033041955,
+          "csv_column_index": 70,
+          "delta": -0.000754,
+          "delta_exact": -0.0007542819991170902,
+          "gene_index": 53,
+          "gene_name": "comet_w1",
+          "parent_val": 5.993189285303313
+        },
+        {
+          "child_val": 6.28301254041156,
+          "csv_column_index": 74,
+          "delta": -0.380798,
+          "delta_exact": -0.3807981054546641,
+          "gene_index": 57,
+          "gene_name": "cairn_d",
+          "parent_val": 6.663810645866224
+        },
+        {
+          "child_val": 0.39551946557190604,
+          "csv_column_index": 95,
+          "delta": 0.050657,
+          "delta_exact": 0.05065670364543734,
+          "gene_index": 78,
+          "gene_name": "flute_d",
+          "parent_val": 0.3448627619264687
+        },
+        {
+          "child_val": 0.15109640978435576,
+          "csv_column_index": 97,
+          "delta": 0.000981,
+          "delta_exact": 0.0009805271340984911,
+          "gene_index": 80,
+          "gene_name": "texture_d",
+          "parent_val": 0.15011588265025727
+        },
+        {
+          "child_val": -2.354312701311743,
+          "csv_column_index": 99,
+          "delta": 5.371762,
+          "delta_exact": 5.371761773175324,
+          "gene_index": 82,
+          "gene_name": "texture_angle",
+          "parent_val": -7.726074474487067
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    },
+    {
+      "changed_f64_gene_count": 7,
+      "child_id": 526,
+      "child_operator": "crossover_mutate",
+      "identical_f64_gene_count": 121,
+      "l2_gene_distance": 0.724248,
+      "l2_gene_distance_exact": 0.7242481639458437,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 0.648528,
+      "min_hops_to_focal": 2,
+      "parent_id": 413,
+      "parent_ordinal": 0,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 6.0,
+          "csv_column_index": 70,
+          "delta": 0.007565,
+          "delta_exact": 0.00756499669580446,
+          "gene_index": 53,
+          "gene_name": "comet_w1",
+          "parent_val": 5.9924350033041955
+        },
+        {
+          "child_val": 6.9315406877960415,
+          "csv_column_index": 74,
+          "delta": 0.648528,
+          "delta_exact": 0.6485281473844813,
+          "gene_index": 57,
+          "gene_name": "cairn_d",
+          "parent_val": 6.28301254041156
+        },
+        {
+          "child_val": 1.3702158625567813,
+          "csv_column_index": 85,
+          "delta": -0.129784,
+          "delta_exact": -0.1297841374432187,
+          "gene_index": 68,
+          "gene_name": "lattice_d",
+          "parent_val": 1.5
+        },
+        {
+          "child_val": 6.90881989851296,
+          "csv_column_index": 86,
+          "delta": 0.10882,
+          "delta_exact": 0.10881989851296048,
+          "gene_index": 69,
+          "gene_name": "lattice_pitch",
+          "parent_val": 6.8
+        },
+        {
+          "child_val": 0.8520795553148166,
+          "csv_column_index": 94,
+          "delta": 0.050824,
+          "delta_exact": 0.05082373449160649,
+          "gene_index": 77,
+          "gene_name": "fuller_s1",
+          "parent_val": 0.8012558208232101
+        },
+        {
+          "child_val": 0.07757179908467118,
+          "csv_column_index": 96,
+          "delta": -0.26948,
+          "delta_exact": -0.2694799976021054,
+          "gene_index": 79,
+          "gene_name": "texture_mode",
+          "parent_val": 0.34705179668677655
+        },
+        {
+          "child_val": 0.15,
+          "csv_column_index": 97,
+          "delta": -0.001096,
+          "delta_exact": -0.0010964097843557674,
+          "gene_index": 80,
+          "gene_name": "texture_d",
+          "parent_val": 0.15109640978435576
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    },
+    {
+      "changed_f64_gene_count": 35,
+      "child_id": 526,
+      "child_operator": "crossover_mutate",
+      "identical_f64_gene_count": 93,
+      "l2_gene_distance": 1.349493,
+      "l2_gene_distance_exact": 1.3494929224475092,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 0.894505,
+      "min_hops_to_focal": 2,
+      "parent_id": 392,
+      "parent_ordinal": 1,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 1.95175976952384,
+          "csv_column_index": 18,
+          "delta": -0.000049,
+          "delta_exact": -0.000049077932622765275,
+          "gene_index": 1,
+          "gene_name": "cp01",
+          "parent_val": 1.9518088474564628
+        },
+        {
+          "child_val": 1.5820265339636135,
+          "csv_column_index": 19,
+          "delta": -3e-6,
+          "delta_exact": -3.278240046977743e-6,
+          "gene_index": 2,
+          "gene_name": "cp02",
+          "parent_val": 1.5820298122036605
+        },
+        {
+          "child_val": 0.8133821702524813,
+          "csv_column_index": 20,
+          "delta": -0.0,
+          "delta_exact": -1.5216323900890671e-7,
+          "gene_index": 3,
+          "gene_name": "cp03",
+          "parent_val": 0.8133823224157203
+        },
+        {
+          "child_val": 0.34142665835421515,
+          "csv_column_index": 21,
+          "delta": -0.0,
+          "delta_exact": -4.907872108717015e-9,
+          "gene_index": 4,
+          "gene_name": "cp04",
+          "parent_val": 0.34142666326208726
+        },
+        {
+          "child_val": -0.4791905812601209,
+          "csv_column_index": 22,
+          "delta": -0.0,
+          "delta_exact": -1.0999962052338219e-10,
+          "gene_index": 5,
+          "gene_name": "cp05",
+          "parent_val": -0.47919058115012125
+        },
+        {
+          "child_val": -1.2454611986124446,
+          "csv_column_index": 23,
+          "delta": -0.0,
+          "delta_exact": -1.7130741269966165e-12,
+          "gene_index": 6,
+          "gene_name": "cp06",
+          "parent_val": -1.2454611986107316
+        },
+        {
+          "child_val": -1.313858330862375,
+          "csv_column_index": 24,
+          "delta": -0.0,
+          "delta_exact": -1.865174681370263e-14,
+          "gene_index": 7,
+          "gene_name": "cp07",
+          "parent_val": -1.3138583308623564
+        },
+        {
+          "child_val": -0.3329939125063566,
+          "csv_column_index": 25,
+          "delta": -0.0,
+          "delta_exact": -1.1102230246251565e-16,
+          "gene_index": 8,
+          "gene_name": "cp08",
+          "parent_val": -0.3329939125063565
+        },
+        {
+          "child_val": 1.4153146583542515,
+          "csv_column_index": 40,
+          "delta": -0.0,
+          "delta_exact": -6.496581050896566e-11,
+          "gene_index": 23,
+          "gene_name": "cp23",
+          "parent_val": 1.4153146584192173
+        },
+        {
+          "child_val": 1.488403751917278,
+          "csv_column_index": 41,
+          "delta": -0.0,
+          "delta_exact": -3.0407358853068445e-9,
+          "gene_index": 24,
+          "gene_name": "cp24",
+          "parent_val": 1.4884037549580138
+        },
+        {
+          "child_val": 0.3737013532214035,
+          "csv_column_index": 42,
+          "delta": -0.0,
+          "delta_exact": -9.889780377969615e-8,
+          "gene_index": 25,
+          "gene_name": "cp25",
+          "parent_val": 0.3737014521192073
+        },
+        {
+          "child_val": 0.035071482728768616,
+          "csv_column_index": 43,
+          "delta": -2e-6,
+          "delta_exact": -2.235162535585422e-6,
+          "gene_index": 26,
+          "gene_name": "cp26",
+          "parent_val": 0.0350737178913042
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    },
+    {
+      "changed_f64_gene_count": 13,
+      "child_id": 1095,
+      "child_operator": "crossover_mutate",
+      "identical_f64_gene_count": 115,
+      "l2_gene_distance": 0.560427,
+      "l2_gene_distance_exact": 0.5604268679412081,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 0.27759,
+      "min_hops_to_focal": 1,
+      "parent_id": 413,
+      "parent_ordinal": 0,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 5.8,
+          "csv_column_index": 62,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 45,
+          "gene_name": "t_stock",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 3.548537342428057,
+          "csv_column_index": 63,
+          "delta": 0.151761,
+          "delta_exact": 0.1517613192885987,
+          "gene_index": 46,
+          "gene_name": "t_tip",
+          "parent_val": 3.3967760231394584
+        },
+        {
+          "child_val": 22.0,
+          "csv_column_index": 65,
+          "delta": 0.27759,
+          "delta_exact": 0.27759008089886805,
+          "gene_index": 48,
+          "gene_name": "edge_angle_in",
+          "parent_val": 21.722409919101132
+        },
+        {
+          "child_val": 2.4584392017131274,
+          "csv_column_index": 84,
+          "delta": 0.257889,
+          "delta_exact": 0.2578888554804708,
+          "gene_index": 67,
+          "gene_name": "relief_q",
+          "parent_val": 2.2005503462326566
+        },
+        {
+          "child_val": 6.90881989851296,
+          "csv_column_index": 86,
+          "delta": 0.10882,
+          "delta_exact": 0.10881989851296048,
+          "gene_index": 69,
+          "gene_name": "lattice_pitch",
+          "parent_val": 6.8
+        },
+        {
+          "child_val": 0.8520795553148166,
+          "csv_column_index": 94,
+          "delta": 0.050824,
+          "delta_exact": 0.05082373449160649,
+          "gene_index": 77,
+          "gene_name": "fuller_s1",
+          "parent_val": 0.8012558208232101
+        },
+        {
+          "child_val": 0.07757179908467118,
+          "csv_column_index": 96,
+          "delta": -0.26948,
+          "delta_exact": -0.2694799976021054,
+          "gene_index": 79,
+          "gene_name": "texture_mode",
+          "parent_val": 0.34705179668677655
+        },
+        {
+          "child_val": 0.8729211266344896,
+          "csv_column_index": 106,
+          "delta": -0.020966,
+          "delta_exact": -0.020965926548411118,
+          "gene_index": 89,
+          "gene_name": "edge_t",
+          "parent_val": 0.8938870531829007
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 140,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 123,
+          "gene_name": "k0",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 141,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 124,
+          "gene_name": "k1",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 142,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 125,
+          "gene_name": "k2",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 143,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 126,
+          "gene_name": "k3",
+          "parent_val": 5.9
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    },
+    {
+      "changed_f64_gene_count": 14,
+      "child_id": 1095,
+      "child_operator": "crossover_mutate",
+      "identical_f64_gene_count": 114,
+      "l2_gene_distance": 0.815184,
+      "l2_gene_distance_exact": 0.8151840862492151,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 0.648528,
+      "min_hops_to_focal": 1,
+      "parent_id": 526,
+      "parent_ordinal": 1,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 5.8,
+          "csv_column_index": 62,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 45,
+          "gene_name": "t_stock",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 3.548537342428057,
+          "csv_column_index": 63,
+          "delta": 0.151761,
+          "delta_exact": 0.1517613192885987,
+          "gene_index": 46,
+          "gene_name": "t_tip",
+          "parent_val": 3.3967760231394584
+        },
+        {
+          "child_val": 22.0,
+          "csv_column_index": 65,
+          "delta": 0.27759,
+          "delta_exact": 0.27759008089886805,
+          "gene_index": 48,
+          "gene_name": "edge_angle_in",
+          "parent_val": 21.722409919101132
+        },
+        {
+          "child_val": 5.9924350033041955,
+          "csv_column_index": 70,
+          "delta": -0.007565,
+          "delta_exact": -0.00756499669580446,
+          "gene_index": 53,
+          "gene_name": "comet_w1",
+          "parent_val": 6.0
+        },
+        {
+          "child_val": 6.28301254041156,
+          "csv_column_index": 74,
+          "delta": -0.648528,
+          "delta_exact": -0.6485281473844813,
+          "gene_index": 57,
+          "gene_name": "cairn_d",
+          "parent_val": 6.9315406877960415
+        },
+        {
+          "child_val": 2.4584392017131274,
+          "csv_column_index": 84,
+          "delta": 0.257889,
+          "delta_exact": 0.2578888554804708,
+          "gene_index": 67,
+          "gene_name": "relief_q",
+          "parent_val": 2.2005503462326566
+        },
+        {
+          "child_val": 1.5,
+          "csv_column_index": 85,
+          "delta": 0.129784,
+          "delta_exact": 0.1297841374432187,
+          "gene_index": 68,
+          "gene_name": "lattice_d",
+          "parent_val": 1.3702158625567813
+        },
+        {
+          "child_val": 0.15109640978435576,
+          "csv_column_index": 97,
+          "delta": 0.001096,
+          "delta_exact": 0.0010964097843557674,
+          "gene_index": 80,
+          "gene_name": "texture_d",
+          "parent_val": 0.15
+        },
+        {
+          "child_val": 0.8729211266344896,
+          "csv_column_index": 106,
+          "delta": -0.020966,
+          "delta_exact": -0.020965926548411118,
+          "gene_index": 89,
+          "gene_name": "edge_t",
+          "parent_val": 0.8938870531829007
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 140,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 123,
+          "gene_name": "k0",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 141,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 124,
+          "gene_name": "k1",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 142,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 125,
+          "gene_name": "k2",
+          "parent_val": 5.9
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    }
+  ],
+  "l2_distance_note": "Euclidean L2 norm across raw CSV numeric coordinates (columns 17..144); mixes coordinate units (mm, degrees, dimensionless, discrete counts) and is not a physical distance.",
+  "max_parent_hops_included": 3,
+  "parent_child_gene_diffs": [
+    {
+      "changed_f64_gene_count": 24,
+      "child_id": 245,
+      "child_operator": "archive_mutate",
+      "identical_f64_gene_count": 104,
+      "l2_gene_distance": 0.604263,
+      "l2_gene_distance_exact": 0.6042631602903563,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 0.361541,
+      "min_hops_to_focal": 3,
+      "parent_id": 174,
+      "parent_ordinal": 0,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 1.95175976952384,
+          "csv_column_index": 18,
+          "delta": -0.000049,
+          "delta_exact": -0.000049077932622765275,
+          "gene_index": 1,
+          "gene_name": "cp01",
+          "parent_val": 1.9518088474564628
+        },
+        {
+          "child_val": 1.5820265339636135,
+          "csv_column_index": 19,
+          "delta": -3e-6,
+          "delta_exact": -3.278240046977743e-6,
+          "gene_index": 2,
+          "gene_name": "cp02",
+          "parent_val": 1.5820298122036605
+        },
+        {
+          "child_val": 0.8133821702524813,
+          "csv_column_index": 20,
+          "delta": -0.0,
+          "delta_exact": -1.5216323900890671e-7,
+          "gene_index": 3,
+          "gene_name": "cp03",
+          "parent_val": 0.8133823224157203
+        },
+        {
+          "child_val": 0.34142665835421515,
+          "csv_column_index": 21,
+          "delta": -0.0,
+          "delta_exact": -4.907872108717015e-9,
+          "gene_index": 4,
+          "gene_name": "cp04",
+          "parent_val": 0.34142666326208726
+        },
+        {
+          "child_val": -0.4791905812601209,
+          "csv_column_index": 22,
+          "delta": -0.0,
+          "delta_exact": -1.0999962052338219e-10,
+          "gene_index": 5,
+          "gene_name": "cp05",
+          "parent_val": -0.47919058115012125
+        },
+        {
+          "child_val": -1.2454611986124446,
+          "csv_column_index": 23,
+          "delta": -0.0,
+          "delta_exact": -1.7130741269966165e-12,
+          "gene_index": 6,
+          "gene_name": "cp06",
+          "parent_val": -1.2454611986107316
+        },
+        {
+          "child_val": -1.313858330862375,
+          "csv_column_index": 24,
+          "delta": -0.0,
+          "delta_exact": -1.865174681370263e-14,
+          "gene_index": 7,
+          "gene_name": "cp07",
+          "parent_val": -1.3138583308623564
+        },
+        {
+          "child_val": -0.3329939125063566,
+          "csv_column_index": 25,
+          "delta": -0.0,
+          "delta_exact": -1.1102230246251565e-16,
+          "gene_index": 8,
+          "gene_name": "cp08",
+          "parent_val": -0.3329939125063565
+        },
+        {
+          "child_val": 1.4153146583542515,
+          "csv_column_index": 40,
+          "delta": -0.0,
+          "delta_exact": -6.496581050896566e-11,
+          "gene_index": 23,
+          "gene_name": "cp23",
+          "parent_val": 1.4153146584192173
+        },
+        {
+          "child_val": 1.488403751917278,
+          "csv_column_index": 41,
+          "delta": -0.0,
+          "delta_exact": -3.0407358853068445e-9,
+          "gene_index": 24,
+          "gene_name": "cp24",
+          "parent_val": 1.4884037549580138
+        },
+        {
+          "child_val": 0.3737013532214035,
+          "csv_column_index": 42,
+          "delta": -0.0,
+          "delta_exact": -9.889780377969615e-8,
+          "gene_index": 25,
+          "gene_name": "cp25",
+          "parent_val": 0.3737014521192073
+        },
+        {
+          "child_val": 0.035071482728768616,
+          "csv_column_index": 43,
+          "delta": -2e-6,
+          "delta_exact": -2.235162535585422e-6,
+          "gene_index": 26,
+          "gene_name": "cp26",
+          "parent_val": 0.0350737178913042
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    },
+    {
+      "changed_f64_gene_count": 8,
+      "child_id": 392,
+      "child_operator": "mutate",
+      "identical_f64_gene_count": 120,
+      "l2_gene_distance": 4.962176,
+      "l2_gene_distance_exact": 4.962175647357888,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 4.850458,
+      "min_hops_to_focal": 3,
+      "parent_id": 299,
+      "parent_ordinal": 0,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 8.738672881088993,
+          "csv_column_index": 69,
+          "delta": -0.894505,
+          "delta_exact": -0.8945047243794715,
+          "gene_index": 52,
+          "gene_name": "comet_w0",
+          "parent_val": 9.633177605468465
+        },
+        {
+          "child_val": 0.22676297957988922,
+          "csv_column_index": 71,
+          "delta": 0.226763,
+          "delta_exact": 0.22676297957988922,
+          "gene_index": 54,
+          "gene_name": "comet_bow",
+          "parent_val": 0.0
+        },
+        {
+          "child_val": 4.3105430149260915,
+          "csv_column_index": 92,
+          "delta": -0.408744,
+          "delta_exact": -0.408743975228,
+          "gene_index": 75,
+          "gene_name": "fuller_w",
+          "parent_val": 4.7192869901540915
+        },
+        {
+          "child_val": 0.699286668873239,
+          "csv_column_index": 94,
+          "delta": -0.101969,
+          "delta_exact": -0.10196915194997114,
+          "gene_index": 77,
+          "gene_name": "fuller_s1",
+          "parent_val": 0.8012558208232101
+        },
+        {
+          "child_val": 0.47382294027674765,
+          "csv_column_index": 95,
+          "delta": 0.12896,
+          "delta_exact": 0.12896017835027895,
+          "gene_index": 78,
+          "gene_name": "flute_d",
+          "parent_val": 0.3448627619264687
+        },
+        {
+          "child_val": 0.23796247776260604,
+          "csv_column_index": 96,
+          "delta": -0.109089,
+          "delta_exact": -0.10908931892417051,
+          "gene_index": 79,
+          "gene_name": "texture_mode",
+          "parent_val": 0.34705179668677655
+        },
+        {
+          "child_val": 2.800094169831545,
+          "csv_column_index": 98,
+          "delta": -0.196673,
+          "delta_exact": -0.19667258151065692,
+          "gene_index": 81,
+          "gene_name": "texture_pitch",
+          "parent_val": 2.996766751342202
+        },
+        {
+          "child_val": -2.8756161097827153,
+          "csv_column_index": 99,
+          "delta": 4.850458,
+          "delta_exact": 4.850458364704352,
+          "gene_index": 82,
+          "gene_name": "texture_angle",
+          "parent_val": -7.726074474487067
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    },
+    {
+      "changed_f64_gene_count": 5,
+      "child_id": 413,
+      "child_operator": "archive_mutate",
+      "identical_f64_gene_count": 123,
+      "l2_gene_distance": 5.38548,
+      "l2_gene_distance_exact": 5.3854804221039165,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 5.371762,
+      "min_hops_to_focal": 2,
+      "parent_id": 245,
+      "parent_ordinal": 0,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 5.9924350033041955,
+          "csv_column_index": 70,
+          "delta": -0.000754,
+          "delta_exact": -0.0007542819991170902,
+          "gene_index": 53,
+          "gene_name": "comet_w1",
+          "parent_val": 5.993189285303313
+        },
+        {
+          "child_val": 6.28301254041156,
+          "csv_column_index": 74,
+          "delta": -0.380798,
+          "delta_exact": -0.3807981054546641,
+          "gene_index": 57,
+          "gene_name": "cairn_d",
+          "parent_val": 6.663810645866224
+        },
+        {
+          "child_val": 0.39551946557190604,
+          "csv_column_index": 95,
+          "delta": 0.050657,
+          "delta_exact": 0.05065670364543734,
+          "gene_index": 78,
+          "gene_name": "flute_d",
+          "parent_val": 0.3448627619264687
+        },
+        {
+          "child_val": 0.15109640978435576,
+          "csv_column_index": 97,
+          "delta": 0.000981,
+          "delta_exact": 0.0009805271340984911,
+          "gene_index": 80,
+          "gene_name": "texture_d",
+          "parent_val": 0.15011588265025727
+        },
+        {
+          "child_val": -2.354312701311743,
+          "csv_column_index": 99,
+          "delta": 5.371762,
+          "delta_exact": 5.371761773175324,
+          "gene_index": 82,
+          "gene_name": "texture_angle",
+          "parent_val": -7.726074474487067
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    },
+    {
+      "changed_f64_gene_count": 7,
+      "child_id": 526,
+      "child_operator": "crossover_mutate",
+      "identical_f64_gene_count": 121,
+      "l2_gene_distance": 0.724248,
+      "l2_gene_distance_exact": 0.7242481639458437,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 0.648528,
+      "min_hops_to_focal": 2,
+      "parent_id": 413,
+      "parent_ordinal": 0,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 6.0,
+          "csv_column_index": 70,
+          "delta": 0.007565,
+          "delta_exact": 0.00756499669580446,
+          "gene_index": 53,
+          "gene_name": "comet_w1",
+          "parent_val": 5.9924350033041955
+        },
+        {
+          "child_val": 6.9315406877960415,
+          "csv_column_index": 74,
+          "delta": 0.648528,
+          "delta_exact": 0.6485281473844813,
+          "gene_index": 57,
+          "gene_name": "cairn_d",
+          "parent_val": 6.28301254041156
+        },
+        {
+          "child_val": 1.3702158625567813,
+          "csv_column_index": 85,
+          "delta": -0.129784,
+          "delta_exact": -0.1297841374432187,
+          "gene_index": 68,
+          "gene_name": "lattice_d",
+          "parent_val": 1.5
+        },
+        {
+          "child_val": 6.90881989851296,
+          "csv_column_index": 86,
+          "delta": 0.10882,
+          "delta_exact": 0.10881989851296048,
+          "gene_index": 69,
+          "gene_name": "lattice_pitch",
+          "parent_val": 6.8
+        },
+        {
+          "child_val": 0.8520795553148166,
+          "csv_column_index": 94,
+          "delta": 0.050824,
+          "delta_exact": 0.05082373449160649,
+          "gene_index": 77,
+          "gene_name": "fuller_s1",
+          "parent_val": 0.8012558208232101
+        },
+        {
+          "child_val": 0.07757179908467118,
+          "csv_column_index": 96,
+          "delta": -0.26948,
+          "delta_exact": -0.2694799976021054,
+          "gene_index": 79,
+          "gene_name": "texture_mode",
+          "parent_val": 0.34705179668677655
+        },
+        {
+          "child_val": 0.15,
+          "csv_column_index": 97,
+          "delta": -0.001096,
+          "delta_exact": -0.0010964097843557674,
+          "gene_index": 80,
+          "gene_name": "texture_d",
+          "parent_val": 0.15109640978435576
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    },
+    {
+      "changed_f64_gene_count": 35,
+      "child_id": 526,
+      "child_operator": "crossover_mutate",
+      "identical_f64_gene_count": 93,
+      "l2_gene_distance": 1.349493,
+      "l2_gene_distance_exact": 1.3494929224475092,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 0.894505,
+      "min_hops_to_focal": 2,
+      "parent_id": 392,
+      "parent_ordinal": 1,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 1.95175976952384,
+          "csv_column_index": 18,
+          "delta": -0.000049,
+          "delta_exact": -0.000049077932622765275,
+          "gene_index": 1,
+          "gene_name": "cp01",
+          "parent_val": 1.9518088474564628
+        },
+        {
+          "child_val": 1.5820265339636135,
+          "csv_column_index": 19,
+          "delta": -3e-6,
+          "delta_exact": -3.278240046977743e-6,
+          "gene_index": 2,
+          "gene_name": "cp02",
+          "parent_val": 1.5820298122036605
+        },
+        {
+          "child_val": 0.8133821702524813,
+          "csv_column_index": 20,
+          "delta": -0.0,
+          "delta_exact": -1.5216323900890671e-7,
+          "gene_index": 3,
+          "gene_name": "cp03",
+          "parent_val": 0.8133823224157203
+        },
+        {
+          "child_val": 0.34142665835421515,
+          "csv_column_index": 21,
+          "delta": -0.0,
+          "delta_exact": -4.907872108717015e-9,
+          "gene_index": 4,
+          "gene_name": "cp04",
+          "parent_val": 0.34142666326208726
+        },
+        {
+          "child_val": -0.4791905812601209,
+          "csv_column_index": 22,
+          "delta": -0.0,
+          "delta_exact": -1.0999962052338219e-10,
+          "gene_index": 5,
+          "gene_name": "cp05",
+          "parent_val": -0.47919058115012125
+        },
+        {
+          "child_val": -1.2454611986124446,
+          "csv_column_index": 23,
+          "delta": -0.0,
+          "delta_exact": -1.7130741269966165e-12,
+          "gene_index": 6,
+          "gene_name": "cp06",
+          "parent_val": -1.2454611986107316
+        },
+        {
+          "child_val": -1.313858330862375,
+          "csv_column_index": 24,
+          "delta": -0.0,
+          "delta_exact": -1.865174681370263e-14,
+          "gene_index": 7,
+          "gene_name": "cp07",
+          "parent_val": -1.3138583308623564
+        },
+        {
+          "child_val": -0.3329939125063566,
+          "csv_column_index": 25,
+          "delta": -0.0,
+          "delta_exact": -1.1102230246251565e-16,
+          "gene_index": 8,
+          "gene_name": "cp08",
+          "parent_val": -0.3329939125063565
+        },
+        {
+          "child_val": 1.4153146583542515,
+          "csv_column_index": 40,
+          "delta": -0.0,
+          "delta_exact": -6.496581050896566e-11,
+          "gene_index": 23,
+          "gene_name": "cp23",
+          "parent_val": 1.4153146584192173
+        },
+        {
+          "child_val": 1.488403751917278,
+          "csv_column_index": 41,
+          "delta": -0.0,
+          "delta_exact": -3.0407358853068445e-9,
+          "gene_index": 24,
+          "gene_name": "cp24",
+          "parent_val": 1.4884037549580138
+        },
+        {
+          "child_val": 0.3737013532214035,
+          "csv_column_index": 42,
+          "delta": -0.0,
+          "delta_exact": -9.889780377969615e-8,
+          "gene_index": 25,
+          "gene_name": "cp25",
+          "parent_val": 0.3737014521192073
+        },
+        {
+          "child_val": 0.035071482728768616,
+          "csv_column_index": 43,
+          "delta": -2e-6,
+          "delta_exact": -2.235162535585422e-6,
+          "gene_index": 26,
+          "gene_name": "cp26",
+          "parent_val": 0.0350737178913042
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    },
+    {
+      "changed_f64_gene_count": 13,
+      "child_id": 1095,
+      "child_operator": "crossover_mutate",
+      "identical_f64_gene_count": 115,
+      "l2_gene_distance": 0.560427,
+      "l2_gene_distance_exact": 0.5604268679412081,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 0.27759,
+      "min_hops_to_focal": 1,
+      "parent_id": 413,
+      "parent_ordinal": 0,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 5.8,
+          "csv_column_index": 62,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 45,
+          "gene_name": "t_stock",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 3.548537342428057,
+          "csv_column_index": 63,
+          "delta": 0.151761,
+          "delta_exact": 0.1517613192885987,
+          "gene_index": 46,
+          "gene_name": "t_tip",
+          "parent_val": 3.3967760231394584
+        },
+        {
+          "child_val": 22.0,
+          "csv_column_index": 65,
+          "delta": 0.27759,
+          "delta_exact": 0.27759008089886805,
+          "gene_index": 48,
+          "gene_name": "edge_angle_in",
+          "parent_val": 21.722409919101132
+        },
+        {
+          "child_val": 2.4584392017131274,
+          "csv_column_index": 84,
+          "delta": 0.257889,
+          "delta_exact": 0.2578888554804708,
+          "gene_index": 67,
+          "gene_name": "relief_q",
+          "parent_val": 2.2005503462326566
+        },
+        {
+          "child_val": 6.90881989851296,
+          "csv_column_index": 86,
+          "delta": 0.10882,
+          "delta_exact": 0.10881989851296048,
+          "gene_index": 69,
+          "gene_name": "lattice_pitch",
+          "parent_val": 6.8
+        },
+        {
+          "child_val": 0.8520795553148166,
+          "csv_column_index": 94,
+          "delta": 0.050824,
+          "delta_exact": 0.05082373449160649,
+          "gene_index": 77,
+          "gene_name": "fuller_s1",
+          "parent_val": 0.8012558208232101
+        },
+        {
+          "child_val": 0.07757179908467118,
+          "csv_column_index": 96,
+          "delta": -0.26948,
+          "delta_exact": -0.2694799976021054,
+          "gene_index": 79,
+          "gene_name": "texture_mode",
+          "parent_val": 0.34705179668677655
+        },
+        {
+          "child_val": 0.8729211266344896,
+          "csv_column_index": 106,
+          "delta": -0.020966,
+          "delta_exact": -0.020965926548411118,
+          "gene_index": 89,
+          "gene_name": "edge_t",
+          "parent_val": 0.8938870531829007
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 140,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 123,
+          "gene_name": "k0",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 141,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 124,
+          "gene_name": "k1",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 142,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 125,
+          "gene_name": "k2",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 143,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 126,
+          "gene_name": "k3",
+          "parent_val": 5.9
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    },
+    {
+      "changed_f64_gene_count": 14,
+      "child_id": 1095,
+      "child_operator": "crossover_mutate",
+      "identical_f64_gene_count": 114,
+      "l2_gene_distance": 0.815184,
+      "l2_gene_distance_exact": 0.8151840862492151,
+      "material_changed": false,
+      "max_abs_coordinate_delta": 0.648528,
+      "min_hops_to_focal": 1,
+      "parent_id": 526,
+      "parent_ordinal": 1,
+      "sample_changed_coordinates": [
+        {
+          "child_val": 5.8,
+          "csv_column_index": 62,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 45,
+          "gene_name": "t_stock",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 3.548537342428057,
+          "csv_column_index": 63,
+          "delta": 0.151761,
+          "delta_exact": 0.1517613192885987,
+          "gene_index": 46,
+          "gene_name": "t_tip",
+          "parent_val": 3.3967760231394584
+        },
+        {
+          "child_val": 22.0,
+          "csv_column_index": 65,
+          "delta": 0.27759,
+          "delta_exact": 0.27759008089886805,
+          "gene_index": 48,
+          "gene_name": "edge_angle_in",
+          "parent_val": 21.722409919101132
+        },
+        {
+          "child_val": 5.9924350033041955,
+          "csv_column_index": 70,
+          "delta": -0.007565,
+          "delta_exact": -0.00756499669580446,
+          "gene_index": 53,
+          "gene_name": "comet_w1",
+          "parent_val": 6.0
+        },
+        {
+          "child_val": 6.28301254041156,
+          "csv_column_index": 74,
+          "delta": -0.648528,
+          "delta_exact": -0.6485281473844813,
+          "gene_index": 57,
+          "gene_name": "cairn_d",
+          "parent_val": 6.9315406877960415
+        },
+        {
+          "child_val": 2.4584392017131274,
+          "csv_column_index": 84,
+          "delta": 0.257889,
+          "delta_exact": 0.2578888554804708,
+          "gene_index": 67,
+          "gene_name": "relief_q",
+          "parent_val": 2.2005503462326566
+        },
+        {
+          "child_val": 1.5,
+          "csv_column_index": 85,
+          "delta": 0.129784,
+          "delta_exact": 0.1297841374432187,
+          "gene_index": 68,
+          "gene_name": "lattice_d",
+          "parent_val": 1.3702158625567813
+        },
+        {
+          "child_val": 0.15109640978435576,
+          "csv_column_index": 97,
+          "delta": 0.001096,
+          "delta_exact": 0.0010964097843557674,
+          "gene_index": 80,
+          "gene_name": "texture_d",
+          "parent_val": 0.15
+        },
+        {
+          "child_val": 0.8729211266344896,
+          "csv_column_index": 106,
+          "delta": -0.020966,
+          "delta_exact": -0.020965926548411118,
+          "gene_index": 89,
+          "gene_name": "edge_t",
+          "parent_val": 0.8938870531829007
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 140,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 123,
+          "gene_name": "k0",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 141,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 124,
+          "gene_name": "k1",
+          "parent_val": 5.9
+        },
+        {
+          "child_val": 5.8,
+          "csv_column_index": 142,
+          "delta": -0.1,
+          "delta_exact": -0.10000000000000053,
+          "gene_index": 125,
+          "gene_name": "k2",
+          "parent_val": 5.9
+        }
+      ],
+      "within_3_hop_edge_horizon": true
+    }
+  ],
+  "public_run_id": 1,
+  "reused_ancestor_finding": "Individual 413 (gen 3, fit 1.15296, parents [245], archive_mutate) is reused across two generations in Individual 1095's ancestry: first as parent 0 of Individual 526 (gen 4, fit 1.15563, parents [413, 392], crossover_mutate) and again as parent 0 of Individual 1095 (gen 9, fit 1.15727, parents [413, 526], crossover_mutate). In the induced 7-node subgraph, Individual 174 (gen 1, fit 1.14979, parents [57, 61]) also branches to both Individual 245 (3 hops from 1095 via 413) and Individual 299 (4 hops from 1095 via 526 <- 392 <- 299).",
+  "schema": "jarambit.inheritance_genome_diff.v1",
+  "scope": "Recorded parent links from all_evals.json and exact stored CSV gene coordinate differences (delta != 0) across columns 17..144 plus material column 145; coordinate difference does not establish causal attribution of individual genes.",
+  "source_csv_relpath": "evidence/rs_v2/w282_ultrarunner/search/all_evals.csv",
+  "source_csv_sha256": "a28f6d2c8a676661280981733a1e33c80136aba157c7a9d2f5a5c3db444a223c",
+  "source_json_relpath": "evidence/rs_v2/w282_ultrarunner/search/all_evals.json",
+  "source_json_sha256": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363",
+  "three_hop_edge_count": 7
+}

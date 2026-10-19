@@ -1,0 +1,2343 @@
+{
+  "schema": "jarambit.ei.p1_t06_native_summary_admission_receipt.v1",
+  "task_id": "JR-EI-P1-T06",
+  "admiralty_task_id": "jarambit:JR-EI-P1-T06@r2:sha256:42fad7b91e80a21adf2908e90bcc6a0a07fde2b6e85cca86a1776c4621e4ee61",
+  "decision_refs": [
+    "SC-DEC-183E",
+    "SC-DEC-183F",
+    "SC-DEC-186A"
+  ],
+  "erratum_correction_ref": "SC183E_SOURCE_ERRATUM_20261019T1713Z.md items 1, 2, 9",
+  "observed_utc": "2026-10-19T17:41:30Z",
+  "steward": "2740538.captain_jarambit (window 1)",
+  "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+  "branch": "ei/admiralty-primary-20261019",
+  "status": "implemented_unvalidated",
+  "validation_posture": {
+    "ci_hold_until_p8": true,
+    "native_execution_qualified": false,
+    "runtime_mode": "manual-coordination-active",
+    "deferred_p8_checks": [
+      "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml native_history -- --test-threads=2",
+      "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2"
+    ]
+  },
+  "declared_schema": "gen,island,evals,aesthetic_pass,legal,feasible,best_fit,best_spg,best_mass_g,best_aes,best_nov,archive_cells,min_legal_mass_g,mean_relief_frac_pass",
+  "rust_reader_binding": {
+    "module_path": "crates/paper-artifacts/src/native_history.rs",
+    "module_sha256": "159f8f3fcebfc2805387814552a92fa2ed8670765bc62619afdc18ee1cefc7ae",
+    "module_bytes": 9813
+  },
+  "producer_and_config_scope": {
+    "base_git_commit": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+    "baseline_qd_rs_path": "crates/crescent/src/qd.rs",
+    "baseline_qd_rs_sha256": "ec83c92df6bb666a941dcde0fc1fb2bd1eb6be7e892266810c19d792ce9e2736",
+    "local_perf_patch_diff_sha256": "fb80e34dfde1f3b49788e1d71e6700ef3da25f11e5270ed0b5dcab79e083b219",
+    "patched_qd_rs_sha256": "dfce6905486e51c60c0e60ae307be881ab8a0c58fb7b7d7fdba3a0841b69103f",
+    "unknown_and_unverified_process_bindings": [
+      "Summaries are generation/island aggregates (not births or complete genomes).",
+      "Runs lacking proc_config.json (xbabe1 c01/c02, xbabe2 c01, xbabe3 c01/c02, xbabe4 c01/c02) have expected_islands=None in native_history::coverage(None); observing islands 0..3 does not prove four were configured.",
+      "proc_config.json added_utc and STOPPED_MEMORY timestamps are configuration-addition / executor-relief receipts, not verified OS process start/termination receipts.",
+      "Current on-disk binary hashes on xbabe1..4 do not retrospectively prove which binary image each historical process executed."
+    ]
+  },
+  "v2_staged_native_histories_summary": {
+    "files_count": 11,
+    "total_rows": 17672,
+    "longest_retained_generation_in_v2": 708,
+    "internal_generation_gaps_count": 0,
+    "runs": [
+      {
+        "package_id": "evo_full_20261018_xbabe2_c01",
+        "staged_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe2_c01/history_live.csv",
+        "bytes": 123294,
+        "sha256": "8b514085b1713a3ea9c29c1a81e7edbab5b8452376323030c85ea37affdaa82d",
+        "headerless_row_zero_retained": true,
+        "row_0_raw": "0,0,64,55,0,0,-1.0434,3.4056,76.01,0.408,0.033,0,NaN,0.0633",
+        "rows_count": 1900,
+        "generation_range": [
+          0,
+          474
+        ],
+        "observed_islands": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "expected_islands_from_admitted_proc_config": null,
+        "coverage_completeness_status": "unknown_without_proc_config",
+        "internal_generation_gaps": [],
+        "nan_counts_by_column": {
+          "min_legal_mass_g": 3
+        },
+        "max_best_fit_col6": 1.12,
+        "proc_config": null,
+        "stopped_memory_receipt": null
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe2_c02",
+        "staged_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe2_c02/history_live.csv",
+        "bytes": 4071,
+        "sha256": "b5b1b120a777d43b7ab6d7edbc4ce8a9d98bfef64e3968138c72fbaa58015656",
+        "headerless_row_zero_retained": true,
+        "row_0_raw": "0,0,64,59,0,0,-1.0459,3.3531,77.18,0.408,0.047,0,NaN,0.0608",
+        "rows_count": 64,
+        "generation_range": [
+          0,
+          15
+        ],
+        "observed_islands": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "expected_islands_from_admitted_proc_config": 4,
+        "coverage_completeness_status": "verified_4_islands_per_gen",
+        "internal_generation_gaps": [],
+        "nan_counts_by_column": {
+          "min_legal_mass_g": 3
+        },
+        "max_best_fit_col6": 1.0169,
+        "proc_config": {
+          "proc": "c02",
+          "seed": 2026104302,
+          "threads": 18,
+          "gens": 800,
+          "pop": 64,
+          "islands": 4,
+          "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+          "added_utc": "2026-10-19T01:37:03Z",
+          "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+        },
+        "stopped_memory_receipt": "stopped_by_executor_memory_relief 2026-10-19T02:01Z\n"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe2_c03",
+        "staged_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe2_c03/history_live.csv",
+        "bytes": 4587,
+        "sha256": "6d925fa92a21d1e90ff37fcd29689c8e7e15d6a439c391f931d23f68d953c295",
+        "headerless_row_zero_retained": true,
+        "row_0_raw": "0,0,64,58,0,0,-1.1044,3.1799,80.91,0.408,0.091,0,NaN,0.0673",
+        "rows_count": 72,
+        "generation_range": [
+          0,
+          17
+        ],
+        "observed_islands": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "expected_islands_from_admitted_proc_config": 4,
+        "coverage_completeness_status": "verified_4_islands_per_gen",
+        "internal_generation_gaps": [],
+        "nan_counts_by_column": {
+          "min_legal_mass_g": 3
+        },
+        "max_best_fit_col6": 1.0596,
+        "proc_config": {
+          "proc": "c03",
+          "seed": 2026104303,
+          "threads": 18,
+          "gens": 800,
+          "pop": 64,
+          "islands": 4,
+          "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+          "added_utc": "2026-10-19T01:37:08Z",
+          "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+        },
+        "stopped_memory_receipt": "stopped_by_executor_memory_relief 2026-10-19T02:01Z\n"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe2_c04",
+        "staged_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe2_c04/history_live.csv",
+        "bytes": 1003,
+        "sha256": "0c418be512c379d1ae3841fca9f87839460155b062eae18b25fccd042326fe6d",
+        "headerless_row_zero_retained": true,
+        "row_0_raw": "0,0,64,61,0,0,-1.1047,3.2100,80.15,0.408,0.084,0,NaN,0.0628",
+        "rows_count": 16,
+        "generation_range": [
+          0,
+          3
+        ],
+        "observed_islands": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "expected_islands_from_admitted_proc_config": 4,
+        "coverage_completeness_status": "verified_4_islands_per_gen",
+        "internal_generation_gaps": [],
+        "nan_counts_by_column": {
+          "min_legal_mass_g": 2
+        },
+        "max_best_fit_col6": -0.1596,
+        "proc_config": {
+          "proc": "c04",
+          "seed": 2026104304,
+          "threads": 10,
+          "gens": 800,
+          "pop": 64,
+          "islands": 4,
+          "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+          "added_utc": "2026-10-19T01:44:28Z",
+          "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+        },
+        "stopped_memory_receipt": "stopped_by_executor_memory_relief 2026-10-19T02:01Z\n"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe2_c05",
+        "staged_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe2_c05/history_live.csv",
+        "bytes": 138761,
+        "sha256": "44516178645a52539103b1003588f680d3ba762b40b79774bba82acaedf01d54",
+        "headerless_row_zero_retained": true,
+        "row_0_raw": "0,0,64,53,0,0,-1.0057,3.1707,81.95,0.408,0.083,0,NaN,0.0658",
+        "rows_count": 2132,
+        "generation_range": [
+          0,
+          532
+        ],
+        "observed_islands": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "expected_islands_from_admitted_proc_config": 4,
+        "coverage_completeness_status": "verified_4_islands_per_gen",
+        "internal_generation_gaps": [],
+        "nan_counts_by_column": {
+          "min_legal_mass_g": 3
+        },
+        "max_best_fit_col6": 1.1468,
+        "proc_config": {
+          "proc": "c05",
+          "seed": 2026104305,
+          "threads": 24,
+          "gens": 800,
+          "pop": 64,
+          "islands": 4,
+          "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+          "added_utc": "2026-10-19T03:10:18Z",
+          "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+        },
+        "stopped_memory_receipt": null
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe2_c06",
+        "staged_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe2_c06/history_live.csv",
+        "bytes": 58750,
+        "sha256": "67e7e375f3b1020b9fa1759d1c893de742ba5bca06e238c585c7814fe8b53d11",
+        "headerless_row_zero_retained": true,
+        "row_0_raw": "0,0,64,56,0,0,-1.1101,3.4287,75.00,0.408,0.055,0,NaN,0.0642",
+        "rows_count": 908,
+        "generation_range": [
+          0,
+          226
+        ],
+        "observed_islands": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "expected_islands_from_admitted_proc_config": 4,
+        "coverage_completeness_status": "verified_4_islands_per_gen",
+        "internal_generation_gaps": [],
+        "nan_counts_by_column": {
+          "min_legal_mass_g": 3
+        },
+        "max_best_fit_col6": 1.1029,
+        "proc_config": {
+          "proc": "c06",
+          "seed": 2026104306,
+          "threads": 12,
+          "gens": 800,
+          "pop": 64,
+          "islands": 4,
+          "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+          "added_utc": "2026-10-19T03:58:15Z",
+          "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+        },
+        "stopped_memory_receipt": null
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c01",
+        "staged_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe3_c01/history_live.csv",
+        "bytes": 184192,
+        "sha256": "c6f4bb6deb1ec6c1ee9b4df3f6afef5012afa09f112ad1bda71540bb27e3394d",
+        "headerless_row_zero_retained": true,
+        "row_0_raw": "0,0,64,58,0,0,-1.1101,3.3910,75.83,0.408,0.021,0,NaN,0.0676",
+        "rows_count": 2836,
+        "generation_range": [
+          0,
+          708
+        ],
+        "observed_islands": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "expected_islands_from_admitted_proc_config": null,
+        "coverage_completeness_status": "unknown_without_proc_config",
+        "internal_generation_gaps": [],
+        "nan_counts_by_column": {
+          "min_legal_mass_g": 2
+        },
+        "max_best_fit_col6": 1.1156,
+        "proc_config": null,
+        "stopped_memory_receipt": null
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c02",
+        "staged_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe3_c02/history_live.csv",
+        "bytes": 181807,
+        "sha256": "bf5a54af9ddb1bc4f57acc629a170ef088261bf75e28f0ee5556d1ca8eb123e0",
+        "headerless_row_zero_retained": true,
+        "row_0_raw": "0,0,64,57,0,0,-1.1101,3.3907,75.84,0.408,0.013,0,NaN,0.0691",
+        "rows_count": 2792,
+        "generation_range": [
+          0,
+          697
+        ],
+        "observed_islands": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "expected_islands_from_admitted_proc_config": null,
+        "coverage_completeness_status": "unknown_without_proc_config",
+        "internal_generation_gaps": [],
+        "nan_counts_by_column": {
+          "min_legal_mass_g": 6
+        },
+        "max_best_fit_col6": 1.1205,
+        "proc_config": null,
+        "stopped_memory_receipt": null
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c03",
+        "staged_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe3_c03/history_live.csv",
+        "bytes": 178428,
+        "sha256": "772c94427e3c1cc0d3e991e8120a9643ca82894cc588ae391b9b9ed0ac1bd76f",
+        "headerless_row_zero_retained": true,
+        "row_0_raw": "0,0,64,54,0,0,-1.1044,3.2207,79.89,0.408,0.087,0,NaN,0.0609",
+        "rows_count": 2748,
+        "generation_range": [
+          0,
+          686
+        ],
+        "observed_islands": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "expected_islands_from_admitted_proc_config": 4,
+        "coverage_completeness_status": "verified_4_islands_per_gen",
+        "internal_generation_gaps": [],
+        "nan_counts_by_column": {
+          "min_legal_mass_g": 2
+        },
+        "max_best_fit_col6": 1.1099,
+        "proc_config": {
+          "proc": "c03",
+          "seed": 2026105303,
+          "threads": 18,
+          "gens": 800,
+          "pop": 64,
+          "islands": 4,
+          "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+          "added_utc": "2026-10-19T01:37:03Z",
+          "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+        },
+        "stopped_memory_receipt": null
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c04",
+        "staged_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe3_c04/history_live.csv",
+        "bytes": 182055,
+        "sha256": "865a29b943a9bc94698e106c35cd29f817ae3e68ebdee666bf589d446c443ebd",
+        "headerless_row_zero_retained": true,
+        "row_0_raw": "0,0,64,56,0,0,-1.0234,3.4035,76.21,0.408,0.041,0,NaN,0.0670",
+        "rows_count": 2792,
+        "generation_range": [
+          0,
+          697
+        ],
+        "observed_islands": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "expected_islands_from_admitted_proc_config": 4,
+        "coverage_completeness_status": "verified_4_islands_per_gen",
+        "internal_generation_gaps": [],
+        "nan_counts_by_column": {
+          "min_legal_mass_g": 4
+        },
+        "max_best_fit_col6": 1.1395,
+        "proc_config": {
+          "proc": "c04",
+          "seed": 2026105304,
+          "threads": 18,
+          "gens": 800,
+          "pop": 64,
+          "islands": 4,
+          "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+          "added_utc": "2026-10-19T01:37:08Z",
+          "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+        },
+        "stopped_memory_receipt": null
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c05",
+        "staged_path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-staging-v2/data/evolution-archives/crescent_native_qd_fit/evo_full_20261018_xbabe3_c05/history_live.csv",
+        "bytes": 91497,
+        "sha256": "8a19a8096b20cc5851470b8d899267b0cc7cf68268f51834e8554566febc8756",
+        "headerless_row_zero_retained": true,
+        "row_0_raw": "0,0,64,54,1,0,-0.2107,3.4220,76.04,0.408,0.037,1,76.04,0.0676",
+        "rows_count": 1412,
+        "generation_range": [
+          0,
+          352
+        ],
+        "observed_islands": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "expected_islands_from_admitted_proc_config": 4,
+        "coverage_completeness_status": "verified_4_islands_per_gen",
+        "internal_generation_gaps": [],
+        "nan_counts_by_column": {
+          "min_legal_mass_g": 2
+        },
+        "max_best_fit_col6": 1.1037,
+        "proc_config": {
+          "proc": "c05",
+          "seed": 2026105305,
+          "threads": 10,
+          "gens": 800,
+          "pop": 64,
+          "islands": 4,
+          "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+          "added_utc": "2026-10-19T03:10:55Z",
+          "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+        },
+        "stopped_memory_receipt": null
+      }
+    ]
+  },
+  "four_worker_live_native_crescent_inventory": {
+    "hosts_inspected": [
+      "xbabe1",
+      "xbabe2",
+      "xbabe3",
+      "xbabe4"
+    ],
+    "total_run_dirs": 18,
+    "completed_gen_800_runs_count": 10,
+    "completed_gen_800_distribution_by_host": {
+      "xbabe1": [
+        "c01",
+        "c03",
+        "c04",
+        "c05"
+      ],
+      "xbabe2": [],
+      "xbabe3": [
+        "c01",
+        "c02",
+        "c03",
+        "c04"
+      ],
+      "xbabe4": [
+        "c01",
+        "c02"
+      ]
+    },
+    "completed_gen_800_runs": [
+      {
+        "host": "xbabe1",
+        "run_id": "c01",
+        "history_live_rows": 3204,
+        "history_live_sha256": "c5e32f790cc1b2d0628e5e0b29e48fd5725e9fb8f456177b70bf9dd94e28464c",
+        "history_live_bytes": 208333,
+        "max_generation": 800,
+        "max_fit_col6": 1.1327,
+        "nan_tokens": 1,
+        "generation_gaps": [],
+        "qd_archive_sha256": "403b5f570e12c084230eea95440758df4058e34b578bb87f4040cbc17067a469",
+        "qd_archive_bytes": 5869,
+        "all_evals_csv_bytes": 383105475,
+        "all_evals_json_bytes": 217937003,
+        "has_proc_config": false,
+        "proc_config": null
+      },
+      {
+        "host": "xbabe1",
+        "run_id": "c03",
+        "history_live_rows": 3204,
+        "history_live_sha256": "4e3f330d9a8f5d35b7f4deafc3c53eb6a517ea500d88ef48e440ea056c1ed690",
+        "history_live_bytes": 208585,
+        "max_generation": 800,
+        "max_fit_col6": 1.1089,
+        "nan_tokens": 5,
+        "generation_gaps": [],
+        "qd_archive_sha256": "d8c2a439f57935823ed179043f22577d3fbc9cbb0079ab654859c1411fa2d3c0",
+        "qd_archive_bytes": 5226,
+        "all_evals_csv_bytes": 385322474,
+        "all_evals_json_bytes": 218073475,
+        "has_proc_config": true,
+        "proc_config": {
+          "proc": "c03",
+          "seed": 2026103303,
+          "threads": 24,
+          "gens": 800,
+          "pop": 64,
+          "islands": 4,
+          "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+          "added_utc": "2026-10-19T01:37:04Z",
+          "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+        }
+      },
+      {
+        "host": "xbabe1",
+        "run_id": "c04",
+        "history_live_rows": 3204,
+        "history_live_sha256": "a45128c513d4205cbccccfad6bb36410274864da6c5525c8c705a76329d0f7cf",
+        "history_live_bytes": 208306,
+        "max_generation": 800,
+        "max_fit_col6": 1.138,
+        "nan_tokens": 2,
+        "generation_gaps": [],
+        "qd_archive_sha256": "3e07c26d80608890a78b34f6fa084594fa7b43c2b1af39b11197fbb8c96bd282",
+        "qd_archive_bytes": 6006,
+        "all_evals_csv_bytes": 377177096,
+        "all_evals_json_bytes": 217680693,
+        "has_proc_config": true,
+        "proc_config": {
+          "proc": "c04",
+          "seed": 2026103304,
+          "threads": 24,
+          "gens": 800,
+          "pop": 64,
+          "islands": 4,
+          "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+          "added_utc": "2026-10-19T01:37:09Z",
+          "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+        }
+      },
+      {
+        "host": "xbabe1",
+        "run_id": "c05",
+        "history_live_rows": 3204,
+        "history_live_sha256": "9975db4d6b9fd6232df175ad79e3687569f55d750499a583a07bb5933ea69885",
+        "history_live_bytes": 208208,
+        "max_generation": 800,
+        "max_fit_col6": 1.144,
+        "nan_tokens": 4,
+        "generation_gaps": [],
+        "qd_archive_sha256": "9687e935a1df7ef66706b3144db12adb33aeb418a93e716b4028bd66c6f1331b",
+        "qd_archive_bytes": 5878,
+        "all_evals_csv_bytes": 383117362,
+        "all_evals_json_bytes": 217698956,
+        "has_proc_config": true,
+        "proc_config": {
+          "proc": "c05",
+          "seed": 2026103305,
+          "threads": 16,
+          "gens": 800,
+          "pop": 64,
+          "islands": 4,
+          "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+          "added_utc": "2026-10-19T01:44:28Z",
+          "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+        }
+      },
+      {
+        "host": "xbabe3",
+        "run_id": "c01",
+        "history_live_rows": 3204,
+        "history_live_sha256": "d032f0718937564f42b6acc03dfc138894b91d7fa267ad52cb657b76b7c2ba5b",
+        "history_live_bytes": 208166,
+        "max_generation": 800,
+        "max_fit_col6": 1.1156,
+        "nan_tokens": 2,
+        "generation_gaps": [],
+        "qd_archive_sha256": "7e300d2b958010d675f3d290c52883ddefa57b369a09b3f0d8f1a6ff401ae1f9",
+        "qd_archive_bytes": 6010,
+        "all_evals_csv_bytes": 384808219,
+        "all_evals_json_bytes": 217850572,
+        "has_proc_config": false,
+        "proc_config": null
+      },
+      {
+        "host": "xbabe3",
+        "run_id": "c02",
+        "history_live_rows": 3204,
+        "history_live_sha256": "1008ef9a47a2455df4d4aad3d5a8998b671e02c29c0fea3d8f6d00531fc94b49",
+        "history_live_bytes": 208700,
+        "max_generation": 800,
+        "max_fit_col6": 1.1228,
+        "nan_tokens": 6,
+        "generation_gaps": [],
+        "qd_archive_sha256": "d60243f16029b8d3495a196982e5e30e4cd8f302fccc5ab6fab007534f0cb6ff",
+        "qd_archive_bytes": 5621,
+        "all_evals_csv_bytes": 381765717,
+        "all_evals_json_bytes": 217532622,
+        "has_proc_config": false,
+        "proc_config": null
+      },
+      {
+        "host": "xbabe3",
+        "run_id": "c03",
+        "history_live_rows": 3204,
+        "history_live_sha256": "3ecae3e7603e49b44d7826dbb61412c7eada4a006a24ed2fc66cb0b9752d9988",
+        "history_live_bytes": 208146,
+        "max_generation": 800,
+        "max_fit_col6": 1.1108,
+        "nan_tokens": 2,
+        "generation_gaps": [],
+        "qd_archive_sha256": "c0e77e25176ec6d44fd2b6837e8636f4bc8b11bc9c6f6b7f21487180af9c9f65",
+        "qd_archive_bytes": 5882,
+        "all_evals_csv_bytes": 377698296,
+        "all_evals_json_bytes": 217965842,
+        "has_proc_config": true,
+        "proc_config": {
+          "proc": "c03",
+          "seed": 2026105303,
+          "threads": 18,
+          "gens": 800,
+          "pop": 64,
+          "islands": 4,
+          "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+          "added_utc": "2026-10-19T01:37:03Z",
+          "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+        }
+      },
+      {
+        "host": "xbabe3",
+        "run_id": "c04",
+        "history_live_rows": 3204,
+        "history_live_sha256": "7cc225bdb1405a52f5ffcdbf0d99dc5016ec51107ab205d89c9550ddcd73249e",
+        "history_live_bytes": 208989,
+        "max_generation": 800,
+        "max_fit_col6": 1.1408,
+        "nan_tokens": 4,
+        "generation_gaps": [],
+        "qd_archive_sha256": "991aeb8911c402daf3a1fbfa4d5ddc89db96f76abe588997eecce04be4cd1b99",
+        "qd_archive_bytes": 6068,
+        "all_evals_csv_bytes": 380387911,
+        "all_evals_json_bytes": 217849124,
+        "has_proc_config": true,
+        "proc_config": {
+          "proc": "c04",
+          "seed": 2026105304,
+          "threads": 18,
+          "gens": 800,
+          "pop": 64,
+          "islands": 4,
+          "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+          "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+          "added_utc": "2026-10-19T01:37:08Z",
+          "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+        }
+      },
+      {
+        "host": "xbabe4",
+        "run_id": "c01",
+        "history_live_rows": 3204,
+        "history_live_sha256": "008324fd912a0225cef1101ad2ee4a09d210fb009d8a23db703c2857f7a8d213",
+        "history_live_bytes": 208553,
+        "max_generation": 800,
+        "max_fit_col6": 1.1186,
+        "nan_tokens": 7,
+        "generation_gaps": [],
+        "qd_archive_sha256": "6d3236fb18e0a7db96b0f590bf2146e752154b6e68ce6b962118d3260447667d",
+        "qd_archive_bytes": 5672,
+        "all_evals_csv_bytes": 377583811,
+        "all_evals_json_bytes": 218011952,
+        "has_proc_config": false,
+        "proc_config": null
+      },
+      {
+        "host": "xbabe4",
+        "run_id": "c02",
+        "history_live_rows": 3204,
+        "history_live_sha256": "f08bcb4dfaa46f7f335eafed91868e465a1ca1113067696df13053dfe91b2df5",
+        "history_live_bytes": 208660,
+        "max_generation": 800,
+        "max_fit_col6": 1.1177,
+        "nan_tokens": 3,
+        "generation_gaps": [],
+        "qd_archive_sha256": "3b1f6132d73ad70aa32a768110c1121d9db49eb038c8a561e0ea3b73d1621a37",
+        "qd_archive_bytes": 5558,
+        "all_evals_csv_bytes": 380930388,
+        "all_evals_json_bytes": 217974459,
+        "has_proc_config": false,
+        "proc_config": null
+      }
+    ],
+    "all_18_host_run_directories": {
+      "xbabe1": {
+        "c01": {
+          "all_evals.csv": {
+            "bytes": 383105475
+          },
+          "all_evals.json": {
+            "bytes": 217937003
+          },
+          "certification.csv": {
+            "bytes": 2669,
+            "sha256": "5aa86ae189571e1e10ae92aebf5a4b51f107b519dff917fc13fee829644f8e0a"
+          },
+          "evidence.jevl": {
+            "bytes": 6211293,
+            "sha256": "51b78952daaef3e259579f3f5d61af7c76e692051555e8c9a152a2f0d1d0792f"
+          },
+          "history.csv": {
+            "bytes": 208481,
+            "sha256": "62d9f832a1159fafa0115eafa473d1b3feed573fb15f430b2989df7019686071",
+            "has_header": true,
+            "header": "gen,island,evals,aesthetic_pass,legal,feasible,best_fit,best_spg,best_mass_g,best_aes,best_nov,archive_cells,min_legal_mass_g,mean_relief_frac_pass",
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1327,
+            "nan_tokens": 1,
+            "generation_gaps": []
+          },
+          "history_live.csv": {
+            "bytes": 208333,
+            "sha256": "c5e32f790cc1b2d0628e5e0b29e48fd5725e9fb8f456177b70bf9dd94e28464c",
+            "has_header": false,
+            "header": null,
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1327,
+            "nan_tokens": 1,
+            "generation_gaps": []
+          },
+          "plates.txt": {
+            "bytes": 1,
+            "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+          },
+          "progress.md": {
+            "bytes": 1635,
+            "sha256": "7176fee47cf2ede0c3055015d3e974c011a5c8cc8ddffe92145aeb33b7857d20"
+          },
+          "qd_archive.csv": {
+            "bytes": 5869,
+            "sha256": "403b5f570e12c084230eea95440758df4058e34b578bb87f4040cbc17067a469"
+          },
+          "report.md": {
+            "bytes": 3814,
+            "sha256": "07e670d93a039237c0bc14d2a585de349a47ae79c19b717631180dbf952090e8"
+          },
+          "run.log": {
+            "bytes": 239249,
+            "sha256": "f0e9d43604c0f9ff0e8310a5b5e8adc72ce432bef7458ccaa71f2d59cce3446b"
+          }
+        },
+        "c02": {
+          "STOPPED_MEMORY": {
+            "bytes": 62,
+            "sha256": "6207c4f7a4ed0651f87b788d955c500325f6c4fa28d1824fbe3d4bb8d9f7e523",
+            "text": "exit=stopped_by_executor_memory_pressure 2026-10-19T01:03:26Z\n"
+          },
+          "evidence.jevl": {
+            "bytes": 83230,
+            "sha256": "6d400b0c5aebc4e667e5a3ba827089ff17c028551f42079139999f5d24dd1ef4"
+          },
+          "history_live.csv": {
+            "bytes": 2785,
+            "sha256": "343f1e89a8f2b3846cc5db540a9799d12c610e531c72303528e61fc19a749175",
+            "has_header": false,
+            "header": null,
+            "rows": 44,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 10,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.0822,
+            "nan_tokens": 3,
+            "generation_gaps": []
+          },
+          "progress.md": {
+            "bytes": 1579,
+            "sha256": "aec5b4451ee89e82224974cddb138a330ebce325fb64c5c1ad40ad4e2811c211"
+          },
+          "qd_archive.csv": {
+            "bytes": 3104,
+            "sha256": "5ac112826283d3ffd039dfe8bb90c9cf280a5614b63fef4f96cbf5d5eab158e7"
+          },
+          "run.log": {
+            "bytes": 3129,
+            "sha256": "61852b2c74fc477d9f1f394f60a17a14ca80e2b8875e8faeab104c3e7438a136"
+          }
+        },
+        "c03": {
+          "all_evals.csv": {
+            "bytes": 385322474
+          },
+          "all_evals.json": {
+            "bytes": 218073475
+          },
+          "certification.csv": {
+            "bytes": 2669,
+            "sha256": "9cc471e720cb8773bba3049620d6560e0bac97824cb6bd2eb207a23de7faee3e"
+          },
+          "evidence.jevl": {
+            "bytes": 6217458,
+            "sha256": "ae1962d243ddf40e95b71a486b09465b5b1a88884e96024a4469587fd2fa9549"
+          },
+          "history.csv": {
+            "bytes": 208733,
+            "sha256": "db15495b78eb3b1970da7e0efe639fbb7124242596103c7478abaa7e9ab6dcf2",
+            "has_header": true,
+            "header": "gen,island,evals,aesthetic_pass,legal,feasible,best_fit,best_spg,best_mass_g,best_aes,best_nov,archive_cells,min_legal_mass_g,mean_relief_frac_pass",
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1089,
+            "nan_tokens": 5,
+            "generation_gaps": []
+          },
+          "history_live.csv": {
+            "bytes": 208585,
+            "sha256": "4e3f330d9a8f5d35b7f4deafc3c53eb6a517ea500d88ef48e440ea056c1ed690",
+            "has_header": false,
+            "header": null,
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1089,
+            "nan_tokens": 5,
+            "generation_gaps": []
+          },
+          "plates.txt": {
+            "bytes": 1,
+            "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+          },
+          "proc_config.json": {
+            "bytes": 861,
+            "sha256": "5d9cf9649f9f6cf8dd7ea934708574fb25d8a772091ccaaf2b6a729efd0153af",
+            "json": {
+              "proc": "c03",
+              "seed": 2026103303,
+              "threads": 24,
+              "gens": 800,
+              "pop": 64,
+              "islands": 4,
+              "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+              "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+              "added_utc": "2026-10-19T01:37:04Z",
+              "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+            }
+          },
+          "progress.md": {
+            "bytes": 1638,
+            "sha256": "641b686d7c5af0c40293073d4da6808d8a306151aa72f80fe6a3e831c1fa8fbb"
+          },
+          "qd_archive.csv": {
+            "bytes": 5226,
+            "sha256": "d8c2a439f57935823ed179043f22577d3fbc9cbb0079ab654859c1411fa2d3c0"
+          },
+          "report.md": {
+            "bytes": 3812,
+            "sha256": "782cba00f5d60d6076de92ac30c8db59b4bdbc82b6cdd4eef850d514f0e8b97c"
+          },
+          "run.log": {
+            "bytes": 239305,
+            "sha256": "4efe5fdad52646b043169753de7739243809ffcac9329ab028bc5af4ce5ce090"
+          }
+        },
+        "c04": {
+          "all_evals.csv": {
+            "bytes": 377177096
+          },
+          "all_evals.json": {
+            "bytes": 217680693
+          },
+          "certification.csv": {
+            "bytes": 2633,
+            "sha256": "8562e8321f15e10b27874dd016054d06ab94ea43e2bf991aaf71142951e92ace"
+          },
+          "ef1c04_c01_fit.json": {
+            "bytes": 2213417,
+            "sha256": "1287f07900be1f5cdd79eda23e3a1af70b82e3a8878b6f5b1c477127cc925c5c"
+          },
+          "ef1c04_c01_fit.step": {
+            "bytes": 13620215
+          },
+          "ef1c04_c01_fit.stl": {
+            "bytes": 2585408,
+            "sha256": "da930f78e7dd6a4ddfb8882d84eb5e93b5617130d58d5ea5c91c5e387f0357e7"
+          },
+          "ef1c04_c01_fit_genome.csv": {
+            "bytes": 2820,
+            "sha256": "cf5f1c57e1e0551d0ecb628c314a5bfd0c319a099237bafe8e71418eaf675639"
+          },
+          "ef1c04_c02_fit.json": {
+            "bytes": 2213562,
+            "sha256": "a6f0694caaf413795ea0f885957375d8f33f8ee5d01eb042d7714443a39713a0"
+          },
+          "ef1c04_c02_fit.step": {
+            "bytes": 13620220
+          },
+          "ef1c04_c02_fit.stl": {
+            "bytes": 2585412,
+            "sha256": "04453464f0937acafc9d12a873667b801f4bc8e9dc2d26a82daeee4bb54ccae0"
+          },
+          "ef1c04_c02_fit_genome.csv": {
+            "bytes": 2818,
+            "sha256": "684a4cc5c74909efbf98f4e93a01458c7fff2712f8567d29ef8c6de9cc6127d1"
+          },
+          "ef1c04_c03_fit.json": {
+            "bytes": 2213562,
+            "sha256": "92e780d87681fadadf38a5664cf1b0710be3ea2b2749649416cb51f70e1e9b8d"
+          },
+          "ef1c04_c03_fit.step": {
+            "bytes": 13620220
+          },
+          "ef1c04_c03_fit.stl": {
+            "bytes": 2585412,
+            "sha256": "ac25f4bd0f5652b69264e74c900af93291b0db52c13eb2e98b4c7c04c1c6e3a6"
+          },
+          "ef1c04_c03_fit_genome.csv": {
+            "bytes": 2818,
+            "sha256": "e951a4940de761d818730a302f9e788b67858a9ebc98cc9457087326a9a541d8"
+          },
+          "ef1c04_c04_fit.json": {
+            "bytes": 2213563,
+            "sha256": "f3d7ed077f95cd38f0d3f3fb9588ec9746dba704310ebce0955c135fb3d344a7"
+          },
+          "ef1c04_c04_fit.step": {
+            "bytes": 13620220
+          },
+          "ef1c04_c04_fit.stl": {
+            "bytes": 2585412,
+            "sha256": "4e909b1575d0abf19ce9bff5b2001662cec125ab28176ede217bbd09aa0d146a"
+          },
+          "ef1c04_c04_fit_genome.csv": {
+            "bytes": 2819,
+            "sha256": "8b783a0b15f7a16cd261641c698751da8807a7f226e36ecfa839a99064e87f22"
+          },
+          "ef1c04_c05_fit.json": {
+            "bytes": 2213422,
+            "sha256": "ef01f56299701e445bc1b5874e99ad8b1d812faff8aeb42ca3a13ef21aae7ec6"
+          },
+          "ef1c04_c05_fit.step": {
+            "bytes": 13620224
+          },
+          "ef1c04_c05_fit.stl": {
+            "bytes": 2585414,
+            "sha256": "365a2cc154fd9c501cb73b24d1a0effcaea13b8334e2f94417706e4c44c9ab64"
+          },
+          "ef1c04_c05_fit_genome.csv": {
+            "bytes": 2835,
+            "sha256": "add02f86b01814742169017be3bb6f0eef486fbfd9c00c72145fb3522f27071d"
+          },
+          "ef1c04_c06_fit.json": {
+            "bytes": 2213405,
+            "sha256": "8874d8d4b30089987db1f7919573aa2d0c850ba601b2cf753dee0eb51c509f1e"
+          },
+          "ef1c04_c06_fit.step": {
+            "bytes": 13620224
+          },
+          "ef1c04_c06_fit.stl": {
+            "bytes": 2585414,
+            "sha256": "7d7fef33639de50b74b05038560c3731d125049ffaeb83f8aad05ff3b4f92cad"
+          },
+          "ef1c04_c06_fit_genome.csv": {
+            "bytes": 2835,
+            "sha256": "77fb23aecbd84ecaebcb66647663851aec091bfafa631e7be99c6a823a0f37ba"
+          },
+          "evidence.jevl": {
+            "bytes": 6218924,
+            "sha256": "492728ad2fbc2fd89171a6076a28d74e18fb1560998fdf95c256ae809a2a4615"
+          },
+          "history.csv": {
+            "bytes": 208454,
+            "sha256": "ea06cbc0ae1e73a429c5e0c6e11fc54c3d43604aa067319b88a57d79b5bcc903",
+            "has_header": true,
+            "header": "gen,island,evals,aesthetic_pass,legal,feasible,best_fit,best_spg,best_mass_g,best_aes,best_nov,archive_cells,min_legal_mass_g,mean_relief_frac_pass",
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.138,
+            "nan_tokens": 2,
+            "generation_gaps": []
+          },
+          "history_live.csv": {
+            "bytes": 208306,
+            "sha256": "a45128c513d4205cbccccfad6bb36410274864da6c5525c8c705a76329d0f7cf",
+            "has_header": false,
+            "header": null,
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.138,
+            "nan_tokens": 2,
+            "generation_gaps": []
+          },
+          "plates.txt": {
+            "bytes": 90,
+            "sha256": "3df6851d7c65aedfa45fa5668ede252990b7d759c0e051872df4f8714aeb41fb"
+          },
+          "proc_config.json": {
+            "bytes": 861,
+            "sha256": "ca48a24f39b8bb0cc6e056fb47dd1d858a07104d4ab0e24b734677b45cad3450",
+            "json": {
+              "proc": "c04",
+              "seed": 2026103304,
+              "threads": 24,
+              "gens": 800,
+              "pop": 64,
+              "islands": 4,
+              "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+              "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+              "added_utc": "2026-10-19T01:37:09Z",
+              "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+            }
+          },
+          "progress.md": {
+            "bytes": 1638,
+            "sha256": "65f955f5a9c8db303826b7671de3fcf316b0afba2070ad86d23ba2f6c988351c"
+          },
+          "qd_archive.csv": {
+            "bytes": 6006,
+            "sha256": "3e07c26d80608890a78b34f6fa084594fa7b43c2b1af39b11197fbb8c96bd282"
+          },
+          "report.md": {
+            "bytes": 10486,
+            "sha256": "6f5563aefff3027da67ca6078d6a33ae5dc902fc77c884b4370beb7e08454419"
+          },
+          "run.log": {
+            "bytes": 239114,
+            "sha256": "291093670f6652f818d2f8b6756fa41710de22d0121d230fe3223d8bb1bb5bbc"
+          }
+        },
+        "c05": {
+          "all_evals.csv": {
+            "bytes": 383117362
+          },
+          "all_evals.json": {
+            "bytes": 217698956
+          },
+          "certification.csv": {
+            "bytes": 2669,
+            "sha256": "bd231544f04f777d08938237e237b29fbbe2abdab0627479ecd2c52a415638ba"
+          },
+          "evidence.jevl": {
+            "bytes": 6227098,
+            "sha256": "a4ff8822eb3637d23be6655c48f311be9e4a9043eb6cbe9cd493d753bc5fa845"
+          },
+          "history.csv": {
+            "bytes": 208356,
+            "sha256": "205a607d477238fbc8bbc77f1334838d5e6babef3e16899eea5bf011cb7c4567",
+            "has_header": true,
+            "header": "gen,island,evals,aesthetic_pass,legal,feasible,best_fit,best_spg,best_mass_g,best_aes,best_nov,archive_cells,min_legal_mass_g,mean_relief_frac_pass",
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.144,
+            "nan_tokens": 4,
+            "generation_gaps": []
+          },
+          "history_live.csv": {
+            "bytes": 208208,
+            "sha256": "9975db4d6b9fd6232df175ad79e3687569f55d750499a583a07bb5933ea69885",
+            "has_header": false,
+            "header": null,
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.144,
+            "nan_tokens": 4,
+            "generation_gaps": []
+          },
+          "plates.txt": {
+            "bytes": 1,
+            "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+          },
+          "proc_config.json": {
+            "bytes": 861,
+            "sha256": "0ceb3fb347c6b149e8e10b1d1f9af8b524580b11e5b923e785f2628967dc1dd4",
+            "json": {
+              "proc": "c05",
+              "seed": 2026103305,
+              "threads": 16,
+              "gens": 800,
+              "pop": 64,
+              "islands": 4,
+              "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+              "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+              "added_utc": "2026-10-19T01:44:28Z",
+              "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+            }
+          },
+          "progress.md": {
+            "bytes": 1637,
+            "sha256": "cc34bfd96f6673014f4ec1d399a56c52f8d662d4d26fbd844febeda839e1314f"
+          },
+          "qd_archive.csv": {
+            "bytes": 5878,
+            "sha256": "9687e935a1df7ef66706b3144db12adb33aeb418a93e716b4028bd66c6f1331b"
+          },
+          "report.md": {
+            "bytes": 3855,
+            "sha256": "872ad56dfb0743fbc9190b1035caa97a2768262786af756f05670cd28ce06321"
+          },
+          "run.log": {
+            "bytes": 239440,
+            "sha256": "a03cc3c6e85555f58500e87ca02d8402f135db40517128295deb3e3ab65cdd71"
+          }
+        }
+      },
+      "xbabe2": {
+        "c01": {
+          "evidence.jevl": {
+            "bytes": 3677694,
+            "sha256": "24b3ae25ffd77993d86fbc688c2a2e223a0e2fcd6d5a34294a9909f9c17ec459"
+          },
+          "history_live.csv": {
+            "bytes": 123294,
+            "sha256": "8b514085b1713a3ea9c29c1a81e7edbab5b8452376323030c85ea37affdaa82d",
+            "has_header": false,
+            "header": null,
+            "rows": 1900,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 474,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.12,
+            "nan_tokens": 3,
+            "generation_gaps": []
+          },
+          "progress.md": {
+            "bytes": 1637,
+            "sha256": "3728a3cf2f911793a58e67917bed56e85d26bf7ad864a59239f5ecd61e9400ab"
+          },
+          "qd_archive.csv": {
+            "bytes": 5405,
+            "sha256": "b5becb652a23950bc61bd26b93c25dea836305f324cd361cba13fe26b0e03502"
+          },
+          "run.log": {
+            "bytes": 141446,
+            "sha256": "2a78deeb10d3ee7271bab2aea0f368399a8bf39be59d428494413c6d5a1cd2d1"
+          }
+        },
+        "c02": {
+          "STOPPED_MEMORY": {
+            "bytes": 52,
+            "sha256": "944cee03641b99571b1972941f5dc94485b566d297c4cc20598724f6c3d6076c",
+            "text": "stopped_by_executor_memory_relief 2026-10-19T02:01Z\n"
+          },
+          "evidence.jevl": {
+            "bytes": 121278,
+            "sha256": "80e2af34490d16e63cd691be5e19f490a0b21f1fe0423cf6355a1f8497794b74"
+          },
+          "history_live.csv": {
+            "bytes": 4071,
+            "sha256": "b5b1b120a777d43b7ab6d7edbc4ce8a9d98bfef64e3968138c72fbaa58015656",
+            "has_header": false,
+            "header": null,
+            "rows": 64,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 15,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.0169,
+            "nan_tokens": 3,
+            "generation_gaps": []
+          },
+          "proc_config.json": {
+            "bytes": 861,
+            "sha256": "0c6cbd04a056751b85a08e0ddead0eb2dd969da0a987e2eb5b2e69de4891bdee",
+            "json": {
+              "proc": "c02",
+              "seed": 2026104302,
+              "threads": 18,
+              "gens": 800,
+              "pop": 64,
+              "islands": 4,
+              "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+              "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+              "added_utc": "2026-10-19T01:37:03Z",
+              "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+            }
+          },
+          "progress.md": {
+            "bytes": 1575,
+            "sha256": "3176a3132645e4488fe363f7d05c39c8e054bcefafa51370ef4d3222ebc8ee64"
+          },
+          "qd_archive.csv": {
+            "bytes": 3114,
+            "sha256": "cb60797859cf9fe1797a9088b583d008ba7a8c7186aed7b81617be8d608794e0"
+          },
+          "run.log": {
+            "bytes": 4591,
+            "sha256": "7ed3ea57cd7cdd32f4319f853b1e4088d8b8cede728fe99c936051cbde18d771"
+          }
+        },
+        "c03": {
+          "STOPPED_MEMORY": {
+            "bytes": 52,
+            "sha256": "944cee03641b99571b1972941f5dc94485b566d297c4cc20598724f6c3d6076c",
+            "text": "stopped_by_executor_memory_relief 2026-10-19T02:01Z\n"
+          },
+          "evidence.jevl": {
+            "bytes": 137962,
+            "sha256": "00bc734f15b5c72ddf810e7844a660baffc8d8f1d4b66d5fdfe976486ed14d61"
+          },
+          "history_live.csv": {
+            "bytes": 4587,
+            "sha256": "6d925fa92a21d1e90ff37fcd29689c8e7e15d6a439c391f931d23f68d953c295",
+            "has_header": false,
+            "header": null,
+            "rows": 72,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 17,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.0596,
+            "nan_tokens": 3,
+            "generation_gaps": []
+          },
+          "proc_config.json": {
+            "bytes": 861,
+            "sha256": "983c3b8a020abfe8fad81ae117259bdabd6e33f72a11228e4e828befcc00fef2",
+            "json": {
+              "proc": "c03",
+              "seed": 2026104303,
+              "threads": 18,
+              "gens": 800,
+              "pop": 64,
+              "islands": 4,
+              "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+              "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+              "added_utc": "2026-10-19T01:37:08Z",
+              "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+            }
+          },
+          "progress.md": {
+            "bytes": 1588,
+            "sha256": "4ff55ff8201bc065c62421b57c1b3939a4e5a852c7e9b42fcf7a2cd98e4d1d27"
+          },
+          "qd_archive.csv": {
+            "bytes": 2874,
+            "sha256": "ed132d37db4ea202fb18746f41506e29c2d1519c3d052094cb2c16d1a07bff97"
+          },
+          "run.log": {
+            "bytes": 5172,
+            "sha256": "2635125efd2da5c54ce69abe9d23e95f6d209bf2af6012b1601eaf17e0add35f"
+          }
+        },
+        "c04": {
+          "STOPPED_MEMORY": {
+            "bytes": 52,
+            "sha256": "944cee03641b99571b1972941f5dc94485b566d297c4cc20598724f6c3d6076c",
+            "text": "stopped_by_executor_memory_relief 2026-10-19T02:01Z\n"
+          },
+          "evidence.jevl": {
+            "bytes": 29063,
+            "sha256": "c3692acc8eb46a087747344fd77da5e6425f27548300826055bbb9e2faa8bbde"
+          },
+          "history_live.csv": {
+            "bytes": 1003,
+            "sha256": "0c418be512c379d1ae3841fca9f87839460155b062eae18b25fccd042326fe6d",
+            "has_header": false,
+            "header": null,
+            "rows": 16,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 3,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": -0.1596,
+            "nan_tokens": 2,
+            "generation_gaps": []
+          },
+          "proc_config.json": {
+            "bytes": 861,
+            "sha256": "bf0b09a1b0bb84edf0be71a31b2e4f578d2c5c7aeb131bdc7940f44e3f1b7c09",
+            "json": {
+              "proc": "c04",
+              "seed": 2026104304,
+              "threads": 10,
+              "gens": 800,
+              "pop": 64,
+              "islands": 4,
+              "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+              "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+              "added_utc": "2026-10-19T01:44:28Z",
+              "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+            }
+          },
+          "progress.md": {
+            "bytes": 493,
+            "sha256": "1a896942ec4ffaa033797bf40576b0a38d8370db8b32051f0f4bd7eb453bdafc"
+          },
+          "qd_archive.csv": {
+            "bytes": 154,
+            "sha256": "dfb4ffa3be0d9f1bfbf6db6b133515db2559c1df728a91eed5859d87a91d663d"
+          },
+          "run.log": {
+            "bytes": 1131,
+            "sha256": "8edce3aaa78c64579564cdce862bb0110176a0e971cfc72801da22d147ab3c29"
+          }
+        },
+        "c05": {
+          "evidence.jevl": {
+            "bytes": 4170727,
+            "sha256": "59b046da357e313e2a372cc4bb5c82eda93db74f60b193ab53ae3c60f0184e39"
+          },
+          "history_live.csv": {
+            "bytes": 138761,
+            "sha256": "44516178645a52539103b1003588f680d3ba762b40b79774bba82acaedf01d54",
+            "has_header": false,
+            "header": null,
+            "rows": 2132,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 532,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1468,
+            "nan_tokens": 3,
+            "generation_gaps": []
+          },
+          "proc_config.json": {
+            "bytes": 861,
+            "sha256": "1b9c7d3c48414896a134e2eb081b2c9d61abe90cbb5270bfc6dfd542566a2828",
+            "json": {
+              "proc": "c05",
+              "seed": 2026104305,
+              "threads": 24,
+              "gens": 800,
+              "pop": 64,
+              "islands": 4,
+              "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+              "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+              "added_utc": "2026-10-19T03:10:18Z",
+              "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+            }
+          },
+          "progress.md": {
+            "bytes": 1631,
+            "sha256": "2f4bf77caf0c675dcce360e1384e51c441cf365d044c4fec3e4f4058f96badf7"
+          },
+          "qd_archive.csv": {
+            "bytes": 5848,
+            "sha256": "359ffb91092d60dbdba052cebd274ad6887f70fc3fc612671028968b94ff47be"
+          },
+          "run.log": {
+            "bytes": 159037,
+            "sha256": "7aceb344d2784e2cc1f46b9c6b01fa8407340e48bcebe0dbea6d7232b4cfd12b"
+          }
+        },
+        "c06": {
+          "evidence.jevl": {
+            "bytes": 1761458,
+            "sha256": "5a97d32bc6fe76df223656d82c87a8dd48c15dde92387294c186722d9c53f72c"
+          },
+          "history_live.csv": {
+            "bytes": 58750,
+            "sha256": "67e7e375f3b1020b9fa1759d1c893de742ba5bca06e238c585c7814fe8b53d11",
+            "has_header": false,
+            "header": null,
+            "rows": 908,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 226,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1029,
+            "nan_tokens": 3,
+            "generation_gaps": []
+          },
+          "proc_config.json": {
+            "bytes": 861,
+            "sha256": "e9077cd0afa195cec9de3684bb621a737d7d39a42f15fa27ca14fa5cb7a036a5",
+            "json": {
+              "proc": "c06",
+              "seed": 2026104306,
+              "threads": 12,
+              "gens": 800,
+              "pop": 64,
+              "islands": 4,
+              "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+              "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+              "added_utc": "2026-10-19T03:58:15Z",
+              "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+            }
+          },
+          "progress.md": {
+            "bytes": 1621,
+            "sha256": "0230d5867c0bd1a31a6001ff7725a509d635e6135a9bf3a0436c7f1d9a0e0165"
+          },
+          "qd_archive.csv": {
+            "bytes": 5348,
+            "sha256": "f864e4b7b8ff6c9cb65a9a8b71d9a079749eabbf12200b6088f4ab8187e38b29"
+          },
+          "run.log": {
+            "bytes": 67370,
+            "sha256": "2566323e5a2936e89bc61431afb72a99300c4940d5d39484675f8e04ce74efb0"
+          }
+        }
+      },
+      "xbabe3": {
+        "c01": {
+          "all_evals.csv": {
+            "bytes": 384808219
+          },
+          "all_evals.json": {
+            "bytes": 217850572
+          },
+          "certification.csv": {
+            "bytes": 2669,
+            "sha256": "8df0f8f9648c088258c355a8b6ad7767636e3eb1f2e47713774dcf2e1e5b933c"
+          },
+          "evidence.jevl": {
+            "bytes": 6224264,
+            "sha256": "ccfe74f1413dd8798688d21a2a62191506a15cd928258e1e7d005508083187e6"
+          },
+          "history.csv": {
+            "bytes": 208314,
+            "sha256": "fac70f883c84369f837a3ff54a4c16f09f9a2dfb2b349d8af393c9975bb6a5a1",
+            "has_header": true,
+            "header": "gen,island,evals,aesthetic_pass,legal,feasible,best_fit,best_spg,best_mass_g,best_aes,best_nov,archive_cells,min_legal_mass_g,mean_relief_frac_pass",
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1156,
+            "nan_tokens": 2,
+            "generation_gaps": []
+          },
+          "history_live.csv": {
+            "bytes": 208166,
+            "sha256": "d032f0718937564f42b6acc03dfc138894b91d7fa267ad52cb657b76b7c2ba5b",
+            "has_header": false,
+            "header": null,
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1156,
+            "nan_tokens": 2,
+            "generation_gaps": []
+          },
+          "plates.txt": {
+            "bytes": 1,
+            "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+          },
+          "progress.md": {
+            "bytes": 1638,
+            "sha256": "be84aa2171f0f393403d777b5aa93da46e9a46b7779190131a4d0adaed0e4f65"
+          },
+          "qd_archive.csv": {
+            "bytes": 6010,
+            "sha256": "7e300d2b958010d675f3d290c52883ddefa57b369a09b3f0d8f1a6ff401ae1f9"
+          },
+          "report.md": {
+            "bytes": 3857,
+            "sha256": "adc25bc2de0dae9afbccac549ae7f03ab5bcee3455b607df14784cd739a74363"
+          },
+          "run.log": {
+            "bytes": 239402,
+            "sha256": "c304d1d94b015e09a5a5ea815b853cf16487ca43ae8d17271dde4082d7c3b624"
+          }
+        },
+        "c02": {
+          "all_evals.csv": {
+            "bytes": 381765717
+          },
+          "all_evals.json": {
+            "bytes": 217532622
+          },
+          "certification.csv": {
+            "bytes": 2669,
+            "sha256": "b2ab4f5ecb7cf8e8a67fdd270fd4234a7a490d041664301432fa7d6e3fab169e"
+          },
+          "evidence.jevl": {
+            "bytes": 6248884,
+            "sha256": "4192c6615b3ad7fb3caad1d4ed04a916f4e16b7da429a94463090794cac6ea4c"
+          },
+          "history.csv": {
+            "bytes": 208848,
+            "sha256": "d96fd91742b256a782ea112238af47964cfd2d42a7f15bcee595bd25bcc655da",
+            "has_header": true,
+            "header": "gen,island,evals,aesthetic_pass,legal,feasible,best_fit,best_spg,best_mass_g,best_aes,best_nov,archive_cells,min_legal_mass_g,mean_relief_frac_pass",
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1228,
+            "nan_tokens": 6,
+            "generation_gaps": []
+          },
+          "history_live.csv": {
+            "bytes": 208700,
+            "sha256": "1008ef9a47a2455df4d4aad3d5a8998b671e02c29c0fea3d8f6d00531fc94b49",
+            "has_header": false,
+            "header": null,
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1228,
+            "nan_tokens": 6,
+            "generation_gaps": []
+          },
+          "plates.txt": {
+            "bytes": 1,
+            "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+          },
+          "progress.md": {
+            "bytes": 1632,
+            "sha256": "837731e48f75dd8d45e999a2f8d0524e6de7007eff9fe1ce35c602a32f2c0ee0"
+          },
+          "qd_archive.csv": {
+            "bytes": 5621,
+            "sha256": "d60243f16029b8d3495a196982e5e30e4cd8f302fccc5ab6fab007534f0cb6ff"
+          },
+          "report.md": {
+            "bytes": 3858,
+            "sha256": "3ecad31594ef310d653607a7ce55a2b730b077da6acdd2e875edaca80d665b24"
+          },
+          "run.log": {
+            "bytes": 240004,
+            "sha256": "d1533544f9ed8e43ecde050392d084a29b3fcd4716db994b8ddaf8821e872f13"
+          }
+        },
+        "c03": {
+          "all_evals.csv": {
+            "bytes": 377698296
+          },
+          "all_evals.json": {
+            "bytes": 217965842
+          },
+          "certification.csv": {
+            "bytes": 2633,
+            "sha256": "4a48227fc199a7f4a79349e0066630a194078276529298845f872d91cc0186b1"
+          },
+          "ef3c03_c01_fit.json": {
+            "bytes": 2316218,
+            "sha256": "b778655f7247d36db70731dd280c75ea3d7375127ab1804296ed87c6bd2bab7a"
+          },
+          "ef3c03_c01_fit.step": {
+            "bytes": 14047664
+          },
+          "ef3c03_c01_fit.stl": {
+            "bytes": 2665170,
+            "sha256": "10d5b9f3fca8983dd27d2b0953c30560eb18e801f7411cd19380f2db5be637c0"
+          },
+          "ef3c03_c01_fit_genome.csv": {
+            "bytes": 2804,
+            "sha256": "881f2d81f76b09b7debb2a053b179d8a44b00cb026ada9b6587c14a512edccbf"
+          },
+          "ef3c03_c02_fit.json": {
+            "bytes": 2316037,
+            "sha256": "0ca3b492f75566106028b76c0b61bbc3f43c6e0976065ddde0a0236707613794"
+          },
+          "ef3c03_c02_fit.step": {
+            "bytes": 14047664
+          },
+          "ef3c03_c02_fit.stl": {
+            "bytes": 2665168,
+            "sha256": "bf93264c4f2724b88986511d3668889bd04dfed1f3bf6b76dcd3aaa9db72fcc5"
+          },
+          "ef3c03_c02_fit_genome.csv": {
+            "bytes": 2817,
+            "sha256": "5cc62c5d082544b7e4ccb3974415badc0f627d0f519c082579c876a284b05a18"
+          },
+          "ef3c03_c03_fit.json": {
+            "bytes": 2316148,
+            "sha256": "fb8a897e03ab860ac9e2bfafdab3e960435a6dde221604345813b43596d99212"
+          },
+          "ef3c03_c03_fit.step": {
+            "bytes": 14047664
+          },
+          "ef3c03_c03_fit.stl": {
+            "bytes": 2665168,
+            "sha256": "19e02fe83ad2a85be01a6ae06b072d52eaba1974abf4679956cb0ccbcdf8efb0"
+          },
+          "ef3c03_c03_fit_genome.csv": {
+            "bytes": 2818,
+            "sha256": "f1460ea4de7205e009e3cf5405d6442bf0e2b0f8b7c7fe4bc287ee5db0fac573"
+          },
+          "ef3c03_c04_fit.json": {
+            "bytes": 2316138,
+            "sha256": "4100d79fcfb8b77710ef729f7c2c8bec18cd0f68d7661efebe4dd1467df479e4"
+          },
+          "ef3c03_c04_fit.step": {
+            "bytes": 14047664
+          },
+          "ef3c03_c04_fit.stl": {
+            "bytes": 2665168,
+            "sha256": "b8068956f35b16421f7217893eb34fd4bb9ac5b9cead0c6cc31504b107384f7c"
+          },
+          "ef3c03_c04_fit_genome.csv": {
+            "bytes": 2816,
+            "sha256": "739423af373dc4fc82d195944402cfb417ba5bac4a1db7f49b8743824cf0f52c"
+          },
+          "ef3c03_c05_fit.json": {
+            "bytes": 2316147,
+            "sha256": "8d6919f6308c8358bc88ef6051612f6a2fcfdc309a8ced79f4b3d00f78070f4e"
+          },
+          "ef3c03_c05_fit.step": {
+            "bytes": 14047664
+          },
+          "ef3c03_c05_fit.stl": {
+            "bytes": 2665168,
+            "sha256": "1143004b57a2b3d6486f044ad023e20f51e0e29fe50ab3ff3a519d8f33f8c5a4"
+          },
+          "ef3c03_c05_fit_genome.csv": {
+            "bytes": 2817,
+            "sha256": "481ebe7cd25f5756659c6073f116cbd7255432445b45debcb8a03eadae775dff"
+          },
+          "ef3c03_c06_fit.json": {
+            "bytes": 2316244,
+            "sha256": "83d5e01445d95f9e4af496bf9f5d4cbdd02438038270ae024863884686626a9c"
+          },
+          "ef3c03_c06_fit.step": {
+            "bytes": 14047660
+          },
+          "ef3c03_c06_fit.stl": {
+            "bytes": 2665162,
+            "sha256": "070430b5ec73c1cec4b9bdea5286c339355efc7d5d2af3711647be26e9891183"
+          },
+          "ef3c03_c06_fit_genome.csv": {
+            "bytes": 2788,
+            "sha256": "37947e6b827313d8a63a7469954dd9c18aff99b3c1799094f38825131a25e188"
+          },
+          "evidence.jevl": {
+            "bytes": 6201130,
+            "sha256": "8df8404e2fd13be735cb17a1e31dd2b809b5c8029ffc0b10da680c3bd99ed5c2"
+          },
+          "history.csv": {
+            "bytes": 208294,
+            "sha256": "3bfb3204ee0a0465ee41b9dcf8408e3eef3c536e23e2dcf6c1c336f5abc243d0",
+            "has_header": true,
+            "header": "gen,island,evals,aesthetic_pass,legal,feasible,best_fit,best_spg,best_mass_g,best_aes,best_nov,archive_cells,min_legal_mass_g,mean_relief_frac_pass",
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1108,
+            "nan_tokens": 2,
+            "generation_gaps": []
+          },
+          "history_live.csv": {
+            "bytes": 208146,
+            "sha256": "3ecae3e7603e49b44d7826dbb61412c7eada4a006a24ed2fc66cb0b9752d9988",
+            "has_header": false,
+            "header": null,
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1108,
+            "nan_tokens": 2,
+            "generation_gaps": []
+          },
+          "plates.txt": {
+            "bytes": 90,
+            "sha256": "53311739d3d5bf997ba1640afd91beca40e56fbfd243a55027919e7798808e42"
+          },
+          "proc_config.json": {
+            "bytes": 861,
+            "sha256": "7d908ee4e6c80b75cc2a64d9e31506cc06704c2c308911dc7702319c221bf29d",
+            "json": {
+              "proc": "c03",
+              "seed": 2026105303,
+              "threads": 18,
+              "gens": 800,
+              "pop": 64,
+              "islands": 4,
+              "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+              "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+              "added_utc": "2026-10-19T01:37:03Z",
+              "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+            }
+          },
+          "progress.md": {
+            "bytes": 1638,
+            "sha256": "9729bcdcdd2d3cfb405ee0c5cc7a45e2cc9df0a70b9d949c4ae098d730034b05"
+          },
+          "qd_archive.csv": {
+            "bytes": 5882,
+            "sha256": "c0e77e25176ec6d44fd2b6837e8636f4bc8b11bc9c6f6b7f21487180af9c9f65"
+          },
+          "report.md": {
+            "bytes": 10526,
+            "sha256": "0ab7f0b74f6bdecb6931bae5ab1dd38ac1adf55e1d2a37d5c52c73dcd26ba347"
+          },
+          "run.log": {
+            "bytes": 239462,
+            "sha256": "35d1cbad8791f9bfeb984998da0b182f37ddc66591dd8d9f3734d16ea48533ff"
+          }
+        },
+        "c04": {
+          "all_evals.csv": {
+            "bytes": 380387911
+          },
+          "all_evals.json": {
+            "bytes": 217849124
+          },
+          "certification.csv": {
+            "bytes": 2636,
+            "sha256": "89c33ae13f241fe7b2895c9dbb242699ec6bb26e3d0e7f8bace26796051be0a6"
+          },
+          "ef3c04_c01_fit.json": {
+            "bytes": 2216843,
+            "sha256": "fea86b920412a20c29f1748d66bc70e465ee1f6dd6859c63d454b6d82c9a62e4"
+          },
+          "ef3c04_c01_fit.step": {
+            "bytes": 13380999
+          },
+          "ef3c04_c01_fit.stl": {
+            "bytes": 2541971,
+            "sha256": "82d975f69920e8d88995039305299cf078f547f5eecd49a732e32731f32eaf3c"
+          },
+          "ef3c04_c01_fit_genome.csv": {
+            "bytes": 2810,
+            "sha256": "84fb022c5b4e16a1d8d15a9ca75fcbfbd728e5a2f7f30501b4b367b5289d58ef"
+          },
+          "ef3c04_c02_fit.json": {
+            "bytes": 2216983,
+            "sha256": "7c34cee8338da7f840dcbb8710426a0c55ac5b2cd3de890bb6acbf5d762d152f"
+          },
+          "ef3c04_c02_fit.step": {
+            "bytes": 13381024
+          },
+          "ef3c04_c02_fit.stl": {
+            "bytes": 2541988,
+            "sha256": "79c1e92311c4a90c76134282fbf615d8fea22fdaa3ad88cf9adc99a15dfb87cf"
+          },
+          "ef3c04_c02_fit_genome.csv": {
+            "bytes": 2795,
+            "sha256": "7c3898201ed655c9b98dec1e46564159fdf96b8c063977ef714c2d1674c20127"
+          },
+          "ef3c04_c03_fit.json": {
+            "bytes": 2217045,
+            "sha256": "c7858918fcd0e2a0a76931ba531911807c2a24689a465865c0e833e403eb5b20"
+          },
+          "ef3c04_c03_fit.step": {
+            "bytes": 13381024
+          },
+          "ef3c04_c03_fit.stl": {
+            "bytes": 2541988,
+            "sha256": "73374a777f417a7ca18c2c7edcfd47416cbb849b2df323621ceff99f90ed97a4"
+          },
+          "ef3c04_c03_fit_genome.csv": {
+            "bytes": 2795,
+            "sha256": "7d3b8441ef677bf057bea9f4c70ae58074f816f4d3c7f918c3df29ab680b3e2e"
+          },
+          "ef3c04_c04_fit.json": {
+            "bytes": 2217112,
+            "sha256": "f98cb9db1c4cb41cc8089e89e5a7f1acee0c97d1a24160f8f278e325848bbb33"
+          },
+          "ef3c04_c04_fit.step": {
+            "bytes": 13381017
+          },
+          "ef3c04_c04_fit.stl": {
+            "bytes": 2541985,
+            "sha256": "cc0f36fe0117db2b2da0dc6663926cad6fcedcb039ec1d3a9524e05b6a7f6a6c"
+          },
+          "ef3c04_c04_fit_genome.csv": {
+            "bytes": 2830,
+            "sha256": "a213c310166325588a2e2cf16d7b2c2870c12b7096c497a9402b38a64ef9c56f"
+          },
+          "ef3c04_c05_fit.json": {
+            "bytes": 2216963,
+            "sha256": "dee659103ef8cfd51dedaaa16659ff2a28c255d6dd37bf7b89d203ebb5df976e"
+          },
+          "ef3c04_c05_fit.step": {
+            "bytes": 13381004
+          },
+          "ef3c04_c05_fit.stl": {
+            "bytes": 2541981,
+            "sha256": "b117a8de629514541de57d21ca27919ea22054c19a2d87b54cae6108288ce4e5"
+          },
+          "ef3c04_c05_fit_genome.csv": {
+            "bytes": 2813,
+            "sha256": "bea2f3ec7546f5f05a348a542c480c46f42dfe0e5a0ce967da54b2ab6ee46b73"
+          },
+          "ef3c04_c06_fit.json": {
+            "bytes": 2216969,
+            "sha256": "2d4e35294e911cf0f4945f76bf4c7178ad1bff894bf76ee618602babd1562650"
+          },
+          "ef3c04_c06_fit.step": {
+            "bytes": 13381004
+          },
+          "ef3c04_c06_fit.stl": {
+            "bytes": 2541981,
+            "sha256": "bdbe36273a19b6c598f9493324a8683045bd7425f4d616e905ddd740dc3df324"
+          },
+          "ef3c04_c06_fit_genome.csv": {
+            "bytes": 2810,
+            "sha256": "c4064f122e578437b3a1cd8d20c7161cccf32d2eccaf247d39a87b2f350b61cf"
+          },
+          "evidence.jevl": {
+            "bytes": 6257909,
+            "sha256": "e5ad4e0a95b417c34c9c6c54c31d4c6c132ecd691a3185fb0627e238a9adc109"
+          },
+          "history.csv": {
+            "bytes": 209137,
+            "sha256": "0b07ad4c9a9497a8786685beb2c7c4849867e5d78ca3631f1f97c9fc3faa09f3",
+            "has_header": true,
+            "header": "gen,island,evals,aesthetic_pass,legal,feasible,best_fit,best_spg,best_mass_g,best_aes,best_nov,archive_cells,min_legal_mass_g,mean_relief_frac_pass",
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1408,
+            "nan_tokens": 4,
+            "generation_gaps": []
+          },
+          "history_live.csv": {
+            "bytes": 208989,
+            "sha256": "7cc225bdb1405a52f5ffcdbf0d99dc5016ec51107ab205d89c9550ddcd73249e",
+            "has_header": false,
+            "header": null,
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1408,
+            "nan_tokens": 4,
+            "generation_gaps": []
+          },
+          "plates.txt": {
+            "bytes": 90,
+            "sha256": "961929c84091b9b57bd81e025f6f1413db1dd522d509fe0901bfdc5224a10de4"
+          },
+          "proc_config.json": {
+            "bytes": 861,
+            "sha256": "56c469ebc3e56b3533ea77ecc65e2036de2fe0aa5a7aae6859b6066d82650319",
+            "json": {
+              "proc": "c04",
+              "seed": 2026105304,
+              "threads": 18,
+              "gens": 800,
+              "pop": 64,
+              "islands": 4,
+              "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+              "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+              "added_utc": "2026-10-19T01:37:08Z",
+              "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+            }
+          },
+          "progress.md": {
+            "bytes": 1635,
+            "sha256": "ffdef175ec0b13d4e2a195b18c57ce065aa76b5a50bfe248ee844eb43d099468"
+          },
+          "qd_archive.csv": {
+            "bytes": 6068,
+            "sha256": "991aeb8911c402daf3a1fbfa4d5ddc89db96f76abe588997eecce04be4cd1b99"
+          },
+          "report.md": {
+            "bytes": 10658,
+            "sha256": "f95a52f40a7c777bc6e1206125df52bbd9412e86fb1b717ee569914b5cf93310"
+          },
+          "run.log": {
+            "bytes": 240329,
+            "sha256": "daebed901e4f84e474e631894a0c3ba0978ec6008783ac306b9def07a56ebf30"
+          }
+        },
+        "c05": {
+          "evidence.jevl": {
+            "bytes": 3781397,
+            "sha256": "333dd4c053cb6c72d1c46aa2f961585debe970d04bc5fb78696629534031dd16"
+          },
+          "history_live.csv": {
+            "bytes": 126438,
+            "sha256": "355adb8d8f3324a169b6d92314bd44aea78e1596e3c3ffb8534f9074a90a52a3",
+            "has_header": false,
+            "header": null,
+            "rows": 1948,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 486,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1068,
+            "nan_tokens": 2,
+            "generation_gaps": []
+          },
+          "proc_config.json": {
+            "bytes": 861,
+            "sha256": "e97b287b4a06ffe626ad8fc3ece71712c2a5b18948fbc92caa5d98a9c1b3c519",
+            "json": {
+              "proc": "c05",
+              "seed": 2026105305,
+              "threads": 10,
+              "gens": 800,
+              "pop": 64,
+              "islands": 4,
+              "git_sha": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+              "seeds": "/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w282_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p10_c02_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w283_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w298_r03_p14_c01_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411c3_r02_p10_c12_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r02_p14_c17_genome.csv,/home/ubuntu/jarambit_runs/evo_full_20261018/seeds/w411t3_r03_p10_c12_genome.csv",
+              "added_utc": "2026-10-19T03:10:55Z",
+              "reason": "scale-up to ~75-80% CPU per ENG:watcher 7:36 PM MDT"
+            }
+          },
+          "progress.md": {
+            "bytes": 1629,
+            "sha256": "54dd4f9369419a3ab84ff4ba33fec6f5f46d26c3bd83e54f84e5bea8130a001b"
+          },
+          "qd_archive.csv": {
+            "bytes": 5606,
+            "sha256": "91b7bb9c307582b865dc20f7d29e002a5d653063801f2c6ca82d438d7292122e"
+          },
+          "run.log": {
+            "bytes": 145462,
+            "sha256": "de012e9700cc669467fa753eccb1db18f474782c5a80352b690d71fb8d62364e"
+          }
+        }
+      },
+      "xbabe4": {
+        "c01": {
+          "all_evals.csv": {
+            "bytes": 377583811
+          },
+          "all_evals.json": {
+            "bytes": 218011952
+          },
+          "certification.csv": {
+            "bytes": 2633,
+            "sha256": "6f78a7d7292cab6a6f19ceee029566733a08bbc425e6e1c9e903b0abc35df222"
+          },
+          "ef4c01_c01_fit.json": {
+            "bytes": 2301781,
+            "sha256": "ee862b66c834ae0cdf8642d11fcc1f797af996082c4b5f89b6c85b51f79239da"
+          },
+          "ef4c01_c01_fit.step": {
+            "bytes": 13958329
+          },
+          "ef4c01_c01_fit.stl": {
+            "bytes": 2648641,
+            "sha256": "538866999ab473ffee50272c6c45e20dffebd1d8e50457588f13c5a98a1b3c1e"
+          },
+          "ef4c01_c01_fit_genome.csv": {
+            "bytes": 2828,
+            "sha256": "947ca81d8497cbd3f2c2f6ffcfa95cca17790ac8fafa4b63bb652fab65ff6569"
+          },
+          "ef4c01_c02_fit.json": {
+            "bytes": 2301742,
+            "sha256": "ac7e0a4fe6130e5f68a3d147d7ebb34d4d38da9c39c64387508b0255a9c80e41"
+          },
+          "ef4c01_c02_fit.step": {
+            "bytes": 13958352
+          },
+          "ef4c01_c02_fit.stl": {
+            "bytes": 2648662,
+            "sha256": "ed8d55de2a854e55a7808849774d488a155fa370f1dfbdb86a385df02dc985ee"
+          },
+          "ef4c01_c02_fit_genome.csv": {
+            "bytes": 2843,
+            "sha256": "59a46c28d1925b5953c615b42a2be219b8f66822ec698ca2551fe26cc19d7820"
+          },
+          "ef4c01_c03_fit.json": {
+            "bytes": 2301632,
+            "sha256": "865c78749467dccb446f197dcb3bfbd54cdb9f873dc81fe49cedb48cf689399a"
+          },
+          "ef4c01_c03_fit.step": {
+            "bytes": 13958346
+          },
+          "ef4c01_c03_fit.stl": {
+            "bytes": 2648659,
+            "sha256": "beb8ce5c64d977f49669e851a66b164042a26d150beab893eed6a489d40a92f9"
+          },
+          "ef4c01_c03_fit_genome.csv": {
+            "bytes": 2828,
+            "sha256": "e8abf5b4c412d6620aa60505de8edd37bc7d80c31d842e8f17649aa06b1a00c8"
+          },
+          "ef4c01_c04_fit.json": {
+            "bytes": 2301625,
+            "sha256": "c0d6a4915c62b63ec7213df143a539638ce60cf08e94d979c7f3f72ac128a881"
+          },
+          "ef4c01_c04_fit.step": {
+            "bytes": 13958346
+          },
+          "ef4c01_c04_fit.stl": {
+            "bytes": 2648659,
+            "sha256": "d951595627c2eef3d209293dc0d1ebe50fdcf89540f52ef786aaaabe0bcfda23"
+          },
+          "ef4c01_c04_fit_genome.csv": {
+            "bytes": 2829,
+            "sha256": "b6769159bb17cb731fcd48a05cf833e42238e2f49cbefe0fe0a4c6961c8c848a"
+          },
+          "ef4c01_c05_fit.json": {
+            "bytes": 2301633,
+            "sha256": "122be748cba7b808e90873de29e6637bcd7dfacaef4c51bba1f575bef756dd72"
+          },
+          "ef4c01_c05_fit.step": {
+            "bytes": 13958346
+          },
+          "ef4c01_c05_fit.stl": {
+            "bytes": 2648659,
+            "sha256": "4f91566b4c8493f4b9e33284b67c9414df2e8e44261b30fb9bd15d1007830248"
+          },
+          "ef4c01_c05_fit_genome.csv": {
+            "bytes": 2829,
+            "sha256": "43e8d542d611d3e08cecb339713793bf076e64bcf1edbe65cd3df5cebb008a99"
+          },
+          "ef4c01_c06_fit.json": {
+            "bytes": 2301758,
+            "sha256": "b9b64c10fe610faf456f06d055c827301b91e600b051d15a17b24fc2cd2e324b"
+          },
+          "ef4c01_c06_fit.step": {
+            "bytes": 13958375
+          },
+          "ef4c01_c06_fit.stl": {
+            "bytes": 2648668,
+            "sha256": "682684767c3f520f5996490c3d2f936383df9a1a091d7966b54ba93d7f0204cc"
+          },
+          "ef4c01_c06_fit_genome.csv": {
+            "bytes": 2842,
+            "sha256": "0a76fdb208692119b87f0398d231416d3d50d57b53a626b048c1825913c7ef84"
+          },
+          "evidence.jevl": {
+            "bytes": 6245194,
+            "sha256": "9057e344b906944cde7c6bfa77a1bbd22aea2844dc63ad35679133f1aa2df602"
+          },
+          "history.csv": {
+            "bytes": 208701,
+            "sha256": "8319c92c1c1b9f8e1f95036ca63b5576dfe20ef865253ccb162e6d0cd14c7861",
+            "has_header": true,
+            "header": "gen,island,evals,aesthetic_pass,legal,feasible,best_fit,best_spg,best_mass_g,best_aes,best_nov,archive_cells,min_legal_mass_g,mean_relief_frac_pass",
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1186,
+            "nan_tokens": 7,
+            "generation_gaps": []
+          },
+          "history_live.csv": {
+            "bytes": 208553,
+            "sha256": "008324fd912a0225cef1101ad2ee4a09d210fb009d8a23db703c2857f7a8d213",
+            "has_header": false,
+            "header": null,
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1186,
+            "nan_tokens": 7,
+            "generation_gaps": []
+          },
+          "plates.txt": {
+            "bytes": 90,
+            "sha256": "6e62b738b0fd2df937e9689b5781fcc0b9611bf8e8507a581eb907682369a48f"
+          },
+          "progress.md": {
+            "bytes": 1631,
+            "sha256": "7ec20e4254e9d9962eb4441989f45dedf3bc87d43711a1fb4dc527e2c3770a4b"
+          },
+          "qd_archive.csv": {
+            "bytes": 5672,
+            "sha256": "6d3236fb18e0a7db96b0f590bf2146e752154b6e68ce6b962118d3260447667d"
+          },
+          "report.md": {
+            "bytes": 10503,
+            "sha256": "8a5e513ce27d56a62f7efac2cb2e0cb3b84fd8d828189abf6cbf80f0e62a4a1b"
+          },
+          "run.log": {
+            "bytes": 239325,
+            "sha256": "2d041282da4b32abc2ed64d16209646792951db03061989254228c9de897f53b"
+          }
+        },
+        "c02": {
+          "all_evals.csv": {
+            "bytes": 380930388
+          },
+          "all_evals.json": {
+            "bytes": 217974459
+          },
+          "certification.csv": {
+            "bytes": 2669,
+            "sha256": "cfcf543a6480328d6d288bb13a2cccef32e94c53fe2d587ed133edfeeb6ba924"
+          },
+          "evidence.jevl": {
+            "bytes": 6226997,
+            "sha256": "07a607a5e6e665e4f587b34e8523d53472d5cb719127db903d8f2bb04c824278"
+          },
+          "history.csv": {
+            "bytes": 208808,
+            "sha256": "513b475adcf4284c5da23732c2cb7a624ddac45a737dc349441048251ae33d97",
+            "has_header": true,
+            "header": "gen,island,evals,aesthetic_pass,legal,feasible,best_fit,best_spg,best_mass_g,best_aes,best_nov,archive_cells,min_legal_mass_g,mean_relief_frac_pass",
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1177,
+            "nan_tokens": 3,
+            "generation_gaps": []
+          },
+          "history_live.csv": {
+            "bytes": 208660,
+            "sha256": "f08bcb4dfaa46f7f335eafed91868e465a1ca1113067696df13053dfe91b2df5",
+            "has_header": false,
+            "header": null,
+            "rows": 3204,
+            "ends_with_nl": true,
+            "gen_min": 0,
+            "gen_max": 800,
+            "islands": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "max_fit_col6": 1.1177,
+            "nan_tokens": 3,
+            "generation_gaps": []
+          },
+          "plates.txt": {
+            "bytes": 1,
+            "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+          },
+          "progress.md": {
+            "bytes": 1628,
+            "sha256": "44da079d796b0d6cee1b4f079f2aa53491813759d987f2160dde0b440bd91a73"
+          },
+          "qd_archive.csv": {
+            "bytes": 5558,
+            "sha256": "3b1f6132d73ad70aa32a768110c1121d9db49eb038c8a561e0ea3b73d1621a37"
+          },
+          "report.md": {
+            "bytes": 3873,
+            "sha256": "df63e227990ff2d69aaba0c67a60d4ab2b5f8dc35357a8361d9126953f4ffb9b"
+          },
+          "run.log": {
+            "bytes": 239380,
+            "sha256": "21ca37dec6198970b7299ecab1c511153ab4830b04a2e539d775770dab92f836"
+          }
+        }
+      }
+    }
+  },
+  "aborted_attempt_native_histories_summary": {
+    "source_receipt": "docs/paper/JR_EI_P1_T03_ABORTED_ATTEMPTS_CAPTURE_RECEIPT_V2_20261019.json",
+    "source_receipt_sha256": "4ac44ace3bd1216472e9faf8464539d99d9e6e78791102c0ea5623ec29636479",
+    "total_aborted_crescent_attempts": 9,
+    "attempts_with_history_live_csv": 7,
+    "attempts_missing_history_live_csv_null": [
+      "xbabe4_aborted_gens60_0047Z/crescent/c01",
+      "xbabe4_aborted_gens60_0047Z/crescent/c02"
+    ],
+    "total_rows_across_7_aborted_histories": 216,
+    "exact_7_field6_best_fit_maxima": [
+      -0.1731,
+      -0.2922,
+      1.0074,
+      1.0641,
+      1.0618,
+      -101.0,
+      -5.6684
+    ]
+  },
+  "source_head": "97388249afbe65a9974fd1b6b9774d0b70da2e9a",
+  "origin_main_head": "e0ec88dd2dfbd6e4287cb718661a0793b9562183",
+  "declared_scope": "Admit headerless 14-column native crescent history_live.csv summary files across V2 staging (11 files, 17,672 rows, max gen 708), all 4 workers xbabe1..4 (18 run dirs including 10 completed gen-800 runs with 3,204 rows each across xbabe1 c01/c03/c04/c05, xbabe3 c01-c04, xbabe4 c01/c02), and 9 aborted crescent attempts (7 with history_live.csv totaling 216 rows; 2 null).",
+  "deferred_p8_checks": [
+    "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml native_history -- --test-threads=2",
+    "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2"
+  ],
+  "input_identities": {
+    "native_history_rs": {
+      "path": "crates/paper-artifacts/src/native_history.rs",
+      "sha256": "159f8f3fcebfc2805387814552a92fa2ed8670765bc62619afdc18ee1cefc7ae",
+      "bytes": 9813
+    },
+    "p1_t01_receipt_sha256": "48be513e03cb1e797054df99d32fd5660fb4e196a6d6981aeab840b0a02d6ea9",
+    "p1_t02_receipt_sha256": "aa1dd3d15cbd8d13052160e28f6edff2a86edc3fdf49e34b011909717cb75006",
+    "p1_t03_v2_receipt_sha256": "4ac44ace3bd1216472e9faf8464539d99d9e6e78791102c0ea5623ec29636479"
+  }
+}

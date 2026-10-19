@@ -1,0 +1,66 @@
+{
+  "schema": "jarambit.ei.p0_t06.initial_dispatch_and_leases.v1",
+  "task_id": "JR-EI-P0-T06",
+  "observed_utc": "2026-10-19T15:44:42Z",
+  "steward": "2062267.agy_captain_admiralty:0",
+  "admiralty_store_path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_ENGINEERED_INTELLIGENCE_PUSH_20261019/admiralty-store/admiralty-jarambit-ei.sqlite",
+  "workplan_id": "jarambit-engineered-intelligence-20261019",
+  "workplan_revision": "2",
+  "workplan_command_id": "workplan-2172afc87341233a6ceb9625a99c0528c05e27cf28789b53713a3a1adf6254ba",
+  "workplan_canonical_digest": "sha256:8b57b6d6172954e2b6be8d2df442d12980f9c1d18f229f091015fd1fc1d6647f",
+  "workplan_source_digest": "sha256:cc712373e31e498e7d5d2330e22333f9d11f328254c49f5736e12503512f8912",
+  "submitted_contract_events": 60,
+  "execution_mode_honesty": {
+    "offline_store_registered": true,
+    "live_daemon_worker_execution": false,
+    "open_blockers": [
+      "ADM-JARAMBIT-LIVE-01",
+      "ADM-JARAMBIT-LIVE-02"
+    ]
+  },
+  "active_leases": [
+    {
+      "task_ids": [
+        "JR-EI-P0-T01",
+        "JR-EI-P0-T02",
+        "JR-EI-P0-T03",
+        "JR-EI-P0-T04",
+        "JR-EI-P0-T05",
+        "JR-EI-P0-T06"
+      ],
+      "worker_ids": [
+        "4060655.super_captain:0",
+        "2062267.agy_captain_admiralty:0"
+      ],
+      "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+      "owned_paths": [
+        "docs/paper/ENGINEERED_INTELLIGENCE_PHASE_TASKS.json",
+        "docs/paper/PROGRESS_RECEIPT.md"
+      ],
+      "state": "implemented_unvalidated"
+    },
+    {
+      "task_ids": [
+        "JR-EI-P1-T01"
+      ],
+      "worker_ids": [
+        "2740538.captain_jarambit:1"
+      ],
+      "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+      "owned_paths": [
+        "docs/paper/JR_EI_P1_T01_V2_ERRATUM_LINKAGE_RECEIPT_20261019.json"
+      ],
+      "state": "implemented_unvalidated"
+    }
+  ],
+  "next_ready_to_claim_tasks": [
+    "JR-EI-P1-T02",
+    "JR-EI-P1-T05",
+    "JR-EI-P2-T01",
+    "JR-EI-P3-T01",
+    "JR-EI-P4-T01",
+    "JR-EI-P5-T01"
+  ],
+  "state": "implemented_unvalidated",
+  "ci_policy": "deferred_until_P8"
+}

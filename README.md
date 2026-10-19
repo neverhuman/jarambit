@@ -1,32 +1,35 @@
-# Jarambit
+# Jarambit — Engineered Intelligence: Making Physical Design Executable
 
-**Intelligent CAD research: evolutionary geometry, multi-model numerical assessment, and traceable engineering evidence.**
+**An executable geometric genome defines CAD shape, an island-based population search explores alternatives across generations, and multi-model numerical solvers evaluate mechanical response.**
 
-Jarambit connects a 128-gene CAD representation to plate/membrane FEM, a quadratic 3D solid submodel, convergence studies, separate-solver comparisons, and scientific-assurance controls. The [test atlas](docs/tests/README.md) explains every named CAD diagnostic and evaluator, with implementation and retained-evidence links.
+Jarambit is a Rust-centered computational design research system connecting a 128-coordinate geometric genome and categorical material state to deterministic CAD decoding, four-island evolutionary search, and finite-element assessment models. Its retained archive records **1,954,560 complete genome-and-score evaluations** across ten 800-generation runs (`Run 2`–`Run 11`), alongside a reconstructable 17-generation historical run (`Run 1`, `1,984` births) that exposes exact parentage, island slot memberships, and ring migrations, plus `3,649` intermediate multi-stage screening proposals. The [test atlas](docs/tests/README.md) explains every named CAD diagnostic and evaluator, with implementation and retained-evidence links.
 
-[Read the new IEEE-style white paper](docs/paper/README.md) · [Explore all tests](docs/tests/README.md) · [Detailed engineering spec](docs/PAPER_AND_README_ENGINEERING_SPEC.md) · [Architecture](TECHNOLOGY_MAP.md)
+[Read the Engineered Intelligence white paper](docs/paper/README.md) · [Compiled PDF (`docs/paper/main.pdf`)](docs/paper/main.pdf) · [Explore all tests](docs/tests/README.md) · [Detailed engineering spec](docs/PAPER_AND_README_ENGINEERING_SPEC.md) · [Architecture](TECHNOLOGY_MAP.md)
 
-## Engineering assessments at a glance
+![Illustrated assessed export Individual 2000 — exact 3D CAD surface with registered 5-map structural demand index](docs/paper/figures/fig1_hero_blender_v2.png)
 
-| Layer | What is available | What it means |
-|---|---|---|
-| CAD diagnostics | **16 legacy predicates** | Geometry, modeled response, support/stability, convergence and solver consistency |
-| Requirement groups | **10 overlapping RS-v2 groups** | Grouped comparisons that reuse some of the same observations |
-| Historical CAD battery | **18 evaluators × 23 subjects = 414 retained cells** | Software, geometry, numerical findings and result-completeness records |
-| Scientific assurance | **178 definitions across 20 T00–T19 families; 356 required control slots** | A frozen catalog; definitions do not prove execution |
-| Physical validation | **Not established by this evidence** | No qualified product or manufacturing promotion is claimed |
+*Illustrated assessed export **Individual 2000** (single assessed candidate in [`evidence/evolve_certifiable/automatic/leaderboard.json`](evidence/evolve_certifiable/automatic/leaderboard.json): `assessed_count = 1`, `qualified_count = 0`, `champion = null`; separate from the 23-subject historical battery; absent per-birth Stage-2 records across the `1,954,560` native search rows establish missing retained assessments). White-background Cycles raytraced exact CAD surface (`44,994` vertices, `90,000` triangles, `0` modifiers) colored by the dimensionless 5-map percentile composite index in `[0, 1]` over the retained `25,209`-triangle plate mesh.*
 
-**The engineering depth is in the models, checks, and evidence links—not a combined test count.** All historical battery cells say `fresh_this_lane: false`. Stored outcomes are 221 pass, 81 fail, 112 blocked; four shared software columns account for 92 passes. `solid.tip` passes mean complete records, not favorable strength findings. [Read status meanings and every evaluator](docs/tests/README.md#battery).
+![Cohort 3 ten-run 800-generation population and native-summary trajectories (1,954,560 birth rows)](docs/paper/figures/population-latest.svg)
 
-[See all 414 stored cells](docs/paper/generated/battery-matrix.svg) · [Cell-level sources and selectors](docs/paper/generated/battery-matrix.json). The matrix preserves blocked records, original subject roles and the two different retained source-revision fields. It is a categorical evidence map, not a stress heatmap or a count of independent physical tests.
-
-[Assessment visual coverage](docs/tests/visuals.md) lists every subsection's image, visual kind and source receipt, including missing geometry/export views and unavailable spatial fields. A scalar plot or status map does not supply a missing FEM heatmap.
+*Cohort 3 (`Run 2`–`Run 11`): **1,954,560 complete 146-column birth rows** (`195,456` births per run across `801` generations `0..800`, `754,236` search-legal) and `32,040` generation-by-island summary rows, displayed alongside the separate staged summary cohort (`17,672` rows, max generation `708`) and aborted attempts (`216` rows).*
 
 ![Actual historical population, with FEM-complete and not-evaluated records distinguished](docs/paper/generated/population.svg)
 
-*Actual historical w282 data: 1,984 retained births, including 1,455 FEM-complete and 529 not-evaluated records; 446 are legal under the recorded search. The plot distinguishes those states and preserves all stored fitness values. Fitness includes legality penalties and contextual novelty. The highest search score did not pass its later strict assessment; the producer's named exported examples came from separate controlled probes. These historical findings do not establish current qualification. [Results and interpretation](docs/paper/sections/08-results.tex) · [Inputs, producer identity and hashes](docs/paper/generated/manifest.json).*
+*Cohort 1 (`Run 1`, historical `w282`): 1,984 retained births (`1,455` FEM-complete, `529` not-evaluated, `446` search-legal) and `2,176` four-island slot memberships (`192` elite reappearances, `12` ring migrations). The retained historical top-ranked birth (Individual 1095, `fit = 1.15727`) failed its later strict assessment (`cert_pass_all = false`). [Results and interpretation](docs/paper/sections/08-results.tex) · [Inputs, producer identity and hashes](docs/paper/generated/manifest.json) · [Recorded parent links](docs/paper/generated/lineage.svg).*
 
-[See the highest stored score's recorded parent links](docs/paper/generated/lineage.svg) · [Birth and assessment selectors](docs/paper/generated/lineage.json). The two-hop view preserves reused parent IDs and its cutoff; it does not bind those births to the separate cover export.
+<details>
+<summary>Three-cohort population census, separately assessed exports, byte totals, SDs, and provenance bindings</summary>
+
+| Cohort / Layer | Retained Evidence Scope | Reconciled Metrics & Provenance |
+|---|---|---|
+| **Cohort 3: 10-Run 800-Gen Population (`Run 2`–`Run 11`)** | **1,954,560 complete 146-col birth rows** (`195,456` per run × `10` retained runs, `801` gens `0..800`) + **32,040 summary rows** (`200` `.csv.zst` segments, `494,843,141` B compressed from **`3,811,896,749` B** raw CSV, `100%` SHA-256 round-trip verified) | **754,236 search-legal births (38.59%)**, per-run mean `75,423.6 ± 2,936.55` (sample SD `ddof=1`; pop SD `2,785.86`); run-max native fit `1.1089`–`1.1440` (mean `1.1250 ± 0.01285` sample SD); plus 11 staged summaries (`17,672` rows, max gen `708`) and 9 aborted attempts (`216` rows). Absent per-birth Stage-2 records establish missing retained assessments |
+| **Cohort 1: Historical 17-Gen Genealogy (`Run 1`)** | **1,984 births** (`1,455` FEM-complete, `529` not evaluated, `446` legal, `1,965` distinct gene vectors) + **2,176 island-slot memberships** (`192` elite reappearances, `12` ring migrations at G4/G8/G12) in `19` `JEV1` binary frames (`2,207` events) | Highest native birth **Individual 1095** (gen 9, `fit = 1.15727`, display loss `-1.15727`) failed its later strict assessment (`cert_pass_all = false`) |
+| **Cohort 2: Multi-Stage Screening & Retained Weighted Reporting Profile** | **3,649 birth proposals** across `57` birth files in `24` run directories (`2,259` validated 1-based joined screen rows + `1,390` explicit unscreened births; `2,247` 0-based misjoins rejected) + **6 reporting curves** (`15` generation summaries, `Run 31`–`Run 36`) | Highest **retained weighted reporting profile** entry **Individual 2002** (`w411c3_r02_p10_c12`, `W_ULTRALIGHT_v1 = 74.207299`, display loss `25.792701`, `13/26` overlapping legacy flags met, not qualified) |
+| **Separately Assessed Controlled Exports (`Individual 2001` & `Individual 2007`)** | Separate `W283` controlled-probe CAD evaluations (`evidence/rs_v2/w283_ultrarunner/*_cad_eval.json`, not `Run 1` births) | **Individual 2001** (`w283_p14_c01`, `sha256: df555734...1dffc`): `W_CAD = -3.878704`, `G1 = 0.6239029999999999`, mass **`75.382 g`** (`75.1992 g` 3D solid), **11 true / 5 false** legacy gates. **Individual 2007** (`w283_p10_c02`, `sha256: 6eb44dab...edf1d`): `W_CAD = -3.964924`, `G1 = 0.6216340416666666`, mass **`75.642 g`** (`75.5049 g` 3D solid), **11 true / 5 false** legacy gates. Both fail `cert_hunter_260n`, `strict_hunter_260n`, `failure_sequence_1p2`, `twist_tip_only_1p82nm`, `solid_tip_3d_p2_1p82nm`, and grouped `RS-v2` |
+| **Assessed Automatic Export (`Individual 2000`) & Historical Battery** | Single assessed candidate in `automatic/leaderboard.json` (`assessed_count = 1`, `qualified_count = 0`, `champion = null`); separate from the **23-subject × 18-evaluator historical battery** (`414` cells: `221 pass`, `81 fail`, `112 blocked`) | For **Individual 2000**, independent $P_2$ solid solvers agree within `0.04%–0.05%` (`0.669` vs `0.6693` max; `0.726` vs `0.7263` mean); 3-level plate GCI estimates refused (`p = -2.9003` / oscillatory). **No physical specimen or product qualification is claimed** |
+
+</details>
 
 ## A link to every CAD assessment
 
@@ -181,13 +184,20 @@ cargo build --release --locked
 
 ## Quick start
 
-Start by reading the retained evidence and test explanations. Build the evidence studio to inspect existing records:
+**Read-only retained-evidence projection (no live CAD/FEM or `score_cad_native` recomputation):**
 
 ```sh
-./target/release/jarambit export-web-data --out-dir web/public/data
+cargo run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
+cargo run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit
 npm --prefix web ci
 npm --prefix web test
 npm --prefix web run build
+```
+
+**Live Web Studio regeneration (invokes live `score_cad_native` / STL export; distinct from read-only retained-evidence projection):**
+
+```sh
+./target/release/jarambit export-web-data --out-dir web/public/data
 ```
 
 A native screen is not an independent certification. The older Monte Carlo lane uses a beam surrogate by default; plate FEM is opt-in with `JARAMBIT_FEM=1`. See the [assessment guide](docs/EVOLUTION_CERTIFICATION.md) for runtime scope and the [paper build](docs/paper/README.md#format-and-build) for reproducible documentation artifacts.

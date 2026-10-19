@@ -1,0 +1,506 @@
+{
+  "schema": "jarambit.population_historical_membership.v1",
+  "public_run_id": 1,
+  "public_run_label": "Run 1",
+  "source_jevl_path": "evidence/rs_v2/w282_ultrarunner/search/evidence.jevl",
+  "source_jevl_sha256": "29d4602b1728e179606ac380df69652efea6e45c3daf67a6602cf56a6699b181",
+  "intact_frames": 19,
+  "total_events": 2207,
+  "membership_occurrences_total": 2176,
+  "islands_count": 4,
+  "slots_per_island": 32,
+  "generations_count": 17,
+  "birth_occurrences": 1984,
+  "elite_reappearance_occurrences": 192,
+  "elite_current_contextual_score": null,
+  "elite_score_unrecorded_reason": "JEV1 Elite events record (gen, island, id) slot retention after contextual rescoring but omit refreshed scalar fit; birth fit is not substituted.",
+  "duplicate_gen_island_id_keys_count": 9,
+  "duplicate_gen_island_id_keys": [
+    {
+      "gen": 9,
+      "island": 1,
+      "id": 245,
+      "occurrences": 2
+    },
+    {
+      "gen": 9,
+      "island": 2,
+      "id": 526,
+      "occurrences": 2
+    },
+    {
+      "gen": 10,
+      "island": 2,
+      "id": 526,
+      "occurrences": 2
+    },
+    {
+      "gen": 11,
+      "island": 2,
+      "id": 526,
+      "occurrences": 2
+    },
+    {
+      "gen": 12,
+      "island": 2,
+      "id": 526,
+      "occurrences": 2
+    },
+    {
+      "gen": 13,
+      "island": 3,
+      "id": 526,
+      "occurrences": 2
+    },
+    {
+      "gen": 14,
+      "island": 3,
+      "id": 526,
+      "occurrences": 2
+    },
+    {
+      "gen": 15,
+      "island": 3,
+      "id": 526,
+      "occurrences": 2
+    },
+    {
+      "gen": 16,
+      "island": 3,
+      "id": 526,
+      "occurrences": 2
+    }
+  ],
+  "migration_events_count": 12,
+  "migration_copied_id_occurrences": 24,
+  "migration_events": [
+    {
+      "ev": "migration",
+      "gen": 4,
+      "from": 0,
+      "to": 1,
+      "ids": [
+        245,
+        498
+      ]
+    },
+    {
+      "ev": "migration",
+      "gen": 4,
+      "from": 1,
+      "to": 2,
+      "ids": [
+        526,
+        413
+      ]
+    },
+    {
+      "ev": "migration",
+      "gen": 4,
+      "from": 2,
+      "to": 3,
+      "ids": [
+        198,
+        312
+      ]
+    },
+    {
+      "ev": "migration",
+      "gen": 4,
+      "from": 3,
+      "to": 0,
+      "ids": [
+        452,
+        591
+      ]
+    },
+    {
+      "ev": "migration",
+      "gen": 8,
+      "from": 0,
+      "to": 1,
+      "ids": [
+        245,
+        498
+      ]
+    },
+    {
+      "ev": "migration",
+      "gen": 8,
+      "from": 1,
+      "to": 2,
+      "ids": [
+        526,
+        245
+      ]
+    },
+    {
+      "ev": "migration",
+      "gen": 8,
+      "from": 2,
+      "to": 3,
+      "ids": [
+        526,
+        413
+      ]
+    },
+    {
+      "ev": "migration",
+      "gen": 8,
+      "from": 3,
+      "to": 0,
+      "ids": [
+        452,
+        591
+      ]
+    },
+    {
+      "ev": "migration",
+      "gen": 12,
+      "from": 0,
+      "to": 1,
+      "ids": [
+        245,
+        498
+      ]
+    },
+    {
+      "ev": "migration",
+      "gen": 12,
+      "from": 1,
+      "to": 2,
+      "ids": [
+        1095,
+        526
+      ]
+    },
+    {
+      "ev": "migration",
+      "gen": 12,
+      "from": 2,
+      "to": 3,
+      "ids": [
+        1237,
+        526
+      ]
+    },
+    {
+      "ev": "migration",
+      "gen": 12,
+      "from": 3,
+      "to": 0,
+      "ids": [
+        526,
+        1143
+      ]
+    }
+  ],
+  "gen_end_series": [
+    {
+      "gen": 0,
+      "births_count": 128,
+      "fem_complete_births": 65,
+      "fem_not_evaluated_births": 63,
+      "legal_births": 3,
+      "elite_reappearances": 0,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 57,
+      "birth_max_fit": 1.14038,
+      "gen_end_fresh_evals_cumulative": 128,
+      "gen_end_appearances_cumulative": 128,
+      "gen_end_archive_cells": 1,
+      "gen_end_best_id": 57,
+      "gen_end_best_fit": 1.1403784129304426
+    },
+    {
+      "gen": 1,
+      "births_count": 116,
+      "fem_complete_births": 80,
+      "fem_not_evaluated_births": 36,
+      "legal_births": 7,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 174,
+      "birth_max_fit": 1.14979,
+      "gen_end_fresh_evals_cumulative": 244,
+      "gen_end_appearances_cumulative": 256,
+      "gen_end_archive_cells": 1,
+      "gen_end_best_id": 174,
+      "gen_end_best_fit": 1.1497894466579506
+    },
+    {
+      "gen": 2,
+      "births_count": 116,
+      "fem_complete_births": 84,
+      "fem_not_evaluated_births": 32,
+      "legal_births": 12,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 245,
+      "birth_max_fit": 1.15388,
+      "gen_end_fresh_evals_cumulative": 360,
+      "gen_end_appearances_cumulative": 384,
+      "gen_end_archive_cells": 1,
+      "gen_end_best_id": 245,
+      "gen_end_best_fit": 1.1538810927569474
+    },
+    {
+      "gen": 3,
+      "births_count": 116,
+      "fem_complete_births": 84,
+      "fem_not_evaluated_births": 32,
+      "legal_births": 18,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 413,
+      "birth_max_fit": 1.15296,
+      "gen_end_fresh_evals_cumulative": 476,
+      "gen_end_appearances_cumulative": 512,
+      "gen_end_archive_cells": 6,
+      "gen_end_best_id": 245,
+      "gen_end_best_fit": 1.1534637112027948
+    },
+    {
+      "gen": 4,
+      "births_count": 116,
+      "fem_complete_births": 87,
+      "fem_not_evaluated_births": 29,
+      "legal_births": 26,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 4,
+      "migration_copied_ids": 8,
+      "birth_max_id": 526,
+      "birth_max_fit": 1.15563,
+      "gen_end_fresh_evals_cumulative": 592,
+      "gen_end_appearances_cumulative": 640,
+      "gen_end_archive_cells": 9,
+      "gen_end_best_id": 526,
+      "gen_end_best_fit": 1.1556328286994177
+    },
+    {
+      "gen": 5,
+      "births_count": 116,
+      "fem_complete_births": 87,
+      "fem_not_evaluated_births": 29,
+      "legal_births": 29,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 641,
+      "birth_max_fit": 1.14934,
+      "gen_end_fresh_evals_cumulative": 708,
+      "gen_end_appearances_cumulative": 768,
+      "gen_end_archive_cells": 10,
+      "gen_end_best_id": 526,
+      "gen_end_best_fit": 1.1555306313389593
+    },
+    {
+      "gen": 6,
+      "births_count": 116,
+      "fem_complete_births": 83,
+      "fem_not_evaluated_births": 33,
+      "legal_births": 24,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 754,
+      "birth_max_fit": 1.15214,
+      "gen_end_fresh_evals_cumulative": 824,
+      "gen_end_appearances_cumulative": 896,
+      "gen_end_archive_cells": 10,
+      "gen_end_best_id": 526,
+      "gen_end_best_fit": 1.1554078419267046
+    },
+    {
+      "gen": 7,
+      "births_count": 116,
+      "fem_complete_births": 87,
+      "fem_not_evaluated_births": 29,
+      "legal_births": 35,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 907,
+      "birth_max_fit": 1.14853,
+      "gen_end_fresh_evals_cumulative": 940,
+      "gen_end_appearances_cumulative": 1024,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 526,
+      "gen_end_best_fit": 1.1553998575820044
+    },
+    {
+      "gen": 8,
+      "births_count": 116,
+      "fem_complete_births": 85,
+      "fem_not_evaluated_births": 31,
+      "legal_births": 28,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 4,
+      "migration_copied_ids": 8,
+      "birth_max_id": 971,
+      "birth_max_fit": 1.1496,
+      "gen_end_fresh_evals_cumulative": 1056,
+      "gen_end_appearances_cumulative": 1152,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 526,
+      "gen_end_best_fit": 1.1553998575820044
+    },
+    {
+      "gen": 9,
+      "births_count": 116,
+      "fem_complete_births": 90,
+      "fem_not_evaluated_births": 26,
+      "legal_births": 38,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1095,
+      "birth_max_fit": 1.15727,
+      "gen_end_fresh_evals_cumulative": 1172,
+      "gen_end_appearances_cumulative": 1280,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.157265759829317
+    },
+    {
+      "gen": 10,
+      "births_count": 116,
+      "fem_complete_births": 84,
+      "fem_not_evaluated_births": 32,
+      "legal_births": 28,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1237,
+      "birth_max_fit": 1.15662,
+      "gen_end_fresh_evals_cumulative": 1288,
+      "gen_end_appearances_cumulative": 1408,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.1571528167935288
+    },
+    {
+      "gen": 11,
+      "births_count": 116,
+      "fem_complete_births": 97,
+      "fem_not_evaluated_births": 19,
+      "legal_births": 31,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1394,
+      "birth_max_fit": 1.15374,
+      "gen_end_fresh_evals_cumulative": 1404,
+      "gen_end_appearances_cumulative": 1536,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.157075758271365
+    },
+    {
+      "gen": 12,
+      "births_count": 116,
+      "fem_complete_births": 88,
+      "fem_not_evaluated_births": 28,
+      "legal_births": 36,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 4,
+      "migration_copied_ids": 8,
+      "birth_max_id": 1489,
+      "birth_max_fit": 1.1544,
+      "gen_end_fresh_evals_cumulative": 1520,
+      "gen_end_appearances_cumulative": 1664,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.157075758271365
+    },
+    {
+      "gen": 13,
+      "births_count": 116,
+      "fem_complete_births": 83,
+      "fem_not_evaluated_births": 33,
+      "legal_births": 37,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1543,
+      "birth_max_fit": 1.15415,
+      "gen_end_fresh_evals_cumulative": 1636,
+      "gen_end_appearances_cumulative": 1792,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.1570362049161886
+    },
+    {
+      "gen": 14,
+      "births_count": 116,
+      "fem_complete_births": 86,
+      "fem_not_evaluated_births": 30,
+      "legal_births": 32,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1655,
+      "birth_max_fit": 1.15211,
+      "gen_end_fresh_evals_cumulative": 1752,
+      "gen_end_appearances_cumulative": 1920,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.1570362049161886
+    },
+    {
+      "gen": 15,
+      "births_count": 116,
+      "fem_complete_births": 90,
+      "fem_not_evaluated_births": 26,
+      "legal_births": 28,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1762,
+      "birth_max_fit": 1.1513,
+      "gen_end_fresh_evals_cumulative": 1868,
+      "gen_end_appearances_cumulative": 2048,
+      "gen_end_archive_cells": 11,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.1570362049161886
+    },
+    {
+      "gen": 16,
+      "births_count": 116,
+      "fem_complete_births": 95,
+      "fem_not_evaluated_births": 21,
+      "legal_births": 34,
+      "elite_reappearances": 12,
+      "membership_occurrences": 128,
+      "migration_events": 0,
+      "migration_copied_ids": 0,
+      "birth_max_id": 1902,
+      "birth_max_fit": 1.15543,
+      "gen_end_fresh_evals_cumulative": 1984,
+      "gen_end_appearances_cumulative": 2176,
+      "gen_end_archive_cells": 12,
+      "gen_end_best_id": 1095,
+      "gen_end_best_fit": 1.1570362049161886
+    }
+  ]
+}

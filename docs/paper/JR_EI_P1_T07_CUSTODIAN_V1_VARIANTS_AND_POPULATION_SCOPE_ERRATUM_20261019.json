@@ -1,0 +1,81 @@
+{
+  "schema": "jarambit.ei.p1_t07_custodian_v1_variants_and_population_scope_erratum.v1",
+  "task_id": "JR-EI-P1-T07",
+  "admiralty_task_id": "jarambit:JR-EI-P1-T07@r2:sha256:e156080a26c9e8fff7c9a152cb3985c48cf143e3724e526ebf4bd35cc29fa4b0",
+  "decision_refs": [
+    "SC-DEC-183K",
+    "JR-N1",
+    "JR-N2",
+    "JR-N3"
+  ],
+  "observed_utc": "2026-10-19T18:22:00Z",
+  "steward": "2740538.captain_jarambit:1",
+  "status": "implemented_unvalidated",
+  "source_head": "429f12b62b3c82bda6249497aed9f6f13f3b3863",
+  "origin_main_head": "e0ec88dd2dfbd6e4287cb718661a0793b9562183",
+  "base_t07_receipt_preserved_untouched": {
+    "path": "docs/paper/JR_EI_P1_T07_SEALED_SNAPSHOT_INVENTORY_AND_ACCESSION_RECEIPT_20261019.json",
+    "bytes": 12518,
+    "sha256": "47840faf9826a19945ad6d56f62a07f1db0e7d37fea810901c155acf80dd958a"
+  },
+  "v1_handoff_variants_custody_correction": {
+    "withdrawn_mistyped_variant_a_sha256": "081f34e5ce3f7ff56381c74e4786efbe2619d6d0e3c785bd307cc5844a9c9320",
+    "variant_1_first_observed_original": {
+      "preserved_path": "target/archive-red-team/first-handoff/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_20261019.json",
+      "bytes": 269650,
+      "sha256": "081f34e5659ce518ce45ef6ed731840609b221aa3c2f6b1bfbc24322fceacf98",
+      "disposition": "PRESERVED_FIRST_OBSERVED_V1_ORIGINAL"
+    },
+    "variant_2_second_observed_original": {
+      "preserved_path": "target/archive-red-team/second-observed-v1/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_20261019.json",
+      "bytes": 288343,
+      "sha256": "62b67373d45f5a1174561591e6ba49508f3ec1d3bce0bed6e2adad2f04807eae",
+      "disposition": "PRESERVED_SECOND_OBSERVED_V1_ORIGINAL"
+    },
+    "variant_3_current_remote_v1_handoff": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_20261019.json",
+      "bytes": 288343,
+      "sha256": "010a91d7e4865cd661d14b56c7c1bf50feccfcc8080c5e65c3040628881bf311",
+      "disposition": "PRESERVED_CURRENT_REMOTE_V1_HANDOFF"
+    },
+    "v2_frozen_handoff": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_20261019.json",
+      "bytes": 664314,
+      "sha256": "b1f884622aaffc9929069424685ed0aaf8b950470b254141336c193f1ec2529e"
+    },
+    "v2_additive_erratum": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_ERRATUM_20261019.json",
+      "bytes": 34300,
+      "sha256": "a3cefc5ce7f841aa6e7b1edfd8503c988dfa1e4e04754b22ea7babc4bcc1ff8a"
+    }
+  },
+  "honest_t07_population_and_stl_scope": {
+    "base_t07_index_sha256": "dd69650f66a0c6cf29cbfcfc80e1302529717ba7e31a9af6b0b825d13970c49b",
+    "base_t07_total_files": 295,
+    "base_t07_total_bytes": 190807895,
+    "all_evals_included_in_t07": false,
+    "local_sealed_scope_clarification": "T07 publication_acknowledgment_state=local_sealed applies strictly to the 295-file summary/JEV1/QD-archive selection; T07 excluded all_evals.csv and all_evals.json for the 10 completed gen-800 runs, and JEV1 Eval events omit the 129 gene fields. Complete lossless compressed all_evals.csv population accession across all 10 gen-800 runs is bound in JR-EI-P1-T08.",
+    "separated_24_stl_files_count": 24,
+    "separated_24_stl_files_bytes": 62331126,
+    "routine_compact_non_stl_files_count": 271,
+    "routine_compact_non_stl_files_bytes": 128476769,
+    "stl_disposition": "Preserved in place inside versioned-evolution-archives-gen800-accession-v1 as retained certification/render source evidence; excluded from the routine compact score/gene Git payload."
+  },
+  "corrected_p8_validation_command": "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2",
+  "input_identities": {
+    "base_t07_receipt": "47840faf9826a19945ad6d56f62a07f1db0e7d37fea810901c155acf80dd958a",
+    "base_t07_index": "dd69650f66a0c6cf29cbfcfc80e1302529717ba7e31a9af6b0b825d13970c49b",
+    "gen800_population_index": "66c84ed4cdc943df885da4cdd72d25c0054195d9d8b9a01e1c35b6f3119c38cf"
+  },
+  "declared_scope": "Additive erratum to JR-EI-P1-T07 recording all three distinct V1 handoff variants (081f34e5659ce518..., 62b67373d45f5a11..., 010a91d7e4865cd6...), clarifying T07 population/24-STL scope, and correcting the stored P8 validation command.",
+  "deferred_p8_checks": [
+    "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2",
+    "cargo test -p jarambit-evidence"
+  ],
+  "jrn3a_deferred_p8_command_erratum": {
+    "replaces_in_preserved_t07": "cargo test -p paper-artifacts (excluded from root workspace)",
+    "corrected_deferred_p8_checks": [
+      "rtk cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2"
+    ]
+  }
+}
