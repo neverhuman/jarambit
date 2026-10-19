@@ -1,0 +1,346 @@
+{
+  "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+  "fresh_solver_execution": false,
+  "full_3d_field_available": false,
+  "interpolation": "none; six individual mesh-level observations and sixteen bin segments",
+  "lateral_admission": {
+    "admitted": false,
+    "asymptotic_validation": "not_established",
+    "f_ext": null,
+    "fit_status": "oscillatory",
+    "gci_fine": null,
+    "levels": [
+      {
+        "h": 0.5,
+        "mesh": {
+          "id": "cert_pipeline_r01_p14_c02_area_0.25",
+          "revision": "rev1",
+          "sha256": "fdad501e7e8e9b024e29549f8cf1428722af27a4510cd476188ebb8c7e24a099"
+        },
+        "observable": {
+          "id": "plate_sf_hunter",
+          "metric": "sf_hunter",
+          "projection": "plate_cst_dkt",
+          "region": "blade_outside_4mm",
+          "units": "ratio"
+        },
+        "refinement": "uniform_h"
+      },
+      {
+        "h": 1.0,
+        "mesh": {
+          "id": "cert_pipeline_r01_p14_c02_area_1.0",
+          "revision": "rev1",
+          "sha256": "f33ae4f0616f082788d8a473e475df1d0bb3d59c7952af494992cff04d00d0f5"
+        },
+        "observable": {
+          "id": "plate_sf_hunter",
+          "metric": "sf_hunter",
+          "projection": "plate_cst_dkt",
+          "region": "blade_outside_4mm",
+          "units": "ratio"
+        },
+        "refinement": "uniform_h"
+      },
+      {
+        "h": 2.0,
+        "mesh": {
+          "id": "cert_pipeline_r01_p14_c02_area_4.0",
+          "revision": "rev1",
+          "sha256": "16a2843ebfca6826c4eef35072b2682c2bc3467c24bd026104590c70145e4415"
+        },
+        "observable": {
+          "id": "plate_sf_hunter",
+          "metric": "sf_hunter",
+          "projection": "plate_cst_dkt",
+          "region": "blade_outside_4mm",
+          "units": "ratio"
+        },
+        "refinement": "uniform_h"
+      }
+    ],
+    "method_id": "relative_gci.v2",
+    "monotone": false,
+    "observable_valid": true,
+    "p": null,
+    "reason": "oscillatory_sequence",
+    "relative_error_available": false,
+    "sequence_valid": true
+  },
+  "mesh_levels": [
+    {
+      "h_mm": 0.5,
+      "lat20_n": 192.7939464877496,
+      "max_area_mm2": 0.25,
+      "mesh_sha256": "fdad501e7e8e9b024e29549f8cf1428722af27a4510cd476188ebb8c7e24a099",
+      "n_elem": 25209,
+      "n_node": 13503,
+      "seq_ratio": 1.4381383360942153,
+      "sf_hunter": 0.653531985081794
+    },
+    {
+      "h_mm": 1.0,
+      "lat20_n": 203.15852577561745,
+      "max_area_mm2": 1.0,
+      "mesh_sha256": "f33ae4f0616f082788d8a473e475df1d0bb3d59c7952af494992cff04d00d0f5",
+      "n_elem": 6803,
+      "n_node": 3874,
+      "seq_ratio": 1.5763238122195264,
+      "sf_hunter": 0.688665785701246
+    },
+    {
+      "h_mm": 2.0,
+      "lat20_n": 200.90101759202585,
+      "max_area_mm2": 4.0,
+      "mesh_sha256": "16a2843ebfca6826c4eef35072b2682c2bc3467c24bd026104590c70145e4415",
+      "n_elem": 3166,
+      "n_node": 1978,
+      "seq_ratio": 1.594832648598275,
+      "sf_hunter": 0.6810132954055782
+    }
+  ],
+  "plot_limits": {
+    "lateral_sf": [
+      0.0,
+      1.0
+    ],
+    "profile_MPa": [
+      0.0,
+      1300.0
+    ],
+    "sequence": [
+      0.0,
+      2.0
+    ],
+    "solver_sf": [
+      0.0,
+      1.0
+    ]
+  },
+  "producer_revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+  "profile_semantics": {
+    "plate_raw": "maximum saved plate cell response in each planar-distance bin, scaled in the original producer; no global torsion correction",
+    "solid_nodal_avg": "maximum incident-cell unweighted-mean vertex response in each planar-distance bin; original cut distance >3 mm"
+  },
+  "profiles": [
+    {
+      "observations": [
+        {
+          "bin_mm": [
+            4.0,
+            5.0
+          ],
+          "value_MPa": 1203.202
+        },
+        {
+          "bin_mm": [
+            5.0,
+            6.0
+          ],
+          "value_MPa": 724.542
+        },
+        {
+          "bin_mm": [
+            6.0,
+            8.0
+          ],
+          "value_MPa": 488.124
+        },
+        {
+          "bin_mm": [
+            8.0,
+            10.0
+          ],
+          "value_MPa": 296.478
+        },
+        {
+          "bin_mm": [
+            10.0,
+            12.0
+          ],
+          "value_MPa": 276.276
+        },
+        {
+          "bin_mm": [
+            12.0,
+            15.0
+          ],
+          "value_MPa": 302.666
+        },
+        {
+          "bin_mm": [
+            15.0,
+            20.0
+          ],
+          "value_MPa": 249.522
+        },
+        {
+          "bin_mm": [
+            20.0,
+            25.0
+          ],
+          "value_MPa": 213.304
+        }
+      ],
+      "series": "plate_raw"
+    },
+    {
+      "observations": [
+        {
+          "bin_mm": [
+            4.0,
+            5.0
+          ],
+          "value_MPa": 1004.7
+        },
+        {
+          "bin_mm": [
+            5.0,
+            6.0
+          ],
+          "value_MPa": 652.7
+        },
+        {
+          "bin_mm": [
+            6.0,
+            8.0
+          ],
+          "value_MPa": 397.5
+        },
+        {
+          "bin_mm": [
+            8.0,
+            10.0
+          ],
+          "value_MPa": 260.4
+        },
+        {
+          "bin_mm": [
+            10.0,
+            12.0
+          ],
+          "value_MPa": 329.7
+        },
+        {
+          "bin_mm": [
+            12.0,
+            15.0
+          ],
+          "value_MPa": 331.7
+        },
+        {
+          "bin_mm": [
+            15.0,
+            20.0
+          ],
+          "value_MPa": 314.8
+        },
+        {
+          "bin_mm": [
+            20.0,
+            25.0
+          ],
+          "value_MPa": 248.4
+        }
+      ],
+      "series": "solid_nodal_avg"
+    }
+  ],
+  "recovery": [
+    "incident_cell_vertex_max.v1",
+    "incident_cell_vertex_unweighted_mean.v1"
+  ],
+  "roi": {
+    "cut_distance": {
+      "min_exclusive": 3.0
+    },
+    "empty": "refused",
+    "id": "tip_annulus_roi.v1",
+    "tip_distance": {
+      "max_exclusive": 15.0,
+      "min_inclusive": 4.0
+    },
+    "units": "mm"
+  },
+  "scalar_pairs": [
+    {
+      "comparison": 0.7263,
+      "observable": "nodal_avg",
+      "primary": 0.726,
+      "stored_relative_sf_difference": 0.000413
+    },
+    {
+      "comparison": 0.6693,
+      "observable": "nodal_max",
+      "primary": 0.669,
+      "stored_relative_sf_difference": 0.000448
+    }
+  ],
+  "schema": "jarambit.retained_verification_projection.v1",
+  "sequence_admission": {
+    "admitted": false,
+    "asymptotic_validation": "not_established",
+    "f_ext": null,
+    "fit_status": "nonpositive_order",
+    "gci_fine": null,
+    "levels": [
+      {
+        "h": 0.5,
+        "mesh": {
+          "id": "cert_pipeline_r01_p14_c02_area_0.25",
+          "revision": "rev1",
+          "sha256": "fdad501e7e8e9b024e29549f8cf1428722af27a4510cd476188ebb8c7e24a099"
+        },
+        "observable": {
+          "id": "plate_seq_ratio",
+          "metric": "seq_ratio",
+          "projection": "plate_cst_dkt",
+          "region": "blade_vs_ring_neck",
+          "units": "ratio"
+        },
+        "refinement": "uniform_h"
+      },
+      {
+        "h": 1.0,
+        "mesh": {
+          "id": "cert_pipeline_r01_p14_c02_area_1.0",
+          "revision": "rev1",
+          "sha256": "f33ae4f0616f082788d8a473e475df1d0bb3d59c7952af494992cff04d00d0f5"
+        },
+        "observable": {
+          "id": "plate_seq_ratio",
+          "metric": "seq_ratio",
+          "projection": "plate_cst_dkt",
+          "region": "blade_vs_ring_neck",
+          "units": "ratio"
+        },
+        "refinement": "uniform_h"
+      },
+      {
+        "h": 2.0,
+        "mesh": {
+          "id": "cert_pipeline_r01_p14_c02_area_4.0",
+          "revision": "rev1",
+          "sha256": "16a2843ebfca6826c4eef35072b2682c2bc3467c24bd026104590c70145e4415"
+        },
+        "observable": {
+          "id": "plate_seq_ratio",
+          "metric": "seq_ratio",
+          "projection": "plate_cst_dkt",
+          "region": "blade_vs_ring_neck",
+          "units": "ratio"
+        },
+        "refinement": "uniform_h"
+      }
+    ],
+    "method_id": "relative_gci.v2",
+    "monotone": true,
+    "observable_valid": true,
+    "p": -2.900319887160099,
+    "reason": "nonpositive_observed_order",
+    "relative_error_available": false,
+    "sequence_valid": true
+  },
+  "solid_mesh_sha256": "d3f7a444175fb6a6f64ee1118a00f2e83d6994c66b1c266cfd94ac14572faab1",
+  "subject": "cert_pipeline_r01_p14_c02"
+}

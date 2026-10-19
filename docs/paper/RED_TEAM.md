@@ -33,6 +33,9 @@ This is an author adversarial review, not independent peer review, a separate ag
 | Producer-forced zeros imply no stress | Compare centroid masks with stored zeros and coordinate-rounding bounds | Gray masks 75 envelope and 14,875 seated-ring cells. One positive ring coefficient resolves rounded boundary membership; ambiguous zeros are refused. Raw tip unit responses remain visible. |
 | Coarse field substitutes for refined or solid result | Trace which mesh supplies retained arrays versus reported capacity minima | Figure explicitly uses the 0.25 mm² plate level. Capacity summaries combine two levels; strict/solid/fatigue/buckling fields are not invented. |
 | Heatmap hides a high response | Clip the envelope at a material constant or smooth cell values | Rejected. All 100,836 triangle/value associations checked against saved arrays; full source maxima, no clipping or interpolation. |
+| Valid convergence metadata implies a valid error estimate | Inspect the actual three-level assessed-example study | Metadata are valid, but recorded nonpositive order and oscillation refuse both estimates. Six observations plotted; null GCI/extrapolates stay null. |
+| Two profiles imply a full-field independent comparison | Inspect original plate-cell and solid vertex-mean bin definitions | Sixteen bin maxima displayed with original intervals and distinct recovery/region semantics. Matched-solver scalar pairs are a separate panel; no spatial difference field is inferred. |
+| Historical projection tag conceals implemented element order | Follow assessed in-plane calls beyond generic CST comments | Corrected methods to identify T6 in-plane cases and centroid field versus vertex-recovery capacity semantics; original metadata tags preserved. |
 
 ## Residual limitations
 
@@ -42,7 +45,7 @@ This is an author adversarial review, not independent peer review, a separate ag
 - Historical cell semantics and source revisions remain heterogeneous. The explanatory projection preserves them rather than reissuing scientific evidence.
 - Publication tooling checks retained data and layout. It does not verify every original solver execution or guarantee physical correctness.
 - Independent exact-head bot approval and required PR CI remain merge conditions. This author review cannot satisfy that approval.
-- The local PDF renders in Poppler, but pypdf reports repeated `/Group` dictionary keys at embedded SVG-PDF objects. PDF structural cleanup/toolchain portability remain publication follow-ups; `qpdf` is unavailable locally. The new heatmap uses a verified 3,600-pixel raster projection to avoid PDF triangle-edge seams; the source SVG and cell associations remain available.
+- The 19-page PDF now embeds lossless high-resolution PNG projections while retaining the original source SVGs. This removes the duplicate `/Group` keys from the former SVG-PDF import path and avoids dense triangle-edge seams. Strict pypdf parsing and final page rendering are recorded in the progress receipt. This is a local parser/layout check, not formal PDF/A validation or cross-toolchain byte-reproducibility proof.
 
 ## Local broad-gate finding
 

@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="920" viewBox="0 0 1200 920"><rect width="1200" height="920" fill="white"/><g font-family="Arial, sans-serif" fill="#132d3b">
+<text x="20" y="30" font-size="25">RETAINED NUMERICAL VERIFICATION / DIFFERENT QUESTIONS, DIFFERENT OUTCOMES</text>
+<text x="20" y="58" font-size="19">cert_pipeline_r01_p14_c02 / assessed example, not qualified / saved observations only</text>
+<rect x="20" y="80" width="560" height="350" fill="#f7f7f2"/>
+<text x="35" y="108" font-size="22">A / Regional yield-order proxy</text>
+<text x="35" y="132" font-size="17">Dimensionless; source-reported plate levels</text>
+<path d="M85,325 L550,325" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="28" y="330" font-size="16">0.00</text>
+<path d="M85,286.25 L550,286.25" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="28" y="291.25" font-size="16">0.50</text>
+<path d="M85,247.5 L550,247.5" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="28" y="252.5" font-size="16">1.00</text>
+<path d="M85,208.75 L550,208.75" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="28" y="213.75" font-size="16">1.50</text>
+<path d="M85,170 L550,170" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="28" y="175" font-size="16">2.00</text>
+<circle id="seq_ratio-0" cx="195" cy="213.54427895269833" r="5" fill="#007e87" data-value="1.4381383360942153" data-h="0.5"/>
+<text x="162" y="201.54427895269833" font-size="17">1.4381</text>
+<text x="185" y="350" font-size="17">0.5</text>
+<circle id="seq_ratio-1" cx="305" cy="202.8349045529867" r="5" fill="#007e87" data-value="1.5763238122195264" data-h="1"/>
+<text x="272" y="190.8349045529867" font-size="17">1.5763</text>
+<text x="295" y="350" font-size="17">1</text>
+<circle id="seq_ratio-2" cx="525" cy="201.4004697336337" r="5" fill="#007e87" data-value="1.594832648598275" data-h="2"/>
+<text x="492" y="189.4004697336337" font-size="17">1.5948</text>
+<text x="515" y="350" font-size="17">2</text>
+<text x="120" y="378" font-size="17">h = sqrt(maximum triangle area), mm</text>
+<text x="35" y="411" font-size="17">No admitted GCI: nonpositive observed order</text>
+<rect x="620" y="80" width="560" height="350" fill="#f7f7f2"/>
+<text x="635" y="108" font-size="22">B / Lateral safety-factor observable</text>
+<text x="635" y="132" font-size="17">Dimensionless; source-reported plate levels</text>
+<path d="M685,325 L1150,325" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="628" y="330" font-size="16">0.00</text>
+<path d="M685,286.25 L1150,286.25" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="628" y="291.25" font-size="16">0.25</text>
+<path d="M685,247.5 L1150,247.5" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="628" y="252.5" font-size="16">0.50</text>
+<path d="M685,208.75 L1150,208.75" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="628" y="213.75" font-size="16">0.75</text>
+<path d="M685,170 L1150,170" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="628" y="175" font-size="16">1.00</text>
+<circle id="sf_hunter-0" cx="795" cy="223.70254231232192" r="5" fill="#007e87" data-value="0.653531985081794" data-h="0.5"/>
+<text x="762" y="211.70254231232192" font-size="17">0.6535</text>
+<text x="785" y="350" font-size="17">0.5</text>
+<circle id="sf_hunter-1" cx="905" cy="218.25680321630688" r="5" fill="#007e87" data-value="0.688665785701246" data-h="1"/>
+<text x="872" y="206.25680321630688" font-size="17">0.6887</text>
+<text x="895" y="350" font-size="17">1</text>
+<circle id="sf_hunter-2" cx="1125" cy="219.4429392121354" r="5" fill="#007e87" data-value="0.6810132954055782" data-h="2"/>
+<text x="1092" y="207.4429392121354" font-size="17">0.6810</text>
+<text x="1115" y="350" font-size="17">2</text>
+<text x="720" y="378" font-size="17">h = sqrt(maximum triangle area), mm</text>
+<text x="635" y="411" font-size="17">No admitted GCI: oscillatory sequence</text>
+<rect x="20" y="450" width="560" height="380" fill="#f7f7f2"/>
+<text x="35" y="478" font-size="22">C / Matched-mesh solver observations</text>
+<text x="35" y="502" font-size="17">Safety factors; separately recovered vertex statistics</text>
+<text x="35" y="550" font-size="18">Vertex mean</text>
+<path id="solver-nodal_avg-0" d="M190,565 L407.79999999999995,565" stroke="#007e87" stroke-width="5" fill="none" data-value="0.726"/>
+<text x="500" y="570" font-size="16">0.7260</text>
+<path id="solver-nodal_avg-1" d="M190,580 L407.89,580" stroke="#a3442d" stroke-width="5" fill="none" data-value="0.7263"/>
+<text x="500" y="585" font-size="16">0.7263</text>
+<text x="190" y="612" font-size="16">Stored relative SF difference: 0.0413%</text>
+<text x="35" y="640" font-size="18">Vertex max</text>
+<path id="solver-nodal_max-0" d="M190,655 L390.70000000000005,655" stroke="#007e87" stroke-width="5" fill="none" data-value="0.669"/>
+<text x="500" y="660" font-size="16">0.6690</text>
+<path id="solver-nodal_max-1" d="M190,670 L390.78999999999996,670" stroke="#a3442d" stroke-width="5" fill="none" data-value="0.6693"/>
+<text x="500" y="675" font-size="16">0.6693</text>
+<text x="190" y="702" font-size="16">Stored relative SF difference: 0.0448%</text>
+<path d="M190,720 L190,725" stroke="#132d3b" stroke-width="1" fill="none"/>
+<text x="182" y="745" font-size="16">0.0</text>
+<path d="M340,720 L340,725" stroke="#132d3b" stroke-width="1" fill="none"/>
+<text x="332" y="745" font-size="16">0.5</text>
+<path d="M490,720 L490,725" stroke="#132d3b" stroke-width="1" fill="none"/>
+<text x="482" y="745" font-size="16">1.0</text>
+<text x="35" y="773" font-size="16">Teal: scikit-fem P2 / orange: DOLFINx 0.9.0 P2</text>
+<text x="35" y="797" font-size="16">Stored comparison verified; rounding is retained.</text>
+<text x="35" y="820" font-size="16">Agreement does not establish physical validation.</text>
+<rect x="620" y="450" width="560" height="380" fill="#f7f7f2"/>
+<text x="635" y="478" font-size="22">D / Retained regional maxima (MPa)</text>
+<text x="635" y="502" font-size="17">Bin maxima; different model/recovery definitions</text>
+<path d="M685,695 L1155,695" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="630" y="700" font-size="16">0</text>
+<path d="M685,645.7692307692307 L1155,645.7692307692307" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="630" y="650.7692307692307" font-size="16">400</text>
+<path d="M685,596.5384615384615 L1155,596.5384615384615" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="630" y="601.5384615384615" font-size="16">800</text>
+<path d="M685,547.3076923076923 L1155,547.3076923076923" stroke="#dce1e2" stroke-width="1" fill="none"/>
+<text x="630" y="552.3076923076923" font-size="16">1200</text>
+<path id="plate_raw-0" d="M685,546.9136 L707.3809523809524,546.9136" stroke="#007e87" stroke-width="4" data-value="1203.202" data-bin="4-5"/>
+<path id="plate_raw-1" d="M707.3809523809524,605.8256 L729.7619047619048,605.8256" stroke="#007e87" stroke-width="4" data-value="724.542" data-bin="5-6"/>
+<path id="plate_raw-2" d="M729.7619047619048,634.9232 L774.5238095238095,634.9232" stroke="#007e87" stroke-width="4" data-value="488.124" data-bin="6-8"/>
+<path id="plate_raw-3" d="M774.5238095238095,658.5104 L819.2857142857142,658.5104" stroke="#007e87" stroke-width="4" data-value="296.478" data-bin="8-10"/>
+<path id="plate_raw-4" d="M819.2857142857142,660.9968 L864.047619047619,660.9968" stroke="#007e87" stroke-width="4" data-value="276.276" data-bin="10-12"/>
+<path id="plate_raw-5" d="M864.047619047619,657.7488 L931.1904761904761,657.7488" stroke="#007e87" stroke-width="4" data-value="302.666" data-bin="12-15"/>
+<path id="plate_raw-6" d="M931.1904761904761,664.2896 L1043.095238095238,664.2896" stroke="#007e87" stroke-width="4" data-value="249.522" data-bin="15-20"/>
+<path id="plate_raw-7" d="M1043.095238095238,668.7472 L1155,668.7472" stroke="#007e87" stroke-width="4" data-value="213.304" data-bin="20-25"/>
+<path id="solid_nodal_avg-0" d="M685,571.3446153846154 L707.3809523809524,571.3446153846154" stroke="#a3442d" stroke-width="4" data-value="1004.7" data-bin="4-5"/>
+<path id="solid_nodal_avg-1" d="M707.3809523809524,614.6676923076923 L729.7619047619048,614.6676923076923" stroke="#a3442d" stroke-width="4" data-value="652.7" data-bin="5-6"/>
+<path id="solid_nodal_avg-2" d="M729.7619047619048,646.0769230769231 L774.5238095238095,646.0769230769231" stroke="#a3442d" stroke-width="4" data-value="397.5" data-bin="6-8"/>
+<path id="solid_nodal_avg-3" d="M774.5238095238095,662.9507692307692 L819.2857142857142,662.9507692307692" stroke="#a3442d" stroke-width="4" data-value="260.4" data-bin="8-10"/>
+<path id="solid_nodal_avg-4" d="M819.2857142857142,654.4215384615385 L864.047619047619,654.4215384615385" stroke="#a3442d" stroke-width="4" data-value="329.7" data-bin="10-12"/>
+<path id="solid_nodal_avg-5" d="M864.047619047619,654.1753846153846 L931.1904761904761,654.1753846153846" stroke="#a3442d" stroke-width="4" data-value="331.7" data-bin="12-15"/>
+<path id="solid_nodal_avg-6" d="M931.1904761904761,656.2553846153846 L1043.095238095238,656.2553846153846" stroke="#a3442d" stroke-width="4" data-value="314.8" data-bin="15-20"/>
+<path id="solid_nodal_avg-7" d="M1043.095238095238,664.4276923076923 L1155,664.4276923076923" stroke="#a3442d" stroke-width="4" data-value="248.4" data-bin="20-25"/>
+<text x="675" y="721" font-size="16">4</text>
+<text x="764.5238095238095" y="721" font-size="16">8</text>
+<text x="854.047619047619" y="721" font-size="16">12</text>
+<text x="921.1904761904761" y="721" font-size="16">15</text>
+<text x="1033.095238095238" y="721" font-size="16">20</text>
+<text x="1145" y="721" font-size="16">25</text>
+<text x="695" y="748" font-size="17">Planar distance from saved tip, mm</text>
+<text x="635" y="773" font-size="16">Teal: plate cell peaks, no global correction</text>
+<text x="635" y="797" font-size="16">Orange: solid recovered-vertex mean peaks</text>
+<text x="635" y="820" font-size="16">Not a pointwise solver-difference field.</text>
+<text x="20" y="865" font-size="18">Mesh-study metadata are valid; no GCI error estimate is admitted for either plate observable.</text>
+<text x="20" y="893" font-size="17">C uses one matched solid mesh. D contains only saved binned maxima; no 3D stress map or error bars are inferred.</text>
+</g></svg>

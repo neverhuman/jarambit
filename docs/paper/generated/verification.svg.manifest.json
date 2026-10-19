@@ -1,0 +1,21 @@
+{
+  "figure": "docs/paper/generated/verification.svg",
+  "figure_sha256": "fe66123fa003077003512bc5f57ab014bfcf12e239670a7550687f6d22cc2516",
+  "inputs": {
+    "crates/paper-artifacts/src/verification.rs": "faa5305dd0b492f71f0d5a8afec6d0e0c13618568cce916fadc17602d47d38ea",
+    "docs/paper/verification-inputs.v1.json": "f1b80915fd9e70c044cf3bb8a5b92aa836b1ca511457a7785bb513b4a4e19b3b",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_dolfinx_raw.json": "f6a1ec2a523460743473a5b4cb0af2bba6c7aed8f99587a813460a42d174d568",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_dolfinx_sidecar.json": "63b97a1930f6770c7c61cd2f289b40dd7fc272dffd290491814ca6476fbbf4b7",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_plate_gci.json": "45afc2fd250bc8bdbf9b5f6866bbf2e0231f47ad2b62f2d10798cc36ed11244a",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_skfem_raw.json": "9d0748c79af37c15e50b9b90c1eefedb916ecfd145420393c57cb8a8e4bd98bf",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_solid_mesh.npz": "d3f7a444175fb6a6f64ee1118a00f2e83d6994c66b1c266cfd94ac14572faab1",
+    "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_solid_tip.json": "cc969b0f5a0b3b8e4e3a914ec7b4c32bdade1ab0f542a8244cd377a60e6a115e",
+    "fem_solid/cross_check.py": "32b21c6b4edc64731652c860e0f85d1ee5b4fec45b5869ccd86a677cfe386c98",
+    "fem_solid/gci.py": "61889a0e6a6459c8afbafe0c37758584711490b1db232799122eb3af1e4491da",
+    "fem_solid/tip_solid.py": "fdf1cfcd51c78a74519f306587699fd2aebca8468cb718222a935ee0d19f43cb"
+  },
+  "projection_receipt": "docs/paper/generated/verification.json",
+  "schema": 1,
+  "scope": "saved mesh levels, scalar pairs and binned profiles; no full solid field or admitted GCI estimate",
+  "script": "crates/paper-artifacts/src/verification.rs"
+}

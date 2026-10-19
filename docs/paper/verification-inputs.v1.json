@@ -1,0 +1,72 @@
+{
+  "schema": "jarambit.retained_verification_contract.v1",
+  "subject": "cert_pipeline_r01_p14_c02",
+  "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+  "producer_revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+  "sources": {
+    "plate_gci": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_plate_gci.json",
+      "sha256": "45afc2fd250bc8bdbf9b5f6866bbf2e0231f47ad2b62f2d10798cc36ed11244a"
+    },
+    "solid_tip": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_solid_tip.json",
+      "sha256": "cc969b0f5a0b3b8e4e3a914ec7b4c32bdade1ab0f542a8244cd377a60e6a115e"
+    },
+    "skfem_raw": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_skfem_raw.json",
+      "sha256": "9d0748c79af37c15e50b9b90c1eefedb916ecfd145420393c57cb8a8e4bd98bf"
+    },
+    "dolfinx_raw": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_dolfinx_raw.json",
+      "sha256": "f6a1ec2a523460743473a5b4cb0af2bba6c7aed8f99587a813460a42d174d568"
+    },
+    "dolfinx_sidecar": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_dolfinx_sidecar.json",
+      "sha256": "63b97a1930f6770c7c61cd2f289b40dd7fc272dffd290491814ca6476fbbf4b7"
+    },
+    "mesh": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_solid_mesh.npz",
+      "sha256": "d3f7a444175fb6a6f64ee1118a00f2e83d6994c66b1c266cfd94ac14572faab1"
+    }
+  },
+  "interpretation_sources": {
+    "fem_solid/tip_solid.py": "fdf1cfcd51c78a74519f306587699fd2aebca8468cb718222a935ee0d19f43cb",
+    "fem_solid/cross_check.py": "32b21c6b4edc64731652c860e0f85d1ee5b4fec45b5869ccd86a677cfe386c98",
+    "fem_solid/gci.py": "61889a0e6a6459c8afbafe0c37758584711490b1db232799122eb3af1e4491da"
+  },
+  "profile_bins_mm": [
+    [
+      4,
+      5
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      6,
+      8
+    ],
+    [
+      8,
+      10
+    ],
+    [
+      10,
+      12
+    ],
+    [
+      12,
+      15
+    ],
+    [
+      15,
+      20
+    ],
+    [
+      20,
+      25
+    ]
+  ],
+  "scope": "Retained observations and stored verification decisions only; no new solve, GCI estimate, model calibration or physical validation."
+}
