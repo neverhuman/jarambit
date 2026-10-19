@@ -23,6 +23,10 @@ Output: `target/ieee/paper/main.pdf`, source/output SHA-256 lists, tool versions
 
 `crates/paper-artifacts/src/publication.rs` generates the explanatory atlas, complete frozen science index, vector figures, numerical macros, summary and hash manifest. `--check` performs no writes. It reads existing evidence without changing it and invokes no CAD, FEM, evolutionary or physical test.
 
+Before publishing, the reader checks that the selected score and label agree with the final retained Hall of Fame, matching Stage-2 identities agree, objective arithmetic reconciles within recorded rounding, and all 26 predicate flags agree with their tally and failed-ID list. These are reporting-consistency checks; they do not establish equivalence between screening and assessment stages or validate the underlying mechanics.
+
+The `version-check` workflow explicitly tests this standalone Cargo workspace, checks generated freshness, and builds the new manuscript. A successful new-paper build is configured to upload `ieee-paper-<commit SHA>` with its PDF and build receipts. This artifact is separate from the older publication PDFs and is available only after that workflow succeeds.
+
 ![Best retained reporting fitness and evolutionary trajectory](generated/fitness.svg)
 
 The selected w411c3 cohort reports best fitness **74.207299**, higher is better, with placeholder inputs and no qualified design. Its best CAD geometry and full round populations are absent from the retained cohort. The figure shows the actual weighted score profile and three recorded generations beside a separately labeled historical full-birth population inset. It does not invent a winner render or weighted population distribution.

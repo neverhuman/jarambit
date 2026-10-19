@@ -1,4 +1,5 @@
 //! Deterministic publication projections. No scientific evaluator is invoked.
+use crate::validation::{validate_weighted_report, REPORT_GROUPS};
 use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
@@ -7,7 +8,7 @@ use std::path::{Component, Path};
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 const BASE: &str = "009f5ac520fa3afe8ed8025230eef604dbb7f922";
-const CURVE: &str =
+pub(crate) const CURVE: &str =
     "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/fitness_curve.json";
 const POP: &str = "evidence/rs_v2/w282_ultrarunner/search/all_evals.json";
 
@@ -123,49 +124,6 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
     let terms = best["ultralight_fitness_breakdown"]["objectives"]
         .as_object()
         .ok_or("missing objective profile")?;
-    let categories: [(&str, &[&str], f64); 4] = [
-        (
-            "Mass + compactness",
-            &["ultralight_mass", "holder_and_compactness"],
-            30.0,
-        ),
-        (
-            "Form + comfort proxies",
-            &[
-                "karambit_ring_and_claw",
-                "c6_aesthetic_and_ergo",
-                "bore_collar_comfort",
-            ],
-            25.0,
-        ),
-        (
-            "Exported geometry",
-            &[
-                "cad_watertight_brep",
-                "gate_s_sharpness",
-                "gate_s_point_profile",
-            ],
-            15.0,
-        ),
-        (
-            "Response + verification",
-            &[
-                "hiker_lateral_180n",
-                "hunter_lateral_260n",
-                "strict_hunter_260n",
-                "ring_pull_1500n",
-                "twist_body_1p82nm",
-                "twist_tip_plate_1p82nm",
-                "solid_tip_3d_p2_and_xcheck",
-                "side_a4_buckling",
-                "failure_sequence_1p2",
-                "plate_gci_3level",
-                "human_max_overload",
-                "goodman_fatigue_l7",
-            ],
-            30.0,
-        ),
-    ];
     let mut sum = 0.0;
     let mut s = svg_start(1200, 620);
     label(
@@ -194,7 +152,7 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         "Best reported profile in selected w411c3 cohort",
         "#526873",
     );
-    for (i, (name, keys, cap)) in categories.iter().enumerate() {
+    for (i, (name, keys, cap)) in REPORT_GROUPS.iter().enumerate() {
         let points = keys
             .iter()
             .map(|k| number(&terms[*k]["weighted_points"]))
@@ -590,6 +548,8 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         sc.trim_end().to_string() + "\n",
     );
     let curve = read(&root, CURVE, &mut inputs)?;
+    validate_curve(&curve)?;
+    validate_weighted_report(&curve, entries)?;
     let births = read(&root, POP, &mut inputs)?;
     let births = array(&births)?;
     let birth_ids = births
@@ -691,6 +651,8 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     out.insert("docs/paper/generated/metrics.tex".into(),format!("% Generated publication projection; not a solver result.\n\\newcommand{{\\BestFitness}}{{{:.6}}}\n\\newcommand{{\\BatteryPass}}{{{}}}\n\\newcommand{{\\BatteryFail}}{{{}}}\n\\newcommand{{\\BatteryBlocked}}{{{}}}\n\\newcommand{{\\BirthCount}}{{{}}}\n",number(&curve["best_so_far"]["ultralight_weighted_fitness"])?,counts.get("pass").unwrap_or(&0),counts.get("fail").unwrap_or(&0),counts.get("blocked").unwrap_or(&0),births.len()));
     for rel in [
         "crates/paper-artifacts/src/publication.rs",
+        "crates/paper-artifacts/src/lib.rs",
+        "crates/paper-artifacts/src/validation.rs",
         "crates/paper-artifacts/examples/paper_artifacts.rs",
         "crates/paper-artifacts/Cargo.toml",
         "crates/paper-artifacts/Cargo.lock",
@@ -783,6 +745,78 @@ mod tests {
         assert!(validate_curve(&v).is_err());
         v["metric"] = json!("new_loss");
         assert!(validate_curve(&v).is_err());
+    }
+    #[test]
+    fn inconsistent_reports_are_refused_before_write_and_in_check_mode() {
+        use std::sync::atomic::{AtomicU64, Ordering};
+        static NEXT: AtomicU64 = AtomicU64::new(0);
+        struct Fixture(std::path::PathBuf);
+        impl Drop for Fixture {
+            fn drop(&mut self) {
+                let _ = fs::remove_dir_all(&self.0);
+            }
+        }
+        let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../..")
+            .canonicalize()
+            .unwrap();
+        let manifest: Value = serde_json::from_slice(
+            &fs::read(root.join("docs/paper/generated/manifest.json")).unwrap(),
+        )
+        .unwrap();
+        let parent = root.join("target/paper-report-fixtures");
+        fs::create_dir_all(&parent).unwrap();
+        for (mutation, expected_error) in [
+            ("score", "selected best differs"),
+            ("label", "selected label differs"),
+            ("tally", "tally differs"),
+        ] {
+            let path = parent.join(format!(
+                "{}-{}",
+                std::process::id(),
+                NEXT.fetch_add(1, Ordering::Relaxed)
+            ));
+            fs::create_dir(&path).unwrap();
+            let fixture = Fixture(path);
+            for rel in manifest["inputs"].as_object().unwrap().keys() {
+                let source = safe_path(&root, rel).unwrap();
+                let dest = safe_path(&fixture.0, rel).unwrap();
+                fs::create_dir_all(dest.parent().unwrap()).unwrap();
+                fs::copy(source, dest).unwrap();
+            }
+            let curve_path = fixture.0.join(CURVE);
+            let mut curve: Value = serde_json::from_slice(&fs::read(&curve_path).unwrap()).unwrap();
+            match mutation {
+                "score" => {
+                    for row in curve["generations"].as_array_mut().unwrap() {
+                        row["round_best_fitness"] = json!(0.0);
+                        row["hall_of_fame_best_so_far"] = json!(0.0);
+                    }
+                }
+                "label" => {
+                    curve["best_so_far"]["label"] = json!("REVIEW_FIXTURE_WRONG_SUBJECT");
+                }
+                "tally" => {
+                    curve["best_so_far"]["ultralight_fitness_breakdown"]
+                        ["legacy_hard_gates_passed_count"] = json!(26);
+                }
+                _ => unreachable!(),
+            }
+            fs::write(curve_path, serde_json::to_vec(&curve).unwrap()).unwrap();
+            let sentinel = fixture.0.join("docs/paper/generated/summary.json");
+            fs::create_dir_all(sentinel.parent().unwrap()).unwrap();
+            fs::write(&sentinel, b"unchanged before rejected publication").unwrap();
+            for check in [false, true] {
+                let error = generate(&fixture.0, check).unwrap_err().to_string();
+                assert!(error.contains(expected_error), "{mutation}: {error}");
+                assert_eq!(
+                    fs::read(&sentinel).unwrap(),
+                    b"unchanged before rejected publication"
+                );
+                assert!(!fixture.0.join("docs/paper/generated/fitness.svg").exists());
+                assert!(!fixture.0.join("docs/tests/README.md").exists());
+            }
+        }
     }
     #[test]
     fn committed_publication_inputs_reconcile() {

@@ -6,7 +6,8 @@ fn main() {
         std::process::exit(2);
     }
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    if let Err(error) = jarambit_paper_artifacts::publication::generate(&root, args == ["--check"]) {
+    if let Err(error) = jarambit_paper_artifacts::publication::generate(&root, args == ["--check"])
+    {
         eprintln!("publication: {error}");
         std::process::exit(1);
     }

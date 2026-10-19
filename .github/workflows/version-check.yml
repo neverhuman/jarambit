@@ -42,6 +42,15 @@ jobs:
       - run: python3 -c "import sys; sys.path.insert(0,'metrics'); import global_metric as g; v,_=g.global_G(dict(solid_tip_sf_nodal_max=1.5,spg=4.0,aes_score=0.6,mass_g=80,seq_ratio=0.9)); assert abs(v-0.9675)<1e-9, v; print('G smoke ok', v)"
       - name: G1 completeness contract tests (PR-0.28.1)
         run: python3 -m unittest discover -s metrics/tests -t . -v
+      - name: Standalone paper reporting contracts and generated freshness
+        run: |
+          toolchain=/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin
+          export PATH="${toolchain}:/home/ubuntu/.cargo/bin:${PATH}"
+          export RUSTC="${toolchain}/rustc"
+          export CARGO_TARGET_DIR="$PWD/target/paper-artifacts-ci"
+          test -x "$RUSTC"
+          cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2
+          cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
       - name: Build generic claim bridge for operator-admission controls
         run: |
           unset CARGO_TARGET_DIR
@@ -252,6 +261,30 @@ jobs:
         run: |
           python3 -B ops/render/paper/build_pdf.py --verify-reproducible
           (cd target/paper && sha256sum -c SHA256SUMS)
+      - name: Build and check the new IEEE-style manuscript
+        run: |
+          toolchain=/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin
+          export PATH="${toolchain}:/home/ubuntu/.cargo/bin:${PATH}"
+          export RUSTC="${toolchain}/rustc"
+          for tool in make rsvg-convert lualatex pdfinfo kpsewhich rg shasum; do
+            command -v "$tool" || exit 1
+          done
+          kpsewhich IEEEtran.cls >/dev/null || {
+            echo 'The publication runner requires IEEEtran.cls for the new manuscript.' >&2
+            exit 1
+          }
+          make -C docs/paper check CARGO_TARGET_DIR="$PWD/target/paper-artifacts-ci"
+      - name: Upload the reviewed IEEE-style manuscript and build receipts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ieee-paper-${{ github.sha }}
+          path: |
+            target/ieee/paper/main.pdf
+            target/ieee/paper/SOURCE_SHA256SUMS
+            target/ieee/paper/OUTPUT_SHA256SUMS
+            target/ieee/paper/toolchain.txt
+            target/ieee/paper/pdfinfo.txt
+          if-no-files-found: error
       - name: Upload publication PDFs and SHA-256 manifest artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
