@@ -9,6 +9,7 @@
 <text x="50" y="154" font-size="18">B: blocked (112)</text>
 <rect x="20" y="166" width="22" height="22" fill="#8c651c"/>
 <text x="50" y="184" font-size="18">I: incomplete (0)</text>
+<text x="335" y="94" font-size="17">* c10a / c10c: hand-built SWITCHBACK CAD (non-genome)</text>
 <text transform="translate(255,235) rotate(-90)" font-size="18">build.analytic</text>
 <text transform="translate(295,235) rotate(-90)" font-size="18">build.gci_contracts</text>
 <text transform="translate(335,235) rotate(-90)" font-size="18">build.claims</text>
@@ -29,13 +30,13 @@
 <text transform="translate(935,235) rotate(-90)" font-size="18">gate.rs_v2</text>
 <text x="20" y="236" font-size="18">Role / subject</text>
 <text x="975" y="235" font-size="16">P/F/B/I; rev</text>
-<text x="20" y="266" font-size="18">N / c10a</text>
+<text x="20" y="266" font-size="18">N / c10a*</text>
 <text x="975" y="266" font-size="17">5/0/13/0 rA</text>
 <text x="20" y="288" font-size="18">N / c93</text>
 <text x="975" y="288" font-size="17">4/0/14/0 rA</text>
 <text x="20" y="310" font-size="18">N / c92</text>
 <text x="975" y="310" font-size="17">4/0/14/0 rA</text>
-<text x="20" y="332" font-size="18">A / c10c</text>
+<text x="20" y="332" font-size="18">A / c10c*</text>
 <text x="975" y="332" font-size="17">4/0/14/0 rA</text>
 <text x="20" y="354" font-size="18">G / g3</text>
 <text x="975" y="354" font-size="17">11/4/3/0 rA</text>

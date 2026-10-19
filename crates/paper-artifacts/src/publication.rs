@@ -79,7 +79,13 @@ fn xml(s: &str) -> String {
 fn svg_start(w: usize, h: usize) -> String {
     format!("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"{w}\" height=\"{h}\" viewBox=\"0 0 {w} {h}\"><rect width=\"100%\" height=\"100%\" fill=\"#f5f4ef\"/><g font-family=\"Arial, sans-serif\" fill=\"#132d3b\">\n")
 }
+// Only display coordinates are quantized. Retained values and reductions stay unchanged.
+// libm transforms can differ by an ulp across platforms; 0.001 SVG unit is subpixel.
+fn svg_coord(value: f64) -> String {
+    format!("{value:.3}")
+}
 fn label(s: &mut String, x: f64, y: f64, size: usize, content: &str, color: &str) {
+    let (x, y) = (svg_coord(x), svg_coord(y));
     s.push_str(&format!(
         "<text x=\"{x}\" y=\"{y}\" font-size=\"{size}\" fill=\"{color}\">{}</text>\n",
         xml(content)
@@ -233,7 +239,10 @@ fn cover_evolution(births: &[Value], stats: &[Value]) -> Result<String> {
     let sy = |v: f64| 258. - 172. * (v.asinh() - lo.asinh()) / (hi.asinh() - lo.asinh()).max(1e-9);
     for value in [-200.0_f64, -10., -1., 0., 1.] {
         let y = sy(value);
-        s.push_str(&format!("<path d=\"M70 {y}H490\" stroke=\"#d5dfdf\"/>"));
+        s.push_str(&format!(
+            "<path d=\"M70 {}H490\" stroke=\"#d5dfdf\"/>",
+            svg_coord(y)
+        ));
         label(&mut s, 4., y + 5., 17, &format!("{value:.0}"), "#526873");
     }
     for birth in births {
@@ -246,8 +255,8 @@ fn cover_evolution(births: &[Value], stats: &[Value]) -> Result<String> {
         } else {
             s.push_str(&format!(
                 "<path d=\"M{} {}l3 3m0 -3l-3 3\" stroke=\"#b66a30\" opacity=\".5\"/>",
-                x - 1.5,
-                y - 1.5
+                svg_coord(x - 1.5),
+                svg_coord(y - 1.5)
             ));
         }
     }
@@ -288,7 +297,10 @@ fn cover_evolution(births: &[Value], stats: &[Value]) -> Result<String> {
     let cy = |v: f64| 528. - 111. * (v - 1.135) / (1.16 - 1.135);
     for value in [1.14, 1.15, 1.16] {
         let y = cy(value);
-        s.push_str(&format!("<path d=\"M70 {y}H490\" stroke=\"#d5dfdf\"/>"));
+        s.push_str(&format!(
+            "<path d=\"M70 {}H490\" stroke=\"#d5dfdf\"/>",
+            svg_coord(y)
+        ));
         label(&mut s, 4., y + 5., 17, &format!("{value:.2}"), "#526873");
     }
     let mut cumulative = f64::NEG_INFINITY;
@@ -541,7 +553,7 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         );
         s.push_str(&format!(
             "<path d=\"M640 {}H1120\" stroke=\"#d5dfdf\"/>",
-            py(tick)
+            svg_coord(py(tick))
         ));
     }
     let mut gen_values: BTreeMap<u64, Vec<f64>> = BTreeMap::new();
@@ -1286,7 +1298,10 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     let sy = |v: f64| 360. - 235. * (v.asinh() - lo.asinh()) / (hi.asinh() - lo.asinh()).max(1e-9);
     for v in [-200.0_f64, -100., -10., -1., 0., 1.] {
         let y = sy(v);
-        popsvg.push_str(&format!("<path d=\"M95 {y}H1135\" stroke=\"#d5dfdf\"/>"));
+        popsvg.push_str(&format!(
+            "<path d=\"M95 {}H1135\" stroke=\"#d5dfdf\"/>",
+            svg_coord(y)
+        ));
         label(&mut popsvg, 10., y + 5., 15, &format!("{v:.2}"), "#526873");
     }
     for row in births {
@@ -1297,7 +1312,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
                 "<circle cx=\"{x:.2}\" cy=\"{y:.2}\" r=\"1.8\" fill=\"#4e8f9c\" opacity=\".25\"/>"
             ));
         } else {
-            popsvg.push_str(&format!("<path d=\"M{} {}l4 4m0 -4l-4 4\" stroke=\"#b66a30\" stroke-width=\"1\" opacity=\".5\"/>",x-2.,y-2.));
+            popsvg.push_str(&format!("<path d=\"M{} {}l4 4m0 -4l-4 4\" stroke=\"#b66a30\" stroke-width=\"1\" opacity=\".5\"/>",svg_coord(x-2.),svg_coord(y-2.)));
         }
     }
     for (field, color) in [("median", "#132d3b"), ("max", "#007e87")] {
@@ -1645,6 +1660,27 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn svg_coordinates_discard_platform_ulp_noise_but_not_source_values() {
+        // Actual Linux/macOS mismatches from the reviewed asinh projections.
+        for (a, b, expected) in [
+            (357.5170852133724, 357.51708521337247, "357.517"),
+            (256.1465474753194, 256.14654747531944, "256.147"),
+        ] {
+            assert_ne!(a, b);
+            assert_eq!(svg_coord(a), expected);
+            assert_eq!(svg_coord(b), expected);
+            let (mut one, mut two) = (String::new(), String::new());
+            label(&mut one, 4., a, 17, "original-value tick", "#526873");
+            label(&mut two, 4., b, 17, "original-value tick", "#526873");
+            assert_eq!(one, two);
+            assert_ne!(json!(a), json!(b)); // Numerical receipts retain their inputs.
+        }
+        for value in [-200.123456789, -1.234499, 0.0, 1.15727, 599.999999999] {
+            let shown: f64 = svg_coord(value).parse().unwrap();
+            assert!((shown - value).abs() <= 0.000500000001);
+        }
+    }
     #[test]
     fn changed_or_unbound_render_geometry_is_refused() {
         let hash = "a".repeat(64);

@@ -215,6 +215,13 @@ pub(crate) fn svg(p: &Value) -> Result<String> {
             ),
         );
     }
+    label(
+        &mut out,
+        335,
+        94,
+        17,
+        "* c10a / c10c: hand-built SWITCHBACK CAD (non-genome)",
+    );
     for (column, id) in columns.iter().enumerate() {
         let x = 230 + column * 40 + 25;
         out.push_str(&format!(
@@ -232,12 +239,18 @@ pub(crate) fn svg(p: &Value) -> Result<String> {
             "genome" => "G",
             _ => return Err("unknown matrix role".into()),
         };
+        let subject = string(&record["subject"])?;
+        let mark = if ["c10a", "c10c"].contains(&subject) {
+            "*"
+        } else {
+            ""
+        };
         label(
             &mut out,
             20,
             y + 16,
             18,
-            &format!("{prefix} / {}", string(&record["subject"])?),
+            &format!("{prefix} / {subject}{mark}"),
         );
         let c = &record["stored_status_counts"];
         label(
