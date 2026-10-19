@@ -14,6 +14,7 @@ pub(crate) struct Visual {
 
 pub(crate) fn assessed(kind: &str, id: &str) -> Option<Visual> {
     let (figure, panel) = match (kind, id) {
+        ("G16", "c6_aesthetic_floor") | ("RSV2", "aesthetic_and_geometric") => ("reference", "A--B: original 2D reference overlay, saved rounded descriptors and flags; no new measurement or human approval"),
         ("G16", "cad_watertight_and_single_solid") => ("export-identity", "A--B: retained content associations and original topology records; no fresh CAD validation"),
         ("G16", "cert_hiker_180n" | "cert_hunter_260n") => ("plate-fields", "B: lateral unit response; one shared field"),
         ("G16", "cert_ring_pull_1500n") => ("plate-fields", "C: ring unit response with seated-region source zeros masked"),
@@ -34,7 +35,7 @@ pub(crate) fn assessed(kind: &str, id: &str) -> Option<Visual> {
 
 fn gap(kind: &str, id: &str) -> Option<&'static str> {
     match (kind, id) {
-        ("G16", "geometric_and_holder_gates" | "karambit_ring_and_curved_claw" | "c6_aesthetic_floor") | ("RSV2", "aesthetic_and_geometric") => Some("Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison."),
+        ("G16", "geometric_and_holder_gates" | "karambit_ring_and_curved_claw") => Some("Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison."),
         ("RSV2", "gate_s_sharp_law" | "gate_s_tip_point_brep") => Some("Subsection exported-measurement visual not generated; nominal geometry and measured export observations must remain distinct."),
         _ => None,
     }
@@ -67,6 +68,7 @@ fn bind(v: &Visual, out: &BTreeMap<String, String>) -> Result<Value> {
         return Err("visual manifest/path/digest differs".into());
     }
     let (schema, category, scope) = match v.figure {
+        "reference" => ("jarambit.reference_projection.v1", "retained_silhouettes_and_reference_descriptors", "Original 2D point lists with one common display transform, saved rounded descriptors and flags; no new comparison, FEM or human approval."),
         "export-identity" => ("jarambit.export_identity_projection.v1", "retained_topology_records_and_identity_diagram", "Stored token counts, exporter census, BRep observations and render metadata; no fresh CAD validation, regeneration or FEM field."),
         "plate-fields" => ("jarambit.retained_plate_projection.v1", "retained_plate_cell_field", "Original 0.25 mm2 plate arrays only; not strict or solid fields; shared fields are not independent tests."),
         "verification" => ("jarambit.retained_verification_projection.v1", "retained_scalars_and_binned_profiles", "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate."),
@@ -89,6 +91,14 @@ fn bind(v: &Visual, out: &BTreeMap<String, String>) -> Result<Value> {
             || p["fem_field"] != false)
     {
         return Err("export diagram asserted new validation or FEM field".into());
+    }
+    if v.figure == "reference"
+        && (p["fresh_genome_regeneration"] != false
+            || p["comparison_recomputed"] != false
+            || p["fem_field"] != false
+            || p["human_approval"] != false)
+    {
+        return Err("reference diagram asserted new measurement or approval".into());
     }
     let binding = if v.figure == "battery-matrix" {
         if p["all_fresh_this_lane"] != false {
@@ -235,6 +245,9 @@ pub(crate) fn markdown(p: &Value) -> Result<String> {
                 "retained_scalars_flags_and_support_schematic" => {
                     "Saved scalars, flags and support schematic"
                 }
+                "retained_silhouettes_and_reference_descriptors" => {
+                    "Saved silhouettes, reference descriptors and flags"
+                }
                 "historical_categorical_status_map" => "Historical categorical status map",
                 "retained_topology_records_and_identity_diagram" => {
                     "Saved topology records and identity diagram"
@@ -291,6 +304,7 @@ mod tests {
             "assessment",
             "battery-matrix",
             "export-identity",
+            "reference",
         ] {
             for suffix in ["svg", "json", "svg.manifest.json"] {
                 let p = format!("docs/paper/generated/{figure}.{suffix}");
@@ -313,8 +327,8 @@ mod tests {
     #[test]
     fn coverage_preserves_gaps_and_visual_kinds() {
         let p = project(&entries(), &outputs()).unwrap();
-        assert_eq!(p["entries_with_visual"], 38);
-        assert_eq!(p["entries_missing_subsection_visual"], 6);
+        assert_eq!(p["entries_with_visual"], 40);
+        assert_eq!(p["entries_missing_subsection_visual"], 4);
         assert_eq!(p["entries_with_retained_plate_field_link"], 6);
         assert!(p["spatial_requests"]
             .as_array()
@@ -372,6 +386,8 @@ mod tests {
             ("verification", "full_3d_field_available", json!(true)),
             ("assessment", "fresh_solver_execution", json!(true)),
             ("export-identity", "fresh_cad_validation", json!(true)),
+            ("reference", "comparison_recomputed", json!(true)),
+            ("reference", "human_approval", json!(true)),
         ] {
             let mut out = outputs();
             let path = format!("docs/paper/generated/{figure}.json");

@@ -50,12 +50,30 @@
     },
     {
       "atlas_anchor": "g16-c6_aesthetic_floor",
-      "coverage_status": "subsection_visual_missing",
+      "coverage_status": "linked",
       "id": "c6_aesthetic_floor",
       "kind": "G16",
-      "missing_reason": "Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison.",
+      "missing_reason": null,
       "title": "G16-04: Reference-shape comparison",
-      "visuals": []
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/reference.svg",
+          "figure_manifest": "docs/paper/generated/reference.svg.manifest.json",
+          "figure_manifest_sha256": "efbc7a28c57d08e138f17a84a00c258ab4cd957df568b7bca1a17f283e5e89dd",
+          "figure_sha256": "2a788b8d6d56eacb8c247a786de419f1c8a9f64c567e421681dde91a3eb12a5b",
+          "panel": "A--B: original 2D reference overlay, saved rounded descriptors and flags; no new measurement or human approval",
+          "projection_receipt": "docs/paper/generated/reference.json",
+          "projection_receipt_sha256": "799e045d27b683dc92653be507be85074a519d104944c9cfc64b86fa9d11ef98",
+          "scope": "Original 2D point lists with one common display transform, saved rounded descriptors and flags; no new comparison, FEM or human approval.",
+          "visual_kind": "retained_silhouettes_and_reference_descriptors"
+        }
+      ]
     },
     {
       "atlas_anchor": "g16-cert_hiker_180n",
@@ -383,12 +401,30 @@
     },
     {
       "atlas_anchor": "rsv2-aesthetic_and_geometric",
-      "coverage_status": "subsection_visual_missing",
+      "coverage_status": "linked",
       "id": "aesthetic_and_geometric",
       "kind": "RSV2",
-      "missing_reason": "Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison.",
+      "missing_reason": null,
       "title": "RSV2-01: Shape and geometry",
-      "visuals": []
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/reference.svg",
+          "figure_manifest": "docs/paper/generated/reference.svg.manifest.json",
+          "figure_manifest_sha256": "efbc7a28c57d08e138f17a84a00c258ab4cd957df568b7bca1a17f283e5e89dd",
+          "figure_sha256": "2a788b8d6d56eacb8c247a786de419f1c8a9f64c567e421681dde91a3eb12a5b",
+          "panel": "A--B: original 2D reference overlay, saved rounded descriptors and flags; no new measurement or human approval",
+          "projection_receipt": "docs/paper/generated/reference.json",
+          "projection_receipt_sha256": "799e045d27b683dc92653be507be85074a519d104944c9cfc64b86fa9d11ef98",
+          "scope": "Original 2D point lists with one common display transform, saved rounded descriptors and flags; no new comparison, FEM or human approval.",
+          "visual_kind": "retained_silhouettes_and_reference_descriptors"
+        }
+      ]
     },
     {
       "atlas_anchor": "rsv2-floors_828_joint",
@@ -1133,14 +1169,12 @@
       ]
     }
   ],
-  "entries_missing_subsection_visual": 6,
+  "entries_missing_subsection_visual": 4,
   "entries_with_retained_plate_field_link": 6,
-  "entries_with_visual": 38,
+  "entries_with_visual": 40,
   "missing_subsection_visuals": [
     "g16-geometric_and_holder_gates",
     "g16-karambit_ring_and_curved_claw",
-    "g16-c6_aesthetic_floor",
-    "rsv2-aesthetic_and_geometric",
     "rsv2-gate_s_sharp_law",
     "rsv2-gate_s_tip_point_brep"
   ],

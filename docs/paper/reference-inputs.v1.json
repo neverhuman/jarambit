@@ -1,0 +1,31 @@
+{
+  "schema": "jarambit.reference_inputs.v1",
+  "subject": "cert_pipeline_r01_p14_c02",
+  "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+  "producer_revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+  "sources": {
+    "d1": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
+      "sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab"
+    },
+    "scorecard": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+      "sha256": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca"
+    },
+    "rs": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_rs.json",
+      "sha256": "2696a6f5d4dbbcec6a6148c83d5ff48313f7a86682766328be56ea4f203945fb"
+    }
+  },
+  "producer_sources": {
+    "crates/crescent/src/aesthetic.rs": "30404b5e898613fd36b6ea534d501a57ddf1898567ee545807bd2206c7b5282a",
+    "crates/crescent/src/c5_ref.rs": "3b57f41e01b82954a4d4e1b6597ae605469d08170688d72875c6a91514576c39",
+    "crates/crescent/src/c6_ref.rs": "44a1c899cd5c0b3a7a5e753d2f67b41a0c3ca50e1dd3ebff7f4a992915406a27",
+    "crates/cli/src/crescent.rs": "c8f2e1664263e3bb885ca33e27f42dab0fbe0f180116ec890ee4dcd83bdeab22",
+    "crates/crescent/src/record.rs": "5cf69d38d9d78766e045ee66427b143e063c5e9e25b6b4adb777582826ecbccb"
+  },
+  "reference_pointer": "/c4",
+  "reference_interpretation": "producer c5_ref::EXTERIOR, re-exported by c6_ref; historical JSON key c4",
+  "comparison_recomputed": false,
+  "scope": "Read-only projection of retained 2D point lists and original rounded reference descriptors/flags. No new geometry, descriptor calculation, registration, histogram, FEM, ergonomic or human-approval finding."
+}
