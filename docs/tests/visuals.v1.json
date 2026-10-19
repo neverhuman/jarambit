@@ -5,12 +5,30 @@
   "entries": [
     {
       "atlas_anchor": "g16-cad_watertight_and_single_solid",
-      "coverage_status": "subsection_visual_missing",
+      "coverage_status": "linked",
       "id": "cad_watertight_and_single_solid",
       "kind": "G16",
-      "missing_reason": "Subsection topology/identity visual not generated; the cover rendering does not establish topology validity.",
+      "missing_reason": null,
       "title": "G16-01: Export topology and identity",
-      "visuals": []
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/export-identity.svg",
+          "figure_manifest": "docs/paper/generated/export-identity.svg.manifest.json",
+          "figure_manifest_sha256": "1d96107174796fe3c27a6d3117509e4f4cdf9ba704d071104292a644216071da",
+          "figure_sha256": "ae2aa2eeaae0d377ee2dcca7e96ae932bde746213a50a884b15532b10c5c167a",
+          "panel": "A--B: retained content associations and original topology records; no fresh CAD validation",
+          "projection_receipt": "docs/paper/generated/export-identity.json",
+          "projection_receipt_sha256": "31922d147d249fa88203742edbf28c1115fe4a54276a99f8ef993d3f27d97bd2",
+          "scope": "Stored token counts, exporter census, BRep observations and render metadata; no fresh CAD validation, regeneration or FEM field.",
+          "visual_kind": "retained_topology_records_and_identity_diagram"
+        }
+      ]
     },
     {
       "atlas_anchor": "g16-geometric_and_holder_gates",
@@ -1115,11 +1133,10 @@
       ]
     }
   ],
-  "entries_missing_subsection_visual": 7,
+  "entries_missing_subsection_visual": 6,
   "entries_with_retained_plate_field_link": 6,
-  "entries_with_visual": 37,
+  "entries_with_visual": 38,
   "missing_subsection_visuals": [
-    "g16-cad_watertight_and_single_solid",
     "g16-geometric_and_holder_gates",
     "g16-karambit_ring_and_curved_claw",
     "g16-c6_aesthetic_floor",

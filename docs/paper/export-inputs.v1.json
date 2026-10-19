@@ -1,0 +1,46 @@
+{
+  "schema": "jarambit.export_identity_inputs.v1",
+  "subject": "cert_pipeline_r01_p14_c02",
+  "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+  "producer_revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+  "sources": {
+    "scorecard": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+      "sha256": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca"
+    },
+    "step_check": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_step_check.json",
+      "sha256": "0368f38bb75ac97fed2f844b3878ec761b709f23063b141a401f0d40561d9ed9"
+    },
+    "step": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.step",
+      "sha256": "1a28399c1c6c4a21796a963c91545d120fd99f542818a0e6024b0cd24ca34fa6"
+    },
+    "stl": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl",
+      "sha256": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022"
+    },
+    "genome": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_genome.csv",
+      "sha256": "a526b2ef73b25e51a56bcfab1f67640bcbe734955b95a6b432a99dab5cd9f654"
+    }
+  },
+  "scene": {
+    "path": "docs/paper/figures/v2/hero_dark.scene.json",
+    "sha256": "0425bd7d2141ebfc00fe28c73bac61bf43fae817582dbadc344f223648166536"
+  },
+  "producer_source": {
+    "path": "ops/ci/evaluate_cad_candidate.py",
+    "revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+    "sha256": "e5478dba651bfaf327c44746b2388e786a8609916fecafdd51c836ecf4c81945",
+    "review": "Original Git object read during author QA; source identity is recorded, not executed by publication generation."
+  },
+  "semantics": {
+    "step_counts": "Original producer counts raw text occurrences of MANIFOLD_SOLID_BREP(, CLOSED_SHELL( and ADVANCED_FACE(. These are stored token counts, not a fresh geometric census.",
+    "edge_census": "Original producer parses boundary/nonmanifold/dmax from exporter stdout; no new edge census is run.",
+    "units": "Original producer reports mm from its STEP text check; no new unit verification.",
+    "brep": "Original OpenCascade STEP reader/BRepCheck_Analyzer record; preserved, not rerun.",
+    "binding": "Retained content associations, not fresh deterministic genome-to-export regeneration."
+  },
+  "scope": "Software identity/topology reporting only; no new geometry, CAD validation, FEM or physical findings."
+}

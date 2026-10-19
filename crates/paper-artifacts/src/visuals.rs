@@ -14,6 +14,7 @@ pub(crate) struct Visual {
 
 pub(crate) fn assessed(kind: &str, id: &str) -> Option<Visual> {
     let (figure, panel) = match (kind, id) {
+        ("G16", "cad_watertight_and_single_solid") => ("export-identity", "A--B: retained content associations and original topology records; no fresh CAD validation"),
         ("G16", "cert_hiker_180n" | "cert_hunter_260n") => ("plate-fields", "B: lateral unit response; one shared field"),
         ("G16", "cert_ring_pull_1500n") => ("plate-fields", "C: ring unit response with seated-region source zeros masked"),
         ("G16", "twist_body_1p82nm" | "twist_tip_only_1p82nm") => ("plate-fields", "D: raw torsion response; regional capacity selection is a separate operation"),
@@ -33,7 +34,6 @@ pub(crate) fn assessed(kind: &str, id: &str) -> Option<Visual> {
 
 fn gap(kind: &str, id: &str) -> Option<&'static str> {
     match (kind, id) {
-        ("G16", "cad_watertight_and_single_solid") => Some("Subsection topology/identity visual not generated; the cover rendering does not establish topology validity."),
         ("G16", "geometric_and_holder_gates" | "karambit_ring_and_curved_claw" | "c6_aesthetic_floor") | ("RSV2", "aesthetic_and_geometric") => Some("Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison."),
         ("RSV2", "gate_s_sharp_law" | "gate_s_tip_point_brep") => Some("Subsection exported-measurement visual not generated; nominal geometry and measured export observations must remain distinct."),
         _ => None,
@@ -67,6 +67,7 @@ fn bind(v: &Visual, out: &BTreeMap<String, String>) -> Result<Value> {
         return Err("visual manifest/path/digest differs".into());
     }
     let (schema, category, scope) = match v.figure {
+        "export-identity" => ("jarambit.export_identity_projection.v1", "retained_topology_records_and_identity_diagram", "Stored token counts, exporter census, BRep observations and render metadata; no fresh CAD validation, regeneration or FEM field."),
         "plate-fields" => ("jarambit.retained_plate_projection.v1", "retained_plate_cell_field", "Original 0.25 mm2 plate arrays only; not strict or solid fields; shared fields are not independent tests."),
         "verification" => ("jarambit.retained_verification_projection.v1", "retained_scalars_and_binned_profiles", "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate."),
         "assessment" => ("jarambit.retained_assessment_projection.v1", "retained_scalars_flags_and_support_schematic", "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open."),
@@ -81,6 +82,13 @@ fn bind(v: &Visual, out: &BTreeMap<String, String>) -> Result<Value> {
         || (v.figure == "assessment" && p["fresh_solver_execution"] != false)
     {
         return Err("scalar/profile visual asserted unavailable field or fresh solve".into());
+    }
+    if v.figure == "export-identity"
+        && (p["fresh_cad_validation"] != false
+            || p["fresh_genome_regeneration"] != false
+            || p["fem_field"] != false)
+    {
+        return Err("export diagram asserted new validation or FEM field".into());
     }
     let binding = if v.figure == "battery-matrix" {
         if p["all_fresh_this_lane"] != false {
@@ -208,7 +216,7 @@ pub(crate) fn missing_reason(kind: &str, id: &str) -> Option<&'static str> {
 }
 
 pub(crate) fn markdown(p: &Value) -> Result<String> {
-    let mut s = format!("# Assessment visual coverage\n\nGenerated with the publication artifacts. [Machine-readable coverage and hashes](visuals.v1.json) · [All test explanations](README.md) · [Paper and build](../paper/README.md).\n\n**{} of {} catalog entries have subsection visual links; {} remain unpictured.** This denominator counts links, not unique figures, independent tests or completed FEM heatmaps. Six entries link to the same four-panel retained plate-field asset. Other links show saved scalars/profiles, a support schematic or the historical categorical battery. Main-text figure proximity is not checked by this ledger.\n\nThe separate assessed example is `cert_pipeline_r01_p14_c02`, not qualified. The battery map has its own historical 23-subject binding. The cover beauty render does not replace a missing geometry/measurement subsection visual.\n\n| Catalog explanation | Visual kinds and exact panels | Status |\n|---|---|---|\n", p["entries_with_visual"],p["catalog_entries"],p["entries_missing_subsection_visual"]);
+    let mut s = format!("# Assessment visual coverage\n\nGenerated with the publication artifacts. [Machine-readable coverage and hashes](visuals.v1.json) · [All test explanations](README.md) · [Paper and build](../paper/README.md).\n\n**{} of {} catalog entries have subsection visual links; {} remain unpictured.** This denominator counts links, not unique figures, independent tests or completed FEM heatmaps. Six entries link to the same four-panel retained plate-field asset. Other links show saved scalars/profiles, topology records, a support schematic or the historical categorical battery. Main-text figure proximity is not checked by this ledger.\n\nThe separate assessed example is `cert_pipeline_r01_p14_c02`, not qualified. The battery map has its own historical 23-subject binding. The cover beauty render does not replace a missing geometry/measurement subsection visual.\n\n| Catalog explanation | Visual kinds and exact panels | Status |\n|---|---|---|\n", p["entries_with_visual"],p["catalog_entries"],p["entries_missing_subsection_visual"]);
     for e in p["entries"]
         .as_array()
         .ok_or("missing visual coverage entries")?
@@ -228,6 +236,9 @@ pub(crate) fn markdown(p: &Value) -> Result<String> {
                     "Saved scalars, flags and support schematic"
                 }
                 "historical_categorical_status_map" => "Historical categorical status map",
+                "retained_topology_records_and_identity_diagram" => {
+                    "Saved topology records and identity diagram"
+                }
                 _ => return Err("unknown visual-kind label".into()),
             };
             links.push(format!(
@@ -279,6 +290,7 @@ mod tests {
             "verification",
             "assessment",
             "battery-matrix",
+            "export-identity",
         ] {
             for suffix in ["svg", "json", "svg.manifest.json"] {
                 let p = format!("docs/paper/generated/{figure}.{suffix}");
@@ -301,8 +313,8 @@ mod tests {
     #[test]
     fn coverage_preserves_gaps_and_visual_kinds() {
         let p = project(&entries(), &outputs()).unwrap();
-        assert_eq!(p["entries_with_visual"], 37);
-        assert_eq!(p["entries_missing_subsection_visual"], 7);
+        assert_eq!(p["entries_with_visual"], 38);
+        assert_eq!(p["entries_missing_subsection_visual"], 6);
         assert_eq!(p["entries_with_retained_plate_field_link"], 6);
         assert!(p["spatial_requests"]
             .as_array()
@@ -359,6 +371,7 @@ mod tests {
             ("battery-matrix", "all_fresh_this_lane", json!(true)),
             ("verification", "full_3d_field_available", json!(true)),
             ("assessment", "fresh_solver_execution", json!(true)),
+            ("export-identity", "fresh_cad_validation", json!(true)),
         ] {
             let mut out = outputs();
             let path = format!("docs/paper/generated/{figure}.json");

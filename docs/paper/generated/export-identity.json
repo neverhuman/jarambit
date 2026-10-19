@@ -1,0 +1,142 @@
+{
+  "associations": "recorded content links, not a fresh execution trace",
+  "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+  "digest_display": "first 12 hexadecimal characters; full identities in sources",
+  "fem_field": false,
+  "fresh_cad_validation": false,
+  "fresh_genome_regeneration": false,
+  "observations": [
+    {
+      "kind": "count",
+      "meaning": "Original raw STEP MANIFOLD_SOLID_BREP token count",
+      "pointer": "/cad/manifold_solids",
+      "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+      "value": 1
+    },
+    {
+      "kind": "count",
+      "meaning": "Original raw STEP CLOSED_SHELL token count",
+      "pointer": "/cad/closed_shells",
+      "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+      "value": 1
+    },
+    {
+      "kind": "count",
+      "meaning": "Original raw STEP ADVANCED_FACE token count; not STL triangles",
+      "pointer": "/cad/facets",
+      "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+      "value": 55698
+    },
+    {
+      "kind": "count",
+      "meaning": "Original exporter stdout edge census",
+      "pointer": "/cad/boundary_edges",
+      "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+      "value": 0
+    },
+    {
+      "kind": "count",
+      "meaning": "Original exporter stdout edge census",
+      "pointer": "/cad/non_manifold_edges",
+      "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+      "value": 0
+    },
+    {
+      "kind": "count",
+      "meaning": "Original exporter stdout directed-edge repeat",
+      "pointer": "/cad/max_directed_edge_repeat",
+      "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+      "value": 1
+    },
+    {
+      "kind": "flag",
+      "meaning": "Original exporter-census flag, not a fresh mesh inspection",
+      "pointer": "/cad/watertight_exact",
+      "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+      "value": true
+    },
+    {
+      "kind": "flag",
+      "meaning": "Original composite CAD flag, not current qualification",
+      "pointer": "/cad/cad_valid",
+      "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+      "value": true
+    },
+    {
+      "kind": "count",
+      "meaning": "Original OpenCascade reader result",
+      "pointer": "/solids",
+      "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_step_check.json",
+      "value": 1
+    },
+    {
+      "kind": "flag",
+      "meaning": "Original BRepCheck_Analyzer result",
+      "pointer": "/valid",
+      "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_step_check.json",
+      "value": true
+    },
+    {
+      "kind": "count",
+      "meaning": "Blender imported-mesh vertices; not a mechanics mesh",
+      "pointer": "/vertices",
+      "source": "docs/paper/figures/v2/hero_dark.scene.json",
+      "value": 44994
+    },
+    {
+      "kind": "count",
+      "meaning": "Blender imported-mesh triangles; not STEP faces",
+      "pointer": "/triangles",
+      "source": "docs/paper/figures/v2/hero_dark.scene.json",
+      "value": 90000
+    }
+  ],
+  "producer_revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+  "producer_source": {
+    "path": "ops/ci/evaluate_cad_candidate.py",
+    "review": "Original Git object read during author QA; source identity is recorded, not executed by publication generation.",
+    "revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+    "sha256": "e5478dba651bfaf327c44746b2388e786a8609916fecafdd51c836ecf4c81945"
+  },
+  "qualification": "not qualified",
+  "scene": {
+    "path": "docs/paper/figures/v2/hero_dark.scene.json",
+    "sha256": "0425bd7d2141ebfc00fe28c73bac61bf43fae817582dbadc344f223648166536"
+  },
+  "schema": "jarambit.export_identity_projection.v1",
+  "semantics": {
+    "binding": "Retained content associations, not fresh deterministic genome-to-export regeneration.",
+    "brep": "Original OpenCascade STEP reader/BRepCheck_Analyzer record; preserved, not rerun.",
+    "edge_census": "Original producer parses boundary/nonmanifold/dmax from exporter stdout; no new edge census is run.",
+    "step_counts": "Original producer counts raw text occurrences of MANIFOLD_SOLID_BREP(, CLOSED_SHELL( and ADVANCED_FACE(. These are stored token counts, not a fresh geometric census.",
+    "units": "Original producer reports mm from its STEP text check; no new unit verification."
+  },
+  "sources": {
+    "genome": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_genome.csv",
+      "sha256": "a526b2ef73b25e51a56bcfab1f67640bcbe734955b95a6b432a99dab5cd9f654"
+    },
+    "scorecard": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+      "sha256": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca"
+    },
+    "step": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.step",
+      "sha256": "1a28399c1c6c4a21796a963c91545d120fd99f542818a0e6024b0cd24ca34fa6"
+    },
+    "step_check": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_step_check.json",
+      "sha256": "0368f38bb75ac97fed2f844b3878ec761b709f23063b141a401f0d40561d9ed9"
+    },
+    "stl": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl",
+      "sha256": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022"
+    }
+  },
+  "subject": "cert_pipeline_r01_p14_c02",
+  "units": {
+    "meaning": "original producer report; no new unit validation",
+    "provenance": "step_declaration",
+    "value": "mm"
+  }
+}

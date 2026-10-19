@@ -1062,6 +1062,57 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "docs/paper/generated/assessment.json".into(),
         serde_json::to_string_pretty(&assessment_summary)? + "\n",
     );
+    let export_contract = read(&root, "docs/paper/export-inputs.v1.json", &mut inputs)?;
+    if export_contract["subject"] != field_contract["subject"]
+        || export_contract["certificate_identity"] != field_contract["certificate_identity"]
+        || export_contract["producer_revision"] != assessment_manifest["numerical_kernel_commit"]
+    {
+        return Err("export and assessed-example binding differs".into());
+    }
+    let export_sources = export_contract["sources"]
+        .as_object()
+        .ok_or("missing export sources")?;
+    if export_sources.len() != 5 {
+        return Err("export source membership differs".into());
+    }
+    let mut export_docs = BTreeMap::new();
+    for key in ["scorecard", "step_check", "step", "stl", "genome"] {
+        let source = &export_sources[key];
+        let path = text(&source["path"])?;
+        if assessment_manifest["automatic"]["artifacts"][key] != path {
+            return Err("export artifact path differs".into());
+        }
+        let raw = fs::read(safe_path(&root, path)?)?;
+        let actual = digest(&raw);
+        if source["sha256"].as_str() != Some(actual.as_str()) {
+            return Err("export artifact digest differs".into());
+        }
+        inputs.insert(path.into(), actual);
+        if ["scorecard", "step_check"].contains(&key) {
+            export_docs.insert(key, serde_json::from_slice::<Value>(&raw)?);
+        }
+    }
+    let scene_path = "docs/paper/figures/v2/hero_dark.scene.json";
+    let export_scene = read(&root, scene_path, &mut inputs)?;
+    if export_contract["scene"]["path"] != scene_path
+        || export_contract["scene"]["sha256"].as_str() != Some(inputs[scene_path].as_str())
+    {
+        return Err("export scene binding differs".into());
+    }
+    let (export_svg, export_summary) = crate::export_identity::project(
+        &export_docs["scorecard"],
+        &export_docs["step_check"],
+        &export_scene,
+        &export_contract,
+    )?;
+    out.insert(
+        "docs/paper/generated/export-identity.svg".into(),
+        export_svg,
+    );
+    out.insert(
+        "docs/paper/generated/export-identity.json".into(),
+        serde_json::to_string_pretty(&export_summary)? + "\n",
+    );
     let birth_ids = births
         .iter()
         .map(|r| {
@@ -1257,6 +1308,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "crates/paper-artifacts/src/verification.rs",
         "crates/paper-artifacts/src/assessment.rs",
         "crates/paper-artifacts/src/battery.rs",
+        "crates/paper-artifacts/src/export_identity.rs",
         "crates/paper-artifacts/src/visuals.rs",
         "crates/paper-artifacts/examples/paper_artifacts.rs",
         "crates/paper-artifacts/Cargo.toml",
@@ -1367,6 +1419,24 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "docs/paper/generated/assessment.svg.manifest.json".into(),
         serde_json::to_string_pretty(&scalar_manifest)? + "\n",
     );
+    let mut export_inputs = BTreeMap::new();
+    for path in [
+        "docs/paper/export-inputs.v1.json",
+        "evidence/evolve_certifiable/manifest.json",
+        "crates/paper-artifacts/src/export_identity.rs",
+        scene_path,
+    ] {
+        export_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    for source in export_sources.values() {
+        let path = text(&source["path"])?;
+        export_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    let export_manifest = json!({"schema":1,"figure":"docs/paper/generated/export-identity.svg","figure_sha256":digest(out["docs/paper/generated/export-identity.svg"].as_bytes()),"inputs":export_inputs,"script":"crates/paper-artifacts/src/export_identity.rs","projection_receipt":"docs/paper/generated/export-identity.json","scope":"original export record observations and content associations; no fresh CAD validation or genome regeneration"});
+    out.insert(
+        "docs/paper/generated/export-identity.svg.manifest.json".into(),
+        serde_json::to_string_pretty(&export_manifest)? + "\n",
+    );
     let visual_coverage = crate::visuals::project(entries, &out)?;
     out.insert(
         "docs/tests/visuals.md".into(),
@@ -1383,6 +1453,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     let manifest = json!({"schema":"jarambit.publication_manifest.v1","baseline":BASE,"inputs":inputs,"outputs":outputs,"generation":"cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts","scope":"Documentation only; source hashes establish identity, not physical truth",
     "visual_coverage":"docs/tests/visuals.v1.json",
     "figures": {
+        "export-identity.svg":{"contract":"docs/paper/export-inputs.v1.json","projection_receipt":"docs/paper/generated/export-identity.json","selectors":["/cad","/genome_sha256","/genome_csv","/solids","/valid","/vertices","/triangles"],"scope":"stored STEP token counts, original exporter census and BRep observations plus Blender import metadata; no fresh validation or qualification"},
         "lineage.svg":{"contract":"docs/paper/lineage-inputs.v1.json","projection_receipt":"docs/paper/generated/lineage.json","selectors":["/*/id","/*/gen","/*/fit","/*/parents","/*/op","/*/op_version","/*/fem_status","/*/legal"],"membership":"two recorded parent hops from highest historical stored fit, with original parent-list order","scope":"layout does not encode elapsed time or fitness; no inferred inheritance or best-geometry identity"},
         "battery-matrix.svg":{"contract":"docs/paper/battery-inputs.v1.json","projection_receipt":"docs/paper/generated/battery-matrix.json","membership":"manifest subjects and case_ids; exact-ID cell joins","selectors":["/subject","/role","/cases/*/id","/cases/*/status","/cases/*/fresh_this_lane","/cases/*/kind","/cases/*/evidence_path"],"scope":"stored historical labels only; not a FEM heatmap, new assessment or physical reliability estimate"},
         "assessment.svg":{"contract":"docs/paper/assessment-inputs.v1.json","projection_receipt":"docs/paper/generated/assessment.json","selectors":["/buckling_eigenvalue","/supported_seq_ratio","/fat_sf","/hm_*_sf","/strict_lat_rob_0p0625_n","/twist_tipzone_sf_strict","/weighted_cad_score/gates","/gates"],"scope":"saved scalars and overlapping status flags; no solver or new physical evidence","support_audit":"eigsh operator symmetry/eigenpair residual unresolved; no eigenvector retained"},
