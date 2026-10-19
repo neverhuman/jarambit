@@ -2,11 +2,11 @@
 //!
 //! Stage-2 ranks by `compute_canonical_ultralight_weighted_fitness` (Rust), which mirrors
 //! `ops/ci/ultralight_weighted_fitness.py::compute_ultralight_weighted_fitness` (Python).
-//! This test scores every committed genome-backed scorecard / RS-v2 receipt pair, plus
-//! fallback-branch variants of them, with both implementations and requires identical
-//! results, so neither copy of the formula can drift silently.
+//! This test scores every committed genome-backed scorecard / RS-v2 receipt pair, the
+//! xbabe2 i81-i86 refill scorecards, and fallback-branch variants with both implementations
+//! and requires identical results, so neither copy of the formula can drift silently.
 
-use super::compute_canonical_ultralight_weighted_fitness;
+use super::{compute_canonical_ultralight_weighted_fitness, stage2_score_from_scorecard};
 use serde_json::{json, Value};
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -86,7 +86,7 @@ fn variants(sc: &Value, rs: &Value) -> Vec<(String, Value, Value)> {
 }
 
 #[test]
-fn canonical_ultralight_rust_matches_python_on_committed_scorecards() {
+fn canonical_ultralight_rust_matches_python_on_committed_and_refill_scorecards() {
     let root = root();
     let pairs = committed_pairs(&root);
     let n_master = pairs
@@ -119,6 +119,67 @@ fn canonical_ultralight_rust_matches_python_on_committed_scorecards() {
         }
     }
 
+    let refill_fixture = read_json(&root.join(
+        "crates/cli/tests/fixtures/wultralight_i81_i86_scorecards.json",
+    ));
+    assert_eq!(
+        refill_fixture["schema"].as_str(),
+        Some("jarambit.wultralight_i81_i86_parity_fixture.v1")
+    );
+    assert_eq!(
+        refill_fixture["source_commit"].as_str(),
+        Some("009f5ac520fa3afe8ed8025230eef604dbb7f922")
+    );
+    let refill_cases = refill_fixture["cases"].as_array().unwrap();
+    assert_eq!(refill_cases.len(), 6, "expected i81-i86 scorecards");
+    let refill_start = cases.len();
+    let mut refill_labels = Vec::new();
+    let mut refill_expected = Vec::new();
+    for (i, row) in refill_cases.iter().enumerate() {
+        let label = row["label"].as_str().expect("fixture label").to_owned();
+        for key in ["source_scorecard_sha256", "source_rs_sha256"] {
+            let digest = row[key].as_str().expect("source digest");
+            assert_eq!(digest.len(), 64, "{label}: invalid {key}");
+            assert!(digest.bytes().all(|b| b.is_ascii_hexdigit()), "{label}: invalid {key}");
+        }
+        let sc = row["scorecard"].clone();
+        let rs = row["rs"].clone();
+        let rust_score = compute_canonical_ultralight_weighted_fitness(&sc, &rs);
+        let expected = row["expected_score"].as_f64().expect("fixture score");
+        assert!(
+            (rust_score - expected).abs() <= 1e-9,
+            "{label}: Rust scorecard fixture={rust_score}, expected Python snapshot={expected}"
+        );
+        let mut stored_match = sc.clone();
+        stored_match["ultralight_weighted_fitness"] =
+            json!({"global_weighted_fitness": expected});
+        assert_eq!(stage2_score_from_scorecard(&stored_match, &rs), Ok(expected));
+        stored_match["ultralight_weighted_fitness"]["global_weighted_fitness"] =
+            json!(expected + 4.0);
+        assert!(
+            stage2_score_from_scorecard(&stored_match, &rs).is_err(),
+            "{label}: mismatched stored W_ULTRALIGHT_v1 must be rejected"
+        );
+        let sp = tmp.join(format!("refill_{i}_sc.json"));
+        let rp = tmp.join(format!("refill_{i}_rs.json"));
+        std::fs::write(&sp, serde_json::to_vec(&sc).unwrap()).unwrap();
+        std::fs::write(&rp, serde_json::to_vec(&rs).unwrap()).unwrap();
+        cases.push((label.clone(), rust_score, sp, rp));
+        refill_labels.push(label);
+        refill_expected.push(expected);
+    }
+    assert_eq!(
+        refill_labels.iter().map(String::as_str).collect::<Vec<_>>(),
+        [
+            "ef2i81_r01_p10_c44",
+            "ef2i82_r01_p14_c90",
+            "ef2i83_r01_p10_c70",
+            "ef2i84_r01_p14_c49",
+            "ef2i85_r01_p10_c92",
+            "ef2i86_r01_p14_c50",
+        ]
+    );
+
     let list = tmp.join("cases.json");
     let paths: Vec<[String; 2]> = cases
         .iter()
@@ -147,6 +208,18 @@ fn canonical_ultralight_rust_matches_python_on_committed_scorecards() {
     );
     let py: Vec<f64> = serde_json::from_slice(&out.stdout).unwrap();
     assert_eq!(py.len(), cases.len());
+    for (offset, ((label, _, _, _), expected)) in cases[refill_start..]
+        .iter()
+        .zip(&refill_expected)
+        .enumerate()
+    {
+        let index = refill_start + offset;
+        assert!(
+            (py[index] - expected).abs() <= 1e-9,
+            "{label}: Python scorecard fixture={}, expected Python snapshot={expected}",
+            py[index]
+        );
+    }
 
     let mismatches: Vec<String> = cases
         .iter()

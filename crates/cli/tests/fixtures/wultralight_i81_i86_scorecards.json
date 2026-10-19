@@ -1,0 +1,306 @@
+{
+  "cases": [
+    {
+      "expected_score": 74.228781,
+      "label": "ef2i81_r01_p10_c44",
+      "rs": {
+        "export_measurements": {
+          "point": {
+            "monotonic": false
+          },
+          "sharpness": {
+            "max_apex_mm": 0.21573567057558263,
+            "max_half_angle_deg": 30.78241412260258
+          }
+        },
+        "gates": {
+          "gate_s_sharp_law": "fail",
+          "gate_s_tip_point_brep": "fail",
+          "human_max": "fail"
+        }
+      },
+      "scorecard": {
+        "engineering_metrics": {
+          "buckling_eigenvalue_a4": 7.383236813416508,
+          "fat_sf_l7": 0.5142538105110006,
+          "lat_rob_cert_n": 184.1,
+          "mass_3d_g": 101.0554,
+          "ring_bearing_w_mm": 12.08417217493325,
+          "ring_rob_cert_n": 20275.8,
+          "seq_ratio_cert": 1.354,
+          "solid_tip_dolfinx_rel_err": 0.0011,
+          "solid_tip_sf_nodal_max": 0.3636,
+          "strict_lat_rob_0p0625_n": 197.0,
+          "twist_body_sf": 3.069,
+          "twist_tip_sf": 0.245,
+          "twist_tipzone_sf_strict": 0.275
+        },
+        "weighted_cad_score": {
+          "gates": {
+            "c6_aesthetic_floor": true,
+            "cad_watertight_and_single_solid": true,
+            "dolfinx_cross_check_2pct": true,
+            "geometric_and_holder_gates": true,
+            "karambit_ring_and_curved_claw": true,
+            "plate_gci_valid_3level": true,
+            "twist_body_1p82nm": true
+          }
+        }
+      },
+      "source_rs_sha256": "cb6d6c2f21d28f2cd350ac0c259c16c960a06713f41625f4a3001e909199f3c4",
+      "source_scorecard_sha256": "bbd7d2ff0e65c7bb03af91005db8a6ec1d152e0c539de89e033133c2be977508"
+    },
+    {
+      "expected_score": 72.854574,
+      "label": "ef2i82_r01_p14_c90",
+      "rs": {
+        "export_measurements": {
+          "point": {
+            "monotonic": false
+          },
+          "sharpness": {
+            "max_apex_mm": 0.2075383594989943,
+            "max_half_angle_deg": 21.46405941363612
+          }
+        },
+        "gates": {
+          "gate_s_sharp_law": "fail",
+          "gate_s_tip_point_brep": "fail",
+          "human_max": "fail"
+        }
+      },
+      "scorecard": {
+        "engineering_metrics": {
+          "buckling_eigenvalue_a4": 4.7252583017240735,
+          "fat_sf_l7": 0.43313364601608095,
+          "lat_rob_cert_n": 155.1,
+          "mass_3d_g": 100.6784,
+          "ring_bearing_w_mm": 12.160606660223564,
+          "ring_rob_cert_n": 20988.6,
+          "seq_ratio_cert": 1.573,
+          "solid_tip_dolfinx_rel_err": 0.0,
+          "solid_tip_sf_nodal_max": 0.307,
+          "strict_lat_rob_0p0625_n": 158.1,
+          "twist_body_sf": 2.531,
+          "twist_tip_sf": 0.219,
+          "twist_tipzone_sf_strict": 0.239
+        },
+        "weighted_cad_score": {
+          "gates": {
+            "c6_aesthetic_floor": true,
+            "cad_watertight_and_single_solid": true,
+            "dolfinx_cross_check_2pct": true,
+            "geometric_and_holder_gates": true,
+            "karambit_ring_and_curved_claw": true,
+            "plate_gci_valid_3level": true,
+            "twist_body_1p82nm": true
+          }
+        }
+      },
+      "source_rs_sha256": "c8933006d9882bda575a5542004b889de2aafd9c7bda82301b27c0ba91bba3ec",
+      "source_scorecard_sha256": "45a22ab50788516d8ca0120441a2b10e4779c8dcb806cc2bf582282924c277da"
+    },
+    {
+      "expected_score": 74.210586,
+      "label": "ef2i83_r01_p10_c70",
+      "rs": {
+        "export_measurements": {
+          "point": {
+            "monotonic": false
+          },
+          "sharpness": {
+            "max_apex_mm": 0.21573567057558263,
+            "max_half_angle_deg": 30.78241412260258
+          }
+        },
+        "gates": {
+          "gate_s_sharp_law": "fail",
+          "gate_s_tip_point_brep": "fail",
+          "human_max": "fail"
+        }
+      },
+      "scorecard": {
+        "engineering_metrics": {
+          "buckling_eigenvalue_a4": 5.607856369005271,
+          "fat_sf_l7": 0.514253810521288,
+          "lat_rob_cert_n": 184.1,
+          "mass_3d_g": 101.1257,
+          "ring_bearing_w_mm": 12.08417217493325,
+          "ring_rob_cert_n": 20275.7,
+          "seq_ratio_cert": 1.354,
+          "solid_tip_dolfinx_rel_err": 0.0011,
+          "solid_tip_sf_nodal_max": 0.3636,
+          "strict_lat_rob_0p0625_n": 197.0,
+          "twist_body_sf": 3.069,
+          "twist_tip_sf": 0.245,
+          "twist_tipzone_sf_strict": 0.275
+        },
+        "weighted_cad_score": {
+          "gates": {
+            "c6_aesthetic_floor": true,
+            "cad_watertight_and_single_solid": true,
+            "dolfinx_cross_check_2pct": true,
+            "geometric_and_holder_gates": true,
+            "karambit_ring_and_curved_claw": true,
+            "plate_gci_valid_3level": true,
+            "twist_body_1p82nm": true
+          }
+        }
+      },
+      "source_rs_sha256": "6dd8203adca06b681eed7b4ea54cc4cdb09eb250cf4447c4205df22767352f3d",
+      "source_scorecard_sha256": "fe1852d463b2b913c83d45548f94c82b249b69a25a60cd8cafa6d001d7c0182b"
+    },
+    {
+      "expected_score": 72.67807,
+      "label": "ef2i84_r01_p14_c49",
+      "rs": {
+        "export_measurements": {
+          "point": {
+            "monotonic": false
+          },
+          "sharpness": {
+            "max_apex_mm": 0.2054623517342059,
+            "max_half_angle_deg": 24.463906509438747
+          }
+        },
+        "gates": {
+          "gate_s_sharp_law": "fail",
+          "gate_s_tip_point_brep": "fail",
+          "human_max": "fail"
+        }
+      },
+      "scorecard": {
+        "engineering_metrics": {
+          "buckling_eigenvalue_a4": 3.4688830190347417,
+          "fat_sf_l7": 0.43500029840258625,
+          "lat_rob_cert_n": 155.7,
+          "mass_3d_g": 101.1626,
+          "ring_bearing_w_mm": 12.31250422305785,
+          "ring_rob_cert_n": 21007.3,
+          "seq_ratio_cert": 1.549,
+          "solid_tip_dolfinx_rel_err": 0.000712,
+          "solid_tip_sf_nodal_max": 0.2808,
+          "strict_lat_rob_0p0625_n": 155.5,
+          "twist_body_sf": 2.524,
+          "twist_tip_sf": 0.237,
+          "twist_tipzone_sf_strict": 0.242
+        },
+        "weighted_cad_score": {
+          "gates": {
+            "c6_aesthetic_floor": true,
+            "cad_watertight_and_single_solid": true,
+            "dolfinx_cross_check_2pct": true,
+            "geometric_and_holder_gates": true,
+            "karambit_ring_and_curved_claw": true,
+            "plate_gci_valid_3level": true,
+            "twist_body_1p82nm": true
+          }
+        }
+      },
+      "source_rs_sha256": "19846b8a358348a8b7837e4dfb0fb2c9ad26e1d942bea669480fe70982d6ab7f",
+      "source_scorecard_sha256": "790e6c9729bafec4c852e88f8d3b99132b8da82ea64daee2ab5f82a7e6fe121f"
+    },
+    {
+      "expected_score": 73.477296,
+      "label": "ef2i85_r01_p10_c92",
+      "rs": {
+        "export_measurements": {
+          "point": {
+            "monotonic": false
+          },
+          "sharpness": {
+            "max_apex_mm": 0.21572702927242987,
+            "max_half_angle_deg": 30.78241412260258
+          }
+        },
+        "gates": {
+          "gate_s_sharp_law": "fail",
+          "gate_s_tip_point_brep": "fail",
+          "human_max": "fail"
+        }
+      },
+      "scorecard": {
+        "engineering_metrics": {
+          "buckling_eigenvalue_a4": 8.691161976967681,
+          "fat_sf_l7": 0.5141812162936463,
+          "lat_rob_cert_n": 184.1,
+          "mass_3d_g": 103.0269,
+          "ring_bearing_w_mm": 12.08417217493325,
+          "ring_rob_cert_n": 20743.9,
+          "seq_ratio_cert": 1.436,
+          "solid_tip_dolfinx_rel_err": 0.001376,
+          "solid_tip_sf_nodal_max": 0.3635,
+          "strict_lat_rob_0p0625_n": 165.7,
+          "twist_body_sf": 3.068,
+          "twist_tip_sf": 0.245,
+          "twist_tipzone_sf_strict": 0.275
+        },
+        "weighted_cad_score": {
+          "gates": {
+            "c6_aesthetic_floor": true,
+            "cad_watertight_and_single_solid": true,
+            "dolfinx_cross_check_2pct": true,
+            "geometric_and_holder_gates": true,
+            "karambit_ring_and_curved_claw": true,
+            "plate_gci_valid_3level": true,
+            "twist_body_1p82nm": true
+          }
+        }
+      },
+      "source_rs_sha256": "d425dcf07f95bd1d396b371d87781bac6e217a4f65c135c7c0efe74bf59ac6c6",
+      "source_scorecard_sha256": "e89f563cbeb479090331da9df98ab1038c6b2517d43731179193c2ad138775b5"
+    },
+    {
+      "expected_score": 72.819207,
+      "label": "ef2i86_r01_p14_c50",
+      "rs": {
+        "export_measurements": {
+          "point": {
+            "monotonic": false
+          },
+          "sharpness": {
+            "max_apex_mm": 0.21107322644770732,
+            "max_half_angle_deg": 22.646019943520713
+          }
+        },
+        "gates": {
+          "gate_s_sharp_law": "fail",
+          "gate_s_tip_point_brep": "fail",
+          "human_max": "fail"
+        }
+      },
+      "scorecard": {
+        "engineering_metrics": {
+          "buckling_eigenvalue_a4": 5.4221140805504,
+          "fat_sf_l7": 0.4334724757997044,
+          "lat_rob_cert_n": 155.2,
+          "mass_3d_g": 100.6359,
+          "ring_bearing_w_mm": 12.156824906206744,
+          "ring_rob_cert_n": 20787.8,
+          "seq_ratio_cert": 1.552,
+          "solid_tip_dolfinx_rel_err": 0.000352,
+          "solid_tip_sf_nodal_max": 0.2841,
+          "strict_lat_rob_0p0625_n": 160.7,
+          "twist_body_sf": 2.427,
+          "twist_tip_sf": 0.214,
+          "twist_tipzone_sf_strict": 0.243
+        },
+        "weighted_cad_score": {
+          "gates": {
+            "c6_aesthetic_floor": true,
+            "cad_watertight_and_single_solid": true,
+            "dolfinx_cross_check_2pct": true,
+            "geometric_and_holder_gates": true,
+            "karambit_ring_and_curved_claw": true,
+            "plate_gci_valid_3level": true,
+            "twist_body_1p82nm": true
+          }
+        }
+      },
+      "source_rs_sha256": "af08e7c8bff3ef5867657e33902e9f015be0edc6857865fe07d71308be4bb30d",
+      "source_scorecard_sha256": "d523ba6a394ef323e9f2fc3dfeacd641a368f4cef74a3169c341ebfa8c856e36"
+    }
+  ],
+  "schema": "jarambit.wultralight_i81_i86_parity_fixture.v1",
+  "source_commit": "009f5ac520fa3afe8ed8025230eef604dbb7f922"
+}

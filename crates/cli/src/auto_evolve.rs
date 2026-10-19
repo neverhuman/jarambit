@@ -787,6 +787,27 @@ fn compute_canonical_ultralight_weighted_fitness(cad_eval_doc: &Value, rs_doc: &
     (total_score * 1e6).round() / 1e6
 }
 
+fn stage2_score_from_scorecard(cad_eval_doc: &Value, rs_doc: &Value) -> Result<f64, String> {
+    let score = compute_canonical_ultralight_weighted_fitness(cad_eval_doc, rs_doc);
+    if !score.is_finite() {
+        return Err("standard assessment unverified: missing/nonfinite W_ULTRALIGHT_v1".into());
+    }
+    if let Some(value) = cad_eval_doc
+        .get("ultralight_weighted_fitness")
+        .and_then(|u| u.get("global_weighted_fitness"))
+    {
+        let stored = value.as_f64().filter(|x| x.is_finite()).ok_or_else(|| {
+            "standard assessment unverified: missing/nonfinite W_ULTRALIGHT_v1".to_owned()
+        })?;
+        if (stored - score).abs() > 1e-6 {
+            return Err(format!(
+                "standard assessment unverified: stored W_ULTRALIGHT_v1 {stored:.6} disagrees with canonical recomputation {score:.6}"
+            ));
+        }
+    }
+    Ok(score)
+}
+
 /// Monotone non-decreasing Hall-of-Fame global fitness curve across rounds/generations.
 pub fn monotone_hall_of_fame_curve(round_maxima: &[f64]) -> Vec<f64> {
     let mut best = 0.0_f64;
@@ -877,18 +898,7 @@ fn certify_candidate_stage2(
         == Some(true);
     let w_cad = finite(&wc["W_CAD"], "W_CAD")?;
     let g1_val = finite(&g1["G"], "G1")?;
-    let ultralight_fitness = if let Some(val) = sc
-        .get("ultralight_weighted_fitness")
-        .and_then(|u| u.get("global_weighted_fitness"))
-    {
-        finite(val, "W_ULTRALIGHT_v1")?
-    } else {
-        let score = compute_canonical_ultralight_weighted_fitness(&sc, &rs_doc);
-        if !score.is_finite() {
-            return Err("standard assessment unverified: missing/nonfinite W_ULTRALIGHT_v1".into());
-        }
-        score
-    };
+    let ultralight_fitness = stage2_score_from_scorecard(&sc, &rs_doc)?;
     let mass_g = finite(&em["mass_g"], "raster mass")?;
     let mass_3d_g = finite(&em["mass_3d_g"], "3D mass")?;
     let strict_hunter_sf = finite(&em["sf_hunter_strict"], "strict hunter SF")?;
