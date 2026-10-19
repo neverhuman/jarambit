@@ -728,6 +728,19 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
             } else {
                 atlas.push_str(if kind=="G16" {"**Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.\n\n"} else {"**Retained example:** [historical grouped result](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json). Use exact group IDs from `rs_v2_eval` in the implementation; do not infer group identity from table position. [Requirement namespace](../../requirements/RS-karambit-v2.toml).\n\n"});
             }
+            let visual = match (kind, id) {
+                ("G16", "cert_hiker_180n" | "cert_hunter_260n") => Some(("plate-fields", "B: lateral unit response; one shared field")),
+                ("G16", "cert_ring_pull_1500n") => Some(("plate-fields", "C: ring unit response with seated-region source zeros masked")),
+                ("G16", "twist_body_1p82nm" | "twist_tip_only_1p82nm") => Some(("plate-fields", "D: raw torsion response; regional capacity selection is a separate operation")),
+                ("G16", "solid_tip_3d_p2_1p82nm") | ("RSV2", "solid_tip_sf") | ("battery", "solid.tip") => Some(("verification", "C--D: matched scalar comparison and binned profiles; no full 3D field")),
+                ("G16", "failure_sequence_1p2") | ("RSV2", "seq_hard") | ("battery", "plate.seq") => Some(("verification", "A: retained yield-order proxy across mesh levels; no admitted GCI")),
+                ("G16", "plate_gci_valid_3level") | ("battery", "plate.gci") => Some(("verification", "A--B: valid metadata, but nonpositive-order/oscillatory observations and no admitted GCI")),
+                ("G16", "dolfinx_cross_check_2pct") => Some(("verification", "C: original matched-mesh safety-factor observations and stored rounded differences")),
+                _ => None,
+            };
+            if let Some((figure, panel)) = visual {
+                atlas.push_str(&format!("**Separate assessed-example visual:** [{panel}](../paper/generated/{figure}.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/{figure}.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.\n\n"));
+            }
         }
     }
     out.insert(
@@ -855,6 +868,82 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "docs/paper/generated/plate-fields.json".into(),
         serde_json::to_string_pretty(&plate_summary)? + "\n",
     );
+    let verification_contract = read(&root, "docs/paper/verification-inputs.v1.json", &mut inputs)?;
+    if verification_contract["producer_revision"] != assessment_manifest["numerical_kernel_commit"]
+        || verification_contract["subject"] != field_contract["subject"]
+        || verification_contract["certificate_identity"] != field_contract["certificate_identity"]
+    {
+        return Err("verification and plate subjects/producers differ".into());
+    }
+    let verification_members = [
+        "plate_gci",
+        "solid_tip",
+        "skfem_raw",
+        "dolfinx_raw",
+        "dolfinx_sidecar",
+        "mesh",
+    ];
+    let sources = verification_contract["sources"]
+        .as_object()
+        .ok_or("missing verification sources")?;
+    if sources.len() != verification_members.len() {
+        return Err("verification source membership differs".into());
+    }
+    let mut verification_docs = BTreeMap::new();
+    for key in verification_members {
+        let record = &sources[key];
+        let path = text(&record["path"])?;
+        if assessment_manifest["automatic"]["artifacts"][key] != path {
+            return Err("verification artifact path differs".into());
+        }
+        let value = if key == "mesh" {
+            inputs.insert(path.into(), digest(&fs::read(safe_path(&root, path)?)?));
+            Value::Null
+        } else {
+            read(&root, path, &mut inputs)?
+        };
+        if inputs[path] != text(&record["sha256"])? {
+            return Err("verification artifact digest differs".into());
+        }
+        verification_docs.insert(key, value);
+    }
+    let interpretation = verification_contract["interpretation_sources"]
+        .as_object()
+        .ok_or("missing verification interpretation sources")?;
+    let expected_interpretation = [
+        "fem_solid/tip_solid.py",
+        "fem_solid/cross_check.py",
+        "fem_solid/gci.py",
+    ];
+    if interpretation.len() != expected_interpretation.len() {
+        return Err("verification interpretation source membership differs".into());
+    }
+    for path in expected_interpretation {
+        let hash = digest(&fs::read(safe_path(&root, path)?)?);
+        if interpretation[path].as_str() != Some(hash.as_str()) {
+            return Err("verification interpretation source changed".into());
+        }
+        inputs.insert(path.into(), hash);
+    }
+    let (verification_svg, verification_summary) = crate::verification::project(
+        &verification_docs["plate_gci"],
+        &verification_docs["solid_tip"],
+        &verification_docs["skfem_raw"],
+        &verification_docs["dolfinx_raw"],
+        &verification_docs["dolfinx_sidecar"],
+        &verification_contract,
+    )?;
+    out.insert(
+        "docs/paper/generated/verification.svg".into(),
+        verification_svg,
+    );
+    out.insert(
+        "docs/paper/generated/verification.json".into(),
+        serde_json::to_string_pretty(&verification_summary)? + "\n",
+    );
+    if verification_docs["solid_tip"]["d1_sha256"] != field_contract["source_sha256"] {
+        return Err("verification and displayed plate input digests differ".into());
+    }
     let birth_ids = births
         .iter()
         .map(|r| {
@@ -1046,6 +1135,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "crates/paper-artifacts/src/validation.rs",
         "crates/paper-artifacts/src/historical.rs",
         "crates/paper-artifacts/src/plate.rs",
+        "crates/paper-artifacts/src/verification.rs",
         "crates/paper-artifacts/examples/paper_artifacts.rs",
         "crates/paper-artifacts/Cargo.toml",
         "crates/paper-artifacts/Cargo.lock",
@@ -1083,12 +1173,32 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "docs/paper/generated/plate-fields.svg.manifest.json".into(),
         serde_json::to_string_pretty(&plate_manifest)? + "\n",
     );
+    let mut verification_inputs = BTreeMap::new();
+    for path in [
+        "docs/paper/verification-inputs.v1.json",
+        "crates/paper-artifacts/src/verification.rs",
+    ] {
+        verification_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    for record in sources.values() {
+        let path = text(&record["path"])?;
+        verification_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    for path in interpretation.keys() {
+        verification_inputs.insert(path.clone(), inputs[path].clone());
+    }
+    let verification_manifest = json!({"schema":1,"figure":"docs/paper/generated/verification.svg","figure_sha256":digest(out["docs/paper/generated/verification.svg"].as_bytes()),"inputs":verification_inputs,"script":"crates/paper-artifacts/src/verification.rs","projection_receipt":"docs/paper/generated/verification.json","scope":"saved mesh levels, scalar pairs and binned profiles; no full solid field or admitted GCI estimate"});
+    out.insert(
+        "docs/paper/generated/verification.svg.manifest.json".into(),
+        serde_json::to_string_pretty(&verification_manifest)? + "\n",
+    );
     let outputs = out
         .iter()
         .map(|(k, v)| (k.clone(), digest(v.as_bytes())))
         .collect::<BTreeMap<_, _>>();
     let manifest = json!({"schema":"jarambit.publication_manifest.v1","baseline":BASE,"inputs":inputs,"outputs":outputs,"generation":"cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts","scope":"Documentation only; source hashes establish identity, not physical truth",
     "figures": {
+        "verification.svg":{"contract":"docs/paper/verification-inputs.v1.json","projection_receipt":"docs/paper/generated/verification.json","mesh_selectors":["/levels_fine_to_coarse","/seq_ratio_gci","/sf_hunter_gci"],"solver_selectors":["/solid/SF_solid_nodal_avg","/solid/SF_solid_nodal_max","/SF_nodal_avg","/SF_nodal_max"],"profile_selector":"/profile_MPa","scope":"retained observations; separate recovery definitions and original ROI; no new solve, estimate, interpolation or pointwise difference"},
         "plate-fields.svg":{"source":field_source,"contract":"docs/paper/field-inputs.v1.json","projection_receipt":"docs/paper/generated/plate-fields.json","selectors":["/mesh/xy","/mesh/tris","/mesh/env_vm","/mesh/lat","/mesh/ring","/mesh/twist"],"association":"one stored rounded value per triangle; no interpolation","limits":"independent zero-to-source-maximum scales; no clipping","masks":"source-forced zeros only; raw unit-response tip region retained","scope":"retained 0.25 mm2 plate mesh, not strict or solid fields"},
         "cover-evolution.svg":{"source":POP,"membership":"all retained births in panel B; per-generation and cumulative maxima of stored fit in panel C","selectors":["/*/id","/*/gen","/*/fit","/*/fem_status"],"population_vertical_transform":"asinh(fit); original-value ticks","maximum_axis_limits":[1.135,1.16],"maximum_axis_truncated":true,"lines":"straight segments between observed generations; no fitted convergence model","producer_revision":history["producer_revision"],"semantics":history["fitness_semantics"]},
         "fitness.svg": {"weighted_source":CURVE,"weighted_selectors":["/best_so_far/ultralight_weighted_fitness","/best_so_far/ultralight_fitness_breakdown/objectives/*/weighted_points","/generations/*/generation","/generations/*/round_best_fitness","/generations/*/hall_of_fame_best_so_far"],"weighted_direction":"higher_is_better","weighted_stage_lineage":"incomplete; reporting producer can substitute assessment values for screening values","population_source":POP,"population_selectors":["/*/id","/*/gen","/*/fit"],"population_reduction":"all retained births; generation maximum and sorted-sample median","population_vertical_transform":"asinh(fit); ticks in original units","regimes":"separate panels; no cross-regime score comparison"},

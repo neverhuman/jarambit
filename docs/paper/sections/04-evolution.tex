@@ -16,7 +16,7 @@ By contrast, the historical w282 \code{all_evals.json} contains \BirthCount\ ret
 The original provenance pins producer revision \code{82f450f7fb41}. Its \href{https://github.com/neverhuman/jarambit/blob/82f450f7fb418e28c4b229031920dec5454435f3/crates/crescent/src/qd.rs}{quality-diversity implementation} recomputes novelty using archive/current-population context and includes it in the score. Fitness is also branched by legality. A saved value is therefore a contextual search observation, not a fixed physical property of its genome. The publication reader admits the recorded producer identity and verifies population/provenance/summary hashes against the original wave manifest.
 
 \begin{figure*}[t]
-\centering\includegraphics[width=\textwidth]{population.pdf}
+\centering\includegraphics[width=\textwidth]{population.png}
 \caption{All \BirthCount\ retained historical w282 births. Blue dots are FEM-complete records; amber crosses are not evaluated by FEM. Lines show the pooled generation median and maximum. The asinh(fit) axis retains the negative penalty tail with original-value ticks. Stacked bars give actual FEM-status counts by generation, with total births above each bar. Fitness includes legality penalties and contextual novelty; pooled changes do not directly measure mechanical improvement. This is a birth collection, not a survivor population. Exact counts, selectors, producer identity, and hashes accompany the figure.}
 \label{fig:population}
 \end{figure*}

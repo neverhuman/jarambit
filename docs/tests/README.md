@@ -97,6 +97,8 @@ Compares the retained plate lateral-response observation with one legacy require
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
 
+**Separate assessed-example visual:** [B: lateral unit response; one shared field](../paper/generated/plate-fields.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/plate-fields.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="g16-cert_hunter_260n"></a>
 
 ### G16-06: Additional lateral comparison
@@ -110,6 +112,8 @@ Applies a second legacy comparison to the same lateral-response family.
 [Current implementation](../../crates/crescent/src/fem.rs) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/crates/crescent/src/fem.rs) · [Related software controls](../../crates/physics/tests/solver_parity.rs)
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
+
+**Separate assessed-example visual:** [B: lateral unit response; one shared field](../paper/generated/plate-fields.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/plate-fields.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="g16-strict_hunter_260n"></a>
 
@@ -139,6 +143,8 @@ Records the existing static ring-traction comparison.
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
 
+**Separate assessed-example visual:** [C: ring unit response with seated-region source zeros masked](../paper/generated/plate-fields.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/plate-fields.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="g16-twist_body_1p82nm"></a>
 
 ### G16-09: Body-region torsion
@@ -153,6 +159,8 @@ Reads the body-region observable from the existing torsion model.
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
 
+**Separate assessed-example visual:** [D: raw torsion response; regional capacity selection is a separate operation](../paper/generated/plate-fields.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/plate-fields.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="g16-twist_tip_only_1p82nm"></a>
 
 ### G16-10: Local plate torsion
@@ -166,6 +174,8 @@ Reads the local region of the existing plate torsion model.
 [Current implementation](../../crates/crescent/src/fem.rs) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/crates/crescent/src/fem.rs) · [Related software controls](../../crates/physics/tests/invariance.rs)
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
+
+**Separate assessed-example visual:** [D: raw torsion response; regional capacity selection is a separate operation](../paper/generated/plate-fields.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/plate-fields.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="g16-twist_tip_submodel_strict_1p82nm"></a>
 
@@ -195,6 +205,8 @@ Reads the quadratic tetrahedral local-solid model result.
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
 
+**Separate assessed-example visual:** [C--D: matched scalar comparison and binned profiles; no full 3D field](../paper/generated/verification.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/verification.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="g16-side_a4_buckling_and_support"></a>
 
 ### G16-13: Support and stability
@@ -223,6 +235,8 @@ Compares regional elastic response limits in the recorded model.
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
 
+**Separate assessed-example visual:** [A: retained yield-order proxy across mesh levels; no admitted GCI](../paper/generated/verification.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/verification.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="g16-plate_gci_valid_3level"></a>
 
 ### G16-15: Mesh and observable consistency
@@ -237,6 +251,8 @@ Checks whether mesh sequence and observable identity support the stated converge
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
 
+**Separate assessed-example visual:** [A--B: valid metadata, but nonpositive-order/oscillatory observations and no admitted GCI](../paper/generated/verification.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/verification.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="g16-dolfinx_cross_check_2pct"></a>
 
 ### G16-16: Separate-solver consistency
@@ -250,6 +266,8 @@ Compares separately attributed solver outputs for the matched discretized proble
 [Current implementation](../../fem_solid/cross_check.py) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/fem_solid/cross_check.py) · [Related software controls](../../fem_solid/tests/test_dolfinx_verification_record.py)
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
+
+**Separate assessed-example visual:** [C: original matched-mesh safety-factor observations and stored rounded differences](../paper/generated/verification.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/verification.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 ## RSV2
 
@@ -322,6 +340,8 @@ Groups the local-solid comparison.
 
 **Retained example:** [historical grouped result](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json). Use exact group IDs from `rs_v2_eval` in the implementation; do not infer group identity from table position. [Requirement namespace](../../requirements/RS-karambit-v2.toml).
 
+**Separate assessed-example visual:** [C--D: matched scalar comparison and binned profiles; no full 3D field](../paper/generated/verification.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/verification.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="rsv2-strict_hunter_lateral"></a>
 
 ### RSV2-05: Refined lateral response
@@ -349,6 +369,8 @@ Groups the recorded sequence comparison.
 [Current implementation](../../crates/cli/src/bench.rs) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/crates/cli/src/bench.rs) · [Related software controls](../../crates/crescent/src/tests.rs)
 
 **Retained example:** [historical grouped result](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_rs.json). Use exact group IDs from `rs_v2_eval` in the implementation; do not infer group identity from table position. [Requirement namespace](../../requirements/RS-karambit-v2.toml).
+
+**Separate assessed-example visual:** [A: retained yield-order proxy across mesh levels; no admitted GCI](../paper/generated/verification.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/verification.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="rsv2-human_max"></a>
 
@@ -569,6 +591,8 @@ Reports the retained regional yield-order comparison.
 
 **Historical stored outcomes (23 subjects):** 10 pass / 9 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "plate.seq"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
 
+**Separate assessed-example visual:** [A: retained yield-order proxy across mesh levels; no admitted GCI](../paper/generated/verification.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/verification.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+
 <a id="battery-plate.l7"></a>
 
 ### Fatigue screen
@@ -596,6 +620,8 @@ Reports the stored convergence-evidence finding.
 [Current implementation](../../fem_solid/gci.py) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/fem_solid/gci.py) · [Related software controls](../../ops/ci/tests/test_cad_battery.py)
 
 **Historical stored outcomes (23 subjects):** 4 pass / 15 fail / 4 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "plate.gci"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
+
+**Separate assessed-example visual:** [A--B: valid metadata, but nonpositive-order/oscillatory observations and no admitted GCI](../paper/generated/verification.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/verification.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="battery-side.a1"></a>
 
@@ -666,6 +692,8 @@ Reports whether the retained solid-result record is complete.
 [Current implementation](../../fem_solid/tip_solid.py) · [Pinned implementation](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/fem_solid/tip_solid.py) · [Related software controls](../../ops/ci/tests/test_cad_battery.py)
 
 **Historical stored outcomes (23 subjects):** 20 pass / 0 fail / 3 blocked / 0 incomplete. These preserve the original column semantics. [Corpus manifest](../../evidence/cad_battery/manifest.json); select `cases[]` by `id == "solid.tip"`, then inspect `evidence_path`, `kind`, `solver`, `source_commit`, `geometry_sha256` and `fresh_this_lane`.
+
+**Separate assessed-example visual:** [C--D: matched scalar comparison and binned profiles; no full 3D field](../paper/generated/verification.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/verification.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="battery-gate.rs_v2"></a>
 

@@ -10,14 +10,16 @@ Source baseline: `009f5ac520fa3afe8ed8025230eef604dbb7f922`, inspected 18 Octobe
 
 The manuscript uses `IEEEtran` in journal mode, 10 pt, with a custom single-column first page containing title, abstract, then the Blender render beside actual evolution data. Index terms follow the figure. Remaining pages use two columns. This is an **IEEE-style white paper**, not an unmodified venue submission template. A formal submission needs a selected venue's current template, verified authorship, disclosure, references and supported research contribution. No IEEE acceptance, DOI or badge is claimed. [IEEE Access guidance](https://ieeeaccess.ieee.org/authors/submission-guidelines/).
 
-Dependencies: Rust 1.85.1, locked Cargo dependencies, LuaLaTeX, IEEEtran, TeX Gyre fonts, librsvg `rsvg-convert`, Poppler `pdfinfo`/`pdftoppm`, `make`, and `shasum`. Build from repository root; shell commands here use the desktop's RTK convention:
+Dependencies: Rust 1.85.1, locked Cargo dependencies, LuaLaTeX, IEEEtran, TeX Gyre fonts, librsvg `rsvg-convert`, Poppler `pdfinfo`/`pdftoppm`, ripgrep `rg`, `make`, and `shasum`. Build from repository root. The public recipe uses plain tools; RTK is an optional local wrapper:
 
 ```sh
-rtk proxy env CARGO_TARGET_DIR="$PWD/target" cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts
-rtk proxy make -C docs/paper check
+env CARGO_TARGET_DIR="$PWD/target/paper-artifacts" cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts
+make -C docs/paper check CARGO_TARGET_DIR="$PWD/target/paper-artifacts"
 ```
 
 Output: `target/ieee/paper/main.pdf`, source/output SHA-256 lists, tool versions, PDF metadata and logs. The Makefile's check mode verifies 15–20 pages and rejects overfull boxes or unresolved references/citations. The legacy pinned Pandoc target remains separate and unchanged. Byte-identical PDF reproduction across toolchain versions is not claimed.
+
+The PDF embeds lossless PNG projections of the generated SVG figures: 3,600 pixels for full-width figures and 2,400 pixels for the narrow cover plot. This avoids duplicate transparency-group dictionary keys encountered when this LuaLaTeX version imports librsvg PDF output, and triangle-edge seams in dense fields. Original SVGs and numerical projections remain inspectable and bound to source receipts. The new field and verification SVGs carry cell/observation IDs. Raster/output hashes accompany the PDF; no data values change during this display conversion.
 
 ## Evidence contract
 
@@ -46,7 +48,7 @@ The opening shows the exact assessed export `cert_pipeline_r01_p14_c02` beside t
 Three 1,200-pixel/48-sample lighting proofs preceded the selected 3,600 × 2,800-pixel/256-sample master (Cycles CPU, four threads, seed 42, denoising, AgX). Proofs and logs remain under `target/paper/blender-v2`. To reproduce with the pinned Blender 4.5.3 executable supplied through `BLENDER`:
 
 ```sh
-rtk proxy python3 -B ops/render/blender/rerender.py --profile publication --output-root docs/paper/figures/v2 --recipe dark --width 3600 --height 2800 --samples 256
+python3 -B ops/render/blender/rerender.py --profile publication --output-root docs/paper/figures/v2 --recipe dark --width 3600 --height 2800 --samples 256
 ```
 
 The publication profile requires an explicit isolated output root and applies no typography overlay, clipping, mesh modification or depth of field. The profile extends the existing `rerender.py`/`candidate_scenes.py` bindings. Archived assets, their hashed `render_paper.py`/`paper_scenes.py` sources, and legacy defaults are preserved byte-for-byte.
@@ -62,5 +64,15 @@ The envelope is already scaled stress (MPa); lateral and ring arrays are unit re
 The PDF embeds a 3,600-pixel raster projection (over 500 dpi at publication width) to avoid white seams introduced by some PDF renderers between adjacent vector triangles. The original SVG remains available for cell-level inspection. The cell fills and legend anchors are checked against source values; no lighting or tone mapping is applied to this numerical image.
 
 These are the retained **0.25 mm² plate-level fields**. Exported capacity summaries combine two mesh levels, so the displayed field must not be presented as the limiting capacity mesh, a strict-refinement result or a solid-element field. No full strict, solved solid, buckling-mode or fatigue field is admitted to this publication input set. The manuscript now explains stress recovery and masks alongside G16-05 through G16-12; additional subsection visuals remain outstanding where the necessary observations are absent.
+
+## Actual mesh-study and solver observations
+
+![Retained mesh levels, matched scalar pairs and binned profiles](generated/verification.svg)
+
+The [verification input contract](verification-inputs.v1.json) binds five saved JSON records, the actual solid mesh bytes and three interpretation sources verified against the original producer revision. The [projection receipt](generated/verification.json) preserves six mesh-level observations, two solver scalar pairs, sixteen original bin maxima, recovery definitions and the original region. The atlas links the relevant G16, RS-v2 and battery explanations to these panels, explicitly identifying the separate assessed example.
+
+The three-level plate study uses maximum areas **0.25, 1 and 4 mm²**, distinct from the two-level certification summary. Its sequence/observable metadata are valid, but neither GCI error estimate is admitted: the yield-order proxy has negative observed order and the lateral sequence is oscillatory. Null estimates stay null; no error bars or extrapolated results are invented. The retained `plate_cst_dkt` projection tag is historical metadata; the manuscript separately describes the T6 in-plane implementation actually used for the assessed cases.
+
+The matched solid comparison uses **91,008 tetrahedra / 416,583 DOF**. Saved nodal-maximum SFs are 0.669 and 0.6693; mean-recovery SFs are 0.726 and 0.7263. Reported relative differences retain their rounded-output basis. A common mesh and close scalar agreement do not establish discretization accuracy or physical validation. The profile panel contains original plate-cell and solid recovered-vertex bin maxima with different recovery/region definitions; it is not a full-field solver comparison or a synthetic 3D heatmap. No new FEM execution occurs during publication generation.
 
 The conclusion treats aerospace fixtures, robotics, thermal management, medical-device research, instruments and energy systems as future opportunities. It does not claim that printing titanium establishes unprecedented tolerances or that a simulation qualifies a product. Stronger publication claims need controlled benign research and independent reconstruction evidence.
