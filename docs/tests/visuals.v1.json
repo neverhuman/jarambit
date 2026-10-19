@@ -1,0 +1,1154 @@
+{
+  "catalog": "docs/tests/catalog.json",
+  "catalog_entries": 44,
+  "completion": "incomplete; existing categorical or scalar images do not satisfy unavailable spatial requests",
+  "entries": [
+    {
+      "atlas_anchor": "g16-cad_watertight_and_single_solid",
+      "coverage_status": "subsection_visual_missing",
+      "id": "cad_watertight_and_single_solid",
+      "kind": "G16",
+      "missing_reason": "Subsection topology/identity visual not generated; the cover rendering does not establish topology validity.",
+      "title": "G16-01: Export topology and identity",
+      "visuals": []
+    },
+    {
+      "atlas_anchor": "g16-geometric_and_holder_gates",
+      "coverage_status": "subsection_visual_missing",
+      "id": "geometric_and_holder_gates",
+      "kind": "G16",
+      "missing_reason": "Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison.",
+      "title": "G16-02: Geometry and holder compatibility",
+      "visuals": []
+    },
+    {
+      "atlas_anchor": "g16-karambit_ring_and_curved_claw",
+      "coverage_status": "subsection_visual_missing",
+      "id": "karambit_ring_and_curved_claw",
+      "kind": "G16",
+      "missing_reason": "Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison.",
+      "title": "G16-03: Shape and archetype",
+      "visuals": []
+    },
+    {
+      "atlas_anchor": "g16-c6_aesthetic_floor",
+      "coverage_status": "subsection_visual_missing",
+      "id": "c6_aesthetic_floor",
+      "kind": "G16",
+      "missing_reason": "Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison.",
+      "title": "G16-04: Reference-shape comparison",
+      "visuals": []
+    },
+    {
+      "atlas_anchor": "g16-cert_hiker_180n",
+      "coverage_status": "linked",
+      "id": "cert_hiker_180n",
+      "kind": "G16",
+      "missing_reason": null,
+      "title": "G16-05: Lateral-response comparison",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/plate-fields.svg",
+          "figure_manifest": "docs/paper/generated/plate-fields.svg.manifest.json",
+          "figure_manifest_sha256": "f8a997f387f53f0bd559e0eff424394a179adb05bd8a9bec1f86416f9a88ca9d",
+          "figure_sha256": "1d9c206f413091011adb75770b3de7aa3133f4ba6b2c60197255dd66c20889ae",
+          "panel": "B: lateral unit response; one shared field",
+          "projection_receipt": "docs/paper/generated/plate-fields.json",
+          "projection_receipt_sha256": "5a2ac9172e090462f4cbfc35576eee2e0f9b56be8da637f4a242d0b952f968c9",
+          "scope": "Original 0.25 mm2 plate arrays only; not strict or solid fields; shared fields are not independent tests.",
+          "visual_kind": "retained_plate_cell_field"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "g16-cert_hunter_260n",
+      "coverage_status": "linked",
+      "id": "cert_hunter_260n",
+      "kind": "G16",
+      "missing_reason": null,
+      "title": "G16-06: Additional lateral comparison",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/plate-fields.svg",
+          "figure_manifest": "docs/paper/generated/plate-fields.svg.manifest.json",
+          "figure_manifest_sha256": "f8a997f387f53f0bd559e0eff424394a179adb05bd8a9bec1f86416f9a88ca9d",
+          "figure_sha256": "1d9c206f413091011adb75770b3de7aa3133f4ba6b2c60197255dd66c20889ae",
+          "panel": "B: lateral unit response; one shared field",
+          "projection_receipt": "docs/paper/generated/plate-fields.json",
+          "projection_receipt_sha256": "5a2ac9172e090462f4cbfc35576eee2e0f9b56be8da637f4a242d0b952f968c9",
+          "scope": "Original 0.25 mm2 plate arrays only; not strict or solid fields; shared fields are not independent tests.",
+          "visual_kind": "retained_plate_cell_field"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "g16-strict_hunter_260n",
+      "coverage_status": "linked",
+      "id": "strict_hunter_260n",
+      "kind": "G16",
+      "missing_reason": null,
+      "title": "G16-07: Refined lateral observation",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/assessment.svg",
+          "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
+          "figure_manifest_sha256": "c9716e7464632deb6f91a18a05b47708791022a243ee4b049d12239ce8eb9226",
+          "figure_sha256": "dd61c56092b8f6d964faca96a3cd95dcc1ff976b0e3c6cad006f4f3b706f71a8",
+          "panel": "C: original certification/strict scalar pairs; no strict full field or error estimate",
+          "projection_receipt": "docs/paper/generated/assessment.json",
+          "projection_receipt_sha256": "0be0e88cc05601165b3a8d7b6901ff6e1076531a45bec0a59f62b328feee2cb4",
+          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
+          "visual_kind": "retained_scalars_flags_and_support_schematic"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "g16-cert_ring_pull_1500n",
+      "coverage_status": "linked",
+      "id": "cert_ring_pull_1500n",
+      "kind": "G16",
+      "missing_reason": null,
+      "title": "G16-08: Ring-traction response",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/plate-fields.svg",
+          "figure_manifest": "docs/paper/generated/plate-fields.svg.manifest.json",
+          "figure_manifest_sha256": "f8a997f387f53f0bd559e0eff424394a179adb05bd8a9bec1f86416f9a88ca9d",
+          "figure_sha256": "1d9c206f413091011adb75770b3de7aa3133f4ba6b2c60197255dd66c20889ae",
+          "panel": "C: ring unit response with seated-region source zeros masked",
+          "projection_receipt": "docs/paper/generated/plate-fields.json",
+          "projection_receipt_sha256": "5a2ac9172e090462f4cbfc35576eee2e0f9b56be8da637f4a242d0b952f968c9",
+          "scope": "Original 0.25 mm2 plate arrays only; not strict or solid fields; shared fields are not independent tests.",
+          "visual_kind": "retained_plate_cell_field"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "g16-twist_body_1p82nm",
+      "coverage_status": "linked",
+      "id": "twist_body_1p82nm",
+      "kind": "G16",
+      "missing_reason": null,
+      "title": "G16-09: Body-region torsion",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/plate-fields.svg",
+          "figure_manifest": "docs/paper/generated/plate-fields.svg.manifest.json",
+          "figure_manifest_sha256": "f8a997f387f53f0bd559e0eff424394a179adb05bd8a9bec1f86416f9a88ca9d",
+          "figure_sha256": "1d9c206f413091011adb75770b3de7aa3133f4ba6b2c60197255dd66c20889ae",
+          "panel": "D: raw torsion response; regional capacity selection is a separate operation",
+          "projection_receipt": "docs/paper/generated/plate-fields.json",
+          "projection_receipt_sha256": "5a2ac9172e090462f4cbfc35576eee2e0f9b56be8da637f4a242d0b952f968c9",
+          "scope": "Original 0.25 mm2 plate arrays only; not strict or solid fields; shared fields are not independent tests.",
+          "visual_kind": "retained_plate_cell_field"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "g16-twist_tip_only_1p82nm",
+      "coverage_status": "linked",
+      "id": "twist_tip_only_1p82nm",
+      "kind": "G16",
+      "missing_reason": null,
+      "title": "G16-10: Local plate torsion",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/plate-fields.svg",
+          "figure_manifest": "docs/paper/generated/plate-fields.svg.manifest.json",
+          "figure_manifest_sha256": "f8a997f387f53f0bd559e0eff424394a179adb05bd8a9bec1f86416f9a88ca9d",
+          "figure_sha256": "1d9c206f413091011adb75770b3de7aa3133f4ba6b2c60197255dd66c20889ae",
+          "panel": "D: raw torsion response; regional capacity selection is a separate operation",
+          "projection_receipt": "docs/paper/generated/plate-fields.json",
+          "projection_receipt_sha256": "5a2ac9172e090462f4cbfc35576eee2e0f9b56be8da637f4a242d0b952f968c9",
+          "scope": "Original 0.25 mm2 plate arrays only; not strict or solid fields; shared fields are not independent tests.",
+          "visual_kind": "retained_plate_cell_field"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "g16-twist_tip_submodel_strict_1p82nm",
+      "coverage_status": "linked",
+      "id": "twist_tip_submodel_strict_1p82nm",
+      "kind": "G16",
+      "missing_reason": null,
+      "title": "G16-11: Refined local torsion",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/assessment.svg",
+          "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
+          "figure_manifest_sha256": "c9716e7464632deb6f91a18a05b47708791022a243ee4b049d12239ce8eb9226",
+          "figure_sha256": "dd61c56092b8f6d964faca96a3cd95dcc1ff976b0e3c6cad006f4f3b706f71a8",
+          "panel": "C: original certification/strict scalar pairs; no strict full field or error estimate",
+          "projection_receipt": "docs/paper/generated/assessment.json",
+          "projection_receipt_sha256": "0be0e88cc05601165b3a8d7b6901ff6e1076531a45bec0a59f62b328feee2cb4",
+          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
+          "visual_kind": "retained_scalars_flags_and_support_schematic"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "g16-solid_tip_3d_p2_1p82nm",
+      "coverage_status": "linked",
+      "id": "solid_tip_3d_p2_1p82nm",
+      "kind": "G16",
+      "missing_reason": null,
+      "title": "G16-12: Local quadratic solid result",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/verification.svg",
+          "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
+          "figure_manifest_sha256": "a6a965bf5e3924f29d30fce3ef21e2be6ffaa9dcea1a70c925531f078278c305",
+          "figure_sha256": "fe66123fa003077003512bc5f57ab014bfcf12e239670a7550687f6d22cc2516",
+          "panel": "C--D: matched scalar comparison and binned profiles; no full 3D field",
+          "projection_receipt": "docs/paper/generated/verification.json",
+          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
+          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "visual_kind": "retained_scalars_and_binned_profiles"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "g16-side_a4_buckling_and_support",
+      "coverage_status": "linked",
+      "id": "side_a4_buckling_and_support",
+      "kind": "G16",
+      "missing_reason": null,
+      "title": "G16-13: Support and stability",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/assessment.svg",
+          "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
+          "figure_manifest_sha256": "c9716e7464632deb6f91a18a05b47708791022a243ee4b049d12239ce8eb9226",
+          "figure_sha256": "dd61c56092b8f6d964faca96a3cd95dcc1ff976b0e3c6cad006f4f3b706f71a8",
+          "panel": "A: support-model schematic and archived scalars; eigen-operator verification remains open",
+          "projection_receipt": "docs/paper/generated/assessment.json",
+          "projection_receipt_sha256": "0be0e88cc05601165b3a8d7b6901ff6e1076531a45bec0a59f62b328feee2cb4",
+          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
+          "visual_kind": "retained_scalars_flags_and_support_schematic"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "g16-failure_sequence_1p2",
+      "coverage_status": "linked",
+      "id": "failure_sequence_1p2",
+      "kind": "G16",
+      "missing_reason": null,
+      "title": "G16-14: Regional yield-order proxy",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/verification.svg",
+          "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
+          "figure_manifest_sha256": "a6a965bf5e3924f29d30fce3ef21e2be6ffaa9dcea1a70c925531f078278c305",
+          "figure_sha256": "fe66123fa003077003512bc5f57ab014bfcf12e239670a7550687f6d22cc2516",
+          "panel": "A: retained yield-order proxy across mesh levels; no admitted GCI",
+          "projection_receipt": "docs/paper/generated/verification.json",
+          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
+          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "visual_kind": "retained_scalars_and_binned_profiles"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "g16-plate_gci_valid_3level",
+      "coverage_status": "linked",
+      "id": "plate_gci_valid_3level",
+      "kind": "G16",
+      "missing_reason": null,
+      "title": "G16-15: Mesh and observable consistency",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/verification.svg",
+          "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
+          "figure_manifest_sha256": "a6a965bf5e3924f29d30fce3ef21e2be6ffaa9dcea1a70c925531f078278c305",
+          "figure_sha256": "fe66123fa003077003512bc5f57ab014bfcf12e239670a7550687f6d22cc2516",
+          "panel": "A--B: valid metadata, but nonpositive-order/oscillatory observations and no admitted GCI",
+          "projection_receipt": "docs/paper/generated/verification.json",
+          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
+          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "visual_kind": "retained_scalars_and_binned_profiles"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "g16-dolfinx_cross_check_2pct",
+      "coverage_status": "linked",
+      "id": "dolfinx_cross_check_2pct",
+      "kind": "G16",
+      "missing_reason": null,
+      "title": "G16-16: Separate-solver consistency",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/verification.svg",
+          "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
+          "figure_manifest_sha256": "a6a965bf5e3924f29d30fce3ef21e2be6ffaa9dcea1a70c925531f078278c305",
+          "figure_sha256": "fe66123fa003077003512bc5f57ab014bfcf12e239670a7550687f6d22cc2516",
+          "panel": "C: original matched-mesh safety-factor observations and stored rounded differences",
+          "projection_receipt": "docs/paper/generated/verification.json",
+          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
+          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "visual_kind": "retained_scalars_and_binned_profiles"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "rsv2-aesthetic_and_geometric",
+      "coverage_status": "subsection_visual_missing",
+      "id": "aesthetic_and_geometric",
+      "kind": "RSV2",
+      "missing_reason": "Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison.",
+      "title": "RSV2-01: Shape and geometry",
+      "visuals": []
+    },
+    {
+      "atlas_anchor": "rsv2-floors_828_joint",
+      "coverage_status": "linked",
+      "id": "floors_828_joint",
+      "kind": "RSV2",
+      "missing_reason": null,
+      "title": "RSV2-02: Combined numerical response",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/plate-fields.svg",
+          "figure_manifest": "docs/paper/generated/plate-fields.svg.manifest.json",
+          "figure_manifest_sha256": "f8a997f387f53f0bd559e0eff424394a179adb05bd8a9bec1f86416f9a88ca9d",
+          "figure_sha256": "1d9c206f413091011adb75770b3de7aa3133f4ba6b2c60197255dd66c20889ae",
+          "panel": "A--C: shared retained envelope and unit-response families; the original grouped flag is separate from these fields",
+          "projection_receipt": "docs/paper/generated/plate-fields.json",
+          "projection_receipt_sha256": "5a2ac9172e090462f4cbfc35576eee2e0f9b56be8da637f4a242d0b952f968c9",
+          "scope": "Original 0.25 mm2 plate arrays only; not strict or solid fields; shared fields are not independent tests.",
+          "visual_kind": "retained_plate_cell_field"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "rsv2-twist_floor_body_and_tipsub_strict",
+      "coverage_status": "linked",
+      "id": "twist_floor_body_and_tipsub_strict",
+      "kind": "RSV2",
+      "missing_reason": null,
+      "title": "RSV2-03: Body and local torsion",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/assessment.svg",
+          "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
+          "figure_manifest_sha256": "c9716e7464632deb6f91a18a05b47708791022a243ee4b049d12239ce8eb9226",
+          "figure_sha256": "dd61c56092b8f6d964faca96a3cd95dcc1ff976b0e3c6cad006f4f3b706f71a8",
+          "panel": "C: original certification/strict scalar pairs; no strict full field or error estimate",
+          "projection_receipt": "docs/paper/generated/assessment.json",
+          "projection_receipt_sha256": "0be0e88cc05601165b3a8d7b6901ff6e1076531a45bec0a59f62b328feee2cb4",
+          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
+          "visual_kind": "retained_scalars_flags_and_support_schematic"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "rsv2-solid_tip_sf",
+      "coverage_status": "linked",
+      "id": "solid_tip_sf",
+      "kind": "RSV2",
+      "missing_reason": null,
+      "title": "RSV2-04: Local solid response",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/verification.svg",
+          "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
+          "figure_manifest_sha256": "a6a965bf5e3924f29d30fce3ef21e2be6ffaa9dcea1a70c925531f078278c305",
+          "figure_sha256": "fe66123fa003077003512bc5f57ab014bfcf12e239670a7550687f6d22cc2516",
+          "panel": "C--D: matched scalar comparison and binned profiles; no full 3D field",
+          "projection_receipt": "docs/paper/generated/verification.json",
+          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
+          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "visual_kind": "retained_scalars_and_binned_profiles"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "rsv2-strict_hunter_lateral",
+      "coverage_status": "linked",
+      "id": "strict_hunter_lateral",
+      "kind": "RSV2",
+      "missing_reason": null,
+      "title": "RSV2-05: Refined lateral response",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/assessment.svg",
+          "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
+          "figure_manifest_sha256": "c9716e7464632deb6f91a18a05b47708791022a243ee4b049d12239ce8eb9226",
+          "figure_sha256": "dd61c56092b8f6d964faca96a3cd95dcc1ff976b0e3c6cad006f4f3b706f71a8",
+          "panel": "C: original certification/strict scalar pairs; no strict full field or error estimate",
+          "projection_receipt": "docs/paper/generated/assessment.json",
+          "projection_receipt_sha256": "0be0e88cc05601165b3a8d7b6901ff6e1076531a45bec0a59f62b328feee2cb4",
+          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
+          "visual_kind": "retained_scalars_flags_and_support_schematic"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "rsv2-seq_hard",
+      "coverage_status": "linked",
+      "id": "seq_hard",
+      "kind": "RSV2",
+      "missing_reason": null,
+      "title": "RSV2-06: Regional yield order",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/verification.svg",
+          "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
+          "figure_manifest_sha256": "a6a965bf5e3924f29d30fce3ef21e2be6ffaa9dcea1a70c925531f078278c305",
+          "figure_sha256": "fe66123fa003077003512bc5f57ab014bfcf12e239670a7550687f6d22cc2516",
+          "panel": "A: retained yield-order proxy across mesh levels; no admitted GCI",
+          "projection_receipt": "docs/paper/generated/verification.json",
+          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
+          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "visual_kind": "retained_scalars_and_binned_profiles"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "rsv2-human_max",
+      "coverage_status": "linked",
+      "id": "human_max",
+      "kind": "RSV2",
+      "missing_reason": null,
+      "title": "RSV2-07: Additional response and geometry",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/assessment.svg",
+          "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
+          "figure_manifest_sha256": "c9716e7464632deb6f91a18a05b47708791022a243ee4b049d12239ce8eb9226",
+          "figure_sha256": "dd61c56092b8f6d964faca96a3cd95dcc1ff976b0e3c6cad006f4f3b706f71a8",
+          "panel": "B: separate recorded response factors; in-plane value remains record-only",
+          "projection_receipt": "docs/paper/generated/assessment.json",
+          "projection_receipt_sha256": "0be0e88cc05601165b3a8d7b6901ff6e1076531a45bec0a59f62b328feee2cb4",
+          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
+          "visual_kind": "retained_scalars_flags_and_support_schematic"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "rsv2-fatigue",
+      "coverage_status": "linked",
+      "id": "fatigue",
+      "kind": "RSV2",
+      "missing_reason": null,
+      "title": "RSV2-08: Fatigue-model assessment",
+      "visuals": [
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/assessment.svg",
+          "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
+          "figure_manifest_sha256": "c9716e7464632deb6f91a18a05b47708791022a243ee4b049d12239ce8eb9226",
+          "figure_sha256": "dd61c56092b8f6d964faca96a3cd95dcc1ff976b0e3c6cad006f4f3b706f71a8",
+          "panel": "B: original fatigue-model scalar; no fatigue field or measured lifetime",
+          "projection_receipt": "docs/paper/generated/assessment.json",
+          "projection_receipt_sha256": "0be0e88cc05601165b3a8d7b6901ff6e1076531a45bec0a59f62b328feee2cb4",
+          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
+          "visual_kind": "retained_scalars_flags_and_support_schematic"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "rsv2-gate_s_sharp_law",
+      "coverage_status": "subsection_visual_missing",
+      "id": "gate_s_sharp_law",
+      "kind": "RSV2",
+      "missing_reason": "Subsection exported-measurement visual not generated; nominal geometry and measured export observations must remain distinct.",
+      "title": "RSV2-09: Exported edge measurements",
+      "visuals": []
+    },
+    {
+      "atlas_anchor": "rsv2-gate_s_tip_point_brep",
+      "coverage_status": "subsection_visual_missing",
+      "id": "gate_s_tip_point_brep",
+      "kind": "RSV2",
+      "missing_reason": "Subsection exported-measurement visual not generated; nominal geometry and measured export observations must remain distinct.",
+      "title": "RSV2-10: Exported point-profile measurements",
+      "visuals": []
+    },
+    {
+      "atlas_anchor": "battery-build.analytic",
+      "coverage_status": "linked",
+      "id": "build.analytic",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Analytic software controls",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-build.gci_contracts",
+      "coverage_status": "linked",
+      "id": "build.gci_contracts",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Convergence arithmetic controls",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-build.claims",
+      "coverage_status": "linked",
+      "id": "build.claims",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Claim-handling controls",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-build.dolfinx",
+      "coverage_status": "linked",
+      "id": "build.dolfinx",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Separate-solver capability",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-geom.unit",
+      "coverage_status": "linked",
+      "id": "geom.unit",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Export units",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-geom.one_solid",
+      "coverage_status": "linked",
+      "id": "geom.one_solid",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Solid topology",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-geom.mass",
+      "coverage_status": "linked",
+      "id": "geom.mass",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Mass observation",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-geom.pin",
+      "coverage_status": "linked",
+      "id": "geom.pin",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Geometry identity",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-plate.loads",
+      "coverage_status": "linked",
+      "id": "plate.loads",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Plate response",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-plate.seq",
+      "coverage_status": "linked",
+      "id": "plate.seq",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Sequence proxy",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        },
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/verification.svg",
+          "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
+          "figure_manifest_sha256": "a6a965bf5e3924f29d30fce3ef21e2be6ffaa9dcea1a70c925531f078278c305",
+          "figure_sha256": "fe66123fa003077003512bc5f57ab014bfcf12e239670a7550687f6d22cc2516",
+          "panel": "A: retained yield-order proxy across mesh levels; no admitted GCI",
+          "projection_receipt": "docs/paper/generated/verification.json",
+          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
+          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "visual_kind": "retained_scalars_and_binned_profiles"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-plate.l7",
+      "coverage_status": "linked",
+      "id": "plate.l7",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Fatigue screen",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        },
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/assessment.svg",
+          "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
+          "figure_manifest_sha256": "c9716e7464632deb6f91a18a05b47708791022a243ee4b049d12239ce8eb9226",
+          "figure_sha256": "dd61c56092b8f6d964faca96a3cd95dcc1ff976b0e3c6cad006f4f3b706f71a8",
+          "panel": "B: original fatigue-model scalar; no fatigue field or measured lifetime",
+          "projection_receipt": "docs/paper/generated/assessment.json",
+          "projection_receipt_sha256": "0be0e88cc05601165b3a8d7b6901ff6e1076531a45bec0a59f62b328feee2cb4",
+          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
+          "visual_kind": "retained_scalars_flags_and_support_schematic"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-plate.gci",
+      "coverage_status": "linked",
+      "id": "plate.gci",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Candidate mesh study",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        },
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/verification.svg",
+          "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
+          "figure_manifest_sha256": "a6a965bf5e3924f29d30fce3ef21e2be6ffaa9dcea1a70c925531f078278c305",
+          "figure_sha256": "fe66123fa003077003512bc5f57ab014bfcf12e239670a7550687f6d22cc2516",
+          "panel": "A--B: valid metadata, but nonpositive-order/oscillatory observations and no admitted GCI",
+          "projection_receipt": "docs/paper/generated/verification.json",
+          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
+          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "visual_kind": "retained_scalars_and_binned_profiles"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-side.a1",
+      "coverage_status": "linked",
+      "id": "side.a1",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Legacy side-report record A1",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-side.a2",
+      "coverage_status": "linked",
+      "id": "side.a2",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Legacy side-report record A2",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-side.a3",
+      "coverage_status": "linked",
+      "id": "side.a3",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Legacy side-report record A3",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-side.a4",
+      "coverage_status": "linked",
+      "id": "side.a4",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Support and stability report",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        },
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/assessment.svg",
+          "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
+          "figure_manifest_sha256": "c9716e7464632deb6f91a18a05b47708791022a243ee4b049d12239ce8eb9226",
+          "figure_sha256": "dd61c56092b8f6d964faca96a3cd95dcc1ff976b0e3c6cad006f4f3b706f71a8",
+          "panel": "A: support-model schematic and archived scalars; eigen-operator verification remains open",
+          "projection_receipt": "docs/paper/generated/assessment.json",
+          "projection_receipt_sha256": "0be0e88cc05601165b3a8d7b6901ff6e1076531a45bec0a59f62b328feee2cb4",
+          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
+          "visual_kind": "retained_scalars_flags_and_support_schematic"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-solid.tip",
+      "coverage_status": "linked",
+      "id": "solid.tip",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Solid-result completeness",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        },
+        {
+          "binding": {
+            "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+            "qualification": "not qualified",
+            "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
+            "subject": "cert_pipeline_r01_p14_c02"
+          },
+          "figure": "docs/paper/generated/verification.svg",
+          "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
+          "figure_manifest_sha256": "a6a965bf5e3924f29d30fce3ef21e2be6ffaa9dcea1a70c925531f078278c305",
+          "figure_sha256": "fe66123fa003077003512bc5f57ab014bfcf12e239670a7550687f6d22cc2516",
+          "panel": "C--D: matched scalar comparison and binned profiles; no full 3D field",
+          "projection_receipt": "docs/paper/generated/verification.json",
+          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
+          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "visual_kind": "retained_scalars_and_binned_profiles"
+        }
+      ]
+    },
+    {
+      "atlas_anchor": "battery-gate.rs_v2",
+      "coverage_status": "linked",
+      "id": "gate.rs_v2",
+      "kind": "battery",
+      "missing_reason": null,
+      "title": "Grouped requirement finding",
+      "visuals": [
+        {
+          "binding": {
+            "cohort": "historical 23-subject battery",
+            "relationship": "original corpus; separate from assessed-example panels"
+          },
+          "figure": "docs/paper/generated/battery-matrix.svg",
+          "figure_manifest": "docs/paper/generated/battery-matrix.svg.manifest.json",
+          "figure_manifest_sha256": "b9858f132cb6bf166e534e430c90efb456951a1226c054fa7e7b4c7ffcf62f2a",
+          "figure_sha256": "439c2b248dd032039590c3810b7d6bc7b475763d20ae5a6e54e75b94d56a00be",
+          "panel": "Exact evaluator-ID column, all 23 original stored labels",
+          "projection_receipt": "docs/paper/generated/battery-matrix.json",
+          "projection_receipt_sha256": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+          "scope": "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields.",
+          "visual_kind": "historical_categorical_status_map"
+        }
+      ]
+    }
+  ],
+  "entries_missing_subsection_visual": 7,
+  "entries_with_retained_plate_field_link": 6,
+  "entries_with_visual": 37,
+  "missing_subsection_visuals": [
+    "g16-cad_watertight_and_single_solid",
+    "g16-geometric_and_holder_gates",
+    "g16-karambit_ring_and_curved_claw",
+    "g16-c6_aesthetic_floor",
+    "rsv2-aesthetic_and_geometric",
+    "rsv2-gate_s_sharp_law",
+    "rsv2-gate_s_tip_point_brep"
+  ],
+  "schema": "jarambit.test_visual_coverage.v1",
+  "scope": "Catalog-to-visual links, not full FEM-field coverage, qualification or main-text proximity",
+  "spatial_requests": [
+    {
+      "available_alternative": "original certification/strict scalars; no error estimate",
+      "id": "strict_plate_field",
+      "status": "archive_required"
+    },
+    {
+      "available_alternative": "matched scalar pairs and binned profiles with distinct recovery semantics",
+      "id": "solved_solid_field",
+      "status": "archive_required"
+    },
+    {
+      "available_alternative": "archived scalar; eigen-operator verification remains open",
+      "id": "buckling_mode",
+      "status": "archive_required"
+    },
+    {
+      "available_alternative": "saved fatigue-model scalar; no measured lifetime",
+      "id": "fatigue_field",
+      "status": "archive_required"
+    }
+  ]
+}

@@ -301,6 +301,10 @@ jobs:
             docs/paper/figures/v2/hero_dark.manifest.json
             docs/paper/figures/v2/hero_dark.scene.json
             docs/paper/generated/manifest.json
+            docs/tests/catalog.json
+            docs/tests/README.md
+            docs/tests/visuals.md
+            docs/tests/visuals.v1.json
             docs/paper/generated/plate-fields.json
             docs/paper/generated/plate-fields.svg
             docs/paper/generated/plate-fields.svg.manifest.json
