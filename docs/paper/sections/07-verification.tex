@@ -1,0 +1,39 @@
+\section{Numerical Verification and Scientific Assurance}
+\subsection{The Model Hierarchy}
+The platform's mechanics include a plate/membrane representation and a local quadratic-solid representation. At the linear-system level, a typical static finite-element computation solves
+\begin{equation}
+ \mathbf K\mathbf u=\mathbf f,
+\end{equation}
+where stiffness, displacement and load depend on the specified geometry, material and boundary conditions. This generic equation does not define the physical problem by itself. The meaning of the result also depends on element formulation, integration, constraints, solver tolerances, region selection and stress recovery.
+
+The plate path uses DKT bending and CST membrane components in the existing implementation. It is an efficient model abstraction for its represented geometry and assumptions. The solid path uses quadratic ten-node tetrahedra for a local submodel. A richer element formulation can resolve different behavior, but it does not automatically validate transferred boundary conditions or make a local result representative of the complete object. Each model should be judged on the question it is intended to answer.
+
+\subsection{Observable Semantics}
+A stress result is not just an array named ``stress.'' It may be evaluated at integration points, associated with elements, extrapolated to nodes, averaged across adjacent elements, or projected into another function space. A maximum over one representation can differ from a maximum over another even when the displacement solution is the same. Region masks introduce another source of semantic variation.
+
+For this reason, verification should bind the observable definition to the mesh and field. Comparing a nodal maximum from one solver with an averaged field from another can give a misleading agreement or disagreement. The original field and the postprocessing operation should remain inspectable. A visualization should describe whether it interpolates, projects, averages or merely colors a surface. Smoothness of a displayed image is not evidence of smoothness of the underlying physical field.
+
+\subsection{Mesh Studies and Error Estimates}
+A mesh-refinement study examines how a chosen observable behaves as discretization changes. The classical grid-convergence literature emphasizes the conditions and reporting needed to interpret such estimates \cite{roache}. In this repository, convergence metadata and arithmetic controls are explicitly separated from candidate-specific evidence. The distinction is useful because a mathematically valid formula can be applied to semantically incompatible observations.
+
+A credible sequence must preserve the modeled problem and observable while changing the intended discretization parameter. Unexpected sign changes, a plateau, divergent observed order or nearly indistinguishable inputs may limit interpretation. A very small difference between two values is not automatically a small error relative to the modeled continuum solution. Nor is a model's discretization uncertainty the same as its discrepancy from the physical system.
+
+\subsection{Separate Solvers and Shared Error}
+The independent assessment path uses scikit-fem and the pinned DOLFINx environment on matched saved meshes. scikit-fem's published software description explains its finite-element assembly role \cite{skfem}; the repository records the particular assessment setup and its limitations. A meaningful comparison needs independently obtained outputs, not two fields populated from one execution.
+
+Matched meshes help isolate implementation differences. They also mean that geometry/discretization assumptions can be shared. If two solvers use the same inadequate constitutive model, supports or observation definition, agreement cannot identify that shared inadequacy. Cross-solver consistency is therefore one layer of verification, not a substitute for model validation. The exact problem matched between solvers should be stated alongside any percentage agreement.
+
+\subsection{The Frozen Assurance Catalog}
+The scientific-assurance catalog has 178 definitions across 20 families, T00 through T19, and 356 required paired-control slots. A definition specifies a challenge and an oracle; it is not an execution receipt. The frozen status strings describe catalog state at the time of freezing. Later source presence should be recorded separately rather than retroactively rewriting history.
+
+The families cover inventory and receipt behavior, convergence semantics, claim scope, stochastic evidence, field meaning, software/numerical contracts, material-state transfer, research observation and intervention, audit independence, and CI custody. These controls are not all per-CAD mechanics tests. Some are deterministic software fixtures; others define research questions or admission requirements. Their breadth should be visible without collapsing their evidence classes.
+
+The generated online index preserves every exact case ID, challenge, oracle, frozen status, allowed implementation path, expected receipt pattern and claim limit. An expected path containing an attempt placeholder is a specification of where evidence would belong. It does not prove the file exists. Similarly, the T08--T18 meta-test's source/method presence checks cannot establish that all those research controls executed.
+
+\subsection{Positive, Negative, and Missing Controls}
+A positive control asks whether the system accepts an appropriate case. A negative control asks whether it rejects a deliberately broken counterpart. The pair is particularly important in evidence systems: a renderer that accepts everything can look complete while providing no assurance. Required missing controls must remain visible; silently skipping them can make a partial execution appear comprehensive.
+
+For a numerical control, the oracle must be independent enough to detect the error being tested. Recomputing a value with the same flawed expression in a test can mirror the implementation rather than challenge it. For provenance controls, changing a source artifact after hashing should invalidate the association. For physical claims, a synthetic software fixture must never populate a physically-validated label. These principles explain why assurance architecture deserves space in an engineering paper rather than being relegated to a generic CI badge.
+
+\subsection{What Remains Unvalidated}
+No new physical experiment is supplied by this manuscript. Linear elasticity, local submodel assumptions, support idealization, fatigue interpretation and manufacturing transfer remain bounded by their evidence. The existence of detailed checks is a strength of the platform, but it should not be used to imply a stronger validation domain than has actually been established. The most credible account of the test suite identifies both the engineering question each layer answers and the next question it leaves open.

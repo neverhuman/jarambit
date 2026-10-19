@@ -1,5 +1,7 @@
 # docs/ — paper, versioning, logs, calibration
 
+Start with the [IEEE-style research white paper](paper/README.md), [complete CAD test atlas](tests/README.md), [178-case science index](tests/science.md), and [detailed engineering specification](PAPER_AND_README_ENGINEERING_SPEC.md). Existing long technical references remain below.
+
 | file | purpose |
 |---|---|
 | `WHITEPAPER.md` | living paper (author Jepson Taylor), header carries version + date |

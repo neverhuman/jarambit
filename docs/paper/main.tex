@@ -1,0 +1,56 @@
+\RequirePackage[T1]{fontenc}
+\documentclass[10pt,journal,letterpaper]{IEEEtran}
+% Research white-paper layout: custom single-column opening, IEEEtran body.
+% This modification is not an unmodified IEEE venue submission template.
+\usepackage{tgtermes,tgheros}
+\usepackage{amsmath,amssymb,graphicx,booktabs,array,xcolor,url}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\hypersetup{pdftitle={Beyond the Shape a Human Would Draw},pdfsubject={Intelligent CAD, Evolutionary Search, and Auditable Engineering Evidence},pdfkeywords={CAD, evolutionary computation, verification, provenance, research draft}}
+\definecolor{ink}{HTML}{132D3B}
+\definecolor{teal}{HTML}{007E87}
+\definecolor{rust}{HTML}{A3442D}
+\newcommand{\code}[1]{{\small\texttt{\detokenize{#1}}}}
+\newcommand{\src}[2]{\href{https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/#1}{#2}}
+\newcommand{\test}[1]{\subsubsection{#1}}
+\input{generated/metrics.tex}
+\graphicspath{{../../target/ieee/paper/}}
+\interdisplaylinepenalty=2500
+\setlength{\emergencystretch}{1.5em}
+\begin{document}
+\onecolumn
+\thispagestyle{empty}
+\begin{center}
+{\sffamily\color{teal}\small JARAMBIT / RESEARCH WHITE PAPER / 18 OCTOBER 2026}\par\vspace{6mm}
+{\sffamily\bfseries\color{ink}\fontsize{27}{30}\selectfont Beyond the Shape a Human Would Draw}\par\vspace{4mm}
+{\sffamily\color{ink}\fontsize{15}{19}\selectfont Intelligent CAD, Evolutionary Search,\\and the Evidence Required to Trust Them}\par\vspace{4mm}
+{\small Research draft prepared for Jepson Taylor\quad|\quad Human author approval pending}\par
+\end{center}
+\vspace{3mm}
+\noindent\textbf{Abstract---}Computational design can search geometric families that are impractical to enumerate manually, but a persuasive shape and a rising fitness curve are insufficient engineering evidence. This white paper studies Jarambit, a Rust-centered evolutionary CAD platform that connects a parameterized representation, numerical assessment, weighted ranking, and retained evidence. We explain the lifecycle of a gene, the distinction between searching a fixed genome and proposing a new representation, and the role agents could play in the latter. A complete assessment taxonomy separates 16 legacy diagnostic predicates, ten overlapping requirement groups, 18 heterogeneous battery evaluators, and 178 frozen scientific-assurance definitions. Reconciliation of the historical battery yields 414 retained cells: \BatteryPass\ stored passes, \BatteryFail\ failures, and \BatteryBlocked\ blocked records. These labels include capability and completeness records; they are not counts of independent physical experiments. A selected retained weighted cohort reports best fitness \BestFitness\ on its higher-is-better scale, with no qualified design. Its three-generation history cannot establish long-run convergence or compute scaling. A separate historical dataset contains \BirthCount\ evaluated births and supports population analysis within its original score regime. We distinguish implemented methods, retrospective findings, and prospective agent-assisted research. The resulting framework connects ambitious design exploration to numerical verification, source identity, honest reporting, and the physical measurement needed before additive-manufactured products can be trusted.
+\par\vspace{3mm}
+\noindent\textbf{Index Terms---}Computational design, evolutionary computation, CAD, quality diversity, finite elements, evidence provenance, agent-assisted engineering, additive manufacturing.
+\begin{figure}[h]
+\centering\includegraphics[width=\textwidth]{fitness.pdf}
+\caption{Best retained reporting profile in the selected w411c3 cohort, beside its three recorded generations (A) and a separate historical w282 population inset (B). Panel A truncates its vertical axis to expose the small observed change; B uses an asinh vertical scale with original-value ticks. The panels use different fitness regimes. The score includes placeholder inputs; the best-record geometry and full round populations are unavailable in this retained cohort. No physical qualification or global optimum is claimed. Source: versioned fitness-curve JSON; full selectors and hashes accompany the paper.}
+\end{figure}
+\vfill
+\noindent{\footnotesize\color{rust}IEEE-style white paper, not an accepted IEEE article. Source baseline: \code{009f5ac520fa3afe8ed8025230eef604dbb7f922}. Retained numerical and software evidence; no new CAD/FEM search or physical experiment performed for this manuscript.}
+\clearpage\twocolumn
+\pagestyle{headings}
+\markboth{JARAMBIT: INTELLIGENT CAD AND AUDITABLE ENGINEERING EVIDENCE}{Research white paper / draft}
+\input{sections/01-introduction.tex}
+\input{sections/02-background.tex}
+\input{sections/03-genome.tex}
+\input{sections/04-evolution.tex}
+\input{sections/05-fitness.tex}
+\input{sections/06-battery.tex}
+\input{sections/07-verification.tex}
+\input{sections/08-results.tex}
+\input{sections/09-agents.tex}
+\input{sections/10-reproducibility.tex}
+\input{sections/11-discussion.tex}
+\input{sections/12-conclusion.tex}
+\input{references.tex}
+\end{document}

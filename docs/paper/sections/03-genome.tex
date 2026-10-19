@@ -1,0 +1,31 @@
+\section{From a Gene to an Identifiable CAD}
+\subsection{A Gene Is a Contract, Not Merely a Number}
+In a computational design representation, a gene needs an identity, type, interpretation, unit, legal domain, decoder relationship, and version. A floating-point value without these properties is not a sufficiently specified engineering parameter. The same serialized number could mean a length, a dimensionless shape descriptor, an index into a discrete choice, or an activation coefficient. Confusing these meanings can generate plausible-looking geometry with an invalid interpretation.
+
+Jarambit's crescent representation is defined in \src{crates/crescent/src/genome.rs}{the genome source}, with geometry construction in \src{crates/crescent/src/pheno.rs}{the phenotype source}. The representation contains 128 numerical values and a material field. This count describes the current representation, not 128 independent physical degrees of freedom. Decoder dependencies, inactive features, repeated values, and derived geometry can couple the effect of multiple entries. The CSV material field is metadata with physical consequences, not a numeric coordinate to interpolate casually.
+
+For documentation, each gene should be understood through four relationships: its serialized location, its typed semantic meaning, the decoder operation it influences, and the observations that can reveal its effect. A schema change is complete only when all four remain coherent. This paper does not prescribe new genes, physical bounds, or shape modifications; it describes the information a reviewer needs to understand the existing representation and any future software proposal.
+
+\subsection{Decoder and Phenotype}
+The decoder maps the stored representation into geometric objects and fields. In the present platform, the result includes a planform and a spatially varying thickness representation, with CAD export and numerical-analysis paths. This intermediate phenotype is important because the vector alone does not define the final object independently of the decoder. A decoder revision can change exported geometry even when the input CSV remains byte-for-byte identical.
+
+A reproducible candidate identity therefore includes at least the serialized genome, material interpretation, decoder/source revision, and export configuration. The resulting STEP or STL has its own content identity. The analysis mesh has another identity. A report should make these relationships explicit rather than assuming a shared filename proves that all artifacts refer to one shape.
+
+The distinction also prevents a common visualization error. A mesh used to render a surface may differ from the mesh used for mechanics. A displayed stress field can originate from a related design rather than the depicted shape. The image can remain useful as a concept illustration, but it cannot support a candidate-specific numerical claim unless the geometry and field identities are matched. The repository's historical disclosures illustrate why this distinction belongs in the method, not only in a footnote.
+
+\subsection{Export and Assessment Identity}
+STEP and STL encode different representations. A tessellated shell can appear closed to a viewer while a B-rep import remains invalid or contains multiple disconnected solids. Unit interpretation may be external or implicit. Mass can be obtained from a raster/thickness approximation, a mesh volume, or a B-rep solid; these values are observations with different assumptions. Similar numbers do not establish identical computation.
+
+An assessment record should identify which representation was measured, which density/material interpretation was used, and which conversion steps occurred. A topology check, a unit check, a mass observation, and a geometry-binding check are separate questions. Their distinction explains why some historical battery geometry cells remain blocked even when other numerical fields are populated. Missing identity is an evidential limitation rather than a cosmetic issue.
+
+\subsection{Designing a Gene: A Software Methodology}
+The general software methodology begins by stating the representational need in ordinary language. Next, define the parameter's type and unit, its allowed serialization, and its effect in the decoder. Then specify how invalid or unsupported values are handled, how old files are read, and which independent observations distinguish a correct implementation from a plausible error. A benign reference geometry is appropriate for demonstrating these contracts without claiming a new application-specific design improvement.
+
+Three tests are especially informative at this level. A serialization round trip should preserve the intended semantics. A dimensional-consistency check should reject an incompatible unit or type. A decoder-reference check should distinguish a meaningful change from a silently ignored parameter. These are representation tests; passing them does not validate the resulting object's physical behavior.
+
+Changes to representation should be versioned separately from changes to objective and numerical model. If all three change together, an observed score improvement cannot be attributed cleanly. The historical score regime must remain accessible, and old results should not be silently reinterpreted by the new decoder. A migration should produce explicit mappings or mark incompatibility where exact preservation is impossible.
+
+\subsection{What Complex Genomes Add}
+More expressive representations can encode hierarchies, relationships, reusable substructures, and spatial fields. Their complexity creates new opportunities for invalid combinations and hidden coupling. An agent may help articulate or inspect such relationships, but expressiveness must be measured through the phenotypes it produces and the engineering questions it can answer. Parameter count alone is a poor measure of design intelligence.
+
+A future research comparison should therefore ask whether a representation supports useful variation, clear interpretation, reliable decoding, and defensible assessment within a declared domain. Those are prospective questions here. The current evidence supports an explanation of an existing fixed representation and its audit trail; it does not establish that agents have already discovered superior complex genomes.
