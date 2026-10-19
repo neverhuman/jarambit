@@ -73,6 +73,7 @@ a=sys.argv
 out=Path(a[a.index('--out-dir')+1]);label=a[a.index('--label')+1]
 m=json.loads(Path('evidence/evolve_certifiable/manifest.json').read_text())
 sc=json.loads(Path(m['automatic']['artifacts']['scorecard']).read_text())
+rs=json.loads(Path(m['automatic']['artifacts']['rs']).read_text())
 sc['certificate_identity']=out.parent.name
 mode=os.environ['EVO_TEST_MODE']
 if mode=='identity':sc['certificate_identity']='wrong'
@@ -84,9 +85,11 @@ if mode=='disagreement':
  sc['weighted_cad_score']['gates']['dolfinx_cross_check_2pct']=False
  sc['weighted_cad_score']['all_engineering_gates_pass']=False
 (out/(label+'_master_scorecard.json')).write_text(json.dumps(sc))
+if mode!='missing_rs':
+ (out/(label+'_rs.json')).write_text(json.dumps(rs))
 "#).unwrap();
     std::fs::set_permissions(&fake,std::fs::Permissions::from_mode(0o755)).unwrap();
-    for mode in ["identity","nonfinite","disagreement"] {
+    for mode in ["identity","nonfinite","missing_rs","disagreement"] {
         let out=folder.join(mode);
         let result=Command::new(env!("CARGO_BIN_EXE_jarambit"))
             .args(["auto-evolve","--rounds","1","--candidates-per-round","1","--top-k-certify","1","--threads","1","--seeds","evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv","--out-dir"])
@@ -98,6 +101,7 @@ if mode=='disagreement':
         if mode=="disagreement" {assert!(result.status.success());assert_eq!(report["designs"][0]["all_16_gates"],false);}
         else {assert!(!result.status.success());assert_eq!(report["unverified"].as_array().unwrap().len(),1);
             let reason=report["unverified"][0]["reason"].as_str().unwrap();
-            assert!(reason.contains(if mode=="identity" {"different genome/model"}else{"missing/nonfinite"}),"{reason}");}
+            let expected=if mode=="identity" {"different genome/model"} else if mode=="missing_rs" {"missing RS-v2 receipt"} else {"missing/nonfinite"};
+            assert!(reason.contains(expected),"{reason}");}
     }
 }
