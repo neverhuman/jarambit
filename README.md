@@ -86,7 +86,7 @@ The following generated panels preserve their original model/requirement scope. 
 <summary>Historical generated records, correction table, figures and release details</summary>
 
 <!-- GEN:HEAD:BEGIN -->
-[![version](https://img.shields.io/badge/version-v2.0.0-ff6f00?style=for-the-badge)](https://github.com/neverhuman/jarambit/releases/tag/v2.0.0)
+[![version](https://img.shields.io/badge/version-v2.1.0-ff6f00?style=for-the-badge)](https://github.com/neverhuman/jarambit/releases/tag/v2.1.0)
 [![historical record](https://img.shields.io/badge/historical%20record-w282__p14__c01-2e7d32?style=for-the-badge)](docs/ENGINEERING_GATES_AND_EVOLUTION.md)
 [![mass](https://img.shields.io/badge/mass-75.568%20g%20%2875.323%20g%203D%29-00897b?style=for-the-badge)](docs/WHITEPAPER.md)
 [![G1](https://img.shields.io/badge/G1-0.878210-7b1fa2?style=for-the-badge)](docs/GLOBAL_METRIC.md)
@@ -111,7 +111,7 @@ RS-karambit-v1: screen PASS · promotion FAIL (seq 0.959 < 1.2) · soft: mass 84
 <!-- RS:END -->
 
 <!-- GEN:FIGS:BEGIN -->
-📄 [White paper](docs/WHITEPAPER.md) · 📐 [Engineering gates & evolution paper](docs/ENGINEERING_GATES_AND_EVOLUTION.md) · 📋 [Work plan](docs/WORKPLAN.md) · 📊 [Live status](STATUS.md) · ⚖️ [Patent draft (not filed)](docs/PATENT_DRAFT.md) · 📦 [Release v2.0.0](https://github.com/neverhuman/jarambit/releases/tag/v2.0.0) · 🗺️ [Technology map](TECHNOLOGY_MAP.md)
+📄 [White paper](docs/WHITEPAPER.md) · 📐 [Engineering gates & evolution paper](docs/ENGINEERING_GATES_AND_EVOLUTION.md) · 📋 [Work plan](docs/WORKPLAN.md) · 📊 [Live status](STATUS.md) · ⚖️ [Patent draft (not filed)](docs/PATENT_DRAFT.md) · 📦 [Release v2.1.0](https://github.com/neverhuman/jarambit/releases/tag/v2.1.0) · 🗺️ [Technology map](TECHNOLOGY_MAP.md)
 
 <img src="docs/figures/whitepaper/fig_readme_mass_vs_wave.png" width="96%" alt="Historical pre-#82 model: selected-candidate mass vs wave w20 through w282 from committed evidence JSON, with historical screen record w282_p14_c01 at 75.568 g (75.323 g 3D) labelled"/>
 
@@ -123,7 +123,7 @@ RS-karambit-v1: screen PASS · promotion FAIL (seq 0.959 < 1.2) · soft: mass 84
 <!-- GEN:FIGS:END -->
 
 <!-- GEN:RELEASE:BEGIN -->
-## Release v2.0.0 & Documentation
+## Release v2.1.0 & Documentation
 
 - **Historical 16-gate screen record (`w282_p14_c01`):** `75.568 g` 2.5D raster / `75.323 g` 3D watertight solid, locked `G1 = 0.878210` (`COMPLETE`), `W_CAD = +1.7790` (`16/16` engineering gates pass: strict 0.0625 mm² lateral `262.6 N` / `SF = 1.010`, strict 4–15 mm tip-submodel twist `SF = 1.125`, certified failure sequence `seq_ratio = 1.201 >= 1.20`, 3D P2 tetrahedral solid-tip `SF = 1.4093` with `0.021%` `dolfinx` v0.9.0 vs. `skfem` agreement, and `side.a4` Winkler+bore supported `seq = 4.042`).
 - **Historical 16-gate `W_CAD_v2` mass progression (`w274` → `w282`):** `w274_s2905_c01` (`84.979 g` / `85.021 g` 3D, `W_CAD = +1.4634`) → `w275_s2909_c01` (`81.774 g` / `81.804 g` 3D, `W_CAD = +1.5589`) → `w276_s2913_c01` (`79.995 g` / `80.050 g` 3D, `W_CAD = +1.6381`) → `w277_s2919_c01` (`79.509 g` / `79.656 g` 3D, `W_CAD = +1.6604`) → `w278_s2922_c01` (`78.580 g` / `78.597 g` 3D, `W_CAD = +1.7021`) → `w279_s2928_c01` (`77.535 g` / `77.414 g` 3D, `W_CAD = +1.7212`) → `w280_s2931_c01` (`76.965 g` / `76.834 g` 3D, `W_CAD = +1.7432`) → `w281_s2932_c01` (`75.911 g` / `75.695 g` 3D, `W_CAD = +1.7916`) → `w282_p10_c02` (`75.836 g` / `75.616 g` 3D, `W_CAD = +1.7978`) → `w282_p14_c01` (`75.568 g` / `75.323 g` 3D, `W_CAD = +1.7790`).
