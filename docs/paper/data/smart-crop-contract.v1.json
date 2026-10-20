@@ -1,0 +1,23 @@
+{
+  "schema": "jarambit.smart_crop.display_contract.v1",
+  "policy_version": "jarambit.upper_range_crop_policy.v1",
+  "source_contract": "docs/paper/field-inputs.v1.json",
+  "range_cutoffs": [
+    0.5,
+    0.75,
+    0.9
+  ],
+  "min_excess_mass_coverage": 0.95,
+  "max_bbox_area_fraction": 0.4,
+  "min_scale_gain": 1.75,
+  "pad_fraction": 0.08,
+  "interpretation": "Fixed retained-data display policy, not a physical requirement or an optimization gate.",
+  "threshold": "Upper fraction of full eligible raw-value range, not a count or area quantile.",
+  "excess_baseline": "Whole original eligible field above its fixed half-range threshold.",
+  "area_and_integral_denominator": "Complete original eligible source field; exact clipped original-triangle contributions.",
+  "colorbar": "Unchanged full raw domain; no crop-local normalization.",
+  "missingness": "Original per-field masks, typed missingness and genuine zeros preserved.",
+  "hotspots": "All threshold ties, all maxima and disconnected support; full-context fallback if no compact truthful crop.",
+  "locator": "Original plate outer/hole boundary with exact source-coordinate crop affine quad, not authenticated detailed CAD silhouette.",
+  "full_context_companion": "docs/paper/generated/plate-fields.svg"
+}
