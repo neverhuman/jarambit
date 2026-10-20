@@ -24,7 +24,7 @@ rtk proxy sh docs/paper/reproduce.sh build
 
 This reads retained evidence and writes reporting derivatives, PNG figures, main/supplement PDFs, and manifests under the lane's existing target/. It does not run a new search, CAD export, FEM solve, or physical experiment. The complete native input expands to approximately 3.81 GB and is streamed under the allocated resource cap.
 
-Prerequisites: Rust/Cargo with locked dependencies, complete archives, LuaLaTeX/IEEEtran, TeX Gyre fonts, librsvg, and PDF tools. Rebuild documents from existing generated figures with:
+Prerequisites: Rust/Cargo with locked dependencies, complete archives, LuaLaTeX/IEEEtran, TeX Gyre fonts, librsvg, Fontconfig, and PDF tools. The script defaults to two Cargo build jobs; the caller supplies its machine's resource allocation. Rebuild documents from existing generated figures with:
 
 ~~~sh
 rtk proxy sh docs/paper/reproduce.sh documents
@@ -34,8 +34,8 @@ Final validation uses the check subcommand after the recorded freeze, together w
 
 ## Source closure and accessions
 
-The standalone supplement driver includes detailed representation, score, numerical-method, cohort and literature fragments plus the original historical supplement.
+The standalone supplement driver includes detailed representation, score, numerical-method, cohort and literature fragments plus an active assembly copy of the historical supplement. Only the copy's heading hierarchy changes; the original historical source remains unchanged.
 
-The build records actual LuaLaTeX inputs, active SVG/crop/hero sources, reporting source/contracts, fonts and toolchain under target/ieee/paper/ in INPUT_FILES, SOURCE_SHA256SUMS, OUTPUT_SHA256SUMS, and toolchain.txt. Original producer identities remain in their contracts. The final publication receipt must bind matching manuscript/build/delivery accessions; prior evidence snapshots are not relabeled as this revision.
+The build records actual LuaLaTeX inputs, active SVG/crop/hero sources, reporting source/contracts, TeX and Fontconfig font files, and toolchain under target/ieee/paper/ in INPUT_FILES, SOURCE_SHA256SUMS, OUTPUT_SHA256SUMS, and toolchain.txt. SOURCE_DATE_EPOCH defaults to the retained evidence baseline's commit timestamp for deterministic PDF metadata; actual build UTC belongs to the execution receipt. Original producer identities remain in their contracts. The final publication receipt must bind matching manuscript/build/delivery accessions; prior evidence snapshots are not relabeled as this revision.
 
 The [crosswalk](CROSSWALK_SUPPLEMENT.md) provides artifact navigation, masks/support definitions, historical battery details, and producer/report/manuscript/PDF identity distinctions. Main/supplement page inspection and working immutable access links remain final acceptance requirements.

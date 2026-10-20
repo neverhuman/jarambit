@@ -2,6 +2,7 @@ ROOT := ../..
 OUT := $(abspath $(ROOT)/target/ieee/paper)
 export CARGO_TARGET_DIR := $(abspath $(ROOT)/target)
 CARGO ?= cargo
+SOURCE_DATE_EPOCH ?= 1792460432
 GEN_FIGURES := population plate-fields verification assessment battery-matrix weighted-runs reference
 POP_FIGURES := population-latest inheritance
 HERO_SVG := drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg
@@ -10,8 +11,11 @@ HERO_PNG := drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.png
 CROP_PNG := drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.png
 GEN_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(GEN_FIGURES)))
 POP_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(POP_FIGURES)))
-TEX_ENV = TEXINPUTS="$(OUT):" SOURCE_DATE_EPOCH=1792365255 FORCE_SOURCE_DATE=1 TZ=UTC
+# Pinned evidence-baseline timestamp; actual build UTC belongs to the receipt.
+TEX_ENV = TEXINPUTS="$(OUT):" SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH) FORCE_SOURCE_DATE=1 TZ=UTC
 .PHONY: all artifacts figures pdfs main supplement audit check clean
+# A report must finish generating before its figure/document consumers start.
+.NOTPARALLEL:
 all: artifacts pdfs
 # Reporting reconstruction only; no CAD, FEM, search, tests or CI.
 artifacts:
@@ -40,10 +44,11 @@ pdfs: figures
 	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) supplement-main.tex > $(OUT)/supplement-pass3.log
 	cp $(OUT)/main.pdf main.pdf
 	cp $(OUT)/supplement-main.pdf supplement.pdf
-	{ sed -n 's/^INPUT //p' $(OUT)/main.fls $(OUT)/supplement-main.fls; printf '%s\n' Makefile reproduce.sh $(HERO_SVG) $(CROP_SVG) publication.v2.json figure-semantics.v1.json claim-evidence.v1.json generated/manifest.json; for name in $(GEN_FIGURES); do printf 'generated/%s.svg\n' "$$name"; done; for name in $(POP_FIGURES); do printf 'figures/%s.svg\n' "$$name"; done; printf '%s\n' *-inputs.v1.json data/public_ids.v1.json data/score_profiles.v1.json data/selection_receipts.v1.json; find $(ROOT)/crates/paper-artifacts/src -maxdepth 1 -name '*.rs' -type f; printf '%s\n' $(ROOT)/crates/paper-artifacts/Cargo.toml $(ROOT)/crates/paper-artifacts/Cargo.lock; } | LC_ALL=C sort -u > $(OUT)/INPUT_FILES
+	{ sed -n 's/^INPUT //p' $(OUT)/main.fls $(OUT)/supplement-main.fls; printf '%s\n' Makefile reproduce.sh $(HERO_SVG) $(CROP_SVG) publication.v2.json figure-semantics.v1.json claim-evidence.v1.json generated/manifest.json; for name in $(GEN_FIGURES); do printf 'generated/%s.svg\n' "$$name"; done; for name in $(POP_FIGURES); do printf 'figures/%s.svg\n' "$$name"; done; printf '%s\n' *-inputs.v1.json data/public_ids.v1.json data/score_profiles.v1.json data/selection_receipts.v1.json; find $(ROOT)/crates/paper-artifacts -maxdepth 2 -name '*.rs' -type f; printf '%s\n' $(ROOT)/crates/paper-artifacts/Cargo.toml $(ROOT)/crates/paper-artifacts/Cargo.lock $(ROOT)/rust-toolchain.toml; for family in Inter 'Inter:weight=bold' sans-serif 'sans-serif:weight=bold'; do fc-match -f '%{file}\n' "$$family" || exit; done; } | LC_ALL=C sort -u > $(OUT)/INPUT_FILES
 	while IFS= read -r input; do test -f "$$input" || exit 1; sha256sum "$$input" || exit; done < $(OUT)/INPUT_FILES > $(OUT)/SOURCE_SHA256SUMS
-	sha256sum main.pdf supplement.pdf $(OUT)/*.png figures/fig1_hero_blender_v2.png drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.png drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.png > $(OUT)/OUTPUT_SHA256SUMS
+	sha256sum main.pdf supplement.pdf $(GEN_PNGS) $(POP_PNGS) figures/fig1_hero_blender_v2.png $(HERO_PNG) $(CROP_PNG) > $(OUT)/OUTPUT_SHA256SUMS
 	lualatex --version > $(OUT)/toolchain.txt
+	printf 'SOURCE_DATE_EPOCH=%s\n' "$(SOURCE_DATE_EPOCH)" >> $(OUT)/toolchain.txt
 	rsvg-convert --version >> $(OUT)/toolchain.txt
 	kpsewhich IEEEtran.cls >> $(OUT)/toolchain.txt
 	pdfinfo main.pdf > $(OUT)/pdfinfo.txt

@@ -74,7 +74,7 @@ Individual 2000 supplies the actual spatial fields. Its records distinguish cert
 
 Rust CAD and evaluation core, with a Vite + TypeScript + React evidence studio. The current automatic lane ranks candidates using weighted fitness and sends a selected subset to independent assessment. Other lanes retain their own algorithms and score conventions. [Genome and methodology](docs/paper/sections/03-genome.tex) · [Existing operational guide](docs/EVOLUTION_CERTIFICATION.md).
 
-**Score direction:** retained `W_ULTRALIGHT_v1` is higher-is-better. At the manuscript's source baseline, native Stage 1, native Stage 2 and the reporting scorer used different proxies/constants. [PR #135](https://github.com/neverhuman/jarambit/pull/135) subsequently changed Stage-2 ranking to the canonical score; the retained cohorts keep their original score history and incomplete lineage. The desired future lower-is-better convention remains a separate product direction. [Full interpretation](docs/paper/sections/05-fitness.tex).
+**Score direction:** retained `W_ULTRALIGHT_v1` is higher-is-better. Historical Stage 1, Stage 2 and reporting paths used different proxies/constants. [PR #135](https://github.com/neverhuman/jarambit/pull/135) later changed Stage-2 ranking to the canonical score; that change does not establish the missing historical producer or make retained score regimes comparable. A future lower-is-better convention remains a separate product direction. [Full interpretation](docs/paper/sections/05-fitness.tex).
 
 ## Retained history and corrections
 
@@ -145,23 +145,21 @@ cargo build --release --locked
 
 ## Quick start
 
-**Read-only retained-evidence projection (no live CAD/FEM or `score_cad_native` recomputation):**
+**Reconstruct the paper and supplement from retained evidence:**
 
 ```sh
-cargo run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
-cargo run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit
-npm --prefix web ci
-npm --prefix web test
-npm --prefix web run build
+rtk proxy sh docs/paper/reproduce.sh build
 ```
 
-**Live Web Studio regeneration (invokes live `score_cad_native` / STL export; distinct from read-only retained-evidence projection):**
+This reads original evidence and writes reporting derivatives, figures, PDFs and build manifests. It invokes no new search, CAD export or mechanical solve. [Prerequisites and separate validation commands](docs/paper/README.md#reconstruct-the-reports).
+
+**Live Web Studio regeneration (invokes live `score_cad_native` / STL export; separate from report reconstruction):**
 
 ```sh
 ./target/release/jarambit export-web-data --out-dir web/public/data
 ```
 
-A native screen is not an independent certification. The older Monte Carlo lane uses a beam surrogate by default; plate FEM is opt-in with `JARAMBIT_FEM=1`. See the [assessment guide](docs/EVOLUTION_CERTIFICATION.md) for runtime scope and the [paper build](docs/paper/README.md#format-and-build) for reproducible documentation artifacts.
+A native screen is not an independent certification. The older Monte Carlo lane uses a beam surrogate by default; plate FEM is opt-in with `JARAMBIT_FEM=1`. See the [assessment guide](docs/EVOLUTION_CERTIFICATION.md) for runtime scope and the [paper build](docs/paper/README.md#reconstruct-the-reports) for reproducible documentation artifacts.
 
 ## Research and project documentation
 
@@ -171,6 +169,8 @@ The hand-built C.10d concept film and its cross-revision field/weight disclosure
 
 <details>
 <summary>Historical market comparison and original source caveats</summary>
+
+The snapshot below retains its historical naming and stored mass scalars. In the current paper, `w411c3_r02_p10_c12` identifies Individual 2002's saved reporting summary; its exported CAD, full round populations and independent later assessment are unavailable in the admitted accession. The historical "Stage-2 leader" label does not establish those artifacts or recover its missing scorer provenance.
 
 <!-- MARKET:CENSUS:BEGIN -->
 ## Market weight comparison

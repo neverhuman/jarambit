@@ -6,7 +6,8 @@ repo_dir=$(CDPATH= cd -- "$paper_dir/../.." && pwd)
 cd "$repo_dir"
 : "${CARGO_INCREMENTAL:=0}"
 : "${CARGO_PROFILE_DEV_DEBUG:=line-tables-only}"
-export CARGO_INCREMENTAL CARGO_PROFILE_DEV_DEBUG
+: "${CARGO_BUILD_JOBS:=2}"
+export CARGO_INCREMENTAL CARGO_PROFILE_DEV_DEBUG CARGO_BUILD_JOBS
 export CARGO_TARGET_DIR="$repo_dir/target"
 case "${1:-build}" in
   build) exec make -C "$paper_dir" all ;;
