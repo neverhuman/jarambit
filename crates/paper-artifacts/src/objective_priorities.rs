@@ -411,7 +411,7 @@ pub fn arc_path(arc: Arc, center: [f64; 2], outer: f64, inner: f64) -> Result<Op
     if arc.start == arc.end {
         return Ok(None);
     }
-    let point = |t, r| -> Result<[f64; 2]> {
+    let point = |t: u16, r: f64| -> Result<[f64; 2]> {
         let p = unit_point(t)?;
         let q = [center[0] + r * p[0], center[1] + r * p[1]];
         if q.iter().any(|v| !v.is_finite()) {

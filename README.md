@@ -4,9 +4,9 @@ Jarambit is a computational design research system linking a geometric represent
 
 [Main paper](docs/paper/main.pdf) · [Standalone supplement](docs/paper/supplement.pdf) · [Reconstruction guide](docs/paper/README.md) · [Evidence crosswalk](docs/paper/CROSSWALK_SUPPLEMENT.md) · [Test atlas](docs/tests/README.md) · [Architecture](TECHNOLOGY_MAP.md)
 
-![Individual 2000, the illustrated assessed export, with a dimensionless relative response summary on its exact CAD surface](docs/paper/figures/fig1_hero_blender_v2.png)
+![Illuminated appearance of the retained response index on Individual 2000's unchanged CAD geometry](docs/paper/figures/hero-appearance.png)
 
-*Individual 2000 supplies the illustrated assessed geometry and retained fields. Its stable reporting alias is linked by exact certificate and genome hashes to proposal observation 6643; per-child parentage remains unrecorded. Colors average available, area-weighted response ranks from four retained channels. This dimensionless display index does not express fitness, safety or qualification. Contributor counts and source-area coverage accompany the index. [Definitions and original evidence](docs/paper/CROSSWALK_SUPPLEMENT.md).*
+*Individual 2000 is an editorially selected retained assessed example, not a rank or global winner. Its stable alias is linked by exact certificate and genome hashes to proposal observation 6643; per-child parentage remains unrecorded. Base colors average available, area-weighted response ranks from four retained channels. Lighting changes displayed RGB; use the [unlit quantitative companion](docs/paper/generated/hero-full-range.svg) for the original color key. Geometry, fields, masks and retained fitness are reused, not newly evaluated. This index does not express fitness, safety or qualification. [Source and appearance receipt](docs/paper/generated/hero-appearance.v1.json) · [Definitions and original evidence](docs/paper/CROSSWALK_SUPPLEMENT.md).*
 
 ## Which evidence is retained
 
@@ -23,6 +23,10 @@ Jarambit is a computational design research system linking a geometric represent
 
 *The renderer visits 1,954,560 native, 1,984 historical, and 2,259 numeric screening records as 1,958,803 individual point operations. Points can overlap. Neutral occupancy does not replace minority classes with a bin majority, and incompatible scorers retain separate axes. The 1,390 unobserved proposals receive no invented score. [Source, ID, extrema, and point accounting](docs/paper/generated/population/point-rendering.v1.json).*
 
+![Every retained Run 5 birth on a positive log display, with cumulative best from those same observations](docs/paper/generated/population/positive/run-05-positive-points-gap.svg)
+
+*Run 5's 195,456 original observations retain negative scores and zeros. Positions use generation+1 and a fixed gap to this run's final retained best, normalized by its complete original range, with a display floor of 1e-6; ticks recover original fitness and generation. The blue cumulative best first reaches the final stored maximum at G760, with seven exact ties and no higher retained value through G800. This is a retrospective stored-score plateau, not physical convergence, a comparable global winner or a new assessment. The [complete positive-view index](docs/paper/generated/population/positive/index.v1.json) keeps ten native runs, historical births and screening observations separate; screening file ordinals are not time and have no pooled trajectory. Both positive variants paint all 1,958,803 numeric observations; the 1,390 unknown screens remain nonnumeric. Summary comparisons draw no raw points.*
+
 ## Three findings
 
 1. Extensive search records can coexist with uneven parentage, geometry, and later-assessment coverage.
@@ -36,6 +40,10 @@ Jarambit is a computational design research system linking a geometric represent
 [Results and scope](docs/paper/sections/08-results.tex) · [Numerical interpretation](docs/paper/sections/07-verification.tex)
 
 ## Retained reporting priorities: Individual 2002
+
+![Twenty configured recipe priorities totaling 100 percent](docs/paper/generated/objective-priorities.v1.svg)
+
+The chart shows the recovered recipe's configured weights, not achieved contributions or a new fitness calculation. The saved Individual 2002 vector below is a separate observation. [Recipe source and exact weight accounting](docs/paper/generated/objective-priorities.v1.json).
 
 This twenty-term vector belongs to **Individual 2002's retained reporting record**, with saved score **74.207299/100**. Weights, normalized values, and contributions are stored summaries. A recovered historical recipe is source-bound; its original execution and call-input provenance remain unresolved. Several terms are partly compatible with defaults or proxies, distinct from reporting-layer missingness. Exact content links proposal observation 6420 and a later unqualified assessment summary (`W_CAD = -7.414831`); its full underlying CAD and scorecard files are not retained in the admitted tree. The [current interpretation](docs/paper/data/reporting-interpretation-contract.v2.json) preserves the original registry, score vector and evidence.
 

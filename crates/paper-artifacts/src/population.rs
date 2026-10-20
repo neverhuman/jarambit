@@ -2645,6 +2645,15 @@ fn hero_clean_svg(rgb: &[u8]) -> Result<(String, String)> {
     Ok((svg, sha256_bytes(&png)))
 }
 
+/// Preserve the lighting API's bounded integer exponent; never truncate a recipe value.
+fn hero_shininess(value: &Value) -> Result<i32> {
+    let n = finite_point_number(value)?;
+    if !(1. ..=128.).contains(&n) || n.fract() != 0. {
+        return Err("population: lighting shininess must be an integer in1..128".into());
+    }
+    Ok(n as i32)
+}
+
 /// Render only from a separately SHA-bound additive source recipe. Its expected
 /// pins MUST come from Captain's actual preflight + independent source review.
 /// No observed digest is installed as an expected pin inside this render path.
@@ -2735,7 +2744,7 @@ pub fn generate_hero_appearance_outputs(
                     ambient: scalar(&light["ambient"])?,
                     diffuse: scalar(&light["diffuse"])?,
                     specular: scalar(&light["specular"])?,
-                    shininess: scalar(&light["shininess"])?,
+                    shininess: hero_shininess(&light["shininess"])?,
                 },
             },
             expected_camera_sha256: recipe["expected_pins"]["camera_sha256"]
@@ -3933,6 +3942,15 @@ pub fn generate_v2_outputs(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn hero_lighting_recipe_requires_a_bounded_integral_exponent() {
+        assert_eq!(hero_shininess(&json!(24.0)).unwrap(),24);
+        assert_eq!(hero_shininess(&json!(128)).unwrap(),128);
+        for invalid in [json!(24.5),json!(0),json!(129),json!(-1),Value::Null,json!("24")] {
+            assert!(hero_shininess(&invalid).is_err());
+        }
+    }
 
 
     #[test]

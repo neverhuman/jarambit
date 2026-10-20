@@ -174,16 +174,29 @@ Runs~10--11, using each run's separately printed scale.}
 \clearpage
 
 \subsection{Bounded Run~5 Display Comparison}
-Figures~\ref{fig:run5-display-comparison} and~\ref{fig:run5-positive-affine}
-reuse the same retained cumulative-best and full-population median summaries
-as main Figure~\ref{M-fig:run5-gap}. They are summary views, not a second
-all-record scatter or new observations. The full numeric point universe and
-its $1390$ nonnumeric proposals remain in main
-Figure~\ref{M-fig:population-latest}; none is reassigned a display-floor score.
+Figures~\ref{fig:run5-display-comparison}, \ref{fig:run5-positive-affine}
+and~\ref{fig:run5-gap-summary} reuse the same retained cumulative-best
+and full-population median summaries. These summary panels draw no raw
+birth points. Main Figure~\ref{M-fig:run5-gap} separately projects every
+Run~5 birth and derives its cumulative-best overlay from those raw rows,
+without a median overlay. The full numeric point universe and its $1390$
+nonnumeric proposals remain in main Figure~\ref{M-fig:population-latest};
+none is reassigned a display-floor score.
 Each comparison uses the complete compatible original Run~5 range,
 rather than deriving normalization from the summary trace or a crop.
 Exact parameters, source membership and unchanged leader ties accompany
 the generated story receipts.
+
+The separate all-point positive-coordinate set keeps twelve source scopes
+apart: ten native runs, historical births and numeric screening observations,
+with positive-affine and positive-gap variants for each. The proof index
+\nolinkurl{docs/paper/generated/population/positive/index.v1.json} binds
+their source membership, point accounting, display parameters and outputs.
+This is a set of separate display domains, not a common score calibration.
+Its full admitted universe remains $1{,}958{,}803$ numeric observations;
+$1390$ missing screens remain nonnumeric. Screening retains its one-based
+birth-file ordinal rather than an invented generation or shared campaign
+trajectory. These views add no observations or physical convergence evidence.
 
 \begin{figure}[ht]
 \centering
@@ -204,8 +217,25 @@ $x_+=g+1$, $y_+=(f-m)/s+\varepsilon$, where $m=f_{\min}$,
 $s=f_{\max}-f_{\min}$ use the full original compatible run and
 $\varepsilon=10^{-6}$ is a display floor. Original-score ticks use
 $f=m+s(y_+-\varepsilon)$; generation ticks recover $g=x_+-1$.
-The main gap view instead labels normalized gap to its fixed final
-retained best. Both retain original zero/negative scores and missingness;
-shifted-score ratios and log slopes have no physical interpretation.}
+The summary gap view in Figure~\ref{fig:run5-gap-summary} labels normalized
+gap; the all-point main gap view instead recovers original fitness ticks.
+These summary panels draw no raw birth points and change neither the source
+domain nor saved summaries. Shifted-score ratios and log slopes have no
+physical interpretation.}
 \label{fig:run5-positive-affine}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{run-05-positive-gap.png}
+\caption{Run~5 retained cumulative-best and population-median summaries in
+the positive-gap display, with no raw birth points. The fixed own-run final
+reference, full original range, display floor and inverse match the definitions
+in the main text. Here ticks show normalized gap, with zero original gap at
+the retained best, and original generations; the separate all-point main
+Figure~\ref{M-fig:run5-gap} uses original-fitness ticks. The seven exact maximum
+ties, earliest retained attainment at generation~760 and final 40-transition
+stored-score plateau are source observations, not physical convergence,
+qualification or a global winner.}
+\label{fig:run5-gap-summary}
 \end{figure}
