@@ -1837,7 +1837,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     crate::population::generate_v2_outputs(&root, &mut out, &mut inputs)?;
     // External, independently reviewed source pins precede any appearance render.
     const APPEARANCE_RECIPE: &str = "docs/paper/data/hero-appearance-source-recipe.v1.json";
-    const APPEARANCE_RECIPE_SHA256: &str = "d4af7606fb3b3e2b526599037000d59fdbf572fc729c6563bf413258e6f30f96";
+    const APPEARANCE_RECIPE_SHA256: &str = "7d431843aa9a176b51b270eccff385cff92e759d0d54577e6676e2a2708ed44e";
     let appearance_recipe_bytes = fs::read(safe_path(&root, APPEARANCE_RECIPE)?)?;
     if digest(&appearance_recipe_bytes) != APPEARANCE_RECIPE_SHA256 {
         return Err("appearance recipe differs from independently bound source accession".into());

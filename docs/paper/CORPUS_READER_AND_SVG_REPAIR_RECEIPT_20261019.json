@@ -18,7 +18,7 @@
   "source_and_binary_bindings": {
     "crates/paper-artifacts/src/corpus.rs": "2b1cba1c136d6950d7f2efe4ac362224e4d57b16247bb0b463a097bbb332576e",
     "crates/paper-artifacts/src/population.rs": "1f53640711e208136b58be28a22efb57f3af502f2d37b093a7406ae6eab97d9d",
-    "crates/paper-artifacts/src/publication.rs": "3cd921955c78ab5e1d94770f0056219f77c9a57159128fe8f167204867d6f7ef",
+    "crates/paper-artifacts/src/publication.rs": "b9ff67a8f58764c0a42e16e77fae3b864e61c93f6e275c4c76736139849e8a1d",
     "crates/paper-artifacts/src/lib.rs": "ef7326ca2fe3aeec06a426d6dce545a3c550760a03f7dcf585a5cfd08fdace2b",
     "crates/paper-artifacts/examples/publication_v2_audit.rs": "25184c01ce3ed129fca33aff0cb7a03ad9fbc00b7372c15fe16376227b46aaa0",
     "superseded_stale_debug_binary_sha256": "24f52f1300ee0397dc2c84da7b1bc4ed1309114b63c71a7edd0003a45c3a6f3d",
@@ -334,12 +334,12 @@
   ],
   "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. The e67 successor86-test attempt failed84passed/2failed and remains preserved. Corrected successor validation is recorded separately with its exact head. Combined contrast/omission successor controls remain unexecuted at this source/output rebinding; their later exact-head results are separate evidence, not this historical focused-test entry. Root1307 residual successor controls remain unexecuted at this source/output rebinding; actual119 controls remain predecessor evidence, with new affected results separate after completefreeze. Current narrow repair successor report generation exited0 at f1b356a3; no tests or full audit have run at this rebinding. Original70test entry and all preceding exact-head evidence remain historical; producer execution is not validationPASS.",
   "pending_successor_closure": {
-    "authority_path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/ROOT_PENDING_SCOPE_DISPOSITIONS_W25_AND_DIRECTED_TAIL_DETAIL_20261020T1935Z.md",
-    "authority_sha256": "400e31fb7b4296b4c15a6ed26e76287ab76b81c1914a1df6d5205746f59c6872",
-    "stage": "SOURCE_ONLY_BEFORE_ONE_ADMITTED_GENERATION; no current producer/test/PDF freshness PASS",
-    "previous_source_increment": "dbc4034685a86ed3a849ca5b526fc3af5ffb8a0a",
-    "previous_active_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_DBC4034_20261020.json",
-    "previous_active_receipt_sha256": "72f3310d2de6ad8e1bd954b9b8139311c34995012d2635a4eb0ae8180482fed1",
+    "authority_path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/ROOT_ACTUAL_Q_PIN_CLEARANCE_CANONICAL_INSTALL_AND_ONE_GENERATION_ORDER_20261020T2019Z.md",
+    "authority_sha256": "f2b47daf44c279cdefdde39e0c3f7fd71a16b5dba3e7c9170202ee11c841b501",
+    "stage": "ACTUAL_Q_ADMITTED_PIN_INSTALL_SOURCE_ONLY; generatedmetadata/figures/PDF/currenttests not executed",
+    "previous_source_increment": "6c49e1c888efed2ff2fc65620dabd3a7379b5e1d",
+    "previous_active_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_6C49E1C_20261020.json",
+    "previous_active_receipt_sha256": "8231ee429ad649bf660bd56304aa98cda54e9a5dc2e1a712b0ff91d767fedf7f",
     "previous_complete_freeze": "73ffef00ddd35e3cf679074c38fe3625aba966f2",
     "source_bindings_renewed": [
       {
@@ -361,6 +361,12 @@
         "path": "docs/paper/CROSSWALK_SUPPLEMENT.md",
         "predecessor_sha256": "a42c27d8b70bd804dab6da726fa183ca7403a560025ed051d0c2ea9309860bb5",
         "actual_sha256": "7b2edca9d3acd1e40947304cef6e227f8719f650aa6f368edba82a9c73e0807c"
+      },
+      {
+        "path": "crates/paper-artifacts/src/publication.rs",
+        "predecessor_sha256": "3cd921955c78ab5e1d94770f0056219f77c9a57159128fe8f167204867d6f7ef",
+        "actual_sha256": "b9ff67a8f58764c0a42e16e77fae3b864e61c93f6e275c4c76736139849e8a1d",
+        "reason": "Only exact independently admitted actual recipe digest constant updated; no guard relaxation."
       }
     ],
     "actual_producer_binary_status": "Last actual96c3c791identity and integration_rebinding execution belong to priorf1b/73 only. No new executable/source equivalence or current suitePASS asserted.",
@@ -375,6 +381,15 @@
       },
       "scope": "Sourceinventory only, not actualrunnercasecount/PASS; examplefixturecontrols separate."
     },
-    "selected_v2_disposition": "Root1935selected-v2partialindexneedsnoexpansionsolelyforappearance; fulloperative manifest+SOURCE/OUTPUT+actualCIaccession andALLreader/freshnessvalidatorsremainmandatory. Noexemption/bypass."
+    "selected_v2_disposition": "Root1935selected-v2partialindexneedsnoexpansionsolelyforappearance; fulloperative manifest+SOURCE/OUTPUT+actualCIaccession andALLreader/freshnessvalidatorsremainmandatory. Noexemption/bypass.",
+    "actual_independent_appearance_pin_admission": {
+      "actual_observation_sha256": "660d9c00b84b3f310b36a2749e4a1b6cadf3accf6668a73b7ecf353314104e78",
+      "independent_Q_receipt_sha256": "eec99fcee928d4d35e38817bd67427cfd1cc02e68ff20c75e26e1feaa990d929",
+      "Q_thread": "01a15499-c47f-7b21-8e3a-6873ef1527c0",
+      "source_head": "6c49e1c888efed2ff2fc65620dabd3a7379b5e1d",
+      "scope": "Actual bound22pins only; no generated image/test/CI/formalapproval",
+      "recipe_sha256": "7d431843aa9a176b51b270eccff385cff92e759d0d54577e6676e2a2708ed44e",
+      "unchanged_expected_facts": "geometry,camera,registration,fields,masks,contributors,palette/map,fivecomponents; onlytwo independently admitted codefile hashes changed"
+    }
   }
 }

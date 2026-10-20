@@ -1,0 +1,797 @@
+{
+  "schema": "jarambit.q.actual_hero_pin_admission_and_narrow_static_successor.v1",
+  "utc": "2026-10-20T15:57:11.619650+00:00",
+  "identity": {
+    "worker": "/root/rr5_source_redteam",
+    "thread": "01a157a8-6211-7bb0-b493-28763c15a1dc",
+    "session": "01a1575b-8982-7403-90e4-61e6c0f7d4b0",
+    "host": "xbabe2",
+    "uid": 1000,
+    "assignment": "manual independent Q read-only source/data comparison",
+    "native_task_id": null,
+    "native_claim_id": null,
+    "native_lease_id": null,
+    "source_author": false,
+    "GitHub_review_submitted": false,
+    "GitHub_review_id": null
+  },
+  "verdict": "OBSERVED_HERO_PINSET_ADMITTED_FOR_EXACT_BOUND_DEPENDENCIES; NARROW_AXIS_AND_XML_TERMINATOR_STATIC_SOURCE_CLEARANCE; ACTUAL_APPEARANCE_AND_FINAL_APPROVAL_PENDING",
+  "scope": {
+    "preflight_head": "9f39e2e17b796d281197ec61e4efa8505944e8d8",
+    "preflight_tree": "e2fc1259214d2a101413ea5b8ca9ce8814d82453",
+    "transport_successor_head": "99d180cdb5ef99f358df1b5e580bd78276987fe4",
+    "transport_successor_tree": "9247560d0b0047cceff52982695f9275a58bad55",
+    "current_head": "99d180cdb5ef99f358df1b5e580bd78276987fe4",
+    "current_tree": "9247560d0b0047cceff52982695f9275a58bad55",
+    "current_status": " M docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg\n M docs/paper/generated/display-composite.v1.json\n M docs/paper/generated/evidence-architecture.svg.manifest.json\n M docs/paper/generated/hero-contrast-preview.svg\n M docs/paper/generated/hero-full-range.svg\n M docs/paper/generated/hero-mesh-on.svg\n M docs/paper/generated/hero-support.svg\n M docs/paper/generated/manifest.json\n M docs/paper/generated/overview.md\n M docs/paper/generated/plate-fields.svg.manifest.json\n M docs/paper/generated/population/point-rendering.v1.json\n M docs/paper/generated/reference.svg.manifest.json\n M docs/paper/generated/shared_projection.v2.json\n M docs/paper/generated/weighted-runs.svg.manifest.json\n M docs/paper/publication.v2.json\n M docs/tests/visuals.v1.json\n?? docs/paper/generated/objective-priorities.v1.json\n?? docs/paper/generated/objective-priorities.v1.svg\n?? docs/paper/generated/objective-priorities.v1.svg.manifest.json\n?? docs/paper/generated/plate-smart-crops.svg\n?? docs/paper/generated/plate-smart-crops.svg.manifest.json\n?? docs/paper/generated/plate-smart-crops.v1.json\n?? docs/paper/generated/population/positive/\n?? docs/paper/generated/population/story/\n",
+    "entire_head_or_generated_tree_approved": false
+  },
+  "observations": [
+    {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-appearance-preflight-475f063/preflight.stdout.json",
+      "sha256": "5759bb3f17e9a4f65a580643f969776c821b5b106b2534d20505a244f6b3e162",
+      "bytes": 5680
+    },
+    {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preflight.stdout.json",
+      "sha256": "81c35662f3a17cae1ddb2a3ba6f46de74142de3dc66afd3e0ca0eac6e43266ec",
+      "bytes": 5680
+    },
+    {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-99d180c/preflight.stdout.json",
+      "sha256": "81c35662f3a17cae1ddb2a3ba6f46de74142de3dc66afd3e0ca0eac6e43266ec",
+      "bytes": 5680
+    }
+  ],
+  "exact_pin_comparison": {
+    "only_old_to9f_change": "population.rs source SHA30f87→7b658",
+    "all_other_JSON_fields_exact": true,
+    "9f_to99d_preflight_bytes_exact": true,
+    "all22_source_input_hashes_match": [
+      {
+        "path": "crates/paper-artifacts/examples/hero_appearance_preflight.rs",
+        "sha256": "35d98fdc28c06199e6f31fcb03c0047d78de5ebacc09dab9908bb0d3e755ed77",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "crates/paper-artifacts/src/appearance.rs",
+        "sha256": "cc91aaf0efb3c55d9b1f4059aaacd405669404030f1cf804a6e47eefe5325178",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "crates/paper-artifacts/src/display.rs",
+        "sha256": "636bb74fbdd7be6a5db0e307499aed034b58e29f321837426e177405a711e22b",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "crates/paper-artifacts/src/hero_appearance.rs",
+        "sha256": "06ffae640e18d4d6ed8ebe8065c192ad27cf9c74de0c0221da7dab60b5076e98",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "crates/paper-artifacts/src/plate.rs",
+        "sha256": "ac4537b4cdd44323dc7d259d0227e0b30b4c57ebc994f70580ed64ee96c200bd",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "crates/paper-artifacts/src/population.rs",
+        "sha256": "7b6588592b84114e5affeeba3c17f075975c4886d0890b27be471c0805bfabe9",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "docs/paper/assessment-inputs.v1.json",
+        "sha256": "fac0cd6cc08e731585e243277d401cb4e9a746279f4a544b012d4fae6b928171",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "docs/paper/data/display-composite-contract.v1.json",
+        "sha256": "df34216ea111683233fadcab64d6536f52af2178da300f0ea027f8b19d9b74e9",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "docs/paper/data/display-composite-review.v1.json",
+        "sha256": "1b4d70b8bcc4668af40427350cba12e876c972ecc1d3f0db792aec44c01b101f",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "docs/paper/data/public_ids.v1.json",
+        "sha256": "a0c3708415027d0f850f8776c4bfef7cf845ea2181b86aa8bab959a20e59c7ab",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "docs/paper/data/score_profiles.v1.json",
+        "sha256": "53d6bf2d3227f5ed0d81fd648141810e25951af5f31862fc17c2343c6e6d8c52",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "docs/paper/data/selection_receipts.v1.json",
+        "sha256": "9f8f5f05bef98304e37f3e90d02abc646d10b99d92d745c2f8f501e893f1d2e8",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "docs/paper/data/test-field-roster.v1.json",
+        "sha256": "1f1eabe810527006901ba318e167278cb154c8961894eb5f2a3deb18f5eedb01",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "docs/paper/field-inputs.v1.json",
+        "sha256": "93ffdcdae2c2eead22ce858e3eb83af1f61cdb4bafa29e418b6859736c6c8449",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "docs/paper/figure-semantics.v1.json",
+        "sha256": "8a0ef0fc93ffcaec7397b8cd1721333ea622623bba8c59b446c03dfcf98e4d9e",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "docs/tests/catalog.json",
+        "sha256": "521f1a3290b58b03f588cc0d8be1426ae01c813bca4405c2652060dcb1ae6ec0",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl",
+        "sha256": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
+        "sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_a4.json",
+        "sha256": "788196e1a534b1611df5a777741c7ec77079493c770a73ec2e976f30906cb472",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+        "sha256": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_plate_gci.json",
+        "sha256": "45afc2fd250bc8bdbf9b5f6866bbf2e0231f47ad2b62f2d10798cc36ed11244a",
+        "Git9f_and_current_match": true
+      },
+      {
+        "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_rs.json",
+        "sha256": "2696a6f5d4dbbcec6a6148c83d5ff48313f7a86682766328be56ea4f203945fb",
+        "Git9f_and_current_match": true
+      }
+    ]
+  },
+  "admitted_expected_pins": {
+    "camera_sha256": "accf46861f3f9a0b0bdff94ad67ee07725d51d6d817461d64615f004a40b17fc",
+    "channel_ids": [
+      "retained-field:lat",
+      "retained-field:pry",
+      "retained-field:ring",
+      "retained-field:twist"
+    ],
+    "component_sha256": {
+      "contributor_ids_and_counts": "5f33b4df25cf21c7b64fc1564e6907cafc0f9e13ee737f3a9ef9984fedece99b",
+      "ordered_face_to_original_cell_ids": "8eedb91cbfdb9417ed8a136d4181d645a8d28b7b1b513e7a3659ee804a0d3593",
+      "original_source_mask_bits": "e10024a08f9718071cf7d8fda5b9cbd1b2410767d8e0350c36057482a5168b33",
+      "registered_index_bits": "dc9af881d0d1fc5aeff1ac7a2f090e4c6679b2a0d9e96cca52a9c37338dd2a18",
+      "unlit_cell_palette_rgb": "f3bfdeb7a222f2069a189b2210ff6445a3dfe6941aea7f85752575d23658a3e3"
+    },
+    "ordered_decoded_geometry_sha256": "270fe8fee8aaa0d74c5a59d8b310c4ffc454fe985e479f86203c77fb48bb3b73",
+    "registered_assignment_sha256": "0fc00f0ea79cb90c367cffcc06701b0d27b8a0fda7545441d5ebad7afdf3084f",
+    "schema": "jarambit.hero_appearance_expected_pins.v1",
+    "source_cells": 25209,
+    "source_faces": 90000,
+    "source_sha256": {
+      "crates/paper-artifacts/examples/hero_appearance_preflight.rs": "35d98fdc28c06199e6f31fcb03c0047d78de5ebacc09dab9908bb0d3e755ed77",
+      "crates/paper-artifacts/src/appearance.rs": "cc91aaf0efb3c55d9b1f4059aaacd405669404030f1cf804a6e47eefe5325178",
+      "crates/paper-artifacts/src/display.rs": "636bb74fbdd7be6a5db0e307499aed034b58e29f321837426e177405a711e22b",
+      "crates/paper-artifacts/src/hero_appearance.rs": "06ffae640e18d4d6ed8ebe8065c192ad27cf9c74de0c0221da7dab60b5076e98",
+      "crates/paper-artifacts/src/plate.rs": "ac4537b4cdd44323dc7d259d0227e0b30b4c57ebc994f70580ed64ee96c200bd",
+      "crates/paper-artifacts/src/population.rs": "7b6588592b84114e5affeeba3c17f075975c4886d0890b27be471c0805bfabe9",
+      "docs/paper/assessment-inputs.v1.json": "fac0cd6cc08e731585e243277d401cb4e9a746279f4a544b012d4fae6b928171",
+      "docs/paper/data/display-composite-contract.v1.json": "df34216ea111683233fadcab64d6536f52af2178da300f0ea027f8b19d9b74e9",
+      "docs/paper/data/display-composite-review.v1.json": "1b4d70b8bcc4668af40427350cba12e876c972ecc1d3f0db792aec44c01b101f",
+      "docs/paper/data/public_ids.v1.json": "a0c3708415027d0f850f8776c4bfef7cf845ea2181b86aa8bab959a20e59c7ab",
+      "docs/paper/data/score_profiles.v1.json": "53d6bf2d3227f5ed0d81fd648141810e25951af5f31862fc17c2343c6e6d8c52",
+      "docs/paper/data/selection_receipts.v1.json": "9f8f5f05bef98304e37f3e90d02abc646d10b99d92d745c2f8f501e893f1d2e8",
+      "docs/paper/data/test-field-roster.v1.json": "1f1eabe810527006901ba318e167278cb154c8961894eb5f2a3deb18f5eedb01",
+      "docs/paper/field-inputs.v1.json": "93ffdcdae2c2eead22ce858e3eb83af1f61cdb4bafa29e418b6859736c6c8449",
+      "docs/paper/figure-semantics.v1.json": "8a0ef0fc93ffcaec7397b8cd1721333ea622623bba8c59b446c03dfcf98e4d9e",
+      "docs/tests/catalog.json": "521f1a3290b58b03f588cc0d8be1426ae01c813bca4405c2652060dcb1ae6ec0",
+      "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022",
+      "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+      "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_a4.json": "788196e1a534b1611df5a777741c7ec77079493c770a73ec2e976f30906cb472",
+      "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca",
+      "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_plate_gci.json": "45afc2fd250bc8bdbf9b5f6866bbf2e0231f47ad2b62f2d10798cc36ed11244a",
+      "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_rs.json": "2696a6f5d4dbbcec6a6148c83d5ff48313f7a86682766328be56ea4f203945fb"
+    },
+    "subject": "Individual 2000"
+  },
+  "independent_original_proof": {
+    "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/q-stopped-packet-review/Q_475F063_INDEPENDENT_STRUCTURAL_PIN_HASH_COMPARISON_20261020.json",
+    "sha256": "0640495c3ec1c2724430e469524fd2a1297f194bc4d13d40b59e25c3f4353fae",
+    "bytes": 5973
+  },
+  "prior_475f_custody": {
+    "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/q-stopped-packet-review/Q_475F063_ACTUAL_PREFLIGHT_CUSTODY_READBACK_20261020.json",
+    "sha256": "5c5d4fcdf0d6deb345ed61234136a562386b702861e87e6c3c87053ccf1e50ef",
+    "bytes": 7898
+  },
+  "proof_limits": {
+    "all90000_original_ASCII_STL_faces_order": true,
+    "all25209_D1_cells": true,
+    "all90000_nearest_original_cell_assignments_independently_recomputed": true,
+    "method": "alternating-axis balanced kd-tree, exact f64 squared distance and lowest original cell ID ties; author grid not called",
+    "original_no_refit_camera_recomputed": true,
+    "original_masks_contributors_scalar_index_bits_and_palette_reencoded": true,
+    "baseline_scalar_ranks_or_fields_recomputed": false,
+    "full_assignment_digest_independently_reencoded": true,
+    "normals_lighting_rendered": false
+  },
+  "fresh9f_custody": {
+    "receipt": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/CAPTAIN_ACTUAL_POSITIVE_ALL_POINT_ARTIFACTS_AND_COUNTS_RECEIPT.json",
+      "sha256": "84facf271067604dd999d25a7e054038d5ed1c2c6f01afb5870e6b1341ce1f48",
+      "bytes": 33073
+    },
+    "all14_rawlogs_match": [
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/build.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/source-status.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/run.sh",
+        "sha256": "33347ae878eccfa538afe1218e5be01f2673022ab23a50d3f329564bd01d88cf",
+        "bytes": 1790
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/build.stderr.log",
+        "sha256": "0542a4c59f0f7591089e956d93d4b33292f2bfcc18d7ee7907b3daaa08cbc84b",
+        "bytes": 1075
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/generation.stderr.log",
+        "sha256": "7c3d1bf093b4e0a224ec0430ac0ab1355d7e213ec19d344839bb747e79ba1076",
+        "bytes": 776
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/reporting-source-before.sha256",
+        "sha256": "689e9a77933a1bae67a4aeaec3687f119ccc426c03ee62aedab0750c6274482e",
+        "bytes": 4166
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/reporting-source-after.sha256",
+        "sha256": "689e9a77933a1bae67a4aeaec3687f119ccc426c03ee62aedab0750c6274482e",
+        "bytes": 4166
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/executables.sha256",
+        "sha256": "1c792928ab998ddb3d8c7b1fcc4390e66fcc393f254d474c0cb4ee6fab27877f",
+        "bytes": 222
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preflight.stderr.log",
+        "sha256": "87842fec7120a389a0378ce58119edae3bea119b5505ebae5b7b0a2fc38776fe",
+        "bytes": 842
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/source-head.txt",
+        "sha256": "82d6346989a8f6d4429da5ff96ea3f284bfb0b1635d9558080a1c3df584fb6fc",
+        "bytes": 41
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/status-after.txt",
+        "sha256": "67920e8ad1e84960207cbd58e85e0c93bc73dc4000d2df647530ab472928684f",
+        "bytes": 1187
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/START.json",
+        "sha256": "762442e6b8a38beb5ac30466c2bcea0d2acbd866be9d11b359714dfac6d154a5",
+        "bytes": 555
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/generation.stdout.log",
+        "sha256": "cd420f4cae5622a2cbc143d5f637ffca146aa550a4ee1f24dda6b34682ed1477",
+        "bytes": 78
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preflight.stdout.json",
+        "sha256": "81c35662f3a17cae1ddb2a3ba6f46de74142de3dc66afd3e0ca0eac6e43266ec",
+        "bytes": 5680
+      }
+    ],
+    "before_after_lists_exact": true,
+    "tracked36_and_ignored1_Rust_match": [
+      {
+        "path": "crates/paper-artifacts/examples/hero_appearance_preflight.rs",
+        "sha256": "35d98fdc28c06199e6f31fcb03c0047d78de5ebacc09dab9908bb0d3e755ed77",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/examples/native_history_audit.rs",
+        "sha256": "34e85b3cded65a3955d6cb753183b337a3e8e3b2ccbca1cd541abb9db708b71a",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/examples/paper_artifacts.rs",
+        "sha256": "71d6b223c1b71e51c92278abd51619e8f62f28f3e7b58184d34542f0025806a9",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/examples/publication_v2_audit.rs",
+        "sha256": "25184c01ce3ed129fca33aff0cb7a03ad9fbc00b7372c15fe16376227b46aaa0",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/examples/verify_review_origin.rs",
+        "sha256": "0b98bc719b4d569ee4842ae58471b585dbffba9f1a7cae7d4d977be188eea13d",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/appearance.rs",
+        "sha256": "cc91aaf0efb3c55d9b1f4059aaacd405669404030f1cf804a6e47eefe5325178",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/assessment.rs",
+        "sha256": "b184b9a4fac930864a5bee0612b9b634c7fd33def6c418926274c1138d7e7fb9",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/battery.rs",
+        "sha256": "1a727850141d3fcea428f28a67a19d4cbdcf6c934df41376590cf3b004ff93ad",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/corpus.rs",
+        "sha256": "2b1cba1c136d6950d7f2efe4ac362224e4d57b16247bb0b463a097bbb332576e",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/display.rs",
+        "sha256": "636bb74fbdd7be6a5db0e307499aed034b58e29f321837426e177405a711e22b",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/export_identity.rs",
+        "sha256": "92c0b4bf4cc3dcb2531f84496580fa9fa4527de452d56b771c59a7c65d4790a9",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/hero_appearance.rs",
+        "sha256": "06ffae640e18d4d6ed8ebe8065c192ad27cf9c74de0c0221da7dab60b5076e98",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/historical.rs",
+        "sha256": "137ad9f54818031541c3440ff3d1a0d66c23d175c3a1a09c16a8375dc39ff799",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/identity.rs",
+        "sha256": "3e3b6d579a61fdb970321b428c451190187a39a307d1e6b618a0a020dc4f64df",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/interpretation.rs",
+        "sha256": "3d83966fec996e1277b9decfbb8f9c63e8e438048ab532057e84ca05b2267b6e",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/lib.rs",
+        "sha256": "ef7326ca2fe3aeec06a426d6dce545a3c550760a03f7dcf585a5cfd08fdace2b",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/lineage.rs",
+        "sha256": "a79e9822a9c393b5b6eb7fd255ca5aa1450726c87c3fb1e7930261446debc532",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/native_history.rs",
+        "sha256": "159f8f3fcebfc2805387814552a92fa2ed8670765bc62619afdc18ee1cefc7ae",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/objective_priorities.rs",
+        "sha256": "f26d4eae116c00198d930d9fe19a0ca2577c895a9e0d4fd8f080a8881b4e1abb",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/plate.rs",
+        "sha256": "ac4537b4cdd44323dc7d259d0227e0b30b4c57ebc994f70580ed64ee96c200bd",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/population.rs",
+        "sha256": "7b6588592b84114e5affeeba3c17f075975c4886d0890b27be471c0805bfabe9",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/population_story.rs",
+        "sha256": "b55ac8747d6c6645b1d6d4a7d82b32a4c7abb0ed7cf8d419b3ca04530081c6e5",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/positive_points.rs",
+        "sha256": "7c0b2e855cb32e6a7466c7f295f6f895702f5654d691752c20fe1e2566cd855d",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/publication.rs",
+        "sha256": "948ffcf00994474124ccccdab52a30b5d6f82fc556d9b68414952da451703fcb",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/reference.rs",
+        "sha256": "97d2a6f151614d3cc7f5dfd4e4b0659ceb352340066c0cc7b2a5e61346e0640f",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/saliency.rs",
+        "sha256": "0c4b3ea03d8809113545963858230f52fba11bcd4a083bb66c5795629468ed87",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/score_axis.rs",
+        "sha256": "65cfdebb8af49bf62f8f4c5ed33326771204b109a491ab4367777700df5a19e7",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/validation.rs",
+        "sha256": "f3a4f5930169a1c92b22ce539c46041b947548d325b44f1614a7261fb91a06ca",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/verification.rs",
+        "sha256": "4aafe5b995085bfa22a3893810efa8be39aeed1297587193b6e45965240ef293",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/visuals.rs",
+        "sha256": "532fca340f3d33bbd37982b521d6075490f1108243ea3549ee7ad062030a95b1",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/src/weighted_runs.rs",
+        "sha256": "5e4fc448e725a673a7fdb03a047259a5993e2e342f4a7ec9bfcfbef8d59e5b85",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/target/release/build/serde_core-7a2cf34242bdaa64/out/private.rs",
+        "sha256": "899563ce84b59b13cd7036e25f7897c1e730906f62a43aff14472d11c4229f34",
+        "scope": "ignored generated build source"
+      },
+      {
+        "path": "crates/paper-artifacts/tests/appearance_contract.rs",
+        "sha256": "8af6f11d353cd437553b3821c3ad968b6cc5c1ba39011766936e6f33751b0dba",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/tests/objective_priorities_contract.rs",
+        "sha256": "49e0556ea9c8244fd0585fffbbd64746c8902b7e7ded81aade83a465404fbeac",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/tests/population_story_contract.rs",
+        "sha256": "b0b2eb6cdfbcbedd6c86baa392fc6bfa535a9042009af5792896acb5d947aec0",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/tests/positive_points_contract.rs",
+        "sha256": "cca7fdd5e87e918bb1ec94c9171166b0d0335a70a99b6de3fbb2ffb743800c5a",
+        "scope": "tracked Git9f"
+      },
+      {
+        "path": "crates/paper-artifacts/tests/saliency_contract.rs",
+        "sha256": "2fbf9a21802bd95da9219296e87b514a67dde69bcb29a8af21dfacb5b66d5064",
+        "scope": "tracked Git9f"
+      }
+    ],
+    "source_status_before_empty": true,
+    "captured_executables": [
+      "40e1f1ca898925154a75c8039e1ae5ce4572fd2f7d2b9900cd5bce7346336935  target/release/examples/hero_appearance_preflight",
+      "df97192d1da5e4c049bfdb6f43e45faee8a3c0ac9eed8740960703d49a281522  target/release/examples/paper_artifacts"
+    ],
+    "current_preflight_binary": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/codex-latest-feedback-510713/target/release/examples/hero_appearance_preflight",
+      "sha256": "fa1a3755f7d1762d05472b55d1a024bc521645acfc13caa7ef770dfc9667864f",
+      "bytes": 1148936
+    },
+    "current_binary_still_matches_captured9f": false,
+    "old475f_binary_historical_capture_only": true,
+    "verifier_setup_error": "First final-receipt probe used nested crate target for preflight executable; absent there. Correct actual executable is lane target/release/examples path from captured commands. No custody mismatch or source change."
+  },
+  "axis_binding_static": {
+    "full475f_to9f_source_diff_sha256": "d4d2b4f92e2a88e3c55d0abac2ddac04a611b9ea93a9559a0a98f4a853cea5a6",
+    "source_locations": [
+      "Git9f population.rs:3438-3442 exact original summary axis serializer SHA is required",
+      "Git9f population.rs:3443-3444 strict original identity-order SHA and195456 operations",
+      "Git9f population.rs:3447-3449 parsed SHA/Value equality disclosed diagnostically",
+      "Git9f positive_points.rs:209-214 axis metadata serialized and bound before any receipt parse"
+    ],
+    "disposition": "PASS static narrow delta: no tolerance, coordinates, point selection, membership or numeric transform change. Exact original serde_json parameter-byte identity replaces reparsed f64 Value equality. Internal canonical naming means these serializer bytes, not external standard canonicalization.",
+    "actual_captain_receipt20_bindings": 20,
+    "actual_captain_receipt_parsed_roundtrip_inequalities": 6,
+    "Q_numeric_or_generator_execution": false
+  },
+  "XML_failure_and_narrow_fix": {
+    "failure_receipt": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/FIRST_RASTER_FAILURE_AND_PRESERVED_OUTPUTS.json",
+      "sha256": "3605c30d6b55ae036f038a590b651a4a485fcc5460c7f68ce0de5faa55abe80f",
+      "bytes": 5802
+    },
+    "actual_consumer_exit": 2,
+    "all49_invalid_outputs_independently_hash_checked": [
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-04-positive-points-gap.v1.json",
+        "sha256": "2b66f021cf40c580263d3dfe04461d3647962f15b3066f05998138aaa201f440",
+        "bytes": 15475
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-11-positive-points-affine.v1.json",
+        "sha256": "9765cdbb72aabfae51aa68f4ee5633ea2e3579d2ddd5ea5709af043f369f6c69",
+        "bytes": 18051
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/screening-positive-points-affine.svg",
+        "sha256": "ea28fe50004b3696e967283cda753dffcd3c0b392b1cb5d61100b405b38dbeee",
+        "bytes": 270369
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-09-positive-points-affine.svg",
+        "sha256": "2e23af52616b6a1df361087cedc95f3c56219de323132b8a9830b44bf7c4221c",
+        "bytes": 332284
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-08-positive-points-gap.v1.json",
+        "sha256": "8a3977059e01c56f09b359b63615cd9b0032b8a3cefeb9ecabe10dc9d13c135c",
+        "bytes": 15491
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-09-positive-points-gap.v1.json",
+        "sha256": "a8681441895538ec87b8f2b551f02196e30398e415bb34601793ca70dba713f9",
+        "bytes": 15857
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-10-positive-points-affine.svg",
+        "sha256": "3f5369772d84797a80e99c1915863605b26e056c68addf2c9a3388f3bdb57a31",
+        "bytes": 332285
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-04-positive-points-gap.svg",
+        "sha256": "fe7df241e158876573d2d5096a72ef416ef75c71572e45864939c4a78d585dfa",
+        "bytes": 332282
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/historical-positive-points-affine.svg",
+        "sha256": "b28e0c5ea1d70df853d56c1efdad94e4dd65538a9555e6000936d22c6b84b198",
+        "bytes": 271589
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-11-positive-points-gap.svg",
+        "sha256": "e9bb63a505c1d186d99399484c33902fae7bcd09cb9ab978b8c3846832193e17",
+        "bytes": 332284
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-03-positive-points-gap.v1.json",
+        "sha256": "6daf2702447c5002154b1ed8c3446938ae83c42e754188764b98b2f46c441dec",
+        "bytes": 15479
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-03-positive-points-affine.v1.json",
+        "sha256": "1125d9f370e7f47466208b66eec0ea36657ed74c6f919768077c3dac2d64e105",
+        "bytes": 15488
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-07-positive-points-affine.v1.json",
+        "sha256": "fe8db1cc2969f70a7956a24b2dc1eb5b1db6860be643ee017dc0d7cfe6794a6a",
+        "bytes": 15374
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/screening-positive-points-gap.v1.json",
+        "sha256": "303ae77c3c009e4fb98778b4d4300c902e8ff234a6ddee72cec2f6468f60830b",
+        "bytes": 29343
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-02-positive-points-gap.svg",
+        "sha256": "75f4489a1239b8557016e1c8c7507cffc4f3b39bd8fafe8d14f3ac2f164762b9",
+        "bytes": 332282
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/screening-positive-points-affine.v1.json",
+        "sha256": "bd724e3bc270ed843ab0d2e3c8b0fd2254639dbfcfa8e6508e34c52fac984d97",
+        "bytes": 29334
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/historical-positive-points-gap.svg",
+        "sha256": "dbe4e6612878128621343bf3ce58149788e5cdd08050df15c9063c64c49b6da3",
+        "bytes": 271587
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-09-positive-points-gap.svg",
+        "sha256": "ebf2b41fc5fa45ab885b0cd40e13e7251a277c67220cac9816c6285071ba36a1",
+        "bytes": 332282
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-10-positive-points-gap.v1.json",
+        "sha256": "a68dc35a8e9e221a0f5dc95dc343d92cba95b295b0f722ff9d117add8df089a8",
+        "bytes": 15964
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-05-positive-points-affine.svg",
+        "sha256": "a3932c2570a1d78e20c73827f00d6ae580263bfec9c1b3a4d51c80c0982e2ee5",
+        "bytes": 332284
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-06-positive-points-affine.svg",
+        "sha256": "e024f118a7805136dc582032f4d13e764842d9c57bd52f9d3d3ac5bd01dd7c47",
+        "bytes": 332285
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-05-positive-points-gap.svg",
+        "sha256": "d6622e3b80087c79e6c133982bf14a89ef81e632491f5de7960452fcaebed9ce",
+        "bytes": 332282
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/historical-positive-points-affine.v1.json",
+        "sha256": "6b6452f26e8f7f9ec32c69080b13b955bbadd181e320c9bc1d7fc823fe3abcef",
+        "bytes": 4059
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-11-positive-points-gap.v1.json",
+        "sha256": "f2c2cc680dfee753a61155eb1d5034ada6a4d62faa2531eabcf59d0117f06bc8",
+        "bytes": 18045
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-03-positive-points-gap.svg",
+        "sha256": "f7ba287bad7fb42b7176be58351a572033ee33c242c728918d3fbac061d690e1",
+        "bytes": 332282
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-08-positive-points-gap.svg",
+        "sha256": "839d724f04b405f718f87f09ba9d5d4ba26da90a82fb9d96336013fa88a3d9da",
+        "bytes": 332282
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-08-positive-points-affine.svg",
+        "sha256": "d86c7ee71830caac9db6422893b92e383c575972c96e3b018193bf2cf2ac16aa",
+        "bytes": 332284
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/historical-positive-points-gap.v1.json",
+        "sha256": "390564a79974264879a7f499d039fc4053c3fc421df60efed25e605c93fe8eba",
+        "bytes": 4055
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-07-positive-points-gap.v1.json",
+        "sha256": "45eb3f0b4464d2083e273bebb8cfb5b3659217273df54726b82533c8d4dd240f",
+        "bytes": 15367
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-07-positive-points-affine.svg",
+        "sha256": "198aedcca1d22da27d29d8b9c3425f20f3146cb546cdf49987e4694c20f037ca",
+        "bytes": 332284
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-09-positive-points-affine.v1.json",
+        "sha256": "d49509bbe65ec9f04a30cb90e8f34c30a2d0a7c9f3bc75b007460eb690efc0e4",
+        "bytes": 15865
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-06-positive-points-gap.svg",
+        "sha256": "448b5d51e1cc141c6427d0d4e9451c58770024f70987224517fd43a6e2d1280c",
+        "bytes": 332283
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-06-positive-points-gap.v1.json",
+        "sha256": "63b5a60702d3698cd60f10e95212f8947c2b373215ef4e29fb9abe16b4a9d225",
+        "bytes": 19593
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-06-positive-points-affine.v1.json",
+        "sha256": "97af8de3b5dd87f2e64d74b1f6a59954ca691b3b1b45e0e0b6aec4937a9d0ab6",
+        "bytes": 19599
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/index.v1.json",
+        "sha256": "6d4a0752b039df33929b5c56abb1d2f96a06ce4fbdf095d83fdf05a3daa01084",
+        "bytes": 11655
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/screening-positive-points-gap.svg",
+        "sha256": "ad37532da442a3e9a561af417e192b92ae9775a91c1d11440c8e515144da9208",
+        "bytes": 270366
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-05-positive-points-affine.v1.json",
+        "sha256": "f61009c288f0bd45d3e02782e319c40abdd800156b26804150bce156e546a825",
+        "bytes": 16206
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-03-positive-points-affine.svg",
+        "sha256": "1e190886a737ff689ab773393d800a6c8e073a2760818f8f6c77d2cadc69e967",
+        "bytes": 332284
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-11-positive-points-affine.svg",
+        "sha256": "50d3e49ed04c277575a49148b30c4859ae7a171f51d7afd431fac37134df7d0f",
+        "bytes": 332286
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-07-positive-points-gap.svg",
+        "sha256": "e8036b4d24a63b01fc1a9e76f53046c86d21e029479ee9f4f6dbd2ff2a0d3516",
+        "bytes": 332282
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-08-positive-points-affine.v1.json",
+        "sha256": "54e06b2ffbf7b82690117da06045c1d38ec9b0bd1ed26d7265f4c47ba26e6037",
+        "bytes": 15498
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-04-positive-points-affine.svg",
+        "sha256": "c122bb7e91a8d5c8f327714762d0159fe84056ae4e0c0df4720033ade3379084",
+        "bytes": 332284
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-04-positive-points-affine.v1.json",
+        "sha256": "87310bdc6e62ed0bc49aab2a4cd2c330e13253fc57d378cca8c85c7fc63924b0",
+        "bytes": 15483
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-02-positive-points-gap.v1.json",
+        "sha256": "417ed5747afe760d2fde787e913b18ec903e26fb0b814bdb19e2de159e15db2e",
+        "bytes": 15598
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-05-positive-points-gap.v1.json",
+        "sha256": "3206cdd2926e6a5f77aa656b1074814b86b0ddc535a136f64fb802948f10433c",
+        "bytes": 16197
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-02-positive-points-affine.svg",
+        "sha256": "a1cc60396e15e411bee759d1929fa42c4a8a07ced101ba648e8d5a7de680b527",
+        "bytes": 332284
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-10-positive-points-affine.v1.json",
+        "sha256": "cb1b4f1c4607980dbcb4909bbc59242f32512b369f265993c6e9dc42a57d471d",
+        "bytes": 15973
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-10-positive-points-gap.svg",
+        "sha256": "74d3db5bda22ff7f5a507d745cf2cc9d4e99692c7829677d2fd7394fbf0eb058",
+        "bytes": 332283
+      },
+      {
+        "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-9f39e2e/preserved-first-XML-invalid-positive-outputs/run-02-positive-points-affine.v1.json",
+        "sha256": "a21108355d2dd5bd1f77aa70bc35eea8ceb309a8a24e689e6095c239d3b0e13d",
+        "bytes": 15604
+      }
+    ],
+    "Q_static_miss_acknowledged": "Q also missed literal raw-string backslash-n after SVG root; no pixel acceptance was granted.",
+    "exact99d_positive_points_sha256": "d5581ec41e051f7b6f28f11e89a97dc53caf17876d80abfd00e88603c36d1b2d",
+    "exact99d_test_sha256": "429f9c6846c2f56ac37d4ee11fb8bc3365c96e66d0c7cc2d608042cb68bbf34a",
+    "narrow_delta_sha256": "b040928bcb33f736b8738f2e02cbff3f90cb14448e4cb93e9db3d1bce4384046",
+    "disposition": "PASS static narrow delta: final raw string ends at SVG root; svg.push appends real newline; existing authored constant-view assertion rejects literal backslash-n and requires exact root/newline. No mapping or numeric delta. Controls not executed by Q.",
+    "captain_actual99d_consumer_receipt": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/actual-retained-generation-99d180c/CAPTAIN_ACTUAL_ALL_POINT_COUNTS_AND_FIRST_CONSUMER_PNG_READBACK.json",
+      "sha256": "6f0d08772340961ca468dee57cbdf671e4d0b835f3f2716a2b9c0bce75a23487",
+      "bytes": 20579
+    },
+    "new_consumer_PNGs_not_independently_accepted_here": true
+  },
+  "limits": [
+    "This admission is exact input/source/data/camera/assignment pinset; whole-head, active generated tree, lighting/normals, actual new appearance pixels, PDF and final delivery remain separate.",
+    "No independent scalar rank/scientific field recomputation, solver/FEM/CAD/scorer, compiler/tests/fixtures/render/CI/API/GitHub by Q.",
+    "All88c build,475f generation,9f XML failures and historical reports preserved; no old PASS transferred.",
+    "Captain99d consumer success is bound as a separate actual receipt, not Q pixel or print approval.",
+    "Complete freeze/closure, all affected controls, designated final nonauthor review and truthful submission-origin proof remain later obligations.",
+    "PR142 operator gap remains UNVERIFIED; native IDs null; Q authored no source and submitted no GitHub review."
+  ]
+}
