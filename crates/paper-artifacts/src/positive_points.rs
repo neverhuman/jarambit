@@ -381,8 +381,9 @@ impl PositivePointRaster {
         };
         write!(
             svg,
-            r##"<text x="675" y="648" text-anchor="middle" font-size="23" fill="#334155">{x_label}</text><text x="30" y="115" font-size="23" fill="#334155">Raw score ticks; vertical position = log10({formula}); epsilon = 1e-6.</text><text x="30" y="690" font-size="23" fill="#334155">{overlay_label}</text><text x="30" y="730" font-size="23" fill="#334155">{leader_label}</text><text x="30" y="770" font-size="23" fill="#334155">Fixed full-source min/max and final reference; no physical ratios or cross-run ranking.</text><text x="30" y="810" font-size="23" fill="#334155">Unknown screen values are nonnumeric; full-range asinh and summary views are separate.</text></svg>\n"##
+            r##"<text x="675" y="648" text-anchor="middle" font-size="23" fill="#334155">{x_label}</text><text x="30" y="115" font-size="23" fill="#334155">Raw score ticks; vertical position = log10({formula}); epsilon = 1e-6.</text><text x="30" y="690" font-size="23" fill="#334155">{overlay_label}</text><text x="30" y="730" font-size="23" fill="#334155">{leader_label}</text><text x="30" y="770" font-size="23" fill="#334155">Fixed full-source min/max and final reference; no physical ratios or cross-run ranking.</text><text x="30" y="810" font-size="23" fill="#334155">Unknown screen values are nonnumeric; full-range asinh and summary views are separate.</text></svg>"##
         )?;
+        svg.push('\n');
         receipt["tick_rows"] = json!(tick_rows);
         receipt["svg_sha256"] = json!(format!("{:x}", Sha256::digest(svg.as_bytes())));
         Ok((svg, receipt))

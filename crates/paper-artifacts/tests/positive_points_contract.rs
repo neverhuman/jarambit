@@ -162,7 +162,9 @@ fn constant_scope_has_one_raw_tick_and_no_fake_variation() {
     .unwrap();
     r.paint(&[1], 0, 0.).unwrap();
     r.paint(&[2], 0, 0.).unwrap();
-    let (_, receipt) = r.render("AA==", "Neutral constant scope").unwrap();
+    let (svg, receipt) = r.render("AA==", "Neutral constant scope").unwrap();
+    assert!(svg.ends_with("</svg>\n"));
+    assert!(!svg.contains("</svg>\\n"));
     assert_eq!(receipt["tick_rows"].as_array().unwrap().len(), 1);
     assert_eq!(receipt["tick_rows"][0]["original_value"], 0.);
     assert_eq!(receipt["axis"]["scale"]["constant_fallback"], true);
