@@ -2518,11 +2518,16 @@ fn render_hero_view(
 /// Deterministic Rust emitter for all 6 multi-cohort SVGs, `shared_projection.v2.json`,
 /// `generated/overview.md`, and `publication.v2.json` (`JR-R2`, `JR-R3`, `SC-DEC-183Z`, & `SC-DEC-183AB`).
 /// Called directly by `crate::publication::generate` and covered by `--check`.
+/// Extend outputs after the admitted six-source weighted-summary projection.
 pub fn generate_v2_outputs(
     root: &Path,
     out: &mut BTreeMap<String, String>,
     inputs: &mut BTreeMap<String, String>,
 ) -> Result<()> {
+    let weighted: Value = serde_json::from_str(
+        out.get("docs/paper/generated/weighted-runs.json")
+            .ok_or("population: missing admitted weighted-summary projection")?,
+    )?;
     let required_rels = [
         "evidence/rs_v2/w282_ultrarunner/search/evidence.jevl",
         "evidence/rs_v2/w282_ultrarunner/search/all_evals.json",
@@ -2671,7 +2676,6 @@ pub fn generate_v2_outputs(
     let svg_newer = render_population_newer_svg(&t05)?;
     let (svg_latest, mut point_receipt, mut point_outputs) =
         render_population_latest_svg(root, &births, &newer_rec, &t05)?;
-    let weighted: Value = serde_json::from_str(&out["docs/paper/generated/weighted-runs.json"])?;
     let registry: Value =
         serde_json::from_slice(&fs::read(root.join("docs/paper/data/public_ids.v1.json"))?)?;
     let mut weighted_leaders = Vec::new();
@@ -3158,6 +3162,32 @@ mod tests {
         let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
         let mut out = BTreeMap::new();
         let mut inputs = BTreeMap::new();
+        assert!(generate_v2_outputs(&root, &mut out, &mut inputs)
+            .unwrap_err()
+            .to_string()
+            .contains("missing admitted weighted-summary projection"));
+        let weighted_contract: Value = serde_json::from_slice(
+            &fs::read(root.join("docs/paper/weighted-inputs.v1.json")).unwrap(),
+        )
+        .unwrap();
+        let weighted_docs = weighted_contract["runs"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|run| {
+                let bytes = fs::read(root.join(run["path"].as_str().unwrap())).unwrap();
+                assert_eq!(json!(sha256_bytes(&bytes)), run["sha256"]);
+                (
+                    run["id"].as_str().unwrap().to_string(),
+                    serde_json::from_slice(&bytes).unwrap(),
+                )
+            })
+            .collect();
+        let weighted = crate::weighted_runs::project(&weighted_docs, &weighted_contract).unwrap();
+        out.insert(
+            "docs/paper/generated/weighted-runs.json".into(),
+            serde_json::to_string_pretty(&weighted).unwrap() + "\n",
+        );
         generate_v2_outputs(&root, &mut out, &mut inputs).unwrap();
 
         let mem_svg = &out["docs/paper/figures/population-membership.svg"];
@@ -3166,8 +3196,26 @@ mod tests {
         assert!(!mem_svg.contains("Island 0 (32 slots)"));
 
         let lat_svg = &out["docs/paper/figures/population-latest.svg"];
-        assert!(lat_svg.contains("-10.0 &lt;= fit &lt; -2.0"));
-        assert!(lat_svg.contains("610,051 legal=true rows have fit &lt; 0"));
+        // Simplified visible keys retain the original source/count invariants
+        // in the numeric receipt, without restoring administrative plot text.
+        let points: Value = serde_json::from_str(
+            &out["docs/paper/generated/population/point-rendering.v1.json"],
+        )
+        .unwrap();
+        assert_eq!(points["native"]["legal_true_with_negative_fit"], 610_051);
+        assert_eq!(points["native"]["legal_true_rows"], 754_236);
+        assert_eq!(points["native"]["raster"]["point_operations"], 1_954_560);
+        assert_eq!(points["numeric_point_operations"], 1_958_803);
+        assert_eq!(points["excluded_numeric_records"], 0);
+        assert_eq!(points["unknown"]["records"], 1390);
+        assert_eq!(points["unknown"]["numeric_point_operations"], 0);
+        assert_eq!(
+            points["native"]["source_visit_sha256"],
+            "f78dc1ba20301f50d47c3034aeb1e3d65c9f0e863d942ed047fb6d4ebc710dbf"
+        );
+        for field in ["clipping", "jitter", "majority_class_replacement"] {
+            assert_eq!(points["native"]["raster"][field], false);
+        }
         assert!(lat_svg.contains(r#"data-numeric-scored-points="1954560""#));
         assert!(lat_svg.contains(r#"data-unknown-proposal-count="1390""#));
         assert!(!lat_svg.contains("severe penalty"));
