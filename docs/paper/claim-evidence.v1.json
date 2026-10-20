@@ -16,7 +16,7 @@
     {
       "id": "C03",
       "binding": "crop_panels exact crop/denominator/numerator/fraction",
-      "claim": "B planned crop domain retains64.52% whole torsion saliency; A/C100%; no inherited global90% from oldROI."
+      "claim": "Runtime rectangular source-domain fraction: B64.52% whole torsion saliency; A/C100%, before decorative PIP overlays; not visible-ink coverage or an inherited global90% claim."
     },
     {
       "id": "C04",
@@ -37,7 +37,7 @@
   "acceptance": "Actual application, typed validation, PNG/PDF regeneration and final reading-size review pending.",
   "crop_svg_admission": {
     "path": "docs/paper/drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.svg",
-    "sha256": "a5a1c5d0c5e28460fb657954c107da03168c81904edddf380e4a3a963b1e1373",
+    "sha256": "4a048bb34fdccc2687f2fba63372af4a35868602522b1d3bf54782c44ae9ecb4",
     "source_d1_sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
     "method": "All original emitted polygons matched retained source-triangle IDs after recorded pose/affine transform and0.01px rounding. Field polygons preserved; exact rectangular clipping and text corrected.",
     "source_polygon_id_hashes": {

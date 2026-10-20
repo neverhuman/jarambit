@@ -349,7 +349,7 @@ pub(crate) fn project(
         ("hm_twist_sf", "Torsion overload"),
         ("hm_tip_inplane_sf", "In-plane (record)"),
         ("hm_spine_sf", "Spine bending"),
-        ("hm_ringback_sf", "Ring traction"),
+        ("hm_ringback_sf", "Ring-back overload"),
     ];
     let mut factor_rows = Vec::new();
     for (i, (key, title)) in factors.into_iter().enumerate() {
@@ -372,7 +372,7 @@ pub(crate) fn project(
         635.,
         516.,
         21,
-        "Separate load cases; no spatial fatigue field.",
+        "Factors: larger = more margin; 1 = named load.",
     );
 
     text(
@@ -514,7 +514,7 @@ pub(crate) fn project(
         20.,
         1154.,
         21,
-        "All panels bind Individual 2000; 20-term weighted profile of Individual 2002 (Run 31) is in fitness.svg.",
+        "Individual 2000 only; Individual 2002 has a separate weighted reporting profile.",
     );
     svg.push_str("</g></svg>\n");
     let summary = json!({"schema":"jarambit.retained_assessment_projection.v1","subject":c["subject"],"certificate_identity":c["certificate_identity"],"producer_revision":c["producer_revision"],"support":{"eigenvalue":a["buckling_eigenvalue"],"source_status":a["status"],"supported_lateral_ratio":a["supported_seq_ratio"],"certification_multicase_minimum":a["certified_seq_ratio"],"supported_blade_peak_MPa_per_N":a["supported_blade_peak_mpa_per_n"],"supported_hand_peak_MPa_per_N":a["supported_hand_peak_mpa_per_n"],"case_region_comparability":false,"eigen_operator_audit":"open: eigsh applied to K_support^-1 G; Euclidean symmetry and eigenpair residual not established in retained record","eigenvector_available":false},"factors":factor_rows,"certification_strict_pairs":pair_rows,"weighted_cad_score_breakdown":{"W_CAD":wcad_total,"unpenalized_quality_score":wcad_unpen,"shortfall_penalty":wcad_pen,"base_feasible":wcad_base,"failed_branch_formula":"base_feasible (-1.0) - shortfall_penalty (4.619108) + 0.1 * s_mass (0.048700) = -5.570408 (conditional failed branch, not unpenalized_quality_score - shortfall_penalty)","subscores":subscore_rows,"nonzero_shortfalls":shortfall_rows},"flags":flag_rows,"qualification":false,"fresh_solver_execution":false,"note":"Scalar plots, historical CAD subscores/shortfalls, and a labeled support-model schematic; no synthetic fatigue/stability/strict spatial fields, no aggregation or new thresholds."});

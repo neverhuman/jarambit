@@ -267,7 +267,7 @@ pub(crate) fn project(
             x + 78.,
             y + 332.,
             21,
-            "h = sqrt(max triangle area), mm",
+            "h = sqrt(max triangle area), mm; finer ←",
         );
         label(&mut svg, x + 15., y + 366., 21, status);
     }

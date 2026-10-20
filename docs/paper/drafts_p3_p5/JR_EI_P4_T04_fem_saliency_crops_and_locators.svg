@@ -1,11 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 720" width="1800" height="720" font-family="DejaVu Sans, Arial, sans-serif">
 <rect width="1800" height="720" fill="#ffffff"/>
 <rect x="16" y="14" width="1768" height="692" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
-<text x="36" y="44" font-size="24" font-weight="700" fill="#0f172a">Individual 2000 — Retained Unit Responses &amp; Explicit Whole-Field Crop Coverage</text>
-<text x="36" y="68" font-size="22" fill="#475569">Retained 0.25 mm² plate mesh (25,209 triangles, 13,503 nodes); one assessed automatic export, not qualified.</text>
+<text x="36" y="43" font-size="32" font-weight="700" fill="#0f172a">Individual 2000 — Retained Plate Responses</text>
+<text x="36" y="76" font-size="32" fill="#475569">Whole-field saliency before locator overlays; one assessed export, not qualified.</text>
 <rect x="36.0" y="86.0" width="560.0" height="596.0" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
-<text x="50.0" y="110.0" font-size="23" font-weight="700" fill="#0f172a">A. Ring-Traction Saliency Crop (MPa/N)</text>
-<text x="50.0" y="134.0" font-size="22" fill="#475569">Rect. window: 100% global; 10,334 active cells</text>
+<text x="50.0" y="121.0" font-size="32" font-weight="700" fill="#0f172a">A. Ring traction (MPa/N)</text>
 <defs><clipPath id="crop-clip-0"><rect x="66" y="168" width="500" height="218.75"/></clipPath></defs>
 <rect x="50.0" y="144.0" width="532.0" height="446.0" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
 <g clip-path="url(#crop-clip-0)">
@@ -13423,7 +13422,7 @@
 <polygon points="514.31,359.59 513.62,359.01 515.17,358.89" fill="#cbd5e1" stroke="#cbd5e1" stroke-width="0.25"/>
 </g>
 <rect x="386.0" y="494.0" width="188.0" height="88.0" rx="4" fill="#ffffff" fill-opacity="0.94" stroke="#64748b" stroke-width="1"/>
-<text x="392.0" y="514.0" font-size="22" font-weight="600" fill="#334155">PIP Locator</text>
+<text x="392.0" y="486.0" font-size="32" font-weight="600" fill="#334155">Locator</text>
 <polygon points="533.5,544.5 533.3,544.6 533.4,544.4" fill="#94a3b8" stroke="#94a3b8" stroke-width="0.2"/>
 <polygon points="531.1,546.3 531.1,546.4 531.0,546.2" fill="#94a3b8" stroke="#94a3b8" stroke-width="0.2"/>
 <polygon points="529.6,546.3 529.4,546.1 529.7,546.0" fill="#94a3b8" stroke="#94a3b8" stroke-width="0.2"/>
@@ -19809,13 +19808,12 @@
 <rect x="559.20" y="608.00" width="6.90" height="13.0" fill="#d32c15"/>
 <rect x="565.60" y="608.00" width="6.90" height="13.0" fill="#d22314"/>
 <rect x="60.0" y="608.0" width="512.0" height="13.0" fill="none" stroke="#334155" stroke-width="0.8"/>
-<text x="60.0" y="640.0" font-size="22" fill="#334155">0.0</text>
-<text x="316.0" y="640.0" font-size="22" text-anchor="middle" fill="#334155">0.0132</text>
-<text x="572.0" y="640.0" font-size="22" text-anchor="end" fill="#334155">0.0264 Max</text>
-<text x="50.0" y="668.0" font-size="22" fill="#475569">BBox: [-28.0, -26.0] to [84.0, 23.0] mm</text>
+<text x="60.0" y="646.0" font-size="32" fill="#334155">0.0</text>
+<text x="316.0" y="646.0" font-size="32" text-anchor="middle" fill="#334155">0.0132</text>
+<text x="572.0" y="646.0" font-size="32" text-anchor="end" fill="#334155">0.0264</text>
+<text x="50.0" y="679.0" font-size="32" fill="#475569">Window: 100% whole-field</text>
 <rect x="616.0" y="86.0" width="560.0" height="596.0" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
-<text x="630.0" y="110.0" font-size="23" font-weight="700" fill="#0f172a">B. Tip Torsion Crop (MPa/(N·mm))</text>
-<text x="630.0" y="134.0" font-size="22" fill="#475569">Rect. window: 64.52% global; raw max 34.8589</text>
+<text x="630.0" y="121.0" font-size="32" font-weight="700" fill="#0f172a">B. Tip torsion (MPa/(N·mm))</text>
 <defs><clipPath id="crop-clip-1"><rect x="646" y="168" width="311.212121212121" height="316"/></clipPath></defs>
 <rect x="630.0" y="144.0" width="532.0" height="446.0" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
 <g clip-path="url(#crop-clip-1)">
@@ -22855,7 +22853,7 @@
 <circle cx="898.97" cy="201.15" r="38.30" fill="none" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5,3"/>
 </g>
 <rect x="966.0" y="494.0" width="188.0" height="88.0" rx="4" fill="#ffffff" fill-opacity="0.94" stroke="#64748b" stroke-width="1"/>
-<text x="972.0" y="514.0" font-size="22" font-weight="600" fill="#334155">PIP Locator</text>
+<text x="972.0" y="486.0" font-size="32" font-weight="600" fill="#334155">Locator</text>
 <polygon points="1113.5,544.5 1113.3,544.6 1113.4,544.4" fill="#94a3b8" stroke="#94a3b8" stroke-width="0.2"/>
 <polygon points="1111.1,546.3 1111.1,546.4 1111.0,546.2" fill="#94a3b8" stroke="#94a3b8" stroke-width="0.2"/>
 <polygon points="1109.6,546.3 1109.4,546.1 1109.7,546.0" fill="#94a3b8" stroke="#94a3b8" stroke-width="0.2"/>
@@ -29241,14 +29239,15 @@
 <rect x="1139.20" y="608.00" width="6.90" height="13.0" fill="#d32c15"/>
 <rect x="1145.60" y="608.00" width="6.90" height="13.0" fill="#d22314"/>
 <rect x="640.0" y="608.0" width="512.0" height="13.0" fill="none" stroke="#334155" stroke-width="0.8"/>
-<text x="640.0" y="640.0" font-size="22" fill="#334155">0.0</text>
-<text x="896.0" y="640.0" font-size="22" text-anchor="middle" fill="#334155">0.3306</text>
-<text x="1152.0" y="640.0" font-size="22" text-anchor="end" fill="#334155">0.6611</text>
-<text x="640.0" y="540.0" font-size="22" fill="#334155">≥0.6611 (over-range)</text>
-<text x="630.0" y="668.0" font-size="22" fill="#475569">Posed crop bbox: [166.0, 4.0] to [198.5, 37.0] mm</text>
+<text x="640.0" y="646.0" font-size="32" fill="#334155">0.0</text>
+<text x="896.0" y="646.0" font-size="32" text-anchor="middle" fill="#334155">0.3306</text>
+<text x="1152.0" y="646.0" font-size="32" text-anchor="end" fill="#334155">0.6611</text>
+<text x="640.0" y="516.0" font-size="32" fill="#334155">≥0.6611</text>
+<text x="640.0" y="550.0" font-size="32" fill="#334155">(over-range)</text>
+<text x="640.0" y="584.0" font-size="32" fill="#334155">raw max 34.8589</text>
+<text x="630.0" y="679.0" font-size="32" fill="#475569">Window: 64.52% whole-field</text>
 <rect x="1196.0" y="86.0" width="560.0" height="596.0" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
-<text x="1210.0" y="110.0" font-size="23" font-weight="700" fill="#0f172a">C. In-Plane Tip Pry Saliency Crop (MPa/N)</text>
-<text x="1210.0" y="134.0" font-size="22" fill="#475569">Rect. window: 100% global; T6 peak 2.9181</text>
+<text x="1210.0" y="121.0" font-size="32" font-weight="700" fill="#0f172a">C. In-plane tip pry (MPa/N)</text>
 <defs><clipPath id="crop-clip-2"><rect x="1226" y="168" width="500" height="143.518518518519"/></clipPath></defs>
 <rect x="1210.0" y="144.0" width="532.0" height="446.0" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
 <g clip-path="url(#crop-clip-2)">
@@ -54463,7 +54462,7 @@
 <polygon points="1439.94,297.44 1439.58,297.13 1440.39,297.07" fill="#104287" stroke="#104287" stroke-width="0.25"/>
 </g>
 <rect x="1546.0" y="494.0" width="188.0" height="88.0" rx="4" fill="#ffffff" fill-opacity="0.94" stroke="#64748b" stroke-width="1"/>
-<text x="1546.0" y="486.0" font-size="20" font-weight="600" fill="#334155">PIP Locator</text>
+<text x="1546.0" y="486.0" font-size="32" font-weight="600" fill="#334155">Locator</text>
 <polygon points="1693.5,544.5 1693.3,544.6 1693.4,544.4" fill="#94a3b8" stroke="#94a3b8" stroke-width="0.2"/>
 <polygon points="1691.1,546.3 1691.1,546.4 1691.0,546.2" fill="#94a3b8" stroke="#94a3b8" stroke-width="0.2"/>
 <polygon points="1689.6,546.3 1689.4,546.1 1689.7,546.0" fill="#94a3b8" stroke="#94a3b8" stroke-width="0.2"/>
@@ -60849,8 +60848,8 @@
 <rect x="1719.20" y="608.00" width="6.90" height="13.0" fill="#d32c15"/>
 <rect x="1725.60" y="608.00" width="6.90" height="13.0" fill="#d22314"/>
 <rect x="1220.0" y="608.0" width="512.0" height="13.0" fill="none" stroke="#334155" stroke-width="0.8"/>
-<text x="1220.0" y="640.0" font-size="22" fill="#334155">0.0</text>
-<text x="1476.0" y="640.0" font-size="22" text-anchor="middle" fill="#334155">1.4590</text>
-<text x="1732.0" y="640.0" font-size="22" text-anchor="end" fill="#334155">2.9181 (Max)</text>
-<text x="1210.0" y="668.0" font-size="22" fill="#475569">Posed crop bbox: [-20.0, -26.0] to [196.0, 36.0] mm</text>
+<text x="1220.0" y="646.0" font-size="32" fill="#334155">0.0</text>
+<text x="1476.0" y="646.0" font-size="32" text-anchor="middle" fill="#334155">1.4590</text>
+<text x="1732.0" y="646.0" font-size="32" text-anchor="end" fill="#334155">2.9181</text>
+<text x="1210.0" y="679.0" font-size="32" fill="#475569">Window: 100% whole-field</text>
 </svg>

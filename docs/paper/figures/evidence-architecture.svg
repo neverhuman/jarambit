@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 620" width="1280" height="620" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Separate retained evidence paths; assessment coverage is selective</title>
+<desc>Representation defines recorded coordinates. Historical births, proposals and native births have distinct denominators and scoring. Separately assessed exports have their own retained bundles. No arrow joins all search records to downstream assessment.</desc>
+<metadata>Authored reporting diagram. Evidence basis: study-design.tex SHA256 aee26e3efc5184915e426e7e5c220486b8875ed306cda733a32a8e6a9e2fcc1c; cohort-inventory.tex SHA256 9168b67a5b5f3d42c50ad07d671a2f67ff5e5d315c6122f76042820d3df33ce3; source checkpoint e517ff894a47a5c3cf1aed5ca88faa1f4e2c9b07. This is not an assessment join or a qualification-rate estimate.</metadata>
+<defs><marker id="direction" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#334155"/></marker></defs>
+<rect width="1280" height="620" fill="#ffffff"/>
+<g fill="#132d3b">
+<text x="24" y="42" font-size="28" font-weight="700">Retained Evidence Paths — Selective Assessment</text>
+<text x="24" y="73" font-size="22">Distinct accessions and counting units; no population-wide CAD or physical validation is implied.</text>
+<rect x="24" y="104" width="280" height="234" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="40" y="140" font-size="25" font-weight="700">Representation</text>
+<text x="40" y="180" font-size="22">128 numeric</text>
+<text x="40" y="211" font-size="22">coordinates + material</text>
+<text x="40" y="260" font-size="22">Producer + decoder</text>
+<text x="40" y="291" font-size="22">give stored values</text>
+<text x="40" y="322" font-size="22">their meaning.</text>
+<path d="M304,218 L354,218" stroke="#334155" stroke-width="2.5" marker-end="url(#direction)"/>
+<rect x="354" y="104" width="900" height="234" rx="6" fill="#f8fafc" stroke="#cbd5e1"/>
+<text x="374" y="140" font-size="25" font-weight="700">Retained Search Observations</text>
+<text x="374" y="182" font-size="22">H: 1,984 historical births; parentage retained</text>
+<text x="374" y="220" font-size="22">P: 3,649 proposals; 2,259 retained numeric screens</text>
+<text x="374" y="258" font-size="22">N: 1,954,560 native births across ten completed runs</text>
+<text x="374" y="304" font-size="22">Separate scorers; birth counts do not measure assessment coverage.</text>
+<text x="354" y="366" font-size="22" fill="#92400e">Native per-birth CAD/assessment join: not retained.</text>
+<text x="354" y="394" font-size="22" fill="#92400e">No search-to-assessment arrow.</text>
+<rect x="354" y="405" width="380" height="178" rx="6" fill="#fff7ed" stroke="#cbd5e1"/>
+<text x="374" y="441" font-size="25" font-weight="700">Assessed Export Records</text>
+<text x="374" y="480" font-size="22">2000: one automatic export</text>
+<text x="374" y="515" font-size="22">2001 / 2007: controlled</text>
+<text x="374" y="554" font-size="22">Birth links: unknown</text>
+<path d="M734,494 L814,494" stroke="#334155" stroke-width="2.5" marker-end="url(#direction)"/>
+<rect x="814" y="405" width="440" height="178" rx="6" fill="#f0fdfa" stroke="#cbd5e1"/>
+<text x="834" y="441" font-size="25" font-weight="700">Bound Evidence Views</text>
+<text x="834" y="480" font-size="22">2000: plate fields + scalars</text>
+<text x="834" y="515" font-size="22">2001 / 2007: scorecards</text>
+<text x="834" y="554" font-size="22">Physical results: not reported</text>
+</g>
+</svg>

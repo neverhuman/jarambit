@@ -492,9 +492,10 @@ pub(crate) fn project_semantics(
             "achieved_whole_domain_fraction":fraction,
             "coverage_interpretation":"rectangular physical source-domain integral before decorative PIP; not visible ink"}));
     }
-    if !crop_svg.contains("C. In-Plane Tip Pry Saliency Crop (MPa/N)")
-        || !crop_svg.contains("≥0.6611 (over-range)")
-        || !crop_svg.contains("raw max 34.8589")
+    if !crop_svg.contains(">C. In-plane tip pry (MPa/N)</text>")
+        || !crop_svg.contains(">≥0.6611</text>")
+        || !crop_svg.contains(">(over-range)</text>")
+        || !crop_svg.contains(">raw max 34.8589</text>")
         || crop_svg.contains("23-subject automatic CAD battery")
         || crop_svg.contains("&gt;= 90%")
     {
