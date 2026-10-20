@@ -692,6 +692,68 @@ fn production_policy(i: &Inputs, a: &Value, o: &Value) -> Check<ProductionPolicy
     })
 }
 
+fn reviewer_role_transport(args: &[&str], endpoint: &str) -> Check<()> {
+    need(
+        args[0] == "/home/ubuntu/.local/bin/gh-role",
+        "unapproved gh-role executable path",
+    )?;
+    need(
+        args.get(1) == Some(&"reviewer"),
+        "gh-role requires explicit reviewer role",
+    )?;
+    let tail = &args[2..];
+    let ack_count = tail
+        .iter()
+        .filter(|arg| **arg == "--ack-unassociated")
+        .count();
+    need(ack_count <= 1, "duplicate gh-role acknowledgement flag")?;
+    let api_index = usize::from(tail.first() == Some(&"--ack-unassociated"));
+    need(
+        ack_count == api_index,
+        "misplaced gh-role acknowledgement flag",
+    )?;
+    need(
+        tail.get(api_index) == Some(&"api"),
+        "gh-role wrapper permits only reviewer [--ack-unassociated] api",
+    )?;
+    let api = &tail[api_index + 1..];
+    let (mut endpoint_seen, mut method_seen, mut input_seen) = (false, false, false);
+    let mut at = 0;
+    while at < api.len() {
+        match api[at] {
+            "--method" | "-X" => {
+                need(!method_seen, "duplicate gh-role API method")?;
+                need(
+                    api.get(at + 1) == Some(&"POST"),
+                    "gh-role requires explicit POST method",
+                )?;
+                method_seen = true;
+                at += 2;
+            }
+            "--input" => {
+                need(!input_seen, "duplicate gh-role API input")?;
+                need(
+                    api.get(at + 1).is_some_and(|path| !path.starts_with('-')),
+                    "malformed gh-role input path",
+                )?;
+                input_seen = true;
+                at += 2;
+            }
+            value if value == endpoint => {
+                need(!endpoint_seen, "duplicate gh-role API endpoint")?;
+                endpoint_seen = true;
+                at += 1;
+            }
+            value if value.starts_with('-') => return Err("unsupported gh-role API flag".into()),
+            _ => return Err("unexpected gh-role API argument".into()),
+        }
+    }
+    need(
+        endpoint_seen && method_seen && input_seen,
+        "gh-role requires one endpoint, POST method and input",
+    )
+}
+
 fn verify(i: &Inputs, now: u64) -> Check<Value> {
     let head = pin(i, "expected-head", 40)?;
     let tree = pin(i, "expected-tree", 40)?;
@@ -867,19 +929,24 @@ fn verify(i: &Inputs, now: u64) -> Check<Value> {
     )?;
     let pr = number(&a, "/pull_request")?;
     let endpoint = format!("repos/{repo}/pulls/{pr}/reviews");
-    need(
-        pr > 0
-            && args[0].rsplit('/').next() == Some("gh")
-            && args.contains(&"api")
-            && args.contains(&endpoint.as_str())
-            && args
-                .windows(2)
-                .any(|w| matches!(w[0], "--method" | "-X") && w[1] == "POST")
-            && args
-                .windows(2)
-                .any(|w| w[0] == "--input" && !w[1].starts_with('-')),
-        "unbound review submission command",
-    )?;
+    if args[0].rsplit('/').next() == Some("gh-role") {
+        need(pr > 0, "unbound review submission command")?;
+        reviewer_role_transport(args, &endpoint)?;
+    } else {
+        need(
+            pr > 0
+                && args[0].rsplit('/').next() == Some("gh")
+                && args.contains(&"api")
+                && args.contains(&endpoint.as_str())
+                && args
+                    .windows(2)
+                    .any(|w| matches!(w[0], "--method" | "-X") && w[1] == "POST")
+                && args
+                    .windows(2)
+                    .any(|w| w[0] == "--input" && !w[1].starts_with('-')),
+            "unbound review submission command",
+        )?;
+    }
     let request = document(i, "request")?;
     need(
         text(&request, "/event")? == "APPROVE" && text(&request, "/commit_id")? == head,
