@@ -1128,8 +1128,8 @@ fn render_population_latest_svg(
     }
 
     // Panel B (left): Run 1 1,984 births (x = 135..575, y = 815..1145) & Panel C (right): 2,259 screened + 1,390 unknown band (x = 695..1145, y = 815..1145)
-    s.push_str(r##"<text x="40" y="798" font-size="22" font-weight="700" fill="#0f172a">Panel B — Run 1 (1,984 Scored, 0 Unknown)</text>"##);
-    s.push_str(r##"<text x="600" y="798" font-size="22" font-weight="700" fill="#0f172a">Panel C — Screening (2,259 + 1,390 Unscreened)</text>"##);
+    s.push_str(r##"<text x="40" y="798" font-size="22" font-weight="700" fill="#0f172a">Panel B — Run 1 (1,984 Births, 0 Unk.)</text>"##);
+    s.push_str(r##"<text x="585" y="798" font-size="22" font-weight="700" fill="#0f172a">Panel C — Screening (2,259 + 1,390 Unknown)</text>"##);
     s.push_str(r##"<rect id="panel-b-run1-scatter" data-numeric-scored-points="1984" data-unknown-band-points="0" data-excluded-or-invalid-points="0" x="135" y="815" width="440" height="330" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>"##);
     for b in births {
         let id = b["id"].as_u64().unwrap_or(0);
@@ -1168,7 +1168,7 @@ fn render_population_latest_svg(
             }
         }
     }
-    s.push_str(r##"<text x="920" y="1095" text-anchor="middle" font-size="21" font-weight="700" fill="#92400e">Unknown / Unevaluated Band (1,390 unscored)</text>"##);
+    s.push_str(r##"<text x="920" y="1095" text-anchor="middle" font-size="21" font-weight="700" fill="#92400e">Unknown Band (1,390 unscreened)</text>"##);
     s.push_str(r##"<text x="685" y="835" text-anchor="end" font-size="21" fill="#334155">0.0</text><text x="685" y="1055" text-anchor="end" font-size="21" fill="#334155">-25</text>"##);
     s.push_str(r##"<text x="705" y="1172" font-size="21" fill="#334155">F1</text><text x="1105" y="1172" font-size="21" fill="#334155">F57</text>"##);
 
@@ -1200,7 +1200,7 @@ fn render_fitness_progress_svg(
     s.push_str(r##"<text x="40" y="78" font-size="21" fill="#475569">Each cohort uses its own native objective definition and scale (qualified count = 0).</text>"##);
 
     let ax0 = 115.0_f64;
-    let ax1 = 555.0_f64;
+    let ax1 = 485.0_f64;
     let ay0 = 130.0_f64;
     let ay1 = 330.0_f64;
     s.push_str(r##"<text x="40" y="114" font-size="22" font-weight="700" fill="#0f172a">Panel A — Cohort 1 (Run 1): 17-Gen Search Fitness (1,984 Births, Gen 0–16)</text>"##);
@@ -1230,12 +1230,12 @@ fn render_fitness_progress_svg(
         s.push_str(&format!(r##"<circle cx="{}" cy="{}" r="3.0" fill="#0f172a"/><circle cx="{}" cy="{}" r="2.5" fill="#0d9488"/>"##, svg_coord(tx), svg_coord(cy_cum), svg_coord(tx), svg_coord(cy_gen)));
     }
     s.push_str(&format!(r##"<polyline fill="none" stroke="#0f172a" stroke-width="2.2" points="{}"/><polyline fill="none" stroke="#0d9488" stroke-width="1.8" stroke-dasharray="4,3" points="{}"/>"##, cum_pts.join(" "), gen_pts.join(" ")));
-    s.push_str(r##"<rect x="575" y="130" width="585" height="200" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
-    s.push_str(r##"<text x="588" y="160" font-size="22" font-weight="700" fill="#0f172a">Cohort 1 (Run 1) Summary</text>"##);
-    s.push_str(r##"<text x="588" y="192" font-size="21" fill="#334155">• Cum. best: +1.1573 at G9 (Ind 1095)</text>"##);
-    s.push_str(r##"<text x="588" y="224" font-size="21" fill="#334155">• Per-gen max: +0.961..+1.157</text>"##);
-    s.push_str(r##"<text x="588" y="256" font-size="21" fill="#334155">• Strict cert_pass_all = false</text>"##);
-    s.push_str(r##"<text x="588" y="288" font-size="21" fill="#334155">• Probes: Ind 2001 (-3.8787), Ind 2008 (+1.7790)</text>"##);
+    s.push_str(r##"<rect x="505" y="130" width="655" height="200" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
+    s.push_str(r##"<text x="518" y="160" font-size="22" font-weight="700" fill="#0f172a">Cohort 1 (Run 1) Summary</text>"##);
+    s.push_str(r##"<text x="518" y="192" font-size="21" fill="#334155">• Cum. best: +1.1573 at G9 (Ind 1095)</text>"##);
+    s.push_str(r##"<text x="518" y="224" font-size="21" fill="#334155">• Per-gen max: +0.961..+1.157</text>"##);
+    s.push_str(r##"<text x="518" y="256" font-size="21" fill="#334155">• Strict cert_pass_all = false</text>"##);
+    s.push_str(r##"<text x="518" y="288" font-size="21" fill="#334155">• Probes: Ind 2001 (-3.8787), Ind 2008 (+1.7790)</text>"##);
 
     let (by0, by1) = (420.0_f64, 640.0_f64);
     s.push_str(r##"<text x="40" y="402" font-size="22" font-weight="700" fill="#0f172a">Panel B — Cohort 2 (Run 31): 3-Gen Weighted Reporting Trajectory (Runs 31–36)</text>"##);
@@ -1262,13 +1262,13 @@ fn render_fitness_progress_svg(
     }
     s.push_str(&format!(r##"<polyline fill="none" stroke="#0d9488" stroke-width="2.4" points="{}"/><polyline fill="none" stroke="#d97706" stroke-width="2.0" stroke-dasharray="4,3" points="{}"/>"##, hof_pts.join(" "), rnd_pts.join(" ")));
     let ((_, g0_hof, g0_rnd), (_, g1_hof, g1_rnd), (_, g2_hof, g2_rnd)) = (parsed_rows[0], parsed_rows[1], parsed_rows[2]);
-    s.push_str(r##"<rect x="575" y="420" width="585" height="220" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
-    s.push_str(r##"<text x="588" y="448" font-size="21" font-weight="700" fill="#0f172a">Cohort 2 Selected Run 31 Summary (Retained Profile)</text>"##);
-    s.push_str(&format!(r##"<text x="588" y="478" font-size="21" fill="#334155">• Gen 0 (Ind 2009): archive {g0_hof:.6} / round {g0_rnd:.6}</text>"##));
-    s.push_str(&format!(r##"<text x="588" y="508" font-size="21" fill="#334155">• Gen 1 (Ind 2002): archive {g1_hof:.6} / round {g1_rnd:.6}</text>"##));
-    s.push_str(&format!(r##"<text x="588" y="538" font-size="21" fill="#334155">• Gen 2 (Ind 2002): archive {g2_hof:.6} / round {g2_rnd:.6}</text>"##));
-    s.push_str(r##"<text x="588" y="568" font-size="21" fill="#334155">• Selected Individual 2002: F = 74.207299 / 100</text>"##);
-    s.push_str(r##"<text x="588" y="598" font-size="21" fill="#334155">• Runs 31–36 census in weighted-runs.svg</text>"##);
+    s.push_str(r##"<rect x="505" y="420" width="655" height="220" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
+    s.push_str(r##"<text x="518" y="448" font-size="21" font-weight="700" fill="#0f172a">Cohort 2 Selected Run 31 Summary (Retained Profile)</text>"##);
+    s.push_str(&format!(r##"<text x="518" y="478" font-size="21" fill="#334155">• Gen 0 (Ind 2009): archive {g0_hof:.6} / round {g0_rnd:.6}</text>"##));
+    s.push_str(&format!(r##"<text x="518" y="508" font-size="21" fill="#334155">• Gen 1 (Ind 2002): archive {g1_hof:.6} / round {g1_rnd:.6}</text>"##));
+    s.push_str(&format!(r##"<text x="518" y="538" font-size="21" fill="#334155">• Gen 2 (Ind 2002): archive {g2_hof:.6} / round {g2_rnd:.6}</text>"##));
+    s.push_str(r##"<text x="518" y="568" font-size="21" fill="#334155">• Selected Individual 2002: F = 74.207299 / 100</text>"##);
+    s.push_str(r##"<text x="518" y="598" font-size="21" fill="#334155">• Runs 31–36 census in weighted-runs.svg</text>"##);
 
     let (cy0, cy1) = (735.0_f64, 965.0_f64);
     s.push_str(r##"<text x="40" y="716" font-size="22" font-weight="700" fill="#0f172a">Panel C — Cohort 3: Ten Retained 800-Gen Runs (Run 2–Run 11, 1,954,560 Rows)</text>"##);
@@ -1307,12 +1307,12 @@ fn render_fitness_progress_svg(
             s.push_str(&format!(r##"<polyline fill="none" stroke="#0f172a" stroke-width="1.4" stroke-opacity="0.75" points="{}"/>"##, cpts.join(" ")));
         }
     }
-    s.push_str(r##"<rect x="575" y="735" width="585" height="230" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
-    s.push_str(r##"<text x="588" y="765" font-size="21" font-weight="700" fill="#0f172a">Cohort 3 Native Search Summary (Runs 2–11)</text>"##);
-    s.push_str(r##"<text x="588" y="798" font-size="21" fill="#334155">• Cum. bests: +1.1089..+1.1440 (Run 5 best)</text>"##);
-    s.push_str(r##"<text x="588" y="831" font-size="21" fill="#334155">• Null-median generations left un-bridged</text>"##);
-    s.push_str(r##"<text x="588" y="864" font-size="21" fill="#334155">• 1,954,560 rows (754,236 legal [38.59%])</text>"##);
-    s.push_str(r##"<text x="588" y="897" font-size="21" fill="#334155">• Stage-2 3D solid/plate: unavailable retained assessment</text>"##);
+    s.push_str(r##"<rect x="505" y="735" width="655" height="230" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
+    s.push_str(r##"<text x="518" y="765" font-size="21" font-weight="700" fill="#0f172a">Cohort 3 Native Search Summary (Runs 2–11)</text>"##);
+    s.push_str(r##"<text x="518" y="798" font-size="21" fill="#334155">• Cum. bests: +1.1089..+1.1440 (Run 5 best)</text>"##);
+    s.push_str(r##"<text x="518" y="831" font-size="21" fill="#334155">• Null-median generations left un-bridged</text>"##);
+    s.push_str(r##"<text x="518" y="864" font-size="21" fill="#334155">• 1,954,560 rows (754,236 legal [38.59%])</text>"##);
+    s.push_str(r##"<text x="518" y="897" font-size="21" fill="#334155">• Stage-2 3D solid/plate: unavailable retained assessment</text>"##);
     s.push_str(&format!(r##"<text x="40" y="1036" font-size="21" fill="#334155">• Cohort 3 legal medians (G0: {g0_non_null}/10 {g0_lmed_min:.4}..{g0_lmed_max:.4}; min {all_lmed_min:.4}; G800: {g800_lmed_min:.4}..{g800_lmed_max:.4})</text>"##));
     s.push_str("</svg>\n");
     Ok(s)
@@ -1321,23 +1321,23 @@ fn render_fitness_progress_svg(
 /// Generate `docs/paper/figures/inheritance.svg` directly from `inheritance.json`.
 fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
     let mut s = String::with_capacity(32_000);
-    s.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1120" width="1200" height="1120" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif">"##);
+    s.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1160" width="1200" height="1160" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif">"##);
     s.push('\n');
-    s.push_str(r##"<rect width="1200" height="1120" fill="#f8fafc"/>"##);
-    s.push_str(r##"<rect x="20" y="16" width="1160" height="1088" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>"##);
+    s.push_str(r##"<rect width="1200" height="1160" fill="#f8fafc"/>"##);
+    s.push_str(r##"<rect x="20" y="16" width="1160" height="1128" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>"##);
     s.push_str(r##"<text x="40" y="48" font-size="24" font-weight="700" fill="#0f172a">Recorded 3-Hop Ancestry DAG &amp; 128-Gene Differences (Individual 1095, Run 1)</text>"##);
     s.push_str(r##"<text x="40" y="78" font-size="21" fill="#475569">7 birth nodes &amp; 7 directed 3-hop edges (+ 1 dashed 4th-hop closure edge 174→299); Individual 413 reused</text>"##);
 
-    // Top panel: DAG (x = 40..1160, y = 98..588)
-    s.push_str(r##"<rect x="40" y="98" width="1120" height="490" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
+    // Top panel: DAG (x = 40..1160, y = 98..636)
+    s.push_str(r##"<rect x="40" y="98" width="1120" height="538" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
     let pos_map: BTreeMap<u64, (f64, f64)> = BTreeMap::from([
-        (174, (600.0, 148.0)),
-        (245, (315.0, 248.0)),
-        (299, (885.0, 248.0)),
-        (413, (315.0, 358.0)),
-        (392, (885.0, 358.0)),
-        (526, (820.0, 458.0)),
-        (1095, (480.0, 538.0)),
+        (174, (600.0, 140.0)),
+        (245, (315.0, 254.0)),
+        (299, (885.0, 254.0)),
+        (413, (315.0, 368.0)),
+        (392, (885.0, 368.0)),
+        (526, (820.0, 482.0)),
+        (1095, (420.0, 594.0)),
     ]);
 
     let mut node_lines: BTreeMap<u64, (String, String)> = BTreeMap::new();
@@ -1383,9 +1383,17 @@ fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
                     r##"<line id="edge-{p}-{c}" data-hops="3" x1="{}" y1="{}" x2="{}" y2="{}" stroke="#334155" stroke-width="2.4"/>"##,
                     svg_coord(x1), svg_coord(y1 + 28.0), svg_coord(x2), svg_coord(y2 - 28.0)
                 ));
+                let (lx, ly) = match (p, c) {
+                    (174, 245) => (0.5 * (x1 + x2) - 24.0, 0.5 * (y1 + y2) + 5.0),
+                    (413, 526) => (0.5 * (x1 + x2) - 36.0, 0.5 * (y1 + y2) + 6.0),
+                    (392, 526) => (0.5 * (x1 + x2) + 32.0, 0.5 * (y1 + y2) + 6.0),
+                    (413, 1095) => (0.5 * (x1 + x2) - 42.0, 0.5 * (y1 + y2) + 8.0),
+                    (526, 1095) => (0.5 * (x1 + x2) + 50.0, 0.5 * (y1 + y2) + 8.0),
+                    _ => (0.5 * (x1 + x2), 0.5 * (y1 + y2) + 6.0),
+                };
                 s.push_str(&format!(
-                    r##"<text x="{}" y="{}" text-anchor="middle" font-size="21" font-weight="600" fill="#0f766e">Δ={chg}/128</text>"##,
-                    svg_coord(0.5 * (x1 + x2)), svg_coord(0.5 * (y1 + y2))
+                    r##"<rect x="{}" y="{}" width="128" height="24" rx="4" fill="#f8fafc" fill-opacity="0.94"/><text x="{}" y="{}" text-anchor="middle" font-size="21" font-weight="600" fill="#0f766e">Δ={chg}/128</text>"##,
+                    svg_coord(lx - 64.0), svg_coord(ly - 19.0), svg_coord(lx), svg_coord(ly)
                 ));
             }
         }
@@ -1401,9 +1409,11 @@ fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
                     r##"<line id="edge-{p}-{c}-4th-hop" data-hops="4" x1="{}" y1="{}" x2="{}" y2="{}" stroke="#64748b" stroke-width="2.0" stroke-dasharray="5,4"/>"##,
                     svg_coord(x1), svg_coord(y1 + 28.0), svg_coord(x2), svg_coord(y2 - 28.0)
                 ));
+                let lx4 = 0.5 * (x1 + x2) + 50.0;
+                let ly4 = 0.5 * (y1 + y2) + 5.0;
                 s.push_str(&format!(
-                    r##"<text x="{}" y="{}" text-anchor="middle" font-size="21" font-weight="600" fill="#475569">Δ={chg}/128 (4th hop)</text>"##,
-                    svg_coord(0.5 * (x1 + x2) + 30.0), svg_coord(0.5 * (y1 + y2) - 4.0)
+                    r##"<rect x="{}" y="{}" width="230" height="24" rx="4" fill="#f8fafc" fill-opacity="0.94"/><text x="{}" y="{}" text-anchor="middle" font-size="21" font-weight="600" fill="#475569">Δ={chg}/128 (4th hop)</text>"##,
+                    svg_coord(lx4 - 115.0), svg_coord(ly4 - 19.0), svg_coord(lx4), svg_coord(ly4)
                 ));
             }
         }
@@ -1429,9 +1439,9 @@ fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
         ));
     }
 
-    // Bottom panel: 128-gene diff bars + lineage disclosure (x = 40..1160, y = 606..1086)
-    s.push_str(r##"<rect x="40" y="606" width="1120" height="480" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
-    s.push_str(r##"<text x="60" y="640" font-size="22" font-weight="700" fill="#0f172a">Directed Edge Coordinate Changes Across 128 Continuous Genes (Δ != 0) &amp; Lineage Scope</text>"##);
+    // Bottom panel: 128-gene diff bars + lineage disclosure (x = 40..1160, y = 650..1126)
+    s.push_str(r##"<rect x="40" y="650" width="1120" height="476" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
+    s.push_str(r##"<text x="60" y="684" font-size="22" font-weight="700" fill="#0f172a">Directed Edge Coordinate Changes Across 128 Continuous Genes (Δ != 0)</text>"##);
 
     if let Some(edges) = inheritance_ledger["induced_subgraph_parent_child_gene_diffs"].as_array() {
         for (i, e) in edges.iter().enumerate() {
@@ -1441,7 +1451,7 @@ fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
             let iden = e["identical_f64_gene_count"].as_u64().unwrap_or(0);
             let l2 = e["l2_gene_distance"].as_f64().unwrap_or(0.0);
             let within3 = e["within_3_hop_edge_horizon"].as_bool().unwrap_or(true);
-            let ry = 660.0 + (i as f64) * 36.0;
+            let ry = 702.0 + (i as f64) * 36.0;
             let w_chg = (chg as f64 / 128.0) * 320.0;
             let w_id = (iden as f64 / 128.0) * 320.0;
             let edge_lbl = if within3 { format!("{p} → {c}") } else { format!("{p} → {c}*") };
@@ -1452,9 +1462,341 @@ fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
         }
     }
 
-    s.push_str(r##"<text x="60" y="975" font-size="21" fill="#475569">*174 → 299 is the 4th-hop induced closure edge; Ti-6Al-4V material (col 145) unchanged on all 8 edges.</text>"##);
-    s.push_str(r##"<text x="60" y="1008" font-size="21" fill="#334155">• Run 1 (1,984 births): 128 roots + 938 1-parent mutations + 918 2-parent crossovers.</text>"##);
-    s.push_str(r##"<text x="60" y="1040" font-size="21" fill="#334155">• Screening (3,649 proposals) &amp; Runs 2–11 (1,954,560 rows): parent_ids = unavailable_in_source.</text>"##);
+    s.push_str(r##"<text x="60" y="1015" font-size="21" fill="#475569">*174 → 299 is the 4th-hop induced closure edge; Ti-6Al-4V material (col 145) unchanged on all 8 edges.</text>"##);
+    s.push_str(r##"<text x="60" y="1048" font-size="21" fill="#334155">• Run 1 (1,984 births): 128 roots + 938 1-parent mutations + 918 2-parent crossovers.</text>"##);
+    s.push_str(r##"<text x="60" y="1080" font-size="21" fill="#334155">• Screening (3,649 proposals) &amp; Runs 2–11 (1,954,560 rows): parent_ids = unavailable_in_source.</text>"##);
+    s.push_str("</svg>\n");
+    Ok(s)
+}
+
+/// Render high-contrast first-page hero SVG (`SC-DEC-183AL` Item 3) directly from retained
+/// `cert_pipeline_r01_p14_c02.stl` (`90,000` triangles) and `cert_pipeline_r01_p14_c02_D1.json`
+/// (`25,209` triangles) under proper `SO(3)` pose (`det = +1.0`) with crisp dark silhouette/hole
+/// contours and readable `21–26px` typography.
+pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
+    use std::fmt::Write as _;
+    const D1_REL: &str = "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json";
+    const STL_REL: &str = "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl";
+    let d1_bytes = crate::corpus::read_bounded_file(
+        &crate::corpus::resolve_safe_relpath(repo_root, D1_REL)?,
+        16 * 1024 * 1024,
+    )?;
+    let stl_bytes = crate::corpus::read_bounded_file(
+        &crate::corpus::resolve_safe_relpath(repo_root, STL_REL)?,
+        16 * 1024 * 1024,
+    )?;
+    let d1: Value = serde_json::from_slice(&d1_bytes)?;
+    let xy_arr = d1["mesh"]["xy"].as_array().ok_or("missing D1 xy")?;
+    let tris_arr = d1["mesh"]["tris"].as_array().ok_or("missing D1 tris")?;
+    let xy: Vec<[f64; 2]> = xy_arr
+        .iter()
+        .map(|p| {
+            let a = p.as_array().unwrap();
+            [a[0].as_f64().unwrap(), a[1].as_f64().unwrap()]
+        })
+        .collect();
+    let tris: Vec<[usize; 3]> = tris_arr
+        .iter()
+        .map(|t| {
+            let a = t.as_array().unwrap();
+            [
+                a[0].as_u64().unwrap() as usize,
+                a[1].as_u64().unwrap() as usize,
+                a[2].as_u64().unwrap() as usize,
+            ]
+        })
+        .collect();
+    let n_tris = tris.len();
+    let mut areas = Vec::with_capacity(n_tris);
+    let mut centroids = Vec::with_capacity(n_tris);
+    let mut edge_counts: BTreeMap<(usize, usize), usize> = BTreeMap::new();
+    for t in &tris {
+        let [a, b, c] = [xy[t[0]], xy[t[1]], xy[t[2]]];
+        let area = 0.5 * ((b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])).abs();
+        areas.push(area);
+        centroids.push([(a[0] + b[0] + c[0]) / 3.0, (a[1] + b[1] + c[1]) / 3.0]);
+        for (u, v) in [(t[0], t[1]), (t[1], t[2]), (t[2], t[0])] {
+            let e = if u < v { (u, v) } else { (v, u) };
+            *edge_counts.entry(e).or_insert(0) += 1;
+        }
+    }
+    // Compute 5-map area-weighted midrank percentile composite across env_vm, lat, pry, ring, twist
+    let map_names = ["env_vm", "lat", "pry", "ring", "twist"];
+    let mut comp_sum = vec![0.0_f64; n_tris];
+    let mut comp_cnt = vec![0u32; n_tris];
+    for name in map_names {
+        let vals: Vec<f64> = d1["mesh"][name]
+            .as_array()
+            .ok_or("missing D1 field")?
+            .iter()
+            .map(|v| v.as_f64().unwrap_or(0.0))
+            .collect();
+        let mut active: Vec<(usize, f64)> = vals
+            .iter()
+            .copied()
+            .enumerate()
+            .filter(|&(_, v)| (name != "env_vm" && name != "ring") || v > 0.0)
+            .collect();
+        active.sort_by(|a, b| a.1.total_cmp(&b.1));
+        let tot_area: f64 = active.iter().map(|&(idx, _)| areas[idx]).sum();
+        let mut cum = 0.0_f64;
+        for &(idx, _) in &active {
+            let a = areas[idx];
+            let rank = (cum + 0.5 * a) / tot_area.max(1e-12);
+            cum += a;
+            comp_sum[idx] += rank;
+            comp_cnt[idx] += 1;
+        }
+    }
+    let mut comp: Vec<f64> = (0..n_tris)
+        .map(|i| comp_sum[i] / (comp_cnt[i].max(1) as f64))
+        .collect();
+    let c_min = comp.iter().copied().fold(f64::INFINITY, f64::min);
+    let c_max = comp.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+    for v in &mut comp {
+        *v = ((*v - c_min) / (c_max - c_min).max(1e-12)).clamp(0.0, 1.0);
+    }
+
+    // High-contrast 6-stop sequential LUT: midnight navy -> royal blue -> deep teal -> gold -> vivid orange -> deep crimson
+    const HERO_LUT: [[f64; 3]; 6] = [
+        [8.0, 28.0, 74.0],
+        [15.0, 76.0, 129.0],
+        [13.0, 148.0, 136.0],
+        [234.0, 179.0, 8.0],
+        [234.0, 88.0, 12.0],
+        [153.0, 27.0, 27.0],
+    ];
+    let eval_lut = |t: f64| -> [f64; 3] {
+        let u = t.clamp(0.0, 1.0) * 5.0;
+        let idx = (u.floor() as usize).min(4);
+        let f = u - (idx as f64);
+        [
+            (1.0 - f) * HERO_LUT[idx][0] + f * HERO_LUT[idx + 1][0],
+            (1.0 - f) * HERO_LUT[idx][1] + f * HERO_LUT[idx + 1][1],
+            (1.0 - f) * HERO_LUT[idx][2] + f * HERO_LUT[idx + 1][2],
+        ]
+    };
+
+    // Proper SO(3) pose R = R_z(-6 deg) * R_x(180 deg) (det = +1.0)
+    let theta = -6.0_f64.to_radians();
+    let (ct, st) = (theta.cos(), theta.sin());
+    let pose_xy = |x: f64, y: f64| -> [f64; 2] {
+        let yr = -y;
+        [x * ct - yr * st, x * st + yr * ct]
+    };
+    let posed_nodes: Vec<[f64; 2]> = xy.iter().map(|p| pose_xy(p[0], p[1])).collect();
+    let mut xmin = f64::INFINITY;
+    let mut xmax = f64::NEG_INFINITY;
+    let mut ymin = f64::INFINITY;
+    let mut ymax = f64::NEG_INFINITY;
+    for p in &posed_nodes {
+        xmin = xmin.min(p[0]);
+        xmax = xmax.max(p[0]);
+        ymin = ymin.min(p[1]);
+        ymax = ymax.max(p[1]);
+    }
+    let scale = (1380.0 / (xmax - xmin)).min(470.0 / (ymax - ymin));
+    let ox = 110.0 + (1380.0 - (xmax - xmin) * scale) * 0.5 - xmin * scale;
+    let oy = 104.0 + (470.0 - (ymax - ymin) * scale) * 0.5 + ymax * scale;
+    let to_svg = |px: f64, py: f64| -> (f64, f64) { (ox + px * scale, oy - py * scale) };
+
+    // Build 2D spatial grid on unposed D1 centroids so 90,000 STL triangles map in O(1)
+    let mut grid_buckets: BTreeMap<(i32, i32), Vec<usize>> = BTreeMap::new();
+    for (i, c) in centroids.iter().enumerate() {
+        let gx = (c[0] * 0.5).floor() as i32;
+        let gy = (c[1] * 0.5).floor() as i32;
+        grid_buckets.entry((gx, gy)).or_default().push(i);
+    }
+
+    // Parse 90,000-triangle STL (supports both ASCII and binary STL) and shade visible upper-surface triangles
+    if stl_bytes.len() < 84 {
+        return Err("STL too short".into());
+    }
+    let mut raw_tris: Vec<([f64; 3], [[f64; 3]; 3])> = Vec::with_capacity(90_000);
+    if stl_bytes.starts_with(b"solid") {
+        let text = std::str::from_utf8(&stl_bytes)?;
+        let mut cur_n = [0.0f64; 3];
+        let mut cur_v = [[0.0f64; 3]; 3];
+        let mut vi = 0usize;
+        for line in text.lines() {
+            let t = line.trim();
+            if let Some(rest) = t.strip_prefix("facet normal ") {
+                let mut it = rest.split_whitespace();
+                if let (Some(nx), Some(ny), Some(nz)) = (it.next(), it.next(), it.next()) {
+                    cur_n = [
+                        nx.parse().unwrap_or(0.0),
+                        ny.parse().unwrap_or(0.0),
+                        nz.parse().unwrap_or(0.0),
+                    ];
+                }
+                vi = 0;
+            } else if let Some(rest) = t.strip_prefix("vertex ") {
+                if vi < 3 {
+                    let mut it = rest.split_whitespace();
+                    if let (Some(vx), Some(vy), Some(vz)) = (it.next(), it.next(), it.next()) {
+                        cur_v[vi] = [
+                            vx.parse().unwrap_or(0.0),
+                            vy.parse().unwrap_or(0.0),
+                            vz.parse().unwrap_or(0.0),
+                        ];
+                        vi += 1;
+                        if vi == 3 {
+                            raw_tris.push((cur_n, cur_v));
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        let tri_count = u32::from_le_bytes(stl_bytes[80..84].try_into().unwrap()) as usize;
+        for idx in 0..tri_count {
+            let base = 84 + idx * 50;
+            let read_f32 = |off: usize| -> f64 {
+                f32::from_le_bytes(stl_bytes[base + off..base + off + 4].try_into().unwrap()) as f64
+            };
+            raw_tris.push((
+                [read_f32(0), read_f32(4), read_f32(8)],
+                [
+                    [read_f32(12), read_f32(16), read_f32(20)],
+                    [read_f32(24), read_f32(28), read_f32(32)],
+                    [read_f32(36), read_f32(40), read_f32(44)],
+                ],
+            ));
+        }
+    }
+    let mut stl_vis: Vec<(f64, [(f64, f64); 3], [u8; 3])> = Vec::with_capacity(raw_tris.len() / 2 + 1024);
+    for (n_vec, [v0, v1, v2]) in raw_tris {
+        let (nx, ny, nz) = (n_vec[0], n_vec[1], n_vec[2]);
+        // Under R = R_z(-6 deg) * R_x(180 deg), posed z is -z
+        let nzp = -nz;
+        if nzp < -0.05 {
+            continue;
+        }
+        let cx = (v0[0] + v1[0] + v2[0]) / 3.0;
+        let cy = (v0[1] + v1[1] + v2[1]) / 3.0;
+        let czp = -(v0[2] + v1[2] + v2[2]) / 3.0;
+        let (gx, gy) = ((cx * 0.5).floor() as i32, (cy * 0.5).floor() as i32);
+        let mut best_i = 0usize;
+        let mut best_d2 = f64::INFINITY;
+        for dx in -2..=2 {
+            for dy in -2..=2 {
+                if let Some(bucket) = grid_buckets.get(&(gx + dx, gy + dy)) {
+                    for &di in bucket {
+                        let d2 = (centroids[di][0] - cx).powi(2) + (centroids[di][1] - cy).powi(2);
+                        if d2 < best_d2 {
+                            best_d2 = d2;
+                            best_i = di;
+                        }
+                    }
+                }
+            }
+        }
+        let base_rgb = eval_lut(comp[best_i]);
+        let nxp = nx * ct - (-ny) * st;
+        let nyp = nx * st + (-ny) * ct;
+        let n_len = (nxp * nxp + nyp * nyp + nzp * nzp).sqrt().max(1e-9);
+        let (unx, uny, unz) = (nxp / n_len, nyp / n_len, nzp / n_len);
+        // Key light from upper-left-front (-0.38, 0.44, 0.81) + bevel rim (0.45, -0.35, 0.82)
+        let dot1 = (-0.38 * unx + 0.44 * uny + 0.81 * unz).max(0.0);
+        let dot2 = (0.45 * unx - 0.35 * uny + 0.82 * unz).max(0.0);
+        let shade = 0.72 + 0.32 * dot1 + 0.08 * dot2;
+        let spec = 14.0 * dot1.powi(6);
+        let rgb = [
+            (base_rgb[0] * shade + spec).round().clamp(0.0, 255.0) as u8,
+            (base_rgb[1] * shade + spec).round().clamp(0.0, 255.0) as u8,
+            (base_rgb[2] * shade + spec).round().clamp(0.0, 255.0) as u8,
+        ];
+        let p0 = pose_xy(v0[0], v0[1]);
+        let p1 = pose_xy(v1[0], v1[1]);
+        let p2 = pose_xy(v2[0], v2[1]);
+        stl_vis.push((czp, [to_svg(p0[0], p0[1]), to_svg(p1[0], p1[1]), to_svg(p2[0], p2[1])], rgb));
+    }
+    stl_vis.sort_by(|a, b| a.0.total_cmp(&b.0));
+
+    let mut s = String::with_capacity(6_400_000);
+    s.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 680" width="1600" height="680" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif">"##);
+    s.push('\n');
+    s.push_str(r##"<rect width="1600" height="680" fill="#ffffff"/>"##);
+    s.push_str(r##"<rect x="14" y="12" width="1572" height="656" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>"##);
+    s.push_str(r##"<text x="36" y="44" font-size="25" font-weight="700" fill="#0f172a">Individual 2000 — Exact 3D CAD Surface &amp; Registered 5-Map Structural Demand Index (D1)</text>"##);
+    s.push_str(r##"<text x="36" y="72" font-size="21" fill="#334155">Exact STL (44,994 vertices, 90,000 triangles; 0 modifiers) · Proper SO(3) Pose (det = +1.0) · 25,209-Triangle D1 Composite</text>"##);
+
+    // Draw high-contrast 3D STL surface triangles
+    for (_, [s0, s1, s2], [r, g, b]) in &stl_vis {
+        let _ = write!(
+            s,
+            "<polygon points=\"{:.2},{:.2} {:.2},{:.2} {:.2},{:.2}\" fill=\"#{r:02x}{g:02x}{b:02x}\" stroke=\"#{r:02x}{g:02x}{b:02x}\" stroke-width=\"0.22\"/>\n",
+            s0.0, s0.1, s1.0, s1.1, s2.0, s2.1
+        );
+    }
+
+    // Crisp dark silhouette and finger-ring / handle-slot hole contours from D1 boundary edges
+    s.push_str(r##"<g stroke="#0f172a" stroke-width="1.8" stroke-linecap="round">"##);
+    for (&(u, v), &cnt) in &edge_counts {
+        if cnt == 1 {
+            let (x1, y1) = to_svg(posed_nodes[u][0], posed_nodes[u][1]);
+            let (x2, y2) = to_svg(posed_nodes[v][0], posed_nodes[v][1]);
+            let _ = write!(s, "<line x1=\"{x1:.2}\" y1=\"{y1:.2}\" x2=\"{x2:.2}\" y2=\"{y2:.2}\"/>");
+        }
+    }
+    s.push_str("</g>\n");
+
+    // 4.0 mm tip-exclusion dashed circle
+    if let Some(tip_arr) = d1["export_surface"]["tip"].as_array() {
+        let tp = pose_xy(tip_arr[0].as_f64().unwrap_or(0.0), tip_arr[1].as_f64().unwrap_or(0.0));
+        let (tx, ty) = to_svg(tp[0], tp[1]);
+        let r_px = 4.0 * scale;
+        let _ = writeln!(
+            s,
+            r##"<circle cx="{tx:.2}" cy="{ty:.2}" r="{r_px:.2}" fill="none" stroke="#b91c1c" stroke-width="2.0" stroke-dasharray="5,4"/><text x="{:.2}" y="{:.2}" text-anchor="end" font-size="21" font-weight="600" fill="#991b1b">4.0 mm Tip Submodel ROI</text>"##,
+            tx - r_px - 10.0,
+            ty + 6.0
+        );
+    }
+
+    // High-contrast sequential colorbar + readable dark legend & scale bar
+    s.push_str(r##"<text x="36" y="596" font-size="21" font-weight="700" fill="#0f172a">5-Map Percentile Composite Index [0, 1] (env_vm, lat, pry, ring, twist)</text>"##);
+    let cb_x0 = 36.0_f64;
+    let cb_w = 640.0_f64;
+    let n_steps = 80usize;
+    for i in 0..n_steps {
+        let t = (i as f64 + 0.5) / (n_steps as f64);
+        let [r, g, b] = eval_lut(t).map(|v| v.round() as u8);
+        let x = cb_x0 + (i as f64) * (cb_w / n_steps as f64);
+        let w = (cb_w / n_steps as f64) + 0.8;
+        let _ = write!(
+            s,
+            "<rect x=\"{x:.2}\" y=\"606\" width=\"{w:.2}\" height=\"18\" fill=\"#{r:02x}{g:02x}{b:02x}\"/>"
+        );
+    }
+    s.push_str(r##"<rect x="36" y="606" width="640" height="18" fill="none" stroke="#0f172a" stroke-width="1.4"/>"##);
+    for (frac, lbl, anchor) in [
+        (0.0, "0.00 (Low)", "start"),
+        (0.28, "0.25", "middle"),
+        (0.50, "0.50", "middle"),
+        (0.72, "0.75", "middle"),
+        (1.00, "1.00 (Peak)", "end"),
+    ] {
+        let tick_x = cb_x0 + (match lbl {
+            "0.25" => 0.25,
+            "0.75" => 0.75,
+            _ => frac,
+        }) * cb_w;
+        let text_x = cb_x0 + frac * cb_w;
+        let _ = write!(
+            s,
+            "<line x1=\"{tick_x:.2}\" y1=\"624\" x2=\"{tick_x:.2}\" y2=\"630\" stroke=\"#0f172a\" stroke-width=\"1.4\"/><text x=\"{text_x:.2}\" y=\"650\" text-anchor=\"{anchor}\" font-size=\"21\" font-weight=\"600\" fill=\"#0f172a\">{lbl}</text>"
+        );
+    }
+    let bar_25mm = 25.0 * scale;
+    let bx1 = 1554.0_f64;
+    let bx0 = bx1 - bar_25mm;
+    let _ = writeln!(
+        s,
+        r##"<text x="{:.2}" y="596" text-anchor="middle" font-size="21" font-weight="700" fill="#0f172a">25 mm CAD Scale</text><line x1="{bx0:.2}" y1="615" x2="{bx1:.2}" y2="615" stroke="#0f172a" stroke-width="3.0"/><line x1="{bx0:.2}" y1="607" x2="{bx0:.2}" y2="623" stroke="#0f172a" stroke-width="2.4"/><line x1="{bx1:.2}" y1="607" x2="{bx1:.2}" y2="623" stroke="#0f172a" stroke-width="2.4"/>"##,
+        0.5 * (bx0 + bx1)
+    );
+    s.push_str(r##"<text x="1554" y="650" text-anchor="end" font-size="21" fill="#334155">Assessed = 1, Qualified = 0 (Cohort 3 births lack Stage-2 CAD assessments)</text>"##);
     s.push_str("</svg>\n");
     Ok(s)
 }

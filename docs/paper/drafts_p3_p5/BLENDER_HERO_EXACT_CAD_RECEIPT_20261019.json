@@ -51,8 +51,20 @@
     3200,
     1360
   ],
-  "output_png_sha256": "882c92d660a05872f3f482a2b0ad78df02725bd06d3d513ff867568d5081d333",
-  "output_png_bytes": 855353,
+  "output_png_sha256": "358713c7a5dcd52993fff3f066f9bbdd06c6839d6e88ea72533a56691707df92",
+  "output_png_bytes": 1285542,
+  "superseded_cycles_composite_png_sha256": "882c92d660a05872f3f482a2b0ad78df02725bd06d3d513ff867568d5081d333",
+  "superseded_cycles_composite_png_bytes": 855353,
+  "delivered_svg_projection_recipe": {
+    "renderer_kind": "Deterministic Rust exact-CAD 3D surface SVG projection + rsvg-convert rasterization (not Cycles raytraced output)",
+    "producer_source": "crates/paper-artifacts/src/population.rs::render_hero_exact_cad_svg",
+    "intermediate_svg_path": "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg",
+    "intermediate_svg_sha256": "016dc907f2d8ba5bf318af9b493b750a5145768527cc6a14038c299051f1607a",
+    "intermediate_svg_bytes": 5632721,
+    "rasterizer_command": "rsvg-convert -w 3200 -h 1360 docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg -o docs/paper/figures/fig1_hero_blender_v2.png",
+    "output_png_sha256": "358713c7a5dcd52993fff3f066f9bbdd06c6839d6e88ea72533a56691707df92",
+    "output_png_bytes": 1285542
+  },
   "output_paths": [
     "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.png",
     "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/figures/fig1_hero_blender_v2.png",

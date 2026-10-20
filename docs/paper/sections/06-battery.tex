@@ -24,8 +24,8 @@ Understanding the retained data requires distinguishing three evaluation regimes
 \toprule
 \textbf{Methodological Family} & \textbf{Observable \& Units} & \textbf{Domain \& Formulation} & \textbf{Retained Visual / Scope} & \textbf{Verification Criteria} \\
 \midrule
-1.~Representation \& exported geometry & B-rep solid/shell/face counts; mesh closure; mass ($\mathrm{g}$); SHA-256 identity & 128-gene + material decoder to STEP, STL, and 2D/3D FEM meshes & Fig.~\ref{fig:export-identity} (A--B); 3 nominal/B-rep checks omit synthetic visuals & Watertight single solid; holder envelope; ring/claw \& bevel geometry \\
-2.~Shape \& reference comparison & Hausdorff distance $d_H$ ($\mathrm{mm}$), curvature EMD, similarity score $\in[0,1]$ & Closed 2D exterior contour (4,230 pts) vs.\ C.5/C.6 reference (1,117 pts) & Fig.~\ref{fig:reference} (A--B: 2.285\,mm, EMD 0.0071, score 0.4079) & Reference-contour similarity ($d_H \le 15\,\mathrm{mm}$, $\mathrm{EMD} \le 0.12$, score $\ge 0.25$) \\
+1.~Representation \& exported geometry & B-rep solid/shell/face counts; mesh closure; mass ($\mathrm{g}$); SHA-256 identity & 128-gene + material decoder to STEP, STL, and 2D/3D FEM meshes & Fig.~\ref{fig:cover}; Supplement \nolinkurl{export-identity.svg}; 3 nominal/B-rep checks omit synthetic visuals & Watertight single solid; holder envelope; ring/claw \& bevel geometry \\
+2.~Shape \& reference comparison & Hausdorff distance $d_H$ ($\mathrm{mm}$), curvature EMD, similarity score $\in[0,1]$ & Closed 2D exterior contour (4,230 pts) vs.\ C.5/C.6 reference (1,117 pts) & Supplement \nolinkurl{reference.svg} (2.285\,mm, EMD 0.0071, score 0.4079) & Reference-contour similarity ($d_H \le 15\,\mathrm{mm}$, $\mathrm{EMD} \le 0.12$, score $\ge 0.25$) \\
 3.~Plate lateral \& pry response & Unit bending/pry $\sigma_{\mathrm{vM}}$ ($\mathrm{MPa/N}$); lateral capacity $F_{\mathrm{lat}}$ ($\mathrm{N}$) & DKT bending \& T6 membrane; both scaled by $260\,\mathrm{N}$ in multi-case envelope & Fig.~\ref{fig:plate-fields} (A, B); Fig.~\ref{fig:assessment} (C: 168.90 vs.\ 168.18\,N) & Lateral bending \& pry capacity ($180\,\mathrm{N}$ coarse; $260\,\mathrm{N}$ cert.\ \& refined plate) \\
 4.~Ring traction & Unit in-plane $\sigma_{\mathrm{vM}}$ ($\mathrm{MPa/N}$); ring pull capacity $F_{\mathrm{ring}}$ ($\mathrm{N}$) & T6 membrane triangles ($25{,}209$ total; $10{,}334$ unmasked ring support) & Fig.~\ref{fig:plate-fields} (C: 14,875 seated cells masked in gray) & Retention-ring pull capacity ($1500\,\mathrm{N}$ membrane traction \& human overload) \\
 5.~Body \& local torsion & Unit torsional $\sigma_{\mathrm{vM}}$ ($\mathrm{MPa/(N\,mm)}$); body/tip safety factors & DKT plate torsion ($1.82\,\mathrm{N\,m}$ scale); 4\,mm tip capacity exclusion & Fig.~\ref{fig:plate-fields} (D); Fig.~\ref{fig:assessment} (C: 0.5239 cert / 0.5287 strict) & Body \& tip torsional response ($1.82\,\mathrm{N\,m}$ cert.\ and refined plate torsion) \\
@@ -44,28 +44,14 @@ Understanding the retained data requires distinguishing three evaluation regimes
 \textbf{Question \& Observables:} Does a decoded genome produce a closed, single-solid B-rep and surface mesh with verifiable unit scaling, mass ($\mathrm{g}$), edge/tip profile geometry ($\mathrm{mm}$), and cryptographic byte binding?
 \textbf{Domain \& Formulation:} The decoder maps the 128-gene vector and material density into a 2D mid-surface contour, variable thickness/bevel fields, and 3D STEP/STL exports.
 \textbf{Objective Role:} Geometric legality gates initial evaluation in native QD search; exported geometry terms contribute 15\% of the retained weighted reporting profile.
-\textbf{Retained Visual \& Limits:} Figure~\ref{fig:export-identity} binds Individual~2000's genome, STEP/STL digests, 1 solid / 1 shell / 55,698 STEP face tokens, OpenCascade valid B-rep record, and 44,994-vertex / 90,000-triangle Blender render mesh. Three geometry checks in this family (holder-envelope clearance, ring/claw planform proportions, and B-rep edge/tip metrology) intentionally omit synthetic subsection visuals (4 entries total across the 44-entry catalog) because nominal parameters and exported B-rep metrology must not be conflated. In the historical battery, unit-declaration, single-solid, and pin-clearance bindings are blocked across all 23 subjects (Supplement Section~\ref{sec:reproducibility}).
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{export-identity.png}
-\caption{Individual~2000 original export-identity and topology records (single assessed export, 1 assessed, 0 qualified, no promoted champion): saved content associations, STEP text-token counts ($1$ solid, $1$ shell, $55{,}698$ faces), exporter edge census, and B-rep reader findings alongside the $44{,}994$-vertex / $90{,}000$-triangle render mesh.}
-\label{fig:export-identity}
-\end{figure*}
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{reference.png}
-\caption{Individual~2000 reference-contour comparison records (single assessed export, 1 assessed, 0 qualified, no promoted champion): all $4{,}230$ exterior outline points and $1{,}117$ C.5/C.6 reference points displayed as closed polylines under a common isotropic scale, paired with saved descriptors (Hausdorff distance $2.285\,\mathrm{mm}$, curvature EMD $0.0071$, similarity score $0.4079$).}
-\label{fig:reference}
-\end{figure*}
+\textbf{Retained Visual \& Limits:} The linked Supplement (\nolinkurl{generated/export-identity.svg}, Section~\ref{sec:reproducibility}) and Figure~\ref{fig:cover} bind Individual~2000's genome, STEP/STL digests, 1 solid / 1 shell / 55,698 STEP face tokens, OpenCascade valid B-rep record, and 44,994-vertex / 90,000-triangle render mesh. Three geometry checks in this family (holder-envelope clearance, ring/claw planform proportions, and B-rep edge/tip metrology) intentionally omit synthetic subsection visuals (4 entries total across the 44-entry catalog) because nominal parameters and exported B-rep metrology must not be conflated. In the historical battery, unit-declaration, single-solid, and pin-clearance bindings are blocked across all 23 subjects (Supplement Section~\ref{sec:reproducibility}).
 
 \subsection{Family 2: Shape and Reference Comparison}
 \label{subsec:family-reference}
 \textbf{Question \& Observables:} How closely does the decoded exterior silhouette match the authored reference archetype in Hausdorff distance ($\mathrm{mm}$), curvature-histogram Earth Mover's Distance (EMD, dimensionless), and composite similarity score $\in [0,1]$?
 \textbf{Domain \& Formulation:} Evaluates the closed 2D exterior polyline (4,230 points for Individual~2000) against the retained C.5 exterior reference polyline (1,117 points, reused by C.6) under a common isotropic coordinate transform.
 \textbf{Objective Role:} Enforces the reference-contour similarity floor before FEM in native QD search and supplies form/reference proxy terms in weighted reporting.
-\textbf{Retained Visual \& Limits:} Figure~\ref{fig:reference} displays both polylines and the saved descriptors (Hausdorff $2.285\,\mathrm{mm}$, curvature EMD $0.0071$, similarity score $0.4079$, empty failure list). Reference resemblance measures conformity to an authored geometric prior, not human ergonomic approval or comfort (Supplement Section~\ref{sec:reproducibility}).
+\textbf{Retained Visual \& Limits:} The linked Supplement (\nolinkurl{generated/reference.svg}, Section~\ref{sec:reproducibility}) displays both polylines and the saved descriptors (Hausdorff $2.285\,\mathrm{mm}$, curvature EMD $0.0071$, similarity score $0.4079$, empty failure list). Reference resemblance measures conformity to an authored geometric prior, not human ergonomic approval or comfort.
 
 \subsection{Family 3: Plate Lateral and Pry Response}
 \label{subsec:family-lateral}

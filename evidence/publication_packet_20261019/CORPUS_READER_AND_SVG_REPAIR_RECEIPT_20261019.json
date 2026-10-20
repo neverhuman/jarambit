@@ -1,0 +1,95 @@
+{
+  "schema": "jarambit.corpus_reader_and_svg_repair_receipt.v1",
+  "timestamp_utc": "2026-10-19T20:23:15Z",
+  "steward": "2740538.captain_jarambit:1",
+  "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+  "branch": "ei/admiralty-primary-20261019",
+  "governing_decisions": [
+    "SC-DEC-183P",
+    "SC-DEC-183Q",
+    "SC-DEC-183R",
+    "SC-DEC-183S",
+    "SC-DEC-183V",
+    "SC-DEC-183W",
+    "SC-DEC-183X",
+    "SC-DEC-183Y"
+  ],
+  "erroneous_v1_receipt_preserved_at": "docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_V1_OBSERVED_ERRONEOUS_20261019.json",
+  "source_and_binary_bindings": {
+    "crates/paper-artifacts/src/corpus.rs": "766b84efb5f558566c4d10649f997c86881717bd4547f995a7f3e4fb3ea1b72e",
+    "crates/paper-artifacts/src/population.rs": "d3c3d25967dfb815983eaa0b54d9890b115a2f67fcc5d6fe154b4a87210fd15e",
+    "crates/paper-artifacts/src/publication.rs": "21ff29d9c16cf44a4b04f26be7c5e65aaf83a7afde90be4faa84c616e49fe11b",
+    "crates/paper-artifacts/src/lib.rs": "6722079254b611b1dab6f5f5135be59ff718d567e4d0ebd1448bfd928c0db337",
+    "crates/paper-artifacts/examples/publication_v2_audit.rs": "610a5b9a0c03984278db7b150184a101d1bacd10dc79e668e9ec2c36cf5c3919",
+    "superseded_stale_debug_binary_sha256": "24f52f1300ee0397dc2c84da7b1bc4ed1309114b63c71a7edd0003a45c3a6f3d"
+  },
+  "sc_dec_183p_and_183s_fixes_verified": {
+    "1_jev1_binary_framing": {
+      "file": "evidence/rs_v2/w282_ultrarunner/search/evidence.jevl",
+      "bytes": 64162,
+      "sha256": "29d4602b1728e179606ac380df69652efea6e45c3daf67a6602cf56a6699b181",
+      "first16_hex": "4a45563198010000a34f027366a90fd9",
+      "frames_decoded": 19,
+      "events_decoded": 2207,
+      "migrations_generations": [4, 8, 12]
+    },
+    "2_historical_search_files": {
+      "all_evals.json": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363",
+      "all_evals.csv": "a28f6d2c8a676661280981733a1e33c80136aba157c7a9d2f5a5c3db444a223c",
+      "all_evals_csv_columns": 146,
+      "distinct_129col_gene_material_tuples": 1965,
+      "history.csv": "9fde87c601b0a7fab3bf4b3f66ca3505df19917cb45e7c7bc7994f3e8f59333f",
+      "qd_archive.csv": "9d4ce161375faceb7a13c03c021b2fed50a47db96cb9f514552416f41898f28c",
+      "search_summary.json": "e4e6cf51da8269833709ef8501ba3b06934cfb5baecc038628f384675b63dd49"
+    },
+    "3_newer_wave_corpus": {
+      "birth_files": 57,
+      "run_directories": 24,
+      "birth_events": 3649,
+      "one_based_exact_joins": 2259,
+      "unscreened_birth_events": 1390,
+      "zero_based_misjoins_rejected": 2247,
+      "metadata_validator_birth_files_fix": "validate_newer_corpus_join accepts canonical birth_files (or legacy birth_files_count) and rebuilt publication_v2_audit binary exits 0"
+    },
+    "4_frozen_custody_hashes_restored": {
+      "v1_first_observed": "081f34e5659ce518ce45ef6ed731840609b221aa3c2f6b1bfbc24322fceacf98",
+      "v1_second_observed": "62b67373d45f5a1174561591e6ba49508f3ec1d3bce0bed6e2adad2f04807eae",
+      "v1_current_remote": "010a91d7e4865cd661d14b56c7c1bf50feccfcc8080c5e65c3040628881bf311",
+      "v2_frozen_handoff": "b1f884622aaffc9929069424685ed0aaf8b950470b254141336c193f1ec2529e",
+      "v2_erratum": "a3cefc5ce7f841aa6e7b1edfd8503c988dfa1e4e04754b22ea7babc4bcc1ff8a",
+      "t07_base_index": "dd69650f66a0c6cf29cbfcfc80e1302529717ba7e31a9af6b0b825d13970c49b",
+      "t08_gen800_index": "66c84ed4cdc943df885da4cdd72d25c0054195d9d8b9a01e1c35b6f3119c38cf"
+    },
+    "5_bounded_reads_and_containment": {
+      "read_bounded_file": "fs::symlink_metadata preflight + Read::take(max_bytes + 1)",
+      "decompress_segment_bytes": "StreamingDecoder::take(expected_logical_bytes + 1)",
+      "resolve_safe_relpath": "rejects symlinks and verifies canonicalize() prefix containment",
+      "resolve_archive_path": "strict worktree-local resolution under repo_root without parent-directory escape",
+      "validate_repair_receipt_file_bindings": "automatic Rust byte-level verification of all receipt file paths and SHA-256 constants"
+    },
+    "6_public_run_registry_reconciled": {
+      "cohort_1_historical_w282": ["Run 1"],
+      "cohort_3_ten_retained_800gen_runs": ["Run 2", "Run 3", "Run 4", "Run 5", "Run 6", "Run 7", "Run 8", "Run 9", "Run 10", "Run 11"],
+      "legacy_superseded_crosswalk": ["Run 37", "Run 38", "Run 39", "Run 40", "Run 41", "Run 42", "Run 43", "Run 44", "Run 45", "Run 46"]
+    }
+  },
+  "generated_outputs_sha256": {
+    "docs/paper/figures/population-births.svg": "7bfb9f1d0f71972dedae621baf9ff7487e8ecabf30779a26e55d5c104ed9035b",
+    "docs/paper/figures/population-membership.svg": "0d872c623ec134a91359ff20ec1bbe81df2e712801760ffbba0802e01a635d12",
+    "docs/paper/figures/population-newer.svg": "eb6d5cce390c6b1847ec60e8e3234b9be0d28965c218953d43e7638557db59fd",
+    "docs/paper/figures/population-latest.svg": "c60282624a2cd2a0c0a604b9476c196c051291974ba40ab1eb5feac0cc5a425d",
+    "docs/paper/figures/fitness-progress.svg": "f0147dc401f9e6caa801edb61a1bebd3c945830ae3abe8e93fd98764e3a22207",
+    "docs/paper/figures/inheritance.svg": "6e58f5abc975790518251a04a85cc99bab630570787c2408f53c80381e7a85e1",
+    "docs/paper/generated/shared_projection.v2.json": "cabb41c0475d3dbc77349850bd2110661fce0fd544da73857dc59b6bc21d43c8",
+    "docs/paper/generated/overview.md": "376ce903ef7c2768f5695f930614390ad6f94fad07ccdfe7e84b3b735bf352c2",
+    "docs/paper/generated/manifest.json": "71f5500d65dd051e3e3530733d31e302352d6923ef3829ce174a93cb890bf656",
+    "docs/paper/publication.v2.json": "26efcc68cc889f918d82e3f982ae714781238fb721078f7519c8efd359909150",
+    "docs/paper/generated/population/gen800_scatter_cache.v1.json": "4eabe5a581dcb655b413857bfb3c28741070dc390b3ca71d744aa51f58e7a493"
+  },
+  "focused_test_execution": {
+    "command": "CARGO_TARGET_DIR=/tmp/jarambit-hpc-profile-target nice -n 10 cargo test --locked -j 4 --manifest-path crates/paper-artifacts/Cargo.toml --lib",
+    "tests_passed": 70,
+    "tests_failed": 0,
+    "exit_code": 0
+  }
+}
