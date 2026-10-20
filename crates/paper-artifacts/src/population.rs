@@ -2349,14 +2349,18 @@ fn render_hero_view(
     let title = match view {
         HeroView::Support => "Individual 2000 — Available Response Support",
         HeroView::ContrastPreview => "Individual 2000 — Display Contrast Preview (Q05–Q95)",
-        HeroView::FullRange | HeroView::MeshOn => {
-            "Individual 2000 — Available-Response Display Index"
-        }
+        HeroView::MeshOn => "Individual 2000 — CAD Tessellation Overlay",
+        HeroView::FullRange => "Individual 2000 — Available-Response Display Index",
     };
     s.push_str(&format!(
         r##"<text x="36" y="44" font-size="34" font-weight="700" fill="#0f172a">{title}</text>"##
     ));
-    s.push_str(r##"<text x="36" y="80" font-size="28" fill="#334155">Four retained response channels; scalar predicates and unavailable fields add no spatial weight.</text>"##);
+    let subtitle = if view == HeroView::MeshOn {
+        "CAD STL: 90,000 triangles. Colors: retained plate-response display index."
+    } else {
+        "Four retained response channels; scalar predicates and unavailable fields add no spatial weight."
+    };
+    s.push_str(&format!(r##"<text x="36" y="80" font-size="28" fill="#334155">{subtitle}</text>"##));
 
     // Draw projected STL triangles with direct quantitative palette colors.
     for (_, [s0, s1, s2], [r, g, b]) in &stl_vis {
