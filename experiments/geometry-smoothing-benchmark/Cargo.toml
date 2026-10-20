@@ -1,0 +1,11 @@
+[package]
+name = "geometry-smoothing-benchmark"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[workspace]
+
+[profile.release]
+overflow-checks = true
+debug-assertions = true

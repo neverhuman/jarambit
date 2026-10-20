@@ -1,0 +1,17 @@
+{
+"schema":"synthetic_geometry_smoothing.v1",
+"fixture":"deterministic_rough_icosphere",
+"representation":"triangle_mesh_not_brep",
+"units":"mm",
+"vertices":642,
+"triangles":1280,
+"radius_mm":30,
+"noise_amplitude_mm":0.8,
+"subdivisions":3,
+"settings":{"iterations":20,"lambda":0.5,"mu":-0.5,"max_displacement_mm":2},
+"before":{"radial_rms_mm":4.23985777081147985e-1,"radial_p95_mm":7.48253714822233462e-1,"radial_max_mm":7.99081442451161195e-1,"mean_radius_mm":3.00000000000000107e1,"volume_mm3":1.12120866237378708e5,"min_double_area_mm2":1.58974526034985129e1,"max_displacement_mm":0.00000000000000000e0,"moved_vertices":0,"euler_characteristic":2,"boundary_vertices":0},
+"after":{"radial_rms_mm":1.02598178000115739e-1,"radial_p95_mm":2.19425580211989768e-1,"radial_max_mm":4.20317460963918421e-1,"mean_radius_mm":2.99783223877039298e1,"volume_mm3":1.11887419102586442e5,"min_double_area_mm2":1.21533571746943920e1,"max_displacement_mm":1.02358417042598071e0,"moved_vertices":642,"euler_characteristic":2,"boundary_vertices":0},
+"reference":{"radial_rms_mm":3.35344129857132091e-15,"radial_p95_mm":3.55271367880050093e-15,"radial_max_mm":7.10542735760100186e-15,"mean_radius_mm":3.00000000000000000e1,"volume_mm3":1.12124002061512991e5,"min_double_area_mm2":1.63491136913422217e1,"max_displacement_mm":0.00000000000000000e0,"moved_vertices":0,"euler_characteristic":2,"boundary_vertices":0},
+"topology_unchanged":true,
+"benchmark_passed":true
+}

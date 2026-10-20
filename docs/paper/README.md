@@ -32,6 +32,10 @@ Prerequisites: Rust/Cargo with locked dependencies, complete archives, LuaLaTeX/
 rtk proxy sh docs/paper/reproduce.sh documents
 ~~~
 
+Every figure/PDF build first executes the [synthetic geometry smoothing benchmark](../../experiments/geometry-smoothing-benchmark/README.md). It actually moves vertices on a made-up rough sphere and refuses to continue if the declared error, volume, topology or displacement checks fail. This is a neutral algorithm preflight: its meshes do not replace the paper's source-bound CAD or supply assessment evidence for the cover subject. No production geometry smoothing is installed by this step.
+
+Run that preflight alone with `rtk proxy make -C docs/paper synthetic-geometry-check`. Each execution saves new meshes, numerical measurements and source/output SHA-256 manifests under `target/ieee/paper/synthetic-geometry/run.*/`. `LATEST` identifies the most recent successful attempt; a failed command prevents the figure/PDF build from continuing. Existing benchmark results are never overwritten. The required version-check CI job runs the benchmark tests and repeats this preflight before building the paper.
+
 Final validation uses the check subcommand after the recorded freeze, together with all required repository gates and independent exact-head review. An implementation build does not establish that those checks have passed.
 
 ## Source closure and accessions
