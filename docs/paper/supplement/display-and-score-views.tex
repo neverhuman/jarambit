@@ -12,6 +12,11 @@ Table~\ref{tab:display-roster-families} reconciles its universe. Inventory
 membership does not imply an independent test, performed solve or spatial
 response. Scalar-only and incompatible-domain rows remain in the table and
 contribute missing values at every display cell; they are never broadcast.
+The requested multihue palette has no monotone-lightness or universal
+color-vision accessibility claim. Grayscale and simulated color-vision
+diagnostics can merge different index colors. Numeric per-cell values,
+contributor records and the separate physical-unit views remain necessary
+for quantitative interpretation; hue alone is insufficient.
 
 \begin{table}[ht]
 \centering
@@ -60,7 +65,6 @@ mesh off. Colors are display coordinates, not physical units or fitness.}
 \end{figure}
 
 \clearpage
-\subsection{Additional Quantile Detail}
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{population-detail.png}
@@ -76,21 +80,17 @@ density. These views add no observations.}
 \end{figure}
 \clearpage
 
-\subsection{Native Run Context}
-These five paired views reuse all $1{,}954{,}560$ retained native birth
-observations. Each run has its own printed $\operatorname{asinh}(y/L)$ key,
-with $L$ given by the declared empirical 25th percentile of nonzero absolute
-scores. Zeros remain plotted. The secondary retained-best trace is monotone
-by construction within its own run; it is not evidence of physical
-convergence and does not connect separate runs. These contextual fitness
-values are not a common scientific quality scale or a downstream assessment.
-
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{native-runs-2-3.png}
 \caption{Retained birth observations and within-run retained-best context for
-Runs~2--3. Each run keeps its original generation and score values, full
-numeric range and separately printed transform scale.}
+Runs~2--3. Across the five paired views, all $1{,}954{,}560$ original native
+births are reused. Each run keeps its full numeric range and printed
+$\operatorname{asinh}(y/L)$ key; $L$ is that run's empirical 25th percentile
+of nonzero absolute scores, while zeros remain plotted. The secondary
+retained-best trace is monotone by construction within its own run and
+does not connect different runs. It establishes neither physical convergence
+nor a common scientific quality scale or downstream assessment.}
 \label{fig:native-runs-2-3}
 \end{figure}
 \clearpage

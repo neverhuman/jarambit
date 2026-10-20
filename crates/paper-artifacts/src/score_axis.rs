@@ -16,8 +16,9 @@ impl ScoreAxis {
         }
         sorted.sort_by(f64::total_cmp);
         let (low, high) = (sorted[0], sorted[sorted.len() - 1]);
+        let one_sign = (low > 0. && high > 0.) || (low < 0. && high < 0.);
         if low == high
-            || (low * high > 0. && low.abs().max(high.abs()) / low.abs().min(high.abs()) <= 4.)
+            || (one_sign && low.abs().max(high.abs()) / low.abs().min(high.abs()) <= 4.)
         {
             return Ok(Self::Linear);
         }
@@ -138,6 +139,16 @@ mod tests {
         assert!(matches!(
             ScoreAxis::derive(&[2., 3., 4.]).unwrap(),
             ScoreAxis::Linear
+        ));
+        for values in [[1e-300, 2e-300], [-2e-300, -1e-300]] {
+            assert!(matches!(
+                ScoreAxis::derive(&values).unwrap(),
+                ScoreAxis::Linear
+            ));
+        }
+        assert!(matches!(
+            ScoreAxis::derive(&[-1e-300, 1e-300]).unwrap(),
+            ScoreAxis::Asinh { .. }
         ));
     }
 }
