@@ -1,0 +1,520 @@
+{
+  "schema": "jarambit.corpus_reader_and_svg_repair_receipt.v1",
+  "timestamp_utc": "2026-10-19T20:23:15Z",
+  "steward": "2740538.captain_jarambit:1",
+  "worktree": "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019",
+  "branch": "ei/admiralty-primary-20261019",
+  "governing_decisions": [
+    "SC-DEC-183P",
+    "SC-DEC-183Q",
+    "SC-DEC-183R",
+    "SC-DEC-183S",
+    "SC-DEC-183V",
+    "SC-DEC-183W",
+    "SC-DEC-183X",
+    "SC-DEC-183Y"
+  ],
+  "erroneous_v1_receipt_preserved_at": "docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_V1_OBSERVED_ERRONEOUS_20261019.json",
+  "source_and_binary_bindings": {
+    "crates/paper-artifacts/src/corpus.rs": "2b1cba1c136d6950d7f2efe4ac362224e4d57b16247bb0b463a097bbb332576e",
+    "crates/paper-artifacts/src/population.rs": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
+    "crates/paper-artifacts/src/publication.rs": "357077ca454d02bd7d5425aa7f7ddb3e65370dac4c1556ff34ce49d2bb59d918",
+    "crates/paper-artifacts/src/lib.rs": "ef7326ca2fe3aeec06a426d6dce545a3c550760a03f7dcf585a5cfd08fdace2b",
+    "crates/paper-artifacts/examples/publication_v2_audit.rs": "25184c01ce3ed129fca33aff0cb7a03ad9fbc00b7372c15fe16376227b46aaa0",
+    "superseded_stale_debug_binary_sha256": "24f52f1300ee0397dc2c84da7b1bc4ed1309114b63c71a7edd0003a45c3a6f3d",
+    "crates/paper-artifacts/src/display.rs": "636bb74fbdd7be6a5db0e307499aed034b58e29f321837426e177405a711e22b",
+    "crates/paper-artifacts/src/score_axis.rs": "3c92d2462679d7c8925db44c0a706a88a5fb7d7f46fcb5e4bc8684724f3b4762",
+    "crates/paper-artifacts/src/plate.rs": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e",
+    "crates/paper-artifacts/src/assessment.rs": "b184b9a4fac930864a5bee0612b9b634c7fd33def6c418926274c1138d7e7fb9",
+    "crates/paper-artifacts/src/battery.rs": "1a727850141d3fcea428f28a67a19d4cbdcf6c934df41376590cf3b004ff93ad",
+    "crates/paper-artifacts/src/export_identity.rs": "92c0b4bf4cc3dcb2531f84496580fa9fa4527de452d56b771c59a7c65d4790a9",
+    "crates/paper-artifacts/src/historical.rs": "137ad9f54818031541c3440ff3d1a0d66c23d175c3a1a09c16a8375dc39ff799",
+    "crates/paper-artifacts/src/identity.rs": "3e3b6d579a61fdb970321b428c451190187a39a307d1e6b618a0a020dc4f64df",
+    "crates/paper-artifacts/src/interpretation.rs": "3d83966fec996e1277b9decfbb8f9c63e8e438048ab532057e84ca05b2267b6e",
+    "crates/paper-artifacts/src/lineage.rs": "a79e9822a9c393b5b6eb7fd255ca5aa1450726c87c3fb1e7930261446debc532",
+    "crates/paper-artifacts/src/native_history.rs": "159f8f3fcebfc2805387814552a92fa2ed8670765bc62619afdc18ee1cefc7ae",
+    "crates/paper-artifacts/src/reference.rs": "97d2a6f151614d3cc7f5dfd4e4b0659ceb352340066c0cc7b2a5e61346e0640f",
+    "crates/paper-artifacts/src/validation.rs": "f3a4f5930169a1c92b22ce539c46041b947548d325b44f1614a7261fb91a06ca",
+    "crates/paper-artifacts/src/verification.rs": "4aafe5b995085bfa22a3893810efa8be39aeed1297587193b6e45965240ef293",
+    "crates/paper-artifacts/src/visuals.rs": "532fca340f3d33bbd37982b521d6075490f1108243ea3549ee7ad062030a95b1",
+    "crates/paper-artifacts/src/weighted_runs.rs": "5e4fc448e725a673a7fdb03a047259a5993e2e342f4a7ec9bfcfbef8d59e5b85",
+    "crates/paper-artifacts/examples/verify_review_origin.rs": "0b98bc719b4d569ee4842ae58471b585dbffba9f1a7cae7d4d977be188eea13d",
+    "crates/paper-artifacts/examples/fixtures/verify-review-origin-neutral.v1.json": "7fdde1b3fe648c63887e3cc34cc476b677f38852ac1c296e9f0249afafc86b57",
+    "current_executed_reporting_binary_sha256": "74cfa538b9c374da6c60c510d212ddc270cd3a56a2717d9c0b3ade7b634c5fc8",
+    "README.md": "29ba5844b71be959112883c18d88dc64f266d45d6776baa5c85c462aabc3b4c9",
+    "docs/paper/CROSSWALK_SUPPLEMENT.md": "7b2edca9d3acd1e40947304cef6e227f8719f650aa6f368edba82a9c73e0807c",
+    "docs/paper/supplement/numerical-methods.tex": "1fe7d935e5ad65ed6dea5600ab4202c107c265233dc71a1a8af171e8ac34d876"
+  },
+  "sc_dec_183p_and_183s_fixes_verified": {
+    "1_jev1_binary_framing": {
+      "file": "evidence/rs_v2/w282_ultrarunner/search/evidence.jevl",
+      "bytes": 64162,
+      "sha256": "29d4602b1728e179606ac380df69652efea6e45c3daf67a6602cf56a6699b181",
+      "first16_hex": "4a45563198010000a34f027366a90fd9",
+      "frames_decoded": 19,
+      "events_decoded": 2207,
+      "migrations_generations": [
+        4,
+        8,
+        12
+      ]
+    },
+    "2_historical_search_files": {
+      "all_evals.json": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363",
+      "all_evals.csv": "a28f6d2c8a676661280981733a1e33c80136aba157c7a9d2f5a5c3db444a223c",
+      "all_evals_csv_columns": 146,
+      "distinct_129col_gene_material_tuples": 1965,
+      "history.csv": "9fde87c601b0a7fab3bf4b3f66ca3505df19917cb45e7c7bc7994f3e8f59333f",
+      "qd_archive.csv": "9d4ce161375faceb7a13c03c021b2fed50a47db96cb9f514552416f41898f28c",
+      "search_summary.json": "e4e6cf51da8269833709ef8501ba3b06934cfb5baecc038628f384675b63dd49"
+    },
+    "3_newer_wave_corpus": {
+      "birth_files": 57,
+      "run_directories": 24,
+      "birth_events": 3649,
+      "one_based_exact_joins": 2259,
+      "unscreened_birth_events": 1390,
+      "zero_based_misjoins_rejected": 2247,
+      "metadata_validator_birth_files_fix": "validate_newer_corpus_join accepts canonical birth_files (or legacy birth_files_count) and rebuilt publication_v2_audit binary exits 0"
+    },
+    "4_frozen_custody_hashes_restored": {
+      "v1_first_observed": "081f34e5659ce518ce45ef6ed731840609b221aa3c2f6b1bfbc24322fceacf98",
+      "v1_second_observed": "62b67373d45f5a1174561591e6ba49508f3ec1d3bce0bed6e2adad2f04807eae",
+      "v1_current_remote": "010a91d7e4865cd661d14b56c7c1bf50feccfcc8080c5e65c3040628881bf311",
+      "v2_frozen_handoff": "b1f884622aaffc9929069424685ed0aaf8b950470b254141336c193f1ec2529e",
+      "v2_erratum": "a3cefc5ce7f841aa6e7b1edfd8503c988dfa1e4e04754b22ea7babc4bcc1ff8a",
+      "t07_base_index": "dd69650f66a0c6cf29cbfcfc80e1302529717ba7e31a9af6b0b825d13970c49b",
+      "t08_gen800_index": "66c84ed4cdc943df885da4cdd72d25c0054195d9d8b9a01e1c35b6f3119c38cf"
+    },
+    "5_bounded_reads_and_containment": {
+      "read_bounded_file": "fs::symlink_metadata preflight + Read::take(max_bytes + 1)",
+      "decompress_segment_bytes": "StreamingDecoder::take(expected_logical_bytes + 1)",
+      "resolve_safe_relpath": "rejects symlinks and verifies canonicalize() prefix containment",
+      "resolve_archive_path": "strict worktree-local resolution under repo_root without parent-directory escape",
+      "validate_repair_receipt_file_bindings": "automatic Rust byte-level verification of all receipt file paths and SHA-256 constants"
+    },
+    "6_public_run_registry_reconciled": {
+      "cohort_1_historical_w282": [
+        "Run 1"
+      ],
+      "cohort_3_ten_retained_800gen_runs": [
+        "Run 2",
+        "Run 3",
+        "Run 4",
+        "Run 5",
+        "Run 6",
+        "Run 7",
+        "Run 8",
+        "Run 9",
+        "Run 10",
+        "Run 11"
+      ],
+      "legacy_superseded_crosswalk": [
+        "Run 37",
+        "Run 38",
+        "Run 39",
+        "Run 40",
+        "Run 41",
+        "Run 42",
+        "Run 43",
+        "Run 44",
+        "Run 45",
+        "Run 46"
+      ]
+    }
+  },
+  "generated_outputs_sha256": {
+    "docs/paper/figures/population-births.svg": "7bfb9f1d0f71972dedae621baf9ff7487e8ecabf30779a26e55d5c104ed9035b",
+    "docs/paper/figures/population-membership.svg": "0d872c623ec134a91359ff20ec1bbe81df2e712801760ffbba0802e01a635d12",
+    "docs/paper/figures/population-newer.svg": "eb6d5cce390c6b1847ec60e8e3234b9be0d28965c218953d43e7638557db59fd",
+    "docs/paper/figures/population-latest.svg": "bedc134f7bbfa2c56b16f2f3e85f0898d4118f79f5ca654b621a27169677a963",
+    "docs/paper/figures/fitness-progress.svg": "f0147dc401f9e6caa801edb61a1bebd3c945830ae3abe8e93fd98764e3a22207",
+    "docs/paper/figures/inheritance.svg": "abf568cbf39ce5b7b330bf14794d82fd5f46a7860f376fbc44f23d25c17f2488",
+    "docs/paper/generated/shared_projection.v2.json": "5782bf46e615b483488725cbf4b2d03b61f9ee8410376e2cf5e590132dc4ea4b",
+    "docs/paper/generated/overview.md": "6e7bea772687ea01b091034cdcbb14c76d60ef3db42440f20609aa5e3456c770",
+    "docs/paper/generated/manifest.json": "c1f39d37d9069843a6bdb6c532316bec7a50c96272fd65407181fd6b838e16c5",
+    "docs/paper/publication.v2.json": "e05a01c31d1555edb3e66524f8f0ad935983eea587bf4e2a11442a7c1357cd40",
+    "docs/paper/generated/population/gen800_scatter_cache.v1.json": "4eabe5a581dcb655b413857bfb3c28741070dc390b3ca71d744aa51f58e7a493",
+    "docs/paper/generated/battery-matrix.svg": "831ae3ffa57df6f8bcd5a26f16d0ca745e00da2bc279f4bd9bc13e881665f669",
+    "docs/paper/generated/native-runs-2-3.svg": "4725fa63985bbd80230411f3138b44f3c3fc51395b21c29caa10ada2c5ec103c",
+    "docs/tests/visuals.v1.json": "17d863a89dd7dc5f6aca2909fe64a6652a012c84aa102dffaea66d589c734010",
+    "docs/paper/generated/population/point-rendering.v1.json": "312a503957fe46fb7bc6bd538e99c587f5e2652f39469e34abaf46978a901a9f",
+    "docs/paper/generated/hero-contrast-preview.svg": "284430694b4094626b0f83ec58d1073bc1ab51f0b0b691e2778ff36d4f85f377",
+    "docs/paper/generated/native-runs-6-7.svg": "8336168576c6dd60c098dabbe8a8fd33a7ae1b1c03a7c072b934e4f7d694d36d",
+    "docs/paper/generated/assessment.svg.manifest.json": "b8b12139d7e9e93f8ae1d35ea79d97e91bd9e74a9f6cdb1f8eec5c3b292fe105",
+    "docs/paper/generated/weighted-runs.svg.manifest.json": "bdff3c87222604ccd5564cb929c97f8f3af57a9a30a12b5eee273241c7aa1549",
+    "docs/paper/generated/export-identity.svg": "5957a04019a4be54fab1a642913d7f92baa6a09b53fb522ccc21101db1eeb007",
+    "docs/paper/generated/native-runs-4-5.svg": "d8dbcacc2324e4acf2333cf42d126e24d27e67ebbe13e86f616744f0ae66d46d",
+    "docs/paper/generated/metrics.tex": "c2d3afbe5e0694ba681f33fe3af77f55934ad448fc11f36aff59b6487c7f45ea",
+    "docs/tests/science.md": "fa1b70a9267eb3a51b293243941a814446824be2335d3341c570e2934f7c348c",
+    "docs/tests/visuals.md": "4a3a859831845a2fc8b8a865196ec4a8dd41c27112dc2e1d274ffe2f815867ec",
+    "docs/paper/generated/lineage.svg": "f09d825663a62272b53bb9cfbd7bcc4b14fec4f11be7ea8948ee313330f4080c",
+    "docs/paper/generated/hero-full-range.svg": "7f6eef77a9084b8b13411e8e1cb344484088c95fcaab06a136e27cbeef509f0b",
+    "docs/paper/generated/plate-fields.svg.manifest.json": "5e9c20fec908426cbaee6d2f9649229644c1ae49cd049e9d2bfeb7c1654a96e5",
+    "docs/paper/generated/population/score-axis.v1.json": "536ef65cd5bacbc0e507b87284e9e662e4c8a9223761c53c8589d5dbf3a0c387",
+    "docs/paper/generated/population/inheritance.json": "2af73e7eb28ed859314b98f5d47b1029b2f6366ba8ad321305a2e43d833cdfa9",
+    "docs/paper/generated/hero-mesh-on.svg": "d2894d272cfa66448bd3ad26c9bd7c13d41578ca6dd836db6d216a7b9f0e0b7f",
+    "docs/paper/generated/battery.tex": "08076ef743f6aa223afc97ea96c2ee5407e3c37c7489eb72fa2f67c224608413",
+    "docs/paper/generated/reference.json": "f6323031a1b3019db4c2f3b7d39a976aeab0df7d47e151b295383604716f5092",
+    "docs/paper/generated/verification.json": "293465c8751203a691b1994eb87f6977d4d6884828a226eb0518c4d088764e1c",
+    "docs/paper/generated/cover-evolution.svg": "12f9eadce5c8bb7fd45eaa30339583d4d9e5027c4959b0b8a93ba48527edd2df",
+    "docs/paper/generated/weighted-runs.json": "1edf151941161d6a4dd94fd23a371cf802c116ba5e2c1a98ed02250a9ecd4338",
+    "docs/paper/generated/crop-semantics.v1.json": "50d4c19f9b6938e4bad34a3dfae98c3aa7709da952ddba71de5c02af92ed358b",
+    "docs/paper/generated/export-identity.svg.manifest.json": "8d454b358d8e21cd7c1af3f68ddee27a997d5d848ed7679842dfb7f114ac4358",
+    "docs/paper/generated/plate-fields.json": "b0eeebce3952a4d1ff6e106f6c3d64d053d933032049dfa7e19aca171a73151e",
+    "docs/tests/README.md": "d62215062aa2d961a6b6745bc9e1ea64c17062696791120c67d27f06ca501807",
+    "docs/paper/generated/native-runs-8-9.svg": "8edefeb11bd0b8992c22926332c80233c38bda2424663c8f80736d1d1169138d",
+    "docs/paper/generated/plate-fields.svg": "86e191a331824e6e7adf893d0f60e516d9081c9441db7d64a84a67d099905add",
+    "docs/paper/generated/weighted-runs.svg": "a6e9215304d714f85b87bfbbb5607f238df1d7a5ad3ba29b0f7c40207649f214",
+    "docs/paper/generated/assessment.json": "dc9040de663dab3bb09bccd1dd2cb848b0f606fd750ee5bdff95747211a2d939",
+    "docs/paper/generated/fitness.svg": "17d53a4dc87171012b8424fedbc9adc7b234418446a344d26c48da8216053152",
+    "docs/paper/generated/reference.svg.manifest.json": "71e3ce17df20b2da2315ec86d53ee71377f79d9e2bc53688b33455987e4ee32b",
+    "docs/paper/generated/population.svg": "cbfa7fa60d8e3432f88f1e938cd271f45909c88c6cca9d1d6d1e8786cc1a44ca",
+    "docs/paper/generated/hero-support.svg": "0a31da991fb21e5c03081fbb38485435de05285c661e6ec7ddecd71a9e7020ef",
+    "docs/paper/generated/population/retained-leaders.v1.json": "a00ffd38b65cc6e6120a83330d631c39ca6f919b1ef1d038903c15bda7694d7e",
+    "docs/paper/generated/display-composite.v1.json": "0966d40954c04c27b1c4ea60c90ba9e37b77cd02c15c0f6a1f24e8d7c3d89e0c",
+    "docs/paper/generated/export-identity.json": "31922d147d249fa88203742edbf28c1115fe4a54276a99f8ef993d3f27d97bd2",
+    "docs/paper/generated/test-field-roster.v1.tsv": "fefc751025c9f3b8c7f4391cf17449fe1da1265b08fd5fc4ad9549d115b96638",
+    "docs/paper/generated/verification.svg": "c6468a3ed836e2f376d91287e05337dfb803f25831b14f26cf9f1a359a98e61b",
+    "docs/paper/generated/lineage.json": "cc94cdb8b24ac9e750a160f8aeca14768dfd1d6ca7f3122de9ab503b24ba721d",
+    "docs/paper/generated/lineage.svg.manifest.json": "756bf95d3c26b8f94e9faff17f858e6877af2e5a873ea05db13a703e90506d32",
+    "docs/paper/generated/population-detail.svg": "3f37ed60bf5111616b0739fba62caf7c7ccefc21dfa92179646d771ed6d5dec2",
+    "docs/paper/generated/reporting-interpretation.v2.json": "c9bb7402488683af47c36544081d7a735af5abd661105e6f30e80e7f3b5605a9",
+    "docs/paper/generated/native-runs-10-11.svg": "61d6a48a6aba17ed2be07eae37f6d90a6dcfed1eb51164a630ab537ae9079757",
+    "docs/paper/generated/evidence-architecture.svg.manifest.json": "dd056149ba8342ac0144a398da8037e8db19c9754abc4f9ff888508f22d25032",
+    "docs/paper/generated/battery-matrix.svg.manifest.json": "5e6f35d82116c3afc1b165a1027c4d813ddd84b1d98c4ec3c04df3b97041529a",
+    "docs/paper/figures/inheritance-details.svg": "669b5c70e4521f6c68e7652e885584d0c4d88562fb2266e3fcbf5a946d079a25",
+    "docs/paper/generated/battery-matrix.json": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
+    "docs/paper/generated/reference.svg": "66c970a77f5ad0d38e3262d3d2f6a7e71a10d567214f2c0d5263294e49920e2e",
+    "docs/paper/generated/verification.svg.manifest.json": "e5a11fc4134596597cc6b1f7721f2b270ec657ba857eb8d22690f8915f94fb68",
+    "docs/paper/generated/summary.json": "d2c82b0dd13bcc17b7ad932ddabb5ecb7d524797424e20db848e62b8ff0c7e6e",
+    "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg": "7f6eef77a9084b8b13411e8e1cb344484088c95fcaab06a136e27cbeef509f0b",
+    "docs/paper/generated/crop-source-hash.tex": "ed03828c332aa582a9bb0b0fb638738c6a22f7ee0d76c35cc38f45f718230322",
+    "docs/paper/generated/assessment.svg": "c2d56af4fe70d13ef0bcc83e7c2addc10a6c1654ddb0f3f458569fb7f6eeb5eb"
+  },
+  "focused_test_execution": {
+    "command": "CARGO_TARGET_DIR=/tmp/jarambit-hpc-profile-target nice -n 10 cargo test --locked -j 4 --manifest-path crates/paper-artifacts/Cargo.toml --lib",
+    "tests_passed": 70,
+    "tests_failed": 0,
+    "exit_code": 0
+  },
+  "integration_rebinding": {
+    "checked_utc": "2026-10-20T20:58:50.524208+00:00",
+    "previous_receipt_sha256": "bcc4f34ebba71bdd7b6b1906b1e8d97a8841caf9a1ccd3498890da41c7ebe606",
+    "previous_receipt_commit": "26aeda0ff0fdec5c8cdca111e9624054615a2787",
+    "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_26AEDA0_20261020.json",
+    "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+    "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+    "reporting_source_commit": "26aeda0ff0fdec5c8cdca111e9624054615a2787",
+    "reporting_source_tree": "bcf06f474aee05851cf72dd48af5052e7042cae1",
+    "actual_generation_receipt_sha256": "746389da627a6be45c4c86260c09871e43b4ce4340dab50996d8891949e7c50c",
+    "actual_generation_log_sha256": "6bca2be37dc64ecc8e3c58c33b883115b08167f3b2741da221ce5b46c6304a00",
+    "executed_reporting_binary_sha256": "74cfa538b9c374da6c60c510d212ddc270cd3a56a2717d9c0b3ade7b634c5fc8",
+    "previous_executed_binary_identity_preserved_in_exact_preimage_and_history": "96c3c79155ca0fe5450735d24433f802fca1f269817f05f32f976a021e96ed2f",
+    "actual_generation_exit": 0,
+    "actual_terminal_utc": "2026-10-20T20:52:54.414482+00:00",
+    "actual_runtime_final_sha256": "72548b7f3c9409394255b32746f6a54996ca71138377ad1175d6ec3ac8c7b6a0",
+    "current_tests_executed_at_rebinding": false,
+    "changed_output_bindings": [
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/manifest.json",
+        "previous": "a770df6275f887ff5809c357f841e154b63ac958a22866be6728d26159744bfc",
+        "actual": "c1f39d37d9069843a6bdb6c532316bec7a50c96272fd65407181fd6b838e16c5"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/publication.v2.json",
+        "previous": "bd0d581f72d451b99d8870da5977b687f3d14b8d6e32f4749ffb77d67325d0b9",
+        "actual": "e05a01c31d1555edb3e66524f8f0ad935983eea587bf4e2a11442a7c1357cd40"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/tests/visuals.v1.json",
+        "previous": "b55ceb8ce6532f0ab25e0b7132d417d4f83095ccc950c6b2dacdc0fd3fc25673",
+        "actual": "17d863a89dd7dc5f6aca2909fe64a6652a012c84aa102dffaea66d589c734010"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/population/point-rendering.v1.json",
+        "previous": "34918656ae550c2b79e25b9d52080329b865395e3633e11122a4822fac35c432",
+        "actual": "312a503957fe46fb7bc6bd538e99c587f5e2652f39469e34abaf46978a901a9f"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/weighted-runs.svg.manifest.json",
+        "previous": "b5cab4adbbb47143c610219dc83a94cc24e87ea9409be48cbed2c17d08379e82",
+        "actual": "bdff3c87222604ccd5564cb929c97f8f3af57a9a30a12b5eee273241c7aa1549"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/plate-fields.svg.manifest.json",
+        "previous": "1978ade35d42fc91febb084108e0f28122cf0841980c69c19f1c1ff19beb15db",
+        "actual": "5e9c20fec908426cbaee6d2f9649229644c1ae49cd049e9d2bfeb7c1654a96e5"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/population/score-axis.v1.json",
+        "previous": "1e40a2dbd40480fc8d6673e5f341e10fd74aa5ff4f251f4133b1e03d7f5f1803",
+        "actual": "536ef65cd5bacbc0e507b87284e9e662e4c8a9223761c53c8589d5dbf3a0c387"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/reference.svg.manifest.json",
+        "previous": "a0435289a0733ffdd7a47506aec78882970a5f609ff497c381afe8b2cee92631",
+        "actual": "71e3ce17df20b2da2315ec86d53ee71377f79d9e2bc53688b33455987e4ee32b"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/population-detail.svg",
+        "previous": "389466a0aa794bf22667d35d263047fc04ce7f574209043bd7c30c343abad2fc",
+        "actual": "3f37ed60bf5111616b0739fba62caf7c7ccefc21dfa92179646d771ed6d5dec2"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/evidence-architecture.svg.manifest.json",
+        "previous": "c16a2b768aa2fcae60679e51c178155c139019870e9dadf72d179afbce73f452",
+        "actual": "dd056149ba8342ac0144a398da8037e8db19c9754abc4f9ff888508f22d25032"
+      }
+    ],
+    "reason": "Finite Root-authorized successor: Q-admitted actual22 appearance dependency pins; 2.1.2 document metadata; true original-score Q90..MAX/MIN..Q10 detail with inclusive cutoff/extremum ties and unchanged full-range/positive views; exact0.1% ROI callout and package accession. Actual admitted retained reporter/raster/paired19+32-page PDF build exited0. This rebinding records actual source/output digests and actual executed producer74cfa538, preserving exact pre26a receipt, prior96c3 producer identity, focused historical70test entry and every prior failure/success within its own source/date/scope. Original immutable inputs/custody/constants/science/geometry/fields/masks/weights/validators unchanged. First generated-manifest input-role failure and partial bytes remain preserved; corrected retry is separately admitted/recorded. No current suite/full-zstd/CI/independent PDF or formal approval claim. Root final exact-head controls/Q/origin/delivery remain mandatory."
+  },
+  "integration_rebinding_history": [
+    {
+      "checked_utc": "2026-10-20T00:42:51.828436+00:00",
+      "previous_receipt_sha256": "887117c619986e53da111d111b96882d00c25ed9f20498527edf278b24839eca",
+      "preserved_original_commit": "d1b65cbe73b3890f07524c86b23c7ece3c9f2767",
+      "reason": "Rebind current source/output hashes after EOF-whitespace-only population.rs cleanup. Original observations, custody records, binary history and prior execution claims are unchanged; final local reporting tests are rerun separately."
+    },
+    {
+      "checked_utc": "2026-10-20T05:02:05.610507+00:00",
+      "previous_receipt_sha256": "685b76c0994500441890d732d78869c91215695b335e8016af0eff98dc89915e",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reason": "Rebind live reporting source/output identities after the authorized major revision. Original observations, custody constants, erroneous V1 and historical execution claims are unchanged. Strict validator and test definitions are unchanged; final current tests are separate."
+    },
+    {
+      "checked_utc": "2026-10-20T05:26:38.287820+00:00",
+      "previous_receipt_sha256": "54624f27c7fb550334656e44df1ce6d3ed7b377f52e4d8e9668362f274e869e3",
+      "previous_receipt_commit": "3c9c334fcc2b308dc21114a7ddd338c844fc9856",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reason": "Rebind live publication writer and generated manifest after adding the required common script identity and writer input binding for the static authored architecture SVG. Original observations, custody constants, historical receipt and historical execution claims remain unchanged. Strict validators and test definitions are unchanged; successor validation is separately head-bound."
+    },
+    {
+      "checked_utc": "2026-10-20T08:49:25.113940+00:00",
+      "previous_receipt_sha256": "7a1a3ac8ee0e944625e32717ce27f9ac4a70de3a3b7d7152a0c210187458f5f1",
+      "previous_receipt_commit": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE510713_20261020.json",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "42cecdfdc1b4dc3b25c67d268a1bb410d75ca356",
+      "actual_generation_receipt_sha256": "fe358c13f1ce8a5689c4d1d4280656df5efae169ffd7923fe34501392ee296f5",
+      "actual_generation_log_sha256": "3ee9d6a75929705c27f74c0f54607c969abc28ec62a94233d7eac86dd9d0f302",
+      "executed_reporting_binary_sha256": "8944aebd08aacd5c9ef1e5c68cce35628585c54752c81619151d65c8bfa4a3a4",
+      "reason": "Renew active reporting source/output bindings after the independently reviewed missing-aware display and axis changes. Preserve exact receiving510713 and original102C receipts, all source observations/custody constants and all historical execution claims. Current validation is separately head-bound; this rebinding is not an inherited PASS."
+    },
+    {
+      "checked_utc": "2026-10-20T10:03:25.908333+00:00",
+      "previous_receipt_sha256": "c56cc5145a9fc4014dfd6c0f35a2109e1e519f39f2e3a1b88b2bfbc54a87515d",
+      "previous_receipt_commit": "d3ba882d554fe14ae1954e06f479ff277eff03b2",
+      "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_D3BA882D_20261020.json",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "b004c9ca55852cd2d253189407f4fc4e23468c7c",
+      "actual_generation_receipt_sha256": "a17fbe38eecd834be8d038d8514f1b4a851ae4262997c0b84c456be1af4a85df",
+      "actual_generation_log_sha256": "dd015db074dcaf57034e9e0c6c22821ac5ebfa130028b24420d687d73f36f2b8",
+      "executed_reporting_binary_sha256": "3b7c03057caa2ff6bcdd52118db211a99c37cfd6b6df3711a2f2d5188db40a6e",
+      "reason": "Renew active operational source/output bindings after actual V4 retained-data reporting generation, including historical-score/A4/default qualifications and exact fractional weights. Preserve exact D3/510713/102C receipts, all original science/custody constants and every historical execution claim. Expanded bound current reporting source and generated closure is actual on-disk hashing, not inherited test or final-origin PASS. No suites/guard/audit/FEM/search/CI ran; final receiving-main/source/artifact freeze and controls are separate."
+    },
+    {
+      "checked_utc": "2026-10-20T10:32:20.594320+00:00",
+      "previous_receipt_sha256": "c1e2bcad8340530bcf25320c6ffc8313cd562d9102575a48597a56503b4da482",
+      "previous_receipt_commit": "2a3b1a6991fdd3a69596127ab9dcffaec4582095",
+      "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2A3B1A6_20261020.json",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "7070b1a8b319f55033fb03e25be0c494545d1621",
+      "actual_generation_receipt_sha256": "1fde487f7fc93c38c97e32a1348d8874eebb1fd5cab8b437499c831354e61a03",
+      "actual_generation_log_sha256": "6dedb7ac1576084b2ebb6892697a38e7b8c79ba96c311b5bd55bff457ddd83ca",
+      "executed_reporting_binary_sha256": "ac4af6926a62f364a8699fd559b67cb6ae65293bf7b4fd58ee93934350b6a4ea",
+      "reason": "Root-authorized canonical narrow successor: identify optional CAD STL tessellation overlay and regenerate only retained reporting derivatives. Defaulthero, scientific values/geometry/masks/scorers/weights/solver and Root detached2a3b D1 unchanged. Preserve exact prior2a3bactive receipt and every historical observation/testclaim. This source/output rebinding is not test, realorigin, CI or finalapproval; affected Root controls remain separate."
+    },
+    {
+      "checked_utc": "2026-10-20T11:03:11.548207+00:00",
+      "previous_receipt_sha256": "1f4fe533e5326242e53262be078120013f7185458e41e36a5ab0b6d05adef58b",
+      "previous_receipt_commit": "2a2cd6822501ef00e95cf3d2058325bf1933b5d7",
+      "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2A2CD68_20261020.json",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "516272fe378464376ea94d602d4e938ba97d8d48",
+      "actual_generation_receipt_sha256": "2a2048c22ea90ee4b35f2c07ee9b9de3dbc1782ea90502a42ed7ccf8379e7851",
+      "actual_generation_log_sha256": "c147a704a18832c83d50fd9728b7b69ff083465cf97296ffa489fb326bddf272",
+      "executed_reporting_binary_sha256": "ac4af6926a62f364a8699fd559b67cb6ae65293bf7b4fd58ee93934350b6a4ea",
+      "reason": "Root-authorized exact reviewer-wrapper origin transport compatibility after actual nonauthor Q source clearance. Preserve full observed outer argv; actual helper JSON input route does not enforce check_eligible and requires prospective same-or-stronger actual read-only eligibility proof. All original56 fixture cases unchanged,25 authored controls added (81total), NONE executed by Captain. The regenerated161-input/65-output reporting manifest is byte-identical to its predecessor; guard/fixture bindings are renewed in this operational receipt and package source closure. All65 reporting output bytes are unchanged. Preserve every historical observation/test claim and prior receipt bytes. Root detached D1 and all scientific source/values/masks/weights/solver untouched; affected final controls and real review-origin remain Root-owned."
+    },
+    {
+      "checked_utc": "2026-10-20T12:13:18.273343+00:00",
+      "previous_receipt_sha256": "ab798f29edd365282375f80ed555ceda28ce24a1700e4af1232f7c48dde08062",
+      "previous_receipt_commit": "dd92248cbfd8f38200c07e6ae66aab859272b542",
+      "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_DD92248_20261020.json",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "c293a0ccd87f6d46f5b6b8eb3eb2c0c473033e65",
+      "actual_generation_receipt_sha256": "ef3968e53d3af7a73f88b5f49fed58646cdae330b45be14d595338b42a248933",
+      "actual_generation_log_sha256": "5016c157597a2c07da950f1156e173c67b69731d674fbbd0ad9a7c18bd9f2f59",
+      "executed_reporting_binary_sha256": "39b50dc4f8c8311bb2594acb33875f9df86c2f2a7bf278d48929788ee07357dd",
+      "reason": "Root1155 authorized combined successor: exact independent-Q-cleared additive contrast saturation accounting with unchanged legacy values/means/palette/masks/geometry and actual guard object-root/omitted-field supplemental-capture compatibility. Original81 guard cases preserved;29 authored controls added (110total), none executed at this rebinding. Actual bounded retained reporter exited0; display-composite gains only saturation_accounting; publication.v2 renews only that output hash; manifest renews two changed reporting-source input hashes and output bindings. All other63report outputs and every preexisting composite field remain byte-identical. Preserve historical source/test/custody facts and exact prior receipt archive. Current guard/fixture/protocol bindings and paired package closure renewed; actual affected successor controls follow completefreeze and remain separately bound to their executed head. No oldDD/e58PASS transferred; Root owns samePR144 finalCI/eligibleformalreview/realproductionorigin/matchedmerge/release."
+    },
+    {
+      "checked_utc": "2026-10-20T13:21:16.590255+00:00",
+      "previous_receipt_sha256": "7c4c247ad6a71dca2c955b34e6dd021aef4dfbe17b12bf7c2e7588dfcff68553",
+      "previous_receipt_commit": "119c885acca681f9b24d5676f1e8bf3241db3f50",
+      "previous_receipt_repo_path": "docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_20261019.json",
+      "previous_receipt_preservation": "Exact prior bytes remain in the immutable previous commit, preserved branch and coordination source/output snapshot; no original historical observation or test entry is rewritten.",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "6aba1fa6d7a9de1ba58da4f142acfaf98576104d",
+      "actual_generation_receipt_sha256": "38d0281c7587ca7a7f0dad95d719e0e69b0a8846313382c56305afcc980a64d5",
+      "actual_generation_log_sha256": "3b7839707583b119daa4d23fdeb874b8c68e1a460a451290bac23b74068f5aa3",
+      "executed_reporting_binary_sha256": "bc75bb97ad08db2696630aab59207618ef4cfcadc83f2daae5e758a5e2b22f18",
+      "reason": "Root1307 authorized four source corrections: source-bound earlier historical Boolean-predicate contrast, honest external summary accession navigation, shared-input/plate-mesh figure labels with minimal existing-test assertions, and sidecar module-path/current-launcher disclosure preserving cache/execution limits. Actual reporter and paired documents rebuilt. Only verification source input and three SVG/manifest/visual-reference hash outputs changed; other62 reporting outputs, including all numerical projections, are byte-identical. Existing historical source/test/failure/custody facts remain intact. Current affected controls are not yet executed at this rebinding and will retain separate exact frozen-head evidence. Root owns samePR144 finalCI/prospectiveeligibleformalreview/realorigin/matchedmerge/release."
+    },
+    {
+      "checked_utc": "2026-10-20T18:22:36.115086+00:00",
+      "previous_receipt_sha256": "2ddda8303b193a648d25a9552db550a20eb4b7a501f2aaf45714a3954d9445f5",
+      "previous_receipt_commit": "7a51c1b29b752eea8d8c41bdff83cbef0910bb95",
+      "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_7A51C1B2_20261020.json",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "f1b356a35fa0398caa5c29976195ac7fbb724de2",
+      "actual_generation_receipt_sha256": "63752f0e072ef9ebc86b98792cbab5a49e281cc7243064e329c0756ad04b0d6e",
+      "actual_generation_log_sha256": "c71b17684a2e6249956aef2f2c35bcea0661b8879471f149f2565d66c970750f",
+      "executed_reporting_binary_sha256": "96c3c79155ca0fe5450735d24433f802fca1f269817f05f32f976a021e96ed2f",
+      "previous_executed_binary_identity_preserved_in_exact_preimage_and_history": "bc75bb97ad08db2696630aab59207618ef4cfcadc83f2daae5e758a5e2b22f18",
+      "actual_generation_exit": 0,
+      "current_tests_executed_at_rebinding": false,
+      "reason": "Direct human bounded successor renews four stale validated crate-source and sixteen generated-output bindings, preserves exact7a active receipt in registered history, and truthfully records the actual retained-report generation at f1b356a3. Reporting source code, every selected report output, all scientific inputs/geometry/fields/weights/masks, validators and thresholds remain unchanged. Existing README source pointer is also renewed to the actual unchanged current README; old README/binary/test observations remain in exact7a history. Actual producer binary96c3c791 was captured before/after successful bounded execution, not guessed or relabelled. Original70test entry and all prior failures/successes retain their own source/date/scope. No current suite/fullzstd/CI/formalapproval is claimed; final required controls and genuine origin remain Root-owned."
+    },
+    {
+      "checked_utc": "2026-10-20T20:58:50.524208+00:00",
+      "previous_receipt_sha256": "bcc4f34ebba71bdd7b6b1906b1e8d97a8841caf9a1ccd3498890da41c7ebe606",
+      "previous_receipt_commit": "26aeda0ff0fdec5c8cdca111e9624054615a2787",
+      "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_26AEDA0_20261020.json",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "26aeda0ff0fdec5c8cdca111e9624054615a2787",
+      "reporting_source_tree": "bcf06f474aee05851cf72dd48af5052e7042cae1",
+      "actual_generation_receipt_sha256": "746389da627a6be45c4c86260c09871e43b4ce4340dab50996d8891949e7c50c",
+      "actual_generation_log_sha256": "6bca2be37dc64ecc8e3c58c33b883115b08167f3b2741da221ce5b46c6304a00",
+      "executed_reporting_binary_sha256": "74cfa538b9c374da6c60c510d212ddc270cd3a56a2717d9c0b3ade7b634c5fc8",
+      "previous_executed_binary_identity_preserved_in_exact_preimage_and_history": "96c3c79155ca0fe5450735d24433f802fca1f269817f05f32f976a021e96ed2f",
+      "actual_generation_exit": 0,
+      "actual_terminal_utc": "2026-10-20T20:52:54.414482+00:00",
+      "actual_runtime_final_sha256": "72548b7f3c9409394255b32746f6a54996ca71138377ad1175d6ec3ac8c7b6a0",
+      "current_tests_executed_at_rebinding": false,
+      "changed_output_bindings": [
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/manifest.json",
+          "previous": "a770df6275f887ff5809c357f841e154b63ac958a22866be6728d26159744bfc",
+          "actual": "c1f39d37d9069843a6bdb6c532316bec7a50c96272fd65407181fd6b838e16c5"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/publication.v2.json",
+          "previous": "bd0d581f72d451b99d8870da5977b687f3d14b8d6e32f4749ffb77d67325d0b9",
+          "actual": "e05a01c31d1555edb3e66524f8f0ad935983eea587bf4e2a11442a7c1357cd40"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/tests/visuals.v1.json",
+          "previous": "b55ceb8ce6532f0ab25e0b7132d417d4f83095ccc950c6b2dacdc0fd3fc25673",
+          "actual": "17d863a89dd7dc5f6aca2909fe64a6652a012c84aa102dffaea66d589c734010"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/population/point-rendering.v1.json",
+          "previous": "34918656ae550c2b79e25b9d52080329b865395e3633e11122a4822fac35c432",
+          "actual": "312a503957fe46fb7bc6bd538e99c587f5e2652f39469e34abaf46978a901a9f"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/weighted-runs.svg.manifest.json",
+          "previous": "b5cab4adbbb47143c610219dc83a94cc24e87ea9409be48cbed2c17d08379e82",
+          "actual": "bdff3c87222604ccd5564cb929c97f8f3af57a9a30a12b5eee273241c7aa1549"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/plate-fields.svg.manifest.json",
+          "previous": "1978ade35d42fc91febb084108e0f28122cf0841980c69c19f1c1ff19beb15db",
+          "actual": "5e9c20fec908426cbaee6d2f9649229644c1ae49cd049e9d2bfeb7c1654a96e5"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/population/score-axis.v1.json",
+          "previous": "1e40a2dbd40480fc8d6673e5f341e10fd74aa5ff4f251f4133b1e03d7f5f1803",
+          "actual": "536ef65cd5bacbc0e507b87284e9e662e4c8a9223761c53c8589d5dbf3a0c387"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/reference.svg.manifest.json",
+          "previous": "a0435289a0733ffdd7a47506aec78882970a5f609ff497c381afe8b2cee92631",
+          "actual": "71e3ce17df20b2da2315ec86d53ee71377f79d9e2bc53688b33455987e4ee32b"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/population-detail.svg",
+          "previous": "389466a0aa794bf22667d35d263047fc04ce7f574209043bd7c30c343abad2fc",
+          "actual": "3f37ed60bf5111616b0739fba62caf7c7ccefc21dfa92179646d771ed6d5dec2"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/evidence-architecture.svg.manifest.json",
+          "previous": "c16a2b768aa2fcae60679e51c178155c139019870e9dadf72d179afbce73f452",
+          "actual": "dd056149ba8342ac0144a398da8037e8db19c9754abc4f9ff888508f22d25032"
+        }
+      ],
+      "reason": "Finite Root-authorized successor: Q-admitted actual22 appearance dependency pins; 2.1.2 document metadata; true original-score Q90..MAX/MIN..Q10 detail with inclusive cutoff/extremum ties and unchanged full-range/positive views; exact0.1% ROI callout and package accession. Actual admitted retained reporter/raster/paired19+32-page PDF build exited0. This rebinding records actual source/output digests and actual executed producer74cfa538, preserving exact pre26a receipt, prior96c3 producer identity, focused historical70test entry and every prior failure/success within its own source/date/scope. Original immutable inputs/custody/constants/science/geometry/fields/masks/weights/validators unchanged. First generated-manifest input-role failure and partial bytes remain preserved; corrected retry is separately admitted/recorded. No current suite/full-zstd/CI/independent PDF or formal approval claim. Root final exact-head controls/Q/origin/delivery remain mandatory."
+    }
+  ],
+  "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. The e67 successor86-test attempt failed84passed/2failed and remains preserved. Corrected successor validation is recorded separately with its exact head. Combined contrast/omission successor controls remain unexecuted at this source/output rebinding; their later exact-head results are separate evidence, not this historical focused-test entry. Root1307 residual successor controls remain unexecuted at this source/output rebinding; actual119 controls remain predecessor evidence, with new affected results separate after completefreeze. Current narrow repair successor report generation exited0 at f1b356a3; no tests or full audit have run at this rebinding. Original70test entry and all preceding exact-head evidence remain historical; producer execution is not validationPASS.",
+  "pending_successor_closure": {
+    "authority_path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/ROOT_DIRECT_HUMAN_CONTEXT_ZOOM_AND_VIVID_SCORE_COLORS_20261020T2132Z.md",
+    "authority_sha256": "b848653fc0b3ca1bec9a6eee600f4e6308baadfddc888a4b9360422f9cc8cb00",
+    "stage": "PF07_PF08_SOURCE_PREPARATION_ONLY;ACTUAL_DEPENDENCY_PREFLIGHT_AND_Q_THEN_GENERATION_PENDING",
+    "source_preparation_utc": "2026-10-20T21:41:53.943205+00:00",
+    "previous_complete_freeze": "4213da0ab381bd3b7e0c78c5d240b091672d5a22",
+    "previous_active_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_4213DA0_20261020.json",
+    "previous_active_receipt_sha256": "b0686bf3208852f7ac08314b516f0ce840fe0fefe804a1a810e5b6ff3ee1f813",
+    "actual_source_binding_changes": [
+      {
+        "path": "crates/paper-artifacts/src/population.rs",
+        "previous": "1f53640711e208136b58be28a22efb57f3af502f2d37b093a7406ae6eab97d9d",
+        "actual": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753"
+      },
+      {
+        "path": "crates/paper-artifacts/src/publication.rs",
+        "previous": "b9ff67a8f58764c0a42e16e77fae3b864e61c93f6e275c4c76736139849e8a1d",
+        "actual": "357077ca454d02bd7d5425aa7f7ddb3e65370dac4c1556ff34ce49d2bb59d918"
+      },
+      {
+        "path": "crates/paper-artifacts/src/plate.rs",
+        "previous": "118639cf8e9325bc05e68e0c98a37586479b7c1d2e3f783a8296a7fbdde05f2e",
+        "actual": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e"
+      },
+      {
+        "path": "README.md",
+        "previous": "88431acd73fc403cb07f3d9dae106c3e8ec014780c70d72431d478da732742b5",
+        "actual": "29ba5844b71be959112883c18d88dc64f266d45d6776baa5c85c462aabc3b4c9"
+      }
+    ],
+    "generated_outputs": "Previous4213 outputs and90f47101 successful generation remain historical/unchanged at this source stage. No PF07/PF08 output or tests claimed.",
+    "previous_executed_reporting_binary_sha256": "74cfa538b9c374da6c60c510d212ddc270cd3a56a2717d9c0b3ade7b634c5fc8",
+    "narrow_changes": "B/D wider deterministic30%context camera andexactPiP, separateunchangedsaliencyROI stats; allpositive rawpoints source-bound originalscoreRGB andhaloed bestcurve withunchangedposition/census/ties.",
+    "strict_hero_source_pins": "plate/population wholefile hashes changed. Actual observation-first preflight then existingRootNONAUTHORQ actual22pin admission required; oldexpectedfacts/recipe not modified or guessed.",
+    "authored_new_neutral_controls": 11,
+    "current_executed_controls": 0,
+    "scientific_inputs_geometry_fields_masks_weights_fitness_unchanged": true
+  }
+}

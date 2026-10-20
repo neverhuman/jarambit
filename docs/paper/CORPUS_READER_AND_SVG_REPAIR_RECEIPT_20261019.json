@@ -18,7 +18,7 @@
   "source_and_binary_bindings": {
     "crates/paper-artifacts/src/corpus.rs": "2b1cba1c136d6950d7f2efe4ac362224e4d57b16247bb0b463a097bbb332576e",
     "crates/paper-artifacts/src/population.rs": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
-    "crates/paper-artifacts/src/publication.rs": "357077ca454d02bd7d5425aa7f7ddb3e65370dac4c1556ff34ce49d2bb59d918",
+    "crates/paper-artifacts/src/publication.rs": "56752442a230aee4b933743d37eb28a663870b4f2d06e96d61156013c065134f",
     "crates/paper-artifacts/src/lib.rs": "ef7326ca2fe3aeec06a426d6dce545a3c550760a03f7dcf585a5cfd08fdace2b",
     "crates/paper-artifacts/examples/publication_v2_audit.rs": "25184c01ce3ed129fca33aff0cb7a03ad9fbc00b7372c15fe16376227b46aaa0",
     "superseded_stale_debug_binary_sha256": "24f52f1300ee0397dc2c84da7b1bc4ed1309114b63c71a7edd0003a45c3a6f3d",
@@ -482,7 +482,7 @@
   "pending_successor_closure": {
     "authority_path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/ROOT_DIRECT_HUMAN_CONTEXT_ZOOM_AND_VIVID_SCORE_COLORS_20261020T2132Z.md",
     "authority_sha256": "b848653fc0b3ca1bec9a6eee600f4e6308baadfddc888a4b9360422f9cc8cb00",
-    "stage": "PF07_PF08_SOURCE_PREPARATION_ONLY;ACTUAL_DEPENDENCY_PREFLIGHT_AND_Q_THEN_GENERATION_PENDING",
+    "stage": "PF07_PF08_ACTUAL_OBSERVATION_AND_NONAUTHOR_PIN_INSTALL_COMPLETE;GENERATION_PENDING",
     "source_preparation_utc": "2026-10-20T21:41:53.943205+00:00",
     "previous_complete_freeze": "4213da0ab381bd3b7e0c78c5d240b091672d5a22",
     "previous_active_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_4213DA0_20261020.json",
@@ -515,6 +515,15 @@
     "strict_hero_source_pins": "plate/population wholefile hashes changed. Actual observation-first preflight then existingRootNONAUTHORQ actual22pin admission required; oldexpectedfacts/recipe not modified or guessed.",
     "authored_new_neutral_controls": 11,
     "current_executed_controls": 0,
-    "scientific_inputs_geometry_fields_masks_weights_fitness_unchanged": true
+    "scientific_inputs_geometry_fields_masks_weights_fitness_unchanged": true,
+    "source_base": "4ff1ce172bc2c626e9a1e34f377e379c034f2741",
+    "actual_observation_sha256": "46587bc4dd80a34d081a1b3b0c4487b2b9dafd04a677fbd030cdff1af66fb00b",
+    "actual_non_author_Q_sha256": "260b2cfcf9c13c8b519d91d9330e9aa2df55a19f4a9143f241569b7423159c87",
+    "actual_preflight_binary_sha256": "fddbb7de5cfe596d41bce11aa80bb8340d79a80ab5481b62c1c12425ffd255c3",
+    "new_recipe_sha256": "34e84ddeff834ebb268ba0ae6cbd3e7614cf019a8fbd8393f2ece3163a5323b2",
+    "current_reporting_producer_and_test_identities": "Historical actual74cfa producer and original focusedtest70entry preserved; newpreflight fddbb is NOT current reporting/testidentity.",
+    "actual_render_or_tests": false,
+    "authored_new_controls": 11,
+    "executed_new_controls": 0
   }
 }

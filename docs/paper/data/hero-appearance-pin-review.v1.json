@@ -1,6 +1,6 @@
 {
   "schema": "jarambit.q.actual_observation_pin_preparation_review.v1",
-  "recorded_utc": "2026-10-20T20:18:02.367646+00:00",
+  "recorded_utc": "2026-10-20T21:55:57.693096+00:00",
   "identity": {
     "worker": "/root/resume_archive_review",
     "thread_id": "01a15499-c47f-7b21-8e3a-6873ef1527c0",
@@ -11,59 +11,91 @@
     "source_author": false,
     "GitHub_review_submitted": false,
     "GitHub_review_id": null,
-    "assignment": "Root prospective b2051d7a appearance observation/pin preparation activation; no current final-paper origin-bound review assignment"
+    "assignment": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/ROOT_PROSPECTIVE_NONAUTHOR_PF07_PF08_4FF1CE1_SOURCE_OBSERVATION_REVIEW_ASSIGNMENT.json",
+      "sha256": "ec0674f53acd16603d8ff65e338a78fc0d223b64c02b005c629abaf4ead41c37",
+      "prospective": true
+    }
   },
-  "verdict": "ACTUAL_OBSERVED_PINSET_ADMITTED_FOR_EXACT_6C49_SOURCE_INPUT_GEOMETRY_FIELD_MASK_REGISTRATION_CAMERA_DEPENDENCIES_ONLY",
+  "verdict": "ACTUAL_OBSERVED_PINSET_ADMITTED_FOR_EXACT_4FF1CE1_SOURCE_INPUT_GEOMETRY_FIELD_MASK_REGISTRATION_CAMERA_DEPENDENCIES_ONLY; PF07_PF08_STATIC_SOURCE_CLEARED; NEW_VISUALS_NOT_APPROVED",
   "scope": {
-    "head": "6c49e1c888efed2ff2fc65620dabd3a7379b5e1d",
-    "tree": "a09a0965ac7c9d3fc392cfbd467463d9077c4842",
+    "head": "4ff1ce172bc2c626e9a1e34f377e379c034f2741",
+    "tree": "1511e88d4662259c7b1f54091d07bf4a4bd526e6",
+    "base": "4213da0ab381bd3b7e0c78c5d240b091672d5a22",
+    "actual_readback_start": {
+      "utc": "2026-10-20T21:53:55.012453+00:00",
+      "head": "4ff1ce172bc2c626e9a1e34f377e379c034f2741",
+      "tree": "1511e88d4662259c7b1f54091d07bf4a4bd526e6",
+      "status": ""
+    },
+    "actual_readback_end": {
+      "utc": "2026-10-20T21:53:55.516344+00:00",
+      "head": "4ff1ce172bc2c626e9a1e34f377e379c034f2741",
+      "tree": "1511e88d4662259c7b1f54091d07bf4a4bd526e6",
+      "status": ""
+    },
     "actual_current_readback_clean": true,
+    "source_delta_files": 17,
     "entire_head_or_generated_tree_approved": false,
     "actual_recipe_installed_by_reviewer": false,
     "actual_recipe_or_expected_values_authored_by_reviewer": false,
     "future_source_changes_require_dependency_recheck": true
   },
   "actual_observation": {
-    "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/narrow-successor-1917/version-212-1939/actual-observation-for-existing-Q/hero-appearance-preflight.6c49.actual.v1.json",
-    "sha256": "660d9c00b84b3f310b36a2749e4a1b6cadf3accf6668a73b7ecf353314104e78",
+    "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/pf07-pf08-2132/actual-4ff-observation-for-existing-Root-Q/hero-appearance-preflight.4ff1ce1.actual.v1.json",
+    "sha256": "46587bc4dd80a34d081a1b3b0c4487b2b9dafd04a677fbd030cdff1af66fb00b",
     "bytes": 5680,
-    "raw_launcher_sha256": "215630e0ee97fd7dc6b483b736669ec2f7dd88257e9cc55824e9fd792d5fb9b8",
+    "raw_launcher_sha256": "9271396b8b1ada962280f3d8fa2f862ae3c26bfc8c18f67ba37eda94856618e9",
     "exact_contiguous_JSON_offset": 442,
-    "JSON_bytes_before_final_newline": 5679,
     "extraction_verified_byte_for_byte": true,
     "observed_only_status": "OBSERVED_ONLY_NOT_INDEPENDENT_PIN_ADMISSION"
   },
   "actual_execution": {
-    "admission_utc": "2026-10-20T20:09:39.522065+00:00",
-    "terminal_utc": "2026-10-20T20:10:17.308856+00:00",
+    "admission_utc": "2026-10-20T21:51:12.159682+00:00",
+    "terminal_utc": "2026-10-20T21:51:50.731980+00:00",
     "launcher_exit": 0,
     "cleanup_errors": [],
     "scientific_or_final_validation_PASS": false,
+    "issuer": "Admiral single effective allocation; no competing Root grant",
+    "grant_sha256": "4b25c3d1c53811c3af89c221afabc1e95772f3865ee7423b0640980244c18742",
+    "config_sha256": "42edf09cf1528e9016248ad1de1f0d9858173743a4fc7b924c0014400903725e",
+    "body_sha256": "28bd0bc22176744daa99c7d8d4a0f2abae4533552b558fb6d9274bcf825560a3",
     "binary": {
       "path": "/home/ubuntu/jarambit/.agent/worktrees/codex-latest-feedback-510713/target/release/examples/hero_appearance_preflight",
-      "actual_sha256": "f49e633473a03ff552e05c5fead1367dc4a7c2142e146dfae873800234125af5",
-      "actual_bytes": 1147032,
-      "actual_mtime_ns": 1792527016271529927,
-      "matches_captured": true
+      "sha256": "fddbb7de5cfe596d41bce11aa80bb8340d79a80ab5481b62c1c12425ffd255c3",
+      "bytes": 1145440,
+      "mtime_ns": 1792533109805925762,
+      "preserved_path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/pf07-pf08-2132/actual-4ff-observation-for-existing-Root-Q/hero_appearance_preflight.fddbb7de5cfe596d41bce11aa80bb8340d79a80ab5481b62c1c12425ffd255c3.binary",
+      "preserved_exact": true
     },
-    "body_sha256": "299c512046c7f1cf6aa1ec6d2e141d0446bc5e5e87334c8e6e482b7670130159",
-    "grant_sha256": "ba92ea4924c047adf273772d6bae9debd2e04c009caee3d738ecf8671a5fd4e0",
-    "config_sha256": "ef3c129de3b904548644d067855b0319996ca6f66f74ea99cae709fb691d5bca",
-    "cargo_executor_pid": 3886595,
-    "cargo_executor_start_ticks": "71243290",
-    "example_child_pid": null,
-    "example_child_pid_status": "Not individually sampled before exit; no retrospective child identity asserted.",
-    "reporter_uid": 1000,
-    "reporter_cap_effective": 0,
-    "reporter_affinity": [
-      6
-    ],
-    "reporter_nice": 19,
+    "reporter": {
+      "pid": 964327,
+      "start": "71852549",
+      "ppid": 964319,
+      "uids": [
+        1000,
+        1000,
+        1000,
+        1000
+      ],
+      "gids": [
+        1000,
+        1000,
+        1000,
+        1000
+      ],
+      "cap": 0,
+      "group": "/jarambit.slice/jarambit-evo.slice/jr-observation-4ff1ce1-58f7bc41da837eae8e354b0a.scope",
+      "affinity": [
+        6
+      ],
+      "nice": 19
+    },
     "unit": {
-      "unit": "jr-preflight-6c49-5b579cc03f6a7289.scope",
-      "group": "/jarambit.slice/jarambit-evo.slice/jr-preflight-6c49-5b579cc03f6a7289.scope",
-      "invocation": "0adb9288527d46d78b22ffc496bd4e56",
-      "inode": 92697973,
+      "unit": "jr-observation-4ff1ce1-58f7bc41da837eae8e354b0a.scope",
+      "group": "/jarambit.slice/jarambit-evo.slice/jr-observation-4ff1ce1-58f7bc41da837eae8e354b0a.scope",
+      "invocation": "14f84d833fc3468d8e1015777e2c761c",
+      "inode": 93440644,
       "device": 30
     },
     "kernel_caps": {
@@ -75,141 +107,207 @@
     "manager_properties_at_admission": {
       "TimeoutStopUSec": "5s",
       "RuntimeMaxUSec": "9min 52s",
-      "ControlGroup": "/jarambit.slice/jarambit-evo.slice/jr-preflight-6c49-5b579cc03f6a7289.scope",
+      "ControlGroup": "/jarambit.slice/jarambit-evo.slice/jr-observation-4ff1ce1-58f7bc41da837eae8e354b0a.scope",
       "KillMode": "control-group",
       "FinalKillSignal": "9",
       "SendSIGKILL": "yes",
       "ActiveState": "active",
-      "ActiveEnterTimestampMonotonic": "712432933276",
-      "InvocationID": "0adb9288527d46d78b22ffc496bd4e56"
+      "ActiveEnterTimestampMonotonic": "718525521659",
+      "InvocationID": "14f84d833fc3468d8e1015777e2c761c"
     },
     "terminal_scope_inactive": true,
-    "toolchain_capture": [
-      {
-        "argv": [
-          "/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
-          "--version",
-          "--verbose"
-        ],
-        "stdout": "rustc 1.85.1 (4eb161250 2025-03-15)\nbinary: rustc\ncommit-hash: 4eb161250e340c8f48f66e2b929ef4a5bed7c181\ncommit-date: 2025-03-15\nhost: x86_64-unknown-linux-gnu\nrelease: 1.85.1\nLLVM version: 19.1.7\n",
-        "stderr": "",
-        "exit_code": 0,
-        "binary_sha256": "f8d033fd72e878ec60493788c8bffec2e6c154dcab6f0cb4c145af8ada26a7ed"
+    "example_child_pid": null,
+    "example_child_pid_status": "Not individually sampled before exit; no retrospective child PID or inferred child argv asserted.",
+    "toolchain": {
+      "rustc_information": {
+        "rustc_fingerprint": 27840874149453303,
+        "outputs": {
+          "17747080675513052775": {
+            "success": true,
+            "status": "",
+            "code": 0,
+            "stdout": "rustc 1.85.1 (4eb161250 2025-03-15)\nbinary: rustc\ncommit-hash: 4eb161250e340c8f48f66e2b929ef4a5bed7c181\ncommit-date: 2025-03-15\nhost: x86_64-unknown-linux-gnu\nrelease: 1.85.1\nLLVM version: 19.1.7\n",
+            "stderr": ""
+          },
+          "13331785392996375709": {
+            "success": true,
+            "status": "",
+            "code": 0,
+            "stdout": "___\nlib___.rlib\nlib___.so\nlib___.so\nlib___.a\nlib___.so\n/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu\noff\npacked\nunpacked\n___\ndebug_assertions\npanic=\"unwind\"\nproc_macro\ntarget_abi=\"\"\ntarget_arch=\"x86_64\"\ntarget_endian=\"little\"\ntarget_env=\"gnu\"\ntarget_family=\"unix\"\ntarget_feature=\"fxsr\"\ntarget_feature=\"sse\"\ntarget_feature=\"sse2\"\ntarget_has_atomic=\"16\"\ntarget_has_atomic=\"32\"\ntarget_has_atomic=\"64\"\ntarget_has_atomic=\"8\"\ntarget_has_atomic=\"ptr\"\ntarget_os=\"linux\"\ntarget_pointer_width=\"64\"\ntarget_vendor=\"unknown\"\nunix\n",
+            "stderr": ""
+          }
+        },
+        "successes": {}
       },
-      {
-        "argv": [
-          "/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/cargo",
-          "--version"
+      "fingerprint": {
+        "rustc": 8750902384292223123,
+        "features": "[]",
+        "declared_features": "[]",
+        "target": 8962875812102519119,
+        "profile": 15200641462840923308,
+        "path": 6071082054886322256,
+        "deps": [
+          [
+            6801039024641860015,
+            "jarambit_paper_artifacts",
+            false,
+            1019924209921727791
+          ],
+          [
+            8160210889872729633,
+            "serde_json",
+            false,
+            16883065541050419937
+          ],
+          [
+            9857275760291862238,
+            "sha2",
+            false,
+            15773705471048356513
+          ],
+          [
+            15667726689128706326,
+            "ruzstd",
+            false,
+            8771396832938277671
+          ]
         ],
-        "stdout": "cargo 1.85.1 (d73d2caf9 2024-12-31)\n",
-        "stderr": "",
-        "exit_code": 0,
-        "binary_sha256": "87e9ff02f95ea17d877e7c4eeb0f365f50fe3827f5afec132131ff3b8031a57e"
-      }
-    ],
-    "capture_attribution": "Actual execution was performed through the admitted Captain/Admiral route, not by this reviewer. Reviewer personally read original runtime records, verified copied/raw byte hashes and exact source/binary/body/71-input readbacks; no independent process launch or inferred child argv/PID is claimed."
+        "local": [
+          {
+            "CheckDepInfo": {
+              "dep_info": "release/.fingerprint/jarambit-paper-artifacts-6b5b48ce991e6c98/dep-example-hero_appearance_preflight",
+              "checksum": false
+            }
+          }
+        ],
+        "rustflags": [],
+        "config": 2069994364910194474,
+        "compile_kind": 0
+      },
+      "flags_bound_to_actual_body": "release locked; release overflow checks=true, debug assertions=true; cargo jobs/pools/test threads1; SOURCE_DATE_EPOCH1792460432"
+    },
+    "capture_attribution": "Captain performed admitted compile/run. Reviewer personally read original records and immutable source, exact extracted JSON, current and preserved binary/hash/profile, grant/body/config/toolchain/input and copied/raw joins. Reviewer launched no preflight, compiler, suite or rendering; no live process witnessing or individually sampled example PID asserted."
   },
   "independent_factual_joins": {
-    "all22_observed_source_hashes_match_exact_immutable_6c49_and_current_live_files": true,
+    "all22_observed_source_hashes_match_exact_immutable_head_and_current_live": true,
     "all22_source_keyset_matches_prior_admitted_keyset": true,
     "changed_source_file_pins_only": [
       {
         "path": "crates/paper-artifacts/src/plate.rs",
-        "historical_source_sha256": "ac4537b4cdd44323dc7d259d0227e0b30b4c57ebc994f70580ed64ee96c200bd",
-        "actual_observed_source_sha256": "118639cf8e9325bc05e68e0c98a37586479b7c1d2e3f783a8296a7fbdde05f2e"
+        "observed_sha256": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e",
+        "immutable_sha256": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e",
+        "live_sha256": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e",
+        "bytes": 46847,
+        "matches": true,
+        "prior_sha256": "118639cf8e9325bc05e68e0c98a37586479b7c1d2e3f783a8296a7fbdde05f2e"
       },
       {
         "path": "crates/paper-artifacts/src/population.rs",
-        "historical_source_sha256": "7b6588592b84114e5affeeba3c17f075975c4886d0890b27be471c0805bfabe9",
-        "actual_observed_source_sha256": "1f53640711e208136b58be28a22efb57f3af502f2d37b093a7406ae6eab97d9d"
+        "observed_sha256": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
+        "immutable_sha256": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
+        "live_sha256": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
+        "bytes": 234961,
+        "matches": true,
+        "prior_sha256": "1f53640711e208136b58be28a22efb57f3af502f2d37b093a7406ae6eab97d9d"
       }
     ],
-    "all_other_observed_pin_fields_match_prior_recipe_exactly": true,
-    "camera_numeric_rotation_scale_offset_refit_and_digest_match_prior_observation": true,
+    "all_other_observed_pin_fields_match_prior_actual660d_exactly": true,
+    "all_other_actual_observation_facts_match_prior660d": true,
+    "camera_numeric_rotation_scale_offset_refit_and_digest_unchanged": true,
     "all5_component_hashes_identical": true,
     "ordered_geometry_identical": true,
     "registration_identical": true,
     "channel_ids_source_faces_source_cells_subject_identical": true,
-    "hero_source_registration_camera_preflight_strict_admission_block_identical_to_prior73_sha256": "99d1c5e2a4a6586be1e85e9f01e2d1e26ff4fd7a8b883b7f0e717daa947a40eb",
-    "actual_binary_file_sha256_matches_captured": true,
-    "all71_captured_input_hashes_match_current_retained_bytes": true,
+    "hero_source_loading_binding_camera_preflight_strict_guard_function_invariance": [
+      {
+        "function": "load_hero_source",
+        "sha256": "5e6739dd54fde9bf4e5d09e98dd05d724775d249b5d93591f12822a7628880a6",
+        "bytes": 6552,
+        "unchanged": true
+      },
+      {
+        "function": "hero_appearance_camera",
+        "sha256": "807c3f6ef84b3c517de360e116057bc882f8a04cb80689c360734193c5fbe28f",
+        "bytes": 416,
+        "unchanged": true
+      },
+      {
+        "function": "hero_appearance_binding",
+        "sha256": "e0010701dd9671ece800bf986cfcbb90f34fe41d38693bf06aac5904dfcaf8e6",
+        "bytes": 5866,
+        "unchanged": true
+      },
+      {
+        "function": "hero_appearance_preflight",
+        "sha256": "97687df301744b2dc162ac72207b2054a9e6a417f3980edcd5dd29050be3b7a1",
+        "bytes": 1046,
+        "unchanged": true
+      },
+      {
+        "function": "hero_require_expected_pins",
+        "sha256": "9624c8c72954ab380333035984c123ef3dffad06df479b345bba7f8d0e62275a",
+        "bytes": 1069,
+        "unchanged": true
+      }
+    ],
+    "actual_binary_file_and_preserved_copy_exact": true,
+    "all78_config_input_hashes_match_retained_bytes": true,
+    "all76_source_handoff_inputs_match_retained_bytes": true,
     "all8_original_runtime_and_Captain_copy_pairs_equal_and_hash_bound": true,
-    "strict_equality_and_missing_pin_rejection_not_weakened": true
+    "all320_original_source_Git_blob_mode_type_size_identity_vs510713_independently_verified": true,
+    "strict_equality_missing_pin_rejection_not_weakened": true
+  },
+  "static_source_review": {
+    "source_diff_sha256": "aa8329974ae1b723160996305c1447d2570283f609b9a880a47494e0224b2498",
+    "PF07": [
+      "Only lateral/torsion Zoom views expand; source minimum xspan0.30, selected ROI containment, physical aspect pad/clamp/letterbox; all original preparation, selector, masks, rawscale and values retained.",
+      "Expanded crop coverage uses existing exact clipped-triangle whole-field denominators; separately saved selection_roi retains original threshold/coverage. PiP quad uses the same actual displayed source bbox. A/C fallback unchanged.",
+      "Original source-boundary edges are stroked for B/D; no triangle positions, values or scientific definition changes. Contract exact version/fieldIDs/0.30 is admitted failclosed.",
+      "Four new neutral context controls are statically meaningful; source-inspected only, not executed. Recognition/readability require actual new images, not this source review."
+    ],
+    "PF08": [
+      "Correct warmer-is-better preference orientation for all4 Preference\u00d7gap combinations, original-unit inverse key, constant midpoint and invalid/out-of-domain failclosed before mutation.",
+      "Literal positions and mask/census/order/tie core unchanged; only RGB writes added at fixed3x3 footprints in original source order. Overpainting is explicitly last painted source score, not density or average.",
+      "Distinct dark cumulative-best line/light halo; same coordinates/membership/curve; caller delta onlyimport/two RGB encoder calls. All24 positive views share admitted helper; current actual new images are not established.",
+      "Seven new neutral palette/PNG/ordering/constant/nonfinite controls source-inspected, nine existing retained; unexecuted. RGB buffer+1201113bytes per raster and added transform/encoding cost unbenchmarked."
+    ],
+    "docs_and_binding": "Read actual17-path diff incl README/body/supplement/contract/release prep/repair history/Makefile. New source descriptions match implementation, old actual4213 artifacts remain historical pending generation.",
+    "protected_science": "320 original immutable source Git objects match510713/current4ff; no native CSV decompression/recount or scientific rerun.",
+    "child_source_support": {
+      "worker": "/root/resume_archive_review/readonly_display_axis_audit",
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/4ff1ce1/child-pf08-source-review/PF08_SOURCE_REVIEW.json",
+      "sha256": "552148e1eb6e9776a64f64b857bd0db67db584b94786f15a6595df19dcd8541e",
+      "source_author": false,
+      "scope": "PF08 source only; no execution/artifact approval"
+    }
   },
   "new_material_findings": [],
   "finite_installation_disposition": {
-    "allowed": "Sole Captain may copy only the verbatim observed_pins object from the actual observation SHA660d9c00 into the additive recipe, bind this independent receipt and the actual observation by SHA, and preserve prior observation/review/recipe bytes and history. This is review admission of actual independently compared observations, not reviewer-authored expected values.",
-    "source_delta_limit": "Only the observed whole-file plate.rs and population.rs pin updates are admitted relative to prior expected source pins. All geometry/field/mask/contributor/palette/map/camera/registration/source-channel facts remain exactly as observed; no substitution, defaulting or removal.",
-    "stop_if": "Any bound source/input key, source byte, geometry/field/mask/registration/camera/component fact changes, or copied observation/review bytes differ, requires a new precise source/fact review. No automatic admission across arbitrary future heads."
+    "allowed": "Sole Captain may copy only the verbatim observed_pins object from actual observation SHA46587bc4dd80a34d081a1b3b0c4487b2b9dafd04a677fbd030cdff1af66fb00b into the additive recipe, bind this independent receipt and actual observation by SHA, and preserve prior observation/review/recipe bytes and history. No redundant Root acknowledgment is required by the prospective assignment. This admits source-compared actual observations, not reviewer-authored expected values.",
+    "source_delta_limit": "Only actual observed whole-file plate.rs and population.rs pin updates relative to prior pins. Geometry/field/mask/contributor/palette/map/camera/registration/source channel facts and all other source pins remain verbatim.",
+    "stop_if": "Any source/input key or byte, geometry/field/mask/registration/camera/component fact changes, copied observation/review differs, or current binary/runtime/source binding drifts, requires precise dependency recheck. No automatic arbitrary-head admission."
   },
   "limits": [
-    "Pin preparation only. No new normals or lighting derivation, rendering, new appearance pixels, source artifact generation, PDF layout, scientific solver/FEM/CAD/scorer/fitness evaluation or physical qualification is established.",
-    "Reviewer did not run Cargo/compiler/tests/preflight/render/CI/API or author a recipe/expected values. Read-only source/data/hash comparison and own target receipts only.",
-    "Current67 authored controls, full-zstd audit, current generated source/output closure, exact CI package membership, all affected page inspections, final origin-bound independent review and production guard/merge/release remain separate obligations.",
-    "Earlier corrected09c0 all51-page witness remains tied to historical bf74/c70f PDF bytes. This receipt grants no later source/artifact/whole-paper/formal approval.",
-    "No reuse of old PR144 formal assignment/runtime dispatch or approval for this source preparation."
+    "Source and actual pin preparation only. Current new B/D curvature recognition/PiP statistics/printed layout, vivid colorbar and Run5 appearance, all affected PDF pages and generated closure still require actual generation and separate review. Old4213 all51 proof cannot approve new visuals.",
+    "No image/normals/fresh physics/scorer/geometry/fitness computed by this actual preflight; no tests/render/build/CI/API/GitHub writes by reviewer. Own target review receipts only.",
+    "All11 new authored controls and required suites are unexecuted at this source-observation review. Observation exit0 is not test/CI/physical qualification PASS.",
+    "No final artifact/whole-paper/formal GitHub approval, actual review origin guard, merge/release or resource grant issued by reviewer. Prior PR144 review runtime/approval is not reused.",
+    "Runtime record views/captured hashes bind the finite job; sampled accounting is not atomic quota. Individual example child PID remains unknown."
   ],
-  "next_action": "Captain installs only the exact actual observed/admitted facts with historical custody, renews dependent digests/closures at the actual completed successor, and obtains the separately required governed generation. Complete clean artifact freeze and Root controls precede current source/artifact/changed-page and real CI/formal review.",
+  "next_action": "Captain installs only exact actual admitted observations/review/history and dependent source digests, commits; separately governed figure/report/PDF generation, complete clean freeze/current source-output-320 proof and Root local gates precede new changed-page/current artifact/CI/formal review.",
   "evidence": [
     {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/ACTUAL_OBSERVATION_COMPONENT_COMPARISON.json",
-      "sha256": "6a59388f15e0c2b3974f59a4c5143e8ec2c1e7311786cad4fe6451c2af6e050b"
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/4ff1ce1-observation-preparation/Q_ACTUAL_4FF1CE1_SOURCE_OBSERVATION_RAW_JOIN.json",
+      "sha256": "991c1dbfce240f7ad8ef153555712fe5a833bd09da883ed85391671e0518fd5f"
     },
     {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/ACTUAL_OBSERVATION_COMPONENT_COMPARISON.md",
-      "sha256": "33ed49d94f3c52fe6418e11b47106a86ddf222aeaac5c2a64956bd563282f80e"
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/4ff1ce1-observation-preparation/Q_ACTUAL_4FF1CE1_78_INPUT_AND_320_ORIGINAL_BYTE_READBACK.json",
+      "sha256": "7db29c9512af91b65d528ff7bf53782a85f376ad4624a87627c5858b562c73a9"
     },
     {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/Q_ACTUAL_6C49_OBSERVATION_PROVENANCE_JOINS.json",
-      "sha256": "5e8479f91ea968e548d976b26e06b586684e552aa758a14048c9d069a8e6b2a2"
-    },
-    {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/SOURCE_STATIC_PREPARATION.json",
-      "sha256": "ffa24485ca7f24e8c90ee971b9b5bc13c49f48c2860693135ec47ce269d6f34e"
-    },
-    {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/SOURCE_STATIC_PREPARATION.md",
-      "sha256": "d179ddd7d2b1e49c5599cbc8aeb186b6820257b424d6976c3b7a46225e269d5d"
-    },
-    {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/CAPTAIN_ACTUAL_6C49_OBSERVATION_EXECUTION_AND_INDEPENDENT_Q_HANDOFF.json",
-      "sha256": "999a5f734c7e076bceab1d47f76873b8c52251ff2bac51959ac9c820a8c4e4c7"
-    },
-    {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/FINAL.json",
-      "sha256": "e4fa8d0de6de241f0a79bc6e457ec04e99dcd41c82e9fbcd21783fe1412d36a2"
-    },
-    {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/actual-admission.json",
-      "sha256": "03dc42944137463f54e225ba0f2bb45db654389732ecc23667cf5f3562143331"
-    },
-    {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/actual-command.json",
-      "sha256": "5d1c97b299a8f765d4b3ff87fec5d6e801092fc1e6e51393dc187ee40d01eed3"
-    },
-    {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/commands.jsonl",
-      "sha256": "52e46eb5944bf56373daf78f2dd3d7689c719897dede4f469c98b3dc9074ba66"
-    },
-    {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/hero-appearance-preflight.6c49.actual.v1.json",
-      "sha256": "660d9c00b84b3f310b36a2749e4a1b6cadf3accf6668a73b7ecf353314104e78"
-    },
-    {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/inside-ack.json",
-      "sha256": "0de7faf97c32b356d08aaea2a96385f0bb1e8d1c2d9ce3be564bac7f45c326c6"
-    },
-    {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/inside-report.json",
-      "sha256": "2a9b6692002b802e792b7b81c5ed9ea417ad231c336995381d5d46f2505c1a28"
-    },
-    {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/launcher.log",
-      "sha256": "215630e0ee97fd7dc6b483b736669ec2f7dd88257e9cc55824e9fd792d5fb9b8"
-    },
-    {
-      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/usage-latest.json",
-      "sha256": "04451126277f8f45b109b5cac187c7ecd35e65eebf544e15c2ce5dc6c182aec5"
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/4ff1ce1/child-pf08-source-review/PF08_SOURCE_REVIEW.json",
+      "sha256": "552148e1eb6e9776a64f64b857bd0db67db584b94786f15a6595df19dcd8541e"
     }
-  ]
+  ],
+  "actual_observed_pin_object_sha256_canonical_json": "561e4ef3eb6ff5348018bdf7d11e41e57231506b5dd9233b1156aeb93f900472"
 }
