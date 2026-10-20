@@ -17,7 +17,7 @@
   "erroneous_v1_receipt_preserved_at": "docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_V1_OBSERVED_ERRONEOUS_20261019.json",
   "source_and_binary_bindings": {
     "crates/paper-artifacts/src/corpus.rs": "766b84efb5f558566c4d10649f997c86881717bd4547f995a7f3e4fb3ea1b72e",
-    "crates/paper-artifacts/src/population.rs": "d3c3d25967dfb815983eaa0b54d9890b115a2f67fcc5d6fe154b4a87210fd15e",
+    "crates/paper-artifacts/src/population.rs": "ec78ee4cd0a10e5395f7d5d800871b3e6688457fc86c0dff7ffe870b51169352",
     "crates/paper-artifacts/src/publication.rs": "21ff29d9c16cf44a4b04f26be7c5e65aaf83a7afde90be4faa84c616e49fe11b",
     "crates/paper-artifacts/src/lib.rs": "6722079254b611b1dab6f5f5135be59ff718d567e4d0ebd1448bfd928c0db337",
     "crates/paper-artifacts/examples/publication_v2_audit.rs": "610a5b9a0c03984278db7b150184a101d1bacd10dc79e668e9ec2c36cf5c3919",
@@ -31,7 +31,11 @@
       "first16_hex": "4a45563198010000a34f027366a90fd9",
       "frames_decoded": 19,
       "events_decoded": 2207,
-      "migrations_generations": [4, 8, 12]
+      "migrations_generations": [
+        4,
+        8,
+        12
+      ]
     },
     "2_historical_search_files": {
       "all_evals.json": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363",
@@ -68,9 +72,33 @@
       "validate_repair_receipt_file_bindings": "automatic Rust byte-level verification of all receipt file paths and SHA-256 constants"
     },
     "6_public_run_registry_reconciled": {
-      "cohort_1_historical_w282": ["Run 1"],
-      "cohort_3_ten_retained_800gen_runs": ["Run 2", "Run 3", "Run 4", "Run 5", "Run 6", "Run 7", "Run 8", "Run 9", "Run 10", "Run 11"],
-      "legacy_superseded_crosswalk": ["Run 37", "Run 38", "Run 39", "Run 40", "Run 41", "Run 42", "Run 43", "Run 44", "Run 45", "Run 46"]
+      "cohort_1_historical_w282": [
+        "Run 1"
+      ],
+      "cohort_3_ten_retained_800gen_runs": [
+        "Run 2",
+        "Run 3",
+        "Run 4",
+        "Run 5",
+        "Run 6",
+        "Run 7",
+        "Run 8",
+        "Run 9",
+        "Run 10",
+        "Run 11"
+      ],
+      "legacy_superseded_crosswalk": [
+        "Run 37",
+        "Run 38",
+        "Run 39",
+        "Run 40",
+        "Run 41",
+        "Run 42",
+        "Run 43",
+        "Run 44",
+        "Run 45",
+        "Run 46"
+      ]
     }
   },
   "generated_outputs_sha256": {
@@ -82,7 +110,7 @@
     "docs/paper/figures/inheritance.svg": "6e58f5abc975790518251a04a85cc99bab630570787c2408f53c80381e7a85e1",
     "docs/paper/generated/shared_projection.v2.json": "cabb41c0475d3dbc77349850bd2110661fce0fd544da73857dc59b6bc21d43c8",
     "docs/paper/generated/overview.md": "376ce903ef7c2768f5695f930614390ad6f94fad07ccdfe7e84b3b735bf352c2",
-    "docs/paper/generated/manifest.json": "71f5500d65dd051e3e3530733d31e302352d6923ef3829ce174a93cb890bf656",
+    "docs/paper/generated/manifest.json": "7a7023fea41ef8f99d2a6a7ada45e36c2eae47ffbf5b041f9f95d5ddf0249fbb",
     "docs/paper/publication.v2.json": "26efcc68cc889f918d82e3f982ae714781238fb721078f7519c8efd359909150",
     "docs/paper/generated/population/gen800_scatter_cache.v1.json": "4eabe5a581dcb655b413857bfb3c28741070dc390b3ca71d744aa51f58e7a493"
   },
@@ -91,5 +119,11 @@
     "tests_passed": 70,
     "tests_failed": 0,
     "exit_code": 0
+  },
+  "integration_rebinding": {
+    "checked_utc": "2026-10-20T00:42:51.828436+00:00",
+    "previous_receipt_sha256": "887117c619986e53da111d111b96882d00c25ed9f20498527edf278b24839eca",
+    "preserved_original_commit": "d1b65cbe73b3890f07524c86b23c7ece3c9f2767",
+    "reason": "Rebind current source/output hashes after EOF-whitespace-only population.rs cleanup. Original observations, custody records, binary history and prior execution claims are unchanged; final local reporting tests are rerun separately."
   }
 }
