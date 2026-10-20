@@ -58,17 +58,23 @@ Native fitness includes novelty computed against contemporaneous population/arch
 
 A display loss $L=-f$, $100-F$, or $-W_{\mathrm{CAD}}$ reverses numerical order. Minimizing it preserves the original preference for a larger native score. It does not make those different profiles comparable. A cumulative maximum is monotone by construction, so its corresponding loss is nonincreasing by construction; that fact alone is not evidence of continuing physical improvement.
 
-\subsection{Relative Field Summary and Physical-Unit Views}
-The hero summarizes retained fields of Individual~2000. For each active map, cells are sorted by stored magnitude and assigned the midpoint of their cumulative area interval. Equal stored values are processed in deterministic source-cell order, rather than pooled into one tied percentile. The active-map ranks are averaged at each cell, then the candidate's resulting minimum and maximum are linearly stretched to $[0,1]$ for display. This candidate-specific relative summary removes physical units. A color value of $0.8$ means neither $80\%$ safety nor an absolute $80$th percentile shared by other candidates.
+\subsection{Missing-Aware Response Display and Physical-Unit Views}
+The display roster accounts for all $44$ catalog predicates and $8$ retained-channel metadata rows. These $52$ metadata rows are not $52$ independent tests or performed solves. Four distinct retained unit-response channels of Individual~2000 share the original plate triangles: lateral, in-plane tip pry, ring traction and chord torsion. The scaled envelope and its derived safety-factor map remain companion quantities, without another equal weight. Scalar-only, missing or incompatible-domain observations remain missing spatial contributions; no scalar or Individual~2002 reporting term is broadcast onto this geometry.
 
-The five maps are the envelope, lateral, pry, ring and torsion arrays. Because the envelope is derived from the primitive responses, five contributors do not represent five independent tests. Ring/envelope masks vary the number of active contributors; the cover does not display a separate per-cell support map. Section~\ref{sec:verification} and the Supplement describe the actual support counts and primitive-only sensitivity.
+Within each eligible channel, the normalization is an ascending area-weighted percentile midrank of valid original response values. All exactly tied values share the midpoint of their pooled area; a constant valid field has rank $0.5$. Original source masks apply, while genuine finite zeros remain valid. For cell $i$, let $K_i$ contain the available normalized channels. The unweighted display index and its support are
+\begin{equation}
+ c_i=\frac{1}{q_i}\sum_{k\in K_i}r_{ki},\qquad q_i=|K_i|>0.
+\end{equation}
+An all-missing cell has no index and $q_i=0$, rather than index zero. Contributor identities and coverage $q_i/4$ accompany the index; $44$ and $52$ are inventory counts, not its support denominator. No candidate-specific minimum/maximum stretch follows the mean. A high index denotes relatively high response within the available channels, not safety, fitness, likelihood or merit.
 
-Figure~\ref{fig:plate-fields} retains four physical-unit maps; the fifth, in-plane tip pry, appears in Figure~\ref{fig:saliency-crops}C. Gray denotes producer-masked cells, not measured zero stress. Raw torsion has a large tip-patch peak, which remains distinct from the post-exclusion peak used by selected capacity calculations.
+Physical values, within-channel normalization, the available-channel mean and display contrast are separate quantities. The contract defines a full $[0,1]$ index key with a shared flat navy--teal--yellow--orange--red transfer for surface and legend; this palette does not claim monotone luminance. A percentile-window contrast view, if used, is a separate coordinate with declared index bounds, saturation counts and source-area fractions, accompanied by the full-range view. The Supplement specifies the roster, masks, normalization and projection limits.
+
+Figure~\ref{fig:plate-fields} retains the envelope and three physical-unit response views; the fourth eligible response, in-plane tip pry, appears in Figure~\ref{fig:saliency-crops}C. Gray denotes producer-masked cells, not measured zero stress. Raw torsion retains its tip-patch peak, distinct from the post-exclusion peak used by selected capacity calculations.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{plate-fields.png}
-\caption{Spatial concentration differs across Individual~2000's retained plate responses. A: scaled multi-case envelope (MPa). B: unit lateral response (MPa/N). C: unit ring traction (MPa/N). D: raw unit chord torsion (MPa/(N\,mm)). The plate has $25{,}209$ triangles; gray marks the envelope's 75 tip-excluded cells and ring field's $14{,}875$ seated cells. Tip pry, the fifth composite component, is shown separately in Figure~\ref{fig:saliency-crops}C. Each field keeps its own physical scale.}
+\caption{Spatial concentration differs across Individual~2000's retained plate responses. A: scaled multi-case envelope (MPa). B: unit lateral response (MPa/N). C: unit ring traction (MPa/N). D: raw unit chord torsion (MPa/(N\,mm)). The plate has $25{,}209$ triangles; gray marks the envelope's 75 tip-excluded cells and ring field's $14{,}875$ seated cells. The fourth eligible response channel, in-plane tip pry, is shown separately in Figure~\ref{fig:saliency-crops}C. Each field keeps its own physical scale.}
 \label{fig:plate-fields}
 \end{figure*}
 

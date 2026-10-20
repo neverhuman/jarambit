@@ -2,6 +2,12 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v2.1.1 — 2026-10-20 (retained-evidence display corrections)
+
+- Corrects the response display to use source-bound available-channel means, pooled area-weighted tied ranks, explicit missingness and per-cell contributor coverage. The complete catalog/channel inventory records unavailable spatial observations without scalar broadcast.
+- Uses the shared navy–teal–yellow–orange–red display transfer with full-range main rendering and separate contrast/support companions. Score views retain all admitted numeric observations, print their data-derived scales and add explicitly bounded detail and separate run context.
+- Clarifies reporting aliases, selection limits and native recovery gaps; packages the display/axis contracts, row-level inventory and reproducible main/supplement build. This patch release changes reporting only; it adds no optimization, CAD export, physical solve or qualification claim.
+
 ## v2.1.0 — 2026-10-20 (retrospective design traceability publication)
 
 - Adds the corrected 15-page IEEE-style manuscript and standalone 18-page supplement, with explicit evidence coverage, candidate identities, score profiles and selective assessment paths.

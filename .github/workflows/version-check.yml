@@ -289,6 +289,20 @@ jobs:
             target/ieee/paper/population-latest.png
             target/ieee/paper/inheritance.png
             target/ieee/paper/evidence-architecture.png
+            target/ieee/paper/hero-support.png
+            target/ieee/paper/hero-contrast-preview.png
+            target/ieee/paper/population-detail.png
+            target/ieee/paper/native-runs-*.png
+            docs/paper/reproduce.sh
+            docs/paper/Makefile
+            docs/paper/data/*.json
+            docs/paper/generated/display-composite.v1.json
+            docs/paper/generated/test-field-roster.v1.tsv
+            docs/paper/generated/hero-*.svg
+            docs/paper/generated/population-detail.svg
+            docs/paper/generated/native-runs-*.svg
+            docs/paper/generated/population/score-axis.v1.json
+            docs/paper/generated/population/retained-leaders.v1.json
             docs/paper/figure-semantics.v1.json
             docs/paper/claim-evidence.v1.json
             docs/paper/generated/crop-semantics.v1.json
