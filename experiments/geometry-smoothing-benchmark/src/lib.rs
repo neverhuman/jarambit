@@ -323,6 +323,9 @@ pub fn metrics(mesh: &Mesh, source: &Mesh, radius: f64) -> Result<Metrics> {
     if mesh.faces != source.faces || mesh.vertices.len() != source.vertices.len() {
         return Err("metrics require matching topology".into());
     }
+    if source.vertices.iter().flatten().any(|x| !x.is_finite()) {
+        return Err("source coordinates must be finite".into());
+    }
     let mut errors: Vec<f64> = mesh
         .vertices
         .iter()
@@ -335,6 +338,9 @@ pub fn metrics(mesh: &Mesh, source: &Mesh, radius: f64) -> Result<Metrics> {
         .zip(&source.vertices)
         .map(|(&a, &b)| norm(sub(a, b)))
         .collect();
+    if displacements.iter().any(|x| !x.is_finite()) {
+        return Err("source displacement overflow".into());
+    }
     let volume = mesh
         .faces
         .iter()
@@ -533,6 +539,17 @@ mod tests {
             &target,
             Settings::default()
         ));
+    }
+
+    #[test]
+    fn metrics_rejects_nonfinite_source_and_displacement_overflow() {
+        let mesh = sphere(1, 30., 0.8).unwrap();
+        assert!(metrics(&mesh, &mesh, 30.).is_ok());
+        for value in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY, f64::MAX] {
+            let mut source = mesh.clone();
+            source.vertices[0][0] = value;
+            assert!(metrics(&mesh, &source, 30.).is_err(), "source x={value}");
+        }
     }
 
     #[test]

@@ -43,17 +43,27 @@ jobs:
           export RUSTC="${toolchain}/rustc" RUSTDOC="${toolchain}/rustdoc"
           export CARGO_TARGET_DIR="$PWD/target/synthetic-geometry-ci"
           attempt="$PWD/target/synthetic-geometry-artifacts/${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-          cargo run --release --locked --manifest-path experiments/geometry-smoothing-benchmark/Cargo.toml -- --out "$attempt/output"
-          sha256sum experiments/geometry-smoothing-benchmark/Cargo.toml \
+          mkdir -p "$(dirname "$attempt")"
+          mkdir "$attempt"
+          printf 'run=%s\nattempt=%s\nsource_sha=%s\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_SHA" > "$attempt/START.txt"
+          date -u +'%Y-%m-%dT%H:%M:%SZ' >> "$attempt/START.txt"
+          shasum -a 256 .github/workflows/synthetic-geometry-benchmark.yml \
+            experiments/geometry-smoothing-benchmark/Cargo.toml \
             experiments/geometry-smoothing-benchmark/Cargo.lock \
             experiments/geometry-smoothing-benchmark/src/*.rs \
             experiments/geometry-smoothing-benchmark/tests/*.rs > "$attempt/SOURCE_SHA256SUMS"
-          (cd "$attempt/output" && sha256sum rough.obj smoothed.obj reference.obj \
-            rough.stl smoothed.stl reference.stl vertices.csv metrics.json \
-            comparison.svg REPORT.md) > "$attempt/OUTPUT_SHA256SUMS"
+          producer_rc=0
+          cargo run --release --locked --manifest-path experiments/geometry-smoothing-benchmark/Cargo.toml -- --out "$attempt/output" > "$attempt/producer.log" 2>&1 || producer_rc=$?
+          cat "$attempt/producer.log"
+          printf '%s\n' "$producer_rc" > "$attempt/EXIT_CODE"
+          if test -d "$attempt/output"; then
+            (cd "$attempt/output" && find . -maxdepth 1 -type f -exec shasum -a 256 {} + | LC_ALL=C sort) > "$attempt/AVAILABLE_OUTPUT_SHA256SUMS"
+          fi
+          exit "$producer_rc"
       - name: Upload synthetic benchmark results and generated meshes
+        if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: synthetic-geometry-${{ github.sha }}-${{ github.run_attempt }}
           path: target/synthetic-geometry-artifacts/
-          if-no-files-found: error
+          if-no-files-found: warn

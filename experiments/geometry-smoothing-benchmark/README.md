@@ -4,9 +4,13 @@ Standalone Rust implementation of actual vertex-position smoothing. Its only inp
 
 The default test passed: all 642 vertices moved; vertex radial RMS error fell from 0.423986 to 0.102598 mm, a 75.802% reduction. Volume differed from the clean reference mesh by -0.211001%. See [measured report](results/verified/REPORT.md), [before/after wireframe](results/verified/comparison.svg), and [numerical results](results/verified/metrics.json).
 
-Generated OBJ/STL meshes and the full vertex-coordinate CSV are runtime artifacts, not repository CAD. Run the command below to produce them in a new output directory, or download the artifact from the standalone **Synthetic geometry benchmark** workflow. Historical receipts under `results/verified/` retain the original run's hashes, including hashes for artifacts no longer stored in Git; mesh/CSV links in that historical report describe the original run directory. Its source hashes bind the original standalone revision, not later packaging/CI edits. Current workflow executions publish fresh source/output digests.
+Generated OBJ/STL meshes and the full vertex-coordinate CSV are runtime artifacts, not repository CAD. Run the command below to produce them in a new output directory, or download the artifact from the standalone **Synthetic geometry benchmark** workflow. Historical receipts under `results/verified/` retain the original run's hashes, including hashes for artifacts no longer stored in Git; mesh/CSV links in that historical report describe the original run directory. Its source hashes bind the original standalone revision, not later validation, packaging or CI edits. Current workflow executions publish fresh source/output digests.
 
 The benchmark has its own path-filtered CI workflow and manual dispatch. It is not a prerequisite of paper figure/PDF builds or required version-check. A synthetic sphere pass does not validate, smooth or qualify the paper's production CAD. The attempted paper-build coupling in PR head `3e80b424` was rejected during review and removed; its source and proof remain in that historical commit.
+
+The workflow writes source/start metadata before invoking the producer, records its actual exit code and log, and hashes whatever output files exist. Upload also runs after a producer failure; failed tests can prevent a producer attempt, in which case there may be no mesh artifact. A successful upload does not turn a failed job into a passing benchmark. `AVAILABLE_OUTPUT_SHA256SUMS` can describe a partial failed run; inspect `EXIT_CODE`, the log and the benchmark result together.
+
+The rejected initial-weight snapshot is intentionally partial: only `REPORT.md`, `metrics.json` and `comparison.svg` were retained. Raw mesh/CSV links inside its unchanged historical report are unavailable in Git. Reproduce that rejected setting with `--mu -0.53 --out results/new-rejected-run`; the declared criteria should fail with exit code 2. The retained failed report, metrics and graphic remain unchanged.
 
 ## Run
 
@@ -52,7 +56,7 @@ Before running experiments, acceptance criteria were set to: positions actually 
 
 ## Verification
 
-Eight library tests and three CLI/export tests pass. They cover three noise amplitudes, two held-out roughness phases, fixed boundaries and pins, deterministic displacement caps, scale/translation invariance, invalid geometry and parameters, and rejection of unchanged geometry as a successful smoothing result. Export tests reload actual OBJ/STL coordinates, independently recompute sphere error, verify all vertices changed, and confirm STL triangles contain those exact coordinates. Negative controls enforce failing status for tiny movement budgets, excessive shrinkage, and a noiseless input.
+Nine library tests and three CLI/export tests pass. They cover three noise amplitudes, two held-out roughness phases, fixed boundaries and pins, deterministic displacement caps, scale/translation invariance, invalid geometry and parameters, nonfinite measurement sources and displacement overflow, and rejection of unchanged geometry as a successful smoothing result. Export tests reload actual OBJ/STL coordinates, independently recompute sphere error, verify all vertices changed, and confirm STL triangles contain those exact coordinates. Negative controls enforce failing status for tiny movement budgets, excessive shrinkage, and a noiseless input.
 
 There are no third-party dependencies. `src/lib.rs` owns smoothing and measurement; `src/main.rs` owns synthetic generation settings, exports, report and wireframe comparison; `tests/export_contract.rs` verifies the delivered mesh files. Generated outputs are immutable snapshots of their run; reruns use a new directory.
 
