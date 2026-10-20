@@ -231,20 +231,60 @@ fn binding_block(a: &Value, origin: &Value, assignment_hash: &str) -> Check<Stri
 // workflow bytes. Assignment/owner policy may add fresh requirements, never drop
 // any of these jobs or replace their workflow identity.
 const PRODUCTION_CI: [(&str, &str, &str, &str); 7] = [
-    ("VERSION == tag == WHITEPAPER header", ".github/workflows/version-check.yml", "version", "version-check"),
-    ("cargo test --release + D1 gate smoke", ".github/workflows/d1-gates.yml", "test", "d1-gates"),
-    ("jankurai repo score & repair queue", ".github/workflows/jankurai.yml", "audit", "jankurai"),
-    ("local runner policy (xbabe1)", ".github/workflows/runner-policy.yml", "local-runners", "runner-policy"),
-    ("local runner policy (xbabe2)", ".github/workflows/runner-policy.yml", "local-runners", "runner-policy"),
-    ("local runner policy (xbabe3)", ".github/workflows/runner-policy.yml", "local-runners", "runner-policy"),
-    ("local runner policy (xbabe4)", ".github/workflows/runner-policy.yml", "local-runners", "runner-policy"),
+    (
+        "VERSION == tag == WHITEPAPER header",
+        ".github/workflows/version-check.yml",
+        "version",
+        "version-check",
+    ),
+    (
+        "cargo test --release + D1 gate smoke",
+        ".github/workflows/d1-gates.yml",
+        "test",
+        "d1-gates",
+    ),
+    (
+        "jankurai repo score & repair queue",
+        ".github/workflows/jankurai.yml",
+        "audit",
+        "jankurai",
+    ),
+    (
+        "local runner policy (xbabe1)",
+        ".github/workflows/runner-policy.yml",
+        "local-runners",
+        "runner-policy",
+    ),
+    (
+        "local runner policy (xbabe2)",
+        ".github/workflows/runner-policy.yml",
+        "local-runners",
+        "runner-policy",
+    ),
+    (
+        "local runner policy (xbabe3)",
+        ".github/workflows/runner-policy.yml",
+        "local-runners",
+        "runner-policy",
+    ),
+    (
+        "local runner policy (xbabe4)",
+        ".github/workflows/runner-policy.yml",
+        "local-runners",
+        "runner-policy",
+    ),
 ];
 const REQUIRED_ARTIFACTS: [&str; 11] = [
-    "docs/paper/main.pdf", "docs/paper/supplement.pdf",
-    "target/ieee/paper/main.pdf", "target/ieee/paper/supplement-main.pdf",
-    "target/ieee/paper/supplement.pdf", "target/ieee/paper/INPUT_FILES",
-    "target/ieee/paper/SOURCE_SHA256SUMS", "target/ieee/paper/OUTPUT_SHA256SUMS",
-    "target/ieee/paper/toolchain.txt", "docs/paper/generated/manifest.json",
+    "docs/paper/main.pdf",
+    "docs/paper/supplement.pdf",
+    "target/ieee/paper/main.pdf",
+    "target/ieee/paper/supplement-main.pdf",
+    "target/ieee/paper/supplement.pdf",
+    "target/ieee/paper/INPUT_FILES",
+    "target/ieee/paper/SOURCE_SHA256SUMS",
+    "target/ieee/paper/OUTPUT_SHA256SUMS",
+    "target/ieee/paper/toolchain.txt",
+    "docs/paper/generated/manifest.json",
     "docs/paper/publication.v2.json",
 ];
 struct ProductionPolicy {
@@ -253,17 +293,33 @@ struct ProductionPolicy {
     required_apps: BTreeMap<String, u64>,
 }
 fn map<'a>(v: &'a Value, key: &str) -> Check<&'a serde_json::Map<String, Value>> {
-    v.get(key).and_then(Value::as_object).ok_or_else(|| format!("missing object {key}"))
+    v.get(key)
+        .and_then(Value::as_object)
+        .ok_or_else(|| format!("missing object {key}"))
 }
 fn canonical_path(name: &str, base: &str, checkout: &str) -> Check<String> {
-    need(!name.is_empty() && !name.chars().any(|c| matches!(c, '\0' | '\n' | '\r' | '\\')), "invalid closure path")?;
+    need(
+        !name.is_empty() && !name.chars().any(|c| matches!(c, '\0' | '\n' | '\r' | '\\')),
+        "invalid closure path",
+    )?;
     let owned;
-    let relative = if let Some(rest) = name.strip_prefix(&format!("{checkout}/")) { rest }
-        else if name.starts_with('/') { return Ok(format!("external:{name}")); }
-        else { owned = format!("{base}{name}"); &owned };
+    let relative = if let Some(rest) = name.strip_prefix(&format!("{checkout}/")) {
+        rest
+    } else if name.starts_with('/') {
+        return Ok(format!("external:{name}"));
+    } else {
+        owned = format!("{base}{name}");
+        &owned
+    };
     let mut parts = Vec::new();
     for part in relative.split('/') {
-        match part { "" | "." => (), ".." => { need(parts.pop().is_some(), "closure path escapes checkout")?; }, _ => parts.push(part) }
+        match part {
+            "" | "." => (),
+            ".." => {
+                need(parts.pop().is_some(), "closure path escapes checkout")?;
+            }
+            _ => parts.push(part),
+        }
     }
     need(!parts.is_empty(), "empty canonical closure path")?;
     Ok(parts.join("/"))
@@ -271,63 +327,137 @@ fn canonical_path(name: &str, base: &str, checkout: &str) -> Check<String> {
 fn checksum_rows(contents: &str, checkout: &str) -> Check<BTreeMap<String, String>> {
     let mut rows = BTreeMap::new();
     for line in contents.lines() {
-        need(line.len() > 66 && line.as_bytes()[..66].is_ascii() && hex(&line[..64], 64) && matches!(&line[64..66], "  " | " *"), "malformed closure checksum")?;
+        need(
+            line.len() > 66
+                && line.as_bytes()[..66].is_ascii()
+                && hex(&line[..64], 64)
+                && matches!(&line[64..66], "  " | " *"),
+            "malformed closure checksum",
+        )?;
         let name = canonical_path(&line[66..], "docs/paper/", checkout)?;
-        if let Some(old) = rows.insert(name, line[..64].to_owned()) { need(old == line[..64], "conflicting closure checksum")?; }
+        if let Some(old) = rows.insert(name, line[..64].to_owned()) {
+            need(old == line[..64], "conflicting closure checksum")?;
+        }
     }
     need(!rows.is_empty(), "empty closure checksums")?;
     Ok(rows)
 }
 fn covered(files: &serde_json::Map<String, Value>, name: &str, hash: &str) -> Check<()> {
-    need(hex(hash, 64) && files.get(name).and_then(Value::as_str) == Some(hash), "artifact closure hash/path missing or changed")
+    need(
+        hex(hash, 64) && files.get(name).and_then(Value::as_str) == Some(hash),
+        "artifact closure hash/path missing or changed",
+    )
 }
-fn fresh_contexts(i: &Inputs, a: &Value, o: &Value) -> Check<(BTreeSet<String>, BTreeMap<String, u64>)> {
+fn fresh_contexts(
+    i: &Inputs,
+    a: &Value,
+    o: &Value,
+) -> Check<(BTreeSet<String>, BTreeMap<String, u64>)> {
     let f = document(i, "required-contexts")?;
-    need(text(&f, "/schema")? == "jarambit.required_context_capture.v1", "wrong fresh policy schema")?;
+    need(
+        text(&f, "/schema")? == "jarambit.required_context_capture.v1",
+        "wrong fresh policy schema",
+    )?;
     context(&f, text(a, "/head")?, text(a, "/tree")?)?;
     equal(a, &f, "/repository", "fresh policy repository")?;
     equal(a, &f, "/merge_owner_runtime_id", "fresh policy owner")?;
-    need(text(&f, "/base_branch")? == "main", "wrong fresh policy base")?;
-    need(number(&o, "/fetch_started_at_unix")? <= number(&f, "/fetch_started_at_unix")?
-        && number(&f, "/fetch_started_at_unix")? <= number(&f, "/fetched_at_unix")?
-        && number(&f, "/fetched_at_unix")? <= number(&o, "/fetched_at_unix")?, "fresh policy fetch interval mismatch")?;
+    need(
+        text(&f, "/base_branch")? == "main",
+        "wrong fresh policy base",
+    )?;
+    need(
+        number(&o, "/fetch_started_at_unix")? <= number(&f, "/fetch_started_at_unix")?
+            && number(&f, "/fetch_started_at_unix")? <= number(&f, "/fetched_at_unix")?
+            && number(&f, "/fetched_at_unix")? <= number(&o, "/fetched_at_unix")?,
+        "fresh policy fetch interval mismatch",
+    )?;
     let captures = array(&f, "/captures")?;
-    need(captures.len() == 3, "incomplete required-context API captures")?;
+    need(
+        captures.len() == 3,
+        "incomplete required-context API captures",
+    )?;
     let repo = text(a, "/repository")?;
     let mut bodies = BTreeMap::new();
     for capture in captures {
         let kind = text(capture, "/kind")?;
-        let suffix = match kind { "branch" => "", "legacy" => "/protection", "rules" => "/rules", _ => return Err("unknown required-context capture".into()) };
-        let endpoint = if kind == "rules" { format!("repos/{repo}/rules/branches/main") }
-            else { format!("repos/{repo}/branches/main{suffix}") };
-        need(text(capture, "/endpoint")? == endpoint, "required-context endpoint mismatch")?;
+        let suffix = match kind {
+            "branch" => "",
+            "legacy" => "/protection",
+            "rules" => "/rules",
+            _ => return Err("unknown required-context capture".into()),
+        };
+        let endpoint = if kind == "rules" {
+            format!("repos/{repo}/rules/branches/main")
+        } else {
+            format!("repos/{repo}/branches/main{suffix}")
+        };
+        need(
+            text(capture, "/endpoint")? == endpoint,
+            "required-context endpoint mismatch",
+        )?;
         let body = text(capture, "/body_utf8")?;
-        need(digest(body.as_bytes()) == text(capture, "/body_sha256")?, "required-context response hash mismatch")?;
-        let value: Value = serde_json::from_str(body).map_err(|_| "invalid required-context API JSON")?;
-        need(bodies.insert(kind.to_owned(), (number(capture, "/http_status")?, value)).is_none(), "duplicate required-context capture")?;
+        need(
+            digest(body.as_bytes()) == text(capture, "/body_sha256")?,
+            "required-context response hash mismatch",
+        )?;
+        let value: Value =
+            serde_json::from_str(body).map_err(|_| "invalid required-context API JSON")?;
+        need(
+            bodies
+                .insert(kind.to_owned(), (number(capture, "/http_status")?, value))
+                .is_none(),
+            "duplicate required-context capture",
+        )?;
     }
-    let (branch_status, branch) = bodies.get("branch").ok_or("missing branch policy capture")?;
+    let (branch_status, branch) = bodies
+        .get("branch")
+        .ok_or("missing branch policy capture")?;
     need(*branch_status == 200, "branch policy unavailable")?;
-    let protected = branch.get("protected").and_then(Value::as_bool).ok_or("branch protected flag unavailable")?;
+    let protected = branch
+        .get("protected")
+        .and_then(Value::as_bool)
+        .ok_or("branch protected flag unavailable")?;
     let mut names = BTreeSet::new();
     let mut apps = BTreeMap::new();
     let mut add = |name: &str, app: Option<u64>| -> Check<()> {
-        need(!name.is_empty(), "empty fresh required context")?; names.insert(name.to_owned());
-        if let Some(id) = app { if let Some(old) = apps.insert(name.to_owned(), id) { need(old == id, "required context app conflict")?; } }
+        need(!name.is_empty(), "empty fresh required context")?;
+        names.insert(name.to_owned());
+        if let Some(id) = app {
+            if let Some(old) = apps.insert(name.to_owned(), id) {
+                need(old == id, "required context app conflict")?;
+            }
+        }
         Ok(())
     };
-    let (legacy_status, legacy) = bodies.get("legacy").ok_or("missing legacy policy capture")?;
+    let (legacy_status, legacy) = bodies
+        .get("legacy")
+        .ok_or("missing legacy policy capture")?;
     if *legacy_status == 200 {
-        let required = legacy.get("required_status_checks").ok_or("missing legacy required checks field")?;
+        let required = legacy
+            .get("required_status_checks")
+            .ok_or("missing legacy required checks field")?;
         if !required.is_null() {
-            for name in array(required, "/contexts")? { add(name.as_str().ok_or("invalid legacy context")?, None)?; }
+            for name in array(required, "/contexts")? {
+                add(name.as_str().ok_or("invalid legacy context")?, None)?;
+            }
             if let Some(checks) = required.get("checks") {
-                for check in checks.as_array().ok_or("invalid legacy check app bindings")? {
-                    add(text(check, "/context")?, check.get("app_id").and_then(Value::as_u64))?;
+                for check in checks
+                    .as_array()
+                    .ok_or("invalid legacy check app bindings")?
+                {
+                    add(
+                        text(check, "/context")?,
+                        check.get("app_id").and_then(Value::as_u64),
+                    )?;
                 }
             }
         }
-    } else { need(!protected && *legacy_status == 404, "legacy policy unavailable; no empty-policy inference")?; }
+    } else {
+        need(
+            !protected && *legacy_status == 404,
+            "legacy policy unavailable; no empty-policy inference",
+        )?;
+    }
     let (rules_status, rules) = bodies.get("rules").ok_or("missing rules policy capture")?;
     need(*rules_status == 200, "effective branch rules unavailable")?;
     let effective_rules = rules.as_array().ok_or("invalid effective branch rules")?;
@@ -340,12 +470,36 @@ fn fresh_contexts(i: &Inputs, a: &Value, o: &Value) -> Check<(BTreeSet<String>, 
     )?;
     for rule in effective_rules {
         match text(rule, "/type")? {
-            "required_status_checks" => for check in array(rule, "/parameters/required_status_checks")? {
-                add(text(check, "/context")?, check.get("integration_id").and_then(Value::as_u64))?;
-            },
-            "workflows" => return Err("required workflow rule needs explicit reviewed support; cannot omit".into()),
-            "creation" | "update" | "deletion" | "required_linear_history" | "required_signatures" | "pull_request" | "non_fast_forward" | "commit_message_pattern" | "commit_author_email_pattern" | "committer_email_pattern" | "branch_name_pattern" | "tag_name_pattern" => (),
-            _ => return Err("unsupported effective branch rule; cannot infer complete CI policy".into()),
+            "required_status_checks" => {
+                for check in array(rule, "/parameters/required_status_checks")? {
+                    add(
+                        text(check, "/context")?,
+                        check.get("integration_id").and_then(Value::as_u64),
+                    )?;
+                }
+            }
+            "workflows" => {
+                return Err(
+                    "required workflow rule needs explicit reviewed support; cannot omit".into(),
+                )
+            }
+            "creation"
+            | "update"
+            | "deletion"
+            | "required_linear_history"
+            | "required_signatures"
+            | "pull_request"
+            | "non_fast_forward"
+            | "commit_message_pattern"
+            | "commit_author_email_pattern"
+            | "committer_email_pattern"
+            | "branch_name_pattern"
+            | "tag_name_pattern" => (),
+            _ => {
+                return Err(
+                    "unsupported effective branch rule; cannot infer complete CI policy".into(),
+                )
+            }
         }
     }
     Ok((names, apps))
@@ -353,66 +507,189 @@ fn fresh_contexts(i: &Inputs, a: &Value, o: &Value) -> Check<(BTreeSet<String>, 
 fn production_policy(i: &Inputs, a: &Value, o: &Value) -> Check<ProductionPolicy> {
     hash_is(i, "policy", text(a, "/policy_sha256")?)?;
     equal(a, o, "/policy_sha256", "pre-review policy")?;
-    need(o.get("policy_checked_against_actual_required_contexts") == Some(&Value::Bool(true)), "owner has not verified actual required-context policy")?;
+    need(
+        o.get("policy_checked_against_actual_required_contexts") == Some(&Value::Bool(true)),
+        "owner has not verified actual required-context policy",
+    )?;
     let p = document(i, "policy")?;
-    need(text(&p, "/schema")? == "jarambit.production_review_policy.v1", "wrong production policy schema")?;
+    need(
+        text(&p, "/schema")? == "jarambit.production_review_policy.v1",
+        "wrong production policy schema",
+    )?;
     context(&p, text(a, "/head")?, text(a, "/tree")?)?;
     equal(a, &p, "/merge_owner_runtime_id", "pre-review policy owner")?;
     let files = map(&p, "artifact_sha256")?;
-    for (name, hash) in files { need(!name.is_empty() && hash.as_str().is_some_and(|s| hex(s,64)), "invalid pinned artifact scope")?; }
-    for name in REQUIRED_ARTIFACTS { need(files.contains_key(name), "missing mandatory publication artifact")?; }
-    for (left, right) in [("docs/paper/main.pdf", "target/ieee/paper/main.pdf"), ("docs/paper/supplement.pdf", "target/ieee/paper/supplement.pdf"), ("docs/paper/supplement.pdf", "target/ieee/paper/supplement-main.pdf")] {
-        need(files.get(left) == files.get(right), "main/companion PDF hash binding mismatch")?;
+    for (name, hash) in files {
+        need(
+            !name.is_empty() && hash.as_str().is_some_and(|s| hex(s, 64)),
+            "invalid pinned artifact scope",
+        )?;
+    }
+    for name in REQUIRED_ARTIFACTS {
+        need(
+            files.contains_key(name),
+            "missing mandatory publication artifact",
+        )?;
+    }
+    for (left, right) in [
+        ("docs/paper/main.pdf", "target/ieee/paper/main.pdf"),
+        (
+            "docs/paper/supplement.pdf",
+            "target/ieee/paper/supplement.pdf",
+        ),
+        (
+            "docs/paper/supplement.pdf",
+            "target/ieee/paper/supplement-main.pdf",
+        ),
+    ] {
+        need(
+            files.get(left) == files.get(right),
+            "main/companion PDF hash binding mismatch",
+        )?;
     }
     let checkout = text(&p, "/checkout_root")?;
-    need(checkout.starts_with('/') && !checkout.ends_with('/'), "invalid frozen checkout root")?;
+    need(
+        checkout.starts_with('/') && !checkout.ends_with('/'),
+        "invalid frozen checkout root",
+    )?;
     let closure = map(&p, "closure_utf8")?;
-    for name in ["target/ieee/paper/INPUT_FILES", "target/ieee/paper/SOURCE_SHA256SUMS", "target/ieee/paper/OUTPUT_SHA256SUMS", "target/ieee/paper/toolchain.txt", "docs/paper/generated/manifest.json"] {
-        let contents = closure.get(name).and_then(Value::as_str).filter(|s| !s.is_empty()).ok_or("missing actual publication closure bytes")?;
+    for name in [
+        "target/ieee/paper/INPUT_FILES",
+        "target/ieee/paper/SOURCE_SHA256SUMS",
+        "target/ieee/paper/OUTPUT_SHA256SUMS",
+        "target/ieee/paper/toolchain.txt",
+        "docs/paper/generated/manifest.json",
+    ] {
+        let contents = closure
+            .get(name)
+            .and_then(Value::as_str)
+            .filter(|s| !s.is_empty())
+            .ok_or("missing actual publication closure bytes")?;
         covered(files, name, &digest(contents.as_bytes()))?;
     }
-    let source = checksum_rows(text(&Value::Object(closure.clone()), "/target~1ieee~1paper~1SOURCE_SHA256SUMS")?, checkout)?;
-    let output = checksum_rows(text(&Value::Object(closure.clone()), "/target~1ieee~1paper~1OUTPUT_SHA256SUMS")?, checkout)?;
-    let inputs: BTreeSet<_> = text(&Value::Object(closure.clone()), "/target~1ieee~1paper~1INPUT_FILES")?.lines()
-        .map(|line| canonical_path(line, "docs/paper/", checkout)).collect::<Check<_>>()?;
-    need(!inputs.is_empty() && inputs == source.keys().cloned().collect(), "INPUT_FILES/source closure membership mismatch")?;
-    for (name, hash) in source.iter().chain(output.iter()) { covered(files, name, hash)?; }
-    let generated: Value = serde_json::from_str(text(&Value::Object(closure.clone()), "/docs~1paper~1generated~1manifest.json")?).map_err(|_| "invalid generated manifest closure")?;
-    need(text(&generated, "/schema")? == "jarambit.publication_manifest.v1", "wrong generated manifest schema")?;
+    let source = checksum_rows(
+        text(
+            &Value::Object(closure.clone()),
+            "/target~1ieee~1paper~1SOURCE_SHA256SUMS",
+        )?,
+        checkout,
+    )?;
+    let output = checksum_rows(
+        text(
+            &Value::Object(closure.clone()),
+            "/target~1ieee~1paper~1OUTPUT_SHA256SUMS",
+        )?,
+        checkout,
+    )?;
+    let inputs: BTreeSet<_> = text(
+        &Value::Object(closure.clone()),
+        "/target~1ieee~1paper~1INPUT_FILES",
+    )?
+    .lines()
+    .map(|line| canonical_path(line, "docs/paper/", checkout))
+    .collect::<Check<_>>()?;
+    need(
+        !inputs.is_empty() && inputs == source.keys().cloned().collect(),
+        "INPUT_FILES/source closure membership mismatch",
+    )?;
+    for (name, hash) in source.iter().chain(output.iter()) {
+        covered(files, name, hash)?;
+    }
+    let generated: Value = serde_json::from_str(text(
+        &Value::Object(closure.clone()),
+        "/docs~1paper~1generated~1manifest.json",
+    )?)
+    .map_err(|_| "invalid generated manifest closure")?;
+    need(
+        text(&generated, "/schema")? == "jarambit.publication_manifest.v1",
+        "wrong generated manifest schema",
+    )?;
     for kind in ["inputs", "outputs"] {
-        let rows = map(&generated, kind)?; need(!rows.is_empty(), "empty generated input/output closure")?;
-        for (name, hash) in rows { covered(files, &canonical_path(name, "", checkout)?, hash.as_str().ok_or("invalid generated closure hash")?)?; }
+        let rows = map(&generated, kind)?;
+        need(!rows.is_empty(), "empty generated input/output closure")?;
+        for (name, hash) in rows {
+            covered(
+                files,
+                &canonical_path(name, "", checkout)?,
+                hash.as_str().ok_or("invalid generated closure hash")?,
+            )?;
+        }
     }
     let workflows = map(&p, "workflows")?;
     for (path, wf) in workflows {
-        need(path.starts_with(".github/workflows/") && path.ends_with(".yml"), "invalid source workflow path")?;
-        need(number(wf, "/github_workflow_id")? > 0, "missing actual workflow identity")?;
+        need(
+            path.starts_with(".github/workflows/") && path.ends_with(".yml"),
+            "invalid source workflow path",
+        )?;
+        need(
+            number(wf, "/github_workflow_id")? > 0,
+            "missing actual workflow identity",
+        )?;
         let bytes = text(wf, "/source_utf8")?;
         let hash = text(wf, "/source_sha256")?;
-        need(digest(bytes.as_bytes()) == hash, "source workflow hash mismatch")?;
+        need(
+            digest(bytes.as_bytes()) == hash,
+            "source workflow hash mismatch",
+        )?;
         covered(files, path, hash)?;
     }
     let mut contexts = BTreeMap::new();
     for row in array(&p, "/contexts")? {
         let name = text(row, "/name")?;
-        let wf = workflows.get(text(row, "/workflow_path")?).ok_or("context source workflow missing")?;
-        need(text(wf, "/source_utf8")?.contains(&format!("  {}:", text(row, "/job_id")?)), "context job absent from source workflow")?;
-        need(contexts.insert(name.to_owned(), row.clone()).is_none(), "duplicate production context")?;
+        let wf = workflows
+            .get(text(row, "/workflow_path")?)
+            .ok_or("context source workflow missing")?;
+        need(
+            text(wf, "/source_utf8")?.contains(&format!("  {}:", text(row, "/job_id")?)),
+            "context job absent from source workflow",
+        )?;
+        need(
+            contexts.insert(name.to_owned(), row.clone()).is_none(),
+            "duplicate production context",
+        )?;
     }
     for (name, path, job, workflow_name) in PRODUCTION_CI {
-        let row = contexts.get(name).ok_or("production minimum CI context omitted")?;
-        let wf = workflows.get(path).ok_or("production workflow source omitted")?;
-        need(text(row, "/workflow_path")? == path && text(row, "/job_id")? == job
-            && text(wf, "/name")? == workflow_name, "production workflow/job identity changed")?;
+        let row = contexts
+            .get(name)
+            .ok_or("production minimum CI context omitted")?;
+        let wf = workflows
+            .get(path)
+            .ok_or("production workflow source omitted")?;
+        need(
+            text(row, "/workflow_path")? == path
+                && text(row, "/job_id")? == job
+                && text(wf, "/name")? == workflow_name,
+            "production workflow/job identity changed",
+        )?;
     }
     let (fresh, apps) = fresh_contexts(i, a, o)?;
-    let complete: BTreeSet<_> = PRODUCTION_CI.iter().map(|row| row.0.to_owned()).chain(fresh).collect();
-    need(contexts.keys().cloned().collect::<BTreeSet<_>>() == complete, "production policy differs from complete fresh CI scope")?;
+    let complete: BTreeSet<_> = PRODUCTION_CI
+        .iter()
+        .map(|row| row.0.to_owned())
+        .chain(fresh)
+        .collect();
+    need(
+        contexts.keys().cloned().collect::<BTreeSet<_>>() == complete,
+        "production policy differs from complete fresh CI scope",
+    )?;
     let assigned = array(a, "/required_check_names")?;
     let mut assigned_names = BTreeSet::new();
-    for name in assigned { need(name.as_str().is_some_and(|s| !s.is_empty() && assigned_names.insert(s.to_owned())), "invalid/duplicate required check name")?; }
-    need(assigned_names == complete, "assignment narrowed or changed complete CI policy")?;
-    Ok(ProductionPolicy {document:p, contexts, required_apps:apps})
+    for name in assigned {
+        need(
+            name.as_str()
+                .is_some_and(|s| !s.is_empty() && assigned_names.insert(s.to_owned())),
+            "invalid/duplicate required check name",
+        )?;
+    }
+    need(
+        assigned_names == complete,
+        "assignment narrowed or changed complete CI policy",
+    )?;
+    Ok(ProductionPolicy {
+        document: p,
+        contexts,
+        required_apps: apps,
+    })
 }
 
 fn verify(i: &Inputs, now: u64) -> Check<Value> {
@@ -501,8 +778,16 @@ fn verify(i: &Inputs, now: u64) -> Check<Value> {
         let report = document(i, name)?;
         context(&report, head, tree)?;
         equal(&a, &report, "/policy_sha256", "reviewed production scope")?;
-        need(text(&report, "/schema")? == "jarambit.independent_publication_report.v1"
-            && text(&report, "/scope")? == if name == "source-report" { "source" } else { "artifact" }, "wrong independent report scope/schema")?;
+        need(
+            text(&report, "/schema")? == "jarambit.independent_publication_report.v1"
+                && text(&report, "/scope")?
+                    == if name == "source-report" {
+                        "source"
+                    } else {
+                        "artifact"
+                    },
+            "wrong independent report scope/schema",
+        )?;
         need(text(&report, "/verdict")? == "PASS", "report is not PASS")?;
         equal(&a, &report, "/reviewer_runtime", "report runtime")?;
         if name == "artifact-report" {
@@ -511,7 +796,10 @@ fn verify(i: &Inputs, now: u64) -> Check<Value> {
                 .and_then(Value::as_object)
                 .ok_or("missing artifact hash map")?;
             need(!hashes.is_empty(), "empty artifact hash map")?;
-            need(hashes == map(&policy.document, "artifact_sha256")?, "artifact report differs from full Root-pinned scope")?;
+            need(
+                hashes == map(&policy.document, "artifact_sha256")?,
+                "artifact report differs from full Root-pinned scope",
+            )?;
             for hash in hashes.values() {
                 need(
                     hash.as_str().is_some_and(|s| hex(s, 64)),
@@ -672,7 +960,9 @@ fn verify(i: &Inputs, now: u64) -> Check<Value> {
         )?;
         let expected_context = policy.contexts.get(name).ok_or("unassigned CI context")?;
         let workflow_path = text(expected_context, "/workflow_path")?;
-        let expected_workflow = map(&policy.document, "workflows")?.get(workflow_path).ok_or("missing CI source workflow")?;
+        let expected_workflow = map(&policy.document, "workflows")?
+            .get(workflow_path)
+            .ok_or("missing CI source workflow")?;
         let check_id = number(item, "/check_run_id")?;
         let run_id = number(item, "/workflow_run_id")?;
         let attempt = number(item, "/workflow_run_attempt")?;
@@ -703,7 +993,10 @@ fn verify(i: &Inputs, now: u64) -> Check<Value> {
             "CI completed after formal approval",
         )?;
         if let Some(app) = policy.required_apps.get(name) {
-            need(number(&check, "/app/id")? == *app, "fresh required context app mismatch")?;
+            need(
+                number(&check, "/app/id")? == *app,
+                "fresh required context app mismatch",
+            )?;
         }
         let run_url = format!("https://github.com/{repo}/actions/runs/{run_id}");
         let detail = text(&check, "/details_url")?;
@@ -726,9 +1019,13 @@ fn verify(i: &Inputs, now: u64) -> Check<Value> {
                 && text(&run, "/html_url")? == run_url,
             "required workflow not exact-head success",
         )?;
-        need(text(&run, "/path")? == workflow_path
-            && number(&run, "/workflow_id")? == number(expected_workflow, "/github_workflow_id")?
-            && text(&run, "/name")? == text(expected_workflow, "/name")?, "required source workflow identity mismatch")?;
+        need(
+            text(&run, "/path")? == workflow_path
+                && number(&run, "/workflow_id")?
+                    == number(expected_workflow, "/github_workflow_id")?
+                && text(&run, "/name")? == text(expected_workflow, "/name")?,
+            "required source workflow identity mismatch",
+        )?;
     }
     Ok(
         json!({"schema":"jarambit.verified_review_origin.v1","review_origin":"VERIFIED",
