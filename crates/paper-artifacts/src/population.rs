@@ -2232,4 +2232,3 @@ mod tests {
         assert!(!fit_svg.contains("(~0.94)"));
     }
 }
-
