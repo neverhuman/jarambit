@@ -114,14 +114,17 @@ whole-field integrals and affine crop/locator coordinates for each panel.
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{population-detail.png}
-\caption{Additional empirical 1st--99th percentile views of the same retained
-observations as main Figure~\ref{M-fig:population-latest}. Strict below/above
-counts are printed for each panel; boundary ties remain inside. The native,
-historical and screening panels contain $1{,}915{,}492$, $1945$ and $2214$
-point operations, respectively ($1{,}919{,}651$ total). Each panel prints its
-actual bounds and transform. Numeric tails are omitted here and remain in
-the full-range main figure. Marks can overlap; occupancy does not encode
-density. These views add no observations.}
+\caption{Directed tail detail of the same retained observations as main
+Figure~\ref{M-fig:population-latest}: native and historical higher-is-better
+fitness use empirical Q90 through the actual finite maximum; lower-is-better
+screening deficit uses the actual finite minimum through Q10. Quantile indices
+are $\lfloor p(n-1)\rfloor$. All cutoff and favorable-extremum ties remain
+inside, with one point operation per selected observation. Each panel prints
+its original-unit bounds, transform, exact below/inside/above counts and
+retained-extremum tie count. The opposite tails remain in the full-range main
+figure; the $1390$ missing screens remain nonnumeric. Marks can overlap;
+occupancy does not encode density. Pooled native context establishes no
+comparable global engineering winner. These views add no observations.}
 \label{fig:population-detail}
 \end{figure}
 \clearpage

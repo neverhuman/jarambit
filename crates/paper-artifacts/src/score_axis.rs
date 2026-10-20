@@ -94,18 +94,6 @@ pub(crate) fn quantile_sorted(sorted: &[f64], probability: f64) -> Option<f64> {
     }
 }
 
-pub(crate) fn detail_bounds(values: &[f64]) -> Result<[f64; 2]> {
-    if values.is_empty() || values.iter().any(|v| !v.is_finite()) {
-        return Err("score axis: invalid detail source".into());
-    }
-    let mut sorted = values.to_vec();
-    sorted.sort_by(f64::total_cmp);
-    Ok([
-        quantile_sorted(&sorted, 0.01).unwrap(),
-        quantile_sorted(&sorted, 0.99).unwrap(),
-    ])
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -128,14 +116,11 @@ mod tests {
     }
 
     #[test]
-    fn quantiles_keep_ties_constants_and_single_observations() {
-        assert_eq!(detail_bounds(&[3.]).unwrap(), [3., 3.]);
-        assert_eq!(detail_bounds(&[2., 2., 2.]).unwrap(), [2., 2.]);
-        let mut values = vec![5.; 100];
-        values[0] = -100.;
-        values[99] = 100.;
-        assert_eq!(detail_bounds(&values).unwrap(), [-100., 5.]);
-        assert!(detail_bounds(&[]).is_err());
+    fn axes_keep_constants_and_one_sign_domains_linear() {
+        assert!(matches!(ScoreAxis::derive(&[3.]).unwrap(), ScoreAxis::Linear));
+        assert!(matches!(ScoreAxis::derive(&[2., 2., 2.]).unwrap(), ScoreAxis::Linear));
+        assert_eq!(quantile_sorted(&[1., 2., 2., 9., 20.], 0.25), Some(2.));
+        assert_eq!(quantile_sorted(&[], 0.25), None);
         assert!(matches!(
             ScoreAxis::derive(&[2., 3., 4.]).unwrap(),
             ScoreAxis::Linear
