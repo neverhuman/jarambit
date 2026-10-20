@@ -51,6 +51,8 @@ cargo run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml \
 
 `make -C docs/paper audit-full` also checks generated freshness. `audit-quick` decodes one segment per run (10/200), which does not establish full decode. The audit emits its actual scope, configured limit, segment/row counts, source/binary hashes, command, elapsed time and exit. The agent-only `rtk` wrapper is not a public build prerequisite.
 
+At the complete source freeze, `make -C docs/paper review-origin-controls` explicitly executes the guard's neutral positive/negative cases. Passing those cases is separate from the real pre-merge guard invocation with Root-authorized assignment, full policy/artifact scope, authentic reviewer submission and fresh GitHub/CI records. Same-account approval alone does not prove reviewer independence; PR142's historical operator-origin gap remains disclosed.
+
 ## Source closure and accessions
 
 The standalone supplement driver includes detailed representation, score, numerical-method, cohort and literature fragments plus an active assembly copy of the historical supplement. The active assembly corrects heading hierarchy, navigation and captions; the original historical source remains unchanged.
