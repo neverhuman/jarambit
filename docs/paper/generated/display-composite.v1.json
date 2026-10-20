@@ -12,6 +12,85 @@
     ],
     "high": 0.8621273953257935,
     "low": 0.10574752602381049,
+    "saturation_accounting": {
+      "area_fraction_denominator": "all positive original source triangle area, including cells with missing composite; before overlays or surface projection",
+      "buckets": {
+        "counts": [
+          1433,
+          1,
+          22575,
+          1,
+          1199
+        ],
+        "order": [
+          "below_low",
+          "equal_low",
+          "interior",
+          "equal_high",
+          "above_high"
+        ],
+        "source_area_fractions": [
+          0.04997571512550835,
+          0.000047025336230741414,
+          0.8999628493253536,
+          0.0000306609390037829,
+          0.04998374927389948
+        ],
+        "source_area_mm2": [
+          190.7209500000002,
+          0.17946150000000027,
+          3434.503521499985,
+          0.11701050000000478,
+          190.75161050000003
+        ]
+      },
+      "collapsed_transfer": "unchanged Contrast::map sends EVERY finite value to0.5 when low==high, including strict outside values; both rendered endpoint counts are zero",
+      "collapsed_window": false,
+      "count_scope": "all finite composite cells, including zero-area cells; source-area fractions give zero weight to zero-area cells",
+      "equality_convention": "disjoint buckets; when low==high, all common-boundary ties are counted once in equal_low and equal_high is zero",
+      "missing": {
+        "count": 0,
+        "source_area_fraction": 0.0,
+        "source_area_mm2": 0.0
+      },
+      "rendered_endpoints": {
+        "counts": [
+          1434,
+          1200
+        ],
+        "order": [
+          "lower",
+          "upper"
+        ],
+        "rule": "Contrast::map(value) equals0 or1; includes boundary equalities for a noncollapsed window; not a strict-tail count",
+        "source_area_fractions": [
+          0.050022740461739094,
+          0.05001441021290326
+        ],
+        "source_area_mm2": [
+          190.9004115000002,
+          190.86862100000002
+        ]
+      },
+      "schema": "jarambit.contrast_saturation_accounting.v1",
+      "strict_tails": {
+        "counts": [
+          1433,
+          1199
+        ],
+        "order": [
+          "below_low",
+          "above_high"
+        ],
+        "source_area_fractions": [
+          0.04997571512550835,
+          0.04998374927389948
+        ]
+      },
+      "whole_source_area_mm2": 3816.272554,
+      "zero_area_cell_count": 0,
+      "zero_denominator": "area fractions are null when whole positive source area is zero; counts remain explicit"
+    },
     "status": "additional preview; not selected without independent readability review",
     "whole_source_area_mm2": 3816.272554
   },

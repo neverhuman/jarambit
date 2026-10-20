@@ -17,12 +17,12 @@
   "erroneous_v1_receipt_preserved_at": "docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_V1_OBSERVED_ERRONEOUS_20261019.json",
   "source_and_binary_bindings": {
     "crates/paper-artifacts/src/corpus.rs": "2b1cba1c136d6950d7f2efe4ac362224e4d57b16247bb0b463a097bbb332576e",
-    "crates/paper-artifacts/src/population.rs": "abf9fb7193f44f30534df87af886ad3ddc5a7882f9076a5c28fa2e53048c26fd",
+    "crates/paper-artifacts/src/population.rs": "a430763a1135b58fc1e018e80179e4a40eea39a1f5434cb398dee83f6a8b1735",
     "crates/paper-artifacts/src/publication.rs": "96af0475bc82201e1df0ef1022d4bc452b164d0242f18665ba80a2d379107849",
     "crates/paper-artifacts/src/lib.rs": "6624a5b5b769ad38cad27d455767b6453aa2c0c3704b9b992e285be80eb6dc99",
     "crates/paper-artifacts/examples/publication_v2_audit.rs": "25184c01ce3ed129fca33aff0cb7a03ad9fbc00b7372c15fe16376227b46aaa0",
     "superseded_stale_debug_binary_sha256": "24f52f1300ee0397dc2c84da7b1bc4ed1309114b63c71a7edd0003a45c3a6f3d",
-    "crates/paper-artifacts/src/display.rs": "69d1b8bc94ae18ba492d738fcd2cbb482c2598bfb3add5101f7878e90aed210e",
+    "crates/paper-artifacts/src/display.rs": "636bb74fbdd7be6a5db0e307499aed034b58e29f321837426e177405a711e22b",
     "crates/paper-artifacts/src/score_axis.rs": "65cfdebb8af49bf62f8f4c5ed33326771204b109a491ab4367777700df5a19e7",
     "crates/paper-artifacts/src/plate.rs": "d4032ac1d606348433f5d8747a8d50bf4331a5c06f0810e88983d0f2da51ed84",
     "crates/paper-artifacts/src/assessment.rs": "b184b9a4fac930864a5bee0612b9b634c7fd33def6c418926274c1138d7e7fb9",
@@ -38,9 +38,9 @@
     "crates/paper-artifacts/src/verification.rs": "62604c2f187c020226478ed2b0eb8a9ec4d9e70a68bc1e7d2ff7a31e39d1ba4a",
     "crates/paper-artifacts/src/visuals.rs": "532fca340f3d33bbd37982b521d6075490f1108243ea3549ee7ad062030a95b1",
     "crates/paper-artifacts/src/weighted_runs.rs": "5e4fc448e725a673a7fdb03a047259a5993e2e342f4a7ec9bfcfbef8d59e5b85",
-    "crates/paper-artifacts/examples/verify_review_origin.rs": "7ab6f68b14b935828ebba20a9daa3e5daedd90703036a9a0d8c25ae469021652",
-    "crates/paper-artifacts/examples/fixtures/verify-review-origin-neutral.v1.json": "a95ca7612264ee911cdbd17a25695d54e795fbbd5e29c9ac281da5e0456de9ac",
-    "current_executed_reporting_binary_sha256": "ac4af6926a62f364a8699fd559b67cb6ae65293bf7b4fd58ee93934350b6a4ea"
+    "crates/paper-artifacts/examples/verify_review_origin.rs": "0b98bc719b4d569ee4842ae58471b585dbffba9f1a7cae7d4d977be188eea13d",
+    "crates/paper-artifacts/examples/fixtures/verify-review-origin-neutral.v1.json": "7fdde1b3fe648c63887e3cc34cc476b677f38852ac1c296e9f0249afafc86b57",
+    "current_executed_reporting_binary_sha256": "39b50dc4f8c8311bb2594acb33875f9df86c2f2a7bf278d48929788ee07357dd"
   },
   "sc_dec_183p_and_183s_fixes_verified": {
     "1_jev1_binary_framing": {
@@ -129,8 +129,8 @@
     "docs/paper/figures/inheritance.svg": "abf568cbf39ce5b7b330bf14794d82fd5f46a7860f376fbc44f23d25c17f2488",
     "docs/paper/generated/shared_projection.v2.json": "1bb3b0b48b61ff1e349148393fe01b3ebed0cae15681190eddc1be049709c696",
     "docs/paper/generated/overview.md": "6282f2ec0367045688ccf626e80f7f1ba9c6f1f72c5b778011639ef61c0e8d05",
-    "docs/paper/generated/manifest.json": "2eb28ab088596d74911f45c792635ff776ea4c66e583dfb9c7b8fc8fcd029d95",
-    "docs/paper/publication.v2.json": "d7d3a293d422972bba47fb4f58c05cd129c49417579b772a836b157a714e0eb8",
+    "docs/paper/generated/manifest.json": "e0b3fa72f54e22b4c2aed573d7a08972312747dce0d70d85f37ad60b2268081c",
+    "docs/paper/publication.v2.json": "cd084ebce9e37f44288edf92b988bd85bfbc448a09bd23e333bd915266315752",
     "docs/paper/generated/population/gen800_scatter_cache.v1.json": "4eabe5a581dcb655b413857bfb3c28741070dc390b3ca71d744aa51f58e7a493",
     "docs/paper/generated/battery-matrix.svg": "831ae3ffa57df6f8bcd5a26f16d0ca745e00da2bc279f4bd9bc13e881665f669",
     "docs/paper/generated/native-runs-2-3.svg": "4725fa63985bbd80230411f3138b44f3c3fc51395b21c29caa10ada2c5ec103c",
@@ -169,7 +169,7 @@
     "docs/paper/generated/population.svg": "cbfa7fa60d8e3432f88f1e938cd271f45909c88c6cca9d1d6d1e8786cc1a44ca",
     "docs/paper/generated/hero-support.svg": "2fd600725ac1c8b06867c286ee6c0559c35bc063df2b00fe661cc7097ea9ccba",
     "docs/paper/generated/population/retained-leaders.v1.json": "a00ffd38b65cc6e6120a83330d631c39ca6f919b1ef1d038903c15bda7694d7e",
-    "docs/paper/generated/display-composite.v1.json": "1bc18670645e53f93c98668a53df5531e025d701012b7cd1d36d544188b0f9be",
+    "docs/paper/generated/display-composite.v1.json": "796723cd4d59ad27f30b55ca62b83bca8f45c06f3a580d8f85a0fd299dbb9d3b",
     "docs/paper/generated/export-identity.json": "31922d147d249fa88203742edbf28c1115fe4a54276a99f8ef993d3f27d97bd2",
     "docs/paper/generated/test-field-roster.v1.tsv": "fefc751025c9f3b8c7f4391cf17449fe1da1265b08fd5fc4ad9549d115b96638",
     "docs/paper/generated/verification.svg": "a84d788cf0940ea9b3ce27b5e6e18d4d2b40aa089e4db39944209586c910c2e7",
@@ -196,17 +196,17 @@
     "exit_code": 0
   },
   "integration_rebinding": {
-    "checked_utc": "2026-10-20T11:03:11.548207+00:00",
-    "previous_receipt_sha256": "1f4fe533e5326242e53262be078120013f7185458e41e36a5ab0b6d05adef58b",
-    "previous_receipt_commit": "2a2cd6822501ef00e95cf3d2058325bf1933b5d7",
-    "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2A2CD68_20261020.json",
+    "checked_utc": "2026-10-20T12:13:18.273343+00:00",
+    "previous_receipt_sha256": "ab798f29edd365282375f80ed555ceda28ce24a1700e4af1232f7c48dde08062",
+    "previous_receipt_commit": "dd92248cbfd8f38200c07e6ae66aab859272b542",
+    "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_DD92248_20261020.json",
     "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
     "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
-    "reporting_source_commit": "516272fe378464376ea94d602d4e938ba97d8d48",
-    "actual_generation_receipt_sha256": "2a2048c22ea90ee4b35f2c07ee9b9de3dbc1782ea90502a42ed7ccf8379e7851",
-    "actual_generation_log_sha256": "c147a704a18832c83d50fd9728b7b69ff083465cf97296ffa489fb326bddf272",
-    "executed_reporting_binary_sha256": "ac4af6926a62f364a8699fd559b67cb6ae65293bf7b4fd58ee93934350b6a4ea",
-    "reason": "Root-authorized exact reviewer-wrapper origin transport compatibility after actual nonauthor Q source clearance. Preserve full observed outer argv; actual helper JSON input route does not enforce check_eligible and requires prospective same-or-stronger actual read-only eligibility proof. All original56 fixture cases unchanged,25 authored controls added (81total), NONE executed by Captain. The regenerated161-input/65-output reporting manifest is byte-identical to its predecessor; guard/fixture bindings are renewed in this operational receipt and package source closure. All65 reporting output bytes are unchanged. Preserve every historical observation/test claim and prior receipt bytes. Root detached D1 and all scientific source/values/masks/weights/solver untouched; affected final controls and real review-origin remain Root-owned."
+    "reporting_source_commit": "c293a0ccd87f6d46f5b6b8eb3eb2c0c473033e65",
+    "actual_generation_receipt_sha256": "ef3968e53d3af7a73f88b5f49fed58646cdae330b45be14d595338b42a248933",
+    "actual_generation_log_sha256": "5016c157597a2c07da950f1156e173c67b69731d674fbbd0ad9a7c18bd9f2f59",
+    "executed_reporting_binary_sha256": "39b50dc4f8c8311bb2594acb33875f9df86c2f2a7bf278d48929788ee07357dd",
+    "reason": "Root1155 authorized combined successor: exact independent-Q-cleared additive contrast saturation accounting with unchanged legacy values/means/palette/masks/geometry and actual guard object-root/omitted-field supplemental-capture compatibility. Original81 guard cases preserved;29 authored controls added (110total), none executed at this rebinding. Actual bounded retained reporter exited0; display-composite gains only saturation_accounting; publication.v2 renews only that output hash; manifest renews two changed reporting-source input hashes and output bindings. All other63report outputs and every preexisting composite field remain byte-identical. Preserve historical source/test/custody facts and exact prior receipt archive. Current guard/fixture/protocol bindings and paired package closure renewed; actual affected successor controls follow completefreeze and remain separately bound to their executed head. No oldDD/e58PASS transferred; Root owns samePR144 finalCI/eligibleformalreview/realproductionorigin/matchedmerge/release."
   },
   "integration_rebinding_history": [
     {
@@ -268,7 +268,20 @@
       "actual_generation_log_sha256": "6dedb7ac1576084b2ebb6892697a38e7b8c79ba96c311b5bd55bff457ddd83ca",
       "executed_reporting_binary_sha256": "ac4af6926a62f364a8699fd559b67cb6ae65293bf7b4fd58ee93934350b6a4ea",
       "reason": "Root-authorized canonical narrow successor: identify optional CAD STL tessellation overlay and regenerate only retained reporting derivatives. Defaulthero, scientific values/geometry/masks/scorers/weights/solver and Root detached2a3b D1 unchanged. Preserve exact prior2a3bactive receipt and every historical observation/testclaim. This source/output rebinding is not test, realorigin, CI or finalapproval; affected Root controls remain separate."
+    },
+    {
+      "checked_utc": "2026-10-20T11:03:11.548207+00:00",
+      "previous_receipt_sha256": "1f4fe533e5326242e53262be078120013f7185458e41e36a5ab0b6d05adef58b",
+      "previous_receipt_commit": "2a2cd6822501ef00e95cf3d2058325bf1933b5d7",
+      "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2A2CD68_20261020.json",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "516272fe378464376ea94d602d4e938ba97d8d48",
+      "actual_generation_receipt_sha256": "2a2048c22ea90ee4b35f2c07ee9b9de3dbc1782ea90502a42ed7ccf8379e7851",
+      "actual_generation_log_sha256": "c147a704a18832c83d50fd9728b7b69ff083465cf97296ffa489fb326bddf272",
+      "executed_reporting_binary_sha256": "ac4af6926a62f364a8699fd559b67cb6ae65293bf7b4fd58ee93934350b6a4ea",
+      "reason": "Root-authorized exact reviewer-wrapper origin transport compatibility after actual nonauthor Q source clearance. Preserve full observed outer argv; actual helper JSON input route does not enforce check_eligible and requires prospective same-or-stronger actual read-only eligibility proof. All original56 fixture cases unchanged,25 authored controls added (81total), NONE executed by Captain. The regenerated161-input/65-output reporting manifest is byte-identical to its predecessor; guard/fixture bindings are renewed in this operational receipt and package source closure. All65 reporting output bytes are unchanged. Preserve every historical observation/test claim and prior receipt bytes. Root detached D1 and all scientific source/values/masks/weights/solver untouched; affected final controls and real review-origin remain Root-owned."
     }
   ],
-  "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. The e67 successor86-test attempt failed84passed/2failed and remains preserved. Corrected successor validation is recorded separately with its exact head."
+  "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. The e67 successor86-test attempt failed84passed/2failed and remains preserved. Corrected successor validation is recorded separately with its exact head. Combined contrast/omission successor controls remain unexecuted at this source/output rebinding; their later exact-head results are separate evidence, not this historical focused-test entry."
 }
