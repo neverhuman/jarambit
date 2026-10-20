@@ -1,0 +1,487 @@
+{
+  "schema": "jarambit.review_origin.neutral_fixtures.v1",
+  "fixture_only": true,
+  "execution_status": "AUTHORED_NOT_EXECUTED",
+  "notice": "All accounts, IDs, API-shaped JSON, tool records and positive origin are synthetic neutral controls. They do not establish actual GitHub/operator provenance or authorize a merge. Test-only repinning cannot be enabled in the executable.",
+  "now_unix": 1704067275,
+  "documents": {
+    "authors": "{\"authors\":[{\"thread_id\":\"neutral-source-author-thread\",\"worker_id\":\"/neutral/source-author\"}],\"head\":\"1111111111111111111111111111111111111111\",\"tree\":\"2222222222222222222222222222222222222222\"}",
+    "dispatch-record": "NEUTRAL FIXTURE ONLY: synthetic pre-review assignment tool record.\n",
+    "submission-record": "NEUTRAL FIXTURE ONLY: synthetic successful review submission tool record.\n",
+    "fetch-record": "NEUTRAL FIXTURE ONLY: synthetic fresh review/checks/workflow fetch tool record.\n",
+    "assignment": "{\"authors_sha256\":\"b16690e650496e9d2bce5b3d01380fb8871ccacf2552e8054f09e117c80bdad2\",\"dispatch_record_sha256\":\"cd22a87d6d16261bd5b5e6de106e67749159806a0f1e35bed23fe6cbd2933bd7\",\"github_login\":\"neutral-review-bot\",\"github_user_id\":99,\"head\":\"1111111111111111111111111111111111111111\",\"issued_at_unix\":1704067200,\"maximum_fetch_age_seconds\":300,\"merge_owner_runtime_id\":\"/neutral/merge-owner\",\"pull_request\":17,\"repository\":\"neutral-fixture/review-origin\",\"required_check_names\":[\"Neutral required job\"],\"reviewer_runtime\":{\"dispatch_id\":\"neutral-manual-dispatch\",\"mode\":\"manual\",\"native_task_id\":null,\"thread_id\":\"neutral-reviewer-thread\",\"worker_id\":\"/neutral/reviewer\"},\"schema\":\"jarambit.review_assignment.v1\",\"tree\":\"2222222222222222222222222222222222222222\"}",
+    "source-report": "{\"fixture_only\":true,\"head\":\"1111111111111111111111111111111111111111\",\"reviewer_runtime\":{\"dispatch_id\":\"neutral-manual-dispatch\",\"mode\":\"manual\",\"native_task_id\":null,\"thread_id\":\"neutral-reviewer-thread\",\"worker_id\":\"/neutral/reviewer\"},\"scope\":\"source\",\"tree\":\"2222222222222222222222222222222222222222\",\"verdict\":\"PASS\"}",
+    "artifact-report": "{\"artifact_sha256\":{\"neutral-report.txt\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},\"fixture_only\":true,\"head\":\"1111111111111111111111111111111111111111\",\"reviewer_runtime\":{\"dispatch_id\":\"neutral-manual-dispatch\",\"mode\":\"manual\",\"native_task_id\":null,\"thread_id\":\"neutral-reviewer-thread\",\"worker_id\":\"/neutral/reviewer\"},\"scope\":\"artifact\",\"tree\":\"2222222222222222222222222222222222222222\",\"verdict\":\"PASS\"}",
+    "request": "{\"body\":\"Neutral fixture only; this is not an actual review or merge authorization.\\n\\nBEGIN JARAMBIT REVIEW ORIGIN V1\\nassignment_sha256=b46ba19f78d421529b50022b5dd0ea5d74e80057ec7fc14a2aaf73604d0b9a2d\\nworker=/neutral/reviewer\\nthread=neutral-reviewer-thread\\ndispatch=neutral-manual-dispatch\\nhead=1111111111111111111111111111111111111111\\ntree=2222222222222222222222222222222222222222\\nsource_report_sha256=1eb36a40e72bd8c2470c4f915f17e1bc76394ace720623ffc3e52566bc073a8a\\nartifact_report_sha256=46eeda4f082f283a62609db16ea50f2746718103af77062e3d9da94c5aa91b4b\\nrequired_ci=Neutral required job:9001:9002:1\\nEND JARAMBIT REVIEW ORIGIN V1\",\"commit_id\":\"1111111111111111111111111111111111111111\",\"event\":\"APPROVE\"}",
+    "response": "{\"body\":\"Neutral fixture only; this is not an actual review or merge authorization.\\n\\nBEGIN JARAMBIT REVIEW ORIGIN V1\\nassignment_sha256=b46ba19f78d421529b50022b5dd0ea5d74e80057ec7fc14a2aaf73604d0b9a2d\\nworker=/neutral/reviewer\\nthread=neutral-reviewer-thread\\ndispatch=neutral-manual-dispatch\\nhead=1111111111111111111111111111111111111111\\ntree=2222222222222222222222222222222222222222\\nsource_report_sha256=1eb36a40e72bd8c2470c4f915f17e1bc76394ace720623ffc3e52566bc073a8a\\nartifact_report_sha256=46eeda4f082f283a62609db16ea50f2746718103af77062e3d9da94c5aa91b4b\\nrequired_ci=Neutral required job:9001:9002:1\\nEND JARAMBIT REVIEW ORIGIN V1\",\"commit_id\":\"1111111111111111111111111111111111111111\",\"html_url\":\"https://github.com/neutral-fixture/review-origin/pull/17#pullrequestreview-8080\",\"id\":8080,\"pull_request_url\":\"https://api.github.com/repos/neutral-fixture/review-origin/pulls/17\",\"state\":\"APPROVED\",\"submitted_at\":\"2024-01-01T00:01:00Z\",\"user\":{\"id\":99,\"login\":\"neutral-review-bot\"}}",
+    "review": "{\"body\":\"Neutral fixture only; this is not an actual review or merge authorization.\\n\\nBEGIN JARAMBIT REVIEW ORIGIN V1\\nassignment_sha256=b46ba19f78d421529b50022b5dd0ea5d74e80057ec7fc14a2aaf73604d0b9a2d\\nworker=/neutral/reviewer\\nthread=neutral-reviewer-thread\\ndispatch=neutral-manual-dispatch\\nhead=1111111111111111111111111111111111111111\\ntree=2222222222222222222222222222222222222222\\nsource_report_sha256=1eb36a40e72bd8c2470c4f915f17e1bc76394ace720623ffc3e52566bc073a8a\\nartifact_report_sha256=46eeda4f082f283a62609db16ea50f2746718103af77062e3d9da94c5aa91b4b\\nrequired_ci=Neutral required job:9001:9002:1\\nEND JARAMBIT REVIEW ORIGIN V1\",\"commit_id\":\"1111111111111111111111111111111111111111\",\"html_url\":\"https://github.com/neutral-fixture/review-origin/pull/17#pullrequestreview-8080\",\"id\":8080,\"pull_request_url\":\"https://api.github.com/repos/neutral-fixture/review-origin/pulls/17\",\"state\":\"APPROVED\",\"submitted_at\":\"2024-01-01T00:01:00Z\",\"user\":{\"id\":99,\"login\":\"neutral-review-bot\"}}",
+    "checks": "{\"check_runs\":[{\"completed_at\":\"2024-01-01T00:00:50Z\",\"conclusion\":\"success\",\"details_url\":\"https://github.com/neutral-fixture/review-origin/actions/runs/9002/job/9010\",\"head_sha\":\"1111111111111111111111111111111111111111\",\"id\":9001,\"name\":\"Neutral required job\",\"status\":\"completed\"}],\"total_count\":1}",
+    "runs": "{\"total_count\":1,\"workflow_runs\":[{\"conclusion\":\"success\",\"head_sha\":\"1111111111111111111111111111111111111111\",\"html_url\":\"https://github.com/neutral-fixture/review-origin/actions/runs/9002\",\"id\":9002,\"repository\":{\"full_name\":\"neutral-fixture/review-origin\"},\"run_attempt\":1,\"status\":\"completed\"}]}",
+    "submission": "{\"artifact_report_sha256\":\"46eeda4f082f283a62609db16ea50f2746718103af77062e3d9da94c5aa91b4b\",\"assignment_sha256\":\"b46ba19f78d421529b50022b5dd0ea5d74e80057ec7fc14a2aaf73604d0b9a2d\",\"body_sha256\":\"9cd8e3f51703824c031cdbf97ce7f0d9844f855958c8460a437a3a62d1e3466d\",\"command\":{\"argv\":[\"gh\",\"api\",\"--method\",\"POST\",\"repos/neutral-fixture/review-origin/pulls/17/reviews\",\"--input\",\"neutral-review-request.json\"],\"exit_code\":0,\"tool_record_sha256\":\"6260b68cf4a42fedef82dda783b548675754bc6ed1a2e40fca225892f4360a0e\"},\"head\":\"1111111111111111111111111111111111111111\",\"request_sha256\":\"e9ddcc96fc8e199be06584cda6b3d6208f4fbe23514a8f34bdac2dc06b5b1d58\",\"required_ci\":[{\"check_run_id\":9001,\"name\":\"Neutral required job\",\"workflow_run_attempt\":1,\"workflow_run_id\":9002}],\"response_sha256\":\"12768962f6af221c5232fac950f591a007cef67642d3a74356af4badad58fbb4\",\"review_id\":8080,\"reviewer_runtime\":{\"dispatch_id\":\"neutral-manual-dispatch\",\"mode\":\"manual\",\"native_task_id\":null,\"thread_id\":\"neutral-reviewer-thread\",\"worker_id\":\"/neutral/reviewer\"},\"source_report_sha256\":\"1eb36a40e72bd8c2470c4f915f17e1bc76394ace720623ffc3e52566bc073a8a\",\"tree\":\"2222222222222222222222222222222222222222\"}",
+    "origin": "{\"artifact_report_sha256\":\"46eeda4f082f283a62609db16ea50f2746718103af77062e3d9da94c5aa91b4b\",\"assignment_sha256\":\"b46ba19f78d421529b50022b5dd0ea5d74e80057ec7fc14a2aaf73604d0b9a2d\",\"body_sha256\":\"9cd8e3f51703824c031cdbf97ce7f0d9844f855958c8460a437a3a62d1e3466d\",\"checks_sha256\":\"12327042034e3b0e76f969aae76cf34bbbd5f3a26dab17633c24e3c2768f4685\",\"command\":{\"argv\":[\"gh\",\"api\",\"--method\",\"POST\",\"repos/neutral-fixture/review-origin/pulls/17/reviews\",\"--input\",\"neutral-review-request.json\"],\"exit_code\":0,\"tool_record_sha256\":\"6260b68cf4a42fedef82dda783b548675754bc6ed1a2e40fca225892f4360a0e\"},\"fetch_record_sha256\":\"0b8560cef6adf01ce8ba795ef8b1067d89c5901e614468e2272a12aeb74880bb\",\"fetch_started_at_unix\":1704067270,\"fetched_at_unix\":1704067272,\"head\":\"1111111111111111111111111111111111111111\",\"merge_owner_runtime_id\":\"/neutral/merge-owner\",\"request_sha256\":\"e9ddcc96fc8e199be06584cda6b3d6208f4fbe23514a8f34bdac2dc06b5b1d58\",\"required_ci\":[{\"check_run_id\":9001,\"name\":\"Neutral required job\",\"workflow_run_attempt\":1,\"workflow_run_id\":9002}],\"response_sha256\":\"12768962f6af221c5232fac950f591a007cef67642d3a74356af4badad58fbb4\",\"review_id\":8080,\"review_sha256\":\"12768962f6af221c5232fac950f591a007cef67642d3a74356af4badad58fbb4\",\"reviewer_runtime\":{\"dispatch_id\":\"neutral-manual-dispatch\",\"mode\":\"manual\",\"native_task_id\":null,\"thread_id\":\"neutral-reviewer-thread\",\"worker_id\":\"/neutral/reviewer\"},\"runs_sha256\":\"aef062d234153176d74321d5c94ff45b2f48bdabc97cf8f424e115e9c8f36bfc\",\"schema\":\"jarambit.merge_owner_review_origin.v1\",\"source_report_sha256\":\"1eb36a40e72bd8c2470c4f915f17e1bc76394ace720623ffc3e52566bc073a8a\",\"submission_record_sha256\":\"6260b68cf4a42fedef82dda783b548675754bc6ed1a2e40fca225892f4360a0e\",\"submission_sha256\":\"37bcdf1a082353a6d825e0bbd6a3d91d676e1ac922b1e9b4df961b3ee42365bc\",\"submitted_at\":\"2024-01-01T00:01:00Z\",\"tree\":\"2222222222222222222222222222222222222222\",\"verified_against_actual_tool_records\":true}"
+  },
+  "pins": {
+    "expected-head": "1111111111111111111111111111111111111111",
+    "expected-tree": "2222222222222222222222222222222222222222",
+    "assignment-sha256": "b46ba19f78d421529b50022b5dd0ea5d74e80057ec7fc14a2aaf73604d0b9a2d",
+    "origin-sha256": "f821b09669db573e4a86690cb61438e3499b3ce29372380795d128c5916ba190"
+  },
+  "cases": [
+    {
+      "name": "positive-neutral-complete-origin",
+      "expect_pass": true,
+      "repin_owner_fixture": false,
+      "mutations": []
+    },
+    {
+      "name": "missing-assignment",
+      "expect_pass": false,
+      "expected_error": "missing input assignment",
+      "repin_owner_fixture": false,
+      "mutations": [
+        {
+          "document": "assignment",
+          "remove_document": true
+        }
+      ]
+    },
+    {
+      "name": "tampered-assignment-untrusted-hash",
+      "expect_pass": false,
+      "expected_error": "assignment SHA256 mismatch",
+      "repin_owner_fixture": false,
+      "mutations": [
+        {
+          "document": "assignment",
+          "pointer": "/github_login",
+          "value": "unrelated-bot"
+        }
+      ]
+    },
+    {
+      "name": "tampered-origin-untrusted-hash",
+      "expect_pass": false,
+      "expected_error": "origin SHA256 mismatch",
+      "repin_owner_fixture": false,
+      "mutations": [
+        {
+          "document": "origin",
+          "pointer": "/review_id",
+          "value": 999
+        }
+      ]
+    },
+    {
+      "name": "forged-runtime",
+      "expect_pass": false,
+      "expected_error": "submission runtime mismatch",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "submission",
+          "pointer": "/reviewer_runtime/thread_id",
+          "value": "forged-thread"
+        }
+      ]
+    },
+    {
+      "name": "forged-source-report-runtime",
+      "expect_pass": false,
+      "expected_error": "report runtime mismatch",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "source-report",
+          "pointer": "/reviewer_runtime/thread_id",
+          "value": "forged-thread"
+        }
+      ]
+    },
+    {
+      "name": "source-author-reviewer",
+      "expect_pass": false,
+      "expected_error": "reviewer is source author",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "authors",
+          "pointer": "/authors/0/worker_id",
+          "value": "/neutral/reviewer"
+        }
+      ]
+    },
+    {
+      "name": "reviewer-self-authorizes",
+      "expect_pass": false,
+      "expected_error": "reviewer cannot authorize own assignment",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "assignment",
+          "pointer": "/merge_owner_runtime_id",
+          "value": "/neutral/reviewer"
+        },
+        {
+          "document": "origin",
+          "pointer": "/merge_owner_runtime_id",
+          "value": "/neutral/reviewer"
+        }
+      ]
+    },
+    {
+      "name": "owner-has-not-checked-actual-tool-records",
+      "expect_pass": false,
+      "expected_error": "origin not verified from actual tool records",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "origin",
+          "pointer": "/verified_against_actual_tool_records",
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "unrelated-same-bot-review",
+      "expect_pass": false,
+      "expected_error": "wrong designated review ID",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "review",
+          "pointer": "/id",
+          "value": 8081
+        },
+        {
+          "document": "review",
+          "pointer": "/body",
+          "value": "An unrelated approval by the same neutral bot."
+        }
+      ]
+    },
+    {
+      "name": "wrong-review-id",
+      "expect_pass": false,
+      "expected_error": "wrong designated review ID",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "review",
+          "pointer": "/id",
+          "value": 8082
+        }
+      ]
+    },
+    {
+      "name": "wrong-reviewed-head",
+      "expect_pass": false,
+      "expected_error": "review commit mismatch",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "review",
+          "pointer": "/commit_id",
+          "value": "3333333333333333333333333333333333333333"
+        }
+      ]
+    },
+    {
+      "name": "requested-changes-is-not-approval",
+      "expect_pass": false,
+      "expected_error": "review state is not APPROVED",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "review",
+          "pointer": "/state",
+          "value": "CHANGES_REQUESTED"
+        }
+      ]
+    },
+    {
+      "name": "pending-is-not-approval",
+      "expect_pass": false,
+      "expected_error": "review state is not APPROVED",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "review",
+          "pointer": "/state",
+          "value": "PENDING"
+        },
+        {
+          "document": "review",
+          "pointer": "/submitted_at",
+          "value": null
+        }
+      ]
+    },
+    {
+      "name": "comment-is-not-approval",
+      "expect_pass": false,
+      "expected_error": "review state is not APPROVED",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "review",
+          "pointer": "/state",
+          "value": "COMMENTED"
+        }
+      ]
+    },
+    {
+      "name": "submission-response-does-not-match-live-review",
+      "expect_pass": false,
+      "expected_error": "submission API response mismatch",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "response",
+          "pointer": "/id",
+          "value": 8083
+        }
+      ]
+    },
+    {
+      "name": "wrong-review-body",
+      "expect_pass": false,
+      "expected_error": "submission API response mismatch",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "review",
+          "pointer": "/body",
+          "value": "Unbound review text"
+        }
+      ]
+    },
+    {
+      "name": "missing-artifact-report",
+      "expect_pass": false,
+      "expected_error": "missing input artifact-report",
+      "repin_owner_fixture": false,
+      "mutations": [
+        {
+          "document": "artifact-report",
+          "remove_document": true
+        }
+      ]
+    },
+    {
+      "name": "uncleared-source-report",
+      "expect_pass": false,
+      "expected_error": "report is not PASS",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "source-report",
+          "pointer": "/verdict",
+          "value": "UNVERIFIED"
+        }
+      ]
+    },
+    {
+      "name": "failed-submission-command",
+      "expect_pass": false,
+      "expected_error": "submission command failed",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "submission",
+          "pointer": "/command/exit_code",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "forged-submission-tool-record",
+      "expect_pass": false,
+      "expected_error": "submission tool record mismatch",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "submission",
+          "pointer": "/command/tool_record_sha256",
+          "value": "0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "request-is-not-explicit-approve",
+      "expect_pass": false,
+      "expected_error": "request not explicit exact-head APPROVE",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "request",
+          "pointer": "/event",
+          "value": "COMMENT"
+        }
+      ]
+    },
+    {
+      "name": "failed-required-ci",
+      "expect_pass": false,
+      "expected_error": "required check not exact-head success",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "checks",
+          "pointer": "/check_runs/0/conclusion",
+          "value": "failure"
+        }
+      ]
+    },
+    {
+      "name": "pending-required-ci",
+      "expect_pass": false,
+      "expected_error": "required check not exact-head success",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "checks",
+          "pointer": "/check_runs/0/status",
+          "value": "in_progress"
+        },
+        {
+          "document": "checks",
+          "pointer": "/check_runs/0/conclusion",
+          "value": null
+        }
+      ]
+    },
+    {
+      "name": "missing-required-ci",
+      "expect_pass": false,
+      "expected_error": "missing/duplicate required check ID",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "checks",
+          "pointer": "/check_runs",
+          "value": []
+        },
+        {
+          "document": "checks",
+          "pointer": "/total_count",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "incomplete-check-pagination",
+      "expect_pass": false,
+      "expected_error": "incomplete/paginated API collection",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "checks",
+          "pointer": "/total_count",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "failed-required-workflow",
+      "expect_pass": false,
+      "expected_error": "required workflow not exact-head success",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "runs",
+          "pointer": "/workflow_runs/0/conclusion",
+          "value": "failure"
+        }
+      ]
+    },
+    {
+      "name": "missing-required-workflow",
+      "expect_pass": false,
+      "expected_error": "missing/duplicate required workflow run ID",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "runs",
+          "pointer": "/workflow_runs",
+          "value": []
+        },
+        {
+          "document": "runs",
+          "pointer": "/total_count",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "wrong-workflow-attempt",
+      "expect_pass": false,
+      "expected_error": "required workflow not exact-head success",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "runs",
+          "pointer": "/workflow_runs/0/run_attempt",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "approval-before-ci-success",
+      "expect_pass": false,
+      "expected_error": "CI completed after formal approval",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "checks",
+          "pointer": "/check_runs/0/completed_at",
+          "value": "2024-01-01T00:01:05Z"
+        }
+      ]
+    },
+    {
+      "name": "superseded-check-run",
+      "expect_pass": false,
+      "expected_error": "required check superseded",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "checks",
+          "pointer": "/check_runs",
+          "value": [
+            {
+              "id": 9001,
+              "name": "Neutral required job",
+              "head_sha": "1111111111111111111111111111111111111111",
+              "status": "completed",
+              "conclusion": "success",
+              "completed_at": "2024-01-01T00:00:50Z",
+              "details_url": "https://github.com/neutral-fixture/review-origin/actions/runs/9002/job/9010"
+            },
+            {
+              "id": 9003,
+              "name": "Neutral required job",
+              "head_sha": "1111111111111111111111111111111111111111",
+              "status": "in_progress",
+              "conclusion": null,
+              "completed_at": "2024-01-01T00:00:50Z",
+              "details_url": "https://github.com/neutral-fixture/review-origin/actions/runs/9002/job/9010"
+            }
+          ]
+        },
+        {
+          "document": "checks",
+          "pointer": "/total_count",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "stale-owner-fetch",
+      "expect_pass": false,
+      "expected_error": "stale/future/unordered owner fetch",
+      "repin_owner_fixture": false,
+      "mutations": [],
+      "now_override": 1704068000
+    }
+  ]
+}
