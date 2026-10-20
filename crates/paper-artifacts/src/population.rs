@@ -1712,6 +1712,7 @@ fn render_population_latest_svg(
         "docs/paper/generated/population/retained-leaders.v1.json".into(),
         serde_json::to_string_pretty(&receipt["retained_leaders"])? + "\n",
     );
+    append_positive_point_views(&native_points, &historical_points, &screen_points, &mut receipt, &mut outputs)?;
     let s = full;
     Ok((s, receipt, outputs))
 }
@@ -3025,6 +3026,211 @@ fn render_hero_view(
     Ok((s, composite))
 }
 
+fn append_positive_point_views(
+    native: &[(usize, u64, u64, f64)],
+    historical: &[(u64, u64, f64)],
+    screening: &[(u64, u64, f64)],
+    point: &mut Value,
+    outputs: &mut BTreeMap<String, String>,
+) -> Result<()> {
+    use crate::population_story::Preference;
+    use crate::positive_points::{Abscissa, PositivePointRaster, HEIGHT, WIDTH};
+    if native.len() != 1_954_560
+        || historical.len() != 1984
+        || screening.len() != 2259
+        || point["unknown"]["records"] != 1390u64
+        || point["numeric_point_operations"] != 1_958_803u64
+    {
+        return Err("positive points: unadmitted full-source census".into());
+    }
+    let contexts = point["run_context"]
+        .as_array()
+        .ok_or("positive points: missing original contexts")?;
+    let runs = point["native"]["runs"]
+        .as_array()
+        .ok_or("positive points: missing original identity order")?;
+    if contexts.len() != 10 || runs.len() != 10 {
+        return Err("positive points: exact ten-run scope differs".into());
+    }
+    let mut index_rows = Vec::new();
+    let mut totals = [0_u64; 2];
+    for (variant, gap) in [("affine", false), ("gap", true)] {
+        let mut scope_outputs = Vec::new();
+        for context in contexts {
+            let ordinal = context["archive_run_ordinal"]
+                .as_u64()
+                .ok_or("positive points: missing run ordinal")? as usize;
+            let public = context["public_run_id"]
+                .as_u64()
+                .ok_or("positive points: missing public run")?;
+            let bounds = context["raster"]["observed_score_extrema"]
+                .as_array()
+                .ok_or("positive points: missing complete extrema")?;
+            if bounds.len() != 2 || !(2..=11).contains(&public) || ordinal > 9 {
+                return Err("positive points: invalid compatible run scope".into());
+            }
+            let domain = [
+                finite_point_number(&bounds[0])?,
+                finite_point_number(&bounds[1])?,
+            ];
+            let mut raster = PositivePointRaster::new(
+                domain,
+                Preference::Higher,
+                gap,
+                Abscissa::Generation { last: 800 },
+                195456,
+            )?;
+            for &(run, id, generation, f) in native {
+                if run == ordinal {
+                    raster.paint(&[id], generation, f)?;
+                }
+            }
+            let matches: Vec<_> = runs
+                .iter()
+                .filter(|row| {
+                    row["archive_run_ordinal"] == ordinal as u64
+                        && row["package_id"] == context["package_id"]
+                })
+                .collect();
+            if matches.len() != 1
+                || matches[0]["original_id_order_sha256"].as_str()
+                    != Some(raster.identity_order_sha256().as_str())
+            {
+                return Err("positive points: original callback identity order differs".into());
+            }
+            let prefix=format!("docs/paper/generated/population/positive/run-{public:02}-positive-points-{variant}");
+            let png = encode_point_png_b64(WIDTH, HEIGHT, raster.pixels());
+            let title =
+                format!("Run {public}: every retained birth, fixed positive {variant} view");
+            let (svg, mut receipt) = raster.render(&png, &title)?;
+            let leader = point["retained_leaders"]["native_by_run"]
+                .as_array()
+                .ok_or("positive points: missing leaders")?
+                .iter()
+                .find(|r| r["archive_run_ordinal"] == ordinal as u64)
+                .ok_or("positive points: missing compatible leader")?;
+            if receipt["leader_ties"] != leader["tie_count"]
+                || domain[1] != finite_point_number(&leader["value"])?
+            {
+                return Err("positive points: original leader/tie census differs".into());
+            }
+            receipt["source"] = json!({"original_archive":context["source"],"package_id":context["package_id"],"archive_run_ordinal":ordinal,"public_run_id":public,
+                "admitted_original_identity_order_sha256":matches[0]["original_id_order_sha256"],"leader_ledger":leader,
+                "stage":"original retained native birth observations; not post-rescore membership or physical improvement"});
+            receipt["summary_companion"] = json!({"path":format!("docs/paper/generated/population/story/run-{public:02}-positive-{variant}.v1.json"),
+                "same_complete_original_domain_and_positive_axis":true,"summary_y_viewport_may_differ":true});
+            scope_outputs.push((prefix, svg, receipt));
+        }
+        for historical_scope in [true, false] {
+            let values: Vec<f64> = if historical_scope {
+                historical.iter().map(|p| p.2).collect()
+            } else {
+                screening.iter().map(|p| p.2).collect()
+            };
+            let domain = point_bounds(values.into_iter())?;
+            let (name, preference, x_axis, count) = if historical_scope {
+                let last = historical
+                    .iter()
+                    .map(|p| p.1)
+                    .max()
+                    .ok_or("positive points: empty historical scope")?;
+                (
+                    "historical",
+                    Preference::Higher,
+                    Abscissa::Generation { last },
+                    1984,
+                )
+            } else {
+                (
+                    "screening",
+                    Preference::Lower,
+                    Abscissa::FileOrdinal { last: 57 },
+                    2259,
+                )
+            };
+            let mut raster = PositivePointRaster::new(domain, preference, gap, x_axis, count)?;
+            if historical_scope {
+                for &(id, generation, f) in historical {
+                    raster.paint(&[id], generation, f)?;
+                }
+            } else {
+                for &(file, candidate, f) in screening {
+                    raster.paint(&[file, candidate], file + 1, f)?;
+                }
+            }
+            let prefix = format!(
+                "docs/paper/generated/population/positive/{name}-positive-points-{variant}"
+            );
+            let png = encode_point_png_b64(WIDTH, HEIGHT, raster.pixels());
+            let title =
+                format!("{name}: every retained numeric row, fixed positive {variant} view");
+            let (svg, mut receipt) = raster.render(&png, &title)?;
+            receipt["source"] = if historical_scope {
+                json!({"path":HISTORICAL_ALL_EVALS_JSON_RELPATH,"sha256":HISTORICAL_ALL_EVALS_JSON_SHA256,
+                "identity":"original historical id; original generation retained","leader_ledger":point["retained_leaders"]["historical"]})
+            } else {
+                json!({"source_pairs":point["screening"]["source_pairs"],"identity":"original zero-based file index plus one-based candidate; x is unchanged one-based file ordinal",
+                    "unknown":point["unknown"],"leader_ledger":point["retained_leaders"]["screening"]})
+            };
+            let leader = &point["retained_leaders"][if historical_scope {
+                "historical"
+            } else {
+                "screening"
+            }];
+            if receipt["leader_ties"].as_u64()
+                != Some(
+                    leader["ties"]
+                        .as_array()
+                        .ok_or("positive points: missing original ties")?
+                        .len() as u64,
+                )
+            {
+                return Err("positive points: historical/screening original ties differ".into());
+            }
+            scope_outputs.push((prefix, svg, receipt));
+        }
+        if scope_outputs.len() != 12 {
+            return Err("positive points: incomplete compatible scope list".into());
+        }
+        let mut scope_names = BTreeSet::new();
+        let mut total = 0_u64;
+        for (prefix, svg, receipt) in scope_outputs {
+            if !scope_names.insert(prefix.clone()) {
+                return Err("positive points: duplicate compatible scope".into());
+            }
+            total += receipt["numeric_point_operations"]
+                .as_u64()
+                .ok_or("positive points: missing operation count")?;
+            let svg_path = format!("{prefix}.svg");
+            let receipt_path = format!("{prefix}.v1.json");
+            let receipt_json = serde_json::to_string_pretty(&receipt)? + "\n";
+            index_rows.push(json!({"variant":variant,"svg":svg_path,"svg_sha256":sha256_bytes(svg.as_bytes()),"receipt":receipt_path,
+                "receipt_sha256":sha256_bytes(receipt_json.as_bytes()),"numeric_point_operations":receipt["numeric_point_operations"]}));
+            if outputs.insert(svg_path, svg).is_some()
+                || outputs.insert(receipt_path, receipt_json).is_some()
+            {
+                return Err("positive points: duplicate output path".into());
+            }
+        }
+        if total != 1_958_803 {
+            return Err("positive points: full all-record operation census differs".into());
+        }
+        totals[usize::from(gap)] = total;
+    }
+    let index = json!({"schema":"jarambit.positive_all_record_index.v1","views":index_rows,"operations_by_variant":{"positive_affine":totals[0],"positive_gap":totals[1]},
+        "unknown":point["unknown"],"distinct_admitted_numeric_observations":1_958_803,"additional_views_are_not_new_data":true,
+        "full_range_asinh_companion":"docs/paper/figures/population-latest.svg","quantile_clipping":false,"density_or_subsampling":false,
+        "source_profiles":"ten separate native runs, historical births, lower-preferred screening deficits; no cross-run score calibration or global winner",
+        "main_candidate":"run-05-positive-points-gap.png; pending actual final-width/readability/finding review"});
+    outputs.insert(
+        "docs/paper/generated/population/positive/index.v1.json".into(),
+        serde_json::to_string_pretty(&index)? + "\n",
+    );
+    point["positive_all_record_views"] = json!({"index":"docs/paper/generated/population/positive/index.v1.json","operations_by_variant":index["operations_by_variant"],
+        "unknown_nonnumeric":1390,"additional_views_are_not_new_data":true});
+    Ok(())
+}
+
 /// Additive, source-joined summaries; this never replaces the all-record point layer.
 fn append_native_story_views(
     density: &Value,
@@ -3216,6 +3422,16 @@ fn append_native_story_views(
             ),
         ] {
             let rendered = population_story::render_run_panel(&trace, view, generation)?;
+            if name != "asinh" {
+                let variant = if name == "positive-gap" {"gap"} else {"affine"};
+                let path = format!("docs/paper/generated/population/positive/run-{public:02}-positive-points-{variant}.v1.json");
+                let all_points: Value = serde_json::from_str(outputs.get(&path).ok_or("population story: missing real positive point companion")?)?;
+                if all_points["axis"] != rendered.receipt["view_axis"]
+                    || all_points["source"]["admitted_original_identity_order_sha256"] != json!(trace.source.membership_identity_order_sha256)
+                    || all_points["numeric_point_operations"] != 195456u64 {
+                    return Err("population story: point and summary transform/membership differ".into());
+                }
+            }
             let prefix = format!("docs/paper/generated/population/story/run-{public:02}-{name}");
             let svg_path = format!("{prefix}.svg");
             let receipt_path = format!("{prefix}.v1.json");

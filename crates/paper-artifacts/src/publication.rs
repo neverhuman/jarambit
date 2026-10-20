@@ -1576,6 +1576,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "crates/paper-artifacts/src/appearance.rs",
         "crates/paper-artifacts/src/hero_appearance.rs",
         "crates/paper-artifacts/src/population_story.rs",
+        "crates/paper-artifacts/src/positive_points.rs",
         "crates/paper-artifacts/src/saliency.rs",
         "crates/paper-artifacts/src/interpretation.rs",
         "crates/paper-artifacts/src/validation.rs",
