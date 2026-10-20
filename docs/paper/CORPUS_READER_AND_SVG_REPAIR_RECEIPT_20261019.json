@@ -40,7 +40,7 @@
     "crates/paper-artifacts/src/weighted_runs.rs": "5e4fc448e725a673a7fdb03a047259a5993e2e342f4a7ec9bfcfbef8d59e5b85",
     "crates/paper-artifacts/examples/verify_review_origin.rs": "0b98bc719b4d569ee4842ae58471b585dbffba9f1a7cae7d4d977be188eea13d",
     "crates/paper-artifacts/examples/fixtures/verify-review-origin-neutral.v1.json": "7fdde1b3fe648c63887e3cc34cc476b677f38852ac1c296e9f0249afafc86b57",
-    "current_executed_reporting_binary_sha256": "96c3c79155ca0fe5450735d24433f802fca1f269817f05f32f976a021e96ed2f",
+    "current_executed_reporting_binary_sha256": "74cfa538b9c374da6c60c510d212ddc270cd3a56a2717d9c0b3ade7b634c5fc8",
     "README.md": "88431acd73fc403cb07f3d9dae106c3e8ec014780c70d72431d478da732742b5",
     "docs/paper/CROSSWALK_SUPPLEMENT.md": "7b2edca9d3acd1e40947304cef6e227f8719f650aa6f368edba82a9c73e0807c",
     "docs/paper/supplement/numerical-methods.tex": "1fe7d935e5ad65ed6dea5600ab4202c107c265233dc71a1a8af171e8ac34d876"
@@ -132,17 +132,17 @@
     "docs/paper/figures/inheritance.svg": "abf568cbf39ce5b7b330bf14794d82fd5f46a7860f376fbc44f23d25c17f2488",
     "docs/paper/generated/shared_projection.v2.json": "5782bf46e615b483488725cbf4b2d03b61f9ee8410376e2cf5e590132dc4ea4b",
     "docs/paper/generated/overview.md": "6e7bea772687ea01b091034cdcbb14c76d60ef3db42440f20609aa5e3456c770",
-    "docs/paper/generated/manifest.json": "a770df6275f887ff5809c357f841e154b63ac958a22866be6728d26159744bfc",
-    "docs/paper/publication.v2.json": "bd0d581f72d451b99d8870da5977b687f3d14b8d6e32f4749ffb77d67325d0b9",
+    "docs/paper/generated/manifest.json": "c1f39d37d9069843a6bdb6c532316bec7a50c96272fd65407181fd6b838e16c5",
+    "docs/paper/publication.v2.json": "e05a01c31d1555edb3e66524f8f0ad935983eea587bf4e2a11442a7c1357cd40",
     "docs/paper/generated/population/gen800_scatter_cache.v1.json": "4eabe5a581dcb655b413857bfb3c28741070dc390b3ca71d744aa51f58e7a493",
     "docs/paper/generated/battery-matrix.svg": "831ae3ffa57df6f8bcd5a26f16d0ca745e00da2bc279f4bd9bc13e881665f669",
     "docs/paper/generated/native-runs-2-3.svg": "4725fa63985bbd80230411f3138b44f3c3fc51395b21c29caa10ada2c5ec103c",
-    "docs/tests/visuals.v1.json": "b55ceb8ce6532f0ab25e0b7132d417d4f83095ccc950c6b2dacdc0fd3fc25673",
-    "docs/paper/generated/population/point-rendering.v1.json": "34918656ae550c2b79e25b9d52080329b865395e3633e11122a4822fac35c432",
+    "docs/tests/visuals.v1.json": "17d863a89dd7dc5f6aca2909fe64a6652a012c84aa102dffaea66d589c734010",
+    "docs/paper/generated/population/point-rendering.v1.json": "312a503957fe46fb7bc6bd538e99c587f5e2652f39469e34abaf46978a901a9f",
     "docs/paper/generated/hero-contrast-preview.svg": "284430694b4094626b0f83ec58d1073bc1ab51f0b0b691e2778ff36d4f85f377",
     "docs/paper/generated/native-runs-6-7.svg": "8336168576c6dd60c098dabbe8a8fd33a7ae1b1c03a7c072b934e4f7d694d36d",
     "docs/paper/generated/assessment.svg.manifest.json": "b8b12139d7e9e93f8ae1d35ea79d97e91bd9e74a9f6cdb1f8eec5c3b292fe105",
-    "docs/paper/generated/weighted-runs.svg.manifest.json": "b5cab4adbbb47143c610219dc83a94cc24e87ea9409be48cbed2c17d08379e82",
+    "docs/paper/generated/weighted-runs.svg.manifest.json": "bdff3c87222604ccd5564cb929c97f8f3af57a9a30a12b5eee273241c7aa1549",
     "docs/paper/generated/export-identity.svg": "5957a04019a4be54fab1a642913d7f92baa6a09b53fb522ccc21101db1eeb007",
     "docs/paper/generated/native-runs-4-5.svg": "d8dbcacc2324e4acf2333cf42d126e24d27e67ebbe13e86f616744f0ae66d46d",
     "docs/paper/generated/metrics.tex": "c2d3afbe5e0694ba681f33fe3af77f55934ad448fc11f36aff59b6487c7f45ea",
@@ -150,8 +150,8 @@
     "docs/tests/visuals.md": "4a3a859831845a2fc8b8a865196ec4a8dd41c27112dc2e1d274ffe2f815867ec",
     "docs/paper/generated/lineage.svg": "f09d825663a62272b53bb9cfbd7bcc4b14fec4f11be7ea8948ee313330f4080c",
     "docs/paper/generated/hero-full-range.svg": "7f6eef77a9084b8b13411e8e1cb344484088c95fcaab06a136e27cbeef509f0b",
-    "docs/paper/generated/plate-fields.svg.manifest.json": "1978ade35d42fc91febb084108e0f28122cf0841980c69c19f1c1ff19beb15db",
-    "docs/paper/generated/population/score-axis.v1.json": "1e40a2dbd40480fc8d6673e5f341e10fd74aa5ff4f251f4133b1e03d7f5f1803",
+    "docs/paper/generated/plate-fields.svg.manifest.json": "5e9c20fec908426cbaee6d2f9649229644c1ae49cd049e9d2bfeb7c1654a96e5",
+    "docs/paper/generated/population/score-axis.v1.json": "536ef65cd5bacbc0e507b87284e9e662e4c8a9223761c53c8589d5dbf3a0c387",
     "docs/paper/generated/population/inheritance.json": "2af73e7eb28ed859314b98f5d47b1029b2f6366ba8ad321305a2e43d833cdfa9",
     "docs/paper/generated/hero-mesh-on.svg": "d2894d272cfa66448bd3ad26c9bd7c13d41578ca6dd836db6d216a7b9f0e0b7f",
     "docs/paper/generated/battery.tex": "08076ef743f6aa223afc97ea96c2ee5407e3c37c7489eb72fa2f67c224608413",
@@ -168,7 +168,7 @@
     "docs/paper/generated/weighted-runs.svg": "a6e9215304d714f85b87bfbbb5607f238df1d7a5ad3ba29b0f7c40207649f214",
     "docs/paper/generated/assessment.json": "dc9040de663dab3bb09bccd1dd2cb848b0f606fd750ee5bdff95747211a2d939",
     "docs/paper/generated/fitness.svg": "17d53a4dc87171012b8424fedbc9adc7b234418446a344d26c48da8216053152",
-    "docs/paper/generated/reference.svg.manifest.json": "a0435289a0733ffdd7a47506aec78882970a5f609ff497c381afe8b2cee92631",
+    "docs/paper/generated/reference.svg.manifest.json": "71e3ce17df20b2da2315ec86d53ee71377f79d9e2bc53688b33455987e4ee32b",
     "docs/paper/generated/population.svg": "cbfa7fa60d8e3432f88f1e938cd271f45909c88c6cca9d1d6d1e8786cc1a44ca",
     "docs/paper/generated/hero-support.svg": "0a31da991fb21e5c03081fbb38485435de05285c661e6ec7ddecd71a9e7020ef",
     "docs/paper/generated/population/retained-leaders.v1.json": "a00ffd38b65cc6e6120a83330d631c39ca6f919b1ef1d038903c15bda7694d7e",
@@ -178,10 +178,10 @@
     "docs/paper/generated/verification.svg": "c6468a3ed836e2f376d91287e05337dfb803f25831b14f26cf9f1a359a98e61b",
     "docs/paper/generated/lineage.json": "cc94cdb8b24ac9e750a160f8aeca14768dfd1d6ca7f3122de9ab503b24ba721d",
     "docs/paper/generated/lineage.svg.manifest.json": "756bf95d3c26b8f94e9faff17f858e6877af2e5a873ea05db13a703e90506d32",
-    "docs/paper/generated/population-detail.svg": "389466a0aa794bf22667d35d263047fc04ce7f574209043bd7c30c343abad2fc",
+    "docs/paper/generated/population-detail.svg": "3f37ed60bf5111616b0739fba62caf7c7ccefc21dfa92179646d771ed6d5dec2",
     "docs/paper/generated/reporting-interpretation.v2.json": "c9bb7402488683af47c36544081d7a735af5abd661105e6f30e80e7f3b5605a9",
     "docs/paper/generated/native-runs-10-11.svg": "61d6a48a6aba17ed2be07eae37f6d90a6dcfed1eb51164a630ab537ae9079757",
-    "docs/paper/generated/evidence-architecture.svg.manifest.json": "c16a2b768aa2fcae60679e51c178155c139019870e9dadf72d179afbce73f452",
+    "docs/paper/generated/evidence-architecture.svg.manifest.json": "dd056149ba8342ac0144a398da8037e8db19c9754abc4f9ff888508f22d25032",
     "docs/paper/generated/battery-matrix.svg.manifest.json": "5e6f35d82116c3afc1b165a1027c4d813ddd84b1d98c4ec3c04df3b97041529a",
     "docs/paper/figures/inheritance-details.svg": "669b5c70e4521f6c68e7652e885584d0c4d88562fb2266e3fcbf5a946d079a25",
     "docs/paper/generated/battery-matrix.json": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
@@ -199,20 +199,85 @@
     "exit_code": 0
   },
   "integration_rebinding": {
-    "checked_utc": "2026-10-20T18:22:36.115086+00:00",
-    "previous_receipt_sha256": "2ddda8303b193a648d25a9552db550a20eb4b7a501f2aaf45714a3954d9445f5",
-    "previous_receipt_commit": "7a51c1b29b752eea8d8c41bdff83cbef0910bb95",
-    "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_7A51C1B2_20261020.json",
+    "checked_utc": "2026-10-20T20:58:50.524208+00:00",
+    "previous_receipt_sha256": "bcc4f34ebba71bdd7b6b1906b1e8d97a8841caf9a1ccd3498890da41c7ebe606",
+    "previous_receipt_commit": "26aeda0ff0fdec5c8cdca111e9624054615a2787",
+    "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_26AEDA0_20261020.json",
     "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
     "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
-    "reporting_source_commit": "f1b356a35fa0398caa5c29976195ac7fbb724de2",
-    "actual_generation_receipt_sha256": "63752f0e072ef9ebc86b98792cbab5a49e281cc7243064e329c0756ad04b0d6e",
-    "actual_generation_log_sha256": "c71b17684a2e6249956aef2f2c35bcea0661b8879471f149f2565d66c970750f",
-    "executed_reporting_binary_sha256": "96c3c79155ca0fe5450735d24433f802fca1f269817f05f32f976a021e96ed2f",
-    "previous_executed_binary_identity_preserved_in_exact_preimage_and_history": "bc75bb97ad08db2696630aab59207618ef4cfcadc83f2daae5e758a5e2b22f18",
+    "reporting_source_commit": "26aeda0ff0fdec5c8cdca111e9624054615a2787",
+    "reporting_source_tree": "bcf06f474aee05851cf72dd48af5052e7042cae1",
+    "actual_generation_receipt_sha256": "746389da627a6be45c4c86260c09871e43b4ce4340dab50996d8891949e7c50c",
+    "actual_generation_log_sha256": "6bca2be37dc64ecc8e3c58c33b883115b08167f3b2741da221ce5b46c6304a00",
+    "executed_reporting_binary_sha256": "74cfa538b9c374da6c60c510d212ddc270cd3a56a2717d9c0b3ade7b634c5fc8",
+    "previous_executed_binary_identity_preserved_in_exact_preimage_and_history": "96c3c79155ca0fe5450735d24433f802fca1f269817f05f32f976a021e96ed2f",
     "actual_generation_exit": 0,
+    "actual_terminal_utc": "2026-10-20T20:52:54.414482+00:00",
+    "actual_runtime_final_sha256": "72548b7f3c9409394255b32746f6a54996ca71138377ad1175d6ec3ac8c7b6a0",
     "current_tests_executed_at_rebinding": false,
-    "reason": "Direct human bounded successor renews four stale validated crate-source and sixteen generated-output bindings, preserves exact7a active receipt in registered history, and truthfully records the actual retained-report generation at f1b356a3. Reporting source code, every selected report output, all scientific inputs/geometry/fields/weights/masks, validators and thresholds remain unchanged. Existing README source pointer is also renewed to the actual unchanged current README; old README/binary/test observations remain in exact7a history. Actual producer binary96c3c791 was captured before/after successful bounded execution, not guessed or relabelled. Original70test entry and all prior failures/successes retain their own source/date/scope. No current suite/fullzstd/CI/formalapproval is claimed; final required controls and genuine origin remain Root-owned."
+    "changed_output_bindings": [
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/manifest.json",
+        "previous": "a770df6275f887ff5809c357f841e154b63ac958a22866be6728d26159744bfc",
+        "actual": "c1f39d37d9069843a6bdb6c532316bec7a50c96272fd65407181fd6b838e16c5"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/publication.v2.json",
+        "previous": "bd0d581f72d451b99d8870da5977b687f3d14b8d6e32f4749ffb77d67325d0b9",
+        "actual": "e05a01c31d1555edb3e66524f8f0ad935983eea587bf4e2a11442a7c1357cd40"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/tests/visuals.v1.json",
+        "previous": "b55ceb8ce6532f0ab25e0b7132d417d4f83095ccc950c6b2dacdc0fd3fc25673",
+        "actual": "17d863a89dd7dc5f6aca2909fe64a6652a012c84aa102dffaea66d589c734010"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/population/point-rendering.v1.json",
+        "previous": "34918656ae550c2b79e25b9d52080329b865395e3633e11122a4822fac35c432",
+        "actual": "312a503957fe46fb7bc6bd538e99c587f5e2652f39469e34abaf46978a901a9f"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/weighted-runs.svg.manifest.json",
+        "previous": "b5cab4adbbb47143c610219dc83a94cc24e87ea9409be48cbed2c17d08379e82",
+        "actual": "bdff3c87222604ccd5564cb929c97f8f3af57a9a30a12b5eee273241c7aa1549"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/plate-fields.svg.manifest.json",
+        "previous": "1978ade35d42fc91febb084108e0f28122cf0841980c69c19f1c1ff19beb15db",
+        "actual": "5e9c20fec908426cbaee6d2f9649229644c1ae49cd049e9d2bfeb7c1654a96e5"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/population/score-axis.v1.json",
+        "previous": "1e40a2dbd40480fc8d6673e5f341e10fd74aa5ff4f251f4133b1e03d7f5f1803",
+        "actual": "536ef65cd5bacbc0e507b87284e9e662e4c8a9223761c53c8589d5dbf3a0c387"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/reference.svg.manifest.json",
+        "previous": "a0435289a0733ffdd7a47506aec78882970a5f609ff497c381afe8b2cee92631",
+        "actual": "71e3ce17df20b2da2315ec86d53ee71377f79d9e2bc53688b33455987e4ee32b"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/population-detail.svg",
+        "previous": "389466a0aa794bf22667d35d263047fc04ce7f574209043bd7c30c343abad2fc",
+        "actual": "3f37ed60bf5111616b0739fba62caf7c7ccefc21dfa92179646d771ed6d5dec2"
+      },
+      {
+        "bucket": "generated_outputs_sha256",
+        "path": "docs/paper/generated/evidence-architecture.svg.manifest.json",
+        "previous": "c16a2b768aa2fcae60679e51c178155c139019870e9dadf72d179afbce73f452",
+        "actual": "dd056149ba8342ac0144a398da8037e8db19c9754abc4f9ff888508f22d25032"
+      }
+    ],
+    "reason": "Finite Root-authorized successor: Q-admitted actual22 appearance dependency pins; 2.1.2 document metadata; true original-score Q90..MAX/MIN..Q10 detail with inclusive cutoff/extremum ties and unchanged full-range/positive views; exact0.1% ROI callout and package accession. Actual admitted retained reporter/raster/paired19+32-page PDF build exited0. This rebinding records actual source/output digests and actual executed producer74cfa538, preserving exact pre26a receipt, prior96c3 producer identity, focused historical70test entry and every prior failure/success within its own source/date/scope. Original immutable inputs/custody/constants/science/geometry/fields/masks/weights/validators unchanged. First generated-manifest input-role failure and partial bytes remain preserved; corrected retry is separately admitted/recorded. No current suite/full-zstd/CI/independent PDF or formal approval claim. Root final exact-head controls/Q/origin/delivery remain mandatory."
   },
   "integration_rebinding_history": [
     {
@@ -330,52 +395,107 @@
       "actual_generation_exit": 0,
       "current_tests_executed_at_rebinding": false,
       "reason": "Direct human bounded successor renews four stale validated crate-source and sixteen generated-output bindings, preserves exact7a active receipt in registered history, and truthfully records the actual retained-report generation at f1b356a3. Reporting source code, every selected report output, all scientific inputs/geometry/fields/weights/masks, validators and thresholds remain unchanged. Existing README source pointer is also renewed to the actual unchanged current README; old README/binary/test observations remain in exact7a history. Actual producer binary96c3c791 was captured before/after successful bounded execution, not guessed or relabelled. Original70test entry and all prior failures/successes retain their own source/date/scope. No current suite/fullzstd/CI/formalapproval is claimed; final required controls and genuine origin remain Root-owned."
+    },
+    {
+      "checked_utc": "2026-10-20T20:58:50.524208+00:00",
+      "previous_receipt_sha256": "bcc4f34ebba71bdd7b6b1906b1e8d97a8841caf9a1ccd3498890da41c7ebe606",
+      "previous_receipt_commit": "26aeda0ff0fdec5c8cdca111e9624054615a2787",
+      "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_26AEDA0_20261020.json",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "26aeda0ff0fdec5c8cdca111e9624054615a2787",
+      "reporting_source_tree": "bcf06f474aee05851cf72dd48af5052e7042cae1",
+      "actual_generation_receipt_sha256": "746389da627a6be45c4c86260c09871e43b4ce4340dab50996d8891949e7c50c",
+      "actual_generation_log_sha256": "6bca2be37dc64ecc8e3c58c33b883115b08167f3b2741da221ce5b46c6304a00",
+      "executed_reporting_binary_sha256": "74cfa538b9c374da6c60c510d212ddc270cd3a56a2717d9c0b3ade7b634c5fc8",
+      "previous_executed_binary_identity_preserved_in_exact_preimage_and_history": "96c3c79155ca0fe5450735d24433f802fca1f269817f05f32f976a021e96ed2f",
+      "actual_generation_exit": 0,
+      "actual_terminal_utc": "2026-10-20T20:52:54.414482+00:00",
+      "actual_runtime_final_sha256": "72548b7f3c9409394255b32746f6a54996ca71138377ad1175d6ec3ac8c7b6a0",
+      "current_tests_executed_at_rebinding": false,
+      "changed_output_bindings": [
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/manifest.json",
+          "previous": "a770df6275f887ff5809c357f841e154b63ac958a22866be6728d26159744bfc",
+          "actual": "c1f39d37d9069843a6bdb6c532316bec7a50c96272fd65407181fd6b838e16c5"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/publication.v2.json",
+          "previous": "bd0d581f72d451b99d8870da5977b687f3d14b8d6e32f4749ffb77d67325d0b9",
+          "actual": "e05a01c31d1555edb3e66524f8f0ad935983eea587bf4e2a11442a7c1357cd40"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/tests/visuals.v1.json",
+          "previous": "b55ceb8ce6532f0ab25e0b7132d417d4f83095ccc950c6b2dacdc0fd3fc25673",
+          "actual": "17d863a89dd7dc5f6aca2909fe64a6652a012c84aa102dffaea66d589c734010"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/population/point-rendering.v1.json",
+          "previous": "34918656ae550c2b79e25b9d52080329b865395e3633e11122a4822fac35c432",
+          "actual": "312a503957fe46fb7bc6bd538e99c587f5e2652f39469e34abaf46978a901a9f"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/weighted-runs.svg.manifest.json",
+          "previous": "b5cab4adbbb47143c610219dc83a94cc24e87ea9409be48cbed2c17d08379e82",
+          "actual": "bdff3c87222604ccd5564cb929c97f8f3af57a9a30a12b5eee273241c7aa1549"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/plate-fields.svg.manifest.json",
+          "previous": "1978ade35d42fc91febb084108e0f28122cf0841980c69c19f1c1ff19beb15db",
+          "actual": "5e9c20fec908426cbaee6d2f9649229644c1ae49cd049e9d2bfeb7c1654a96e5"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/population/score-axis.v1.json",
+          "previous": "1e40a2dbd40480fc8d6673e5f341e10fd74aa5ff4f251f4133b1e03d7f5f1803",
+          "actual": "536ef65cd5bacbc0e507b87284e9e662e4c8a9223761c53c8589d5dbf3a0c387"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/reference.svg.manifest.json",
+          "previous": "a0435289a0733ffdd7a47506aec78882970a5f609ff497c381afe8b2cee92631",
+          "actual": "71e3ce17df20b2da2315ec86d53ee71377f79d9e2bc53688b33455987e4ee32b"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/population-detail.svg",
+          "previous": "389466a0aa794bf22667d35d263047fc04ce7f574209043bd7c30c343abad2fc",
+          "actual": "3f37ed60bf5111616b0739fba62caf7c7ccefc21dfa92179646d771ed6d5dec2"
+        },
+        {
+          "bucket": "generated_outputs_sha256",
+          "path": "docs/paper/generated/evidence-architecture.svg.manifest.json",
+          "previous": "c16a2b768aa2fcae60679e51c178155c139019870e9dadf72d179afbce73f452",
+          "actual": "dd056149ba8342ac0144a398da8037e8db19c9754abc4f9ff888508f22d25032"
+        }
+      ],
+      "reason": "Finite Root-authorized successor: Q-admitted actual22 appearance dependency pins; 2.1.2 document metadata; true original-score Q90..MAX/MIN..Q10 detail with inclusive cutoff/extremum ties and unchanged full-range/positive views; exact0.1% ROI callout and package accession. Actual admitted retained reporter/raster/paired19+32-page PDF build exited0. This rebinding records actual source/output digests and actual executed producer74cfa538, preserving exact pre26a receipt, prior96c3 producer identity, focused historical70test entry and every prior failure/success within its own source/date/scope. Original immutable inputs/custody/constants/science/geometry/fields/masks/weights/validators unchanged. First generated-manifest input-role failure and partial bytes remain preserved; corrected retry is separately admitted/recorded. No current suite/full-zstd/CI/independent PDF or formal approval claim. Root final exact-head controls/Q/origin/delivery remain mandatory."
     }
   ],
   "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. The e67 successor86-test attempt failed84passed/2failed and remains preserved. Corrected successor validation is recorded separately with its exact head. Combined contrast/omission successor controls remain unexecuted at this source/output rebinding; their later exact-head results are separate evidence, not this historical focused-test entry. Root1307 residual successor controls remain unexecuted at this source/output rebinding; actual119 controls remain predecessor evidence, with new affected results separate after completefreeze. Current narrow repair successor report generation exited0 at f1b356a3; no tests or full audit have run at this rebinding. Original70test entry and all preceding exact-head evidence remain historical; producer execution is not validationPASS.",
   "pending_successor_closure": {
     "authority_path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/ROOT_ACTUAL_Q_PIN_CLEARANCE_CANONICAL_INSTALL_AND_ONE_GENERATION_ORDER_20261020T2019Z.md",
     "authority_sha256": "f2b47daf44c279cdefdde39e0c3f7fd71a16b5dba3e7c9170202ee11c841b501",
-    "stage": "ACTUAL_2.1.2_METADATA_GENERATED_AND_BOUND; ONE_SHARED_FIGURE_PDF_GENERATION_PENDING; no current finaltests/freshness/CI",
+    "stage": "ACTUAL_26A_REPORT_RASTER_PAIRED_PDFS_GENERATED_EXIT_ZERO;BOOKKEEPING_CLOSURE_AND_FINAL_GATES_PENDING",
     "previous_source_increment": "bfd49ecac85e2029ac2994ecc6fcbebe6a718bda",
-    "previous_active_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_BFD49EC_20261020.json",
-    "previous_active_receipt_sha256": "954820d468ccadc2d1715cbaa7a8ed6cef49489d64bb9c6daaa5bfef8cf7d037",
+    "previous_active_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_26AEDA0_20261020.json",
+    "previous_active_receipt_sha256": "bcc4f34ebba71bdd7b6b1906b1e8d97a8841caf9a1ccd3498890da41c7ebe606",
     "previous_complete_freeze": "73ffef00ddd35e3cf679074c38fe3625aba966f2",
-    "source_bindings_renewed": [
-      {
-        "path": "crates/paper-artifacts/src/population.rs",
-        "predecessor_sha256": "7b6588592b84114e5affeeba3c17f075975c4886d0890b27be471c0805bfabe9",
-        "actual_sha256": "1f53640711e208136b58be28a22efb57f3af502f2d37b093a7406ae6eab97d9d"
-      },
-      {
-        "path": "crates/paper-artifacts/src/publication.rs",
-        "predecessor_sha256": "3b0f6df8d68e6db07130e0561f13ba6729bc032f039fd7d46529c749b1299f8e",
-        "actual_sha256": "3cd921955c78ab5e1d94770f0056219f77c9a57159128fe8f167204867d6f7ef"
-      },
-      {
-        "path": "crates/paper-artifacts/src/score_axis.rs",
-        "predecessor_sha256": "65cfdebb8af49bf62f8f4c5ed33326771204b109a491ab4367777700df5a19e7",
-        "actual_sha256": "3c92d2462679d7c8925db44c0a706a88a5fb7d7f46fcb5e4bc8684724f3b4762"
-      },
-      {
-        "path": "docs/paper/CROSSWALK_SUPPLEMENT.md",
-        "predecessor_sha256": "a42c27d8b70bd804dab6da726fa183ca7403a560025ed051d0c2ea9309860bb5",
-        "actual_sha256": "7b2edca9d3acd1e40947304cef6e227f8719f650aa6f368edba82a9c73e0807c"
-      },
-      {
-        "path": "crates/paper-artifacts/src/publication.rs",
-        "predecessor_sha256": "3cd921955c78ab5e1d94770f0056219f77c9a57159128fe8f167204867d6f7ef",
-        "actual_sha256": "b9ff67a8f58764c0a42e16e77fae3b864e61c93f6e275c4c76736139849e8a1d",
-        "reason": "Only exact independently admitted actual recipe digest constant updated; no guard relaxation."
-      },
-      {
-        "path": "README.md",
-        "predecessor_sha256": "72680ef49a194e9877094bfc5927ca84de1aa500136984a1ce2a195aee853cb7",
-        "actual_sha256": "88431acd73fc403cb07f3d9dae106c3e8ec014780c70d72431d478da732742b5",
-        "reason": "Only existing generator versionlinks/releaseheading advanced211->212; no underlyinghistoricalnumeric tablechange."
-      }
-    ],
-    "actual_producer_binary_status": "Last actual96c3c791identity and integration_rebinding execution belong to priorf1b/73 only. No new executable/source equivalence or current suitePASS asserted.",
+    "source_bindings_renewed": "Actual23validated crate/fixture pins plus existing documentation pointers statically match; all67 selected generated-output bindings renewed from actual successful outputs.",
+    "actual_producer_binary_status": {
+      "sha256": "74cfa538b9c374da6c60c510d212ddc270cd3a56a2717d9c0b3ade7b634c5fc8",
+      "source_head": "26aeda0ff0fdec5c8cdca111e9624054615a2787",
+      "actual_generation_exit": 0,
+      "actual_terminal_utc": "2026-10-20T20:52:54.414482+00:00",
+      "previous_binary_sha256_preserved": "96c3c79155ca0fe5450735d24433f802fca1f269817f05f32f976a021e96ed2f",
+      "tests_executed": false
+    },
     "reporting_only_changes": "RootadmittedW25currentcovernav and higher-fitnessQ90..MAX/lower-deficitMIN..Q10 detail only; inclusiveextrema/cutoffties/counts+orderedidentity binding. Globalfullrange axes andpointpaths/positivehelpers unchanged; exactROIleader/packagingdbc work preserved.",
     "tests_authored_not_executed": {
       "additional_directed_neutral_unit_controls": 8,
@@ -431,6 +551,14 @@
         }
       ],
       "scope": "Three existing document generators only; not report-figure generation, new reporting producer binary or tests. Existing previousproducer/testidentities remain historical."
+    },
+    "actual_shared_generation": {
+      "receipt_sha256": "746389da627a6be45c4c86260c09871e43b4ce4340dab50996d8891949e7c50c",
+      "body_sha256": "a21e740d8ec9ccd7b2224f74ef79e55e084dba0e6dba1bcd44107a21a5ab4a07",
+      "grant_sha256": "dc4add8becf6a8512ab350a141e803d89537f5622877058049385dae05f1a5e6",
+      "config_sha256": "a6c1efdfe7fd29caf02c61c5a039bc6906515ddc8e238c5d622a19246663604e",
+      "actual_terminal_sha256": "72548b7f3c9409394255b32746f6a54996ca71138377ad1175d6ec3ac8c7b6a0",
+      "current_final_acceptance": false
     }
   }
 }

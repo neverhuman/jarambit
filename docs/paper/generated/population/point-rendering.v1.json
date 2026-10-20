@@ -5,7 +5,7 @@
     "docs/paper/generated/native-runs-4-5.svg": "d8dbcacc2324e4acf2333cf42d126e24d27e67ebbe13e86f616744f0ae66d46d",
     "docs/paper/generated/native-runs-6-7.svg": "8336168576c6dd60c098dabbe8a8fd33a7ae1b1c03a7c072b934e4f7d694d36d",
     "docs/paper/generated/native-runs-8-9.svg": "8edefeb11bd0b8992c22926332c80233c38bda2424663c8f80736d1d1169138d",
-    "docs/paper/generated/population-detail.svg": "389466a0aa794bf22667d35d263047fc04ce7f574209043bd7c30c343abad2fc",
+    "docs/paper/generated/population-detail.svg": "3f37ed60bf5111616b0739fba62caf7c7ccefc21dfa92179646d771ed6d5dec2",
     "docs/paper/generated/population/positive/historical-positive-points-affine.svg": "8c26a037bb29daa01b8b710adf3ad9dfba4405b83fa2058cb4ed9dd6310047c5",
     "docs/paper/generated/population/positive/historical-positive-points-affine.v1.json": "a6836bdd6910f93bc3713d1b0e766f3a5ffebec49694417a61fe804f46196bba",
     "docs/paper/generated/population/positive/historical-positive-points-gap.svg": "3d0667e9da0394eed8c90f8b14104a38ef63f729608bd03f3c51d0244b1c380c",
@@ -56,7 +56,7 @@
     "docs/paper/generated/population/positive/screening-positive-points-gap.svg": "fa81d785db4acf6483963c8c34b9e35907f2bb1a491c5805d3dfe1ee27cbfecd",
     "docs/paper/generated/population/positive/screening-positive-points-gap.v1.json": "6e556e371956ca52d2035169dd6df2398e0e8ce618f0efc1a84b42ee6d70eaa7",
     "docs/paper/generated/population/retained-leaders.v1.json": "a00ffd38b65cc6e6120a83330d631c39ca6f919b1ef1d038903c15bda7694d7e",
-    "docs/paper/generated/population/score-axis.v1.json": "1e40a2dbd40480fc8d6673e5f341e10fd74aa5ff4f251f4133b1e03d7f5f1803",
+    "docs/paper/generated/population/score-axis.v1.json": "536ef65cd5bacbc0e507b87284e9e662e4c8a9223761c53c8589d5dbf3a0c387",
     "docs/paper/generated/population/story/index.v1.json": "48863c3fa3ce6a9e4af53ec5a291184e7878b5d2bddbd750e5339832c463d15e",
     "docs/paper/generated/population/story/run-02-asinh.svg": "ce0feb9409119c79cdf1ea9d2921ea18f730a3b3f53c23fafc4baf2632ade51e",
     "docs/paper/generated/population/story/run-02-asinh.v1.json": "d6529fecc44663efabd08ee478e9667f7de4198ed13b314d16266bc20e3cecaa",
@@ -120,40 +120,67 @@
     "docs/paper/generated/population/story/run-11-positive-gap.v1.json": "d2ac47d4d801455c63e04720c5a4cc9fb808f536ab6cd2cbd48c882eb4d20a34"
   },
   "detail": {
+    "full_range_companion": "docs/paper/figures/population-latest.svg",
     "historical": {
+      "all_rows_membership_sha256": "0b8fd4dbd1b3fc7a4f4e41d875568ac0946537df54c96e0cd382073fddcd053d",
       "below_inside_above": [
-        19,
-        1945,
-        20
+        1784,
+        200,
+        0
       ],
       "bounds": [
-        -204.95296,
-        1.15053
+        1.1232,
+        1.15727
       ],
+      "constant_domain_policy": "exact membership and display domain retained; tied points centered, no widened selection",
+      "cutoff": 1.1232,
+      "cutoff_ties": {
+        "included_count": 1,
+        "source_count": 1
+      },
+      "direction": "higher_is_better",
+      "display_axis_widened": false,
+      "extremum": {
+        "included_tie_count": 1,
+        "ordered_identity_score_sha256": "d9bc11dd062c7fe348538cb4efed883817923feb2a86be7502c880b185b58125",
+        "source_tie_count": 1,
+        "value": 1.15727
+      },
+      "hash_encoding": "ordered LE u64 identity arity, each identity field, original f64 score bits; all-row hash additionally appends u8 below=0/inside=1/above=2",
+      "identity_fields": [
+        "original_id",
+        "generation"
+      ],
+      "membership_bounds_original_units": [
+        1.1232,
+        1.15727
+      ],
+      "membership_transform": "none; inclusive original scores and all boundary ties",
+      "numeric_universe": 1984,
       "raster": {
         "clipping": false,
         "jitter": false,
         "majority_class_replacement": false,
         "observed_score_extrema": [
-          -204.95296,
-          1.15053
+          1.1232,
+          1.15727
         ],
         "observed_x_extrema": [
           0.0,
           16.0
         ],
-        "occupied_pixels": 612,
-        "overlap_operations": 1333,
-        "pixel_sha256": "a39e0e2e9f39d24051caf31966c8f01326c5dd524559620d246980c9a884c938",
+        "occupied_pixels": 196,
+        "overlap_operations": 4,
+        "pixel_sha256": "da8239f0557343ecbab4aaf208398b9afe346f412cbb2c5cf8f5811de4acaa02",
         "point_color": "neutral occupancy; overlaps do not encode count",
-        "point_operations": 1945,
+        "point_operations": 200,
         "raster_px": [
           951,
           221
         ],
         "score_display_domain": [
-          -204.95296,
-          1.15053
+          1.1232,
+          1.15727
         ],
         "vertical_transform": {
           "L_rule": "empirical Q25 of nonzero absolute original observations; floor(p*(n-1)); zero excluded only from L estimation, never from points",
@@ -165,42 +192,71 @@
           0.0,
           16.0
         ]
-      }
+      },
+      "selected_identity_score_sha256": "59108828178a64b85f7570278c86630122c2a4509f561c2205c1f7e9db63bbda",
+      "selection": "Q90..MAX"
     },
     "native": {
+      "all_rows_membership_sha256": "9969c62f041ed5cd69dd3f04c6377ae6df7a5392d69b6c38ccd56a4ae634cd7a",
       "below_inside_above": [
-        19542,
-        1915492,
-        19526
+        1758961,
+        195599,
+        0
       ],
       "bounds": [
-        -205.4476,
-        1.0771
+        -0.1682,
+        1.144
       ],
+      "constant_domain_policy": "exact membership and display domain retained; tied points centered, no widened selection",
+      "cutoff": -0.1682,
+      "cutoff_ties": {
+        "included_count": 288,
+        "source_count": 288
+      },
+      "direction": "higher_is_better",
+      "display_axis_widened": false,
+      "extremum": {
+        "included_tie_count": 7,
+        "ordered_identity_score_sha256": "6f92cb1b2036342c2ceea9816ac2e99d491459566780fb9f04e780f6e1fa82fc",
+        "source_tie_count": 7,
+        "value": 1.144
+      },
+      "hash_encoding": "ordered LE u64 identity arity, each identity field, original f64 score bits; all-row hash additionally appends u8 below=0/inside=1/above=2",
+      "identity_fields": [
+        "archive_run_ordinal",
+        "original_id",
+        "generation"
+      ],
+      "membership_bounds_original_units": [
+        -0.1682,
+        1.144
+      ],
+      "membership_transform": "none; inclusive original scores and all boundary ties",
+      "numeric_universe": 1954560,
       "raster": {
         "clipping": false,
         "jitter": false,
         "majority_class_replacement": false,
         "observed_score_extrema": [
-          -205.4476,
-          1.0771
+          -0.1682,
+          1.144
         ],
         "observed_x_extrema": [
-          0.0,
+          1.0,
           800.0
         ],
-        "occupied_pixels": 96002,
-        "overlap_operations": 1819490,
-        "pixel_sha256": "eb42375f5b234b27f0a6f82b34ee632c7f554563321128ce4f3fee1806bbe0b9",
+        "occupied_pixels": 50032,
+        "overlap_operations": 145567,
+        "pixel_sha256": "43cbc4696116117880ff85ffcca413571d0d59b998e75f5c289a10b8efbf3601",
         "point_color": "neutral occupancy; overlaps do not encode count",
-        "point_operations": 1915492,
+        "point_operations": 195599,
         "raster_px": [
           1201,
           321
         ],
         "score_display_domain": [
-          -205.4476,
-          1.0771
+          -0.1682,
+          1.144
         ],
         "vertical_transform": {
           "L_rule": "empirical Q25 of nonzero absolute original observations; floor(p*(n-1)); zero excluded only from L estimation, never from points",
@@ -212,43 +268,72 @@
           0.0,
           800.0
         ]
-      }
+      },
+      "selected_identity_score_sha256": "5a545583d867666c7949db9ef1b0824641196217937822d385c523c951d3020a",
+      "selection": "Q90..MAX"
     },
-    "policy": "additional empirical Q01–Q99 panels; floor(p*(n-1)); strict tails, boundary ties inside",
+    "policy": "higher-is-better Q90..MAX; lower-is-better MIN..Q10; floor(p*(n-1)); inclusive cutoff and extremum ties",
+    "pooled_native_scope": "display context only; not a comparable global engineering winner or connected cross-run trajectory",
     "screening": {
+      "all_rows_membership_sha256": "9b208f9346d33cf7bb76a392d4833decc608fb7a499a685380db88acfac555fc",
       "below_inside_above": [
-        22,
-        2214,
-        23
+        0,
+        226,
+        2033
       ],
       "bounds": [
-        2.7781832518641543,
-        5.673897018881242
+        2.769032384488388,
+        3.0484527101565
       ],
+      "constant_domain_policy": "exact membership and display domain retained; tied points centered, no widened selection",
+      "cutoff": 3.0484527101565,
+      "cutoff_ties": {
+        "included_count": 1,
+        "source_count": 1
+      },
+      "direction": "lower_is_better",
+      "display_axis_widened": false,
+      "extremum": {
+        "included_tie_count": 1,
+        "ordered_identity_score_sha256": "3c6c1ec35331a01dd9b376d4bce7b899305e259ae5233ebe8baf97f23aede33d",
+        "source_tie_count": 1,
+        "value": 2.769032384488388
+      },
+      "hash_encoding": "ordered LE u64 identity arity, each identity field, original f64 score bits; all-row hash additionally appends u8 below=0/inside=1/above=2",
+      "identity_fields": [
+        "birth_file_ordinal_one_based",
+        "candidate_one_based"
+      ],
+      "membership_bounds_original_units": [
+        2.769032384488388,
+        3.0484527101565
+      ],
+      "membership_transform": "none; inclusive original scores and all boundary ties",
+      "numeric_universe": 2259,
       "raster": {
         "clipping": false,
         "jitter": false,
         "majority_class_replacement": false,
         "observed_score_extrema": [
-          2.7781832518641543,
-          5.673897018881242
+          2.769032384488388,
+          3.0484527101565
         ],
         "observed_x_extrema": [
-          1.0,
-          57.0
+          4.0,
+          32.0
         ],
-        "occupied_pixels": 895,
-        "overlap_operations": 1319,
-        "pixel_sha256": "5361b2f83fa42ffc6f40bf92a2c82922eb575326cfc17d48598cb8c0a8f85b82",
+        "occupied_pixels": 72,
+        "overlap_operations": 154,
+        "pixel_sha256": "cab5677d75bcadeecb03f7659c3a6b85bbcfeab1c710dd7458c3277e0d9d92a1",
         "point_color": "neutral occupancy; overlaps do not encode count",
-        "point_operations": 2214,
+        "point_operations": 226,
         "raster_px": [
           951,
           221
         ],
         "score_display_domain": [
-          2.7781832518641543,
-          5.673897018881242
+          2.769032384488388,
+          3.0484527101565
         ],
         "vertical_transform": {
           "inverse": "identity",
@@ -259,7 +344,9 @@
           1.0,
           57.0
         ]
-      }
+      },
+      "selected_identity_score_sha256": "386fb205a8be24e34b90e1cf9920ec4a5384588c35b24ae30961f354acde3dcb",
+      "selection": "MIN..Q10"
     }
   },
   "excluded_numeric_records": 0,
@@ -434,7 +521,7 @@
   "numeric_point_operations": 1958803,
   "numeric_records_visited": 1958803,
   "point_operations_by_view": {
-    "additional_quantile_detail": 1919651,
+    "additional_directed_tail_detail": 196025,
     "additional_separate_native_run_context": 1954560,
     "full_overview": 1958803,
     "interpretation": "The same retained observations are shown in multiple explicitly labeled views; additional views are not new data."

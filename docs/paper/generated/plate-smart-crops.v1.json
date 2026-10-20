@@ -3943,6 +3943,29 @@
           9.0061
         ],
         "genuine_zero_count": 1091,
+        "locator_callout": {
+          "label": "Exact ROI",
+          "label_svg_baseline": [
+            1008.0,
+            331.0
+          ],
+          "leader_svg_points": [
+            [
+              1116.0,
+              323.0
+            ],
+            [
+              1134.0,
+              310.0
+            ],
+            [
+              1147.1405310681048,
+              286.9710679616843
+            ]
+          ],
+          "roi_enlarged": false,
+          "target": "center of the unchanged exact source-coordinate crop quadrilateral"
+        },
         "locator_crop_quad": [
           [
             1145.6502727262387,
@@ -22018,6 +22041,29 @@
           34.8589
         ],
         "genuine_zero_count": 1822,
+        "locator_callout": {
+          "label": "Exact ROI",
+          "label_svg_baseline": [
+            1008.0,
+            736.0
+          ],
+          "leader_svg_points": [
+            [
+              1116.0,
+              728.0
+            ],
+            [
+              1134.0,
+              715.0
+            ],
+            [
+              1147.2277691033153,
+              692.1742891318296
+            ]
+          ],
+          "roi_enlarged": false,
+          "target": "center of the unchanged exact source-coordinate crop quadrilateral"
+        },
         "locator_crop_quad": [
           [
             1146.1164907814496,

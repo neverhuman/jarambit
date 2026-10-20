@@ -1,11 +1,11 @@
 {
   "figure": "docs/paper/generated/plate-smart-crops.svg",
-  "figure_sha256": "2a1a55981ce97a564e57501100171ef821d52e3e383196809d3a1a97e81c6617",
+  "figure_sha256": "d3a08ce28d09ec8f2eafd24bbaa5b7176760dd038a8d96b6340d39631e28dd3b",
   "inputs": {
     "crates/cli/src/crescent.rs": "c8f2e1664263e3bb885ca33e27f42dab0fbe0f180116ec890ee4dcd83bdeab22",
     "crates/crescent/src/fem.rs": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
     "crates/crescent/src/pheno.rs": "fd0f556d9054334f26b3d1698979c14696435b1fb85c1c637f5e199d4b4aa19c",
-    "crates/paper-artifacts/src/plate.rs": "ac4537b4cdd44323dc7d259d0227e0b30b4c57ebc994f70580ed64ee96c200bd",
+    "crates/paper-artifacts/src/plate.rs": "118639cf8e9325bc05e68e0c98a37586479b7c1d2e3f783a8296a7fbdde05f2e",
     "crates/paper-artifacts/src/saliency.rs": "0c4b3ea03d8809113545963858230f52fba11bcd4a083bb66c5795629468ed87",
     "crates/physics/src/fine.rs": "b8762847e7452d3bcbfde718e55e13c42d4ac61d9a23abf5a75d2d5c38343096",
     "docs/paper/data/smart-crop-contract.v1.json": "e4305513ef5adc41d391aed17e2abca360afff0fa05a1d31c94ea6777770f432",
