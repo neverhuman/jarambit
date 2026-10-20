@@ -6,7 +6,7 @@ Jarambit is a computational design research system linking a geometric represent
 
 ![Individual 2000, the illustrated assessed export, with a dimensionless relative response summary on its exact CAD surface](docs/paper/figures/fig1_hero_blender_v2.png)
 
-*Individual 2000 supplies the illustrated assessed geometry and retained fields. Colors summarize relative response ranks for this candidate; they have no physical units and do not express safety or qualification. Contributor support varies across the surface. [Definitions and original evidence](docs/paper/CROSSWALK_SUPPLEMENT.md).*
+*Individual 2000 supplies the illustrated assessed geometry and retained fields. The number is a stable reporting alias, not a generation or score rank; no source birth record is linked to this export. Colors summarize relative response ranks for this candidate; they have no physical units and do not express safety or qualification. Contributor support varies across the surface. [Definitions and original evidence](docs/paper/CROSSWALK_SUPPLEMENT.md).*
 
 ## Which evidence is retained
 

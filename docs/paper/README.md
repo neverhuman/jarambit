@@ -10,6 +10,8 @@ The opening introduces uneven evidence coverage; ancestor reuse and a historical
 
 The white hero is an exact CAD projection of **Individual 2000**, colored by a dimensionless candidate-specific response summary. It is distinct from physical-unit plate fields and from **Individual 2002's** retained weighted reporting vector. Original fields, geometry, weights, thresholds, and evidence stay unchanged.
 
+Individual 2000 is a stable reporting alias for the retained export, not a generation or score rank. Its registry entry has no linked source birth record. The selection receipt records an editorial illustration role because the assessed bundle is retained; it does not establish a global champion or identify a particular human selector.
+
 The [evidence-path diagram](figures/evidence-architecture.svg) separates retained search observations from candidate-specific assessed exports; it asserts no population-wide assessment join. The [compact ancestry view](figures/inheritance.svg) has a separate [detailed coordinate-change view](figures/inheritance-details.svg) in the Supplement.
 
 The main population view processes every retained scored record through a point operation. Native, historical, and screening regimes retain separate axes; unknown proposals have a nonnumeric coverage note. Points can overlap. [Source/ID/extrema/point receipt](generated/population/point-rendering.v1.json).
