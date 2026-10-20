@@ -1595,6 +1595,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "crates/paper-artifacts/src/reference.rs",
         "crates/paper-artifacts/src/visuals.rs",
         "crates/paper-artifacts/examples/paper_artifacts.rs",
+        "crates/paper-artifacts/examples/hero_appearance_preflight.rs",
         "crates/paper-artifacts/Cargo.toml",
         "crates/paper-artifacts/Cargo.lock",
         "Cargo.lock",
@@ -1834,6 +1835,32 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         serde_json::to_string_pretty(&architecture_manifest)? + "\n",
     );
     crate::population::generate_v2_outputs(&root, &mut out, &mut inputs)?;
+    // External, independently reviewed source pins precede any appearance render.
+    const APPEARANCE_RECIPE: &str = "docs/paper/data/hero-appearance-source-recipe.v1.json";
+    const APPEARANCE_RECIPE_SHA256: &str = "d4af7606fb3b3e2b526599037000d59fdbf572fc729c6563bf413258e6f30f96";
+    let appearance_recipe_bytes = fs::read(safe_path(&root, APPEARANCE_RECIPE)?)?;
+    if digest(&appearance_recipe_bytes) != APPEARANCE_RECIPE_SHA256 {
+        return Err("appearance recipe differs from independently bound source accession".into());
+    }
+    let appearance_recipe: Value = serde_json::from_slice(&appearance_recipe_bytes)?;
+    inputs.insert(APPEARANCE_RECIPE.into(), APPEARANCE_RECIPE_SHA256.into());
+    for (path_key, hash_key) in [
+        ("actual_preflight_receipt_path", "actual_preflight_receipt_sha256"),
+        ("independent_source_review_receipt_path", "independent_source_review_receipt_sha256"),
+    ] {
+        let rel = appearance_recipe["pin_admission"][path_key].as_str().ok_or("missing appearance admission receipt path")?;
+        let bytes = fs::read(safe_path(&root, rel)?)?;
+        let hash = digest(&bytes);
+        if appearance_recipe["pin_admission"][hash_key].as_str() != Some(hash.as_str()) {
+            return Err("appearance admission receipt bytes differ".into());
+        }
+        inputs.insert(rel.into(), hash);
+    }
+    for (path, content) in crate::population::generate_hero_appearance_outputs(
+        &root, APPEARANCE_RECIPE, APPEARANCE_RECIPE_SHA256,
+    )? {
+        if out.insert(path, content).is_some() { return Err("duplicate appearance output".into()); }
+    }
     let outputs = out
         .iter()
         .map(|(k, v)| (k.clone(), digest(v.as_bytes())))
@@ -1858,6 +1885,10 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "population-latest.svg":{"contract":"artifacts/versioned-evolution-archives-gen800-population-v1/index.gen800_population.sha256.json","projection_receipt":"docs/paper/generated/population/point-rendering.v1.json","membership":"all 1,954,560 admitted native rows as direct neutral point operations, plus separate 1,984 historical birth and 2,259 numeric screen panels; 1,390 unknown proposals have a nonnumeric coverage row","axis_contract":"docs/paper/data/score-axis-contract.v1.json","axis_receipt":"docs/paper/generated/population/score-axis.v1.json","vertical_transform":"source-derived per-regime linear or asinh(y/L), explicit L and original-unit ticks; full actual observed domain without clipping or jitter","class_handling":"neutral occupancy, no class-majority substitution; counts/IDs/extrema/overlap in point receipt"},
         "fitness-progress.svg":{"contract":"docs/paper/data/score_profiles.v1.json","projection_receipt":"docs/paper/generated/shared_projection.v2.json","membership":"three separate numerical-axis panels for Cohort 1 (Run 1, 17-gen), Cohort 2 (weighted summaries), and Cohort 3 (Run 2..Run 11, 10 retained 800-gen runs qd_fit)"},
         "hero-full-range.svg":{"source":"docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg","contract":"docs/paper/data/display-composite-contract.v1.json","roster":"docs/paper/data/test-field-roster.v1.json","independent_contract_review":"docs/paper/data/display-composite-review.v1.json","projection_receipt":"docs/paper/generated/display-composite.v1.json","surface":"retained STL SVG projection, flat shared palette, no fresh Cycles","supersedes":"historical figure-semantics.v1.json#/hero_composite five-map recipe; original bytes preserved","scope":"4 available retained response channels;44catalog entries+8metadata addenda are not52independent tests; not scientific fitness"},
+        "hero-appearance.svg":{"recipe":APPEARANCE_RECIPE,"recipe_sha256":APPEARANCE_RECIPE_SHA256,"projection_receipt":"docs/paper/generated/hero-appearance.v1.json","surface":"every original ordered retained STL face, proper no-refit camera, depth buffer, display-only corner normals and interior lighting","quantitative_companion":"docs/paper/generated/hero-full-range.svg","matched_unlit":"docs/paper/generated/hero-appearance-unlit.svg","scope":"Lighting changes RGB, not source fields/masks/contributors/geometry/fitness; no new assessment or Cycles claim"},
+        "plate-smart-crops.svg":{"recipe":"docs/paper/data/smart-crop-contract.v1.json","projection_receipt":"docs/paper/generated/plate-smart-crops.v1.json","full_context":"docs/paper/generated/plate-fields.svg","scope":"Fixed value-range display policy, original masks/full raw scales and whole-source area/excess denominators; source-coordinate crop/locator only"},
+        "objective-priorities.v1.svg":{"recipe":"docs/paper/data/weighted-priorities.v1.json","projection_receipt":"docs/paper/generated/objective-priorities.v1.json","scope":"20 configured historical recipe priorities sum100pct; not candidate contributions/F or new fitness/qualification"},
+        "population/positive/index.v1.json":{"projection_receipt":"docs/paper/generated/population/point-rendering.v1.json","scope":"12separate source profiles, positive affine/gap variants,1958803pointoperations each;1390unknown nonnumeric; no density/subsample/clip/pooledscreen trajectory; original asinh and summary companions distinct"},
         "hero-support.svg":{"contract":"docs/paper/data/display-composite-contract.v1.json","projection_receipt":"docs/paper/generated/display-composite.v1.json","denominator":"4 eligible registered response channels; exact original source-triangle area, before overlays/projection"},
         "hero-contrast-preview.svg":{"contract":"docs/paper/data/display-composite-contract.v1.json","projection_receipt":"docs/paper/generated/display-composite.v1.json","scope":"additional Q05–Q95 contrast preview with original index thresholds/tails; full[0,1] companion required; not selected without independent readability review"},
         "hero-mesh-on.svg":{"contract":"docs/paper/data/display-composite-contract.v1.json","scope":"all exact retained visible STL triangle edges,0.12unit line width/0.03opacity per triangle; mesh-off fullrange remains default"},
