@@ -26,7 +26,7 @@ Jarambit is a computational design research system linking a geometric represent
 ## Three findings
 
 1. Extensive search records can coexist with uneven parentage, geometry, and later-assessment coverage.
-2. Historical ancestry exposes reuse, and the highest stored historical birth score belongs to a candidate that fails a later internal assessment. This example does not establish a pairwise rank reversal or a general failure rate.
+2. Historical ancestry exposes reuse. In the same 1,984-birth Run 1 cohort, Individual 1095 (stored birth rank 1, `f = 1.15727`) has the earlier saved `cert_pass_all=false`, while Individual 1543 (rank 8, `f = 1.15415`) has `cert_pass_all=true`. This categorical contrast does not establish a continuous later-assessment score reversal, later 26-predicate qualification, or a population-wide failure rate.
 3. Selected solid-model observables agree within 0.05% between scikit-fem/PyAMG and DOLFINx/PETSc on a shared mesh. Separate plate sequences do not admit the retained extrapolated-error estimates. These observations support different conclusions.
 
 [Separate retained evidence paths](docs/paper/figures/evidence-architecture.svg) distinguish search observations from assessed exports.
