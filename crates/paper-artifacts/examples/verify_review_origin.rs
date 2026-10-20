@@ -373,7 +373,7 @@ fn fresh_contexts(
     )?;
     let captures = array(&f, "/captures")?;
     need(
-        captures.len() == 3,
+        matches!(captures.len(), 3 | 4),
         "incomplete required-context API captures",
     )?;
     let repo = text(a, "/repository")?;
@@ -383,6 +383,7 @@ fn fresh_contexts(
         let suffix = match kind {
             "branch" => "",
             "legacy" => "/protection",
+            "legacy_checks" => "/protection/required_status_checks",
             "rules" => "/rules",
             _ => return Err("unknown required-context capture".into()),
         };
@@ -433,29 +434,55 @@ fn fresh_contexts(
         .get("legacy")
         .ok_or("missing legacy policy capture")?;
     if *legacy_status == 200 {
-        let required = legacy
-            .get("required_status_checks")
-            .ok_or("missing legacy required checks field")?;
-        if !required.is_null() {
-            for name in array(required, "/contexts")? {
-                add(name.as_str().ok_or("invalid legacy context")?, None)?;
-            }
-            if let Some(checks) = required.get("checks") {
-                for check in checks
-                    .as_array()
-                    .ok_or("invalid legacy check app bindings")?
-                {
-                    add(
-                        text(check, "/context")?,
-                        check.get("app_id").and_then(Value::as_u64),
-                    )?;
+        need(
+            legacy.is_object(),
+            "legacy policy response must be an object",
+        )?;
+        if let Some(required) = legacy.get("required_status_checks") {
+            need(
+                !bodies.contains_key("legacy_checks"),
+                "unused supplemental legacy checks capture",
+            )?;
+            if !required.is_null() {
+                for name in array(required, "/contexts")? {
+                    add(name.as_str().ok_or("invalid legacy context")?, None)?;
+                }
+                if let Some(checks) = required.get("checks") {
+                    for check in checks
+                        .as_array()
+                        .ok_or("invalid legacy check app bindings")?
+                    {
+                        add(
+                            text(check, "/context")?,
+                            check.get("app_id").and_then(Value::as_u64),
+                        )?;
+                    }
                 }
             }
+        } else {
+            need(
+                protected,
+                "omitted legacy checks require a protected branch",
+            )?;
+            let (status, checks) = bodies
+                .get("legacy_checks")
+                .ok_or("omitted legacy required checks need supplemental capture")?;
+            need(*status == 404, "supplemental legacy checks must return 404")?;
+            need(
+                checks.is_object()
+                    && checks.get("message").and_then(Value::as_str)
+                        == Some("Required status checks not enabled"),
+                "supplemental legacy checks absence message mismatch",
+            )?;
         }
     } else {
         need(
             !protected && *legacy_status == 404,
             "legacy policy unavailable; no empty-policy inference",
+        )?;
+        need(
+            !bodies.contains_key("legacy_checks"),
+            "unused supplemental legacy checks capture",
         )?;
     }
     let (rules_status, rules) = bodies.get("rules").ok_or("missing rules policy capture")?;

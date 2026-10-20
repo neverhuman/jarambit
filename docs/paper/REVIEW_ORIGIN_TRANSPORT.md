@@ -81,6 +81,35 @@ rtk proxy /home/ubuntu/.local/bin/gh-role reviewer api repos/OWNER/REPO/pulls/NU
    Root-pinned workflow/required-context policy, CI run/check IDs and conclusions,
    source and full artifact-scope reports and final freeze remain mandatory.
 
+## Fresh required-context capture protocol
+
+Keep the existing `required-contexts` wrapper, 17 file flags and four external
+pins. Root must attest authentic current branch, legacy protection and effective
+rules reads with exact endpoints, HTTP statuses, unmodified `body_utf8` bytes and
+matching `body_sha256` values. An HTTP 200 legacy protection body must be a JSON
+object. Its explicit `required_status_checks` object or null uses exactly the
+existing three captures; an unprotected branch with legacy HTTP 404 also keeps
+its existing three-capture path. Neither path accepts an unused fourth capture.
+
+Only when the parent branch read is HTTP 200 with `protected: true` and the
+legacy protection read is HTTP 200 with an object **omitting**
+`required_status_checks`, retain one additional capture of kind `legacy_checks`
+at exactly `repos/OWNER/REPO/branches/main/protection/required_status_checks`.
+It must be HTTP 404 with a parsed JSON object whose `message` is exactly
+`Required status checks not enabled`. Preserve the actual response bytes and
+hash; do not manufacture a null property in the original response. A generic
+404, other status/message, invalid root, missing or changed hash, wrong endpoint,
+duplicate kind or unneeded capture fails closed. All other production policy
+and independently pinned source/artifact/CI requirements remain mandatory.
+
+The effective-rules read remains HTTP 200 with an array shorter than 30; a full
+default page requires complete-capture support and is refused. Continue to bind
+all seven production-minimum CI contexts and every actual required context/app
+and source workflow. This narrow omission proof does not establish an empty
+production policy or permit skipping CI. Root must exercise the final guard with
+real unmodified branch, legacy, supplemental and rules records after the full
+source/artifact freeze; neutral fixture expectations are not API evidence.
+
 ## Submission and later guard verification
 
 Only after all gates actually pass may the designated eligible runtime submit

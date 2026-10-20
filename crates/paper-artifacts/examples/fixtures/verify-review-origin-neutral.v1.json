@@ -3111,6 +3111,1199 @@
         }
       ],
       "expected_error": "unexpected gh-role API argument"
+    },
+    {
+      "name": "positive-protected-legacy-object-omission-exact-qualified-404",
+      "expect_pass": true,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "positive-explicit-null-legacy-keeps-three-capture-path",
+      "expect_pass": true,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "body_sha256": "61ff6d872f69981b173f3ec0b977c23cc7edfc781f1964690df1480a497fbd27",
+              "body_utf8": "{\"required_status_checks\":null}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "kind": "legacy"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "positive-unprotected-legacy-404-keeps-three-capture-path",
+      "expect_pass": true,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "24fc1b396a03313e85efb2537785fccd7fee444ca05797ed113b091db828d251",
+              "body_utf8": "{\"protected\":false}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Not Found\"}",
+              "body_sha256": "8fd54eee4277f1327015cc0bcaed8a878bf44d1804364cd5d93dfab9e2d1a5af"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "legacy-omission-needs-fourth-capture",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            }
+          ]
+        }
+      ],
+      "expected_error": "omitted legacy required checks need supplemental capture"
+    },
+    {
+      "name": "legacy-omission-supplemental-status-200-rejected",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 200,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "supplemental legacy checks must return 404"
+    },
+    {
+      "name": "legacy-omission-supplemental-status-401-rejected",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 401,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "supplemental legacy checks must return 404"
+    },
+    {
+      "name": "legacy-omission-supplemental-status-403-rejected",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 403,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "supplemental legacy checks must return 404"
+    },
+    {
+      "name": "legacy-omission-supplemental-status-500-rejected",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 500,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "supplemental legacy checks must return 404"
+    },
+    {
+      "name": "legacy-omission-supplemental-generic-not-found",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Not Found\"}",
+              "body_sha256": "8fd54eee4277f1327015cc0bcaed8a878bf44d1804364cd5d93dfab9e2d1a5af"
+            }
+          ]
+        }
+      ],
+      "expected_error": "supplemental legacy checks absence message mismatch"
+    },
+    {
+      "name": "legacy-omission-supplemental-wrong-case",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"required status checks not enabled\"}",
+              "body_sha256": "c6fc23d48369bcbdba8d201a9f9d5815d81c9e16ede046b031b37d25f6b6e493"
+            }
+          ]
+        }
+      ],
+      "expected_error": "supplemental legacy checks absence message mismatch"
+    },
+    {
+      "name": "legacy-omission-supplemental-missing-message",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{}",
+              "body_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "supplemental legacy checks absence message mismatch"
+    },
+    {
+      "name": "legacy-omission-supplemental-array-root",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "[]",
+              "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            }
+          ]
+        }
+      ],
+      "expected_error": "supplemental legacy checks absence message mismatch"
+    },
+    {
+      "name": "legacy-omission-supplemental-null-root",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "null",
+              "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+            }
+          ]
+        }
+      ],
+      "expected_error": "supplemental legacy checks absence message mismatch"
+    },
+    {
+      "name": "legacy-omission-supplemental-string-root",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "\"Required status checks not enabled\"",
+              "body_sha256": "e80241200e3013bac6afa85f6cfef5a326af4709d6a2e8ed515886b7e8a5f8a5"
+            }
+          ]
+        }
+      ],
+      "expected_error": "supplemental legacy checks absence message mismatch"
+    },
+    {
+      "name": "legacy-omission-wrong-supplemental-endpoint",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks/other",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "required-context endpoint mismatch"
+    },
+    {
+      "name": "legacy-omission-duplicate-kind",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "duplicate required-context capture"
+    },
+    {
+      "name": "legacy-array-root-cannot-use-omission-fallback",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "[]",
+              "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "legacy policy response must be an object"
+    },
+    {
+      "name": "legacy-null-root-cannot-use-omission-fallback",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "null",
+              "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "legacy policy response must be an object"
+    },
+    {
+      "name": "legacy-string-root-cannot-use-omission-fallback",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "\"omitted\"",
+              "body_sha256": "166de089e4848b46efd191fe7736cd93b197652d31080d293ec1e214efc66f2f"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "legacy policy response must be an object"
+    },
+    {
+      "name": "legacy-omission-unprotected-parent-rejected",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "24fc1b396a03313e85efb2537785fccd7fee444ca05797ed113b091db828d251",
+              "body_utf8": "{\"protected\":false}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "omitted legacy checks require a protected branch"
+    },
+    {
+      "name": "legacy-explicit-object-rejects-unused-fourth-capture",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "body_sha256": "925cf6372ed42b78f54304144340ff60cc0766b696a052bddeb5105a008cf79a",
+              "body_utf8": "{\"required_status_checks\":{\"checks\":[{\"app_id\":1234,\"context\":\"marketing render smoke\"}],\"contexts\":[\"marketing render smoke\"]}}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "kind": "legacy"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "unused supplemental legacy checks capture"
+    },
+    {
+      "name": "legacy-explicit-null-rejects-unused-fourth-capture",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "body_sha256": "61ff6d872f69981b173f3ec0b977c23cc7edfc781f1964690df1480a497fbd27",
+              "body_utf8": "{\"required_status_checks\":null}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "kind": "legacy"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "unused supplemental legacy checks capture"
+    },
+    {
+      "name": "legacy-unprotected-404-rejects-unused-fourth-capture",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "24fc1b396a03313e85efb2537785fccd7fee444ca05797ed113b091db828d251",
+              "body_utf8": "{\"protected\":false}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Not Found\"}",
+              "body_sha256": "8fd54eee4277f1327015cc0bcaed8a878bf44d1804364cd5d93dfab9e2d1a5af"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "unused supplemental legacy checks capture"
+    },
+    {
+      "name": "legacy-protected-404-cannot-use-supplemental-fallback",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 404,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "legacy policy unavailable; no empty-policy inference"
+    },
+    {
+      "name": "legacy-omission-missing-supplemental-body-hash",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}"
+            }
+          ]
+        }
+      ],
+      "expected_error": "missing/non-string /body_sha256"
+    },
+    {
+      "name": "legacy-omission-changed-supplemental-body-hash",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "expected_error": "required-context response hash mismatch"
+    },
+    {
+      "name": "legacy-omission-blank-supplemental-body",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "",
+              "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          ]
+        }
+      ],
+      "expected_error": "missing/non-string /body_utf8"
+    },
+    {
+      "name": "legacy-omission-parent-status-must-still-be-200",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 403,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 200,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "branch policy unavailable"
+    },
+    {
+      "name": "legacy-omission-effective-rules-must-still-be-200",
+      "expect_pass": false,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "required-contexts",
+          "pointer": "/captures",
+          "value": [
+            {
+              "body_sha256": "3527091ad9056e9fc995405b7e0598b204a64ea4734a163ff5d139efa76fae0a",
+              "body_utf8": "{\"protected\":true}",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main",
+              "http_status": 200,
+              "kind": "branch"
+            },
+            {
+              "kind": "legacy",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection",
+              "http_status": 200,
+              "body_utf8": "{\"enabled\":true}",
+              "body_sha256": "26b3426b2593763c96d0890b4a77a0bbf66d13fc512b0c6b138a23c290f30a2a"
+            },
+            {
+              "body_sha256": "a98a85fc5a0a2bc8c5994cbcca48c84c0583ba2b24997648bd3ea9bc5f07735e",
+              "body_utf8": "[{\"parameters\":{\"required_status_checks\":[{\"context\":\"marketing render smoke\",\"integration_id\":1234}]},\"type\":\"required_status_checks\"}]",
+              "endpoint": "repos/neutral-fixture/review-origin/rules/branches/main",
+              "http_status": 500,
+              "kind": "rules"
+            },
+            {
+              "kind": "legacy_checks",
+              "endpoint": "repos/neutral-fixture/review-origin/branches/main/protection/required_status_checks",
+              "http_status": 404,
+              "body_utf8": "{\"message\":\"Required status checks not enabled\"}",
+              "body_sha256": "7cf5a25398f3050baab8052456e3b306214bb20461641666212b66a4d6910a9a"
+            }
+          ]
+        }
+      ],
+      "expected_error": "effective branch rules unavailable"
     }
   ]
 }
