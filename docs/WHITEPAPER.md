@@ -2,7 +2,7 @@
 
 **Jepson Taylor**
 
-**Version 2.1.1 — 2026-10-20** (living document; version from `docs/VERSION`, checked by CI). **Certification erratum:** the Wave 283 all-hard and 16-gate pass claims are withdrawn. Neither committed candidate qualifies under the repaired pipeline. The generated tables below contain the corrected results. Historical screens remain historical evidence; no design is promoted.
+**Version 2.1.2 — 2026-10-20** (living document; version from `docs/VERSION`, checked by CI). **Certification erratum:** the Wave 283 all-hard and 16-gate pass claims are withdrawn. Neither committed candidate qualifies under the repaired pipeline. The generated tables below contain the corrected results. Historical screens remain historical evidence; no design is promoted.
 
 **Abstract** — *jarambit* is a Rust-native pipeline that evolves fixed-blade titanium hiking/utility karambits (SWITCHBACK class) under hard manufacturability and safety constraints, verified by a plate FEM screen plus a solid tip submodel, made robust by Monte Carlo over tolerances, temperature (−10…100 °C) and cut media, and ranked across waves by a single GLOBAL metric **G** that combines solid-tip safety factor, strength-per-gram, aesthetics, mass and failure sequence. Hard limits reject qualification; search may rank infeasible candidates by negative fitness, and G never overrides a gate.
 

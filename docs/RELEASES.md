@@ -2,6 +2,16 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v2.1.2 — 2026-10-20 (retained-evidence presentation and artifact packaging fixes)
+
+Preparation notes: source changes are recorded here before final generation and validation. Publication remains pending the required local controls, independent review, CI, merge and release gates.
+
+- Adds shaded presentation of the unchanged retained geometry with display-only normals, an explicit appearance recipe and a separate unlit quantitative companion. Lighting changes RGB; it does not change the underlying field, geometry or stored fitness.
+- Adds source-bound all-record positive-coordinate views and per-run context while retaining the complete full-range views, original values, missingness and row accounting. The detail view selects higher-score Q90 through the actual maximum and lower-deficit minimum through Q10, including cutoff and extremum ties with explicit membership counts.
+- Displays the retained 20-term priority vector without changing its weights or scoring. Removes summary badges from the main presentation, corrects current-cover navigation and adds a readable leader to the exact small crop without enlarging its ROI.
+- Extends the paper CI artifact allowlist to the new reporting assets and renews source/output closure. Historical receipts, prior release notes and immutable inputs remain preserved; authored controls are not evidence of execution.
+- Changes reporting and packaging only. It adds no optimization, geometry change, physical solve, new fitness evaluation or qualification claim; the published v2.1.1 tag and release remain unchanged.
+
 ## v2.1.1 — 2026-10-20 (retained-evidence reporting and provenance corrections)
 
 - Corrects the response display to use source-bound available-channel means, pooled area-weighted tied ranks, explicit missingness and per-cell contributor coverage. The complete catalog/channel inventory records unavailable spatial observations without scalar broadcast.
