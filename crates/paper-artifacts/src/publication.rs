@@ -1082,6 +1082,32 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "docs/paper/generated/plate-smart-crops.v1.json".into(),
         serde_json::to_string_pretty(&smart_receipt)? + "\n",
     );
+    // Configured recipe priorities only: do not import/evaluate Python or candidate scores.
+    let priorities_contract_path = "docs/paper/data/weighted-priorities.v1.json";
+    let priorities_contract = read(&root, priorities_contract_path, &mut inputs)?;
+    let priorities_recipe_path = crate::objective_priorities::RETAINED_PATH;
+    let priorities_recipe_bytes = fs::read(safe_path(&root, priorities_recipe_path)?)?;
+    inputs.insert(
+        priorities_recipe_path.into(),
+        digest(&priorities_recipe_bytes),
+    );
+    let priorities = crate::objective_priorities::validate_priority_roster(
+        &priorities_contract,
+        &priorities_recipe_bytes,
+    )?;
+    let priorities_chart =
+        crate::objective_priorities::render_priority_donut(&priorities, 514.044)?;
+    let mut priorities_receipt = priorities_chart.manifest;
+    priorities_receipt["actual_contract"] =
+        json!({"path":priorities_contract_path,"sha256":inputs[priorities_contract_path]});
+    out.insert(
+        "docs/paper/generated/objective-priorities.v1.svg".into(),
+        priorities_chart.svg,
+    );
+    out.insert(
+        "docs/paper/generated/objective-priorities.v1.json".into(),
+        serde_json::to_string_pretty(&priorities_receipt)? + "\n",
+    );
     let verification_contract = read(&root, "docs/paper/verification-inputs.v1.json", &mut inputs)?;
     if verification_contract["producer_revision"] != assessment_manifest["numerical_kernel_commit"]
         || verification_contract["subject"] != field_contract["subject"]
@@ -1546,6 +1572,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     for rel in [
         "crates/paper-artifacts/src/publication.rs",
         "crates/paper-artifacts/src/lib.rs",
+        "crates/paper-artifacts/src/objective_priorities.rs",
         "crates/paper-artifacts/src/appearance.rs",
         "crates/paper-artifacts/src/hero_appearance.rs",
         "crates/paper-artifacts/src/population_story.rs",
@@ -1657,6 +1684,23 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     out.insert(
         "docs/paper/generated/plate-smart-crops.svg.manifest.json".into(),
         serde_json::to_string_pretty(&smart_manifest)? + "\n",
+    );
+    let mut priority_inputs = BTreeMap::new();
+    for path in [
+        priorities_contract_path,
+        priorities_recipe_path,
+        "crates/paper-artifacts/src/objective_priorities.rs",
+    ] {
+        priority_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    let priorities_manifest = json!({"schema":1,"figure":"docs/paper/generated/objective-priorities.v1.svg",
+        "figure_sha256":digest(out["docs/paper/generated/objective-priorities.v1.svg"].as_bytes()),
+        "inputs":priority_inputs,"script":"crates/paper-artifacts/src/objective_priorities.rs",
+        "projection_receipt":"docs/paper/generated/objective-priorities.v1.json",
+        "scope":"Exact configured weights of recovered20-term reporting recipe; no candidate score, normalized specimen values, contributions, fitness total, global comparable selection or qualification."});
+    out.insert(
+        "docs/paper/generated/objective-priorities.v1.svg.manifest.json".into(),
+        serde_json::to_string_pretty(&priorities_manifest)? + "\n",
     );
     let mut verification_inputs = BTreeMap::new();
     for path in [
