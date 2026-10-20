@@ -155,22 +155,37 @@ fn historical_cases(births: &Value, csv: &str, expected: &Value) -> Result<Value
     Ok(json!(cases))
 }
 
-pub(crate) fn project(root: &Path, inputs: &mut BTreeMap<String, String>) -> Result<Value> {
-    let c = read(root, CONTRACT)?;
+fn current_claims(c: &Value) -> Result<()> {
     if c["schema"] != "jarambit.reporting_interpretation_contract.v2"
         || c["original_contracts_remain_unchanged"] != true
-        || !c["buckling"]["admitted_engineering_value"].is_null()
-        || !c["buckling"]["current_qualification"].is_null()
+        || c.pointer("/buckling/admitted_engineering_value") != Some(&Value::Null)
+        || c.pointer("/buckling/current_qualification") != Some(&Value::Null)
         || c["buckling"]["qualification_state"] != "unestablished_due_to_unqualified_operator"
         || c["runtime"]["state"] != "retained_capture_not_exact_executed_environment"
-        || !c["runtime"]["original_solve_runtime_hash_binding"].is_null()
+        || c.pointer("/runtime/original_solve_runtime_hash_binding") != Some(&Value::Null)
         || c["weighted_recipe"]["status"]
             != "recovered_compatible_recipe_not_proven_original_execution"
-        || !c["weighted_recipe"]["executed_source_binding"].is_null()
+        || c.pointer("/weighted_recipe/executed_source_binding") != Some(&Value::Null)
+        || c.pointer("/weighted_recipe/imputed_points_claim") != Some(&Value::Null)
+        || c["weighted_recipe"]["sha256"] != c["sources"]["recovered_recipe"]["sha256"]
+        || c["ring_mask"]["predicate"] != "centroid.x >= sx0 - 3.0"
+        || c["ring_mask"]["masked_cell_count"] != 14875
+        || c["ring_mask"]["unmasked_cell_count"] != 10334
     {
         return Err("unadmitted current interpretation or invented execution binding".into());
     }
+    Ok(())
+}
+
+pub(crate) fn project(root: &Path, inputs: &mut BTreeMap<String, String>) -> Result<Value> {
+    let c = read(root, CONTRACT)?;
+    current_claims(&c)?;
     inputs.insert(CONTRACT.into(), digest(&fs::read(root.join(CONTRACT))?));
+    let source_path = "crates/paper-artifacts/src/interpretation.rs";
+    inputs.insert(
+        source_path.into(),
+        digest(&fs::read(root.join(source_path))?),
+    );
     let bindings = c["sources"]
         .as_object()
         .ok_or("missing interpretation sources")?;
@@ -196,7 +211,8 @@ pub(crate) fn project(root: &Path, inputs: &mut BTreeMap<String, String>) -> Res
                 alias += e["one_based_candidate_index"]
                     .as_u64()
                     .ok_or("missing index")?
-                    - 1;
+                    .checked_sub(1)
+                    .ok_or("proposal indices are one based")?;
                 found = true;
                 break;
             }
@@ -296,7 +312,15 @@ pub(crate) fn project(root: &Path, inputs: &mut BTreeMap<String, String>) -> Res
     }
     let index = source("native_index")?;
     let native_runs = array(&index["runs"])?;
-    if native_runs.len() != 10 {
+    let missing_configs = native_runs
+        .iter()
+        .filter(|r| r["decoder_and_schema_binding"]["proc_config_sha256"].is_null())
+        .count();
+    if native_runs.len() != 10
+        || missing_configs != 5
+        || c["native_provenance"]["missing_process_config_bindings"].as_u64()
+            != Some(missing_configs as u64)
+    {
         return Err("native run denominator differs".into());
     }
     Ok(
@@ -361,5 +385,38 @@ mod tests {
         assert_eq!(p["buckling"]["historical_producer_reported_status"], "pass");
         assert_eq!(p["runtime"]["exact_executed_environment_proven"], false);
         assert_eq!(p["producer_scorer_solver_or_search_executed"], false);
+    }
+    #[test]
+    fn capture_recipe_and_historical_flags_cannot_assert_missing_execution_or_capacity() {
+        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let contract = read(&root, CONTRACT).unwrap();
+        current_claims(&contract).unwrap();
+        for (pointer, invented) in [
+            (
+                "/buckling/admitted_engineering_value",
+                json!(7.0350618718604325),
+            ),
+            ("/buckling/current_qualification", json!(true)),
+            (
+                "/runtime/original_solve_runtime_hash_binding",
+                json!("captured_is_not_executed"),
+            ),
+            (
+                "/weighted_recipe/executed_source_binding",
+                json!("source_presence_is_not_execution"),
+            ),
+            ("/weighted_recipe/imputed_points_claim", json!(15.682353)),
+            ("/ring_mask/masked_cell_count", json!(0)),
+        ] {
+            let mut bad = contract.clone();
+            *bad.pointer_mut(pointer).unwrap() = invented;
+            assert!(current_claims(&bad).is_err(), "{pointer}");
+        }
+        let mut omitted = contract;
+        omitted["runtime"]
+            .as_object_mut()
+            .unwrap()
+            .remove("original_solve_runtime_hash_binding");
+        assert!(current_claims(&omitted).is_err());
     }
 }
