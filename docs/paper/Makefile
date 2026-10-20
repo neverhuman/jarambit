@@ -14,6 +14,7 @@ CROP_PNG := drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.png
 REPORT_CONTRACTS := $(sort $(wildcard data/*.json))
 REPORT_METADATA := generated/display-composite.v1.json generated/test-field-roster.v1.tsv generated/population/score-axis.v1.json generated/population/retained-leaders.v1.json generated/population/point-rendering.v1.json
 DISPLAY_ALTERNATIVES := generated/hero-full-range.svg generated/hero-mesh-on.svg
+REPAIR_HISTORY := history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE510713_20261020.json
 GEN_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(GEN_FIGURES)))
 POP_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(POP_FIGURES)))
 # Pinned evidence-baseline timestamp; actual build UTC belongs to the receipt.
@@ -51,7 +52,7 @@ pdfs: figures
 	cp $(OUT)/supplement-main.pdf supplement.pdf
 	# Portable companion name matches the main PDF GoToR target in the build bundle.
 	cp $(OUT)/supplement-main.pdf $(OUT)/supplement.pdf
-	{ sed -n 's/^INPUT //p' $(OUT)/main.fls $(OUT)/supplement-main.fls; printf '%s\n' Makefile reproduce.sh CORPUS_READER_AND_SVG_REPAIR_RECEIPT_20261019.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json $(HERO_SVG) $(CROP_SVG) publication.v2.json figure-semantics.v1.json claim-evidence.v1.json generated/manifest.json $(REPORT_METADATA) $(DISPLAY_ALTERNATIVES); for name in $(GEN_FIGURES); do printf 'generated/%s.svg\n' "$$name"; done; for name in $(POP_FIGURES); do printf 'figures/%s.svg\n' "$$name"; done; printf '%s\n' *-inputs.v1.json $(REPORT_CONTRACTS); find $(ROOT)/crates/paper-artifacts -maxdepth 2 -name '*.rs' -type f; printf '%s\n' $(ROOT)/crates/paper-artifacts/Cargo.toml $(ROOT)/crates/paper-artifacts/Cargo.lock $(ROOT)/rust-toolchain.toml; for family in Inter 'Inter:weight=bold' sans-serif 'sans-serif:weight=bold'; do fc-match -f '%{file}\n' "$$family" || exit; done; } | LC_ALL=C sort -u > $(OUT)/INPUT_FILES
+	{ sed -n 's/^INPUT //p' $(OUT)/main.fls $(OUT)/supplement-main.fls; printf '%s\n' Makefile reproduce.sh CORPUS_READER_AND_SVG_REPAIR_RECEIPT_20261019.json $(REPAIR_HISTORY) $(HERO_SVG) $(CROP_SVG) publication.v2.json figure-semantics.v1.json claim-evidence.v1.json generated/manifest.json $(REPORT_METADATA) $(DISPLAY_ALTERNATIVES); for name in $(GEN_FIGURES); do printf 'generated/%s.svg\n' "$$name"; done; for name in $(POP_FIGURES); do printf 'figures/%s.svg\n' "$$name"; done; printf '%s\n' *-inputs.v1.json $(REPORT_CONTRACTS); find $(ROOT)/crates/paper-artifacts -maxdepth 2 -name '*.rs' -type f; printf '%s\n' $(ROOT)/crates/paper-artifacts/Cargo.toml $(ROOT)/crates/paper-artifacts/Cargo.lock $(ROOT)/rust-toolchain.toml; for family in Inter 'Inter:weight=bold' sans-serif 'sans-serif:weight=bold'; do fc-match -f '%{file}\n' "$$family" || exit; done; } | LC_ALL=C sort -u > $(OUT)/INPUT_FILES
 	while IFS= read -r input; do test -f "$$input" || exit 1; sha256sum "$$input" || exit; done < $(OUT)/INPUT_FILES > $(OUT)/SOURCE_SHA256SUMS
 	sha256sum main.pdf supplement.pdf $(OUT)/supplement.pdf $(GEN_PNGS) $(POP_PNGS) figures/fig1_hero_blender_v2.png $(HERO_PNG) $(CROP_PNG) $(REPORT_METADATA) $(DISPLAY_ALTERNATIVES) > $(OUT)/OUTPUT_SHA256SUMS
 	lualatex --version > $(OUT)/toolchain.txt

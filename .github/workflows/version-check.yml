@@ -296,6 +296,8 @@ jobs:
             docs/paper/reproduce.sh
             docs/paper/Makefile
             docs/paper/publication.v2.json
+            docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_20261019.json
+            docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE*.json
             docs/paper/figures/fig1_hero_blender_v2.png
             docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg
             docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.png
