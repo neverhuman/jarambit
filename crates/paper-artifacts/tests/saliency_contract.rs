@@ -1,6 +1,6 @@
 //! Analytic neutral presentation controls. Authored only; no production solve.
 use jarambit_paper_artifacts::saliency::{
-    coverage_for_bbox, fit, select, Affine2, CropDecision, CropPolicy,
+    coverage_for_bbox, expand_context_viewport, fit, select, Affine2, CropDecision, CropPolicy,
     FieldView, SourceBindings, Viewport,
 };
 
@@ -174,4 +174,63 @@ fn changed_policy_or_unbound_source_is_not_silently_accepted() {
     assert!(select(&f.view(),&binding(),&policy,a,b,c).is_err());
     let mut source=binding(); source.source_sha256.clear();
     assert!(select(&f.view(),&source,&CropPolicy::proposal_v1(),a,b,c).is_err());
+}
+
+#[test]
+fn context_camera_has_a_minimum_whole_object_span_and_keeps_the_selected_roi() {
+    let f=Fixture::islands(&[(0.,0.,1.,10.),(25.,0.,1.,4.),(99.,9.,1.,0.)]);
+    let mut r=choose(&f);
+    assert_eq!(r.decision,CropDecision::Zoom);
+    let selected=r.bbox_source_mm;
+    let selected_coverage=r.record["coverage"].clone();
+    let original_value_bits:Vec<_>=f.values.iter().map(|v|v.to_bits()).collect();
+    expand_context_viewport(&f.view(),&mut r,views()[1]).unwrap();
+    assert!(r.bbox_source_mm[2]-r.bbox_source_mm[0] >= 30.);
+    assert!(r.bbox_source_mm[0]<=selected[0] && r.bbox_source_mm[2]>=selected[2]);
+    assert!(r.bbox_source_mm[1]<=selected[1] && r.bbox_source_mm[3]>=selected[3]);
+    assert_eq!(r.record["selection_roi"]["bbox_source_mm"],serde_json::json!(selected));
+    assert_eq!(r.record["selection_roi"]["coverage"],selected_coverage);
+    assert_eq!(original_value_bits,f.values.iter().map(|v|v.to_bits()).collect::<Vec<_>>());
+    assert_eq!(r.record["full_raw_colorbar"],serde_json::json!([0.,10.]));
+}
+
+#[test]
+fn context_locator_and_accounting_bind_the_actual_larger_camera() {
+    let f=Fixture::islands(&[(0.,0.,1.,10.),(25.,0.,1.,4.),(99.,9.,1.,0.)]);
+    let mut r=choose(&f);
+    expand_context_viewport(&f.view(),&mut r,views()[1]).unwrap();
+    assert_eq!(r.locator_crop_quad,r.source_to_locator.rectangle(r.bbox_source_mm));
+    let independently_measured=coverage_for_bbox(&f.view(),r.bbox_source_mm,5.).unwrap();
+    near(r.coverage.area_fraction.unwrap(),independently_measured.area_fraction.unwrap());
+    near(r.coverage.area_fraction.unwrap(),2./3.);
+    near(r.record["selection_roi"]["coverage"]["source_area_fraction"].as_f64().unwrap(),1./3.);
+    near(r.coverage.excess_fraction.unwrap(),1.);
+    assert_eq!(r.record["bbox_source_mm"],serde_json::json!(r.bbox_source_mm));
+    assert_eq!(r.record["source_to_panel"],r.source_to_panel.json());
+}
+
+#[test]
+fn context_camera_clamps_at_distal_source_limits_without_losing_peak_ties() {
+    let f=Fixture::islands(&[(99.,9.,1.,10.),(99.5,8.,0.1,10.),(0.,0.,1.,0.)]);
+    let mut r=choose(&f);
+    let peaks=r.record["peak_cell_ids"].clone();
+    expand_context_viewport(&f.view(),&mut r,views()[1]).unwrap();
+    assert!(r.bbox_source_mm[0]>=0. && r.bbox_source_mm[2]<=100.);
+    assert!(r.bbox_source_mm[1]>=0. && r.bbox_source_mm[3]<=10.);
+    assert!(r.bbox_source_mm[2]-r.bbox_source_mm[0]>=30.);
+    assert_eq!(r.record["peak_cell_ids"],peaks);
+    near(r.coverage.excess_fraction.unwrap(),1.);
+}
+
+#[test]
+fn context_camera_does_not_invent_saliency_for_constant_or_missing_fields() {
+    let f=Fixture::islands(&[(0.,0.,1.,7.)]);
+    let mut r=choose(&f);let before=r.record.clone();
+    expand_context_viewport(&f.view(),&mut r,views()[1]).unwrap();
+    assert_eq!(r.decision,CropDecision::Constant);assert_eq!(r.record,before);
+    let mut missing=Fixture::islands(&[(0.,0.,1.,f64::NAN)]);
+    missing.missing[0]=Some("retained neutral observation missing".into());
+    let mut r=choose(&missing);let before=r.record.clone();
+    expand_context_viewport(&missing.view(),&mut r,views()[1]).unwrap();
+    assert_eq!(r.decision,CropDecision::Missing);assert_eq!(r.record,before);
 }

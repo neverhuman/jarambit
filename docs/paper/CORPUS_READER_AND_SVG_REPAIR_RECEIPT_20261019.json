@@ -17,14 +17,14 @@
   "erroneous_v1_receipt_preserved_at": "docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_V1_OBSERVED_ERRONEOUS_20261019.json",
   "source_and_binary_bindings": {
     "crates/paper-artifacts/src/corpus.rs": "2b1cba1c136d6950d7f2efe4ac362224e4d57b16247bb0b463a097bbb332576e",
-    "crates/paper-artifacts/src/population.rs": "1f53640711e208136b58be28a22efb57f3af502f2d37b093a7406ae6eab97d9d",
-    "crates/paper-artifacts/src/publication.rs": "b9ff67a8f58764c0a42e16e77fae3b864e61c93f6e275c4c76736139849e8a1d",
+    "crates/paper-artifacts/src/population.rs": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
+    "crates/paper-artifacts/src/publication.rs": "357077ca454d02bd7d5425aa7f7ddb3e65370dac4c1556ff34ce49d2bb59d918",
     "crates/paper-artifacts/src/lib.rs": "ef7326ca2fe3aeec06a426d6dce545a3c550760a03f7dcf585a5cfd08fdace2b",
     "crates/paper-artifacts/examples/publication_v2_audit.rs": "25184c01ce3ed129fca33aff0cb7a03ad9fbc00b7372c15fe16376227b46aaa0",
     "superseded_stale_debug_binary_sha256": "24f52f1300ee0397dc2c84da7b1bc4ed1309114b63c71a7edd0003a45c3a6f3d",
     "crates/paper-artifacts/src/display.rs": "636bb74fbdd7be6a5db0e307499aed034b58e29f321837426e177405a711e22b",
     "crates/paper-artifacts/src/score_axis.rs": "3c92d2462679d7c8925db44c0a706a88a5fb7d7f46fcb5e4bc8684724f3b4762",
-    "crates/paper-artifacts/src/plate.rs": "118639cf8e9325bc05e68e0c98a37586479b7c1d2e3f783a8296a7fbdde05f2e",
+    "crates/paper-artifacts/src/plate.rs": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e",
     "crates/paper-artifacts/src/assessment.rs": "b184b9a4fac930864a5bee0612b9b634c7fd33def6c418926274c1138d7e7fb9",
     "crates/paper-artifacts/src/battery.rs": "1a727850141d3fcea428f28a67a19d4cbdcf6c934df41376590cf3b004ff93ad",
     "crates/paper-artifacts/src/export_identity.rs": "92c0b4bf4cc3dcb2531f84496580fa9fa4527de452d56b771c59a7c65d4790a9",
@@ -41,7 +41,7 @@
     "crates/paper-artifacts/examples/verify_review_origin.rs": "0b98bc719b4d569ee4842ae58471b585dbffba9f1a7cae7d4d977be188eea13d",
     "crates/paper-artifacts/examples/fixtures/verify-review-origin-neutral.v1.json": "7fdde1b3fe648c63887e3cc34cc476b677f38852ac1c296e9f0249afafc86b57",
     "current_executed_reporting_binary_sha256": "74cfa538b9c374da6c60c510d212ddc270cd3a56a2717d9c0b3ade7b634c5fc8",
-    "README.md": "88431acd73fc403cb07f3d9dae106c3e8ec014780c70d72431d478da732742b5",
+    "README.md": "29ba5844b71be959112883c18d88dc64f266d45d6776baa5c85c462aabc3b4c9",
     "docs/paper/CROSSWALK_SUPPLEMENT.md": "7b2edca9d3acd1e40947304cef6e227f8719f650aa6f368edba82a9c73e0807c",
     "docs/paper/supplement/numerical-methods.tex": "1fe7d935e5ad65ed6dea5600ab4202c107c265233dc71a1a8af171e8ac34d876"
   },
@@ -480,85 +480,41 @@
   ],
   "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. The e67 successor86-test attempt failed84passed/2failed and remains preserved. Corrected successor validation is recorded separately with its exact head. Combined contrast/omission successor controls remain unexecuted at this source/output rebinding; their later exact-head results are separate evidence, not this historical focused-test entry. Root1307 residual successor controls remain unexecuted at this source/output rebinding; actual119 controls remain predecessor evidence, with new affected results separate after completefreeze. Current narrow repair successor report generation exited0 at f1b356a3; no tests or full audit have run at this rebinding. Original70test entry and all preceding exact-head evidence remain historical; producer execution is not validationPASS.",
   "pending_successor_closure": {
-    "authority_path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/ROOT_ACTUAL_Q_PIN_CLEARANCE_CANONICAL_INSTALL_AND_ONE_GENERATION_ORDER_20261020T2019Z.md",
-    "authority_sha256": "f2b47daf44c279cdefdde39e0c3f7fd71a16b5dba3e7c9170202ee11c841b501",
-    "stage": "ACTUAL_26A_REPORT_RASTER_PAIRED_PDFS_GENERATED_EXIT_ZERO;BOOKKEEPING_CLOSURE_AND_FINAL_GATES_PENDING",
-    "previous_source_increment": "bfd49ecac85e2029ac2994ecc6fcbebe6a718bda",
-    "previous_active_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_26AEDA0_20261020.json",
-    "previous_active_receipt_sha256": "bcc4f34ebba71bdd7b6b1906b1e8d97a8841caf9a1ccd3498890da41c7ebe606",
-    "previous_complete_freeze": "73ffef00ddd35e3cf679074c38fe3625aba966f2",
-    "source_bindings_renewed": "Actual23validated crate/fixture pins plus existing documentation pointers statically match; all67 selected generated-output bindings renewed from actual successful outputs.",
-    "actual_producer_binary_status": {
-      "sha256": "74cfa538b9c374da6c60c510d212ddc270cd3a56a2717d9c0b3ade7b634c5fc8",
-      "source_head": "26aeda0ff0fdec5c8cdca111e9624054615a2787",
-      "actual_generation_exit": 0,
-      "actual_terminal_utc": "2026-10-20T20:52:54.414482+00:00",
-      "previous_binary_sha256_preserved": "96c3c79155ca0fe5450735d24433f802fca1f269817f05f32f976a021e96ed2f",
-      "tests_executed": false
-    },
-    "reporting_only_changes": "RootadmittedW25currentcovernav and higher-fitnessQ90..MAX/lower-deficitMIN..Q10 detail only; inclusiveextrema/cutoffties/counts+orderedidentity binding. Globalfullrange axes andpointpaths/positivehelpers unchanged; exactROIleader/packagingdbc work preserved.",
-    "tests_authored_not_executed": {
-      "additional_directed_neutral_unit_controls": 8,
-      "net_authored_controls_since_receiving372": 67,
-      "static_literal_test_attribute_roster": {
-        "src": 112,
-        "integration": 54,
-        "total": 166
+    "authority_path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/ROOT_DIRECT_HUMAN_CONTEXT_ZOOM_AND_VIVID_SCORE_COLORS_20261020T2132Z.md",
+    "authority_sha256": "b848653fc0b3ca1bec9a6eee600f4e6308baadfddc888a4b9360422f9cc8cb00",
+    "stage": "PF07_PF08_SOURCE_PREPARATION_ONLY;ACTUAL_DEPENDENCY_PREFLIGHT_AND_Q_THEN_GENERATION_PENDING",
+    "source_preparation_utc": "2026-10-20T21:41:53.943205+00:00",
+    "previous_complete_freeze": "4213da0ab381bd3b7e0c78c5d240b091672d5a22",
+    "previous_active_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_4213DA0_20261020.json",
+    "previous_active_receipt_sha256": "b0686bf3208852f7ac08314b516f0ce840fe0fefe804a1a810e5b6ff3ee1f813",
+    "actual_source_binding_changes": [
+      {
+        "path": "crates/paper-artifacts/src/population.rs",
+        "previous": "1f53640711e208136b58be28a22efb57f3af502f2d37b093a7406ae6eab97d9d",
+        "actual": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753"
       },
-      "scope": "Sourceinventory only, not actualrunnercasecount/PASS; examplefixturecontrols separate."
-    },
-    "selected_v2_disposition": "Root1935selected-v2partialindexneedsnoexpansionsolelyforappearance; fulloperative manifest+SOURCE/OUTPUT+actualCIaccession andALLreader/freshnessvalidatorsremainmandatory. Noexemption/bypass.",
-    "actual_independent_appearance_pin_admission": {
-      "actual_observation_sha256": "660d9c00b84b3f310b36a2749e4a1b6cadf3accf6668a73b7ecf353314104e78",
-      "independent_Q_receipt_sha256": "eec99fcee928d4d35e38817bd67427cfd1cc02e68ff20c75e26e1feaa990d929",
-      "Q_thread": "01a15499-c47f-7b21-8e3a-6873ef1527c0",
-      "source_head": "6c49e1c888efed2ff2fc65620dabd3a7379b5e1d",
-      "scope": "Actual bound22pins only; no generated image/test/CI/formalapproval",
-      "recipe_sha256": "7d431843aa9a176b51b270eccff385cff92e759d0d54577e6676e2a2708ed44e",
-      "unchanged_expected_facts": "geometry,camera,registration,fields,masks,contributors,palette/map,fivecomponents; onlytwo independently admitted codefile hashes changed"
-    },
-    "actual_metadata_generation": {
-      "authority": "ROOT_EXACT_METADATA_BFD49_SINGLE_JOB_GRANT_20261020.json",
-      "grant_sha256": "56d3f86586a50149f789b715603ac778866c90cc8eb90fdcdf773171c616479b",
-      "body_sha256": "657f09a047835837129eab6fe5385147a820742c1d71a1724033776173c37ffd",
-      "head": "bfd49ecac85e2029ac2994ecc6fcbebe6a718bda",
-      "reporter_PID": 1453211,
-      "reporter_start_ticks": "71361649",
-      "unit": {
-        "unit": "jr-root-meta-f237d70a4ec5a9598b820cc8.scope",
-        "group": "/jarambit.slice/jarambit-evo.slice/jr-root-meta-f237d70a4ec5a9598b820cc8.scope",
-        "invocation": "d7162376a59a4ba0a5d18a86ebe8f9e3",
-        "inode": 92843117,
-        "device": 30
+      {
+        "path": "crates/paper-artifacts/src/publication.rs",
+        "previous": "b9ff67a8f58764c0a42e16e77fae3b864e61c93f6e275c4c76736139849e8a1d",
+        "actual": "357077ca454d02bd7d5425aa7f7ddb3e65370dac4c1556ff34ce49d2bb59d918"
       },
-      "actual_started_utc": "2026-10-20T20:29:23.101520+00:00",
-      "actual_terminal_utc": "2026-10-20T20:29:23.459730+00:00",
-      "exit": 0,
-      "raw_log_sha256": "9d26dc217c607ce5cc9d4dbe630c755a25a6e91952f1a9add399c234869bbc7b",
-      "terminal_sha256": "3fce598a89fdf31cafb26bc930489d5289bf9ba983ecd74a43c622ddc0e6bdab",
-      "generated_metadata": [
-        {
-          "path": "README.md",
-          "sha256": "88431acd73fc403cb07f3d9dae106c3e8ec014780c70d72431d478da732742b5"
-        },
-        {
-          "path": "STATUS.md",
-          "sha256": "30f8daba3457bded135acdc407190234b75f9436dfa6060db9989f98b2b8517e"
-        },
-        {
-          "path": "docs/WHITEPAPER.md",
-          "sha256": "7010699723b316fad07a21fa5c5b8ae743c1b2f05a0b036fc756cb5607c4240e"
-        }
-      ],
-      "scope": "Three existing document generators only; not report-figure generation, new reporting producer binary or tests. Existing previousproducer/testidentities remain historical."
-    },
-    "actual_shared_generation": {
-      "receipt_sha256": "746389da627a6be45c4c86260c09871e43b4ce4340dab50996d8891949e7c50c",
-      "body_sha256": "a21e740d8ec9ccd7b2224f74ef79e55e084dba0e6dba1bcd44107a21a5ab4a07",
-      "grant_sha256": "dc4add8becf6a8512ab350a141e803d89537f5622877058049385dae05f1a5e6",
-      "config_sha256": "a6c1efdfe7fd29caf02c61c5a039bc6906515ddc8e238c5d622a19246663604e",
-      "actual_terminal_sha256": "72548b7f3c9409394255b32746f6a54996ca71138377ad1175d6ec3ac8c7b6a0",
-      "current_final_acceptance": false
-    }
+      {
+        "path": "crates/paper-artifacts/src/plate.rs",
+        "previous": "118639cf8e9325bc05e68e0c98a37586479b7c1d2e3f783a8296a7fbdde05f2e",
+        "actual": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e"
+      },
+      {
+        "path": "README.md",
+        "previous": "88431acd73fc403cb07f3d9dae106c3e8ec014780c70d72431d478da732742b5",
+        "actual": "29ba5844b71be959112883c18d88dc64f266d45d6776baa5c85c462aabc3b4c9"
+      }
+    ],
+    "generated_outputs": "Previous4213 outputs and90f47101 successful generation remain historical/unchanged at this source stage. No PF07/PF08 output or tests claimed.",
+    "previous_executed_reporting_binary_sha256": "74cfa538b9c374da6c60c510d212ddc270cd3a56a2717d9c0b3ade7b634c5fc8",
+    "narrow_changes": "B/D wider deterministic30%context camera andexactPiP, separateunchangedsaliencyROI stats; allpositive rawpoints source-bound originalscoreRGB andhaloed bestcurve withunchangedposition/census/ties.",
+    "strict_hero_source_pins": "plate/population wholefile hashes changed. Actual observation-first preflight then existingRootNONAUTHORQ actual22pin admission required; oldexpectedfacts/recipe not modified or guessed.",
+    "authored_new_neutral_controls": 11,
+    "current_executed_controls": 0,
+    "scientific_inputs_geometry_fields_masks_weights_fitness_unchanged": true
   }
 }

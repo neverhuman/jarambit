@@ -91,7 +91,7 @@ areas $A_i^{\mathrm{crop}}$, the area and excess fractions are
 Both sums use the whole source-eligible set after its original masks;
 missing values are not zeros, and genuine finite zeros remain valid.
 Positive excess is display saliency, not physical energy.
-The versioned policy requires at least $95\%$ of that whole-field excess,
+The saliency-selection policy requires at least $95\%$ of that whole-field excess,
 a bounding-box fraction at most $0.40$ and scale gain at least $1.75$,
 with padding fraction $0.08$. These are display constants, not physical
 or qualification gates; $95\%$ is a policy threshold, not a reported
@@ -99,6 +99,15 @@ achieved coverage. All threshold ties, maxima and disconnected support
 participate. Missing, constant or insufficiently concentrated fields
 retain full context; undefined fractions remain missing.
 No crop-local color normalization is applied.
+For the lateral and torsional B/D panels, a separate display camera expands
+the selected ROI to at least $30\%$ of the whole object's horizontal extent,
+with physical-aspect padding and clamping to the original source bounds.
+This wider camera shows curved distal blade/tip context. Its area and excess
+fractions are recomputed from the exact clipped original triangles; the
+smaller saliency-selection ROI retains its own threshold and statistics.
+The PiP red rectangle is the actual displayed camera, including this context,
+not the smaller selected ROI. The $0.40$ compactness requirement above applies
+to the saliency selection, not to the expanded context camera.
 The source-bound \nolinkurl{docs/paper/generated/plate-smart-crops.v1.json}
 records the actual decision, thresholds, source hashes, clipped areas,
 whole-field integrals and affine crop/locator coordinates for each panel.
@@ -196,6 +205,16 @@ with positive-affine and positive-gap variants for each. The proof index
 \nolinkurl{docs/paper/generated/population/positive/index.v1.json} binds
 their source membership, point accounting, display parameters and outputs.
 This is a set of separate display domains, not a common score calibration.
+The raw-point variants use a navy--teal--yellow--orange--red key for original
+stored scores, with a monotone contrast parameter derived from the declared
+logarithmic coordinate and reversed when needed so that warmer means better
+within the named run/stage/profile. Original-unit colorbar ticks and the exact
+contrast definition accompany each view. Lower screening deficit is better;
+no color scale pools its values with native fitness. Later original-source
+marks can overpaint earlier colors, including overlapping fixed point footprints;
+the key encodes the last painted original score, not density or a pixel average.
+The cumulative-best curve keeps the same coordinates with a dark stroke and
+light halo. These RGB changes do not rescore any observation.
 Its full admitted universe remains $1{,}958{,}803$ numeric observations;
 $1390$ missing screens remain nonnumeric. Screening retains its one-based
 birth-file ordinal rather than an invented generation or shared campaign
