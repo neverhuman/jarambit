@@ -1,0 +1,12 @@
+{
+  "figure": "docs/paper/figures/evidence-architecture.svg",
+  "figure_sha256": "3d1d2599a6de0ecb0a6c467ee879316430ad15051c003532d813cb07ffc6399d",
+  "inputs": {
+    "docs/paper/figures/evidence-architecture.svg": "3d1d2599a6de0ecb0a6c467ee879316430ad15051c003532d813cb07ffc6399d",
+    "docs/paper/sections/study-design.tex": "fe22271817c4a22a9d36e6476f50e6e8a5450066887eb068ca89f9a52023f145",
+    "docs/paper/supplement/cohort-inventory.tex": "9168b67a5b5f3d42c50ad07d671a2f67ff5e5d315c6122f76042820d3df33ce3"
+  },
+  "role": "Authored explanatory diagram bound to retained study coverage; not a generated assessment join",
+  "schema": "jarambit.authored_figure_manifest.v1",
+  "scope": "Separate search denominators and individually assessed export bundles; no per-birth native CAD/assessment or physical validation claim"
+}

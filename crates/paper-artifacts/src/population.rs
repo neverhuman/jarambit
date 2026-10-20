@@ -1624,15 +1624,29 @@ fn render_fitness_progress_svg(
     Ok(s)
 }
 
-/// Generate `docs/paper/figures/inheritance.svg` directly from `inheritance.json`.
-fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
+/// Generate the main ancestry DAG or its supplementary coordinate-detail view from `inheritance.json`.
+fn render_inheritance_svg(inheritance_ledger: &Value, include_details: bool) -> Result<String> {
     let mut s = String::with_capacity(32_000);
-    s.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1160" width="1200" height="1160" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif">"##);
+    let (height, card_height) = if include_details {
+        (1160, 1128)
+    } else {
+        (744, 712)
+    };
+    s.push_str(&format!(r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 {height}" width="1200" height="{height}" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif">"##));
     s.push('\n');
-    s.push_str(r##"<rect width="1200" height="1160" fill="#f8fafc"/>"##);
-    s.push_str(r##"<rect x="20" y="16" width="1160" height="1128" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>"##);
-    s.push_str(r##"<text x="40" y="48" font-size="24" font-weight="700" fill="#0f172a">Recorded 3-Hop Ancestry DAG &amp; 128-Gene Differences (Individual 1095, Run 1)</text>"##);
-    s.push_str(r##"<text x="40" y="78" font-size="21" fill="#475569">7 birth nodes &amp; 7 directed 3-hop edges (+ 1 dashed 4th-hop closure edge 174→299); Individual 413 reused</text>"##);
+    s.push_str(&format!(
+        r##"<rect width="1200" height="{height}" fill="#f8fafc"/>"##
+    ));
+    s.push_str(&format!(r##"<rect x="20" y="16" width="1160" height="{card_height}" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>"##));
+    if include_details {
+        s.push_str(r##"<text x="40" y="48" font-size="24" font-weight="700" fill="#0f172a">Recorded 3-Hop Ancestry DAG &amp; 128-Gene Differences (Individual 1095, Run 1)</text>"##);
+        s.push_str(r##"<text x="40" y="78" font-size="21" fill="#475569">7 birth nodes &amp; 7 directed 3-hop edges (+ 1 dashed 4th-hop closure edge 174→299); Individual 413 reused</text>"##);
+    } else {
+        s.push_str(r##"<text x="40" y="48" font-size="24" font-weight="700" fill="#0f172a">Recorded Ancestry — Individual 1095, Run 1</text>"##);
+        s.push_str(r##"<text x="40" y="78" font-size="21" fill="#475569">7 births; arrows run parent → child. Individual 413 is reused.</text>"##);
+    }
+
+    s.push_str(r##"<defs><marker id="parent-child-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#334155"/></marker></defs>"##);
 
     // Top panel: DAG (x = 40..1160, y = 98..636)
     s.push_str(r##"<rect x="40" y="98" width="1120" height="538" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
@@ -1672,7 +1686,11 @@ fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
             node_lines.insert(
                 id,
                 (
-                    format!("Individual {id} (Gen {gen}, {fit:+.5}){role_tag}"),
+                    if include_details {
+                        format!("Individual {id} (Gen {gen}, {fit:+.5}){role_tag}")
+                    } else {
+                        format!("Individual {id} (Gen {gen}){role_tag}")
+                    },
                     full_op.to_string(),
                 ),
             );
@@ -1686,21 +1704,23 @@ fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
             let chg = e["changed_f64_gene_count"].as_u64().unwrap_or(0);
             if let (Some(&(x1, y1)), Some(&(x2, y2))) = (pos_map.get(&p), pos_map.get(&c)) {
                 s.push_str(&format!(
-                    r##"<line id="edge-{p}-{c}" data-hops="3" x1="{}" y1="{}" x2="{}" y2="{}" stroke="#334155" stroke-width="2.4"/>"##,
-                    svg_coord(x1), svg_coord(y1 + 28.0), svg_coord(x2), svg_coord(y2 - 28.0)
+                    r##"<line id="edge-{p}-{c}" data-hops="3" marker-end="url(#parent-child-arrow)" x1="{}" y1="{}" x2="{}" y2="{}" stroke="#334155" stroke-width="2.4"/>"##,
+                    svg_coord(x1), svg_coord(y1 + 28.0), svg_coord(x2), svg_coord(y2 - 35.0)
                 ));
-                let (lx, ly) = match (p, c) {
-                    (174, 245) => (0.5 * (x1 + x2) - 24.0, 0.5 * (y1 + y2) + 5.0),
-                    (413, 526) => (0.5 * (x1 + x2) - 36.0, 0.5 * (y1 + y2) + 6.0),
-                    (392, 526) => (0.5 * (x1 + x2) + 32.0, 0.5 * (y1 + y2) + 6.0),
-                    (413, 1095) => (0.5 * (x1 + x2) - 42.0, 0.5 * (y1 + y2) + 8.0),
-                    (526, 1095) => (0.5 * (x1 + x2) + 50.0, 0.5 * (y1 + y2) + 8.0),
-                    _ => (0.5 * (x1 + x2), 0.5 * (y1 + y2) + 6.0),
-                };
-                s.push_str(&format!(
-                    r##"<rect x="{}" y="{}" width="128" height="24" rx="4" fill="#f8fafc" fill-opacity="0.94"/><text x="{}" y="{}" text-anchor="middle" font-size="21" font-weight="600" fill="#0f766e">Δ={chg}/128</text>"##,
-                    svg_coord(lx - 64.0), svg_coord(ly - 19.0), svg_coord(lx), svg_coord(ly)
-                ));
+                if include_details {
+                    let (lx, ly) = match (p, c) {
+                        (174, 245) => (0.5 * (x1 + x2) - 24.0, 0.5 * (y1 + y2) + 5.0),
+                        (413, 526) => (0.5 * (x1 + x2) - 36.0, 0.5 * (y1 + y2) + 6.0),
+                        (392, 526) => (0.5 * (x1 + x2) + 32.0, 0.5 * (y1 + y2) + 6.0),
+                        (413, 1095) => (0.5 * (x1 + x2) - 42.0, 0.5 * (y1 + y2) + 8.0),
+                        (526, 1095) => (0.5 * (x1 + x2) + 50.0, 0.5 * (y1 + y2) + 8.0),
+                        _ => (0.5 * (x1 + x2), 0.5 * (y1 + y2) + 6.0),
+                    };
+                    s.push_str(&format!(
+                        r##"<rect x="{}" y="{}" width="128" height="24" rx="4" fill="#f8fafc" fill-opacity="0.94"/><text x="{}" y="{}" text-anchor="middle" font-size="21" font-weight="600" fill="#0f766e">Δ={chg}/128</text>"##,
+                        svg_coord(lx - 64.0), svg_coord(ly - 19.0), svg_coord(lx), svg_coord(ly)
+                    ));
+                }
             }
         }
     }
@@ -1712,15 +1732,17 @@ fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
             let chg = e["changed_f64_gene_count"].as_u64().unwrap_or(0);
             if let (Some(&(x1, y1)), Some(&(x2, y2))) = (pos_map.get(&p), pos_map.get(&c)) {
                 s.push_str(&format!(
-                    r##"<line id="edge-{p}-{c}-4th-hop" data-hops="4" x1="{}" y1="{}" x2="{}" y2="{}" stroke="#64748b" stroke-width="2.0" stroke-dasharray="5,4"/>"##,
-                    svg_coord(x1), svg_coord(y1 + 28.0), svg_coord(x2), svg_coord(y2 - 28.0)
+                    r##"<line id="edge-{p}-{c}-4th-hop" data-hops="4" marker-end="url(#parent-child-arrow)" x1="{}" y1="{}" x2="{}" y2="{}" stroke="#64748b" stroke-width="2.0" stroke-dasharray="5,4"/>"##,
+                    svg_coord(x1), svg_coord(y1 + 28.0), svg_coord(x2), svg_coord(y2 - 35.0)
                 ));
-                let lx4 = 0.5 * (x1 + x2) + 50.0;
-                let ly4 = 0.5 * (y1 + y2) + 5.0;
-                s.push_str(&format!(
-                    r##"<rect x="{}" y="{}" width="230" height="24" rx="4" fill="#f8fafc" fill-opacity="0.94"/><text x="{}" y="{}" text-anchor="middle" font-size="21" font-weight="600" fill="#475569">Δ={chg}/128 (4th hop)</text>"##,
-                    svg_coord(lx4 - 115.0), svg_coord(ly4 - 19.0), svg_coord(lx4), svg_coord(ly4)
-                ));
+                if include_details {
+                    let lx4 = 0.5 * (x1 + x2) + 50.0;
+                    let ly4 = 0.5 * (y1 + y2) + 5.0;
+                    s.push_str(&format!(
+                        r##"<rect x="{}" y="{}" width="230" height="24" rx="4" fill="#f8fafc" fill-opacity="0.94"/><text x="{}" y="{}" text-anchor="middle" font-size="21" font-weight="600" fill="#475569">Δ={chg}/128 (4th hop)</text>"##,
+                        svg_coord(lx4 - 115.0), svg_coord(ly4 - 19.0), svg_coord(lx4), svg_coord(ly4)
+                    ));
+                }
             }
         }
     }
@@ -1753,36 +1775,43 @@ fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
         ));
     }
 
-    // Bottom panel: 128-gene diff bars + lineage disclosure (x = 40..1160, y = 650..1126)
-    s.push_str(r##"<rect x="40" y="650" width="1120" height="476" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
-    s.push_str(r##"<text x="60" y="684" font-size="22" font-weight="700" fill="#0f172a">Directed Edge Changes Across 128 Numeric Coordinates (Δ != 0)</text>"##);
+    if include_details {
+        // Bottom panel: 128-gene diff bars + lineage disclosure (x = 40..1160, y = 650..1126)
+        s.push_str(r##"<rect x="40" y="650" width="1120" height="476" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
+        s.push_str(r##"<text x="60" y="684" font-size="22" font-weight="700" fill="#0f172a">Directed Edge Changes Across 128 Numeric Coordinates (Δ != 0)</text>"##);
 
-    if let Some(edges) = inheritance_ledger["induced_subgraph_parent_child_gene_diffs"].as_array() {
-        for (i, e) in edges.iter().enumerate() {
-            let p = e["parent_id"].as_u64().unwrap_or(0);
-            let c = e["child_id"].as_u64().unwrap_or(0);
-            let chg = e["changed_f64_gene_count"].as_u64().unwrap_or(0);
-            let iden = e["identical_f64_gene_count"].as_u64().unwrap_or(0);
-            let l2 = e["l2_gene_distance"].as_f64().unwrap_or(0.0);
-            let within3 = e["within_3_hop_edge_horizon"].as_bool().unwrap_or(true);
-            let ry = 702.0 + (i as f64) * 36.0;
-            let w_chg = (chg as f64 / 128.0) * 320.0;
-            let w_id = (iden as f64 / 128.0) * 320.0;
-            let edge_lbl = if within3 {
-                format!("{p} → {c}")
-            } else {
-                format!("{p} → {c}*")
-            };
-            s.push_str(&format!(
-                r##"<text x="60" y="{}" font-size="21" font-weight="600" fill="#1e293b">{}</text><rect x="210" y="{}" width="{}" height="22" fill="#0d9488"/><rect x="{}" y="{}" width="{}" height="22" fill="#cbd5e1"/><text x="550" y="{}" font-size="21" fill="#334155">{chg}/128 changed (L2 = {l2:.3})</text>"##,
-                svg_coord(ry + 18.0), xml_escape(&edge_lbl), svg_coord(ry), svg_coord(w_chg), svg_coord(210.0 + w_chg), svg_coord(ry), svg_coord(w_id), svg_coord(ry + 18.0)
-            ));
+        if let Some(edges) =
+            inheritance_ledger["induced_subgraph_parent_child_gene_diffs"].as_array()
+        {
+            for (i, e) in edges.iter().enumerate() {
+                let p = e["parent_id"].as_u64().unwrap_or(0);
+                let c = e["child_id"].as_u64().unwrap_or(0);
+                let chg = e["changed_f64_gene_count"].as_u64().unwrap_or(0);
+                let iden = e["identical_f64_gene_count"].as_u64().unwrap_or(0);
+                let l2 = e["l2_gene_distance"].as_f64().unwrap_or(0.0);
+                let within3 = e["within_3_hop_edge_horizon"].as_bool().unwrap_or(true);
+                let ry = 702.0 + (i as f64) * 36.0;
+                let w_chg = (chg as f64 / 128.0) * 320.0;
+                let w_id = (iden as f64 / 128.0) * 320.0;
+                let edge_lbl = if within3 {
+                    format!("{p} → {c}")
+                } else {
+                    format!("{p} → {c}*")
+                };
+                s.push_str(&format!(
+                    r##"<text x="60" y="{}" font-size="21" font-weight="600" fill="#1e293b">{}</text><rect x="210" y="{}" width="{}" height="22" fill="#0d9488"/><rect x="{}" y="{}" width="{}" height="22" fill="#cbd5e1"/><text x="550" y="{}" font-size="21" fill="#334155">{chg}/128 changed (L2 = {l2:.3})</text>"##,
+                    svg_coord(ry + 18.0), xml_escape(&edge_lbl), svg_coord(ry), svg_coord(w_chg), svg_coord(210.0 + w_chg), svg_coord(ry), svg_coord(w_id), svg_coord(ry + 18.0)
+                ));
+            }
         }
-    }
 
-    s.push_str(r##"<text x="60" y="1015" font-size="21" fill="#475569">*174 → 299 is the 4th-hop induced closure edge; Ti-6Al-4V material (col 145) unchanged on all 8 edges.</text>"##);
-    s.push_str(r##"<text x="60" y="1048" font-size="21" fill="#334155">• Run 1 (1,984 births): 128 roots + 938 1-parent mutations + 918 2-parent crossovers.</text>"##);
-    s.push_str(r##"<text x="60" y="1080" font-size="21" fill="#334155">• Screening (3,649 proposals) &amp; Runs 2–11 (1,954,560 rows): parent_ids = unavailable_in_source.</text>"##);
+        s.push_str(r##"<text x="60" y="1015" font-size="21" fill="#475569">*174 → 299 is the 4th-hop induced closure edge; Ti-6Al-4V material (col 145) unchanged on all 8 edges.</text>"##);
+        s.push_str(r##"<text x="60" y="1048" font-size="21" fill="#334155">• Run 1 (1,984 births): 128 roots + 938 1-parent mutations + 918 2-parent crossovers.</text>"##);
+        s.push_str(r##"<text x="60" y="1080" font-size="21" fill="#334155">• Screening (3,649 proposals) &amp; Runs 2–11 (1,954,560 rows): parent_ids = unavailable_in_source.</text>"##);
+    } else {
+        s.push_str(r##"<text x="40" y="672" font-size="21" fill="#475569">Dashed arrow 174 → 299: induced fourth-hop closure outside the three-hop traversal.</text>"##);
+        s.push_str(r##"<text x="40" y="706" font-size="21" fill="#334155">Stored scores and numeric-coordinate differences are retained in the supplement.</text>"##);
+    }
     s.push_str("</svg>\n");
     Ok(s)
 }
@@ -1790,7 +1819,7 @@ fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
 /// Render high-contrast first-page hero SVG (`SC-DEC-183AL` Item 3) directly from retained
 /// `cert_pipeline_r01_p14_c02.stl` (`90,000` triangles) and `cert_pipeline_r01_p14_c02_D1.json`
 /// (`25,209` triangles) under proper `SO(3)` pose (`det = +1.0`) with crisp dark silhouette/hole
-/// contours and readable `21–26px` typography.
+/// contours and readable `28–34px` typography.
 pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     use std::fmt::Write as _;
     const D1_REL: &str = "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json";
@@ -1875,14 +1904,14 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
         *v = ((*v - c_min) / (c_max - c_min).max(1e-12)).clamp(0.0, 1.0);
     }
 
-    // High-contrast 6-stop sequential LUT: midnight navy -> royal blue -> deep teal -> gold -> vivid orange -> deep crimson
+    // Sequential light-to-dark blue LUT; the same unchanged index drives surface and key.
     const HERO_LUT: [[f64; 3]; 6] = [
-        [8.0, 28.0, 74.0],
-        [15.0, 76.0, 129.0],
-        [13.0, 148.0, 136.0],
-        [234.0, 179.0, 8.0],
-        [234.0, 88.0, 12.0],
-        [153.0, 27.0, 27.0],
+        [239.0, 243.0, 255.0],
+        [198.0, 219.0, 239.0],
+        [158.0, 202.0, 225.0],
+        [107.0, 174.0, 214.0],
+        [49.0, 130.0, 189.0],
+        [8.0, 81.0, 156.0],
     ];
     let eval_lut = |t: f64| -> [f64; 3] {
         let u = t.clamp(0.0, 1.0) * 5.0;
@@ -2044,8 +2073,8 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     s.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 680" width="1600" height="680" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif">"##);
     s.push('\n');
     s.push_str(r##"<rect width="1600" height="680" fill="#ffffff"/>"##);
-    s.push_str(r##"<text x="36" y="44" font-size="25" font-weight="700" fill="#0f172a">Individual 2000 — Retained 5-Map Relative Composite</text>"##);
-    s.push_str(r##"<text x="36" y="72" font-size="21" fill="#334155">Color shows a dimensionless, within-candidate summary of five retained response maps.</text>"##);
+    s.push_str(r##"<text x="36" y="44" font-size="34" font-weight="700" fill="#0f172a">Individual 2000 — Relative Composite of Five Responses</text>"##);
+    s.push_str(r##"<text x="36" y="80" font-size="28" fill="#334155">Dimensionless summary within this candidate; lighting shows surface shape.</text>"##);
 
     // Draw high-contrast 3D STL surface triangles
     for (_, [s0, s1, s2], [r, g, b]) in &stl_vis {
@@ -2080,14 +2109,14 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
         let r_px = 4.0 * scale;
         let _ = writeln!(
             s,
-            r##"<circle cx="{tx:.2}" cy="{ty:.2}" r="{r_px:.2}" fill="none" stroke="#b91c1c" stroke-width="2.0" stroke-dasharray="5,4"/><text x="{:.2}" y="{:.2}" text-anchor="end" font-size="21" font-weight="600" fill="#991b1b">4.0 mm Tip Submodel ROI</text>"##,
+            r##"<circle cx="{tx:.2}" cy="{ty:.2}" r="{r_px:.2}" fill="none" stroke="#b91c1c" stroke-width="2.0" stroke-dasharray="5,4"/><text x="{:.2}" y="{:.2}" text-anchor="end" font-size="28" font-weight="600" fill="#991b1b">4.0 mm tip region</text>"##,
             tx - r_px - 10.0,
             ty + 6.0
         );
     }
 
     // High-contrast sequential colorbar + readable dark legend & scale bar
-    s.push_str(r##"<text x="36" y="596" font-size="21" font-weight="700" fill="#0f172a">5-Map Relative Composite Index [0, 1] (env_vm, lat, pry, ring, twist)</text>"##);
+    s.push_str(r##"<text x="36" y="596" font-size="28" font-weight="700" fill="#0f172a">Relative composite index [0, 1]</text>"##);
     let cb_x0 = 36.0_f64;
     let cb_w = 640.0_f64;
     let n_steps = 80usize;
@@ -2103,11 +2132,11 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     }
     s.push_str(r##"<rect x="36" y="606" width="640" height="18" fill="none" stroke="#0f172a" stroke-width="1.4"/>"##);
     for (frac, lbl, anchor) in [
-        (0.0, "0.00 (Low)", "start"),
+        (0.0, "0.00", "start"),
         (0.28, "0.25", "middle"),
         (0.50, "0.50", "middle"),
         (0.72, "0.75", "middle"),
-        (1.00, "1.00 (Peak)", "end"),
+        (1.00, "1.00", "end"),
     ] {
         let tick_x = cb_x0
             + (match lbl {
@@ -2118,7 +2147,7 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
         let text_x = cb_x0 + frac * cb_w;
         let _ = write!(
             s,
-            "<line x1=\"{tick_x:.2}\" y1=\"624\" x2=\"{tick_x:.2}\" y2=\"630\" stroke=\"#0f172a\" stroke-width=\"1.4\"/><text x=\"{text_x:.2}\" y=\"650\" text-anchor=\"{anchor}\" font-size=\"21\" font-weight=\"600\" fill=\"#0f172a\">{lbl}</text>"
+            "<line x1=\"{tick_x:.2}\" y1=\"624\" x2=\"{tick_x:.2}\" y2=\"630\" stroke=\"#0f172a\" stroke-width=\"1.4\"/><text x=\"{text_x:.2}\" y=\"650\" text-anchor=\"{anchor}\" font-size=\"28\" font-weight=\"600\" fill=\"#0f172a\">{lbl}</text>"
         );
     }
     let bar_25mm = 25.0 * scale;
@@ -2126,10 +2155,13 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     let bx0 = bx1 - bar_25mm;
     let _ = writeln!(
         s,
-        r##"<text x="{:.2}" y="596" text-anchor="middle" font-size="21" font-weight="700" fill="#0f172a">25 mm CAD Scale</text><line x1="{bx0:.2}" y1="615" x2="{bx1:.2}" y2="615" stroke="#0f172a" stroke-width="3.0"/><line x1="{bx0:.2}" y1="607" x2="{bx0:.2}" y2="623" stroke="#0f172a" stroke-width="2.4"/><line x1="{bx1:.2}" y1="607" x2="{bx1:.2}" y2="623" stroke="#0f172a" stroke-width="2.4"/>"##,
+        r##"<text x="{:.2}" y="596" text-anchor="middle" font-size="28" font-weight="700" fill="#0f172a">25 mm</text><line x1="{bx0:.2}" y1="615" x2="{bx1:.2}" y2="615" stroke="#0f172a" stroke-width="3.0"/><line x1="{bx0:.2}" y1="607" x2="{bx0:.2}" y2="623" stroke="#0f172a" stroke-width="2.4"/><line x1="{bx1:.2}" y1="607" x2="{bx1:.2}" y2="623" stroke="#0f172a" stroke-width="2.4"/>"##,
         0.5 * (bx0 + bx1)
     );
-    s.push_str(r##"<text x="1554" y="650" text-anchor="end" font-size="21" fill="#334155">Assessed = 1, Qualified = 0 (Cohort 3 births lack Stage-2 CAD assessments)</text>"##);
+    s.push_str(
+        r##"<text x="720" y="596" font-size="28" fill="#334155">Unshaded color key</text>"##,
+    );
+    s.push_str(r##"<text x="1554" y="650" text-anchor="end" font-size="28" fill="#334155">Assessed 1; qualified 0</text>"##);
     s.push_str("</svg>\n");
     Ok(s)
 }
@@ -2302,7 +2334,8 @@ pub fn generate_v2_outputs(
         W411C3_FITNESS_CURVE_SHA256,
         &gen800_density,
     )?;
-    let svg_inheritance = render_inheritance_svg(&inheritance_ledger)?;
+    let svg_inheritance = render_inheritance_svg(&inheritance_ledger, false)?;
+    let svg_inheritance_details = render_inheritance_svg(&inheritance_ledger, true)?;
     let svg_hero = render_hero_exact_cad_svg(root)?;
 
     out.insert(
@@ -2324,6 +2357,10 @@ pub fn generate_v2_outputs(
     );
     out.insert("docs/paper/figures/inheritance.svg".into(), svg_inheritance);
     out.insert(
+        "docs/paper/figures/inheritance-details.svg".into(),
+        svg_inheritance_details,
+    );
+    out.insert(
         "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg".into(),
         svg_hero,
     );
@@ -2335,6 +2372,7 @@ pub fn generate_v2_outputs(
         "docs/paper/figures/population-latest.svg",
         "docs/paper/figures/fitness-progress.svg",
         "docs/paper/figures/inheritance.svg",
+        "docs/paper/figures/inheritance-details.svg",
         "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg",
     ]
     .iter()
@@ -2483,6 +2521,7 @@ pub fn generate_v2_outputs(
             "docs/paper/generated/population/point-rendering.v1.json": point_receipt_sha,
             "docs/paper/figures/fitness-progress.svg": fig_hashes["docs/paper/figures/fitness-progress.svg"],
             "docs/paper/figures/inheritance.svg": fig_hashes["docs/paper/figures/inheritance.svg"],
+            "docs/paper/figures/inheritance-details.svg": fig_hashes["docs/paper/figures/inheritance-details.svg"],
             "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg": fig_hashes["docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg"],
             "docs/paper/generated/shared_projection.v2.json": shared_proj_sha,
             "docs/paper/generated/overview.md": overview_sha
@@ -2696,8 +2735,11 @@ mod tests {
         ));
 
         let inh_svg = &out["docs/paper/figures/inheritance.svg"];
-        assert!(inh_svg.contains("Individual 413 (Gen 3, +1.15296) [reused]"));
-        assert!(inh_svg.contains("Individual 526 (Gen 4, +1.15563)"));
+        assert!(inh_svg.contains("Individual 413 (Gen 3) [reused]"));
+        assert!(inh_svg.contains("Individual 526 (Gen 4)"));
+        let inh_details = &out["docs/paper/figures/inheritance-details.svg"];
+        assert!(inh_details.contains("Individual 413 (Gen 3, +1.15296) [reused]"));
+        assert!(inh_details.contains("Individual 526 (Gen 4, +1.15563)"));
         assert!(inh_svg.contains("Archive mutation"));
         assert!(inh_svg.contains("Crossover + mutation"));
         assert!(inh_svg.contains(r#"id="edge-413-526""#));

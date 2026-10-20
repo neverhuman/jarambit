@@ -29,6 +29,8 @@ Jarambit is a computational design research system linking a geometric represent
 2. Historical ancestry exposes reuse, and the highest stored historical birth score belongs to a candidate that fails a later internal assessment. This example does not establish a pairwise rank reversal or a general failure rate.
 3. Selected solid-model observables agree within 0.05% between scikit-fem/PyAMG and DOLFINx/PETSc on a shared mesh. Separate plate sequences do not admit the retained extrapolated-error estimates. These observations support different conclusions.
 
+[Separate retained evidence paths](docs/paper/figures/evidence-architecture.svg) distinguish search observations from assessed exports.
+
 ![Recorded shared ancestry in the historical cohort](docs/paper/figures/inheritance.svg)
 
 [Results and scope](docs/paper/sections/08-results.tex) · [Numerical interpretation](docs/paper/sections/07-verification.tex)

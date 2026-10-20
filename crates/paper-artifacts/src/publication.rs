@@ -1196,6 +1196,10 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     )?;
     crop_semantics["source_svg_sha256"] = json!(crop_sha);
     out.insert(
+        "docs/paper/generated/crop-source-hash.tex".into(),
+        format!("\\nolinkurl{{{crop_sha}}}%\n"),
+    );
+    out.insert(
         "docs/paper/generated/crop-semantics.v1.json".into(),
         serde_json::to_string_pretty(&crop_semantics)? + "\n",
     );
@@ -1687,6 +1691,29 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "docs/tests/visuals.v1.json".into(),
         serde_json::to_string_pretty(&visual_coverage)? + "\n",
     );
+    let architecture_path = "docs/paper/figures/evidence-architecture.svg";
+    let mut architecture_inputs = BTreeMap::new();
+    for path in [
+        architecture_path,
+        "docs/paper/sections/study-design.tex",
+        "docs/paper/supplement/cohort-inventory.tex",
+    ] {
+        let hash = digest(&fs::read(safe_path(&root, path)?)?);
+        inputs.insert(path.to_string(), hash.clone());
+        architecture_inputs.insert(path.to_string(), hash);
+    }
+    let architecture_manifest = json!({
+        "schema":"jarambit.authored_figure_manifest.v1",
+        "figure":architecture_path,
+        "figure_sha256":architecture_inputs[architecture_path],
+        "inputs":architecture_inputs,
+        "role":"Authored explanatory diagram bound to retained study coverage; not a generated assessment join",
+        "scope":"Separate search denominators and individually assessed export bundles; no per-birth native CAD/assessment or physical validation claim"
+    });
+    out.insert(
+        "docs/paper/generated/evidence-architecture.svg.manifest.json".into(),
+        serde_json::to_string_pretty(&architecture_manifest)? + "\n",
+    );
     crate::population::generate_v2_outputs(&root, &mut out, &mut inputs)?;
     let outputs = out
         .iter()
@@ -1695,6 +1722,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     let manifest = json!({"schema":"jarambit.publication_manifest.v1","baseline":BASE,"inputs":inputs,"outputs":outputs,"generation":"cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts","scope":"Documentation only; source hashes establish identity, not physical truth",
     "visual_coverage":"docs/tests/visuals.v1.json",
     "figures": {
+        "evidence-architecture.svg":{"source":"docs/paper/figures/evidence-architecture.svg","manifest":"docs/paper/generated/evidence-architecture.svg.manifest.json","scope":"Authored reporting diagram, not a generated join or population-wide assessment rate"},
         "weighted-runs.svg":{"contract":"docs/paper/weighted-inputs.v1.json","projection_receipt":"docs/paper/generated/weighted-runs.json","membership":"six admitted source files / fifteen generation summaries / thirty saved score observations","selectors":["/generations/*/generation","/generations/*/round_best_fitness","/generations/*/hall_of_fame_best_so_far","/generations/*/best_so_far_label","/generations/*/round_file","/best_so_far/label","/best_so_far/ultralight_weighted_fitness"],"scope":"retained reporting summaries only; stage/scorer lineage not established, no homogeneous-convergence or independent-replication claim"},
         "export-identity.svg":{"contract":"docs/paper/export-inputs.v1.json","projection_receipt":"docs/paper/generated/export-identity.json","selectors":["/cad","/genome_sha256","/genome_csv","/solids","/valid","/vertices","/triangles"],"scope":"stored STEP token counts, original exporter census and BRep observations plus Blender import metadata; no fresh validation or qualification"},
         "lineage.svg":{"contract":"docs/paper/lineage-inputs.v1.json","projection_receipt":"docs/paper/generated/lineage.json","selectors":["/*/id","/*/gen","/*/fit","/*/parents","/*/op","/*/op_version","/*/fem_status","/*/legal"],"membership":"two recorded parent hops from highest historical stored fit, with original parent-list order","scope":"layout does not encode elapsed time or fitness; no inferred inheritance or best-geometry identity"},
@@ -1710,7 +1738,8 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "population-newer.svg":{"contract":"docs/paper/JR_EI_P1_T05_NEWER_BIRTHS_SCREENS_JOIN_RECEIPT_20261019.json","projection_receipt":"docs/paper/generated/population/newer_events.json","membership":"57 birth files across 24 run directories (3,649 births = 2,259 1-based joined screens + 1,390 unscreened births); proportional 0..3,200 common scale"},
         "population-latest.svg":{"contract":"artifacts/versioned-evolution-archives-gen800-population-v1/index.gen800_population.sha256.json","projection_receipt":"docs/paper/generated/population/point-rendering.v1.json","membership":"all 1,954,560 admitted native rows as direct neutral point operations, plus separate 1,984 historical birth and 2,259 numeric screen panels; 1,390 unknown proposals have a nonnumeric coverage row","vertical_transform":"asinh with original-value ticks; full observed domain retained without clipping or jitter","class_handling":"neutral occupancy, no class-majority substitution; counts/IDs/extrema/overlap in point receipt"},
         "fitness-progress.svg":{"contract":"docs/paper/data/score_profiles.v1.json","projection_receipt":"docs/paper/generated/shared_projection.v2.json","membership":"three separate numerical-axis panels for Cohort 1 (Run 1, 17-gen), Cohort 2 (weighted summaries), and Cohort 3 (Run 2..Run 11, 10 retained 800-gen runs qd_fit)"},
-        "inheritance.svg":{"contract":"docs/paper/generated/population/inheritance.json","projection_receipt":"docs/paper/generated/population/inheritance.json","membership":"7-node 3-hop ancestry DAG and 128-coordinate gene diffs around Individual 1095 (Cohort 1, Run 1); Cohort 2/3 parent_ids unavailable_in_source"}
+        "inheritance-details.svg":{"contract":"docs/paper/generated/population/inheritance.json","projection_receipt":"docs/paper/generated/population/inheritance.json","scope":"Supplementary raw coordinate differences and mixed-unit norms; not normalized or physical distance"},
+        "inheritance.svg":{"contract":"docs/paper/generated/population/inheritance.json","projection_receipt":"docs/paper/generated/population/inheritance.json","membership":"7-node 3-hop ancestry DAG plus recorded induced fourth-hop closure around Individual 1095; compact IDs, generations and operations; exact coordinate differences retained in unchanged ledger and supplementary view"}
     }});
     out.insert(
         "docs/paper/generated/manifest.json".into(),

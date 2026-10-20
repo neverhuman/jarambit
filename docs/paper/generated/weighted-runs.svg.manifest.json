@@ -2,7 +2,7 @@
   "figure": "docs/paper/generated/weighted-runs.svg",
   "figure_sha256": "b1b893b89ef81eeff4beba2b6690cca5ceaa166eccc9660fc26305c725faaf59",
   "inputs": {
-    "crates/paper-artifacts/src/publication.rs": "45443212259b7b2fd9cd457fb6a8a0d6b34125cdf1b12e54cbfb051080a3902a",
+    "crates/paper-artifacts/src/publication.rs": "ac926a17c00caaa1ba6a02b1a0d633b2af4bd2c02c122e03d7792787be9380f5",
     "crates/paper-artifacts/src/weighted_runs.rs": "93de2c53ff1195089032a4ce3c5ea99d7fb24a83b652b8c9d947322f0331a6ad",
     "docs/paper/weighted-inputs.v1.json": "2e17ed88061e98d00bb7a1f8ca1df28fe26ec41fc7657c23d65f8d1047815f3e",
     "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe1/w501_ul/fitness_curve.json": "f642f4dd04554e174622dee330a09338ecd1d263120df29aad4f9cf7fce7bb0b",

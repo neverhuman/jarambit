@@ -30,7 +30,7 @@
 <text x="635" y="345" font-size="21">Spine bending</text>
 <path id="hm_spine_sf" d="M835,338 L844.6422555543201,338" stroke="#007e87" stroke-width="6" data-value="0.22423850126325828" data-limit="5"/>
 <text x="1062" y="345" font-size="21">0.2242</text>
-<text x="635" y="397" font-size="21">Ring traction</text>
+<text x="635" y="397" font-size="21">Ring-back overload</text>
 <path id="hm_ringback_sf" d="M835,390 L1038.2080887209872,390" stroke="#007e87" stroke-width="6" data-value="4.725769505139237" data-limit="5"/>
 <text x="1062" y="397" font-size="21">4.7258</text>
 <path d="M835,435 L835,443" stroke="#526873" stroke-width="1.5" fill="none"/>
@@ -41,7 +41,7 @@
 <text x="956" y="470" font-size="21">3</text>
 <path d="M1050,435 L1050,443" stroke="#526873" stroke-width="1.5" fill="none"/>
 <text x="1042" y="470" font-size="21">5</text>
-<text x="635" y="516" font-size="21">Separate load cases; no spatial fatigue field.</text>
+<text x="635" y="516" font-size="21">Factors: larger = more margin; 1 = named load.</text>
 <text x="35" y="630" font-size="23">C / Certification vs. strict scalars</text>
 <text x="35" y="676" font-size="22">Out-of-plane plate bending capacity (N)</text>
 <text x="40" y="717" font-size="21">Cert. minimum</text>
@@ -94,5 +94,5 @@
 <text x="1065" y="1027" font-size="21">0.3307</text>
 <text x="635" y="1055" font-size="21">Failed branch: base -1.0 - pen 4.6191 + 0.1·s_mass.</text>
 <text x="20" y="1118" font-size="22">Saved structural observations do not establish contact calibration, service life, or qualification.</text>
-<text x="20" y="1154" font-size="21">All panels bind Individual 2000; 20-term weighted profile of Individual 2002 (Run 31) is in fitness.svg.</text>
+<text x="20" y="1154" font-size="21">Individual 2000 only; Individual 2002 has a separate weighted reporting profile.</text>
 </g></svg>

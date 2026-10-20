@@ -23,7 +23,7 @@
 <circle id="seq_ratio-2" cx="518" cy="223.41338811213802" r="6" fill="#007e87" data-value="1.594832648598275" data-h="2"/>
 <text x="482" y="209.41338811213802" font-size="21">1.5948</text>
 <text x="502" y="384" font-size="21">2</text>
-<text x="98" y="418" font-size="21">h = sqrt(max triangle area), mm</text>
+<text x="98" y="418" font-size="21">h = sqrt(max triangle area), mm; finer ←</text>
 <text x="35" y="452" font-size="21">No admitted GCI: nonpositive order</text>
 <rect x="620" y="86" width="560" height="385" fill="#f7f7f2" stroke="#d5dfdf"/>
 <text x="635" y="118" font-size="23">B / Out-of-plane bending safety factor</text>
@@ -47,7 +47,7 @@
 <circle id="sf_hunter-2" cx="1118" cy="242.0378727351075" r="6" fill="#007e87" data-value="0.6810132954055782" data-h="2"/>
 <text x="1082" y="228.0378727351075" font-size="21">0.6810</text>
 <text x="1102" y="384" font-size="21">2</text>
-<text x="698" y="418" font-size="21">h = sqrt(max triangle area), mm</text>
+<text x="698" y="418" font-size="21">h = sqrt(max triangle area), mm; finer ←</text>
 <text x="635" y="452" font-size="21">No admitted GCI: oscillatory sequence</text>
 <rect x="20" y="492" width="560" height="435" fill="#f7f7f2" stroke="#d5dfdf"/>
 <text x="35" y="524" font-size="23">C / Independent-solver comparison</text>
