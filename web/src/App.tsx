@@ -222,7 +222,7 @@ export const App: React.FC = () => {
   };
 
   const featuredQuickLinks = useMemo(() => {
-    const order = ['w282_p14_c01', 'w282_p10_c02', 'w283_p14_c01', 'w283_p10_c02', 'c10a'];
+    const order = ['w282_p14_c01', 'w282_p10_c02', 'w283_p14_c01', 'w283_p10_c02'];
     return order.map((id) => {
       const sc = customScorecards[id] ?? bundle.featured_scorecards[id];
       const wCad = sc?.weighted_cad_score?.W_CAD;
@@ -231,12 +231,7 @@ export const App: React.FC = () => {
       const scoreText =
         wCad != null ? `W_CAD ${wCad >= 0 ? '+' : ''}${wCad.toFixed(4)}` : 'W_CAD unavailable';
       const statusText = formatGateHeadlineStatus(id, allPass);
-      const massPrefix =
-        id === 'c10a'
-          ? 'Switchback C10a STEP'
-          : mass3d != null
-            ? `${mass3d.toFixed(2)}g`
-            : id;
+      const massPrefix = mass3d != null ? `${mass3d.toFixed(2)}g` : id;
       return {
         id,
         tag: `${massPrefix} · ${scoreText} (${statusText})`,
