@@ -17,11 +17,14 @@
   "erroneous_v1_receipt_preserved_at": "docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_V1_OBSERVED_ERRONEOUS_20261019.json",
   "source_and_binary_bindings": {
     "crates/paper-artifacts/src/corpus.rs": "2b1cba1c136d6950d7f2efe4ac362224e4d57b16247bb0b463a097bbb332576e",
-    "crates/paper-artifacts/src/population.rs": "0a1a427d155fded80e7efb909e6b18a6196af63f4473e303ff1221292967328c",
-    "crates/paper-artifacts/src/publication.rs": "f2cb3810dff41fd5297da87727d75bc1f73f9ec047bec45981107a15763862b1",
-    "crates/paper-artifacts/src/lib.rs": "6722079254b611b1dab6f5f5135be59ff718d567e4d0ebd1448bfd928c0db337",
+    "crates/paper-artifacts/src/population.rs": "0854d70cf85743d0e9e9c08354bd4a92ecacceffbd9e91cb55973a6db3488491",
+    "crates/paper-artifacts/src/publication.rs": "20fae8a854bd0c4054b7b961257fcd518348a6e9d75c59b55fcb3af49b4484fa",
+    "crates/paper-artifacts/src/lib.rs": "3d5064fd882608062bd0282e525e6b8175291df1ab8f2e965dc407c8e3acf322",
     "crates/paper-artifacts/examples/publication_v2_audit.rs": "610a5b9a0c03984278db7b150184a101d1bacd10dc79e668e9ec2c36cf5c3919",
-    "superseded_stale_debug_binary_sha256": "24f52f1300ee0397dc2c84da7b1bc4ed1309114b63c71a7edd0003a45c3a6f3d"
+    "superseded_stale_debug_binary_sha256": "24f52f1300ee0397dc2c84da7b1bc4ed1309114b63c71a7edd0003a45c3a6f3d",
+    "crates/paper-artifacts/src/display.rs": "5a673898a0952728dde8a3e3f7ae29b4affc879a2dbe7e74c4ffcfd9475b48f0",
+    "crates/paper-artifacts/src/score_axis.rs": "65cfdebb8af49bf62f8f4c5ed33326771204b109a491ab4367777700df5a19e7",
+    "crates/paper-artifacts/src/plate.rs": "ca1f8f042a3f3fcd40c0dc96f606f4529ddedaca7a3ad0ff5deaffa27a3d2794"
   },
   "sc_dec_183p_and_183s_fixes_verified": {
     "1_jev1_binary_framing": {
@@ -105,13 +108,13 @@
     "docs/paper/figures/population-births.svg": "7bfb9f1d0f71972dedae621baf9ff7487e8ecabf30779a26e55d5c104ed9035b",
     "docs/paper/figures/population-membership.svg": "0d872c623ec134a91359ff20ec1bbe81df2e712801760ffbba0802e01a635d12",
     "docs/paper/figures/population-newer.svg": "eb6d5cce390c6b1847ec60e8e3234b9be0d28965c218953d43e7638557db59fd",
-    "docs/paper/figures/population-latest.svg": "f810b0c6a05ab56f5173cfc28f7a8432243cef515c61aa7da981986a31d78241",
+    "docs/paper/figures/population-latest.svg": "bedc134f7bbfa2c56b16f2f3e85f0898d4118f79f5ca654b621a27169677a963",
     "docs/paper/figures/fitness-progress.svg": "f0147dc401f9e6caa801edb61a1bebd3c945830ae3abe8e93fd98764e3a22207",
     "docs/paper/figures/inheritance.svg": "abf568cbf39ce5b7b330bf14794d82fd5f46a7860f376fbc44f23d25c17f2488",
-    "docs/paper/generated/shared_projection.v2.json": "5b3613a6b0bba6c163bf0ccc77579cee6dba55a58ca13844bb9333faf3d2bb77",
-    "docs/paper/generated/overview.md": "7340f1111a4ed56bdde38644cd3749c31aa8cfd724d1e3516cdd23997f531d10",
-    "docs/paper/generated/manifest.json": "5569ca8d69d6d0ee8dd799555c9599cf54fc3e45e24cc6c5aad84fecc4bd0380",
-    "docs/paper/publication.v2.json": "2d3851f99f5bcb966f6b1247368acdfb8475a723e8913fbc54a484224ab55d00",
+    "docs/paper/generated/shared_projection.v2.json": "86d3bb20f85cc38a5c33a4af2d94a2b44a9b47228f6dcca3b11f95ed447a784d",
+    "docs/paper/generated/overview.md": "8bcc5b38a4cc36e43bcc67c458283647091031ba25e26e6d4690ed466186b926",
+    "docs/paper/generated/manifest.json": "5a8d63bc469d3fdfd5ce44092453c4ef4f75bacf99710fdad1abf3aef884e2da",
+    "docs/paper/publication.v2.json": "f482fe74a52b58429b18814c300cf7d8e0d77c3d7cbe15d620a33f9666057118",
     "docs/paper/generated/population/gen800_scatter_cache.v1.json": "4eabe5a581dcb655b413857bfb3c28741070dc390b3ca71d744aa51f58e7a493"
   },
   "focused_test_execution": {
@@ -121,12 +124,17 @@
     "exit_code": 0
   },
   "integration_rebinding": {
-    "checked_utc": "2026-10-20T05:26:38.287820+00:00",
-    "previous_receipt_sha256": "54624f27c7fb550334656e44df1ce6d3ed7b377f52e4d8e9668362f274e869e3",
-    "previous_receipt_commit": "3c9c334fcc2b308dc21114a7ddd338c844fc9856",
+    "checked_utc": "2026-10-20T08:49:25.113940+00:00",
+    "previous_receipt_sha256": "7a1a3ac8ee0e944625e32717ce27f9ac4a70de3a3b7d7152a0c210187458f5f1",
+    "previous_receipt_commit": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+    "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE510713_20261020.json",
     "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
     "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
-    "reason": "Rebind live publication writer and generated manifest after adding the required common script identity and writer input binding for the static authored architecture SVG. Original observations, custody constants, historical receipt and historical execution claims remain unchanged. Strict validators and test definitions are unchanged; successor validation is separately head-bound."
+    "reporting_source_commit": "42cecdfdc1b4dc3b25c67d268a1bb410d75ca356",
+    "actual_generation_receipt_sha256": "fe358c13f1ce8a5689c4d1d4280656df5efae169ffd7923fe34501392ee296f5",
+    "actual_generation_log_sha256": "3ee9d6a75929705c27f74c0f54607c969abc28ec62a94233d7eac86dd9d0f302",
+    "executed_reporting_binary_sha256": "8944aebd08aacd5c9ef1e5c68cce35628585c54752c81619151d65c8bfa4a3a4",
+    "reason": "Renew active reporting source/output bindings after the independently reviewed missing-aware display and axis changes. Preserve exact receiving510713 and original102C receipts, all source observations/custody constants and all historical execution claims. Current validation is separately head-bound; this rebinding is not an inherited PASS."
   },
   "integration_rebinding_history": [
     {
@@ -141,7 +149,15 @@
       "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
       "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
       "reason": "Rebind live reporting source/output identities after the authorized major revision. Original observations, custody constants, erroneous V1 and historical execution claims are unchanged. Strict validator and test definitions are unchanged; final current tests are separate."
+    },
+    {
+      "checked_utc": "2026-10-20T05:26:38.287820+00:00",
+      "previous_receipt_sha256": "54624f27c7fb550334656e44df1ce6d3ed7b377f52e4d8e9668362f274e869e3",
+      "previous_receipt_commit": "3c9c334fcc2b308dc21114a7ddd338c844fc9856",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reason": "Rebind live publication writer and generated manifest after adding the required common script identity and writer input binding for the static authored architecture SVG. Original observations, custody constants, historical receipt and historical execution claims remain unchanged. Strict validators and test definitions are unchanged; successor validation is separately head-bound."
     }
   ],
-  "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. Current RR5 results are recorded in final delivery receipts."
+  "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. The e67 successor86-test attempt failed84passed/2failed and remains preserved. Corrected successor validation is recorded separately with its exact head."
 }
