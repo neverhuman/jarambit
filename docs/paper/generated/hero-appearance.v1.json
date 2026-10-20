@@ -1,0 +1,191 @@
+{
+  "appearance": {
+    "ambient": 0.35,
+    "background": "literal sRGB255/255/255 outside actual coverage; no exterior effects",
+    "diffuse": 0.65,
+    "direction_camera": [
+      -0.35,
+      0.4,
+      1.0
+    ],
+    "field_filtering": false,
+    "height": 680,
+    "lit_RGB_equals_base_palette": false,
+    "outline": "black inward L1 boundary of actual sampled coverage, including holes",
+    "outline_pixels": 2.0,
+    "quantitative_companion": "unchanged existing unlit four-channel full-range source figure MUST remain; image.unlit_rgb adds a matched visibility/AA comparison, not a replacement for original input evidence",
+    "renderer": "deterministic Rust CPU depth raster; NOT Blender/Cycles",
+    "shininess": 24,
+    "specular": 0.04,
+    "supersample": 2,
+    "width": 1600
+  },
+  "buffers": {
+    "coverage": "7078936d6e9c5f4972878bce194b90f84c5d2de9176a64311e6b1f2e2c89dadf",
+    "illuminated_rgb": "bbac233b2c8032ef0cd6b69e4f755d50255230fb24d87deb974c03630e0b8b53",
+    "inward_outline": "e184e95d8ccad80d1dd8f5a700e75b94894e25ed3756d9523203e180515f0cf8",
+    "matched_unlit_rgb": "85ac1012c35e06604fd674fcf9d58b8135003d42e92bf3304ca6c296eb222b81",
+    "winning_original_face_ids": "9da22b7abfdee855cdea6558e96c187a2ffd20fbc63c9d78db06190e28f68d24"
+  },
+  "caller": {
+    "checked_expected_pins": {
+      "camera_sha256": "accf46861f3f9a0b0bdff94ad67ee07725d51d6d817461d64615f004a40b17fc",
+      "channel_ids": [
+        "retained-field:lat",
+        "retained-field:pry",
+        "retained-field:ring",
+        "retained-field:twist"
+      ],
+      "component_sha256": {
+        "contributor_ids_and_counts": "5f33b4df25cf21c7b64fc1564e6907cafc0f9e13ee737f3a9ef9984fedece99b",
+        "ordered_face_to_original_cell_ids": "8eedb91cbfdb9417ed8a136d4181d645a8d28b7b1b513e7a3659ee804a0d3593",
+        "original_source_mask_bits": "e10024a08f9718071cf7d8fda5b9cbd1b2410767d8e0350c36057482a5168b33",
+        "registered_index_bits": "dc9af881d0d1fc5aeff1ac7a2f090e4c6679b2a0d9e96cca52a9c37338dd2a18",
+        "unlit_cell_palette_rgb": "f3bfdeb7a222f2069a189b2210ff6445a3dfe6941aea7f85752575d23658a3e3"
+      },
+      "ordered_decoded_geometry_sha256": "270fe8fee8aaa0d74c5a59d8b310c4ffc454fe985e479f86203c77fb48bb3b73",
+      "registered_assignment_sha256": "0fc00f0ea79cb90c367cffcc06701b0d27b8a0fda7545441d5ebad7afdf3084f",
+      "schema": "jarambit.hero_appearance_expected_pins.v1",
+      "source_cells": 25209,
+      "source_faces": 90000,
+      "source_sha256": {
+        "crates/paper-artifacts/examples/hero_appearance_preflight.rs": "35d98fdc28c06199e6f31fcb03c0047d78de5ebacc09dab9908bb0d3e755ed77",
+        "crates/paper-artifacts/src/appearance.rs": "cc91aaf0efb3c55d9b1f4059aaacd405669404030f1cf804a6e47eefe5325178",
+        "crates/paper-artifacts/src/display.rs": "636bb74fbdd7be6a5db0e307499aed034b58e29f321837426e177405a711e22b",
+        "crates/paper-artifacts/src/hero_appearance.rs": "06ffae640e18d4d6ed8ebe8065c192ad27cf9c74de0c0221da7dab60b5076e98",
+        "crates/paper-artifacts/src/plate.rs": "ac4537b4cdd44323dc7d259d0227e0b30b4c57ebc994f70580ed64ee96c200bd",
+        "crates/paper-artifacts/src/population.rs": "7b6588592b84114e5affeeba3c17f075975c4886d0890b27be471c0805bfabe9",
+        "docs/paper/assessment-inputs.v1.json": "fac0cd6cc08e731585e243277d401cb4e9a746279f4a544b012d4fae6b928171",
+        "docs/paper/data/display-composite-contract.v1.json": "df34216ea111683233fadcab64d6536f52af2178da300f0ea027f8b19d9b74e9",
+        "docs/paper/data/display-composite-review.v1.json": "1b4d70b8bcc4668af40427350cba12e876c972ecc1d3f0db792aec44c01b101f",
+        "docs/paper/data/public_ids.v1.json": "a0c3708415027d0f850f8776c4bfef7cf845ea2181b86aa8bab959a20e59c7ab",
+        "docs/paper/data/score_profiles.v1.json": "53d6bf2d3227f5ed0d81fd648141810e25951af5f31862fc17c2343c6e6d8c52",
+        "docs/paper/data/selection_receipts.v1.json": "9f8f5f05bef98304e37f3e90d02abc646d10b99d92d745c2f8f501e893f1d2e8",
+        "docs/paper/data/test-field-roster.v1.json": "1f1eabe810527006901ba318e167278cb154c8961894eb5f2a3deb18f5eedb01",
+        "docs/paper/field-inputs.v1.json": "93ffdcdae2c2eead22ce858e3eb83af1f61cdb4bafa29e418b6859736c6c8449",
+        "docs/paper/figure-semantics.v1.json": "8a0ef0fc93ffcaec7397b8cd1721333ea622623bba8c59b446c03dfcf98e4d9e",
+        "docs/tests/catalog.json": "521f1a3290b58b03f588cc0d8be1426ae01c813bca4405c2652060dcb1ae6ec0",
+        "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022",
+        "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+        "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_a4.json": "788196e1a534b1611df5a777741c7ec77079493c770a73ec2e976f30906cb472",
+        "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca",
+        "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_plate_gci.json": "45afc2fd250bc8bdbf9b5f6866bbf2e0231f47ad2b62f2d10798cc36ed11244a",
+        "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_rs.json": "2696a6f5d4dbbcec6a6148c83d5ff48313f7a86682766328be56ea4f203945fb"
+      },
+      "subject": "Individual 2000"
+    },
+    "matched_unlit_is_additional_visibility_control": true,
+    "pin_admission": {
+      "actual_preflight_receipt_path": "docs/paper/data/hero-appearance-preflight.v1.json",
+      "actual_preflight_receipt_sha256": "9787f1632fb15eabf3a4fbdc83e0422ca4c4a90d103e9761dee61a3683d5ad63",
+      "independent_source_review_receipt_path": "docs/paper/data/hero-appearance-pin-review.v1.json",
+      "independent_source_review_receipt_sha256": "ba012b7d52ed02615e00d51fc15df8c4a9b247a8378f765365ff1570f016820c",
+      "limit": "Exact22file source/input/geometry/camera/registration/component pinset only, not whole-head/normal/lighting/pixel/PDF/formal approval",
+      "status": "independently_source_reviewed"
+    },
+    "png": {
+      "color_type": "RGB8; filter0; stored DEFLATE",
+      "illuminated_sha256": "404342e10da2d1125b2c9d7241eabe5318ea8a6002e8b70ee45a1c11a1d0ce00",
+      "matched_unlit_sha256": "ced4a4a2238f4d40f564c1a94c0f52e020260645a96d6e1c9f4874ffabcd4c18"
+    },
+    "required_visible_caption_disclosure": "Illuminated appearance of the retained response index: RGB differs from base palette colors. Use the unchanged unlit four-channel companion for quantitative colors. Retained geometry and fitness are reused, not newly evaluated.",
+    "source_recipe": {
+      "path": "docs/paper/data/hero-appearance-source-recipe.v1.json",
+      "sha256": "d4af7606fb3b3e2b526599037000d59fdbf572fc729c6563bf413258e6f30f96"
+    },
+    "svg": {
+      "illuminated_sha256": "3e057afb592c028e90242414d1f35088dcff4b42ce66c18d5083ed21b8e02f9d",
+      "matched_unlit_sha256": "93d2b2411fbe82bdd5a3cd21512c984d06c0d091a2c151bfb839f209e3a4f509",
+      "visible_exterior_labels_or_effects": false
+    },
+    "unchanged_quantitative_companion": "docs/paper/generated/hero-full-range.svg"
+  },
+  "camera": {
+    "depth": "maximum posed z per geometric sample; exact ties later original face wins; no normal-based culling",
+    "offset": [
+      224.06947980023284,
+      377.42646149316886
+    ],
+    "refit": false,
+    "rotation": [
+      [
+        0.9945218953682733,
+        -0.10452846326765347,
+        0.0
+      ],
+      [
+        -0.10452846326765347,
+        -0.9945218953682733,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    ],
+    "scale": 6.470538337971699,
+    "sha256": "accf46861f3f9a0b0bdff94ad67ee07725d51d6d817461d64615f004a40b17fc"
+  },
+  "fitness_delta": null,
+  "fresh_fitness_or_solver_execution": false,
+  "geometry": {
+    "face_order": "original STL triangle/corner order; no indexed-buffer rewrite, welding, decimation or displacement",
+    "ordered_decoded_corners_after": "270fe8fee8aaa0d74c5a59d8b310c4ffc454fe985e479f86203c77fb48bb3b73",
+    "ordered_decoded_corners_before": "270fe8fee8aaa0d74c5a59d8b310c4ffc454fe985e479f86203c77fb48bb3b73",
+    "projected_edge_on_faces": 4378,
+    "source_faces": 90000,
+    "submitted_faces": 90000
+  },
+  "normals": {
+    "ambiguous_edges": 0,
+    "blend": 1.0,
+    "blocked_edges": 15065,
+    "capped_corners": 10,
+    "changed_corners": 222288,
+    "crease_degrees": 15.0,
+    "duplicate_faces": 0,
+    "joined_edges": 119935,
+    "max_deviation_degrees": 20.0,
+    "observed_max_deviation_degrees": 19.737619199533206,
+    "region_authority": "none; inferred exact-edge fans, not semantic feature preservation",
+    "sha256": "3598f6d752cdf4a954ea78636e7c4f80670f6ecd0718087dd6755d69c1b4c8e2"
+  },
+  "registered_assignment": {
+    "component_hashes_after": {
+      "contributor_ids_and_counts": "5f33b4df25cf21c7b64fc1564e6907cafc0f9e13ee737f3a9ef9984fedece99b",
+      "ordered_face_to_original_cell_ids": "8eedb91cbfdb9417ed8a136d4181d645a8d28b7b1b513e7a3659ee804a0d3593",
+      "original_source_mask_bits": "e10024a08f9718071cf7d8fda5b9cbd1b2410767d8e0350c36057482a5168b33",
+      "registered_index_bits": "dc9af881d0d1fc5aeff1ac7a2f090e4c6679b2a0d9e96cca52a9c37338dd2a18",
+      "unlit_cell_palette_rgb": "f3bfdeb7a222f2069a189b2210ff6445a3dfe6941aea7f85752575d23658a3e3"
+    },
+    "component_hashes_before": {
+      "contributor_ids_and_counts": "5f33b4df25cf21c7b64fc1564e6907cafc0f9e13ee737f3a9ef9984fedece99b",
+      "ordered_face_to_original_cell_ids": "8eedb91cbfdb9417ed8a136d4181d645a8d28b7b1b513e7a3659ee804a0d3593",
+      "original_source_mask_bits": "e10024a08f9718071cf7d8fda5b9cbd1b2410767d8e0350c36057482a5168b33",
+      "registered_index_bits": "dc9af881d0d1fc5aeff1ac7a2f090e4c6679b2a0d9e96cca52a9c37338dd2a18",
+      "unlit_cell_palette_rgb": "f3bfdeb7a222f2069a189b2210ff6445a3dfe6941aea7f85752575d23658a3e3"
+    },
+    "eligible_channels": 4,
+    "query": "Caller supplies the CURRENT exact nearest-original-D1-centroid map and original source-index ties; adapter does no new registration or interpolation",
+    "sha256": "0fc00f0ea79cb90c367cffcc06701b0d27b8a0fda7545441d5ebad7afdf3084f",
+    "source_channels": [
+      "retained-field:lat",
+      "retained-field:pry",
+      "retained-field:ring",
+      "retained-field:twist"
+    ]
+  },
+  "retained_fitness": "Reuse the same independently bound original observation for both appearances; no newly scored geometry or measured zero-loss delta",
+  "schema": "jarambit.retained_hero_appearance.v1",
+  "source_attribution": {
+    "appearance_rs_sha256": "ac88ebfe5b179a566be629b14b327701b1bfe300f0d67d101edd7366572fcb37",
+    "commit": "562e9c1e8f776c37a4a242e7ba545f15d5974639",
+    "port": "generic normals/strict STL/depth principles only; current camera/colors/white-outline adapter newly authored"
+  },
+  "sources": {
+    "d1_sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+    "stl_sha256": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022"
+  },
+  "subject": "Individual 2000"
+}

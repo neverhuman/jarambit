@@ -1,0 +1,110 @@
+{
+  "axis": {
+    "best_reference_original": null,
+    "constant_coordinate": "epsilon; inverse returns sole original value",
+    "coordinate_formula": "(f-m)/s+epsilon",
+    "epsilon": 1e-6,
+    "epsilon_meaning": "display floor, not uncertainty or residual",
+    "fixed_retrospective_reference": false,
+    "inverse_coordinate_formula": "m+s*(coordinate-epsilon)",
+    "logarithm_base": 10,
+    "max_original": 1.15727,
+    "min_original": -207.22973,
+    "physical_score_ratio_meaning": false,
+    "scale": {
+      "constant_fallback": false,
+      "units": 208.387
+    },
+    "selection_on_display_transform": false,
+    "view": "positive_affine_log10"
+  },
+  "axis_canonical_json_sha256": "d1c96d41100efefd137cd5fb0316564a2c8df929512721efc6b661f8b9b93588",
+  "excluded_numeric_records": 0,
+  "expected_numeric_records": 1984,
+  "first_retained_leader_generation": 9,
+  "full_range_asinh_companion_required": true,
+  "identity_hash_encoding": "ordered caller-specified fixed-width LE u64 original identity tuple",
+  "identity_order_sha256": "405f3b9654a71ed52e3d96a33c1a81b1cf93b1efae069cf71cef80d6292a0bb7",
+  "leader_ties": 1,
+  "minimum_file_ordinal_among_ties": null,
+  "new_fitness_or_geometry": false,
+  "numeric_point_operations": 1984,
+  "occupied_centers": 204,
+  "original_domain": [
+    -207.22973,
+    1.15727
+  ],
+  "original_negative_records": 1538,
+  "original_zero_records": 0,
+  "overlapping_center_operations": 1780,
+  "overlay": "within-scope cumulative best derived from exactly these raw observations; no median invented; gaps not bridged",
+  "physical_ratio_meaning": false,
+  "point_operation_hash_encoding": "LE u64 identity tuple length, identity tuple, original x, original f64 bits, raster x, raster y",
+  "point_operation_sha256": "51e8da67b7485eb126b392412b94d1b78e5ff5dafd5c78530b8aa52bd6e7361a",
+  "raster": {
+    "center_mask_sha256": "075728922d06e6b026259578ff91dda3abf13a176eca9183536458c1fab2f2de",
+    "density": false,
+    "height": 421,
+    "point_footprint": "fixed 3x3 pixels, bounded footprint at panel edge; every original center included",
+    "visible_mask_sha256": "fe8967749c1c51204183a500ce9cd160403a16edd6f87ff2272f03a110b4437e",
+    "width": 951
+  },
+  "schema": "jarambit.positive_all_record_projection.v1",
+  "source": {
+    "identity": "original historical id; original generation retained",
+    "leader_ledger": {
+      "later_assessment": "Individual1095: earlier run-specific Boolean predicate cert_pass_all=false, seq_ok=false; not a later 26-requirement qualification result",
+      "native_direction": "higher_is_better",
+      "source": "evidence/rs_v2/w282_ultrarunner/search/all_evals.json",
+      "source_sha256": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363",
+      "ties": [
+        {
+          "generation": 9,
+          "original_id": 1095,
+          "public_individual": 1095
+        }
+      ],
+      "value": 1.15727
+    },
+    "path": "evidence/rs_v2/w282_ultrarunner/search/all_evals.json",
+    "sha256": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363"
+  },
+  "source_membership_admitted_by": "caller, before display projection",
+  "svg_sha256": "8c26a037bb29daa01b8b710adf3ad9dfba4405b83fa2058cb4ed9dd6310047c5",
+  "tick_rows": [
+    {
+      "label": "-2.072297e2",
+      "log10_coordinate": -6.0,
+      "original_value": -207.22973
+    },
+    {
+      "label": "-2.072233e2",
+      "log10_coordinate": -4.499999891426434,
+      "original_value": -207.22334860980484
+    },
+    {
+      "label": "-2.070216e2",
+      "log10_coordinate": -2.9999997828528677,
+      "original_value": -207.0215512828065
+    },
+    {
+      "label": "-2.006402e2",
+      "log10_coordinate": -1.4999996742793016,
+      "original_value": -200.64015789697388
+    },
+    {
+      "label": "1.157270e0",
+      "log10_coordinate": 4.342942647204277e-7,
+      "original_value": 1.15727
+    }
+  ],
+  "x_axis": {
+    "coordinate_formula": "log10(generation+1)",
+    "inverse_formula": "10^x-1",
+    "logarithm_base": 10,
+    "original_bounds": [
+      0,
+      16
+    ]
+  }
+}

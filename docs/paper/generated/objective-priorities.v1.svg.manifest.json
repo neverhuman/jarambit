@@ -1,0 +1,13 @@
+{
+  "figure": "docs/paper/generated/objective-priorities.v1.svg",
+  "figure_sha256": "1d31d1730b789180349af193d38362ecaa0bdd23d089ac2daad29fd44510c2a8",
+  "inputs": {
+    "crates/paper-artifacts/src/objective_priorities.rs": "f26d4eae116c00198d930d9fe19a0ca2577c895a9e0d4fd8f080a8881b4e1abb",
+    "docs/paper/data/weighted-priorities.v1.json": "f5cb11e009424011b882266a18e7a940ea3fe8fb534c48106b017ead37bcf6fa",
+    "docs/paper/history/ultralight_weighted_fitness_009f5ac5.source.txt": "1adbd37191710d439d3ca388e468499fe48bc217546145deb57f87f1da24770b"
+  },
+  "projection_receipt": "docs/paper/generated/objective-priorities.v1.json",
+  "schema": 1,
+  "scope": "Exact configured weights of recovered20-term reporting recipe; no candidate score, normalized specimen values, contributions, fitness total, global comparable selection or qualification.",
+  "script": "crates/paper-artifacts/src/objective_priorities.rs"
+}

@@ -1,0 +1,491 @@
+{
+  "actual_contract": {
+    "path": "docs/paper/data/weighted-priorities.v1.json",
+    "sha256": "f5cb11e009424011b882266a18e7a940ea3fe8fb534c48106b017ead37bcf6fa"
+  },
+  "angles": {
+    "closure": "exact integer tick1000; no adjusted last weight; full-circle arcs split into <=180-degree pieces",
+    "denominator_tenths": 1000,
+    "normalization": "none; input sum must already be100.0",
+    "path_coordinates": "six decimal SVG units; final1000 tick reuses exact0 endpoint",
+    "start": "12 o'clock; clockwise"
+  },
+  "contract_json_value_sha256": "23824fdd1c533cbf3ff6446ca02395152c137b5a98296a7571e32f3629362316",
+  "contributions_included": false,
+  "display_weight_sum_pct_exact_decimal": "100.0",
+  "family_sums": [
+    {
+      "family": "Mass/compactness",
+      "sum_pct": "30.0"
+    },
+    {
+      "family": "Form/comfort proxies",
+      "sum_pct": "25.0"
+    },
+    {
+      "family": "Exported geometry proxies",
+      "sum_pct": "15.0"
+    },
+    {
+      "family": "Response/verification proxies",
+      "sum_pct": "30.0"
+    }
+  ],
+  "fitness_total_included": false,
+  "gate_free_claim": false,
+  "historical_execution": "Compatible recipe recovered; exact executed source/call inputs/point-stage binding unresolved; this chart does not evaluate any term",
+  "normalized_scores_included": false,
+  "objective_count": 20,
+  "objectives": [
+    {
+      "angle_degrees_exact_rational": "220/1000 * 360",
+      "end_tick": 220,
+      "family": "Mass/compactness",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "ultralight_mass",
+      "nominal_color": "#1f77b4",
+      "normalization_lines": [
+        105,
+        105
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['ultralight_mass']",
+      "ordinal": 1,
+      "scientific_label": "Mass preference",
+      "source_weight_line": 29,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['ultralight_mass']",
+      "start_tick": 0,
+      "weight_pct_exact_decimal": "22.0",
+      "weight_tenths": 220,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "80/1000 * 360",
+      "end_tick": 300,
+      "family": "Mass/compactness",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "holder_and_compactness",
+      "nominal_color": "#aec7e8",
+      "normalization_lines": [
+        106,
+        106
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['holder_and_compactness']",
+      "ordinal": 2,
+      "scientific_label": "Holder/compactness proxy",
+      "source_weight_line": 30,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['holder_and_compactness']",
+      "start_tick": 220,
+      "weight_pct_exact_decimal": "8.0",
+      "weight_tenths": 80,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "70/1000 * 360",
+      "end_tick": 370,
+      "family": "Form/comfort proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "karambit_ring_and_claw",
+      "nominal_color": "#ff7f0e",
+      "normalization_lines": [
+        107,
+        107
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['karambit_ring_and_claw']",
+      "ordinal": 3,
+      "scientific_label": "Ring/claw form proxy",
+      "source_weight_line": 32,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['karambit_ring_and_claw']",
+      "start_tick": 300,
+      "weight_pct_exact_decimal": "7.0",
+      "weight_tenths": 70,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "90/1000 * 360",
+      "end_tick": 460,
+      "family": "Form/comfort proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "c6_aesthetic_and_ergo",
+      "nominal_color": "#ffbb78",
+      "normalization_lines": [
+        108,
+        108
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['c6_aesthetic_and_ergo']",
+      "ordinal": 4,
+      "scientific_label": "Reference form proxy",
+      "source_weight_line": 33,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['c6_aesthetic_and_ergo']",
+      "start_tick": 370,
+      "weight_pct_exact_decimal": "9.0",
+      "weight_tenths": 90,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "90/1000 * 360",
+      "end_tick": 550,
+      "family": "Form/comfort proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "bore_collar_comfort",
+      "nominal_color": "#2ca02c",
+      "normalization_lines": [
+        109,
+        109
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['bore_collar_comfort']",
+      "ordinal": 5,
+      "scientific_label": "Bore/collar comfort proxy",
+      "source_weight_line": 34,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['bore_collar_comfort']",
+      "start_tick": 460,
+      "weight_pct_exact_decimal": "9.0",
+      "weight_tenths": 90,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "50/1000 * 360",
+      "end_tick": 600,
+      "family": "Exported geometry proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "cad_watertight_brep",
+      "nominal_color": "#98df8a",
+      "normalization_lines": [
+        110,
+        110
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['cad_watertight_brep']",
+      "ordinal": 6,
+      "scientific_label": "Single-solid B-rep status",
+      "source_weight_line": 36,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['cad_watertight_brep']",
+      "start_tick": 550,
+      "weight_pct_exact_decimal": "5.0",
+      "weight_tenths": 50,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "50/1000 * 360",
+      "end_tick": 650,
+      "family": "Exported geometry proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "gate_s_sharpness",
+      "nominal_color": "#d62728",
+      "normalization_lines": [
+        111,
+        111
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['gate_s_sharpness']",
+      "ordinal": 7,
+      "scientific_label": "Edge-profile proxy",
+      "source_weight_line": 37,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['gate_s_sharpness']",
+      "start_tick": 600,
+      "weight_pct_exact_decimal": "5.0",
+      "weight_tenths": 50,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "50/1000 * 360",
+      "end_tick": 700,
+      "family": "Exported geometry proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "gate_s_point_profile",
+      "nominal_color": "#ff9896",
+      "normalization_lines": [
+        112,
+        117
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['gate_s_point_profile']",
+      "ordinal": 8,
+      "scientific_label": "Point-profile proxy",
+      "source_weight_line": 38,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['gate_s_point_profile']",
+      "start_tick": 650,
+      "weight_pct_exact_decimal": "5.0",
+      "weight_tenths": 50,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "35/1000 * 360",
+      "end_tick": 735,
+      "family": "Response/verification proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "hiker_lateral_180n",
+      "nominal_color": "#9467bd",
+      "normalization_lines": [
+        118,
+        118
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['hiker_lateral_180n']",
+      "ordinal": 9,
+      "scientific_label": "Lateral response, 180 N reference",
+      "source_weight_line": 40,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['hiker_lateral_180n']",
+      "start_tick": 700,
+      "weight_pct_exact_decimal": "3.5",
+      "weight_tenths": 35,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "25/1000 * 360",
+      "end_tick": 760,
+      "family": "Response/verification proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "hunter_lateral_260n",
+      "nominal_color": "#c5b0d5",
+      "normalization_lines": [
+        119,
+        119
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['hunter_lateral_260n']",
+      "ordinal": 10,
+      "scientific_label": "Lateral response, 260 N reference",
+      "source_weight_line": 41,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['hunter_lateral_260n']",
+      "start_tick": 735,
+      "weight_pct_exact_decimal": "2.5",
+      "weight_tenths": 25,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "20/1000 * 360",
+      "end_tick": 780,
+      "family": "Response/verification proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "strict_hunter_260n",
+      "nominal_color": "#8c564b",
+      "normalization_lines": [
+        120,
+        120
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['strict_hunter_260n']",
+      "ordinal": 11,
+      "scientific_label": "Strict lateral response",
+      "source_weight_line": 42,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['strict_hunter_260n']",
+      "start_tick": 760,
+      "weight_pct_exact_decimal": "2.0",
+      "weight_tenths": 20,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "25/1000 * 360",
+      "end_tick": 805,
+      "family": "Response/verification proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "ring_pull_1500n",
+      "nominal_color": "#c49c94",
+      "normalization_lines": [
+        121,
+        121
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['ring_pull_1500n']",
+      "ordinal": 12,
+      "scientific_label": "Ring-traction response",
+      "source_weight_line": 43,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['ring_pull_1500n']",
+      "start_tick": 780,
+      "weight_pct_exact_decimal": "2.5",
+      "weight_tenths": 25,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "25/1000 * 360",
+      "end_tick": 830,
+      "family": "Response/verification proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "twist_body_1p82nm",
+      "nominal_color": "#e377c2",
+      "normalization_lines": [
+        122,
+        122
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['twist_body_1p82nm']",
+      "ordinal": 13,
+      "scientific_label": "Body-torsion response",
+      "source_weight_line": 44,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['twist_body_1p82nm']",
+      "start_tick": 805,
+      "weight_pct_exact_decimal": "2.5",
+      "weight_tenths": 25,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "25/1000 * 360",
+      "end_tick": 855,
+      "family": "Response/verification proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "twist_tip_plate_1p82nm",
+      "nominal_color": "#f7b6d2",
+      "normalization_lines": [
+        123,
+        123
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['twist_tip_plate_1p82nm']",
+      "ordinal": 14,
+      "scientific_label": "Local plate-torsion response",
+      "source_weight_line": 45,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['twist_tip_plate_1p82nm']",
+      "start_tick": 830,
+      "weight_pct_exact_decimal": "2.5",
+      "weight_tenths": 25,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "30/1000 * 360",
+      "end_tick": 885,
+      "family": "Response/verification proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "solid_tip_3d_p2_and_xcheck",
+      "nominal_color": "#7f7f7f",
+      "normalization_lines": [
+        124,
+        124
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['solid_tip_3d_p2_and_xcheck']",
+      "ordinal": 15,
+      "scientific_label": "Reported solid-tip/comparison proxy",
+      "source_weight_line": 46,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['solid_tip_3d_p2_and_xcheck']",
+      "start_tick": 855,
+      "weight_pct_exact_decimal": "3.0",
+      "weight_tenths": 30,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "20/1000 * 360",
+      "end_tick": 905,
+      "family": "Response/verification proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "side_a4_buckling",
+      "nominal_color": "#c7c7c7",
+      "normalization_lines": [
+        125,
+        125
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['side_a4_buckling']",
+      "ordinal": 16,
+      "scientific_label": "Reported support/stability proxy",
+      "source_weight_line": 47,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['side_a4_buckling']",
+      "start_tick": 885,
+      "weight_pct_exact_decimal": "2.0",
+      "weight_tenths": 20,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "35/1000 * 360",
+      "end_tick": 940,
+      "family": "Response/verification proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "failure_sequence_1p2",
+      "nominal_color": "#bcbd22",
+      "normalization_lines": [
+        126,
+        126
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['failure_sequence_1p2']",
+      "ordinal": 17,
+      "scientific_label": "Elastic yield-order proxy",
+      "source_weight_line": 48,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['failure_sequence_1p2']",
+      "start_tick": 905,
+      "weight_pct_exact_decimal": "3.5",
+      "weight_tenths": 35,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "20/1000 * 360",
+      "end_tick": 960,
+      "family": "Response/verification proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "plate_gci_3level",
+      "nominal_color": "#dbdb8d",
+      "normalization_lines": [
+        127,
+        127
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['plate_gci_3level']",
+      "ordinal": 18,
+      "scientific_label": "Reported plate-study status",
+      "source_weight_line": 49,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['plate_gci_3level']",
+      "start_tick": 940,
+      "weight_pct_exact_decimal": "2.0",
+      "weight_tenths": 20,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "20/1000 * 360",
+      "end_tick": 980,
+      "family": "Response/verification proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "human_max_overload",
+      "nominal_color": "#17becf",
+      "normalization_lines": [
+        128,
+        132
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['human_max_overload']",
+      "ordinal": 19,
+      "scientific_label": "Overload proxy",
+      "source_weight_line": 50,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['human_max_overload']",
+      "start_tick": 960,
+      "weight_pct_exact_decimal": "2.0",
+      "weight_tenths": 20,
+      "zero_weight": false
+    },
+    {
+      "angle_degrees_exact_rational": "20/1000 * 360",
+      "end_tick": 1000,
+      "family": "Response/verification proxies",
+      "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145",
+      "id": "goodman_fatigue_l7",
+      "nominal_color": "#9edae5",
+      "normalization_lines": [
+        133,
+        133
+      ],
+      "normalization_selector": "compute_ultralight_weighted_fitness.s_scores['goodman_fatigue_l7']",
+      "ordinal": 20,
+      "scientific_label": "Goodman fatigue proxy",
+      "source_weight_line": 51,
+      "source_weight_selector": "ULTRALIGHT_WEIGHTS_V1['goodman_fatigue_l7']",
+      "start_tick": 980,
+      "weight_pct_exact_decimal": "2.0",
+      "weight_tenths": 20,
+      "zero_weight": false
+    }
+  ],
+  "outputs": {
+    "png_sha256": null,
+    "svg_sha256": "1d31d1730b789180349af193d38362ecaa0bdd23d089ac2daad29fd44510c2a8"
+  },
+  "palette": {
+    "additional_cues": "visible objective numbers on both diagram and key, connected to actual slices; black separators",
+    "id": "configured-objective-nominal-tab20-v1",
+    "semantics": "nominal objective identity only; no ordinal magnitude/good-bad meaning",
+    "universal_color_vision_accessibility_claim": false
+  },
+  "png_binding": "Captain must add actual encoded PNG hash after generation, never invent one",
+  "qualification_claim": false,
+  "recipe": {
+    "path": "ops/ci/ultralight_weighted_fitness.py",
+    "retained_path": "docs/paper/history/ultralight_weighted_fitness_009f5ac5.source.txt",
+    "revision": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+    "sha256": "1adbd37191710d439d3ca388e468499fe48bc217546145deb57f87f1da24770b"
+  },
+  "schema": "jarambit.configured_weighted_priorities_projection.v1",
+  "source_weight_sum_pct_exact_decimal": "100.0",
+  "specimen": null,
+  "typography": {
+    "actual_PDF_readback": "pending independent artifact review",
+    "declared_fullwidth_pt": 514.044,
+    "minimum_effective_pt": 8.99577,
+    "minimum_font_svg_units": 28,
+    "svg_height": 1100,
+    "svg_width": 1600
+  },
+  "zero_weight_ids": []
+}
