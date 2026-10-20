@@ -1721,6 +1721,11 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         serde_json::to_string_pretty(&architecture_manifest)? + "\n",
     );
     crate::population::generate_v2_outputs(&root, &mut out, &mut inputs)?;
+    let interpretation = crate::interpretation::project(&root, &mut inputs)?;
+    out.insert(
+        "docs/paper/generated/reporting-interpretation.v2.json".into(),
+        serde_json::to_string_pretty(&interpretation)? + "\n",
+    );
     let outputs = out
         .iter()
         .map(|(k, v)| (k.clone(), digest(v.as_bytes())))

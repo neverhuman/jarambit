@@ -22,17 +22,18 @@
 <text x="374" y="258" font-size="22">N: 1,954,560 native births across ten completed runs</text>
 <text x="374" y="304" font-size="22">Separate scorers; birth counts do not measure assessment coverage.</text>
 <text x="354" y="366" font-size="22" fill="#92400e">Native per-birth CAD/assessment join: not retained.</text>
-<text x="354" y="394" font-size="22" fill="#92400e">No search-to-assessment arrow.</text>
+<text x="354" y="394" font-size="22" fill="#92400e">Exact proposal links do not recover per-child parents.</text>
 <rect x="354" y="405" width="380" height="178" rx="6" fill="#fff7ed" stroke="#cbd5e1"/>
 <text x="374" y="441" font-size="25" font-weight="700">Assessed Export Records</text>
-<text x="374" y="480" font-size="22">2000: one automatic export</text>
+<text x="374" y="480" font-size="22">2000 ↔ proposal 6643</text>
 <text x="374" y="515" font-size="22">2001 / 2007: controlled</text>
-<text x="374" y="554" font-size="22">Birth links: unknown</text>
+<text x="374" y="554" font-size="22">Per-child parents: unrecorded</text>
 <path d="M734,494 L814,494" stroke="#334155" stroke-width="2.5" marker-end="url(#direction)"/>
 <rect x="814" y="405" width="440" height="178" rx="6" fill="#f0fdfa" stroke="#cbd5e1"/>
 <text x="834" y="441" font-size="25" font-weight="700">Bound Evidence Views</text>
 <text x="834" y="480" font-size="22">2000: plate fields + scalars</text>
-<text x="834" y="515" font-size="22">2001 / 2007: scorecards</text>
-<text x="834" y="554" font-size="22">Physical results: not reported</text>
+<text x="834" y="515" font-size="22">2002: later summary, no CAD</text>
+<text x="834" y="554" font-size="22">2001 / 2007: scorecards</text>
+<text x="354" y="612" font-size="22">Physical results: not reported. Current buckling inference: withdrawn.</text>
 </g>
 </svg>

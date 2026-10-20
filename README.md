@@ -6,7 +6,7 @@ Jarambit is a computational design research system linking a geometric represent
 
 ![Individual 2000, the illustrated assessed export, with a dimensionless relative response summary on its exact CAD surface](docs/paper/figures/fig1_hero_blender_v2.png)
 
-*Individual 2000 supplies the illustrated assessed geometry and retained fields. The number is a stable reporting alias, not a generation or score rank; no source birth record is linked to this export. Colors average available, area-weighted response ranks from four retained channels. This dimensionless display index does not express fitness, safety or qualification. Contributor counts and source-area coverage accompany the index. [Definitions and original evidence](docs/paper/CROSSWALK_SUPPLEMENT.md).*
+*Individual 2000 supplies the illustrated assessed geometry and retained fields. Its stable reporting alias is linked by exact certificate and genome hashes to proposal observation 6643; per-child parentage remains unrecorded. Colors average available, area-weighted response ranks from four retained channels. This dimensionless display index does not express fitness, safety or qualification. Contributor counts and source-area coverage accompany the index. [Definitions and original evidence](docs/paper/CROSSWALK_SUPPLEMENT.md).*
 
 ## Which evidence is retained
 
@@ -37,7 +37,7 @@ Jarambit is a computational design research system linking a geometric represent
 
 ## Retained reporting priorities: Individual 2002
 
-This twenty-term vector belongs to **Individual 2002's retained reporting record**, with saved score **74.207299/100**. Weights, normalized values, and contributions are stored summaries. The historical normalization/scorer binding remains unresolved; current code and matching names do not establish that missing producer. Exported CAD and independent later assessment are unavailable in this accession.
+This twenty-term vector belongs to **Individual 2002's retained reporting record**, with saved score **74.207299/100**. Weights, normalized values, and contributions are stored summaries. A recovered historical recipe is source-bound; its original execution and call-input provenance remain unresolved. Several terms are partly compatible with defaults or proxies, distinct from reporting-layer missingness. Exact content links proposal observation 6420 and a later unqualified assessment summary (`W_CAD = -7.414831`); its full underlying CAD and scorecard files are not retained in the admitted tree. The [current interpretation](docs/paper/data/reporting-interpretation-contract.v2.json) preserves the original registry, score vector and evidence.
 
 | Reported objective | Weight (%) | Saved normalized value | Contribution (points) |
 |---|---:|---:|---:|
@@ -172,7 +172,7 @@ The hand-built C.10d concept film and its cross-revision field/weight disclosure
 <details>
 <summary>Historical market comparison and original source caveats</summary>
 
-The snapshot below retains its historical naming and stored mass scalars. In the current paper, `w411c3_r02_p10_c12` identifies Individual 2002's saved reporting summary; its exported CAD, full round populations and independent later assessment are unavailable in the admitted accession. The historical "Stage-2 leader" label does not establish those artifacts or recover its missing scorer provenance.
+The snapshot below retains its historical naming and stored mass scalars. In the current paper, `w411c3_r02_p10_c12` identifies Individual 2002's saved reporting record. Its three round birth/screen pairs and a certificate-matched later unqualified assessment summary are retained; full underlying exported CAD and scorecard files are not retained in the admitted tree. The historical "Stage-2 leader" label does not establish those missing artifacts or prove the recovered recipe's original execution.
 
 <!-- MARKET:CENSUS:BEGIN -->
 ## Market weight comparison

@@ -12,14 +12,14 @@ CROP_SVG := drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.svg
 HERO_PNG := drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.png
 CROP_PNG := drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.png
 REPORT_CONTRACTS := $(sort $(wildcard data/*.json))
-REPORT_METADATA := generated/display-composite.v1.json generated/test-field-roster.v1.tsv generated/population/score-axis.v1.json generated/population/retained-leaders.v1.json generated/population/point-rendering.v1.json
+REPORT_METADATA := generated/display-composite.v1.json generated/test-field-roster.v1.tsv generated/population/score-axis.v1.json generated/population/retained-leaders.v1.json generated/population/point-rendering.v1.json generated/reporting-interpretation.v2.json
 DISPLAY_ALTERNATIVES := generated/hero-full-range.svg generated/hero-mesh-on.svg
-REPAIR_HISTORY := history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE510713_20261020.json
+REPAIR_HISTORY := history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE510713_20261020.json history/ultralight_weighted_fitness_009f5ac5.source.txt
 GEN_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(GEN_FIGURES)))
 POP_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(POP_FIGURES)))
 # Pinned evidence-baseline timestamp; actual build UTC belongs to the receipt.
 TEX_ENV = TEXINPUTS="$(OUT):" SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH) FORCE_SOURCE_DATE=1 TZ=UTC
-.PHONY: all artifacts figures pdfs main supplement audit check clean
+.PHONY: all artifacts figures pdfs main supplement audit audit-quick audit-full check clean
 # A report must finish generating before its figure/document consumers start.
 .NOTPARALLEL:
 all: artifacts pdfs
@@ -63,9 +63,12 @@ pdfs: figures
 	pdfinfo supplement.pdf > $(OUT)/supplement-pdfinfo.txt
 main supplement: pdfs
 # Final RR5 validation only; implementation builds use artifacts/pdf targets.
-audit:
-	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
+audit: audit-full
+audit-quick:
 	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit
+audit-full:
+	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
+	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit -- --full-zstd
 check: audit pdfs
 	! rg 'Overfull|LaTeX Warning: (Reference|Citation).*undefined' $(OUT)/main.log $(OUT)/supplement-main.log
 	awk '/^Pages:/ { if ($$2 < 15 || $$2 > 20) exit 1; found=1 } END { if (!found) exit 1 }' $(OUT)/pdfinfo.txt

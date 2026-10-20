@@ -10,6 +10,8 @@
 //!   and writes `docs/paper/generated/population/gen800_scatter_cache.v1.json`.
 use jarambit_paper_artifacts::{corpus, identity, population, publication, validation};
 use serde_json::{json, Value};
+use sha2::{Digest, Sha256};
+use std::time::Instant;
 use std::{env, fs, path::Path};
 
 fn read_json(path: &Path) -> Result<Value, Box<dyn std::error::Error>> {
@@ -17,6 +19,7 @@ fn read_json(path: &Path) -> Result<Value, Box<dyn std::error::Error>> {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let started = Instant::now();
     let args: Vec<String> = env::args().skip(1).collect();
     if args.iter().any(|a| a == "--help" || a == "-h") {
         println!(
@@ -36,6 +39,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let full_zstd = args.iter().any(|a| a == "--full-zstd");
     let check_flag = args.iter().any(|a| a == "--check");
     let populate_scatter = args.iter().any(|a| a == "--populate-scatter");
+    if args
+        .iter()
+        .any(|a| !matches!(a.as_str(), "--full-zstd" | "--check" | "--populate-scatter"))
+    {
+        return Err("unknown audit argument; use --help".into());
+    }
     if populate_scatter && (full_zstd || check_flag || args.len() > 1) {
         return Err(
             "--populate-scatter is an explicit cache-generation mode and cannot be combined with read-only audit flags"
@@ -124,6 +133,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let max_segs = if full_zstd { None } else { Some(1) };
     let zstd_bytes_ok =
         corpus::verify_and_decode_gen800_archive(&archive_root, Some(expected_idx_sha), max_segs)?;
+    if full_zstd
+        && (zstd_bytes_ok["segments_decoded"] != 200 || zstd_bytes_ok["rows_decoded"] != 1_954_560)
+    {
+        return Err("full audit did not decode the complete admitted archive".into());
+    }
 
     // 3. Verify all generated SVGs, projections, and manifests are fresh in check mode
     publication::generate(&root, true)?;
@@ -133,6 +147,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         serde_json::to_string_pretty(&json!({
             "schema": "jarambit.publication_v2_audit.v1",
             "mode": "read_only_audit",
+            "decode_scope": if full_zstd { "full" } else { "quick_one_segment_per_run" },
+            "configured_max_segments_per_run": max_segs,
+            "full_archive_decoded": zstd_bytes_ok["full_archive_decoded"],
+            "command_argv": env::args().collect::<Vec<_>>(),
+            "audit_source_sha256": format!("{:x}", Sha256::digest(fs::read(root.join("crates/paper-artifacts/examples/publication_v2_audit.rs"))?)),
+            "corpus_source_sha256": format!("{:x}", Sha256::digest(fs::read(root.join("crates/paper-artifacts/src/corpus.rs"))?)),
+            "binary_sha256": format!("{:x}", Sha256::digest(fs::read(env::current_exe()?)?)),
+            "elapsed_seconds": started.elapsed().as_secs_f64(),
+            "exit_code": 0,
             "public_ids": id_summary["explicit_individual_count"],
             "selection_claims": sel_summary["claim_count"],
             "score_profiles": sp_summary["profile_count"],

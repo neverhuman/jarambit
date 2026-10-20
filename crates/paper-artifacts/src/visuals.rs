@@ -17,14 +17,14 @@ pub(crate) fn assessed(kind: &str, id: &str) -> Option<Visual> {
         ("G16", "c6_aesthetic_floor") | ("RSV2", "aesthetic_and_geometric") => ("reference", "A--B: original 2D reference overlay, saved rounded descriptors and flags; no new measurement or human approval"),
         ("G16", "cad_watertight_and_single_solid") => ("export-identity", "A--B: retained content associations and original topology records; no fresh CAD validation"),
         ("G16", "cert_hiker_180n" | "cert_hunter_260n") => ("plate-fields", "B: lateral unit response; one shared field"),
-        ("G16", "cert_ring_pull_1500n") => ("plate-fields", "C: ring unit response with seated-region source zeros masked"),
+        ("G16", "cert_ring_pull_1500n") => ("plate-fields", "C: ring unit response with source half-plane zeros masked"),
         ("G16", "twist_body_1p82nm" | "twist_tip_only_1p82nm") => ("plate-fields", "D: raw torsion response; regional capacity selection is a separate operation"),
         ("G16", "solid_tip_3d_p2_1p82nm") | ("RSV2", "solid_tip_sf") | ("battery", "solid.tip") => ("verification", "C--D: matched scalar comparison and binned profiles; no full 3D field"),
         ("G16", "failure_sequence_1p2") | ("RSV2", "seq_hard") | ("battery", "plate.seq") => ("verification", "A: retained yield-order proxy across mesh levels; no admitted GCI"),
         ("G16", "plate_gci_valid_3level") | ("battery", "plate.gci") => ("verification", "A--B: valid metadata, but nonpositive-order/oscillatory observations and no admitted GCI"),
         ("G16", "dolfinx_cross_check_2pct") => ("verification", "C: original matched-mesh safety-factor observations and stored rounded differences"),
         ("G16", "strict_hunter_260n" | "twist_tip_submodel_strict_1p82nm") | ("RSV2", "strict_hunter_lateral" | "twist_floor_body_and_tipsub_strict") => ("assessment", "C: original certification/strict scalar pairs; no strict full field or error estimate"),
-        ("G16", "side_a4_buckling_and_support") | ("battery", "side.a4") => ("assessment", "A: support-model schematic and archived scalars; eigen-operator verification remains open"),
+        ("G16", "side_a4_buckling_and_support") | ("battery", "side.a4") => ("assessment", "A: historical support record; current buckling engineering interpretation withdrawn"),
         ("RSV2", "fatigue") | ("battery", "plate.l7") => ("assessment", "B: original fatigue-model scalar; no fatigue field or measured lifetime"),
         ("RSV2", "human_max") => ("assessment", "B: separate recorded response factors; in-plane value remains record-only"),
         ("RSV2", "floors_828_joint") => ("plate-fields", "A--C: shared retained envelope and unit-response families; the original grouped flag is separate from these fields"),
@@ -71,8 +71,8 @@ fn bind(v: &Visual, out: &BTreeMap<String, String>) -> Result<Value> {
         "reference" => ("jarambit.reference_projection.v1", "retained_silhouettes_and_reference_descriptors", "Original 2D point lists with one common display transform, saved rounded descriptors and flags; no new comparison, FEM or human approval."),
         "export-identity" => ("jarambit.export_identity_projection.v1", "retained_topology_records_and_identity_diagram", "Stored token counts, exporter census, BRep observations and render metadata; no fresh CAD validation, regeneration or FEM field."),
         "plate-fields" => ("jarambit.retained_plate_projection.v1", "retained_plate_cell_field", "Original 0.25 mm2 plate arrays only; not strict or solid fields; shared fields are not independent tests."),
-        "verification" => ("jarambit.retained_verification_projection.v1", "retained_scalars_and_binned_profiles", "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate."),
-        "assessment" => ("jarambit.retained_assessment_projection.v1", "retained_scalars_flags_and_support_schematic", "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open."),
+        "verification" => ("jarambit.retained_verification_projection.v2", "retained_scalars_and_binned_profiles", "Saved mesh observations, matched scalar pairs at source precision and recovery-dependent profiles; no full solved solid field or admitted GCI estimate."),
+        "assessment" => ("jarambit.retained_assessment_projection.v2", "historical_scalars_flags_and_withdrawn_buckling_interpretation", "Original scalars/flags retained as history; current buckling value and dependent qualification unestablished; no new eigenmode, solve or score."),
         "battery-matrix" => ("jarambit.battery_matrix_projection.v1", "historical_categorical_status_map", "23 historical subjects; completeness and shared references are not independent physical tests or FEM fields."),
         _ => return Err("unadmitted visual type".into()),
     };
@@ -84,6 +84,14 @@ fn bind(v: &Visual, out: &BTreeMap<String, String>) -> Result<Value> {
         || (v.figure == "assessment" && p["fresh_solver_execution"] != false)
     {
         return Err("scalar/profile visual asserted unavailable field or fresh solve".into());
+    }
+    if v.figure == "assessment"
+        && (!p["support"]["admitted_engineering_value"].is_null()
+            || !p["qualification"].is_null()
+            || p["current_qualification"] != "unestablished_due_to_unqualified_operator"
+            || p["support"]["interpretation_status"] != "withdrawn")
+    {
+        return Err("withdrawn buckling observation asserted current engineering admission".into());
     }
     if v.figure == "export-identity"
         && (p["fresh_cad_validation"] != false
@@ -109,7 +117,9 @@ fn bind(v: &Visual, out: &BTreeMap<String, String>) -> Result<Value> {
         if p["subject"] != SUBJECT || p["certificate_identity"] != CERTIFICATE {
             return Err("visual subject/certificate binding differs".into());
         }
-        json!({"subject":SUBJECT,"certificate_identity":CERTIFICATE,"qualification":"not qualified","relationship":"separate assessed example, not a rerun of the atlas historical example or battery"})
+        json!({"subject":SUBJECT,"certificate_identity":CERTIFICATE,"historical_record_qualified":false,
+            "current_dependent_qualification":null,"qualification_state":"unestablished_due_to_unqualified_operator",
+            "relationship":"separate assessed example, not a rerun of the atlas historical example or battery"})
     };
     Ok(
         json!({"figure":figure,"figure_sha256":hash(raw.as_bytes()),"panel":v.panel,

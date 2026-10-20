@@ -8,6 +8,16 @@ fn num(v: &Value) -> Result<f64> {
         .filter(|n| n.is_finite())
         .ok_or_else(|| "missing/nonfinite verification value".into())
 }
+// Display only the precision admitted by the original SF records. Refuse a
+// value that would need hidden rounding to fit that declared source precision.
+fn sf_display(value: &Value, decimals: usize) -> Result<String> {
+    let original = num(value)?;
+    let shown = format!("{original:.decimals$}");
+    if shown.parse::<f64>()? != original {
+        return Err("verification SF exceeds retained display precision".into());
+    }
+    Ok(shown)
+}
 fn arr(v: &Value) -> Result<&Vec<Value>> {
     v.as_array()
         .ok_or_else(|| "missing verification array".into())
@@ -103,6 +113,8 @@ fn admit(g: &Value, s: &Value, p: &Value, d: &Value, side: &Value, c: &Value) ->
         let key = format!("SF_{name}");
         let sk = num(&p["solid"][primary])?;
         let dx = num(&d[&key])?;
+        sf_display(&p["solid"][primary], 3)?;
+        sf_display(&d[&key], 4)?;
         if sk <= 0.
             || dx <= 0.
             || s["stored_solid"][format!("SF_skfem_{name}")] != p["solid"][primary]
@@ -312,7 +324,12 @@ pub(crate) fn project(
             let start = x + 165.;
             let end = start + v * 285.;
             writeln!(svg,"<path id=\"solver-{name}-{j}\" d=\"M{start},{yy} L{end},{yy}\" stroke=\"{color}\" stroke-width=\"7\" fill=\"none\" data-value=\"{v}\"/>").unwrap();
-            label(&mut svg, x + 462., yy + 7., 21, &format!("{v:.4}"));
+            let shown = if j == 0 {
+                sf_display(&primary["solid"][primary_key], 3)?
+            } else {
+                sf_display(&comparison[format!("SF_{name}")], 4)?
+            };
+            label(&mut svg, x + 462., yy + 7., 21, &shown);
         }
         let err = num(&solid["dolfinx_cross_check"][format!("rel_err_{name}")])?;
         label(
@@ -320,9 +337,16 @@ pub(crate) fn project(
             x + 165.,
             py + 74.,
             21,
-            &format!("Relative difference: {:.4}%", 100. * err),
+            &format!("Rounded-SF difference: {:.4}%", 100. * err),
         );
-        scalar_pairs.push(json!({"observable":name,"primary":a,"comparison":b,"stored_relative_sf_difference":err}));
+        scalar_pairs.push(json!({"observable":name,"primary":a,"comparison":b,
+            "primary_display":sf_display(&primary["solid"][primary_key],3)?,
+            "comparison_display":sf_display(&comparison[format!("SF_{name}")],4)?,
+            "primary_decimal_places":3,"comparison_decimal_places":4,
+            "difference_from_rounded_tokens":b-a,
+            "relative_difference_from_rounded_tokens":(b/a-1.).abs(),
+            "stored_relative_sf_difference":err,
+            "difference_basis":"retained rounded SF tokens, abs(comparison/primary - 1); not an underlying physical accuracy bound"}));
     }
     for j in 0..=2 {
         let px = x + 165. + j as f64 * 142.5;
@@ -347,7 +371,7 @@ pub(crate) fn project(
         x + 15.,
         y + 408.,
         21,
-        "Solver agreement (<= 2%); not physical test.",
+        "Rounded-SF comparison; no accuracy bound.",
     );
     let x = 620.;
     writeln!(
@@ -440,7 +464,7 @@ pub(crate) fn project(
         "Panel C compares two independent solvers on one mesh; Panel D shows binned regional peaks.",
     );
     svg.push_str("</g></svg>\n");
-    let summary = json!({"schema":"jarambit.retained_verification_projection.v1","subject":contract["subject"],"certificate_identity":contract["certificate_identity"],"producer_revision":contract["producer_revision"],"mesh_levels":g["levels_fine_to_coarse"],"sequence_admission":g["seq_ratio_gci"],"lateral_admission":g["sf_hunter_gci"],"scalar_pairs":scalar_pairs,"solid_mesh_sha256":solid["mesh_sha256"],"recovery":side["recovery"],"roi":side["roi"],"profiles":profiles,"profile_semantics":{"plate_raw":"maximum saved plate cell response in each planar-distance bin, scaled in the original producer; no global torsion correction","solid_nodal_avg":"maximum incident-cell unweighted-mean vertex response in each planar-distance bin; original cut distance >3 mm"},"plot_limits":{"sequence":[0.,2.],"lateral_sf":[0.,1.],"solver_sf":[0.,1.],"profile_MPa":[0.,1300.]},"interpolation":"none; six individual mesh-level observations and sixteen bin segments","fresh_solver_execution":false,"full_3d_field_available":false});
+    let summary = json!({"schema":"jarambit.retained_verification_projection.v2","supersedes_projection_schema":"jarambit.retained_verification_projection.v1","source_contract_schema":contract["schema"],"scalar_display_policy":{"primary_decimal_places":3,"comparison_decimal_places":4,"scope":"Original rounded SF observations; no reconstructed extra digit, new solver result or tighter physical accuracy claim"},"subject":contract["subject"],"certificate_identity":contract["certificate_identity"],"producer_revision":contract["producer_revision"],"mesh_levels":g["levels_fine_to_coarse"],"sequence_admission":g["seq_ratio_gci"],"lateral_admission":g["sf_hunter_gci"],"scalar_pairs":scalar_pairs,"solid_mesh_sha256":solid["mesh_sha256"],"recovery":side["recovery"],"roi":side["roi"],"profiles":profiles,"profile_semantics":{"plate_raw":"maximum saved plate cell response in each planar-distance bin, scaled in the original producer; no global torsion correction","solid_nodal_avg":"maximum incident-cell unweighted-mean vertex response in each planar-distance bin; original cut distance >3 mm"},"plot_limits":{"sequence":[0.,2.],"lateral_sf":[0.,1.],"solver_sf":[0.,1.],"profile_MPa":[0.,1300.]},"interpolation":"none; six individual mesh-level observations and sixteen bin segments","fresh_solver_execution":false,"full_3d_field_available":false});
     Ok((svg, summary))
 }
 
@@ -511,5 +535,59 @@ mod tests {
         p = r[2].clone();
         p["profile_MPa"]["plate_raw"]["4-5"] = json!(1400.);
         assert!(project(&r[0], &r[1], &p, &r[3], &r[4], &c).is_err());
+    }
+
+    #[test]
+    fn original_sf_precision_and_rounded_token_differences_survive_projection() {
+        let (r, c) = records();
+        let (svg, summary) = project(&r[0], &r[1], &r[2], &r[3], &r[4], &c).unwrap();
+        assert_eq!(
+            summary["schema"],
+            "jarambit.retained_verification_projection.v2"
+        );
+        for (i, primary, comparison) in [(0, "0.726", "0.7263"), (1, "0.669", "0.6693")] {
+            let pair = &summary["scalar_pairs"][i];
+            assert_eq!(pair["primary_display"], primary);
+            assert_eq!(pair["comparison_display"], comparison);
+            assert_eq!(pair["primary_decimal_places"], 3);
+            assert_eq!(pair["comparison_decimal_places"], 4);
+            assert!((num(&pair["difference_from_rounded_tokens"]).unwrap() - 0.0003).abs() < 1e-12);
+            let expected =
+                (num(&pair["comparison"]).unwrap() / num(&pair["primary"]).unwrap() - 1.).abs();
+            assert_eq!(
+                num(&pair["relative_difference_from_rounded_tokens"]).unwrap(),
+                expected
+            );
+            assert!(svg.contains(&format!(">{primary}</text>")));
+            assert!(svg.contains(&format!(">{comparison}</text>")));
+        }
+        assert!(!svg.contains(">0.6690</text>"));
+        assert!(!svg.contains(">0.7260</text>"));
+        assert!(svg.contains("Rounded-SF difference: 0.0413%"));
+        assert!(svg.contains("Rounded-SF difference: 0.0448%"));
+        assert_eq!(
+            summary["scalar_pairs"][0]["stored_relative_sf_difference"],
+            r[1]["dolfinx_cross_check"]["rel_err_nodal_avg"]
+        );
+    }
+    #[test]
+    fn unbound_extra_sf_precision_cannot_be_silently_rounded_or_reported_as_accuracy() {
+        let (r, c) = records();
+        let mut primary = r[2].clone();
+        let mut solid = r[1].clone();
+        primary["solid"]["SF_solid_nodal_avg"] = json!(0.72604);
+        solid["stored_solid"]["SF_skfem_nodal_avg"] = json!(0.72604);
+        solid["dolfinx_cross_check"]["rel_err_nodal_avg"] =
+            json!((0.7263_f64 / 0.72604 - 1.).abs());
+        assert!(project(&r[0], &solid, &primary, &r[3], &r[4], &c).is_err());
+        let mut comparison = r[3].clone();
+        let mut side = r[4].clone();
+        solid = r[1].clone();
+        comparison["SF_nodal_avg"] = json!(0.72631);
+        side["legacy_stdout"] = comparison.clone();
+        solid["dolfinx_cross_check"]["SF_nodal_avg"] = json!(0.72631);
+        solid["dolfinx_cross_check"]["rel_err_nodal_avg"] = json!((0.72631_f64 / 0.726 - 1.).abs());
+        assert!(project(&r[0], &solid, &r[2], &comparison, &side, &c).is_err());
+        assert!(sf_display(&Value::Null, 3).is_err());
     }
 }
