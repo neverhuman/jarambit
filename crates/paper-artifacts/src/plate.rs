@@ -671,7 +671,7 @@ pub(crate) fn project(doc: &Value, contract: &Value) -> Result<(String, Value)> 
 
 
 /// A reserved, non-overlaid whole-field locator; all boundary loops remain visible.
-fn smart_locator(s:&mut String,m:&Mesh,crop:&crate::saliency::CropReceipt,x:f64,y:f64) {
+fn smart_locator(s:&mut String,m:&Mesh,crop:&crate::saliency::CropReceipt,x:f64,y:f64) -> Option<Value> {
     writeln!(s,"<rect x=\"{}\" y=\"{}\" width=\"170\" height=\"155\" fill=\"white\"/>",x+380.,y+100.).unwrap();
     text(s,x+388.,y+124.,21,"Locator");
     let mut edges:BTreeMap<(usize,usize),usize>=BTreeMap::new();
@@ -691,6 +691,21 @@ fn smart_locator(s:&mut String,m:&Mesh,crop:&crate::saliency::CropReceipt,x:f64,
     let points=crop.locator_crop_quad.iter()
         .map(|p|format!("{:.6},{:.6}",p[0],p[1])).collect::<Vec<_>>().join(" ");
     writeln!(s,"<polygon points=\"{points}\" fill=\"none\" stroke=\"#c5292b\" stroke-width=\"1.5\"/>").unwrap();
+    if crop.coverage.area_fraction.is_some_and(|area| area < 0.01) {
+        let center = [
+            crop.locator_crop_quad.iter().map(|p| p[0]).sum::<f64>() / 4.,
+            crop.locator_crop_quad.iter().map(|p| p[1]).sum::<f64>() / 4.,
+        ];
+        let leader = [[x+496.,y+237.], [x+514.,y+224.], center];
+        writeln!(s,"<polyline points=\"{:.6},{:.6} {:.6},{:.6} {:.6},{:.6}\" fill=\"none\" stroke=\"#c5292b\" stroke-width=\"1.5\"/>",
+            leader[0][0],leader[0][1],leader[1][0],leader[1][1],center[0],center[1]).unwrap();
+        writeln!(s,"<text x=\"{}\" y=\"{}\" font-size=\"21\" fill=\"#c5292b\">Exact ROI</text>",x+388.,y+245.).unwrap();
+        Some(json!({"label":"Exact ROI","leader_svg_points":leader,
+            "label_svg_baseline":[x+388.,y+245.],"roi_enlarged":false,
+            "target":"center of the unchanged exact source-coordinate crop quadrilateral"}))
+    } else {
+        None
+    }
 }
 
 /// Additive smart view. The original project() remains the full-context companion.
@@ -797,7 +812,9 @@ pub(crate) fn project_smart(doc: &Value, contract: &Value, policy: &crate::salie
             s.push_str("</g>\n");
         }
         if crop.decision == crate::saliency::CropDecision::Zoom {
-            smart_locator(&mut s, &m, &crop, x, y);
+            if let Some(callout) = smart_locator(&mut s, &m, &crop, x, y) {
+                crop.record["locator_callout"] = callout;
+            }
         }
         crop.record["locator_outline_source"] = json!("original plate boundary edges; not a detailed CAD silhouette");
         crop.record["locator_svg_coordinate_decimals"] = json!(6);

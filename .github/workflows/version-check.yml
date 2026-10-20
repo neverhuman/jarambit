@@ -294,6 +294,18 @@ jobs:
             target/ieee/paper/hero-contrast-preview.png
             target/ieee/paper/population-detail.png
             target/ieee/paper/native-runs-*.png
+            target/ieee/paper/hero-appearance.png
+            target/ieee/paper/hero-appearance-unlit.png
+            target/ieee/paper/hero-full-range.png
+            target/ieee/paper/plate-smart-crops.png
+            target/ieee/paper/objective-priorities.v1.png
+            target/ieee/paper/run-??-asinh.png
+            target/ieee/paper/run-??-positive-affine.png
+            target/ieee/paper/run-??-positive-gap.png
+            target/ieee/paper/run-??-positive-points-affine.png
+            target/ieee/paper/run-??-positive-points-gap.png
+            target/ieee/paper/historical-positive-points-*.png
+            target/ieee/paper/screening-positive-points-*.png
             docs/paper/reproduce.sh
             docs/paper/Makefile
             docs/paper/publication.v2.json
@@ -303,6 +315,7 @@ jobs:
             crates/paper-artifacts/examples/verify_review_origin.rs
             crates/paper-artifacts/examples/fixtures/verify-review-origin-neutral.v1.json
             docs/paper/figures/fig1_hero_blender_v2.png
+            docs/paper/figures/hero-appearance.png
             docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg
             docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.png
             docs/paper/drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.svg
@@ -312,6 +325,17 @@ jobs:
             docs/paper/generated/reporting-interpretation.v2.json
             docs/paper/generated/test-field-roster.v1.tsv
             docs/paper/generated/hero-*.svg
+            docs/paper/generated/hero-appearance.v1.json
+            docs/paper/generated/objective-priorities.v1.svg
+            docs/paper/generated/objective-priorities.v1.json
+            docs/paper/generated/objective-priorities.v1.svg.manifest.json
+            docs/paper/generated/plate-smart-crops.svg
+            docs/paper/generated/plate-smart-crops.v1.json
+            docs/paper/generated/plate-smart-crops.svg.manifest.json
+            docs/paper/generated/population/story/*.svg
+            docs/paper/generated/population/story/*.v1.json
+            docs/paper/generated/population/positive/*.svg
+            docs/paper/generated/population/positive/*.v1.json
             docs/paper/generated/population-detail.svg
             docs/paper/generated/native-runs-*.svg
             docs/paper/generated/population/score-axis.v1.json
