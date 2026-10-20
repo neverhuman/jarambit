@@ -262,21 +262,40 @@
     },
     "units": "mm"
   },
+  "scalar_display_policy": {
+    "comparison_decimal_places": 4,
+    "primary_decimal_places": 3,
+    "scope": "Original rounded SF observations; no reconstructed extra digit, new solver result or tighter physical accuracy claim"
+  },
   "scalar_pairs": [
     {
       "comparison": 0.7263,
+      "comparison_decimal_places": 4,
+      "comparison_display": "0.7263",
+      "difference_basis": "retained rounded SF tokens, abs(comparison/primary - 1); not an underlying physical accuracy bound",
+      "difference_from_rounded_tokens": 0.00029999999999996696,
       "observable": "nodal_avg",
       "primary": 0.726,
+      "primary_decimal_places": 3,
+      "primary_display": "0.726",
+      "relative_difference_from_rounded_tokens": 0.0004132231404958553,
       "stored_relative_sf_difference": 0.000413
     },
     {
       "comparison": 0.6693,
+      "comparison_decimal_places": 4,
+      "comparison_display": "0.6693",
+      "difference_basis": "retained rounded SF tokens, abs(comparison/primary - 1); not an underlying physical accuracy bound",
+      "difference_from_rounded_tokens": 0.00029999999999996696,
       "observable": "nodal_max",
       "primary": 0.669,
+      "primary_decimal_places": 3,
+      "primary_display": "0.669",
+      "relative_difference_from_rounded_tokens": 0.0004484304932734773,
       "stored_relative_sf_difference": 0.000448
     }
   ],
-  "schema": "jarambit.retained_verification_projection.v1",
+  "schema": "jarambit.retained_verification_projection.v2",
   "sequence_admission": {
     "admitted": false,
     "asymptotic_validation": "not_established",
@@ -342,5 +361,7 @@
     "sequence_valid": true
   },
   "solid_mesh_sha256": "d3f7a444175fb6a6f64ee1118a00f2e83d6994c66b1c266cfd94ac14572faab1",
-  "subject": "cert_pipeline_r01_p14_c02"
+  "source_contract_schema": "jarambit.retained_verification_contract.v1",
+  "subject": "cert_pipeline_r01_p14_c02",
+  "supersedes_projection_schema": "jarambit.retained_verification_projection.v1"
 }

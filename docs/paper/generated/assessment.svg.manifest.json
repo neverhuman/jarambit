@@ -1,10 +1,10 @@
 {
   "figure": "docs/paper/generated/assessment.svg",
-  "figure_sha256": "b4aa0aed4352d79f9d8ea14609a98569cc9f071728b6e476b99e4cc6b16ddcb0",
+  "figure_sha256": "c2d56af4fe70d13ef0bcc83e7c2addc10a6c1654ddb0f3f458569fb7f6eeb5eb",
   "inputs": {
     "crates/cli/src/bench.rs": "191712f94e18ed8b49612edee84037ef4f9c4f533c3ebbb8342a7b866e7ffa71",
     "crates/crescent/src/fem.rs": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
-    "crates/paper-artifacts/src/assessment.rs": "9f96ca7f28714f07f55efb1912732e903b316196fb21de5eeaba045a4e2eca9c",
+    "crates/paper-artifacts/src/assessment.rs": "b184b9a4fac930864a5bee0612b9b634c7fd33def6c418926274c1138d7e7fb9",
     "docs/paper/assessment-inputs.v1.json": "fac0cd6cc08e731585e243277d401cb4e9a746279f4a544b012d4fae6b928171",
     "docs/tests/catalog.json": "521f1a3290b58b03f588cc0d8be1426ae01c813bca4405c2652060dcb1ae6ec0",
     "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_a4.json": "788196e1a534b1611df5a777741c7ec77079493c770a73ec2e976f30906cb472",

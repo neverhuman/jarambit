@@ -1,11 +1,11 @@
 {
   "figure": "docs/paper/figures/evidence-architecture.svg",
-  "figure_sha256": "ab7a038d0adb4944fc3adb8a359f8e7b06d991fc52ffff8e92727649af9c4cd8",
+  "figure_sha256": "509ca1e50ee68a26b46767a6462e2b44df9e02d8631efe4713d3abcfd4ecfa57",
   "inputs": {
-    "crates/paper-artifacts/src/publication.rs": "20fae8a854bd0c4054b7b961257fcd518348a6e9d75c59b55fcb3af49b4484fa",
-    "docs/paper/figures/evidence-architecture.svg": "ab7a038d0adb4944fc3adb8a359f8e7b06d991fc52ffff8e92727649af9c4cd8",
-    "docs/paper/sections/study-design.tex": "27d1b060970928b3d3839388f7003ceca6904355436488fccf224042ad592ba9",
-    "docs/paper/supplement/cohort-inventory.tex": "cbf4de7a896d755beedd687e4ea8dccf590c565cc2e4f217990514050464ea96"
+    "crates/paper-artifacts/src/publication.rs": "3c2f705a56b1356500ca5defbf0896e74db4009b6e27036c8a985b214ba9a749",
+    "docs/paper/figures/evidence-architecture.svg": "509ca1e50ee68a26b46767a6462e2b44df9e02d8631efe4713d3abcfd4ecfa57",
+    "docs/paper/sections/study-design.tex": "2a5697a27b3c587db4e1eb86435120ff2c38ed0169f99d5826dea7e5b61bbb9e",
+    "docs/paper/supplement/cohort-inventory.tex": "9daeec9e90fb58304e9e3d9d5744cc84dd7cbc5be9c875d63bfd0dd13a447cb2"
   },
   "role": "Authored explanatory diagram bound to retained study coverage; not a generated assessment join",
   "schema": "jarambit.authored_figure_manifest.v1",

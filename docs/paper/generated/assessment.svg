@@ -1,22 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1180" viewBox="0 0 1200 1180"><rect width="1200" height="1180" fill="white"/><g font-family="Arial, sans-serif" fill="#132d3b">
 <text x="20" y="36" font-size="25">Individual 2000 — Retained Structural Scalars &amp; Historical CAD Subscores</text>
-<text x="20" y="68" font-size="21">Assessed candidate (not qualified) · saved solver observations &amp; historical shortfall branch</text>
+<text x="20" y="68" font-size="21">Historical observations · current qualification unestablished</text>
 <rect x="20" y="90" width="560" height="485" fill="#f7f7f2" stroke="#d5dfdf"/>
 <rect x="620" y="90" width="560" height="485" fill="#f7f7f2" stroke="#d5dfdf"/>
 <rect x="20" y="595" width="560" height="485" fill="#f7f7f2" stroke="#d5dfdf"/>
 <rect x="620" y="595" width="560" height="485" fill="#f7f7f2" stroke="#d5dfdf"/>
-<text x="35" y="125" font-size="23">A / Alternate-support buckling model</text>
-<text x="35" y="158" font-size="21">Support assumptions (no retained mode):</text>
+<text x="35" y="125" font-size="23">A / Buckling interpretation withdrawn</text>
+<text x="35" y="158" font-size="21">Original support model; no admitted mode:</text>
 <rect x="42" y="174" width="510" height="38" fill="#e4ebec" stroke="#526873"/>
 <text x="56" y="200" font-size="21">Radial pin bearing + flange springs</text>
 <rect x="42" y="222" width="510" height="38" fill="#e4ebec" stroke="#526873"/>
 <text x="56" y="248" font-size="21">Winkler grip-pad elastic foundation</text>
-<text x="42" y="296" font-size="22">Buckling eigenvalue: 7.0351</text>
-<text x="42" y="332" font-size="22">Supported yield-order ratio: 5.2027</text>
-<text x="42" y="368" font-size="21">Multi-case minimum ratio: 1.4353</text>
-<text x="35" y="416" font-size="21">Load cases, regions &amp; mesh scopes differ.</text>
-<text x="35" y="448" font-size="21">Generalized eigen-operator symmetry open.</text>
-<text x="35" y="480" font-size="21">No spatial eigenvector retained in archive.</text>
+<text x="42" y="296" font-size="22">Current buckling value: not admitted</text>
+<text x="42" y="332" font-size="21">Historical scalar: 7.0350618718604325</text>
+<text x="42" y="368" font-size="21">Historical producer status: pass</text>
+<text x="35" y="416" font-size="21">K_support^-1 G used with symmetric eigsh</text>
+<text x="35" y="448" font-size="21">No retained symmetry / eigenpair residual</text>
+<text x="35" y="480" font-size="21">Current dependent qualification unestablished</text>
+<text x="42" y="512" font-size="21">Supported ratio (stored): 5.2027</text>
+<text x="42" y="544" font-size="21">Multi-case ratio (stored): 1.4353</text>
 <text x="635" y="125" font-size="23">B / Cyclic fatigue &amp; overload factors</text>
 <text x="635" y="189" font-size="21">Goodman fatigue</text>
 <path id="fat_sf" d="M835,182 L855.287178576764,182" stroke="#007e87" stroke-width="6" data-value="0.4717948506224175" data-limit="5"/>
