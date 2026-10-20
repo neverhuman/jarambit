@@ -3235,6 +3235,84 @@ mod tests {
         assert!(!lat_svg.contains("severe penalty"));
         assert!(!lat_svg.contains("multi-gate pen."));
 
+        // The actual visible labels must disclose each source-derived transform,
+        // not merely retain it in machine metadata or resurrect removed prose.
+        let detail_svg = &out["docs/paper/generated/population-detail.svg"];
+        let axes: Value =
+            serde_json::from_str(&out["docs/paper/generated/population/score-axis.v1.json"])
+                .unwrap();
+        for (profile, threshold) in [("native", 0.4054_f64), ("historical", 0.29066_f64)] {
+            assert_eq!(axes[profile]["transform"], "asinh(y/L)");
+            assert_eq!(axes[profile]["linear_threshold_L"], json!(threshold));
+            let visible = format!("asinh(y/L), L={threshold:.5}</text>");
+            for svg in [lat_svg, detail_svg] {
+                assert!(svg.contains(&visible));
+            }
+        }
+        assert_eq!(axes["screening"]["transform"], "linear");
+        for svg in [lat_svg, detail_svg] {
+            assert!(svg.contains("Screen deficit (lower is better); linear</text>"));
+            assert!(svg.contains("1,390 proposals have no retained numeric screen value; no score is imputed.</text>"));
+        }
+        for profile in ["native", "historical", "screening"] {
+            for value in points[profile]["raster"]["score_display_domain"]
+                .as_array()
+                .unwrap()
+            {
+                assert!(lat_svg.contains(&format!(">{:.4}</text>", value.as_f64().unwrap())));
+            }
+        }
+        assert!(detail_svg.contains("Q01–Q99 Detail — Full-Range Companion Retained</text>"));
+        for (profile, tails) in [
+            ("native", [19542u64, 1915492, 19526]),
+            ("historical", [19, 1945, 20]),
+            ("screening", [22, 2214, 23]),
+        ] {
+            assert_eq!(
+                points["detail"][profile]["below_inside_above"],
+                json!(tails)
+            );
+            assert_eq!(
+                tails.iter().sum::<u64>(),
+                points[profile]["raster"]["point_operations"]
+                    .as_u64()
+                    .unwrap()
+            );
+            assert_eq!(
+                points["detail"][profile]["raster"]["point_operations"],
+                tails[1]
+            );
+            assert!(detail_svg.contains(&format!(
+                "Below: {}; inside: {}; above: {}. Full range: population-latest.svg.</text>",
+                tails[0], tails[1], tails[2]
+            )));
+            for value in points["detail"][profile]["bounds"].as_array().unwrap() {
+                assert!(detail_svg.contains(&format!(">{:.4}</text>", value.as_f64().unwrap())));
+            }
+        }
+        let run_context = points["run_context"].as_array().unwrap();
+        assert_eq!(run_context.len(), 10);
+        for pair in run_context.chunks_exact(2) {
+            let key = format!(
+                "docs/paper/generated/native-runs-{}-{}.svg",
+                pair[0]["public_run_id"].as_u64().unwrap(),
+                pair[1]["public_run_id"].as_u64().unwrap()
+            );
+            for run in pair {
+                let visible = match run["axis"]["transform"].as_str().unwrap() {
+                    "asinh(y/L)" => {
+                        let threshold = run["axis"]["linear_threshold_L"].as_f64().unwrap();
+                        assert!(threshold.is_finite() && threshold > 0.);
+                        format!("asinh(y/L), L={threshold:.5}</text>")
+                    }
+                    "linear" => "linear</text>".to_string(),
+                    other => panic!("unexpected run axis transform: {other}"),
+                };
+                assert!(out[&key].contains(&visible));
+                assert_eq!(run["raster"]["point_operations"], 195456);
+            }
+        }
+
         let fit_svg = &out["docs/paper/figures/fitness-progress.svg"];
         // SC-DEC-183Z Panel B exact source-derived points and SHA-256 pointer checks
         assert!(fit_svg.contains(W411C3_FITNESS_CURVE_SHA256));
