@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 620" width="1280" height="620" font-family="DejaVu Sans, Arial, sans-serif">
 <title>Separate retained evidence paths; assessment coverage is selective</title>
 <desc>Representation defines recorded coordinates. Historical births, proposals and native births have distinct denominators and scoring. Separately assessed exports have their own retained bundles. No arrow joins all search records to downstream assessment.</desc>
-<metadata>Authored reporting diagram. Evidence basis: study-design.tex SHA256 aee26e3efc5184915e426e7e5c220486b8875ed306cda733a32a8e6a9e2fcc1c; cohort-inventory.tex SHA256 9168b67a5b5f3d42c50ad07d671a2f67ff5e5d315c6122f76042820d3df33ce3; source checkpoint e517ff894a47a5c3cf1aed5ca88faa1f4e2c9b07. This is not an assessment join or a qualification-rate estimate.</metadata>
+<metadata>Authored reporting diagram. Historical authoring basis (checkpoint e517; current bindings are in generated/evidence-architecture.svg.manifest.json): study-design.tex SHA256 aee26e3efc5184915e426e7e5c220486b8875ed306cda733a32a8e6a9e2fcc1c; cohort-inventory.tex SHA256 9168b67a5b5f3d42c50ad07d671a2f67ff5e5d315c6122f76042820d3df33ce3; source checkpoint e517ff894a47a5c3cf1aed5ca88faa1f4e2c9b07. This is not an assessment join or a qualification-rate estimate.</metadata>
 <defs><marker id="direction" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#334155"/></marker></defs>
 <rect width="1280" height="620" fill="#ffffff"/>
 <g fill="#132d3b">

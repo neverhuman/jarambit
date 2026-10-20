@@ -279,7 +279,7 @@ pub(crate) fn project(
         35.,
         158.,
         21,
-        "Support schematic (no mode shape retained):",
+        "Support assumptions (no retained mode):",
     );
     for (y, title) in [
         (174., "Radial pin bearing + flange springs"),

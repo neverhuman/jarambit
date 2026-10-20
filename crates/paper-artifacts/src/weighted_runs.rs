@@ -146,7 +146,7 @@ pub(crate) fn svg(p: &Value) -> Result<String> {
         20.,
         66.,
         21,
-        "15 saved generation summaries (30 observations) · stage &amp; scorer comparability not established",
+        "15 saved generation summaries (30 observations) · stage & scorer comparability not established",
     );
     writeln!(s,"<circle cx=\"30\" cy=\"96\" r=\"8\" stroke=\"#007e87\" stroke-width=\"3\" fill=\"none\"/><path d=\"M390,90 L402,102 M390,102 L402,90\" stroke=\"#d07b42\" stroke-width=\"3\"/>").unwrap();
     label(&mut s, 48., 103., 21, "Archive best (Hall of Fame)");
@@ -156,7 +156,7 @@ pub(crate) fn svg(p: &Value) -> Result<String> {
         620.,
         103.,
         21,
-        "Symbols coincide when archive &amp; round match",
+        "Symbols coincide when archive & round match",
     );
     let runs = p["runs"].as_array().ok_or("missing weighted plot runs")?;
     if runs.len() != 6 {

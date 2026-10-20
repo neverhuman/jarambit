@@ -281,6 +281,16 @@ jobs:
           name: ieee-paper-${{ github.sha }}
           path: |
             target/ieee/paper/main.pdf
+            target/ieee/paper/supplement.pdf
+            target/ieee/paper/INPUT_FILES
+            target/ieee/paper/supplement-pdfinfo.txt
+            target/ieee/paper/population-latest.png
+            target/ieee/paper/inheritance.png
+            target/ieee/paper/evidence-architecture.png
+            docs/paper/figure-semantics.v1.json
+            docs/paper/claim-evidence.v1.json
+            docs/paper/generated/crop-semantics.v1.json
+            docs/paper/generated/population/point-rendering.v1.json
             target/ieee/paper/plate-fields.png
             target/ieee/paper/verification.png
             target/ieee/paper/assessment.png

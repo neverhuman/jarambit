@@ -1,6 +1,6 @@
 {
   "excluded_numeric_records": 0,
-  "figure_sha256": "c73454ce24854c995dda8cd246f5977048f25e2543544126b8a99b769cbbd72f",
+  "figure_sha256": "f810b0c6a05ab56f5173cfc28f7a8432243cef515c61aa7da981986a31d78241",
   "historical": {
     "raster": {
       "clipping": false,
@@ -597,9 +597,9 @@
       }
     ]
   },
-  "selected_figure_universe": "ten retained native runs, historical births, joined numeric screens; unknown proposals in nonnumeric coverage row",
+  "selected_figure_universe": "ten retained native runs, historical births, joined numeric screens; unknown proposals disclosed in a nonnumeric coverage note",
   "unknown": {
-    "display": "nonnumeric coverage row; no invented score",
+    "display": "nonnumeric coverage note; no plotted band or invented score",
     "numeric_point_operations": 0,
     "records": 1390,
     "source_identity_sha256": "21abb8fa6d2c66e6eeb1228e88bd28ccc379ad5c9481899c9f44552f4ea1ccb0"
