@@ -216,6 +216,100 @@ impl Contrast {
     }
 }
 
+/// Additive accounting only. Keep the legacy three-bucket loop and its
+/// accumulation order unchanged; this does not modify the display transfer.
+fn contrast_accounting(values: &[Option<f64>], area: &[f64], window: Contrast) -> Result<Value> {
+    if values.len() != area.len()
+        || !window.low.is_finite()
+        || !window.high.is_finite()
+        || window.low > window.high
+    {
+        return Err("display: invalid contrast accounting registration or bounds".into());
+    }
+    let mut counts = [0usize; 5];
+    let mut areas = [0.; 5];
+    let mut endpoints = [0usize; 2];
+    let mut endpoint_areas = [0.; 2];
+    let (mut missing_count, mut missing_area, mut zero_area_count) = (0usize, 0., 0usize);
+    let mut whole_area = 0.;
+    for (&value, &weight) in values.iter().zip(area) {
+        if !weight.is_finite() || weight < 0. {
+            return Err("display: invalid contrast source area".into());
+        }
+        whole_area += weight;
+        zero_area_count += usize::from(weight == 0.);
+        let Some(value) = value else {
+            missing_count += 1;
+            missing_area += weight;
+            continue;
+        };
+        if !value.is_finite() {
+            return Err("display: nonfinite contrast observation".into());
+        }
+        // A collapsed bound's equal values belong to equal_low only. The same
+        // cells are never counted a second time as equal_high.
+        let bucket = if value < window.low {
+            0
+        } else if value == window.low {
+            1
+        } else if value > window.high {
+            4
+        } else if value == window.high {
+            3
+        } else {
+            2
+        };
+        counts[bucket] += 1;
+        areas[bucket] += weight;
+        let mapped = window.map(value);
+        if !mapped.is_finite() {
+            return Err("display: nonfinite contrast transfer in accounting".into());
+        }
+        // Count actual endpoint coordinates, not strict tails: boundary values
+        // also render at endpoints; a collapsed window maps every value to0.5.
+        let endpoint = if mapped == 0. {
+            Some(0)
+        } else if mapped == 1. {
+            Some(1)
+        } else {
+            None
+        };
+        if let Some(endpoint) = endpoint {
+            endpoints[endpoint] += 1;
+            endpoint_areas[endpoint] += weight;
+        }
+    }
+    if !whole_area.is_finite() {
+        return Err("display: contrast source area denominator overflow".into());
+    }
+    let fraction = |a: f64| {
+        if whole_area > 0. {
+            Some(a / whole_area)
+        } else {
+            None
+        }
+    };
+    Ok(json!({
+        "schema":"jarambit.contrast_saturation_accounting.v1",
+        "whole_source_area_mm2":whole_area,
+        "area_fraction_denominator":"all positive original source triangle area, including cells with missing composite; before overlays or surface projection",
+        "zero_area_cell_count":zero_area_count,
+        "count_scope":"all finite composite cells, including zero-area cells; source-area fractions give zero weight to zero-area cells",
+        "buckets":{"order":["below_low","equal_low","interior","equal_high","above_high"],
+            "counts":counts,"source_area_mm2":areas,"source_area_fractions":areas.map(fraction)},
+        "missing":{"count":missing_count,"source_area_mm2":missing_area,"source_area_fraction":fraction(missing_area)},
+        "strict_tails":{"order":["below_low","above_high"],"counts":[counts[0],counts[4]],
+            "source_area_fractions":[fraction(areas[0]),fraction(areas[4])]},
+        "rendered_endpoints":{"order":["lower","upper"],"counts":endpoints,
+            "source_area_mm2":endpoint_areas,"source_area_fractions":endpoint_areas.map(fraction),
+            "rule":"Contrast::map(value) equals0 or1; includes boundary equalities for a noncollapsed window; not a strict-tail count"},
+        "collapsed_window":window.low==window.high,
+        "equality_convention":"disjoint buckets; when low==high, all common-boundary ties are counted once in equal_low and equal_high is zero",
+        "collapsed_transfer":"unchanged Contrast::map sends EVERY finite value to0.5 when low==high, including strict outside values; both rendered endpoint counts are zero",
+        "zero_denominator":"area fractions are null when whole positive source area is zero; counts remain explicit"
+    }))
+}
+
 pub(crate) struct Composite {
     pub values: Vec<Option<f64>>,
     pub counts: Vec<usize>,
@@ -501,7 +595,7 @@ pub(crate) fn composite(root: &Path, doc: &Value, area: &[f64]) -> Result<Compos
         "support_denominator":"4 eligible response channels; area fractions over all positive original source-triangle area, before overlays/projection",
         "rows":inventory,"cells":cells,"palette":contract["palette"],"surface_lighting":"none",
         "default_contrast":{"domain":[0.,1.],"status":"full-range; actual readability review pending"},
-        "Q05_Q95_preview":{"low":low,"high":high,"counts_below_inside_above":tails,"area_mm2_below_inside_above":tail_area,"whole_source_area_mm2":whole_area,"status":"additional preview; not selected without independent readability review"},
+        "Q05_Q95_preview":{"low":low,"high":high,"counts_below_inside_above":tails,"area_mm2_below_inside_above":tail_area,"whole_source_area_mm2":whole_area,"status":"additional preview; not selected without independent readability review","saturation_accounting":contrast_accounting(&values,area,Contrast{low,high})?},
         "display_transfer":contract["display_transfer"],"mask_reconstruction":"original source-bound plate admission; no value==0 missingness heuristic",
         "current_mask_terminology":{"contract":"docs/paper/data/reporting-interpretation-contract.v2.json","ring":"source-masked half-plane centroid.x >= sx0 - 3.0; includes seated and unloaded regions","original_contract_and_mask_bytes_preserved":true},
         "scope":"Reporting only; no new solve/CAD/search, scalar broadcast or foreign-subject vector. Surface color is display transfer of retained plate response, not volumetric stress."
@@ -628,5 +722,145 @@ mod tests {
         assert_eq!(palette.rgb(0.), [8, 28, 74]);
         assert_eq!(palette.rgb(0.5), [250, 204, 21]);
         assert_eq!(palette.rgb(1.), [153, 27, 27]);
+    }
+
+    #[test]
+    fn contrast_boundaries_strict_tails_and_rendered_endpoints_are_distinct() {
+        let values = [
+            Some(0.),
+            Some(0.2),
+            Some(0.5),
+            Some(0.8),
+            Some(1.),
+            None,
+            Some(0.),
+        ];
+        let a = contrast_accounting(
+            &values,
+            &[1., 2., 3., 4., 5., 6., 0.],
+            Contrast {
+                low: 0.2,
+                high: 0.8,
+            },
+        )
+        .unwrap();
+        assert_eq!(a["buckets"]["counts"], json!([2, 1, 1, 1, 1]));
+        assert_eq!(a["buckets"]["source_area_mm2"], json!([1., 2., 3., 4., 5.]));
+        assert_eq!(a["strict_tails"]["counts"], json!([2, 1]));
+        assert_eq!(a["rendered_endpoints"]["counts"], json!([3, 2]));
+        assert_eq!(a["rendered_endpoints"]["source_area_mm2"], json!([3., 9.]));
+        assert_eq!(a["whole_source_area_mm2"], 21.);
+        assert_eq!(a["zero_area_cell_count"], 1);
+        assert_eq!(a["missing"]["count"], 1);
+        assert_eq!(a["missing"]["source_area_mm2"], 6.);
+        for (i, area) in [1., 2., 3., 4., 5.].into_iter().enumerate() {
+            assert_eq!(a["buckets"]["source_area_fractions"][i], json!(area / 21.));
+        }
+        assert_eq!(
+            a["strict_tails"]["source_area_fractions"],
+            json!([1. / 21., 5. / 21.])
+        );
+        assert_eq!(
+            a["rendered_endpoints"]["source_area_fractions"],
+            json!([3. / 21., 9. / 21.])
+        );
+        let fraction_sum: f64 = a["buckets"]["source_area_fractions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|v| v.as_f64().unwrap())
+            .sum();
+        assert!(
+            (fraction_sum + a["missing"]["source_area_fraction"].as_f64().unwrap() - 1.).abs()
+                < 1e-12
+        );
+        assert_eq!(
+            a["buckets"]["counts"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(|v| v.as_u64().unwrap())
+                .sum::<u64>()
+                + a["missing"]["count"].as_u64().unwrap(),
+            values.len() as u64
+        );
+    }
+    #[test]
+    fn collapsed_contrast_counts_common_boundary_once_and_renders_no_endpoints() {
+        let values = [Some(0.), Some(0.5), Some(0.5), Some(1.), None];
+        let window = Contrast {
+            low: 0.5,
+            high: 0.5,
+        };
+        let a = contrast_accounting(&values, &[1., 2., 3., 4., 5.], window).unwrap();
+        assert_eq!(a["collapsed_window"], true);
+        assert_eq!(a["buckets"]["counts"], json!([1, 2, 0, 0, 1]));
+        assert_eq!(a["buckets"]["source_area_mm2"], json!([1., 5., 0., 0., 4.]));
+        assert_eq!(a["strict_tails"]["counts"], json!([1, 1]));
+        assert_eq!(
+            a["strict_tails"]["source_area_fractions"],
+            json!([1. / 15., 4. / 15.])
+        );
+        assert_eq!(a["rendered_endpoints"]["counts"], json!([0, 0]));
+        assert_eq!(
+            a["rendered_endpoints"]["source_area_fractions"],
+            json!([0., 0.])
+        );
+        for v in values.into_iter().flatten() {
+            assert_eq!(window.map(v), 0.5);
+        }
+        assert_eq!(a["missing"]["source_area_fraction"], json!(5. / 15.));
+    }
+    #[test]
+    fn missing_and_zero_area_remain_explicit_without_invented_fraction_denominators() {
+        let window = Contrast { low: 0., high: 1. };
+        let a = contrast_accounting(&[None, None], &[1., 2.], window).unwrap();
+        assert_eq!(a["buckets"]["counts"], json!([0, 0, 0, 0, 0]));
+        assert_eq!(
+            a["buckets"]["source_area_fractions"],
+            json!([0., 0., 0., 0., 0.])
+        );
+        assert_eq!(a["missing"]["source_area_fraction"], 1.);
+        let zero = contrast_accounting(&[Some(0.), Some(0.5)], &[0., 0.], window).unwrap();
+        assert_eq!(zero["buckets"]["counts"], json!([0, 1, 1, 0, 0]));
+        assert_eq!(zero["rendered_endpoints"]["counts"], json!([1, 0]));
+        assert_eq!(zero["zero_area_cell_count"], 2);
+        assert_eq!(
+            zero["buckets"]["source_area_fractions"],
+            json!([null, null, null, null, null])
+        );
+        assert_eq!(
+            zero["rendered_endpoints"]["source_area_fractions"],
+            json!([null, null])
+        );
+        assert!(zero["missing"]["source_area_fraction"].is_null());
+        let empty = contrast_accounting(&[], &[], window).unwrap();
+        assert_eq!(empty["whole_source_area_mm2"], 0.);
+        assert_eq!(empty["buckets"]["counts"], json!([0, 0, 0, 0, 0]));
+        assert_eq!(
+            empty["buckets"]["source_area_fractions"],
+            json!([null, null, null, null, null])
+        );
+    }
+    #[test]
+    fn corrupt_contrast_accounting_inputs_are_refused_even_at_zero_area() {
+        let window = Contrast { low: 0., high: 1. };
+        assert!(contrast_accounting(&[Some(0.)], &[], window).is_err());
+        for value in [f64::NAN, f64::INFINITY] {
+            assert!(contrast_accounting(&[Some(value)], &[0.], window).is_err());
+            assert!(contrast_accounting(&[None], &[value], window).is_err());
+            assert!(contrast_accounting(
+                &[Some(0.)],
+                &[1.],
+                Contrast {
+                    low: value,
+                    high: 1.
+                }
+            )
+            .is_err());
+        }
+        assert!(contrast_accounting(&[Some(0.)], &[-1.], window).is_err());
+        assert!(contrast_accounting(&[Some(0.)], &[1.], Contrast { low: 1., high: 0. }).is_err());
+        assert!(contrast_accounting(&[None, None], &[f64::MAX, f64::MAX], window).is_err());
     }
 }
