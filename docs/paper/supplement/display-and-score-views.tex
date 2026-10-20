@@ -37,6 +37,14 @@ Total metadata & 52 & $44$ catalog rows plus $8$ channel rows, not $52$ independ
 \end{tabular}
 \end{table}
 
+\subsection{Quantitative Companions to the Appearance View}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{hero-full-range.png}
+\caption{Unlit full-range quantitative companion to the appearance view in main Figure~\ref{M-fig:cover}. Surface and legend use the same flat transfer of the retained four-channel index over $[0,1]$, with mesh off. Lighting changes RGB in the main appearance view; its colors must not be read as this quantitative key. Neither view changes the admitted geometry, responses, masks, contributor counts or retained scores, and neither establishes safety, fitness or qualification.}
+\label{fig:hero-quantitative}
+\end{figure}
+
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\textwidth]{hero-support.png}
@@ -59,9 +67,47 @@ $[0.1057475260,0.8621273953]$. Below it are $1433$ source cells over
 $190.720950\,\mathrm{mm}^2$; above it are $1199$ cells over
 $190.751611\,\mathrm{mm}^2$. Each tail is approximately $5.0\%$ of original
 \emph{source area}, not $5.0\%$ of cell count. Only this preview saturates
-those tails. Main Figure~\ref{M-fig:cover} retains the full $[0,1]$ key with
-mesh off. Colors are display coordinates, not physical units or fitness.}
+those tails. Figure~\ref{fig:hero-quantitative} retains the unlit full
+$[0,1]$ quantitative key with mesh off; the main appearance view separately
+uses lighting. Colors are display coordinates, not physical units or fitness.}
 \label{fig:display-contrast}
+\end{figure}
+
+\subsection{Source-Coordinate Crops and Whole-Field Denominators}
+Main Figure~\ref{M-fig:plate-fields} changes only the viewing window.
+For each eligible original field, a range cutoff is
+$t_\alpha=v_{\min}+\alpha(v_{\max}-v_{\min})$ with fixed candidates
+$\alpha=0.50,0.75,0.90$; it is not a count or area quantile.
+The baseline $t_{50}$ always comes from the whole original eligible field,
+including when a more concentrated cutoff proposes the window.
+For original triangle areas $A_i$ and their exact rectangularly clipped
+areas $A_i^{\mathrm{crop}}$, the area and excess fractions are
+\begin{equation}
+ \frac{\sum_i A_i^{\mathrm{crop}}}{\sum_i A_i},
+ \qquad
+ \frac{\sum_i A_i^{\mathrm{crop}}(v_i-t_{50})_+}
+      {\sum_i A_i(v_i-t_{50})_+}.
+\end{equation}
+Both sums use the whole source-eligible set after its original masks;
+missing values are not zeros, and genuine finite zeros remain valid.
+Positive excess is display saliency, not physical energy.
+The versioned policy requires at least $95\%$ of that whole-field excess,
+a bounding-box fraction at most $0.40$ and scale gain at least $1.75$,
+with padding fraction $0.08$. These are display constants, not physical
+or qualification gates; $95\%$ is a policy threshold, not a reported
+achieved coverage. All threshold ties, maxima and disconnected support
+participate. Missing, constant or insufficiently concentrated fields
+retain full context; undefined fractions remain missing.
+No crop-local color normalization is applied.
+The source-bound \nolinkurl{docs/paper/generated/plate-smart-crops.v1.json}
+records the actual decision, thresholds, source hashes, clipped areas,
+whole-field integrals and affine crop/locator coordinates for each panel.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{plate-fields.png}
+\caption{Spatial concentration differs across Individual~2000's retained plate responses. A: scaled multi-case envelope (MPa). B: unit lateral response (MPa/N). C: unit ring traction (MPa/N). D: raw unit chord torsion (MPa/(N\,mm)). The plate has $25{,}209$ triangles; gray marks the envelope's 75 tip-excluded cells and ring field's $14{,}875$ cells in the producer-masked half-plane, which includes the seat and unloaded blade. The fourth eligible response channel, in-plane tip pry, is shown separately in main Figure~\ref{M-fig:saliency-crops}C. Each field keeps its own physical scale.}
+\label{fig:plate-full-context}
 \end{figure}
 
 \clearpage
@@ -126,3 +172,40 @@ Runs~10--11, using each run's separately printed scale.}
 \label{fig:native-runs-10-11}
 \end{figure}
 \clearpage
+
+\subsection{Bounded Run~5 Display Comparison}
+Figures~\ref{fig:run5-display-comparison} and~\ref{fig:run5-positive-affine}
+reuse the same retained cumulative-best and full-population median summaries
+as main Figure~\ref{M-fig:run5-gap}. They are summary views, not a second
+all-record scatter or new observations. The full numeric point universe and
+its $1390$ nonnumeric proposals remain in main
+Figure~\ref{M-fig:population-latest}; none is reassigned a display-floor score.
+Each comparison uses the complete compatible original Run~5 range,
+rather than deriving normalization from the summary trace or a crop.
+Exact parameters, source membership and unchanged leader ties accompany
+the generated story receipts.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{run-05-asinh.png}
+\caption{Run~5 summaries on the declared $\operatorname{asinh}(f/L)$ scale,
+with linear original generation and original-score ticks. The run's printed
+$L$ belongs to this scope, not the pooled native overview. The retained-best
+trace is monotone by construction; its final stored-score plateau is not
+physical convergence or qualification.}
+\label{fig:run5-display-comparison}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{run-05-positive-affine.png}
+\caption{The same Run~5 summaries with positive-affine logarithmic display:
+$x_+=g+1$, $y_+=(f-m)/s+\varepsilon$, where $m=f_{\min}$,
+$s=f_{\max}-f_{\min}$ use the full original compatible run and
+$\varepsilon=10^{-6}$ is a display floor. Original-score ticks use
+$f=m+s(y_+-\varepsilon)$; generation ticks recover $g=x_+-1$.
+The main gap view instead labels normalized gap to its fixed final
+retained best. Both retain original zero/negative scores and missingness;
+shifted-score ratios and log slopes have no physical interpretation.}
+\label{fig:run5-positive-affine}
+\end{figure}
