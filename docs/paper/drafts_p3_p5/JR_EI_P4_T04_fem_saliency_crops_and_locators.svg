@@ -19814,7 +19814,7 @@
 <text x="572.0" y="640.0" font-size="22" text-anchor="end" fill="#334155">0.0264 Max</text>
 <text x="50.0" y="668.0" font-size="22" fill="#475569">BBox: [-28.0, -26.0] to [84.0, 23.0] mm</text>
 <rect x="616.0" y="86.0" width="560.0" height="596.0" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
-<text x="630.0" y="110.0" font-size="23" font-weight="700" fill="#0f172a">B. Terminal Blade Torsion Crop (MPa/(N·mm))</text>
+<text x="630.0" y="110.0" font-size="23" font-weight="700" fill="#0f172a">B. Tip Torsion Crop (MPa/(N·mm))</text>
 <text x="630.0" y="134.0" font-size="22" fill="#475569">Rect. window: 64.52% global; raw max 34.8589</text>
 <defs><clipPath id="crop-clip-1"><rect x="646" y="168" width="311.212121212121" height="316"/></clipPath></defs>
 <rect x="630.0" y="144.0" width="532.0" height="446.0" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
@@ -29243,11 +29243,12 @@
 <rect x="640.0" y="608.0" width="512.0" height="13.0" fill="none" stroke="#334155" stroke-width="0.8"/>
 <text x="640.0" y="640.0" font-size="22" fill="#334155">0.0</text>
 <text x="896.0" y="640.0" font-size="22" text-anchor="middle" fill="#334155">0.3306</text>
-<text x="1152.0" y="640.0" font-size="22" text-anchor="end" fill="#334155">≥0.6611 (over-range)</text>
+<text x="1152.0" y="640.0" font-size="22" text-anchor="end" fill="#334155">0.6611</text>
+<text x="640.0" y="540.0" font-size="22" fill="#334155">≥0.6611 (over-range)</text>
 <text x="630.0" y="668.0" font-size="22" fill="#475569">Posed crop bbox: [166.0, 4.0] to [198.5, 37.0] mm</text>
 <rect x="1196.0" y="86.0" width="560.0" height="596.0" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
 <text x="1210.0" y="110.0" font-size="23" font-weight="700" fill="#0f172a">C. In-Plane Tip Pry Saliency Crop (MPa/N)</text>
-<text x="1210.0" y="134.0" font-size="22" fill="#475569">Rect. window: 100% global; T6 peak 2.9181 MPa/N</text>
+<text x="1210.0" y="134.0" font-size="22" fill="#475569">Rect. window: 100% global; T6 peak 2.9181</text>
 <defs><clipPath id="crop-clip-2"><rect x="1226" y="168" width="500" height="143.518518518519"/></clipPath></defs>
 <rect x="1210.0" y="144.0" width="532.0" height="446.0" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
 <g clip-path="url(#crop-clip-2)">
@@ -54462,7 +54463,7 @@
 <polygon points="1439.94,297.44 1439.58,297.13 1440.39,297.07" fill="#104287" stroke="#104287" stroke-width="0.25"/>
 </g>
 <rect x="1546.0" y="494.0" width="188.0" height="88.0" rx="4" fill="#ffffff" fill-opacity="0.94" stroke="#64748b" stroke-width="1"/>
-<text x="1552.0" y="514.0" font-size="20" font-weight="600" fill="#334155">PIP Locator</text>
+<text x="1546.0" y="486.0" font-size="20" font-weight="600" fill="#334155">PIP Locator</text>
 <polygon points="1693.5,544.5 1693.3,544.6 1693.4,544.4" fill="#94a3b8" stroke="#94a3b8" stroke-width="0.2"/>
 <polygon points="1691.1,546.3 1691.1,546.4 1691.0,546.2" fill="#94a3b8" stroke="#94a3b8" stroke-width="0.2"/>
 <polygon points="1689.6,546.3 1689.4,546.1 1689.7,546.0" fill="#94a3b8" stroke="#94a3b8" stroke-width="0.2"/>
