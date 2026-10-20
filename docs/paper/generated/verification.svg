@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1020" viewBox="0 0 1200 1020"><rect width="1200" height="1020" fill="white"/><g font-family="Arial, sans-serif" fill="#132d3b">
-<text x="20" y="34" font-size="25">Individual 2000 — Mesh Convergence, Independent Solvers &amp; Regional Stress</text>
+<text x="20" y="34" font-size="25">Individual 2000 — Plate Mesh Study, Shared-Input Comparison &amp; Regional Stress</text>
 <text x="20" y="66" font-size="21">Assessed candidate (not qualified) · saved 3-level plate sequence &amp; matched quadratic tetrahedral solid</text>
 <rect x="20" y="86" width="560" height="385" fill="#f7f7f2" stroke="#d5dfdf"/>
 <text x="35" y="118" font-size="23">A / Tip-before-ring yield-order ratio</text>
@@ -50,7 +50,7 @@
 <text x="698" y="418" font-size="21">h = sqrt(max triangle area), mm; finer ←</text>
 <text x="635" y="452" font-size="21">No admitted GCI: oscillatory sequence</text>
 <rect x="20" y="492" width="560" height="435" fill="#f7f7f2" stroke="#d5dfdf"/>
-<text x="35" y="524" font-size="23">C / Independent-solver comparison</text>
+<text x="35" y="524" font-size="23">C / Shared-mesh assembly/solver comparison</text>
 <text x="35" y="554" font-size="21">Safety factors · matched quadratic tet mesh</text>
 <text x="35" y="600" font-size="22">Vertex mean</text>
 <path id="solver-nodal_avg-0" d="M185,618 L391.90999999999997,618" stroke="#007e87" stroke-width="7" fill="none" data-value="0.726"/>
@@ -109,5 +109,5 @@
 <text x="635" y="867" font-size="21">Teal: plate cell peaks · Orange: solid vertex mean</text>
 <text x="635" y="900" font-size="21">Binned maxima only; not a pointwise 3D field.</text>
 <text x="20" y="964" font-size="22">Mesh-refinement metadata are valid, but neither plate observable admits a Richardson error bound.</text>
-<text x="20" y="998" font-size="21">Panel C compares two independent solvers on one mesh; Panel D shows binned regional peaks.</text>
+<text x="20" y="998" font-size="21">C: two assembly/solver implementations with shared inputs. D: binned regional peaks.</text>
 </g></svg>

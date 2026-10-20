@@ -35,12 +35,15 @@
     "crates/paper-artifacts/src/native_history.rs": "159f8f3fcebfc2805387814552a92fa2ed8670765bc62619afdc18ee1cefc7ae",
     "crates/paper-artifacts/src/reference.rs": "97d2a6f151614d3cc7f5dfd4e4b0659ceb352340066c0cc7b2a5e61346e0640f",
     "crates/paper-artifacts/src/validation.rs": "f3a4f5930169a1c92b22ce539c46041b947548d325b44f1614a7261fb91a06ca",
-    "crates/paper-artifacts/src/verification.rs": "62604c2f187c020226478ed2b0eb8a9ec4d9e70a68bc1e7d2ff7a31e39d1ba4a",
+    "crates/paper-artifacts/src/verification.rs": "4aafe5b995085bfa22a3893810efa8be39aeed1297587193b6e45965240ef293",
     "crates/paper-artifacts/src/visuals.rs": "532fca340f3d33bbd37982b521d6075490f1108243ea3549ee7ad062030a95b1",
     "crates/paper-artifacts/src/weighted_runs.rs": "5e4fc448e725a673a7fdb03a047259a5993e2e342f4a7ec9bfcfbef8d59e5b85",
     "crates/paper-artifacts/examples/verify_review_origin.rs": "0b98bc719b4d569ee4842ae58471b585dbffba9f1a7cae7d4d977be188eea13d",
     "crates/paper-artifacts/examples/fixtures/verify-review-origin-neutral.v1.json": "7fdde1b3fe648c63887e3cc34cc476b677f38852ac1c296e9f0249afafc86b57",
-    "current_executed_reporting_binary_sha256": "39b50dc4f8c8311bb2594acb33875f9df86c2f2a7bf278d48929788ee07357dd"
+    "current_executed_reporting_binary_sha256": "bc75bb97ad08db2696630aab59207618ef4cfcadc83f2daae5e758a5e2b22f18",
+    "README.md": "9850f4aa635db8664898d381a3072a4a9a50c84147ec6ec71c77ff038cde54cb",
+    "docs/paper/CROSSWALK_SUPPLEMENT.md": "a42c27d8b70bd804dab6da726fa183ca7403a560025ed051d0c2ea9309860bb5",
+    "docs/paper/supplement/numerical-methods.tex": "1fe7d935e5ad65ed6dea5600ab4202c107c265233dc71a1a8af171e8ac34d876"
   },
   "sc_dec_183p_and_183s_fixes_verified": {
     "1_jev1_binary_framing": {
@@ -129,12 +132,12 @@
     "docs/paper/figures/inheritance.svg": "abf568cbf39ce5b7b330bf14794d82fd5f46a7860f376fbc44f23d25c17f2488",
     "docs/paper/generated/shared_projection.v2.json": "1bb3b0b48b61ff1e349148393fe01b3ebed0cae15681190eddc1be049709c696",
     "docs/paper/generated/overview.md": "6282f2ec0367045688ccf626e80f7f1ba9c6f1f72c5b778011639ef61c0e8d05",
-    "docs/paper/generated/manifest.json": "e0b3fa72f54e22b4c2aed573d7a08972312747dce0d70d85f37ad60b2268081c",
+    "docs/paper/generated/manifest.json": "8735e8dbbb86e0274a4093ea1f6add0247f3eb93f8311b59a210c326264d6bd5",
     "docs/paper/publication.v2.json": "cd084ebce9e37f44288edf92b988bd85bfbc448a09bd23e333bd915266315752",
     "docs/paper/generated/population/gen800_scatter_cache.v1.json": "4eabe5a581dcb655b413857bfb3c28741070dc390b3ca71d744aa51f58e7a493",
     "docs/paper/generated/battery-matrix.svg": "831ae3ffa57df6f8bcd5a26f16d0ca745e00da2bc279f4bd9bc13e881665f669",
     "docs/paper/generated/native-runs-2-3.svg": "4725fa63985bbd80230411f3138b44f3c3fc51395b21c29caa10ada2c5ec103c",
-    "docs/tests/visuals.v1.json": "5a3ae7b3f34a06a539c9efcf5d986ec0b4383d3547ad7df2212da3f893297b4a",
+    "docs/tests/visuals.v1.json": "3c54fef3efb41003d68613e64da8695643ee00ba466926b84d8bca43f77b3335",
     "docs/paper/generated/population/point-rendering.v1.json": "fff1a26edbe16df12f182396129dc6f596e6144a3d4a438edf38add684e967fc",
     "docs/paper/generated/hero-contrast-preview.svg": "98b35891c066021df5e1e9540c2ef71012585e518a1070bdaf93f1c92eb8a0a3",
     "docs/paper/generated/native-runs-6-7.svg": "8336168576c6dd60c098dabbe8a8fd33a7ae1b1c03a7c072b934e4f7d694d36d",
@@ -172,7 +175,7 @@
     "docs/paper/generated/display-composite.v1.json": "796723cd4d59ad27f30b55ca62b83bca8f45c06f3a580d8f85a0fd299dbb9d3b",
     "docs/paper/generated/export-identity.json": "31922d147d249fa88203742edbf28c1115fe4a54276a99f8ef993d3f27d97bd2",
     "docs/paper/generated/test-field-roster.v1.tsv": "fefc751025c9f3b8c7f4391cf17449fe1da1265b08fd5fc4ad9549d115b96638",
-    "docs/paper/generated/verification.svg": "a84d788cf0940ea9b3ce27b5e6e18d4d2b40aa089e4db39944209586c910c2e7",
+    "docs/paper/generated/verification.svg": "c6468a3ed836e2f376d91287e05337dfb803f25831b14f26cf9f1a359a98e61b",
     "docs/paper/generated/lineage.json": "cc94cdb8b24ac9e750a160f8aeca14768dfd1d6ca7f3122de9ab503b24ba721d",
     "docs/paper/generated/lineage.svg.manifest.json": "756bf95d3c26b8f94e9faff17f858e6877af2e5a873ea05db13a703e90506d32",
     "docs/paper/generated/population-detail.svg": "389466a0aa794bf22667d35d263047fc04ce7f574209043bd7c30c343abad2fc",
@@ -183,7 +186,7 @@
     "docs/paper/figures/inheritance-details.svg": "669b5c70e4521f6c68e7652e885584d0c4d88562fb2266e3fcbf5a946d079a25",
     "docs/paper/generated/battery-matrix.json": "fd1620976574c3803821f16d87775bdb16b123434f71afed8e74498ec6043d59",
     "docs/paper/generated/reference.svg": "66c970a77f5ad0d38e3262d3d2f6a7e71a10d567214f2c0d5263294e49920e2e",
-    "docs/paper/generated/verification.svg.manifest.json": "08c4b2bc1e708c49561c4082251ed88e7512195b77363d4c4ba71625840aa06d",
+    "docs/paper/generated/verification.svg.manifest.json": "e5a11fc4134596597cc6b1f7721f2b270ec657ba857eb8d22690f8915f94fb68",
     "docs/paper/generated/summary.json": "d2c82b0dd13bcc17b7ad932ddabb5ecb7d524797424e20db848e62b8ff0c7e6e",
     "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg": "5bcf0b044576bf77708867aa28116329fda45e5866db6cc8cd4e59fb9f850a71",
     "docs/paper/generated/crop-source-hash.tex": "ed03828c332aa582a9bb0b0fb638738c6a22f7ee0d76c35cc38f45f718230322",
@@ -196,17 +199,18 @@
     "exit_code": 0
   },
   "integration_rebinding": {
-    "checked_utc": "2026-10-20T12:13:18.273343+00:00",
-    "previous_receipt_sha256": "ab798f29edd365282375f80ed555ceda28ce24a1700e4af1232f7c48dde08062",
-    "previous_receipt_commit": "dd92248cbfd8f38200c07e6ae66aab859272b542",
-    "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_DD92248_20261020.json",
+    "checked_utc": "2026-10-20T13:21:16.590255+00:00",
+    "previous_receipt_sha256": "7c4c247ad6a71dca2c955b34e6dd021aef4dfbe17b12bf7c2e7588dfcff68553",
+    "previous_receipt_commit": "119c885acca681f9b24d5676f1e8bf3241db3f50",
+    "previous_receipt_repo_path": "docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_20261019.json",
+    "previous_receipt_preservation": "Exact prior bytes remain in the immutable previous commit, preserved branch and coordination source/output snapshot; no original historical observation or test entry is rewritten.",
     "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
     "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
-    "reporting_source_commit": "c293a0ccd87f6d46f5b6b8eb3eb2c0c473033e65",
-    "actual_generation_receipt_sha256": "ef3968e53d3af7a73f88b5f49fed58646cdae330b45be14d595338b42a248933",
-    "actual_generation_log_sha256": "5016c157597a2c07da950f1156e173c67b69731d674fbbd0ad9a7c18bd9f2f59",
-    "executed_reporting_binary_sha256": "39b50dc4f8c8311bb2594acb33875f9df86c2f2a7bf278d48929788ee07357dd",
-    "reason": "Root1155 authorized combined successor: exact independent-Q-cleared additive contrast saturation accounting with unchanged legacy values/means/palette/masks/geometry and actual guard object-root/omitted-field supplemental-capture compatibility. Original81 guard cases preserved;29 authored controls added (110total), none executed at this rebinding. Actual bounded retained reporter exited0; display-composite gains only saturation_accounting; publication.v2 renews only that output hash; manifest renews two changed reporting-source input hashes and output bindings. All other63report outputs and every preexisting composite field remain byte-identical. Preserve historical source/test/custody facts and exact prior receipt archive. Current guard/fixture/protocol bindings and paired package closure renewed; actual affected successor controls follow completefreeze and remain separately bound to their executed head. No oldDD/e58PASS transferred; Root owns samePR144 finalCI/eligibleformalreview/realproductionorigin/matchedmerge/release."
+    "reporting_source_commit": "6aba1fa6d7a9de1ba58da4f142acfaf98576104d",
+    "actual_generation_receipt_sha256": "38d0281c7587ca7a7f0dad95d719e0e69b0a8846313382c56305afcc980a64d5",
+    "actual_generation_log_sha256": "3b7839707583b119daa4d23fdeb874b8c68e1a460a451290bac23b74068f5aa3",
+    "executed_reporting_binary_sha256": "bc75bb97ad08db2696630aab59207618ef4cfcadc83f2daae5e758a5e2b22f18",
+    "reason": "Root1307 authorized four source corrections: source-bound earlier historical Boolean-predicate contrast, honest external summary accession navigation, shared-input/plate-mesh figure labels with minimal existing-test assertions, and sidecar module-path/current-launcher disclosure preserving cache/execution limits. Actual reporter and paired documents rebuilt. Only verification source input and three SVG/manifest/visual-reference hash outputs changed; other62 reporting outputs, including all numerical projections, are byte-identical. Existing historical source/test/failure/custody facts remain intact. Current affected controls are not yet executed at this rebinding and will retain separate exact frozen-head evidence. Root owns samePR144 finalCI/prospectiveeligibleformalreview/realorigin/matchedmerge/release."
   },
   "integration_rebinding_history": [
     {
@@ -281,7 +285,34 @@
       "actual_generation_log_sha256": "c147a704a18832c83d50fd9728b7b69ff083465cf97296ffa489fb326bddf272",
       "executed_reporting_binary_sha256": "ac4af6926a62f364a8699fd559b67cb6ae65293bf7b4fd58ee93934350b6a4ea",
       "reason": "Root-authorized exact reviewer-wrapper origin transport compatibility after actual nonauthor Q source clearance. Preserve full observed outer argv; actual helper JSON input route does not enforce check_eligible and requires prospective same-or-stronger actual read-only eligibility proof. All original56 fixture cases unchanged,25 authored controls added (81total), NONE executed by Captain. The regenerated161-input/65-output reporting manifest is byte-identical to its predecessor; guard/fixture bindings are renewed in this operational receipt and package source closure. All65 reporting output bytes are unchanged. Preserve every historical observation/test claim and prior receipt bytes. Root detached D1 and all scientific source/values/masks/weights/solver untouched; affected final controls and real review-origin remain Root-owned."
+    },
+    {
+      "checked_utc": "2026-10-20T12:13:18.273343+00:00",
+      "previous_receipt_sha256": "ab798f29edd365282375f80ed555ceda28ce24a1700e4af1232f7c48dde08062",
+      "previous_receipt_commit": "dd92248cbfd8f38200c07e6ae66aab859272b542",
+      "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_DD92248_20261020.json",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "c293a0ccd87f6d46f5b6b8eb3eb2c0c473033e65",
+      "actual_generation_receipt_sha256": "ef3968e53d3af7a73f88b5f49fed58646cdae330b45be14d595338b42a248933",
+      "actual_generation_log_sha256": "5016c157597a2c07da950f1156e173c67b69731d674fbbd0ad9a7c18bd9f2f59",
+      "executed_reporting_binary_sha256": "39b50dc4f8c8311bb2594acb33875f9df86c2f2a7bf278d48929788ee07357dd",
+      "reason": "Root1155 authorized combined successor: exact independent-Q-cleared additive contrast saturation accounting with unchanged legacy values/means/palette/masks/geometry and actual guard object-root/omitted-field supplemental-capture compatibility. Original81 guard cases preserved;29 authored controls added (110total), none executed at this rebinding. Actual bounded retained reporter exited0; display-composite gains only saturation_accounting; publication.v2 renews only that output hash; manifest renews two changed reporting-source input hashes and output bindings. All other63report outputs and every preexisting composite field remain byte-identical. Preserve historical source/test/custody facts and exact prior receipt archive. Current guard/fixture/protocol bindings and paired package closure renewed; actual affected successor controls follow completefreeze and remain separately bound to their executed head. No oldDD/e58PASS transferred; Root owns samePR144 finalCI/eligibleformalreview/realproductionorigin/matchedmerge/release."
+    },
+    {
+      "checked_utc": "2026-10-20T13:21:16.590255+00:00",
+      "previous_receipt_sha256": "7c4c247ad6a71dca2c955b34e6dd021aef4dfbe17b12bf7c2e7588dfcff68553",
+      "previous_receipt_commit": "119c885acca681f9b24d5676f1e8bf3241db3f50",
+      "previous_receipt_repo_path": "docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_20261019.json",
+      "previous_receipt_preservation": "Exact prior bytes remain in the immutable previous commit, preserved branch and coordination source/output snapshot; no original historical observation or test entry is rewritten.",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "6aba1fa6d7a9de1ba58da4f142acfaf98576104d",
+      "actual_generation_receipt_sha256": "38d0281c7587ca7a7f0dad95d719e0e69b0a8846313382c56305afcc980a64d5",
+      "actual_generation_log_sha256": "3b7839707583b119daa4d23fdeb874b8c68e1a460a451290bac23b74068f5aa3",
+      "executed_reporting_binary_sha256": "bc75bb97ad08db2696630aab59207618ef4cfcadc83f2daae5e758a5e2b22f18",
+      "reason": "Root1307 authorized four source corrections: source-bound earlier historical Boolean-predicate contrast, honest external summary accession navigation, shared-input/plate-mesh figure labels with minimal existing-test assertions, and sidecar module-path/current-launcher disclosure preserving cache/execution limits. Actual reporter and paired documents rebuilt. Only verification source input and three SVG/manifest/visual-reference hash outputs changed; other62 reporting outputs, including all numerical projections, are byte-identical. Existing historical source/test/failure/custody facts remain intact. Current affected controls are not yet executed at this rebinding and will retain separate exact frozen-head evidence. Root owns samePR144 finalCI/prospectiveeligibleformalreview/realorigin/matchedmerge/release."
     }
   ],
-  "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. The e67 successor86-test attempt failed84passed/2failed and remains preserved. Corrected successor validation is recorded separately with its exact head. Combined contrast/omission successor controls remain unexecuted at this source/output rebinding; their later exact-head results are separate evidence, not this historical focused-test entry."
+  "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. The e67 successor86-test attempt failed84passed/2failed and remains preserved. Corrected successor validation is recorded separately with its exact head. Combined contrast/omission successor controls remain unexecuted at this source/output rebinding; their later exact-head results are separate evidence, not this historical focused-test entry. Root1307 residual successor controls remain unexecuted at this source/output rebinding; actual119 controls remain predecessor evidence, with new affected results separate after completefreeze."
 }

@@ -283,7 +283,7 @@
     "crates/paper-artifacts/src/reference.rs": "97d2a6f151614d3cc7f5dfd4e4b0659ceb352340066c0cc7b2a5e61346e0640f",
     "crates/paper-artifacts/src/score_axis.rs": "65cfdebb8af49bf62f8f4c5ed33326771204b109a491ab4367777700df5a19e7",
     "crates/paper-artifacts/src/validation.rs": "f3a4f5930169a1c92b22ce539c46041b947548d325b44f1614a7261fb91a06ca",
-    "crates/paper-artifacts/src/verification.rs": "62604c2f187c020226478ed2b0eb8a9ec4d9e70a68bc1e7d2ff7a31e39d1ba4a",
+    "crates/paper-artifacts/src/verification.rs": "4aafe5b995085bfa22a3893810efa8be39aeed1297587193b6e45965240ef293",
     "crates/paper-artifacts/src/visuals.rs": "532fca340f3d33bbd37982b521d6075490f1108243ea3549ee7ad062030a95b1",
     "crates/paper-artifacts/src/weighted_runs.rs": "5e4fc448e725a673a7fdb03a047259a5993e2e342f4a7ec9bfcfbef8d59e5b85",
     "crates/physics/src/fine.rs": "b8762847e7452d3bcbfde718e55e13c42d4ac61d9a23abf5a75d2d5c38343096",
@@ -464,8 +464,8 @@
     "docs/paper/generated/summary.json": "d2c82b0dd13bcc17b7ad932ddabb5ecb7d524797424e20db848e62b8ff0c7e6e",
     "docs/paper/generated/test-field-roster.v1.tsv": "fefc751025c9f3b8c7f4391cf17449fe1da1265b08fd5fc4ad9549d115b96638",
     "docs/paper/generated/verification.json": "293465c8751203a691b1994eb87f6977d4d6884828a226eb0518c4d088764e1c",
-    "docs/paper/generated/verification.svg": "a84d788cf0940ea9b3ce27b5e6e18d4d2b40aa089e4db39944209586c910c2e7",
-    "docs/paper/generated/verification.svg.manifest.json": "08c4b2bc1e708c49561c4082251ed88e7512195b77363d4c4ba71625840aa06d",
+    "docs/paper/generated/verification.svg": "c6468a3ed836e2f376d91287e05337dfb803f25831b14f26cf9f1a359a98e61b",
+    "docs/paper/generated/verification.svg.manifest.json": "e5a11fc4134596597cc6b1f7721f2b270ec657ba857eb8d22690f8915f94fb68",
     "docs/paper/generated/weighted-runs.json": "1edf151941161d6a4dd94fd23a371cf802c116ba5e2c1a98ed02250a9ecd4338",
     "docs/paper/generated/weighted-runs.svg": "a6e9215304d714f85b87bfbbb5607f238df1d7a5ad3ba29b0f7c40207649f214",
     "docs/paper/generated/weighted-runs.svg.manifest.json": "fad6948323f811ca6cdd3fd819e7dc6f66da4cbe1c9ba4ea1c9c480d7eda2a64",
@@ -473,7 +473,7 @@
     "docs/tests/README.md": "d62215062aa2d961a6b6745bc9e1ea64c17062696791120c67d27f06ca501807",
     "docs/tests/science.md": "fa1b70a9267eb3a51b293243941a814446824be2335d3341c570e2934f7c348c",
     "docs/tests/visuals.md": "4a3a859831845a2fc8b8a865196ec4a8dd41c27112dc2e1d274ffe2f815867ec",
-    "docs/tests/visuals.v1.json": "5a3ae7b3f34a06a539c9efcf5d986ec0b4383d3547ad7df2212da3f893297b4a"
+    "docs/tests/visuals.v1.json": "3c54fef3efb41003d68613e64da8695643ee00ba466926b84d8bca43f77b3335"
   },
   "schema": "jarambit.publication_manifest.v1",
   "scope": "Documentation only; source hashes establish identity, not physical truth",
