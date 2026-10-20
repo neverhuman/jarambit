@@ -354,7 +354,18 @@ fn verify(i: &Inputs, now: u64) -> Check<Value> {
                 .all(|v| v.as_str().is_some_and(|s| !s.is_empty())),
         "missing submission argv",
     )?;
-    let args: Vec<_> = argv.iter().filter_map(Value::as_str).collect();
+    // Preserve the complete observed argv in the receipt. Only validation may
+    // look through the host's exact optional `rtk proxy` shell prefix.
+    let recorded_args: Vec<_> = argv.iter().filter_map(Value::as_str).collect();
+    let args = if recorded_args[0].rsplit('/').next() == Some("rtk") {
+        need(
+            recorded_args.len() >= 3 && recorded_args[1] == "proxy",
+            "unbound review submission command",
+        )?;
+        &recorded_args[2..]
+    } else {
+        recorded_args.as_slice()
+    };
     let repo = text(&a, "/repository")?;
     let parts: Vec<_> = repo.split('/').collect();
     need(
