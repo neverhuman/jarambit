@@ -41,7 +41,7 @@
     "crates/paper-artifacts/examples/verify_review_origin.rs": "0b98bc719b4d569ee4842ae58471b585dbffba9f1a7cae7d4d977be188eea13d",
     "crates/paper-artifacts/examples/fixtures/verify-review-origin-neutral.v1.json": "7fdde1b3fe648c63887e3cc34cc476b677f38852ac1c296e9f0249afafc86b57",
     "current_executed_reporting_binary_sha256": "96c3c79155ca0fe5450735d24433f802fca1f269817f05f32f976a021e96ed2f",
-    "README.md": "72680ef49a194e9877094bfc5927ca84de1aa500136984a1ce2a195aee853cb7",
+    "README.md": "88431acd73fc403cb07f3d9dae106c3e8ec014780c70d72431d478da732742b5",
     "docs/paper/CROSSWALK_SUPPLEMENT.md": "7b2edca9d3acd1e40947304cef6e227f8719f650aa6f368edba82a9c73e0807c",
     "docs/paper/supplement/numerical-methods.tex": "1fe7d935e5ad65ed6dea5600ab4202c107c265233dc71a1a8af171e8ac34d876"
   },
@@ -336,10 +336,10 @@
   "pending_successor_closure": {
     "authority_path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/ROOT_ACTUAL_Q_PIN_CLEARANCE_CANONICAL_INSTALL_AND_ONE_GENERATION_ORDER_20261020T2019Z.md",
     "authority_sha256": "f2b47daf44c279cdefdde39e0c3f7fd71a16b5dba3e7c9170202ee11c841b501",
-    "stage": "ACTUAL_Q_ADMITTED_PIN_INSTALL_SOURCE_ONLY; generatedmetadata/figures/PDF/currenttests not executed",
-    "previous_source_increment": "6c49e1c888efed2ff2fc65620dabd3a7379b5e1d",
-    "previous_active_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_6C49E1C_20261020.json",
-    "previous_active_receipt_sha256": "8231ee429ad649bf660bd56304aa98cda54e9a5dc2e1a712b0ff91d767fedf7f",
+    "stage": "ACTUAL_2.1.2_METADATA_GENERATED_AND_BOUND; ONE_SHARED_FIGURE_PDF_GENERATION_PENDING; no current finaltests/freshness/CI",
+    "previous_source_increment": "bfd49ecac85e2029ac2994ecc6fcbebe6a718bda",
+    "previous_active_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_BFD49EC_20261020.json",
+    "previous_active_receipt_sha256": "954820d468ccadc2d1715cbaa7a8ed6cef49489d64bb9c6daaa5bfef8cf7d037",
     "previous_complete_freeze": "73ffef00ddd35e3cf679074c38fe3625aba966f2",
     "source_bindings_renewed": [
       {
@@ -367,6 +367,12 @@
         "predecessor_sha256": "3cd921955c78ab5e1d94770f0056219f77c9a57159128fe8f167204867d6f7ef",
         "actual_sha256": "b9ff67a8f58764c0a42e16e77fae3b864e61c93f6e275c4c76736139849e8a1d",
         "reason": "Only exact independently admitted actual recipe digest constant updated; no guard relaxation."
+      },
+      {
+        "path": "README.md",
+        "predecessor_sha256": "72680ef49a194e9877094bfc5927ca84de1aa500136984a1ce2a195aee853cb7",
+        "actual_sha256": "88431acd73fc403cb07f3d9dae106c3e8ec014780c70d72431d478da732742b5",
+        "reason": "Only existing generator versionlinks/releaseheading advanced211->212; no underlyinghistoricalnumeric tablechange."
       }
     ],
     "actual_producer_binary_status": "Last actual96c3c791identity and integration_rebinding execution belong to priorf1b/73 only. No new executable/source equivalence or current suitePASS asserted.",
@@ -390,6 +396,41 @@
       "scope": "Actual bound22pins only; no generated image/test/CI/formalapproval",
       "recipe_sha256": "7d431843aa9a176b51b270eccff385cff92e759d0d54577e6676e2a2708ed44e",
       "unchanged_expected_facts": "geometry,camera,registration,fields,masks,contributors,palette/map,fivecomponents; onlytwo independently admitted codefile hashes changed"
+    },
+    "actual_metadata_generation": {
+      "authority": "ROOT_EXACT_METADATA_BFD49_SINGLE_JOB_GRANT_20261020.json",
+      "grant_sha256": "56d3f86586a50149f789b715603ac778866c90cc8eb90fdcdf773171c616479b",
+      "body_sha256": "657f09a047835837129eab6fe5385147a820742c1d71a1724033776173c37ffd",
+      "head": "bfd49ecac85e2029ac2994ecc6fcbebe6a718bda",
+      "reporter_PID": 1453211,
+      "reporter_start_ticks": "71361649",
+      "unit": {
+        "unit": "jr-root-meta-f237d70a4ec5a9598b820cc8.scope",
+        "group": "/jarambit.slice/jarambit-evo.slice/jr-root-meta-f237d70a4ec5a9598b820cc8.scope",
+        "invocation": "d7162376a59a4ba0a5d18a86ebe8f9e3",
+        "inode": 92843117,
+        "device": 30
+      },
+      "actual_started_utc": "2026-10-20T20:29:23.101520+00:00",
+      "actual_terminal_utc": "2026-10-20T20:29:23.459730+00:00",
+      "exit": 0,
+      "raw_log_sha256": "9d26dc217c607ce5cc9d4dbe630c755a25a6e91952f1a9add399c234869bbc7b",
+      "terminal_sha256": "3fce598a89fdf31cafb26bc930489d5289bf9ba983ecd74a43c622ddc0e6bdab",
+      "generated_metadata": [
+        {
+          "path": "README.md",
+          "sha256": "88431acd73fc403cb07f3d9dae106c3e8ec014780c70d72431d478da732742b5"
+        },
+        {
+          "path": "STATUS.md",
+          "sha256": "30f8daba3457bded135acdc407190234b75f9436dfa6060db9989f98b2b8517e"
+        },
+        {
+          "path": "docs/WHITEPAPER.md",
+          "sha256": "7010699723b316fad07a21fa5c5b8ae743c1b2f05a0b036fc756cb5607c4240e"
+        }
+      ],
+      "scope": "Three existing document generators only; not report-figure generation, new reporting producer binary or tests. Existing previousproducer/testidentities remain historical."
     }
   }
 }
