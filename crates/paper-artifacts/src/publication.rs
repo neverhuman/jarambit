@@ -444,7 +444,7 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
                 470.,
                 cur_y,
                 21,
-                &format!("{pts:.2}/{w_pct:.0}"),
+                &format!("{pts:.2}/{w_pct}"),
                 "#526873",
             );
             cur_y += 38.0;
@@ -652,7 +652,7 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         620.,
         936.,
         21,
-        "Asinh vertical scale; ticks in original fit units",
+        "Asinh(fit/1); L = 1; original fit ticks",
         "#526873",
     );
     label(
@@ -1880,12 +1880,20 @@ mod tests {
         )));
         for term in terms.values() {
             assert!(svg.contains(&format!(
-                "{:.2}/{:.0}",
+                "{:.2}/{}",
                 number(&term["weighted_points"]).unwrap(),
                 number(&term["weight_pct"]).unwrap()
             )));
         }
         assert_eq!(curve, original);
+        assert!(svg.contains("3.50/3.5"));
+        assert!(svg.contains("2.50/2.5"));
+        assert!(svg.contains(&format!(
+            "Historical producer tally: {}/26",
+            best["ultralight_fitness_breakdown"]["legacy_hard_gates_passed_count"]
+                .as_u64()
+                .unwrap()
+        )));
         assert!(svg.contains("HISTORICAL SAVED WEIGHTED ARITHMETIC"));
         assert!(svg.contains("A4 term (unadmitted)"));
         assert!(svg.contains("partly default-compatible/proxy terms"));
