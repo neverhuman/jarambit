@@ -205,9 +205,13 @@ impl PositivePointRaster {
         {
             return Err("positive points: incomplete operations/extrema/leader census".into());
         }
+        // Bind the original in-memory parameters before any JSON parse can round a float.
+        let axis = self.axis.metadata();
+        let axis_canonical_json_sha256 =
+            format!("{:x}", Sha256::digest(serde_json::to_vec(&axis)?));
         Ok(
             json!({"schema":"jarambit.positive_all_record_projection.v1", "original_domain":self.original_domain,
-            "axis":self.axis.metadata(),"x_axis":self.x_axis.metadata(),"original_negative_records":self.negatives,"original_zero_records":self.zeros,
+            "axis":axis,"axis_canonical_json_sha256":axis_canonical_json_sha256,"x_axis":self.x_axis.metadata(),"original_negative_records":self.negatives,"original_zero_records":self.zeros,
             "numeric_point_operations":self.operations,"expected_numeric_records":self.expected,"excluded_numeric_records":0,
             "overlapping_center_operations":self.overlaps,"occupied_centers":self.centers.iter().filter(|&&v|v!=0).count(),
             "identity_order_sha256":self.identity_order_sha256(),"identity_hash_encoding":"ordered caller-specified fixed-width LE u64 original identity tuple",

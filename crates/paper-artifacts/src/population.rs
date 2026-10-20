@@ -3430,16 +3430,23 @@ fn append_native_story_views(
                 GenerationView::Log10GenerationPlusOne,
             ),
         ] {
-            let rendered = population_story::render_run_panel(&trace, view, generation)?;
+            let mut rendered = population_story::render_run_panel(&trace, view, generation)?;
             if name != "asinh" {
                 let variant = if name == "positive-gap" {"gap"} else {"affine"};
                 let path = format!("docs/paper/generated/population/positive/run-{public:02}-positive-points-{variant}.v1.json");
                 let all_points: Value = serde_json::from_str(outputs.get(&path).ok_or("population story: missing real positive point companion")?)?;
-                if all_points["axis"] != rendered.receipt["view_axis"]
+                // Compare the canonical parameter bytes bound BEFORE the point receipt's
+                // JSON parse. Numeric Value equality after a second f64 parse can lose1ulp.
+                let expected_axis_sha = sha256_bytes(&serde_json::to_vec(&rendered.receipt["view_axis"])?);
+                let parsed_axis_sha = sha256_bytes(&serde_json::to_vec(&all_points["axis"])?);
+                if all_points["axis_canonical_json_sha256"] != json!(expected_axis_sha)
                     || all_points["source"]["admitted_original_identity_order_sha256"] != json!(trace.source.membership_identity_order_sha256)
                     || all_points["numeric_point_operations"] != 195456u64 {
-                    return Err("population story: point and summary transform/membership differ".into());
+                    return Err(format!("population story: Run{public}/{name} point and summary binding differs; point_axis={} expected_axis={expected_axis_sha} point_ids={} expected_ids={} point_operations={}",all_points["axis_canonical_json_sha256"],all_points["source"]["admitted_original_identity_order_sha256"],trace.source.membership_identity_order_sha256,all_points["numeric_point_operations"]).into());
                 }
+                rendered.receipt["positive_point_companion_binding"] = json!({"path":path,"canonical_axis_sha256_before_parse":expected_axis_sha,
+                    "point_receipt_parsed_axis_sha256":parsed_axis_sha,"json_numeric_roundtrip_exact":all_points["axis"]==rendered.receipt["view_axis"],
+                    "identity_order_and195456operations_exact":true,"reason":"Exact original parameter serialization is bound before parsing; no approximate numeric comparison or changed coordinate."});
             }
             let prefix = format!("docs/paper/generated/population/story/run-{public:02}-{name}");
             let svg_path = format!("{prefix}.svg");
