@@ -2514,7 +2514,6 @@ fn render_hero_view(
     if view == HeroView::ContrastPreview {
         s.push_str(r##"<text x="720" y="650" font-size="28" fill="#334155">Full-range companion retained</text>"##);
     }
-    s.push_str(r##"<text x="1554" y="650" text-anchor="end" font-size="28" fill="#334155">Assessed 1; qualified 0</text>"##);
     s.push_str("</svg>\n");
     Ok((s, composite))
 }
