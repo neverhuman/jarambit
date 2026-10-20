@@ -211,7 +211,7 @@ pub(crate) fn project(
         20.,
         34.,
         25,
-        "Individual 2000 — Mesh Convergence, Independent Solvers & Regional Stress",
+        "Individual 2000 — Plate Mesh Study, Shared-Input Comparison & Regional Stress",
     );
     label(
         &mut svg,
@@ -295,7 +295,7 @@ pub(crate) fn project(
         x + 15.,
         y + 32.,
         23,
-        "C / Independent-solver comparison",
+        "C / Shared-mesh assembly/solver comparison",
     );
     label(
         &mut svg,
@@ -461,7 +461,7 @@ pub(crate) fn project(
         20.,
         998.,
         21,
-        "Panel C compares two independent solvers on one mesh; Panel D shows binned regional peaks.",
+        "C: two assembly/solver implementations with shared inputs. D: binned regional peaks.",
     );
     svg.push_str("</g></svg>\n");
     let summary = json!({"schema":"jarambit.retained_verification_projection.v2","supersedes_projection_schema":"jarambit.retained_verification_projection.v1","source_contract_schema":contract["schema"],"scalar_display_policy":{"primary_decimal_places":3,"comparison_decimal_places":4,"scope":"Original rounded SF observations; no reconstructed extra digit, new solver result or tighter physical accuracy claim"},"subject":contract["subject"],"certificate_identity":contract["certificate_identity"],"producer_revision":contract["producer_revision"],"mesh_levels":g["levels_fine_to_coarse"],"sequence_admission":g["seq_ratio_gci"],"lateral_admission":g["sf_hunter_gci"],"scalar_pairs":scalar_pairs,"solid_mesh_sha256":solid["mesh_sha256"],"recovery":side["recovery"],"roi":side["roi"],"profiles":profiles,"profile_semantics":{"plate_raw":"maximum saved plate cell response in each planar-distance bin, scaled in the original producer; no global torsion correction","solid_nodal_avg":"maximum incident-cell unweighted-mean vertex response in each planar-distance bin; original cut distance >3 mm"},"plot_limits":{"sequence":[0.,2.],"lateral_sf":[0.,1.],"solver_sf":[0.,1.],"profile_MPa":[0.,1300.]},"interpolation":"none; six individual mesh-level observations and sixteen bin segments","fresh_solver_execution":false,"full_3d_field_available":false});
@@ -506,6 +506,25 @@ mod tests {
         );
         assert_eq!(svg.matches("<circle id=").count(), 6);
         assert_eq!(svg.matches("data-bin=").count(), 16);
+        // Visible wording must retain shared-input and refused-error scope.
+        for expected in [
+            "Plate Mesh Study, Shared-Input Comparison &amp; Regional Stress</text>",
+            "C / Shared-mesh assembly/solver comparison</text>",
+            "C: two assembly/solver implementations with shared inputs. D: binned regional peaks.</text>",
+            "No admitted GCI: nonpositive order</text>",
+            "No admitted GCI: oscillatory sequence</text>",
+            "neither plate observable admits a Richardson error bound.</text>",
+        ] {
+            assert!(svg.contains(expected), "missing visible semantic: {expected}");
+        }
+        for removed in [
+            "Mesh Convergence",
+            "Independent Solvers",
+            "Independent-solver comparison",
+            "two independent solvers",
+        ] {
+            assert!(!svg.contains(removed), "unqualified wording: {removed}");
+        }
     }
     #[test]
     fn forged_binding_region_and_scalar_agreement_are_refused() {
