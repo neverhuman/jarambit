@@ -370,7 +370,7 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         24.,
         34.,
         24,
-        "INDIVIDUAL 2002 (RUN 31) — 20-TERM WEIGHTED OBJECTIVE PROFILE",
+        "INDIVIDUAL 2002 (RUN 31) — HISTORICAL SAVED WEIGHTED ARITHMETIC",
         "#007e87",
     );
     label(
@@ -378,7 +378,7 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         24.,
         64.,
         22,
-        &format!("Total F = {f:.6} / 100.00 (101.139 g; 24/26 checks passed; not physical qualification)"),
+        &format!("Saved F = {f:.6} / 100.00 (101.139 g; no current qualification inferred)"),
         "#132d3b",
     );
 
@@ -399,11 +399,11 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
             "twist_body_1p82nm" => "1.82 N·m body torsion",
             "twist_tip_plate_1p82nm" => "1.82 N·m tip plate torsion",
             "solid_tip_3d_p2_and_xcheck" => "3D P2 tip & cross-check",
-            "side_a4_buckling" => "Lateral buckling λ",
+            "side_a4_buckling" => "A4 term (unadmitted)",
             "failure_sequence_1p2" => "Yield sequence ratio",
-            "plate_gci_3level" => "3-level mesh convergence",
+            "plate_gci_3level" => "Saved mesh-sequence flag",
             "human_max_overload" => "Overload reserve",
-            "goodman_fatigue_l7" => "Goodman fatigue life",
+            "goodman_fatigue_l7" => "Historical fatigue term",
             _ => "Objective term",
         }
     };
@@ -462,7 +462,9 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         24.,
         1060.,
         21,
-        &format!("Individual 2002 (Run 31): {tally}/26 threshold checks met; strict 260 N bend & mass fail."),
+        &format!(
+            "Historical producer tally: {tally}/26; current dependent qualification unestablished."
+        ),
         "#a3442d",
     );
     label(
@@ -470,9 +472,12 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         24.,
         1094.,
         21,
-        "Note: Individual 2000 (assessed example) is evaluated under its own continuous CAD score in assessment.svg.",
+        "A4 is unadmitted; saved F and weights preserved; partly default-compatible/proxy terms.",
         "#526873",
     );
+    label(&mut s, 24., 1126., 21,
+        "Recipe execution/call inputs unestablished; Individual 2000 has a separate saved CAD score.",
+        "#526873");
 
     // Right column Panel A: Run 31 3-generation trajectory
     label(
@@ -1468,7 +1473,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     );
     popsvg.push_str("</g></svg>\n");
     out.insert("docs/paper/generated/population.svg".into(), popsvg);
-    let summary = json!({"schema":"jarambit.publication_projection.v1","source_baseline":BASE,"scope":"Retained evidence projection; no new scientific execution","battery_subjects":files.len(),"battery_evaluators":evaluator_ids.len(),"stored_statuses":counts,"per_evaluator":per,"science_definitions":cases.len(),"science_family_counts":families,"population_births":births.len(),"population_statistics":stats,"historical_context":history,"weighted_curve":curve["generations"],"weighted_best":curve["best_so_far"]["ultralight_weighted_fitness"],"weighted_stage_lineage":"incomplete; retained summaries are not a homogeneous objective-convergence experiment","score_direction":"higher_is_better","missing":"Weighted cohort CAD geometry and round population files are unavailable in retained cohort"});
+    let summary = json!({"schema":"jarambit.publication_projection.v1","source_baseline":BASE,"scope":"Retained evidence projection; no new scientific execution","battery_subjects":files.len(),"battery_evaluators":evaluator_ids.len(),"stored_statuses":counts,"per_evaluator":per,"science_definitions":cases.len(),"science_family_counts":families,"population_births":births.len(),"population_statistics":stats,"historical_context":history,"weighted_curve":curve["generations"],"weighted_best":curve["best_so_far"]["ultralight_weighted_fitness"],"weighted_stage_lineage":"incomplete; retained summaries are not a homogeneous objective-convergence experiment","score_direction":"higher_is_better","missing":"Three proposal birth/screen pairs and a later unqualified Individual2002 summary are retained across accessions; full underlying CAD/scorecards remain unretained. See reporting-interpretation.v2.json.","weighted_interpretation":"Historical saved arithmetic; A4 term unadmitted and partly default-compatible/proxy inputs; no current qualification or proven original recipe execution"});
     out.insert(
         "docs/paper/generated/summary.json".into(),
         serde_json::to_string_pretty(&summary)? + "\n",
@@ -1738,7 +1743,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "verification.svg":{"contract":"docs/paper/verification-inputs.v1.json","projection_receipt":"docs/paper/generated/verification.json","mesh_selectors":["/levels_fine_to_coarse","/seq_ratio_gci","/sf_hunter_gci"],"solver_selectors":["/solid/SF_solid_nodal_avg","/solid/SF_solid_nodal_max","/SF_nodal_avg","/SF_nodal_max"],"profile_selector":"/profile_MPa","scope":"retained observations; separate recovery definitions and original ROI; no new solve, estimate, interpolation or pointwise difference"},
         "plate-fields.svg":{"source":field_source,"contract":"docs/paper/field-inputs.v1.json","projection_receipt":"docs/paper/generated/plate-fields.json","selectors":["/mesh/xy","/mesh/tris","/mesh/env_vm","/mesh/lat","/mesh/ring","/mesh/twist"],"association":"one stored rounded value per triangle; no interpolation","limits":"independent zero-to-source-maximum scales; no clipping","masks":"source-forced zeros only; raw unit-response tip region retained","scope":"retained 0.25 mm2 plate mesh, not strict or solid fields"},
         "cover-evolution.svg":{"source":POP,"membership":"all retained births in panel B; per-generation and cumulative maxima of stored fit in panel C","selectors":["/*/id","/*/gen","/*/fit","/*/fem_status"],"population_vertical_transform":"asinh(fit); original-value ticks","maximum_axis_limits":[1.135,1.16],"maximum_axis_truncated":true,"lines":"straight segments between observed generations; no fitted convergence model","producer_revision":history["producer_revision"],"semantics":history["fitness_semantics"]},
-        "fitness.svg": {"weighted_source":CURVE,"weighted_selectors":["/best_so_far/ultralight_weighted_fitness","/best_so_far/ultralight_fitness_breakdown/objectives/*/weighted_points","/generations/*/generation","/generations/*/round_best_fitness","/generations/*/hall_of_fame_best_so_far"],"weighted_direction":"higher_is_better","weighted_stage_lineage":"incomplete; reporting producer can substitute assessment values for screening values","population_source":POP,"population_selectors":["/*/id","/*/gen","/*/fit"],"population_reduction":"all retained births; generation maximum and sorted-sample median","population_vertical_transform":"asinh(fit); ticks in original units","regimes":"separate panels; no cross-regime score comparison"},
+        "fitness.svg": {"weighted_source":CURVE,"weighted_selectors":["/best_so_far/ultralight_weighted_fitness","/best_so_far/ultralight_fitness_breakdown/objectives/*/weighted_points","/generations/*/generation","/generations/*/round_best_fitness","/generations/*/hall_of_fame_best_so_far"],"weighted_direction":"higher_is_better","weighted_interpretation":"historical saved arithmetic; unadmitted A4 and partly default-compatible/proxy terms; no current qualification","interpretation_contract":"docs/paper/data/reporting-interpretation-contract.v2.json","weighted_stage_lineage":"incomplete; reporting producer can substitute assessment values for screening values","population_source":POP,"population_selectors":["/*/id","/*/gen","/*/fit"],"population_reduction":"all retained births; generation maximum and sorted-sample median","population_vertical_transform":"asinh(fit); ticks in original units","regimes":"separate panels; no cross-regime score comparison"},
         "population.svg":{"source":POP,"membership":"all retained births, including not-evaluated penalty records","selectors":["/*/id","/*/gen","/*/fit","/*/fem_status","/*/legal"],"reduction":"generation median and maximum; status census by generation; no imputation","vertical_transform":"asinh(fit); ticks in original units","producer_revision":history["producer_revision"],"producer_qd_sha256":history["producer_qd_sha256"],"semantics":history["fitness_semantics"]},
         "population-births.svg":{"source":POP,"projection_receipt":"docs/paper/generated/population/historical_births.json","membership":"all 1,984 historical w282 births in Run 1 (1,455 FEM-complete + 529 not-evaluated; 446 legal)","vertical_transform":"asinh(fit); ticks in original units"},
         "population-membership.svg":{"source":POP,"projection_receipt":"docs/paper/generated/population/historical_membership.json","membership":"all 2,176 island-membership occurrences in Run 1 (1,984 births + 192 elite reappearances) and 12 ring migrations at G4, G8, G12 (24 copied IDs)"},
@@ -1854,6 +1859,40 @@ mod tests {
         assert!(validate_curve(&v).is_err());
         v["metric"] = json!("new_loss");
         assert!(validate_curve(&v).is_err());
+    }
+    #[test]
+    fn saved_weighted_view_preserves_values_without_admitting_a4_or_default_inputs() {
+        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let mut inputs = BTreeMap::new();
+        let curve = read(&root, CURVE, &mut inputs).unwrap();
+        let births = read(&root, POP, &mut inputs).unwrap();
+        let original = curve.clone();
+        let svg = hero(&curve, array(&births).unwrap()).unwrap();
+        let best = &curve["best_so_far"];
+        let terms = best["ultralight_fitness_breakdown"]["objectives"]
+            .as_object()
+            .unwrap();
+        assert_eq!(terms.len(), 20);
+        assert_eq!(svg.matches("<rect x=\"330\"").count(), 40);
+        assert!(svg.contains(&format!(
+            "Saved F = {:.6}",
+            number(&best["ultralight_weighted_fitness"]).unwrap()
+        )));
+        for term in terms.values() {
+            assert!(svg.contains(&format!(
+                "{:.2}/{:.0}",
+                number(&term["weighted_points"]).unwrap(),
+                number(&term["weight_pct"]).unwrap()
+            )));
+        }
+        assert_eq!(curve, original);
+        assert!(svg.contains("HISTORICAL SAVED WEIGHTED ARITHMETIC"));
+        assert!(svg.contains("A4 term (unadmitted)"));
+        assert!(svg.contains("partly default-compatible/proxy terms"));
+        assert!(svg.contains("Recipe execution/call inputs unestablished"));
+        assert!(svg.contains("current dependent qualification unestablished"));
+        assert!(!svg.contains("checks passed"));
+        assert!(!svg.contains("Lateral buckling"));
     }
     #[test]
     fn inconsistent_reports_are_refused_before_write_and_in_check_mode() {

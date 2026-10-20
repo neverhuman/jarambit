@@ -5,7 +5,7 @@ export CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS := true
 export CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS := true
 CARGO ?= cargo
 SOURCE_DATE_EPOCH ?= 1792460432
-GEN_FIGURES := population plate-fields verification assessment battery-matrix weighted-runs reference hero-support hero-contrast-preview population-detail native-runs-2-3 native-runs-4-5 native-runs-6-7 native-runs-8-9 native-runs-10-11
+GEN_FIGURES := population fitness plate-fields verification assessment battery-matrix weighted-runs reference hero-support hero-contrast-preview population-detail native-runs-2-3 native-runs-4-5 native-runs-6-7 native-runs-8-9 native-runs-10-11
 POP_FIGURES := population-latest inheritance evidence-architecture inheritance-details
 HERO_SVG := drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg
 CROP_SVG := drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.svg
@@ -19,7 +19,7 @@ GEN_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(GEN_FIGURES)))
 POP_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(POP_FIGURES)))
 # Pinned evidence-baseline timestamp; actual build UTC belongs to the receipt.
 TEX_ENV = TEXINPUTS="$(OUT):" SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH) FORCE_SOURCE_DATE=1 TZ=UTC
-.PHONY: all artifacts figures pdfs main supplement audit audit-quick audit-full check clean
+.PHONY: all artifacts figures pdfs main supplement audit audit-quick audit-full review-origin-controls check clean
 # A report must finish generating before its figure/document consumers start.
 .NOTPARALLEL:
 all: artifacts pdfs
@@ -69,6 +69,8 @@ audit-quick:
 audit-full:
 	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
 	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit -- --full-zstd
+review-origin-controls:
+	cd $(ROOT) && $(CARGO) test --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example verify_review_origin -- --nocapture
 check: audit pdfs
 	! rg 'Overfull|LaTeX Warning: (Reference|Citation).*undefined' $(OUT)/main.log $(OUT)/supplement-main.log
 	awk '/^Pages:/ { if ($$2 < 15 || $$2 > 20) exit 1; found=1 } END { if (!found) exit 1 }' $(OUT)/pdfinfo.txt
