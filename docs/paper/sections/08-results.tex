@@ -15,6 +15,15 @@ Figure~\ref{fig:population-latest} keeps the native population separate from the
 
 Supplement Figure~\ref{S-fig:population-detail} adds empirical 1st--99th percentile detail panels with declared bounds and strict-tail counts. Those panels contain $1{,}919{,}651$ point operations and omit the numeric tails, so the overview's zero-exclusion claim does not apply to them. Separate per-run point and retained-best context views for Runs~2--11 reuse the same retained births, without connecting different runs into a shared trajectory. Their axes use each run's declared $L$ and key, rather than the pooled overview scale. These additional views add no observations or evidence of physical convergence.
 
+For a within-run summary view, Figure~\ref{fig:run5-gap} uses $x_+=g+1$ and $z=(b-f)/s+\varepsilon$, displayed on base-10 logarithmic axes. Here $b=1.1440$ is the fixed final best retained score of Run~5, $s=f_{\max}-f_{\min}$ is its full original numeric range and $\varepsilon=10^{-6}$ is a display floor. The inverse is $f=b-s(z-\varepsilon)$; generation is recovered by $g=x_+-1$. The reference is retrospective, not the current running best or an unknown optimum. Normalized-gap ticks identify zero original gap at the retained best; shifted-gap ratios and plotted slopes have no physical performance interpretation. Supplement Figures~\ref{S-fig:run5-display-comparison} and~\ref{S-fig:run5-positive-affine} give the asinh and positive-affine comparisons.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{run-05-positive-gap.png}
+\caption{Run~5 retained-best and population-median summaries in a positive-gap display, not an all-record scatter. The earliest of seven exact maximum ties is original ID~185541, public alias~781909, at generation~760 with stored $f=1.1440$. No strictly higher stored observation appears over the final 40 generation transitions through generation~800 at serialized precision. The floor marks zero original gap, not a measured residual; ticks show normalized gap and original generations. This is neither physical convergence nor a global winner or later CAD/solid assessment. The full-range all-record overview remains Figure~\ref{fig:population-latest}.}
+\label{fig:run5-gap}
+\end{figure*}
+
 \subsection{Recorded Ancestry Enables a Later-Assessment Disagreement to Be Inspected}
 The historical Run~1 retains $1984$ births, recorded within-run parent links, $2176$ island-slot memberships and $12$ migration events. Parent identifiers for external seed ancestry are not recorded. The genealogy exposes reuse of ancestors rather than a simple branching tree. Its saved FEM-status categories distinguish $1455$ complete records from $529$ not evaluated; the latter are not failed solves.
 
@@ -31,15 +40,16 @@ Individual~1095 has the highest stored historical birth score ($f=1.15727$, gene
 \textbf{Individual} & \textbf{Role} & \textbf{Retained evidence} & \textbf{Interpretation} \\
 \midrule
 1095 / 1543 & Run~1 birth ranks 1 / 8: $f=1.15727/1.15415$ & Birth and earlier certification-summary records & Earlier predicate false / true; not later qualification \\
-781909 (Run~5) & Largest stored native $f=1.1440$; seven tied records & Earliest tied original ID~185541, generation~760; retained population row & No retained per-birth later CAD/solid assessment \\
-2000 & Stable alias for the illustrated assessed export & Exact proposal-content link; bound CAD, plate fields and assessment bundle & Parents unrecorded; zero qualified; no champion \\
+781909 (Run~5) & Largest numeric stored native $f=1.1440$; seven ties & Earliest tied original ID~185541, generation~760; retained population row & No bound per-birth later CAD/solid assessment; qualification unknown \\
+2000 & Editorially selected retained assessed example; stable alias, not rank & Exact proposal-content link; bound CAD, plate fields and assessment bundle & Parents unrecorded; zero qualified; no champion \\
 2001 / 2007 & Separately assessed controlled exports & CAD/scorecard records; $W_{\mathrm{CAD}}=-3.879/-3.965$ and $G_1=0.624/0.622$ & Grouped strict verification not met \\
-2002 / 2009 & Weighted reporting records in Run~31 & Stored $F=74.207299/74.167488$; linked proposals/screens; 2002 has a later summary & Full underlying bundles not established; executed scorer/stage binding unresolved \\
+5443 & Smallest retained screen deficit $2.769032384488388$; one tie & Source-file ordinal~32, candidate~6; proposal and screen & Ordinal is not generation; full CAD/assessment join unestablished \\
+2002 / 2009 & Weighted reporting records in Run~31 & Stored $F=74.207299/74.167488$; linked proposals/screens; 2002 has a later unqualified summary & 2002's referenced full CAD/scorecard absent; scorer/stage binding unresolved \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-These are extrema of retained observations under their native preference directions, not newly evaluated designs. The native maximum has seven ties at serialized precision; its earliest original ID and existing public alias are reported without promoting a qualified champion. Contextual native fitness, screening deficits, weighted reporting summaries and later assessment scores have different producer and observation-stage bindings. Their values do not establish a single comparable global best.
+These are extrema of retained observations under their native preference directions, not newly evaluated designs. The native maximum has seven ties at serialized precision; its earliest original ID and existing public alias are reported without promoting a qualified champion. The source-bound retained-leader receipt preserves every exact tie and each run's own context. Producer/configuration equivalence across the ten native runs is not admitted, including five runs without retained configuration files. Contextual native fitness, screening deficits, weighted reporting summaries and later assessment scores also have different producer and observation-stage bindings. Their values do not establish a single comparable global best. Missing downstream evidence is not a failed assessment, and missing CAD for a score leader does not make the illustrated example a score winner.
 
 The intermediate campaign retains $3649$ proposals in 57 birth files across 24 run directories. One-based candidate indexing joins $2259$ screens; $1390$ screen observations are missing. A separate retained weighted-reporting subset has six curve files and fifteen generation summaries. In Run~31, the archive score changes from $74.1675$ (Individual~2009) to $74.2073$ (Individual~2002), then stays at that value. An archive maximum is monotone by construction. The curve alone does not show continuing improvement in physical quality. A compatible versioned weighted recipe is recoverable, but the curve does not establish its exact executed producer or uniform observation stage and is not a controlled convergence experiment.
 
