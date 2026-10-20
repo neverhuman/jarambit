@@ -7,12 +7,13 @@
 \usepackage{xurl}
 \usepackage{xr-hyper}
 \usepackage[hidelinks]{hyperref}
-\externaldocument[][nocite]{../../target/ieee/paper/main}[main.pdf]
+\externaldocument[M-][nocite]{../../target/ieee/paper/main}[main.pdf]
 \usepackage{microtype}
 \hypersetup{
   pdftitle={Technical Supplement: Engineered Intelligence},
   pdfauthor={Research draft; author approval pending},
   pdflang={en-US},
+  bookmarksdepth=3,
   pdfsubject={Engineered Intelligence: Executable Representations, Recorded Evolutionary Search, and Traceable Engineering Evidence},
   pdfkeywords={Engineered Intelligence, computational design, evolutionary computation, CAD, quality diversity, finite elements, evidence provenance, reproducible populations}
 }
@@ -54,6 +55,8 @@
 Research draft, 20 October 2026. Author approval pending.
 \end{center}
 This supplement retains the detailed representation, score, numerical-method, and cohort inventories supporting the main paper. Original evidence and contracts retain their own producer identities. It reports computational records; physical observations are not reported in this study.
+% Keep detailed PDF bookmarks; print two contents levels at the normal text size.
+\setcounter{tocdepth}{2}
 \tableofcontents
 \clearpage
 \input{supplement/representation-search.tex}
