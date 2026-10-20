@@ -1,4 +1,7 @@
 /target/
+/results/verified/*.obj
+/results/verified/*.stl
+/results/verified/vertices.csv
 /results/default/
 /results/rejected-initial-weights/*.obj
 /results/rejected-initial-weights/*.stl

@@ -4,6 +4,10 @@ Standalone Rust implementation of actual vertex-position smoothing. Its only inp
 
 The default test passed: all 642 vertices moved; vertex radial RMS error fell from 0.423986 to 0.102598 mm, a 75.802% reduction. Volume differed from the clean reference mesh by -0.211001%. See [measured report](results/verified/REPORT.md), [before/after wireframe](results/verified/comparison.svg), and [numerical results](results/verified/metrics.json).
 
+Generated OBJ/STL meshes and the full vertex-coordinate CSV are runtime artifacts, not repository CAD. Run the command below to produce them in a new output directory, or download the artifact from the standalone **Synthetic geometry benchmark** workflow. Historical receipts under `results/verified/` retain the original run's hashes, including hashes for artifacts no longer stored in Git; mesh/CSV links in that historical report describe the original run directory. Its source hashes bind the original standalone revision, not later packaging/CI edits. Current workflow executions publish fresh source/output digests.
+
+The benchmark has its own path-filtered CI workflow and manual dispatch. It is not a prerequisite of paper figure/PDF builds or required version-check. A synthetic sphere pass does not validate, smooth or qualify the paper's production CAD. The attempted paper-build coupling in PR head `3e80b424` was rejected during review and removed; its source and proof remain in that historical commit.
+
 ## Run
 
 From this directory, using Rust 1.85.1 or newer:
