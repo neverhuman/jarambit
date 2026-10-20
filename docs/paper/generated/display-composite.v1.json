@@ -262560,11 +262560,11 @@
   "mask_reconstruction": "original source-bound plate admission; no value==0 missingness heuristic",
   "original_channel_addenda": 8,
   "outputs_sha256": {
-    "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg": "5bcf0b044576bf77708867aa28116329fda45e5866db6cc8cd4e59fb9f850a71",
-    "docs/paper/generated/hero-contrast-preview.svg": "98b35891c066021df5e1e9540c2ef71012585e518a1070bdaf93f1c92eb8a0a3",
-    "docs/paper/generated/hero-full-range.svg": "5bcf0b044576bf77708867aa28116329fda45e5866db6cc8cd4e59fb9f850a71",
-    "docs/paper/generated/hero-mesh-on.svg": "ea415356e339918ed3927a9f6c5986e499a862a0a277913b0230d1d219dd620f",
-    "docs/paper/generated/hero-support.svg": "2fd600725ac1c8b06867c286ee6c0559c35bc063df2b00fe661cc7097ea9ccba",
+    "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg": "7f6eef77a9084b8b13411e8e1cb344484088c95fcaab06a136e27cbeef509f0b",
+    "docs/paper/generated/hero-contrast-preview.svg": "284430694b4094626b0f83ec58d1073bc1ab51f0b0b691e2778ff36d4f85f377",
+    "docs/paper/generated/hero-full-range.svg": "7f6eef77a9084b8b13411e8e1cb344484088c95fcaab06a136e27cbeef509f0b",
+    "docs/paper/generated/hero-mesh-on.svg": "d2894d272cfa66448bd3ad26c9bd7c13d41578ca6dd836db6d216a7b9f0e0b7f",
+    "docs/paper/generated/hero-support.svg": "0a31da991fb21e5c03081fbb38485435de05285c661e6ec7ddecd71a9e7020ef",
     "docs/paper/generated/test-field-roster.v1.tsv": "fefc751025c9f3b8c7f4391cf17449fe1da1265b08fd5fc4ad9549d115b96638"
   },
   "palette": {

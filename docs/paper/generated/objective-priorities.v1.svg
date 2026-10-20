@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" width="1600" height="1100"><rect width="1600" height="1100" fill="#fff"/><g font-family="Arial, sans-serif" fill="#132d3b"><text x="40" y="46" font-size="32" text-anchor="start">Configured priorities of the recovered weighted reporting recipe</text>
+<text x="40" y="88" font-size="28" text-anchor="start">20 objectives; 100.0% configured weight; colors identify objectives</text>
+<path data-role="slice" data-objective-id="ultralight_mass" data-ordinal="1" d="M 310.000000 295.000000 A 205.000000 205.000000 0 0 1 511.368886 461.586831 L 432.785906 476.577336 A 125.000000 125.000000 0 0 0 310.000000 375.000000 Z" fill="#1f77b4" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="ultralight_mass" data-ordinal="1"><rect x="620" y="124" width="30" height="30" fill="#1f77b4" stroke="#111" stroke-width="1"/>
+<text x="666" y="148" font-size="28" text-anchor="start">01</text>
+<text x="716" y="148" font-size="28" text-anchor="start">Mass preference</text>
+<text x="1560" y="148" font-size="28" text-anchor="end">22.0%</text>
+</g><path data-role="slice" data-objective-id="holder_and_compactness" data-ordinal="2" d="M 511.368886 461.586831 A 205.000000 205.000000 0 0 1 504.966586 563.348484 L 428.882065 538.627124 A 125.000000 125.000000 0 0 0 432.785906 476.577336 Z" fill="#aec7e8" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="holder_and_compactness" data-ordinal="2"><rect x="620" y="162" width="30" height="30" fill="#aec7e8" stroke="#111" stroke-width="1"/>
+<text x="666" y="186" font-size="28" text-anchor="start">02</text>
+<text x="716" y="186" font-size="28" text-anchor="start">Holder/compactness proxy</text>
+<text x="1560" y="186" font-size="28" text-anchor="end">8.0%</text>
+</g><path data-role="slice" data-objective-id="karambit_ring_and_claw" data-ordinal="3" d="M 504.966586 563.348484 A 205.000000 205.000000 0 0 1 459.438569 640.332157 L 401.121078 585.568388 A 125.000000 125.000000 0 0 0 428.882065 538.627124 Z" fill="#ff7f0e" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="karambit_ring_and_claw" data-ordinal="3"><rect x="620" y="200" width="30" height="30" fill="#ff7f0e" stroke="#111" stroke-width="1"/>
+<text x="666" y="224" font-size="28" text-anchor="start">03</text>
+<text x="716" y="224" font-size="28" text-anchor="start">Ring/claw form proxy</text>
+<text x="1560" y="224" font-size="28" text-anchor="end">7.0%</text>
+</g><path data-role="slice" data-objective-id="c6_aesthetic_and_ergo" data-ordinal="4" d="M 459.438569 640.332157 A 205.000000 205.000000 0 0 1 360.981427 698.559548 L 341.086236 621.072895 A 125.000000 125.000000 0 0 0 401.121078 585.568388 Z" fill="#ffbb78" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="c6_aesthetic_and_ergo" data-ordinal="4"><rect x="620" y="238" width="30" height="30" fill="#ffbb78" stroke="#111" stroke-width="1"/>
+<text x="666" y="262" font-size="28" text-anchor="start">04</text>
+<text x="716" y="262" font-size="28" text-anchor="start">Reference form proxy</text>
+<text x="1560" y="262" font-size="28" text-anchor="end">9.0%</text>
+</g><path data-role="slice" data-objective-id="bore_collar_comfort" data-ordinal="5" d="M 360.981427 698.559548 A 205.000000 205.000000 0 0 1 246.651516 694.966586 L 271.372876 618.882065 A 125.000000 125.000000 0 0 0 341.086236 621.072895 Z" fill="#2ca02c" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="bore_collar_comfort" data-ordinal="5"><rect x="620" y="276" width="30" height="30" fill="#2ca02c" stroke="#111" stroke-width="1"/>
+<text x="666" y="300" font-size="28" text-anchor="start">05</text>
+<text x="716" y="300" font-size="28" text-anchor="start">Bore/collar comfort proxy</text>
+<text x="1560" y="300" font-size="28" text-anchor="end">9.0%</text>
+</g><path data-role="slice" data-objective-id="cad_watertight_brep" data-ordinal="6" d="M 246.651516 694.966586 A 205.000000 205.000000 0 0 1 189.504023 665.848484 L 236.526843 601.127124 A 125.000000 125.000000 0 0 0 271.372876 618.882065 Z" fill="#98df8a" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="cad_watertight_brep" data-ordinal="6"><rect x="620" y="314" width="30" height="30" fill="#98df8a" stroke="#111" stroke-width="1"/>
+<text x="666" y="338" font-size="28" text-anchor="start">06</text>
+<text x="716" y="338" font-size="28" text-anchor="start">Single-solid B-rep status</text>
+<text x="1560" y="338" font-size="28" text-anchor="end">5.0%</text>
+</g><path data-role="slice" data-objective-id="gate_s_sharpness" data-ordinal="7" d="M 189.504023 665.848484 A 205.000000 205.000000 0 0 1 144.151516 620.495977 L 208.872876 573.473157 A 125.000000 125.000000 0 0 0 236.526843 601.127124 Z" fill="#d62728" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="gate_s_sharpness" data-ordinal="7"><rect x="620" y="352" width="30" height="30" fill="#d62728" stroke="#111" stroke-width="1"/>
+<text x="666" y="376" font-size="28" text-anchor="start">07</text>
+<text x="716" y="376" font-size="28" text-anchor="start">Edge-profile proxy</text>
+<text x="1560" y="376" font-size="28" text-anchor="end">5.0%</text>
+</g><path data-role="slice" data-objective-id="gate_s_point_profile" data-ordinal="8" d="M 144.151516 620.495977 A 205.000000 205.000000 0 0 1 115.033414 563.348484 L 191.117935 538.627124 A 125.000000 125.000000 0 0 0 208.872876 573.473157 Z" fill="#ff9896" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="gate_s_point_profile" data-ordinal="8"><rect x="620" y="390" width="30" height="30" fill="#ff9896" stroke="#111" stroke-width="1"/>
+<text x="666" y="414" font-size="28" text-anchor="start">08</text>
+<text x="716" y="414" font-size="28" text-anchor="start">Point-profile proxy</text>
+<text x="1560" y="414" font-size="28" text-anchor="end">5.0%</text>
+</g><path data-role="slice" data-objective-id="hiker_lateral_180n" data-ordinal="9" d="M 115.033414 563.348484 A 205.000000 205.000000 0 0 1 105.909797 519.292204 L 185.554754 511.763539 A 125.000000 125.000000 0 0 0 191.117935 538.627124 Z" fill="#9467bd" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="hiker_lateral_180n" data-ordinal="9"><rect x="620" y="428" width="30" height="30" fill="#9467bd" stroke="#111" stroke-width="1"/>
+<text x="666" y="452" font-size="28" text-anchor="start">09</text>
+<text x="716" y="452" font-size="28" text-anchor="start">Lateral response, 180 N reference</text>
+<text x="1560" y="452" font-size="28" text-anchor="end">3.5%</text>
+</g><path data-role="slice" data-objective-id="hunter_lateral_260n" data-ordinal="10" d="M 105.909797 519.292204 A 205.000000 205.000000 0 0 1 105.404521 487.127943 L 185.246659 492.151185 A 125.000000 125.000000 0 0 0 185.554754 511.763539 Z" fill="#c5b0d5" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="hunter_lateral_260n" data-ordinal="10"><rect x="620" y="466" width="30" height="30" fill="#c5b0d5" stroke="#111" stroke-width="1"/>
+<text x="666" y="490" font-size="28" text-anchor="start">10</text>
+<text x="716" y="490" font-size="28" text-anchor="start">Lateral response, 260 N reference</text>
+<text x="1560" y="490" font-size="28" text-anchor="end">2.5%</text>
+</g><path data-role="slice" data-objective-id="strict_hunter_260n" data-ordinal="11" d="M 105.404521 487.127943 A 205.000000 205.000000 0 0 1 108.631114 461.586831 L 187.214094 476.577336 A 125.000000 125.000000 0 0 0 185.246659 492.151185 Z" fill="#8c564b" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="strict_hunter_260n" data-ordinal="11"><rect x="620" y="504" width="30" height="30" fill="#8c564b" stroke="#111" stroke-width="1"/>
+<text x="666" y="528" font-size="28" text-anchor="start">11</text>
+<text x="716" y="528" font-size="28" text-anchor="start">Strict lateral response</text>
+<text x="1560" y="528" font-size="28" text-anchor="end">2.0%</text>
+</g><path data-role="slice" data-objective-id="ring_pull_1500n" data-ordinal="12" d="M 108.631114 461.586831 A 205.000000 205.000000 0 0 1 117.119442 430.558726 L 192.389904 457.657760 A 125.000000 125.000000 0 0 0 187.214094 476.577336 Z" fill="#c49c94" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="ring_pull_1500n" data-ordinal="12"><rect x="620" y="542" width="30" height="30" fill="#c49c94" stroke="#111" stroke-width="1"/>
+<text x="666" y="566" font-size="28" text-anchor="start">12</text>
+<text x="716" y="566" font-size="28" text-anchor="start">Ring-traction response</text>
+<text x="1560" y="566" font-size="28" text-anchor="end">2.5%</text>
+</g><path data-role="slice" data-objective-id="twist_body_1p82nm" data-ordinal="13" d="M 117.119442 430.558726 A 205.000000 205.000000 0 0 1 130.357131 401.240497 L 200.461665 439.780791 A 125.000000 125.000000 0 0 0 192.389904 457.657760 Z" fill="#e377c2" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="twist_body_1p82nm" data-ordinal="13"><rect x="620" y="580" width="30" height="30" fill="#e377c2" stroke="#111" stroke-width="1"/>
+<text x="666" y="604" font-size="28" text-anchor="start">13</text>
+<text x="716" y="604" font-size="28" text-anchor="start">Body-torsion response</text>
+<text x="1560" y="604" font-size="28" text-anchor="end">2.5%</text>
+</g><path data-role="slice" data-objective-id="twist_tip_plate_1p82nm" data-ordinal="14" d="M 130.357131 401.240497 A 205.000000 205.000000 0 0 1 148.018222 374.354054 L 211.230623 423.386618 A 125.000000 125.000000 0 0 0 200.461665 439.780791 Z" fill="#f7b6d2" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="twist_tip_plate_1p82nm" data-ordinal="14"><rect x="620" y="618" width="30" height="30" fill="#f7b6d2" stroke="#111" stroke-width="1"/>
+<text x="666" y="642" font-size="28" text-anchor="start">14</text>
+<text x="716" y="642" font-size="28" text-anchor="start">Local plate-torsion response</text>
+<text x="1560" y="642" font-size="28" text-anchor="end">2.5%</text>
+</g><path data-role="slice" data-objective-id="solid_tip_3d_p2_and_xcheck" data-ordinal="15" d="M 148.018222 374.354054 A 205.000000 205.000000 0 0 1 174.431068 346.227231 L 227.336017 406.236116 A 125.000000 125.000000 0 0 0 211.230623 423.386618 Z" fill="#7f7f7f" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="solid_tip_3d_p2_and_xcheck" data-ordinal="15"><rect x="620" y="656" width="30" height="30" fill="#7f7f7f" stroke="#111" stroke-width="1"/>
+<text x="666" y="680" font-size="28" text-anchor="start">15</text>
+<text x="716" y="680" font-size="28" text-anchor="start">Reported solid-tip/comparison proxy</text>
+<text x="1560" y="680" font-size="28" text-anchor="end">3.0%</text>
+</g><path data-role="slice" data-objective-id="side_a4_buckling" data-ordinal="16" d="M 174.431068 346.227231 A 205.000000 205.000000 0 0 1 194.772908 330.448482 L 239.739578 396.614928 A 125.000000 125.000000 0 0 0 227.336017 406.236116 Z" fill="#c7c7c7" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="side_a4_buckling" data-ordinal="16"><rect x="620" y="694" width="30" height="30" fill="#c7c7c7" stroke="#111" stroke-width="1"/>
+<text x="666" y="718" font-size="28" text-anchor="start">16</text>
+<text x="716" y="718" font-size="28" text-anchor="start">Reported support/stability proxy</text>
+<text x="1560" y="718" font-size="28" text-anchor="end">2.0%</text>
+</g><path data-role="slice" data-objective-id="failure_sequence_1p2" data-ordinal="17" d="M 194.772908 330.448482 A 205.000000 205.000000 0 0 1 234.534467 309.395820 L 263.984431 383.777939 A 125.000000 125.000000 0 0 0 239.739578 396.614928 Z" fill="#bcbd22" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="failure_sequence_1p2" data-ordinal="17"><rect x="620" y="732" width="30" height="30" fill="#bcbd22" stroke="#111" stroke-width="1"/>
+<text x="666" y="756" font-size="28" text-anchor="start">17</text>
+<text x="716" y="756" font-size="28" text-anchor="start">Elastic yield-order proxy</text>
+<text x="1560" y="756" font-size="28" text-anchor="end">3.5%</text>
+</g><path data-role="slice" data-objective-id="plate_gci_3level" data-ordinal="18" d="M 234.534467 309.395820 A 205.000000 205.000000 0 0 1 259.018573 301.440452 L 278.913764 378.927105 A 125.000000 125.000000 0 0 0 263.984431 383.777939 Z" fill="#dbdb8d" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="plate_gci_3level" data-ordinal="18"><rect x="620" y="770" width="30" height="30" fill="#dbdb8d" stroke="#111" stroke-width="1"/>
+<text x="666" y="794" font-size="28" text-anchor="start">18</text>
+<text x="716" y="794" font-size="28" text-anchor="start">Reported plate-study status</text>
+<text x="1560" y="794" font-size="28" text-anchor="end">2.0%</text>
+</g><path data-role="slice" data-objective-id="human_max_overload" data-ordinal="19" d="M 259.018573 301.440452 A 205.000000 205.000000 0 0 1 284.306687 296.616486 L 294.333346 375.985662 A 125.000000 125.000000 0 0 0 278.913764 378.927105 Z" fill="#17becf" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="human_max_overload" data-ordinal="19"><rect x="620" y="808" width="30" height="30" fill="#17becf" stroke="#111" stroke-width="1"/>
+<text x="666" y="832" font-size="28" text-anchor="start">19</text>
+<text x="716" y="832" font-size="28" text-anchor="start">Overload proxy</text>
+<text x="1560" y="832" font-size="28" text-anchor="end">2.0%</text>
+</g><path data-role="slice" data-objective-id="goodman_fatigue_l7" data-ordinal="20" d="M 284.306687 296.616486 A 205.000000 205.000000 0 0 1 310.000000 295.000000 L 310.000000 375.000000 A 125.000000 125.000000 0 0 0 294.333346 375.985662 Z" fill="#9edae5" stroke="#111" stroke-width="1"/>
+<g data-role="key" data-objective-id="goodman_fatigue_l7" data-ordinal="20"><rect x="620" y="846" width="30" height="30" fill="#9edae5" stroke="#111" stroke-width="1"/>
+<text x="666" y="870" font-size="28" text-anchor="start">20</text>
+<text x="716" y="870" font-size="28" text-anchor="start">Goodman fatigue proxy</text>
+<text x="1560" y="870" font-size="28" text-anchor="end">2.0%</text>
+</g><path data-role="ordinal-connector" data-ordinal="20" d="M 297.127943 295.404521 L 295.872133 275.443986 L 88 158" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="168" font-size="28" text-anchor="middle">20</text>
+<path data-role="ordinal-connector" data-ordinal="19" d="M 271.586831 298.631114 L 267.839204 278.985369 L 88 203.6" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="213.6" font-size="28" text-anchor="middle">19</text>
+<path data-role="ordinal-connector" data-ordinal="18" d="M 246.651516 305.033414 L 240.471176 286.012284 L 88 249.2" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="259.2" font-size="28" text-anchor="middle">18</text>
+<path data-role="ordinal-connector" data-ordinal="17" d="M 214.074388 318.828046 L 204.715792 301.152733 L 88 294.8" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="304.8" font-size="28" text-anchor="middle">17</text>
+<path data-role="ordinal-connector" data-ordinal="16" d="M 184.354054 338.018222 L 172.095913 322.215122 L 88 340.4" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="350.4" font-size="28" text-anchor="middle">16</text>
+<path data-role="ordinal-connector" data-ordinal="15" d="M 160.561431 359.667843 L 145.982059 345.976901 L 88 386" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="396" font-size="28" text-anchor="middle">15</text>
+<path data-role="ordinal-connector" data-ordinal="14" d="M 138.659491 387.450322 L 121.943344 376.469866 L 88 431.6" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="441.6" font-size="28" text-anchor="middle">14</text>
+<path data-role="ordinal-connector" data-ordinal="13" d="M 123.162328 415.639556 L 104.934263 407.409269 L 88 477.2" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="487.2" font-size="28" text-anchor="middle">13</text>
+<path data-role="ordinal-connector" data-ordinal="12" d="M 112.265729 445.906025 L 92.974581 440.628564 L 88 522.8" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="532.8" font-size="28" text-anchor="middle">12</text>
+<path data-role="ordinal-connector" data-ordinal="11" d="M 106.616486 474.306687 L 86.774192 471.800022 L 88 568.4" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="578.4" font-size="28" text-anchor="middle">11</text>
+<path data-role="ordinal-connector" data-ordinal="10" d="M 105.025290 503.220000 L 85.027758 503.534146 L 88 614" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="624" font-size="28" text-anchor="middle">10</text>
+<path data-role="ordinal-connector" data-ordinal="9" d="M 109.259324 541.571396 L 89.674868 545.627141 L 88 659.6" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="669.6" font-size="28" text-anchor="middle">09</text>
+<path data-role="ordinal-connector" data-ordinal="8" d="M 127.343663 593.068052 L 109.523532 602.147862 L 88 705.2" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="715.2" font-size="28" text-anchor="middle">08</text>
+<path data-role="ordinal-connector" data-ordinal="7" d="M 165.043110 644.956890 L 150.900974 659.099026 L 88 750.8" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="760.8" font-size="28" text-anchor="middle">07</text>
+<path data-role="ordinal-connector" data-ordinal="6" d="M 216.931948 682.656337 L 207.852138 700.476468 L 88 796.4" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="806.4" font-size="28" text-anchor="middle">06</text>
+<path data-role="ordinal-connector" data-ordinal="5" d="M 303.560794 704.898845 L 302.932579 724.888976 L 88 842" fill="none" stroke="#333" stroke-width="1"/>
+<text x="62" y="852" font-size="28" text-anchor="middle">05</text>
+<path data-role="ordinal-connector" data-ordinal="1" d="M 440.671918 342.044785 L 453.420398 326.634520 L 542 158" fill="none" stroke="#333" stroke-width="1"/>
+<text x="568" y="168" font-size="28" text-anchor="middle">01</text>
+<path data-role="ordinal-connector" data-ordinal="2" d="M 514.595479 512.872057 L 534.556014 514.127867 L 542 386" fill="none" stroke="#333" stroke-width="1"/>
+<text x="568" y="396" font-size="28" text-anchor="middle">02</text>
+<path data-role="ordinal-connector" data-ordinal="3" d="M 486.452116 604.353490 L 503.666956 614.534319 L 542 614" fill="none" stroke="#333" stroke-width="1"/>
+<text x="568" y="624" font-size="28" text-anchor="middle">03</text>
+<path data-role="ordinal-connector" data-ordinal="4" d="M 414.353490 676.452116 L 424.534319 693.666956 L 542 842" fill="none" stroke="#333" stroke-width="1"/>
+<text x="568" y="852" font-size="28" text-anchor="middle">04</text>
+<text x="310" y="448" font-size="30" text-anchor="middle">20 configured</text>
+<text x="310" y="487" font-size="30" text-anchor="middle">objectives</text>
+<text x="310" y="536" font-size="34" text-anchor="middle">100.0%</text>
+<text x="310" y="575" font-size="28" text-anchor="middle">total weight</text>
+<text x="40" y="958" font-size="28" text-anchor="start">Recipe preferences, not specimen performance or safety probabilities.</text>
+<text x="40" y="1000" font-size="28" text-anchor="start">Exact historical execution and summary-stage bindings remain unresolved.</text>
+<text x="40" y="1042" font-size="28" text-anchor="start">Numbers link slices and key. Weights confer no physical qualification.</text>
+</g></svg>

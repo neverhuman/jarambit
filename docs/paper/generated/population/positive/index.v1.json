@@ -1,0 +1,214 @@
+{
+  "additional_views_are_not_new_data": true,
+  "density_or_subsampling": false,
+  "distinct_admitted_numeric_observations": 1958803,
+  "full_range_asinh_companion": "docs/paper/figures/population-latest.svg",
+  "main_candidate": "run-05-positive-points-gap.png; pending actual final-width/readability/finding review",
+  "operations_by_variant": {
+    "positive_affine": 1958803,
+    "positive_gap": 1958803
+  },
+  "quantile_clipping": false,
+  "schema": "jarambit.positive_all_record_index.v1",
+  "source_profiles": "ten separate native runs, historical births, lower-preferred screening deficits; no cross-run score calibration or global winner",
+  "unknown": {
+    "display": "nonnumeric coverage note; no plotted band or invented score",
+    "numeric_point_operations": 0,
+    "records": 1390,
+    "source_identity_sha256": "21abb8fa6d2c66e6eeb1228e88bd28ccc379ad5c9481899c9f44552f4ea1ccb0"
+  },
+  "views": [
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-02-positive-points-affine.v1.json",
+      "receipt_sha256": "f6901b404df9885d6460d367a42c4342eacba7f5fc13cfd9a3178aaba3fc19b9",
+      "svg": "docs/paper/generated/population/positive/run-02-positive-points-affine.svg",
+      "svg_sha256": "6f0ed9b1d787ac864c313f6e90da1efd07085194a8288034d06ffa96aaaf3f17",
+      "variant": "affine"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-03-positive-points-affine.v1.json",
+      "receipt_sha256": "61c603b140c6be0307c7bc068613333727e10b40ff395116bded760719d3a05a",
+      "svg": "docs/paper/generated/population/positive/run-03-positive-points-affine.svg",
+      "svg_sha256": "c07af5f9fa8f94b913c140f5b3f927ddeed3e542534d0182b93e002804e1060a",
+      "variant": "affine"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-04-positive-points-affine.v1.json",
+      "receipt_sha256": "7d81390cfb0dc8c2558299eb1602138e46d6edff17378d873fabf3ae5ab7872f",
+      "svg": "docs/paper/generated/population/positive/run-04-positive-points-affine.svg",
+      "svg_sha256": "8176b8a48ad1dc5636f91f5fa6582d2a41d697c14e99925e17e025c46578b23d",
+      "variant": "affine"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-05-positive-points-affine.v1.json",
+      "receipt_sha256": "ec5d767f47fd09393a4e5dd4cf954e9cfa1142bc603dcbae2431cc60b92b5523",
+      "svg": "docs/paper/generated/population/positive/run-05-positive-points-affine.svg",
+      "svg_sha256": "9700ee4465c18efdb8b1f59b45c7ffb326a189b81f47889b1f182e528e08d884",
+      "variant": "affine"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-06-positive-points-affine.v1.json",
+      "receipt_sha256": "11a523f81221f031bace99bea648ecfed852ada30ec14d9ed2f8ffb4ab87e63e",
+      "svg": "docs/paper/generated/population/positive/run-06-positive-points-affine.svg",
+      "svg_sha256": "c7e4a72ca4eed6abfd3ba22e4dd70eaf45cef0b2f4ef1497e6a0b261e4d56993",
+      "variant": "affine"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-07-positive-points-affine.v1.json",
+      "receipt_sha256": "c4e40c48ef0b676d2c0c0d5672fba55a236afa75207c4b585efc360ae287e0ad",
+      "svg": "docs/paper/generated/population/positive/run-07-positive-points-affine.svg",
+      "svg_sha256": "e980a6bbe26c6a4d1bf5b2f01b00004bb6b5fa7a9517ca9354a07c91e2c2e65f",
+      "variant": "affine"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-08-positive-points-affine.v1.json",
+      "receipt_sha256": "5a3a352b307c12934b6a44a59f2295f84b8c39a3ff6f2d26bb59ad7306ab6eb5",
+      "svg": "docs/paper/generated/population/positive/run-08-positive-points-affine.svg",
+      "svg_sha256": "dec8f9af894127f32a642a80cc739ff24eb80b22d4dcdab42c3b9a83d2fefa83",
+      "variant": "affine"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-09-positive-points-affine.v1.json",
+      "receipt_sha256": "67024c2a74e6a50931bd0ba4d6bd69d4608f93c39de67e8ff87e6bf52fdc0053",
+      "svg": "docs/paper/generated/population/positive/run-09-positive-points-affine.svg",
+      "svg_sha256": "471658fc4150a5b940237acb8b727e623193a200d19042d95dc144bd79bd1c42",
+      "variant": "affine"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-10-positive-points-affine.v1.json",
+      "receipt_sha256": "84335fa738d7b9e383fb1896ac5281f97ff73f75748f4d0953adcf0e0ceafc14",
+      "svg": "docs/paper/generated/population/positive/run-10-positive-points-affine.svg",
+      "svg_sha256": "0e846478db947ecadc444091b71d8a98862748a6f50c329b85cb419457f93f47",
+      "variant": "affine"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-11-positive-points-affine.v1.json",
+      "receipt_sha256": "e8887c9ef5e21838fb0c0d97706b2943ddf3fc96797538aad2540d488da86d69",
+      "svg": "docs/paper/generated/population/positive/run-11-positive-points-affine.svg",
+      "svg_sha256": "cff434fff8f438f278ac0800871bd5341833396862f2629b9134d82da9afadcb",
+      "variant": "affine"
+    },
+    {
+      "numeric_point_operations": 1984,
+      "receipt": "docs/paper/generated/population/positive/historical-positive-points-affine.v1.json",
+      "receipt_sha256": "a6836bdd6910f93bc3713d1b0e766f3a5ffebec49694417a61fe804f46196bba",
+      "svg": "docs/paper/generated/population/positive/historical-positive-points-affine.svg",
+      "svg_sha256": "8c26a037bb29daa01b8b710adf3ad9dfba4405b83fa2058cb4ed9dd6310047c5",
+      "variant": "affine"
+    },
+    {
+      "numeric_point_operations": 2259,
+      "receipt": "docs/paper/generated/population/positive/screening-positive-points-affine.v1.json",
+      "receipt_sha256": "2342f9320e3bae3f950654898e8bb9466d5ec26ebbaa321af69965953011dc5f",
+      "svg": "docs/paper/generated/population/positive/screening-positive-points-affine.svg",
+      "svg_sha256": "758392eac1dc5750ca569355a18f59f48954147e6568cb9f1a3dcf98b328a39e",
+      "variant": "affine"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-02-positive-points-gap.v1.json",
+      "receipt_sha256": "3d44e81547fe0eda0d84d977a2597ce7a411421251849b0a9d0c8d45aef23282",
+      "svg": "docs/paper/generated/population/positive/run-02-positive-points-gap.svg",
+      "svg_sha256": "c9c07208db7666ea3f180d2fc7902b4d404a038e6739e8ae4f6dce47400a4029",
+      "variant": "gap"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-03-positive-points-gap.v1.json",
+      "receipt_sha256": "68946a05fd7cf10108955982d618d21cdc24107d167a8fd52737f8271f7553e7",
+      "svg": "docs/paper/generated/population/positive/run-03-positive-points-gap.svg",
+      "svg_sha256": "3ac6ff581fefe5dc2c72913fba5d269201f1e042d3c32c7402c0f875ffac5817",
+      "variant": "gap"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-04-positive-points-gap.v1.json",
+      "receipt_sha256": "c7289d6832e14d2d2a24de6a452c321e93386387990cfac8d3a372ac89418019",
+      "svg": "docs/paper/generated/population/positive/run-04-positive-points-gap.svg",
+      "svg_sha256": "2ebae43954c1984d37c204511ef6b7f7f816dc498faea1c520e849be9a790d4a",
+      "variant": "gap"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-05-positive-points-gap.v1.json",
+      "receipt_sha256": "ce75000f9c9c959c3fd86653a100f7b77b8f9387cba1c1f64fa247afcbe59333",
+      "svg": "docs/paper/generated/population/positive/run-05-positive-points-gap.svg",
+      "svg_sha256": "9c5ea79734dd34e9e5507f27a3263aa3ccbe8084138793fbf49d9d1f10d9d345",
+      "variant": "gap"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-06-positive-points-gap.v1.json",
+      "receipt_sha256": "78a2d7b68eca24328a459cf7ac0793ee9ba070919e166bd2d340a80687e8cf87",
+      "svg": "docs/paper/generated/population/positive/run-06-positive-points-gap.svg",
+      "svg_sha256": "3ab8eb1fcb93e42eeaee969690e295d794ca413648e07602273fca184494e3ab",
+      "variant": "gap"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-07-positive-points-gap.v1.json",
+      "receipt_sha256": "a72c04570d5084e7db6f3d2978c7889421719512aaf470af67b832f13d4e4b95",
+      "svg": "docs/paper/generated/population/positive/run-07-positive-points-gap.svg",
+      "svg_sha256": "5c90e01f58335bf63f4d02cfd4e2df58ec72323532eefacdb3968fc062e14eeb",
+      "variant": "gap"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-08-positive-points-gap.v1.json",
+      "receipt_sha256": "e5445154c59c375e01191835ff30bc72f72fdf0560a0200e2b0f5dcba3793c5f",
+      "svg": "docs/paper/generated/population/positive/run-08-positive-points-gap.svg",
+      "svg_sha256": "383c8a898090d20e893f2da0ddf44ddf1dc6e423ff91866075c24f3c136ae5b6",
+      "variant": "gap"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-09-positive-points-gap.v1.json",
+      "receipt_sha256": "4c429bcb461bb5a35c33fd9d415adb4d88f99965379e41025c6ba9a1dd9f8115",
+      "svg": "docs/paper/generated/population/positive/run-09-positive-points-gap.svg",
+      "svg_sha256": "43a721c95a0a83044b2e94977eab3cdca598d14afc20320c8f3bd3a5a3dfed13",
+      "variant": "gap"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-10-positive-points-gap.v1.json",
+      "receipt_sha256": "0c0b292bf504cab713008babb94d2d0192470adfe293b525f3e61758fbcb6ef4",
+      "svg": "docs/paper/generated/population/positive/run-10-positive-points-gap.svg",
+      "svg_sha256": "5b626fbe1c018be0615ae5df3790a8d24ae6bd365303742ee6292a09695bfa60",
+      "variant": "gap"
+    },
+    {
+      "numeric_point_operations": 195456,
+      "receipt": "docs/paper/generated/population/positive/run-11-positive-points-gap.v1.json",
+      "receipt_sha256": "7bbf990e1a048ba6eb2dda681122478fe248e4a4dc66d79598b3cec9d416e0e0",
+      "svg": "docs/paper/generated/population/positive/run-11-positive-points-gap.svg",
+      "svg_sha256": "22568efa39c511fb23ff4ea9019d595a17568228df384bd06e9f65d636c47b63",
+      "variant": "gap"
+    },
+    {
+      "numeric_point_operations": 1984,
+      "receipt": "docs/paper/generated/population/positive/historical-positive-points-gap.v1.json",
+      "receipt_sha256": "a8b8a4159dbc7716696ac7d493dd904dce43d8bdbb8569a17e422de21864645a",
+      "svg": "docs/paper/generated/population/positive/historical-positive-points-gap.svg",
+      "svg_sha256": "3d0667e9da0394eed8c90f8b14104a38ef63f729608bd03f3c51d0244b1c380c",
+      "variant": "gap"
+    },
+    {
+      "numeric_point_operations": 2259,
+      "receipt": "docs/paper/generated/population/positive/screening-positive-points-gap.v1.json",
+      "receipt_sha256": "6e556e371956ca52d2035169dd6df2398e0e8ce618f0efc1a84b42ee6d70eaa7",
+      "svg": "docs/paper/generated/population/positive/screening-positive-points-gap.svg",
+      "svg_sha256": "fa81d785db4acf6483963c8c34b9e35907f2bb1a491c5805d3dfe1ee27cbfecd",
+      "variant": "gap"
+    }
+  ]
+}

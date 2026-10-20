@@ -1,0 +1,520 @@
+{
+  "axis": {
+    "best_reference_original": null,
+    "constant_coordinate": "epsilon; inverse returns sole original value",
+    "coordinate_formula": "(f-m)/s+epsilon",
+    "epsilon": 1e-6,
+    "epsilon_meaning": "display floor, not uncertainty or residual",
+    "fixed_retrospective_reference": false,
+    "inverse_coordinate_formula": "m+s*(coordinate-epsilon)",
+    "logarithm_base": 10,
+    "max_original": 6.060102873820819,
+    "min_original": 2.769032384488388,
+    "physical_score_ratio_meaning": false,
+    "scale": {
+      "constant_fallback": false,
+      "units": 3.291070489332431
+    },
+    "selection_on_display_transform": false,
+    "view": "positive_affine_log10"
+  },
+  "axis_canonical_json_sha256": "dcaf060506414477d14813a15dbe2ecb1304d8cf86f58920d0d56b2ed048e179",
+  "excluded_numeric_records": 0,
+  "expected_numeric_records": 2259,
+  "first_retained_leader_generation": null,
+  "full_range_asinh_companion_required": true,
+  "identity_hash_encoding": "ordered caller-specified fixed-width LE u64 original identity tuple",
+  "identity_order_sha256": "245bdcadc57ba62786c33624295ae7e5ef2c7e117fd1ee732ec2f77354b759cf",
+  "leader_ties": 1,
+  "minimum_file_ordinal_among_ties": 32,
+  "new_fitness_or_geometry": false,
+  "numeric_point_operations": 2259,
+  "occupied_centers": 737,
+  "original_domain": [
+    2.769032384488388,
+    6.060102873820819
+  ],
+  "original_negative_records": 0,
+  "original_zero_records": 0,
+  "overlapping_center_operations": 1522,
+  "overlay": "none; file accession order is not a proven campaign/time sequence",
+  "physical_ratio_meaning": false,
+  "point_operation_hash_encoding": "LE u64 identity tuple length, identity tuple, original x, original f64 bits, raster x, raster y",
+  "point_operation_sha256": "8b2303b2ee676faf48a21b638b3d23acb7bcffe51a035b3072aa582c7f0ab105",
+  "raster": {
+    "center_mask_sha256": "cec9d8561449e65f3dbbc353523136302da589ad6d8890daf2827c1d3132f012",
+    "density": false,
+    "height": 421,
+    "point_footprint": "fixed 3x3 pixels, bounded footprint at panel edge; every original center included",
+    "visible_mask_sha256": "ca525af80c31af66afceb38dff090b54a62036d3d4f7d44e4d8a4f56b8221c57",
+    "width": 951
+  },
+  "schema": "jarambit.positive_all_record_projection.v1",
+  "source": {
+    "identity": "original zero-based file index plus one-based candidate; x is unchanged one-based file ordinal",
+    "leader_ledger": {
+      "later_assessment": null,
+      "native_direction": "lower_is_better",
+      "ties": [
+        {
+          "birth_file_ordinal": 32,
+          "candidate_one_based": 6,
+          "public_individual": 5443,
+          "source_pair": {
+            "birth_file_ordinal": 32,
+            "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406t3/round_02_births.json",
+            "births_sha256": "97e8ff212f4d9c00af103d719754486f1bd7995ed7347cd0f4cd2a3ca89bba6e",
+            "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406t3/round_02_screen.json",
+            "screen_sha256": "a575bb45ff0265763327f91de045979dab4b8fe47673d7f433e096291facb2ed"
+          }
+        }
+      ],
+      "value": 2.769032384488388
+    },
+    "source_pairs": [
+      {
+        "birth_file_ordinal": 1,
+        "births_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/round_00_births.json",
+        "births_sha256": "31fa1989f0589880701951e69f29951584f7474d1fadae9c931da1f090f8966f",
+        "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/round_00_screen.json",
+        "screen_sha256": "5a382c819aed487fd9f32993d445bd7a9832cd56ab4ded54b01cdf3771948ece"
+      },
+      {
+        "birth_file_ordinal": 2,
+        "births_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/round_01_births.json",
+        "births_sha256": "5c07ffe5ea52fab88d7a9591c7f0e77d4e41b7b47058e0730afcb1928f5c016c",
+        "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/round_01_screen.json",
+        "screen_sha256": "c7f9963efff755c344a53931231fae80b7e05029c17845dc864e27144b23800f"
+      },
+      {
+        "birth_file_ordinal": 3,
+        "births_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/round_02_births.json",
+        "births_sha256": "bb87be57fc049efb4b7b3a39a926e2454c13556f2e31bbec72b9b8f47343387b",
+        "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/round_02_screen.json",
+        "screen_sha256": "6a9f4ab68a8816afe1ef3b3170e5e6a7250a132052180dceede81aae9f4e5ddf"
+      },
+      {
+        "birth_file_ordinal": 4,
+        "births_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w300/round_00_births.json",
+        "births_sha256": "a30476f416a0feb3e61f9d66d7143dc856d4b7deb0df76cc14c13dfaf62990c4",
+        "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe2/out/w300/round_00_screen.json",
+        "screen_sha256": "aee8ec5447da5d6a75764a731e5f0c011baf9732c9a3f6e87c1d01328342586b"
+      },
+      {
+        "birth_file_ordinal": 5,
+        "births_path": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/round_00_births.json",
+        "births_sha256": "aaaf4b9b4eb3402de76d50c09647cb7d4393f173639e5c5c75ea99c4bd0c957f",
+        "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/round_00_screen.json",
+        "screen_sha256": "81b9798206c295ca1376d110be03a5d2f619a9076d4ea6b144991d4468c9a6c1"
+      },
+      {
+        "birth_file_ordinal": 6,
+        "births_path": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/round_01_births.json",
+        "births_sha256": "9aa07cc54dae03d686af84af8f9d080969711ad0b299c4c6a15d99efbcdf6a75",
+        "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/round_01_screen.json",
+        "screen_sha256": "58370b6a4862d25e3099d5070f659ae60d540067f1dd67fdacc03a082b193157"
+      },
+      {
+        "birth_file_ordinal": 7,
+        "births_path": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w402c3/round_00_births.json",
+        "births_sha256": "746bd77b5a38a43d3842a0561ef02249792b9749e3b83014ec8a85784dcac86d",
+        "screen_path": "evidence/evolution_plateau/2026-10-17/xbabe3/out/w402c3/round_00_screen.json",
+        "screen_sha256": "6f98c3194556f673e2765ffea2a4b7dce713617a1b5cd1e79f8fdf71769251e0"
+      },
+      {
+        "birth_file_ordinal": 8,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w315/round_00_births.json",
+        "births_sha256": "bc9441f863812257b119520370563da8cfe606fe56d76c8649ce3077838ce0d2",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w315/round_00_screen.json",
+        "screen_sha256": "4ed6def0fb861038ddc7c8184c08c824325531f2830de41c3772abe0046e1689"
+      },
+      {
+        "birth_file_ordinal": 9,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w315/round_01_births.json",
+        "births_sha256": "e149fae3512408544de0205c562d995838aa166f0c4f64386a00dd40b961863c",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w315/round_01_screen.json",
+        "screen_sha256": "a45a5f4559b64702c9cf77e71e5f734e14af996ce1b20e34b4afde1523137698"
+      },
+      {
+        "birth_file_ordinal": 10,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w316/round_00_births.json",
+        "births_sha256": "c1ce1969c2cee585db9cde609acd957635398acfc227f57c595bf08c0415db14",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w316/round_00_screen.json",
+        "screen_sha256": "1b5cb4d4ff4504bcd073b0fd1276a5a3887ddbb06447a91a2ad2c478921ed56e"
+      },
+      {
+        "birth_file_ordinal": 11,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w316/round_01_births.json",
+        "births_sha256": "a4fc583720d23a8fc0876ea398dde7d862d261a8199bfe496476573acec4ffe8",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w316/round_01_screen.json",
+        "screen_sha256": "2a7a0f86ac92ea7e983179761b639ef7e7bf585274d96cee8d81cccfb589b872"
+      },
+      {
+        "birth_file_ordinal": 12,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/round_00_births.json",
+        "births_sha256": "aa4f9c4c0a888a9fb723ccd1245bb0a8c10d33be7743767ab53c71edbe73290c",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/round_00_screen.json",
+        "screen_sha256": "1895c91af815e83e87e5d820705f84537327a50a493b37a7bfdf98b41b8de240"
+      },
+      {
+        "birth_file_ordinal": 13,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/round_01_births.json",
+        "births_sha256": "b5df4627717dc2b76fc0b2f7ad18f92307b9ba82c268ed792d78ea7730efdda8",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/round_01_screen.json",
+        "screen_sha256": "afd1e87a79c21f6996df5b0774df4b9653a413dafe2a7d83a2bb9b5c65822663"
+      },
+      {
+        "birth_file_ordinal": 14,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w318/round_00_births.json",
+        "births_sha256": "294c9d71e64d0963c24c71fcd8e76f9ec6b8e08bd5089bb8c78c44dfc4e3d75f",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w318/round_00_screen.json",
+        "screen_sha256": "2416936cd05b93217ed8912fc27d5cc8b9308ce0fe04e69fd35278daacded1d8"
+      },
+      {
+        "birth_file_ordinal": 15,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w318/round_01_births.json",
+        "births_sha256": "f384d9fc60eaad7d2880e47c8ae467e9c42a13688050d0ffa80331b3736f2f21",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w318/round_01_screen.json",
+        "screen_sha256": "243404dc45c5903b03a2ea3ddf476a5b0f6eeee16e38a7e8b24832ac81e53b28"
+      },
+      {
+        "birth_file_ordinal": 16,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w319/round_00_births.json",
+        "births_sha256": "8ac6de8f7f19cc83c4c9d7f871006e3455300d5ffe71c3f51bedfeb66cd0167c",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w319/round_00_screen.json",
+        "screen_sha256": "067756640f297d949b7f8f0aa898e3100ce8f61f8070ad2307e9542c7ecf575d"
+      },
+      {
+        "birth_file_ordinal": 17,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w319/round_01_births.json",
+        "births_sha256": "a8098af848a7f65cf6f107e732bc888ace0b06bed7433af0749ed39776f12fee",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w319/round_01_screen.json",
+        "screen_sha256": "af58989acf8b6f9f9c27dcac34f5476eaec73d0cc5adb1630818f1ba8bd34a3a"
+      },
+      {
+        "birth_file_ordinal": 18,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w320/round_00_births.json",
+        "births_sha256": "f725189be663ee30646a52a84dd049648a7b39c7e39a58e7d9384e5d626e83c7",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w320/round_00_screen.json",
+        "screen_sha256": "adb40eb24b76e1ce1120c5255f5db90f69c4824fad1ca19af60b8aa17a6134f5"
+      },
+      {
+        "birth_file_ordinal": 19,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w320/round_01_births.json",
+        "births_sha256": "195b11e4828697ea8db1a6898330a62e03adcfd7f12c2671a71e03ef80a0cbdb",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w320/round_01_screen.json",
+        "screen_sha256": "a4494238b88b330502a6d36910eacb947df9d511b587cd656c388a682bd1f274"
+      },
+      {
+        "birth_file_ordinal": 20,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w321/round_00_births.json",
+        "births_sha256": "be46d1bb54326f5a3e64b1e314603fd42eb2b167eaaf595bed7e38ca969bbd9b",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w321/round_00_screen.json",
+        "screen_sha256": "2a42a4dd18c16a30f0b7e6c4227bb1b343f4857642fb0475aa0bd3133e5aa7ad"
+      },
+      {
+        "birth_file_ordinal": 21,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w321/round_01_births.json",
+        "births_sha256": "f7b82eb78644f7f0523e6ffba56082ea32f123c48e33570f372189ffed583046",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w321/round_01_screen.json",
+        "screen_sha256": "3198812d1301e05e308d4e312f18b54c8a8b2a1ca2762ae51f142b352f27d4cc"
+      },
+      {
+        "birth_file_ordinal": 22,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w322/round_00_births.json",
+        "births_sha256": "2b635ca6f0b048092bf6fc4f42dccb807c8d3c07798b2b998f15c0c56706850e",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w322/round_00_screen.json",
+        "screen_sha256": "6387cede8be390191aca6ec625bbcbc2dc2d9be4e6bae1692bc87cffdb62a0fa"
+      },
+      {
+        "birth_file_ordinal": 23,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w322/round_01_births.json",
+        "births_sha256": "996f17c70313362a4a1ba42d0a18c3667dd286847a74e87e3dde7e9373cb3926",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe2/out/w322/round_01_screen.json",
+        "screen_sha256": "43ed879198c677cd9bba8b63d47a48c88bd1e0361c2f665d2dc65684b1206d51"
+      },
+      {
+        "birth_file_ordinal": 24,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w405c3/round_00_births.json",
+        "births_sha256": "8cea1247b4eb2f4bece786d2b0f13807272d1550bbfa39a5750bc436cc6a0e03",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w405c3/round_00_screen.json",
+        "screen_sha256": "f6eacf9fb8b1a2d7f6ac9867fcb521ec0a2d72c1f29d99706a708fbfbb2ed848"
+      },
+      {
+        "birth_file_ordinal": 25,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w405c3/round_01_births.json",
+        "births_sha256": "b0144a3100827d9665ee6d3e8ef2ce9e6ac4688f6082293c32de58c0d7f4d4e1",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w405c3/round_01_screen.json",
+        "screen_sha256": "b181c543b1faaf6d02bb4a5b85fb78ac0a9d1ea68918c25b27bc4701236a4778"
+      },
+      {
+        "birth_file_ordinal": 26,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w405c3/round_02_births.json",
+        "births_sha256": "996a8b5167288c6fa774f1004e39221a853e865304355e1f1d16bbd54de708ac",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w405c3/round_02_screen.json",
+        "screen_sha256": "fffa1f8686c70c7588d702622f67f0756a30bb22f99b2bb14bb0e745187f45f1"
+      },
+      {
+        "birth_file_ordinal": 27,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406c3/round_00_births.json",
+        "births_sha256": "c29223d66e1c1d25b4712efc966d53ebab4b0b3eed901a8508b543e610e5d57e",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406c3/round_00_screen.json",
+        "screen_sha256": "538f24eb8666c9a700a117e8984a9280d552342c59ae160551c9ff537e8461c4"
+      },
+      {
+        "birth_file_ordinal": 28,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406c3/round_01_births.json",
+        "births_sha256": "26e9cb38f8761b5a2ec091f79977ee0d4c1152ccfb9b9614d33b53a3cb6ebaea",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406c3/round_01_screen.json",
+        "screen_sha256": "83fc240d6aa42a1259d6f3996ecaae8c2821ef4d08c02a9cdd829fea99e8deff"
+      },
+      {
+        "birth_file_ordinal": 29,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406c3/round_02_births.json",
+        "births_sha256": "977f2d8ea8fecd4849566ba59666c30fc25994b6f2802f285bb49849c0323833",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406c3/round_02_screen.json",
+        "screen_sha256": "f96febdadc6ab90295608d1e29d1b2fb689f345caf871bc77c0dffff3c8dd1e8"
+      },
+      {
+        "birth_file_ordinal": 30,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406t3/round_00_births.json",
+        "births_sha256": "3ce17611374d93addd17832f7f7619dac604affbef383211a131a972652d3a08",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406t3/round_00_screen.json",
+        "screen_sha256": "82ba7f42cb4e0731f00bf3161ab7cc86565bba643e16cc0da05f91debdb9e2f0"
+      },
+      {
+        "birth_file_ordinal": 31,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406t3/round_01_births.json",
+        "births_sha256": "e213bd3e7d9a06acd2e0ec6dee69c04e3de43a05a38384712d7191f6e0271c36",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406t3/round_01_screen.json",
+        "screen_sha256": "fc79be15d82110cc28d0b314cf896343ac0a253f6f7ffdee7343130489353340"
+      },
+      {
+        "birth_file_ordinal": 32,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406t3/round_02_births.json",
+        "births_sha256": "97e8ff212f4d9c00af103d719754486f1bd7995ed7347cd0f4cd2a3ca89bba6e",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w406t3/round_02_screen.json",
+        "screen_sha256": "a575bb45ff0265763327f91de045979dab4b8fe47673d7f433e096291facb2ed"
+      },
+      {
+        "birth_file_ordinal": 33,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w407c3/round_00_births.json",
+        "births_sha256": "9ef56544e0ac01fb82e99b6e3055479a4079ba7d5dc62122e5f7737dc9897260",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w407c3/round_00_screen.json",
+        "screen_sha256": "1b02d667993aca396947df422b16b5f14c18b910fadd2a78d3d15387277a7578"
+      },
+      {
+        "birth_file_ordinal": 34,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w407c3/round_01_births.json",
+        "births_sha256": "b68196822df5091bb3f0432430ea4b947b39b774303d70a4c357347750c8820d",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w407c3/round_01_screen.json",
+        "screen_sha256": "464571849e44876c65cde9a1aed2b2ad4ce0780d3fe7660eec3e3269a92685c1"
+      },
+      {
+        "birth_file_ordinal": 35,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w407c3/round_02_births.json",
+        "births_sha256": "0ae65d6da9468b23d00db842ca0fa85b109bf33f6f88fd8e819dae87a4b53e1c",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w407c3/round_02_screen.json",
+        "screen_sha256": "d1bfaf33f2000aeeeae056165b6427be3506920bc2731d422bef555096c6757b"
+      },
+      {
+        "birth_file_ordinal": 36,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w407t3/round_00_births.json",
+        "births_sha256": "8fe6b6ddbc819dcc795f48927ffa25e63f957f535fd84a2176c03f01427dde5d",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w407t3/round_00_screen.json",
+        "screen_sha256": "d571555c69df2feeecdb25ea9f9c53831a0b5f17009faaf5cfcad5984fda0764"
+      },
+      {
+        "birth_file_ordinal": 37,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w407t3/round_01_births.json",
+        "births_sha256": "c00813c5da5c114c64748d3d86d9b71d361df5356a933e5920be8fa5131d8e7d",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w407t3/round_01_screen.json",
+        "screen_sha256": "cc79d18eddffbc9ae101c6fcaaa5d784ca4b2ae674b2738d4f57a6a0e3e6bdcc"
+      },
+      {
+        "birth_file_ordinal": 38,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w407t3/round_02_births.json",
+        "births_sha256": "adf131a214ccc5fba6c685ca89bb3b8fcdde3f07cf595af43f91008a1ed959ef",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w407t3/round_02_screen.json",
+        "screen_sha256": "f6e5e264baf2072041b6f972d38447c25436aa297ac4d4c45a5f4930a3559f03"
+      },
+      {
+        "birth_file_ordinal": 39,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w408c3/round_00_births.json",
+        "births_sha256": "a0522ae67c4469b403538cd7a9fd2290624a531653d6378eeb17ebb3d2045374",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w408c3/round_00_screen.json",
+        "screen_sha256": "f820510b5d4cdcaba5402ff8860551ff9330ca71faf7038d111e060ad6e81b3c"
+      },
+      {
+        "birth_file_ordinal": 40,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w408c3/round_01_births.json",
+        "births_sha256": "eb81298ab751e440c353b041015a7405dc8476d8624698f370fbb6e5ff46c9f7",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w408c3/round_01_screen.json",
+        "screen_sha256": "546dce60033c9750c2ad0ee1e6df0080cc691dcaafaa6b0a1cb11b30e738629b"
+      },
+      {
+        "birth_file_ordinal": 41,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w408c3/round_02_births.json",
+        "births_sha256": "26fdd0443143e2b67f3cb5a2f641b519c6969a31c6cbac9d3eca00b8fa96db3b",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w408c3/round_02_screen.json",
+        "screen_sha256": "4b2db1d8dd0f32685ec5cbd2a7ec55af82ab050bd998b6dc725ac2f7311591c5"
+      },
+      {
+        "birth_file_ordinal": 42,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w408t3/round_00_births.json",
+        "births_sha256": "5ccb5b6d5aff1f6fae2d23e6cdd02337cd5c0df97e5f4a2bfbb96aeb95a80155",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w408t3/round_00_screen.json",
+        "screen_sha256": "506cb14ef2da97f53f44715e37a92c583004c89dd290453e685aec4a46e3474e"
+      },
+      {
+        "birth_file_ordinal": 43,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w408t3/round_01_births.json",
+        "births_sha256": "7e6620590a690fded1edd45616759797b37b7e3e630abd5f9d0992521a68fb68",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w408t3/round_01_screen.json",
+        "screen_sha256": "3d7c985c7e3b6a274ffeafede39ca0a88e4421e2ac737bb5af2bf2260e343938"
+      },
+      {
+        "birth_file_ordinal": 44,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w408t3/round_02_births.json",
+        "births_sha256": "5fad653f1056375ca108bed4c2c66a78cfa7d87c5520250a961077b56c6032a1",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w408t3/round_02_screen.json",
+        "screen_sha256": "44be6efb28723839f8350b9bca8dc92602074316427fe4f1043c8df563a8789c"
+      },
+      {
+        "birth_file_ordinal": 45,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w410c3/round_00_births.json",
+        "births_sha256": "b14aa0980aaf65656497dcae7fed0e7109fd3284a04d7d589f1789dea7948db3",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w410c3/round_00_screen.json",
+        "screen_sha256": "12b326426f5d0774e6114ff6e9d33051d697b0623a75a082a6b4327bb2fff803"
+      },
+      {
+        "birth_file_ordinal": 46,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w410c3/round_01_births.json",
+        "births_sha256": "fdf5577ba8bc12ab5b8baf53f1dfd94c843bd0b46f02b3b59eae767e4a9648ff",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w410c3/round_01_screen.json",
+        "screen_sha256": "81ec6172c75af587f74dd9e17cea3a158029ee8fb3fe3fbc77075bc8abeba702"
+      },
+      {
+        "birth_file_ordinal": 47,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w410c3/round_02_births.json",
+        "births_sha256": "9898cb0dec8386d3dae2cb7712c65f4197ab1a29c480d02177dca2e3fd38d858",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w410c3/round_02_screen.json",
+        "screen_sha256": "a763f53353621afd7378073437ae55bb578d7f4c9636664e4508ba9a692c1cc4"
+      },
+      {
+        "birth_file_ordinal": 48,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w410t3/round_00_births.json",
+        "births_sha256": "0fc13cd8e95228784026efbdd764627655591715d1d9c02408af23a4d81b8ae7",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w410t3/round_00_screen.json",
+        "screen_sha256": "0522f3042d3e1bd79ec71b3482bf869b785fadf11ae6521bc7133d74df4fd824"
+      },
+      {
+        "birth_file_ordinal": 49,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w410t3/round_01_births.json",
+        "births_sha256": "82b01949409d60a49aa67767dc446cf4b6196700873c57156eb4aa995a1ff0dd",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w410t3/round_01_screen.json",
+        "screen_sha256": "763f991d39d8a15d5ffca2fde4023bb54feb5c21803e42179f86354da8870f23"
+      },
+      {
+        "birth_file_ordinal": 50,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w410t3/round_02_births.json",
+        "births_sha256": "bc92eb75d04793a6d8a27971cd2c000545d1e689d7e0655a911c476c26fe8de0",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w410t3/round_02_screen.json",
+        "screen_sha256": "07356607b91705efe230bf84b5c6569495470d47369fa6b8764391908823506c"
+      },
+      {
+        "birth_file_ordinal": 51,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/round_00_births.json",
+        "births_sha256": "11bf2826e679be0e7169451aed887acf87690742a8766c78c5fc61113a949e1f",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/round_00_screen.json",
+        "screen_sha256": "7d3963b938eb7c94f4615496aab5936795d9eeb20ce57f4ff03c799b0ef5b011"
+      },
+      {
+        "birth_file_ordinal": 52,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/round_01_births.json",
+        "births_sha256": "f865043d07759d19f155f3e7310c2a53177ada8db9ec4b19d2a0d6db8ba253c3",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/round_01_screen.json",
+        "screen_sha256": "57ca887d33b120ff47c8bd14ff8fcf5c3e31fadc8213115c7cd904e2d2362e4e"
+      },
+      {
+        "birth_file_ordinal": 53,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/round_02_births.json",
+        "births_sha256": "3239366de33339e6ecdd41aa541debc1bed700a8d5f3ecc9bb7ca7346b422e38",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/round_02_screen.json",
+        "screen_sha256": "ea1543a00ed94fe06d1bdef8c96cdd6da92565df5610b572b462aefa99bd6523"
+      },
+      {
+        "birth_file_ordinal": 54,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411t3/round_00_births.json",
+        "births_sha256": "ddd83f88dc77f3f58a3cffda95841bfadc6b7748ce30ed3648f8b5472f973ca6",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411t3/round_00_screen.json",
+        "screen_sha256": "973731ba00a97e427070907dd101e5c6dba564d07cef95ac6a3674fea9b65e07"
+      },
+      {
+        "birth_file_ordinal": 55,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411t3/round_01_births.json",
+        "births_sha256": "6dfc7bf983ba5a8634a4928ea4a6095712c93d90d4916d041a4f07571b5b078e",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411t3/round_01_screen.json",
+        "screen_sha256": "1b030041145d88c6d788f7ab59b96a0b316e8624d6b22009541b21ffbd41ae74"
+      },
+      {
+        "birth_file_ordinal": 56,
+        "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411t3/round_02_births.json",
+        "births_sha256": "a7b119cec5797790d7a3e7df9ed27022089311b7a9221db2b17ca1bc30245e22",
+        "screen_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411t3/round_02_screen.json",
+        "screen_sha256": "33ed836255918be3b0b250d913f213ff34052766193bebe7e258d3fba6821182"
+      },
+      {
+        "birth_file_ordinal": 57,
+        "births_path": "evidence/evolve_certifiable/automatic/round_00_births.json",
+        "births_sha256": "53eef1ef54b83c1649187d2299b63f8a413dec6cab34971d231273db7494856c",
+        "screen_path": "evidence/evolve_certifiable/automatic/round_00_screen.json",
+        "screen_sha256": "65fe2c33dd39f8f63eb79be22a27cc4d70fbac7ae9052c35d9948d5be128ecdd"
+      }
+    ],
+    "unknown": {
+      "display": "nonnumeric coverage note; no plotted band or invented score",
+      "numeric_point_operations": 0,
+      "records": 1390,
+      "source_identity_sha256": "21abb8fa6d2c66e6eeb1228e88bd28ccc379ad5c9481899c9f44552f4ea1ccb0"
+    }
+  },
+  "source_membership_admitted_by": "caller, before display projection",
+  "svg_sha256": "758392eac1dc5750ca569355a18f59f48954147e6568cb9f1a3dcf98b328a39e",
+  "tick_rows": [
+    {
+      "label": "2.769032e0",
+      "log10_coordinate": -6.0,
+      "original_value": 2.769032384488388
+    },
+    {
+      "label": "2.769133e0",
+      "log10_coordinate": -4.499999891426434,
+      "original_value": 2.7691331662307817
+    },
+    {
+      "label": "2.772320e0",
+      "log10_coordinate": -2.9999997828528677,
+      "original_value": 2.772320165552766
+    },
+    {
+      "label": "2.873102e0",
+      "log10_coordinate": -1.4999996742793016,
+      "original_value": 2.8731019583370325
+    },
+    {
+      "label": "6.060103e0",
+      "log10_coordinate": 4.342942647204277e-7,
+      "original_value": 6.060102873820819
+    }
+  ],
+  "x_axis": {
+    "coordinate_formula": "log10(one_based_file_ordinal)",
+    "inverse_formula": "10^x",
+    "logarithm_base": 10,
+    "original_bounds": [
+      1,
+      57
+    ]
+  }
+}
