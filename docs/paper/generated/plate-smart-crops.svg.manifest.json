@@ -1,14 +1,14 @@
 {
   "figure": "docs/paper/generated/plate-smart-crops.svg",
-  "figure_sha256": "d3a08ce28d09ec8f2eafd24bbaa5b7176760dd038a8d96b6340d39631e28dd3b",
+  "figure_sha256": "f84daf6bb9bc777c2fb71fdab27e44c9d531f8c53c393536fd227c577b55e401",
   "inputs": {
     "crates/cli/src/crescent.rs": "c8f2e1664263e3bb885ca33e27f42dab0fbe0f180116ec890ee4dcd83bdeab22",
     "crates/crescent/src/fem.rs": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
     "crates/crescent/src/pheno.rs": "fd0f556d9054334f26b3d1698979c14696435b1fb85c1c637f5e199d4b4aa19c",
-    "crates/paper-artifacts/src/plate.rs": "118639cf8e9325bc05e68e0c98a37586479b7c1d2e3f783a8296a7fbdde05f2e",
-    "crates/paper-artifacts/src/saliency.rs": "0c4b3ea03d8809113545963858230f52fba11bcd4a083bb66c5795629468ed87",
+    "crates/paper-artifacts/src/plate.rs": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e",
+    "crates/paper-artifacts/src/saliency.rs": "898ae7f0f8175409fc56819b89ab347cc1f10fc47a06dca4cb51b9df86d90370",
     "crates/physics/src/fine.rs": "b8762847e7452d3bcbfde718e55e13c42d4ac61d9a23abf5a75d2d5c38343096",
-    "docs/paper/data/smart-crop-contract.v1.json": "e4305513ef5adc41d391aed17e2abca360afff0fa05a1d31c94ea6777770f432",
+    "docs/paper/data/smart-crop-contract.v1.json": "124685f851bbba1bfe6a3565f8e06a66e31b616767c836779e039c1cbf6ff0e6",
     "docs/paper/field-inputs.v1.json": "93ffdcdae2c2eead22ce858e3eb83af1f61cdb4bafa29e418b6859736c6c8449",
     "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab"
   },

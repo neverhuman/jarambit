@@ -38,6 +38,12 @@
   "original_zero_records": 0,
   "overlapping_center_operations": 167192,
   "overlay": "within-scope cumulative best derived from exactly these raw observations; no median invented; gaps not bridged",
+  "overlay_style": {
+    "applies_to": "generation scopes only; no invented trajectory for file accession order",
+    "halo": "#ffffff",
+    "path_coordinates_unchanged": true,
+    "stroke": "#111827"
+  },
   "physical_ratio_meaning": false,
   "point_operation_hash_encoding": "LE u64 identity tuple length, identity tuple, original x, original f64 bits, raster x, raster y",
   "point_operation_sha256": "b78212fe9f861dfd584f51caecf77c119faf062bc6c0acf1adf21d4d9b448fd6",
@@ -50,6 +56,88 @@
     "width": 951
   },
   "schema": "jarambit.positive_all_record_projection.v1",
+  "score_color": {
+    "axis_canonical_json_sha256": "e5b573661c81a2fa4c84edd616ed750b54214c5cb3dd524c447f6a5ec563202b",
+    "background_srgb": [
+      255,
+      255,
+      255
+    ],
+    "better_toward_lower_transformed_coordinate": true,
+    "constant_domain_rule": "all finite observations use midpoint yellow; no invented variation",
+    "contrast": "same fixed source-bound PositiveAxis log10 transform as vertical coordinates, normalized over complete transformed endpoints and reversed if better points toward lower transformed coordinates",
+    "legend_original_unit_ticks": [
+      {
+        "label": "-2.101724e2",
+        "original_value": -210.1724,
+        "palette_fraction": 0.0
+      },
+      {
+        "label": "-5.541304e0",
+        "original_value": -5.541303815118887,
+        "palette_fraction": 0.25
+      },
+      {
+        "label": "9.296980e-1",
+        "original_value": 0.9296980075434207,
+        "palette_fraction": 0.5
+      },
+      {
+        "label": "1.134329e0",
+        "original_value": 1.1343290014128342,
+        "palette_fraction": 0.75
+      },
+      {
+        "label": "1.140800e0",
+        "original_value": 1.1408,
+        "palette_fraction": 1.0
+      }
+    ],
+    "monotone_luminance_claim": false,
+    "nonfinite_missing_rule": "refused before any painting/operation; unknown observations remain separately nonnumeric",
+    "original_domain": [
+      -210.1724,
+      1.1408
+    ],
+    "painting": "same original source order; every original fixed 3x3 footprint is painted; later marks cover earlier RGB, including adjacent footprint overlap; visible color is not a count or proof every distinct score remains separately visible",
+    "palette": "navy_teal_yellow_orange_red_piecewise_linear_srgb_v1",
+    "palette_srgb": [
+      [
+        8,
+        28,
+        74
+      ],
+      [
+        13,
+        148,
+        136
+      ],
+      [
+        250,
+        204,
+        21
+      ],
+      [
+        234,
+        88,
+        12
+      ],
+      [
+        153,
+        27,
+        27
+      ]
+    ],
+    "preference": "higher_original_score_is_better",
+    "quantity": "original recorded score; never fitness recomputation, density or category",
+    "rgb_sha256": "8e46f89b070768e5dbcfbb6042ec11b28999845b6e24ae948b28d856e03c1e81",
+    "saturation_or_hidden_clip": false,
+    "schema": "jarambit.original_score_color.v1",
+    "scope": "one caller-admitted stage/run/profile and complete original domain; no pooled cross-scope ranking",
+    "scope_title": "Run 9: every retained birth, fixed positive gap view",
+    "visible_original_unit_legend": true,
+    "warmer_is_better": true
+  },
   "source": {
     "admitted_original_identity_order_sha256": "55c62176b5f0a189dd5b535f97778f1f1ba0fa01bde8b2a7cecc4d98a93ac723",
     "archive_run_ordinal": 7,
@@ -488,7 +576,7 @@
     "same_complete_original_domain_and_positive_axis": true,
     "summary_y_viewport_may_differ": true
   },
-  "svg_sha256": "43a721c95a0a83044b2e94977eab3cdca598d14afc20320c8f3bd3a5a3dfed13",
+  "svg_sha256": "aa36c6bd28b88ef4c6eb5de85c7c7ab783dd8e822269933b8f18990eb5e62154",
   "tick_rows": [
     {
       "label": "1.140800e0",

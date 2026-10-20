@@ -53,8 +53,8 @@
         "crates/paper-artifacts/src/appearance.rs": "cc91aaf0efb3c55d9b1f4059aaacd405669404030f1cf804a6e47eefe5325178",
         "crates/paper-artifacts/src/display.rs": "636bb74fbdd7be6a5db0e307499aed034b58e29f321837426e177405a711e22b",
         "crates/paper-artifacts/src/hero_appearance.rs": "06ffae640e18d4d6ed8ebe8065c192ad27cf9c74de0c0221da7dab60b5076e98",
-        "crates/paper-artifacts/src/plate.rs": "118639cf8e9325bc05e68e0c98a37586479b7c1d2e3f783a8296a7fbdde05f2e",
-        "crates/paper-artifacts/src/population.rs": "1f53640711e208136b58be28a22efb57f3af502f2d37b093a7406ae6eab97d9d",
+        "crates/paper-artifacts/src/plate.rs": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e",
+        "crates/paper-artifacts/src/population.rs": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
         "docs/paper/assessment-inputs.v1.json": "fac0cd6cc08e731585e243277d401cb4e9a746279f4a544b012d4fae6b928171",
         "docs/paper/data/display-composite-contract.v1.json": "df34216ea111683233fadcab64d6536f52af2178da300f0ea027f8b19d9b74e9",
         "docs/paper/data/display-composite-review.v1.json": "1b4d70b8bcc4668af40427350cba12e876c972ecc1d3f0db792aec44c01b101f",
@@ -77,10 +77,10 @@
     "matched_unlit_is_additional_visibility_control": true,
     "pin_admission": {
       "actual_preflight_receipt_path": "docs/paper/data/hero-appearance-preflight.v1.json",
-      "actual_preflight_receipt_sha256": "660d9c00b84b3f310b36a2749e4a1b6cadf3accf6668a73b7ecf353314104e78",
+      "actual_preflight_receipt_sha256": "46587bc4dd80a34d081a1b3b0c4487b2b9dafd04a677fbd030cdff1af66fb00b",
       "independent_source_review_receipt_path": "docs/paper/data/hero-appearance-pin-review.v1.json",
-      "independent_source_review_receipt_sha256": "eec99fcee928d4d35e38817bd67427cfd1cc02e68ff20c75e26e1feaa990d929",
-      "limit": "Exact actual6c49 observation/22 source-input pins/geometry/camera/registration/five-component pinset independently admitted; not normals/lighting/pixels/PDF/whole-head/formal approval. Any bound source/fact change requires new precise review.",
+      "independent_source_review_receipt_sha256": "260b2cfcf9c13c8b519d91d9330e9aa2df55a19f4a9143f241569b7423159c87",
+      "limit": "Exact actual4ff observation/22 source-input pins/geometry/camera/registration/five-component pinset independently admitted; not new B/D or color pixels/PDF/whole-head/formalapproval. Any bound source/fact change requires precise review.",
       "status": "independently_source_reviewed"
     },
     "png": {
@@ -91,7 +91,7 @@
     "required_visible_caption_disclosure": "Illuminated appearance of the retained response index: RGB differs from base palette colors. Use the unchanged unlit four-channel companion for quantitative colors. Retained geometry and fitness are reused, not newly evaluated.",
     "source_recipe": {
       "path": "docs/paper/data/hero-appearance-source-recipe.v1.json",
-      "sha256": "7d431843aa9a176b51b270eccff385cff92e759d0d54577e6676e2a2708ed44e"
+      "sha256": "34e84ddeff834ebb268ba0ae6cbd3e7614cf019a8fbd8393f2ece3163a5323b2"
     },
     "svg": {
       "illuminated_sha256": "3e057afb592c028e90242414d1f35088dcff4b42ce66c18d5083ed21b8e02f9d",
