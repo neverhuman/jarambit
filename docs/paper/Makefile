@@ -2,8 +2,6 @@ ROOT := ../..
 OUT := $(abspath $(ROOT)/target/ieee/paper)
 export CARGO_TARGET_DIR := $(abspath $(ROOT)/target)
 CARGO ?= cargo
-SYNTHETIC_MANIFEST := experiments/geometry-smoothing-benchmark/Cargo.toml
-SYNTHETIC_SOURCES := $(SYNTHETIC_MANIFEST) experiments/geometry-smoothing-benchmark/Cargo.lock experiments/geometry-smoothing-benchmark/src/lib.rs experiments/geometry-smoothing-benchmark/src/main.rs experiments/geometry-smoothing-benchmark/tests/export_contract.rs experiments/geometry-smoothing-benchmark/tests/paper_pipeline.rs
 SOURCE_DATE_EPOCH ?= 1792460432
 GEN_FIGURES := population plate-fields verification assessment battery-matrix weighted-runs reference
 POP_FIGURES := population-latest inheritance evidence-architecture inheritance-details
@@ -15,32 +13,21 @@ GEN_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(GEN_FIGURES)))
 POP_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(POP_FIGURES)))
 # Pinned evidence-baseline timestamp; actual build UTC belongs to the receipt.
 TEX_ENV = TEXINPUTS="$(OUT):" SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH) FORCE_SOURCE_DATE=1 TZ=UTC
-.PHONY: all artifacts figures pdfs main supplement audit check clean synthetic-geometry-check
+.PHONY: all artifacts figures pdfs main supplement audit check clean
 # A report must finish generating before its figure/document consumers start.
 .NOTPARALLEL:
 all: artifacts pdfs
 # Reporting reconstruction only; no CAD, FEM, search, tests or CI.
 artifacts:
 	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts
-# Validate actual smoothing on the neutral fixture before any figure consumer.
-# This is not a production CAD transform or an assessment of the cover subject.
-synthetic-geometry-check: | $(OUT)
-	@set -eu; \
-	mkdir -p "$(OUT)/synthetic-geometry"; \
-	attempt=$$(mktemp -d "$(OUT)/synthetic-geometry/run.XXXXXX"); \
-	cd "$(ROOT)"; \
-	CARGO_TARGET_DIR="$(abspath $(ROOT)/target/synthetic-geometry)" $(CARGO) run --release --locked --manifest-path $(SYNTHETIC_MANIFEST) -- --out "$$attempt/output"; \
-	shasum -a 256 $(SYNTHETIC_SOURCES) > "$$attempt/SOURCE_SHA256SUMS"; \
-	(cd "$$attempt/output" && shasum -a 256 rough.obj smoothed.obj reference.obj rough.stl smoothed.stl reference.stl vertices.csv metrics.json comparison.svg REPORT.md) > "$$attempt/OUTPUT_SHA256SUMS"; \
-	printf '%s\n' "$$attempt" > "$(OUT)/synthetic-geometry/LATEST"
-figures: synthetic-geometry-check $(GEN_PNGS) $(POP_PNGS) figures/fig1_hero_blender_v2.png $(CROP_PNG)
+figures: $(GEN_PNGS) $(POP_PNGS) figures/fig1_hero_blender_v2.png $(CROP_PNG)
 $(OUT):
 	mkdir -p $(OUT)
 $(GEN_PNGS): $(OUT)/%.png: generated/%.svg | $(OUT)
 	rsvg-convert -w 3600 -o $@ $<
 $(POP_PNGS): $(OUT)/%.png: figures/%.svg | $(OUT)
 	rsvg-convert -w 3600 -o $@ $<
-$(HERO_PNG): $(HERO_SVG) | synthetic-geometry-check
+$(HERO_PNG): $(HERO_SVG)
 	rsvg-convert -w 3200 -h 1360 -o $@ $<
 figures/fig1_hero_blender_v2.png: $(HERO_PNG)
 	cp $< $@

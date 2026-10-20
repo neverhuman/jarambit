@@ -1,0 +1,59 @@
+name: Synthetic geometry benchmark
+
+on:
+  pull_request:
+    paths:
+      - 'experiments/geometry-smoothing-benchmark/**'
+      - '.github/workflows/synthetic-geometry-benchmark.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'experiments/geometry-smoothing-benchmark/**'
+      - '.github/workflows/synthetic-geometry-benchmark.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic:
+    name: Synthetic geometry fixture and export contracts
+    runs-on: [self-hosted, linux, x64, xbabe, general, xbabe1]
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash ops/ci/run_bounded.sh version {0}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Test standalone geometry and export contracts
+        run: |
+          toolchain=/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin
+          export PATH="${toolchain}:/home/ubuntu/.cargo/bin:${PATH}"
+          export RUSTC="${toolchain}/rustc" RUSTDOC="${toolchain}/rustdoc"
+          export CARGO_TARGET_DIR="$PWD/target/synthetic-geometry-ci"
+          test -x "$RUSTC"
+          cargo test --release --locked --manifest-path experiments/geometry-smoothing-benchmark/Cargo.toml -- --test-threads=1
+          cargo clippy --release --locked --manifest-path experiments/geometry-smoothing-benchmark/Cargo.toml --all-targets -- -D warnings
+      - name: Produce synthetic-only meshes and hash-bound receipts
+        run: |
+          toolchain=/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin
+          export PATH="${toolchain}:/home/ubuntu/.cargo/bin:${PATH}"
+          export RUSTC="${toolchain}/rustc" RUSTDOC="${toolchain}/rustdoc"
+          export CARGO_TARGET_DIR="$PWD/target/synthetic-geometry-ci"
+          attempt="$PWD/target/synthetic-geometry-artifacts/${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          cargo run --release --locked --manifest-path experiments/geometry-smoothing-benchmark/Cargo.toml -- --out "$attempt/output"
+          sha256sum experiments/geometry-smoothing-benchmark/Cargo.toml \
+            experiments/geometry-smoothing-benchmark/Cargo.lock \
+            experiments/geometry-smoothing-benchmark/src/*.rs \
+            experiments/geometry-smoothing-benchmark/tests/*.rs > "$attempt/SOURCE_SHA256SUMS"
+          (cd "$attempt/output" && sha256sum rough.obj smoothed.obj reference.obj \
+            rough.stl smoothed.stl reference.stl vertices.csv metrics.json \
+            comparison.svg REPORT.md) > "$attempt/OUTPUT_SHA256SUMS"
+      - name: Upload synthetic benchmark results and generated meshes
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: synthetic-geometry-${{ github.sha }}-${{ github.run_attempt }}
+          path: target/synthetic-geometry-artifacts/
+          if-no-files-found: error
