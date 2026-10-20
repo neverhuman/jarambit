@@ -2103,19 +2103,77 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     Ok(render_hero_view(repo_root, HeroView::FullRange)?.0)
 }
 
-fn render_hero_view(
-    repo_root: &Path,
-    view: HeroView,
-) -> Result<(String, crate::display::Composite)> {
-    use std::fmt::Write as _;
-    const D1_REL: &str = "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json";
-    const STL_REL: &str = "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl";
+const HERO_D1_REL: &str = "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json";
+const HERO_STL_REL: &str = "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl";
+const HERO_SUBJECT: &str = "Individual 2000";
+const HERO_ORDERED_GEOMETRY_SHA: &str =
+    "270fe8fee8aaa0d74c5a59d8b310c4ffc454fe985e479f86203c77fb48bb3b73";
+
+// Shared predecessor source loading, exact nearest-cell registration and camera.
+// Flat quantitative output keeps its original culling/painter/SVG code below.
+struct HeroSource {
+    d1_bytes: Vec<u8>,
+    stl_bytes: Vec<u8>,
+    d1: Value,
+    composite: crate::display::Composite,
+    raw_tris: Vec<([f64; 3], [[f64; 3]; 3])>,
+    face_to_cell: Vec<usize>,
+    edge_counts: BTreeMap<(usize, usize), usize>,
+    posed_nodes: Vec<[f64; 2]>,
+    ct: f64,
+    st: f64,
+    scale: f64,
+    ox: f64,
+    oy: f64,
+}
+
+fn hero_nearest_cell(
+    cx: f64,
+    cy: f64,
+    centroids: &[[f64; 2]],
+    grid_buckets: &BTreeMap<(i32, i32), Vec<usize>>,
+) -> Result<usize> {
+    let (gx, gy) = ((cx * 0.5).floor() as i32, (cy * 0.5).floor() as i32);
+    let mut best_i = None;
+    let mut best_d2 = f64::INFINITY;
+    for dx in -2..=2 {
+        for dy in -2..=2 {
+            if let Some(bucket) = grid_buckets.get(&(gx + dx, gy + dy)) {
+                for &di in bucket {
+                    let d2 = (centroids[di][0] - cx).powi(2) + (centroids[di][1] - cy).powi(2);
+                    if d2 < best_d2 || (d2 == best_d2 && best_i.map_or(true, |old| di < old)) {
+                        best_d2 = d2;
+                        best_i = Some(di);
+                    }
+                }
+            }
+        }
+    }
+    // The grid accelerates an exact nearest-centroid query. If an outside
+    // bucket could contain a nearer cell, finish against the complete source.
+    let outside_margin = (cx - (gx - 2) as f64 * 2.0)
+        .min((gx + 3) as f64 * 2.0 - cx)
+        .min(cy - (gy - 2) as f64 * 2.0)
+        .min((gy + 3) as f64 * 2.0 - cy);
+    if best_d2 >= outside_margin.powi(2) {
+        for (di, center) in centroids.iter().enumerate() {
+            let d2 = (center[0] - cx).powi(2) + (center[1] - cy).powi(2);
+            if d2 < best_d2 || (d2 == best_d2 && best_i.map_or(true, |old| di < old)) {
+                best_d2 = d2;
+                best_i = Some(di);
+            }
+        }
+    }
+    best_i.ok_or_else(|| "population: no source cell for surface display transfer".into())
+}
+
+fn load_hero_source(repo_root: &Path) -> Result<HeroSource> {
     let d1_bytes = crate::corpus::read_bounded_file(
-        &crate::corpus::resolve_safe_relpath(repo_root, D1_REL)?,
+        &crate::corpus::resolve_safe_relpath(repo_root, HERO_D1_REL)?,
         16 * 1024 * 1024,
     )?;
     let stl_bytes = crate::corpus::read_bounded_file(
-        &crate::corpus::resolve_safe_relpath(repo_root, STL_REL)?,
+        &crate::corpus::resolve_safe_relpath(repo_root, HERO_STL_REL)?,
         16 * 1024 * 1024,
     )?;
     let d1: Value = serde_json::from_slice(&d1_bytes)?;
@@ -2161,15 +2219,7 @@ fn render_hero_view(
     }
     composite
         .input_hashes
-        .insert(STL_REL.into(), sha256_bytes(&stl_bytes));
-    let contrast = if view == HeroView::ContrastPreview {
-        composite.preview
-    } else {
-        crate::display::Contrast {
-            low: 0.0,
-            high: 1.0,
-        }
-    };
+        .insert(HERO_STL_REL.into(), sha256_bytes(&stl_bytes));
 
     // Proper SO(3) pose R = R_z(-6 deg) * R_x(180 deg) (det = +1.0)
     let theta = -6.0_f64.to_radians();
@@ -2192,7 +2242,6 @@ fn render_hero_view(
     let scale = (1380.0 / (xmax - xmin)).min(470.0 / (ymax - ymin));
     let ox = 110.0 + (1380.0 - (xmax - xmin) * scale) * 0.5 - xmin * scale;
     let oy = 104.0 + (470.0 - (ymax - ymin) * scale) * 0.5 + ymax * scale;
-    let to_svg = |px: f64, py: f64| -> (f64, f64) { (ox + px * scale, oy - py * scale) };
 
     // Build 2D spatial grid on unposed D1 centroids so 90,000 STL triangles map in O(1)
     let mut grid_buckets: BTreeMap<(i32, i32), Vec<usize>> = BTreeMap::new();
@@ -2258,50 +2307,506 @@ fn render_hero_view(
             ));
         }
     }
+    let face_to_cell = raw_tris
+        .iter()
+        .map(|(_, [v0, v1, v2])| {
+            let cx = (v0[0] + v1[0] + v2[0]) / 3.0;
+            let cy = (v0[1] + v1[1] + v2[1]) / 3.0;
+            hero_nearest_cell(cx, cy, &centroids, &grid_buckets)
+        })
+        .collect::<Result<Vec<_>>>()?;
+    Ok(HeroSource {
+        d1_bytes,
+        stl_bytes,
+        d1,
+        composite,
+        raw_tris,
+        face_to_cell,
+        edge_counts,
+        posed_nodes,
+        ct,
+        st,
+        scale,
+        ox,
+        oy,
+    })
+}
+
+// Components use the exact byte encodings in hero_appearance::RegistrationInput.
+// Kept here because that module intentionally exposes no mutable registration.
+fn hero_registration_components(input: &crate::hero_appearance::RegistrationInput) -> Value {
+    fn string(h: &mut Sha256, value: &str) {
+        h.update((value.len() as u64).to_le_bytes());
+        h.update(value.as_bytes());
+    }
+    let (mut scalar, mut mask, mut contributors, mut colors, mut mapping) = (
+        Sha256::new(),
+        Sha256::new(),
+        Sha256::new(),
+        Sha256::new(),
+        Sha256::new(),
+    );
+    for cell in &input.cells {
+        match cell.index {
+            Some(v) => {
+                scalar.update([1_u8]);
+                scalar.update(v.to_le_bytes());
+            }
+            None => scalar.update([0_u8]),
+        }
+        for &v in &cell.source_masks {
+            mask.update([u8::from(v)]);
+        }
+        contributors.update((cell.contributors.len() as u64).to_le_bytes());
+        for id in &cell.contributors {
+            string(&mut contributors, id);
+        }
+        colors.update(cell.base_rgb);
+    }
+    for &i in &input.face_to_cell {
+        mapping.update((i as u64).to_le_bytes());
+    }
+    json!({
+        "registered_index_bits":format!("{:x}",scalar.finalize()),
+        "original_source_mask_bits":format!("{:x}",mask.finalize()),
+        "contributor_ids_and_counts":format!("{:x}",contributors.finalize()),
+        "unlit_cell_palette_rgb":format!("{:x}",colors.finalize()),
+        "ordered_face_to_original_cell_ids":format!("{:x}",mapping.finalize())
+    })
+}
+
+fn hero_appearance_camera(source: &HeroSource) -> crate::appearance::Camera {
+    // Same R_z(-6deg) * R_x(180deg), D1 bounds, scale and offsets as the flat SVG.
+    crate::appearance::Camera {
+        rotation: [
+            [source.ct, source.st, 0.0],
+            [source.st, -source.ct, 0.0],
+            [0.0, 0.0, -1.0],
+        ],
+        scale: source.scale,
+        offset: [source.ox, source.oy],
+    }
+}
+
+fn hero_appearance_binding(
+    repo_root: &Path,
+    source: &HeroSource,
+) -> Result<(crate::hero_appearance::RegistrationInput, Value)> {
+    use crate::hero_appearance::{CellColor, RegistrationInput};
+    let decoded = crate::appearance::decode_stl(&source.stl_bytes)?;
+    let geometry = decoded.geometry_digest();
+    // Recompute from actual retained bytes, then check the historical accession.
+    // Neither this known geometry pin nor any observed camera/assignment digest
+    // substitutes for the separately admitted additive recipe's expected pins.
+    if geometry != HERO_ORDERED_GEOMETRY_SHA
+        || decoded.len() != 90_000
+        || source.composite.values.len() != 25_209
+        || decoded.len() != source.raw_tris.len()
+        || decoded
+            .triangles()
+            .iter()
+            .zip(&source.raw_tris)
+            .any(|(a, (_, b))| {
+                a.iter()
+                    .flatten()
+                    .zip(b.iter().flatten())
+                    .any(|(x, y)| x.to_bits() != y.to_bits())
+            })
+    {
+        return Err(
+            "population: appearance ordered geometry/count differs from retained predecessor"
+                .into(),
+        );
+    }
+    let rows = source.composite.receipt["rows"]
+        .as_array()
+        .ok_or("missing composite rows")?;
+    let members: Vec<_> = rows
+        .iter()
+        .filter(|r| r["composite_member"] == true)
+        .collect();
+    let mut channel_ids = Vec::new();
+    let mut masks = Vec::new();
+    for row in members {
+        channel_ids.push(
+            row["row_id"]
+                .as_str()
+                .ok_or("missing channel ID")?
+                .to_string(),
+        );
+        let mut masked = BTreeSet::new();
+        for id in row["source_masked_cell_ids"]
+            .as_array()
+            .ok_or("missing original channel mask")?
+        {
+            let id = usize::try_from(id.as_u64().ok_or("untyped masked cell")?)?;
+            if id >= source.composite.values.len() || !masked.insert(id) {
+                return Err("population: invalid original channel mask IDs".into());
+            }
+        }
+        masks.push(masked);
+    }
+    let projected = source.composite.receipt["cells"]
+        .as_array()
+        .ok_or("missing composite cells")?;
+    if projected.len() != source.composite.values.len() || channel_ids.len() != 4 {
+        return Err("population: appearance source channel/cell count differs".into());
+    }
+    let mut cells = Vec::with_capacity(projected.len());
+    let full_range = crate::display::Contrast {
+        low: 0.0,
+        high: 1.0,
+    };
+    for (i, row) in projected.iter().enumerate() {
+        let index = source.composite.values[i];
+        let contributors = row["contributor_test_ids"]
+            .as_array()
+            .ok_or("missing contributor IDs")?
+            .iter()
+            .map(|id| {
+                id.as_str()
+                    .map(str::to_string)
+                    .ok_or("untyped contributor ID")
+            })
+            .collect::<std::result::Result<Vec<_>, _>>()?;
+        if row["cell_id"].as_u64() != Some(i as u64)
+            || row["value"] != json!(index)
+            || contributors.len() != source.composite.counts[i]
+            || row["contributor_count"].as_u64() != Some(contributors.len() as u64)
+        {
+            return Err("population: original cell/contributor projection differs".into());
+        }
+        cells.push(CellColor {
+            index,
+            missing_reason: index
+                .is_none()
+                .then(|| "no_available_positive_area_response".into()),
+            source_masks: masks.iter().map(|m| m.contains(&i)).collect(),
+            contributors,
+            base_rgb: index
+                .map(|v| source.composite.palette.rgb(full_range.map(v)))
+                .unwrap_or([203, 213, 225]),
+        });
+    }
+    let input = RegistrationInput {
+        subject: HERO_SUBJECT.into(),
+        d1_sha256: sha256_bytes(&source.d1_bytes),
+        channel_ids,
+        cells,
+        face_to_cell: source.face_to_cell.clone(),
+    };
+    let mut input_hashes = source.composite.input_hashes.clone();
+    // Pin the reporting code as well as its retained input closure. No Git/API,
+    // compiler, scorer or renderer is invoked by this observation-only path.
+    for path in [
+        "crates/paper-artifacts/src/population.rs",
+        "crates/paper-artifacts/src/display.rs",
+        "crates/paper-artifacts/src/plate.rs",
+        "crates/paper-artifacts/src/appearance.rs",
+        "crates/paper-artifacts/src/hero_appearance.rs",
+        "crates/paper-artifacts/examples/hero_appearance_preflight.rs",
+    ] {
+        let bytes = crate::corpus::read_bounded_file(
+            &crate::corpus::resolve_safe_relpath(repo_root, path)?,
+            8 * 1024 * 1024,
+        )?;
+        input_hashes.insert(path.into(), sha256_bytes(&bytes));
+    }
+    let observed = json!({
+        "schema":"jarambit.hero_appearance_expected_pins.v1",
+        "subject":HERO_SUBJECT,
+        "source_sha256":input_hashes,
+        "ordered_decoded_geometry_sha256":geometry,
+        "camera_sha256":hero_appearance_camera(source).digest(),
+        "registered_assignment_sha256":input.digest()?,
+        "component_sha256":hero_registration_components(&input),
+        "source_faces":decoded.len(), "source_cells":input.cells.len(),
+        "channel_ids":input.channel_ids,
+    });
+    Ok((input, observed))
+}
+
+/// Observation-only reporting preflight. It reuses the admitted source loading,
+/// area-weighted display index, exact original-centroid query/ties and camera.
+/// It does NOT derive normals, allocate an image, render, solve or score. The
+/// returned digests are observations awaiting independent source comparison;
+/// calling this function does not admit its own results as expected pins.
+pub fn hero_appearance_preflight(repo_root: &Path) -> Result<Value> {
+    let source = load_hero_source(repo_root)?;
+    let (_, observed) = hero_appearance_binding(repo_root, &source)?;
+    Ok(json!({
+        "schema":"jarambit.hero_appearance_preflight.v1",
+        "status":"OBSERVED_ONLY_NOT_INDEPENDENT_PIN_ADMISSION",
+        "observed_pins":observed,
+        "historical_ordered_geometry_checked":HERO_ORDERED_GEOMETRY_SHA,
+        "camera":{"rotation":hero_appearance_camera(&source).rotation,
+            "scale":source.scale,"offset":[source.ox,source.oy],"refit":false},
+        "registration":"same predecessor unposed STL XY centroid -> exact nearest original D1 triangle centroid; exact ties lowest source cell ID; all original STL faces",
+        "image_rendered":false,"normals_derived":false,"fresh_science_or_fitness":false,
+        "required_next_step":"Captain captures this actual preflight; independent Q compares original source, complete registration and camera before expected pins enter the additive recipe."
+    }))
+}
+
+fn hero_sha_pin(value: &Value) -> bool {
+    value.as_str().is_some_and(|s| {
+        s.len() == 64
+            && s.bytes()
+                .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
+    })
+}
+fn hero_require_expected_pins(expected: &Value, observed: &Value) -> Result<()> {
+    // Missing/null pins are not defaults. Compare the complete source closure,
+    // ordered geometry, camera, assignment, scalar/mask/contributor/RGB/map bits.
+    let sources = expected["source_sha256"].as_object();
+    let components = expected["component_sha256"].as_object();
+    if !hero_sha_pin(&expected["ordered_decoded_geometry_sha256"])
+        || !hero_sha_pin(&expected["camera_sha256"])
+        || !hero_sha_pin(&expected["registered_assignment_sha256"])
+        || !sources.is_some_and(|s| !s.is_empty() && s.values().all(hero_sha_pin))
+        || !components.is_some_and(|s| s.len() == 5 && s.values().all(hero_sha_pin))
+        || expected != observed
+    {
+        return Err(
+            "population: missing/null/unadmitted or mismatching appearance expected pins".into(),
+        );
+    }
+    Ok(())
+}
+
+// Independent RGB8 PNG path; the existing indexed point encoder stays untouched.
+// Stored DEFLATE blocks and Adler32/PNG CRC follow the same existing pattern.
+fn encode_hero_rgb_png(w: usize, h: usize, rgb: &[u8]) -> Result<Vec<u8>> {
+    let pixels = w.checked_mul(h).ok_or("RGB PNG size overflow")?;
+    if w == 0
+        || h == 0
+        || w > 4096
+        || h > 4096
+        || rgb.len() != pixels.checked_mul(3).ok_or("RGB PNG size overflow")?
+    {
+        return Err("population: invalid RGB PNG shape".into());
+    }
+    let row_bytes = w * 3;
+    let mut raw = Vec::with_capacity(h * (row_bytes + 1));
+    for row in rgb.chunks_exact(row_bytes) {
+        raw.push(0);
+        raw.extend_from_slice(row);
+    }
+    let mut zlib = vec![0x78, 0x01];
+    let chunks: Vec<_> = raw.chunks(65_535).collect();
+    for (i, chunk) in chunks.iter().enumerate() {
+        zlib.push(if i + 1 == chunks.len() { 1 } else { 0 });
+        let len = chunk.len() as u16;
+        zlib.extend_from_slice(&len.to_le_bytes());
+        zlib.extend_from_slice(&(!len).to_le_bytes());
+        zlib.extend_from_slice(chunk);
+    }
+    let (mut s1, mut s2) = (1u32, 0u32);
+    for &b in &raw {
+        s1 = (s1 + b as u32) % 65_521;
+        s2 = (s2 + s1) % 65_521;
+    }
+    zlib.extend_from_slice(&((s2 << 16) | s1).to_be_bytes());
+    let mut png = vec![137, 80, 78, 71, 13, 10, 26, 10];
+    let mut ihdr = Vec::new();
+    ihdr.extend_from_slice(&(w as u32).to_be_bytes());
+    ihdr.extend_from_slice(&(h as u32).to_be_bytes());
+    ihdr.extend_from_slice(&[8, 2, 0, 0, 0]); // RGB8, no indexed/binary String conversion.
+    png_chunk(b"IHDR", &ihdr, &mut png);
+    png_chunk(b"IDAT", &zlib, &mut png);
+    png_chunk(b"IEND", &[], &mut png);
+    Ok(png)
+}
+fn hero_base64(bytes: &[u8]) -> String {
+    const B64: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    let mut out = String::with_capacity(bytes.len().div_ceil(3) * 4);
+    for c in bytes.chunks(3) {
+        let n = ((c[0] as u32) << 16)
+            | ((c.get(1).copied().unwrap_or(0) as u32) << 8)
+            | c.get(2).copied().unwrap_or(0) as u32;
+        out.push(B64[((n >> 18) & 63) as usize] as char);
+        out.push(B64[((n >> 12) & 63) as usize] as char);
+        out.push(if c.len() > 1 {
+            B64[((n >> 6) & 63) as usize] as char
+        } else {
+            '='
+        });
+        out.push(if c.len() > 2 {
+            B64[(n & 63) as usize] as char
+        } else {
+            '='
+        });
+    }
+    out
+}
+fn hero_clean_svg(rgb: &[u8]) -> Result<(String, String)> {
+    let png = encode_hero_rgb_png(1600, 680, rgb)?;
+    let svg = format!("<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1600 680\" width=\"1600\" height=\"680\"><rect width=\"1600\" height=\"680\" fill=\"#ffffff\"/><image width=\"1600\" height=\"680\" href=\"data:image/png;base64,{}\"/></svg>\n",hero_base64(&png));
+    Ok((svg, sha256_bytes(&png)))
+}
+
+/// Render only from a separately SHA-bound additive source recipe. Its expected
+/// pins MUST come from Captain's actual preflight + independent source review.
+/// No observed digest is installed as an expected pin inside this render path.
+/// Returns text artifacts; caller owns publication wiring and writing outputs.
+pub fn generate_hero_appearance_outputs(
+    repo_root: &Path,
+    recipe_rel: &str,
+    expected_recipe_sha256: &str,
+) -> Result<BTreeMap<String, String>> {
+    if !hero_sha_pin(&json!(expected_recipe_sha256)) {
+        return Err("population: absent appearance recipe accession".into());
+    }
+    let bytes = crate::corpus::read_bounded_file(
+        &crate::corpus::resolve_safe_relpath(repo_root, recipe_rel)?,
+        128 * 1024,
+    )?;
+    if sha256_bytes(&bytes) != expected_recipe_sha256 {
+        return Err("population: appearance recipe bytes differ".into());
+    }
+    let recipe: Value = serde_json::from_slice(&bytes)?;
+    if recipe["schema"] != "jarambit.hero_appearance_source_recipe.v1"
+        || recipe["pin_admission"]["status"] != "independently_source_reviewed"
+        || !hero_sha_pin(&recipe["pin_admission"]["actual_preflight_receipt_sha256"])
+        || !hero_sha_pin(&recipe["pin_admission"]["independent_source_review_receipt_sha256"])
+        || recipe["render"]
+            != json!({"width":1600,"height":680,"supersample":2,"outline_pixels":2.0})
+        || recipe["regions"] != Value::Null
+        || recipe["quantitative_companion"] != "docs/paper/generated/hero-full-range.svg"
+    {
+        return Err("population: appearance pins lack explicit external admission".into());
+    }
+    let source = load_hero_source(repo_root)?;
+    let (input, observed) = hero_appearance_binding(repo_root, &source)?;
+    hero_require_expected_pins(&recipe["expected_pins"], &observed)?;
+    let scalar = |v: &Value| -> Result<f64> {
+        v.as_f64()
+            .filter(|v| v.is_finite())
+            .ok_or_else(|| "missing/nonfinite appearance setting".into())
+    };
+    let normals = crate::appearance::NormalSettings {
+        crease_degrees: scalar(&recipe["normals"]["crease_degrees"])?,
+        blend: scalar(&recipe["normals"]["blend"])?,
+        max_deviation_degrees: scalar(&recipe["normals"]["max_deviation_degrees"])?,
+    };
+    let light = &recipe["lighting"];
+    let direction = light["direction_camera"]
+        .as_array()
+        .ok_or("missing light direction")?;
+    if direction.len() != 3 {
+        return Err("invalid light direction shape".into());
+    }
+    let camera = hero_appearance_camera(&source);
+    let surface = crate::hero_appearance::RetainedSurface::from_stl(
+        HERO_SUBJECT,
+        &source.stl_bytes,
+        recipe["expected_pins"]["source_sha256"][HERO_STL_REL]
+            .as_str()
+            .ok_or("missing STL pin")?,
+        recipe["expected_pins"]["ordered_decoded_geometry_sha256"]
+            .as_str()
+            .ok_or("missing geometry pin")?,
+    )?;
+    let registered = crate::hero_appearance::RegisteredCellColors::bind(
+        input,
+        &source.d1_bytes,
+        recipe["expected_pins"]["registered_assignment_sha256"]
+            .as_str()
+            .ok_or("missing assignment pin")?,
+    )?;
+    let output = crate::hero_appearance::render(
+        &surface,
+        &registered,
+        &crate::hero_appearance::AppearanceRecipe {
+            normals,
+            regions: None,
+            render: crate::appearance::RenderSettings {
+                width: 1600,
+                height: 680,
+                supersample: 2,
+                outline_pixels: 2.0,
+                camera,
+                lighting: crate::appearance::Lighting {
+                    direction: [
+                        scalar(&direction[0])?,
+                        scalar(&direction[1])?,
+                        scalar(&direction[2])?,
+                    ],
+                    ambient: scalar(&light["ambient"])?,
+                    diffuse: scalar(&light["diffuse"])?,
+                    specular: scalar(&light["specular"])?,
+                    shininess: scalar(&light["shininess"])?,
+                },
+            },
+            expected_camera_sha256: recipe["expected_pins"]["camera_sha256"]
+                .as_str()
+                .ok_or("missing camera pin")?
+                .into(),
+        },
+    )?;
+    if output.receipt["registered_assignment"]["component_hashes_before"]
+        != observed["component_sha256"]
+    {
+        return Err("population: appearance adapter component encoding differs".into());
+    }
+    let (lit, lit_png_sha) = hero_clean_svg(&output.image.rgb)?;
+    let (unlit, unlit_png_sha) = hero_clean_svg(&output.image.unlit_rgb)?;
+    let mut receipt = output.receipt;
+    receipt["caller"] = json!({
+        "source_recipe":{"path":recipe_rel,"sha256":expected_recipe_sha256},
+        "pin_admission":recipe["pin_admission"],"checked_expected_pins":recipe["expected_pins"],
+        "required_visible_caption_disclosure":output.required_visible_disclosure,
+        "png":{"illuminated_sha256":lit_png_sha,"matched_unlit_sha256":unlit_png_sha,"color_type":"RGB8; filter0; stored DEFLATE"},
+        "svg":{"illuminated_sha256":sha256_bytes(lit.as_bytes()),"matched_unlit_sha256":sha256_bytes(unlit.as_bytes()),"visible_exterior_labels_or_effects":false},
+        "unchanged_quantitative_companion":"docs/paper/generated/hero-full-range.svg",
+        "matched_unlit_is_additional_visibility_control":true,
+    });
+    Ok(BTreeMap::from([
+        ("docs/paper/generated/hero-appearance.svg".into(), lit),
+        (
+            "docs/paper/generated/hero-appearance-unlit.svg".into(),
+            unlit,
+        ),
+        (
+            "docs/paper/generated/hero-appearance.v1.json".into(),
+            serde_json::to_string_pretty(&receipt)? + "\n",
+        ),
+    ]))
+}
+
+fn render_hero_view(
+    repo_root: &Path,
+    view: HeroView,
+) -> Result<(String, crate::display::Composite)> {
+    use std::fmt::Write as _;
+    let HeroSource {
+        d1, composite, raw_tris, face_to_cell, edge_counts, posed_nodes,
+        ct, st, scale, ox, oy, ..
+    } = load_hero_source(repo_root)?;
+    let contrast = if view == HeroView::ContrastPreview {
+        composite.preview
+    } else {
+        crate::display::Contrast {
+            low: 0.0,
+            high: 1.0,
+        }
+    };
+
+    let pose_xy = |x: f64, y: f64| -> [f64; 2] {
+        let yr = -y;
+        [x * ct - yr * st, x * st + yr * ct]
+    };
+    let to_svg = |px: f64, py: f64| -> (f64, f64) { (ox + px * scale, oy - py * scale) };
     let mut stl_vis: Vec<(f64, [(f64, f64); 3], [u8; 3])> =
         Vec::with_capacity(raw_tris.len() / 2 + 1024);
-    for (n_vec, [v0, v1, v2]) in raw_tris {
+    for (face_id, (n_vec, [v0, v1, v2])) in raw_tris.into_iter().enumerate() {
         let nz = n_vec[2];
         // Under R = R_z(-6 deg) * R_x(180 deg), posed z is -z
         let nzp = -nz;
         if nzp < -0.05 {
             continue;
         }
-        let cx = (v0[0] + v1[0] + v2[0]) / 3.0;
-        let cy = (v0[1] + v1[1] + v2[1]) / 3.0;
         let czp = -(v0[2] + v1[2] + v2[2]) / 3.0;
-        let (gx, gy) = ((cx * 0.5).floor() as i32, (cy * 0.5).floor() as i32);
-        let mut best_i = None;
-        let mut best_d2 = f64::INFINITY;
-        for dx in -2..=2 {
-            for dy in -2..=2 {
-                if let Some(bucket) = grid_buckets.get(&(gx + dx, gy + dy)) {
-                    for &di in bucket {
-                        let d2 = (centroids[di][0] - cx).powi(2) + (centroids[di][1] - cy).powi(2);
-                        if d2 < best_d2 || (d2 == best_d2 && best_i.map_or(true, |old| di < old)) {
-                            best_d2 = d2;
-                            best_i = Some(di);
-                        }
-                    }
-                }
-            }
-        }
-        // The grid accelerates an exact nearest-centroid query. If an outside
-        // bucket could contain a nearer cell, finish against the complete source.
-        let outside_margin = (cx - (gx - 2) as f64 * 2.0)
-            .min((gx + 3) as f64 * 2.0 - cx)
-            .min(cy - (gy - 2) as f64 * 2.0)
-            .min((gy + 3) as f64 * 2.0 - cy);
-        if best_d2 >= outside_margin.powi(2) {
-            for (di, center) in centroids.iter().enumerate() {
-                let d2 = (center[0] - cx).powi(2) + (center[1] - cy).powi(2);
-                if d2 < best_d2 || (d2 == best_d2 && best_i.map_or(true, |old| di < old)) {
-                    best_d2 = d2;
-                    best_i = Some(di);
-                }
-            }
-        }
-        let best_i = best_i.ok_or("population: no source cell for surface display transfer")?;
+        let best_i = face_to_cell[face_id];
         let value = if view == HeroView::Support {
             (composite.counts[best_i] > 0).then_some(composite.counts[best_i] as f64 / 4.0)
         } else {
@@ -3212,6 +3717,200 @@ pub fn generate_v2_outputs(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+
+    #[test]
+    fn hero_rgb_png_preserves_rgb_bytes_white_and_stored_deflate_checksums() {
+        let png = encode_hero_rgb_png(1, 1, &[255, 0, 128]).unwrap();
+        assert_eq!(&png[..8], &[137, 80, 78, 71, 13, 10, 26, 10]);
+        // Literal external PNG layout: width/height1, RGB8, no palette/transparency.
+        assert_eq!(&png[12..16], b"IHDR");
+        assert_eq!(&png[16..29], &[0, 0, 0, 1, 0, 0, 0, 1, 8, 2, 0, 0, 0]);
+        assert_eq!(&png[37..41], b"IDAT");
+        assert_eq!(
+            &png[41..56],
+            &[0x78, 0x01, 0x01, 4, 0, 0xfb, 0xff, 0, 255, 0, 128, 0x03, 0x81, 0x01, 0x80]
+        );
+        assert_eq!(&png[64..68], b"IEND");
+        // Independent bit-polynomial CRC control, rather than invoking png_chunk.
+        let mut at = 8;
+        while at < png.len() {
+            let n = u32::from_be_bytes(png[at..at + 4].try_into().unwrap()) as usize;
+            let mut crc = !0u32;
+            for &b in &png[at + 4..at + 8 + n] {
+                crc ^= u32::from(b);
+                for _ in 0..8 {
+                    crc = (crc >> 1) ^ (0xedb8_8320 & 0u32.wrapping_sub(crc & 1));
+                }
+            }
+            assert_eq!(
+                !crc,
+                u32::from_be_bytes(png[at + 8 + n..at + 12 + n].try_into().unwrap())
+            );
+            at += n + 12;
+        }
+        assert_eq!(at, png.len());
+        let white = encode_hero_rgb_png(2, 1, &[255; 6]).unwrap();
+        assert_eq!(&white[48..55], &[0, 255, 255, 255, 255, 255, 255]);
+        assert!(encode_hero_rgb_png(0, 1, &[]).is_err());
+        assert!(encode_hero_rgb_png(2, 1, &[255; 5]).is_err());
+        assert!(encode_hero_rgb_png(4097, 1, &[]).is_err());
+        assert_eq!(hero_base64(&[0, 255, 128]), "AP+A");
+        assert_eq!(hero_base64(&[255]), "/w==");
+        assert_eq!(hero_base64(&[255, 0]), "/wA=");
+    }
+
+    #[test]
+    fn hero_registration_preflight_preserves_ties_fallback_and_all_component_bindings() {
+        use crate::hero_appearance::{CellColor, RegistrationInput};
+        let centroids = [[-1.0, 0.0], [1.0, 0.0], [100.0, 100.0]];
+        let mut grid = BTreeMap::<(i32, i32), Vec<usize>>::new();
+        for (i, c) in centroids.iter().enumerate() {
+            grid.entry(((c[0] * 0.5).floor() as i32, (c[1] * 0.5).floor() as i32))
+                .or_default()
+                .push(i);
+        }
+        assert_eq!(hero_nearest_cell(0.0, 0.0, &centroids, &grid).unwrap(), 0);
+        assert_eq!(
+            hero_nearest_cell(90.0, 100.0, &centroids, &grid).unwrap(),
+            2
+        );
+        assert!(hero_nearest_cell(0.0, 0.0, &[], &BTreeMap::new()).is_err());
+        let channels: Vec<String> = ["a", "b", "c", "d"]
+            .into_iter()
+            .map(str::to_string)
+            .collect();
+        let input = RegistrationInput {
+            subject: "neutral fixture".into(),
+            d1_sha256: sha256_bytes(b"fixture D1"),
+            channel_ids: channels.clone(),
+            cells: vec![
+                CellColor {
+                    index: Some(0.0),
+                    missing_reason: None,
+                    source_masks: vec![false; 4],
+                    contributors: channels,
+                    base_rgb: [8, 28, 74],
+                },
+                CellColor {
+                    index: None,
+                    missing_reason: Some("fixture unavailable".into()),
+                    source_masks: vec![true; 4],
+                    contributors: vec![],
+                    base_rgb: [203, 213, 225],
+                },
+            ],
+            face_to_cell: vec![0, 1, 0],
+        };
+        let parts = hero_registration_components(&input);
+        assert_eq!(
+            parts["ordered_face_to_original_cell_ids"],
+            sha256_bytes(
+                &[0u64, 1, 0]
+                    .into_iter()
+                    .flat_map(u64::to_le_bytes)
+                    .collect::<Vec<_>>()
+            )
+        );
+        assert_eq!(
+            parts["original_source_mask_bits"],
+            sha256_bytes(&[0, 0, 0, 0, 1, 1, 1, 1])
+        );
+        let mut changed = input.clone();
+        changed.cells[0].index = Some(0.1);
+        assert_ne!(
+            parts["registered_index_bits"],
+            hero_registration_components(&changed)["registered_index_bits"]
+        );
+        assert_ne!(input.digest().unwrap(), changed.digest().unwrap());
+        let mut changed = input.clone();
+        changed.cells[0].contributors.swap(0, 1);
+        assert_ne!(
+            parts["contributor_ids_and_counts"],
+            hero_registration_components(&changed)["contributor_ids_and_counts"]
+        );
+        let mut changed = input.clone();
+        changed.cells[0].base_rgb[0] += 1;
+        assert_ne!(
+            parts["unlit_cell_palette_rgb"],
+            hero_registration_components(&changed)["unlit_cell_palette_rgb"]
+        );
+        let mut changed = input.clone();
+        changed.face_to_cell.swap(0, 1);
+        assert_ne!(
+            parts["ordered_face_to_original_cell_ids"],
+            hero_registration_components(&changed)["ordered_face_to_original_cell_ids"]
+        );
+        let mut changed = input.clone();
+        changed.cells[0].source_masks[1] = true;
+        assert_ne!(
+            parts["original_source_mask_bits"],
+            hero_registration_components(&changed)["original_source_mask_bits"]
+        );
+        assert!(changed.digest().is_err()); // a masked source cannot remain a contributor.
+        assert!(crate::hero_appearance::RegisteredCellColors::bind(
+            input.clone(),
+            b"wrong D1",
+            &input.digest().unwrap()
+        )
+        .is_err());
+        assert!(crate::hero_appearance::RegisteredCellColors::bind(
+            input.clone(),
+            b"fixture D1",
+            &"f".repeat(64)
+        )
+        .is_err());
+    }
+
+    #[test]
+    fn hero_production_pins_refuse_null_partial_camera_and_assignment_changes() {
+        let h = sha256_bytes(b"neutral observed bytes");
+        let observed = json!({"schema":"jarambit.hero_appearance_expected_pins.v1",
+            "source_sha256":{"neutral-source":h},"ordered_decoded_geometry_sha256":h,
+            "camera_sha256":h,"registered_assignment_sha256":h,
+            "component_sha256":{"registered_index_bits":h,"original_source_mask_bits":h,
+                "contributor_ids_and_counts":h,"unlit_cell_palette_rgb":h,"ordered_face_to_original_cell_ids":h},
+            "source_faces":3,"source_cells":2,"channel_ids":["a","b","c","d"]});
+        assert!(hero_require_expected_pins(&observed, &observed).is_ok()); // neutral control only, not production pin admission.
+        assert!(hero_require_expected_pins(&Value::Null, &observed).is_err());
+        for pointer in [
+            "/source_sha256/neutral-source",
+            "/ordered_decoded_geometry_sha256",
+            "/camera_sha256",
+            "/registered_assignment_sha256",
+            "/component_sha256/registered_index_bits",
+            "/component_sha256/original_source_mask_bits",
+            "/component_sha256/contributor_ids_and_counts",
+            "/component_sha256/unlit_cell_palette_rgb",
+            "/component_sha256/ordered_face_to_original_cell_ids",
+        ] {
+            let mut missing = observed.clone();
+            *missing.pointer_mut(pointer).unwrap() = Value::Null;
+            assert!(
+                hero_require_expected_pins(&missing, &observed).is_err(),
+                "{pointer}"
+            );
+            let mut wrong = observed.clone();
+            *wrong.pointer_mut(pointer).unwrap() = json!("f".repeat(64));
+            assert!(
+                hero_require_expected_pins(&wrong, &observed).is_err(),
+                "{pointer}"
+            );
+        }
+        let mut partial = observed.clone();
+        partial.as_object_mut().unwrap().remove("source_faces");
+        assert!(hero_require_expected_pins(&partial, &observed).is_err());
+        let camera = crate::appearance::Camera {
+            rotation: [[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]],
+            scale: 2.,
+            offset: [3., 4.],
+        };
+        let changed = crate::appearance::Camera {
+            offset: [3., 4.001],
+            ..camera
+        };
+        assert_ne!(camera.digest(), changed.digest());
+    }
 
     fn reviewed_palette() -> crate::display::Palette {
         let contract: Value = serde_json::from_str(include_str!(
