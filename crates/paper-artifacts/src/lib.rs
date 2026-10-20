@@ -20,3 +20,4 @@ pub mod validation;
 mod verification;
 mod visuals;
 mod weighted_runs;
+pub mod saliency;

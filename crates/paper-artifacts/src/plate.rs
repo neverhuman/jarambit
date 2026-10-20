@@ -257,7 +257,7 @@ fn admit(doc: &Value, contract: &Value) -> Result<Mesh> {
     })
 }
 
-fn polygon_area(poly: &[[f64; 2]]) -> f64 {
+pub(crate) fn polygon_area(poly: &[[f64; 2]]) -> f64 {
     if poly.len() < 3 {
         return 0.;
     }
@@ -270,7 +270,7 @@ fn polygon_area(poly: &[[f64; 2]]) -> f64 {
         .abs()
 }
 
-fn clipped_polygon(mut poly: Vec<[f64; 2]>, bbox: [f64; 4]) -> Vec<[f64; 2]> {
+pub(crate) fn clipped_polygon(mut poly: Vec<[f64; 2]>, bbox: [f64; 4]) -> Vec<[f64; 2]> {
     for (axis, bound, lower) in [
         (0, bbox[0], true),
         (0, bbox[2], false),
@@ -669,6 +669,211 @@ pub(crate) fn project(doc: &Value, contract: &Value) -> Result<(String, Value)> 
     Ok((s, summary))
 }
 
+
+/// A reserved, non-overlaid whole-field locator; all boundary loops remain visible.
+fn smart_locator(s:&mut String,m:&Mesh,crop:&crate::saliency::CropReceipt,x:f64,y:f64) {
+    writeln!(s,"<rect x=\"{}\" y=\"{}\" width=\"170\" height=\"155\" fill=\"white\"/>",x+380.,y+100.).unwrap();
+    text(s,x+388.,y+124.,21,"Locator");
+    let mut edges:BTreeMap<(usize,usize),usize>=BTreeMap::new();
+    for t in &m.tris {
+        for (a,b) in [(t[0],t[1]),(t[1],t[2]),(t[2],t[0])] {
+            *edges.entry((a.min(b),a.max(b))).or_default()+=1;
+        }
+    }
+    let mut path=String::new();
+    for ((a,b),count) in edges {
+        if count!=1 { continue; }
+        let p=crop.source_to_locator.point(m.xy[a]);
+        let q=crop.source_to_locator.point(m.xy[b]);
+        write!(path,"M{:.6},{:.6}L{:.6},{:.6}",p[0],p[1],q[0],q[1]).unwrap();
+    }
+    writeln!(s,"<path d=\"{path}\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.4\"/>").unwrap();
+    let points=crop.locator_crop_quad.iter()
+        .map(|p|format!("{:.6},{:.6}",p[0],p[1])).collect::<Vec<_>>().join(" ");
+    writeln!(s,"<polygon points=\"{points}\" fill=\"none\" stroke=\"#c5292b\" stroke-width=\"1.5\"/>").unwrap();
+}
+
+/// Additive smart view. The original project() remains the full-context companion.
+pub(crate) fn project_smart(doc: &Value, contract: &Value, policy: &crate::saliency::CropPolicy) -> Result<(String, Value)> {
+    let m = admit(doc, contract)?;
+    let missing = vec![None; m.tris.len()];
+    let _subject_internal = contract["subject"].as_str().unwrap();
+    let mut s = String::from("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1200\" height=\"960\" viewBox=\"0 0 1200 960\"><rect width=\"1200\" height=\"960\" fill=\"white\"/><g font-family=\"Arial, sans-serif\" fill=\"#132d3b\">\n");
+    text(
+        &mut s,
+        20.,
+        34.,
+        25,
+        "Individual 2000 — Retained Plate-Element Response Fields",
+    );
+    text(
+        &mut s,
+        20.,
+        66.,
+        21,
+        &format!(
+            "Assessed candidate · {} nodes · {} triangles · independent full-range scales",
+            m.xy.len(),
+            m.tris.len()
+        ),
+    );
+    let mut field_summary = serde_json::Map::new();
+    for (panel, (field, title, units, description)) in FIELDS.into_iter().enumerate() {
+        let x = 20. + 600. * (panel % 2) as f64;
+        let y = 86. + 405. * (panel / 2) as f64;
+        writeln!(
+            s,
+            "<rect x=\"{x}\" y=\"{y}\" width=\"560\" height=\"385\" fill=\"#f7f7f2\" stroke=\"#d5dfdf\"/>"
+        )
+        .unwrap();
+        text(&mut s, x + 15., y + 32., 23, title);
+        text(
+            &mut s,
+            x + 15.,
+            y + 62.,
+            21,
+            &format!("{units} · {description}"),
+        );
+        let mask: Vec<_> = (0..m.tris.len())
+            .map(|i| match field {
+                "env_vm" => m.envelope_mask[i],
+                "ring" => m.ring_mask[i],
+                _ => false,
+            })
+            .collect();
+        let max = m.values[field].iter().copied().fold(0., f64::max);
+        let full_view = crate::saliency::Viewport { x:x+30., y:y+78., width:500., height:185. };
+        let zoom_view = crate::saliency::Viewport { x:x+30., y:y+78., width:345., height:185. };
+        let locator_view = crate::saliency::Viewport { x:x+390., y:y+128., width:140., height:100. };
+        let bindings = crate::saliency::SourceBindings {
+            source_path: contract["source"].as_str().ok_or("missing crop source")?.into(),
+            source_sha256: contract["source_sha256"].as_str().ok_or("missing crop source hash")?.into(),
+            certificate_identity: contract["certificate_identity"].as_str().ok_or("missing crop identity")?.into(),
+            field_selector: format!("/mesh/{field}"), units:units.into(),
+        };
+        let field_view = crate::saliency::FieldView { xy:&m.xy, triangles:&m.tris,
+            values:&m.values[field], masked:&mask, missing_reasons:&missing };
+        let mut crop = crate::saliency::select(&field_view,&bindings,policy,full_view,zoom_view,locator_view)
+            .map_err(|e| format!("plate crop: {e}"))?;
+        let scale = crop.source_to_panel.xx;
+        let origin_x = crop.source_to_panel.tx;
+        let origin_y = crop.source_to_panel.ty;
+        // Clip the transformed physical bbox, not its possibly letterboxed viewport.
+        // Otherwise extra source cells in the letterbox would falsify the locator.
+        let b = crop.bbox_source_mm;
+        let aperture = [origin_x+b[0]*scale,origin_y-b[3]*scale,
+            (b[2]-b[0])*scale,(b[3]-b[1])*scale];
+        crop.record["svg_clip_rect"] = json!(aperture);
+        writeln!(s,"<defs><clipPath id=\"smart-clip-{field}\"><rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\"/></clipPath></defs>",aperture[0],aperture[1],aperture[2],aperture[3]).unwrap();
+        writeln!(s, "<g id=\"field-{field}\" shape-rendering=\"crispEdges\" clip-path=\"url(#smart-clip-{field})\">").unwrap();
+        for (i, t) in m.tris.iter().enumerate() {
+            let value = m.values[field][i];
+            let fill = if mask[i] {
+                "#b8bfc3".to_string()
+            } else {
+                color(if max > 0. { value / max } else { 0. })
+            };
+            let points = t
+                .iter()
+                .map(|v| {
+                    format!(
+                        "{:.3},{:.3}",
+                        origin_x + m.xy[*v][0] * scale,
+                        origin_y - m.xy[*v][1] * scale
+                    )
+                })
+                .collect::<Vec<_>>()
+                .join(" ");
+            writeln!(
+                s,
+                "<polygon id=\"{field}-{i}\" points=\"{points}\" fill=\"{fill}\"/>"
+            )
+            .unwrap();
+        }
+        s.push_str("</g>\n");
+        if field == "lat" || field == "twist" {
+            writeln!(s,"<g clip-path=\"url(#smart-clip-{field})\">").unwrap();
+            writeln!(s,"<circle cx=\"{}\" cy=\"{}\" r=\"{}\" fill=\"none\" stroke=\"#a3442d\" stroke-width=\"1.6\" stroke-dasharray=\"4 3\"/>",origin_x+m.tip[0]*scale,origin_y-m.tip[1]*scale,4.*scale).unwrap();
+            s.push_str("</g>\n");
+        }
+        if crop.decision == crate::saliency::CropDecision::Zoom {
+            smart_locator(&mut s, &m, &crop, x, y);
+        }
+        crop.record["locator_outline_source"] = json!("original plate boundary edges; not a detailed CAD silhouette");
+        crop.record["locator_svg_coordinate_decimals"] = json!(6);
+        writeln!(
+            s,
+            "<defs><linearGradient id=\"lut-{field}\" color-interpolation=\"sRGB\">"
+        )
+        .unwrap();
+        for (j, c) in LUT.iter().enumerate() {
+            writeln!(
+                s,
+                "<stop offset=\"{}%\" stop-color=\"#{:02x}{:02x}{:02x}\"/>",
+                j * 25,
+                c[0],
+                c[1],
+                c[2]
+            )
+            .unwrap();
+        }
+        s.push_str("</linearGradient></defs>\n");
+        let fill = if max > 0. {
+            format!("url(#lut-{field})")
+        } else {
+            color(0.)
+        };
+        writeln!(s,"<rect id=\"legend-{field}\" x=\"{}\" y=\"{}\" width=\"500\" height=\"16\" fill=\"{fill}\"/>",x+30.,y+282.).unwrap();
+        for (j, t) in [0., 0.5, 1.].into_iter().enumerate() {
+            let anchor = ["start", "middle", "end"][j];
+            writeln!(
+                s,
+                "<text x=\"{}\" y=\"{}\" font-size=\"21\" text-anchor=\"{anchor}\">{:.4}</text>",
+                x + 30. + t * 500.,
+                y + 325.,
+                t * max
+            )
+            .unwrap();
+        }
+        let masked: Vec<_> = mask
+            .iter()
+            .enumerate()
+            .filter_map(|(i, b)| b.then_some(i))
+            .collect();
+        let note = if crop.decision == crate::saliency::CropDecision::Zoom {
+            format!("Zoom t >= {:.4}; excess {:.1}%; area {:.1}%",
+                crop.chosen_value_threshold.unwrap(),
+                100.*crop.coverage.excess_fraction.ok_or("missing crop excess denominator")?,
+                100.*crop.coverage.area_fraction.ok_or("missing crop area denominator")?)
+        } else if !masked.is_empty() {
+            format!("Full context; {} source-masked cells", masked.len())
+        } else {
+            "Full context; original field and raw scale".into()
+        };
+        text(&mut s, x + 15., y + 364., 21, &note);
+        field_summary.insert(field.into(),json!({"selector":format!("/mesh/{field}"),"units":units,"count":m.tris.len(),"association":"triangle","limits":[0.,max],"clipped_count":0,"masked_cell_ids":masked,"raw_zero_count":m.values[field].iter().filter(|v|**v==0.).count(),"plot_transform":{"scale":scale,"origin_x":origin_x,"origin_y":origin_y,"formula":"svg_x=origin_x+source_x*scale; svg_y=origin_y-source_y*scale"}}));
+        field_summary.get_mut(field).unwrap()["clipped_count_scope"] = json!("color values only; camera coverage is separate");
+        field_summary.get_mut(field).unwrap()["smart_crop"] = crop.record;
+    }
+    text(
+        &mut s,
+        20.,
+        912.,
+        21,
+        "Camera zoom clips geometry only; colors keep full raw scales and original source masks.",
+    );
+    text(
+        &mut s,
+        20.,
+        944.,
+        21,
+        "Fields come from the 0.25 mm2 plate mesh of Individual 2000 (not the refined mesh or 3D solid).",
+    );
+    s.push_str("</g></svg>\n");
+    let summary = json!({"schema":"jarambit.retained_plate_smart_projection.v1","subject":contract["subject"],"certificate_identity":contract["certificate_identity"],"source":contract["source"],"producer_revision":contract["producer_revision"],"nodes":m.xy.len(),"triangles":m.tris.len(),"palette":{"name":"piecewise-linear viridis anchors","space":"sRGB","knots":LUT,"positions":[0.,0.25,0.5,0.75,1.]},"tip_node":m.tip_node,"tip_coordinate":m.tip,"minimum_tip_mask_threshold_margin_mm":m.min_tip_boundary_margin,"tip_mask_coordinate_error_bound_mm":2.*2_f64.sqrt()*0.0005,"ring_boundary_membership_resolved_by_positive_source_value":m.resolved_ring_boundary,"fields":field_summary,"note":"Lateral and torsion show all raw cells, including the original capacity-excluded tip region. Envelope and ring producer-forced zeros are masked, not colored as zero stress."});
+    Ok((s, summary))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -777,4 +982,26 @@ mod tests {
             json!([1])
         );
     }
+    #[test]
+    fn smart_camera_preserves_original_color_scales_masks_and_every_cell_submission() {
+        let (doc, mut contract)=fixture();
+        contract["source"]=json!("neutral-fixture-only");
+        contract["source_sha256"]=json!("0".repeat(64));
+        let (full, original)=project(&doc,&contract).unwrap();
+        let (smart, zoomed)=project_smart(&doc,&contract,&crate::saliency::CropPolicy::proposal_v1()).unwrap();
+        for (field,_,_,_) in FIELDS {
+            for key in ["limits","masked_cell_ids","raw_zero_count","count","units"] {
+                assert_eq!(original["fields"][field][key],zoomed["fields"][field][key],"{field}/{key}");
+            }
+            for i in 0..2 {
+                assert!(full.contains(&format!("id=\"{field}-{i}\"")));
+                assert!(smart.contains(&format!("id=\"{field}-{i}\"")));
+            }
+            assert_eq!(zoomed["fields"][field]["smart_crop"]["colors_renormalized_to_crop"],false);
+        }
+        assert!(smart.contains("Locator"));
+        assert!(smart.contains("stroke=\"#c5292b\""));
+        assert!(!full.contains("Locator"));
+    }
+
 }
