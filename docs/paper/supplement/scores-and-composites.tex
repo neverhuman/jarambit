@@ -1,0 +1,80 @@
+\section{Scores, Candidate Roles and Display Composites}
+\label{sec:score-composites-details}
+\subsection{Original Reporting Authority and Missing Provenance}
+The six sources admitted by \nolinkurl{docs/paper/weighted-inputs.v1.json} contain fifteen generation summaries. That original contract leaves producer revision, scorer revision and point stage unestablished. The original score-profile registry also names a producer tuple for the weighted profile: revision \code{009f5ac520fa3afe8ed8025230eef604dbb7f922}, path \nolinkurl{crates/paper-artifacts/src/validation.rs}. That path is absent at the named revision. Preserve the original registry and this unresolved binding; the saved vector below does not reconstruct the missing historical scorer. Matching metric names or current source cannot establish an executed historical revision.
+
+The source for Individual~2002's vector is \nolinkurl{evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/fitness_curve.json}, SHA-256 \nolinkurl{afe065170218f0f5f20942a9e737e7e91a300244f8e6a99fd3c1d617d16f1412}, selector \nolinkurl{/best_so_far/ultralight_fitness_breakdown/objectives}. The scalar is $74.207299$. The weights and normalized terms below are serialized summary values; they are not recomputed solver observations. Their weighted-point sum exactly reproduces the saved scalar to its retained precision. No CAD geometry or independent later assessment is inferred from the registry category, certificate hash or component labels.
+
+\begin{table*}[t]
+\centering
+\caption{Individual~2002's actual retained weighted vector: scientific labels plus exact machine keys. Normalized values and contributions are saved reporting quantities.}
+\label{tab:weighted-vector-details}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.50\textwidth}rrr@{}}
+\toprule
+\textbf{Objective / machine key} & \textbf{Weight (\%)} & \textbf{Normalized} & \textbf{Points} \\
+\midrule
+Mass preference; \nolinkurl{ultralight_mass} & 22.0 & 0.339548 & 7.470061 \\
+Holder/compactness proxy; \nolinkurl{holder_and_compactness} & 8.0 & 1.000000 & 8.000000 \\
+Ring/claw form proxy; \nolinkurl{karambit_ring_and_claw} & 7.0 & 1.000000 & 7.000000 \\
+Reference form proxy; \nolinkurl{c6_aesthetic_and_ergo} & 9.0 & 1.000000 & 9.000000 \\
+Bore/collar comfort proxy; \nolinkurl{bore_collar_comfort} & 9.0 & 0.875000 & 7.875000 \\
+Single-solid B-rep status; \nolinkurl{cad_watertight_brep} & 5.0 & 1.000000 & 5.000000 \\
+Exported edge-profile proxy; \nolinkurl{gate_s_sharpness} & 5.0 & 0.846429 & 4.232143 \\
+Exported point-profile proxy; \nolinkurl{gate_s_point_profile} & 5.0 & 0.521709 & 2.608543 \\
+Certification lateral, 180 N; \nolinkurl{hiker_lateral_180n} & 3.5 & 1.000000 & 3.500000 \\
+Certification lateral, 260 N; \nolinkurl{hunter_lateral_260n} & 2.5 & 0.708077 & 1.770192 \\
+Strict lateral, 260 N; \nolinkurl{strict_hunter_260n} & 2.0 & 0.757692 & 1.515385 \\
+Ring traction, 1500 N; \nolinkurl{ring_pull_1500n} & 2.5 & 1.000000 & 2.500000 \\
+Body torsion, 1.82 N m; \nolinkurl{twist_body_1p82nm} & 2.5 & 1.000000 & 2.500000 \\
+Local plate torsion, 1.82 N m; \nolinkurl{twist_tip_plate_1p82nm} & 2.5 & 0.260000 & 0.650000 \\
+Reported solid-tip/comparison proxy; \nolinkurl{solid_tip_3d_p2_and_xcheck} & 3.0 & 0.363600 & 1.090800 \\
+Reported support/stability proxy; \nolinkurl{side_a4_buckling} & 2.0 & 1.000000 & 2.000000 \\
+Elastic yield-order proxy; \nolinkurl{failure_sequence_1p2} & 3.5 & 1.000000 & 3.500000 \\
+Reported plate-study status; \nolinkurl{plate_gci_3level} & 2.0 & 1.000000 & 2.000000 \\
+Overload proxy; \nolinkurl{human_max_overload} & 2.0 & 0.483333 & 0.966667 \\
+Goodman fatigue proxy; \nolinkurl{goodman_fatigue_l7} & 2.0 & 0.514254 & 1.028508 \\
+\midrule
+Total & 100.0 & --- & 74.207299 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Conditional CAD Score and Global Composite}
+At producer revision \code{e8cb049df7d03c7d3113556812cc140ca99a29c3}, \nolinkurl{ops/ci/evaluate_cad_candidate.py} defines the CAD score's two branches:
+\begin{align}
+ W_{\mathrm{CAD}}^{\mathrm{pass}} &=1+0.70s_{\mathrm{mass}}+0.12s_{\mathrm{form}}+0.10s_{\mathrm{survival}}\nonumber\\
+ &\quad+0.05s_{\mathrm{seq}}+0.03s_{\mathrm{carry}},\\
+ W_{\mathrm{CAD}}^{\mathrm{fail}} &=-\left(1+4\sum_k\Delta_k\right)+0.10s_{\mathrm{mass}}.
+\end{align}
+The pass branch applies only if all sixteen legacy predicates are true. The mass subscore is a clipped mixture of linear and logarithmic rewards between the 92 and 74 g references. Form combines reference score, hook-drop and curvature proxies. Survival and sequence terms use saturating margin functions; the carry term combines the saved support eigenvalue and fatigue factor. These historical names and weights describe the score's preference rule; they do not establish the physical interpretation implied by a component name.
+
+For Individual~2000, the bound scorecard saves $s_{\mathrm{mass}}=0.486999$, $s_{\mathrm{form}}=0.400862$, $s_{\mathrm{survival}}=0$, $s_{\mathrm{seq}}=0.999604$ and $s_{\mathrm{carry}}=0.6$. Its nonzero normalized shortfalls are strict lateral $0.3530769231$, strict tip torsion $0.471$ and solid tip $0.3307$. The saved penalty is $4.619108$ and the actual failed-branch score is $-5.570408$. The saved unpenalized value $1.456983$ is hypothetical for this failed candidate. Favorable legacy flags such as a plate-study metadata predicate remain stored bookkeeping; they do not override the refused extrapolated-error estimate or open eigen audit.
+
+The separate dimensionless composite is
+\begin{align}
+ G_1&=0.35\min(\mathrm{SF}_{\mathrm{solid\ tip}},2)+0.35\,\mathrm{SPG}/4+0.20s_{\mathrm{shape}}\nonumber\\
+ &\quad-0.05\max(0,m_g-77)/10\nonumber\\
+ &\quad-0.05\max(0,1.2-r_{\mathrm{seq}})/1.2.
+\end{align}
+The original \nolinkurl{metrics/global_metric.py} requires valid inputs rather than filling missing terms with zero. A screen-tip substitute is explicitly provisional. A complete $G_1$ status concerns input completeness; it does not mean the candidate satisfies all requirements. Individuals~2001/2007 retain $G_1=0.623903/0.621634$ and $W_{\mathrm{CAD}}=-3.878704/-3.964924$ under their separate controlled-export records.
+
+\subsection{Native Context and Display Transform}
+The historical native scorer is bound to \code{82f450f7fb418e28c4b229031920dec5454435f3}, \nolinkurl{crates/crescent/src/qd.rs}, SHA-256 \nolinkurl{fe3d057eeec74c3278b46027265406ec0ee97dd65938ae49cb003e08ee5b3a5f}. Illegal/infeasible branches can be negative; evaluated records add mass/mechanical terms and contextual novelty. Novelty uses contemporaneous descriptor context and is re-evaluated during search. A legal geometry can still have negative fitness. Stored birth observations, rescored memberships, generation/island summaries and cumulative archive representatives are distinct stages, even when they refer to the same individual.
+
+Negation $L=-f$ or $-W_{\mathrm{CAD}}$ and complement $L=100-F$ reverse numerical order while preserving preference under minimization. A cumulative maximum $H_g=\max_{k\le g}r_k$ is nondecreasing by construction; its loss transform is nonincreasing. These transforms preserve a profile's preference, not comparability between profiles or evidence of physical improvement.
+
+\subsection{Actual Field-Ranking Display Recipe}
+The retained hero implementation sorts active cells within each field and assigns cell $i$ the area-interval midpoint $(A_{<i}+a_i/2)/A_{\mathrm{active}}$. Equal serialized values are visited in deterministic source-cell order, not pooled into a single tied-value rank. It averages those ranks over active maps per cell, then applies a candidate-specific affine stretch from the resulting minimum/maximum to $[0,1]$. Thus its final color index is a stretched relative rank summary, not a direct stress, a calibrated quality probability or a common absolute percentile across candidates.
+
+The five maps are envelope, lateral, pry, ring and raw torsion. The envelope and ring use producer-active domains; lateral/pry/torsion retain all cells. The source support is 10,334 cells with five contributors, 14,800 with four and 75 with three. The cover does not display a separate contributor map. The envelope depends on the primitive responses; the saved primitive-only comparison reports area-weighted $L_1$ index difference $0.030693$ and maximum difference $0.122172$ relative to the five-map recipe. These saved sensitivity values describe a display comparison and are not independent mechanical evidence.
+
+\subsection{Crop Measure, Denominator and Range}
+For a piecewise-constant stored triangle field $v$, the display-only saliency measure is $\int_D |v|\,dA$. A crop's numerator integrates over the actual triangle/bbox intersections, and its denominator integrates over all source-active triangles in the declared domain. A chosen prior ROI is a different denominator from the whole retained field. Coordinates use the proper rigid pose $R_z(-6^\circ)R_x(180^\circ)$.
+
+The following is a literal-declared-bbox diagnostic, not an achieved-coverage claim for the rendered SVG viewport. Aspect-ratio padding can enlarge the actual clip domain beyond the printed bbox, and emitted polygon counts must be source-bound separately. For the shipped printed bounds, the ring crop is $[-28,-26,84,23]\,\mathrm{mm}$, the terminal torsion crop $[166,4,198.5,37]\,\mathrm{mm}$ and the pry view $[-20,-26,196,36]\,\mathrm{mm}$. Polygon-clipped reconstruction from the original serialized cells gives active whole-domain integrals $14.173756$, $119.158584$ and $900.438870$, respectively. The literal-bbox diagnostic integrals are $14.173756$, $76.878008$ and $900.438870$, giving $100\%$, $64.5174\%$ and $100\%$. These fractions do not establish actual visible-domain coverage. Final emitted-output receipts must bind each drawn polygon, affine viewport, clip domain and denominator to the actual SVG/PNG before any achieved-fraction caption is accepted.
+
+The superseded terminal receipt instead reports 2062 selected ROI cells (not an established count of currently emitted polygons) and integral $73.5323$, compared with whole torsion integral $119.1586$ over 25,209 cells. Its $100\%$ ROI fraction is only about $61.71\%$ of that whole-field denominator. Its exact prior ROI selection rule is unstated; it is not re-created or certified here. Preserve that receipt with explicit supersession rather than updating its hashes around a changed panel.
+
+Raw torsion peaks at $34.8589\,\mathrm{MPa/(N\,mm)}$, inside the capacity exclusion; the post-exclusion capacity peak is $0.6611\,\mathrm{MPa/(N\,mm)}$. A view using the latter legend range needs explicit over-range labeling and a full-range reference. Neither silent saturation nor a caption alone can supply that missing visual key. Panel~C is always \nolinkurl{/mesh/pry}, peak $2.9181\,\mathrm{MPa/N}$, rather than the envelope in MPa.

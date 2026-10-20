@@ -42,28 +42,29 @@
 <path d="M1050,435 L1050,443" stroke="#526873" stroke-width="1.5" fill="none"/>
 <text x="1042" y="470" font-size="21">5</text>
 <text x="635" y="516" font-size="21">Separate load cases; no spatial fatigue field.</text>
-<text x="35" y="630" font-size="23">C / Coarse vs. refined mesh scalars</text>
+<text x="35" y="630" font-size="23">C / Certification vs. strict scalars</text>
 <text x="35" y="676" font-size="22">Out-of-plane plate bending capacity (N)</text>
-<text x="40" y="717" font-size="21">Coarse mesh</text>
+<text x="40" y="717" font-size="21">Cert. minimum</text>
 <path id="lat_rob_n" d="M195,710 L330.1206442610112,710" stroke="#007e87" stroke-width="6" data-value="168.90080532626396" data-limit="300"/>
 <text x="448" y="717" font-size="21">168.9008</text>
-<text x="40" y="755" font-size="21">Refined mesh</text>
+<text x="40" y="755" font-size="21">Strict</text>
 <path id="strict_lat_rob_0p0625_n" d="M195,748 L329.54288458165377,748" stroke="#a3442d" stroke-width="6" data-value="168.1786057270672" data-limit="300"/>
 <text x="448" y="755" font-size="21">168.1786</text>
 <text x="185" y="790" font-size="21">0</text>
 <text x="305" y="790" font-size="21">150</text>
 <text x="425" y="790" font-size="21">300</text>
 <text x="35" y="841" font-size="22">Local tip torsion safety factor</text>
-<text x="40" y="882" font-size="21">Coarse mesh</text>
+<text x="40" y="882" font-size="21">Cert. minimum</text>
 <path id="twist_tipzone_sf" d="M195,875 L320.7410090341867,875" stroke="#007e87" stroke-width="6" data-value="0.5239208709757779" data-limit="1"/>
 <text x="448" y="882" font-size="21">0.5239</text>
-<text x="40" y="920" font-size="21">Refined mesh</text>
+<text x="40" y="920" font-size="21">Strict</text>
 <path id="twist_tipzone_sf_strict" d="M195,913 L321.887584027132,913" stroke="#a3442d" stroke-width="6" data-value="0.5286982667797165" data-limit="1"/>
 <text x="448" y="920" font-size="21">0.5287</text>
 <text x="185" y="955" font-size="21">0</text>
 <text x="305" y="955" font-size="21">0.5</text>
 <text x="425" y="955" font-size="21">1</text>
-<text x="35" y="1045" font-size="21">Saved scalars only; no spatial strict-mesh field.</text>
+<text x="35" y="1008" font-size="21">Certification: min over 0.25 / 0.125 mm².</text>
+<text x="35" y="1045" font-size="21">Strict: 0.0625 mm²; no retained spatial field.</text>
 <text x="635" y="630" font-size="23">D / Historical CAD subscores &amp; shortfalls</text>
 <text x="635" y="662" font-size="21">Branch W_CAD = -5.570408 (unpenalized = +1.4570)</text>
 <text x="635" y="709" font-size="21">Mass efficiency (w=0.70)</text>

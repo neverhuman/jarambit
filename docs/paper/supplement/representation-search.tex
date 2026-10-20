@@ -1,0 +1,189 @@
+\section{Historical Representation and Search Details}
+\label{supp:representation-search}
+This supplement binds detailed decoding and variation statements to historical producer \href{https://github.com/neverhuman/jarambit/tree/82f450f7fb418e28c4b229031920dec5454435f3}{\code{82f450f7}}. The historical accession receipt binds \code{qd.rs} at that revision. The associated \code{genome.rs} and \code{pheno.rs} are inspected source, not evidence that every other cohort used their rules or that the original numerical work was replayed. Manuscript source and evidence-producer revisions remain separate identities.
+
+\subsection{Schema and Literal Producer Domains}
+The numeric groups occupy indices $0..39$, $40..89$, $90..116$, and $117..127$; the categorical material field follows them. The historical population CSV has 17 metadata/metric columns followed by these 129 genome-and-material fields. Its allele names and bounds are preserved below directly from the producer. A listed domain is a stored-coordinate domain, not an assertion that every value yields a distinct active geometry.
+
+The silhouette bounds are symmetric about zero. Stations 0, 39, and 19--22 are pinned; stations 1--7, 14--18, and 23--27 allow $\pm3.0$ mm; station 8 and stations 28--29 allow $\pm2.0$ mm; stations 9--13 and 30--35 allow $\pm3.5$ mm; stations 36--38 allow $\pm2.5$ mm.
+
+In the literal tables, \code{T_MIN}=5.3 mm, \code{P1_POCKET_MAX}=0.6 mm, and \code{P1_RUNOUT_MIN}=3.0 mm. The stock ceiling \code{t_max()} depends on \code{JARAMBIT_T_MAX}, constrained between the floor and 6.0 mm, defaulting to 6.0 mm. The source table alone does not establish a particular run's environment value. Units and threshold/floor interpretation follow the named decoder; source identifiers are retained to avoid inventing unit assignments for ratios and selectors.
+
+\begin{table}[htbp]
+\centering
+\caption{Historical literal coordinate domains, indices $40..55$.}
+\begin{tabular}{@{}rlp{0.36\textwidth}@{}}
+\toprule
+Index & Source name & Stored bounds \\
+\midrule
+40 & \code{blade_drop_deg} & \code{[-4.0, 4.0]} \\
+41 & \code{grip_dx} & \code{[-0.4, 10.0]} \\
+42 & \code{ring_wall} & \code{[4.5, 7.0]} \\
+43 & \code{ring_id} & \code{[24.9, 25.9]} \\
+44 & \code{neck_fillet} & \code{[8.0, 18.0]} \\
+45 & \code{t_stock} & \code{[T_MIN, t_max()]} \\
+46 & \code{t_tip} & \code{[2.6, 4.5]} \\
+47 & \code{taper_x0} & \code{[115.0, 150.0]} \\
+48 & \code{edge_angle_in} & \code{[14.0, 22.0]} \\
+49 & \code{edge_angle_sp} & \code{[14.0, 22.0]} \\
+50 & \code{comet_x0} & \code{[22.0, 30.0]} \\
+51 & \code{comet_x1} & \code{[56.0, 70.0]} \\
+52 & \code{comet_w0} & \code{[7.0, 12.0]} \\
+53 & \code{comet_w1} & \code{[3.5, 6.0]} \\
+54 & \code{comet_bow} & \code{[0.0, 4.0]} \\
+55 & \code{comet_y} & \code{[0.5, 4.0]} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Historical literal coordinate domains, indices $56..71$.}
+\begin{tabular}{@{}rlp{0.36\textwidth}@{}}
+\toprule
+Index & Source name & Stored bounds \\
+\midrule
+56 & \code{eye_scale} & \code{[0.0, 1.25]} \\
+57 & \code{cairn_d} & \code{[4.0, 7.0]} \\
+58 & \code{nub_engage} & \code{[0.4, 1.2]} \\
+59 & \code{holder_wall} & \code{[1.2, 2.0]} \\
+60 & \code{jimp_scale} & \code{[0.8, 1.2]} \\
+61 & \code{serr_large_d} & \code{[1.0, 1.5]} \\
+62 & \code{serr_small_d} & \code{[0.4, 0.8]} \\
+63 & \code{serr_fine_d} & \code{[0.5, 0.9]} \\
+64 & \code{spine_sharp_offset} & \code{[0.0, 45.0]} \\
+65 & \code{relief_d} & \code{[0.0, 1.2]} \\
+66 & \code{relief_w} & \code{[2.0, 8.0]} \\
+67 & \code{relief_q} & \code{[1.0, 3.0]} \\
+68 & \code{lattice_d} & \code{[0.0, 1.5]} \\
+69 & \code{lattice_pitch} & \code{[4.0, 9.0]} \\
+70 & \code{lattice_frac} & \code{[0.4, 0.8]} \\
+71 & \code{lattice_angle} & \code{[0.0, 60.0]} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Historical literal coordinate domains, indices $72..87$.}
+\begin{tabular}{@{}rlp{0.36\textwidth}@{}}
+\toprule
+Index & Source name & Stored bounds \\
+\midrule
+72 & \code{lattice_handle} & \code{[0.0, 1.0]} \\
+73 & \code{lattice_blade} & \code{[0.0, 1.0]} \\
+74 & \code{fuller_d} & \code{[0.0, 1.2]} \\
+75 & \code{fuller_w} & \code{[2.0, 5.0]} \\
+76 & \code{fuller_s0} & \code{[0.05, 0.4]} \\
+77 & \code{fuller_s1} & \code{[0.5, 0.9]} \\
+78 & \code{flute_d} & \code{[0.0, 1.0]} \\
+79 & \code{texture_mode} & \code{[0.0, 1.0]} \\
+80 & \code{texture_d} & \code{[0.15, 0.4]} \\
+81 & \code{texture_pitch} & \code{[1.5, 3.0]} \\
+82 & \code{texture_angle} & \code{[-45.0, 45.0]} \\
+83 & \code{wrap_x0} & \code{[16.0, 26.0]} \\
+84 & \code{wrap_len} & \code{[45.0, 60.0]} \\
+85 & \code{pad_x} & \code{[70.0, 80.0]} \\
+86 & \code{pad_y} & \code{[-5.0, 3.0]} \\
+87 & \code{pad_w} & \code{[6.0, 9.0]} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Historical literal coordinate domains, indices $88..103$.}
+\begin{tabular}{@{}rlp{0.36\textwidth}@{}}
+\toprule
+Index & Source name & Stored bounds \\
+\midrule
+88 & \code{pad_l} & \code{[12.0, 16.0]} \\
+89 & \code{edge_t} & \code{[0.5, 0.9]} \\
+90 & \code{iso_d} & \code{[0.0, 1.6]} \\
+91 & \code{iso_pitch} & \code{[7.0, 16.0]} \\
+92 & \code{iso_rib} & \code{[1.4, 3.0]} \\
+93 & \code{iso_angle} & \code{[-30.0, 30.0]} \\
+94 & \code{iso_rim} & \code{[2.0, 5.0]} \\
+95 & \code{iso_blade} & \code{[0.0, 1.0]} \\
+96 & \code{iso_handle} & \code{[0.0, 1.0]} \\
+97 & \code{iso_blade_extent} & \code{[0.0, 1.0]} \\
+98 & \code{iso_grade} & \code{[-0.8, 0.8]} \\
+99 & \code{win_n} & \code{[0.0, 7.99]} \\
+100 & \code{win_s0} & \code{[0.05, 0.5]} \\
+101 & \code{win_s1} & \code{[0.5, 0.92]} \\
+102 & \code{win_w} & \code{[3.0, 10.0]} \\
+103 & \code{win_fill} & \code{[0.45, 0.8]} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Historical literal coordinate domains, indices $104..119$.}
+\begin{tabular}{@{}rlp{0.36\textwidth}@{}}
+\toprule
+Index & Source name & Stored bounds \\
+\midrule
+104 & \code{win_decay} & \code{[0.4, 1.0]} \\
+105 & \code{rflute_d} & \code{[0.0, 2.0]} \\
+106 & \code{rflute_w} & \code{[0.3, 0.7]} \\
+107 & \code{rflute_arc} & \code{[120.0, 260.0]} \\
+108 & \code{iso_handle_start} & \code{[0.0, 0.8]} \\
+109 & \code{iso_land} & \code{[0.0, 1.0]} \\
+110 & \code{perf_d} & \code{[0.0, 7.0]} \\
+111 & \code{perf_gap} & \code{[3.2, 8.0]} \\
+112 & \code{perf_angle} & \code{[-40.0, 40.0]} \\
+113 & \code{perf_elong} & \code{[1.0, 2.4]} \\
+114 & \code{perf_land} & \code{[0.0, 1.0]} \\
+115 & \code{perf_handle} & \code{[0.0, 1.0]} \\
+116 & \code{perf_handle_start} & \code{[0.0, 0.9]} \\
+117 & \code{p1_on} & \code{[0.0, 1.0]} \\
+118 & \code{rail_w} & \code{[3.0, 7.0]} \\
+119 & \code{neck_l} & \code{[4.0, 12.0]} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Historical literal coordinate domains, indices $120..127$.}
+\begin{tabular}{@{}rlp{0.36\textwidth}@{}}
+\toprule
+Index & Source name & Stored bounds \\
+\midrule
+120 & \code{pocket_d} & \code{[0.0, P1_POCKET_MAX]} \\
+121 & \code{pocket_r} & \code{[P1_RUNOUT_MIN, 6.0]} \\
+122 & \code{k_n} & \code{[3.0, 5.99]} \\
+123 & \code{k0} & \code{[T_MIN, 6.0]} \\
+124 & \code{k1} & \code{[T_MIN, 6.0]} \\
+125 & \code{k2} & \code{[T_MIN, 6.0]} \\
+126 & \code{k3} & \code{[T_MIN, 6.0]} \\
+127 & \code{k4} & \code{[T_MIN, 6.0]} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Clamping and Decoded Types}
+The historical clamp replaces nonfinite values with lower bounds, applies box bounds, and quantizes stock through the bound \code{q01} routine. It enforces $t_{\rm tip}\le t_{\rm stock}-0.5$ mm, holder-wall and engagement constraints, a fuller interval separation of 0.15 (capped at 0.9), a comet span of at least 28 mm, and a window interval separation of 0.2 (capped at 0.92). These are producer-specific rules, replacing the manuscript's earlier unbound generic examples.
+
+The continuous-rail layer activates at \code{p1_on} $\ge0.5$, or through its environment override. It disables selected legacy pocket/through-feature controls, caps shallow pockets, and bounds thickness knots. With the layer off, all stored knot values are overwritten by stock thickness during clamping. Active knot count is \code{floor(k_n)} bounded to 3--5. The phenotype uses \code{floor(win_n)} for window count and a threshold at 0.5 for the texture mode. It does not round every selector to an integer in the serialized vector. Thresholded zone controls and inactive values further separate the number of stored coordinates from effective geometric changes.
+
+\subsection{Crossover and All Six Mutation Branches}
+Historical crossover chooses the 40-coordinate silhouette block from either parent with equal probability, then chooses every other numeric coordinate and the material category independently with equal probability, followed by clamping.
+
+For mutation, \code{op=floor(6u)} selects a mode from 0--5 using the producer RNG. The supplied scale is $\sigma$; \code{fine} means $\sigma<0.025$, and silhouette scale becomes $0.1\sigma$ in that branch. Let $s_i$ denote coordinate-domain span. A \code{jig} adds a normal variate multiplied by the supplied scale and $s_i$.
+\begin{enumerate}
+\item Mode 0: attempt each coordinate with probability 0.15, using silhouette scale for the first 40 and $\sigma$ otherwise; stock is omitted in fine mode.
+\item Mode 1: choose a periodic silhouette-bump center in $[0,40)$, width from $[1.5,5.0]$, and normal amplitude scaled by $6$ times the silhouette scale. Apply the source's exponential profile with station-bound scaling. Outside fine mode, also attempt drop and grip-offset perturbations, each with probability 0.3.
+\item Mode 2: attempt thickness, taper, relief, bevel, ring-wall, and edge-thickness controls with probability 0.5 and jig scale $1.5\sigma$, excluding stock in fine mode. When the rail layer is active, attempt each of five knots and knot count with probability 0.5.
+\item Mode 3: attempt lattice depth, pitch, fraction, and angle with probability 0.6 at scale $1.5\sigma$. Outside fine mode, flip each handle/blade activation coordinate with probability 0.2.
+\item Mode 4 (the remaining match branch): attempt fuller, flute, texture, comet, eye, and cairn controls with probability 0.4 at scale $1.5\sigma$; omit texture mode in fine mode.
+\item Mode 5: with the rail layer active, attempt rail, neck, pocket, knot, stock, fuller-depth, ring-wall, and neck-fillet controls with probability 0.4 at scale $1.5\sigma$. Otherwise attempt the source's machining-coordinate list with probability 0.4; outside fine mode, flip five zone controls with probability 0.12 and attempt a $\pm1$ window-count step with probability 0.25. Stock is omitted in fine mode.
+\end{enumerate}
+Outside fine mode the material category flips with probability 0.03. Every mutation ends in clamping. The historical island loop supplies island/configuration-dependent scales, including a 0.6 multiplier after crossover; the earlier manuscript's fixed 0.15/0.04 pair did not describe this bound loop. Source lists remain available in the immutable \href{https://github.com/neverhuman/jarambit/blob/82f450f7fb418e28c4b229031920dec5454435f3/crates/crescent/src/genome.rs}{genome implementation}.
+
+\subsection{Membership Stage and Frame Interpretation}
+The bound island loop constructs novelty context, refreshes fitness, emits birth/elite membership events and summary observations, and calls its snapshot callback before migration. Migration copies selected IDs to the next island. A \code{GenEnd} event is emitted after that migration, but its summary values were gathered before it. Event position and the stage summarized by its values are therefore different facts. JEV1 elite events omit refreshed scalar fitness. The reporting adapter accepts \code{complete} and maps historical \code{notevaluated} to \code{not_evaluated}; it rejects unknown status strings.
+
+\subsection{Inheritance Ledger and Interpretation Boundary}
+Two source-bound reporting paths coexist. The original \code{lineage-inputs.v1.json} defines a two-hop view consumed by \code{lineage::project}, which produces \code{generated/lineage.json} and \code{generated/lineage.svg}. Separately, the population reporter reconstructs \code{generated/population/inheritance.json} directly from the hash-pinned historical \code{all_evals.json} and \code{all_evals.csv}. Its validator checks the seven three-hop parent edges and separately identifies the recorded fourth-hop induced closure $174\to299$; this path produces \code{figures/inheritance.svg}, the ancestry view used here. The ledger also retains exact numeric-coordinate differences, material change indicators, and mixed-unit raw norms. The two-hop contract remains unchanged and is not the authority for the separate three-hop view.

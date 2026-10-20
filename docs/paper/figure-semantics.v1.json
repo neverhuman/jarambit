@@ -1,0 +1,308 @@
+{
+  "schema": "jarambit.figure_semantics.v1",
+  "scope": "Derived reporting/admission ledger; original scientific inputs and contracts remain byte-stable. No PNG/PDF acceptance claimed.",
+  "evidence_base_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+  "original_contracts": {
+    "docs/paper/field-inputs.v1.json": "93ffdcdae2c2eead22ce858e3eb83af1f61cdb4bafa29e418b6859736c6c8449",
+    "docs/paper/assessment-inputs.v1.json": "fac0cd6cc08e731585e243277d401cb4e9a746279f4a544b012d4fae6b928171",
+    "docs/paper/lineage-inputs.v1.json": "348ae55980e12f6b363ae89628c8ed01d0c691961b05fe5e800f151088a2c7e0"
+  },
+  "producer_revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+  "producer_sources": {
+    "crates/crescent/src/fem.rs": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
+    "crates/cli/src/crescent.rs": "c8f2e1664263e3bb885ca33e27f42dab0fbe0f180116ec890ee4dcd83bdeab22",
+    "crates/physics/src/fine.rs": "b8762847e7452d3bcbfde718e55e13c42d4ac61d9a23abf5a75d2d5c38343096",
+    "crates/crescent/src/pheno.rs": "fd0f556d9054334f26b3d1698979c14696435b1fb85c1c637f5e199d4b4aa19c"
+  },
+  "scalar_interpretation_sources": {
+    "ops/ci/side_a4.py": "f7a49fa378ca5aa9b0ca661db975723c04f727fde6b5f168822e15593202aeca",
+    "crates/crescent/src/fem.rs": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
+    "crates/cli/src/bench.rs": "191712f94e18ed8b49612edee84037ef4f9c4f533c3ebbb8342a7b866e7ffa71"
+  },
+  "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
+  "source_sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+  "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+  "crop_panels": [
+    {
+      "panel": "A",
+      "selector": "/mesh/ring",
+      "units": "MPa/N",
+      "source_path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
+      "source_sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+      "assessment_stage": "retained certification field at0.25mm2; not strict refinement",
+      "crop_domain_posed_mm": [
+        -28,
+        -26,
+        84,
+        23
+      ],
+      "svg_transform": {
+        "scale": 4.464285714285714,
+        "origin_x": 191.0,
+        "origin_y": 270.67857142857144
+      },
+      "svg_clip_rect": [
+        66,
+        168,
+        500.0,
+        218.75
+      ],
+      "svg_clip_rect_element": "<clipPath id=\"crop-clip-0\"><rect x=\"66\" y=\"168\" width=\"500\" height=\"218.75\"/></clipPath>",
+      "emitted_source_triangles": 13412,
+      "intersecting_source_triangles": 12638,
+      "emitted_triangle_ids_ordered_le_u64_sha256": "788d94ad56a9551a4f2f715676f81e940c55cdfefc8b51653819775f521e6b22",
+      "source_active_denominator_cells": 10334,
+      "producer_mask": "source seated-region mask; forced zero is not zero stress",
+      "saliency_measure": "integral abs(serialized piecewise-constant triangle response) dA; source triangles clipped to declared posed crop rectangle",
+      "denominator_scope": "whole retained source-active field domain, not a preselected terminal ROI",
+      "whole_domain_denominator": 14.173756017400002,
+      "crop_numerator": 14.173756017400002,
+      "achieved_whole_domain_fraction": 1.0,
+      "raw_range": [
+        0.0,
+        0.0264
+      ],
+      "display_range": [
+        0,
+        0.0264
+      ],
+      "over_range_policy": "full retained range",
+      "over_range_intersecting_triangles": 0,
+      "prepatch_aperture_diagnostic": {
+        "rectangular_aperture_domain_mm": [
+          -31.584,
+          -71.52799999999999,
+          87.584,
+          28.376
+        ],
+        "fraction_before_PIP_overlay_and_rounded_corners": 1.0,
+        "not_the_literal_declared_bbox": true
+      },
+      "coverage_interpretation": "Rectangular physical source-domain window integral before decorative PIP overlays; not unobscured visible-ink coverage."
+    },
+    {
+      "panel": "B",
+      "selector": "/mesh/twist",
+      "units": "MPa/(N mm)",
+      "source_path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
+      "source_sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+      "assessment_stage": "retained certification field at0.25mm2; not strict refinement",
+      "crop_domain_posed_mm": [
+        166,
+        4,
+        198.5,
+        37
+      ],
+      "svg_transform": {
+        "scale": 9.575757575757576,
+        "origin_x": -943.5757575757577,
+        "origin_y": 522.3030303030303
+      },
+      "svg_clip_rect": [
+        646,
+        168,
+        311.21212121212125,
+        316.0
+      ],
+      "svg_clip_rect_element": "<clipPath id=\"crop-clip-1\"><rect x=\"646\" y=\"168\" width=\"311.212121212121\" height=\"316\"/></clipPath>",
+      "emitted_source_triangles": 3033,
+      "intersecting_source_triangles": 2474,
+      "emitted_triangle_ids_ordered_le_u64_sha256": "3cb30ae6c032bc3b980a071b37d09d4e34b9b71e0036d52aff297e7a49129ef6",
+      "source_active_denominator_cells": 25209,
+      "producer_mask": "none; capacity exclusion is separate",
+      "saliency_measure": "integral abs(serialized piecewise-constant triangle response) dA; source triangles clipped to declared posed crop rectangle",
+      "denominator_scope": "whole retained source-active field domain, not a preselected terminal ROI",
+      "whole_domain_denominator": 119.15858378004454,
+      "crop_numerator": 76.87800792873183,
+      "achieved_whole_domain_fraction": 0.6451738975904695,
+      "raw_range": [
+        0.0,
+        34.8589
+      ],
+      "display_range": [
+        0,
+        0.6611
+      ],
+      "over_range_policy": "top legend segment >=0.6611; raw maximum34.8589 retained and disclosed",
+      "over_range_intersecting_triangles": 59,
+      "prepatch_aperture_diagnostic": {
+        "rectangular_aperture_domain_mm": [
+          164.32911392405063,
+          -7.069620253164562,
+          219.88607594936713,
+          39.506329113924046
+        ],
+        "fraction_before_PIP_overlay_and_rounded_corners": 0.6602367709701731,
+        "not_the_literal_declared_bbox": true
+      },
+      "coverage_interpretation": "Rectangular physical source-domain window integral before decorative PIP overlays; not unobscured visible-ink coverage."
+    },
+    {
+      "panel": "C",
+      "selector": "/mesh/pry",
+      "units": "MPa/N",
+      "source_path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
+      "source_sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+      "assessment_stage": "retained certification field at0.25mm2; not strict refinement",
+      "crop_domain_posed_mm": [
+        -20,
+        -26,
+        196,
+        36
+      ],
+      "svg_transform": {
+        "scale": 2.314814814814815,
+        "origin_x": 1272.2962962962963,
+        "origin_y": 251.33333333333334
+      },
+      "svg_clip_rect": [
+        1226,
+        168,
+        500.0,
+        143.51851851851853
+      ],
+      "svg_clip_rect_element": "<clipPath id=\"crop-clip-2\"><rect x=\"1226\" y=\"168\" width=\"500\" height=\"143.518518518519\"/></clipPath>",
+      "emitted_source_triangles": 25209,
+      "intersecting_source_triangles": 25209,
+      "emitted_triangle_ids_ordered_le_u64_sha256": "d75e55b7654790839e5bc900c6725c79d8bbfecafa5fa383c9a7bd8f91942186",
+      "source_active_denominator_cells": 25209,
+      "producer_mask": "none; capacity exclusion is separate",
+      "saliency_measure": "integral abs(serialized piecewise-constant triangle response) dA; source triangles clipped to declared posed crop rectangle",
+      "denominator_scope": "whole retained source-active field domain, not a preselected terminal ROI",
+      "whole_domain_denominator": 900.4388699722538,
+      "crop_numerator": 900.4388699722538,
+      "achieved_whole_domain_fraction": 1.0,
+      "raw_range": [
+        0.0,
+        2.9181
+      ],
+      "display_range": [
+        0,
+        2.9181
+      ],
+      "over_range_policy": "full retained range",
+      "over_range_intersecting_triangles": 0,
+      "prepatch_aperture_diagnostic": {
+        "rectangular_aperture_domain_mm": [
+          -26.912000000000003,
+          -146.30399999999997,
+          202.91199999999998,
+          46.368
+        ],
+        "fraction_before_PIP_overlay_and_rounded_corners": 1.0,
+        "not_the_literal_declared_bbox": true
+      },
+      "coverage_interpretation": "Rectangular physical source-domain window integral before decorative PIP overlays; not unobscured visible-ink coverage."
+    }
+  ],
+  "pry_additive_admission": {
+    "selector": "/mesh/pry",
+    "units": "MPa/N",
+    "count": 25209,
+    "producer_evidence": {
+      "crates/crescent/src/fem.rs": [
+        312,
+        321,
+        389,
+        392
+      ],
+      "crates/cli/src/crescent.rs": [
+        35,
+        38
+      ]
+    },
+    "limit": "Original field-inputs display_fields does not enumerate pry; original bytes are preserved. Bound producer admits retained pry selector interpretation additively."
+  },
+  "scalar_stages": {
+    "certification": {
+      "keys": [
+        "lat_rob_n",
+        "twist_tipzone_sf"
+      ],
+      "mesh_max_area_mm2": [
+        0.25,
+        0.125
+      ],
+      "aggregation": "minimum"
+    },
+    "strict": {
+      "keys": [
+        "strict_lat_rob_0p0625_n",
+        "twist_tipzone_sf_strict"
+      ],
+      "mesh_max_area_mm2": [
+        0.0625
+      ],
+      "aggregation": "single_mesh"
+    },
+    "separate_plate_gci_max_area_mm2": [
+      4,
+      1,
+      0.25
+    ]
+  },
+  "hero_composite": {
+    "fields": [
+      "env_vm",
+      "lat",
+      "pry",
+      "ring",
+      "twist"
+    ],
+    "actual_transform": [
+      "source-zeroed envelope/ring cells omitted from those map ranks",
+      "sort each active map by value, deterministic source order within ties",
+      "cell position=(preceding area+half own area)/active-map area; no pooled-tie midrank",
+      "average available map positions per triangle",
+      "candidate-specific min-max stretch averaged positions to[0,1]"
+    ],
+    "contributor_count_q": {
+      "5": 10334,
+      "4": 14800,
+      "3": 75
+    },
+    "visibility": "The cover does not display a separate per-triangle contributor-count map.",
+    "limit": "Relative dimensionless display summary, not physical stress or safety/quality probability."
+  },
+  "ancestry_views": {
+    "generated_lineage": {
+      "contract": "docs/paper/lineage-inputs.v1.json",
+      "contract_sha256": "348ae55980e12f6b363ae89628c8ed01d0c691961b05fe5e800f151088a2c7e0",
+      "max_parent_hops": 2,
+      "outputs": [
+        "docs/paper/generated/lineage.json",
+        "docs/paper/generated/lineage.svg"
+      ],
+      "reader": "publication.rs906-930 -> lineage::project"
+    },
+    "inheritance": {
+      "source_json_sha256": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363",
+      "source_csv_sha256": "a28f6d2c8a676661280981733a1e33c80136aba157c7a9d2f5a5c3db444a223c",
+      "max_parent_hops": 3,
+      "focal_id": 1095,
+      "expected_node_ids": [
+        174,
+        245,
+        299,
+        392,
+        413,
+        526,
+        1095
+      ],
+      "traversal_edges": 7,
+      "separate_induced_fourth_hop_edge": [
+        174,
+        299
+      ],
+      "outputs": [
+        "docs/paper/generated/population/inheritance.json",
+        "docs/paper/figures/inheritance.svg"
+      ],
+      "reader": "population.rs147-394 recompute_w282_inheritance_ledger;396-522 validate_inheritance_ledger; separate from two-hop lineage contract",
+      "source_generator_revision": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "source_generator_sha256": "ec78ee4cd0a10e5395f7d5d800871b3e6688457fc86c0dff7ffe870b51169352"
+    },
+    "disposition": "AGC-G03: separate render paths; additive mapping without changing the two-hop contract."
+  },
+  "coverage_interpretation": "Rectangular physical source-domain window integral before decorative PIP overlays; not unobscured visible-ink coverage."
+}

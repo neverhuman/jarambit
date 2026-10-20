@@ -2,23 +2,45 @@
   "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
   "certification_strict_pairs": [
     {
+      "assessment_stage": "certification",
       "key": "lat_rob_n",
       "limit": 300.0,
+      "mesh_aggregation": "minimum",
+      "mesh_max_area_mm2": [
+        0.25,
+        0.125
+      ],
       "value": 168.90080532626396
     },
     {
+      "assessment_stage": "strict",
       "key": "strict_lat_rob_0p0625_n",
       "limit": 300.0,
+      "mesh_aggregation": "single_mesh",
+      "mesh_max_area_mm2": [
+        0.0625
+      ],
       "value": 168.1786057270672
     },
     {
+      "assessment_stage": "certification",
       "key": "twist_tipzone_sf",
       "limit": 1.0,
+      "mesh_aggregation": "minimum",
+      "mesh_max_area_mm2": [
+        0.25,
+        0.125
+      ],
       "value": 0.5239208709757779
     },
     {
+      "assessment_stage": "strict",
       "key": "twist_tipzone_sf_strict",
       "limit": 1.0,
+      "mesh_aggregation": "single_mesh",
+      "mesh_max_area_mm2": [
+        0.0625
+      ],
       "value": 0.5286982667797165
     }
   ],

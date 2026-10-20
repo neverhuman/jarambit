@@ -1,95 +1,82 @@
-% Draft for Section 5 (Fitness Profiles, Priority Groupings, and Stage Semantics)
-\section{Fitness Profiles, Priority Groupings, and Stage Semantics}
+\section{Score Definitions and Comparability}
 \label{sec:fitness}
+A search preference, a stored reporting vector, a shortfall score and a mechanical safety factor answer different questions. Their names, directions, observation stages and missing-input rules must accompany their values. Table~\ref{tab:score-dictionary} keeps the score regimes separate; a shared word such as ``fitness'' does not create a common performance axis.
 
-\subsection{Three Distinct Score Regimes and Forbidden Cross-Profile Splicing}
-Because different search cohorts and assessment stages evaluate different mathematical functions, a common word such as ``fitness'' does not establish comparability across runs. Jarambit's score registry enforces strict separation across three profile families, prohibiting cross-profile splicing:
-\begin{enumerate}
-\item \textbf{Native Quality-Diversity Search Fitness ($f$, Cohort~1 \text{Run~1} and Cohort~3 \text{Run~2}--\text{Run~11}):} In the four-island crescent search engine, native fitness $f$ (higher is better) applies conditional legality and feasibility branches: geometrically illegal or unmeshed candidates receive unbounded negative penalty scores ($f < 0$, down to $-207.23$ in Cohort~1), whereas legal candidates combine normalized mechanical/mass terms with archive-contextual novelty computed against the contemporaneous population and archive. Because novelty is re-evaluated as the archive evolves, $f$ is a contextual search observation rather than an intrinsic physical constant of a genome.
-\item \textbf{Retained Weighted Reporting Profile ($F \in [0,100]$, Cohort~2 Reporting Curves):} In the multi-stage ultralight reporting profile, twenty normalized component terms $s_i \in [0,1]$ are combined with percentage weights summing to $100$:
-\begin{equation}
- F = \sum_{i=1}^{20} w_i s_i,\qquad 0\le s_i \le 1,\quad \sum_{i=1}^{20} w_i = 100.
-\end{equation}
-The twenty terms are organized into four priority groups:
-  \begin{itemize}
-  \item \emph{Mass and compactness ($30\%$):} ultralight mass and holder/envelope compactness.
-  \item \emph{Form and comfort proxies ($25\%$):} karambit ring/claw archetype, silhouette similarity, and bore-collar geometry proxy.
-  \item \emph{Exported geometry ($15\%$):} watertight single-solid B-rep topology, exported edge sharpness, and point profile.
-  \item \emph{Response and verification ($30\%$):} lateral loads ($180\,\mathrm{N}$ and $260\,\mathrm{N}$ coarse and refined), ring traction ($1500\,\mathrm{N}$), body and local tip torsion ($1.82\,\mathrm{N\cdot m}$), quadratic solid tip response and cross-solver agreement, elastic support/buckling, regional yield-order sequence ($\ge 1.2$), three-level plate mesh study, human-maximum overload, and Goodman fatigue screen.
-  \end{itemize}
-Within the six retained Cohort~2 reporting curves (15 generation summaries), Individual~2002 records the highest retained weighted reporting profile value ($F = 74.207299$, mass $101.139\,\mathrm{g}$ raster / $101.138\,\mathrm{g}$ solid). Several terms in $F$ are clipped ratios, Boolean indicators, or screening proxies; a higher value of $F$ orders candidates for research attention without establishing qualification.
-\item \textbf{Shortfall-Penalized CAD Score ($W_{\text{CAD}}$) and Global Composite ($G_1$):} In 16-gate CAD evaluation, candidates satisfying all 16 legacy engineering gates receive a positive score in $[1.0,2.0]$ weighted by mass ($0.70$), archetype ($0.12$), survival buffer ($0.10$), sequence buffer ($0.05$), and carry stability ($0.03$):
-\begin{equation}
-\begin{aligned}
- W_{\text{CAD}}^{\text{pass}} &= 1.0 + 0.70\,s_{\text{mass}} + 0.12\,s_{\text{karambit}} \\
- &\quad + 0.10\,s_{\text{survival}} + 0.05\,s_{\text{seq}} + 0.03\,s_{\text{carry}},
-\end{aligned}
-\end{equation}
-whereas candidates failing any gate receive a negative shortfall penalty:
-\begin{equation}
- W_{\text{CAD}}^{\text{fail}} = -\left(1.0 + 4.0\sum_{k\in\text{shortfalls}}\Delta_k\right) + 0.10\,s_{\text{mass}} < 0.
-\end{equation}
-Alongside $W_{\text{CAD}}$, the dimensionless composite score $G_1$ (higher is better, with no physical millimeter unit and no $0.45$ cutoff gate) evaluates:
-\begin{equation}
-\begin{aligned}
- G_1 &= 0.35\,\min(\mathrm{SF}_{\text{solid\_tip}},\,2.0) + 0.35\,\frac{\mathrm{SPG}}{4.0} \\
- &\quad + 0.20\,s_{\text{aes}} - 0.05\,\frac{\max(0,\,m_g - 77.0)}{10.0} \\
- &\quad - 0.05\,\frac{\max(0,\,1.2 - r_{\text{seq}})}{1.2}.
-\end{aligned}
-\end{equation}
-For the separately assessed controlled export Individual~2001, $W_{\text{CAD}} = -3.878704$, $G_1 = 0.623903$, and mass $= 75.382\,\mathrm{g}$ ($75.1992\,\mathrm{g}$ 3D solid), meeting $11$ of $16$ legacy gates and failing $5$; for companion controlled export Individual~2007, $W_{\text{CAD}} = -3.964924$, $G_1 = 0.621634$, and mass $= 75.642\,\mathrm{g}$ ($75.5049\,\mathrm{g}$ 3D solid), likewise meeting $11$ of $16$ legacy gates and failing the same $5$ gates while failing grouped verification.
-\end{enumerate}
+\begin{table*}[t]
+\centering
+\caption{Score dictionary. Scores are dimensionless; physical units remain attached to their inputs. Missing observations do not become zero scores.}
+\label{tab:score-dictionary}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.19\textwidth}>{\raggedright\arraybackslash}p{0.29\textwidth}>{\raggedright\arraybackslash}p{0.28\textwidth}@{}}
+\toprule
+\textbf{Quantity / stage} & \textbf{Direction / scale} & \textbf{Meaning and normalization} & \textbf{Comparison / missingness} \\
+\midrule
+Native $f$; historical and completed native search & Higher preferred; conditional negative branches, no common $[0,1]$ scale & Mechanical/mass terms and contextual novelty after legality/feasibility branches & Bound profile, configuration and observation stage required; novelty changes with archive context; sign is not legality \\
+Screening deficit; intermediate proposals & Lower shortfall preferred; nonnegative stored sum & Stage-1 screening quantity; not the later 20-term reporting vector & Only observed screens have numeric values; 1390 proposals lack screens \\
+Weighted $F$; retained reporting curves & Higher preferred; $[0,100]$ & Twenty saved normalized terms with weights totaling 100 & Original producer/scorer revision and point-stage comparability not established by summaries; no invented CAD or population distributions \\
+$W_{\mathrm{CAD}}$; 16-gate CAD scorecard & Higher preferred; conditional positive/negative branches & Pass-branch quality versus failed-branch normalized-shortfall penalty & Same assessment definition/inputs required; a favorable subscore is not all-gate success \\
+$G_1$; assessment composite & Higher preferred; dimensionless & Weighted solid-tip factor, strength/mass, shape, mass penalty and sequence gap & Missing required inputs produce incomplete status; a screen-tip substitute is marked provisional; does not override gates \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
-\subsection{Reversible Display-Loss Conventions}
-To support minimization-oriented progress plots without altering underlying stored evidence, each profile defines an explicit order-preserving display loss $L$:
+\subsection{A Retained Weighted Reporting Vector}
+The principal reporting definition is
 \begin{equation}
- L_{\text{native}} = -f,\qquad L_{\text{ultralight}} = 100 - F,\qquad L_{\text{CAD}} = -W_{\text{CAD}}.
+ F=\sum_{i=1}^{20}w_i s_i,\qquad s_i\in[0,1],\quad \sum_iw_i=100.
 \end{equation}
-For cumulative best-so-far series $H_g = \max_{0\le k\le g} r_k$, the corresponding display-loss envelope $-H_g$ or $100 - H_g$ is monotone non-increasing by construction. All figures declare both the display-loss transform and the native score values, preserving negative penalty tails without clipping.
-
-\subsection{Cohort 3 Cross-Run Trajectory Comparison (\text{Run~2}--\text{Run~11})}
-Table~\ref{tab:cohort3-runs} summarizes the ten retained 800-generation four-island runs in Cohort~3 ($1{,}954{,}560$ total evaluated births and $32{,}040$ generation-by-island summary rows). Every run evaluated $195{,}456$ distinct candidate IDs across $801$ generations ($0$--$800$). Search-legal births range from $70{,}278$ ($35.96\%$, \text{Run~6}) to $80{,}132$ ($41.00\%$, \text{Run~11}), totaling $754{,}236$ ($38.59\%$; mean $75{,}423.6 \pm 2{,}936.55$ sample SD, population SD $2{,}785.86$) across the ten-run ensemble, while run-maximum native fitness reaches $1.1089$ (\text{Run~3}) to $1.1440$ (\text{Run~5}) (mean $1.1250 \pm 0.01285$ sample SD, population SD $0.01220$).
+Its priorities are mass/compactness (30\%), form/comfort proxies (25\%), exported geometry (15\%) and response/verification (30\%). Table~\ref{tab:weighted-priorities} shows sums of \emph{stored weighted contributions} for Individual~2002. The Supplement retains all twenty normalized values, weights and contributions. These are reported observations from its summary, not a recalculation under the present scorer and not measurements transferred from Individual~2000.
 
 \begin{table}[t]
 \centering
-\caption{Cohort~3 Ten-Run 800-Generation Census (\text{Run~2}--\text{Run~11}; $195{,}456$ Evaluated Births and $3{,}204$ Summary Rows per Run; $1{,}954{,}560$ Total)}
-\label{tab:cohort3-runs}
-\footnotesize
-\setlength{\tabcolsep}{2.4pt}
-\begin{tabular}{@{}lrrr@{}}
+\caption{Individual~2002: retained reporting priorities and contributed points. Weights express research preferences; they are not probabilities of safety or qualification.}
+\label{tab:weighted-priorities}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lrr@{}}
 \toprule
-Run & Legal Births (\%) & Max $f$ & Min $L=-f$ \\
+\textbf{Objective group} & \textbf{Weight (\%)} & \textbf{Points} \\
 \midrule
-Run~2  & 74,874 (38.31\%) & 1.1327 & $-1.1327$ \\
-Run~3  & 77,011 (39.40\%) & 1.1089 & $-1.1089$ \\
-Run~4  & 77,396 (39.60\%) & 1.1380 & $-1.1380$ \\
-Run~5  & 77,625 (39.71\%) & 1.1440 & $-1.1440$ \\
-Run~6  & 70,278 (35.96\%) & 1.1156 & $-1.1156$ \\
-Run~7  & 74,777 (38.26\%) & 1.1228 & $-1.1228$ \\
-Run~8  & 71,550 (36.61\%) & 1.1108 & $-1.1108$ \\
-Run~9  & 76,284 (39.03\%) & 1.1408 & $-1.1408$ \\
-Run~10 & 74,309 (38.02\%) & 1.1186 & $-1.1186$ \\
-Run~11 & 80,132 (41.00\%) & 1.1177 & $-1.1177$ \\
+Mass and compactness & 30 & 15.470 \\
+Form and comfort proxies & 25 & 23.875 \\
+Exported geometry & 15 & 11.841 \\
+Response and verification & 30 & 23.022 \\
 \midrule
-Total / Range & 754,236 (38.59\%) & 1.1089--1.1440 & $-1.1440..{-1.1089}$ \\
-Mean $\pm s$ & $75{,}423.6\pm 2{,}936.6$ & $1.1250\pm 0.0129$ & $-1.1250\pm 0.0129$ \\
+Total & 100 & 74.207 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Retained Spatial Plate Fields and Saliency Crops for Individual 2000}
-The retained $0.25\,\mathrm{mm}^2$ plate artifact for Individual~2000 ($13{,}503$ nodes, $25{,}209$ triangles) stores seven per-triangle arrays: five structural demand maps---the scaled multi-case von Mises envelope ($\mathrm{MPa}$, maximum $1{,}388.6695\,\mathrm{MPa}$, with $75$ cells inside the $4\,\mathrm{mm}$ tip exclusion forced to zero by the producer and rendered in neutral gray), unit out-of-plane lateral bending response ($\mathrm{MPa/N}$, $25{,}209$ active cells), unit in-plane tip-pry T6 membrane response ($\mathrm{MPa/N}$, $25{,}209$ active cells; in the multi-case envelope construction, both lateral and pry unit responses are multiplied by $260\,\mathrm{N}$), unit ring-traction T6 centroid response ($\mathrm{MPa/N}$, $10{,}334$ active cells and $14{,}875$ seated-region masked cells, scaled by $1500\,\mathrm{N}$ in the envelope), and unit chord-torsion response ($\mathrm{MPa/(N\,mm)}$, $25{,}209$ active cells, scaled by $1820\,\mathrm{N\,mm}$ in the envelope)---together with two auxiliary fields: per-element safety factor (dimensionless) and local element thickness ($\mathrm{mm}$). Figure~\ref{fig:plate-fields} displays the retained demand maps, while Figure~\ref{fig:saliency-crops} pairs the $\ge 90\%$ integrated-saliency local crops with whole-object picture-in-picture locators (and the unlit 2D 5-map percentile composite reference plate with contributor support $q(x)\in\{3/5,4/5,5/5\}$ is archived in the linked Technical Supplement, Section~\ref{sec:reproducibility}).
+The saved scalar is $F=74.207299$, with reported raster mass $101.139\,\mathrm{g}$ and solid-mass scalar $101.1384\,\mathrm{g}$. Several terms are clipped ratios, Boolean values or proxies. In particular, a stored solid or support term in this reporting vector does not establish a retained underlying CAD/solid assessment artifact. The retained directories lack Individual~2002's exported geometry and round populations; its saved qualification label is ``pending independent top-k assessment.'' Individual~2000 instead supplies the illustrated assessed geometry and response fields.
+
+For the assessed Individual~2000, the actual failed-branch score is $W_{\mathrm{CAD}}=-5.570408$. The same scorecard stores unpenalized quality $1.456983$; that is the hypothetical pass-branch value, not an additional achieved score. The Supplement gives the branch equations, input names and shortfall arithmetic. Those scores and $G_1$ remain separate from $F$ and native $f$.
+
+\subsection{Context and Display Direction}
+Native fitness includes novelty computed against contemporaneous population/archive descriptors. A value can therefore change when its context changes, even if the genome does not. Birth scores and later membership observations also have distinct stages. Cross-generation or cross-run maxima describe retained contextual preference; they do not isolate a physical improvement. The historical and newer native implementations/configurations require separate provenance even when both call their scalar $f$.
+
+A display loss $L=-f$, $100-F$, or $-W_{\mathrm{CAD}}$ reverses numerical order. Minimizing it preserves the original preference for a larger native score. It does not make those different profiles comparable. A cumulative maximum is monotone by construction, so its corresponding loss is nonincreasing by construction; that fact alone is not evidence of continuing physical improvement.
+
+\subsection{Relative Field Summary and Physical-Unit Views}
+The hero summarizes retained fields of Individual~2000. For each active map, cells are sorted by stored magnitude and assigned the midpoint of their cumulative area interval. Equal stored values are processed in deterministic source-cell order, rather than pooled into one tied percentile. The active-map ranks are averaged at each cell, then the candidate's resulting minimum and maximum are linearly stretched to $[0,1]$ for display. This candidate-specific relative summary removes physical units. A color value of $0.8$ means neither $80\%$ safety nor an absolute $80$th percentile shared by other candidates.
+
+The five maps are the envelope, lateral, pry, ring and torsion arrays. Because the envelope is derived from the primitive responses, five contributors do not represent five independent tests. Ring/envelope masks vary the number of active contributors; the cover does not display a separate per-cell support map. Section~\ref{sec:verification} and the Supplement describe the actual support counts and primitive-only sensitivity.
+
+Figure~\ref{fig:plate-fields} retains four physical-unit maps; the fifth, in-plane tip pry, appears in Figure~\ref{fig:saliency-crops}C. Gray denotes producer-masked cells, not measured zero stress. Raw torsion has a large tip-patch peak, which remains distinct from the post-exclusion peak used by selected capacity calculations.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{plate-fields.png}
-\caption{Individual~2000 retained $0.25\,\mathrm{mm}^2$ plate arrays ($25{,}209$ triangles, $13{,}503$ nodes; single assessed export, 1 assessed, 0 qualified). A: multi-case stress envelope ($\mathrm{MPa}$). B: unit lateral bending response ($\mathrm{MPa/N}$). C: unit ring-traction response ($\mathrm{MPa/N}$). D: unit torsion response ($\mathrm{MPa/(N\,mm)}$). Gray cells denote producer-masked exclusions ($75$ tip cells in A; $14{,}875$ seated-ring cells in C), not zero physical stress.}
+\caption{Spatial concentration differs across Individual~2000's retained plate responses. A: scaled multi-case envelope (MPa). B: unit lateral response (MPa/N). C: unit ring traction (MPa/N). D: raw unit chord torsion (MPa/(N\,mm)). The plate has $25{,}209$ triangles; gray marks the envelope's 75 tip-excluded cells and ring field's $14{,}875$ seated cells. Tip pry, the fifth composite component, is shown separately in Figure~\ref{fig:saliency-crops}C. Each field keeps its own physical scale.}
 \label{fig:plate-fields}
 \end{figure*}
 
+% Integration gate: reconcile the following fractions/range wording with V's
+% final source-bound crop/over-range receipt and actual emitted SVG/PNG.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{JR_EI_P4_T04_fem_saliency_crops_and_locators.png}
-\caption{Individual~2000 $\ge 90\%$ area-weighted integrated-saliency local crops with whole-object picture-in-picture locators ($25{,}209$ triangles, $13{,}503$ nodes; Panels A--C): ring traction ($\mathrm{MPa/N}$), terminal blade-tip torsion ($\mathrm{MPa/(N\,mm)}$), and multi-case von Mises envelope ($\mathrm{MPa}$).}
+\caption{Individual~2000 retained response views with whole-object locators. A: ring traction (MPa/N). B: terminal chord torsion (MPa/(N\,mm)); this is a restricted terminal view, without a global $90\%$ coverage claim. C: in-plane tip-pry T6 centroid response (MPa/N), with stored peak $2.9181\,\mathrm{MPa/N}$. The raw torsion peak exceeds the post-exclusion capacity-scale range; its over-range treatment and full-range reference must be read together. Domains, masks and integration rules are distinguished in the Supplement; final achieved fractions require the bound emitted-domain receipt.}
 \label{fig:saliency-crops}
 \end{figure*}

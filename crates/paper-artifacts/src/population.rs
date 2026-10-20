@@ -337,12 +337,7 @@ pub fn recompute_w282_inheritance_ledger(root: &Path) -> Result<Value> {
 
     // Order children by (generation, id) and iterate their recorded parents in original order
     let mut ordered_children: Vec<u64> = min_hops.keys().copied().collect();
-    ordered_children.sort_by_key(|&id| {
-        (
-            births_by_id[&id]["gen"].as_u64().unwrap_or(0),
-            id,
-        )
-    });
+    ordered_children.sort_by_key(|&id| (births_by_id[&id]["gen"].as_u64().unwrap_or(0), id));
 
     let mut hop_limited_edges = Vec::new();
     let mut fourth_hop_induced_edges = Vec::new();
@@ -414,7 +409,9 @@ pub fn validate_inheritance_ledger(ledger: &Value) -> Result<Value> {
     let mut node_parents: BTreeMap<u64, Vec<u64>> = BTreeMap::new();
     let mut node_ids = BTreeSet::new();
     for n in nodes {
-        let id = n["public_id"].as_u64().ok_or("population: missing node public_id")?;
+        let id = n["public_id"]
+            .as_u64()
+            .ok_or("population: missing node public_id")?;
         let parents: Vec<u64> = n["recorded_parents"]
             .as_array()
             .ok_or("population: missing recorded_parents")?
@@ -434,7 +431,9 @@ pub fn validate_inheritance_ledger(ledger: &Value) -> Result<Value> {
         || node_parents.get(&526) != Some(&vec![413, 392])
         || node_parents.get(&1095) != Some(&vec![413, 526])
     {
-        return Err("population: recorded_parents for 413/526/1095 disagree with all_evals.json".into());
+        return Err(
+            "population: recorded_parents for 413/526/1095 disagree with all_evals.json".into(),
+        );
     }
 
     let edges = ledger["parent_child_gene_diffs"]
@@ -499,7 +498,9 @@ pub fn validate_inheritance_ledger(ledger: &Value) -> Result<Value> {
         .as_array()
         .ok_or("population: missing induced_subgraph_parent_child_gene_diffs")?;
     if induced.len() != 8 {
-        return Err("population: expected 8 directed parent-child edges in 7-node induced subgraph".into());
+        return Err(
+            "population: expected 8 directed parent-child edges in 7-node induced subgraph".into(),
+        );
     }
     let fourth_hop = ledger["fourth_hop_induced_closure_edges"]
         .as_array()
@@ -509,7 +510,9 @@ pub fn validate_inheritance_ledger(ledger: &Value) -> Result<Value> {
         || fourth_hop[0]["child_id"].as_u64() != Some(299)
         || fourth_hop[0]["changed_f64_gene_count"].as_u64() != Some(2)
     {
-        return Err("population: expected fourth-hop induced closure edge 174->299 (2/128 changed)".into());
+        return Err(
+            "population: expected fourth-hop induced closure edge 174->299 (2/128 changed)".into(),
+        );
     }
 
     Ok(json!({
@@ -810,20 +813,8 @@ fn render_population_newer_svg(t05_receipt: &Value) -> Result<String> {
             1321u64,
             136.0_f64,
         ),
-        (
-            "Plateau Search (4 runs)",
-            448u64,
-            379u64,
-            69u64,
-            196.0_f64,
-        ),
-        (
-            "Automatic Probe (1 run)",
-            7u64,
-            7u64,
-            0u64,
-            256.0_f64,
-        ),
+        ("Plateau Search (4 runs)", 448u64, 379u64, 69u64, 196.0_f64),
+        ("Automatic Probe (1 run)", 7u64, 7u64, 0u64, 256.0_f64),
     ];
 
     for (label_txt, total, screened, unscreened, ry) in fam_rows {
@@ -957,39 +948,28 @@ fn png_chunk(tag: &[u8; 4], data: &[u8], out: &mut Vec<u8>) {
     for &b in tag.iter().chain(data.iter()) {
         crc ^= b as u32;
         for _ in 0..8 {
-            crc = if crc & 1 != 0 { (crc >> 1) ^ 0xedb8_8320 } else { crc >> 1 };
+            crc = if crc & 1 != 0 {
+                (crc >> 1) ^ 0xedb8_8320
+            } else {
+                crc >> 1
+            };
         }
     }
     out.extend_from_slice(&(!crc).to_be_bytes());
 }
 
-fn encode_4bit_png_b64(w: usize, h: usize, bins: &[Value]) -> String {
+fn encode_point_png_b64(w: usize, h: usize, grid: &[u8]) -> String {
     let row_bytes = w.div_ceil(2);
-    let mut grid = vec![0u8; h * w];
-    for b in bins {
-        if let Some(arr) = b.as_array() {
-            let g = arr[0].as_u64().unwrap_or(0) as usize;
-            let yb = arr[1].as_u64().unwrap_or(0) as usize;
-            let leg = arr[2].as_u64().unwrap_or(0);
-            let pen = arr[3].as_u64().unwrap_or(0);
-            let tot = leg + pen;
-            if g < w && yb < h && tot > 0 {
-                let lvl = (((tot as f64).ln() / (500.0_f64).ln()) * 6.0).round().clamp(0.0, 6.0) as u8;
-                let idx = if leg >= pen { 1 + lvl } else { 8 + lvl };
-                let r = (h - 1) - yb;
-                grid[r * w + g] = idx;
-                if g + 1 == w - 1 {
-                    grid[r * w + g + 1] = idx;
-                }
-            }
-        }
-    }
     let mut raw = Vec::with_capacity(h * (1 + row_bytes));
     for r in 0..h {
         raw.push(0u8);
         for bx in 0..row_bytes {
             let p0 = grid[r * w + bx * 2] & 0x0f;
-            let p1 = if bx * 2 + 1 < w { grid[r * w + bx * 2 + 1] & 0x0f } else { 0 };
+            let p1 = if bx * 2 + 1 < w {
+                grid[r * w + bx * 2 + 1] & 0x0f
+            } else {
+                0
+            };
             raw.push((p0 << 4) | p1);
         }
     }
@@ -1015,10 +995,7 @@ fn encode_4bit_png_b64(w: usize, h: usize, bins: &[Value]) -> String {
     ihdr.extend_from_slice(&(h as u32).to_be_bytes());
     ihdr.extend_from_slice(&[4, 3, 0, 0, 0]);
     png_chunk(b"IHDR", &ihdr, &mut png);
-    let plte: [u8; 48] = [
-        248,250,252, 153,246,228, 94,234,212, 45,212,191, 20,184,166, 13,148,136, 15,118,110, 17,94,89,
-        203,213,225, 148,163,184, 100,116,139, 71,85,105, 51,65,85, 30,41,59, 15,23,42, 15,23,42,
-    ];
+    let plte: [u8; 6] = [248, 250, 252, 51, 65, 85];
     png_chunk(b"PLTE", &plte, &mut png);
     png_chunk(b"IDAT", &zlib, &mut png);
     png_chunk(b"IEND", &[], &mut png);
@@ -1030,154 +1007,442 @@ fn encode_4bit_png_b64(w: usize, h: usize, bins: &[Value]) -> String {
         let b2 = if c.len() > 2 { c[2] as usize } else { 0 };
         out.push(B64[b0 >> 2] as char);
         out.push(B64[((b0 & 3) << 4) | (b1 >> 4)] as char);
-        out.push(if c.len() > 1 { B64[((b1 & 15) << 2) | (b2 >> 6)] as char } else { '=' });
-        out.push(if c.len() > 2 { B64[b2 & 63] as char } else { '=' });
+        out.push(if c.len() > 1 {
+            B64[((b1 & 15) << 2) | (b2 >> 6)] as char
+        } else {
+            '='
+        });
+        out.push(if c.len() > 2 {
+            B64[b2 & 63] as char
+        } else {
+            '='
+        });
     }
     out
 }
 
+// A point operation occurs for every admitted row, including overlaps. The image
+// stores neutral occupancy, never density or a majority legal/penalty class.
+struct PointRaster {
+    width: usize,
+    height: usize,
+    x_domain: [f64; 2],
+    y_domain: [f64; 2],
+    pixels: Vec<u8>,
+    point_operations: u64,
+    overlap_operations: u64,
+    observed_x: [f64; 2],
+    observed_y: [f64; 2],
+}
+
+impl PointRaster {
+    fn new(width: usize, height: usize, x_domain: [f64; 2], y_domain: [f64; 2]) -> Result<Self> {
+        if width < 2
+            || height < 2
+            || x_domain
+                .iter()
+                .chain(y_domain.iter())
+                .any(|v| !v.is_finite())
+            || x_domain[0] > x_domain[1]
+            || y_domain[0] > y_domain[1]
+        {
+            return Err("population: invalid point-raster domain".into());
+        }
+        Ok(Self {
+            width,
+            height,
+            x_domain,
+            y_domain,
+            pixels: vec![0; width * height],
+            point_operations: 0,
+            overlap_operations: 0,
+            observed_x: [f64::INFINITY, f64::NEG_INFINITY],
+            observed_y: [f64::INFINITY, f64::NEG_INFINITY],
+        })
+    }
+
+    fn fraction(v: f64, domain: [f64; 2]) -> f64 {
+        if domain[0] == domain[1] {
+            0.5
+        } else {
+            (v - domain[0]) / (domain[1] - domain[0])
+        }
+    }
+
+    fn y_fraction(&self, y: f64) -> f64 {
+        Self::fraction(
+            y.asinh(),
+            [self.y_domain[0].asinh(), self.y_domain[1].asinh()],
+        )
+    }
+
+    fn paint(&mut self, x: f64, y: f64) -> Result<[usize; 2]> {
+        if !x.is_finite()
+            || !y.is_finite()
+            || x < self.x_domain[0]
+            || x > self.x_domain[1]
+            || y < self.y_domain[0]
+            || y > self.y_domain[1]
+        {
+            return Err(
+                format!("population: point outside full display domain: x={x}, y={y}").into(),
+            );
+        }
+        let px = (Self::fraction(x, self.x_domain) * (self.width - 1) as f64).round() as usize;
+        let py = self.height - 1 - (self.y_fraction(y) * (self.height - 1) as f64).round() as usize;
+        let pixel = &mut self.pixels[py * self.width + px];
+        self.overlap_operations += u64::from(*pixel != 0);
+        *pixel = 1;
+        self.point_operations += 1;
+        self.observed_x[0] = self.observed_x[0].min(x);
+        self.observed_x[1] = self.observed_x[1].max(x);
+        self.observed_y[0] = self.observed_y[0].min(y);
+        self.observed_y[1] = self.observed_y[1].max(y);
+        Ok([px, py])
+    }
+
+    fn receipt(&self) -> Result<Value> {
+        if self.point_operations == 0 {
+            return Err("population: empty numeric point panel".into());
+        }
+        Ok(json!({
+            "point_operations": self.point_operations,
+            "overlap_operations": self.overlap_operations,
+            "occupied_pixels": self.pixels.iter().filter(|&&p| p != 0).count(),
+            "raster_px": [self.width, self.height],
+            "x_display_domain": self.x_domain, "score_display_domain": self.y_domain,
+            "observed_x_extrema": self.observed_x, "observed_score_extrema": self.observed_y,
+            "vertical_transform": "asinh; ticks in original source values",
+            "pixel_sha256": sha256_bytes(&self.pixels),
+            "clipping": false, "jitter": false, "majority_class_replacement": false,
+            "point_color": "neutral occupancy; overlaps do not encode count"
+        }))
+    }
+}
+
+fn finite_point_number(v: &Value) -> Result<f64> {
+    v.as_f64()
+        .filter(|v| v.is_finite())
+        .ok_or_else(|| "population: missing/nonfinite point value".into())
+}
+
+fn point_bounds(values: impl Iterator<Item = f64>) -> Result<[f64; 2]> {
+    let mut bounds = [f64::INFINITY, f64::NEG_INFINITY];
+    for value in values {
+        if !value.is_finite() {
+            return Err("population: nonfinite point domain".into());
+        }
+        bounds[0] = bounds[0].min(value);
+        bounds[1] = bounds[1].max(value);
+    }
+    if !bounds[0].is_finite() {
+        return Err("population: missing numeric point domain".into());
+    }
+    Ok(bounds)
+}
+
+fn point_panel(
+    svg: &mut String,
+    raster: &PointRaster,
+    id: &str,
+    rect: [f64; 4],
+    x_label: &str,
+    y_label: &str,
+) {
+    let [x, y, width, height] = rect;
+    let encoded = encode_point_png_b64(raster.width, raster.height, &raster.pixels);
+    svg.push_str(&format!(
+        r##"<image id="{id}" x="{x}" y="{y}" width="{width}" height="{height}" preserveAspectRatio="none" data-numeric-scored-points="{}" data-point-operations="{}" data-excluded-or-invalid-points="0" href="data:image/png;base64,{encoded}"/><rect x="{x}" y="{y}" width="{width}" height="{height}" fill="none" stroke="#94a3b8"/>"##,
+        raster.point_operations, raster.point_operations
+    ));
+    for value in [
+        raster.y_domain[0],
+        ((raster.y_domain[0].asinh() + raster.y_domain[1].asinh()) / 2.0).sinh(),
+        raster.y_domain[1],
+    ] {
+        let ty = y + height * (1.0 - raster.y_fraction(value));
+        svg.push_str(&format!(r##"<text x="{}" y="{}" text-anchor="end" font-size="21" fill="#334155">{value:.4}</text>"##, x - 10.0, svg_coord(ty + 7.0)));
+    }
+    for value in [raster.x_domain[0], raster.x_domain[1]] {
+        let tx = x + width * PointRaster::fraction(value, raster.x_domain);
+        svg.push_str(&format!(r##"<text x="{}" y="{}" text-anchor="middle" font-size="21" fill="#334155">{value:.0}</text>"##, svg_coord(tx), y + height + 28.0));
+    }
+    svg.push_str(&format!(r##"<text x="{}" y="{}" text-anchor="middle" font-size="21" fill="#334155">{}</text><text x="{x}" y="{}" font-size="21" fill="#334155">{}</text>"##,
+        x + width / 2.0, y + height + 56.0, xml_escape(x_label), y - 12.0, xml_escape(y_label)));
+}
+
 fn render_population_latest_svg(
-    gen800_density: &Value,
-    scatter_cache: &Value,
+    root: &Path,
     births: &[Value],
     newer_rec: &Value,
-) -> Result<String> {
-    let mut s = String::with_capacity(520_000);
-    s.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1320" width="1200" height="1320" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif">"##);
-    s.push('\n');
-    s.push_str(r##"<rect width="1200" height="1320" fill="#f8fafc"/>"##);
-    s.push_str(r##"<rect x="20" y="16" width="1160" height="1288" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>"##);
-    s.push_str(r##"<text x="40" y="48" font-size="24" font-weight="700" fill="#0f172a">All-Record Population Scatter &amp; Upper-Score Detail Across Search Regimes</text>"##);
-    s.push_str(r##"<text x="40" y="78" font-size="21" fill="#475569">1,958,803 numeric scored + 1,390 unknown = 1,960,193 records (0 excluded; leg &gt;= pen bins)</text>"##);
-
-    crate::corpus::validate_gen800_scatter_cache(
-        scatter_cache,
-        crate::corpus::GEN800_POPULATION_INDEX_SHA256,
+    t05: &Value,
+) -> Result<(String, Value)> {
+    // Existing archive admission checks compressed/logical/source CSV hashes,
+    // per-run original IDs and complete row/generation/legal censuses before return.
+    let archive_root = crate::corpus::resolve_archive_path(
+        root,
+        "artifacts/versioned-evolution-archives-gen800-population-v1",
     )?;
-    let full_bins = scatter_cache["full_pixels_801x440"]
+    let mut native = PointRaster::new(1601, 641, [0.0, 800.0], [-215.0, 1.20])?;
+    let mut native_visits = 0u64;
+    let mut native_legal = 0u64;
+    let mut negative_legal = 0u64;
+    let mut visit_hash = Sha256::new();
+    let mut paint_hash = Sha256::new();
+    let mut run_visits: BTreeMap<usize, (u64, Sha256)> = BTreeMap::new();
+    let mut on_row =
+        |run_idx: usize, id: u64, generation: u64, fit: f64, legal: bool| -> Result<()> {
+            native_visits += 1;
+            for part in [
+                (run_idx as u64).to_le_bytes(),
+                id.to_le_bytes(),
+                generation.to_le_bytes(),
+                fit.to_bits().to_le_bytes(),
+            ] {
+                visit_hash.update(part);
+            }
+            visit_hash.update([u8::from(legal)]);
+            let pixel = native.paint(generation as f64, fit)?;
+            for part in [
+                (run_idx as u64).to_le_bytes(),
+                id.to_le_bytes(),
+                (pixel[0] as u64).to_le_bytes(),
+                (pixel[1] as u64).to_le_bytes(),
+            ] {
+                paint_hash.update(part);
+            }
+            let run = run_visits
+                .entry(run_idx)
+                .or_insert_with(|| (0, Sha256::new()));
+            run.0 += 1;
+            run.1.update(id.to_le_bytes());
+            native_legal += u64::from(legal);
+            negative_legal += u64::from(legal && fit < 0.0);
+            Ok(())
+        };
+    let admission = crate::corpus::verify_and_decode_gen800_archive_with_callback(
+        &archive_root,
+        Some(crate::corpus::GEN800_POPULATION_INDEX_SHA256),
+        None,
+        Some(&mut on_row),
+    )?;
+    if admission["full_archive_decoded"] != true
+        || admission["rows_decoded"] != native_visits
+        || native_visits != 1_954_560
+        || native.point_operations != native_visits
+        || native_legal != 754_236
+        || negative_legal != 610_051
+        || run_visits.len() != 10
+        || run_visits.values().any(|(count, _)| *count != 195_456)
+    {
+        return Err("population: native source visits and point operations disagree".into());
+    }
+    let index: Value = serde_json::from_slice(&crate::corpus::read_bounded_file(
+        &crate::corpus::resolve_safe_relpath(&archive_root, "index.gen800_population.sha256.json")?,
+        crate::corpus::HARD_SEGMENT_CEILING_BYTES,
+    )?)?;
+    let run_receipts: Vec<Value> = run_visits
+        .into_iter()
+        .map(|(ordinal, (count, ids))| {
+            json!({
+                "archive_run_ordinal": ordinal, "package_id": index["runs"][ordinal]["package_id"],
+                "original_id_order_sha256": format!("{:x}", ids.finalize()),
+                "records_visited": count, "point_operations": count
+            })
+        })
+        .collect();
+
+    let mut historical_points = Vec::with_capacity(births.len());
+    let mut historical_ids = BTreeSet::new();
+    let mut historical_hash = Sha256::new();
+    for row in births {
+        let id = row["id"]
+            .as_u64()
+            .ok_or("population: missing historical id")?;
+        let generation = row["gen"]
+            .as_u64()
+            .ok_or("population: missing historical generation")?;
+        let fit = finite_point_number(&row["fit"])?;
+        if !historical_ids.insert(id) {
+            return Err("population: duplicate historical id".into());
+        }
+        historical_points.push((id, generation, fit));
+    }
+    if historical_points.len() != 1_984 {
+        return Err("population: historical point census differs".into());
+    }
+    let mut historical = PointRaster::new(
+        441,
+        281,
+        point_bounds(historical_points.iter().map(|p| p.1 as f64))?,
+        point_bounds(historical_points.iter().map(|p| p.2))?,
+    )?;
+    for &(id, generation, fit) in &historical_points {
+        let pixel = historical.paint(generation as f64, fit)?;
+        for part in [
+            id.to_le_bytes(),
+            generation.to_le_bytes(),
+            fit.to_bits().to_le_bytes(),
+            (pixel[0] as u64).to_le_bytes(),
+            (pixel[1] as u64).to_le_bytes(),
+        ] {
+            historical_hash.update(part);
+        }
+    }
+
+    // Bind the existing raw joined screen reader to every admitted original pair.
+    // Its sorted birth-file index is the x identity, never a synthetic generation.
+    let pairs = t05["file_pairs"]
         .as_array()
-        .ok_or("missing full_pixels_801x440 in gen800_scatter_cache.v1.json")?;
-    let detail_bins = scatter_cache["detail_pixels_801x260"]
+        .ok_or("population: missing screen source pairs")?;
+    let mut pair_map = BTreeMap::new();
+    for pair in pairs {
+        let birth_path = pair["births_path"]
+            .as_str()
+            .ok_or("population: missing birth source path")?;
+        if pair_map.insert(birth_path, pair).is_some() {
+            return Err("population: duplicate admitted source pair".into());
+        }
+        for (path_key, hash_key) in [
+            ("births_path", "births_sha256"),
+            ("screen_path", "screen_sha256"),
+        ] {
+            let rel = pair[path_key]
+                .as_str()
+                .ok_or("population: missing source-pair path")?;
+            let bytes = crate::corpus::read_bounded_file(
+                &crate::corpus::resolve_safe_relpath(root, rel)?,
+                crate::corpus::HARD_SEGMENT_CEILING_BYTES,
+            )?;
+            if pair[hash_key].as_str() != Some(sha256_bytes(&bytes).as_str()) {
+                return Err(format!("population: unadmitted screen source bytes: {rel}").into());
+            }
+        }
+    }
+    if pair_map.len() != 57 {
+        return Err("population: screen source-pair census differs".into());
+    }
+    let source_pairs: Vec<Value> = pair_map.values().enumerate().map(|(i, pair)| json!({
+        "birth_file_ordinal": i + 1, "births_path": pair["births_path"], "births_sha256": pair["births_sha256"],
+        "screen_path": pair["screen_path"], "screen_sha256": pair["screen_sha256"]
+    })).collect();
+    let mut screen_points = Vec::new();
+    let mut proposal_keys = BTreeSet::new();
+    for row in newer_rec["screened_points"]
         .as_array()
-        .ok_or("missing detail_pixels_801x260 in gen800_scatter_cache.v1.json")?;
-    let b64_full = encode_4bit_png_b64(802, 440, full_bins);
-    let b64_detail = encode_4bit_png_b64(802, 260, detail_bins);
+        .ok_or("population: missing numeric screens")?
+    {
+        let file = row[0]
+            .as_u64()
+            .ok_or("population: missing screen file index")?;
+        let candidate = row[1]
+            .as_u64()
+            .ok_or("population: missing screen candidate index")?;
+        let deficit = finite_point_number(&row[2])?;
+        if file >= 57 || candidate == 0 || !proposal_keys.insert((file, candidate)) {
+            return Err("population: duplicate or invalid scored proposal identity".into());
+        }
+        screen_points.push((file, candidate, deficit));
+    }
+    if screen_points.len() != 2_259 {
+        return Err("population: scored screen census differs".into());
+    }
+    let mut screening = PointRaster::new(
+        441,
+        281,
+        [1.0, 57.0],
+        point_bounds(screen_points.iter().map(|p| p.2))?,
+    )?;
+    let mut screening_hash = Sha256::new();
+    for &(file, candidate, deficit) in &screen_points {
+        let pixel = screening.paint((file + 1) as f64, deficit)?;
+        for part in [
+            file.to_le_bytes(),
+            candidate.to_le_bytes(),
+            deficit.to_bits().to_le_bytes(),
+            (pixel[0] as u64).to_le_bytes(),
+            (pixel[1] as u64).to_le_bytes(),
+        ] {
+            screening_hash.update(part);
+        }
+    }
+    let unknown = newer_rec["unscreened_points"]
+        .as_array()
+        .ok_or("population: missing unknown proposals")?;
+    let mut unknown_hash = Sha256::new();
+    for row in unknown {
+        let file = row[0]
+            .as_u64()
+            .ok_or("population: missing unknown file index")?;
+        let candidate = row[1]
+            .as_u64()
+            .ok_or("population: missing unknown candidate index")?;
+        if file >= 57 || candidate == 0 || !proposal_keys.insert((file, candidate)) {
+            return Err("population: duplicate/overlapping unknown proposal identity".into());
+        }
+        unknown_hash.update(file.to_le_bytes());
+        unknown_hash.update(candidate.to_le_bytes());
+    }
+    if unknown.len() != 1_390 || proposal_keys.len() != 3_649 {
+        return Err("population: unknown proposal census differs".into());
+    }
 
-    // Panel A1: Full asinh(fit) scatter (x = 185..1145, y = 122..442)
-    s.push_str(r##"<text x="40" y="112" font-size="22" font-weight="700" fill="#0f172a">Panel A1 — Runs 2–11 Full asinh(fit) Scatter (1,954,560 Rows, 802×440 Bin Raster)</text>"##);
+    let receipt = json!({
+        "schema": "jarambit.population_point_rendering.v1",
+        "numeric_records_visited": native_visits + historical_points.len() as u64 + screen_points.len() as u64,
+        "numeric_point_operations": native.point_operations + historical.point_operations + screening.point_operations,
+        "selected_figure_universe": "ten retained native runs, historical births, joined numeric screens; unknown proposals in nonnumeric coverage row",
+        "excluded_numeric_records": 0,
+        "native": {"admission": admission, "source_visit_sha256": format!("{:x}", visit_hash.finalize()),
+            "paint_operation_sha256": format!("{:x}", paint_hash.finalize()),
+            "identity_namespace": "archive package_id + original CSV id; no cross-run deduplication",
+            "source_visit_hash_encoding": "ordered LE u64: run ordinal, original id, generation, f64 fit bits; u8 legal",
+            "paint_hash_encoding": "ordered LE u64: run ordinal, original id, raster x, raster y",
+            "runs": run_receipts, "legal_true_rows": native_legal, "legal_false_rows": native_visits - native_legal,
+            "legal_true_with_negative_fit": negative_legal, "raster": native.receipt()?},
+        "historical": {"source_path": HISTORICAL_ALL_EVALS_JSON_RELPATH,
+            "source_sha256": HISTORICAL_ALL_EVALS_JSON_SHA256,
+            "source_and_paint_sha256": format!("{:x}", historical_hash.finalize()), "raster": historical.receipt()?},
+        "screening": {"source_pairs": source_pairs, "identity_namespace": "original birth-file path + one-based candidate index",
+            "source_and_paint_sha256": format!("{:x}", screening_hash.finalize()), "raster": screening.receipt()?},
+        "unknown": {"records": unknown.len(), "numeric_point_operations": 0, "display": "nonnumeric coverage row; no invented score",
+            "source_identity_sha256": format!("{:x}", unknown_hash.finalize())}
+    });
+    let mut s = String::from(
+        r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1140" width="1200" height="1140" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"><rect width="1200" height="1140" fill="#ffffff"/>"##,
+    );
+    s.push_str(r##"<text x="40" y="42" font-size="25" font-weight="700" fill="#0f172a">Every Retained Scored Record, in Separate Source Profiles</text><text x="40" y="76" font-size="21" fill="#475569">1,958,803 source rows → 1,958,803 point operations; overlap is visible occupancy, not density.</text><text x="40" y="112" font-size="23" font-weight="700" fill="#0f172a">A / Runs 2–11 — 1,954,560 native contextual-fitness observations</text>"##);
+    point_panel(
+        &mut s,
+        &native,
+        "gen800-per-record-point-raster",
+        [185.0, 158.0, 960.0, 440.0],
+        "Recorded generation",
+        "Native contextual fitness (higher is better)",
+    );
+    s.push_str(r##"<text x="40" y="698" font-size="23" font-weight="700" fill="#0f172a">B / Run 1 — 1,984 historical births</text><text x="625" y="698" font-size="23" font-weight="700" fill="#0f172a">C / 2,259 joined numeric screens</text>"##);
+    point_panel(
+        &mut s,
+        &historical,
+        "historical-per-record-point-raster",
+        [135.0, 754.0, 440.0, 250.0],
+        "Recorded generation",
+        "Historical search fitness",
+    );
+    point_panel(
+        &mut s,
+        &screening,
+        "screening-per-record-point-raster",
+        [705.0, 754.0, 440.0, 250.0],
+        "Retained birth-file ordinal",
+        "Screen deficit (lower is better)",
+    );
+    s.push_str(r##"<text x="40" y="1088" font-size="21" fill="#92400e" data-unknown-band-points="1390">Coverage: 1,390 proposals lack a retained numeric screen value; no score is imputed.</text><text x="40" y="1120" font-size="21" fill="#475569">610,051 legal=true rows have fit &lt; 0; -10.0 &lt;= fit &lt; -2.0 observations remain in the full native domain.</text>"##);
     s.push_str(&format!(
-        r##"<image id="gen800-full-asinh-scatter-raster" x="185" y="122" width="960" height="320" preserveAspectRatio="none" image-rendering="pixelated" data-numeric-scored-points="1954560" data-unknown-band-points="0" data-excluded-or-invalid-points="0" data-raster-resolution="802x440" href="data:image/png;base64,{b64_full}"/>"##
+        "<metadata id=\"point-rendering-receipt\">{}</metadata></svg>\n",
+        xml_escape(&serde_json::to_string(&receipt)?)
     ));
-    s.push_str(r##"<rect x="185" y="122" width="960" height="320" fill="none" stroke="#94a3b8" stroke-width="1"/>"##);
-    let ymin_a = (-215.0_f64).asinh();
-    let ymax_a = (1.20_f64).asinh();
-    let map_a1_y = |fit: f64| -> f64 {
-        442.0 - ((fit.clamp(-215.0, 1.20).asinh() - ymin_a) / (ymax_a - ymin_a)) * 320.0
-    };
-    for (tv, tlbl) in [(-200.0, "-200.0"), (-10.0, "-10.0"), (-2.0, "-2.0"), (0.0, "0.0"), (1.144, "+1.144")] {
-        let ty = map_a1_y(tv);
-        s.push_str(&format!(
-            r##"<line x1="185" y1="{}" x2="1145" y2="{}" stroke="#cbd5e1" stroke-width="0.8" stroke-dasharray="3,3"/><text x="175" y="{}" text-anchor="end" font-size="21" fill="#334155">{tlbl}</text>"##,
-            svg_coord(ty), svg_coord(ty), svg_coord(ty + 7.0)
-        ));
-    }
-    if let Some(runs) = gen800_density["runs"].as_array() {
-        for (ri, run) in runs.iter().enumerate() {
-            let pub_run_id = run["public_run_id"].as_u64().unwrap_or((ri + 2) as u64);
-            let cum_arr = run["gen_cum_best_fit"].as_array().ok_or("missing gen_cum_best_fit")?;
-            let lmed_arr = run["gen_legal_median_fit"].as_array().ok_or("missing gen_legal_median_fit")?;
-            let mut cum_pts = Vec::new();
-            let mut lmed_seg = Vec::new();
-            for g in (0..=800usize).step_by(8) {
-                let gx = 185.0 + (g as f64 / 800.0) * 960.0;
-                if let Some(cb) = cum_arr.get(g).and_then(Value::as_f64) {
-                    cum_pts.push(format!("{},{}", svg_coord(gx), svg_coord(map_a1_y(cb))));
-                }
-                if let Some(lm) = lmed_arr.get(g).and_then(Value::as_f64) {
-                    lmed_seg.push(format!("{},{}", svg_coord(gx), svg_coord(map_a1_y(lm))));
-                } else if lmed_seg.len() >= 2 {
-                    s.push_str(&format!(r##"<polyline fill="none" stroke="#0284c7" stroke-width="1.2" points="{}"/>"##, lmed_seg.join(" ")));
-                    lmed_seg.clear();
-                } else {
-                    lmed_seg.clear();
-                }
-            }
-            if lmed_seg.len() >= 2 {
-                s.push_str(&format!(r##"<polyline id="run-{pub_run_id}-legal-median" fill="none" stroke="#0284c7" stroke-width="1.2" points="{}"/>"##, lmed_seg.join(" ")));
-            }
-            s.push_str(&format!(r##"<polyline id="run-{pub_run_id}-cum-best" fill="none" stroke="#0f172a" stroke-width="1.5" points="{}"/>"##, cum_pts.join(" ")));
-        }
-    }
-
-    // Panel A2: Upper-Score Linear Detail (x = 185..1145, y = 492..732)
-    s.push_str(r##"<text x="40" y="480" font-size="22" font-weight="700" fill="#0f172a">Panel A2 — Linear Detail [-0.60, +1.16] (727,077 Win + 1,227,483 Tail = 1,954,560)</text>"##);
-    s.push_str(&format!(
-        r##"<image id="gen800-upper-linear-detail-raster" x="185" y="492" width="960" height="240" preserveAspectRatio="none" image-rendering="pixelated" data-numeric-scored-points="727077" data-tail-strip-points="1227483" data-total-conserved-points="1954560" data-unknown-band-points="0" data-excluded-or-invalid-points="0" data-raster-resolution="802x260" href="data:image/png;base64,{b64_detail}"/>"##
-    ));
-    s.push_str(r##"<rect x="185" y="492" width="960" height="240" fill="none" stroke="#94a3b8" stroke-width="1"/>"##);
-    for (tv, tlbl) in [(-0.60, "-0.60"), (0.0, "0.00"), (0.50, "+0.50"), (1.00, "+1.00"), (1.144, "+1.144")] {
-        let ty = 724.0 - ((tv - (-0.60)) / (1.16 - (-0.60))) * 232.0;
-        s.push_str(&format!(
-            r##"<line x1="185" y1="{}" x2="1145" y2="{}" stroke="#cbd5e1" stroke-width="0.8" stroke-dasharray="3,3"/><text x="175" y="{}" text-anchor="end" font-size="21" fill="#334155">{tlbl}</text>"##,
-            svg_coord(ty), svg_coord(ty), svg_coord(ty + 7.0)
-        ));
-    }
-    for gtick in [0u64, 200, 400, 600, 800] {
-        let gx = 185.0 + (gtick as f64 / 800.0) * 960.0;
-        s.push_str(&format!(r##"<text x="{}" y="758" text-anchor="middle" font-size="21" fill="#334155">Gen {gtick}</text>"##, svg_coord(gx)));
-    }
-
-    // Panel B (left): Run 1 1,984 births (x = 135..575, y = 815..1145) & Panel C (right): 2,259 screened + 1,390 unknown band (x = 695..1145, y = 815..1145)
-    s.push_str(r##"<text x="40" y="798" font-size="22" font-weight="700" fill="#0f172a">Panel B — Run 1 (1,984 Births, 0 Unk.)</text>"##);
-    s.push_str(r##"<text x="585" y="798" font-size="22" font-weight="700" fill="#0f172a">Panel C — Screening (2,259 + 1,390 Unknown)</text>"##);
-    s.push_str(r##"<rect id="panel-b-run1-scatter" data-numeric-scored-points="1984" data-unknown-band-points="0" data-excluded-or-invalid-points="0" x="135" y="815" width="440" height="330" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>"##);
-    for b in births {
-        let id = b["id"].as_u64().unwrap_or(0);
-        let g = b["gen"].as_u64().unwrap_or(0);
-        let fit = b["fit"].as_f64().unwrap_or(0.0);
-        let bx = 145.0 + (g as f64 / 16.0) * 420.0 + ((id % 19) as f64 - 9.0) * 0.35;
-        let by = 1135.0 - ((fit.clamp(-215.0, 1.20).asinh() - ymin_a) / (ymax_a - ymin_a)) * 310.0;
-        let col = if b["legal"].as_bool() == Some(true) { "#0d9488" } else { "#64748b" };
-        s.push_str(&format!(r##"<circle cx="{}" cy="{}" r="1.8" fill="{col}" fill-opacity="0.7"/>"##, svg_coord(bx), svg_coord(by)));
-    }
-    s.push_str(r##"<text x="125" y="835" text-anchor="end" font-size="21" fill="#334155">+1.16</text><text x="125" y="1138" text-anchor="end" font-size="21" fill="#334155">-200</text>"##);
-    s.push_str(r##"<text x="145" y="1172" font-size="21" fill="#334155">G0</text><text x="535" y="1172" font-size="21" fill="#334155">G16</text>"##);
-
-    s.push_str(r##"<rect id="panel-c-newer-scatter" data-numeric-scored-points="2259" data-unknown-band-points="1390" data-excluded-or-invalid-points="0" x="695" y="815" width="450" height="245" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>"##);
-    s.push_str(r##"<rect id="panel-c-unknown-band" data-unknown-band-points="1390" x="695" y="1070" width="450" height="75" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>"##);
-    if let Some(scr) = newer_rec["screened_points"].as_array() {
-        for pt in scr {
-            if let Some(arr) = pt.as_array() {
-                let fidx = arr[0].as_u64().unwrap_or(0);
-                let cidx = arr[1].as_u64().unwrap_or(0);
-                let def = arr[2].as_f64().unwrap_or(0.0);
-                let px = 705.0 + (fidx as f64 / 56.0) * 430.0 + ((cidx % 11) as f64 - 5.0) * 0.25;
-                let py = 825.0 + ((def.clamp(0.0, 25.0).asinh()) / (25.0_f64).asinh()) * 225.0;
-                s.push_str(&format!(r##"<circle cx="{}" cy="{}" r="1.7" fill="#0284c7" fill-opacity="0.65"/>"##, svg_coord(px), svg_coord(py)));
-            }
-        }
-    }
-    if let Some(unscr) = newer_rec["unscreened_points"].as_array() {
-        for pt in unscr {
-            if let Some(arr) = pt.as_array() {
-                let fidx = arr[0].as_u64().unwrap_or(0);
-                let cidx = arr[1].as_u64().unwrap_or(0);
-                let px = 705.0 + (fidx as f64 / 56.0) * 430.0;
-                let py = 1102.0 + ((cidx % 17) as f64) * 2.2;
-                s.push_str(&format!(r##"<circle cx="{}" cy="{}" r="1.5" fill="#d97706" fill-opacity="0.65"/>"##, svg_coord(px), svg_coord(py)));
-            }
-        }
-    }
-    s.push_str(r##"<text x="920" y="1095" text-anchor="middle" font-size="21" font-weight="700" fill="#92400e">Unknown Band (1,390 unscreened)</text>"##);
-    s.push_str(r##"<text x="685" y="835" text-anchor="end" font-size="21" fill="#334155">0.0</text><text x="685" y="1055" text-anchor="end" font-size="21" fill="#334155">-25</text>"##);
-    s.push_str(r##"<text x="705" y="1172" font-size="21" fill="#334155">F1</text><text x="1105" y="1172" font-size="21" fill="#334155">F57</text>"##);
-
-    s.push_str(r##"<text x="40" y="1208" font-size="21" fill="#475569">Runs 2–11: 1,954,560 rows (610,051 legal=true rows have fit &lt; 0; -10.0 &lt;= fit &lt; -2.0 band retained)</text>"##);
-    s.push_str(r##"<text x="40" y="1236" font-size="21" fill="#475569">+ 1,984 (Run 1) + 2,259 screened = 1,958,803 scored; + 1,390 unknown = 1,960,193 (0 excluded).</text>"##);
-    s.push_str(r##"<text x="40" y="1264" font-size="21" fill="#475569">802×440 &amp; 802×260 rasters aggregate bin counts (leg &gt;= pen majority color; minority hidden).</text>"##);
-    s.push_str(r##"<text x="40" y="1292" font-size="21" fill="#475569">Separate non-birth logs: 9 aborted runs (216 rows) and 11 staged V2 summaries (17,672 rows).</text>"##);
-    s.push_str("</svg>\n");
-    Ok(s)
+    Ok((s, receipt))
 }
 
 pub const W411C3_FITNESS_CURVE_RELPATH: &str =
@@ -1218,11 +1483,15 @@ fn render_fitness_progress_svg(
     for b in births {
         let g = b["gen"].as_u64().unwrap_or(0) as usize;
         let f = b["fit"].as_f64().unwrap_or(-1e9);
-        if f > g_max[g] { g_max[g] = f; }
+        if f > g_max[g] {
+            g_max[g] = f;
+        }
     }
     let (mut cum_pts, mut gen_pts, mut cur_best) = (Vec::new(), Vec::new(), -1e9_f64);
     for g in 0..17usize {
-        if g_max[g] > cur_best { cur_best = g_max[g]; }
+        if g_max[g] > cur_best {
+            cur_best = g_max[g];
+        }
         let tx = ax0 + (g as f64 / 16.0) * (ax1 - ax0);
         let (cy_cum, cy_gen) = (map_ay(cur_best), map_ay(g_max[g]));
         cum_pts.push(format!("{},{}", svg_coord(tx), svg_coord(cy_cum)));
@@ -1245,11 +1514,16 @@ fn render_fitness_progress_svg(
         let ty = map_by(yv);
         s.push_str(&format!(r##"<line x1="{}" y1="{}" x2="{}" y2="{}" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/><text x="{}" y="{}" text-anchor="end" font-size="21" fill="#475569">{yv:.1}</text>"##, svg_coord(ax0), svg_coord(ty), svg_coord(ax1), svg_coord(ty), svg_coord(ax0 - 8.0), svg_coord(ty + 7.0)));
     }
-    let gen_rows = w411c3_curve["generations"].as_array().ok_or("missing generations")?;
-    let (mut hof_pts, mut rnd_pts, mut parsed_rows) = (Vec::new(), Vec::new(), Vec::with_capacity(3));
+    let gen_rows = w411c3_curve["generations"]
+        .as_array()
+        .ok_or("missing generations")?;
+    let (mut hof_pts, mut rnd_pts, mut parsed_rows) =
+        (Vec::new(), Vec::new(), Vec::with_capacity(3));
     for (idx, row) in gen_rows.iter().enumerate() {
         let gen = row["generation"].as_u64().ok_or("missing generation")?;
-        let hof = row["hall_of_fame_best_so_far"].as_f64().ok_or("missing hof")?;
+        let hof = row["hall_of_fame_best_so_far"]
+            .as_f64()
+            .ok_or("missing hof")?;
         let rnd = row["round_best_fitness"].as_f64().ok_or("missing rnd")?;
         parsed_rows.push((gen, hof, rnd));
         let tx = ax0 + (gen as f64 / 2.0) * (ax1 - ax0);
@@ -1261,7 +1535,8 @@ fn render_fitness_progress_svg(
         s.push_str(&format!(r##"<circle id="run31-gen{gen}-round" data-run="Run 31" data-series="round_best_fitness" data-source-sha256="{w411c3_sha256}" data-source-pointer="/generations/{idx}/round_best_fitness" data-generation="{gen}" data-value="{rnd:.6}" cx="{}" cy="{}" r="3.2" fill="#d97706"/>"##, svg_coord(tx), svg_coord(ty_rnd)));
     }
     s.push_str(&format!(r##"<polyline fill="none" stroke="#0d9488" stroke-width="2.4" points="{}"/><polyline fill="none" stroke="#d97706" stroke-width="2.0" stroke-dasharray="4,3" points="{}"/>"##, hof_pts.join(" "), rnd_pts.join(" ")));
-    let ((_, g0_hof, g0_rnd), (_, g1_hof, g1_rnd), (_, g2_hof, g2_rnd)) = (parsed_rows[0], parsed_rows[1], parsed_rows[2]);
+    let ((_, g0_hof, g0_rnd), (_, g1_hof, g1_rnd), (_, g2_hof, g2_rnd)) =
+        (parsed_rows[0], parsed_rows[1], parsed_rows[2]);
     s.push_str(r##"<rect x="505" y="420" width="655" height="220" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
     s.push_str(r##"<text x="518" y="448" font-size="21" font-weight="700" fill="#0f172a">Cohort 2 Selected Run 31 Summary (Retained Profile)</text>"##);
     s.push_str(&format!(r##"<text x="518" y="478" font-size="21" fill="#334155">• Gen 0 (Ind 2009): archive {g0_hof:.6} / round {g0_rnd:.6}</text>"##));
@@ -1282,18 +1557,47 @@ fn render_fitness_progress_svg(
         let tx = ax0 + (gv as f64 / 800.0) * (ax1 - ax0);
         s.push_str(&format!(r##"<text x="{}" y="{}" text-anchor="middle" font-size="21" fill="#475569">G{gv}</text>"##, svg_coord(tx), svg_coord(cy1 + 26.0)));
     }
-    let (mut g0_lmed_min, mut g0_lmed_max, mut g0_non_null, mut all_lmed_min, mut g800_lmed_min, mut g800_lmed_max) = (f64::INFINITY, f64::NEG_INFINITY, 0usize, f64::INFINITY, f64::INFINITY, f64::NEG_INFINITY);
+    let (
+        mut g0_lmed_min,
+        mut g0_lmed_max,
+        mut g0_non_null,
+        mut all_lmed_min,
+        mut g800_lmed_min,
+        mut g800_lmed_max,
+    ) = (
+        f64::INFINITY,
+        f64::NEG_INFINITY,
+        0usize,
+        f64::INFINITY,
+        f64::INFINITY,
+        f64::NEG_INFINITY,
+    );
     if let Some(runs) = gen800_density["runs"].as_array() {
         for run in runs {
-            let cum_arr = run["gen_cum_best_fit"].as_array().ok_or("missing gen_cum_best_fit")?;
-            let lmed_arr = run["gen_legal_median_fit"].as_array().ok_or("missing gen_legal_median_fit")?;
-            if let Some(v0) = lmed_arr.first().and_then(Value::as_f64) { g0_non_null += 1; g0_lmed_min = g0_lmed_min.min(v0); g0_lmed_max = g0_lmed_max.max(v0); }
-            for lv in lmed_arr.iter().filter_map(Value::as_f64) { all_lmed_min = all_lmed_min.min(lv); }
-            if let Some(v800) = lmed_arr.get(800).and_then(Value::as_f64) { g800_lmed_min = g800_lmed_min.min(v800); g800_lmed_max = g800_lmed_max.max(v800); }
+            let cum_arr = run["gen_cum_best_fit"]
+                .as_array()
+                .ok_or("missing gen_cum_best_fit")?;
+            let lmed_arr = run["gen_legal_median_fit"]
+                .as_array()
+                .ok_or("missing gen_legal_median_fit")?;
+            if let Some(v0) = lmed_arr.first().and_then(Value::as_f64) {
+                g0_non_null += 1;
+                g0_lmed_min = g0_lmed_min.min(v0);
+                g0_lmed_max = g0_lmed_max.max(v0);
+            }
+            for lv in lmed_arr.iter().filter_map(Value::as_f64) {
+                all_lmed_min = all_lmed_min.min(lv);
+            }
+            if let Some(v800) = lmed_arr.get(800).and_then(Value::as_f64) {
+                g800_lmed_min = g800_lmed_min.min(v800);
+                g800_lmed_max = g800_lmed_max.max(v800);
+            }
             let (mut cpts, mut mpts) = (Vec::new(), Vec::new());
             for g in (0..=800usize).step_by(10) {
                 let tx = ax0 + (g as f64 / 800.0) * (ax1 - ax0);
-                if let Some(cb) = cum_arr.get(g).and_then(Value::as_f64) { cpts.push(format!("{},{}", svg_coord(tx), svg_coord(map_cy(cb)))); }
+                if let Some(cb) = cum_arr.get(g).and_then(Value::as_f64) {
+                    cpts.push(format!("{},{}", svg_coord(tx), svg_coord(map_cy(cb))));
+                }
                 if let Some(lm) = lmed_arr.get(g).and_then(Value::as_f64) {
                     mpts.push(format!("{},{}", svg_coord(tx), svg_coord(map_cy(lm))));
                 } else if mpts.len() >= 2 {
@@ -1303,7 +1607,9 @@ fn render_fitness_progress_svg(
                     mpts.clear();
                 }
             }
-            if mpts.len() >= 2 { s.push_str(&format!(r##"<polyline fill="none" stroke="#0284c7" stroke-width="1.2" stroke-opacity="0.65" points="{}"/>"##, mpts.join(" "))); }
+            if mpts.len() >= 2 {
+                s.push_str(&format!(r##"<polyline fill="none" stroke="#0284c7" stroke-width="1.2" stroke-opacity="0.65" points="{}"/>"##, mpts.join(" ")));
+            }
             s.push_str(&format!(r##"<polyline fill="none" stroke="#0f172a" stroke-width="1.4" stroke-opacity="0.75" points="{}"/>"##, cpts.join(" ")));
         }
     }
@@ -1424,7 +1730,13 @@ fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
             .get(&id)
             .map(|(a, b)| (a.as_str(), b.as_str()))
             .unwrap_or(("Individual ?", ""));
-        let fill = if id == 1095 { "#0f172a" } else if id == 413 { "#0d9488" } else { "#0284c7" };
+        let fill = if id == 1095 {
+            "#0f172a"
+        } else if id == 413 {
+            "#0d9488"
+        } else {
+            "#0284c7"
+        };
         s.push_str(&format!(
             r##"<rect id="node-{id}" x="{}" y="{}" width="516" height="58" rx="6" fill="{fill}"/>"##,
             svg_coord(cx - 258.0), svg_coord(cy - 29.0)
@@ -1435,13 +1747,15 @@ fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
         ));
         s.push_str(&format!(
             r##"<text x="{}" y="{}" text-anchor="middle" font-size="21" fill="#e2e8f0">{}</text>"##,
-            svg_coord(cx), svg_coord(cy + 21.0), xml_escape(l2)
+            svg_coord(cx),
+            svg_coord(cy + 21.0),
+            xml_escape(l2)
         ));
     }
 
     // Bottom panel: 128-gene diff bars + lineage disclosure (x = 40..1160, y = 650..1126)
     s.push_str(r##"<rect x="40" y="650" width="1120" height="476" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>"##);
-    s.push_str(r##"<text x="60" y="684" font-size="22" font-weight="700" fill="#0f172a">Directed Edge Coordinate Changes Across 128 Continuous Genes (Δ != 0)</text>"##);
+    s.push_str(r##"<text x="60" y="684" font-size="22" font-weight="700" fill="#0f172a">Directed Edge Changes Across 128 Numeric Coordinates (Δ != 0)</text>"##);
 
     if let Some(edges) = inheritance_ledger["induced_subgraph_parent_child_gene_diffs"].as_array() {
         for (i, e) in edges.iter().enumerate() {
@@ -1454,7 +1768,11 @@ fn render_inheritance_svg(inheritance_ledger: &Value) -> Result<String> {
             let ry = 702.0 + (i as f64) * 36.0;
             let w_chg = (chg as f64 / 128.0) * 320.0;
             let w_id = (iden as f64 / 128.0) * 320.0;
-            let edge_lbl = if within3 { format!("{p} → {c}") } else { format!("{p} → {c}*") };
+            let edge_lbl = if within3 {
+                format!("{p} → {c}")
+            } else {
+                format!("{p} → {c}*")
+            };
             s.push_str(&format!(
                 r##"<text x="60" y="{}" font-size="21" font-weight="600" fill="#1e293b">{}</text><rect x="210" y="{}" width="{}" height="22" fill="#0d9488"/><rect x="{}" y="{}" width="{}" height="22" fill="#cbd5e1"/><text x="550" y="{}" font-size="21" fill="#334155">{chg}/128 changed (L2 = {l2:.3})</text>"##,
                 svg_coord(ry + 18.0), xml_escape(&edge_lbl), svg_coord(ry), svg_coord(w_chg), svg_coord(210.0 + w_chg), svg_coord(ry), svg_coord(w_id), svg_coord(ry + 18.0)
@@ -1664,7 +1982,8 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
             ));
         }
     }
-    let mut stl_vis: Vec<(f64, [(f64, f64); 3], [u8; 3])> = Vec::with_capacity(raw_tris.len() / 2 + 1024);
+    let mut stl_vis: Vec<(f64, [(f64, f64); 3], [u8; 3])> =
+        Vec::with_capacity(raw_tris.len() / 2 + 1024);
     for (n_vec, [v0, v1, v2]) in raw_tris {
         let (nx, ny, nz) = (n_vec[0], n_vec[1], n_vec[2]);
         // Under R = R_z(-6 deg) * R_x(180 deg), posed z is -z
@@ -1709,7 +2028,15 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
         let p0 = pose_xy(v0[0], v0[1]);
         let p1 = pose_xy(v1[0], v1[1]);
         let p2 = pose_xy(v2[0], v2[1]);
-        stl_vis.push((czp, [to_svg(p0[0], p0[1]), to_svg(p1[0], p1[1]), to_svg(p2[0], p2[1])], rgb));
+        stl_vis.push((
+            czp,
+            [
+                to_svg(p0[0], p0[1]),
+                to_svg(p1[0], p1[1]),
+                to_svg(p2[0], p2[1]),
+            ],
+            rgb,
+        ));
     }
     stl_vis.sort_by(|a, b| a.0.total_cmp(&b.0));
 
@@ -1717,7 +2044,6 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     s.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 680" width="1600" height="680" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif">"##);
     s.push('\n');
     s.push_str(r##"<rect width="1600" height="680" fill="#ffffff"/>"##);
-    s.push_str(r##"<rect x="14" y="12" width="1572" height="656" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>"##);
     s.push_str(r##"<text x="36" y="44" font-size="25" font-weight="700" fill="#0f172a">Individual 2000 — Exact 3D CAD Surface &amp; Registered 5-Map Structural Demand Index (D1)</text>"##);
     s.push_str(r##"<text x="36" y="72" font-size="21" fill="#334155">Exact STL (44,994 vertices, 90,000 triangles; 0 modifiers) · Proper SO(3) Pose (det = +1.0) · 25,209-Triangle D1 Composite</text>"##);
 
@@ -1736,14 +2062,20 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
         if cnt == 1 {
             let (x1, y1) = to_svg(posed_nodes[u][0], posed_nodes[u][1]);
             let (x2, y2) = to_svg(posed_nodes[v][0], posed_nodes[v][1]);
-            let _ = write!(s, "<line x1=\"{x1:.2}\" y1=\"{y1:.2}\" x2=\"{x2:.2}\" y2=\"{y2:.2}\"/>");
+            let _ = write!(
+                s,
+                "<line x1=\"{x1:.2}\" y1=\"{y1:.2}\" x2=\"{x2:.2}\" y2=\"{y2:.2}\"/>"
+            );
         }
     }
     s.push_str("</g>\n");
 
     // 4.0 mm tip-exclusion dashed circle
     if let Some(tip_arr) = d1["export_surface"]["tip"].as_array() {
-        let tp = pose_xy(tip_arr[0].as_f64().unwrap_or(0.0), tip_arr[1].as_f64().unwrap_or(0.0));
+        let tp = pose_xy(
+            tip_arr[0].as_f64().unwrap_or(0.0),
+            tip_arr[1].as_f64().unwrap_or(0.0),
+        );
         let (tx, ty) = to_svg(tp[0], tp[1]);
         let r_px = 4.0 * scale;
         let _ = writeln!(
@@ -1755,7 +2087,7 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     }
 
     // High-contrast sequential colorbar + readable dark legend & scale bar
-    s.push_str(r##"<text x="36" y="596" font-size="21" font-weight="700" fill="#0f172a">5-Map Percentile Composite Index [0, 1] (env_vm, lat, pry, ring, twist)</text>"##);
+    s.push_str(r##"<text x="36" y="596" font-size="21" font-weight="700" fill="#0f172a">5-Map Relative Composite Index [0, 1] (env_vm, lat, pry, ring, twist)</text>"##);
     let cb_x0 = 36.0_f64;
     let cb_w = 640.0_f64;
     let n_steps = 80usize;
@@ -1777,11 +2109,12 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
         (0.72, "0.75", "middle"),
         (1.00, "1.00 (Peak)", "end"),
     ] {
-        let tick_x = cb_x0 + (match lbl {
-            "0.25" => 0.25,
-            "0.75" => 0.75,
-            _ => frac,
-        }) * cb_w;
+        let tick_x = cb_x0
+            + (match lbl {
+                "0.25" => 0.25,
+                "0.75" => 0.75,
+                _ => frac,
+            }) * cb_w;
         let text_x = cb_x0 + frac * cb_w;
         let _ = write!(
             s,
@@ -1877,8 +2210,9 @@ pub fn generate_v2_outputs(
     // Read retained original w411c3 fitness_curve.json and cross-verify against score_profiles.v1.json
     let w411c3_curve: Value =
         serde_json::from_slice(&fs::read(root.join(W411C3_FITNESS_CURVE_RELPATH))?)?;
-    let score_profiles: Value =
-        serde_json::from_slice(&fs::read(root.join("docs/paper/data/score_profiles.v1.json"))?)?;
+    let score_profiles: Value = serde_json::from_slice(&fs::read(
+        root.join("docs/paper/data/score_profiles.v1.json"),
+    )?)?;
     let sp_w411_pts = score_profiles["progress_series"]
         .as_array()
         .and_then(|arr| {
@@ -1945,13 +2279,23 @@ pub fn generate_v2_outputs(
     )?)?;
     let scatter_cache_rel = "docs/paper/generated/population/gen800_scatter_cache.v1.json";
     let scatter_cache_bytes = fs::read(root.join(scatter_cache_rel))?;
-    inputs.insert(scatter_cache_rel.to_string(), sha256_bytes(&scatter_cache_bytes));
-    let scatter_cache: Value = serde_json::from_slice(&scatter_cache_bytes)?;
+    inputs.insert(
+        scatter_cache_rel.to_string(),
+        sha256_bytes(&scatter_cache_bytes),
+    );
 
     let svg_births = render_population_births_svg(&births)?;
     let svg_membership = render_population_membership_svg(&hist_rec)?;
     let svg_newer = render_population_newer_svg(&t05)?;
-    let svg_latest = render_population_latest_svg(&gen800_density, &scatter_cache, &births, &newer_rec)?;
+    let (svg_latest, mut point_receipt) =
+        render_population_latest_svg(root, &births, &newer_rec, &t05)?;
+    point_receipt["figure_sha256"] = json!(sha256_bytes(svg_latest.as_bytes()));
+    let point_receipt_json = serde_json::to_string_pretty(&point_receipt)? + "\n";
+    let point_receipt_sha = sha256_bytes(point_receipt_json.as_bytes());
+    out.insert(
+        "docs/paper/generated/population/point-rendering.v1.json".into(),
+        point_receipt_json,
+    );
     let svg_fitness = render_fitness_progress_svg(
         &births,
         &w411c3_curve,
@@ -1959,8 +2303,12 @@ pub fn generate_v2_outputs(
         &gen800_density,
     )?;
     let svg_inheritance = render_inheritance_svg(&inheritance_ledger)?;
+    let svg_hero = render_hero_exact_cad_svg(root)?;
 
-    out.insert("docs/paper/figures/population-births.svg".into(), svg_births);
+    out.insert(
+        "docs/paper/figures/population-births.svg".into(),
+        svg_births,
+    );
     out.insert(
         "docs/paper/figures/population-membership.svg".into(),
         svg_membership,
@@ -1974,9 +2322,10 @@ pub fn generate_v2_outputs(
         "docs/paper/figures/fitness-progress.svg".into(),
         svg_fitness,
     );
+    out.insert("docs/paper/figures/inheritance.svg".into(), svg_inheritance);
     out.insert(
-        "docs/paper/figures/inheritance.svg".into(),
-        svg_inheritance,
+        "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg".into(),
+        svg_hero,
     );
 
     let fig_hashes: BTreeMap<String, String> = [
@@ -1986,6 +2335,7 @@ pub fn generate_v2_outputs(
         "docs/paper/figures/population-latest.svg",
         "docs/paper/figures/fitness-progress.svg",
         "docs/paper/figures/inheritance.svg",
+        "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg",
     ]
     .iter()
     .map(|&k| (k.to_string(), sha256_bytes(out[k].as_bytes())))
@@ -2083,7 +2433,7 @@ pub fn generate_v2_outputs(
 
     let overview_md = format!(
         "# Multi-Cohort Population & Evidence Overview (Generated by `crates/paper-artifacts`)\n\n\
-         - **Generator:** `cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts` (`--check` verified)\n\
+         - **Generator:** `cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts` (`--check` is a separate validation command)\n\
          - **Qualification posture (`evidence/evolve_certifiable/automatic/leaderboard.json`):** `assessed_count = 1`, `qualified_count = 0`, `champion = null`. In Cohort 1, top-ranked `Individual 1095` (`fit = +1.157270`) later failed strict assessment (`cert_pass_all = false`); in Cohorts 2 and 3, per-birth Stage-2 3D solid/plate certification records are absent from the retained search logs.\n\
          - **Cohort 1 (Historical 17-Gen Reconstruction, `Run 1`):** `1,984` unique births (`1,455` FEM-complete + `529` not-evaluated; `446` legal), `2,176` membership occurrences (`192` elite reappearances; `9` duplicate slot keys), `12` ring migrations at **`G4 / G8 / G12`** (`Island 1→2, 2→3, 3→4, 4→1`, source `island: 0..3`, `24` copied IDs), `1,965` distinct 129-column gene+material serializations.\n\
          - **Cohort 2 (Intermediate Screening Corpus):** `57` birth files across `24` run directories = `3,649` birth events (`2,259` 1-based joined screen rows + `1,390` unscreened birth events; `2,247` 0-based misjoins rejected). Selected reporting series `Run 31` (`{W411C3_FITNESS_CURVE_RELPATH}`, `sha256: {W411C3_FITNESS_CURVE_SHA256}`) records 20-term weighted profile `F = 74.207299 / 100.0` (`30%` mass/compactness `15.470`, `25%` form/comfort `23.875`, `15%` exported geometry `11.841`, `30%` response/verification `23.022`) with `hall_of_fame_best_so_far = [74.167488, 74.207299, 74.207299]` and `round_best_fitness = [74.167488, 74.207299, 73.608446]` (`Individual 2009` at Gen 0, `Individual 2002` at Gen 1–2).\n\
@@ -2130,8 +2480,10 @@ pub fn generate_v2_outputs(
             "docs/paper/figures/population-membership.svg": fig_hashes["docs/paper/figures/population-membership.svg"],
             "docs/paper/figures/population-newer.svg": fig_hashes["docs/paper/figures/population-newer.svg"],
             "docs/paper/figures/population-latest.svg": fig_hashes["docs/paper/figures/population-latest.svg"],
+            "docs/paper/generated/population/point-rendering.v1.json": point_receipt_sha,
             "docs/paper/figures/fitness-progress.svg": fig_hashes["docs/paper/figures/fitness-progress.svg"],
             "docs/paper/figures/inheritance.svg": fig_hashes["docs/paper/figures/inheritance.svg"],
+            "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg": fig_hashes["docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg"],
             "docs/paper/generated/shared_projection.v2.json": shared_proj_sha,
             "docs/paper/generated/overview.md": overview_sha
         }
@@ -2147,6 +2499,137 @@ pub fn generate_v2_outputs(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn point_raster_oracle_retains_extrema_and_counts_overlapping_operations() {
+        // Explicit independent 5x5 oracle: corners and origin, with one overlap.
+        let mut raster =
+            PointRaster::new(5, 5, [0.0, 4.0], [-2.0_f64.sinh(), 2.0_f64.sinh()]).unwrap();
+        assert_eq!(raster.paint(0.0, -2.0_f64.sinh()).unwrap(), [0, 4]);
+        assert_eq!(raster.paint(4.0, 2.0_f64.sinh()).unwrap(), [4, 0]);
+        assert_eq!(raster.paint(2.0, 0.0).unwrap(), [2, 2]);
+        assert_eq!(raster.paint(2.0, 0.0).unwrap(), [2, 2]);
+        let mut expected = vec![0u8; 25];
+        expected[20] = 1;
+        expected[4] = 1;
+        expected[12] = 1;
+        assert_eq!(raster.pixels, expected);
+        let receipt = raster.receipt().unwrap();
+        assert_eq!(receipt["point_operations"], 4);
+        assert_eq!(receipt["occupied_pixels"], 3);
+        assert_eq!(receipt["overlap_operations"], 1);
+        assert!(raster.paint(-0.01, 0.0).is_err());
+        assert!(raster.paint(2.0, 2.0_f64.sinh() + 0.01).is_err());
+        assert!(raster.paint(2.0, f64::NAN).is_err());
+        assert_eq!(raster.point_operations, 4);
+    }
+
+    #[test]
+    fn point_raster_uniform_domain_has_a_real_center_and_refuses_other_values() {
+        let mut raster = PointRaster::new(5, 5, [7.0, 7.0], [-3.0, -3.0]).unwrap();
+        assert_eq!(raster.paint(7.0, -3.0).unwrap(), [2, 2]);
+        assert!(raster.paint(7.0, -2.99).is_err());
+        assert!(PointRaster::new(5, 5, [1.0, 0.0], [0.0, 1.0]).is_err());
+    }
+
+    #[test]
+    fn off_center_asinh_mapping_is_distinct_from_linear_mapping_and_png_roundtrips() {
+        // sinh(2) and sinh(0.8), supplied numerically so the expected mapping is independent.
+        let mut raster =
+            PointRaster::new(9, 9, [0., 8.], [-3.626860407847019, 3.626860407847019]).unwrap();
+        assert_eq!(raster.paint(1., 0.888105982187623).unwrap(), [1, 2]);
+        // Linear y mapping would place this point on row3, not row2.
+        let encoded = encode_point_png_b64(raster.width, raster.height, &raster.pixels);
+        let alphabet = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        let mut png = Vec::new();
+        for block in encoded.as_bytes().chunks(4) {
+            let mut packed = 0u32;
+            for &byte in block {
+                packed = (packed << 6)
+                    | if byte == b'=' {
+                        0
+                    } else {
+                        alphabet.iter().position(|&v| v == byte).unwrap() as u32
+                    };
+            }
+            png.push((packed >> 16) as u8);
+            if block[2] != b'=' {
+                png.push((packed >> 8) as u8);
+            }
+            if block[3] != b'=' {
+                png.push(packed as u8);
+            }
+        }
+        assert_eq!(&png[..8], &[137, 80, 78, 71, 13, 10, 26, 10]);
+        let mut cursor = 8usize;
+        let mut zlib = Vec::new();
+        while cursor < png.len() {
+            let len = u32::from_be_bytes(png[cursor..cursor + 4].try_into().unwrap()) as usize;
+            let tag = &png[cursor + 4..cursor + 8];
+            let data = &png[cursor + 8..cursor + 8 + len];
+            if tag == b"IHDR" {
+                assert_eq!(&data[8..10], &[4, 3]);
+            }
+            if tag == b"IDAT" {
+                zlib.extend_from_slice(data);
+            }
+            cursor += 12 + len;
+        }
+        let mut raw = Vec::new();
+        cursor = 2;
+        loop {
+            let last = zlib[cursor] & 1 != 0;
+            assert_eq!(zlib[cursor] & 6, 0); // Stored DEFLATE block.
+            let len = u16::from_le_bytes(zlib[cursor + 1..cursor + 3].try_into().unwrap());
+            let complement = u16::from_le_bytes(zlib[cursor + 3..cursor + 5].try_into().unwrap());
+            assert_eq!(len, !complement);
+            cursor += 5;
+            raw.extend_from_slice(&zlib[cursor..cursor + len as usize]);
+            cursor += len as usize;
+            if last {
+                break;
+            }
+        }
+        let mut pixels = Vec::new();
+        for row in raw.chunks_exact(1 + raster.width.div_ceil(2)) {
+            assert_eq!(row[0], 0);
+            for x in 0..raster.width {
+                pixels.push(if x % 2 == 0 {
+                    row[1 + x / 2] >> 4
+                } else {
+                    row[1 + x / 2] & 15
+                });
+            }
+        }
+        assert_eq!(pixels, raster.pixels);
+        assert_eq!(pixels.iter().filter(|&&v| v != 0).count(), 1);
+        assert_eq!(pixels[2 * 9 + 1], 1);
+    }
+
+    #[test]
+    fn admitted_source_callback_paints_every_run_scoped_original_record() {
+        let (archive, index_sha) = crate::corpus::tests::build_minimal_801gen_archive(0);
+        let mut raster = PointRaster::new(801, 161, [0., 800.], [1.05, 1.13]).unwrap();
+        let mut identities = BTreeSet::new();
+        let mut on_row =
+            |run: usize, id: u64, generation: u64, fit: f64, _legal: bool| -> Result<()> {
+                assert!(identities.insert((run, id)));
+                raster.paint(generation as f64, fit)?;
+                Ok(())
+            };
+        let admission = crate::corpus::verify_and_decode_gen800_archive_with_callback(
+            &archive.0,
+            Some(&index_sha),
+            None,
+            Some(&mut on_row),
+        )
+        .unwrap();
+        assert_eq!(admission["rows_decoded"], 8010);
+        assert_eq!(identities.len(), 8010);
+        assert_eq!(raster.point_operations, 8010);
+        assert_eq!(raster.overlap_operations, 7209);
+        assert_eq!(raster.pixels.iter().filter(|&&v| v != 0).count(), 801);
+    }
 
     #[test]
     fn historical_jevl_status_adapter_maps_notevaluated_only() {
@@ -2208,7 +2691,9 @@ mod tests {
         assert!(fit_svg.contains("• Gen 2 (Ind 2002): archive 74.207299 / round 73.608446"));
         assert!(fit_svg.contains("• Stage-2 3D solid/plate: unavailable retained assessment"));
         assert!(fit_svg.contains("Cohort 2 Selected Run 31 Summary (Retained Profile)"));
-        assert!(fit_svg.contains("legal medians (G0: 5/10 -0.2620..-0.2070; min -0.5782; G800: -0.2610..-0.1933)"));
+        assert!(fit_svg.contains(
+            "legal medians (G0: 5/10 -0.2620..-0.2070; min -0.5782; G800: -0.2610..-0.1933)"
+        ));
 
         let inh_svg = &out["docs/paper/figures/inheritance.svg"];
         assert!(inh_svg.contains("Individual 413 (Gen 3, +1.15296) [reused]"));

@@ -1,0 +1,50 @@
+{
+  "schema": "jarambit.claim_evidence.v1",
+  "evidence_base_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+  "semantic_ledger": "docs/paper/figure-semantics.v1.json",
+  "claims": [
+    {
+      "id": "C01",
+      "binding": "crop_panels[C] and pry_additive_admission",
+      "claim": "Panel C is tip-pry unit response MPa/N, not envelope MPa."
+    },
+    {
+      "id": "C02",
+      "binding": "single assessed automatic export; historical23subjects remain separate",
+      "claim": "No23-subject automatic assessment claim."
+    },
+    {
+      "id": "C03",
+      "binding": "crop_panels exact crop/denominator/numerator/fraction",
+      "claim": "B planned crop domain retains64.52% whole torsion saliency; A/C100%; no inherited global90% from oldROI."
+    },
+    {
+      "id": "C04",
+      "binding": "scalar_stages and original producer interpretation bindings",
+      "claim": "Certification minimum0.25/0.125mm2; strict0.0625mm2; separate GCI."
+    },
+    {
+      "id": "C14",
+      "binding": "hero_composite",
+      "claim": "No per-triangle support-map visibility implied on the cover."
+    },
+    {
+      "id": "AGC-G03",
+      "binding": "ancestry_views",
+      "claim": "Two-hop lineage.svg and three-hop inheritance.svg have separate source routes."
+    }
+  ],
+  "acceptance": "Actual application, typed validation, PNG/PDF regeneration and final reading-size review pending.",
+  "crop_svg_admission": {
+    "path": "docs/paper/drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.svg",
+    "sha256": "d6cd7e52409f1f4a0dc2e05538442104a78657af313230d7ebcdda90888feda2",
+    "source_d1_sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+    "method": "All original emitted polygons matched retained source-triangle IDs after recorded pose/affine transform and0.01px rounding. Field polygons preserved; exact rectangular clipping and text corrected.",
+    "source_polygon_id_hashes": {
+      "A": "788d94ad56a9551a4f2f715676f81e940c55cdfefc8b51653819775f521e6b22",
+      "B": "3cb30ae6c032bc3b980a071b37d09d4e34b9b71e0036d52aff297e7a49129ef6",
+      "C": "d75e55b7654790839e5bc900c6725c79d8bbfecafa5fa383c9a7bd8f91942186"
+    },
+    "acceptance_limit": "Admits exact reporting SVG bytes only; no final PNG/PDF or visible-ink acceptance."
+  }
+}

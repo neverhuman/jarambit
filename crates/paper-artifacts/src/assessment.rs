@@ -380,7 +380,7 @@ pub(crate) fn project(
         35.,
         630.,
         23,
-        "C / Coarse vs. refined mesh scalars",
+        "C / Certification vs. strict scalars",
     );
     let pairs = [
         (
@@ -401,8 +401,8 @@ pub(crate) fn project(
         let y = 676. + i as f64 * 165.;
         text(&mut svg, 35., y, 22, title);
         for (j, (key, label_txt, color)) in [
-            (cert, "Coarse mesh", "#007e87"),
-            (strict, "Refined mesh", "#a3442d"),
+            (cert, "Cert. minimum", "#007e87"),
+            (strict, "Strict", "#a3442d"),
         ]
         .into_iter()
         .enumerate()
@@ -412,7 +412,12 @@ pub(crate) fn project(
             text(&mut svg, 40., yy + 7., 21, label_txt);
             bar(&mut svg, key, [195., yy], 240., value, limit, color)?;
             text(&mut svg, 448., yy + 7., 21, &format!("{value:.4}"));
-            pair_rows.push(json!({"key":key,"value":value,"limit":limit}));
+            pair_rows.push(json!({
+                "key":key, "value":value, "limit":limit,
+                "assessment_stage":if key == cert { "certification" } else { "strict" },
+                "mesh_max_area_mm2":if key == cert { json!([0.25, 0.125]) } else { json!([0.0625]) },
+                "mesh_aggregation":if key == cert { "minimum" } else { "single_mesh" }
+            }));
         }
         for v in [0., limit / 2., limit] {
             text(
@@ -427,9 +432,16 @@ pub(crate) fn project(
     text(
         &mut svg,
         35.,
+        1008.,
+        21,
+        "Certification: min over 0.25 / 0.125 mm².",
+    );
+    text(
+        &mut svg,
+        35.,
         1045.,
         21,
-        "Saved scalars only; no spatial strict-mesh field.",
+        "Strict: 0.0625 mm²; no retained spatial field.",
     );
 
     text(
@@ -444,9 +456,7 @@ pub(crate) fn project(
         635.,
         662.,
         21,
-        &format!(
-            "Branch W_CAD = {wcad_total:.6} (unpenalized = +{wcad_unpen:.4})"
-        ),
+        &format!("Branch W_CAD = {wcad_total:.6} (unpenalized = +{wcad_unpen:.4})"),
     );
     for (i, row) in subscore_rows.iter().enumerate() {
         let y = 702. + i as f64 * 38.;

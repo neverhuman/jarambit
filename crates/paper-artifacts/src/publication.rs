@@ -211,7 +211,14 @@ fn admit_cover_render(root: &Path, inputs: &mut BTreeMap<String, String>) -> Res
 
 fn cover_evolution(births: &[Value], stats: &[Value]) -> Result<String> {
     let mut s = svg_start(520, 620);
-    label(&mut s, 18., 30., 23, "B / Run 1 Historical Population", "#007e87");
+    label(
+        &mut s,
+        18.,
+        30.,
+        23,
+        "B / Run 1 Historical Population",
+        "#007e87",
+    );
     label(
         &mut s,
         18.,
@@ -490,7 +497,10 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
     for i in 0..4 {
         let v = lo + (hi - lo) * i as f64 / 3.;
         let y = sy(v);
-        s.push_str(&format!("<path d=\"M710 {}H1150\" stroke=\"#d5dfdf\"/>", svg_coord(y)));
+        s.push_str(&format!(
+            "<path d=\"M710 {}H1150\" stroke=\"#d5dfdf\"/>",
+            svg_coord(y)
+        ));
         label(&mut s, 620., y + 7., 21, &format!("{v:.2}"), "#526873");
     }
     for (field, color) in [
@@ -623,7 +633,14 @@ fn hero(curve: &Value, births: &[Value]) -> Result<String> {
         ));
     }
     for g in [0., 8., 16.] {
-        label(&mut s, px(g) - 14., 896., 21, &format!("G{g:.0}"), "#526873");
+        label(
+            &mut s,
+            px(g) - 14.,
+            896.,
+            21,
+            &format!("G{g:.0}"),
+            "#526873",
+        );
     }
     label(
         &mut s,
@@ -1146,6 +1163,42 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     if scalar_docs["a4"]["d1_sha256"] != field_contract["source_sha256"] {
         return Err("support and displayed plate bindings differ".into());
     }
+    let figure_semantics = read(&root, "docs/paper/figure-semantics.v1.json", &mut inputs)?;
+    let claim_evidence = read(&root, "docs/paper/claim-evidence.v1.json", &mut inputs)?;
+    for (path, expected) in figure_semantics["original_contracts"]
+        .as_object()
+        .ok_or("missing original semantic input bindings")?
+    {
+        if inputs.get(path).map(String::as_str) != expected.as_str() {
+            return Err(format!("presentation original contract changed: {path}").into());
+        }
+    }
+    let crop_admission = &claim_evidence["crop_svg_admission"];
+    let crop_path = text(&crop_admission["path"])?;
+    if crop_path != "docs/paper/drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.svg"
+        || crop_admission["source_d1_sha256"] != field_contract["source_sha256"]
+    {
+        return Err("crop artwork admission source differs".into());
+    }
+    let crop_bytes = fs::read(safe_path(&root, crop_path)?)?;
+    let crop_sha = digest(&crop_bytes);
+    if crop_admission["sha256"].as_str() != Some(crop_sha.as_str()) {
+        return Err("crop artwork differs from source-triangle correspondence accession".into());
+    }
+    inputs.insert(crop_path.into(), crop_sha.clone());
+    let mut crop_semantics = crate::plate::project_semantics(
+        &field_doc,
+        &field_contract,
+        &assessment_contract,
+        &lineage_contract,
+        &figure_semantics,
+        std::str::from_utf8(&crop_bytes)?,
+    )?;
+    crop_semantics["source_svg_sha256"] = json!(crop_sha);
+    out.insert(
+        "docs/paper/generated/crop-semantics.v1.json".into(),
+        serde_json::to_string_pretty(&crop_semantics)? + "\n",
+    );
     let (assessment_svg, assessment_summary) = crate::assessment::project(
         &scalar_docs["a4"],
         &scalar_docs["rs"],
@@ -1398,17 +1451,17 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         let unsolved = number(&row["fem_not_evaluated"])? * 80. / max_n;
         popsvg.push_str(&format!("<rect x=\"{}\" y=\"{}\" width=\"32\" height=\"{solved}\" fill=\"#4e8f9c\"/><rect x=\"{}\" y=\"{}\" width=\"32\" height=\"{unsolved}\" fill=\"#b66a30\"/>",x-16.,590.-solved,x-16.,590.-solved-unsolved));
         if g % 2 == 0 {
-            label(
-                &mut popsvg,
-                x - 16.,
-                620.,
-                21,
-                &format!("G{g}"),
-                "#526873",
-            );
+            label(&mut popsvg, x - 16., 620., 21, &format!("G{g}"), "#526873");
         }
     }
-    label(&mut popsvg,32.,658.,21,"Search fit includes legality penalties and novelty; not a physical qualification score.", "#a3442d");
+    label(
+        &mut popsvg,
+        32.,
+        658.,
+        21,
+        "Search fit includes legality penalties and novelty; not a physical qualification score.",
+        "#a3442d",
+    );
     popsvg.push_str("</g></svg>\n");
     out.insert("docs/paper/generated/population.svg".into(), popsvg);
     let summary = json!({"schema":"jarambit.publication_projection.v1","source_baseline":BASE,"scope":"Retained evidence projection; no new scientific execution","battery_subjects":files.len(),"battery_evaluators":evaluator_ids.len(),"stored_statuses":counts,"per_evaluator":per,"science_definitions":cases.len(),"science_family_counts":families,"population_births":births.len(),"population_statistics":stats,"historical_context":history,"weighted_curve":curve["generations"],"weighted_best":curve["best_so_far"]["ultralight_weighted_fitness"],"weighted_stage_lineage":"incomplete; retained summaries are not a homogeneous objective-convergence experiment","score_direction":"higher_is_better","missing":"Weighted cohort CAD geometry and round population files are unavailable in retained cohort"});
@@ -1655,7 +1708,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "population-births.svg":{"source":POP,"projection_receipt":"docs/paper/generated/population/historical_births.json","membership":"all 1,984 historical w282 births in Run 1 (1,455 FEM-complete + 529 not-evaluated; 446 legal)","vertical_transform":"asinh(fit); ticks in original units"},
         "population-membership.svg":{"source":POP,"projection_receipt":"docs/paper/generated/population/historical_membership.json","membership":"all 2,176 island-membership occurrences in Run 1 (1,984 births + 192 elite reappearances) and 12 ring migrations at G4, G8, G12 (24 copied IDs)"},
         "population-newer.svg":{"contract":"docs/paper/JR_EI_P1_T05_NEWER_BIRTHS_SCREENS_JOIN_RECEIPT_20261019.json","projection_receipt":"docs/paper/generated/population/newer_events.json","membership":"57 birth files across 24 run directories (3,649 births = 2,259 1-based joined screens + 1,390 unscreened births); proportional 0..3,200 common scale"},
-        "population-latest.svg":{"contract":"docs/paper/data/gen800_population_density_and_traces.v1.json","projection_receipt":"docs/paper/generated/population/latest_snapshots.json","membership":"all 1,954,560 evaluations across 10 retained 800-gen runs (Run 2..Run 11, superseding legacy Run 37..Run 46; 195,456 rows/run, 754,236 legal + 1,200,324 penalty) in 32x8 density cloud + quantile/best traces; no FEM status inferred"},
+        "population-latest.svg":{"contract":"artifacts/versioned-evolution-archives-gen800-population-v1/index.gen800_population.sha256.json","projection_receipt":"docs/paper/generated/population/point-rendering.v1.json","membership":"all 1,954,560 admitted native rows as direct neutral point operations, plus separate 1,984 historical birth and 2,259 numeric screen panels; 1,390 unknown proposals have a nonnumeric coverage row","vertical_transform":"asinh with original-value ticks; full observed domain retained without clipping or jitter","class_handling":"neutral occupancy, no class-majority substitution; counts/IDs/extrema/overlap in point receipt"},
         "fitness-progress.svg":{"contract":"docs/paper/data/score_profiles.v1.json","projection_receipt":"docs/paper/generated/shared_projection.v2.json","membership":"three separate numerical-axis panels for Cohort 1 (Run 1, 17-gen), Cohort 2 (weighted summaries), and Cohort 3 (Run 2..Run 11, 10 retained 800-gen runs qd_fit)"},
         "inheritance.svg":{"contract":"docs/paper/generated/population/inheritance.json","projection_receipt":"docs/paper/generated/population/inheritance.json","membership":"7-node 3-hop ancestry DAG and 128-coordinate gene diffs around Individual 1095 (Cohort 1, Run 1); Cohort 2/3 parent_ids unavailable_in_source"}
     }});
