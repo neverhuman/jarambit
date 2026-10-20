@@ -4,7 +4,7 @@ A search preference, a stored reporting vector, a shortfall score and a mechanic
 
 \begin{table*}[t]
 \centering
-\caption{Score dictionary. Scores are dimensionless; physical units remain attached to their inputs. Missing observations do not become zero scores.}
+\caption{Score dictionary. Scores are dimensionless; physical units remain attached to their inputs. The reporting reconstruction invents no missing scores; historical scorer defaults are disclosed below.}
 \label{tab:score-dictionary}
 \small
 \setlength{\tabcolsep}{4pt}
@@ -13,9 +13,9 @@ A search preference, a stored reporting vector, a shortfall score and a mechanic
 \toprule
 \textbf{Quantity / stage} & \textbf{Direction / scale} & \textbf{Meaning and normalization} & \textbf{Comparison / missingness} \\
 \midrule
-Native $f$; historical and completed native search & Higher preferred; conditional negative branches, no common $[0,1]$ scale & Mechanical/mass terms and contextual novelty after legality/feasibility branches & Bound profile, configuration and observation stage required; novelty changes with archive context; sign is not legality \\
+Native $f$; historical and completed native search & Higher preferred; conditional negative branches, no common $[0,1]$ scale & Mechanical/mass terms and contextual novelty after legality/feasibility branches & Bound profile, configuration and stage required; novelty changes with context; negative legal scores occur in completed native runs \\
 Screening deficit; intermediate proposals & Lower shortfall preferred; nonnegative stored sum & Stage-1 screening quantity; not the later 20-term reporting vector & Only observed screens have numeric values; 1390 proposals lack screens \\
-Weighted $F$; retained reporting curves & Higher preferred; $[0,100]$ & Twenty saved normalized terms with weights totaling 100 & Original producer/scorer revision and point-stage comparability not established by summaries; no invented CAD or population distributions \\
+Weighted $F$; retained reporting curves & Higher preferred; $[0,100]$ & Twenty saved normalized terms with weights totaling 100 & Compatible versioned recipe recovered; exact executed producer and point-stage comparability unresolved; some inputs are default-compatible \\
 $W_{\mathrm{CAD}}$; 16-gate CAD scorecard & Higher preferred; conditional positive/negative branches & Pass-branch quality versus failed-branch normalized-shortfall penalty & Same assessment definition/inputs required; a favorable subscore is not all-gate success \\
 $G_1$; assessment composite & Higher preferred; dimensionless & Weighted solid-tip factor, strength/mass, shape, mass penalty and sequence gap & Missing required inputs produce incomplete status; a screen-tip substitute is marked provisional; does not override gates \\
 \bottomrule
@@ -49,7 +49,9 @@ Total & 100 & 74.207 \\
 \end{tabular}
 \end{table}
 
-The saved scalar is $F=74.207299$, with reported raster mass $101.139\,\mathrm{g}$ and solid-mass scalar $101.1384\,\mathrm{g}$. Several terms are clipped ratios, Boolean values or proxies. In particular, a stored solid or support term in this reporting vector does not establish a retained underlying CAD/solid assessment artifact. The retained directories lack Individual~2002's exported geometry and round populations; its saved qualification label is ``pending independent top-k assessment.'' Individual~2000 instead supplies the illustrated assessed geometry and response fields.
+The saved scalar is $F=74.207299$, with reported raster mass $101.139\,\mathrm{g}$ and solid-mass scalar $101.1384\,\mathrm{g}$. Its exact genome and certificate link to a retained proposal and screen; a separate leaderboard retains a later-assessment summary with \code{qualified=false}. The underlying exported geometry and full scorecard files are not retained at its referenced paths in the checked repository tree. The screen's earlier ``pending independent top-k assessment'' label is not that later summary's outcome. Individual~2000 supplies the illustrated assessed geometry and response fields.
+
+A versioned twenty-term recipe is recoverable, but its exact historical execution and the curves' point stages remain unresolved. Several saved inputs match that recipe's hard-coded fallbacks for bore radius, edge/point profiles and overload proxies. The four whole terms containing those inputs contribute $15.682353$ points; this is not a claim that every point in those terms is an imputed measurement. Some absent-key Boolean branches also receive favorable defaults. The Supplement distinguishes these default-compatible inputs and historical bookkeeping from new reporting-layer imputation. The original vector is preserved, without rescoring.
 
 For the assessed Individual~2000, the actual failed-branch score is $W_{\mathrm{CAD}}=-5.570408$. The same scorecard stores unpenalized quality $1.456983$; that is the hypothetical pass-branch value, not an additional achieved score. The Supplement gives the branch equations, input names and shortfall arithmetic. Those scores and $G_1$ remain separate from $F$ and native $f$.
 
@@ -74,7 +76,7 @@ Figure~\ref{fig:plate-fields} retains the envelope and three physical-unit respo
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{plate-fields.png}
-\caption{Spatial concentration differs across Individual~2000's retained plate responses. A: scaled multi-case envelope (MPa). B: unit lateral response (MPa/N). C: unit ring traction (MPa/N). D: raw unit chord torsion (MPa/(N\,mm)). The plate has $25{,}209$ triangles; gray marks the envelope's 75 tip-excluded cells and ring field's $14{,}875$ seated cells. The fourth eligible response channel, in-plane tip pry, is shown separately in Figure~\ref{fig:saliency-crops}C. Each field keeps its own physical scale.}
+\caption{Spatial concentration differs across Individual~2000's retained plate responses. A: scaled multi-case envelope (MPa). B: unit lateral response (MPa/N). C: unit ring traction (MPa/N). D: raw unit chord torsion (MPa/(N\,mm)). The plate has $25{,}209$ triangles; gray marks the envelope's 75 tip-excluded cells and ring field's $14{,}875$ cells in the producer-masked half-plane, which includes the seat and unloaded blade. The fourth eligible response channel, in-plane tip pry, is shown separately in Figure~\ref{fig:saliency-crops}C. Each field keeps its own physical scale.}
 \label{fig:plate-fields}
 \end{figure*}
 
