@@ -1,0 +1,77 @@
+\RequirePackage[T1]{fontenc}
+\documentclass[10pt,journal,letterpaper]{IEEEtran}
+% Research white-paper showcase layout: custom single-column opening, IEEEtran two-column body.
+% Draft prepared under JR-EI-P3-T01 inside docs/paper/drafts_p3_p5/ (disjoint editorial scope).
+% Venue submission requires the selected venue's unmodified official template.
+\usepackage{tgtermes,tgheros}
+\usepackage{amsmath,amssymb,graphicx,booktabs,array,xcolor,url}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\hypersetup{
+  pdftitle={Engineered Intelligence: The Evolution of Physical Design --- Executable Genomes, Recorded Inheritance, and Full Population Evidence},
+  pdfsubject={Engineered Intelligence: Executable Representations, Recorded Evolutionary Search, and Traceable Engineering Evidence},
+  pdfkeywords={Engineered Intelligence, computational design, evolutionary computation, CAD, quality diversity, finite elements, evidence provenance, reproducible populations}
+}
+\definecolor{ink}{HTML}{132D3B}
+\definecolor{teal}{HTML}{007E87}
+\definecolor{rust}{HTML}{A3442D}
+\newcommand{\code}[1]{{\small\texttt{\detokenize{#1}}}}
+\newcommand{\src}[2]{\href{https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/#1}{#2}}
+\newcommand{\test}[1]{\subsubsection{#1}}
+\input{generated/metrics.tex}
+% Fallback macros for P2-projected counts until JR-EI-P2-T08 regenerates generated/metrics.tex:
+\providecommand{\NewerBirthFilesCount}{57}
+\providecommand{\NewerRunDirsCount}{24}
+\providecommand{\NewerBirthEventsCount}{3,649}
+\providecommand{\NewerScreenRowsCount}{2,259}
+\providecommand{\NewerUnscreenedBirthsCount}{1,390}
+\providecommand{\NativeSummaryFilesCount}{11}
+\providecommand{\NativeSummaryRowsCount}{17,672}
+\providecommand{\NativeLongestRetainedGen}{708}
+\providecommand{\CompletedGenEightHundredRunsCount}{10}
+\providecommand{\CZeroOneRetainedIdsCount}{195,456}
+\graphicspath{{../../target/ieee/paper/}}
+\interdisplaylinepenalty=2500
+\setlength{\emergencystretch}{1.5em}
+\begin{document}
+\onecolumn
+\thispagestyle{empty}
+\begin{center}
+{\sffamily\color{teal}\small JARAMBIT / ENGINEERED INTELLIGENCE RESEARCH WHITE PAPER / 19 OCTOBER 2026}\par\vspace{5mm}
+{\sffamily\bfseries\color{ink}\fontsize{25}{28}\selectfont Engineered Intelligence: The Evolution of Physical Design}\par\vspace{3.5mm}
+{\sffamily\color{ink}\fontsize{14}{18}\selectfont Executable Genomes, Recorded Inheritance, and Full Population Evidence}\par\vspace{3.5mm}
+{\small Research draft prepared for Jepson Taylor\quad|\quad Human author approval pending}\par
+\end{center}
+\vspace{2.5mm}
+\noindent\textbf{Abstract---}Engineered Intelligence makes a physical design process executable and its evolution inspectable. We present Jarambit, a Rust-centered system connecting versioned numerical genomes, deterministic CAD decoding, automated evolutionary search, and multi-stage numerical assessment. Rather than reducing computational design to a single selected image, its retained histories expose both candidate geometries and the population process that produced them. A reconstructed historical experiment (\code{w282\_ultrarunner}) contains \BirthCount\ retained births across 17 generations (\FemComplete\ with completed plate finite-element observations and \FemNotEvaluated\ recorded as not evaluated), preserving parent relationships, elite retention, four-island membership observations, and inter-island migration. Because the historical search objective combines legality-dependent penalty branches with archive-contextual novelty, the highest stored birth fitness (\HistoricalBestFit, Individual~\HistoricalBestId\ at generation~\HistoricalBestGeneration) does not pass later strict assessment, demonstrating why search preference and mechanical verification must remain distinct. We complement this reconstructable genealogy with two separately bounded repository cohorts: \NewerBirthEventsCount\ newer birth events across \NewerBirthFilesCount\ files (\NewerScreenRowsCount\ joined via one-based candidate identity to screening records and \NewerUnscreenedBirthsCount\ without a screen row) and \NativeSummaryRowsCount\ headerless generation-by-island summary rows across \NativeSummaryFilesCount\ staged native quality-diversity histories (reaching generation~\NativeLongestRetainedGen\ in the initial staged subset, alongside \CompletedGenEightHundredRunsCount\ generation-800 host runs undergoing lossless full-population accession). For the separately retained assessed export \code{cert\_pipeline\_r01\_p14\_c02}, source-bound spatial plate fields and matched-mesh solid-solver safety factors (agreeing within $0.05\%$ while plate grid-convergence index estimates remain unadmitted) connect numerical observations to exact exported geometry without claiming physical qualification. The contribution is a reproducible account of physical design as an evolving computation: executable representations generate alternatives, recorded inheritance explains their relationships, and traceable observations keep every claim open to independent inspection.
+\par\vspace{2.5mm}
+\begin{figure}[!h]
+\centering
+% Note: P3 owns manuscript structure; P4 (JR-EI-P4-T05..T07) delivers the full-width v3 white horizontal hero
+% and P2 (JR-EI-P2-T04..T05) delivers the standalone full-population plates on Pages 8-9.
+% Until P4 atomic v3 migration completes at P7 (JR-EI-P7-T03), the bound v2 asset path remains preserved.
+\includegraphics[width=.92\textwidth]{figures/v2/hero_dark.png}
+\caption{Engineered Intelligence opening subject: exact retained assessed export \code{cert\_pipeline\_r01\_p14\_c02} (certificate \code{db5d8e32...}, not qualified; \code{champion=null}). Original mesh topology and faceting are preserved without smoothing or geometric modification. Full population histories (\BirthCount\ historical \code{w282} births, \NewerBirthEventsCount\ newer birth records, and native island summaries) are presented in dedicated full-width population figures (Section~\ref{sec:evolution} and Section~\ref{sec:results}) rather than compressed into a side-by-side thumbnail. (Active v3 full-width horizontal white-studio master with registered available-field percentile composite is bound by \code{JR-EI-P4-T05}--\code{T07} during \code{JR-EI-P7-T03} integration.)}
+\label{fig:cover}
+\end{figure}
+\noindent\textbf{Index Terms---}Engineered Intelligence, computational design, evolutionary computation, executable genomes, CAD, quality diversity, finite elements, evidence provenance, reproducible populations.
+\vfill
+\noindent{\footnotesize\color{rust}IEEE-style showcase white paper, not an accepted IEEE venue article. Source baseline: \code{009f5ac520fa3afe8ed8025230eef604dbb7f922}. Retained numerical and software evidence only; no new CAD/FEM search or physical experiment was executed for this manuscript. Compact staging seal \code{T07} (\code{295} files, \code{190,807,895} bytes) covers finite summary/JEV1/QD selections; lossless full-population \code{all\_evals} accession across all \CompletedGenEightHundredRunsCount\ completed generation-800 runs is tracked separately under \code{JR-EI-P1-T08}.}
+\clearpage\twocolumn
+\pagestyle{headings}
+\markboth{ENGINEERED INTELLIGENCE: THE EVOLUTION OF PHYSICAL DESIGN}{Jarambit Research White Paper / Draft}
+\input{sections/01-introduction.tex}
+\input{sections/02-background.tex}
+\input{sections/03-genome.tex}
+\input{sections/04-evolution.tex}
+\input{sections/05-fitness.tex}
+\input{sections/06-battery.tex}
+\input{sections/07-verification.tex}
+\input{sections/08-results.tex}
+\input{sections/09-agents.tex}
+\input{sections/10-reproducibility.tex}
+\input{sections/11-discussion.tex}
+\input{sections/12-conclusion.tex}
+\input{references.tex}
+\end{document}

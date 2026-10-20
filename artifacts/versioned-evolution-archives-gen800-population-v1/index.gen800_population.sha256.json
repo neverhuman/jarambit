@@ -1,0 +1,5683 @@
+{
+  "schema": "jarambit.evolution_archive.gen800_lossless_population_accession.v1",
+  "generated_at_utc": "2026-10-19T18:20:30Z",
+  "task_id": "JR-EI-P1-T08",
+  "decision_refs": [
+    "SC-DEC-183K"
+  ],
+  "preserved_handoff_custody_chain": {
+    "v1_first_observed_original": {
+      "preserved_path": "target/archive-red-team/first-handoff/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_20261019.json",
+      "bytes": 269650,
+      "sha256": "081f34e5659ce518ce45ef6ed731840609b221aa3c2f6b1bfbc24322fceacf98",
+      "withdrawn_mistyped_sha256": "081f34e5ce3f7ff56381c74e4786efbe2619d6d0e3c785bd307cc5844a9c9320"
+    },
+    "v1_second_observed_original": {
+      "preserved_path": "target/archive-red-team/second-observed-v1/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_20261019.json",
+      "bytes": 288343,
+      "sha256": "62b67373d45f5a1174561591e6ba49508f3ec1d3bce0bed6e2adad2f04807eae"
+    },
+    "v1_current_remote_handoff": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_20261019.json",
+      "bytes": 288343,
+      "sha256": "010a91d7e4865cd661d14b56c7c1bf50feccfcc8080c5e65c3040628881bf311"
+    },
+    "v2_frozen_handoff": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_20261019.json",
+      "bytes": 664314,
+      "sha256": "b1f884622aaffc9929069424685ed0aaf8b950470b254141336c193f1ec2529e"
+    },
+    "v2_additive_erratum": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_EVOLUTION_ARCHIVE_HANDOFF_V2_ERRATUM_20261019.json",
+      "bytes": 34300,
+      "sha256": "a3cefc5ce7f841aa6e7b1edfd8503c988dfa1e4e04754b22ea7babc4bcc1ff8a"
+    }
+  },
+  "base_t07_accession_index_preserved": {
+    "path": "/home/ubuntu/jarambit/artifacts/versioned-evolution-archives-gen800-accession-v1/index.gen800_accession.sha256.json",
+    "bytes": 119035,
+    "sha256": "dd69650f66a0c6cf29cbfcfc80e1302529717ba7e31a9af6b0b825d13970c49b",
+    "total_indexed_files": 295,
+    "total_indexed_bytes": 190807895,
+    "routine_compact_non_stl_files_count": 271,
+    "routine_compact_non_stl_bytes": 128160577,
+    "separated_stl_source_evidence_files_count": 24,
+    "separated_stl_source_evidence_bytes": 62647318,
+    "separated_24_stl_files": [
+      {
+        "package_id": "evo_full_20261018_xbabe1_c04",
+        "filename": "ef1c04_c01_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe1_c04/ef1c04_c01_fit.stl",
+        "bytes": 2585408,
+        "sha256": "da930f78e7dd6a4ddfb8882d84eb5e93b5617130d58d5ea5c91c5e387f0357e7",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe1_c04",
+        "filename": "ef1c04_c02_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe1_c04/ef1c04_c02_fit.stl",
+        "bytes": 2585412,
+        "sha256": "04453464f0937acafc9d12a873667b801f4bc8e9dc2d26a82daeee4bb54ccae0",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe1_c04",
+        "filename": "ef1c04_c03_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe1_c04/ef1c04_c03_fit.stl",
+        "bytes": 2585412,
+        "sha256": "ac25f4bd0f5652b69264e74c900af93291b0db52c13eb2e98b4c7c04c1c6e3a6",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe1_c04",
+        "filename": "ef1c04_c04_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe1_c04/ef1c04_c04_fit.stl",
+        "bytes": 2585412,
+        "sha256": "4e909b1575d0abf19ce9bff5b2001662cec125ab28176ede217bbd09aa0d146a",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe1_c04",
+        "filename": "ef1c04_c05_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe1_c04/ef1c04_c05_fit.stl",
+        "bytes": 2585414,
+        "sha256": "365a2cc154fd9c501cb73b24d1a0effcaea13b8334e2f94417706e4c44c9ab64",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe1_c04",
+        "filename": "ef1c04_c06_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe1_c04/ef1c04_c06_fit.stl",
+        "bytes": 2585414,
+        "sha256": "7d7fef33639de50b74b05038560c3731d125049ffaeb83f8aad05ff3b4f92cad",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c03",
+        "filename": "ef3c03_c01_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe3_c03/ef3c03_c01_fit.stl",
+        "bytes": 2665170,
+        "sha256": "10d5b9f3fca8983dd27d2b0953c30560eb18e801f7411cd19380f2db5be637c0",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c03",
+        "filename": "ef3c03_c02_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe3_c03/ef3c03_c02_fit.stl",
+        "bytes": 2665168,
+        "sha256": "bf93264c4f2724b88986511d3668889bd04dfed1f3bf6b76dcd3aaa9db72fcc5",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c03",
+        "filename": "ef3c03_c03_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe3_c03/ef3c03_c03_fit.stl",
+        "bytes": 2665168,
+        "sha256": "19e02fe83ad2a85be01a6ae06b072d52eaba1974abf4679956cb0ccbcdf8efb0",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c03",
+        "filename": "ef3c03_c04_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe3_c03/ef3c03_c04_fit.stl",
+        "bytes": 2665168,
+        "sha256": "b8068956f35b16421f7217893eb34fd4bb9ac5b9cead0c6cc31504b107384f7c",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c03",
+        "filename": "ef3c03_c05_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe3_c03/ef3c03_c05_fit.stl",
+        "bytes": 2665168,
+        "sha256": "1143004b57a2b3d6486f044ad023e20f51e0e29fe50ab3ff3a519d8f33f8c5a4",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c03",
+        "filename": "ef3c03_c06_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe3_c03/ef3c03_c06_fit.stl",
+        "bytes": 2665162,
+        "sha256": "070430b5ec73c1cec4b9bdea5286c339355efc7d5d2af3711647be26e9891183",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c04",
+        "filename": "ef3c04_c01_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe3_c04/ef3c04_c01_fit.stl",
+        "bytes": 2541971,
+        "sha256": "82d975f69920e8d88995039305299cf078f547f5eecd49a732e32731f32eaf3c",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c04",
+        "filename": "ef3c04_c02_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe3_c04/ef3c04_c02_fit.stl",
+        "bytes": 2541988,
+        "sha256": "79c1e92311c4a90c76134282fbf615d8fea22fdaa3ad88cf9adc99a15dfb87cf",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c04",
+        "filename": "ef3c04_c03_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe3_c04/ef3c04_c03_fit.stl",
+        "bytes": 2541988,
+        "sha256": "73374a777f417a7ca18c2c7edcfd47416cbb849b2df323621ceff99f90ed97a4",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c04",
+        "filename": "ef3c04_c04_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe3_c04/ef3c04_c04_fit.stl",
+        "bytes": 2541985,
+        "sha256": "cc0f36fe0117db2b2da0dc6663926cad6fcedcb039ec1d3a9524e05b6a7f6a6c",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c04",
+        "filename": "ef3c04_c05_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe3_c04/ef3c04_c05_fit.stl",
+        "bytes": 2541981,
+        "sha256": "b117a8de629514541de57d21ca27919ea22054c19a2d87b54cae6108288ce4e5",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe3_c04",
+        "filename": "ef3c04_c06_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe3_c04/ef3c04_c06_fit.stl",
+        "bytes": 2541981,
+        "sha256": "bdbe36273a19b6c598f9493324a8683045bd7425f4d616e905ddd740dc3df324",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe4_c01",
+        "filename": "ef4c01_c01_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe4_c01/ef4c01_c01_fit.stl",
+        "bytes": 2648641,
+        "sha256": "538866999ab473ffee50272c6c45e20dffebd1d8e50457588f13c5a98a1b3c1e",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe4_c01",
+        "filename": "ef4c01_c02_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe4_c01/ef4c01_c02_fit.stl",
+        "bytes": 2648662,
+        "sha256": "ed8d55de2a854e55a7808849774d488a155fa370f1dfbdb86a385df02dc985ee",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe4_c01",
+        "filename": "ef4c01_c03_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe4_c01/ef4c01_c03_fit.stl",
+        "bytes": 2648659,
+        "sha256": "beb8ce5c64d977f49669e851a66b164042a26d150beab893eed6a489d40a92f9",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe4_c01",
+        "filename": "ef4c01_c04_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe4_c01/ef4c01_c04_fit.stl",
+        "bytes": 2648659,
+        "sha256": "d951595627c2eef3d209293dc0d1ebe50fdcf89540f52ef786aaaabe0bcfda23",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe4_c01",
+        "filename": "ef4c01_c05_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe4_c01/ef4c01_c05_fit.stl",
+        "bytes": 2648659,
+        "sha256": "4f91566b4c8493f4b9e33284b67c9414df2e8e44261b30fb9bd15d1007830248",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      },
+      {
+        "package_id": "evo_full_20261018_xbabe4_c01",
+        "filename": "ef4c01_c06_fit.stl",
+        "staged_relpath": "evo_full_20261018_xbabe4_c01/ef4c01_c06_fit.stl",
+        "bytes": 2648668,
+        "sha256": "682684767c3f520f5996490c3d2f936383df9a1a091d7966b54ba93d7f0204cc",
+        "disposition": "retained_certification_or_render_source_evidence_excluded_from_routine_git_payload"
+      }
+    ]
+  },
+  "completed_gen800_population_totals": {
+    "runs_count": 10,
+    "independently_censused_not_extrapolated": true,
+    "total_rows_across_10_runs": 1954560,
+    "total_unique_ids_across_10_runs": 1954560,
+    "total_duplicate_ids_across_10_runs": 0,
+    "columns_per_row": 146,
+    "gene_and_material_columns_per_row": 129,
+    "total_uncompressed_csv_bytes": 3811896749,
+    "total_compressed_zstd_bytes": 494843141,
+    "compression_ratio": 7.7032,
+    "total_zstd_segments": 200,
+    "total_run_manifests": 10,
+    "total_indexed_files": 210,
+    "total_indexed_bytes": 495025101,
+    "max_segment_compressed_bytes": 2627104,
+    "hard_segment_ceiling_bytes": 8388608
+  },
+  "runs": [
+    {
+      "package_id": "evo_full_20261018_xbabe1_c01",
+      "host": "xbabe1",
+      "run_id": "c01",
+      "source_csv_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe1/crescent/c01/all_evals.csv",
+      "source_stat": {
+        "bytes": 383105475,
+        "mtime_ns": 1792398850245785669,
+        "ctime_ns": 1792398850245785669
+      },
+      "original_csv_bytes": 383105475,
+      "original_csv_sha256": "ac6ac8aee11a6e744c69ffcc7fa20d87ae6e78aa0ef2efa2ce5570744b5ac58a",
+      "decompressed_concat_bytes": 383105475,
+      "decompressed_concat_sha256": "ac6ac8aee11a6e744c69ffcc7fa20d87ae6e78aa0ef2efa2ce5570744b5ac58a",
+      "lossless_roundtrip_verified": true,
+      "row_count": 195456,
+      "unique_id_count": 195456,
+      "duplicate_id_count": 0,
+      "id_range": [
+        0,
+        195455
+      ],
+      "generation_range": [
+        0,
+        800
+      ],
+      "distinct_generations_count": 801,
+      "legal_true_count": 74874,
+      "column_count": 146,
+      "gene_and_material_column_count": 129,
+      "segment_count": 20,
+      "total_compressed_bytes": 49310376,
+      "max_segment_compressed_bytes": 2569846,
+      "manifest_relpath": "evo_full_20261018_xbabe1_c01/population_manifest.v1.json",
+      "manifest_sha256": "9ab21efa5ccb372ebb8cb82deb49d516700b3bbbc6d92656526ea988298d3c63",
+      "manifest_bytes": 18165,
+      "decoder_and_schema_binding": {
+        "csv_column_count": 146,
+        "scalar_metadata_columns_0_to_16": [
+          "id",
+          "gen",
+          "fit",
+          "spg",
+          "mass_g",
+          "aes_pass",
+          "aes_score",
+          "hausdorff",
+          "emd",
+          "novelty",
+          "lat_rob",
+          "ring_rob",
+          "sf_hunter",
+          "legal",
+          "n_rejects",
+          "relief_frac",
+          "n_win"
+        ],
+        "gene_columns_17_to_144": [
+          "cp00",
+          "cp01",
+          "cp02",
+          "cp03",
+          "cp04",
+          "cp05",
+          "cp06",
+          "cp07",
+          "cp08",
+          "cp09",
+          "cp10",
+          "cp11",
+          "cp12",
+          "cp13",
+          "cp14",
+          "cp15",
+          "cp16",
+          "cp17",
+          "cp18",
+          "cp19",
+          "cp20",
+          "cp21",
+          "cp22",
+          "cp23",
+          "cp24",
+          "cp25",
+          "cp26",
+          "cp27",
+          "cp28",
+          "cp29",
+          "cp30",
+          "cp31",
+          "cp32",
+          "cp33",
+          "cp34",
+          "cp35",
+          "cp36",
+          "cp37",
+          "cp38",
+          "cp39",
+          "blade_drop_deg",
+          "grip_dx",
+          "ring_wall",
+          "ring_id",
+          "neck_fillet",
+          "t_stock",
+          "t_tip",
+          "taper_x0",
+          "edge_angle_in",
+          "edge_angle_sp",
+          "comet_x0",
+          "comet_x1",
+          "comet_w0",
+          "comet_w1",
+          "comet_bow",
+          "comet_y",
+          "eye_scale",
+          "cairn_d",
+          "nub_engage",
+          "holder_wall",
+          "jimp_scale",
+          "serr_large_d",
+          "serr_small_d",
+          "serr_fine_d",
+          "spine_sharp_offset",
+          "relief_d",
+          "relief_w",
+          "relief_q",
+          "lattice_d",
+          "lattice_pitch",
+          "lattice_frac",
+          "lattice_angle",
+          "lattice_handle",
+          "lattice_blade",
+          "fuller_d",
+          "fuller_w",
+          "fuller_s0",
+          "fuller_s1",
+          "flute_d",
+          "texture_mode",
+          "texture_d",
+          "texture_pitch",
+          "texture_angle",
+          "wrap_x0",
+          "wrap_len",
+          "pad_x",
+          "pad_y",
+          "pad_w",
+          "pad_l",
+          "edge_t",
+          "iso_d",
+          "iso_pitch",
+          "iso_rib",
+          "iso_angle",
+          "iso_rim",
+          "iso_blade",
+          "iso_handle",
+          "iso_blade_extent",
+          "iso_grade",
+          "win_n",
+          "win_s0",
+          "win_s1",
+          "win_w",
+          "win_fill",
+          "win_decay",
+          "rflute_d",
+          "rflute_w",
+          "rflute_arc",
+          "iso_handle_start",
+          "iso_land",
+          "perf_d",
+          "perf_gap",
+          "perf_angle",
+          "perf_elong",
+          "perf_land",
+          "perf_handle",
+          "perf_handle_start",
+          "p1_on",
+          "rail_w",
+          "neck_l",
+          "pocket_d",
+          "pocket_r",
+          "k_n",
+          "k0",
+          "k1",
+          "k2",
+          "k3",
+          "k4"
+        ],
+        "material_column_145": "material",
+        "floating_point_representation": "exact_source_ascii_decimal_tokens_preserved_byte_for_byte_in_zstd_segments",
+        "source_commit_provenance": "d108c9d7d8149ac230ca13fb642159985a8f2857_with_untracked_worktree_state_per_T01_V2",
+        "proc_config_sha256": null,
+        "evidence_jevl_sha256": "51b78952daaef3e259579f3f5d61af7c76e692051555e8c9a152a2f0d1d0792f",
+        "history_live_csv_sha256": "c5e32f790cc1b2d0628e5e0b29e48fd5725e9fb8f456177b70bf9dd94e28464c",
+        "all_evals_json_sha256": "38831dca0d3bce034b1a33385d1f94edd2be357a5cad658d0adcb2eafd600696"
+      }
+    },
+    {
+      "package_id": "evo_full_20261018_xbabe1_c03",
+      "host": "xbabe1",
+      "run_id": "c03",
+      "source_csv_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe1/crescent/c03/all_evals.csv",
+      "source_stat": {
+        "bytes": 385322474,
+        "mtime_ns": 1792399607804878943,
+        "ctime_ns": 1792399607804878943
+      },
+      "original_csv_bytes": 385322474,
+      "original_csv_sha256": "4076371886530cfa749eda6cffa8d88caf3be5bd76450c33ce577cecd6fd1fe0",
+      "decompressed_concat_bytes": 385322474,
+      "decompressed_concat_sha256": "4076371886530cfa749eda6cffa8d88caf3be5bd76450c33ce577cecd6fd1fe0",
+      "lossless_roundtrip_verified": true,
+      "row_count": 195456,
+      "unique_id_count": 195456,
+      "duplicate_id_count": 0,
+      "id_range": [
+        0,
+        195455
+      ],
+      "generation_range": [
+        0,
+        800
+      ],
+      "distinct_generations_count": 801,
+      "legal_true_count": 77011,
+      "column_count": 146,
+      "gene_and_material_column_count": 129,
+      "segment_count": 20,
+      "total_compressed_bytes": 49791636,
+      "max_segment_compressed_bytes": 2583066,
+      "manifest_relpath": "evo_full_20261018_xbabe1_c03/population_manifest.v1.json",
+      "manifest_sha256": "fb1b35a5a6c6b3e1d31894522fa33b89f3d6ba021dbe76f93b9ea3dca2a8d355",
+      "manifest_bytes": 18227,
+      "decoder_and_schema_binding": {
+        "csv_column_count": 146,
+        "scalar_metadata_columns_0_to_16": [
+          "id",
+          "gen",
+          "fit",
+          "spg",
+          "mass_g",
+          "aes_pass",
+          "aes_score",
+          "hausdorff",
+          "emd",
+          "novelty",
+          "lat_rob",
+          "ring_rob",
+          "sf_hunter",
+          "legal",
+          "n_rejects",
+          "relief_frac",
+          "n_win"
+        ],
+        "gene_columns_17_to_144": [
+          "cp00",
+          "cp01",
+          "cp02",
+          "cp03",
+          "cp04",
+          "cp05",
+          "cp06",
+          "cp07",
+          "cp08",
+          "cp09",
+          "cp10",
+          "cp11",
+          "cp12",
+          "cp13",
+          "cp14",
+          "cp15",
+          "cp16",
+          "cp17",
+          "cp18",
+          "cp19",
+          "cp20",
+          "cp21",
+          "cp22",
+          "cp23",
+          "cp24",
+          "cp25",
+          "cp26",
+          "cp27",
+          "cp28",
+          "cp29",
+          "cp30",
+          "cp31",
+          "cp32",
+          "cp33",
+          "cp34",
+          "cp35",
+          "cp36",
+          "cp37",
+          "cp38",
+          "cp39",
+          "blade_drop_deg",
+          "grip_dx",
+          "ring_wall",
+          "ring_id",
+          "neck_fillet",
+          "t_stock",
+          "t_tip",
+          "taper_x0",
+          "edge_angle_in",
+          "edge_angle_sp",
+          "comet_x0",
+          "comet_x1",
+          "comet_w0",
+          "comet_w1",
+          "comet_bow",
+          "comet_y",
+          "eye_scale",
+          "cairn_d",
+          "nub_engage",
+          "holder_wall",
+          "jimp_scale",
+          "serr_large_d",
+          "serr_small_d",
+          "serr_fine_d",
+          "spine_sharp_offset",
+          "relief_d",
+          "relief_w",
+          "relief_q",
+          "lattice_d",
+          "lattice_pitch",
+          "lattice_frac",
+          "lattice_angle",
+          "lattice_handle",
+          "lattice_blade",
+          "fuller_d",
+          "fuller_w",
+          "fuller_s0",
+          "fuller_s1",
+          "flute_d",
+          "texture_mode",
+          "texture_d",
+          "texture_pitch",
+          "texture_angle",
+          "wrap_x0",
+          "wrap_len",
+          "pad_x",
+          "pad_y",
+          "pad_w",
+          "pad_l",
+          "edge_t",
+          "iso_d",
+          "iso_pitch",
+          "iso_rib",
+          "iso_angle",
+          "iso_rim",
+          "iso_blade",
+          "iso_handle",
+          "iso_blade_extent",
+          "iso_grade",
+          "win_n",
+          "win_s0",
+          "win_s1",
+          "win_w",
+          "win_fill",
+          "win_decay",
+          "rflute_d",
+          "rflute_w",
+          "rflute_arc",
+          "iso_handle_start",
+          "iso_land",
+          "perf_d",
+          "perf_gap",
+          "perf_angle",
+          "perf_elong",
+          "perf_land",
+          "perf_handle",
+          "perf_handle_start",
+          "p1_on",
+          "rail_w",
+          "neck_l",
+          "pocket_d",
+          "pocket_r",
+          "k_n",
+          "k0",
+          "k1",
+          "k2",
+          "k3",
+          "k4"
+        ],
+        "material_column_145": "material",
+        "floating_point_representation": "exact_source_ascii_decimal_tokens_preserved_byte_for_byte_in_zstd_segments",
+        "source_commit_provenance": "d108c9d7d8149ac230ca13fb642159985a8f2857_with_untracked_worktree_state_per_T01_V2",
+        "proc_config_sha256": "5d9cf9649f9f6cf8dd7ea934708574fb25d8a772091ccaaf2b6a729efd0153af",
+        "evidence_jevl_sha256": "ae1962d243ddf40e95b71a486b09465b5b1a88884e96024a4469587fd2fa9549",
+        "history_live_csv_sha256": "4e3f330d9a8f5d35b7f4deafc3c53eb6a517ea500d88ef48e440ea056c1ed690",
+        "all_evals_json_sha256": "3ebc80f7fe816fd4809e87beae9a85e06c27991bc92042f029fdae2d2614806a"
+      }
+    },
+    {
+      "package_id": "evo_full_20261018_xbabe1_c04",
+      "host": "xbabe1",
+      "run_id": "c04",
+      "source_csv_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe1/crescent/c04/all_evals.csv",
+      "source_stat": {
+        "bytes": 377177096,
+        "mtime_ns": 1792400263641099122,
+        "ctime_ns": 1792400263641099122
+      },
+      "original_csv_bytes": 377177096,
+      "original_csv_sha256": "b9e42e24177a7c318080b5d8965921945b5b657fc879e606bcbe19be215951d6",
+      "decompressed_concat_bytes": 377177096,
+      "decompressed_concat_sha256": "b9e42e24177a7c318080b5d8965921945b5b657fc879e606bcbe19be215951d6",
+      "lossless_roundtrip_verified": true,
+      "row_count": 195456,
+      "unique_id_count": 195456,
+      "duplicate_id_count": 0,
+      "id_range": [
+        0,
+        195455
+      ],
+      "generation_range": [
+        0,
+        800
+      ],
+      "distinct_generations_count": 801,
+      "legal_true_count": 77396,
+      "column_count": 146,
+      "gene_and_material_column_count": 129,
+      "segment_count": 20,
+      "total_compressed_bytes": 48902646,
+      "max_segment_compressed_bytes": 2571537,
+      "manifest_relpath": "evo_full_20261018_xbabe1_c04/population_manifest.v1.json",
+      "manifest_sha256": "ef4680b5196548188a9c125ad198549e45b022280691b51aada9f54a9b32b786",
+      "manifest_bytes": 18227,
+      "decoder_and_schema_binding": {
+        "csv_column_count": 146,
+        "scalar_metadata_columns_0_to_16": [
+          "id",
+          "gen",
+          "fit",
+          "spg",
+          "mass_g",
+          "aes_pass",
+          "aes_score",
+          "hausdorff",
+          "emd",
+          "novelty",
+          "lat_rob",
+          "ring_rob",
+          "sf_hunter",
+          "legal",
+          "n_rejects",
+          "relief_frac",
+          "n_win"
+        ],
+        "gene_columns_17_to_144": [
+          "cp00",
+          "cp01",
+          "cp02",
+          "cp03",
+          "cp04",
+          "cp05",
+          "cp06",
+          "cp07",
+          "cp08",
+          "cp09",
+          "cp10",
+          "cp11",
+          "cp12",
+          "cp13",
+          "cp14",
+          "cp15",
+          "cp16",
+          "cp17",
+          "cp18",
+          "cp19",
+          "cp20",
+          "cp21",
+          "cp22",
+          "cp23",
+          "cp24",
+          "cp25",
+          "cp26",
+          "cp27",
+          "cp28",
+          "cp29",
+          "cp30",
+          "cp31",
+          "cp32",
+          "cp33",
+          "cp34",
+          "cp35",
+          "cp36",
+          "cp37",
+          "cp38",
+          "cp39",
+          "blade_drop_deg",
+          "grip_dx",
+          "ring_wall",
+          "ring_id",
+          "neck_fillet",
+          "t_stock",
+          "t_tip",
+          "taper_x0",
+          "edge_angle_in",
+          "edge_angle_sp",
+          "comet_x0",
+          "comet_x1",
+          "comet_w0",
+          "comet_w1",
+          "comet_bow",
+          "comet_y",
+          "eye_scale",
+          "cairn_d",
+          "nub_engage",
+          "holder_wall",
+          "jimp_scale",
+          "serr_large_d",
+          "serr_small_d",
+          "serr_fine_d",
+          "spine_sharp_offset",
+          "relief_d",
+          "relief_w",
+          "relief_q",
+          "lattice_d",
+          "lattice_pitch",
+          "lattice_frac",
+          "lattice_angle",
+          "lattice_handle",
+          "lattice_blade",
+          "fuller_d",
+          "fuller_w",
+          "fuller_s0",
+          "fuller_s1",
+          "flute_d",
+          "texture_mode",
+          "texture_d",
+          "texture_pitch",
+          "texture_angle",
+          "wrap_x0",
+          "wrap_len",
+          "pad_x",
+          "pad_y",
+          "pad_w",
+          "pad_l",
+          "edge_t",
+          "iso_d",
+          "iso_pitch",
+          "iso_rib",
+          "iso_angle",
+          "iso_rim",
+          "iso_blade",
+          "iso_handle",
+          "iso_blade_extent",
+          "iso_grade",
+          "win_n",
+          "win_s0",
+          "win_s1",
+          "win_w",
+          "win_fill",
+          "win_decay",
+          "rflute_d",
+          "rflute_w",
+          "rflute_arc",
+          "iso_handle_start",
+          "iso_land",
+          "perf_d",
+          "perf_gap",
+          "perf_angle",
+          "perf_elong",
+          "perf_land",
+          "perf_handle",
+          "perf_handle_start",
+          "p1_on",
+          "rail_w",
+          "neck_l",
+          "pocket_d",
+          "pocket_r",
+          "k_n",
+          "k0",
+          "k1",
+          "k2",
+          "k3",
+          "k4"
+        ],
+        "material_column_145": "material",
+        "floating_point_representation": "exact_source_ascii_decimal_tokens_preserved_byte_for_byte_in_zstd_segments",
+        "source_commit_provenance": "d108c9d7d8149ac230ca13fb642159985a8f2857_with_untracked_worktree_state_per_T01_V2",
+        "proc_config_sha256": "ca48a24f39b8bb0cc6e056fb47dd1d858a07104d4ab0e24b734677b45cad3450",
+        "evidence_jevl_sha256": "492728ad2fbc2fd89171a6076a28d74e18fb1560998fdf95c256ae809a2a4615",
+        "history_live_csv_sha256": "a45128c513d4205cbccccfad6bb36410274864da6c5525c8c705a76329d0f7cf",
+        "all_evals_json_sha256": "8293f5b951ffd58db56aa233fa811a843c9e409d56555068b81e6377a3fc8bda"
+      }
+    },
+    {
+      "package_id": "evo_full_20261018_xbabe1_c05",
+      "host": "xbabe1",
+      "run_id": "c05",
+      "source_csv_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe1/crescent/c05/all_evals.csv",
+      "source_stat": {
+        "bytes": 383117362,
+        "mtime_ns": 1792410078823998148,
+        "ctime_ns": 1792410078823998148
+      },
+      "original_csv_bytes": 383117362,
+      "original_csv_sha256": "1efcb3b228e8d682bf8cd8f886bd06f0baa01c2f64ef50b283ea35af022f82c6",
+      "decompressed_concat_bytes": 383117362,
+      "decompressed_concat_sha256": "1efcb3b228e8d682bf8cd8f886bd06f0baa01c2f64ef50b283ea35af022f82c6",
+      "lossless_roundtrip_verified": true,
+      "row_count": 195456,
+      "unique_id_count": 195456,
+      "duplicate_id_count": 0,
+      "id_range": [
+        0,
+        195455
+      ],
+      "generation_range": [
+        0,
+        800
+      ],
+      "distinct_generations_count": 801,
+      "legal_true_count": 77625,
+      "column_count": 146,
+      "gene_and_material_column_count": 129,
+      "segment_count": 20,
+      "total_compressed_bytes": 50038585,
+      "max_segment_compressed_bytes": 2612518,
+      "manifest_relpath": "evo_full_20261018_xbabe1_c05/population_manifest.v1.json",
+      "manifest_sha256": "630f754b1499bac3561fa91cd7b3cf49cbff76a6f2810c45f229fe9a3797ec57",
+      "manifest_bytes": 18227,
+      "decoder_and_schema_binding": {
+        "csv_column_count": 146,
+        "scalar_metadata_columns_0_to_16": [
+          "id",
+          "gen",
+          "fit",
+          "spg",
+          "mass_g",
+          "aes_pass",
+          "aes_score",
+          "hausdorff",
+          "emd",
+          "novelty",
+          "lat_rob",
+          "ring_rob",
+          "sf_hunter",
+          "legal",
+          "n_rejects",
+          "relief_frac",
+          "n_win"
+        ],
+        "gene_columns_17_to_144": [
+          "cp00",
+          "cp01",
+          "cp02",
+          "cp03",
+          "cp04",
+          "cp05",
+          "cp06",
+          "cp07",
+          "cp08",
+          "cp09",
+          "cp10",
+          "cp11",
+          "cp12",
+          "cp13",
+          "cp14",
+          "cp15",
+          "cp16",
+          "cp17",
+          "cp18",
+          "cp19",
+          "cp20",
+          "cp21",
+          "cp22",
+          "cp23",
+          "cp24",
+          "cp25",
+          "cp26",
+          "cp27",
+          "cp28",
+          "cp29",
+          "cp30",
+          "cp31",
+          "cp32",
+          "cp33",
+          "cp34",
+          "cp35",
+          "cp36",
+          "cp37",
+          "cp38",
+          "cp39",
+          "blade_drop_deg",
+          "grip_dx",
+          "ring_wall",
+          "ring_id",
+          "neck_fillet",
+          "t_stock",
+          "t_tip",
+          "taper_x0",
+          "edge_angle_in",
+          "edge_angle_sp",
+          "comet_x0",
+          "comet_x1",
+          "comet_w0",
+          "comet_w1",
+          "comet_bow",
+          "comet_y",
+          "eye_scale",
+          "cairn_d",
+          "nub_engage",
+          "holder_wall",
+          "jimp_scale",
+          "serr_large_d",
+          "serr_small_d",
+          "serr_fine_d",
+          "spine_sharp_offset",
+          "relief_d",
+          "relief_w",
+          "relief_q",
+          "lattice_d",
+          "lattice_pitch",
+          "lattice_frac",
+          "lattice_angle",
+          "lattice_handle",
+          "lattice_blade",
+          "fuller_d",
+          "fuller_w",
+          "fuller_s0",
+          "fuller_s1",
+          "flute_d",
+          "texture_mode",
+          "texture_d",
+          "texture_pitch",
+          "texture_angle",
+          "wrap_x0",
+          "wrap_len",
+          "pad_x",
+          "pad_y",
+          "pad_w",
+          "pad_l",
+          "edge_t",
+          "iso_d",
+          "iso_pitch",
+          "iso_rib",
+          "iso_angle",
+          "iso_rim",
+          "iso_blade",
+          "iso_handle",
+          "iso_blade_extent",
+          "iso_grade",
+          "win_n",
+          "win_s0",
+          "win_s1",
+          "win_w",
+          "win_fill",
+          "win_decay",
+          "rflute_d",
+          "rflute_w",
+          "rflute_arc",
+          "iso_handle_start",
+          "iso_land",
+          "perf_d",
+          "perf_gap",
+          "perf_angle",
+          "perf_elong",
+          "perf_land",
+          "perf_handle",
+          "perf_handle_start",
+          "p1_on",
+          "rail_w",
+          "neck_l",
+          "pocket_d",
+          "pocket_r",
+          "k_n",
+          "k0",
+          "k1",
+          "k2",
+          "k3",
+          "k4"
+        ],
+        "material_column_145": "material",
+        "floating_point_representation": "exact_source_ascii_decimal_tokens_preserved_byte_for_byte_in_zstd_segments",
+        "source_commit_provenance": "d108c9d7d8149ac230ca13fb642159985a8f2857_with_untracked_worktree_state_per_T01_V2",
+        "proc_config_sha256": "0ceb3fb347c6b149e8e10b1d1f9af8b524580b11e5b923e785f2628967dc1dd4",
+        "evidence_jevl_sha256": "a4ff8822eb3637d23be6655c48f311be9e4a9043eb6cbe9cd493d753bc5fa845",
+        "history_live_csv_sha256": "9975db4d6b9fd6232df175ad79e3687569f55d750499a583a07bb5933ea69885",
+        "all_evals_json_sha256": "580b95f01c0ee77de5a67d78f3c5fc21e52cda9cc93ad4615b8246a993142718"
+      }
+    },
+    {
+      "package_id": "evo_full_20261018_xbabe3_c01",
+      "host": "xbabe3",
+      "run_id": "c01",
+      "source_csv_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe3/crescent/c01/all_evals.csv",
+      "source_stat": {
+        "bytes": 384808219,
+        "mtime_ns": 1792423294392477440,
+        "ctime_ns": 1792423294392477440
+      },
+      "original_csv_bytes": 384808219,
+      "original_csv_sha256": "75552d44073ecba1864ad42cfdd7cfdadfb675cd4eace72783e99cd97f6b1176",
+      "decompressed_concat_bytes": 384808219,
+      "decompressed_concat_sha256": "75552d44073ecba1864ad42cfdd7cfdadfb675cd4eace72783e99cd97f6b1176",
+      "lossless_roundtrip_verified": true,
+      "row_count": 195456,
+      "unique_id_count": 195456,
+      "duplicate_id_count": 0,
+      "id_range": [
+        0,
+        195455
+      ],
+      "generation_range": [
+        0,
+        800
+      ],
+      "distinct_generations_count": 801,
+      "legal_true_count": 70278,
+      "column_count": 146,
+      "gene_and_material_column_count": 129,
+      "segment_count": 20,
+      "total_compressed_bytes": 49666459,
+      "max_segment_compressed_bytes": 2590952,
+      "manifest_relpath": "evo_full_20261018_xbabe3_c01/population_manifest.v1.json",
+      "manifest_sha256": "632d3c660e09f4bb73f2665c724b6fc92ce46ec498e55e31973a07936c61bbd6",
+      "manifest_bytes": 18165,
+      "decoder_and_schema_binding": {
+        "csv_column_count": 146,
+        "scalar_metadata_columns_0_to_16": [
+          "id",
+          "gen",
+          "fit",
+          "spg",
+          "mass_g",
+          "aes_pass",
+          "aes_score",
+          "hausdorff",
+          "emd",
+          "novelty",
+          "lat_rob",
+          "ring_rob",
+          "sf_hunter",
+          "legal",
+          "n_rejects",
+          "relief_frac",
+          "n_win"
+        ],
+        "gene_columns_17_to_144": [
+          "cp00",
+          "cp01",
+          "cp02",
+          "cp03",
+          "cp04",
+          "cp05",
+          "cp06",
+          "cp07",
+          "cp08",
+          "cp09",
+          "cp10",
+          "cp11",
+          "cp12",
+          "cp13",
+          "cp14",
+          "cp15",
+          "cp16",
+          "cp17",
+          "cp18",
+          "cp19",
+          "cp20",
+          "cp21",
+          "cp22",
+          "cp23",
+          "cp24",
+          "cp25",
+          "cp26",
+          "cp27",
+          "cp28",
+          "cp29",
+          "cp30",
+          "cp31",
+          "cp32",
+          "cp33",
+          "cp34",
+          "cp35",
+          "cp36",
+          "cp37",
+          "cp38",
+          "cp39",
+          "blade_drop_deg",
+          "grip_dx",
+          "ring_wall",
+          "ring_id",
+          "neck_fillet",
+          "t_stock",
+          "t_tip",
+          "taper_x0",
+          "edge_angle_in",
+          "edge_angle_sp",
+          "comet_x0",
+          "comet_x1",
+          "comet_w0",
+          "comet_w1",
+          "comet_bow",
+          "comet_y",
+          "eye_scale",
+          "cairn_d",
+          "nub_engage",
+          "holder_wall",
+          "jimp_scale",
+          "serr_large_d",
+          "serr_small_d",
+          "serr_fine_d",
+          "spine_sharp_offset",
+          "relief_d",
+          "relief_w",
+          "relief_q",
+          "lattice_d",
+          "lattice_pitch",
+          "lattice_frac",
+          "lattice_angle",
+          "lattice_handle",
+          "lattice_blade",
+          "fuller_d",
+          "fuller_w",
+          "fuller_s0",
+          "fuller_s1",
+          "flute_d",
+          "texture_mode",
+          "texture_d",
+          "texture_pitch",
+          "texture_angle",
+          "wrap_x0",
+          "wrap_len",
+          "pad_x",
+          "pad_y",
+          "pad_w",
+          "pad_l",
+          "edge_t",
+          "iso_d",
+          "iso_pitch",
+          "iso_rib",
+          "iso_angle",
+          "iso_rim",
+          "iso_blade",
+          "iso_handle",
+          "iso_blade_extent",
+          "iso_grade",
+          "win_n",
+          "win_s0",
+          "win_s1",
+          "win_w",
+          "win_fill",
+          "win_decay",
+          "rflute_d",
+          "rflute_w",
+          "rflute_arc",
+          "iso_handle_start",
+          "iso_land",
+          "perf_d",
+          "perf_gap",
+          "perf_angle",
+          "perf_elong",
+          "perf_land",
+          "perf_handle",
+          "perf_handle_start",
+          "p1_on",
+          "rail_w",
+          "neck_l",
+          "pocket_d",
+          "pocket_r",
+          "k_n",
+          "k0",
+          "k1",
+          "k2",
+          "k3",
+          "k4"
+        ],
+        "material_column_145": "material",
+        "floating_point_representation": "exact_source_ascii_decimal_tokens_preserved_byte_for_byte_in_zstd_segments",
+        "source_commit_provenance": "d108c9d7d8149ac230ca13fb642159985a8f2857_with_untracked_worktree_state_per_T01_V2",
+        "proc_config_sha256": null,
+        "evidence_jevl_sha256": "ccfe74f1413dd8798688d21a2a62191506a15cd928258e1e7d005508083187e6",
+        "history_live_csv_sha256": "d032f0718937564f42b6acc03dfc138894b91d7fa267ad52cb657b76b7c2ba5b",
+        "all_evals_json_sha256": "a9e37148f50e0e5909e78c2d196c26f8e6bb3f362e7fff6673d2214698984401"
+      }
+    },
+    {
+      "package_id": "evo_full_20261018_xbabe3_c02",
+      "host": "xbabe3",
+      "run_id": "c02",
+      "source_csv_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe3/crescent/c02/all_evals.csv",
+      "source_stat": {
+        "bytes": 381765717,
+        "mtime_ns": 1792423672142806691,
+        "ctime_ns": 1792423672142806691
+      },
+      "original_csv_bytes": 381765717,
+      "original_csv_sha256": "e442593276e62784800abed28210d2f4774e8143069948c6ef8dd055e56e6989",
+      "decompressed_concat_bytes": 381765717,
+      "decompressed_concat_sha256": "e442593276e62784800abed28210d2f4774e8143069948c6ef8dd055e56e6989",
+      "lossless_roundtrip_verified": true,
+      "row_count": 195456,
+      "unique_id_count": 195456,
+      "duplicate_id_count": 0,
+      "id_range": [
+        0,
+        195455
+      ],
+      "generation_range": [
+        0,
+        800
+      ],
+      "distinct_generations_count": 801,
+      "legal_true_count": 74777,
+      "column_count": 146,
+      "gene_and_material_column_count": 129,
+      "segment_count": 20,
+      "total_compressed_bytes": 49990583,
+      "max_segment_compressed_bytes": 2612658,
+      "manifest_relpath": "evo_full_20261018_xbabe3_c02/population_manifest.v1.json",
+      "manifest_sha256": "bec92d4b8c19930c63b0d5b133e8449c69585742ab5974ab55277c02a1ce3f45",
+      "manifest_bytes": 18165,
+      "decoder_and_schema_binding": {
+        "csv_column_count": 146,
+        "scalar_metadata_columns_0_to_16": [
+          "id",
+          "gen",
+          "fit",
+          "spg",
+          "mass_g",
+          "aes_pass",
+          "aes_score",
+          "hausdorff",
+          "emd",
+          "novelty",
+          "lat_rob",
+          "ring_rob",
+          "sf_hunter",
+          "legal",
+          "n_rejects",
+          "relief_frac",
+          "n_win"
+        ],
+        "gene_columns_17_to_144": [
+          "cp00",
+          "cp01",
+          "cp02",
+          "cp03",
+          "cp04",
+          "cp05",
+          "cp06",
+          "cp07",
+          "cp08",
+          "cp09",
+          "cp10",
+          "cp11",
+          "cp12",
+          "cp13",
+          "cp14",
+          "cp15",
+          "cp16",
+          "cp17",
+          "cp18",
+          "cp19",
+          "cp20",
+          "cp21",
+          "cp22",
+          "cp23",
+          "cp24",
+          "cp25",
+          "cp26",
+          "cp27",
+          "cp28",
+          "cp29",
+          "cp30",
+          "cp31",
+          "cp32",
+          "cp33",
+          "cp34",
+          "cp35",
+          "cp36",
+          "cp37",
+          "cp38",
+          "cp39",
+          "blade_drop_deg",
+          "grip_dx",
+          "ring_wall",
+          "ring_id",
+          "neck_fillet",
+          "t_stock",
+          "t_tip",
+          "taper_x0",
+          "edge_angle_in",
+          "edge_angle_sp",
+          "comet_x0",
+          "comet_x1",
+          "comet_w0",
+          "comet_w1",
+          "comet_bow",
+          "comet_y",
+          "eye_scale",
+          "cairn_d",
+          "nub_engage",
+          "holder_wall",
+          "jimp_scale",
+          "serr_large_d",
+          "serr_small_d",
+          "serr_fine_d",
+          "spine_sharp_offset",
+          "relief_d",
+          "relief_w",
+          "relief_q",
+          "lattice_d",
+          "lattice_pitch",
+          "lattice_frac",
+          "lattice_angle",
+          "lattice_handle",
+          "lattice_blade",
+          "fuller_d",
+          "fuller_w",
+          "fuller_s0",
+          "fuller_s1",
+          "flute_d",
+          "texture_mode",
+          "texture_d",
+          "texture_pitch",
+          "texture_angle",
+          "wrap_x0",
+          "wrap_len",
+          "pad_x",
+          "pad_y",
+          "pad_w",
+          "pad_l",
+          "edge_t",
+          "iso_d",
+          "iso_pitch",
+          "iso_rib",
+          "iso_angle",
+          "iso_rim",
+          "iso_blade",
+          "iso_handle",
+          "iso_blade_extent",
+          "iso_grade",
+          "win_n",
+          "win_s0",
+          "win_s1",
+          "win_w",
+          "win_fill",
+          "win_decay",
+          "rflute_d",
+          "rflute_w",
+          "rflute_arc",
+          "iso_handle_start",
+          "iso_land",
+          "perf_d",
+          "perf_gap",
+          "perf_angle",
+          "perf_elong",
+          "perf_land",
+          "perf_handle",
+          "perf_handle_start",
+          "p1_on",
+          "rail_w",
+          "neck_l",
+          "pocket_d",
+          "pocket_r",
+          "k_n",
+          "k0",
+          "k1",
+          "k2",
+          "k3",
+          "k4"
+        ],
+        "material_column_145": "material",
+        "floating_point_representation": "exact_source_ascii_decimal_tokens_preserved_byte_for_byte_in_zstd_segments",
+        "source_commit_provenance": "d108c9d7d8149ac230ca13fb642159985a8f2857_with_untracked_worktree_state_per_T01_V2",
+        "proc_config_sha256": null,
+        "evidence_jevl_sha256": "4192c6615b3ad7fb3caad1d4ed04a916f4e16b7da429a94463090794cac6ea4c",
+        "history_live_csv_sha256": "1008ef9a47a2455df4d4aad3d5a8998b671e02c29c0fea3d8f6d00531fc94b49",
+        "all_evals_json_sha256": "f28fde2305a064c3f15866b421fe3e557c6b1f4dff8375e54f7951cb351e8009"
+      }
+    },
+    {
+      "package_id": "evo_full_20261018_xbabe3_c03",
+      "host": "xbabe3",
+      "run_id": "c03",
+      "source_csv_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe3/crescent/c03/all_evals.csv",
+      "source_stat": {
+        "bytes": 377698296,
+        "mtime_ns": 1792424016438737710,
+        "ctime_ns": 1792424016438737710
+      },
+      "original_csv_bytes": 377698296,
+      "original_csv_sha256": "a33071cd6ce3d90c7196e14ee45592d556f58c4e2f3548ef2bf45604a964eb76",
+      "decompressed_concat_bytes": 377698296,
+      "decompressed_concat_sha256": "a33071cd6ce3d90c7196e14ee45592d556f58c4e2f3548ef2bf45604a964eb76",
+      "lossless_roundtrip_verified": true,
+      "row_count": 195456,
+      "unique_id_count": 195456,
+      "duplicate_id_count": 0,
+      "id_range": [
+        0,
+        195455
+      ],
+      "generation_range": [
+        0,
+        800
+      ],
+      "distinct_generations_count": 801,
+      "legal_true_count": 71550,
+      "column_count": 146,
+      "gene_and_material_column_count": 129,
+      "segment_count": 20,
+      "total_compressed_bytes": 48637667,
+      "max_segment_compressed_bytes": 2526423,
+      "manifest_relpath": "evo_full_20261018_xbabe3_c03/population_manifest.v1.json",
+      "manifest_sha256": "16d52c921f0321a1d6c051f0394a483f9545692dce939261b71496781284d1b1",
+      "manifest_bytes": 18227,
+      "decoder_and_schema_binding": {
+        "csv_column_count": 146,
+        "scalar_metadata_columns_0_to_16": [
+          "id",
+          "gen",
+          "fit",
+          "spg",
+          "mass_g",
+          "aes_pass",
+          "aes_score",
+          "hausdorff",
+          "emd",
+          "novelty",
+          "lat_rob",
+          "ring_rob",
+          "sf_hunter",
+          "legal",
+          "n_rejects",
+          "relief_frac",
+          "n_win"
+        ],
+        "gene_columns_17_to_144": [
+          "cp00",
+          "cp01",
+          "cp02",
+          "cp03",
+          "cp04",
+          "cp05",
+          "cp06",
+          "cp07",
+          "cp08",
+          "cp09",
+          "cp10",
+          "cp11",
+          "cp12",
+          "cp13",
+          "cp14",
+          "cp15",
+          "cp16",
+          "cp17",
+          "cp18",
+          "cp19",
+          "cp20",
+          "cp21",
+          "cp22",
+          "cp23",
+          "cp24",
+          "cp25",
+          "cp26",
+          "cp27",
+          "cp28",
+          "cp29",
+          "cp30",
+          "cp31",
+          "cp32",
+          "cp33",
+          "cp34",
+          "cp35",
+          "cp36",
+          "cp37",
+          "cp38",
+          "cp39",
+          "blade_drop_deg",
+          "grip_dx",
+          "ring_wall",
+          "ring_id",
+          "neck_fillet",
+          "t_stock",
+          "t_tip",
+          "taper_x0",
+          "edge_angle_in",
+          "edge_angle_sp",
+          "comet_x0",
+          "comet_x1",
+          "comet_w0",
+          "comet_w1",
+          "comet_bow",
+          "comet_y",
+          "eye_scale",
+          "cairn_d",
+          "nub_engage",
+          "holder_wall",
+          "jimp_scale",
+          "serr_large_d",
+          "serr_small_d",
+          "serr_fine_d",
+          "spine_sharp_offset",
+          "relief_d",
+          "relief_w",
+          "relief_q",
+          "lattice_d",
+          "lattice_pitch",
+          "lattice_frac",
+          "lattice_angle",
+          "lattice_handle",
+          "lattice_blade",
+          "fuller_d",
+          "fuller_w",
+          "fuller_s0",
+          "fuller_s1",
+          "flute_d",
+          "texture_mode",
+          "texture_d",
+          "texture_pitch",
+          "texture_angle",
+          "wrap_x0",
+          "wrap_len",
+          "pad_x",
+          "pad_y",
+          "pad_w",
+          "pad_l",
+          "edge_t",
+          "iso_d",
+          "iso_pitch",
+          "iso_rib",
+          "iso_angle",
+          "iso_rim",
+          "iso_blade",
+          "iso_handle",
+          "iso_blade_extent",
+          "iso_grade",
+          "win_n",
+          "win_s0",
+          "win_s1",
+          "win_w",
+          "win_fill",
+          "win_decay",
+          "rflute_d",
+          "rflute_w",
+          "rflute_arc",
+          "iso_handle_start",
+          "iso_land",
+          "perf_d",
+          "perf_gap",
+          "perf_angle",
+          "perf_elong",
+          "perf_land",
+          "perf_handle",
+          "perf_handle_start",
+          "p1_on",
+          "rail_w",
+          "neck_l",
+          "pocket_d",
+          "pocket_r",
+          "k_n",
+          "k0",
+          "k1",
+          "k2",
+          "k3",
+          "k4"
+        ],
+        "material_column_145": "material",
+        "floating_point_representation": "exact_source_ascii_decimal_tokens_preserved_byte_for_byte_in_zstd_segments",
+        "source_commit_provenance": "d108c9d7d8149ac230ca13fb642159985a8f2857_with_untracked_worktree_state_per_T01_V2",
+        "proc_config_sha256": "7d908ee4e6c80b75cc2a64d9e31506cc06704c2c308911dc7702319c221bf29d",
+        "evidence_jevl_sha256": "8df8404e2fd13be735cb17a1e31dd2b809b5c8029ffc0b10da680c3bd99ed5c2",
+        "history_live_csv_sha256": "3ecae3e7603e49b44d7826dbb61412c7eada4a006a24ed2fc66cb0b9752d9988",
+        "all_evals_json_sha256": "00ab55b6957eb2255802b11cf37250e6de994f350fd9c86d4d33a1c6791fc0ac"
+      }
+    },
+    {
+      "package_id": "evo_full_20261018_xbabe3_c04",
+      "host": "xbabe3",
+      "run_id": "c04",
+      "source_csv_path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe3/crescent/c04/all_evals.csv",
+      "source_stat": {
+        "bytes": 380387911,
+        "mtime_ns": 1792423553969127570,
+        "ctime_ns": 1792423553969127570
+      },
+      "original_csv_bytes": 380387911,
+      "original_csv_sha256": "c3532f95975c217b468fa18034f366d03a10b501331edb32405f8752ca691307",
+      "decompressed_concat_bytes": 380387911,
+      "decompressed_concat_sha256": "c3532f95975c217b468fa18034f366d03a10b501331edb32405f8752ca691307",
+      "lossless_roundtrip_verified": true,
+      "row_count": 195456,
+      "unique_id_count": 195456,
+      "duplicate_id_count": 0,
+      "id_range": [
+        0,
+        195455
+      ],
+      "generation_range": [
+        0,
+        800
+      ],
+      "distinct_generations_count": 801,
+      "legal_true_count": 76284,
+      "column_count": 146,
+      "gene_and_material_column_count": 129,
+      "segment_count": 20,
+      "total_compressed_bytes": 50148309,
+      "max_segment_compressed_bytes": 2627104,
+      "manifest_relpath": "evo_full_20261018_xbabe3_c04/population_manifest.v1.json",
+      "manifest_sha256": "8a45a3bc587358941a5af747452b396f63e42029a5030d718cd55443774e53da",
+      "manifest_bytes": 18227,
+      "decoder_and_schema_binding": {
+        "csv_column_count": 146,
+        "scalar_metadata_columns_0_to_16": [
+          "id",
+          "gen",
+          "fit",
+          "spg",
+          "mass_g",
+          "aes_pass",
+          "aes_score",
+          "hausdorff",
+          "emd",
+          "novelty",
+          "lat_rob",
+          "ring_rob",
+          "sf_hunter",
+          "legal",
+          "n_rejects",
+          "relief_frac",
+          "n_win"
+        ],
+        "gene_columns_17_to_144": [
+          "cp00",
+          "cp01",
+          "cp02",
+          "cp03",
+          "cp04",
+          "cp05",
+          "cp06",
+          "cp07",
+          "cp08",
+          "cp09",
+          "cp10",
+          "cp11",
+          "cp12",
+          "cp13",
+          "cp14",
+          "cp15",
+          "cp16",
+          "cp17",
+          "cp18",
+          "cp19",
+          "cp20",
+          "cp21",
+          "cp22",
+          "cp23",
+          "cp24",
+          "cp25",
+          "cp26",
+          "cp27",
+          "cp28",
+          "cp29",
+          "cp30",
+          "cp31",
+          "cp32",
+          "cp33",
+          "cp34",
+          "cp35",
+          "cp36",
+          "cp37",
+          "cp38",
+          "cp39",
+          "blade_drop_deg",
+          "grip_dx",
+          "ring_wall",
+          "ring_id",
+          "neck_fillet",
+          "t_stock",
+          "t_tip",
+          "taper_x0",
+          "edge_angle_in",
+          "edge_angle_sp",
+          "comet_x0",
+          "comet_x1",
+          "comet_w0",
+          "comet_w1",
+          "comet_bow",
+          "comet_y",
+          "eye_scale",
+          "cairn_d",
+          "nub_engage",
+          "holder_wall",
+          "jimp_scale",
+          "serr_large_d",
+          "serr_small_d",
+          "serr_fine_d",
+          "spine_sharp_offset",
+          "relief_d",
+          "relief_w",
+          "relief_q",
+          "lattice_d",
+          "lattice_pitch",
+          "lattice_frac",
+          "lattice_angle",
+          "lattice_handle",
+          "lattice_blade",
+          "fuller_d",
+          "fuller_w",
+          "fuller_s0",
+          "fuller_s1",
+          "flute_d",
+          "texture_mode",
+          "texture_d",
+          "texture_pitch",
+          "texture_angle",
+          "wrap_x0",
+          "wrap_len",
+          "pad_x",
+          "pad_y",
+          "pad_w",
+          "pad_l",
+          "edge_t",
+          "iso_d",
+          "iso_pitch",
+          "iso_rib",
+          "iso_angle",
+          "iso_rim",
+          "iso_blade",
+          "iso_handle",
+          "iso_blade_extent",
+          "iso_grade",
+          "win_n",
+          "win_s0",
+          "win_s1",
+          "win_w",
+          "win_fill",
+          "win_decay",
+          "rflute_d",
+          "rflute_w",
+          "rflute_arc",
+          "iso_handle_start",
+          "iso_land",
+          "perf_d",
+          "perf_gap",
+          "perf_angle",
+          "perf_elong",
+          "perf_land",
+          "perf_handle",
+          "perf_handle_start",
+          "p1_on",
+          "rail_w",
+          "neck_l",
+          "pocket_d",
+          "pocket_r",
+          "k_n",
+          "k0",
+          "k1",
+          "k2",
+          "k3",
+          "k4"
+        ],
+        "material_column_145": "material",
+        "floating_point_representation": "exact_source_ascii_decimal_tokens_preserved_byte_for_byte_in_zstd_segments",
+        "source_commit_provenance": "d108c9d7d8149ac230ca13fb642159985a8f2857_with_untracked_worktree_state_per_T01_V2",
+        "proc_config_sha256": "56c469ebc3e56b3533ea77ecc65e2036de2fe0aa5a7aae6859b6066d82650319",
+        "evidence_jevl_sha256": "e5ad4e0a95b417c34c9c6c54c31d4c6c132ecd691a3185fb0627e238a9adc109",
+        "history_live_csv_sha256": "7cc225bdb1405a52f5ffcdbf0d99dc5016ec51107ab205d89c9550ddcd73249e",
+        "all_evals_json_sha256": "a64745080cda9c473c998ad6f7e36e65b1d7e6f6e419f2f8d9eb35f12ec15cb8"
+      }
+    },
+    {
+      "package_id": "evo_full_20261018_xbabe4_c01",
+      "host": "xbabe4",
+      "run_id": "c01",
+      "source_csv_path": "/Users/agent/jarambit_runs/evo_full_20261018/xbabe4/crescent/c01/all_evals.csv",
+      "source_stat": {
+        "bytes": 377583811,
+        "mtime_ns": 1792396118245426247,
+        "ctime_ns": 1792396118245426247
+      },
+      "original_csv_bytes": 377583811,
+      "original_csv_sha256": "6db20267b159bf795db54a9c9ff520ae5d0aa3351693c95eed266277cb4ad81c",
+      "decompressed_concat_bytes": 377583811,
+      "decompressed_concat_sha256": "6db20267b159bf795db54a9c9ff520ae5d0aa3351693c95eed266277cb4ad81c",
+      "lossless_roundtrip_verified": true,
+      "row_count": 195456,
+      "unique_id_count": 195456,
+      "duplicate_id_count": 0,
+      "id_range": [
+        0,
+        195455
+      ],
+      "generation_range": [
+        0,
+        800
+      ],
+      "distinct_generations_count": 801,
+      "legal_true_count": 74309,
+      "column_count": 146,
+      "gene_and_material_column_count": 129,
+      "segment_count": 20,
+      "total_compressed_bytes": 49150203,
+      "max_segment_compressed_bytes": 2586046,
+      "manifest_relpath": "evo_full_20261018_xbabe4_c01/population_manifest.v1.json",
+      "manifest_sha256": "2ae800591ee37890eff5b823ee7b65f936662296198f64fb43fb0ae2c8712996",
+      "manifest_bytes": 18165,
+      "decoder_and_schema_binding": {
+        "csv_column_count": 146,
+        "scalar_metadata_columns_0_to_16": [
+          "id",
+          "gen",
+          "fit",
+          "spg",
+          "mass_g",
+          "aes_pass",
+          "aes_score",
+          "hausdorff",
+          "emd",
+          "novelty",
+          "lat_rob",
+          "ring_rob",
+          "sf_hunter",
+          "legal",
+          "n_rejects",
+          "relief_frac",
+          "n_win"
+        ],
+        "gene_columns_17_to_144": [
+          "cp00",
+          "cp01",
+          "cp02",
+          "cp03",
+          "cp04",
+          "cp05",
+          "cp06",
+          "cp07",
+          "cp08",
+          "cp09",
+          "cp10",
+          "cp11",
+          "cp12",
+          "cp13",
+          "cp14",
+          "cp15",
+          "cp16",
+          "cp17",
+          "cp18",
+          "cp19",
+          "cp20",
+          "cp21",
+          "cp22",
+          "cp23",
+          "cp24",
+          "cp25",
+          "cp26",
+          "cp27",
+          "cp28",
+          "cp29",
+          "cp30",
+          "cp31",
+          "cp32",
+          "cp33",
+          "cp34",
+          "cp35",
+          "cp36",
+          "cp37",
+          "cp38",
+          "cp39",
+          "blade_drop_deg",
+          "grip_dx",
+          "ring_wall",
+          "ring_id",
+          "neck_fillet",
+          "t_stock",
+          "t_tip",
+          "taper_x0",
+          "edge_angle_in",
+          "edge_angle_sp",
+          "comet_x0",
+          "comet_x1",
+          "comet_w0",
+          "comet_w1",
+          "comet_bow",
+          "comet_y",
+          "eye_scale",
+          "cairn_d",
+          "nub_engage",
+          "holder_wall",
+          "jimp_scale",
+          "serr_large_d",
+          "serr_small_d",
+          "serr_fine_d",
+          "spine_sharp_offset",
+          "relief_d",
+          "relief_w",
+          "relief_q",
+          "lattice_d",
+          "lattice_pitch",
+          "lattice_frac",
+          "lattice_angle",
+          "lattice_handle",
+          "lattice_blade",
+          "fuller_d",
+          "fuller_w",
+          "fuller_s0",
+          "fuller_s1",
+          "flute_d",
+          "texture_mode",
+          "texture_d",
+          "texture_pitch",
+          "texture_angle",
+          "wrap_x0",
+          "wrap_len",
+          "pad_x",
+          "pad_y",
+          "pad_w",
+          "pad_l",
+          "edge_t",
+          "iso_d",
+          "iso_pitch",
+          "iso_rib",
+          "iso_angle",
+          "iso_rim",
+          "iso_blade",
+          "iso_handle",
+          "iso_blade_extent",
+          "iso_grade",
+          "win_n",
+          "win_s0",
+          "win_s1",
+          "win_w",
+          "win_fill",
+          "win_decay",
+          "rflute_d",
+          "rflute_w",
+          "rflute_arc",
+          "iso_handle_start",
+          "iso_land",
+          "perf_d",
+          "perf_gap",
+          "perf_angle",
+          "perf_elong",
+          "perf_land",
+          "perf_handle",
+          "perf_handle_start",
+          "p1_on",
+          "rail_w",
+          "neck_l",
+          "pocket_d",
+          "pocket_r",
+          "k_n",
+          "k0",
+          "k1",
+          "k2",
+          "k3",
+          "k4"
+        ],
+        "material_column_145": "material",
+        "floating_point_representation": "exact_source_ascii_decimal_tokens_preserved_byte_for_byte_in_zstd_segments",
+        "source_commit_provenance": "d108c9d7d8149ac230ca13fb642159985a8f2857_with_untracked_worktree_state_per_T01_V2",
+        "proc_config_sha256": null,
+        "evidence_jevl_sha256": "9057e344b906944cde7c6bfa77a1bbd22aea2844dc63ad35679133f1aa2df602",
+        "history_live_csv_sha256": "008324fd912a0225cef1101ad2ee4a09d210fb009d8a23db703c2857f7a8d213",
+        "all_evals_json_sha256": "cba39180eb8b94dd147c21c02d30c3a30b3c98efa2de4ec8a4d92f7ed55711a8"
+      }
+    },
+    {
+      "package_id": "evo_full_20261018_xbabe4_c02",
+      "host": "xbabe4",
+      "run_id": "c02",
+      "source_csv_path": "/Users/agent/jarambit_runs/evo_full_20261018/xbabe4/crescent/c02/all_evals.csv",
+      "source_stat": {
+        "bytes": 380930388,
+        "mtime_ns": 1792396634901021062,
+        "ctime_ns": 1792396634901021062
+      },
+      "original_csv_bytes": 380930388,
+      "original_csv_sha256": "86e2c256f218e87ef18d7cb14df92724e298d3611bdbb8859b246106ec0e0db0",
+      "decompressed_concat_bytes": 380930388,
+      "decompressed_concat_sha256": "86e2c256f218e87ef18d7cb14df92724e298d3611bdbb8859b246106ec0e0db0",
+      "lossless_roundtrip_verified": true,
+      "row_count": 195456,
+      "unique_id_count": 195456,
+      "duplicate_id_count": 0,
+      "id_range": [
+        0,
+        195455
+      ],
+      "generation_range": [
+        0,
+        800
+      ],
+      "distinct_generations_count": 801,
+      "legal_true_count": 80132,
+      "column_count": 146,
+      "gene_and_material_column_count": 129,
+      "segment_count": 20,
+      "total_compressed_bytes": 49206677,
+      "max_segment_compressed_bytes": 2569747,
+      "manifest_relpath": "evo_full_20261018_xbabe4_c02/population_manifest.v1.json",
+      "manifest_sha256": "44eac1169c1371e0a716a8727e2e8dea873c1c4f3c6537065022d5ec726bb22c",
+      "manifest_bytes": 18165,
+      "decoder_and_schema_binding": {
+        "csv_column_count": 146,
+        "scalar_metadata_columns_0_to_16": [
+          "id",
+          "gen",
+          "fit",
+          "spg",
+          "mass_g",
+          "aes_pass",
+          "aes_score",
+          "hausdorff",
+          "emd",
+          "novelty",
+          "lat_rob",
+          "ring_rob",
+          "sf_hunter",
+          "legal",
+          "n_rejects",
+          "relief_frac",
+          "n_win"
+        ],
+        "gene_columns_17_to_144": [
+          "cp00",
+          "cp01",
+          "cp02",
+          "cp03",
+          "cp04",
+          "cp05",
+          "cp06",
+          "cp07",
+          "cp08",
+          "cp09",
+          "cp10",
+          "cp11",
+          "cp12",
+          "cp13",
+          "cp14",
+          "cp15",
+          "cp16",
+          "cp17",
+          "cp18",
+          "cp19",
+          "cp20",
+          "cp21",
+          "cp22",
+          "cp23",
+          "cp24",
+          "cp25",
+          "cp26",
+          "cp27",
+          "cp28",
+          "cp29",
+          "cp30",
+          "cp31",
+          "cp32",
+          "cp33",
+          "cp34",
+          "cp35",
+          "cp36",
+          "cp37",
+          "cp38",
+          "cp39",
+          "blade_drop_deg",
+          "grip_dx",
+          "ring_wall",
+          "ring_id",
+          "neck_fillet",
+          "t_stock",
+          "t_tip",
+          "taper_x0",
+          "edge_angle_in",
+          "edge_angle_sp",
+          "comet_x0",
+          "comet_x1",
+          "comet_w0",
+          "comet_w1",
+          "comet_bow",
+          "comet_y",
+          "eye_scale",
+          "cairn_d",
+          "nub_engage",
+          "holder_wall",
+          "jimp_scale",
+          "serr_large_d",
+          "serr_small_d",
+          "serr_fine_d",
+          "spine_sharp_offset",
+          "relief_d",
+          "relief_w",
+          "relief_q",
+          "lattice_d",
+          "lattice_pitch",
+          "lattice_frac",
+          "lattice_angle",
+          "lattice_handle",
+          "lattice_blade",
+          "fuller_d",
+          "fuller_w",
+          "fuller_s0",
+          "fuller_s1",
+          "flute_d",
+          "texture_mode",
+          "texture_d",
+          "texture_pitch",
+          "texture_angle",
+          "wrap_x0",
+          "wrap_len",
+          "pad_x",
+          "pad_y",
+          "pad_w",
+          "pad_l",
+          "edge_t",
+          "iso_d",
+          "iso_pitch",
+          "iso_rib",
+          "iso_angle",
+          "iso_rim",
+          "iso_blade",
+          "iso_handle",
+          "iso_blade_extent",
+          "iso_grade",
+          "win_n",
+          "win_s0",
+          "win_s1",
+          "win_w",
+          "win_fill",
+          "win_decay",
+          "rflute_d",
+          "rflute_w",
+          "rflute_arc",
+          "iso_handle_start",
+          "iso_land",
+          "perf_d",
+          "perf_gap",
+          "perf_angle",
+          "perf_elong",
+          "perf_land",
+          "perf_handle",
+          "perf_handle_start",
+          "p1_on",
+          "rail_w",
+          "neck_l",
+          "pocket_d",
+          "pocket_r",
+          "k_n",
+          "k0",
+          "k1",
+          "k2",
+          "k3",
+          "k4"
+        ],
+        "material_column_145": "material",
+        "floating_point_representation": "exact_source_ascii_decimal_tokens_preserved_byte_for_byte_in_zstd_segments",
+        "source_commit_provenance": "d108c9d7d8149ac230ca13fb642159985a8f2857_with_untracked_worktree_state_per_T01_V2",
+        "proc_config_sha256": null,
+        "evidence_jevl_sha256": "07a607a5e6e665e4f587b34e8523d53472d5cb719127db903d8f2bb04c824278",
+        "history_live_csv_sha256": "f08bcb4dfaa46f7f335eafed91868e465a1ca1113067696df13053dfe91b2df5",
+        "all_evals_json_sha256": "ee5172b4fab1d6107a7f20e0b90e5135e4f4ddfa691e6cc10d497169805e290d"
+      }
+    }
+  ],
+  "files": [
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/population_manifest.v1.json",
+      "bytes": 18165,
+      "sha256": "9ab21efa5ccb372ebb8cb82deb49d516700b3bbbc6d92656526ea988298d3c63",
+      "kind": "run_population_manifest"
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000000.f46b292aea13d00d.csv.zst",
+      "bytes": 2341752,
+      "sha256": "f46b292aea13d00d55857e56ae09a67639bfbbec70e5f5e0615c9e12c988af64",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19058975,
+      "logical_payload_sha256": "1fc4218e90de9038163ed90e1b2347cb8e5bff03504b1e9c32c40608e60c6260",
+      "data_row_count": 10000,
+      "id_range": [
+        0,
+        9999
+      ],
+      "generation_range": [
+        0,
+        40
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000001.5728ca3b97c83197.csv.zst",
+      "bytes": 2473290,
+      "sha256": "5728ca3b97c83197eb6f40c8fa37ed33a818b65f154cc817664e2407ce33ccf0",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19427215,
+      "logical_payload_sha256": "7c93fb7eadc6add217135fdcd89e5aa231fafe80255c62aeb1b5188a4a0d1074",
+      "data_row_count": 10000,
+      "id_range": [
+        10000,
+        19999
+      ],
+      "generation_range": [
+        40,
+        81
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000002.b3b199ba0d983d5b.csv.zst",
+      "bytes": 2521758,
+      "sha256": "b3b199ba0d983d5bb24ca30feba3ac80ae91b5dc72af85e9671f7777ac226ee3",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19673269,
+      "logical_payload_sha256": "8994b0903fe66c065f0af32857fccfb5f820d50d20f347e984c9371ed43bd973",
+      "data_row_count": 10000,
+      "id_range": [
+        20000,
+        29999
+      ],
+      "generation_range": [
+        81,
+        122
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000003.b89a9d9e5e7a253e.csv.zst",
+      "bytes": 2499021,
+      "sha256": "b89a9d9e5e7a253e5d540bd06af565f65ad106458821328f744f3f236c97b0f9",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19687773,
+      "logical_payload_sha256": "92fa6ab7e13857a6e9e540d577af0461d26938e468529c4bd6356409283ed2a8",
+      "data_row_count": 10000,
+      "id_range": [
+        30000,
+        39999
+      ],
+      "generation_range": [
+        122,
+        163
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000004.c1847837077eb61b.csv.zst",
+      "bytes": 2518170,
+      "sha256": "c1847837077eb61b57ae0512088d3d99953b6597e8761226ac21981c8e5ffc0e",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19644295,
+      "logical_payload_sha256": "6fdcd704df07c00f3a62ea7d6e1e3c9aa318db82ae20c7c6be436ec6fb3dda5a",
+      "data_row_count": 10000,
+      "id_range": [
+        40000,
+        49999
+      ],
+      "generation_range": [
+        163,
+        204
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000005.81d09575ee618ff9.csv.zst",
+      "bytes": 2500235,
+      "sha256": "81d09575ee618ff909235fe0f5e47d991e8ae6859ee4f39bfdcdb53b69957ec2",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19582695,
+      "logical_payload_sha256": "bfe01068cb90f048731433a92d29f68eb6432c63ee8a384915e38c1715055b09",
+      "data_row_count": 10000,
+      "id_range": [
+        50000,
+        59999
+      ],
+      "generation_range": [
+        204,
+        245
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000006.32c86f030fd7f452.csv.zst",
+      "bytes": 2480012,
+      "sha256": "32c86f030fd7f45247f62f8ce7b535c0f3d1556227b31181f4a5306889299e22",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19513696,
+      "logical_payload_sha256": "de00b9b520682a42c2ded703c31ddc51aa921c3597bab92851403e6f8c505633",
+      "data_row_count": 10000,
+      "id_range": [
+        60000,
+        69999
+      ],
+      "generation_range": [
+        245,
+        286
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000007.11cbfe57b0bd8237.csv.zst",
+      "bytes": 2519085,
+      "sha256": "11cbfe57b0bd8237b9dfe6ab24e1b47a1405f45d5f5e9a11157e16b4fda8424d",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19528961,
+      "logical_payload_sha256": "bc757cbe5e8ef1e954b029e23a3d8916772a10fa3c0e71574ad90c7a8e2df5b2",
+      "data_row_count": 10000,
+      "id_range": [
+        70000,
+        79999
+      ],
+      "generation_range": [
+        286,
+        327
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000008.3c9f3ae657d01d2d.csv.zst",
+      "bytes": 2520687,
+      "sha256": "3c9f3ae657d01d2d068fcf4557fb26f637c90616d7e0bf5f3f1bc8c8dcebdee2",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19585919,
+      "logical_payload_sha256": "d125e7614dad7cbf18ea44628acf5b23af02f2d50b825346841043bc153ae10f",
+      "data_row_count": 10000,
+      "id_range": [
+        80000,
+        89999
+      ],
+      "generation_range": [
+        327,
+        368
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000009.b48c94ee0f2858e1.csv.zst",
+      "bytes": 2554831,
+      "sha256": "b48c94ee0f2858e184b4cb97002956c812dc008c12f6e4b8e88b24f503dc9f01",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19606030,
+      "logical_payload_sha256": "c02b2f61ff9a27f649c1090b7617fac04c7e324e00636ba16fc4dec9bc724b2d",
+      "data_row_count": 10000,
+      "id_range": [
+        90000,
+        99999
+      ],
+      "generation_range": [
+        368,
+        409
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000010.5562df08e4e4e796.csv.zst",
+      "bytes": 2544670,
+      "sha256": "5562df08e4e4e7969397cd85af34f32bccacbbf378d7c7309779c477c5630bef",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19655691,
+      "logical_payload_sha256": "1f01d283cd9d44420df81b35a64d8414c55d21284698e161c73b32faacb4f8bf",
+      "data_row_count": 10000,
+      "id_range": [
+        100000,
+        109999
+      ],
+      "generation_range": [
+        409,
+        450
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000011.ce69b52a178c2f56.csv.zst",
+      "bytes": 2555300,
+      "sha256": "ce69b52a178c2f560e4b7c463d342adfc45f6b966b6c6653b82344d3bd79966a",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19704307,
+      "logical_payload_sha256": "4e01dae3fa25a372737d2b07beac0614e7b06bd1fc726b14654416c42e138604",
+      "data_row_count": 10000,
+      "id_range": [
+        110000,
+        119999
+      ],
+      "generation_range": [
+        450,
+        491
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000012.c5b400235576ad44.csv.zst",
+      "bytes": 2551054,
+      "sha256": "c5b400235576ad4445f139418ec8e50c26db4c6b6793bbd0e2bf005e81c01286",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19660683,
+      "logical_payload_sha256": "42e5ae1b97c2e87eb18b42331d9b20d38771024a216cd2c4b1ed62f90b7a4565",
+      "data_row_count": 10000,
+      "id_range": [
+        120000,
+        129999
+      ],
+      "generation_range": [
+        491,
+        532
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000013.06abc11a73c9dc9a.csv.zst",
+      "bytes": 2542515,
+      "sha256": "06abc11a73c9dc9a7830e688bd70e312635b6962c4016a8bb494c5aebfd105a5",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19677563,
+      "logical_payload_sha256": "ec97a073cc9fde711f980f2df05fd2eafd56054d2bece5fa87f56638f9093a21",
+      "data_row_count": 10000,
+      "id_range": [
+        130000,
+        139999
+      ],
+      "generation_range": [
+        532,
+        573
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000014.eab34ecdbadb1eff.csv.zst",
+      "bytes": 2563805,
+      "sha256": "eab34ecdbadb1effa30b61bcde4e8b6d895987e9750355ae39c3767c481853d0",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19681279,
+      "logical_payload_sha256": "d628493cc80a9f940b3bc8b38e001952fb11e0a5a113d2ceaed67ad4460b5795",
+      "data_row_count": 10000,
+      "id_range": [
+        140000,
+        149999
+      ],
+      "generation_range": [
+        573,
+        614
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000015.7f9d66be77659b54.csv.zst",
+      "bytes": 2546741,
+      "sha256": "7f9d66be77659b5439834e7c61c0e8bb1b93e7d4401977d79358ba44357e6912",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19691812,
+      "logical_payload_sha256": "ea4a35119c4aa6fbadf5ab4c23518a41e65bab455cce1cc794925a7e3d4240d2",
+      "data_row_count": 10000,
+      "id_range": [
+        150000,
+        159999
+      ],
+      "generation_range": [
+        614,
+        655
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000016.d239a134986cd212.csv.zst",
+      "bytes": 2548581,
+      "sha256": "d239a134986cd21275de5e1663904ebf2500b1ce5f158212b26b6b0ecee4e71c",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19712562,
+      "logical_payload_sha256": "1b04f3a0d7b43f602da4027da84c6a163a5b6a4865d8c74e7f96a29626e956ed",
+      "data_row_count": 10000,
+      "id_range": [
+        160000,
+        169999
+      ],
+      "generation_range": [
+        655,
+        696
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000017.128794058fbab77b.csv.zst",
+      "bytes": 2552388,
+      "sha256": "128794058fbab77b9a7bdfc8833d8fbfec075608f8a32394b58e410b1e852909",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19649464,
+      "logical_payload_sha256": "e6eea84b2e4040e036b2d477a76e176a10045640bfa8779295c7384c56b967f5",
+      "data_row_count": 10000,
+      "id_range": [
+        170000,
+        179999
+      ],
+      "generation_range": [
+        696,
+        737
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000018.ceb647fcb9db5176.csv.zst",
+      "bytes": 2569846,
+      "sha256": "ceb647fcb9db517684d9d514b84934c2f21c360b4669d147debc72a987a16e5e",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19662292,
+      "logical_payload_sha256": "b68e1897b83b386a568b981b98c774153407e12d50700c61d19cf3d95653000e",
+      "data_row_count": 10000,
+      "id_range": [
+        180000,
+        189999
+      ],
+      "generation_range": [
+        737,
+        778
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c01/segments/000019.443db4afe21bbe62.csv.zst",
+      "bytes": 1406635,
+      "sha256": "443db4afe21bbe623a885f99b66c7dd4512875be4409190c585477e66b9db538",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 10700994,
+      "logical_payload_sha256": "e13bdbfe97bd05568221ab30e1a2bfe7f43b8c6e411c77c6e5d53f13924a8a05",
+      "data_row_count": 5456,
+      "id_range": [
+        190000,
+        195455
+      ],
+      "generation_range": [
+        778,
+        800
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/population_manifest.v1.json",
+      "bytes": 18227,
+      "sha256": "fb1b35a5a6c6b3e1d31894522fa33b89f3d6ba021dbe76f93b9ea3dca2a8d355",
+      "kind": "run_population_manifest"
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000000.51b32cf58f9d2023.csv.zst",
+      "bytes": 2428223,
+      "sha256": "51b32cf58f9d202390546f1091985d2c48b986785856d2d3f6163e98b3a5dd56",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19321929,
+      "logical_payload_sha256": "3e833a750ddf821ba40cb245d7dc87f3e5757389a84ec3da599cfb684a4aa39f",
+      "data_row_count": 10000,
+      "id_range": [
+        0,
+        9999
+      ],
+      "generation_range": [
+        0,
+        40
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000001.39507db17c2c8154.csv.zst",
+      "bytes": 2515627,
+      "sha256": "39507db17c2c815443f0d8b609019f98af6de6c746bc44aa3918fae1728ceeba",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19597005,
+      "logical_payload_sha256": "0f85f1a02c3dd951d0ef804dbaf943aaa1b243145420f0fa4f7a7bce7dd21d80",
+      "data_row_count": 10000,
+      "id_range": [
+        10000,
+        19999
+      ],
+      "generation_range": [
+        40,
+        81
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000002.20e76de330253b19.csv.zst",
+      "bytes": 2516854,
+      "sha256": "20e76de330253b192d24fc7c6eafad7b702186bfc0ad9743e955a999c28a66e3",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19779352,
+      "logical_payload_sha256": "532143475031ce33bf7b59c30e7c678afe950bb6fb83768fabbd074d724dfb5a",
+      "data_row_count": 10000,
+      "id_range": [
+        20000,
+        29999
+      ],
+      "generation_range": [
+        81,
+        122
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000003.a77a7804b5ff3a43.csv.zst",
+      "bytes": 2557152,
+      "sha256": "a77a7804b5ff3a43e0567f22b9ab8adbe9bf68c937ad9dc5aea680bfb6cb0d6b",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19866251,
+      "logical_payload_sha256": "40225bbe3a447ced0bdf6b8b13c77c6513b7c6cf09f6090142cf29451c7bcd72",
+      "data_row_count": 10000,
+      "id_range": [
+        30000,
+        39999
+      ],
+      "generation_range": [
+        122,
+        163
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000004.30ec943bce47ee7c.csv.zst",
+      "bytes": 2552927,
+      "sha256": "30ec943bce47ee7cfce33ca41c27646e9885dc009ac6efce4159224e742a802f",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19771612,
+      "logical_payload_sha256": "8b3c9aa9a84370a462822a1077f2a29e6d4336ff589305eda90dd95298583fef",
+      "data_row_count": 10000,
+      "id_range": [
+        40000,
+        49999
+      ],
+      "generation_range": [
+        163,
+        204
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000005.9f1666f5299f960a.csv.zst",
+      "bytes": 2555721,
+      "sha256": "9f1666f5299f960af49f69615698f99506ac2d7b8dd37d1d26d0dcae8d822086",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19717479,
+      "logical_payload_sha256": "5bd99cab879ff74ee8b1720bfd80e7bab7bbf87fb1885619bb3b4b5b939f5788",
+      "data_row_count": 10000,
+      "id_range": [
+        50000,
+        59999
+      ],
+      "generation_range": [
+        204,
+        245
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000006.422d5567ed26a041.csv.zst",
+      "bytes": 2534954,
+      "sha256": "422d5567ed26a041d5e932e7a4a77d96d4a7c0eac4b17020dde66cfe4cd06fe7",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19703858,
+      "logical_payload_sha256": "779d8a9552e14dd21ecbd02ba639551fa13d01ed41210362f1265973b78acdf2",
+      "data_row_count": 10000,
+      "id_range": [
+        60000,
+        69999
+      ],
+      "generation_range": [
+        245,
+        286
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000007.bb70013dd758226e.csv.zst",
+      "bytes": 2531796,
+      "sha256": "bb70013dd758226e88ade69e9290a569da1dfd09cd5ffd08f8da8e0833a93c52",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19709702,
+      "logical_payload_sha256": "180929c48f33b410c23157c0a7e29e63c2137145dd7070a0832205c929d6f664",
+      "data_row_count": 10000,
+      "id_range": [
+        70000,
+        79999
+      ],
+      "generation_range": [
+        286,
+        327
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000008.e2832ac7aaa3a331.csv.zst",
+      "bytes": 2546966,
+      "sha256": "e2832ac7aaa3a33190dc8239ba46370d2030ac9a7c47117cda19005f4dd9941a",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19747326,
+      "logical_payload_sha256": "4265c015f12bddc1cd21318ee8954d676c35bfb4bd331e28bd4a7064ec60d316",
+      "data_row_count": 10000,
+      "id_range": [
+        80000,
+        89999
+      ],
+      "generation_range": [
+        327,
+        368
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000009.4194f597deb8696a.csv.zst",
+      "bytes": 2545899,
+      "sha256": "4194f597deb8696ae33ef2a4bc2215ea6c4a17a9841035658c9c3435e7b929a5",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19738663,
+      "logical_payload_sha256": "72c9c393d3f4b5d510cadb1f8b831c6745c78c8c1b55c213b91fe5615c56f89c",
+      "data_row_count": 10000,
+      "id_range": [
+        90000,
+        99999
+      ],
+      "generation_range": [
+        368,
+        409
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000010.95d368c663ab0b87.csv.zst",
+      "bytes": 2557391,
+      "sha256": "95d368c663ab0b87650d356cf09a55481a05e154d585b1508b71ed90862fe3ce",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19744157,
+      "logical_payload_sha256": "40467351fc93c6d1639c90e188117ebdc7d334cbd315cc5f9d48a2f8a692f165",
+      "data_row_count": 10000,
+      "id_range": [
+        100000,
+        109999
+      ],
+      "generation_range": [
+        409,
+        450
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000011.5c1bbe83707c1a77.csv.zst",
+      "bytes": 2583066,
+      "sha256": "5c1bbe83707c1a77187dd605605e93d872ae7d2c8b1bc3f8fe8ad7f7dfae8b8b",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19743721,
+      "logical_payload_sha256": "bcb9e25965a86f484b23bffb201eb747f6b7448db639c78fa3d50d573849fb62",
+      "data_row_count": 10000,
+      "id_range": [
+        110000,
+        119999
+      ],
+      "generation_range": [
+        450,
+        491
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000012.59d1253fa8b9edf9.csv.zst",
+      "bytes": 2574519,
+      "sha256": "59d1253fa8b9edf9f05b55e297a90f11d6c3ee2d0b8e1f26f8550b835a40f177",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19768852,
+      "logical_payload_sha256": "22ad009f8fb58ef36b958a5c425e97b9778f26d2eafdc85df7928d9ee1420114",
+      "data_row_count": 10000,
+      "id_range": [
+        120000,
+        129999
+      ],
+      "generation_range": [
+        491,
+        532
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000013.adccb144a312fa73.csv.zst",
+      "bytes": 2546364,
+      "sha256": "adccb144a312fa73a96b6ecbcb0b358d282e8bbbda35138f1cb6d7a07e0d6c1a",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19752495,
+      "logical_payload_sha256": "c22f98c9654237be6037f2d9270076b83e17a0776da682eb8baa4aae4ac6e0b7",
+      "data_row_count": 10000,
+      "id_range": [
+        130000,
+        139999
+      ],
+      "generation_range": [
+        532,
+        573
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000014.9e8296bb54cfb1e7.csv.zst",
+      "bytes": 2565390,
+      "sha256": "9e8296bb54cfb1e7cad1154331d6ab349ad1c9900d468c2a723264fc0fe16e23",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19709642,
+      "logical_payload_sha256": "f83878317fcca53ca470a0da34b74a3bf9063beb6dc79d3545dbf44b64367c46",
+      "data_row_count": 10000,
+      "id_range": [
+        140000,
+        149999
+      ],
+      "generation_range": [
+        573,
+        614
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000015.a58c287b9ffc15d1.csv.zst",
+      "bytes": 2575120,
+      "sha256": "a58c287b9ffc15d13441084f35c8379b78795326226c3cc375601c2b85356da9",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19744912,
+      "logical_payload_sha256": "ce4006562790442231c27c092eac70ac9de4dcbbe010c23d2e0375baca66dac9",
+      "data_row_count": 10000,
+      "id_range": [
+        150000,
+        159999
+      ],
+      "generation_range": [
+        614,
+        655
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000016.f08b2cfd8d55c1d1.csv.zst",
+      "bytes": 2564609,
+      "sha256": "f08b2cfd8d55c1d15b2b48f986f79d0d3c9593db7fa96f11552476ef927db0b8",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19716358,
+      "logical_payload_sha256": "3f84d21ac705ca7ae5a50187e1fe78f9e630842664bffedc2d0e51b984067c7a",
+      "data_row_count": 10000,
+      "id_range": [
+        160000,
+        169999
+      ],
+      "generation_range": [
+        655,
+        696
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000017.d0c2cde25fedef00.csv.zst",
+      "bytes": 2558936,
+      "sha256": "d0c2cde25fedef005753f70d860d7b4637e4d69c6678f72f139685899bb110d3",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19709266,
+      "logical_payload_sha256": "656f4df9e98dc72b5a7438571bc022939d705bd03e4605d4100aa5ce8daee67e",
+      "data_row_count": 10000,
+      "id_range": [
+        170000,
+        179999
+      ],
+      "generation_range": [
+        696,
+        737
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000018.5619189ce0056ae8.csv.zst",
+      "bytes": 2567747,
+      "sha256": "5619189ce0056ae874d495cd5b72b96e4ac37db1c7a6aed71e564459db1e062b",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19725203,
+      "logical_payload_sha256": "0dc3b930a114d8620d7a6ee72d903bba76886c3c3c8e9112de1c660e7105bf78",
+      "data_row_count": 10000,
+      "id_range": [
+        180000,
+        189999
+      ],
+      "generation_range": [
+        737,
+        778
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c03/segments/000019.beef867a0acd9d74.csv.zst",
+      "bytes": 1412375,
+      "sha256": "beef867a0acd9d74584e89d8a8c188613c892b73ea507e001c7c9ed83f7b1bf0",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 10754691,
+      "logical_payload_sha256": "ce85965360abe157bfdb6061eb2e824e9f8afe13840b80f1601053ff350967e3",
+      "data_row_count": 5456,
+      "id_range": [
+        190000,
+        195455
+      ],
+      "generation_range": [
+        778,
+        800
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/population_manifest.v1.json",
+      "bytes": 18227,
+      "sha256": "ef4680b5196548188a9c125ad198549e45b022280691b51aada9f54a9b32b786",
+      "kind": "run_population_manifest"
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000000.1fa4254e37f5ff3b.csv.zst",
+      "bytes": 2284789,
+      "sha256": "1fa4254e37f5ff3bcd640397d3c17dda7225e7a5b6d6842037170c7251f591f2",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 18880173,
+      "logical_payload_sha256": "3042ba9662de0511acfea892e050e35a69643b867c67143ae1390bcece951c6b",
+      "data_row_count": 10000,
+      "id_range": [
+        0,
+        9999
+      ],
+      "generation_range": [
+        0,
+        40
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000001.740666be30dbc928.csv.zst",
+      "bytes": 2412281,
+      "sha256": "740666be30dbc928299404c410351459ee6e7d48fcd1f75b72497ec644129c46",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19171084,
+      "logical_payload_sha256": "0c3041680ebf106713209716aa62a279122c83d1258c744dd5140b7ce68e4641",
+      "data_row_count": 10000,
+      "id_range": [
+        10000,
+        19999
+      ],
+      "generation_range": [
+        40,
+        81
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000002.ad89a3f8fdd51247.csv.zst",
+      "bytes": 2452998,
+      "sha256": "ad89a3f8fdd512476abb446f3d25c47259ec58af777d5a03b59f9ed2b2132bcd",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19267747,
+      "logical_payload_sha256": "ea1933ea26dc4fdfabecdba0d14295c50366a8220dc1c3356352c3058bcec06c",
+      "data_row_count": 10000,
+      "id_range": [
+        20000,
+        29999
+      ],
+      "generation_range": [
+        81,
+        122
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000003.4188208b6c314d3d.csv.zst",
+      "bytes": 2478869,
+      "sha256": "4188208b6c314d3de28be5623a38388962075d339777f98a95cec84e0cb23133",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19357537,
+      "logical_payload_sha256": "8a4c308aa3c14493ecd26ca30081c4bc14235c1402cae39aa67b039d8b900e16",
+      "data_row_count": 10000,
+      "id_range": [
+        30000,
+        39999
+      ],
+      "generation_range": [
+        122,
+        163
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000004.80e0b6b4cf5ec1ba.csv.zst",
+      "bytes": 2465234,
+      "sha256": "80e0b6b4cf5ec1ba19c4c75672de1cdbac3cb1ef46d48198d24332176c606b1d",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19334147,
+      "logical_payload_sha256": "aacd494e2d03914d7f8f97e1904709ebf39add824fd74c900441286701de9f3a",
+      "data_row_count": 10000,
+      "id_range": [
+        40000,
+        49999
+      ],
+      "generation_range": [
+        163,
+        204
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000005.650537b897256e0b.csv.zst",
+      "bytes": 2484130,
+      "sha256": "650537b897256e0b2c87bc245cb4f605fde0845153956ca82d4b4c37b5e3d21a",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19285201,
+      "logical_payload_sha256": "b5143d81f76883c5c0ccd78ca170cf01c6cc2848bea2524055c7ce1eb5c3090c",
+      "data_row_count": 10000,
+      "id_range": [
+        50000,
+        59999
+      ],
+      "generation_range": [
+        204,
+        245
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000006.88f11e966d0e4259.csv.zst",
+      "bytes": 2474705,
+      "sha256": "88f11e966d0e4259a43be70bf0f55bbb5873256c78f9adcf5088d8590e68f2b7",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19254837,
+      "logical_payload_sha256": "3ecb23c4eb8faed53ef45047749f6263b26552dd837e772d007aca82ebd8d5a7",
+      "data_row_count": 10000,
+      "id_range": [
+        60000,
+        69999
+      ],
+      "generation_range": [
+        245,
+        286
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000007.0feb8884abac4b45.csv.zst",
+      "bytes": 2462207,
+      "sha256": "0feb8884abac4b454b84fdbf47dd46ba59c1234ba4fc3a49c1bd9e96dec029da",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19152202,
+      "logical_payload_sha256": "c478029635148776ec653a897e52e397ac5348d4d5cb29084a6dc2405dfd2a70",
+      "data_row_count": 10000,
+      "id_range": [
+        70000,
+        79999
+      ],
+      "generation_range": [
+        286,
+        327
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000008.280e54986d1f4a8b.csv.zst",
+      "bytes": 2518887,
+      "sha256": "280e54986d1f4a8b57f59bea54334f723a6dccc0a8cfb4e937c4f8fef4a8ed49",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19216812,
+      "logical_payload_sha256": "2e7d74f0d39c957d014e122f74bc137ef9e6fca75d39f1f2528b558923bd885c",
+      "data_row_count": 10000,
+      "id_range": [
+        80000,
+        89999
+      ],
+      "generation_range": [
+        327,
+        368
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000009.e91d08b08a12748e.csv.zst",
+      "bytes": 2517517,
+      "sha256": "e91d08b08a12748ed3cf24b30a9757e902fd687645750bdfaa6056aeef4f83d1",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19289455,
+      "logical_payload_sha256": "e51fbf383d0745c5d09d3474cb2591f4c2e9b7be9ee482e3ae426c034c11661b",
+      "data_row_count": 10000,
+      "id_range": [
+        90000,
+        99999
+      ],
+      "generation_range": [
+        368,
+        409
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000010.0f7e8b12c43f2ae4.csv.zst",
+      "bytes": 2535657,
+      "sha256": "0f7e8b12c43f2ae474d3df9612c568cf555400b0cd8e48a332ddc8e3b9958bd5",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19296684,
+      "logical_payload_sha256": "10c7745d053b7a5d672a88a543e5b5cf868adbe9cf7eb308f2f5f4612e4345d5",
+      "data_row_count": 10000,
+      "id_range": [
+        100000,
+        109999
+      ],
+      "generation_range": [
+        409,
+        450
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000011.569c35cbd44efd22.csv.zst",
+      "bytes": 2528119,
+      "sha256": "569c35cbd44efd2269193048f5c010f2efb5231b2c0ecc3304030238e9e08688",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19285551,
+      "logical_payload_sha256": "7fe6a83104a87b2e976d828919d1dca42481356ebdb584be82bc1eaa493d8eb9",
+      "data_row_count": 10000,
+      "id_range": [
+        110000,
+        119999
+      ],
+      "generation_range": [
+        450,
+        491
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000012.4abdc2832031989f.csv.zst",
+      "bytes": 2512548,
+      "sha256": "4abdc2832031989fcfd6e036c464ad69462a1a98703dc595b27168d8501e1085",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19298420,
+      "logical_payload_sha256": "bb7e5da6721bb936385ab9ec22b9ddb0433845eb937913bc0a01af74f0dd9ede",
+      "data_row_count": 10000,
+      "id_range": [
+        120000,
+        129999
+      ],
+      "generation_range": [
+        491,
+        532
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000013.72ac6dd2696bf427.csv.zst",
+      "bytes": 2552394,
+      "sha256": "72ac6dd2696bf427d46c26c4fa147f765538948fd3cc5c454bf4c9e5ed062ea1",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19368460,
+      "logical_payload_sha256": "3a1e7a3a79555083a3d7a34e66af6bbca4631778c50d253cb8ec1e9e5df34aac",
+      "data_row_count": 10000,
+      "id_range": [
+        130000,
+        139999
+      ],
+      "generation_range": [
+        532,
+        573
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000014.791af385b0075e6c.csv.zst",
+      "bytes": 2543561,
+      "sha256": "791af385b0075e6c0c24a8c21751b0974d13726af8c38a4c62399aa609f4a7ad",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19421513,
+      "logical_payload_sha256": "df16d1e7da37be070826ee65f54af82eff4c8741a6a28a3534c8eea90ad36221",
+      "data_row_count": 10000,
+      "id_range": [
+        140000,
+        149999
+      ],
+      "generation_range": [
+        573,
+        614
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000015.c5c2473f9918105d.csv.zst",
+      "bytes": 2568825,
+      "sha256": "c5c2473f9918105ddf504c31538733308cbf0309650bd5742d7c638be0497024",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19408766,
+      "logical_payload_sha256": "3778b6d6e8d2fec3393af2a270765ef419c6b7f49f1d94d27c6c9a69c76e2034",
+      "data_row_count": 10000,
+      "id_range": [
+        150000,
+        159999
+      ],
+      "generation_range": [
+        614,
+        655
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000016.861372d7b745aea2.csv.zst",
+      "bytes": 2567516,
+      "sha256": "861372d7b745aea2ef77db3b3fed7cba32fad910aca94940fe85f911c3ce219b",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19447043,
+      "logical_payload_sha256": "eae2c5b43a143bcd1dc80c434e27a025a994414297744c10c8d973493f436242",
+      "data_row_count": 10000,
+      "id_range": [
+        160000,
+        169999
+      ],
+      "generation_range": [
+        655,
+        696
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000017.247495e3b8a91cf7.csv.zst",
+      "bytes": 2571537,
+      "sha256": "247495e3b8a91cf782c45fbbb0e718632c7c335770cded2977b6fb6b5e6ea0aa",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19432636,
+      "logical_payload_sha256": "12bbad62eef68ddc15047568715d3d7286defbb87476eb2c6ad851af6e7edc61",
+      "data_row_count": 10000,
+      "id_range": [
+        170000,
+        179999
+      ],
+      "generation_range": [
+        696,
+        737
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000018.3512f6fa95269e0b.csv.zst",
+      "bytes": 2558497,
+      "sha256": "3512f6fa95269e0b6f71ac7555ac8daa42f8e6b8f64ccc590ea8aa7c62a69fa3",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19421339,
+      "logical_payload_sha256": "c76ceb853dacd4b34cb20ddfe1ed52e9c6b6a9130c45950621b11357ebe332a1",
+      "data_row_count": 10000,
+      "id_range": [
+        180000,
+        189999
+      ],
+      "generation_range": [
+        737,
+        778
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c04/segments/000019.7a2b3b8177a740f3.csv.zst",
+      "bytes": 1412375,
+      "sha256": "7a2b3b8177a740f3a7b09a8e65b03e5adf13b9d31d4ba02601ece8ef3b980ea3",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 10587489,
+      "logical_payload_sha256": "23c68983d66adcbdf92e9b6eff381545a5c11807beb8390d5327690bc9c3c12f",
+      "data_row_count": 5456,
+      "id_range": [
+        190000,
+        195455
+      ],
+      "generation_range": [
+        778,
+        800
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/population_manifest.v1.json",
+      "bytes": 18227,
+      "sha256": "630f754b1499bac3561fa91cd7b3cf49cbff76a6f2810c45f229fe9a3797ec57",
+      "kind": "run_population_manifest"
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000000.3ea04fcdaf2ec8bd.csv.zst",
+      "bytes": 2361294,
+      "sha256": "3ea04fcdaf2ec8bd3304be3e80adf040e6c967348c065a1f8629ccd13af74584",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 18882673,
+      "logical_payload_sha256": "8ebc4f60806148299cee888ba9c20d6341a8a46b148960783423dca41f45b941",
+      "data_row_count": 10000,
+      "id_range": [
+        0,
+        9999
+      ],
+      "generation_range": [
+        0,
+        40
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000001.e011b177dfc4ffdf.csv.zst",
+      "bytes": 2483231,
+      "sha256": "e011b177dfc4ffdf349c0bd0455ae4a56aee42c692f77f114551ee78be95345e",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19333941,
+      "logical_payload_sha256": "fa9f58020fd2cf923cf9c1eccacdd1b261403d4d254a44305a41e3a3bec11048",
+      "data_row_count": 10000,
+      "id_range": [
+        10000,
+        19999
+      ],
+      "generation_range": [
+        40,
+        81
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000002.2d84bb95f190e086.csv.zst",
+      "bytes": 2537051,
+      "sha256": "2d84bb95f190e086734941e44d86ddf4709c0d97ac63cdd5e254fe6c8df80114",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19467651,
+      "logical_payload_sha256": "3fb70d9c669d9a83f40b6cb592ec042dad115ae19513b7acefcdbd82a990eacd",
+      "data_row_count": 10000,
+      "id_range": [
+        20000,
+        29999
+      ],
+      "generation_range": [
+        81,
+        122
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000003.46b39aefadae66a6.csv.zst",
+      "bytes": 2554917,
+      "sha256": "46b39aefadae66a683a69cf4b03d55c4e8d303b874d4bb98ddd901b5badea6f5",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19629042,
+      "logical_payload_sha256": "d77c1ca44bac90125bb3dc568fe105cbe24d42fe55c1d1a947ef086094131e10",
+      "data_row_count": 10000,
+      "id_range": [
+        30000,
+        39999
+      ],
+      "generation_range": [
+        122,
+        163
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000004.be82027160f21c76.csv.zst",
+      "bytes": 2541873,
+      "sha256": "be82027160f21c76b6e3872f2e118b26355a7e0301e9a62f0cd76e6144b0c6ef",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19643396,
+      "logical_payload_sha256": "f4e5711d24b802e549e42451d18bd3c385426f0152e6a141f1d6d6ce76bdc01e",
+      "data_row_count": 10000,
+      "id_range": [
+        40000,
+        49999
+      ],
+      "generation_range": [
+        163,
+        204
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000005.d85c755b957fb282.csv.zst",
+      "bytes": 2573887,
+      "sha256": "d85c755b957fb28248c91527063cd6109dfca2825c5469044909260c1b6e4982",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19717578,
+      "logical_payload_sha256": "14d1880a5ba7805a0e681d5053849ce2fd50aa73ce6092e3c74774f18ce26718",
+      "data_row_count": 10000,
+      "id_range": [
+        50000,
+        59999
+      ],
+      "generation_range": [
+        204,
+        245
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000006.9686b100dd6810a4.csv.zst",
+      "bytes": 2580508,
+      "sha256": "9686b100dd6810a4b2c83bcd7517de44a12dbb94933caab09ecea2697fb9b829",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19706114,
+      "logical_payload_sha256": "c86cbd154ea4e0a8da0a9b8afbf6429cb81e6dac0b090f8893a546d6c5631eec",
+      "data_row_count": 10000,
+      "id_range": [
+        60000,
+        69999
+      ],
+      "generation_range": [
+        245,
+        286
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000007.9eedb75664057ae8.csv.zst",
+      "bytes": 2567396,
+      "sha256": "9eedb75664057ae8bf09deee5c5f80d2de03d53c328055176f753ffbe22e66d0",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19641971,
+      "logical_payload_sha256": "e76f3e9f80cbbbe11cec364816f36e0d1a04f5e5c7fdd036bb123b543405bb40",
+      "data_row_count": 10000,
+      "id_range": [
+        70000,
+        79999
+      ],
+      "generation_range": [
+        286,
+        327
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000008.206e66a1aa45b819.csv.zst",
+      "bytes": 2577845,
+      "sha256": "206e66a1aa45b8190f76d79bac327ef20258a24474adff2fdd616d0f87b9a36c",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19665290,
+      "logical_payload_sha256": "2bab220016238c9765beb89cf5526b97b6c44f0bc09bccbf74e521ec04c21a16",
+      "data_row_count": 10000,
+      "id_range": [
+        80000,
+        89999
+      ],
+      "generation_range": [
+        327,
+        368
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000009.0ae4ca0d89f1bd37.csv.zst",
+      "bytes": 2575543,
+      "sha256": "0ae4ca0d89f1bd37c18a4f86935e09ac28f8b17521cd416eef301ba55513e66f",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19720280,
+      "logical_payload_sha256": "082415f380a4c913f862e5786bb5d02666369fca91f9993a619d9dcc49b4fd2c",
+      "data_row_count": 10000,
+      "id_range": [
+        90000,
+        99999
+      ],
+      "generation_range": [
+        368,
+        409
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000010.189c981b15304025.csv.zst",
+      "bytes": 2577019,
+      "sha256": "189c981b153040254c10e7885646fc34144e064d4de027214b58f1686ddcf78d",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19707957,
+      "logical_payload_sha256": "c60fc4f94b09e6f6d2891723b8f12e31d523ea9b726c6114ea0dfacdf32ea036",
+      "data_row_count": 10000,
+      "id_range": [
+        100000,
+        109999
+      ],
+      "generation_range": [
+        409,
+        450
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000011.0987e318471c10e6.csv.zst",
+      "bytes": 2606696,
+      "sha256": "0987e318471c10e640303a99bb8aa31f0e365231773f5a2b069ba162fcceb3e2",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19724271,
+      "logical_payload_sha256": "d10608ffcfb86377f8385fc8cb6852eeff45dc0ce68e583113679209360aae44",
+      "data_row_count": 10000,
+      "id_range": [
+        110000,
+        119999
+      ],
+      "generation_range": [
+        450,
+        491
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000012.cdb0e946f5ba2a49.csv.zst",
+      "bytes": 2612518,
+      "sha256": "cdb0e946f5ba2a49700bdf9f4eea5e8f091bd9d314f3b26ee2bb08595cfed044",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19682352,
+      "logical_payload_sha256": "96088a2064e1b745a0880f8a600a56b47b3ebcdb5ebf55329ac7419cd45def6b",
+      "data_row_count": 10000,
+      "id_range": [
+        120000,
+        129999
+      ],
+      "generation_range": [
+        491,
+        532
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000013.b051604527bec22f.csv.zst",
+      "bytes": 2548358,
+      "sha256": "b051604527bec22f7ab25e8efa7e9e7f87b0f6aac4913811dba28a9c54d4c94a",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19672485,
+      "logical_payload_sha256": "969bfe910b4a096c808558296ef2979b2ec032e6a0311dbadddf85b165e1c124",
+      "data_row_count": 10000,
+      "id_range": [
+        130000,
+        139999
+      ],
+      "generation_range": [
+        532,
+        573
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000014.c54899c1655357b9.csv.zst",
+      "bytes": 2569844,
+      "sha256": "c54899c1655357b943447e49bff9055cab5c3ce047bb15966faa0a37b01d8cde",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19667740,
+      "logical_payload_sha256": "905de2761c5a8f1e3fb43b023e15f3cf1d0cd55d43b9e8bc885fdb91e11e555a",
+      "data_row_count": 10000,
+      "id_range": [
+        140000,
+        149999
+      ],
+      "generation_range": [
+        573,
+        614
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000015.26518a079d091165.csv.zst",
+      "bytes": 2578830,
+      "sha256": "26518a079d091165274fede7ed552f87039bcb636ab2da9488bea9e38e7a9922",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19634081,
+      "logical_payload_sha256": "baf4c6d46fc14f3216a71320365a7d343c36b816b4e6b2ad93c103b87a1e4d15",
+      "data_row_count": 10000,
+      "id_range": [
+        150000,
+        159999
+      ],
+      "generation_range": [
+        614,
+        655
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000016.2801ad4ee636c2c6.csv.zst",
+      "bytes": 2584378,
+      "sha256": "2801ad4ee636c2c62fbb5741b009204ea45706e69ca2ce86dc39b54307e3b7a3",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19613984,
+      "logical_payload_sha256": "539fb44c9b02e2bf252e6435de9e86b3b280860e3ccf500cdc0ba4833ae28e25",
+      "data_row_count": 10000,
+      "id_range": [
+        160000,
+        169999
+      ],
+      "generation_range": [
+        655,
+        696
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000017.853be07f2ff9a8f8.csv.zst",
+      "bytes": 2586347,
+      "sha256": "853be07f2ff9a8f8e5e61ae92e6516592cad91687dbae489b0ce5876c40518b6",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19671646,
+      "logical_payload_sha256": "0d3d30b6fce602cfd2c223970e0068bf44ed960e7290d4e462d540dcb8bf3491",
+      "data_row_count": 10000,
+      "id_range": [
+        170000,
+        179999
+      ],
+      "generation_range": [
+        696,
+        737
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000018.b8d4f4a9e1e489d0.csv.zst",
+      "bytes": 2590004,
+      "sha256": "b8d4f4a9e1e489d0a62cfbc95cb73d5f047129d947cd815c321c35e5cbc118eb",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19640773,
+      "logical_payload_sha256": "f8dbc947a5b477ec135b7e939b97417ba8c11d51234d20b3805d3e4105e62c91",
+      "data_row_count": 10000,
+      "id_range": [
+        180000,
+        189999
+      ],
+      "generation_range": [
+        737,
+        778
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe1_c05/segments/000019.58c4cffd16043117.csv.zst",
+      "bytes": 1431046,
+      "sha256": "58c4cffd16043117e400fdfef9ad4886a02685752ca03eacd8689bd96f15f94a",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 10694137,
+      "logical_payload_sha256": "5b15887ab3c4ab182abd3f3afb05a728322aab982d74acd1bed0726aa4e11055",
+      "data_row_count": 5456,
+      "id_range": [
+        190000,
+        195455
+      ],
+      "generation_range": [
+        778,
+        800
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/population_manifest.v1.json",
+      "bytes": 18165,
+      "sha256": "632d3c660e09f4bb73f2665c724b6fc92ce46ec498e55e31973a07936c61bbd6",
+      "kind": "run_population_manifest"
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000000.897b74d62f3f3404.csv.zst",
+      "bytes": 2340745,
+      "sha256": "897b74d62f3f34040aa6421de4bc7ecac40edc7e43f37cabc08f5ad959fc058d",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19097243,
+      "logical_payload_sha256": "9a23a25145a3109930aa5e7ecf43acb9696d8e232cd20a56ffe32d734bc1cc30",
+      "data_row_count": 10000,
+      "id_range": [
+        0,
+        9999
+      ],
+      "generation_range": [
+        0,
+        40
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000001.2acf2399e94f3916.csv.zst",
+      "bytes": 2473249,
+      "sha256": "2acf2399e94f3916084cc1df9c4c8fd4104a088696e9dfe3855c65c22806887d",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19604608,
+      "logical_payload_sha256": "ac02cf3724f1926d16403615cef0c4ad544c298e1b4c56db51545bfc5e51c2ae",
+      "data_row_count": 10000,
+      "id_range": [
+        10000,
+        19999
+      ],
+      "generation_range": [
+        40,
+        81
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000002.e4a78e3faa130887.csv.zst",
+      "bytes": 2495266,
+      "sha256": "e4a78e3faa1308878e7582c7753ae262c03061e51f2171adb6d15b18f15c64ac",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19734297,
+      "logical_payload_sha256": "f46d78e59c4811583f4a74c7bd9c17a23c0a55ed04c598890d05dc08900e4e15",
+      "data_row_count": 10000,
+      "id_range": [
+        20000,
+        29999
+      ],
+      "generation_range": [
+        81,
+        122
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000003.fee66fb65ab22d6e.csv.zst",
+      "bytes": 2535699,
+      "sha256": "fee66fb65ab22d6e3418acf8717c7301c5c7b385bf062ab8bf803f52ffa004c9",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19730639,
+      "logical_payload_sha256": "00a2aab8d66abaf5860d739b76d0d20ff2796ca1fee884a387e9b440a4071ba5",
+      "data_row_count": 10000,
+      "id_range": [
+        30000,
+        39999
+      ],
+      "generation_range": [
+        122,
+        163
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000004.dd137c247a0e36f4.csv.zst",
+      "bytes": 2556110,
+      "sha256": "dd137c247a0e36f4769a095ee97d5d5073ea76212f9903b3e8667631bda2fefb",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19678293,
+      "logical_payload_sha256": "0c539811ed1dfd52a3353bf8018ce36a66453a851dc067e16c9fbb8f0cfcfba8",
+      "data_row_count": 10000,
+      "id_range": [
+        40000,
+        49999
+      ],
+      "generation_range": [
+        163,
+        204
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000005.6d2abc21bb0bcd6c.csv.zst",
+      "bytes": 2534986,
+      "sha256": "6d2abc21bb0bcd6cd0497af44996048c06d879a70d3ece188b08847e24ee53c6",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19756426,
+      "logical_payload_sha256": "cdb9b65a1dc4bf8b35b74dc01e6d4463f28b11b5c2b2177762a825f268d24c98",
+      "data_row_count": 10000,
+      "id_range": [
+        50000,
+        59999
+      ],
+      "generation_range": [
+        204,
+        245
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000006.5b82c2eef8b5f7fc.csv.zst",
+      "bytes": 2555889,
+      "sha256": "5b82c2eef8b5f7fcc60b089f7096f6fadfaa100a5c68ff2462a707621e6fac1d",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19799121,
+      "logical_payload_sha256": "586c2b7ae95d22fb587d78e26984bdd7fc0e144f4c3125e26eaa72a7ee5ac772",
+      "data_row_count": 10000,
+      "id_range": [
+        60000,
+        69999
+      ],
+      "generation_range": [
+        245,
+        286
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000007.8045881ff5069cde.csv.zst",
+      "bytes": 2590381,
+      "sha256": "8045881ff5069cdecdf71dc001bec9b0c7a7879cbe4a37269e16a07cf07e196a",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19848424,
+      "logical_payload_sha256": "99522878a6b05d5c885d47b3bf9f320141ceeeeb7e65a96d08f3c3e014ca8f45",
+      "data_row_count": 10000,
+      "id_range": [
+        70000,
+        79999
+      ],
+      "generation_range": [
+        286,
+        327
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000008.830b322850125787.csv.zst",
+      "bytes": 2548853,
+      "sha256": "830b32285012578778f919021d5a4f3af3f8185a5cd3344a1314e55e7bfeb4aa",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19756378,
+      "logical_payload_sha256": "b38708907ebab466efcab78050247da7adb7f08023ac9ddaa790031196a3c96d",
+      "data_row_count": 10000,
+      "id_range": [
+        80000,
+        89999
+      ],
+      "generation_range": [
+        327,
+        368
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000009.f5dcb71c9311037c.csv.zst",
+      "bytes": 2553073,
+      "sha256": "f5dcb71c9311037c6f4e55ee966ee198d672ab4675bfe87af957aedc82aae871",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19738711,
+      "logical_payload_sha256": "3f07dff4a4c5eef7e0f043c8c8e0e3bb451018975db76f37e5501fc13f2a744c",
+      "data_row_count": 10000,
+      "id_range": [
+        90000,
+        99999
+      ],
+      "generation_range": [
+        368,
+        409
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000010.52f3e279b968781f.csv.zst",
+      "bytes": 2570738,
+      "sha256": "52f3e279b968781f0db13f3c7d3c10803827044f8133b17c7da8c35b01e09fc0",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19786134,
+      "logical_payload_sha256": "21591412ea38d6c6304f7c819235f9f1f3fbe7f81e04a303d5305a8e31d5d39f",
+      "data_row_count": 10000,
+      "id_range": [
+        100000,
+        109999
+      ],
+      "generation_range": [
+        409,
+        450
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000011.875142812886daa3.csv.zst",
+      "bytes": 2590952,
+      "sha256": "875142812886daa36737534a8e4e5cdb5f855f359accbba7e711621fcbac985f",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19750117,
+      "logical_payload_sha256": "7298a555dc93957871589b889b0349aec9bc364bd37a6c2df8b69fbf7c3b2208",
+      "data_row_count": 10000,
+      "id_range": [
+        110000,
+        119999
+      ],
+      "generation_range": [
+        450,
+        491
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000012.17edef4f5627d4dd.csv.zst",
+      "bytes": 2568158,
+      "sha256": "17edef4f5627d4dd177d94158b07373407be66bb6755a9ec59f2328a94f6953e",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19725130,
+      "logical_payload_sha256": "f91924011ca4afc10fb2fe33e96657be90666d170e978152c6858dddc54b5fec",
+      "data_row_count": 10000,
+      "id_range": [
+        120000,
+        129999
+      ],
+      "generation_range": [
+        491,
+        532
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000013.27fa6247114de60c.csv.zst",
+      "bytes": 2562713,
+      "sha256": "27fa6247114de60ced10c5eb14fa9c719424abddceb31ed73ecc1610f9d47894",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19733045,
+      "logical_payload_sha256": "7ef98a6db8e1a6c9ce736adbde0c218504bead214b82f5be2e68e123bad8937b",
+      "data_row_count": 10000,
+      "id_range": [
+        130000,
+        139999
+      ],
+      "generation_range": [
+        532,
+        573
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000014.d8213bc0ad7f0362.csv.zst",
+      "bytes": 2552771,
+      "sha256": "d8213bc0ad7f03628d44f6d43637f1dd1759f85948ed22e6859413e38c045d59",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19686498,
+      "logical_payload_sha256": "a0ca7be2154f6a11b6eabe54dd511dfc78ddf0ebef7cff7942c6762a261aca3c",
+      "data_row_count": 10000,
+      "id_range": [
+        140000,
+        149999
+      ],
+      "generation_range": [
+        573,
+        614
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000015.dfcba4a0b1555aab.csv.zst",
+      "bytes": 2523556,
+      "sha256": "dfcba4a0b1555aabea49db57a1d47bbc2fb32fb582435dfe3a2f166fb16a2ee3",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19644066,
+      "logical_payload_sha256": "eac2915bb70a7f243d847ec9df2d10739acfb11be39d2639990a970820118b06",
+      "data_row_count": 10000,
+      "id_range": [
+        150000,
+        159999
+      ],
+      "generation_range": [
+        614,
+        655
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000016.667ef096d7fe9bb7.csv.zst",
+      "bytes": 2573066,
+      "sha256": "667ef096d7fe9bb73d59d8607c6423ce8732d8e2906acf20b01e0a8ff92076eb",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19653674,
+      "logical_payload_sha256": "c1639d4a7767c6befef24d371dbe8cac21e33970ebc73e065326f47e9835eab2",
+      "data_row_count": 10000,
+      "id_range": [
+        160000,
+        169999
+      ],
+      "generation_range": [
+        655,
+        696
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000017.521391884d11bb9a.csv.zst",
+      "bytes": 2556884,
+      "sha256": "521391884d11bb9ae23317f2761092935451005806c905aac49095fb35533848",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19661069,
+      "logical_payload_sha256": "2acef39e0f57cd944fefd04e50fbaafa7733de79268a6c35c95780b4fcb1c354",
+      "data_row_count": 10000,
+      "id_range": [
+        170000,
+        179999
+      ],
+      "generation_range": [
+        696,
+        737
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000018.b917b51a8800889a.csv.zst",
+      "bytes": 2563516,
+      "sha256": "b917b51a8800889a4db67bf6d4337b34bba9057e62c74868d967c5de906cf135",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19691020,
+      "logical_payload_sha256": "659fd74cd90aa7b18efa0ef20fb842fc00d120fc99de9f770ae0bd466498405c",
+      "data_row_count": 10000,
+      "id_range": [
+        180000,
+        189999
+      ],
+      "generation_range": [
+        737,
+        778
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c01/segments/000019.e546f9e01b1fe2cb.csv.zst",
+      "bytes": 1419854,
+      "sha256": "e546f9e01b1fe2cb800d2b0d5c80d381df49711e4f8158aedd6ba7c0bc3abcae",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 10733326,
+      "logical_payload_sha256": "738369db5d7f3e9e89c1e445af6cf73fd2a141aafe8ff9fcc7e9213e55d7414d",
+      "data_row_count": 5456,
+      "id_range": [
+        190000,
+        195455
+      ],
+      "generation_range": [
+        778,
+        800
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/population_manifest.v1.json",
+      "bytes": 18165,
+      "sha256": "bec92d4b8c19930c63b0d5b133e8449c69585742ab5974ab55277c02a1ce3f45",
+      "kind": "run_population_manifest"
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000000.c2db39371abc9525.csv.zst",
+      "bytes": 2340302,
+      "sha256": "c2db39371abc9525c3ec869f0ae623900c998fdcac96eea46b8ede6c4ee855a7",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 18901743,
+      "logical_payload_sha256": "8857a97b743c31bb8317ea974e0e5e59b3ea07457d304505db0b7f38bd52e75c",
+      "data_row_count": 10000,
+      "id_range": [
+        0,
+        9999
+      ],
+      "generation_range": [
+        0,
+        40
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000001.de19ec033b2ff7ad.csv.zst",
+      "bytes": 2490015,
+      "sha256": "de19ec033b2ff7adcc6f132f4370d27954de2183d5313eff131a81f74514fc8f",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19442919,
+      "logical_payload_sha256": "f8affea2c4be5885064cdd28f656594447c3efb053f2877617c6b1517eec2b7c",
+      "data_row_count": 10000,
+      "id_range": [
+        10000,
+        19999
+      ],
+      "generation_range": [
+        40,
+        81
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000002.f962732e055e3f8a.csv.zst",
+      "bytes": 2523659,
+      "sha256": "f962732e055e3f8a79a1819ffb2f445787344373cf0c255912e177f8876fe632",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19546950,
+      "logical_payload_sha256": "eed8d6b8ff3d05e780eff44f466fb083d15f363908f9a131284618f6a7fbd761",
+      "data_row_count": 10000,
+      "id_range": [
+        20000,
+        29999
+      ],
+      "generation_range": [
+        81,
+        122
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000003.5fa27d1b28852154.csv.zst",
+      "bytes": 2525945,
+      "sha256": "5fa27d1b288521544c42e0225f65ddbe2638ed9e8e41a9e868c45ee1d5375e3b",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19534489,
+      "logical_payload_sha256": "8c45905ff810fc3386fb3419cbe0907d6661c8bb74f8320814c543f6497a21b8",
+      "data_row_count": 10000,
+      "id_range": [
+        30000,
+        39999
+      ],
+      "generation_range": [
+        122,
+        163
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000004.e7e939d7be401609.csv.zst",
+      "bytes": 2538960,
+      "sha256": "e7e939d7be4016095f9e82fb82f430742dae64a0b7a42d27094cee90b8f85055",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19572010,
+      "logical_payload_sha256": "a084579006de2ba495e7ae15ae3fb3915d69a6082183df2a6f3efeffff983334",
+      "data_row_count": 10000,
+      "id_range": [
+        40000,
+        49999
+      ],
+      "generation_range": [
+        163,
+        204
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000005.ec607c8691b52225.csv.zst",
+      "bytes": 2522992,
+      "sha256": "ec607c8691b52225263e940a40f99c35b78c463239e7f866c37f7bed29f706a5",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19560187,
+      "logical_payload_sha256": "78d4b9ca442e8c00aaf98ad2303e5fa28509e58de9800e45d6296d48c53850ea",
+      "data_row_count": 10000,
+      "id_range": [
+        50000,
+        59999
+      ],
+      "generation_range": [
+        204,
+        245
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000006.1188676a23fb6729.csv.zst",
+      "bytes": 2550542,
+      "sha256": "1188676a23fb6729c316cfcfebe7ca24246bbcff08144018b792fc9ded730e10",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19567661,
+      "logical_payload_sha256": "29c3b4b764d99c4e184d469e2070bf2cc20f142358cf69da6a6966acbc0bbe29",
+      "data_row_count": 10000,
+      "id_range": [
+        60000,
+        69999
+      ],
+      "generation_range": [
+        245,
+        286
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000007.209e8d1ae182734e.csv.zst",
+      "bytes": 2548663,
+      "sha256": "209e8d1ae182734ea1685824c74a74b05a5e525538e9064f5f1aa640a57867fc",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19571568,
+      "logical_payload_sha256": "9acbf561b9d32abb53502698e1b7acf0643f80c0703d3713aa36b73ff227b128",
+      "data_row_count": 10000,
+      "id_range": [
+        70000,
+        79999
+      ],
+      "generation_range": [
+        286,
+        327
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000008.c570a3b8914f55e8.csv.zst",
+      "bytes": 2559151,
+      "sha256": "c570a3b8914f55e86d0d9ae0b7f78292cec2d23722542874b62497ad17edd971",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19557080,
+      "logical_payload_sha256": "1cbfa4d642971da577d8939ef6714adc189d11f9a707aa92810eba29aa8f95d4",
+      "data_row_count": 10000,
+      "id_range": [
+        80000,
+        89999
+      ],
+      "generation_range": [
+        327,
+        368
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000009.7a484e9a1e99f878.csv.zst",
+      "bytes": 2569625,
+      "sha256": "7a484e9a1e99f878e53cf6215ea23cf4770b63742f1e93eb2dc35122de5320f2",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19591029,
+      "logical_payload_sha256": "4eab0e4adf1ea07a5ba14a921eedabdbd19e58cff9cfb7df8bb466d2c8847528",
+      "data_row_count": 10000,
+      "id_range": [
+        90000,
+        99999
+      ],
+      "generation_range": [
+        368,
+        409
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000010.a484e98f151b2bb2.csv.zst",
+      "bytes": 2582543,
+      "sha256": "a484e98f151b2bb226371102a60ccdb801a72e735ef00b69c2570d3c3d41b177",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19586469,
+      "logical_payload_sha256": "865ba2b6256344d476c4cf20edefa971b83782fd11fea8e2bea7f2438d782dba",
+      "data_row_count": 10000,
+      "id_range": [
+        100000,
+        109999
+      ],
+      "generation_range": [
+        409,
+        450
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000011.eec6e2db679ebfec.csv.zst",
+      "bytes": 2600483,
+      "sha256": "eec6e2db679ebfec9af8a325bb07ddfbcba159bd0ad10e4679fdd246213a784a",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19555461,
+      "logical_payload_sha256": "9f85066e36945bc12e4f937db1b00f7eaec610c784532b97e9dcaff4c134601c",
+      "data_row_count": 10000,
+      "id_range": [
+        110000,
+        119999
+      ],
+      "generation_range": [
+        450,
+        491
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000012.33bb512c1ae66f9b.csv.zst",
+      "bytes": 2604387,
+      "sha256": "33bb512c1ae66f9b43e994347f925de07e385ab067a826ffd5c9050462c1cb32",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19553737,
+      "logical_payload_sha256": "d0174e8ec6be16be34490966617cb43103ed5f7263094bc9c233c76e2bb8bb5e",
+      "data_row_count": 10000,
+      "id_range": [
+        120000,
+        129999
+      ],
+      "generation_range": [
+        491,
+        532
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000013.01817fb1bfe8253f.csv.zst",
+      "bytes": 2593538,
+      "sha256": "01817fb1bfe8253f62b386113ac7401dc7cd6d69d273c41daebb55e95c07296b",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19581064,
+      "logical_payload_sha256": "687320057d749a87eddec2eead0bdd1bb85bedc2101f79f1afd93132b093dae4",
+      "data_row_count": 10000,
+      "id_range": [
+        130000,
+        139999
+      ],
+      "generation_range": [
+        532,
+        573
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000014.6b2fb43193b111d4.csv.zst",
+      "bytes": 2602455,
+      "sha256": "6b2fb43193b111d4dd07a86ce8b27cbf5c1a196defc06d4881d2980cbbb47d0c",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19588921,
+      "logical_payload_sha256": "e4544681f1fefed65e0586e50ecdd2d9979401fbe2fb0d1a631c473d5171a392",
+      "data_row_count": 10000,
+      "id_range": [
+        140000,
+        149999
+      ],
+      "generation_range": [
+        573,
+        614
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000015.f586e7d51e05e769.csv.zst",
+      "bytes": 2602663,
+      "sha256": "f586e7d51e05e769b78ba7a207b80b2a7f2868bccc685d881bed9e21cf241faa",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19609026,
+      "logical_payload_sha256": "ac7a25a947318db6a9100d01eeaff7b8f42575e4b5930734b417227ab102a554",
+      "data_row_count": 10000,
+      "id_range": [
+        150000,
+        159999
+      ],
+      "generation_range": [
+        614,
+        655
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000016.234f0ec331cc01bc.csv.zst",
+      "bytes": 2582581,
+      "sha256": "234f0ec331cc01bce6f37fd272bb283ed9ea60fb904de5641212d84a658a3a0f",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19588042,
+      "logical_payload_sha256": "cbe5830e88c0f6eeef07ee3d9d14f0f3bd2843509de8e868213fca3e5b95ae5f",
+      "data_row_count": 10000,
+      "id_range": [
+        160000,
+        169999
+      ],
+      "generation_range": [
+        655,
+        696
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000017.d4b1336935daaf37.csv.zst",
+      "bytes": 2612658,
+      "sha256": "d4b1336935daaf374787f73608a85da7bf206434eb9eb9a128efd0632acd8ff2",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19585604,
+      "logical_payload_sha256": "98b27f2153d3e2fcbb68a8a0029f7307f01831749b9213bc1f528cdb51d4fb65",
+      "data_row_count": 10000,
+      "id_range": [
+        170000,
+        179999
+      ],
+      "generation_range": [
+        696,
+        737
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000018.205e479f07c09714.csv.zst",
+      "bytes": 2592887,
+      "sha256": "205e479f07c0971496826bf9c25fee501c9e21a83f5b64403b89689b0008b61a",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19580954,
+      "logical_payload_sha256": "e245daabdbdcc93461eb1b96b8a1f6242705844f6231bf2e75daa899b4eede12",
+      "data_row_count": 10000,
+      "id_range": [
+        180000,
+        189999
+      ],
+      "generation_range": [
+        737,
+        778
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c02/segments/000019.310a679d34074a9b.csv.zst",
+      "bytes": 1446534,
+      "sha256": "310a679d34074a9b47057e5cdeb84710234ee3d45c783f00d929ed724f51b22e",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 10690803,
+      "logical_payload_sha256": "7066cd42743b0974c24bf9a5c238a027542b2fe6529f97adc8f92bd0370274ee",
+      "data_row_count": 5456,
+      "id_range": [
+        190000,
+        195455
+      ],
+      "generation_range": [
+        778,
+        800
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/population_manifest.v1.json",
+      "bytes": 18227,
+      "sha256": "16d52c921f0321a1d6c051f0394a483f9545692dce939261b71496781284d1b1",
+      "kind": "run_population_manifest"
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000000.81df0a1b07db5ad4.csv.zst",
+      "bytes": 2317418,
+      "sha256": "81df0a1b07db5ad471eb34cdc6e48b85c9282a4fe2e144df4a58f862d8732d14",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 18726532,
+      "logical_payload_sha256": "195a2b3ec1e72ef7b0b3ba80b5b13969cd620dc44aacf226c47077fd707c4c7d",
+      "data_row_count": 10000,
+      "id_range": [
+        0,
+        9999
+      ],
+      "generation_range": [
+        0,
+        40
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000001.ed2c809acdae75aa.csv.zst",
+      "bytes": 2410556,
+      "sha256": "ed2c809acdae75aa6e3daded33f2acdaff3a76db042b3e9a406421a12f0eb01c",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19177725,
+      "logical_payload_sha256": "8956a351b68cf80a35b1a356046937391f9f18652fca5cff08565a24c03eefbc",
+      "data_row_count": 10000,
+      "id_range": [
+        10000,
+        19999
+      ],
+      "generation_range": [
+        40,
+        81
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000002.be7d77b14d8a6582.csv.zst",
+      "bytes": 2477678,
+      "sha256": "be7d77b14d8a658202324c22ded023aea3e282d334aedca1ba9cd42195609dc3",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19401258,
+      "logical_payload_sha256": "5b2564ede55060968e03e59d49de8c0179d8130215374b6715cb563b35f0c948",
+      "data_row_count": 10000,
+      "id_range": [
+        20000,
+        29999
+      ],
+      "generation_range": [
+        81,
+        122
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000003.97f7f0cfcc8f71e3.csv.zst",
+      "bytes": 2482581,
+      "sha256": "97f7f0cfcc8f71e384f78df571966a414cd437fd784e173dd6499a76f13c630c",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19388952,
+      "logical_payload_sha256": "b87fbd5d3585c6cfa387c9be111038c9de78edd01184bb76ed6aa66dc0641654",
+      "data_row_count": 10000,
+      "id_range": [
+        30000,
+        39999
+      ],
+      "generation_range": [
+        122,
+        163
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000004.4e77929e76b262cc.csv.zst",
+      "bytes": 2473938,
+      "sha256": "4e77929e76b262cc0e441bd856e76c3569d3bfa034e06753af1674439ce4c2f9",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19323884,
+      "logical_payload_sha256": "9e0865404265ff08a64d6346b9832112e22c1e2812dcdfe032d81bac8a2984eb",
+      "data_row_count": 10000,
+      "id_range": [
+        40000,
+        49999
+      ],
+      "generation_range": [
+        163,
+        204
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000005.b221931146583713.csv.zst",
+      "bytes": 2488056,
+      "sha256": "b22193114658371308be1fe69eb93191dd7803d2b5b7de1125d2ebc3802491e2",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19345996,
+      "logical_payload_sha256": "951bdc8b5ed9bb1e6a1b7526d5830d9e4d47f0929c8e822009cba38c98850570",
+      "data_row_count": 10000,
+      "id_range": [
+        50000,
+        59999
+      ],
+      "generation_range": [
+        204,
+        245
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000006.472d798ad4c5f937.csv.zst",
+      "bytes": 2504719,
+      "sha256": "472d798ad4c5f937143926ef3db5685115d9453823f0996ffd3247b3be43ce00",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19342372,
+      "logical_payload_sha256": "aa62d94dab1d1b4550383c10bb7eb25f1ee5e5cb8da0c009ba0df1a0b62c1f8f",
+      "data_row_count": 10000,
+      "id_range": [
+        60000,
+        69999
+      ],
+      "generation_range": [
+        245,
+        286
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000007.5c9161fa9bf087b1.csv.zst",
+      "bytes": 2519725,
+      "sha256": "5c9161fa9bf087b14ccae0c7826e587d8408a0392a75c52b360181dca3f43da7",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19354048,
+      "logical_payload_sha256": "5a6d45c1366736f0620b531de6c3ccba4d06e5fb05eeccea9e7b183b3a70bfb7",
+      "data_row_count": 10000,
+      "id_range": [
+        70000,
+        79999
+      ],
+      "generation_range": [
+        286,
+        327
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000008.430267cfd9ac177f.csv.zst",
+      "bytes": 2487840,
+      "sha256": "430267cfd9ac177f138006e794d2bf92277872610f1ade2bdbb3588b3064594f",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19379988,
+      "logical_payload_sha256": "90c0feeb07c4489a23803c19137443378207f5f22bbd41fd94945f2801d46a92",
+      "data_row_count": 10000,
+      "id_range": [
+        80000,
+        89999
+      ],
+      "generation_range": [
+        327,
+        368
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000009.056310e7ecae7db2.csv.zst",
+      "bytes": 2514669,
+      "sha256": "056310e7ecae7db2de382a2945c4cd73c40140283863119beba1ff26bf80f7e3",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19364685,
+      "logical_payload_sha256": "25f780a6eee7812e6bcb368a6dc23e75822d929f9ef6b5943ef40afa2a5dcc5b",
+      "data_row_count": 10000,
+      "id_range": [
+        90000,
+        99999
+      ],
+      "generation_range": [
+        368,
+        409
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000010.80ccabc48517449e.csv.zst",
+      "bytes": 2501713,
+      "sha256": "80ccabc48517449e6f5059b607ec7864fed8f378e51d6c55188eebb78e844ddd",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19396889,
+      "logical_payload_sha256": "93759addb7463cbcb35c3e6db502747ec1020c5e82f1ac353bdb55b10a5e7eeb",
+      "data_row_count": 10000,
+      "id_range": [
+        100000,
+        109999
+      ],
+      "generation_range": [
+        409,
+        450
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000011.f8fe2407a8392d94.csv.zst",
+      "bytes": 2500529,
+      "sha256": "f8fe2407a8392d948098441518a0c1d9a7c0faee4c09f36135f9ff5f74c0d644",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19407935,
+      "logical_payload_sha256": "77e365cd3e0fd7854205362088775f9e847b7f1fac682f63bbe0baf8ce07d0d2",
+      "data_row_count": 10000,
+      "id_range": [
+        110000,
+        119999
+      ],
+      "generation_range": [
+        450,
+        491
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000012.30605c17a1550f2a.csv.zst",
+      "bytes": 2515508,
+      "sha256": "30605c17a1550f2a3875e2a4c939af86193dbf05ffdeeda11836fb8db77c1b79",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19383176,
+      "logical_payload_sha256": "e28b86cb623fa7fb5eb3f44f725dc4d7cb7b881bd54d1a814e02bdebb9a777ec",
+      "data_row_count": 10000,
+      "id_range": [
+        120000,
+        129999
+      ],
+      "generation_range": [
+        491,
+        532
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000013.7bdcc4530c5fc378.csv.zst",
+      "bytes": 2499919,
+      "sha256": "7bdcc4530c5fc3789d96aeefbd725f563b0ce8d07fe317098f2c4105493acb5c",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19366894,
+      "logical_payload_sha256": "cecd054c552b128cfe4fa5af937ca43d67d392f52416411517281b0516ad2200",
+      "data_row_count": 10000,
+      "id_range": [
+        130000,
+        139999
+      ],
+      "generation_range": [
+        532,
+        573
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000014.3f2d62456682f492.csv.zst",
+      "bytes": 2511403,
+      "sha256": "3f2d62456682f49265de152c7995e39ccea605e6db85126d98c9293f9a5e1aab",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19367551,
+      "logical_payload_sha256": "cd08f9ae925f7d21ce0059f49c733b8f2ccb2d90173996b44f0f58470edd60f3",
+      "data_row_count": 10000,
+      "id_range": [
+        140000,
+        149999
+      ],
+      "generation_range": [
+        573,
+        614
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000015.5c4753d8bf16f16b.csv.zst",
+      "bytes": 2499000,
+      "sha256": "5c4753d8bf16f16b7ee91fc5f60735a540d9d956f22d2e254c960420819b52bd",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19346848,
+      "logical_payload_sha256": "70a3c81e55d1f76cebb63750dae562f503663944dac3274e3fed20f324b1073f",
+      "data_row_count": 10000,
+      "id_range": [
+        150000,
+        159999
+      ],
+      "generation_range": [
+        614,
+        655
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000016.6bdeaabc59c0994b.csv.zst",
+      "bytes": 2511844,
+      "sha256": "6bdeaabc59c0994be2e84a2010dd43ae7979639861a59329160b63e17036eb97",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19402802,
+      "logical_payload_sha256": "9e25adba56d6759dbfc41e42de7ea02a11b6508b0366d060526cb9e73ade0e1e",
+      "data_row_count": 10000,
+      "id_range": [
+        160000,
+        169999
+      ],
+      "generation_range": [
+        655,
+        696
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000017.f11d2783e8b711d4.csv.zst",
+      "bytes": 2509221,
+      "sha256": "f11d2783e8b711d48e27271efe7fb837fc78a85601ed723f09f612ba7c013018",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19342910,
+      "logical_payload_sha256": "86599557a41f2bdac5b027a141eee66b21ae99eaa9d40e1467b880b67b897997",
+      "data_row_count": 10000,
+      "id_range": [
+        170000,
+        179999
+      ],
+      "generation_range": [
+        696,
+        737
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000018.7713941ac98b59d3.csv.zst",
+      "bytes": 2526423,
+      "sha256": "7713941ac98b59d3b900118a68350173a83cc7331137eaf66eaa55bdbdd8df74",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19339899,
+      "logical_payload_sha256": "0f56eb066b26396e994f5ab6f8f14a15cdca4ce97f50e774cc6e1e9b5a2eb48e",
+      "data_row_count": 10000,
+      "id_range": [
+        180000,
+        189999
+      ],
+      "generation_range": [
+        737,
+        778
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c03/segments/000019.a481119b4766014d.csv.zst",
+      "bytes": 1384927,
+      "sha256": "a481119b4766014d2771ac75c08a910ae634216255e1ccc2e1c49df31107887c",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 10537952,
+      "logical_payload_sha256": "fa5070f7fb79710862e52e2ca09193e97d8e5802256976bdc42c1e003487c14e",
+      "data_row_count": 5456,
+      "id_range": [
+        190000,
+        195455
+      ],
+      "generation_range": [
+        778,
+        800
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/population_manifest.v1.json",
+      "bytes": 18227,
+      "sha256": "8a45a3bc587358941a5af747452b396f63e42029a5030d718cd55443774e53da",
+      "kind": "run_population_manifest"
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000000.a54220e03c196e9d.csv.zst",
+      "bytes": 2399346,
+      "sha256": "a54220e03c196e9d32db11228746059ec75804e7fc65c7e62fca287e93ab7fcc",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19057614,
+      "logical_payload_sha256": "1b7003c17f0a3169f0c5abde042d8cf9c9cd5daae09b296b7193c39e4dabaee2",
+      "data_row_count": 10000,
+      "id_range": [
+        0,
+        9999
+      ],
+      "generation_range": [
+        0,
+        40
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000001.55d79cd5b96e4868.csv.zst",
+      "bytes": 2491190,
+      "sha256": "55d79cd5b96e4868745694877d4bc61a821555208b610fdc8a1be7c1a93b4508",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19548610,
+      "logical_payload_sha256": "55b23b1862b9675071b6fa4213c69ed5739c1503bf2e7c777e7ad50ec5e5b5ca",
+      "data_row_count": 10000,
+      "id_range": [
+        10000,
+        19999
+      ],
+      "generation_range": [
+        40,
+        81
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000002.1f0a42a4c86ace3c.csv.zst",
+      "bytes": 2506472,
+      "sha256": "1f0a42a4c86ace3c0677e2a31f345d1b1953a5c8c013e1ced2679f9d7d3ea073",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19610684,
+      "logical_payload_sha256": "7ddfabe468d6428b6feb20623aeb8122dad5fec900f3cd6dee4ec2018fff8691",
+      "data_row_count": 10000,
+      "id_range": [
+        20000,
+        29999
+      ],
+      "generation_range": [
+        81,
+        122
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000003.db254d7d86ef6889.csv.zst",
+      "bytes": 2531945,
+      "sha256": "db254d7d86ef688944c3c3ae0fd4dfac1fd7e09c2e399542c678db5d385966a3",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19613712,
+      "logical_payload_sha256": "a5265afcbab4399b5185ab1120915599f07ced32be01a90576b494a9ad6f2218",
+      "data_row_count": 10000,
+      "id_range": [
+        30000,
+        39999
+      ],
+      "generation_range": [
+        122,
+        163
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000004.35047abf3efd71f0.csv.zst",
+      "bytes": 2533906,
+      "sha256": "35047abf3efd71f0587a1f9a092569337b42887fa4d4f944b25ebfcbf91d255d",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19458269,
+      "logical_payload_sha256": "da7d0cbd2b84e7bf28a48bb3c3fb89154f358b9bf8e7547c382c4c226f02ae39",
+      "data_row_count": 10000,
+      "id_range": [
+        40000,
+        49999
+      ],
+      "generation_range": [
+        163,
+        204
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000005.1c375365a061717b.csv.zst",
+      "bytes": 2557037,
+      "sha256": "1c375365a061717bd73ab70f41733beccc1de746d0a16d7f9b7e3db949a16e68",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19471663,
+      "logical_payload_sha256": "0917d5e8547f3bf8dd000efaf57fc39fce9d11d72ed968adcb738ebe3028a1f1",
+      "data_row_count": 10000,
+      "id_range": [
+        50000,
+        59999
+      ],
+      "generation_range": [
+        204,
+        245
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000006.cf1ef71a3b84d31e.csv.zst",
+      "bytes": 2598462,
+      "sha256": "cf1ef71a3b84d31ec18416e7a08d4e87d6a88ceb3c86f895af01057ed4edff7c",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19500688,
+      "logical_payload_sha256": "fe759fa03efb577e9325f4c1c1d59908bb26e217bdeaa2b2fc2503aa9f1aa6b5",
+      "data_row_count": 10000,
+      "id_range": [
+        60000,
+        69999
+      ],
+      "generation_range": [
+        245,
+        286
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000007.982f84fcda1ad696.csv.zst",
+      "bytes": 2583502,
+      "sha256": "982f84fcda1ad696ef285a922073b19915a72d3cc06b9dcca9f93f86edc6b7b0",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19437655,
+      "logical_payload_sha256": "988d3889c1fe220afd23258b84094521f5082b98d5f0db4e7bec6b55119a0cbe",
+      "data_row_count": 10000,
+      "id_range": [
+        70000,
+        79999
+      ],
+      "generation_range": [
+        286,
+        327
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000008.f81b7862f0d77494.csv.zst",
+      "bytes": 2590359,
+      "sha256": "f81b7862f0d77494720353558275f790d96aa487c0ab90dd7cd2b3fb9ba9099e",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19442786,
+      "logical_payload_sha256": "08a55c19eed351d55140d703496049ba37477f072258494014bd6199ce4e5a89",
+      "data_row_count": 10000,
+      "id_range": [
+        80000,
+        89999
+      ],
+      "generation_range": [
+        327,
+        368
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000009.05422121b31cdfc8.csv.zst",
+      "bytes": 2580077,
+      "sha256": "05422121b31cdfc8079ae8a8225e499b0654ac73592d9d6dd599c0eb91419120",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19410021,
+      "logical_payload_sha256": "2cf39f643f66d88fd54fd10ea4a43ca5d16b056433ce1b5e8a17ba9bb26d4047",
+      "data_row_count": 10000,
+      "id_range": [
+        90000,
+        99999
+      ],
+      "generation_range": [
+        368,
+        409
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000010.9d4b357991cd06db.csv.zst",
+      "bytes": 2589626,
+      "sha256": "9d4b357991cd06db6cdc2aca01f08cc4f7bf6dbab994a6924468f6a49e02bb8d",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19472409,
+      "logical_payload_sha256": "469ee7e8b3424223881860089a1465055504b397e4813445911397305889bc10",
+      "data_row_count": 10000,
+      "id_range": [
+        100000,
+        109999
+      ],
+      "generation_range": [
+        409,
+        450
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000011.8d75d3129d8197c8.csv.zst",
+      "bytes": 2579469,
+      "sha256": "8d75d3129d8197c8420ce83932275ccbcc2fe9ecdb4df8e08306e7af3baa6e85",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19480047,
+      "logical_payload_sha256": "6ee6d669c031789b7d4ba9923ffe5b280bcfce54625bb904e7ae93d0cae1fa01",
+      "data_row_count": 10000,
+      "id_range": [
+        110000,
+        119999
+      ],
+      "generation_range": [
+        450,
+        491
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000012.a9c7562056462e45.csv.zst",
+      "bytes": 2581761,
+      "sha256": "a9c7562056462e45779228b1a61920e640d494ee1f188812645c048529fa3180",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19456612,
+      "logical_payload_sha256": "9741fc370d30884101804ac72108316c80aef06e874e4d9681629b0ea044adf2",
+      "data_row_count": 10000,
+      "id_range": [
+        120000,
+        129999
+      ],
+      "generation_range": [
+        491,
+        532
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000013.a09c504cad983efa.csv.zst",
+      "bytes": 2584483,
+      "sha256": "a09c504cad983efa5b6c871229b4f73291663a588816d5af255f83baba55d299",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19448522,
+      "logical_payload_sha256": "db381964d4c052295b5cc0d114ad8e76cde2c5bf69a363fe60f9d36178931ab1",
+      "data_row_count": 10000,
+      "id_range": [
+        130000,
+        139999
+      ],
+      "generation_range": [
+        532,
+        573
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000014.2d4fdec6bab37cb1.csv.zst",
+      "bytes": 2591216,
+      "sha256": "2d4fdec6bab37cb19bfa7662bc5cb00ca4d4c40fedf37cd75781228cee3be44a",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19430564,
+      "logical_payload_sha256": "0157c0f45d2ad8f1779d27cb4b3167120758af5f45c009605cf9d7265aa41fc7",
+      "data_row_count": 10000,
+      "id_range": [
+        140000,
+        149999
+      ],
+      "generation_range": [
+        573,
+        614
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000015.45f48b5a86d4f107.csv.zst",
+      "bytes": 2577303,
+      "sha256": "45f48b5a86d4f10776463f0a6e4e4723aeb4bf2814b916a77e6eb97e3c80bf22",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19439043,
+      "logical_payload_sha256": "f6bf13ce4a1bf7e52882ef189be3679bed700a20898c7ad02c3313bb8dd61421",
+      "data_row_count": 10000,
+      "id_range": [
+        150000,
+        159999
+      ],
+      "generation_range": [
+        614,
+        655
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000016.76c0ca5900f7c445.csv.zst",
+      "bytes": 2588023,
+      "sha256": "76c0ca5900f7c445b1b6ddfa464fa5fdab57422c002b6d1f49777d723a2382f4",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19501380,
+      "logical_payload_sha256": "14d0330e1d2fbbd0c7709d3dd6fae32433ccb84753454b0c4ee3c02d86f0e6c8",
+      "data_row_count": 10000,
+      "id_range": [
+        160000,
+        169999
+      ],
+      "generation_range": [
+        655,
+        696
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000017.a704147ece3e5105.csv.zst",
+      "bytes": 2614821,
+      "sha256": "a704147ece3e51053a85084d6d518fbda471e4a72dee94d59483c486d1d345ee",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19506170,
+      "logical_payload_sha256": "fd9842aac4ddd40d39fe39c4790575675f6decda7151d361a58ff5e1a807d55a",
+      "data_row_count": 10000,
+      "id_range": [
+        170000,
+        179999
+      ],
+      "generation_range": [
+        696,
+        737
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000018.952e4f1f87b33058.csv.zst",
+      "bytes": 2627104,
+      "sha256": "952e4f1f87b330589365880eb003a6ed4608c3def4819a77d4acaf022a3f507f",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19464082,
+      "logical_payload_sha256": "a34159ba3626d7e0be4a62d28dd8ceed32c6b7e7714e081a8e63f78ebb0a0e61",
+      "data_row_count": 10000,
+      "id_range": [
+        180000,
+        189999
+      ],
+      "generation_range": [
+        737,
+        778
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe3_c04/segments/000019.9ce7dfd0aef3402e.csv.zst",
+      "bytes": 1442207,
+      "sha256": "9ce7dfd0aef3402eae78340f31f4830341311e84475fb5c57f47e1ab4e3e853f",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 10637380,
+      "logical_payload_sha256": "034fd9ab88f8038bc5ee1610b1ed366812e3ed15c8208670d9d3ddc23ac89463",
+      "data_row_count": 5456,
+      "id_range": [
+        190000,
+        195455
+      ],
+      "generation_range": [
+        778,
+        800
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/population_manifest.v1.json",
+      "bytes": 18165,
+      "sha256": "2ae800591ee37890eff5b823ee7b65f936662296198f64fb43fb0ae2c8712996",
+      "kind": "run_population_manifest"
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000000.73fea77589581d25.csv.zst",
+      "bytes": 2321770,
+      "sha256": "73fea77589581d25118019e540b8b0edfac325f6ce26732212bc40b0ddc171ae",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 18806086,
+      "logical_payload_sha256": "0bc82a5d34c79a71c025b3b6a0c895689f193eac0c783270e01786488b1fdadc",
+      "data_row_count": 10000,
+      "id_range": [
+        0,
+        9999
+      ],
+      "generation_range": [
+        0,
+        40
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000001.ce683f7e469df1ed.csv.zst",
+      "bytes": 2355883,
+      "sha256": "ce683f7e469df1ed7395c37f6d15203537c6e3b5451586e0b54525d002acd24f",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 18911520,
+      "logical_payload_sha256": "54cc5c0b93b2e4cd3d877d8d7f2c91decc6b907b7c3f574b4a9ca1928dcc0068",
+      "data_row_count": 10000,
+      "id_range": [
+        10000,
+        19999
+      ],
+      "generation_range": [
+        40,
+        81
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000002.5186c5bef3ed9f10.csv.zst",
+      "bytes": 2396731,
+      "sha256": "5186c5bef3ed9f10903b9db4ccf274f551b21330f2ff77696aadad0970d40940",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19003280,
+      "logical_payload_sha256": "6129f92e8c5776aec05c78873609e0314d8f08636ce40b42ad5d64bfc1a755ff",
+      "data_row_count": 10000,
+      "id_range": [
+        20000,
+        29999
+      ],
+      "generation_range": [
+        81,
+        122
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000003.bd5cc2b148d36d93.csv.zst",
+      "bytes": 2418627,
+      "sha256": "bd5cc2b148d36d93544e23d67bc401b803a48d8f6bde4f4c802fe35993762188",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19081756,
+      "logical_payload_sha256": "f0c7ffc07e9877f6f4c6a423be6522ffee43248cfed3817a4a3a27b7ef9e9a71",
+      "data_row_count": 10000,
+      "id_range": [
+        30000,
+        39999
+      ],
+      "generation_range": [
+        122,
+        163
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000004.41cd1dfbde3d8a5a.csv.zst",
+      "bytes": 2489889,
+      "sha256": "41cd1dfbde3d8a5abf1cc1443eb7695c8df86faaa37bb8c6468af09cf07f7bbe",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19154848,
+      "logical_payload_sha256": "535b15123ec91f4118b8e6ad3dc6faa9a8e4dbad0348300a1b5d1dfc65c00b36",
+      "data_row_count": 10000,
+      "id_range": [
+        40000,
+        49999
+      ],
+      "generation_range": [
+        163,
+        204
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000005.867ac34adc9a75e6.csv.zst",
+      "bytes": 2503975,
+      "sha256": "867ac34adc9a75e655b46e68118fb4fc18457ca592803862fa4a86d86a4fbc92",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19242696,
+      "logical_payload_sha256": "781bfc947e8aa3afad493eaab16282c705d862be95d07c6231eaa477a9996b4b",
+      "data_row_count": 10000,
+      "id_range": [
+        50000,
+        59999
+      ],
+      "generation_range": [
+        204,
+        245
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000006.a73e9de002d182c6.csv.zst",
+      "bytes": 2506589,
+      "sha256": "a73e9de002d182c63615ba3a383090f6459947b4f76e99c372a7c8cc7712efb1",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19283714,
+      "logical_payload_sha256": "fea7c3ae7b5b9ec3707f5eeca8a5791cde0049b4139cab65f3d1c8b598e0726f",
+      "data_row_count": 10000,
+      "id_range": [
+        60000,
+        69999
+      ],
+      "generation_range": [
+        245,
+        286
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000007.623aea9855ce1c6d.csv.zst",
+      "bytes": 2520531,
+      "sha256": "623aea9855ce1c6d3ee0048d50500a58f605abe4b3c99385d50caa14c9cfc7fc",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19386738,
+      "logical_payload_sha256": "8b3d1b5888502b63e97ad98511d3fd92d72e01f60c0a28f74923b3b96649ec8a",
+      "data_row_count": 10000,
+      "id_range": [
+        70000,
+        79999
+      ],
+      "generation_range": [
+        286,
+        327
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000008.7017f9ba838d0656.csv.zst",
+      "bytes": 2529145,
+      "sha256": "7017f9ba838d06565a7765af5ee7964718a6beb8df8958f30b88c7c13b3b4c65",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19409787,
+      "logical_payload_sha256": "a5ca49eeb4c3425baaea6d545f69dfc42755bd6b661163cdca3d7fded1dbc068",
+      "data_row_count": 10000,
+      "id_range": [
+        80000,
+        89999
+      ],
+      "generation_range": [
+        327,
+        368
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000009.9de52a6dd0a6f0e0.csv.zst",
+      "bytes": 2537285,
+      "sha256": "9de52a6dd0a6f0e0db74653321600772bfb7b18f7e2b2b9ed97b5f9b734565ad",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19410106,
+      "logical_payload_sha256": "0a3a3d4cf7850d9abb73a27542da6698702ddc6c03b16254bac027b99b325f92",
+      "data_row_count": 10000,
+      "id_range": [
+        90000,
+        99999
+      ],
+      "generation_range": [
+        368,
+        409
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000010.73cb86180704137c.csv.zst",
+      "bytes": 2586046,
+      "sha256": "73cb86180704137c8efbf706a2c62872ca2197f1cc766cee852b8b56dc8597fb",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19534191,
+      "logical_payload_sha256": "29937a87f43e2e3506608a566305ec88444b5de4089703e89542a81550917190",
+      "data_row_count": 10000,
+      "id_range": [
+        100000,
+        109999
+      ],
+      "generation_range": [
+        409,
+        450
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000011.cafac338eddfb1b5.csv.zst",
+      "bytes": 2555918,
+      "sha256": "cafac338eddfb1b5cb5dc6a7fda269cece7a7eadb5ab0cc2055a3162e85b7751",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19558791,
+      "logical_payload_sha256": "22f135041d3a8a0516f324e318eb799ab05d6022b016b65c1656191252fa5334",
+      "data_row_count": 10000,
+      "id_range": [
+        110000,
+        119999
+      ],
+      "generation_range": [
+        450,
+        491
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000012.3f28d66717ef118f.csv.zst",
+      "bytes": 2581078,
+      "sha256": "3f28d66717ef118ffd4279b5a3be1ab42b05d0bdf4873adaa3bfa66b35f87d19",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19504258,
+      "logical_payload_sha256": "fb3e1f76dbcec9abe5e1cd90d5396233f34a319a682a8b20f2dbf16f2b120c6a",
+      "data_row_count": 10000,
+      "id_range": [
+        120000,
+        129999
+      ],
+      "generation_range": [
+        491,
+        532
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000013.57ca1b2ff8575989.csv.zst",
+      "bytes": 2563901,
+      "sha256": "57ca1b2ff85759897b7f1e55498987c38c7e5f31cc9f57bc3c7977181fd04c95",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19467533,
+      "logical_payload_sha256": "845455f314528b3d7a6c130b539a5681a598d10760d953923e23fde8bd0a6a86",
+      "data_row_count": 10000,
+      "id_range": [
+        130000,
+        139999
+      ],
+      "generation_range": [
+        532,
+        573
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000014.a704a73373e81e8a.csv.zst",
+      "bytes": 2569347,
+      "sha256": "a704a73373e81e8a3fb733a2d9602e7fff58d5f6effd4280d56d729ce85389da",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19487389,
+      "logical_payload_sha256": "24f7077d9b148e5fcd4e474a59a112e3e49618d5cf8d4d28438e1762f5db7337",
+      "data_row_count": 10000,
+      "id_range": [
+        140000,
+        149999
+      ],
+      "generation_range": [
+        573,
+        614
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000015.df842c4539bd784d.csv.zst",
+      "bytes": 2580456,
+      "sha256": "df842c4539bd784d09c00f4a142a8f6f3bdd50953483d283f50490ff651f77de",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19475814,
+      "logical_payload_sha256": "bd7437cf949ef07f5a1030f7b62871f75730f5a47c4ce1f2d94e00590fee0980",
+      "data_row_count": 10000,
+      "id_range": [
+        150000,
+        159999
+      ],
+      "generation_range": [
+        614,
+        655
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000016.4cff14b29d1006f7.csv.zst",
+      "bytes": 2584691,
+      "sha256": "4cff14b29d1006f72d7db0f1412330ef1ca01dc1039def10b3a46e55875bc7cf",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19435064,
+      "logical_payload_sha256": "590b35114ffc5d1b73b709aeec5b48f4c1059a5a1c262442ce79be31be30c120",
+      "data_row_count": 10000,
+      "id_range": [
+        160000,
+        169999
+      ],
+      "generation_range": [
+        655,
+        696
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000017.6f696151dc84da10.csv.zst",
+      "bytes": 2567268,
+      "sha256": "6f696151dc84da10553d820f4183e57002d03e9cb967cc6f6f57c0157785c0ad",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19413169,
+      "logical_payload_sha256": "3502617804c5e5830a63a1904b296d31a0e61d7a6add96987eea3289269b3ea9",
+      "data_row_count": 10000,
+      "id_range": [
+        170000,
+        179999
+      ],
+      "generation_range": [
+        696,
+        737
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000018.f1ff0c2d483b774f.csv.zst",
+      "bytes": 2576842,
+      "sha256": "f1ff0c2d483b774fa212354614e7101ffa5747d2758bbf94f0b2336c1cd50f89",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19425238,
+      "logical_payload_sha256": "25f624757d85c7d564088a113d37badee9ee7b12ca47c61dd001826a8646acb8",
+      "data_row_count": 10000,
+      "id_range": [
+        180000,
+        189999
+      ],
+      "generation_range": [
+        737,
+        778
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c01/segments/000019.8274e4a6e064d029.csv.zst",
+      "bytes": 1404231,
+      "sha256": "8274e4a6e064d0295aac5fce067c9431118af68cb1ce6d6acea012b4545970b5",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 10591833,
+      "logical_payload_sha256": "8c0a91633237c3de98d28b2143e957ba6e2e38d8074d803ad513d2e47c35ffae",
+      "data_row_count": 5456,
+      "id_range": [
+        190000,
+        195455
+      ],
+      "generation_range": [
+        778,
+        800
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/population_manifest.v1.json",
+      "bytes": 18165,
+      "sha256": "44eac1169c1371e0a716a8727e2e8dea873c1c4f3c6537065022d5ec726bb22c",
+      "kind": "run_population_manifest"
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000000.72d1dc814bce83a8.csv.zst",
+      "bytes": 2366496,
+      "sha256": "72d1dc814bce83a8f19bccbbc45b740104ad1b885ee34ed3c9f962b461fca8f1",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19151483,
+      "logical_payload_sha256": "ed697682cb3e14abc363c816ce9de39db588571d028dcd522f0b72ec1b66d4e3",
+      "data_row_count": 10000,
+      "id_range": [
+        0,
+        9999
+      ],
+      "generation_range": [
+        0,
+        40
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000001.53a75f1469a972a3.csv.zst",
+      "bytes": 2464736,
+      "sha256": "53a75f1469a972a31425b26c920957b31c0e1149c888d0161520afd8341e3ca4",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19336744,
+      "logical_payload_sha256": "8b3ee48ecb3137aef8dc7f0e34b5c9a7e75e03bd0ab7e0eea3a84a3a2c86a28f",
+      "data_row_count": 10000,
+      "id_range": [
+        10000,
+        19999
+      ],
+      "generation_range": [
+        40,
+        81
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000002.2964abff68c98591.csv.zst",
+      "bytes": 2481609,
+      "sha256": "2964abff68c98591fdce52174722deac64b30a7eefd52f99240fb83e45979fa8",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19376296,
+      "logical_payload_sha256": "4ba8f84205bab9aa3ec9cb1ea0d5d93e0ce707e946890c1a0cd726b7ec06daa5",
+      "data_row_count": 10000,
+      "id_range": [
+        20000,
+        29999
+      ],
+      "generation_range": [
+        81,
+        122
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000003.4d73588eb8d8b468.csv.zst",
+      "bytes": 2493844,
+      "sha256": "4d73588eb8d8b468adb4d48022bce33d0e2816f4f0130d703f46b27902133d40",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19490791,
+      "logical_payload_sha256": "007c5f10ecee848ed8b84f2c4c5ed95b6f4dd6a2b196a5682ea387932803a8cf",
+      "data_row_count": 10000,
+      "id_range": [
+        30000,
+        39999
+      ],
+      "generation_range": [
+        122,
+        163
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000004.2dab84e92a15d010.csv.zst",
+      "bytes": 2500047,
+      "sha256": "2dab84e92a15d01057894d6cf00ca7d4a9bd341029e44f0bb9b86972a7303db5",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19531361,
+      "logical_payload_sha256": "705644c50ef4eb0ec9ec7c0c9a499d44aad10f6fd3c1972f3ee51ceb02ef34d8",
+      "data_row_count": 10000,
+      "id_range": [
+        40000,
+        49999
+      ],
+      "generation_range": [
+        163,
+        204
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000005.f928d9bf5813f252.csv.zst",
+      "bytes": 2530354,
+      "sha256": "f928d9bf5813f2525fc36e751f97b8b219ee54bea2883a53f82b71d4cfdeb9c1",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19571580,
+      "logical_payload_sha256": "d27d07721e837fa97b314519a532110b5d8cda3eea29b51197653ef34bf513ce",
+      "data_row_count": 10000,
+      "id_range": [
+        50000,
+        59999
+      ],
+      "generation_range": [
+        204,
+        245
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000006.6842b79fc47c09f8.csv.zst",
+      "bytes": 2518400,
+      "sha256": "6842b79fc47c09f8aabca1f4c2ce26ba98aca1ec05b441e3f846703be1f79eae",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19535361,
+      "logical_payload_sha256": "5994cb978ad35fc0b31307a48b663c869cf53c58f561e8e7c53831443a83dff2",
+      "data_row_count": 10000,
+      "id_range": [
+        60000,
+        69999
+      ],
+      "generation_range": [
+        245,
+        286
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000007.899db6c1d862b54b.csv.zst",
+      "bytes": 2530866,
+      "sha256": "899db6c1d862b54b96ad8b7e572b850617f6e51718e05b3e94182bd653757201",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19516346,
+      "logical_payload_sha256": "cbc714f3fe7fe3eabe57eb5d7c42160b2be1098118f9a5ccd8979365e04f5e1e",
+      "data_row_count": 10000,
+      "id_range": [
+        70000,
+        79999
+      ],
+      "generation_range": [
+        286,
+        327
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000008.d3c333cf18e2e38e.csv.zst",
+      "bytes": 2544145,
+      "sha256": "d3c333cf18e2e38ead53496230a30cf20bca665f44086dc413d54a4d76087c8c",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19481899,
+      "logical_payload_sha256": "ea6727f86e9d207485a1258331f49ea9abed8c9c71acc0337c9aad30675bc920",
+      "data_row_count": 10000,
+      "id_range": [
+        80000,
+        89999
+      ],
+      "generation_range": [
+        327,
+        368
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000009.0db2fa8ccfb92faa.csv.zst",
+      "bytes": 2542492,
+      "sha256": "0db2fa8ccfb92faaeeb6e7a888e177dc76e1c4d92317ebd4e21235b8c56b2e2e",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19513998,
+      "logical_payload_sha256": "565236cb3979da0bf878d8d5d2e7c363704f0c982b0f85e5196eb8dced17daa5",
+      "data_row_count": 10000,
+      "id_range": [
+        90000,
+        99999
+      ],
+      "generation_range": [
+        368,
+        409
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000010.e4a095ee9dad4306.csv.zst",
+      "bytes": 2523496,
+      "sha256": "e4a095ee9dad4306f51e7f583c86162bfd671c405dd0a532c98c0f864070862a",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19537431,
+      "logical_payload_sha256": "0d0e2bad784fc9026501b9db17fab9551cb9259127397aadb72f67dfceb81bbe",
+      "data_row_count": 10000,
+      "id_range": [
+        100000,
+        109999
+      ],
+      "generation_range": [
+        409,
+        450
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000011.548208c2078ae943.csv.zst",
+      "bytes": 2527981,
+      "sha256": "548208c2078ae9434fc346a49a6abbbc93c582c132c7da6ec7930b1e7834a1a8",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19552939,
+      "logical_payload_sha256": "d8de1269998f9dc2c1616fd42eba9ed996a8023d5ec00a4267f3a06c63a16396",
+      "data_row_count": 10000,
+      "id_range": [
+        110000,
+        119999
+      ],
+      "generation_range": [
+        450,
+        491
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000012.cc8d5eaf5d81a1d4.csv.zst",
+      "bytes": 2530563,
+      "sha256": "cc8d5eaf5d81a1d476142a31fce5aee781e6f7ed318b59bb65a61b88865de30b",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19575564,
+      "logical_payload_sha256": "73fdeea4428a39f0d5a4a1b2189526d653cf6f9c992a51d5a4a0b6cea54f193f",
+      "data_row_count": 10000,
+      "id_range": [
+        120000,
+        129999
+      ],
+      "generation_range": [
+        491,
+        532
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000013.352bca1948d9e9ec.csv.zst",
+      "bytes": 2532657,
+      "sha256": "352bca1948d9e9ec3926b38ea4a4cda085279814cb725ef97e228b982f6a8fc6",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19548196,
+      "logical_payload_sha256": "66a399a7ee31c18116c5a969aa0ba331e0f99890e6c4ed5c286debef3124fd11",
+      "data_row_count": 10000,
+      "id_range": [
+        130000,
+        139999
+      ],
+      "generation_range": [
+        532,
+        573
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000014.61311eca86eaca89.csv.zst",
+      "bytes": 2538580,
+      "sha256": "61311eca86eaca8967e3d4eb3d0041765eced2049432ea231813b9e4c33145e9",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19526971,
+      "logical_payload_sha256": "1687864905ec665580885a5ed918fea8a0fd0751753ca18fa0d871b8d73bc926",
+      "data_row_count": 10000,
+      "id_range": [
+        140000,
+        149999
+      ],
+      "generation_range": [
+        573,
+        614
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000015.d4c03a2a0303f4b7.csv.zst",
+      "bytes": 2543366,
+      "sha256": "d4c03a2a0303f4b7bef4ed3be3ece00b6b0a21f4489339d6e0da2f9bca00723d",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19492334,
+      "logical_payload_sha256": "0db8395ba4657bd88908cad967b0d648da5c241cf10572d4ae10d11930743d42",
+      "data_row_count": 10000,
+      "id_range": [
+        150000,
+        159999
+      ],
+      "generation_range": [
+        614,
+        655
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000016.585f315272a3606a.csv.zst",
+      "bytes": 2569747,
+      "sha256": "585f315272a3606a709d58317294125c992fdb826c89cbaff70fe0d8d41b6172",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19547311,
+      "logical_payload_sha256": "8d15a7e63b849d385d90dd5da50fd11aead58960d86c9dc67f27cf822f03c600",
+      "data_row_count": 10000,
+      "id_range": [
+        160000,
+        169999
+      ],
+      "generation_range": [
+        655,
+        696
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000017.d0abcc9266ff48ef.csv.zst",
+      "bytes": 2530434,
+      "sha256": "d0abcc9266ff48efa46bcbcf8feca5f1f9b9ac2fee81402535b0d96eabae0fc2",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19514853,
+      "logical_payload_sha256": "a5f9c5903de409077fab4652633a4cfc25d4455e2c865be8bcf661a3715612ed",
+      "data_row_count": 10000,
+      "id_range": [
+        170000,
+        179999
+      ],
+      "generation_range": [
+        696,
+        737
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000018.f24990ebb480eb12.csv.zst",
+      "bytes": 2538206,
+      "sha256": "f24990ebb480eb121c11cebaa1c1d63597e4df59bb546ee8316415c5ed9e892e",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 19505023,
+      "logical_payload_sha256": "ead33156110f1e7a267a4d1d2e1605a5a992c4bd2ce68d72414a071d9272d2ea",
+      "data_row_count": 10000,
+      "id_range": [
+        180000,
+        189999
+      ],
+      "generation_range": [
+        737,
+        778
+      ]
+    },
+    {
+      "relative_path": "evo_full_20261018_xbabe4_c02/segments/000019.8973a334bac25f2b.csv.zst",
+      "bytes": 1398658,
+      "sha256": "8973a334bac25f2b056da36d95e51221f5a7d0a8025b34c2b0f33167f36395f9",
+      "kind": "lossless_zstd_csv_segment",
+      "logical_bytes": 10623907,
+      "logical_payload_sha256": "2324864b41cdf7e669e5c98bf69ef3b6d352e2ecfb32dbad547df9539fc8209e",
+      "data_row_count": 5456,
+      "id_range": [
+        190000,
+        195455
+      ],
+      "generation_range": [
+        778,
+        800
+      ]
+    }
+  ]
+}

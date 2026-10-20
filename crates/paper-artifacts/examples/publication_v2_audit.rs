@@ -38,7 +38,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let populate_scatter = args.iter().any(|a| a == "--populate-scatter");
     if populate_scatter && (full_zstd || check_flag || args.len() > 1) {
         return Err(
-            "--populate-scatter is an explicit generation mode and cannot be combined with read-only audit flags"
+            "--populate-scatter is an explicit cache-generation mode and cannot be combined with read-only audit flags"
                 .into(),
         );
     }

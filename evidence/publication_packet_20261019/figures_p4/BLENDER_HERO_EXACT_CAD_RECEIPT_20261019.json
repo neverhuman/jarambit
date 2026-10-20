@@ -1,0 +1,94 @@
+{
+  "schema": "jarambit.publication_scene.v2",
+  "receipt_id": "BLENDER_HERO_EXACT_CAD_RECEIPT_20261019",
+  "created_at": "2026-10-19T19:50:00Z",
+  "public_individual_id": 2000,
+  "public_label": "Individual 2000",
+  "internal_subject_alias": "cert_pipeline_r01_p14_c02",
+  "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+  "qualification_scope": "Individual 2000: retained assessed export in evidence/evolve_certifiable/automatic/leaderboard.json (assessed_count = 1, qualified_count = 0, champion = null); native population records (1,954,560 births) were not individually assessed by this later pipeline; distinct from the 23-subject / 18-evaluator historical battery.",
+  "stl_path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl",
+  "stl_sha256": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022",
+  "d1_path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
+  "d1_sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+  "import_transform": {
+    "uniform_scale": 0.001,
+    "translation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "vertices": 44994,
+  "triangles": 90000,
+  "imported_vertices_before_sha256": "3937262fa229d7d2da143232c9a5df820c2bed9341bfdc4745b7f3cfbb49988e",
+  "imported_vertices_after_sha256": "3937262fa229d7d2da143232c9a5df820c2bed9341bfdc4745b7f3cfbb49988e",
+  "faces_before_sha256": "382cf1447b489343c61d3f1c36c083a8835babe46c21b9aee55fae5f04449cba",
+  "faces_after_sha256": "382cf1447b489343c61d3f1c36c083a8835babe46c21b9aee55fae5f04449cba",
+  "mesh_modifiers": [],
+  "geometry_changed": false,
+  "camera_basis_determinant_so3": 1.0,
+  "mirrored_2d_reflection_used": false,
+  "pose_orientation": "Ring at left, handle horizontal within 2 deg, blade curving upward to the right via proper SO(3) camera frame",
+  "registered_texture_transfer": {
+    "method": "Exact 2D planform (x, y) centroid correspondence from 25,209 D1 plate triangles onto 90,000 CAD surface triangles in shared millimeter CAD frame",
+    "composite_recipe": "Dimensionless 5-map area-weighted midrank percentile composite index in [0, 1] over active support (env_vm, lat, pry, ring, twist), where 0.50 is the normalized index midpoint (not a spatial median or calibrated failure fraction)",
+    "shader": "Principled BSDF (metallic=0.16, roughness=0.34, clearcoat=0.28) driven by FLOAT_COLOR corner attribute composite_percentile"
+  },
+  "blender": "4.0.2",
+  "build_hash": "Unknown",
+  "engine": "Cycles CPU",
+  "threads": 8,
+  "samples": 28,
+  "seed": 42,
+  "denoise": false,
+  "resolution": [
+    3200,
+    1360
+  ],
+  "output_png_sha256": "358713c7a5dcd52993fff3f066f9bbdd06c6839d6e88ea72533a56691707df92",
+  "output_png_bytes": 1285542,
+  "superseded_cycles_composite_png_sha256": "882c92d660a05872f3f482a2b0ad78df02725bd06d3d513ff867568d5081d333",
+  "superseded_cycles_composite_png_bytes": 855353,
+  "delivered_svg_projection_recipe": {
+    "renderer_kind": "Deterministic Rust exact-CAD 3D surface SVG projection + rsvg-convert rasterization (not Cycles raytraced output)",
+    "producer_source": "crates/paper-artifacts/src/population.rs::render_hero_exact_cad_svg",
+    "intermediate_svg_path": "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg",
+    "intermediate_svg_sha256": "016dc907f2d8ba5bf318af9b493b750a5145768527cc6a14038c299051f1607a",
+    "intermediate_svg_bytes": 5632721,
+    "rasterizer_command": "rsvg-convert -w 3200 -h 1360 docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg -o docs/paper/figures/fig1_hero_blender_v2.png",
+    "output_png_sha256": "358713c7a5dcd52993fff3f066f9bbdd06c6839d6e88ea72533a56691707df92",
+    "output_png_bytes": 1285542
+  },
+  "output_paths": [
+    "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.png",
+    "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/docs/paper/figures/fig1_hero_blender_v2.png",
+    "/home/ubuntu/jarambit/.agent/worktrees/ei-admiralty-primary-20261019/evidence/publication_packet_20261019/figures_p4/JR_EI_P4_T01_blender_exact_cad_hero_white.png",
+    "/home/ubuntu/jarambit/evidence/publication_packet_20261019/figures_p4/JR_EI_P4_T01_blender_exact_cad_hero_white.png"
+  ],
+  "camera": {
+    "type": "ORTHO",
+    "location": [
+      0.07706425338983536,
+      0.014090800657868385,
+      -0.44999998807907104
+    ],
+    "rotation_euler": [
+      -3.0686700344085693,
+      0.014588462188839912,
+      0.10578543692827225
+    ],
+    "ortho_scale": 0.31076565384864807,
+    "shift_x": -0.0019469428807497025,
+    "shift_y": -0.009923837147653103,
+    "depth_of_field": false
+  },
+  "raw_blender_png_path": "docs/paper/drafts_p3_p5/JR_EI_P4_T01_T03_blender_reflective_hero_white_raw.png",
+  "raw_blender_png_sha256": "b9ca7246d06493113727576037c74d7c481e19681bc62bbf36ecf9f96c61dadf",
+  "raw_blender_png_bytes": 2081724
+}

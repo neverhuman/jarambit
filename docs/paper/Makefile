@@ -36,6 +36,6 @@ artifacts:
 	cd $(ROOT) && cargo run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit
 check: all
 	! rg 'Overfull|LaTeX Warning: (Reference|Citation).*undefined' $(OUT)/main.log
-	awk '/^Pages:/ { if ($$2 < 15 || $$2 > 26) exit 1; found=1 } END { if (!found) exit 1 }' $(OUT)/pdfinfo.txt
+	awk '/^Pages:/ { if ($$2 < 15 || $$2 > 20) exit 1; found=1 } END { if (!found) exit 1 }' $(OUT)/pdfinfo.txt
 clean:
 	@echo 'Build artifacts remain under target/ieee/paper for inspection; no automatic deletion.'

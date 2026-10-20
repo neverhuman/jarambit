@@ -1,0 +1,132 @@
+% Supplement Draft prepared under JR-EI-P3-T04 inside docs/paper/drafts_p3_p5/
+% Preserves the complete 414-cell historical battery matrix, all 18 battery evaluator explanations,
+% all 16 legacy G16 diagnostics, all 10 RS-v2 groups, the 44-entry atlas crosswalk, and all missing-field disclosures.
+
+\section*{Supplement S1: Complete Historical 23-Subject $\times$ 18-Evaluator CAD Battery}
+\label{sup:battery-matrix}
+
+\subsection*{S1.1 A Matrix of Different Evidence Kinds}
+The historical battery contains 23 retained subjects and 18 evaluator columns. Its 414 cells include software capability, geometry binding, numerical findings, shared reports, and record completeness. The manifest fixes membership. A later automatic assessment is a separate corpus and does not silently create a twenty-fourth subject. All cells in this historical corpus report \code{fresh\_this\_lane: false}.
+
+The stored statuses reconcile to \BatteryPass\ passes (221), \BatteryFail\ failures (81), and \BatteryBlocked\ blocked records (112). These are labels from heterogeneous producers. They are preserved here as historical data alongside the exact explanation of what each label meant. In particular, the four shared build columns account for 92 stored passes ($4 \times 23$), and the local-solid column's 20 favorable statuses concern record completeness. Neither fact supports an aggregate claim of 221 independently successful physical engineering tests.
+
+Figure~\ref{fig:battery-matrix} retains every subject/evaluator pairing in manifest order. Each subsection below refers to the column with its exact evaluator ID and \code{docs/tests/README.md} anchor. Letters accompany the colors so missing evidence remains distinguishable from an unfavorable observation. Source-cell selectors, original kinds, and evidence-path strings remain in the linked projection (\code{docs/paper/generated/battery-matrix.json}); the aggregate table remains in the artifact package. The manifest's source tag is not uniform across its members: 21 subject records cite \code{6d18ef8c}, while the two \code{w283} records cite \code{4e54019d}. These are retained provenance fields, not a newly verified homogeneous solver regime.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{battery-matrix.png}
+\caption{Supplement Figure S1: All 414 original labels in the fixed historical battery, separate from the cover's assessed example (\code{cert\_pipeline\_r01\_p14\_c02}). N, A, and G reproduce source roles: native CAD, archived-not-on-main, and genome. P/F/B/I mean stored pass/fail/blocked/incomplete, not common physical outcomes. Source tags rA/rB identify the different retained revision fields (\code{6d18ef8c} vs.\ \code{4e54019d}). Four build columns repeat 92 shared pass references; \code{solid.tip} passes mean record completeness. No cell is fresh in this lane, no missing observation is imputed, and no row is promoted to qualification.}
+\label{fig:battery-matrix}
+\end{figure*}
+
+\subsection*{S1.2 Exhaustive Column-by-Column Historical Battery Reference (18 Evaluators)}
+
+\test{build.analytic: Analytic Software Controls (\code{battery-build.analytic})}
+This column references shared analytic/reference software controls (\src{crates/physics/tests/invariance.rs}{\code{invariance.rs}}). Such controls can expose errors in units, invariance, assembly, or solver behavior on reference problems. A per-subject copy of a shared control status does not establish another execution. The historical 23 passes should therefore be understood as repeated references to capability evidence. They do not establish candidate-specific geometry validity or physical behavior.
+
+\test{build.gci\_contracts: Convergence Arithmetic (\code{battery-build.gci\_contracts})}
+This column concerns software rules for interpreting mesh-study data (\src{fem_solid/tests/test_gci.py}{\code{test\_gci.py}}). Positive and negative controls demonstrate that a formula or refusal condition is implemented as intended. It does not mean that a particular CAD has a suitable three-level study, matching observables, or an admitted asymptotic error estimate. Candidate-specific convergence belongs to \code{plate.gci}.
+
+\test{build.claims: Reporting and Admission (\code{battery-build.claims})}
+This column references controls over how evidence is accepted, refused, and rendered into claims (\src{ops/ci/check_claims.py}{\code{check\_claims.py}}). Its object is the reporting system. A favorable software outcome establishes behavior of that control under its fixture; it does not establish the mechanics of any CAD or authorize an unscoped public safety statement.
+
+\test{build.dolfinx: Separate-Solver Capability (\code{battery-build.dolfinx})}
+The retained column references shared solver-comparison evidence (\code{evidence/cad\_battery/dolfinx\_cross\_check.json}). It indicates the scope of that shared capability record, not a fresh dual-solver computation for every subject. Candidate-specific comparison requires the two actual execution identities, matched problem specification, and observable correspondence (\code{G16-16}).
+
+\test{geom.unit: Export Units (\code{battery-geom.unit})}
+The unit column (\src{ops/ci/verify_genome_export.py}{\code{verify\_genome\_export.py}}) asks whether the exported representation's unit interpretation is established by the relevant evidence. All 23 historical cells are blocked. This does not prove that every export has incorrect units; it means the required binding was not established in those historical records.
+
+\test{geom.one\_solid: Topology Binding (\code{battery-geom.one\_solid})}
+This column (\src{ops/ci/verify_genome_export.py}{\code{verify\_genome\_export.py}}) records whether single-solid topology was established for the subject. Its 23 blocked cells preserve a missing-evidence condition rather than 23 unfavorable topology measurements. A mesh closure check and a B-rep solid check do not establish the same fact.
+
+\test{geom.mass: Mass Observation (\code{battery-geom.mass})}
+The mass column (\src{crates/crescent/src/battery.rs}{\code{battery.rs}}) has 19 retained genome observations and four blocked reference entries. For those genome entries, the historical value is a plate/certification mass observation, not a demonstrated STEP-versus-raster consistency comparison.
+
+\test{geom.pin: Geometry Identity (\code{battery-geom.pin})}
+This column (\src{crates/crescent/src/cad_ingest.rs}{\code{cad\_ingest.rs}}) concerns binding the observation to the intended CAD via \code{geometry\_sha256}. All 23 historical entries are blocked because filenames alone cannot establish cryptographic identity.
+
+\test{plate.loads: Plate Response Finding (\code{battery-plate.loads})}
+The load column (\src{crates/crescent/src/fem.rs}{\code{fem.rs}}) reports the stored plate-response comparison: 19 unfavorable records and 4 blocked reference entries. Unfavorable findings are results of the model and comparison policy, not solver crashes; blocked entries are missing records, not measured failures.
+
+\test{plate.seq: Regional Response Comparison (\code{battery-plate.seq})}
+The sequence column (\src{crates/crescent/src/fem.rs}{\code{fem.rs}}) records 10 stored favorable and 9 unfavorable findings among genome entries (plus 4 blocked reference entries), inheriting the linear-elastic proxy limitations of \code{G16-14}.
+
+\test{plate.l7: Fatigue Screen (\code{battery-plate.l7})}
+The fatigue column (\src{crates/crescent/src/fem.rs}{\code{fem.rs}}) records 19 unfavorable model assessments and 4 blocked entries. It is a disclosed analytical screen, not a physical lifetime test.
+
+\test{plate.gci: Candidate Mesh Study (\code{battery-plate.gci})}
+This column (\src{fem_solid/gci.py}{\code{gci.py}}) reports candidate-specific convergence evidence: 4 favorable, 15 unfavorable, and 4 blocked records, distinct from the software arithmetic controls in \code{build.gci\_contracts}.
+
+\test{side.a1: Shared Side-Report Reference (\code{battery-side.a1})}
+References a shared retained side report (\src{crates/crescent/examples/g3_side_report.rs}{\code{g3\_side\_report.rs}}): 19 favorable references and 4 blocked entries, representing report availability under the historical producer's convention rather than a distinct executed experiment.
+
+\test{side.a2: Shared Side-Report Reference (\code{battery-side.a2})}
+Similarly references the common side report (19 favorable, 4 blocked); no distinct physical mechanism or separate execution is established solely by this row.
+
+\test{side.a3: Shared Side-Report Reference (\code{battery-side.a3})}
+Has the same evidential scope as \code{side.a1} and \code{side.a2} (19 favorable, 4 blocked). Treating A1, A2, and A3 as three independent successful experiments would manufacture corroboration from table structure.
+
+\test{side.a4: Support and Stability Report (\code{battery-side.a4})}
+Records the alternate-support/stability report (\src{ops/ci/side_a4.py}{\code{side\_a4.py}}): 19 stored passes and 4 blocked entries. Report completeness, a favorable numerical finding, and physical support calibration remain distinct, and the \code{eigsh} $\mathbf{K}_s^{-1}\mathbf{G}$ symmetry/residual audit remains open.
+
+\test{solid.tip: Solid-Result Completeness (\code{battery-solid.tip})}
+Twenty stored passes and three blocked records (\src{fem_solid/tip_solid.py}{\code{tip\_solid.py}}). The 20 stored passes mean that local-solid result records were complete under the column's rules, not 20 favorable strength comparisons.
+
+\test{gate.rs\_v2: Combined Grouped Finding (\code{battery-gate.rs\_v2})}
+Records the combined historical RS-v2 finding (\src{crates/cli/src/bench.rs}{\code{bench.rs}}): 19 failures and 4 blocked reference entries, with zero passes.
+
+\section*{Supplement S2: Complete 44-Entry Catalog Crosswalk (\code{G16}, \code{RSV2}, and \code{battery})}
+\label{sup:crosswalk-44}
+
+Every entry in \code{docs/tests/catalog.json} (16 \code{G16} legacy predicates, 10 \code{RSV2} requirement groups, and 18 \code{battery} columns = 44 total entries) is preserved in the machine-readable crosswalk (\code{JR\_EI\_P3\_T04\_atlas\_crosswalk\_44.json}) and summarized below with its exact \code{docs/tests/README.md} anchor, main-text Methodological Family (Section~\ref{sec:battery}, Families~1--11), and visual binding or explicit missing-visual disclosure:
+\begin{itemize}
+  \item \textbf{Legacy G16 Diagnostics (16 entries):}
+    \code{g16-cad\_watertight\_and\_single\_solid} (Family~1, \code{export-identity.svg} A--B);
+    \code{g16-geometric\_and\_holder\_gates} (Family~1, \emph{subsection visual missing: geometry/reference visual not generated});
+    \code{g16-karambit\_ring\_and\_curved\_claw} (Family~1, \emph{subsection visual missing: geometry/reference visual not generated});
+    \code{g16-c6\_aesthetic\_floor} (Family~2, \code{reference.svg} A--B);
+    \code{g16-cert\_hiker\_180n} (Family~3, \code{plate-fields.svg} B);
+    \code{g16-cert\_hunter\_260n} (Family~3, \code{plate-fields.svg} B);
+    \code{g16-strict\_hunter\_260n} (Family~3, \code{assessment.svg} C);
+    \code{g16-cert\_ring\_pull\_1500n} (Family~4, \code{plate-fields.svg} C);
+    \code{g16-twist\_body\_1p82nm} (Family~5, \code{plate-fields.svg} D);
+    \code{g16-twist\_tip\_only\_1p82nm} (Family~5, \code{plate-fields.svg} D);
+    \code{g16-twist\_tip\_submodel\_strict\_1p82nm} (Family~5, \code{assessment.svg} C);
+    \code{g16-solid\_tip\_3d\_p2\_1p82nm} (Family~6, \code{verification.svg} C--D);
+    \code{g16-side\_a4\_buckling\_and\_support} (Family~7, \code{assessment.svg} A);
+    \code{g16-failure\_sequence\_1p2} (Family~8, \code{verification.svg} A);
+    \code{g16-plate\_gci\_valid\_3level} (Family~10, \code{verification.svg} A--B);
+    \code{g16-dolfinx\_cross\_check\_2pct} (Family~10, \code{verification.svg} C).
+  \item \textbf{Grouped RS-v2 Predicates (10 entries):}
+    \code{rsv2-aesthetic\_and\_geometric} (Family~2, \code{reference.svg} A--B);
+    \code{rsv2-floors\_828\_joint} (Family~3/4, \code{plate-fields.svg} A--C);
+    \code{rsv2-twist\_floor\_body\_and\_tipsub\_strict} (Family~5, \code{assessment.svg} C);
+    \code{rsv2-solid\_tip\_sf} (Family~6, \code{verification.svg} C--D);
+    \code{rsv2-strict\_hunter\_lateral} (Family~3, \code{assessment.svg} C);
+    \code{rsv2-seq\_hard} (Family~8, \code{verification.svg} A);
+    \code{rsv2-human\_max} (Family~4/5, \code{assessment.svg} B);
+    \code{rsv2-fatigue} (Family~9, \code{assessment.svg} B);
+    \code{rsv2-gate\_s\_sharp\_law} (Family~1, \emph{subsection visual missing: exported-measurement visual not generated});
+    \code{rsv2-gate\_s\_tip\_point\_brep} (Family~1, \emph{subsection visual missing: exported-measurement visual not generated}).
+  \item \textbf{Historical Battery Evaluators (18 entries):}
+    All 18 \code{battery-*} anchors map to \code{battery-matrix.svg} (exact evaluator-ID column across all 23 historical subjects), with secondary assessed-example visual links on \code{battery-solid.tip} (\code{verification.svg} C--D, Family~6), \code{battery-plate.seq} (\code{verification.svg} A, Family~8), \code{battery-plate.gci} (\code{verification.svg} A--B, Family~10), \code{battery-side.a4} (\code{assessment.svg} A, Family~7), and \code{battery-plate.l7} (\code{assessment.svg} B, Family~9).
+\end{itemize}
+
+\section*{Supplement S3: Explicit Disclosure of Missing Subsection Visuals and Unavailable Spatial Fields}
+\label{sup:missing-disclosures}
+
+To prevent visual availability from being misread as full spatial-field coverage (`40/44` catalog entries have subsection visual links; `6/44` link to the four retained $0.25\,\mathrm{mm}^2$ plate-field arrays in \code{plate-fields.svg}), we preserve two explicit non-availability ledgers from \code{visuals.rs}:
+\begin{enumerate}
+  \item \textbf{Four Unpictured Geometry/Export Subsection Entries (\code{subsection\_visual\_missing}):}
+    \begin{itemize}
+      \item \code{g16-geometric\_and\_holder\_gates} and \code{g16-karambit\_ring\_and\_curved\_claw}: \emph{``Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison.''}
+      \item \code{rsv2-gate\_s\_sharp\_law} and \code{rsv2-gate\_s\_tip\_point\_brep}: \emph{``Subsection exported-measurement visual not generated; nominal geometry and measured export observations must remain distinct.''}
+    \end{itemize}
+  \item \textbf{Four Unavailable Spatial Field Requests (\code{status: archive\_required}):}
+    \begin{itemize}
+      \item \code{strict\_plate\_field}: Only certification/strict scalar summaries ($168.9008\,\mathrm{N}$ vs.\ $168.1786\,\mathrm{N}$ lateral; $0.5239$ vs.\ $0.5287$ local torsion) are retained in the admitted publication input set; the $0.25\,\mathrm{mm}^2$ coarse plate field cannot substitute for a $0.0625\,\mathrm{mm}^2$ spatial array.
+      \item \code{solved\_solid\_field}: Only matched scalar safety-factor pairs and 1D longitudinal binned profiles are retained for the $P_2$ tetrahedral tip submodel; no full 3D volumetric stress array is archived in the publication inputs.
+      \item \code{buckling\_mode}: Only the archived linear eigenvalue ($\lambda_1 = 7.0351$) and support schematic are retained; no spatial eigenmode displacement field is archived, and the \code{eigsh} $\mathbf{K}_s^{-1}\mathbf{G}$ operator-symmetry/residual verification question remains open.
+      \item \code{fatigue\_field}: Only the saved modified-Goodman scalar ($n_f = 0.4718$) is retained; no per-element fatigue heatmap or physical cyclic life measurement exists in the admitted archive.
+    \end{itemize}
+\end{enumerate}

@@ -1,0 +1,47 @@
+% Draft for Section 7 (Numerical Verification and Scientific Assurance)
+\section{Numerical Verification and Scientific Assurance}
+\label{sec:verification}
+
+\subsection{The Multi-Model Finite-Element Hierarchy}
+The platform's mechanical evaluation couples a 2.5D plate-and-membrane finite-element formulation with a localized 3D quadratic-solid submodel. At the algebraic level, each linear-elastic static solve evaluates
+\begin{equation}
+ \mathbf K\mathbf u = \mathbf f,
+\end{equation}
+where the stiffness matrix $\mathbf K$, displacement vector $\mathbf u$, and load vector $\mathbf f$ depend on the decoded planform, spatially varying thickness field, alloy constants, support idealization, and element formulation. In the plate path, out-of-plane lateral bending ($180\,\mathrm{N}$ and $260\,\mathrm{N}$) and chord torsion ($1.82\,\mathrm{N\cdot m}$) assemble discrete Kirchhoff triangle (DKT) bending operators paired with constant-strain triangle (CST) membrane terms, whereas the assessed in-plane ring-traction solve ($1500\,\mathrm{N}$) instantiates six-node quadratic (T6) membrane triangles. Consequently, the retained ring-response map for Individual~2000 (Figure~\ref{fig:plate-fields}C) records T6 centroid von Mises stress per unit traction resultant ($\mathrm{MPa/N}$), whereas the lateral and torsion maps (Figure~\ref{fig:plate-fields}B,D) record per-triangle maxima over three corner-extrapolated Gauss-point bending stresses.
+
+In the local 3D solid path, the terminal blade region is discretized with ten-node quadratic ($P_2$) tetrahedra to resolve three-dimensional tip-torsion gradients that a 2.5D plate assumption cannot capture. A richer element formulation resolves local triaxial stress effects, but remains conditioned on the transferred submodel boundary displacements and mesh density.
+
+\subsection{Observable Semantics and Domain Masks}
+Comparing scalar safety factors or stress fields across solvers requires binding the exact postprocessing observable and regional mask to the mesh. For Individual~2000 ($13{,}503$ plate nodes and $25{,}209$ triangles at the $0.25\,\mathrm{mm}^2$ discretization level):
+\begin{itemize}[leftmargin=*,nosep]
+\item The multi-case envelope zeroes $75$ triangles whose centroids lie within $4.0\,\mathrm{mm}$ of the boundary tip node, leaving $25{,}134$ active triangles with a maximum recorded elastic envelope stress of $1{,}388.6695\,\mathrm{MPa}$.
+\item The ring-traction field zeroes $14{,}875$ triangles in the seated ring support zone ($x \ge 76 + \Delta x_{\text{grip}} - 3\,\mathrm{mm}$, with one boundary-adjacent triangle retained because its positive stored coefficient proves it was not source-zeroed), leaving $10{,}334$ active triangles.
+\item The lateral and torsion unit-response fields retain all $25{,}209$ triangles while outlining the $4.0\,\mathrm{mm}$ tip capacity-exclusion boundary.
+\end{itemize}
+Because all four maps are simultaneously active on $10{,}334$ triangles, three maps on $14{,}800$ seated-ring triangles, and two maps on $75$ tip-exclusion triangles, any composite field visualization must publish the per-triangle contributor count $q(x) \in \{2/4, 3/4, 4/4\}$ alongside the area-weighted midrank percentile value.
+
+\subsection{Three-Level Plate Mesh Study and Refused Grid-Convergence Estimates}
+A grid-convergence index (GCI) estimate \cite{roache} requires asymptotic monotone convergence across a consistent mesh sequence. For Individual~2000, the retained three-level plate study (Figure~\ref{fig:verification}A--B) evaluates maximum triangle areas $A_{\max} \in \{0.25, 1.0, 4.0\}\,\mathrm{mm}^2$ (effective grid spacings $h = \sqrt{A_{\max}} \in \{0.5, 1.0, 2.0\}\,\mathrm{mm}$, with $25{,}209$, $6{,}803$, and $3{,}166$ elements, respectively). Although the mesh-sequence metadata are valid, neither GCI uncertainty estimate is admitted:
+\begin{itemize}[leftmargin=*,nosep]
+\item For the regional yield-order sequence proxy (Figure~\ref{fig:verification}A), the three-level series is monotone but yields a negative observed order ($p = -2.9003$), violating asymptotic convergence.
+\item For the lateral safety-factor series (Figure~\ref{fig:verification}B), the three-level differences oscillate in sign across refinements.
+\end{itemize}
+Both Richardson-extrapolated continuum estimates and fine-grid GCI percentages are therefore recorded as null (unadmitted). Separate certification versus strict refinement pairs ($168.9008\,\mathrm{N}$ vs.\ $168.1786\,\mathrm{N}$ lateral capacity at $0.0625\,\mathrm{mm}^2$; $0.5239$ vs.\ $0.5287$ local plate torsion factor) are two-level comparisons and are never presented as three-level GCI studies.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{verification.png}
+\caption{Retained numerical verification records for Individual~2000 (assessed, not qualified). A--B: three-level plate mesh refinement observations ($25{,}209$, $6{,}803$, and $3{,}166$ triangles); both GCI uncertainty estimates are refused ($p=-2.9003$ in A; oscillatory differences in B). C: matched-mesh quadratic tetrahedral solid safety factors ($91{,}008$ elements, $416{,}583$ degrees of freedom) comparing independent finite-element solvers under vertex-maximum and vertex-mean recovery. D: planar tip-distance bin maxima ($4$--$25\,\mathrm{mm}$) for raw plate cells versus recovered solid vertex means.}
+\label{fig:verification}
+\end{figure*}
+
+\subsection{Independent-Solver Quadratic Solid Verification}
+To verify implementation consistency of the local 3D solid path on Individual~2000, two independent finite-element packages (scikit-fem \cite{skfem} and DOLFINx~0.9.0 \cite{dolfinx}) solve the identical saved quadratic tetrahedral mesh ($91{,}008$ ten-node tetrahedra, $416{,}583$ displacement degrees of freedom; Figure~\ref{fig:verification}C). Within the evaluation region ($4\le d_{\text{tip}} < 15\,\mathrm{mm}$ and cut distance $> 3\,\mathrm{mm}$):
+\begin{itemize}[leftmargin=*,nosep]
+\item Under incident-cell vertex-maximum recovery, the two solvers report safety factors of $0.669$ and $0.6693$ (relative difference $0.0448\%$).
+\item Under incident-cell unweighted vertex-mean recovery, the two solvers report safety factors of $0.726$ and $0.7263$ (relative difference $0.0413\%$).
+\end{itemize}
+The primary solve converges in $152$ iterations (relative residual $8.80\times 10^{-11}$) and the independent sidecar in $158$ iterations. This narrow cross-solver agreement verifies algebraic assembly and recovery consistency on the shared mesh, while leaving boundary-transfer idealizations and physical fracture unvalidated.
+
+\subsection{Support Eigenvalue Audit and Paired Assurance Controls}
+In the elastic support and buckling side study for Individual~2000, adding bore-bearing springs and a Winkler grip-pad foundation yields a lateral regional ratio of $5.2027$ and an elastic buckling eigenvalue of $7.0351$ (compared with the multi-case certification minimum of $1.4353$). Because the producer invoked a symmetric Krylov eigensolver on the product operator $\mathbf K_s^{-1}\mathbf G$ without retaining an explicit Euclidean operator-symmetry check or eigenpair residual, that numerical-verification question remains explicitly flagged as open. More broadly, the repository's frozen scientific-assurance catalog specifies $178$ challenge definitions ($356$ paired positive and negative control slots across 20 families) to ensure that corrupted hashes, non-convergent mesh sequences, and synthetic fixtures fail closed rather than silently passing.
