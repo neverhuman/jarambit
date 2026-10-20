@@ -2,7 +2,7 @@
   "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
   "display_recipe": {
     "path": "docs/paper/data/smart-crop-contract.v1.json",
-    "sha256": "e4305513ef5adc41d391aed17e2abca360afff0fa05a1d31c94ea6777770f432"
+    "sha256": "124685f851bbba1bfe6a3565f8e06a66e31b616767c836779e039c1cbf6ff0e6"
   },
   "fields": {
     "env_vm": {
@@ -3800,9 +3800,9 @@
       "masked_cell_ids": [],
       "plot_transform": {
         "formula": "svg_x=origin_x+source_x*scale; svg_y=origin_y-source_y*scale",
-        "origin_x": -13686.094144768222,
-        "origin_y": -3788.2209841484287,
-        "scale": 77.37896242819737
+        "origin_x": -58.086278273574976,
+        "origin_y": 55.40342458231268,
+        "scale": 5.491173535408519
       },
       "raw_zero_count": 1091,
       "selector": "/mesh/lat",
@@ -3896,16 +3896,16 @@
           }
         ],
         "bbox_posed_mm": [
-          185.2712119016998,
+          128.94989999999999,
           -53.467,
-          189.72978809830022,
-          -51.07616928588093
+          191.778,
+          -19.776569565217393
         ],
         "bbox_source_mm": [
-          185.2712119016998,
+          128.94989999999999,
           -53.467,
-          189.72978809830022,
-          -51.07616928588093
+          191.778,
+          -19.776569565217393
         ],
         "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
         "chosen_value_threshold": 4.50305,
@@ -3913,18 +3913,28 @@
         "coordinate_units": "mm",
         "coverage": {
           "cropped_positive_excess_mass": 2.913006305497335,
-          "cropped_raw_response_integral": 21.48850338586285,
-          "cropped_valid_area": 5.187285862632052,
+          "cropped_raw_response_integral": 759.5556533369011,
+          "cropped_valid_area": 496.6870654433276,
           "denominator_scope": "whole original eligible field; never a selected ROI",
           "excess_meaning": "display saliency integral above original t50; not physical energy",
           "positive_excess_mass_fraction": 1.0,
-          "raw_response_integral_fraction": 0.004223255574697013,
-          "source_area_fraction": 0.0013592545577477198,
+          "raw_response_integral_fraction": 0.14927971434986434,
+          "source_area_fraction": 0.13014978841663874,
           "whole_positive_excess_mass": 2.913006305497335,
           "whole_raw_response_integral": 5088.137103188336,
           "whole_valid_area": 3816.2725540000156
         },
         "decision": "Zoom",
+        "display_context": {
+          "actual_whole_object_x_extent_fraction": 0.30000000000000004,
+          "aspect_fit_may_letterbox_at_domain_limits": true,
+          "clamped_to_original_source_bounds": true,
+          "contains_complete_selected_roi": true,
+          "locator_red_rectangle": "exact displayed source-coordinate viewport, not the smaller selection ROI",
+          "minimum_whole_object_x_extent_fraction": 0.3,
+          "requested_physical_aspect": 1.864864864864865,
+          "version": "jarambit.curved_tip_context_viewport.v1"
+        },
         "field_selector": "/mesh/lat",
         "finite_valid_count": 25209,
         "full_bbox_source_mm": [
@@ -3944,44 +3954,49 @@
         ],
         "genuine_zero_count": 1091,
         "locator_callout": {
-          "label": "Exact ROI",
-          "label_svg_baseline": [
-            1008.0,
-            331.0
+          "displayed_bbox_source_mm": [
+            128.94989999999999,
+            -53.467,
+            191.778,
+            -19.776569565217393
           ],
-          "leader_svg_points": [
+          "label": "Display view",
+          "red_quad": [
             [
-              1116.0,
-              323.0
+              1108.0,
+              287.7701920000764
             ],
             [
-              1134.0,
-              310.0
+              1150.0,
+              287.7701920000764
             ],
             [
-              1147.1405310681048,
-              286.9710679616843
+              1150.0,
+              265.2484528696416
+            ],
+            [
+              1108.0,
+              265.2484528696416
             ]
           ],
-          "roi_enlarged": false,
-          "target": "center of the unchanged exact source-coordinate crop quadrilateral"
+          "target": "exact expanded display viewport; selected saliency ROI recorded separately"
         },
         "locator_crop_quad": [
           [
-            1145.6502727262387,
+            1108.0,
             287.7701920000764
           ],
           [
-            1148.6307894099712,
+            1150.0,
             287.7701920000764
           ],
           [
-            1148.6307894099712,
-            286.17194392329225
+            1150.0,
+            265.2484528696416
           ],
           [
-            1145.6502727262387,
-            286.17194392329225
+            1108.0,
+            265.2484528696416
           ]
         ],
         "locator_outline_source": "original plate boundary edges; not a detailed CAD silhouette",
@@ -4012,6 +4027,30 @@
         },
         "reason": "least aggressive fixed accepted range cutoff",
         "schema": "jarambit.source_triangle_smart_crop.v1",
+        "selection_roi": {
+          "bbox_source_mm": [
+            185.2712119016998,
+            -53.467,
+            189.72978809830022,
+            -51.07616928588093
+          ],
+          "chosen_value_threshold": 4.50305,
+          "coverage": {
+            "cropped_positive_excess_mass": 2.913006305497335,
+            "cropped_raw_response_integral": 21.48850338586285,
+            "cropped_valid_area": 5.187285862632052,
+            "denominator_scope": "whole original eligible field; never a selected ROI",
+            "excess_meaning": "display saliency integral above original t50; not physical energy",
+            "positive_excess_mass_fraction": 1.0,
+            "raw_response_integral_fraction": 0.004223255574697013,
+            "source_area_fraction": 0.0013592545577477198,
+            "whole_positive_excess_mass": 2.913006305497335,
+            "whole_raw_response_integral": 5088.137103188336,
+            "whole_valid_area": 3816.2725540000156
+          },
+          "decision": "Zoom",
+          "scope": "unchanged saliency-selection result, distinct from the wider display camera"
+        },
         "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
         "source_mask_and_missing_reason_sha256": "cf7b3780e2fdb8dc888d902a80d779a4e5a85dcf5d783c2a3bc4d8114963d2ae",
         "source_sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
@@ -4029,14 +4068,14 @@
         ],
         "source_to_panel": [
           [
-            77.37896242819737,
+            5.491173535408519,
             0.0,
-            -13686.094144768222
+            -58.086278273574976
           ],
           [
             0.0,
-            -77.37896242819737,
-            -3788.2209841484287
+            -5.491173535408519,
+            55.40342458231268
           ]
         ],
         "source_to_pose": "identity; no geometric rotation",
@@ -4044,7 +4083,7 @@
           650.0,
           164.0,
           345.0,
-          184.99999999999972
+          184.99999999999997
         ],
         "units": "MPa/N",
         "visible_ink_coverage_claim": false,
@@ -21914,9 +21953,9 @@
       "masked_cell_ids": [],
       "plot_transform": {
         "formula": "svg_x=origin_x+source_x*scale; svg_y=origin_y-source_y*scale",
-        "origin_x": -18647.511776834242,
-        "origin_y": -4794.140337534824,
-        "scale": 103.7675638718242
+        "origin_x": -58.086278273574976,
+        "origin_y": 460.4034245823127,
+        "scale": 5.491173535408519
       },
       "raw_zero_count": 1822,
       "selector": "/mesh/twist",
@@ -21994,16 +22033,16 @@
           }
         ],
         "bbox_posed_mm": [
-          185.9686308206187,
+          128.94989999999999,
           -53.467,
-          189.29336917938127,
-          -51.684169285880934
+          191.778,
+          -19.776569565217393
         ],
         "bbox_source_mm": [
-          185.9686308206187,
+          128.94989999999999,
           -53.467,
-          189.29336917938127,
-          -51.684169285880934
+          191.778,
+          -19.776569565217393
         ],
         "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
         "chosen_value_threshold": 17.42945,
@@ -22011,18 +22050,28 @@
         "coordinate_units": "mm",
         "coverage": {
           "cropped_positive_excess_mass": 3.265977118131545,
-          "cropped_raw_response_integral": 36.48794925217728,
-          "cropped_valid_area": 2.901707719416663,
+          "cropped_raw_response_integral": 80.84471084242116,
+          "cropped_valid_area": 496.6870654433276,
           "denominator_scope": "whole original eligible field; never a selected ROI",
           "excess_meaning": "display saliency integral above original t50; not physical energy",
           "positive_excess_mass_fraction": 1.0,
-          "raw_response_integral_fraction": 0.30621335110479864,
-          "source_area_fraction": 0.0007603512795162511,
+          "raw_response_integral_fraction": 0.6784631730071546,
+          "source_area_fraction": 0.13014978841663874,
           "whole_positive_excess_mass": 3.265977118131545,
           "whole_raw_response_integral": 119.15858378000515,
           "whole_valid_area": 3816.2725540000156
         },
         "decision": "Zoom",
+        "display_context": {
+          "actual_whole_object_x_extent_fraction": 0.30000000000000004,
+          "aspect_fit_may_letterbox_at_domain_limits": true,
+          "clamped_to_original_source_bounds": true,
+          "contains_complete_selected_roi": true,
+          "locator_red_rectangle": "exact displayed source-coordinate viewport, not the smaller selection ROI",
+          "minimum_whole_object_x_extent_fraction": 0.3,
+          "requested_physical_aspect": 1.864864864864865,
+          "version": "jarambit.curved_tip_context_viewport.v1"
+        },
         "field_selector": "/mesh/twist",
         "finite_valid_count": 25209,
         "full_bbox_source_mm": [
@@ -22042,44 +22091,49 @@
         ],
         "genuine_zero_count": 1822,
         "locator_callout": {
-          "label": "Exact ROI",
-          "label_svg_baseline": [
-            1008.0,
-            736.0
+          "displayed_bbox_source_mm": [
+            128.94989999999999,
+            -53.467,
+            191.778,
+            -19.776569565217393
           ],
-          "leader_svg_points": [
+          "label": "Display view",
+          "red_quad": [
             [
-              1116.0,
-              728.0
+              1108.0,
+              692.7701920000765
             ],
             [
-              1134.0,
-              715.0
+              1150.0,
+              692.7701920000765
             ],
             [
-              1147.2277691033153,
-              692.1742891318296
+              1150.0,
+              670.2484528696417
+            ],
+            [
+              1108.0,
+              670.2484528696417
             ]
           ],
-          "roi_enlarged": false,
-          "target": "center of the unchanged exact source-coordinate crop quadrilateral"
+          "target": "exact expanded display viewport; selected saliency ROI recorded separately"
         },
         "locator_crop_quad": [
           [
-            1146.1164907814496,
+            1108.0,
             692.7701920000765
           ],
           [
-            1148.339047425181,
+            1150.0,
             692.7701920000765
           ],
           [
-            1148.339047425181,
-            691.5783862635827
+            1150.0,
+            670.2484528696417
           ],
           [
-            1146.1164907814496,
-            691.5783862635827
+            1108.0,
+            670.2484528696417
           ]
         ],
         "locator_outline_source": "original plate boundary edges; not a detailed CAD silhouette",
@@ -22110,6 +22164,30 @@
         },
         "reason": "least aggressive fixed accepted range cutoff",
         "schema": "jarambit.source_triangle_smart_crop.v1",
+        "selection_roi": {
+          "bbox_source_mm": [
+            185.9686308206187,
+            -53.467,
+            189.29336917938127,
+            -51.684169285880934
+          ],
+          "chosen_value_threshold": 17.42945,
+          "coverage": {
+            "cropped_positive_excess_mass": 3.265977118131545,
+            "cropped_raw_response_integral": 36.48794925217728,
+            "cropped_valid_area": 2.901707719416663,
+            "denominator_scope": "whole original eligible field; never a selected ROI",
+            "excess_meaning": "display saliency integral above original t50; not physical energy",
+            "positive_excess_mass_fraction": 1.0,
+            "raw_response_integral_fraction": 0.30621335110479864,
+            "source_area_fraction": 0.0007603512795162511,
+            "whole_positive_excess_mass": 3.265977118131545,
+            "whole_raw_response_integral": 119.15858378000515,
+            "whole_valid_area": 3816.2725540000156
+          },
+          "decision": "Zoom",
+          "scope": "unchanged saliency-selection result, distinct from the wider display camera"
+        },
         "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
         "source_mask_and_missing_reason_sha256": "cf7b3780e2fdb8dc888d902a80d779a4e5a85dcf5d783c2a3bc4d8114963d2ae",
         "source_sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
@@ -22127,22 +22205,22 @@
         ],
         "source_to_panel": [
           [
-            103.7675638718242,
+            5.491173535408519,
             0.0,
-            -18647.511776834242
+            -58.086278273574976
           ],
           [
             0.0,
-            -103.7675638718242,
-            -4794.140337534824
+            -5.491173535408519,
+            460.4034245823127
           ]
         ],
         "source_to_pose": "identity; no geometric rotation",
         "svg_clip_rect": [
           650.0,
           569.0,
-          344.99999999999926,
-          185.0
+          345.0,
+          184.99999999999997
         ],
         "units": "MPa/(N mm)",
         "visible_ink_coverage_claim": false,
