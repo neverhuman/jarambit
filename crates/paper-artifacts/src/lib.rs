@@ -21,3 +21,4 @@ mod verification;
 mod visuals;
 mod weighted_runs;
 pub mod saliency;
+pub mod objective_priorities;

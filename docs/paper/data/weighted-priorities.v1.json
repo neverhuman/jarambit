@@ -1,0 +1,302 @@
+{
+  "schema": "jarambit.configured_weighted_priorities_contract.v1",
+  "recipe": {
+    "revision": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+    "original_path": "ops/ci/ultralight_weighted_fitness.py",
+    "retained_path": "docs/paper/history/ultralight_weighted_fitness_009f5ac5.source.txt",
+    "sha256": "1adbd37191710d439d3ca388e468499fe48bc217546145deb57f87f1da24770b",
+    "weight_selector": "ULTRALIGHT_WEIGHTS_V1",
+    "normalizer_selector": "compute_ultralight_weighted_fitness.s_scores",
+    "final_clamp_selector": "compute_ultralight_weighted_fitness:138-145"
+  },
+  "declared_sum_pct": "100.0",
+  "objectives": [
+    {
+      "ordinal": 1,
+      "id": "ultralight_mass",
+      "scientific_label": "Mass preference",
+      "weight_pct": "22.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['ultralight_mass']",
+      "weight_source_line": 29,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['ultralight_mass']",
+      "normalization_source_lines": [
+        105,
+        105
+      ],
+      "family": "Mass/compactness"
+    },
+    {
+      "ordinal": 2,
+      "id": "holder_and_compactness",
+      "scientific_label": "Holder/compactness proxy",
+      "weight_pct": "8.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['holder_and_compactness']",
+      "weight_source_line": 30,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['holder_and_compactness']",
+      "normalization_source_lines": [
+        106,
+        106
+      ],
+      "family": "Mass/compactness"
+    },
+    {
+      "ordinal": 3,
+      "id": "karambit_ring_and_claw",
+      "scientific_label": "Ring/claw form proxy",
+      "weight_pct": "7.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['karambit_ring_and_claw']",
+      "weight_source_line": 32,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['karambit_ring_and_claw']",
+      "normalization_source_lines": [
+        107,
+        107
+      ],
+      "family": "Form/comfort proxies"
+    },
+    {
+      "ordinal": 4,
+      "id": "c6_aesthetic_and_ergo",
+      "scientific_label": "Reference form proxy",
+      "weight_pct": "9.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['c6_aesthetic_and_ergo']",
+      "weight_source_line": 33,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['c6_aesthetic_and_ergo']",
+      "normalization_source_lines": [
+        108,
+        108
+      ],
+      "family": "Form/comfort proxies"
+    },
+    {
+      "ordinal": 5,
+      "id": "bore_collar_comfort",
+      "scientific_label": "Bore/collar comfort proxy",
+      "weight_pct": "9.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['bore_collar_comfort']",
+      "weight_source_line": 34,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['bore_collar_comfort']",
+      "normalization_source_lines": [
+        109,
+        109
+      ],
+      "family": "Form/comfort proxies"
+    },
+    {
+      "ordinal": 6,
+      "id": "cad_watertight_brep",
+      "scientific_label": "Single-solid B-rep status",
+      "weight_pct": "5.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['cad_watertight_brep']",
+      "weight_source_line": 36,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['cad_watertight_brep']",
+      "normalization_source_lines": [
+        110,
+        110
+      ],
+      "family": "Exported geometry proxies"
+    },
+    {
+      "ordinal": 7,
+      "id": "gate_s_sharpness",
+      "scientific_label": "Edge-profile proxy",
+      "weight_pct": "5.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['gate_s_sharpness']",
+      "weight_source_line": 37,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['gate_s_sharpness']",
+      "normalization_source_lines": [
+        111,
+        111
+      ],
+      "family": "Exported geometry proxies"
+    },
+    {
+      "ordinal": 8,
+      "id": "gate_s_point_profile",
+      "scientific_label": "Point-profile proxy",
+      "weight_pct": "5.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['gate_s_point_profile']",
+      "weight_source_line": 38,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['gate_s_point_profile']",
+      "normalization_source_lines": [
+        112,
+        117
+      ],
+      "family": "Exported geometry proxies"
+    },
+    {
+      "ordinal": 9,
+      "id": "hiker_lateral_180n",
+      "scientific_label": "Lateral response, 180 N reference",
+      "weight_pct": "3.5",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['hiker_lateral_180n']",
+      "weight_source_line": 40,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['hiker_lateral_180n']",
+      "normalization_source_lines": [
+        118,
+        118
+      ],
+      "family": "Response/verification proxies"
+    },
+    {
+      "ordinal": 10,
+      "id": "hunter_lateral_260n",
+      "scientific_label": "Lateral response, 260 N reference",
+      "weight_pct": "2.5",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['hunter_lateral_260n']",
+      "weight_source_line": 41,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['hunter_lateral_260n']",
+      "normalization_source_lines": [
+        119,
+        119
+      ],
+      "family": "Response/verification proxies"
+    },
+    {
+      "ordinal": 11,
+      "id": "strict_hunter_260n",
+      "scientific_label": "Strict lateral response",
+      "weight_pct": "2.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['strict_hunter_260n']",
+      "weight_source_line": 42,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['strict_hunter_260n']",
+      "normalization_source_lines": [
+        120,
+        120
+      ],
+      "family": "Response/verification proxies"
+    },
+    {
+      "ordinal": 12,
+      "id": "ring_pull_1500n",
+      "scientific_label": "Ring-traction response",
+      "weight_pct": "2.5",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['ring_pull_1500n']",
+      "weight_source_line": 43,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['ring_pull_1500n']",
+      "normalization_source_lines": [
+        121,
+        121
+      ],
+      "family": "Response/verification proxies"
+    },
+    {
+      "ordinal": 13,
+      "id": "twist_body_1p82nm",
+      "scientific_label": "Body-torsion response",
+      "weight_pct": "2.5",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['twist_body_1p82nm']",
+      "weight_source_line": 44,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['twist_body_1p82nm']",
+      "normalization_source_lines": [
+        122,
+        122
+      ],
+      "family": "Response/verification proxies"
+    },
+    {
+      "ordinal": 14,
+      "id": "twist_tip_plate_1p82nm",
+      "scientific_label": "Local plate-torsion response",
+      "weight_pct": "2.5",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['twist_tip_plate_1p82nm']",
+      "weight_source_line": 45,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['twist_tip_plate_1p82nm']",
+      "normalization_source_lines": [
+        123,
+        123
+      ],
+      "family": "Response/verification proxies"
+    },
+    {
+      "ordinal": 15,
+      "id": "solid_tip_3d_p2_and_xcheck",
+      "scientific_label": "Reported solid-tip/comparison proxy",
+      "weight_pct": "3.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['solid_tip_3d_p2_and_xcheck']",
+      "weight_source_line": 46,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['solid_tip_3d_p2_and_xcheck']",
+      "normalization_source_lines": [
+        124,
+        124
+      ],
+      "family": "Response/verification proxies"
+    },
+    {
+      "ordinal": 16,
+      "id": "side_a4_buckling",
+      "scientific_label": "Reported support/stability proxy",
+      "weight_pct": "2.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['side_a4_buckling']",
+      "weight_source_line": 47,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['side_a4_buckling']",
+      "normalization_source_lines": [
+        125,
+        125
+      ],
+      "family": "Response/verification proxies"
+    },
+    {
+      "ordinal": 17,
+      "id": "failure_sequence_1p2",
+      "scientific_label": "Elastic yield-order proxy",
+      "weight_pct": "3.5",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['failure_sequence_1p2']",
+      "weight_source_line": 48,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['failure_sequence_1p2']",
+      "normalization_source_lines": [
+        126,
+        126
+      ],
+      "family": "Response/verification proxies"
+    },
+    {
+      "ordinal": 18,
+      "id": "plate_gci_3level",
+      "scientific_label": "Reported plate-study status",
+      "weight_pct": "2.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['plate_gci_3level']",
+      "weight_source_line": 49,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['plate_gci_3level']",
+      "normalization_source_lines": [
+        127,
+        127
+      ],
+      "family": "Response/verification proxies"
+    },
+    {
+      "ordinal": 19,
+      "id": "human_max_overload",
+      "scientific_label": "Overload proxy",
+      "weight_pct": "2.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['human_max_overload']",
+      "weight_source_line": 50,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['human_max_overload']",
+      "normalization_source_lines": [
+        128,
+        132
+      ],
+      "family": "Response/verification proxies"
+    },
+    {
+      "ordinal": 20,
+      "id": "goodman_fatigue_l7",
+      "scientific_label": "Goodman fatigue proxy",
+      "weight_pct": "2.0",
+      "weight_source_selector": "ULTRALIGHT_WEIGHTS_V1['goodman_fatigue_l7']",
+      "weight_source_line": 51,
+      "normalization_source_selector": "compute_ultralight_weighted_fitness.s_scores['goodman_fatigue_l7']",
+      "normalization_source_lines": [
+        133,
+        133
+      ],
+      "family": "Response/verification proxies"
+    }
+  ],
+  "scope": {
+    "specimen": null,
+    "normalized_scores_included": false,
+    "contributions_included": false,
+    "fitness_total_included": false,
+    "qualification_claim": false
+  }
+}
