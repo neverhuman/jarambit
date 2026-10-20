@@ -2,6 +2,12 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v2.1.0 — 2026-10-20 (retrospective design traceability publication)
+
+- Adds the corrected 15-page IEEE-style manuscript and standalone 18-page supplement, with explicit evidence coverage, candidate identities, score profiles and selective assessment paths.
+- Presents all 1,958,803 admitted numeric observations in separate source profiles, including 1,954,560 native births across ten completed runs, with the complete retained archive and source/input/output provenance.
+- Improves figure legibility, captions and portable companion-PDF navigation. Original evidence, scoring contracts, scientific kernels, weights and thresholds are unchanged. This is a reporting release of retained computational observations; it adds no new search, FEM or physical experiments and establishes no design qualification.
+
 ## v2.0.0 — 2026-10-18 (option (a) major release: weighted objectives, no qualified design)
 
 Scope chosen by Jepson Taylor on 2026-10-18 (11:36 AM MDT, option (a) plus the weighted-objectives addendum): ship the pipeline, the verified per-gate checks, and an honest frontier report. **No design qualifies under the legacy 26 hard gates** (16 `W_CAD_v2` + 10 `RS-karambit-v2`). Winner certification moves to the next release. `docs/RELEASE_PLAN_MAJOR.md` drafted this scope under the working label "v0.31.0"; it ships as v2.0.0 because the existing `v0.31.0` tag (2026-10-12) is an unrelated older release and `docs/VERSION` was already 1.0.0.
