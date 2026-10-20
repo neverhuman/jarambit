@@ -2360,7 +2360,9 @@ fn render_hero_view(
     } else {
         "Four retained response channels; scalar predicates and unavailable fields add no spatial weight."
     };
-    s.push_str(&format!(r##"<text x="36" y="80" font-size="28" fill="#334155">{subtitle}</text>"##));
+    s.push_str(&format!(
+        r##"<text x="36" y="80" font-size="28" fill="#334155">{subtitle}</text>"##
+    ));
 
     // Draw projected STL triangles with direct quantitative palette colors.
     for (_, [s0, s1, s2], [r, g, b]) in &stl_vis {
@@ -2518,6 +2520,218 @@ fn render_hero_view(
     Ok((s, composite))
 }
 
+/// Additive, source-joined summaries; this never replaces the all-record point layer.
+fn append_native_story_views(
+    density: &Value,
+    point: &Value,
+    contract: &Value,
+    inputs: &mut BTreeMap<String, String>,
+    outputs: &mut BTreeMap<String, String>,
+) -> Result<()> {
+    use crate::population_story::{
+        self, BoundLeader, BoundRunTrace, GenerationView, LeaderTie, Preference, SourceBinding,
+        TraceSample, View,
+    };
+    const SOURCE: &str = "docs/paper/data/gen800_population_density_and_traces.v1.json";
+    const CONTRACT: &str = "docs/paper/data/population-story-contract.v1.json";
+    if contract["schema"] != "jarambit.population_story.display_contract.v1"
+        || contract["required_all_record_numeric_operations"] != 1_958_803u64
+        || contract["required_unknown_nonnumeric"] != 1390u64
+        || contract["native_source"] != SOURCE
+        || contract["native_run_public_ids"] != json!([2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+        || contract["views"] != json!(["asinh", "positive-affine", "positive-gap"])
+        || contract["positive_display_floor"].as_f64() != Some(1e-6)
+    {
+        return Err("population story: unadmitted display contract revision".into());
+    }
+    let epsilon = finite_point_number(&contract["positive_display_floor"])?;
+    // These are the actual archive admission/point-accounting boundary above, not summary guesses.
+    if point["numeric_point_operations"] != 1_958_803u64
+        || point["excluded_numeric_records"] != 0u64
+        || point["unknown"]["records"] != 1390u64
+        || point["native"]["admission"]["rows_decoded"] != 1_954_560u64
+    {
+        return Err("population story: original all-record coverage/admission changed".into());
+    }
+    let runs = density["runs"]
+        .as_array()
+        .ok_or("population story: missing source runs")?;
+    let contexts = point["run_context"]
+        .as_array()
+        .ok_or("population story: missing admitted run context")?;
+    let ids = point["native"]["runs"]
+        .as_array()
+        .ok_or("population story: missing original identity order")?;
+    let leaders = point["retained_leaders"]["native_by_run"]
+        .as_array()
+        .ok_or("population story: missing bound leaders")?;
+    if [runs.len(), contexts.len(), ids.len(), leaders.len()]
+        .iter()
+        .any(|n| *n != 10)
+    {
+        return Err("population story: exact ten-run scope differs".into());
+    }
+    let leader_json = serde_json::to_string_pretty(&point["retained_leaders"])? + "\n";
+    let leader_sha = sha256_bytes(leader_json.as_bytes());
+    let source_sha = inputs
+        .get(SOURCE)
+        .ok_or("population story: source not in input closure")?
+        .clone();
+    let mut index_rows = Vec::new();
+    for (i, row) in runs.iter().enumerate() {
+        let public = row["public_run_id"]
+            .as_u64()
+            .ok_or("population story: missing public run")?;
+        let package = row["package_id"]
+            .as_str()
+            .ok_or("population story: missing source package")?;
+        if public != i as u64 + 2
+            || row["generation_range"] != json!([0, 800])
+            || row["distinct_generations_count"] != 801u64
+        {
+            return Err("population story: public run/dense source addressing differs".into());
+        }
+        let matches = |v: &&Value| v["package_id"].as_str() == Some(package);
+        let context_matches: Vec<_> = contexts.iter().filter(matches).collect();
+        let id_matches: Vec<_> = ids.iter().filter(matches).collect();
+        let leader_matches: Vec<_> = leaders.iter().filter(matches).collect();
+        if context_matches.len() != 1 || id_matches.len() != 1 || leader_matches.len() != 1 {
+            return Err("population story: missing/ambiguous compatible source join".into());
+        }
+        let (context, id, leader) = (context_matches[0], id_matches[0], leader_matches[0]);
+        if context["public_run_id"] != public
+            || context["archive_run_ordinal"] != i as u64
+            || id["archive_run_ordinal"] != i as u64
+            || leader["archive_run_ordinal"] != i as u64
+            || row["original_csv_sha256"] != context["source"]["original_csv_sha256"]
+            || row["manifest_sha256"] != context["source"]["manifest_sha256"]
+            || row["row_count"] != id["records_visited"]
+        {
+            return Err("population story: archive/identity/summary joins differ".into());
+        }
+        let domain = [
+            finite_point_number(&row["overall_min_fit"])?,
+            finite_point_number(&row["overall_max_fit"])?,
+        ];
+        if context["raster"]["observed_score_extrema"] != json!(domain) {
+            return Err("population story: summary extrema differ from decoded records".into());
+        }
+        let best = row["gen_cum_best_fit"]
+            .as_array()
+            .ok_or("population story: missing best source array")?;
+        let median = row["gen_median_fit"]
+            .as_array()
+            .ok_or("population story: missing full-population median")?;
+        let verified = context["retained_best_birth_trace"]
+            .as_array()
+            .ok_or("population story: missing decoded best trace")?;
+        if best.len() != 801 || median.len() != 801 || verified.len() != 801 || best != verified {
+            return Err("population story: preserved trace differs from decoded archive".into());
+        }
+        let mut samples = Vec::with_capacity(best.len());
+        for (source_index, (b, m)) in best.iter().zip(median.iter()).enumerate() {
+            let optional = |value: &Value| -> Result<Option<f64>> {
+                if value.is_null() {
+                    Ok(None)
+                } else {
+                    Ok(Some(finite_point_number(value)?))
+                }
+            };
+            samples.push(TraceSample {
+                generation: source_index as u64,
+                cumulative_best: optional(b)?,
+                population_median: optional(m)?,
+                best_source_pointer: Some(format!("/runs/{i}/gen_cum_best_fit/{source_index}")),
+                median_source_pointer: Some(format!("/runs/{i}/gen_median_fit/{source_index}")),
+            });
+        }
+        let ties = leader["ties"]
+            .as_array()
+            .ok_or("population story: missing admitted ties")?
+            .iter()
+            .map(|tie| {
+                Ok(LeaderTie {
+                    public_individual: tie["public_individual"]
+                        .as_u64()
+                        .ok_or("population story: missing public individual")?,
+                    original_id: tie["original_id"]
+                        .as_u64()
+                        .ok_or("population story: missing original ID")?
+                        .to_string(),
+                    generation: tie["generation"]
+                        .as_u64()
+                        .ok_or("population story: missing tie generation")?,
+                })
+            })
+            .collect::<Result<Vec<_>>>()?;
+        let trace = BoundRunTrace {
+            label: format!("Run {public}"),
+            metric: "contextual search fitness f".into(),
+            preference: Preference::Higher,
+            original_domain: domain,
+            source: SourceBinding {
+                path: SOURCE.into(),
+                sha256: source_sha.clone(),
+                scope_pointer: format!("/runs/{i}"),
+                compatible_run: format!("Run {public}: {package}"),
+                stage: "original retained native birth observations".into(),
+                membership_identity_order_sha256: id["original_id_order_sha256"]
+                    .as_str()
+                    .ok_or("population story: missing identity-order digest")?
+                    .into(),
+            },
+            leader: BoundLeader {
+                original_value: finite_point_number(&leader["value"])?,
+                original_token: leader["value"].to_string(),
+                ledger_sha256: leader_sha.clone(),
+                ties,
+                representative_tie_index: 0,
+            },
+            samples,
+        };
+        let l = finite_point_number(&context["axis"]["linear_threshold_L"])?;
+        let mut views = Vec::new();
+        for (name, view, generation) in [
+            (
+                "asinh",
+                View::Asinh {
+                    linear_threshold: l,
+                },
+                GenerationView::Linear,
+            ),
+            (
+                "positive-affine",
+                View::PositiveAffineLog10 { epsilon },
+                GenerationView::Log10GenerationPlusOne,
+            ),
+            (
+                "positive-gap",
+                View::PositiveGapLog10 { epsilon },
+                GenerationView::Log10GenerationPlusOne,
+            ),
+        ] {
+            let rendered = population_story::render_run_panel(&trace, view, generation)?;
+            let prefix = format!("docs/paper/generated/population/story/run-{public:02}-{name}");
+            let svg_path = format!("{prefix}.svg");
+            let receipt_path = format!("{prefix}.v1.json");
+            let svg_sha = sha256_bytes(rendered.svg.as_bytes());
+            let mut receipt = rendered.receipt;
+            receipt["recipe_source"] = json!({"path":CONTRACT,"sha256":inputs.get(CONTRACT).ok_or("population story: unbound recipe")?});
+            receipt["source_summary_archive_join"] = json!({"package_id":package,"original_csv_sha256":row["original_csv_sha256"],"manifest_sha256":row["manifest_sha256"],"best_trace_matches_decoded_births":true,"median":"preserved bound full-population source summary; not recomputed by story renderer","leader_token_authority":"bound retained-leaders JSON numeric serialization, not raw CSV spelling"});
+            receipt["svg_sha256"] = json!(svg_sha);
+            let receipt_json = serde_json::to_string_pretty(&receipt)? + "\n";
+            views.push(json!({"view":name,"svg":svg_path,"svg_sha256":svg_sha,"receipt":receipt_path,"receipt_sha256":sha256_bytes(receipt_json.as_bytes())}));
+            outputs.insert(svg_path, rendered.svg);
+            outputs.insert(receipt_path, receipt_json);
+        }
+        index_rows.push(json!({"public_run_id":public,"package_id":package,"views":views}));
+    }
+    outputs.insert("docs/paper/generated/population/story/index.v1.json".into(),serde_json::to_string_pretty(&json!({"schema":"jarambit.native_story_comparison_index.v1","runs":index_rows,
+        "selection":"bounded comparison only; main view selection requires actual final-width readback",
+        "all_record_companion":"docs/paper/figures/population-latest.svg","all_record_numeric_operations":1_958_803,"unknown_nonnumeric":1390,"global_comparable_champion":null}))?+"\n");
+    Ok(())
+}
+
 /// Deterministic Rust emitter for all 6 multi-cohort SVGs, `shared_projection.v2.json`,
 /// `generated/overview.md`, and `publication.v2.json` (`JR-R2`, `JR-R3`, `SC-DEC-183Z`, & `SC-DEC-183AB`).
 /// Called directly by `crate::publication::generate` and covered by `--check`.
@@ -2559,6 +2773,8 @@ pub fn generate_v2_outputs(
         "crates/paper-artifacts/src/identity.rs",
         "crates/paper-artifacts/src/corpus.rs",
         "crates/paper-artifacts/src/population.rs",
+        "crates/paper-artifacts/src/population_story.rs",
+        "docs/paper/data/population-story-contract.v1.json",
         "crates/paper-artifacts/examples/publication_v2_audit.rs",
     ];
     for rel in required_rels {
@@ -2709,6 +2925,16 @@ pub fn generate_v2_outputs(
         "docs/paper/generated/population/retained-leaders.v1.json".into(),
         serde_json::to_string_pretty(&point_receipt["retained_leaders"])? + "\n",
     );
+    let story_contract: Value = serde_json::from_slice(&fs::read(
+        root.join("docs/paper/data/population-story-contract.v1.json"),
+    )?)?;
+    append_native_story_views(
+        &gen800_density,
+        &point_receipt,
+        &story_contract,
+        inputs,
+        &mut point_outputs,
+    )?;
     point_receipt["additional_outputs_sha256"] = json!(point_outputs
         .iter()
         .map(|(path, contents)| (path.clone(), sha256_bytes(contents.as_bytes())))
