@@ -10,6 +10,7 @@ mod lineage;
 pub mod native_history;
 mod plate;
 pub mod population;
+pub mod population_story;
 pub mod publication;
 mod reference;
 mod score_axis;
