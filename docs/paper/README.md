@@ -36,7 +36,7 @@ Final validation uses the check subcommand after the recorded freeze, together w
 
 ## Source closure and accessions
 
-The standalone supplement driver includes detailed representation, score, numerical-method, cohort and literature fragments plus an active assembly copy of the historical supplement. Only the copy's heading hierarchy changes; the original historical source remains unchanged.
+The standalone supplement driver includes detailed representation, score, numerical-method, cohort and literature fragments plus an active assembly copy of the historical supplement. The active assembly corrects heading hierarchy, navigation and captions; the original historical source remains unchanged.
 
 The build records actual LuaLaTeX inputs, active SVG/crop/hero sources, reporting source/contracts, TeX and Fontconfig font files, and toolchain under target/ieee/paper/ in INPUT_FILES, SOURCE_SHA256SUMS, OUTPUT_SHA256SUMS, and toolchain.txt. SOURCE_DATE_EPOCH defaults to the retained evidence baseline's commit timestamp for deterministic PDF metadata; actual build UTC belongs to the execution receipt. Original producer identities remain in their contracts. The final publication receipt must bind matching manuscript/build/delivery accessions; prior evidence snapshots are not relabeled as this revision.
 
