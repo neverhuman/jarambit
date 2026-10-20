@@ -1,6 +1,7 @@
 mod assessment;
 mod battery;
 pub mod corpus;
+mod display;
 mod export_identity;
 mod historical;
 pub mod identity;
@@ -10,6 +11,7 @@ mod plate;
 pub mod population;
 pub mod publication;
 mod reference;
+mod score_axis;
 pub mod validation;
 mod verification;
 mod visuals;

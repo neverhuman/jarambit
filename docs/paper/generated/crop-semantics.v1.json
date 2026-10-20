@@ -4,6 +4,7 @@
     "4": 14800,
     "5": 10334
   },
+  "contributor_count_q_context": "Historical five-map figure-semantics /hero_composite only; active four-response display and support are bound separately in generated/display-composite.v1.json",
   "lineage_contract_preserved": true,
   "new_solver_execution": false,
   "panels": [

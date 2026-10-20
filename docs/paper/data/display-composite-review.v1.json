@@ -1,0 +1,581 @@
+{
+  "schema": "jarambit.independent_F06_F07_actual_contract_review.v1",
+  "observed_utc": "2026-10-20T07:33:06.630680+00:00",
+  "reviewer": {
+    "agent": "/root/rr5_source_redteam",
+    "assignment": "Actual manual Codex Q independent pre-regeneration contract review dispatched by /root",
+    "author_exclusion": "Neither contract nor implementation authored by this reviewer; V actual source author is /root/v_readability_successor",
+    "hostname": "xbabe2",
+    "uid": 1000,
+    "pid": 494046,
+    "native_task_id": null,
+    "native_claim_id": null,
+    "native_lease_id": null
+  },
+  "source_checkout": "/home/ubuntu/jarambit/.agent/worktrees/codex-latest-feedback-renderer-510713",
+  "base_head": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+  "base_tree": "b4505ef4953d36c439c524af20d44e94e9a28f99",
+  "snapshot_identity_note": "Contracts are two untracked files over this base HEAD/tree, not committed contents of the base. Exact contract SHA256 bindings define the reviewed source snapshot.",
+  "status_before_after_matches_stopped_receipt": true,
+  "status_after": "?? docs/paper/data/display-composite-contract.v1.json\n?? docs/paper/data/test-field-roster.v1.json\n",
+  "contract_bindings": [
+    {
+      "path": "docs/paper/data/test-field-roster.v1.json",
+      "bytes": 205285,
+      "sha256": "1f1eabe810527006901ba318e167278cb154c8961894eb5f2a3deb18f5eedb01",
+      "matches_dispatch": true,
+      "matches_initial_and_bounded_followup_hash": true
+    },
+    {
+      "path": "docs/paper/data/display-composite-contract.v1.json",
+      "bytes": 14680,
+      "sha256": "df34216ea111683233fadcab64d6536f52af2178da300f0ea027f8b19d9b74e9",
+      "matches_dispatch": true,
+      "matches_initial_and_bounded_followup_hash": true
+    }
+  ],
+  "control_input_receipts": [
+    {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_LATEST_FEEDBACK_IMPLEMENTATION_20261020/target/latest-feedback/audit/A_FIRST_SOURCE_INVENTORY.json",
+      "bytes": 36747,
+      "sha256": "e0f3861df996f82783b7c50f0a5015937b30ee013e288b9831069e0488b74c06"
+    },
+    {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_LATEST_FEEDBACK_IMPLEMENTATION_20261020/target/latest-feedback/audit/A_FULL_TEST_ROSTER_AND_IMMUTABLE_INPUTS.json",
+      "bytes": 173500,
+      "sha256": "2a501afcb520aa3784d56c3df58dde88affe3840f2611a5397c1f021fd947cd8"
+    },
+    {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_LATEST_FEEDBACK_IMPLEMENTATION_20261020/target/latest-feedback/audit/A_IMMUTABLE_INPUT_HASHES.json",
+      "bytes": 324339,
+      "sha256": "66e76e4e3e7fe1d72017886d7ed7d46f0fcc9f62150da9eb574bd94403b6f54f"
+    },
+    {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_LATEST_FEEDBACK_IMPLEMENTATION_20261020/target/latest-feedback/audit/A_FULL_TEST_ROSTER_AND_IMMUTABLE_INPUTS.v2.json",
+      "bytes": 183924,
+      "sha256": "bde35c703130c81e3189076427d5457b552782e415a1acd627f86fdf8009861a"
+    },
+    {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_LATEST_FEEDBACK_IMPLEMENTATION_20261020/target/latest-feedback/renderer/V_F06_F07_STOPPED_20261020.json",
+      "bytes": 2603,
+      "sha256": "9966951b159d3b39880eb7e7a62e3e8c8f3b466e1df2036312885339e3f46227"
+    },
+    {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_LATEST_FEEDBACK_IMPLEMENTATION_20261020/target/latest-feedback/renderer/V_FIRST_CONTRACT_SOURCE_20261020.json",
+      "bytes": 2029,
+      "sha256": "dc61dada92382db6550bf3e11515ba67d29a1cf3b3eefe8121ff36032c797ae0"
+    },
+    {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_LATEST_FEEDBACK_IMPLEMENTATION_20261020/target/latest-feedback/renderer/V_F06_F07_FIRST_CONTRACT_SOURCE_20261020.patch",
+      "bytes": 224142,
+      "sha256": "4821edbb369ef22b7500a7c6b6e534246061c55ce5cce0f54c7211ed629eeab4"
+    },
+    {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_LATEST_FEEDBACK_IMPLEMENTATION_20261020/REVIEW_PROVENANCE_GATE_ADDENDUM.md",
+      "bytes": 2342,
+      "sha256": "ce4e6bd5b9170673318f4b9923006ae41451bc3badfb9033735b2914a89aff5b"
+    }
+  ],
+  "bounded_source_receipt": {
+    "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_LATEST_FEEDBACK_IMPLEMENTATION_20261020/q-review/Q_F07_BOUNDED_SOURCE_CHECKS_20261020.json",
+    "sha256": "aab4d1c40ed42360977ef3707e6f7c09a18f59781beacf4f20ea99343ece0255"
+  },
+  "all_actual_source_hashes_read_before_after": [
+    {
+      "path": "crates/cli/src/crescent.rs",
+      "bytes": 57901,
+      "sha256_before": "c8f2e1664263e3bb885ca33e27f42dab0fbe0f180116ec890ee4dcd83bdeab22",
+      "expected_hashes": [
+        "c8f2e1664263e3bb885ca33e27f42dab0fbe0f180116ec890ee4dcd83bdeab22"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "c8f2e1664263e3bb885ca33e27f42dab0fbe0f180116ec890ee4dcd83bdeab22",
+      "stable_before_after": true
+    },
+    {
+      "path": "crates/crescent/src/fem.rs",
+      "bytes": 36052,
+      "sha256_before": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
+      "expected_hashes": [
+        "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
+      "stable_before_after": true
+    },
+    {
+      "path": "crates/crescent/src/pheno.rs",
+      "bytes": 35277,
+      "sha256_before": "fd0f556d9054334f26b3d1698979c14696435b1fb85c1c637f5e199d4b4aa19c",
+      "expected_hashes": [
+        "fd0f556d9054334f26b3d1698979c14696435b1fb85c1c637f5e199d4b4aa19c"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "fd0f556d9054334f26b3d1698979c14696435b1fb85c1c637f5e199d4b4aa19c",
+      "stable_before_after": true
+    },
+    {
+      "path": "crates/paper-artifacts/src/plate.rs",
+      "bytes": 31632,
+      "sha256_before": "38112b13a79090dc544e6eccdfae657a519137bfcc03031b4be94d64b6b21348",
+      "expected_hashes": [],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "38112b13a79090dc544e6eccdfae657a519137bfcc03031b4be94d64b6b21348",
+      "stable_before_after": true
+    },
+    {
+      "path": "crates/paper-artifacts/src/population.rs",
+      "bytes": 135985,
+      "sha256_before": "0a1a427d155fded80e7efb909e6b18a6196af63f4473e303ff1221292967328c",
+      "expected_hashes": [],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "0a1a427d155fded80e7efb909e6b18a6196af63f4473e303ff1221292967328c",
+      "stable_before_after": true
+    },
+    {
+      "path": "crates/physics/src/fine.rs",
+      "bytes": 42890,
+      "sha256_before": "b8762847e7452d3bcbfde718e55e13c42d4ac61d9a23abf5a75d2d5c38343096",
+      "expected_hashes": [
+        "b8762847e7452d3bcbfde718e55e13c42d4ac61d9a23abf5a75d2d5c38343096"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "b8762847e7452d3bcbfde718e55e13c42d4ac61d9a23abf5a75d2d5c38343096",
+      "stable_before_after": true
+    },
+    {
+      "path": "docs/paper/assessment-inputs.v1.json",
+      "bytes": 1715,
+      "sha256_before": "fac0cd6cc08e731585e243277d401cb4e9a746279f4a544b012d4fae6b928171",
+      "expected_hashes": [
+        "fac0cd6cc08e731585e243277d401cb4e9a746279f4a544b012d4fae6b928171"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "fac0cd6cc08e731585e243277d401cb4e9a746279f4a544b012d4fae6b928171",
+      "stable_before_after": true
+    },
+    {
+      "path": "docs/paper/data/display-composite-contract.v1.json",
+      "bytes": 14680,
+      "sha256_before": "df34216ea111683233fadcab64d6536f52af2178da300f0ea027f8b19d9b74e9",
+      "expected_hashes": [],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "df34216ea111683233fadcab64d6536f52af2178da300f0ea027f8b19d9b74e9",
+      "stable_before_after": true
+    },
+    {
+      "path": "docs/paper/data/public_ids.v1.json",
+      "bytes": 11223,
+      "sha256_before": "a0c3708415027d0f850f8776c4bfef7cf845ea2181b86aa8bab959a20e59c7ab",
+      "expected_hashes": [
+        "a0c3708415027d0f850f8776c4bfef7cf845ea2181b86aa8bab959a20e59c7ab"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "a0c3708415027d0f850f8776c4bfef7cf845ea2181b86aa8bab959a20e59c7ab",
+      "stable_before_after": true
+    },
+    {
+      "path": "docs/paper/data/score_profiles.v1.json",
+      "bytes": 7770,
+      "sha256_before": "53d6bf2d3227f5ed0d81fd648141810e25951af5f31862fc17c2343c6e6d8c52",
+      "expected_hashes": [
+        "53d6bf2d3227f5ed0d81fd648141810e25951af5f31862fc17c2343c6e6d8c52"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "53d6bf2d3227f5ed0d81fd648141810e25951af5f31862fc17c2343c6e6d8c52",
+      "stable_before_after": true
+    },
+    {
+      "path": "docs/paper/data/selection_receipts.v1.json",
+      "bytes": 6340,
+      "sha256_before": "9f8f5f05bef98304e37f3e90d02abc646d10b99d92d745c2f8f501e893f1d2e8",
+      "expected_hashes": [
+        "9f8f5f05bef98304e37f3e90d02abc646d10b99d92d745c2f8f501e893f1d2e8"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "9f8f5f05bef98304e37f3e90d02abc646d10b99d92d745c2f8f501e893f1d2e8",
+      "stable_before_after": true
+    },
+    {
+      "path": "docs/paper/data/test-field-roster.v1.json",
+      "bytes": 205285,
+      "sha256_before": "1f1eabe810527006901ba318e167278cb154c8961894eb5f2a3deb18f5eedb01",
+      "expected_hashes": [
+        "1f1eabe810527006901ba318e167278cb154c8961894eb5f2a3deb18f5eedb01"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "1f1eabe810527006901ba318e167278cb154c8961894eb5f2a3deb18f5eedb01",
+      "stable_before_after": true
+    },
+    {
+      "path": "docs/paper/field-inputs.v1.json",
+      "bytes": 2719,
+      "sha256_before": "93ffdcdae2c2eead22ce858e3eb83af1f61cdb4bafa29e418b6859736c6c8449",
+      "expected_hashes": [
+        "93ffdcdae2c2eead22ce858e3eb83af1f61cdb4bafa29e418b6859736c6c8449"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "93ffdcdae2c2eead22ce858e3eb83af1f61cdb4bafa29e418b6859736c6c8449",
+      "stable_before_after": true
+    },
+    {
+      "path": "docs/paper/figure-semantics.v1.json",
+      "bytes": 12446,
+      "sha256_before": "8a0ef0fc93ffcaec7397b8cd1721333ea622623bba8c59b446c03dfcf98e4d9e",
+      "expected_hashes": [
+        "8a0ef0fc93ffcaec7397b8cd1721333ea622623bba8c59b446c03dfcf98e4d9e"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "8a0ef0fc93ffcaec7397b8cd1721333ea622623bba8c59b446c03dfcf98e4d9e",
+      "stable_before_after": true
+    },
+    {
+      "path": "docs/paper/generated/plate-fields.json",
+      "bytes": 220983,
+      "sha256_before": "b0eeebce3952a4d1ff6e106f6c3d64d053d933032049dfa7e19aca171a73151e",
+      "expected_hashes": [
+        "b0eeebce3952a4d1ff6e106f6c3d64d053d933032049dfa7e19aca171a73151e"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "b0eeebce3952a4d1ff6e106f6c3d64d053d933032049dfa7e19aca171a73151e",
+      "stable_before_after": true
+    },
+    {
+      "path": "docs/tests/catalog.json",
+      "bytes": 19606,
+      "sha256_before": "521f1a3290b58b03f588cc0d8be1426ae01c813bca4405c2652060dcb1ae6ec0",
+      "expected_hashes": [
+        "521f1a3290b58b03f588cc0d8be1426ae01c813bca4405c2652060dcb1ae6ec0"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "521f1a3290b58b03f588cc0d8be1426ae01c813bca4405c2652060dcb1ae6ec0",
+      "stable_before_after": true
+    },
+    {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl",
+      "bytes": 15275220,
+      "sha256_before": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022",
+      "expected_hashes": [
+        "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022",
+      "stable_before_after": true
+    },
+    {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
+      "bytes": 5711420,
+      "sha256_before": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+      "expected_hashes": [
+        "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+      "stable_before_after": true
+    },
+    {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_a4.json",
+      "bytes": 1402,
+      "sha256_before": "788196e1a534b1611df5a777741c7ec77079493c770a73ec2e976f30906cb472",
+      "expected_hashes": [
+        "788196e1a534b1611df5a777741c7ec77079493c770a73ec2e976f30906cb472"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "788196e1a534b1611df5a777741c7ec77079493c770a73ec2e976f30906cb472",
+      "stable_before_after": true
+    },
+    {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json",
+      "bytes": 202960,
+      "sha256_before": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca",
+      "expected_hashes": [
+        "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca",
+      "stable_before_after": true
+    },
+    {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_plate_gci.json",
+      "bytes": 5800,
+      "sha256_before": "45afc2fd250bc8bdbf9b5f6866bbf2e0231f47ad2b62f2d10798cc36ed11244a",
+      "expected_hashes": [
+        "45afc2fd250bc8bdbf9b5f6866bbf2e0231f47ad2b62f2d10798cc36ed11244a"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "45afc2fd250bc8bdbf9b5f6866bbf2e0231f47ad2b62f2d10798cc36ed11244a",
+      "stable_before_after": true
+    },
+    {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_rs.json",
+      "bytes": 6277,
+      "sha256_before": "2696a6f5d4dbbcec6a6148c83d5ff48313f7a86682766328be56ea4f203945fb",
+      "expected_hashes": [
+        "2696a6f5d4dbbcec6a6148c83d5ff48313f7a86682766328be56ea4f203945fb"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "2696a6f5d4dbbcec6a6148c83d5ff48313f7a86682766328be56ea4f203945fb",
+      "stable_before_after": true
+    },
+    {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_runtime.json",
+      "bytes": 493,
+      "sha256_before": "2d36cc34777430794b280d4686b102e9babc6a8907d4d46e104ae6223660416b",
+      "expected_hashes": [
+        "2d36cc34777430794b280d4686b102e9babc6a8907d4d46e104ae6223660416b"
+      ],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "2d36cc34777430794b280d4686b102e9babc6a8907d4d46e104ae6223660416b",
+      "stable_before_after": true
+    },
+    {
+      "path": "evidence/evolve_certifiable/manifest.json",
+      "bytes": 21675,
+      "sha256_before": "b9c6b46e724f4886ba365fd5cc3f357c06d74635d4e546ede330a137d1f01f18",
+      "expected_hashes": [],
+      "expected_match": true,
+      "stat_unchanged_during_initial_hash": true,
+      "sha256_after": "b9c6b46e724f4886ba365fd5cc3f357c06d74635d4e546ede330a137d1f01f18",
+      "stable_before_after": true
+    }
+  ],
+  "historical_commit_source_checks": [
+    {
+      "path": "crates/crescent/src/fem.rs",
+      "revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+      "git_show_exit": 0,
+      "sha256": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
+      "matches_declared": true
+    },
+    {
+      "path": "crates/cli/src/crescent.rs",
+      "revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+      "git_show_exit": 0,
+      "sha256": "c8f2e1664263e3bb885ca33e27f42dab0fbe0f180116ec890ee4dcd83bdeab22",
+      "matches_declared": true
+    },
+    {
+      "path": "crates/physics/src/fine.rs",
+      "revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+      "git_show_exit": 0,
+      "sha256": "b8762847e7452d3bcbfde718e55e13c42d4ac61d9a23abf5a75d2d5c38343096",
+      "matches_declared": true
+    },
+    {
+      "path": "crates/crescent/src/pheno.rs",
+      "revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+      "git_show_exit": 0,
+      "sha256": "fd0f556d9054334f26b3d1698979c14696435b1fb85c1c637f5e199d4b4aa19c",
+      "matches_declared": true
+    }
+  ],
+  "findings": [
+    {
+      "id": "F07-Q-01",
+      "status": "PASS",
+      "scope": "F06 complete roster and source truth",
+      "bindings": [
+        {
+          "path": "docs/paper/data/test-field-roster.v1.json",
+          "line": 62,
+          "selector": "/universe"
+        },
+        {
+          "path": "docs/paper/data/test-field-roster.v1.json",
+          "line": 80,
+          "selector": "/dependency_semantics"
+        }
+      ],
+      "evidence": "44 catalog entries preserved verbatim plus 8 original-channel metadata rows; all52 IDs unique. Four exact canonical contributors only. Every nonmember carries a null contribution and reason.71 embedded observation values/types equal their retained source selectors. G16 response links are related-only; no exact D1 derivation substituted for certification/regional/strict observables."
+    },
+    {
+      "id": "F07-Q-02",
+      "status": "PASS",
+      "scope": "original identity, stage, quantity, units and historical source binding",
+      "bindings": [
+        {
+          "path": "docs/paper/data/display-composite-contract.v1.json",
+          "line": 21,
+          "selector": "/source"
+        },
+        {
+          "path": "docs/paper/data/display-composite-contract.v1.json",
+          "line": 25,
+          "selector": "/producer_revision"
+        },
+        {
+          "path": "evidence/evolve_certifiable/manifest.json",
+          "line": 236,
+          "selector": "/numerical_kernel_commit"
+        }
+      ],
+      "evidence": "Subject2000 certificate/genome bound; no birth join, global champion, foreign subject2002 field/vector, or new execution claimed. Four source hashes match actual e8cb049 commit source objects and retained field-input declarations. That revision is the retained numerical-kernel attribution, not proof of every tool/runtime; unknown weighted-reporting scorer/producer provenance remains unknown and is not supplied by this contract."
+    },
+    {
+      "id": "F07-Q-03",
+      "status": "PASS",
+      "scope": "explicit source masks, finite zeros, field registration",
+      "bindings": [
+        {
+          "path": "docs/paper/data/display-composite-contract.v1.json",
+          "line": 58,
+          "selector": "/registration"
+        },
+        {
+          "path": "docs/paper/data/display-composite-contract.v1.json",
+          "line": 117,
+          "selector": "/channel_semantics/ring/mask"
+        },
+        {
+          "path": "crates/crescent/src/fem.rs",
+          "line": 388
+        },
+        {
+          "path": "crates/paper-artifacts/src/plate.rs",
+          "line": 205
+        }
+      ],
+      "evidence": "Original source index/triangle association, nodes13503 and triangles25209 exact. Ring mask independently reconstructed14875 with exact d6942086... fingerprint; only rounding-boundary cell11825 has positive stored0.0054 and is active. No source-masked ring value is nonzero. Finite zeros valid elsewhere; no generic value>0 mask. Pry admission is additive; no original contract changed. Mutable generated mask is corroboration, not runtime authority."
+    },
+    {
+      "id": "F07-Q-04",
+      "status": "PASS",
+      "scope": "normalization, missingness, mean and contributor denominator",
+      "bindings": [
+        {
+          "path": "docs/paper/data/display-composite-contract.v1.json",
+          "line": 149,
+          "selector": "/typed_missingness"
+        },
+        {
+          "path": "docs/paper/data/display-composite-contract.v1.json",
+          "line": 157,
+          "selector": "/normalization"
+        },
+        {
+          "path": "docs/paper/data/display-composite-contract.v1.json",
+          "line": 170,
+          "selector": "/mean"
+        },
+        {
+          "path": "docs/paper/data/display-composite-contract.v1.json",
+          "line": 182,
+          "selector": "/coverage"
+        }
+      ],
+      "evidence": "Exact equal-value pooled area midranks; signed zeros tied; constant field0.5; valid zero retained. Positive original area denominator, zero-area excluded explicitly, nonfinite/untyped invalid input errors. Available-only arithmetic mean; all missing None/count0/empty identities. No post-mean minmax or fallback zero/denominator. Source q/4, count and support area fractions before projection/locator, not44/52 or visible ink."
+    },
+    {
+      "id": "F07-Q-05",
+      "status": "PASS",
+      "scope": "dependency exclusions and incompatible domains",
+      "bindings": [
+        {
+          "path": "docs/paper/data/test-field-roster.v1.json",
+          "line": 130,
+          "selector": "/dependency_semantics/derived_envelope"
+        },
+        {
+          "path": "docs/paper/data/display-composite-contract.v1.json",
+          "line": 48,
+          "selector": "/membership"
+        },
+        {
+          "path": "crates/crescent/src/fem.rs",
+          "line": 390
+        },
+        {
+          "path": "crates/crescent/src/fem.rs",
+          "line": 391
+        }
+      ],
+      "evidence": "Scaled-max envelope and reciprocal/sentinel sf excluded from extra equal weighting; te/th geometry excluded. Missing strict/refined/local-solid/buckling/fatigue maps remain missing; scalar2002 cannot be broadcast. Distinct retained response channels are not claimed statistically independent or scientific weighted fitness."
+    },
+    {
+      "id": "F07-Q-06",
+      "status": "PASS",
+      "scope": "contract display projection and contrast limits",
+      "bindings": [
+        {
+          "path": "docs/paper/data/display-composite-contract.v1.json",
+          "line": 196,
+          "selector": "/display_transfer"
+        },
+        {
+          "path": "docs/paper/data/display-composite-contract.v1.json",
+          "line": 258,
+          "selector": "/display_contrast"
+        },
+        {
+          "path": "docs/paper/data/display-composite-contract.v1.json",
+          "line": 285,
+          "selector": "/admission_gate"
+        }
+      ],
+      "evidence": "Nearest original D1 centroid to retained STL triangle centroid in original XY is labeled display-only and not solved volumetric stress; source mesh unchanged; stable index tie rule and no default cell0. True index, contrast coordinate, physical values/units and weighted fitness distinguished. Full[0,1] default/companion; Q05\u2013Q95 preview only pending actual readability review, with true numeric bounds and tail receipts. Shared flat surface/key transfer; nonmonotone luminance explicitly acknowledged."
+    },
+    {
+      "id": "F07-Q-07",
+      "status": "UNVERIFIED",
+      "scope": "implementation, generated receipts, pixel/readability and delivery",
+      "bindings": [
+        {
+          "path": "docs/paper/data/display-composite-contract.v1.json",
+          "line": 288,
+          "selector": "/admission_gate/current_Q_clearance"
+        }
+      ],
+      "evidence": "Implementation does not yet exist under review. No renderer/rank computation, STL assignment, support artifact, contrast raster/PDF, typography, original-byte delivery closure, tests/CI or GitHub approval is established by this contract review."
+    }
+  ],
+  "blocking_revisions": [],
+  "source_contract_clearance_for_implementation": true,
+  "implementation_approval": false,
+  "artifact_or_final_F07_acceptance": false,
+  "actual_GitHub_PR_approval_given": false,
+  "provenance_gate": {
+    "PR142_formal_reviewer_operator_origin": "UNPROVEN_PRESERVED",
+    "future_F25_F26_merge_requires_actual_designated_independent_runtime_dispatch_submission_receipt_exact_review_ID_match": true
+  },
+  "reviewer_actions": {
+    "repository_source_index_ref_worktree_writes": false,
+    "source_authorship": false,
+    "tests_builds_generation_CI_solver_fleet_GitHub_actions": [],
+    "writes_only_own_q_review_receipts": true
+  },
+  "remaining_obligations": [
+    "Author implementation and verify behavior against these exact contracts; meaningful neutral controls must cover pooled ties/finite zeros, source mask/boundary ambiguity, malformed data/domain refusal, missing/all-missing and count0; no control or solver threshold weakening.",
+    "Regenerate only after captain reactivation and permitted resource checks; inspect actual full-range/contrast and mesh previews at final PNG/PDF reading size, with shared key transfer, source support and readable units/counts.",
+    "Preserve immutable original evidence/score contracts and historical provenance unknowns; verify actual resulting source/output/input closure with new receipts.",
+    "Final independent full-head artifact/source review, required real tests/CI and F25/F26 reviewer-origin proof remain separate obligations owned by designated workers and merge owner."
+  ],
+  "limits": [
+    "Only contract source is cleared. No implementation, display rank values, projection assignments, pixel fidelity, or final publication delivery has been approved.",
+    "24 bounded source files were independently hash checked stable before/after; all71 embedded source observations checked. Full A585-file corpus audit was not repeated or represented as Q execution.",
+    "Ring support geometry calculations are direct bounded source/mask checks, not a new solve, rank field, renderer run, test suite, or generated corpus."
+  ],
+  "verdict": "CONTRACT_CLEARANCE_FOR_IMPLEMENTATION"
+}

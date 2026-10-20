@@ -86,6 +86,15 @@ struct Mesh {
     resolved_ring_boundary: Vec<usize>,
     min_tip_boundary_margin: f64,
 }
+/// Reuse the admitted producer masks for additive display-only summaries.
+pub(crate) fn source_display_masks(
+    doc: &Value,
+    contract: &Value,
+) -> Result<(Vec<bool>, Vec<bool>)> {
+    let mesh = admit(doc, contract)?;
+    Ok((mesh.envelope_mask, mesh.ring_mask))
+}
+
 fn admit(doc: &Value, contract: &Value) -> Result<Mesh> {
     if contract["schema"] != "jarambit.retained_plate_contract.v1"
         || contract["coordinate_units"] != "mm"
@@ -505,6 +514,7 @@ pub(crate) fn project_semantics(
         json!({"schema":"jarambit.crop_semantics_projection.v1", "source":contract["source"],
         "source_sha256":contract["source_sha256"], "producer_revision":contract["producer_revision"],
         "panels":receipts, "contributor_count_q":contributor_counts,
+        "contributor_count_q_context":"Historical five-map figure-semantics /hero_composite only; active four-response display and support are bound separately in generated/display-composite.v1.json",
         "lineage_contract_preserved":true, "new_solver_execution":false,
         "scope":"Reporting/source-domain projection; original values/masks unchanged; PNG/PDF visual acceptance separate."}),
     )

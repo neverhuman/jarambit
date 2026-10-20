@@ -1028,6 +1028,7 @@ struct PointRaster {
     height: usize,
     x_domain: [f64; 2],
     y_domain: [f64; 2],
+    score_axis: crate::score_axis::ScoreAxis,
     pixels: Vec<u8>,
     point_operations: u64,
     overlap_operations: u64,
@@ -1053,6 +1054,9 @@ impl PointRaster {
             height,
             x_domain,
             y_domain,
+            score_axis: crate::score_axis::ScoreAxis::Asinh {
+                linear_threshold: 1.0,
+            },
             pixels: vec![0; width * height],
             point_operations: 0,
             overlap_operations: 0,
@@ -1069,10 +1073,18 @@ impl PointRaster {
         }
     }
 
+    fn with_axis(mut self, axis: crate::score_axis::ScoreAxis) -> Self {
+        self.score_axis = axis;
+        self
+    }
+
     fn y_fraction(&self, y: f64) -> f64 {
         Self::fraction(
-            y.asinh(),
-            [self.y_domain[0].asinh(), self.y_domain[1].asinh()],
+            self.score_axis.transform(y),
+            [
+                self.score_axis.transform(self.y_domain[0]),
+                self.score_axis.transform(self.y_domain[1]),
+            ],
         )
     }
 
@@ -1112,7 +1124,7 @@ impl PointRaster {
             "raster_px": [self.width, self.height],
             "x_display_domain": self.x_domain, "score_display_domain": self.y_domain,
             "observed_x_extrema": self.observed_x, "observed_score_extrema": self.observed_y,
-            "vertical_transform": "asinh; ticks in original source values",
+            "vertical_transform": self.score_axis.metadata(),
             "pixel_sha256": sha256_bytes(&self.pixels),
             "clipping": false, "jitter": false, "majority_class_replacement": false,
             "point_color": "neutral occupancy; overlaps do not encode count"
@@ -1152,23 +1164,35 @@ fn point_panel(
     let [x, y, width, height] = rect;
     let encoded = encode_point_png_b64(raster.width, raster.height, &raster.pixels);
     svg.push_str(&format!(
-        r##"<image id="{id}" x="{x}" y="{y}" width="{width}" height="{height}" preserveAspectRatio="none" data-numeric-scored-points="{}" data-point-operations="{}" data-excluded-or-invalid-points="0" href="data:image/png;base64,{encoded}"/><rect x="{x}" y="{y}" width="{width}" height="{height}" fill="none" stroke="#94a3b8"/>"##,
+        r##"<rect x="{x}" y="{y}" width="{width}" height="{height}" fill="none" stroke="#94a3b8"/><image id="{id}" x="{x}" y="{y}" width="{width}" height="{height}" preserveAspectRatio="none" data-numeric-scored-points="{}" data-point-operations="{}" data-excluded-or-invalid-points="0" href="data:image/png;base64,{encoded}"/>"##,
         raster.point_operations, raster.point_operations
     ));
-    for value in [
-        raster.y_domain[0],
-        ((raster.y_domain[0].asinh() + raster.y_domain[1].asinh()) / 2.0).sinh(),
-        raster.y_domain[1],
-    ] {
+    for value in raster.score_axis.ticks(raster.y_domain) {
         let ty = y + height * (1.0 - raster.y_fraction(value));
         svg.push_str(&format!(r##"<text x="{}" y="{}" text-anchor="end" font-size="21" fill="#334155">{value:.4}</text>"##, x - 10.0, svg_coord(ty + 7.0)));
     }
-    for value in [raster.x_domain[0], raster.x_domain[1]] {
+    let mut x_ticks = Vec::new();
+    for i in 0..5 {
+        let value = (raster.x_domain[0]
+            + i as f64 / 4.0 * (raster.x_domain[1] - raster.x_domain[0]))
+            .round();
+        if x_ticks.last() != Some(&value) {
+            x_ticks.push(value);
+        }
+    }
+    for value in x_ticks {
         let tx = x + width * PointRaster::fraction(value, raster.x_domain);
         svg.push_str(&format!(r##"<text x="{}" y="{}" text-anchor="middle" font-size="21" fill="#334155">{value:.0}</text>"##, svg_coord(tx), y + height + 28.0));
     }
+    let axis_key = match raster.score_axis {
+        crate::score_axis::ScoreAxis::Linear => "linear".to_string(),
+        crate::score_axis::ScoreAxis::Asinh { linear_threshold } => {
+            format!("asinh(y/L), L={linear_threshold:.5}")
+        }
+    };
+    let y_label = format!("{y_label}; {axis_key}");
     svg.push_str(&format!(r##"<text x="{}" y="{}" text-anchor="middle" font-size="21" fill="#334155">{}</text><text x="{x}" y="{}" font-size="21" fill="#334155">{}</text>"##,
-        x + width / 2.0, y + height + 56.0, xml_escape(x_label), y - 12.0, xml_escape(y_label)));
+        x + width / 2.0, y + height + 56.0, xml_escape(x_label), y - 12.0, xml_escape(&y_label)));
 }
 
 fn render_population_latest_svg(
@@ -1176,14 +1200,14 @@ fn render_population_latest_svg(
     births: &[Value],
     newer_rec: &Value,
     t05: &Value,
-) -> Result<(String, Value)> {
+) -> Result<(String, Value, BTreeMap<String, String>)> {
     // Existing archive admission checks compressed/logical/source CSV hashes,
     // per-run original IDs and complete row/generation/legal censuses before return.
     let archive_root = crate::corpus::resolve_archive_path(
         root,
         "artifacts/versioned-evolution-archives-gen800-population-v1",
     )?;
-    let mut native = PointRaster::new(1601, 641, [0.0, 800.0], [-215.0, 1.20])?;
+    let mut native_points = Vec::with_capacity(1_954_560);
     let mut native_visits = 0u64;
     let mut native_legal = 0u64;
     let mut negative_legal = 0u64;
@@ -1202,15 +1226,7 @@ fn render_population_latest_svg(
                 visit_hash.update(part);
             }
             visit_hash.update([u8::from(legal)]);
-            let pixel = native.paint(generation as f64, fit)?;
-            for part in [
-                (run_idx as u64).to_le_bytes(),
-                id.to_le_bytes(),
-                (pixel[0] as u64).to_le_bytes(),
-                (pixel[1] as u64).to_le_bytes(),
-            ] {
-                paint_hash.update(part);
-            }
+            native_points.push((run_idx, id, generation, fit));
             let run = run_visits
                 .entry(run_idx)
                 .or_insert_with(|| (0, Sha256::new()));
@@ -1229,13 +1245,56 @@ fn render_population_latest_svg(
     if admission["full_archive_decoded"] != true
         || admission["rows_decoded"] != native_visits
         || native_visits != 1_954_560
-        || native.point_operations != native_visits
         || native_legal != 754_236
         || negative_legal != 610_051
         || run_visits.len() != 10
         || run_visits.values().any(|(count, _)| *count != 195_456)
     {
         return Err("population: native source visits and point operations disagree".into());
+    }
+    let native_values: Vec<_> = native_points.iter().map(|p| p.3).collect();
+    let native_axis = crate::score_axis::ScoreAxis::derive(&native_values)?;
+    let native_bounds = point_bounds(native_values.iter().copied())?;
+    let native_detail_bounds = crate::score_axis::detail_bounds(&native_values)?;
+    let mut native =
+        PointRaster::new(1201, 321, [0.0, 800.0], native_bounds)?.with_axis(native_axis);
+    let mut native_detail =
+        PointRaster::new(1201, 321, [0.0, 800.0], native_detail_bounds)?.with_axis(native_axis);
+    let mut native_tails = [0u64; 3];
+    let mut native_leaders: BTreeMap<usize, (f64, Vec<(u64, u64)>)> = BTreeMap::new();
+    for &(run, id, generation, fit) in &native_points {
+        let pixel = native.paint(generation as f64, fit)?;
+        for part in [
+            (run as u64).to_le_bytes(),
+            id.to_le_bytes(),
+            (pixel[0] as u64).to_le_bytes(),
+            (pixel[1] as u64).to_le_bytes(),
+        ] {
+            paint_hash.update(part);
+        }
+        let bucket = if fit < native_detail_bounds[0] {
+            0
+        } else if fit > native_detail_bounds[1] {
+            2
+        } else {
+            1
+        };
+        native_tails[bucket] += 1;
+        if bucket == 1 {
+            native_detail.paint(generation as f64, fit)?;
+        }
+        let leader = native_leaders.entry(run).or_insert((fit, Vec::new()));
+        if fit > leader.0 {
+            leader.0 = fit;
+            leader.1.clear();
+        }
+        if fit == leader.0 {
+            leader.1.push((id, generation));
+        }
+    }
+    if native.point_operations != native_visits || native_tails.iter().sum::<u64>() != native_visits
+    {
+        return Err("population: full/detail point accounting differs".into());
     }
     let index: Value = serde_json::from_slice(&crate::corpus::read_bounded_file(
         &crate::corpus::resolve_safe_relpath(&archive_root, "index.gen800_population.sha256.json")?,
@@ -1271,14 +1330,32 @@ fn render_population_latest_svg(
     if historical_points.len() != 1_984 {
         return Err("population: historical point census differs".into());
     }
+    let historical_values: Vec<_> = historical_points.iter().map(|p| p.2).collect();
+    let historical_axis = crate::score_axis::ScoreAxis::derive(&historical_values)?;
+    let historical_detail_bounds = crate::score_axis::detail_bounds(&historical_values)?;
+    let mut historical_detail = PointRaster::new(951, 221, [0.0, 16.0], historical_detail_bounds)?
+        .with_axis(historical_axis);
+    let mut historical_tails = [0u64; 3];
     let mut historical = PointRaster::new(
-        441,
-        281,
+        951,
+        221,
         point_bounds(historical_points.iter().map(|p| p.1 as f64))?,
         point_bounds(historical_points.iter().map(|p| p.2))?,
-    )?;
+    )?
+    .with_axis(historical_axis);
     for &(id, generation, fit) in &historical_points {
         let pixel = historical.paint(generation as f64, fit)?;
+        let bucket = if fit < historical_detail_bounds[0] {
+            0
+        } else if fit > historical_detail_bounds[1] {
+            2
+        } else {
+            1
+        };
+        historical_tails[bucket] += 1;
+        if bucket == 1 {
+            historical_detail.paint(generation as f64, fit)?;
+        }
         for part in [
             id.to_le_bytes(),
             generation.to_le_bytes(),
@@ -1347,15 +1424,33 @@ fn render_population_latest_svg(
     if screen_points.len() != 2_259 {
         return Err("population: scored screen census differs".into());
     }
+    let screening_values: Vec<_> = screen_points.iter().map(|p| p.2).collect();
+    let screening_axis = crate::score_axis::ScoreAxis::derive(&screening_values)?;
+    let screening_detail_bounds = crate::score_axis::detail_bounds(&screening_values)?;
+    let mut screening_detail =
+        PointRaster::new(951, 221, [1.0, 57.0], screening_detail_bounds)?.with_axis(screening_axis);
+    let mut screening_tails = [0u64; 3];
     let mut screening = PointRaster::new(
-        441,
-        281,
+        951,
+        221,
         [1.0, 57.0],
         point_bounds(screen_points.iter().map(|p| p.2))?,
-    )?;
+    )?
+    .with_axis(screening_axis);
     let mut screening_hash = Sha256::new();
     for &(file, candidate, deficit) in &screen_points {
         let pixel = screening.paint((file + 1) as f64, deficit)?;
+        let bucket = if deficit < screening_detail_bounds[0] {
+            0
+        } else if deficit > screening_detail_bounds[1] {
+            2
+        } else {
+            1
+        };
+        screening_tails[bucket] += 1;
+        if bucket == 1 {
+            screening_detail.paint((file + 1) as f64, deficit)?;
+        }
         for part in [
             file.to_le_bytes(),
             candidate.to_le_bytes(),
@@ -1387,7 +1482,7 @@ fn render_population_latest_svg(
         return Err("population: unknown proposal census differs".into());
     }
 
-    let receipt = json!({
+    let mut receipt = json!({
         "schema": "jarambit.population_point_rendering.v1",
         "numeric_records_visited": native_visits + historical_points.len() as u64 + screen_points.len() as u64,
         "numeric_point_operations": native.point_operations + historical.point_operations + screening.point_operations,
@@ -1408,41 +1503,217 @@ fn render_population_latest_svg(
         "unknown": {"records": unknown.len(), "numeric_point_operations": 0, "display": "nonnumeric coverage note; no plotted band or invented score",
             "source_identity_sha256": format!("{:x}", unknown_hash.finalize())}
     });
-    let mut s = String::from(
-        r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1140" width="1200" height="1140" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"><rect width="1200" height="1140" fill="#ffffff"/>"##,
+    let registry: Value =
+        serde_json::from_slice(&fs::read(root.join("docs/paper/data/public_ids.v1.json"))?)?;
+    let start = registry["gen800_population_range_allocation"]["public_id_start"]
+        .as_u64()
+        .ok_or("population: missing admitted native alias range")?;
+    let mut packages: Vec<_> = index["runs"]
+        .as_array()
+        .ok_or("population: missing native runs")?
+        .iter()
+        .map(|r| {
+            r["package_id"]
+                .as_str()
+                .ok_or("population: missing package ID")
+        })
+        .collect::<std::result::Result<_, _>>()?;
+    packages.sort();
+    let newer_start = registry["newer_birth_range_allocation"]["public_id_start"]
+        .as_u64()
+        .ok_or("population: missing proposal alias range")?;
+    let mut proposal_offsets = Vec::new();
+    let mut proposal_total = 0u64;
+    for pair in &source_pairs {
+        proposal_offsets.push(proposal_total);
+        let rel = pair["births_path"]
+            .as_str()
+            .ok_or("population: missing proposal source")?;
+        let source: Value =
+            serde_json::from_slice(&fs::read(crate::corpus::resolve_safe_relpath(root, rel)?)?)?;
+        proposal_total += source["genomes"]
+            .as_array()
+            .ok_or("population: missing original genomes list")?
+            .len() as u64;
+    }
+    if proposal_total != 3649 {
+        return Err("population: registered proposal alias census differs".into());
+    }
+    let native_leader_rows: Vec<_> = native_leaders.iter().map(|(&run,(fit,ties))| {
+        let package = index["runs"][run]["package_id"].as_str().unwrap();
+        let ordinal = packages.iter().position(|p| *p == package).unwrap() as u64;
+        json!({"archive_run_ordinal":run,"package_id":package,"native_direction":"higher_is_better","selection":"argmax original retained fitness; exact stored-value ties","value":fit,"tie_count":ties.len(),"ties":ties.iter().map(|&(id,generation)|json!({"original_id":id,"generation":generation,"public_individual":start+ordinal*195456+id})).collect::<Vec<_>>(),"later_assessment":null,"assessment_reason":"No retained complete per-birth CAD/assessment join","source":index["runs"][run],"comparability":"within this original run and retained stage only; producer/scorer equivalence across regimes not asserted"})
+    }).collect();
+    let historical_max = historical_values
+        .iter()
+        .copied()
+        .fold(f64::NEG_INFINITY, f64::max);
+    let screening_min = screening_values
+        .iter()
+        .copied()
+        .fold(f64::INFINITY, f64::min);
+    receipt["retained_leaders"] = json!({"native_by_run":native_leader_rows,"historical":{"native_direction":"higher_is_better","value":historical_max,"ties":historical_points.iter().filter(|p| p.2==historical_max).map(|p|json!({"original_id":p.0,"public_individual":p.0,"generation":p.1})).collect::<Vec<_>>(),"source":HISTORICAL_ALL_EVALS_JSON_RELPATH,"source_sha256":HISTORICAL_ALL_EVALS_JSON_SHA256,"later_assessment":"Individual1095: retained assessment cert_pass_all=false, seq_ok=false; not qualified"},"screening":{"native_direction":"lower_is_better","value":screening_min,"ties":screen_points.iter().filter(|p|p.2==screening_min).map(|p|json!({"birth_file_ordinal":p.0+1,"candidate_one_based":p.1,"public_individual":newer_start+proposal_offsets[p.0 as usize]+p.1-1,"source_pair":source_pairs[p.0 as usize]})).collect::<Vec<_>>(),"later_assessment":null},"global_comparable_champion":null,"selection_on_display_transform":false,"tie_rule":"retain all exact original numeric ties in source traversal order"});
+    receipt["detail"] = json!({"policy":"additional empirical Q01–Q99 panels; floor(p*(n-1)); strict tails, boundary ties inside","native":{"bounds":native_detail_bounds,"below_inside_above":native_tails,"raster":native_detail.receipt()?},"historical":{"bounds":historical_detail_bounds,"below_inside_above":historical_tails,"raster":historical_detail.receipt()?},"screening":{"bounds":screening_detail_bounds,"below_inside_above":screening_tails,"raster":screening_detail.receipt()?}});
+    let mut outputs = BTreeMap::new();
+    let mut run_context_receipts = Vec::new();
+    let run_keys: Vec<_> = native_leaders.keys().copied().collect();
+    for pair in run_keys.chunks(2) {
+        let mut svg = String::from(
+            r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 930" width="1200" height="930" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"><rect width="1200" height="930" fill="#ffffff"/><text x="40" y="42" font-size="25" font-weight="700" fill="#0f172a">Native Run Context — Separate Original Runs</text><text x="40" y="76" font-size="21" fill="#475569">Every original row; retained-best birth trace is context, not physical improvement.</text>"##,
+        );
+        let mut public_runs = Vec::new();
+        for (slot, &run) in pair.iter().enumerate() {
+            let package = index["runs"][run]["package_id"]
+                .as_str()
+                .ok_or("population: missing context package")?;
+            let record = registry["runs"]
+                .as_array()
+                .ok_or("population: missing registry runs")?
+                .iter()
+                .find(|r| r["internal_run_key"] == package)
+                .ok_or("population: unregistered context run")?;
+            let public_run = record["public_run_id"]
+                .as_u64()
+                .ok_or("population: missing public run")?;
+            public_runs.push(public_run);
+            let values: Vec<_> = native_points
+                .iter()
+                .filter(|p| p.0 == run)
+                .map(|p| p.3)
+                .collect();
+            let axis = crate::score_axis::ScoreAxis::derive(&values)?;
+            let mut raster =
+                PointRaster::new(951, 221, [0., 800.], point_bounds(values.iter().copied())?)?
+                    .with_axis(axis);
+            let mut generation_max = vec![f64::NEG_INFINITY; 801];
+            for &(ordinal, _, generation, fit) in &native_points {
+                if ordinal == run {
+                    raster.paint(generation as f64, fit)?;
+                    generation_max[generation as usize] =
+                        generation_max[generation as usize].max(fit);
+                }
+            }
+            let top = 120. + slot as f64 * 420.;
+            svg.push_str(&format!(r##"<text x="40" y="{top}" font-size="23" font-weight="700" fill="#0f172a">Run {public_run} — 195,456 retained birth observations</text>"##));
+            point_panel(
+                &mut svg,
+                &raster,
+                &format!("native-run-{public_run}"),
+                [190., top + 48., 950., 220.],
+                "Recorded generation",
+                "Native contextual fitness (higher is better)",
+            );
+            let mut best = f64::NEG_INFINITY;
+            let mut trace = String::new();
+            let mut trace_values = Vec::new();
+            for (generation, fit) in generation_max.into_iter().enumerate() {
+                best = best.max(fit);
+                if !best.is_finite() {
+                    return Err("population: missing initial retained-best context".into());
+                }
+                trace_values.push(best);
+                trace.push_str(&format!(
+                    "{:.3},{:.3} ",
+                    190. + 950. * generation as f64 / 800.,
+                    top + 48. + 220. * (1. - raster.y_fraction(best))
+                ));
+            }
+            svg.push_str(&format!(
+                r##"<polyline points="{trace}" fill="none" stroke="#0f766e" stroke-width="2.5"/>"##
+            ));
+            let (fit, ties) = &native_leaders[&run];
+            svg.push_str(&format!(r##"<text x="40" y="{}" font-size="21" fill="#475569">Retained maximum {fit:.4}; {} tied rows. No per-birth downstream assessment retained.</text>"##,top+350.,ties.len()));
+            run_context_receipts.push(json!({"archive_run_ordinal":run,"public_run_id":public_run,"package_id":package,"source":index["runs"][run],"raster":raster.receipt()?,"axis":axis.metadata(),"retained_best_birth_trace":trace_values,"trace_scope":"cumulative maximum of original retained birth fitness, monotone by construction; not post-rescore membership or physical quality"}));
+        }
+        svg.push_str("</svg>\n");
+        outputs.insert(
+            format!(
+                "docs/paper/generated/native-runs-{}-{}.svg",
+                public_runs[0], public_runs[1]
+            ),
+            svg,
+        );
+    }
+    receipt["run_context"] = json!(run_context_receipts);
+    receipt["point_operations_by_view"] = json!({"full_overview":native.point_operations+historical.point_operations+screening.point_operations,"additional_quantile_detail":native_detail.point_operations+historical_detail.point_operations+screening_detail.point_operations,"additional_separate_native_run_context":native_points.len(),"interpretation":"The same retained observations are shown in multiple explicitly labeled views; additional views are not new data."});
+    let mut full = String::new();
+    for detail in [false, true] {
+        let height = if detail { 1360 } else { 1280 };
+        let mut svg = format!(
+            r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 {height}" width="1200" height="{height}" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"><rect width="1200" height="{height}" fill="#ffffff"/>"##
+        );
+        let title = if detail {
+            "Q01–Q99 Detail — Full-Range Companion Retained"
+        } else {
+            "Every Retained Scored Record — Separate Source Profiles"
+        };
+        svg.push_str(&format!(r##"<text x="40" y="42" font-size="25" font-weight="700" fill="#0f172a">{title}</text><text x="40" y="76" font-size="21" fill="#475569">Original score units; source-derived axes; overlapping marks are neutral occupancy.</text>"##));
+        for (i, (raster, label, x_label, y_label, tails)) in [
+            (
+                if detail { &native_detail } else { &native },
+                "A / Runs 2–11 — 1,954,560 native observations",
+                "Recorded generation",
+                "Native contextual fitness (higher is better)",
+                native_tails,
+            ),
+            (
+                if detail {
+                    &historical_detail
+                } else {
+                    &historical
+                },
+                "B / Run 1 — 1,984 historical births",
+                "Recorded generation",
+                "Historical search fitness (higher is better)",
+                historical_tails,
+            ),
+            (
+                if detail {
+                    &screening_detail
+                } else {
+                    &screening
+                },
+                "C / 2,259 joined numeric screens",
+                "Retained birth-file ordinal",
+                "Screen deficit (lower is better)",
+                screening_tails,
+            ),
+        ]
+        .into_iter()
+        .enumerate()
+        {
+            let top = 120.0 + i as f64 * if detail { 400.0 } else { 365.0 };
+            svg.push_str(&format!(r##"<text x="40" y="{top}" font-size="23" font-weight="700" fill="#0f172a">{label}</text>"##));
+            point_panel(
+                &mut svg,
+                raster,
+                &format!(
+                    "{}-per-record-point-raster",
+                    ["gen800", "historical", "screening"][i]
+                ),
+                [190.0, top + 48.0, 950.0, 220.0],
+                x_label,
+                y_label,
+            );
+            if detail {
+                svg.push_str(&format!(r##"<text x="190" y="{}" font-size="21" fill="#475569">Below: {}; inside: {}; above: {}. Full range: population-latest.svg.</text>"##,top+350.0,tails[0],tails[1],tails[2]));
+            }
+        }
+        svg.push_str(&format!(r##"<text x="40" y="{}" font-size="21" fill="#92400e" data-unknown-proposal-count="1390">1,390 proposals have no retained numeric screen value; no score is imputed.</text>"##,height-20));
+        svg.push_str("</svg>\n");
+        if detail {
+            outputs.insert("docs/paper/generated/population-detail.svg".into(), svg);
+        } else {
+            full = svg;
+        }
+    }
+    outputs.insert("docs/paper/generated/population/score-axis.v1.json".into(),serde_json::to_string_pretty(&json!({"schema":"jarambit.score_axis_projection.v1","contract":"docs/paper/data/score-axis-contract.v1.json","native":native_axis.metadata(),"historical":historical_axis.metadata(),"screening":screening_axis.metadata(),"detail":receipt["detail"],"full_domain_clipping":false}))?+"\n");
+    outputs.insert(
+        "docs/paper/generated/population/retained-leaders.v1.json".into(),
+        serde_json::to_string_pretty(&receipt["retained_leaders"])? + "\n",
     );
-    s.push_str(r##"<text x="40" y="42" font-size="25" font-weight="700" fill="#0f172a">Every Retained Scored Record, in Separate Source Profiles</text><text x="40" y="76" font-size="21" fill="#475569">1,958,803 point operations; asinh score axes with original-value ticks; marks can overlap.</text><text x="40" y="112" font-size="23" font-weight="700" fill="#0f172a">A / Runs 2–11 — 1,954,560 native contextual-fitness observations</text>"##);
-    point_panel(
-        &mut s,
-        &native,
-        "gen800-per-record-point-raster",
-        [185.0, 158.0, 960.0, 440.0],
-        "Recorded generation",
-        "Native contextual fitness (higher is better)",
-    );
-    s.push_str(r##"<text x="40" y="698" font-size="23" font-weight="700" fill="#0f172a">B / Run 1 — 1,984 historical births</text><text x="625" y="698" font-size="23" font-weight="700" fill="#0f172a">C / 2,259 joined numeric screens</text>"##);
-    point_panel(
-        &mut s,
-        &historical,
-        "historical-per-record-point-raster",
-        [135.0, 754.0, 440.0, 250.0],
-        "Recorded generation",
-        "Historical search fitness",
-    );
-    point_panel(
-        &mut s,
-        &screening,
-        "screening-per-record-point-raster",
-        [705.0, 754.0, 440.0, 250.0],
-        "Retained birth-file ordinal",
-        "Screen deficit (lower is better)",
-    );
-    s.push_str(r##"<text x="40" y="1088" font-size="21" fill="#92400e" data-unknown-proposal-count="1390">Coverage: 1,390 proposals lack a retained numeric screen value; no score is imputed.</text><text x="40" y="1120" font-size="21" fill="#475569">610,051 legal=true rows have fit &lt; 0; -10.0 &lt;= fit &lt; -2.0 observations remain in the full native domain.</text>"##);
-    s.push_str(&format!(
-        "<metadata id=\"point-rendering-receipt\">{}</metadata></svg>\n",
-        xml_escape(&serde_json::to_string(&receipt)?)
-    ));
-    Ok((s, receipt))
+    let s = full;
+    Ok((s, receipt, outputs))
 }
 
 pub const W411C3_FITNESS_CURVE_RELPATH: &str =
@@ -1816,28 +2087,12 @@ fn render_inheritance_svg(inheritance_ledger: &Value, include_details: bool) -> 
     Ok(s)
 }
 
-/// Existing six-anchor light-to-dark blue presentation palette, versioned explicitly.
-const HERO_BLUE_PALETTE_NAME: &str = "jarambit_light_dark_blue_6_v1";
-const HERO_BLUE_PALETTE: [[f64; 3]; 6] = [
-    [239.0, 243.0, 255.0],
-    [198.0, 219.0, 239.0],
-    [158.0, 202.0, 225.0],
-    [107.0, 174.0, 214.0],
-    [49.0, 130.0, 189.0],
-    [8.0, 81.0, 156.0],
-];
-
-/// Shared surface/legend transfer; direct sRGB with no simulated lighting.
-fn hero_blue_rgb(value: f64) -> [u8; 3] {
-    let u = value.clamp(0.0, 1.0) * 5.0;
-    let idx = (u.floor() as usize).min(4);
-    let fraction = u - idx as f64;
-    std::array::from_fn(|channel| {
-        ((1.0 - fraction) * HERO_BLUE_PALETTE[idx][channel]
-            + fraction * HERO_BLUE_PALETTE[idx + 1][channel])
-            .round()
-            .clamp(0.0, 255.0) as u8
-    })
+#[derive(Clone, Copy, PartialEq)]
+enum HeroView {
+    FullRange,
+    ContrastPreview,
+    MeshOn,
+    Support,
 }
 
 /// Render high-contrast first-page hero SVG (`SC-DEC-183AL` Item 3) directly from retained
@@ -1845,6 +2100,13 @@ fn hero_blue_rgb(value: f64) -> [u8; 3] {
 /// (`25,209` triangles) under proper `SO(3)` pose (`det = +1.0`) with crisp dark silhouette/hole
 /// contours and readable `28–34px` typography.
 pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
+    Ok(render_hero_view(repo_root, HeroView::FullRange)?.0)
+}
+
+fn render_hero_view(
+    repo_root: &Path,
+    view: HeroView,
+) -> Result<(String, crate::display::Composite)> {
     use std::fmt::Write as _;
     const D1_REL: &str = "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json";
     const STL_REL: &str = "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl";
@@ -1891,42 +2153,23 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
             *edge_counts.entry(e).or_insert(0) += 1;
         }
     }
-    // Compute 5-map area-weighted midrank percentile composite across env_vm, lat, pry, ring, twist
-    let map_names = ["env_vm", "lat", "pry", "ring", "twist"];
-    let mut comp_sum = vec![0.0_f64; n_tris];
-    let mut comp_cnt = vec![0u32; n_tris];
-    for name in map_names {
-        let vals: Vec<f64> = d1["mesh"][name]
-            .as_array()
-            .ok_or("missing D1 field")?
-            .iter()
-            .map(|v| v.as_f64().unwrap_or(0.0))
-            .collect();
-        let mut active: Vec<(usize, f64)> = vals
-            .iter()
-            .copied()
-            .enumerate()
-            .filter(|&(_, v)| (name != "env_vm" && name != "ring") || v > 0.0)
-            .collect();
-        active.sort_by(|a, b| a.1.total_cmp(&b.1));
-        let tot_area: f64 = active.iter().map(|&(idx, _)| areas[idx]).sum();
-        let mut cum = 0.0_f64;
-        for &(idx, _) in &active {
-            let a = areas[idx];
-            let rank = (cum + 0.5 * a) / tot_area.max(1e-12);
-            cum += a;
-            comp_sum[idx] += rank;
-            comp_cnt[idx] += 1;
+    let mut composite = crate::display::composite(repo_root, &d1, &areas)?;
+    if composite.receipt["display_transfer"]["surface_source"]["sha256"].as_str()
+        != Some(sha256_bytes(&stl_bytes).as_str())
+    {
+        return Err("population: retained hero surface binding differs".into());
+    }
+    composite
+        .input_hashes
+        .insert(STL_REL.into(), sha256_bytes(&stl_bytes));
+    let contrast = if view == HeroView::ContrastPreview {
+        composite.preview
+    } else {
+        crate::display::Contrast {
+            low: 0.0,
+            high: 1.0,
         }
-    }
-    let mut comp: Vec<f64> = (0..n_tris)
-        .map(|i| comp_sum[i] / (comp_cnt[i].max(1) as f64))
-        .collect();
-    let c_min = comp.iter().copied().fold(f64::INFINITY, f64::min);
-    let c_max = comp.iter().copied().fold(f64::NEG_INFINITY, f64::max);
-    for v in &mut comp {
-        *v = ((*v - c_min) / (c_max - c_min).max(1e-12)).clamp(0.0, 1.0);
-    }
+    };
 
     // Proper SO(3) pose R = R_z(-6 deg) * R_x(180 deg) (det = +1.0)
     let theta = -6.0_f64.to_radians();
@@ -2028,22 +2271,45 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
         let cy = (v0[1] + v1[1] + v2[1]) / 3.0;
         let czp = -(v0[2] + v1[2] + v2[2]) / 3.0;
         let (gx, gy) = ((cx * 0.5).floor() as i32, (cy * 0.5).floor() as i32);
-        let mut best_i = 0usize;
+        let mut best_i = None;
         let mut best_d2 = f64::INFINITY;
         for dx in -2..=2 {
             for dy in -2..=2 {
                 if let Some(bucket) = grid_buckets.get(&(gx + dx, gy + dy)) {
                     for &di in bucket {
                         let d2 = (centroids[di][0] - cx).powi(2) + (centroids[di][1] - cy).powi(2);
-                        if d2 < best_d2 {
+                        if d2 < best_d2 || (d2 == best_d2 && best_i.map_or(true, |old| di < old)) {
                             best_d2 = d2;
-                            best_i = di;
+                            best_i = Some(di);
                         }
                     }
                 }
             }
         }
-        let rgb = hero_blue_rgb(comp[best_i]);
+        // The grid accelerates an exact nearest-centroid query. If an outside
+        // bucket could contain a nearer cell, finish against the complete source.
+        let outside_margin = (cx - (gx - 2) as f64 * 2.0)
+            .min((gx + 3) as f64 * 2.0 - cx)
+            .min(cy - (gy - 2) as f64 * 2.0)
+            .min((gy + 3) as f64 * 2.0 - cy);
+        if best_d2 >= outside_margin.powi(2) {
+            for (di, center) in centroids.iter().enumerate() {
+                let d2 = (center[0] - cx).powi(2) + (center[1] - cy).powi(2);
+                if d2 < best_d2 || (d2 == best_d2 && best_i.map_or(true, |old| di < old)) {
+                    best_d2 = d2;
+                    best_i = Some(di);
+                }
+            }
+        }
+        let best_i = best_i.ok_or("population: no source cell for surface display transfer")?;
+        let value = if view == HeroView::Support {
+            (composite.counts[best_i] > 0).then_some(composite.counts[best_i] as f64 / 4.0)
+        } else {
+            composite.values[best_i].map(|v| contrast.map(v))
+        };
+        let rgb = value
+            .map(|v| composite.palette.rgb(v))
+            .unwrap_or([203, 213, 225]);
         let p0 = pose_xy(v0[0], v0[1]);
         let p1 = pose_xy(v1[0], v1[1]);
         let p2 = pose_xy(v2[0], v2[1]);
@@ -2063,15 +2329,16 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     s.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 680" width="1600" height="680" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif">"##);
     s.push('\n');
     let color_metadata = json!({
-        "palette": HERO_BLUE_PALETTE_NAME,
-        "anchors_srgb_0_255": HERO_BLUE_PALETTE,
-        "interpolation": "piecewise_linear_srgb_code_values_then_round_to_u8",
-        "surface_and_legend_transfer": "hero_blue_rgb",
+        "palette": composite.palette.name,
+        "contract": crate::display::CONTRACT,
+        "projection_receipt": "docs/paper/generated/display-composite.v1.json",
+        "surface_and_legend_transfer": "display::Palette::rgb",
         "surface_lighting": "none",
         "scalar_domain": [0.0, 1.0],
-        "scalar_transform": "candidate_minmax_of_mean_available_area_rank_positions",
-        "rank_ties": "deterministic_source_order_not_pooled_tie_midranks",
-        "meaning": "relative_dimensionless_summary_not_stress_fitness_or_probability"
+        "scalar_transform": "mean_available_area_weighted_pooled_tie_midranks_no_postmean_minmax",
+        "contrast_window": [contrast.low, contrast.high],
+        "view": match view { HeroView::FullRange => "full_range", HeroView::ContrastPreview => "additional_Q05_Q95_preview", HeroView::MeshOn => "full_range_exact_mesh_on", HeroView::Support => "available_response_count" },
+        "meaning": "relative_dimensionless_display_index_not_stress_fitness_independent_tests_or_probability"
     });
     let _ = writeln!(
         s,
@@ -2079,8 +2346,17 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
         xml_escape(&color_metadata.to_string())
     );
     s.push_str(r##"<rect width="1600" height="680" fill="#ffffff"/>"##);
-    s.push_str(r##"<text x="36" y="44" font-size="34" font-weight="700" fill="#0f172a">Individual 2000 — Relative Composite of Five Responses</text>"##);
-    s.push_str(r##"<text x="36" y="80" font-size="28" fill="#334155">Dimensionless within-candidate summary; color is not stress or fitness.</text>"##);
+    let title = match view {
+        HeroView::Support => "Individual 2000 — Available Response Support",
+        HeroView::ContrastPreview => "Individual 2000 — Display Contrast Preview (Q05–Q95)",
+        HeroView::FullRange | HeroView::MeshOn => {
+            "Individual 2000 — Available-Response Display Index"
+        }
+    };
+    s.push_str(&format!(
+        r##"<text x="36" y="44" font-size="34" font-weight="700" fill="#0f172a">{title}</text>"##
+    ));
+    s.push_str(r##"<text x="36" y="80" font-size="28" fill="#334155">Four retained response channels; scalar predicates and unavailable fields add no spatial weight.</text>"##);
 
     // Draw projected STL triangles with direct quantitative palette colors.
     for (_, [s0, s1, s2], [r, g, b]) in &stl_vis {
@@ -2089,6 +2365,20 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
             "<polygon points=\"{:.2},{:.2} {:.2},{:.2} {:.2},{:.2}\" fill=\"#{r:02x}{g:02x}{b:02x}\" stroke=\"#{r:02x}{g:02x}{b:02x}\" stroke-width=\"0.22\"/>\n",
             s0.0, s0.1, s1.0, s1.1, s2.0, s2.1
         );
+    }
+
+    if view == HeroView::MeshOn {
+        s.push_str(
+            r##"<g fill="none" stroke="#0f172a" stroke-width="0.12" stroke-opacity="0.03">"##,
+        );
+        for (_, [a, b, c], _) in &stl_vis {
+            let _ = write!(
+                s,
+                "<path d=\"M{:.2},{:.2} L{:.2},{:.2} L{:.2},{:.2} Z\"/>",
+                a.0, a.1, b.0, b.1, c.0, c.1
+            );
+        }
+        s.push_str("</g>");
     }
 
     // Crisp dark silhouette and finger-ring / handle-slot hole contours from D1 boundary edges
@@ -2122,13 +2412,30 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     }
 
     // High-contrast sequential colorbar + readable dark legend & scale bar
-    s.push_str(r##"<text x="36" y="596" font-size="28" font-weight="700" fill="#0f172a">Relative five-field summary [0, 1]</text>"##);
+    let legend_title = if view == HeroView::Support {
+        "Available response channels [0, 4]"
+    } else {
+        "Available-response display index"
+    };
+    s.push_str(&format!(r##"<text x="36" y="596" font-size="28" font-weight="700" fill="#0f172a">{legend_title}</text>"##));
     let cb_x0 = 36.0_f64;
     let cb_w = 640.0_f64;
-    let n_steps = 80usize;
+    let n_steps = if view == HeroView::Support {
+        5usize
+    } else {
+        80usize
+    };
     for i in 0..n_steps {
-        let t = (i as f64 + 0.5) / (n_steps as f64);
-        let [r, g, b] = hero_blue_rgb(t);
+        let t = if view == HeroView::Support {
+            i as f64 / 4.0
+        } else {
+            (i as f64 + 0.5) / n_steps as f64
+        };
+        let [r, g, b] = if view == HeroView::Support && i == 0 {
+            [203, 213, 225]
+        } else {
+            composite.palette.rgb(t)
+        };
         let x = cb_x0 + (i as f64) * (cb_w / n_steps as f64);
         let w = (cb_w / n_steps as f64) + 0.8;
         let _ = write!(
@@ -2137,24 +2444,34 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
         );
     }
     s.push_str(r##"<rect x="36" y="606" width="640" height="18" fill="none" stroke="#0f172a" stroke-width="1.4"/>"##);
-    for (frac, lbl, anchor) in [
-        (0.0, "0.00", "start"),
-        (0.25, "0.25", "middle"),
-        (0.50, "0.50", "middle"),
-        (0.75, "0.75", "middle"),
-        (1.00, "1.00", "end"),
-    ] {
-        let tick_x = cb_x0
-            + (match lbl {
-                "0.25" => 0.25,
-                "0.75" => 0.75,
-                _ => frac,
-            }) * cb_w;
-        let text_x = cb_x0 + frac * cb_w;
-        let _ = write!(
-            s,
-            "<line x1=\"{tick_x:.2}\" y1=\"624\" x2=\"{tick_x:.2}\" y2=\"630\" stroke=\"#0f172a\" stroke-width=\"1.4\"/><text x=\"{text_x:.2}\" y=\"650\" text-anchor=\"{anchor}\" font-size=\"28\" font-weight=\"600\" fill=\"#0f172a\">{lbl}</text>"
-        );
+    for i in 0..5 {
+        let frac = i as f64 / 4.0;
+        let position = if view == HeroView::Support {
+            (i as f64 + 0.5) / 5.0
+        } else {
+            frac
+        };
+        let label = if view == HeroView::Support {
+            i.to_string()
+        } else {
+            let value = contrast.low + frac * (contrast.high - contrast.low);
+            if view == HeroView::ContrastPreview && (i == 0 || i == 4) {
+                format!("{value:.4}")
+            } else {
+                format!("{value:.3}")
+            }
+        };
+        let anchor = if view == HeroView::Support {
+            "middle"
+        } else if i == 0 {
+            "start"
+        } else if i == 4 {
+            "end"
+        } else {
+            "middle"
+        };
+        let tick_x = cb_x0 + position * cb_w;
+        let _ = write!(s, "<line x1=\"{tick_x:.2}\" y1=\"624\" x2=\"{tick_x:.2}\" y2=\"630\" stroke=\"#0f172a\" stroke-width=\"1.4\"/><text x=\"{tick_x:.2}\" y=\"650\" text-anchor=\"{anchor}\" font-size=\"28\" font-weight=\"600\" fill=\"#0f172a\">{label}</text>");
     }
     let bar_25mm = 25.0 * scale;
     let bx1 = 1554.0_f64;
@@ -2164,12 +2481,38 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
         r##"<text x="{:.2}" y="596" text-anchor="middle" font-size="28" font-weight="700" fill="#0f172a">25 mm</text><line x1="{bx0:.2}" y1="615" x2="{bx1:.2}" y2="615" stroke="#0f172a" stroke-width="3.0"/><line x1="{bx0:.2}" y1="607" x2="{bx0:.2}" y2="623" stroke="#0f172a" stroke-width="2.4"/><line x1="{bx1:.2}" y1="607" x2="{bx1:.2}" y2="623" stroke="#0f172a" stroke-width="2.4"/>"##,
         0.5 * (bx0 + bx1)
     );
-    s.push_str(
-        r##"<text x="720" y="596" font-size="28" fill="#334155">Unshaded color key</text>"##,
-    );
+    let context = if view == HeroView::Support {
+        let q = &composite.receipt["support_area_fractions"];
+        format!(
+            "Source area: 3 maps {:.1}%; 4 maps {:.1}%",
+            q[3].as_f64().unwrap() * 100.0,
+            q[4].as_f64().unwrap() * 100.0
+        )
+    } else if view == HeroView::ContrastPreview {
+        let tails = &composite.receipt["Q05_Q95_preview"];
+        let counts = &tails["counts_below_inside_above"];
+        let areas = &tails["area_mm2_below_inside_above"];
+        let whole = tails["whole_source_area_mm2"].as_f64().unwrap();
+        format!(
+            "Below: {} ({:.1}%); above: {} ({:.1}%)",
+            counts[0].as_u64().unwrap(),
+            areas[0].as_f64().unwrap() / whole * 100.0,
+            counts[2].as_u64().unwrap(),
+            areas[2].as_f64().unwrap() / whole * 100.0
+        )
+    } else {
+        "44 catalog rows + 8 channel metadata rows".to_string()
+    };
+    s.push_str(&format!(
+        r##"<text x="720" y="596" font-size="28" fill="#334155">{}</text>"##,
+        xml_escape(&context)
+    ));
+    if view == HeroView::ContrastPreview {
+        s.push_str(r##"<text x="720" y="650" font-size="28" fill="#334155">Full-range companion retained</text>"##);
+    }
     s.push_str(r##"<text x="1554" y="650" text-anchor="end" font-size="28" fill="#334155">Assessed 1; qualified 0</text>"##);
     s.push_str("</svg>\n");
-    Ok(s)
+    Ok((s, composite))
 }
 
 /// Deterministic Rust emitter for all 6 multi-cohort SVGs, `shared_projection.v2.json`,
@@ -2199,6 +2542,7 @@ pub fn generate_v2_outputs(
         "docs/paper/generated/population/historical_membership.json",
         "docs/paper/generated/population/newer_events.json",
         "docs/paper/generated/population/latest_snapshots.json",
+        "docs/paper/data/score-axis-contract.v1.json",
         "crates/paper-artifacts/src/identity.rs",
         "crates/paper-artifacts/src/corpus.rs",
         "crates/paper-artifacts/src/population.rs",
@@ -2325,8 +2669,39 @@ pub fn generate_v2_outputs(
     let svg_births = render_population_births_svg(&births)?;
     let svg_membership = render_population_membership_svg(&hist_rec)?;
     let svg_newer = render_population_newer_svg(&t05)?;
-    let (svg_latest, mut point_receipt) =
+    let (svg_latest, mut point_receipt, mut point_outputs) =
         render_population_latest_svg(root, &births, &newer_rec, &t05)?;
+    let weighted: Value = serde_json::from_str(&out["docs/paper/generated/weighted-runs.json"])?;
+    let registry: Value =
+        serde_json::from_slice(&fs::read(root.join("docs/paper/data/public_ids.v1.json"))?)?;
+    let mut weighted_leaders = Vec::new();
+    for run in weighted["runs"]
+        .as_array()
+        .ok_or("population: missing weighted summary projection")?
+    {
+        let rows = run["points"]
+            .as_array()
+            .ok_or("population: missing weighted summary rows")?;
+        for metric in ["round_best_fitness", "hall_of_fame_best_so_far"] {
+            let maximum = point_bounds(rows.iter().map(|row| row[metric].as_f64().unwrap()))?[1];
+            let ties: Vec<_> = rows.iter().filter(|row|row[metric].as_f64()==Some(maximum)).map(|row| {
+                let alias=if metric == "round_best_fitness" { Value::Null } else { registry["allocated_individuals"].as_array().unwrap().iter().find(|entry|entry["aliases"].as_array().unwrap().contains(&row["best_so_far_label"])).map(|entry|entry["public_id"].clone()).unwrap_or(Value::Null) };
+                json!({"generation":row["generation"],"source_pointer":format!("{}/{}",row["source_pointer"].as_str().unwrap(),metric),"best_so_far_label":row["best_so_far_label"],"public_individual_label_binding":alias,"alias_limit":"Label binding does not identify a round population/CAD artifact or prove scorer/stage comparability"})
+            }).collect();
+            weighted_leaders.push(json!({"summary_source":run["source"],"source_sha256":run["source_sha256"],"metric":metric,"native_direction":"higher_is_better","value":maximum,"ties":ties,"producer_revision":null,"scorer_revision":null,"point_stage":"not_established","comparability":"not_established","scope":"Numerically largest retained summary within this source/metric only; no birth distribution, global champion or downstream CAD assessment inferred"}));
+        }
+    }
+    point_receipt["retained_leaders"]["weighted_summary_by_source_and_metric"] =
+        json!(weighted_leaders);
+    point_outputs.insert(
+        "docs/paper/generated/population/retained-leaders.v1.json".into(),
+        serde_json::to_string_pretty(&point_receipt["retained_leaders"])? + "\n",
+    );
+    point_receipt["additional_outputs_sha256"] = json!(point_outputs
+        .iter()
+        .map(|(path, contents)| (path.clone(), sha256_bytes(contents.as_bytes())))
+        .collect::<BTreeMap<_, _>>());
+    out.extend(point_outputs);
     point_receipt["figure_sha256"] = json!(sha256_bytes(svg_latest.as_bytes()));
     let point_receipt_json = serde_json::to_string_pretty(&point_receipt)? + "\n";
     let point_receipt_sha = sha256_bytes(point_receipt_json.as_bytes());
@@ -2342,7 +2717,45 @@ pub fn generate_v2_outputs(
     )?;
     let svg_inheritance = render_inheritance_svg(&inheritance_ledger, false)?;
     let svg_inheritance_details = render_inheritance_svg(&inheritance_ledger, true)?;
-    let svg_hero = render_hero_exact_cad_svg(root)?;
+    let (svg_hero, display_composite) = render_hero_view(root, HeroView::FullRange)?;
+    inputs.extend(display_composite.input_hashes.clone());
+    out.insert(
+        "docs/paper/generated/test-field-roster.v1.tsv".into(),
+        display_composite.roster_table.clone(),
+    );
+    let mut display_receipt = display_composite.receipt;
+    let mut display_outputs = BTreeMap::new();
+    for (path, view) in [
+        (
+            "docs/paper/generated/hero-contrast-preview.svg",
+            HeroView::ContrastPreview,
+        ),
+        ("docs/paper/generated/hero-mesh-on.svg", HeroView::MeshOn),
+        ("docs/paper/generated/hero-support.svg", HeroView::Support),
+    ] {
+        let (svg, _) = render_hero_view(root, view)?;
+        display_outputs.insert(path.to_string(), sha256_bytes(svg.as_bytes()));
+        out.insert(path.into(), svg);
+    }
+    let hero_path = "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg";
+    display_outputs.insert(hero_path.into(), sha256_bytes(svg_hero.as_bytes()));
+    out.insert(
+        "docs/paper/generated/hero-full-range.svg".into(),
+        svg_hero.clone(),
+    );
+    display_outputs.insert(
+        "docs/paper/generated/hero-full-range.svg".into(),
+        sha256_bytes(svg_hero.as_bytes()),
+    );
+    display_outputs.insert(
+        "docs/paper/generated/test-field-roster.v1.tsv".into(),
+        sha256_bytes(out["docs/paper/generated/test-field-roster.v1.tsv"].as_bytes()),
+    );
+    display_receipt["outputs_sha256"] = json!(display_outputs);
+    out.insert(
+        "docs/paper/generated/display-composite.v1.json".into(),
+        serde_json::to_string_pretty(&display_receipt)? + "\n",
+    );
 
     out.insert(
         "docs/paper/figures/population-births.svg".into(),
@@ -2487,7 +2900,7 @@ pub fn generate_v2_outputs(
     let overview_sha = sha256_bytes(overview_md.as_bytes());
     out.insert("docs/paper/generated/overview.md".into(), overview_md);
 
-    let pub_v2 = json!({
+    let mut pub_v2 = json!({
         "schema": "jarambit.publication.v2",
         "generator": "cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts",
         "audit_command": "cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit",
@@ -2533,6 +2946,17 @@ pub fn generate_v2_outputs(
             "docs/paper/generated/overview.md": overview_sha
         }
     });
+    for (path, contents) in out.iter().filter(|(path, _)| {
+        (path.starts_with("docs/paper/generated/hero-")
+            || path.starts_with("docs/paper/generated/native-runs-"))
+            || path.as_str() == "docs/paper/generated/display-composite.v1.json"
+            || path.as_str() == "docs/paper/generated/test-field-roster.v1.tsv"
+            || path.as_str() == "docs/paper/generated/population-detail.svg"
+            || path.as_str() == "docs/paper/generated/population/score-axis.v1.json"
+            || path.as_str() == "docs/paper/generated/population/retained-leaders.v1.json"
+    }) {
+        pub_v2["outputs_sha256"][path] = json!(sha256_bytes(contents.as_bytes()));
+    }
     out.insert(
         "docs/paper/publication.v2.json".into(),
         serde_json::to_string_pretty(&pub_v2)? + "\n",
@@ -2545,19 +2969,29 @@ pub fn generate_v2_outputs(
 mod tests {
     use super::*;
 
-    #[test]
-    fn hero_blue_palette_has_fixed_endpoints_and_interpolation() {
-        assert_eq!(hero_blue_rgb(0.0), [239, 243, 255]);
-        assert_eq!(hero_blue_rgb(1.0), [8, 81, 156]);
-        assert_eq!(hero_blue_rgb(-1.0), [239, 243, 255]);
-        assert_eq!(hero_blue_rgb(2.0), [8, 81, 156]);
-        assert_eq!(hero_blue_rgb(0.1), [219, 231, 247]);
-        assert_eq!(hero_blue_rgb(0.5), [133, 188, 220]);
-        assert_eq!(hero_blue_rgb(0.9), [29, 106, 173]);
+    fn reviewed_palette() -> crate::display::Palette {
+        let contract: Value = serde_json::from_str(include_str!(
+            "../../../docs/paper/data/display-composite-contract.v1.json"
+        ))
+        .unwrap();
+        crate::display::Palette::admit(&contract["palette"]).unwrap()
     }
 
     #[test]
-    fn hero_blue_quantized_transfer_has_nonincreasing_linear_light_luminance() {
+    fn hero_multihue_palette_has_reviewed_endpoints_and_interpolation() {
+        let palette = reviewed_palette();
+        assert_eq!(palette.rgb(0.0), [8, 28, 74]);
+        assert_eq!(palette.rgb(0.25), [13, 148, 136]);
+        assert_eq!(palette.rgb(0.5), [250, 204, 21]);
+        assert_eq!(palette.rgb(0.75), [234, 88, 12]);
+        assert_eq!(palette.rgb(1.0), [153, 27, 27]);
+        assert_eq!(palette.rgb(-1.0), [8, 28, 74]);
+        assert_eq!(palette.rgb(2.0), [153, 27, 27]);
+        assert_eq!(palette.rgb(0.125), [11, 88, 105]);
+    }
+
+    #[test]
+    fn hero_multihue_palette_does_not_claim_monotone_luminance() {
         let luminance = |rgb: [u8; 3]| {
             let linear = rgb.map(|channel| {
                 let value = f64::from(channel) / 255.0;
@@ -2569,14 +3003,9 @@ mod tests {
             });
             0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
         };
-        let first = luminance(hero_blue_rgb(0.0));
-        let mut previous = first;
-        for index in 1..=1000 {
-            let current = luminance(hero_blue_rgb(index as f64 / 1000.0));
-            assert!(current <= previous, "luminance reversal at sample {index}");
-            previous = current;
-        }
-        assert!(previous < first);
+        let palette = reviewed_palette();
+        assert!(luminance(palette.rgb(0.5)) > luminance(palette.rgb(1.0)));
+        assert!(luminance(palette.rgb(0.25)) > luminance(palette.rgb(0.0)));
     }
 
     #[test]

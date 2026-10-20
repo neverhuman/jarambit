@@ -1,0 +1,299 @@
+{
+  "schema": "jarambit.display_composite_contract.v1",
+  "status": "proposed_pending_independent_Q_contract_adjudication",
+  "purpose": "Retained-data reporting only; replaces the earlier five-map display recipe additively after Q clearance. No scientific fitness or physical value is recomputed.",
+  "roster": {
+    "path": "docs/paper/data/test-field-roster.v1.json",
+    "sha256": "1f1eabe810527006901ba318e167278cb154c8961894eb5f2a3deb18f5eedb01"
+  },
+  "subject": {
+    "public_id": 2000,
+    "public_label": "Individual 2000",
+    "origin": "RetainedExport",
+    "source_birth_event_key": null,
+    "genome_sha256": "a526b2ef73b25e51a56bcfab1f67640bcbe734955b95a6b432a99dab5cd9f654",
+    "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+    "aliases": [
+      "cert_pipeline_r01_p14_c02",
+      "cover_illustrated_assessed_subject"
+    ]
+  },
+  "source": {
+    "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
+    "sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab"
+  },
+  "producer_revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+  "producer_sources": {
+    "crates/crescent/src/fem.rs": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
+    "crates/cli/src/crescent.rs": "c8f2e1664263e3bb885ca33e27f42dab0fbe0f180116ec890ee4dcd83bdeab22",
+    "crates/physics/src/fine.rs": "b8762847e7452d3bcbfde718e55e13c42d4ac61d9a23abf5a75d2d5c38343096",
+    "crates/crescent/src/pheno.rs": "fd0f556d9054334f26b3d1698979c14696435b1fb85c1c637f5e199d4b4aa19c"
+  },
+  "original_contracts": [
+    {
+      "path": "docs/paper/field-inputs.v1.json",
+      "sha256": "93ffdcdae2c2eead22ce858e3eb83af1f61cdb4bafa29e418b6859736c6c8449"
+    },
+    {
+      "path": "docs/paper/figure-semantics.v1.json",
+      "sha256": "8a0ef0fc93ffcaec7397b8cd1721333ea622623bba8c59b446c03dfcf98e4d9e"
+    }
+  ],
+  "canonical_contributor_ids": [
+    "retained-field:lat",
+    "retained-field:pry",
+    "retained-field:ring",
+    "retained-field:twist"
+  ],
+  "membership": {
+    "policy": "iterate_all52_roster_metadata_rows; only four proposed canonical response channels provide normalized spatial values; all other rows remain missing with explicit reason",
+    "all_catalog_rows_retained": 44,
+    "channel_metadata_rows_retained": 8,
+    "eligible_registered_response_channels": 4,
+    "derived_envelope_and_sf": "companion-only; never another equal-weight contribution",
+    "geometry_thickness": "excluded; te is geometry and th is a distinct unregistered grid",
+    "scientific_test_independence_claim": false,
+    "scientific_weighted_fitness": "separate original contracts; no weighted fitness vector, pass-count score, or Individual2002 vector enters this display"
+  },
+  "registration": {
+    "domain_id": "individual-2000-retained-D1-triangles-v1",
+    "mesh_source": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
+      "sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab"
+    },
+    "node_selector": "/mesh/xy",
+    "cell_selector": "/mesh/tris",
+    "nodes": 13503,
+    "triangles": 25209,
+    "coordinate_units": "mm",
+    "association": "one serialized coefficient per original triangle at the same source index",
+    "validation": "Refuse identity/hash, field-length, node/cell-index, association or declared-domain mismatch. No implicit domain conversion.",
+    "cross_mesh_refined_solid_or_foreign_subject": "not admitted; contribution null with reason"
+  },
+  "channel_semantics": {
+    "lat": {
+      "row_id": "retained-field:lat",
+      "selector": "/mesh/lat",
+      "units": "MPa/N",
+      "quantity": "DKT unit lateral-load bending surface von Mises corner maximum",
+      "mask": "none; every finite serialized zero remains valid",
+      "normalization_direction": "ascending_response_not_fitness"
+    },
+    "pry": {
+      "row_id": "retained-field:pry",
+      "selector": "/mesh/pry",
+      "units": "MPa/N",
+      "quantity": "T6 unit in-plane tip-load centroid von Mises response",
+      "mask": "none; every finite serialized zero remains valid",
+      "additive_admission": {
+        "original_display_fields_omits_pry": true,
+        "catalog_standalone_pry_row_absent": true,
+        "original_bytes_preserved": true,
+        "binding": {
+          "path": "docs/paper/figure-semantics.v1.json",
+          "sha256": "8a0ef0fc93ffcaec7397b8cd1721333ea622623bba8c59b446c03dfcf98e4d9e"
+        },
+        "selector": "/pry_additive_admission",
+        "producer_lines": {
+          "crates/crescent/src/fem.rs": [
+            312,
+            321,
+            389,
+            392
+          ],
+          "crates/cli/src/crescent.rs": [
+            35,
+            38
+          ]
+        }
+      },
+      "normalization_direction": "ascending_response_not_fitness"
+    },
+    "ring": {
+      "row_id": "retained-field:ring",
+      "selector": "/mesh/ring",
+      "units": "MPa/N",
+      "quantity": "T6 unit ring-traction resultant centroid von Mises after source seated-region zeroing",
+      "mask": {
+        "kind": "original_source_seated_region",
+        "interpretation_contract": {
+          "path": "docs/paper/field-inputs.v1.json",
+          "sha256": "93ffdcdae2c2eead22ce858e3eb83af1f61cdb4bafa29e418b6859736c6c8449"
+        },
+        "producer_source": "crates/crescent/src/fem.rs",
+        "producer_line": 388,
+        "rule": "triangle centroid x >= 76 + retained genome grip_dx - 3 mm; derive only from original source mesh/genome",
+        "rounding": "Serialized coordinate half-quantum0.0005mm. Refuse ambiguous zero-valued boundary cells. A positive stored ring value proves the single ambiguous original cell is active; do not generalize value>0 into a validity predicate.",
+        "expected_masked_count": 14875,
+        "expected_mask_ids_canonical_json_sha256": "d694208647a8ee62788d439c1758da5b490d1436738d9fc481a78f1ffa567c00",
+        "runtime_source": "derive from retained source and validate against admitted mask fingerprint, not a mutable generated-file dependency",
+        "existing_corroborating_projection": {
+          "path": "docs/paper/generated/plate-fields.json",
+          "sha256": "b0eeebce3952a4d1ff6e106f6c3d64d053d933032049dfa7e19aca171a73151e"
+        },
+        "corroborating_selector": "/fields/ring/masked_cell_ids"
+      },
+      "finite_zero_outside_mask": "valid",
+      "normalization_direction": "ascending_response_not_fitness"
+    },
+    "twist": {
+      "row_id": "retained-field:twist",
+      "selector": "/mesh/twist",
+      "units": "MPa/(N mm)",
+      "quantity": "DKT unit chord-torque bending surface von Mises corner maximum before global envelope torsion correction",
+      "mask": "none; source capacity exclusion is not a mask for this raw response display",
+      "finite_zero": "valid",
+      "normalization_direction": "ascending_response_not_fitness"
+    }
+  },
+  "typed_missingness": {
+    "valid": "finite scalar with source-domain association and no explicit source mask",
+    "missing": "Option::None / JSONnull plus declared reason: unavailable, scalar_only, excluded_dependent, excluded_geometry, incompatible_domain, masked_by_source, zero_area",
+    "corrupt": "Nonfinite number, untyped value, unexpected absent key, invalid association or malformed registration => error. JSONNaN/Infinity prohibited.",
+    "genuine_finite_zero": "valid unless original source mask excludes that exact cell",
+    "all_missing_test": "retained in roster; no numerical effect on cell mean",
+    "scalar_to_field_broadcast": false
+  },
+  "normalization": {
+    "name": "area_weighted_pooled_tie_midrank_v1",
+    "input": "original finite registered unit-response values and positive source-triangle areas; apply only explicit source masks",
+    "weight": "absolute signed-cross-product triangle area in mm2 / 2 from retained original xy",
+    "formula": "rank(value)=(sum_valid_area_of_strictly_smaller_values+0.5*sum_valid_area_of_equal_values)/sum_all_valid_area",
+    "tie_policy": "Group all exactly equal finite serialized values; +0 and -0 are equal; all members of a tie share one rank independent of source order.",
+    "empty_or_zero_total_valid_area": "all normalized values missing; no fallback denominator or fabricated zero",
+    "constant_finite_positive_area_field": "all valid cells normalized to0.5",
+    "zero_area_cell": "retained in source inventory; excluded as missing/zero_area from rank and mean",
+    "negative_or_nonfinite_area": "error",
+    "raw_values_units_extrema_and_denominator": "persist per-channel source hash, original units, valid/masked/missing/zero counts, raw range, valid area and pooled-tie policy",
+    "secondary_minmax_after_mean": false
+  },
+  "mean": {
+    "name": "unweighted_mean_of_available_normalized_channels_v1",
+    "formula": "mean_i=sum(finite normalized value for eligible channels valid at cell_i)/number_of_available_channels_i",
+    "all_missing": "mean=None, contributor_count=0, contributor_test_ids=[]",
+    "nonfinite_after_normalization": "error",
+    "persist_per_cell": [
+      "normalized_mean_or_null",
+      "contributor_count",
+      "contributor_test_ids",
+      "missing_reason_by_roster_row_or_referenced_channel_mask"
+    ],
+    "interpretation": "dimensionless display index of relative response locations; high value is not high fitness, safety, likelihood or desirability"
+  },
+  "coverage": {
+    "full_roster_metadata_count": 52,
+    "catalog_count": 44,
+    "channel_addendum_count": 8,
+    "eligible_response_channel_count": 4,
+    "per_cell_count_denominator": "4 eligible registered response channels, never52 metadata rows or44 predicates",
+    "area_denominator": "sum positive finite area across all25209 original source triangles before any decorative locator or STL projection",
+    "each_channel_support": "valid source-triangle area / whole positive source-mesh area; include excluded/missing counts and reasons separately",
+    "count_area_fractions": "for q=0..4, source area of cells with exactly q contributors / whole positive source-mesh area; fractions sum1 within recorded numerical tolerance",
+    "support_panel": "visible q=0..4 count key, counts/area fractions, eligible/roster denominator text; never imply uniform support",
+    "visible_ink_coverage": false
+  },
+  "display_transfer": {
+    "surface_source": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl",
+      "sha256": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022"
+    },
+    "kind": "Display-only transfer from original plate response to retained surface mesh from the same export",
+    "source_frame": "unposed original XY in mm; exact existing rigid pose only changes final view",
+    "assignment": "nearest original D1 triangle centroid to retained STL triangle centroid in XY; stable ties by smallest original D1 triangle index; refuse no candidate rather than defaulting to cell0",
+    "scope_limit": "Surface color visualizes a nearby retained plate response index; it is not a solved volumetric STL stress field.",
+    "geometry": "Preserve exact retained surface triangles, original silhouette/holes and bounds. No remesh or geometry edits.",
+    "surface_lighting": "none; flat scalar colors use the identical transfer as numeric key"
+  },
+  "palette": {
+    "name": "jarambit_navy_teal_yellow_orange_red_v1",
+    "anchors": [
+      {
+        "t": 0.0,
+        "srgb": [
+          8,
+          28,
+          74
+        ]
+      },
+      {
+        "t": 0.25,
+        "srgb": [
+          13,
+          148,
+          136
+        ]
+      },
+      {
+        "t": 0.5,
+        "srgb": [
+          250,
+          204,
+          21
+        ]
+      },
+      {
+        "t": 0.75,
+        "srgb": [
+          234,
+          88,
+          12
+        ]
+      },
+      {
+        "t": 1.0,
+        "srgb": [
+          153,
+          27,
+          27
+        ]
+      }
+    ],
+    "interpolation": "piecewise linear in sRGB code values; clamp to[0,1], round nonnegative channels to nearest u8",
+    "shared_surface_key_function": true,
+    "monotone_luminance_claim": false,
+    "secondary_cues": "Numeric ticks, under/over cues when contrast clips, explicit contributor support, grayscale/color-vision review.",
+    "white_background": true,
+    "outer_frame": false
+  },
+  "display_contrast": {
+    "default": "full normalized[0,1]",
+    "full_range_companion_required": true,
+    "predeclared_preview": "area-weighted Q05–Q95 of finite available composite values on positive original source area; preview only until Q readability adjudication",
+    "quantile_rule": "left-continuous weighted inverse CDF: smallest value whose cumulative positive valid area reaches p*total_valid_area; group equal values",
+    "preview_transfer": "clamp((mean-low)/(high-low),0,1); label numeric low/high in untransformed composite units",
+    "empty": "missing; no invented bounds",
+    "constant_or_collapsed_window": "common display midpoint0.5; record collapsed window; full[0,1] companion unchanged",
+    "tail_receipt": "Count and source-area fractions strictly below/above bounds; boundary equalities separate; show saturation cues. Never relabel contrast coordinate as raw index.",
+    "scientific_fitness_or_value_change": false
+  },
+  "mesh_preview": {
+    "default": "off",
+    "comparison": [
+      "off",
+      "all exact retained visible surface-triangle edges on"
+    ],
+    "line_width_svg_units_max": 0.12,
+    "line_opacity_max": 0.06,
+    "display_thinning": false,
+    "final_choice": "Q actual reading-size review; default off when mesh darkens or obscures field"
+  },
+  "effective_typography": {
+    "planned_fullwidth_pt": 514.044,
+    "minimum_label_pt": 8.5,
+    "target_label_pt": 9.0,
+    "final_PNG_PDF_review_required": true
+  },
+  "admission_gate": {
+    "regeneration_allowed_before_independent_Q_contract_clearance": false,
+    "current_Q_clearance": null,
+    "required_review": [
+      "originalsource/hash/subject/stage/quantity/unit",
+      "exact original mask and finite-zero policy",
+      "common registration and surface-projection limits",
+      "canonical dependencies and full roster",
+      "rank/mean/coverage denominator",
+      "contrast versus raw scalar and scientific fitness separation"
+    ],
+    "implementation_or_final_acceptance": false
+  }
+}

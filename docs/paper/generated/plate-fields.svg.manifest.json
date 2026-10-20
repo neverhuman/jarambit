@@ -5,7 +5,7 @@
     "crates/cli/src/crescent.rs": "c8f2e1664263e3bb885ca33e27f42dab0fbe0f180116ec890ee4dcd83bdeab22",
     "crates/crescent/src/fem.rs": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
     "crates/crescent/src/pheno.rs": "fd0f556d9054334f26b3d1698979c14696435b1fb85c1c637f5e199d4b4aa19c",
-    "crates/paper-artifacts/src/plate.rs": "38112b13a79090dc544e6eccdfae657a519137bfcc03031b4be94d64b6b21348",
+    "crates/paper-artifacts/src/plate.rs": "ca1f8f042a3f3fcd40c0dc96f606f4529ddedaca7a3ad0ff5deaffa27a3d2794",
     "crates/physics/src/fine.rs": "b8762847e7452d3bcbfde718e55e13c42d4ac61d9a23abf5a75d2d5c38343096",
     "docs/paper/field-inputs.v1.json": "93ffdcdae2c2eead22ce858e3eb83af1f61cdb4bafa29e418b6859736c6c8449",
     "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab"

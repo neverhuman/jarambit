@@ -1,0 +1,165 @@
+{
+  "contract": "docs/paper/data/score-axis-contract.v1.json",
+  "detail": {
+    "historical": {
+      "below_inside_above": [
+        19,
+        1945,
+        20
+      ],
+      "bounds": [
+        -204.95296,
+        1.15053
+      ],
+      "raster": {
+        "clipping": false,
+        "jitter": false,
+        "majority_class_replacement": false,
+        "observed_score_extrema": [
+          -204.95296,
+          1.15053
+        ],
+        "observed_x_extrema": [
+          0.0,
+          16.0
+        ],
+        "occupied_pixels": 612,
+        "overlap_operations": 1333,
+        "pixel_sha256": "a39e0e2e9f39d24051caf31966c8f01326c5dd524559620d246980c9a884c938",
+        "point_color": "neutral occupancy; overlaps do not encode count",
+        "point_operations": 1945,
+        "raster_px": [
+          951,
+          221
+        ],
+        "score_display_domain": [
+          -204.95296,
+          1.15053
+        ],
+        "vertical_transform": {
+          "L_rule": "empirical Q25 of nonzero absolute original observations; floor(p*(n-1)); zero excluded only from L estimation, never from points",
+          "inverse": "L*sinh(t)",
+          "linear_threshold_L": 0.29066,
+          "transform": "asinh(y/L)"
+        },
+        "x_display_domain": [
+          0.0,
+          16.0
+        ]
+      }
+    },
+    "native": {
+      "below_inside_above": [
+        19542,
+        1915492,
+        19526
+      ],
+      "bounds": [
+        -205.4476,
+        1.0771
+      ],
+      "raster": {
+        "clipping": false,
+        "jitter": false,
+        "majority_class_replacement": false,
+        "observed_score_extrema": [
+          -205.4476,
+          1.0771
+        ],
+        "observed_x_extrema": [
+          0.0,
+          800.0
+        ],
+        "occupied_pixels": 96002,
+        "overlap_operations": 1819490,
+        "pixel_sha256": "eb42375f5b234b27f0a6f82b34ee632c7f554563321128ce4f3fee1806bbe0b9",
+        "point_color": "neutral occupancy; overlaps do not encode count",
+        "point_operations": 1915492,
+        "raster_px": [
+          1201,
+          321
+        ],
+        "score_display_domain": [
+          -205.4476,
+          1.0771
+        ],
+        "vertical_transform": {
+          "L_rule": "empirical Q25 of nonzero absolute original observations; floor(p*(n-1)); zero excluded only from L estimation, never from points",
+          "inverse": "L*sinh(t)",
+          "linear_threshold_L": 0.4054,
+          "transform": "asinh(y/L)"
+        },
+        "x_display_domain": [
+          0.0,
+          800.0
+        ]
+      }
+    },
+    "policy": "additional empirical Q01–Q99 panels; floor(p*(n-1)); strict tails, boundary ties inside",
+    "screening": {
+      "below_inside_above": [
+        22,
+        2214,
+        23
+      ],
+      "bounds": [
+        2.7781832518641543,
+        5.673897018881242
+      ],
+      "raster": {
+        "clipping": false,
+        "jitter": false,
+        "majority_class_replacement": false,
+        "observed_score_extrema": [
+          2.7781832518641543,
+          5.673897018881242
+        ],
+        "observed_x_extrema": [
+          1.0,
+          57.0
+        ],
+        "occupied_pixels": 895,
+        "overlap_operations": 1319,
+        "pixel_sha256": "5361b2f83fa42ffc6f40bf92a2c82922eb575326cfc17d48598cb8c0a8f85b82",
+        "point_color": "neutral occupancy; overlaps do not encode count",
+        "point_operations": 2214,
+        "raster_px": [
+          951,
+          221
+        ],
+        "score_display_domain": [
+          2.7781832518641543,
+          5.673897018881242
+        ],
+        "vertical_transform": {
+          "inverse": "identity",
+          "rule": "constant, or one-sign endpoint absolute ratio<=4",
+          "transform": "linear"
+        },
+        "x_display_domain": [
+          1.0,
+          57.0
+        ]
+      }
+    }
+  },
+  "full_domain_clipping": false,
+  "historical": {
+    "L_rule": "empirical Q25 of nonzero absolute original observations; floor(p*(n-1)); zero excluded only from L estimation, never from points",
+    "inverse": "L*sinh(t)",
+    "linear_threshold_L": 0.29066,
+    "transform": "asinh(y/L)"
+  },
+  "native": {
+    "L_rule": "empirical Q25 of nonzero absolute original observations; floor(p*(n-1)); zero excluded only from L estimation, never from points",
+    "inverse": "L*sinh(t)",
+    "linear_threshold_L": 0.4054,
+    "transform": "asinh(y/L)"
+  },
+  "schema": "jarambit.score_axis_projection.v1",
+  "screening": {
+    "inverse": "identity",
+    "rule": "constant, or one-sign endpoint absolute ratio<=4",
+    "transform": "linear"
+  }
+}
