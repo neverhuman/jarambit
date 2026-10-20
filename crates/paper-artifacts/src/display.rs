@@ -376,7 +376,11 @@ pub(crate) fn composite(root: &Path, doc: &Value, area: &[f64]) -> Result<Compos
         roster_table.push_str(
             &columns
                 .iter()
-                .map(|v| v.replace(['\t', '\n', '\r'], " "))
+                .map(|v| {
+                    v.replace(['\t', '\n', '\r'], " ")
+                        .replace("source seated-region", "source half-plane")
+                        .replace("source seated mask", "source half-plane mask")
+                })
                 .collect::<Vec<_>>()
                 .join("\t"),
         );
@@ -499,6 +503,7 @@ pub(crate) fn composite(root: &Path, doc: &Value, area: &[f64]) -> Result<Compos
         "default_contrast":{"domain":[0.,1.],"status":"full-range; actual readability review pending"},
         "Q05_Q95_preview":{"low":low,"high":high,"counts_below_inside_above":tails,"area_mm2_below_inside_above":tail_area,"whole_source_area_mm2":whole_area,"status":"additional preview; not selected without independent readability review"},
         "display_transfer":contract["display_transfer"],"mask_reconstruction":"original source-bound plate admission; no value==0 missingness heuristic",
+        "current_mask_terminology":{"contract":"docs/paper/data/reporting-interpretation-contract.v2.json","ring":"source-masked half-plane centroid.x >= sx0 - 3.0; includes seated and unloaded regions","original_contract_and_mask_bytes_preserved":true},
         "scope":"Reporting only; no new solve/CAD/search, scalar broadcast or foreign-subject vector. Surface color is display transfer of retained plate response, not volumetric stress."
     });
     for (rel, sha) in [

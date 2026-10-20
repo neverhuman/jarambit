@@ -1,0 +1,291 @@
+{
+  "schema": "jarambit.reporting_interpretation_contract.v2",
+  "original_contracts_remain_unchanged": true,
+  "source_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+  "sources": {
+    "public_ids": {
+      "path": "docs/paper/data/public_ids.v1.json",
+      "sha256": "a0c3708415027d0f850f8776c4bfef7cf845ea2181b86aa8bab959a20e59c7ab",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "selection": {
+      "path": "docs/paper/data/selection_receipts.v1.json",
+      "sha256": "9f8f5f05bef98304e37f3e90d02abc646d10b99d92d745c2f8f501e893f1d2e8",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "score_profiles": {
+      "path": "docs/paper/data/score_profiles.v1.json",
+      "sha256": "53d6bf2d3227f5ed0d81fd648141810e25951af5f31862fc17c2343c6e6d8c52",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "proposal_join": {
+      "path": "docs/paper/JR_EI_P1_T05_NEWER_BIRTHS_SCREENS_JOIN_RECEIPT_20261019.json",
+      "sha256": "d669229208ff5dd954c2633e8ec2686480aabfcc40da88748b034583b46efbcf",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "historical_births": {
+      "path": "evidence/rs_v2/w282_ultrarunner/search/all_evals.json",
+      "sha256": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "historical_predicates": {
+      "path": "evidence/rs_v2/w282_ultrarunner/search/certification.csv",
+      "sha256": "6f1bd7dcefe427342959e75e2457c5f4fabb17a1573b68f1552fe440563a1cdd",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "candidate_summary": {
+      "path": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/leaderboard.json",
+      "sha256": "70da1cb69f460711300dc34e8f37b996b0e97f479f9c6ea13e4e47116bd2da16",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "weighted_summary": {
+      "path": "evidence/evolution_waves/2026-10-18_ultralight_v1/xbabe3/w411c3/fitness_curve.json",
+      "sha256": "afe065170218f0f5f20942a9e737e7e91a300244f8e6a99fd3c1d617d16f1412",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "runtime_producer": {
+      "path": "ops/ci/evaluate_cad_candidate.py",
+      "sha256": "f056b5bb4a02f1df94316359bc08a8a4f4ec59ea5c5619dd5ab3e258a489a2e6",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "buckling_producer": {
+      "path": "ops/ci/side_a4.py",
+      "sha256": "f7a49fa378ca5aa9b0ca661db975723c04f727fde6b5f168822e15593202aeca",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "fem_producer": {
+      "path": "crates/crescent/src/fem.rs",
+      "sha256": "9c62d764e8df8d02513b22fa8f2ce76da5bee4c612e81e9f2f58d43ad9f7fdca",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "native_index": {
+      "path": "artifacts/versioned-evolution-archives-gen800-population-v1/index.gen800_population.sha256.json",
+      "sha256": "66c84ed4cdc943df885da4cdd72d25c0054195d9d8b9a01e1c35b6f3119c38cf",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "native_admission": {
+      "path": "docs/paper/JR_EI_P1_T06_NATIVE_SUMMARY_ADMISSION_RECEIPT_20261019.json",
+      "sha256": "ca6d6c828aedf84db6712e52bf477df80504303773a678343fc1cf04e94becc4",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "recovered_recipe": {
+      "path": "docs/paper/history/ultralight_weighted_fitness_009f5ac5.source.txt",
+      "sha256": "1adbd37191710d439d3ca388e468499fe48bc217546145deb57f87f1da24770b",
+      "original_revision": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "runtime": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_runtime.json",
+      "sha256": "2d36cc34777430794b280d4686b102e9babc6a8907d4d46e104ae6223660416b",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "a4": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_a4.json",
+      "sha256": "788196e1a534b1611df5a777741c7ec77079493c770a73ec2e976f30906cb472",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$ (whole original file; precise claim selectors follow)",
+      "state": "retained_source"
+    },
+    "proposal_2000": {
+      "path": "evidence/evolve_certifiable/automatic/round_00_births.json",
+      "sha256": "53eef1ef54b83c1649187d2299b63f8a413dec6cab34971d231273db7494856c",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$.genomes[1]",
+      "state": "retained_source"
+    },
+    "proposal_2002": {
+      "path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/round_01_births.json",
+      "sha256": "f865043d07759d19f155f3e7310c2a53177ada8db9ec4b19d2a0d6db8ba253c3",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$.genomes[11]",
+      "state": "retained_source"
+    },
+    "proposal_2009": {
+      "path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/round_00_births.json",
+      "sha256": "11bf2826e679be0e7169451aed887acf87690742a8766c78c5fc61113a949e1f",
+      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "selector": "$.genomes[10]",
+      "state": "retained_source"
+    }
+  },
+  "proposal_occurrences": [
+    {
+      "public_alias": 2000,
+      "births_path": "evidence/evolve_certifiable/automatic/round_00_births.json",
+      "births_sha256": "53eef1ef54b83c1649187d2299b63f8a413dec6cab34971d231273db7494856c",
+      "selector": "$.genomes[1]",
+      "one_based_candidate_index": 2,
+      "round": 0,
+      "seed": 20261017,
+      "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
+      "genome_csv_reconstruction": "UTF-8(genome_header + LF + row + LF)",
+      "reconstructed_genome_sha256": "a526b2ef73b25e51a56bcfab1f67640bcbe734955b95a6b432a99dab5cd9f654",
+      "registry_genome_match": true,
+      "registry_certificate_match": true,
+      "derived_proposal_alias_under_existing_range_rule": 6643,
+      "proposal_record_keys": [
+        "certificate_identity",
+        "family",
+        "row"
+      ],
+      "parentage_recovered": false,
+      "notes": "Exact content identity recovers a proposal link; it does not recover actual per-child parent IDs."
+    },
+    {
+      "public_alias": 2002,
+      "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/round_01_births.json",
+      "births_sha256": "f865043d07759d19f155f3e7310c2a53177ada8db9ec4b19d2a0d6db8ba253c3",
+      "selector": "$.genomes[11]",
+      "one_based_candidate_index": 12,
+      "round": 1,
+      "seed": 3412,
+      "certificate_identity": "ee2ec73480f12773579cf573ac3cc0838734e8caf40411e6bcba0bb12cf1210b",
+      "genome_csv_reconstruction": "UTF-8(genome_header + LF + row + LF)",
+      "reconstructed_genome_sha256": "078c27c765791cb8b9f8ce29f2047ea0a8b0f2f76f7a542643f93643ca95b96e",
+      "registry_genome_match": true,
+      "registry_certificate_match": true,
+      "derived_proposal_alias_under_existing_range_rule": 6420,
+      "proposal_record_keys": [
+        "certificate_identity",
+        "family",
+        "row"
+      ],
+      "parentage_recovered": false,
+      "notes": "Exact content identity recovers a proposal link; it does not recover actual per-child parent IDs."
+    },
+    {
+      "public_alias": 2009,
+      "births_path": "evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/round_00_births.json",
+      "births_sha256": "11bf2826e679be0e7169451aed887acf87690742a8766c78c5fc61113a949e1f",
+      "selector": "$.genomes[10]",
+      "one_based_candidate_index": 11,
+      "round": 0,
+      "seed": 3412,
+      "certificate_identity": "3436c8145643b9f46ffaeca9167e110f5ee67558a40380b44861f839d6b217c5",
+      "genome_csv_reconstruction": "UTF-8(genome_header + LF + row + LF)",
+      "reconstructed_genome_sha256": "cba561d0a93c89e2081b62e8f6ab114538c7c034a70780d58681a4e41a5512b3",
+      "registry_genome_match": false,
+      "registry_certificate_match": false,
+      "derived_proposal_alias_under_existing_range_rule": 6378,
+      "proposal_record_keys": [
+        "certificate_identity",
+        "family",
+        "row"
+      ],
+      "parentage_recovered": false,
+      "notes": "For 2009 registry null values can be completed from screen/birth join; content also matches alias2003. Never merge distinct birth observations merely because content is equal."
+    }
+  ],
+  "historical_predicate_cases": [
+    {
+      "original_id": 1095,
+      "birth_fit": 1.15727,
+      "generation": 9,
+      "rank_competition": 1,
+      "cert_pass_all": "false",
+      "strict_ok": "true",
+      "seq_ok": "false",
+      "seq_ratio_cert": "1.063",
+      "kind": "res"
+    },
+    {
+      "original_id": 1543,
+      "birth_fit": 1.15415,
+      "generation": 13,
+      "rank_competition": 8,
+      "cert_pass_all": "true",
+      "strict_ok": "true",
+      "seq_ok": "true",
+      "seq_ratio_cert": "1.213",
+      "kind": "fit"
+    }
+  ],
+  "weighted_recipe": {
+    "historical_path": "ops/ci/ultralight_weighted_fitness.py",
+    "revision": "009f5ac520fa3afe8ed8025230eef604dbb7f922",
+    "sha256": "1adbd37191710d439d3ca388e468499fe48bc217546145deb57f87f1da24770b",
+    "status": "recovered_compatible_recipe_not_proven_original_execution",
+    "executed_source_binding": null,
+    "original_call_inputs": null,
+    "four_entire_partly_fallback_compatible_terms": {
+      "bore_collar_comfort": {
+        "normalized_score": 0.875,
+        "weight_pct": 9.0,
+        "weighted_points": 7.875
+      },
+      "gate_s_sharpness": {
+        "normalized_score": 0.846429,
+        "weight_pct": 5.0,
+        "weighted_points": 4.232143
+      },
+      "gate_s_point_profile": {
+        "normalized_score": 0.521709,
+        "weight_pct": 5.0,
+        "weighted_points": 2.608543
+      },
+      "human_max_overload": {
+        "normalized_score": 0.483333,
+        "weight_pct": 2.0,
+        "weighted_points": 0.966667
+      }
+    },
+    "four_entire_terms_sum": 15.682353,
+    "imputed_points_claim": null,
+    "note": "Saved defaults/proxies and missing-key Boolean defaults belong to historical producer semantics, separate from reporting missingness. Recipe bytes retained, never executed by this reader."
+  },
+  "runtime": {
+    "state": "retained_capture_not_exact_executed_environment",
+    "captured_before_cache_reuse": true,
+    "original_solve_runtime_hash_binding": null
+  },
+  "buckling": {
+    "historical_observation_preserved": true,
+    "admitted_engineering_value": null,
+    "current_qualification": null,
+    "qualification_state": "unestablished_due_to_unqualified_operator",
+    "reason": "K_support^-1 G passed to symmetric eigsh without retained symmetry/eigenpair-residual qualification; no replacement computation admitted."
+  },
+  "ring_mask": {
+    "description": "source-masked ring half-plane; includes seated and unloaded regions",
+    "predicate": "centroid.x >= sx0 - 3.0",
+    "masked_cell_count": 14875,
+    "unmasked_cell_count": 10334,
+    "original_values_masks_and_finite_zeros_unchanged": true
+  },
+  "native_provenance": {
+    "completed_runs": 10,
+    "missing_process_config_bindings": 5,
+    "executed_historical_binary_binding": null,
+    "index_and_T06_claims_are_distinct": true
+  },
+  "scope": "Current reporting successor. No new solver, scorer, CAD, optimization, historical event/parent/threshold or source-evidence mutation."
+}

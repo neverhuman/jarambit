@@ -4,6 +4,8 @@ use std::collections::BTreeSet;
 use std::fmt::Write;
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 type FlagGroups = Vec<(String, Vec<(String, bool)>)>;
+const BUCKLING_WITHDRAWAL_REASON: &str = "Unqualified K_support^-1 G passed to symmetric eigsh; no retained Euclidean symmetry or eigenpair-residual qualification";
+const CURRENT_QUALIFICATION: &str = "unestablished_due_to_unqualified_operator";
 fn n(v: &Value) -> Result<f64> {
     v.as_f64()
         .filter(|v| v.is_finite())
@@ -69,7 +71,7 @@ fn admit(a: &Value, r: &Value, s: &Value, c: &Value, catalog: &Value) -> Result<
         || r["all_hard"] != false
         || s["engineering_metrics"]["promote_eligible"] != false
     {
-        return Err("assessment status/qualification interpretation differs".into());
+        return Err("historical assessment status/qualification binding differs".into());
     }
     if a["bore_support"]["model"] != "radial_pin_bearing_and_flange"
         || a["grip_foundation_stiffness"]["model"] != "winkler_grip_pad_foundation"
@@ -77,6 +79,13 @@ fn admit(a: &Value, r: &Value, s: &Value, c: &Value, catalog: &Value) -> Result<
         || a["mesh_max_area_mm2"] != 0.25
     {
         return Err("support-model interpretation differs".into());
+    }
+    // This admits the original historical record only, never an engineering
+    // capacity. Replacement/recomputed values require a separate scientific accession.
+    if n(&a["buckling_eigenvalue"])? != 7.0350618718604325
+        || n(&a["buckling_critical_load_n"])? != 1829.1160866837124
+    {
+        return Err("historical A4 scalar binding differs; no replacement value admitted".into());
     }
     for (source, summary) in [
         ("buckling_eigenvalue", "buckling_eigenvalue_a4"),
@@ -241,7 +250,9 @@ pub(crate) fn project(
     let mut flag_rows = Vec::new();
     for (kind, flags) in &groups {
         for (i, (id, passed)) in flags.iter().enumerate() {
-            flag_rows.push(json!({"kind":kind,"alias":i+1,"id":id,"met":passed}));
+            flag_rows.push(json!({"kind":kind,"alias":i+1,"id":id,"met":passed,
+                "historical_producer_reported_met":passed,"admitted_current_met":null,
+                "interpretation":"historical producer flag only; not current engineering qualification"}));
         }
     }
 
@@ -258,7 +269,7 @@ pub(crate) fn project(
         20.,
         68.,
         21,
-        "Assessed candidate (not qualified) · saved solver observations & historical shortfall branch",
+        "Historical observations · current qualification unestablished",
     );
     for (x, y) in [(20., 90.), (620., 90.), (20., 595.), (620., 595.)] {
         writeln!(
@@ -272,14 +283,14 @@ pub(crate) fn project(
         35.,
         125.,
         23,
-        "A / Alternate-support buckling model",
+        "A / Buckling interpretation withdrawn",
     );
     text(
         &mut svg,
         35.,
         158.,
         21,
-        "Support assumptions (no retained mode):",
+        "Original support model; no admitted mode:",
     );
     for (y, title) in [
         (174., "Radial pin bearing + flange springs"),
@@ -293,48 +304,62 @@ pub(crate) fn project(
         42.,
         296.,
         22,
-        &format!("Buckling eigenvalue: {:.4}", n(&a["buckling_eigenvalue"])?),
+        "Current buckling value: not admitted",
     );
     text(
         &mut svg,
         42.,
         332.,
-        22,
-        &format!(
-            "Supported yield-order ratio: {:.4}",
-            n(&a["supported_seq_ratio"])?
-        ),
+        21,
+        &format!("Historical scalar: {}", n(&a["buckling_eigenvalue"])?),
     );
     text(
         &mut svg,
         42.,
         368.,
         21,
-        &format!(
-            "Multi-case minimum ratio: {:.4}",
-            n(&a["certified_seq_ratio"])?
-        ),
+        &format!("Historical producer status: {}", t(&a["status"])?),
     );
     text(
         &mut svg,
         35.,
         416.,
         21,
-        "Load cases, regions & mesh scopes differ.",
+        "K_support^-1 G used with symmetric eigsh",
     );
     text(
         &mut svg,
         35.,
         448.,
         21,
-        "Generalized eigen-operator symmetry open.",
+        "No retained symmetry / eigenpair residual",
     );
     text(
         &mut svg,
         35.,
         480.,
         21,
-        "No spatial eigenvector retained in archive.",
+        "Current dependent qualification unestablished",
+    );
+    text(
+        &mut svg,
+        42.,
+        512.,
+        21,
+        &format!(
+            "Supported ratio (stored): {:.4}",
+            n(&a["supported_seq_ratio"])?
+        ),
+    );
+    text(
+        &mut svg,
+        42.,
+        544.,
+        21,
+        &format!(
+            "Multi-case ratio (stored): {:.4}",
+            n(&a["certified_seq_ratio"])?
+        ),
     );
 
     text(
@@ -517,7 +542,7 @@ pub(crate) fn project(
         "Individual 2000 only; Individual 2002 has a separate weighted reporting profile.",
     );
     svg.push_str("</g></svg>\n");
-    let summary = json!({"schema":"jarambit.retained_assessment_projection.v1","subject":c["subject"],"certificate_identity":c["certificate_identity"],"producer_revision":c["producer_revision"],"support":{"eigenvalue":a["buckling_eigenvalue"],"source_status":a["status"],"supported_lateral_ratio":a["supported_seq_ratio"],"certification_multicase_minimum":a["certified_seq_ratio"],"supported_blade_peak_MPa_per_N":a["supported_blade_peak_mpa_per_n"],"supported_hand_peak_MPa_per_N":a["supported_hand_peak_mpa_per_n"],"case_region_comparability":false,"eigen_operator_audit":"open: eigsh applied to K_support^-1 G; Euclidean symmetry and eigenpair residual not established in retained record","eigenvector_available":false},"factors":factor_rows,"certification_strict_pairs":pair_rows,"weighted_cad_score_breakdown":{"W_CAD":wcad_total,"unpenalized_quality_score":wcad_unpen,"shortfall_penalty":wcad_pen,"base_feasible":wcad_base,"failed_branch_formula":"base_feasible (-1.0) - shortfall_penalty (4.619108) + 0.1 * s_mass (0.048700) = -5.570408 (conditional failed branch, not unpenalized_quality_score - shortfall_penalty)","subscores":subscore_rows,"nonzero_shortfalls":shortfall_rows},"flags":flag_rows,"qualification":false,"fresh_solver_execution":false,"note":"Scalar plots, historical CAD subscores/shortfalls, and a labeled support-model schematic; no synthetic fatigue/stability/strict spatial fields, no aggregation or new thresholds."});
+    let summary = json!({"schema":"jarambit.retained_assessment_projection.v2","supersedes_projection_schema":"jarambit.retained_assessment_projection.v1","source_contract_schema":c["schema"],"subject":c["subject"],"certificate_identity":c["certificate_identity"],"producer_revision":c["producer_revision"],"support":{"eigenvalue":null,"admitted_engineering_value":null,"admitted_critical_load_n":null,"historical_producer_reported_value":a["buckling_eigenvalue"],"historical_producer_reported_critical_load_n":a["buckling_critical_load_n"],"historical_producer_reported_status":a["status"],"source_status":a["status"],"source_status_context":"historical producer status only","interpretation_status":"withdrawn","withdrawal_reason":BUCKLING_WITHDRAWAL_REASON,"current_qualification":CURRENT_QUALIFICATION,"source":c["sources"]["a4"],"producer_source":{"path":"ops/ci/side_a4.py","sha256":c["interpretation_sources"]["ops/ci/side_a4.py"]},"supported_lateral_ratio":a["supported_seq_ratio"],"certification_multicase_minimum":a["certified_seq_ratio"],"supported_blade_peak_MPa_per_N":a["supported_blade_peak_mpa_per_n"],"supported_hand_peak_MPa_per_N":a["supported_hand_peak_mpa_per_n"],"case_region_comparability":false,"eigen_operator_audit":BUCKLING_WITHDRAWAL_REASON,"eigenvector_available":false},"factors":factor_rows,"certification_strict_pairs":pair_rows,"weighted_cad_score_breakdown":{"interpretation":"historical stored arithmetic; not a current engineering qualification; dependent A4 flag is unqualified","W_CAD":wcad_total,"unpenalized_quality_score":wcad_unpen,"shortfall_penalty":wcad_pen,"base_feasible":wcad_base,"failed_branch_formula":"base_feasible (-1.0) - shortfall_penalty (4.619108) + 0.1 * s_mass (0.048700) = -5.570408 (conditional failed branch, not unpenalized_quality_score - shortfall_penalty)","subscores":subscore_rows,"nonzero_shortfalls":shortfall_rows},"flags":flag_rows,"flags_interpretation":"historical producer flags; admitted_current_met is null and no dependent current PASS is inferred","historical_qualification":false,"historical_qualification_flags":{"promote_eligible":s["engineering_metrics"]["promote_eligible"],"rs_v2_all_hard":r["all_hard"],"all_engineering_gates_pass":wcad["all_engineering_gates_pass"]},"qualification":null,"current_qualification":CURRENT_QUALIFICATION,"fresh_solver_execution":false,"note":"Scalar plots, historical CAD subscores/shortfalls, and a labeled support-model schematic; no synthetic fatigue/stability/strict spatial fields, no aggregation or new thresholds."});
     Ok((svg, summary))
 }
 
@@ -556,7 +581,9 @@ mod tests {
         assert!(!svg.contains("RSV2"));
         assert_eq!(s["factors"][2]["record_only"], true);
         assert_eq!(s["support"]["case_region_comparability"], false);
-        assert_eq!(s["qualification"], false);
+        assert!(s["qualification"].is_null());
+        assert_eq!(s["historical_qualification"], false);
+        assert_eq!(s["current_qualification"], CURRENT_QUALIFICATION);
     }
     #[test]
     fn mismatched_subject_and_forged_summary_are_refused() {
@@ -589,5 +616,83 @@ mod tests {
         let mut rs = r[1].clone();
         rs["hm_ringback_sf"] = json!(6.);
         assert!(project(&r[0], &rs, &r[2], &c, &cat).is_err());
+    }
+
+    #[test]
+    fn buckling_withdrawal_keeps_history_flags_and_score_arithmetic_without_current_pass() {
+        let (r, c, cat) = records();
+        let originals = r.clone();
+        let (svg, p) = project(&r[0], &r[1], &r[2], &c, &cat).unwrap();
+        assert_eq!(r, originals);
+        assert_eq!(p["schema"], "jarambit.retained_assessment_projection.v2");
+        let support = &p["support"];
+        assert!(support["eigenvalue"].is_null());
+        assert!(support["admitted_engineering_value"].is_null());
+        assert!(support["admitted_critical_load_n"].is_null());
+        assert_eq!(
+            support["historical_producer_reported_value"],
+            r[0]["buckling_eigenvalue"]
+        );
+        assert_eq!(support["historical_producer_reported_status"], "pass");
+        assert_eq!(
+            support["historical_producer_reported_critical_load_n"],
+            r[0]["buckling_critical_load_n"]
+        );
+        assert_eq!(support["withdrawal_reason"], BUCKLING_WITHDRAWAL_REASON);
+        assert_eq!(p["current_qualification"], CURRENT_QUALIFICATION);
+        assert!(p["qualification"].is_null());
+        for flag in p["flags"].as_array().unwrap() {
+            assert!(flag["admitted_current_met"].is_null());
+            assert_eq!(flag["historical_producer_reported_met"], flag["met"]);
+        }
+        let a4 = p["flags"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|f| f["id"] == "side_a4_buckling_and_support")
+            .unwrap();
+        assert_eq!(a4["historical_producer_reported_met"], true);
+        assert_eq!(
+            p["weighted_cad_score_breakdown"]["W_CAD"],
+            r[2]["weighted_cad_score"]["W_CAD"]
+        );
+        assert_eq!(
+            p["weighted_cad_score_breakdown"]["shortfall_penalty"],
+            r[2]["weighted_cad_score"]["components"]["shortfall_penalty"]
+        );
+        assert!(svg.contains("Current buckling value: not admitted"));
+        assert!(svg.contains("Historical scalar: 7.0350618718604325"));
+        assert!(svg.contains("Historical producer status: pass"));
+        assert!(!svg.contains("Buckling eigenvalue:"));
+        assert!(!svg.contains("data-value=\"7.035"));
+    }
+    #[test]
+    fn replacement_missing_history_or_retyped_status_cannot_restore_buckling() {
+        let (r, c, cat) = records();
+        for replacement in [json!(5.36559), Value::Null] {
+            let mut a = r[0].clone();
+            let mut s = r[2].clone();
+            a["buckling_eigenvalue"] = replacement.clone();
+            s["engineering_metrics"]["buckling_eigenvalue_a4"] = replacement;
+            assert!(project(&a, &r[1], &s, &c, &cat).is_err());
+        }
+        let mut a = r[0].clone();
+        a["status"] = json!("withdrawn"); // withdrawal must not rewrite historical status
+        assert!(project(&a, &r[1], &r[2], &c, &cat).is_err());
+        let mut s = r[2].clone();
+        s["engineering_metrics"]["promote_eligible"] = json!(true);
+        assert!(project(&r[0], &r[1], &s, &c, &cat).is_err());
+    }
+    #[test]
+    fn self_asserted_operator_qualification_does_not_admit_a_current_value() {
+        let (r, c, cat) = records();
+        let mut a = r[0].clone();
+        a["operator_symmetric"] = json!(true);
+        a["eigenpair_relative_residual"] = json!(0.);
+        a["admitted_engineering_value"] = a["buckling_eigenvalue"].clone();
+        let (_, p) = project(&a, &r[1], &r[2], &c, &cat).unwrap();
+        assert!(p["support"]["admitted_engineering_value"].is_null());
+        assert!(p["qualification"].is_null());
+        assert_eq!(p["current_qualification"], CURRENT_QUALIFICATION);
     }
 }

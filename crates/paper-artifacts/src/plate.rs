@@ -240,7 +240,7 @@ fn admit(doc: &Value, contract: &Value) -> Result<Mesh> {
             center[0] >= threshold
         };
         if seated && values["ring"][i] != 0. {
-            return Err("source seated-zero mask disagrees with ring field".into());
+            return Err("source ring half-plane zero mask disagrees with ring field".into());
         }
         ring_mask.push(seated);
     }
