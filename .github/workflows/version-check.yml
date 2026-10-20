@@ -264,6 +264,16 @@ jobs:
         run: |
           python3 -B ops/render/paper/build_pdf.py --verify-reproducible
           (cd target/paper && sha256sum -c SHA256SUMS)
+      - name: Synthetic geometry smoothing contracts before paper figures
+        run: |
+          toolchain=/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin
+          export PATH="${toolchain}:/home/ubuntu/.cargo/bin:${PATH}"
+          export RUSTC="${toolchain}/rustc"
+          export RUSTDOC="${toolchain}/rustdoc"
+          export CARGO_TARGET_DIR="$PWD/target/synthetic-geometry"
+          cargo test --release --locked --manifest-path experiments/geometry-smoothing-benchmark/Cargo.toml -- --test-threads=2
+          cargo clippy --release --locked --manifest-path experiments/geometry-smoothing-benchmark/Cargo.toml --all-targets -- -D warnings
+          make -C docs/paper synthetic-geometry-check
       - name: Build and check the new IEEE-style manuscript
         run: |
           toolchain=/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin
@@ -286,6 +296,7 @@ jobs:
             target/ieee/paper/supplement.pdf
             target/ieee/paper/INPUT_FILES
             target/ieee/paper/supplement-pdfinfo.txt
+            target/ieee/paper/synthetic-geometry/
             target/ieee/paper/population-latest.png
             target/ieee/paper/inheritance.png
             target/ieee/paper/evidence-architecture.png

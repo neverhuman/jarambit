@@ -1,0 +1,5 @@
+/target/
+/results/default/
+/results/rejected-initial-weights/*.obj
+/results/rejected-initial-weights/*.stl
+/results/rejected-initial-weights/*.csv

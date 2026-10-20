@@ -1,0 +1,167 @@
+{
+  "schema": "synthetic_geometry_verification.v1",
+  "recorded_utc": "2026-10-20T09:10:15.582Z",
+  "scope": "synthetic nonweapon mesh benchmark only",
+  "source_commit": null,
+  "source_binding": "sha256 for exact source files; commit created separately",
+  "compiler": "rustc 1.85.1 (4eb161250 2025-03-15)",
+  "checks": [
+    {
+      "name": "format",
+      "command": [
+        "/Users/bentaylor/.rustup/toolchains/1.85.1-aarch64-apple-darwin/bin/cargo",
+        "fmt",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": "format.log"
+    },
+    {
+      "name": "tests",
+      "command": [
+        "/Users/bentaylor/.rustup/toolchains/1.85.1-aarch64-apple-darwin/bin/cargo",
+        "test",
+        "--release",
+        "--locked"
+      ],
+      "exit_code": 0,
+      "log": "tests.log"
+    },
+    {
+      "name": "clippy",
+      "command": [
+        "/Users/bentaylor/.rustup/toolchains/1.85.1-aarch64-apple-darwin/bin/cargo",
+        "clippy",
+        "--release",
+        "--locked",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit_code": 0,
+      "log": "clippy.log"
+    }
+  ],
+  "test_count": 11,
+  "tests_failed": 0,
+  "reproducibility": {
+    "status": "pass",
+    "compared_files": 10,
+    "comparison": "byte identical on second execution"
+  },
+  "negative_controls": [
+    "unchanged geometry",
+    "insufficient displacement budget",
+    "excessive shrinkage",
+    "zero input noise"
+  ],
+  "development_failure": {
+    "mu": -0.53,
+    "status": "failed original criteria; retained",
+    "report": "../rejected-initial-weights/REPORT.md"
+  },
+  "sources": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "9ba5b955435fb3b3919f7c3042f590166d8023c4c403a5cd4f9b7bc4e9e4e716"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "244f946c88141dd6509c873e0e35185ea4893fc993403601d36ea0f1cd475d61"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "fcb9caae9dc1e0c20d9223616b8a977766d6500f1cfc4661b50530307129ce90"
+    },
+    {
+      "path": "README.md",
+      "sha256": "1f9c9b90b9b9dae56cec93bedc9066bf323193dfae28a4c8c6fa6daef9827c2a"
+    },
+    {
+      "path": "src/lib.rs",
+      "sha256": "e808a778ae07a5c891e4eb7b8a59a08bfdf0df3c737c23f840a25aec59e1302f"
+    },
+    {
+      "path": "src/main.rs",
+      "sha256": "fbe31830b9fdb6d3fd63acc52dddffeae1f84b9255171f7198fa075719b2ecb2"
+    },
+    {
+      "path": "tests/export_contract.rs",
+      "sha256": "898f89047d2711038dc84d439b38df41ab3de1157d3de506c072c5f89d0ee44a"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "REPORT.md",
+      "bytes": 1871,
+      "sha256": "f1431e2dfd2b659361534ef9217fa441e306e7567de5d55df25f4de5770b19ee"
+    },
+    {
+      "path": "clippy.log",
+      "bytes": 198,
+      "sha256": "ca3fb14c6ed6d739cd18f6eef44879f0205fef7ea526f680d6290868d7b5cce9"
+    },
+    {
+      "path": "comparison.png",
+      "bytes": 329478,
+      "sha256": "74550f68685d213f0c12019c8ad74a441c5ff6e58ae2604f326afbb68cca7463"
+    },
+    {
+      "path": "comparison.svg",
+      "bytes": 211111,
+      "sha256": "33dbd14baa61c666d9689663d7e0e9f14b205fffc624f371aee33400a6cc693d"
+    },
+    {
+      "path": "format.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "metrics.json",
+      "bytes": 1448,
+      "sha256": "6f3a89b5c11fbcfd90d097e469a351304db43c5c693df316d82e942f9c62ccc4"
+    },
+    {
+      "path": "reference.obj",
+      "bytes": 61929,
+      "sha256": "eca173e4895520899e84e7a1aba53e5734e9703a86423a012bc3dd2ed3c05ca2"
+    },
+    {
+      "path": "reference.stl",
+      "bytes": 447639,
+      "sha256": "cff73fd23999e55f16bd20222eac94f70dead0453f75bb694a3b6a9f5fe13c29"
+    },
+    {
+      "path": "rough.obj",
+      "bytes": 61929,
+      "sha256": "124022c2325fda27e786417a6cec65100418fbc523622f51b7a6abfbe62b3927"
+    },
+    {
+      "path": "rough.stl",
+      "bytes": 447764,
+      "sha256": "89d73d78786a80173a9bf0a33fe5414c5146b4ef318cd3d186e9c1baeb48a0b4"
+    },
+    {
+      "path": "smoothed.obj",
+      "bytes": 62081,
+      "sha256": "62aff64b96ee7691f1946a570680fbd6a66583dda5bf42e4ec2092afb96d3e57"
+    },
+    {
+      "path": "smoothed.stl",
+      "bytes": 448645,
+      "sha256": "21fb219f2c7cad009e8e9d7e9c0a8abbc545bab7f86e2fdcb3c06de72c88eb99"
+    },
+    {
+      "path": "tests.log",
+      "bytes": 1725,
+      "sha256": "fc5e1115fe7351bc8af2fcb6ba670a3bd41d2f3321cab59a30d657d27eab5f8f"
+    },
+    {
+      "path": "vertices.csv",
+      "bytes": 134362,
+      "sha256": "016cd131c7f9d07ddd8975eb1fe43bdf052fbc26669cb664d7531eec6ce20110"
+    }
+  ],
+  "qualification": "synthetic_fixture_pass_only; no B-rep reconstruction, real CAD or physical performance assessment"
+}
