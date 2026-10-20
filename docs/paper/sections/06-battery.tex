@@ -1,124 +1,61 @@
-\section{Numerical Observation Families and Methodological Evolution}
+\section{What the Numerical Observations Represent}
 \label{sec:battery}
-\IEEEPARstart{E}{valuating} an evolved physical geometry requires translating continuous shape variations into concrete geometric and mechanical observables. Earlier internal documentation listed forty-four catalog predicates---sixteen legacy diagnostic checks, ten grouped requirement predicates, and eighteen historical battery columns---inline alongside a 414-cell categorical status matrix. While complete, that administrative taxonomy obscured the physical and numerical methods.
-
-In this section, we organize the main-text presentation around the \textbf{eleven substantive observation and model families} defined by the underlying physics and software architecture (Table~\ref{tab:observation-families}). Every subsection follows a uniform seven-part structure: (1)~engineering question, (2)~represented observable and units, (3)~numerical domain and formulation, (4)~role across historical and weighted objective regimes, (5)~retained visual evidence for the assessed export Individual~2000, (6)~interpretation limits, and (7)~cross-reference to the Supplement technical crosswalk (Section~\ref{sec:reproducibility}). The complete 23-subject by 18-evaluator historical battery matrix (\BatteryPass\ stored passes, \BatteryFail\ failures, and \BatteryBlocked\ blocked cells; preserved in the linked Supplement \nolinkurl{generated/battery-matrix.svg} and Section~\ref{sec:reproducibility}) and the item-by-item 44-entry crosswalk are preserved without omission.
-
-\subsection{Gate and Objective Evolution Across Regimes}
-\label{subsec:gate-evolution}
-Understanding the retained data requires distinguishing three evaluation regimes that coexist in the repository without conflating their semantics:
-\begin{enumerate}
-  \item \textbf{Historical Native Search (Cohort~1 \text{Run~1}, Cohort~3 \text{Run~2}--\text{Run~11}, and Four-Island Quality-Diversity):} During native quality-diversity evolution, each birth is decoded and checked sequentially for geometric legality, reference-contour similarity, and plate finite-element feasibility. The historical scalar fitness $f$ is therefore \emph{piecewise and conditional}: candidates failing geometric legality or the reference-contour floor receive negative penalty branches without invoking FEM (\FemNotEvaluated\ of \BirthCount\ births in Cohort~1 \text{Run~1}), whereas evaluated candidates combine normalized structural response ratios, mass terms, and archive-contextual novelty. Removing the categorical pass/fail matrix from the opening narrative does not make the historical search algorithm gate-free; its conditional branch structure is preserved as an explicit methodological fact.
-  \item \textbf{Multi-Stage Screening and Retained Weighted Reporting Profile:} In the intermediate pipeline, Stage~1 screens candidates using fast plate and geometric observables, while subsequent evaluation adds local quadratic-solid and refined observations. The 20-term retained weighted reporting profile $F = \sum_{i=1}^{20} w_i s_i \in [0,100]$ aggregates four thematic groups (30\% mass/compactness, 25\% form/comfort proxies, 15\% exported geometry, 30\% response/verification). Prior to repository revision \code{72e25a360470}, selection and reporting differed on two placeholder geometry inputs, and round maxima combined stage values across rounds. We therefore keep historical native $f$, Stage-1 screen scores, and the retained weighted reporting profile strictly separate.
-  \item \textbf{Fixed Historical Assessment Battery (23 Subjects $\times$ 18 Columns):} The historical CAD battery evaluates 23 fixed subjects (21 earlier-cohort subjects and two controlled-probe exports including Individual~2001) across 18 heterogeneous columns mixing shared software controls (92 of the \BatteryPass\ passes), missing geometry-binding receipts (\BatteryBlocked\ blocked cells across unit-declaration, single-solid, and pin-clearance checks plus four reference rows), record-completeness flags (20 quadratic-solid file-completeness records), and strict grouped requirement gates (19 failures and 4 blocked reference rows).
-\end{enumerate}
+The retained mechanical observations answer different questions. A unit-load plate field, a later assessment scalar, a shared-mesh solver comparison, and a software-control flag do not provide interchangeable evidence. Table~\ref{tab:observation-families} groups the eleven observation families by the conclusion each can support. The detailed formulas, source keys, and historical catalog are retained in the Supplement; the fixed 23-subject historical battery is separate from the single automatically assessed export, Individual~2000.
 
 \begin{table*}[t]
 \centering
-\caption{The eleven main-text observation and model families, their represented observables, retained visual bindings for Individual~2000, and scientific verification criteria.}
+\caption{Retained observation families and their limits. The entries describe available records, not newly executed analyses. Fields and assessment scalars shown in the main figures belong to Individual~2000.}
 \label{tab:observation-families}
-\footnotesize
+\small
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.12}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}p{0.21\textwidth}>{\raggedright\arraybackslash}p{0.19\textwidth}>{\raggedright\arraybackslash}p{0.16\textwidth}@{}}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}p{0.27\textwidth}>{\raggedright\arraybackslash}p{0.23\textwidth}>{\raggedright\arraybackslash}p{0.24\textwidth}@{}}
 \toprule
-\textbf{Methodological Family} & \textbf{Observable \& Units} & \textbf{Domain \& Formulation} & \textbf{Retained Visual / Scope} & \textbf{Verification Criteria} \\
+\textbf{Families} & \textbf{Observable} & \textbf{Retained evidence} & \textbf{Supported interpretation} \\
 \midrule
-1.~Representation \& exported geometry & B-rep solid/shell/face counts; mesh closure; mass ($\mathrm{g}$); SHA-256 identity & 128-gene + material decoder to STEP, STL, and 2D/3D FEM meshes & Fig.~\ref{fig:cover}; Supplement \nolinkurl{export-identity.svg}; 3 nominal/B-rep checks omit synthetic visuals & Watertight single solid; holder envelope; ring/claw \& bevel geometry \\
-2.~Shape \& reference comparison & Hausdorff distance $d_H$ ($\mathrm{mm}$), curvature EMD, similarity score $\in[0,1]$ & Closed 2D exterior contour (4,230 pts) vs.\ C.5/C.6 reference (1,117 pts) & Supplement \nolinkurl{reference.svg} (2.285\,mm, EMD 0.0071, score 0.4079) & Reference-contour similarity ($d_H \le 15\,\mathrm{mm}$, $\mathrm{EMD} \le 0.12$, score $\ge 0.25$) \\
-3.~Plate lateral \& pry response & Unit bending/pry $\sigma_{\mathrm{vM}}$ ($\mathrm{MPa/N}$); lateral capacity $F_{\mathrm{lat}}$ ($\mathrm{N}$) & DKT bending \& T6 membrane; both scaled by $260\,\mathrm{N}$ in multi-case envelope & Fig.~\ref{fig:plate-fields} (A, B); Fig.~\ref{fig:assessment} (C: 168.90 vs.\ 168.18\,N) & Lateral bending \& pry capacity ($180\,\mathrm{N}$ coarse; $260\,\mathrm{N}$ cert.\ \& refined plate) \\
-4.~Ring traction & Unit in-plane $\sigma_{\mathrm{vM}}$ ($\mathrm{MPa/N}$); ring pull capacity $F_{\mathrm{ring}}$ ($\mathrm{N}$) & T6 membrane triangles ($25{,}209$ total; $10{,}334$ unmasked ring support) & Fig.~\ref{fig:plate-fields} (C: 14,875 seated cells masked in gray) & Retention-ring pull capacity ($1500\,\mathrm{N}$ membrane traction \& human overload) \\
-5.~Body \& local torsion & Unit torsional $\sigma_{\mathrm{vM}}$ ($\mathrm{MPa/(N\,mm)}$); body/tip safety factors & DKT plate torsion ($1.82\,\mathrm{N\,m}$ scale); 4\,mm tip capacity exclusion & Fig.~\ref{fig:plate-fields} (D); Fig.~\ref{fig:assessment} (C: 0.5239 cert / 0.5287 strict) & Body \& tip torsional response ($1.82\,\mathrm{N\,m}$ cert.\ and refined plate torsion) \\
-6.~Quadratic solid submodel & Nodal-max \& regional safety factor $\mathrm{SF}_{\mathrm{solid}}$ (dimensionless) & 3D quadratic tetrahedra ($P_2$) on terminal submodel; $1.82\,\mathrm{N\,m}$ torsion & Fig.~\ref{fig:verification} (C--D: scalar pairs \& binned profiles; no 3D field) & Quadratic tetrahedral tip submodel ($1.82\,\mathrm{N\,m}$, 10-node $P_2$ continuum) \\
-7.~Support \& linear stability & Supported ratio (5.2027) \& linear buckling eigenvalue $\lambda_1$ (7.0351) & DKT/CST assembly with bore springs \& Winkler grip pad; $\mathbf{K}_s^{-1}\mathbf{G}$ & Fig.~\ref{fig:assessment} (A: schematic \& scalars; eigen-operator audit open) & Compliant bore/grip support \& linear buckling ($\mathbf{K}_s^{-1}\mathbf{G}$) \\
-8.~Regional yield-order proxy & Elastic sequence ratio $r_{\mathrm{seq}}$ (dimensionless, $\ge 1.2$ target) & Ratio of governing regional elastic capacities across plate mesh sequence & Fig.~\ref{fig:verification} (A: 3-level trace; GCI estimate refused) & Tip-first yield-order ratio ($r_{\mathrm{seq}} \ge 1.2$) \\
-9.~Fatigue model & Modified-Goodman factor $n_f$ (dimensionless; saved 0.4718) & $n_f^{-1} = \sigma_a / S_e + \sigma_m / S_u$ under $R=0$ zero-to-max cycle & Fig.~\ref{fig:assessment} (B: scalar only; no spatial fatigue field or life test) & Modified-Goodman cyclic fatigue factor ($R = 0$) \\
-10.~Discretization \& solver consistency & 3-level GCI admission status; matched-mesh solver $\Delta\mathrm{SF}$ ($<0.05\%$) & Richardson extrapolation refusal rules; native Rust vs.\ DOLFINx $P_2$ solid & Fig.~\ref{fig:verification} (A--C: metadata valid, GCI refused, $<0.05\%$ solid match) & Three-level plate mesh convergence \& independent-solver $P_2$ parity \\
-11.~Software \& completeness controls & Continuous $W_{\text{CAD}}$ subscores/shortfalls; contract pass/fail/blocked counts & Analytic invariance, GCI arithmetic fixtures, claim gates, side-study refs & Fig.~\ref{fig:assessment} (D); Supplement \nolinkurl{battery-matrix.svg} & Continuous CAD subscores, shortfall penalties \& fail-closed software controls \\
+Representation/export; reference shape & B-rep and mesh identity; mass (g); contour distance (mm) and similarity & Bound export records and reference comparison & Inspectable geometry and resemblance to an authored prior; no ergonomic approval \\
+Lateral/pry; ring traction; plate torsion & Unit responses (MPa/N or MPa/(N\,mm)); capacities (N); regional factors & $0.25\,\mathrm{mm}^2$ cell fields; certification and strict scalars & Elastic responses under named loads and masks; no strict-mesh field is retained \\
+Quadratic solid tip & Recovered vertex stress (MPa) and safety factors & Shared-mesh scalar pairs and distance-bin profiles & Agreement of selected recovered observables; no full solid stress array in the publication inputs \\
+Support/stability; yield-order proxy & Supported regional ratio; provisional eigenvalue; elastic capacity ratio & Scalars and a three-level proxy sequence & Dependence on support/region assumptions; no physical fracture sequence \\
+Fatigue & Modified-Goodman factor & Saved scalar $n_f=0.472$ & A model-based cyclic-load margin; no observed fatigue life \\
+Discretization/solver consistency & GCI admission; relative difference of safety factors & Refused plate estimates; solid pairs differing by $<0.05\%$ & Separate evidence about mesh-study admission and shared-input agreement \\
+Software/completeness controls & Contract outcomes, file completeness and score bookkeeping & Historical matrix and control definitions/receipts & Evidence organization and software behavior; no additional mechanical specimens \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-\subsection{Family 1: Representation and Exported Geometry}
-\label{subsec:family-geometry}
-\textbf{Question \& Observables:} Does a decoded genome produce a closed, single-solid B-rep and surface mesh with verifiable unit scaling, mass ($\mathrm{g}$), edge/tip profile geometry ($\mathrm{mm}$), and cryptographic byte binding?
-\textbf{Domain \& Formulation:} The decoder maps the 128-gene vector and material density into a 2D mid-surface contour, variable thickness/bevel fields, and 3D STEP/STL exports.
-\textbf{Objective Role:} Geometric legality gates initial evaluation in native QD search; exported geometry terms contribute 15\% of the retained weighted reporting profile.
-\textbf{Retained Visual \& Limits:} The linked Supplement (\nolinkurl{generated/export-identity.svg}, Section~\ref{sec:reproducibility}) and Figure~\ref{fig:cover} bind Individual~2000's genome, STEP/STL digests, 1 solid / 1 shell / 55,698 STEP face tokens, OpenCascade valid B-rep record, and 44,994-vertex / 90,000-triangle render mesh. Three geometry checks in this family (holder-envelope clearance, ring/claw planform proportions, and B-rep edge/tip metrology) intentionally omit synthetic subsection visuals (4 entries total across the 44-entry catalog) because nominal parameters and exported B-rep metrology must not be conflated. In the historical battery, unit-declaration, single-solid, and pin-clearance bindings are blocked across all 23 subjects (Supplement Section~\ref{sec:reproducibility}).
-
-\subsection{Family 2: Shape and Reference Comparison}
-\label{subsec:family-reference}
-\textbf{Question \& Observables:} How closely does the decoded exterior silhouette match the authored reference archetype in Hausdorff distance ($\mathrm{mm}$), curvature-histogram Earth Mover's Distance (EMD, dimensionless), and composite similarity score $\in [0,1]$?
-\textbf{Domain \& Formulation:} Evaluates the closed 2D exterior polyline (4,230 points for Individual~2000) against the retained C.5 exterior reference polyline (1,117 points, reused by C.6) under a common isotropic coordinate transform.
-\textbf{Objective Role:} Enforces the reference-contour similarity floor before FEM in native QD search and supplies form/reference proxy terms in weighted reporting.
-\textbf{Retained Visual \& Limits:} The linked Supplement (\nolinkurl{generated/reference.svg}, Section~\ref{sec:reproducibility}) displays both polylines and the saved descriptors (Hausdorff $2.285\,\mathrm{mm}$, curvature EMD $0.0071$, similarity score $0.4079$, empty failure list). Reference resemblance measures conformity to an authored geometric prior, not human ergonomic approval or comfort.
-
-\subsection{Family 3: Plate Lateral and Pry Response}
+\subsection{Plate Fields and Assessment Stages}
 \label{subsec:family-lateral}
-\textbf{Question \& Observables:} What are the linear-elastic unit responses under out-of-plane lateral tip load ($\mathrm{MPa/N}$) and in-plane tip-pry load ($\mathrm{MPa/N}$), and the resulting lateral load capacity $F_{\mathrm{lat}}$ ($\mathrm{N}$) across coarse, certification, and strict plate discretizations?
-\textbf{Domain \& Formulation:} Discrete Kirchhoff Triangle (DKT) out-of-plane bending elements and six-node quadratic membrane (T6) in-plane bending elements on the 2D mid-surface ($13{,}503$ nodes and $25{,}209$ triangles at the $0.25\,\mathrm{mm}^2$ level; minima taken over $0.25$ and $0.125\,\mathrm{mm}^2$ for certification, and $0.0625\,\mathrm{mm}^2$ for strict refinement). In the multi-case envelope construction, both lateral bending and tip-pry unit-response fields are multiplied by $260\,\mathrm{N}$.
-\textbf{Objective Role:} Primary structural capacity term in native QD fitness and the response/verification group (30\%) of the retained weighted reporting profile.
-\textbf{Retained Visual \& Limits:} Figure~\ref{fig:plate-fields}B shows the $0.25\,\mathrm{mm}^2$ lateral unit-response field ($25{,}209$ valid triangles), while Fig.~\ref{fig:plate-fields}A shows the scaled multi-case envelope ($25{,}134$ valid triangles, with $75$ tip-exclusion cells masked in gray; peak $1{,}388.6695\,\mathrm{MPa}$). Figure~\ref{fig:assessment}C records the certification ($168.9008\,\mathrm{N}$) and strict ($168.1786\,\mathrm{N}$) lateral capacities against the $180\,\mathrm{N}$ coarse and $260\,\mathrm{N}$ certification/strict thresholds, and no full spatial field is archived for the $0.0625\,\mathrm{mm}^2$ strict mesh (Supplement Section~\ref{sec:reproducibility}).
-
-\subsection{Family 4: Ring Traction}
 \label{subsec:family-ring}
-\textbf{Question \& Observables:} What is the in-plane membrane von Mises stress per unit ring-pull resultant ($\mathrm{MPa/N}$) and the static ring-pull capacity ($\mathrm{N}$)?
-\textbf{Domain \& Formulation:} Six-node quadratic membrane triangles (T6) on the mid-surface under static ring-bore traction. In the retained $25{,}209$-triangle plate mesh, $14{,}875$ cells in the seated handle/blade region are producer-zeroed, leaving $10{,}334$ active triangles in the ring and immediate transition domain.
-\textbf{Objective Role:} Contributes to the joint structural floor in native search and multi-stage response scoring.
-\textbf{Retained Visual \& Limits:} Figure~\ref{fig:plate-fields}C renders the $10{,}334$ valid triangles and explicitly masks the $14{,}875$ producer-zeroed seated cells in neutral gray so excluded domain is never misread as zero stress. Static elastic ring traction is not a dynamic drop test or human-finger injury model (Supplement Section~\ref{sec:reproducibility}).
-
-\subsection{Family 5: Body and Local Plate Torsion}
 \label{subsec:family-torsion}
-\textbf{Question \& Observables:} How do the body region and terminal tip region respond to a $1.82\,\mathrm{N\,m}$ torsional load in unit response ($\mathrm{MPa/(N\,mm)}$) and regional safety factors ($\mathrm{SF}$, dimensionless)?
-\textbf{Domain \& Formulation:} DKT plate torsion model with distinct regional masks: body torsion excludes a $4\,\mathrm{mm}$ terminal tip zone ($75$ cells at $0.25\,\mathrm{mm}^2$) when computing body capacity and the global envelope, whereas local tip torsion evaluates the terminal zone at certification ($0.25/0.125\,\mathrm{mm}^2$) and strict ($0.0625\,\mathrm{mm}^2$) levels.
-\textbf{Objective Role:} Separates global blade/handle torsional stiffness from localized tip fragility across both search and assessment stages.
-\textbf{Retained Visual \& Limits:} Figure~\ref{fig:plate-fields}D shows the unmasked raw torsion unit response across all $25{,}209$ triangles with the $4\,\mathrm{mm}$ capacity-exclusion boundary dashed; Fig.~\ref{fig:assessment}C pairs the certification ($0.5239$) and strict ($0.5287$) local tip safety factors. Two-dimensional Kirchhoff plate theory cannot capture three-dimensional through-thickness shear near a sharp point, motivating Family~6 (Supplement Section~\ref{sec:reproducibility}).
+For Individual~2000, the retained plate mesh contains $13{,}503$ nodes and $25{,}209$ triangles. Lateral bending and chord torsion use DKT bending; in-plane tip pry and ring traction use quadratic T6 membrane elements. Their unit-response maps have distinct units and load definitions (Section~\ref{sec:verification}). The scaled multi-case envelope is derived from those maps; it is not an independent fifth load case.
 
-\subsection{Family 6: Quadratic Solid Submodel}
+The assessment comparison in Figure~\ref{fig:assessment}C is \emph{certification versus strict}, not a generic coarse/refined pair. Certification takes the minimum capacity over maximum triangle areas $0.25$ and $0.125\,\mathrm{mm}^2$, while strict assessment uses $0.0625\,\mathrm{mm}^2$. The saved lateral capacities are $168.90$ and $168.18\,\mathrm{N}$; the local tip-torsion factors are $0.524$ and $0.529$. The displayed fields come from the $0.25\,\mathrm{mm}^2$ level. These stages are distinct from the $4/1/0.25\,\mathrm{mm}^2$ plate mesh study.
+
+The global envelope excludes cells within $4\,\mathrm{mm}$ of the tip. The plate body-torsion observable searches beyond $15\,\mathrm{mm}$ from the tip; the local tip observable searches the $4$--$15\,\mathrm{mm}$ annulus. Raw torsion imagery retains the tip-patch response and must distinguish its raw peak from the post-exclusion capacity peak. Ring-traction cells in the producer's seated region are masked, rather than interpreted as unstressed material.
+
+\subsection{Local Solid Response and Recovery}
 \label{subsec:family-solid}
-\textbf{Question \& Observables:} What is the three-dimensional continuum safety factor ($\mathrm{SF}_{\mathrm{solid}}$, dimensionless) in the terminal tip region under $1.82\,\mathrm{N\,m}$ torsion?
-\textbf{Domain \& Formulation:} Ten-node quadratic tetrahedral ($P_2$) continuum submodel of the terminal tip region, recording nodal-maximum and regionally binned safety factors.
-\textbf{Objective Role:} High-fidelity tip verification anchor.
-\textbf{Retained Visual \& Limits:} Figure~\ref{fig:verification}C--D plots the matched-mesh scalar safety factors and regional longitudinal profiles. No full 3D volumetric stress field array is retained in the publication inputs. Furthermore, in the historical 23-subject battery, the quadratic-solid tip column records 20 passes that signify \emph{record completeness}, not 20 favorable strength margins (Supplement Section~\ref{sec:reproducibility}).
+\label{subsec:family-verification}
+The retained $P_2$ solid submodel uses $91{,}008$ tetrahedra and $416{,}583$ displacement degrees of freedom. Its cut-arc displacement degrees of freedom are clamped, and vertex forces in a $2\,\mathrm{mm}$ tip patch apply $1.82\,\mathrm{N\,m}$ chord torque. The retained comparison is scikit-fem/PyAMG CG versus DOLFINx/PETSc CG/GAMG on that same saved submodel. Rust orchestration is not the primary solid assembly implementation. Section~\ref{sec:verification} specifies the common inputs, recovery and selected agreement; the publication inputs contain scalar and binned profiles, rather than a full three-dimensional stress field.
 
-\subsection{Family 7: Compliant Support and Linear Stability}
+\subsection{Proxies, Support Assumptions and Missing Observations}
 \label{subsec:family-support}
-\textbf{Question \& Observables:} Under compliant bore-bearing springs and a Winkler grip-pad foundation, what are the lateral regional stress ratio and the lowest linear buckling eigenvalue $\lambda_1$ (dimensionless)?
-\textbf{Domain \& Formulation:} Alternate DKT/CST assembly solving static compliant support (reported ratio $5.2027$ vs.\ multi-case certification comparator $1.4353$) and linear eigenbuckling ($\lambda_1 = 7.0351$) via Krylov iteration on $\mathbf{K}_s^{-1}\mathbf{G}$.
-\textbf{Objective Role:} Side-report stability diagnostic in assessment and the historical battery.
-\textbf{Retained Visual \& Limits:} Figure~\ref{fig:assessment}A presents the support schematic and archived scalars. Because standard Hermitian Lanczos iteration requires an operator self-adjoint in the inner product and symmetric $\mathbf{K}_s, \mathbf{G}$ do not make $\mathbf{K}_s^{-1}\mathbf{G}$ Euclidean-symmetric without a $\mathbf{K}_s$-inner-product formulation or retained eigenpair residual, the numerical-operator audit remains explicitly open (Supplement Section~\ref{sec:reproducibility}).
+\label{subsec:family-sequence}
+\label{subsec:family-fatigue}
+The regional yield-order ratio compares modeled elastic capacities and has a stored target of $1.2$. It does not model plastic redistribution, cracking or a physical failure sequence. Likewise, the modified-Goodman fatigue factor ($n_f=0.472$) is a scalar model result, not an observed cycle life.
+
+An alternate support study uses bore-bearing springs and a Winkler grip-pad foundation. Its lateral regional ratio ($5.203$) and stored buckling eigenvalue ($7.035$) remain separate from the certification multi-case ratio ($1.435$). The differing support/load observables are not a mesh-convergence pair. The eigenvalue is provisional because the operator-symmetry/eigenpair audit remains open. Figure~\ref{fig:assessment}A presents support assumptions and scalar records; no support eigenvector field is retained.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{assessment.png}
-\caption{Individual~2000 saved scalar observations, continuous CAD objective subscores, and shortfall magnitudes (single assessed export in the automatic certification leaderboard, 1 assessed, 0 qualified, no promoted champion). A: compliant support-model schematic and recorded scalars; the eigen-operator audit remains open. B: saved Goodman fatigue factor ($0.4718$) and human-overload response factors. C: certification versus strict scalar observations ($168.9008\,\mathrm{N}$ vs.\ $168.1786\,\mathrm{N}$ lateral capacity; $0.5239$ vs.\ $0.5287$ local tip torsion). D: continuous CAD quality subscores ($s_{\mathrm{mass}}=0.4870$, $s_{\mathrm{karambit}}=0.4009$, $s_{\mathrm{survival}}=0.0$, $s_{\mathrm{seq}}=0.9996$, $s_{\mathrm{carry}}=0.6000$; pass-branch unpenalized quality score $1.4570$) paired with continuous shortfall magnitudes ($0.4710$ refined tip torsion, $0.3531$ refined plate bending, $0.3307$ quadratic solid tip; failed-branch formula $W_{\text{CAD}} = -1.0 - 4.6191 + 0.10 s_{\mathrm{mass}} = -5.5704$; 10 of 16 legacy gates and 2 of 10 requirement groups met).}
+\caption{Individual~2000: retained scalar assessment observations and conditional score bookkeeping. A: support assumptions and saved scalars; the eigen-operator audit remains open. B: modified-Goodman fatigue factor and human-overload response factors. C: certification minimum over $0.25/0.125\,\mathrm{mm}^2$ versus strict $0.0625\,\mathrm{mm}^2$ observations: lateral capacity $168.90$ versus $168.18\,\mathrm{N}$ and local tip-torsion factor $0.524$ versus $0.529$. D: continuous CAD subscores and shortfalls for this assessed candidate, separate from the retained weighted reporting vector of Individual~2002. This is one assessed automatic export, with no qualified or promoted champion in its retained leaderboard.}
 \label{fig:assessment}
 \end{figure*}
 
-\subsection{Family 8: Regional Yield-Order Proxy}
-\label{subsec:family-sequence}
-\textbf{Question \& Observables:} Does the modeled elastic response ratio between designated body/ring and tip regions ($r_{\mathrm{seq}}$, dimensionless) exceed the $1.2$ ordering threshold?
-\textbf{Domain \& Formulation:} Quotient of regional linear-elastic capacity factors evaluated across the plate mesh sequence.
-\textbf{Objective Role:} Penalizes tip-first elastic overload in native search and weighted reporting.
-\textbf{Retained Visual \& Limits:} Figure~\ref{fig:verification}A plots the sequence proxy across the three plate mesh levels. Because linear elasticity models neither plastic redistribution, crack initiation, nor dynamic fracture propagation, a favorable sequence ratio is an elastic design proxy rather than a proven physical failure sequence (Supplement Section~\ref{sec:reproducibility}).
-
-\subsection{Family 9: Fatigue Model}
-\label{subsec:family-fatigue}
-\textbf{Question \& Observables:} What is the modified-Goodman endurance safety factor $n_f$ (dimensionless) under a repeated zero-to-maximum load cycle?
-\textbf{Domain \& Formulation:} Evaluates $n_f^{-1} = \sigma_a / S_e + \sigma_m / S_u$ with $\sigma_a = \sigma_m = \sigma_{\max}/2$ and Marin-corrected Ti-6Al-4V endurance limit $S_e$.
-\textbf{Objective Role:} Durability screen (saved scalar $n_f = 0.4718$ for Individual~2000; 19 unfavorable and 4 blocked in the historical battery).
-\textbf{Retained Visual \& Limits:} Figure~\ref{fig:assessment}B displays the saved scalar $0.4718$. No spatial fatigue field is stored, and nominal Goodman factors do not substitute for surface-roughness metrology, residual-stress measurement, or cyclic coupon testing (Supplement Section~\ref{sec:reproducibility}).
-
-\subsection{Family 10: Discretization and Separate-Solver Consistency}
-\label{subsec:family-verification}
-\textbf{Question \& Observables:} Do three-level plate mesh sequences admit an asymptotic Grid Convergence Index (GCI), and do independent finite-element implementations agree on the matched $P_2$ solid mesh?
-\textbf{Domain \& Formulation:} Three-level Richardson extrapolation and refusal predicates plus matched-mesh $P_2$ tetrahedral solves comparing the native solver against FEniCSx/DOLFINx.
-\textbf{Objective Role:} Verification and credibility gates (Section~\ref{sec:verification}).
-\textbf{Retained Visual \& Limits:} Figure~\ref{fig:verification}A--B shows that while mesh-sequence metadata are valid, oscillatory and nonpositive observed orders cause the GCI error estimates to be refused. Figure~\ref{fig:verification}C shows that the two solvers on the identical $P_2$ mesh agree within $0.05\%$, confirming solver-implementation parity on a shared discretization without bounding discretization or modeling error (Supplement Section~\ref{sec:reproducibility}).
-
-\subsection{Family 11: Continuous Objective Subscores and Result-Completeness Controls}
+\subsection{Geometry Records and Control Catalogs}
+\label{subsec:family-geometry}
+\label{subsec:family-reference}
 \label{subsec:family-controls}
-\textbf{Question \& Observables:} How do continuous CAD quality subscores and shortfall magnitudes combine into $W_{\text{CAD}}$, and do unit/invariance tests, GCI refusal arithmetic, claim-admission gates, and historical side-report references behave as specified?
-\textbf{Domain \& Formulation:} Continuous subscore and shortfall evaluation plus automated positive and negative software fixtures across the historical battery columns.
-\textbf{Objective Role:} Separates continuous design quality from gate shortfalls and fail-closed repository governance; software-control passes are never weighted as mechanical fitness.
-\textbf{Retained Visual \& Limits:} Figure~\ref{fig:assessment}D presents the five normalized CAD quality subscores ($s_{\mathrm{mass}}=0.4870$, $s_{\mathrm{karambit}}=0.4009$, $s_{\mathrm{survival}}=0.0$, $s_{\mathrm{seq}}=0.9996$, $s_{\mathrm{carry}}=0.6000$; pass-branch unpenalized quality score $1.4570$) alongside the three continuous gate shortfalls ($0.4710$ refined tip torsion, $0.3531$ refined plate bending, and $0.3307$ quadratic solid tip; conditional failed-branch formula $W_{\text{CAD}} = -1.0 - 4.6191 + 0.10 s_{\mathrm{mass}} = -5.5704$; 10 of 16 legacy gates and 2 of 10 requirement groups met) for Individual~2000, while the linked Supplement (\nolinkurl{generated/battery-matrix.svg} and \nolinkurl{generated/battery-matrix.json}, Section~\ref{sec:reproducibility}) retains all 414 historical cells across the 23 battery subjects (\BatteryPass\ stored passes, \BatteryFail\ failures, and \BatteryBlocked\ blocked records), explaining why 92 repeated software-control passes across four build columns and 57 shared side-study references must be separated from candidate-specific mechanical tests.
+Export identities and reference-contour comparisons bind what was generated and measured. They establish neither physical performance nor human comfort. The historical $23\times18$ battery and 44-entry crosswalk remain available in the Supplement. They mix candidate-specific observations, shared software controls, missing bindings and completeness flags. In particular, its 20 quadratic-solid completeness labels do not denote 20 favorable strength margins. Catalog definitions, executed controls and unavailable records are reported separately; their counts are not a mechanical replication denominator.

@@ -1,0 +1,47 @@
+\section{Numerical Methods, Source Bindings and Observation Limits}
+\label{sec:numerical-methods-details}
+This supplement interprets retained observations for Individual~2000; it reports no new solve. The original field, assessment and verification input contracts bind the producer revision \code{e8cb049df7d03c7d3113556812cc140ca99a29c3}. The producer source and raw-input hashes must be checked against those original contracts. A later figure-semantic ledger describes presentation and cannot independently certify a scientific interpretation.
+
+\subsection{Actual Solid Implementation Chain}
+\begin{table*}[t]
+\centering
+\caption{Retained solid implementation chain. Unknown executed package versions remain unknown. Rust is the pipeline/orchestration layer, not either solid assembly library.}
+\label{tab:solid-implementation}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.19\textwidth}>{\raggedright\arraybackslash}p{0.37\textwidth}>{\raggedright\arraybackslash}p{0.37\textwidth}@{}}
+\toprule
+\textbf{Property} & \textbf{Primary} & \textbf{Comparison} \\
+\midrule
+Producer & \nolinkurl{fem_solid/tip_solid.py} & \nolinkurl{fem_solid/cross_check.py} and shared DOLFINx seams \\
+Assembly/field & scikit-fem \code{ElementVector(ElementTetP2)}, integration order 2 & DOLFINx vector Lagrange $P_2$ on linear tetrahedral geometry \\
+Linear solution & PyAMG smoothed aggregation, CG; recorded algorithm \code{skfem_p2_amg_cg} & PETSc CG/GAMG; Chebyshev/Jacobi multigrid-level options \\
+Retained versions & scikit-fem and PyAMG package versions not retained & DOLFINx 0.9.0; PETSc/petsc4py 3.22.0; Basix 0.9.0; UFL 2024.2.0 \\
+Convergence record & 152 iterations; relative residual $8.803574\times10^{-11}$ & 158 iterations; positive KSP reason 2; sidecar residual norm $1.324748\times10^{-10}$ (a different reported norm) \\
+Common mesh & \multicolumn{2}{p{0.75\textwidth}@{}}{Saved NPZ with $91{,}008$ tetrahedra and $416{,}583$ displacement degrees of freedom; mesh-file SHA-256 \nolinkurl{d3f7a444175fb6a6f64ee1118a00f2e83d6994c66b1c266cfd94ac14572faab1}. This file identity differs from the sidecar's internal mesh-layout hash.} \\
+Material/load & \multicolumn{2}{p{0.75\textwidth}@{}}{Ti-6Al-4V isotropic elasticity, $E=113.8\,\mathrm{GPa}$, $\nu=0.34$; common saved allowable and $1820\,\mathrm{N\,mm}$ chord torque. Saved primary and comparison scalar outputs use different rounding.} \\
+Boundary & \multicolumn{2}{p{0.75\textwidth}@{}}{Zero displacement on cut-arc vertices and midpoint degrees of freedom on edges with both ends fixed. Minimum-norm $z$-forces at vertices within $2\,\mathrm{mm}$ of the tip impose torque with zero resultant force and zero transverse moment. No transferred-displacement boundary is recorded.} \\
+Recovery/region & \multicolumn{2}{p{0.75\textwidth}@{}}{Element-vertex von Mises stress, then incident-cell vertex maximum or unweighted mean; planar tip distance in $[4,15)\,\mathrm{mm}$ and nearest saved cut-vertex distance $>3\,\mathrm{mm}$. The comparison sidecar records 6930 ROI vertices.} \\
+\bottomrule
+\end{tabular}
+\end{table*}
+The primary code contains a direct-solver fallback, but the retained run explicitly reports the PyAMG/CG branch. The comparison interpolates von Mises stress into DG1 at cell vertices; it is not an $L_2$ projection, volume weighting or nodal smoothing. Shared incident-cell recovery produces the reported scalar extrema. Differences computed from rounded safety factors are $|0.6693/0.669-1|=0.0004484$ and $|0.7263/0.726-1|=0.0004132$. The code binding and these values support the selected comparison, not a global proof of solver correctness.
+
+\subsection{Plate Stages, Fields and Regions}
+The producer's \code{CERT_AREAS} are $0.25$ and $0.125\,\mathrm{mm}^2$. Certification takes the specified minima over both unbiased solves; its retained spatial fields come from $0.25\,\mathrm{mm}^2$. In the assessment record, \code{lat_rob_n} and \code{twist_tipzone_sf} therefore denote certification values. \code{strict_lat_rob_0p0625_n} and \code{twist_tipzone_sf_strict} denote the separate unbiased $0.0625\,\mathrm{mm}^2$ stage. The respective saved pairs are $168.9008053/168.1786057\,\mathrm{N}$ and $0.523920871/0.528698267$.
+
+Lateral and torsion fields use DKT bending stresses recovered as a maximum over three extrapolated corners. Pry and ring fields use T6 centroid von Mises stress. In particular, \nolinkurl{/mesh/pry} has $25{,}209$ stored unit-load values and peak $2.9181\,\mathrm{MPa/N}$. Its producer applies a unit in-plane load perpendicular to the ring-to-tip chord with the ring bore clamped. It must not be labeled as the multi-case envelope in MPa. The original field contract's display-field list omits this array; admission requires an explicit additive producer-backed interpretation while preserving the original contract bytes.
+
+The envelope scales lateral/pry fields by $260\,\mathrm{N}$, ring by $1500\,\mathrm{N}$ and raw torsion by $1820\,\mathrm{N\,mm}$ times the producer's global torsion correction. It masks $75$ tip cells and has peak $1388.6695\,\mathrm{MPa}$. Raw torsion retains its $34.8589\,\mathrm{MPa/(N\,mm)}$ tip-patch peak; the post-$4\,\mathrm{mm}$ exclusion capacity peak is $0.6611\,\mathrm{MPa/(N\,mm)}$. Body torsion searches beyond $15\,\mathrm{mm}$, while the tip-annulus observable searches $4$--$15\,\mathrm{mm}$. No strict spatial field or full volumetric solid stress array is retained in the publication inputs.
+
+\subsection{Three-Level Study and Refusal Semantics}
+The independent plate study has maximum areas $4$, $1$, $0.25\,\mathrm{mm}^2$, with $h=\sqrt{A_{\max}}$ and refinement ratio 2. In fine-to-coarse order, the yield-order proxy is $1.4381383$, $1.5763238$, $1.5948326$ and the lateral safety factor is $0.6535320$, $0.6886658$, $0.6810133$. The stored relative-GCI procedure records valid sequence/observable metadata but refuses the former for nonpositive observed order ($p=-2.9003199$) and the latter for oscillation. Extrapolated values and fine-grid estimates are null. A valid sequence descriptor is not an admitted extrapolation, and refusal is not a universal statement about other error-estimation methods.
+
+\subsection{Other Observation Families}
+Representation/export records bind genome, material, B-rep, surface mesh, mass and their digests. For Individual~2000, the saved export reports one solid and one shell, a valid OpenCascade B-rep and a $44{,}994$-vertex/$90{,}000$-triangle display mesh. The reference comparison uses a $4230$-point exterior contour and $1117$-point authored reference; saved distance $2.285\,\mathrm{mm}$, curvature EMD $0.0071$ and similarity $0.4079$ describe conformity to that prior. Export metrology and nominal coordinates are distinct observations; neither establishes comfort or human aesthetic approval.
+
+The regional sequence proxy takes the governing ratio of regional elastic capacities over lateral, torsion and pry cases, with a stored target of $1.2$. It does not model fracture, crack initiation or plastic redistribution. The modified-Goodman scalar obeys $n_f^{-1}=\sigma_a/S_e+\sigma_m/S_u$ with $\sigma_a=\sigma_m=\sigma_{\max}/2$ for the modeled zero-to-maximum cycle; its saved value is $0.47179485$. No spatial fatigue array or measured life is supplied.
+
+The alternate support study records radial, tangential and flange springs of $50{,}000$, $5000$ and $100{,}000\,\mathrm{N/mm}$ and a Winkler grip foundation of $200\,\mathrm{N/mm^3}$. Its static lateral ratio is $5.2026756$; the stored eigenvalue is $7.0350619$. Those scalars are conditioned on the alternate supports, rather than replacing the certification ratio $1.4353236$. The $\mathbf K_s^{-1}\mathbf G$ symmetry/eigenpair question remains open. No retained eigenvector is replaced by a synthetic mode shape.
+
+Finally, the historical battery has 23 subjects and 18 columns (414 status cells), including shared software controls, side-study references, blocked geometry bindings and 20 solid-file completeness labels. The original 44-entry crosswalk and historical matrix remain preserved by the publication package. Definition counts (178 assurance challenges/356 paired slots) and repeated control labels are separate from actual execution receipts and from candidate-specific mechanical evidence. A favorable completeness flag is not a favorable strength factor.

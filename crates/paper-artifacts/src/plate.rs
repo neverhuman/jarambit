@@ -248,6 +248,267 @@ fn admit(doc: &Value, contract: &Value) -> Result<Mesh> {
     })
 }
 
+fn polygon_area(poly: &[[f64; 2]]) -> f64 {
+    if poly.len() < 3 {
+        return 0.;
+    }
+    0.5 * poly
+        .iter()
+        .zip(poly.iter().cycle().skip(1))
+        .take(poly.len())
+        .map(|(a, b)| a[0] * b[1] - b[0] * a[1])
+        .sum::<f64>()
+        .abs()
+}
+
+fn clipped_polygon(mut poly: Vec<[f64; 2]>, bbox: [f64; 4]) -> Vec<[f64; 2]> {
+    for (axis, bound, lower) in [
+        (0, bbox[0], true),
+        (0, bbox[2], false),
+        (1, bbox[1], true),
+        (1, bbox[3], false),
+    ] {
+        if poly.is_empty() {
+            break;
+        }
+        let inside = |p: [f64; 2]| {
+            if lower {
+                p[axis] >= bound
+            } else {
+                p[axis] <= bound
+            }
+        };
+        let mut output = Vec::new();
+        let mut previous = *poly.last().unwrap();
+        let mut was_inside = inside(previous);
+        for current in poly {
+            let is_inside = inside(current);
+            if is_inside != was_inside {
+                let fraction = (bound - previous[axis]) / (current[axis] - previous[axis]);
+                output.push(std::array::from_fn(|k| {
+                    previous[k] + fraction * (current[k] - previous[k])
+                }));
+            }
+            if is_inside {
+                output.push(current);
+            }
+            previous = current;
+            was_inside = is_inside;
+        }
+        poly = output;
+    }
+    poly
+}
+
+/// Derived presentation checks run only after publication has verified the
+/// original source bytes, producer files and their immutable input contracts.
+/// The original field contract is not extended or rewritten by this ledger.
+pub(crate) fn project_semantics(
+    doc: &Value,
+    contract: &Value,
+    assessment: &Value,
+    lineage: &Value,
+    semantics: &Value,
+    crop_svg: &str,
+) -> Result<Value> {
+    let mesh = admit(doc, contract)?;
+    if semantics["schema"] != "jarambit.figure_semantics.v1"
+        || semantics["source"] != contract["source"]
+        || semantics["source_sha256"] != contract["source_sha256"]
+        || semantics["certificate_identity"] != contract["certificate_identity"]
+        || semantics["producer_revision"] != contract["producer_revision"]
+        || semantics["producer_sources"] != contract["producer_sources"]
+        || semantics["scalar_interpretation_sources"] != assessment["interpretation_sources"]
+        || assessment["producer_revision"] != contract["producer_revision"]
+    {
+        return Err("plate semantics: original source/subject/producer binding differs".into());
+    }
+    let stages = &semantics["scalar_stages"];
+    if stages["certification"]["keys"] != json!(["lat_rob_n", "twist_tipzone_sf"])
+        || stages["certification"]["mesh_max_area_mm2"] != json!([0.25, 0.125])
+        || stages["certification"]["aggregation"] != "minimum"
+        || stages["strict"]["keys"] != json!(["strict_lat_rob_0p0625_n", "twist_tipzone_sf_strict"])
+        || stages["strict"]["mesh_max_area_mm2"] != json!([0.0625])
+        || stages["strict"]["aggregation"] != "single_mesh"
+        || stages["separate_plate_gci_max_area_mm2"] != json!([4, 1, 0.25])
+    {
+        return Err("plate semantics: certification/strict/GCI source-key stages differ".into());
+    }
+    let pry = array(&doc["mesh"]["pry"])?
+        .iter()
+        .map(number)
+        .collect::<Result<Vec<_>>>()?;
+    if pry.len() != mesh.tris.len()
+        || pry.iter().any(|v| *v < 0.)
+        || semantics["pry_additive_admission"]["selector"] != "/mesh/pry"
+        || semantics["pry_additive_admission"]["units"] != "MPa/N"
+        || semantics["pry_additive_admission"]["count"].as_u64() != Some(pry.len() as u64)
+    {
+        return Err("plate semantics: additive pry association/units differ".into());
+    }
+    let ancestry = &semantics["ancestry_views"];
+    if ancestry["generated_lineage"]["max_parent_hops"] != lineage["max_parent_hops"]
+        || lineage["max_parent_hops"] != 2
+        || ancestry["inheritance"]["max_parent_hops"] != 3
+        || ancestry["inheritance"]["source_json_sha256"] != lineage["population"]["sha256"]
+        || ancestry["inheritance"]["source_csv_sha256"].as_str()
+            != Some(crate::population::HISTORICAL_ALL_EVALS_CSV_SHA256)
+        || ancestry["inheritance"]["expected_node_ids"]
+            != json!([174, 245, 299, 392, 413, 526, 1095])
+        || ancestry["inheritance"]["separate_induced_fourth_hop_edge"] != json!([174, 299])
+    {
+        return Err("plate semantics: separate lineage/inheritance authority differs".into());
+    }
+    let mut contributor_counts: BTreeMap<String, u64> = BTreeMap::new();
+    for i in 0..mesh.tris.len() {
+        // This matches the existing hero display's active-map rule, rather than
+        // assigning zero stress to producer-zeroed envelope/ring regions.
+        let q = 3
+            + usize::from(mesh.values["env_vm"][i] > 0.)
+            + usize::from(mesh.values["ring"][i] > 0.);
+        *contributor_counts.entry(q.to_string()).or_default() += 1;
+    }
+    if semantics["hero_composite"]["fields"] != json!(["env_vm", "lat", "pry", "ring", "twist"])
+        || semantics["hero_composite"]["contributor_count_q"]
+            != serde_json::to_value(&contributor_counts)?
+        || semantics["hero_composite"]["visibility"]
+            != "The cover does not display a separate per-triangle contributor-count map."
+    {
+        return Err("plate semantics: composite support/visibility differs".into());
+    }
+    let panels = array(&semantics["crop_panels"])?;
+    if panels.len() != 3 {
+        return Err("plate semantics: crop panel membership differs".into());
+    }
+    let theta = -6.0_f64.to_radians();
+    let (ct, st) = (theta.cos(), theta.sin());
+    let posed: Vec<[f64; 2]> = mesh
+        .xy
+        .iter()
+        .map(|p| [p[0] * ct + p[1] * st, p[0] * st - p[1] * ct])
+        .collect();
+    let mut receipts = Vec::new();
+    for (index, (id, field, units)) in [
+        ("A", "ring", "MPa/N"),
+        ("B", "twist", "MPa/(N mm)"),
+        ("C", "pry", "MPa/N"),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let panel = &panels[index];
+        if panel["panel"] != id
+            || panel["selector"] != format!("/mesh/{field}")
+            || panel["units"] != units
+            || panel["source_path"] != contract["source"]
+            || panel["source_sha256"] != contract["source_sha256"]
+            || panel["denominator_scope"]
+                != "whole retained source-active field domain, not a preselected terminal ROI"
+        {
+            return Err("plate semantics: wrong crop field/units/source/denominator".into());
+        }
+        let bounds = array(&panel["crop_domain_posed_mm"])?;
+        let rect = array(&panel["svg_clip_rect"])?;
+        if bounds.len() != 4 || rect.len() != 4 {
+            return Err("plate semantics: malformed crop rectangle".into());
+        }
+        let bbox = [
+            number(&bounds[0])?,
+            number(&bounds[1])?,
+            number(&bounds[2])?,
+            number(&bounds[3])?,
+        ];
+        let aperture = [
+            number(&rect[0])?,
+            number(&rect[1])?,
+            number(&rect[2])?,
+            number(&rect[3])?,
+        ];
+        let transform = &panel["svg_transform"];
+        let scale = number(&transform["scale"])?;
+        let ox = number(&transform["origin_x"])?;
+        let oy = number(&transform["origin_y"])?;
+        if bbox[0] >= bbox[2]
+            || bbox[1] >= bbox[3]
+            || scale <= 0.
+            || aperture[2] <= 0.
+            || aperture[3] <= 0.
+        {
+            return Err("plate semantics: invalid crop domain".into());
+        }
+        let inverse = [
+            (aperture[0] - ox) / scale,
+            (oy - aperture[1] - aperture[3]) / scale,
+            (aperture[0] + aperture[2] - ox) / scale,
+            (oy - aperture[1]) / scale,
+        ];
+        let clip_element = panel["svg_clip_rect_element"]
+            .as_str()
+            .ok_or("plate semantics: missing SVG clip binding")?;
+        if inverse.iter().zip(bbox).any(|(a, b)| (*a - b).abs() > 1e-9)
+            || crop_svg.matches(clip_element).count() != 1
+        {
+            return Err(
+                "plate semantics: actual SVG aperture differs from physical crop window".into(),
+            );
+        }
+        let values = if field == "pry" {
+            &pry
+        } else {
+            &mesh.values[field]
+        };
+        let mut denominator = 0.;
+        let mut numerator = 0.;
+        let mut active = 0u64;
+        for (i, triangle) in mesh.tris.iter().enumerate() {
+            if field == "ring" && mesh.ring_mask[i] {
+                continue;
+            }
+            active += 1;
+            let poly: Vec<[f64; 2]> = triangle.iter().map(|j| posed[*j]).collect();
+            denominator += polygon_area(&poly) * values[i].abs();
+            numerator += polygon_area(&clipped_polygon(poly, bbox)) * values[i].abs();
+        }
+        // A zero integral has no defined coverage fraction; never manufacture100%.
+        let fraction = (denominator > 0.).then(|| numerator / denominator);
+        if active
+            != panel["source_active_denominator_cells"]
+                .as_u64()
+                .ok_or("plate semantics: missing active denominator")?
+            || (number(&panel["whole_domain_denominator"])? - denominator).abs() > 1e-7
+            || (number(&panel["crop_numerator"])? - numerator).abs() > 1e-7
+            || match fraction {
+                Some(value) => {
+                    (number(&panel["achieved_whole_domain_fraction"])? - value).abs() > 1e-10
+                }
+                None => !panel["achieved_whole_domain_fraction"].is_null(),
+            }
+        {
+            return Err("plate semantics: source-domain crop denominator/fraction differs".into());
+        }
+        receipts.push(json!({"panel":id, "selector":panel["selector"], "units":units,
+            "crop_domain_posed_mm":bbox, "active_denominator_cells":active,
+            "whole_domain_denominator":denominator, "crop_numerator":numerator,
+            "achieved_whole_domain_fraction":fraction,
+            "coverage_interpretation":"rectangular physical source-domain integral before decorative PIP; not visible ink"}));
+    }
+    if !crop_svg.contains("C. In-Plane Tip Pry Saliency Crop (MPa/N)")
+        || !crop_svg.contains("≥0.6611 (over-range)")
+        || !crop_svg.contains("raw max 34.8589")
+        || crop_svg.contains("23-subject automatic CAD battery")
+        || crop_svg.contains("&gt;= 90%")
+    {
+        return Err("plate semantics: crop observable/scope/over-range label differs".into());
+    }
+    Ok(
+        json!({"schema":"jarambit.crop_semantics_projection.v1", "source":contract["source"],
+        "source_sha256":contract["source_sha256"], "producer_revision":contract["producer_revision"],
+        "panels":receipts, "contributor_count_q":contributor_counts,
+        "lineage_contract_preserved":true, "new_solver_execution":false,
+        "scope":"Reporting/source-domain projection; original values/masks unchanged; PNG/PDF visual acceptance separate."}),
+    )
+}
+
 pub(crate) fn project(doc: &Value, contract: &Value) -> Result<(String, Value)> {
     let m = admit(doc, contract)?;
     let xmin = m.xy.iter().map(|p| p[0]).fold(f64::INFINITY, f64::min);
@@ -408,6 +669,53 @@ mod tests {
         }
         (doc, contract)
     }
+    #[test]
+    fn rectangle_clipping_has_an_independent_area_oracle_and_handles_empty_domains() {
+        let square = vec![[0., 0.], [2., 0.], [2., 2.], [0., 2.]];
+        assert!(
+            (polygon_area(&clipped_polygon(square.clone(), [0.5, 0.5, 1.5, 1.5])) - 1.).abs()
+                < 1e-12
+        );
+        assert_eq!(polygon_area(&clipped_polygon(square, [3., 3., 4., 4.])), 0.);
+        assert_eq!(polygon_area(&[]), 0.);
+    }
+
+    #[test]
+    fn semantic_ledger_rejects_wrong_units_subject_stage_and_crop_denominator() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let read = |path: &str| -> Value {
+            serde_json::from_slice(&std::fs::read(root.join(path)).unwrap()).unwrap()
+        };
+        let contract = read("docs/paper/field-inputs.v1.json");
+        let doc = read(contract["source"].as_str().unwrap());
+        let assessment = read("docs/paper/assessment-inputs.v1.json");
+        let lineage = read("docs/paper/lineage-inputs.v1.json");
+        let ledger = read("docs/paper/figure-semantics.v1.json");
+        let svg = std::fs::read_to_string(
+            root.join("docs/paper/drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.svg"),
+        )
+        .unwrap();
+        assert!(project_semantics(&doc, &contract, &assessment, &lineage, &ledger, &svg).is_ok());
+        for (pointer, value) in [
+            ("/crop_panels/2/units", json!("MPa")),
+            ("/certificate_identity", json!("another candidate")),
+            ("/scalar_stages/strict/mesh_max_area_mm2", json!([0.125])),
+            ("/crop_panels/1/whole_domain_denominator", json!(73.5323)),
+            ("/crop_panels/1/achieved_whole_domain_fraction", json!(0.9)),
+            (
+                "/ancestry_views/generated_lineage/max_parent_hops",
+                json!(3),
+            ),
+        ] {
+            let mut changed = ledger.clone();
+            *changed.pointer_mut(pointer).unwrap() = value;
+            assert!(
+                project_semantics(&doc, &contract, &assessment, &lineage, &changed, &svg).is_err(),
+                "{pointer}"
+            );
+        }
+    }
+
     #[test]
     fn source_mask_is_not_colored_as_zero_and_raw_fields_remain_distinct() {
         let (doc, contract) = fixture();

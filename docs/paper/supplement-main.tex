@@ -1,0 +1,66 @@
+\RequirePackage[T1]{fontenc}
+\documentclass[11pt,journal,onecolumn,letterpaper]{IEEEtran}
+% Standalone, single-column technical supplement.
+% Venue submission requires the selected venue's unmodified official template.
+\usepackage{tgtermes,tgheros}
+\usepackage{amsmath,amssymb,graphicx,booktabs,array,xcolor,url}
+\usepackage{xurl}
+\usepackage{xr-hyper}
+\usepackage[hidelinks]{hyperref}
+\externaldocument[][nocite]{../../target/ieee/paper/main}[main.pdf]
+\usepackage{microtype}
+\hypersetup{
+  pdftitle={Technical Supplement: Engineered Intelligence},
+  pdflang={en-US},
+  pdfsubject={Engineered Intelligence: Executable Representations, Recorded Evolutionary Search, and Traceable Engineering Evidence},
+  pdfkeywords={Engineered Intelligence, computational design, evolutionary computation, CAD, quality diversity, finite elements, evidence provenance, reproducible populations}
+}
+\definecolor{ink}{HTML}{132D3B}
+\definecolor{teal}{HTML}{007E87}
+\definecolor{rust}{HTML}{A3442D}
+\DeclareRobustCommand{\code}[1]{\texorpdfstring{{\small\nolinkurl{#1}}}{\detokenize{#1}}}
+\newcommand{\src}[2]{\href{https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/#1}{#2}}
+\newcommand{\test}[1]{\subsubsection{#1}}
+\input{generated/metrics.tex}
+\providecommand{\CohortOneBirths}{1,984}
+\providecommand{\CohortOneFemComplete}{1,455}
+\providecommand{\CohortOneFemNotEvaluated}{529}
+\providecommand{\CohortOneBestFit}{1.15727}
+\providecommand{\CohortOneBestId}{1095}
+\providecommand{\CohortOneBestGen}{9}
+\providecommand{\CohortTwoBirthEvents}{3,649}
+\providecommand{\CohortTwoScreenRows}{2,259}
+\providecommand{\CohortTwoUnscreenedBirths}{1,390}
+\providecommand{\CohortThreeRuns}{10}
+\providecommand{\CohortThreeGenerations}{801}
+\providecommand{\CohortThreeRowsPerRun}{195,456}
+\providecommand{\CohortThreeTotalEvaluations}{1,954,560}
+\providecommand{\CohortThreeLegalEvaluations}{754,236}
+\graphicspath{{../../target/ieee/paper/}{figures/}{drafts_p3_p5/}}
+\interdisplaylinepenalty=2500
+\setlength{\emergencystretch}{2.5em}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\dbltopfraction}{0.92}
+\renewcommand{\textfraction}{0.06}
+\renewcommand{\floatpagefraction}{0.82}
+\renewcommand{\dblfloatpagefraction}{0.82}
+\providecommand{\IEEEPARstart}[2]{#1#2}
+\begin{document}
+\onecolumn
+\begin{center}
+{\sffamily\bfseries\Large Technical Supplement}\par\medskip
+{\sffamily\large Engineered Intelligence: Tracing Computational Design from Search to Evidence}\par\medskip
+Research draft, 20 October 2026. Author approval pending.
+\end{center}
+This supplement retains the detailed representation, score, numerical-method, and cohort inventories supporting the main paper. Original evidence and contracts retain their own producer identities. It reports computational records; physical observations are not reported in this study.
+\tableofcontents
+\clearpage
+\input{supplement/representation-search.tex}
+\input{supplement/scores-and-composites.tex}
+\input{supplement/numerical-methods.tex}
+\input{supplement/cohort-inventory.tex}
+\input{supplement/related-work-notes.tex}
+\input{supplement.tex}
+\clearpage
+\input{references.tex}
+\end{document}

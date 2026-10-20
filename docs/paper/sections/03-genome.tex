@@ -1,30 +1,32 @@
-% Draft for Section 3 (From a 129-Column Genome Record to an Identifiable CAD)
-\section{From a 129-Column Genome Record to an Identifiable CAD}
+\section{Representation and Candidate Identity}
 \label{sec:genome}
 
-\subsection{A Gene Is a Contract, Not Merely a Number}
-A gene requires an explicit coordinate index, physical or discrete type, unit, box domain, coupling law, and decoder revision. A serialized floating-point token alone cannot distinguish a millimeter normal displacement from an angular bevel setting, a discrete feature-count selector, or a binary structural-layer switch. Those semantics determine whether a decoded B-rep or finite-element mesh is reproducible across software revisions.
+\subsection{A Gene Is a Semantic Contract}
+A gene requires an explicit coordinate index, physical or discrete type, unit, domain, coupling law, and decoder revision. A serialized floating-point token alone cannot distinguish a millimeter displacement from an angle, a feature-count selector, or an architecture switch. Those semantics determine what a stored genome means when it is decoded.
 
-Jarambit's native crescent representation encodes 128 continuous numerical coordinates paired with one categorical alloy state, and decodes them into a planform and 2.5D thickness field. In every evaluated population table across Cohort~3 (\text{Run~2}--\text{Run~11}, $1{,}954{,}560$ evaluations across 10 retained runs of 801 generations) and Cohort~1 (\text{Run~1}, $1{,}984$ historical births), each row contains 146 columns: 17 scalar evaluation and search-metadata columns (columns $0..16$), followed by 128 numerical \code{f64} gene coordinates (columns $17..144$) and one categorical alloy column (\code{material}, column $145$, taking values \code{Ti-6Al-4V} or \code{Ti-3Al-2.5V}), yielding 129 genome-and-material fields per birth record.
+The documented native schema stores 128 numeric coordinates and one categorical material field. Some numeric coordinates express continuous parameters; others are interpreted through thresholds or discretization. The nominal coordinate count is therefore neither the number of independently active parameters nor a measure of geometric freedom. Field roles are summarized below; exact domains and decoding rules require the producer revision attached to each cohort. Historical-producer details are retained in Supplement~\ref{supp:representation-search}, without attributing them to every executed workflow.
 
-\subsection{The Four Structural Blocks of the 128 Numeric Genes}
-The 128 numeric coordinates partition into four functional blocks that reflect the structural hierarchy of the decoder:
-\begin{enumerate}
-\item \textbf{Block A: Silhouette Normal Control Points (\code{cp00}--\code{cp39}, indices $0..39$, 40 coordinates).} Each coordinate specifies a normal displacement in millimeters from the 40-station reference outline. Station-specific bounds restrict displacements to $\pm 1.5\,\mathrm{mm}$ on the outer ring arc ($i\in[0,4]\cup[36,39]$), $\pm 2.0\,\mathrm{mm}$ along the tip approach ($i\in[15,22]$), and $\pm 3.5\,\mathrm{mm}$ along the belly, spine, and handle arches.
-\item \textbf{Block B: Planform, Stock, Bevel, Relief, Lattice, Fuller, and Edge Coordinates (indices $40..89$, 50 coordinates).} Indices $40..44$ parameterize global planform and ring dimensions (blade drop angle, grip offset $\Delta x_{\text{grip}}$, ring wall thickness, ring inner diameter, and neck fillet radius); indices $45..49$ define stock thickness $t_{\text{stock}}$ ($[4.5,6.0]\,\mathrm{mm}$), tip thickness $t_{\text{tip}}$ ($[2.2,5.0]\,\mathrm{mm}$), taper origin $x_{0,\text{taper}}$, and inside/spine bevel angles; indices $50..89$ parameterize the comet groove, ergonomics, three-tier serration depths, handle relief pocket (depth, width, and exponent), dimple lattice, blade fuller, handle flute, surface texture mode, cord wrap, grip pad, and cutting-edge thickness ($[0.25,1.20]\,\mathrm{mm}$).
-\item \textbf{Block C: Internal-Machining Coordinates (indices $90..116$, 27 coordinates).} These 27 coordinates control triangular isogrid pocketing (depth, pitch, grading, handle start, and land width), pierced skeletonization windows (window count through decay rate), ring lightening flutes (depth, width, and arc span), and angled micro-perforation slots (depth through handle start).
-\item \textbf{Block D: Continuous-Rail Layer (indices $117..127$, 11 coordinates).} The final 11 numeric coordinates encode the binary continuous-rail layer switch $p_{1,\text{on}}\in\{0,1\}$, continuous perimeter rail width $w_{\text{rail}}$ ($[2.2,5.5]\,\mathrm{mm}$), solid neck length $l_{\text{neck}}$ ($[6.0,24.0]\,\mathrm{mm}$), interior pocket depth and corner radius ($d_{\text{pocket}}, r_{\text{pocket}}$), active spline-knot count $k_n\in\{3,4,5\}$, and five interior thickness knots \code{k0}--\code{k4} ($[1.5,6.0]\,\mathrm{mm}$).
-\end{enumerate}
+\begin{table}[t]
+\centering
+\caption{Functional groups in the documented numeric schema.}
+\label{tab:genome-blocks}
+\setlength{\tabcolsep}{5.5pt}
+\begin{tabular}{@{}p{0.20\columnwidth}p{0.36\columnwidth}p{0.35\columnwidth}@{}}
+\toprule
+Group & Role and stored type & Conditional interpretation \\
+\midrule
+Silhouette & Numeric normal offsets around a reference outline & Some stations can be pinned by the producer's bounds. \\
+Planform and features & Dimensions, angles, ratios, and feature selectors & A stored numeric feature setting need not activate a feature. \\
+Internal machining & Pocket, window, and perforation parameters & Feature counts and zone switches use discrete decoding rules. \\
+Continuous-rail layer & Numeric architecture switch, dimensions, and thickness knots & The switch selects the thickness architecture; only the selected knot count contributes. \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\subsection{Decoder Coupling, Clamping, and Inactive Coordinates}
-These 129 fields are not independent degrees of freedom. Before phenotype construction, the decoder clamp enforces box bounds on all 128 numeric coordinates together with deterministic cross-gene coupling laws:
-\begin{equation}
-\begin{aligned}
-  t_{\text{tip}} &\le t_{\text{stock}}, & x_{1,\text{comet}} &\ge x_{0,\text{comet}} + 15\,\mathrm{mm}, \\
-  s_{1,\text{fuller}} &\ge s_{0,\text{fuller}} + 0.12, & s_{1,\text{win}} &\ge s_{0,\text{win}} + 0.12,
-\end{aligned}
-\end{equation}
-while rounding discrete coordinates (surface texture mode $\in\{0,1,2\}$, window count $\in\{0,\dots,8\}$, continuous-rail switch $p_{1,\text{on}}\in\{0,1\}$, and spline-knot count $k_n\in\{3,4,5\}$). When $p_{1,\text{on}} < 0.5$, the continuous-rail thickness law is inactive in the decoder even though its 11 numeric coordinates remain serialized in the genome record; conversely, when $p_{1,\text{on}} \ge 0.5$, the continuous perimeter rail and spline-knot thickness law supersede legacy interior pocket features. Preserving all 129 columns losslessly is therefore essential to distinguish an inactive coordinate mutation from a geometric change.
+\subsection{Coupling and Conditional Activity}
+Clamping, thresholding, and coupled bounds distinguish stored coordinates from the geometry they produce. In the bound historical producer, the continuous-rail switch is thresholded, the active knot count is floored and bounded, and enabling the layer disables several legacy features. When it is disabled, knot coordinates are set to stock thickness during clamping. The decoder and its configuration thus belong to the interpretation of a record, rather than being incidental implementation details. A numeric change can be inactive, discretized away, or constrained by another coordinate; changed-coordinate counts alone do not establish geometric change.
 
-\subsection{Candidate, Genome, and Export Identity}
-Because multiple birth events can produce identical clamped coordinates (for example, Cohort~1 \text{Run~1} records $1{,}984$ births across $1{,}965$ distinct gene serializations), Jarambit separates birth/individual identity (\text{Individual~ID}), genome serialization identity, population-slot appearance, and exported CAD/assessment bundle identity. When comparing parent and child rows across the 128 numeric CSV coordinates (columns $17..144$, \code{cp00}--\code{k4}), changed-coordinate counts are defined by exact floating-point inequality ($\Delta \neq 0$) on the stored CSV tokens, and raw-coordinate Euclidean $L_2$ norms across those 128 columns mix heterogeneous units (millimeters, degrees, dimensionless ratios, and discrete selectors) rather than measuring physical geometric distance. For Individual~2000, the STEP solid ($1$ solid, $1$ shell, $55{,}698$ face tokens), the render mesh ($44{,}994$ vertices, $90{,}000$ triangles), the $0.25\,\mathrm{mm}^2$ plate mesh ($13{,}503$ nodes, $25{,}209$ triangles), and the $P_2$ tetrahedral solid tip submodel ($91{,}008$ tetrahedra, $416{,}583$ displacement degrees of freedom) represent distinct discretizations with separate provenance bindings documented in Section~\ref{sec:reproducibility}.
+\subsection{Birth, Genome, Membership, and Export}
+A birth identifies a recorded generation event; a genome serialization identifies stored coordinate and material values; a membership identifies a population-slot occurrence; and an assessed export identifies its own geometry and assessment bundle. These objects can share an individual identifier without sharing a denominator. The historical cohort, for example, retains repeated genome serializations and repeated appearances of earlier births. A display mesh, a plate mesh, and a solid submodel likewise represent distinct discretizations, each requiring its own source binding (Section~\ref{sec:reproducibility}).
+
+The inheritance ledger counts changed numeric coordinates by exact numeric inequality on parsed CSV values. Its raw-coordinate $L_2$ norms mix units and discrete semantics. They are audit summaries of stored coordinates, not physical distances between shapes; the detailed edge ledger is retained in Supplement~\ref{supp:representation-search}.

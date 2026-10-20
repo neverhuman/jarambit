@@ -1,50 +1,24 @@
-% Draft for Section 4 (Evolutionary Process, Variation Operators, and Population Evidence)
-\section{Evolutionary Process, Variation Operators, and Population Evidence}
+\section{Recorded Search and Inheritance}
 \label{sec:evolution}
 
-\subsection{Implemented Variation Operators: Block-Preserving Crossover and Six-Mode Mutation}
-Rather than treating evolutionary search as an opaque black-box optimizer, Jarambit records the exact variation operators applied across its island populations:
-\begin{itemize}
-\item \textbf{Two-parent crossover:} To prevent non-physical saw-tooth discontinuities along the closed silhouette spline, the 40 normal control points (\code{cp00}--\code{cp39}, indices $0..39$) are inherited as a single contiguous block from parent~$b$ with probability $0.5$ and otherwise retained from parent~$a$. The remaining 88 numeric feature coordinates (indices $40..127$) and the categorical alloy grade (\code{material}) are inherited independently with probability $0.5$ per coordinate, followed immediately by deterministic clamping.
-\item \textbf{Six-mode structured mutation:} Each mutation call draws an integer mode $\text{op}\in\{0,1,2,3,4,5\}$ uniformly at random with step scale $\sigma=0.15$ (coarse) or $\sigma=0.04$ (fine):
-  \begin{enumerate}
-  \item \emph{Mode~0 (Sparse per-gene Gaussian):} Perturbs each coordinate $i\in[0,127]$ independently with probability $0.15$ by $\mathcal{N}(0,1)\cdot(\text{hi}_i-\text{lo}_i)\sigma$.
-  \item \emph{Mode~1 (Smooth silhouette bump):} Applies a periodic Gaussian normal displacement bump $A\exp(-d^2/(2w^2))$ across all 40 control points around a random station $c\in[0,39]$ with width $w\in[1.5,5.5]$.
-  \item \emph{Mode~2 (Thickness, taper, and relief operator):} Perturbs stock thickness $t_{\text{stock}}$, tip thickness $t_{\text{tip}}$, taper origin $x_{0,\text{taper}}$, and handle relief depth and width, and---when $p_{1,\text{on}} \ge 0.5$---also perturbs perimeter rail width $w_{\text{rail}}$, pocket depth $d_{\text{pocket}}$, and one interior spline knot \code{k0}--\code{k4}.
-  \item \emph{Mode~3 (Dimple-lattice operator):} Deactivates the lattice ($d_{\text{lattice}} = 0$) with probability $0.15$ or perturbs lattice depth, pitch, fill fraction, angle, and handle/blade extents ($68..73$).
-  \item \emph{Mode~4 (Fuller, flute, texture, and comet operator):} Perturbs blade fuller and handle flute geometry ($74..78$), surface texture mode and pitch/angle ($79..82$), and comet groove width/bow ($52..54$).
-  \item \emph{Mode~5 (Internal pocketing or continuous-rail operator):} When $p_{1,\text{on}} \ge 0.5$, mutates the continuous perimeter rail and knot coordinates ($118..127$) with probability $0.7$; otherwise selects one of four sub-operators targeting triangular isogrid ($90..98$), pierced windows ($99..104$), ring flute ($105..109$), or angled micro-perforations ($110..116$).
-  \end{enumerate}
-  In coarse mode, the alloy grade flips between \code{Ti-6Al-4V} and \code{Ti-3Al-2.5V} with probability $0.03$ before clamping.
-\end{itemize}
+\subsection{Four Collections with Different Meanings}
+Births, population memberships, archive representatives, and assessed exports answer different questions. Births record proposed individuals and their observations. Memberships record occupied island slots, including retained individuals. Quality-diversity archives retain representatives under a run's descriptor and score rules. Later assessments concern selectively admitted or separately exported candidates. Evidence coverage and denominators for these collections are reported with the cohort-specific results (Section~\ref{sec:results}).
 
-\subsection{Four Distinct Population Collections}
-Scientifically credible reporting requires distinguishing four collections that share candidates but have different denominators and selection biases:
-\begin{enumerate}
-\item \textbf{Birth collection:} Every proposed candidate evaluated or rejected at birth:
-  \begin{itemize}
-  \item \emph{Cohort~3 (10-Run 800-Gen Population, $1{,}954{,}560$ Evaluations):} \text{Run~2} through \text{Run~11} each evaluate $195{,}456$ births across generations $0$--$800$ ($801$ distinct generations per run), totaling $1{,}954{,}560$ complete 146-column birth records ($754{,}236$ search-legal).
-  \item \emph{Cohort~1 (Historical 17-Gen, \text{Run~1}):} $1{,}984$ births across generations $0$--$16$ ($1{,}455$ with completed plate finite-element solves, $529$ not evaluated by finite elements, and $446$ search-legal).
-  \item \emph{Cohort~2 (Intermediate Screening):} $3{,}649$ multi-stage birth proposals across 24 screening runs, with $2{,}259$ joined to Stage-1 screening observations and $1{,}390$ preserved in an explicit unscreened observation band.
-  \end{itemize}
-\item \textbf{Island-membership (survivor) collection:} Candidates occupying active island slots at generation end, including elite retention and periodic ring migration. In Cohort~1 (\text{Run~1}), $2{,}176$ slot occurrences are recorded across Islands~1--4 ($4\times 32$ slots over 17 generations), comprising $1{,}984$ initial placements, $192$ elite reappearances, and $12$ ring-migration events ($4$ events each at generations 4, 8, and 12).
-\item \textbf{Quality-diversity archive:} Representatives retained per behavioral niche cell across each run.
-\item \textbf{Independent Stage-2 / strict assessment collection:} The subset of top-ranked or separately exported candidates admitted to multi-gate CAD, plate, and quadratic solid verification (23 subjects in the historical battery plus the single assessed export Individual~2000 in the automatic certification leaderboard, 1 assessed candidate, 0 qualified, no promoted champion).
-\end{enumerate}
+For the historical cohort, the recorded membership stage is \emph{after contextual rescoring and before ring migration}. The bound producer emits birth or elite events and summary observations before migration. Migration subsequently copies selected IDs to destination islands; the overwritten destination IDs are not retained by those events. Calling the earlier snapshot a generation-end post-migration population would therefore overstate what can be reconstructed. Elite events retain membership but omit refreshed contextual fitness, so an individual's stored birth score is not substituted for an unrecorded later score.
+
+\subsection{Variation in the Historical Producer}
+The historical producer uses four island populations, shared novelty memory, a quality-diversity archive, elite retention, tournament selection, and periodic ring migration. Parents can be selected from the archive or current population; recorded parent IDs and operation labels identify the observed birth mechanism. These are source-bound historical semantics, rather than an assertion that every retained cohort executed an identical binary.
+
+Crossover inherits the silhouette's 40 control points as one block and chooses the remaining numeric coordinates and material category independently between parents, then clamps the result. Mutation selects among six modes: sparse coordinate perturbation, a smooth silhouette bump, a thickness-and-section operator, a lattice operator, a fuller/texture/feature operator, and a machining-or-rail operator. Mutation scale depends on island and configuration; the exact parameter branches and the coarse/fine distinction are retained in Supplement~\ref{supp:representation-search}. This is variation within a fixed representation and decoder.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{inheritance.png}
-\caption{Cohort~1 (\text{Run~1}) recorded three-hop ancestry and 128-coordinate genome differences around Individual~1095 (generation~9, $\text{fit}=1.15727$, strict verification not met): the $7$ retained nodes, $7$ three-hop parent edges (solid), and fourth-hop induced edge $174\to 299$ (dashed), showing ancestor reuse of Individual~413 (3-hop) and Individual~174 (induced closure) plus exact $\Delta\neq 0$ coordinate counts across CSV columns $17..144$.}
+\caption{Shared ancestry in the historical search record around Individual~1095. Solid edges show recorded parent-to-child links within three parent hops; the dashed edge $174\to299$ closes the induced subgraph but lies four hops from the focal individual along that path. Individual~413 contributes through both a direct and an indirect path. The genealogy belongs to this historical cohort.}
 \label{fig:lineage}
 \end{figure*}
 
-\subsection{Recorded Multi-Hop Inheritance and Coordinate-Level Genome Diffs}
-Figure~\ref{fig:lineage} traces the recorded three-hop ancestry of Individual~1095 (Cohort~1, \text{Run~1}, generation~9, highest stored birth fitness $\text{fit}=1.15727$) directly from the Cohort~1 evaluation ledger and 146-column population table (exact floating-point inequality $\Delta\neq 0$ across the 128 numeric gene columns $17..144$; raw-coordinate Euclidean $L_2$ norms mix millimeter, degree, and dimensionless units and are not physical geometric distances). Rather than a tree of independent ancestors, the $7$ retained individuals form a directed acyclic graph with $7$ three-hop parent edges and $1$ fourth-hop induced edge ($8$ induced edges total):
-\begin{itemize}
-\item \textbf{Individual~174} (generation~1, $\text{fit}=1.14979$, archive crossover + mutation from parents $57$ and $61$) branches in the induced subgraph to produce both \textbf{Individual~245} (generation~2, $\text{fit}=1.15388$, archive mutation from sole parent $[174]$, $24/128$ changed numeric coordinates, raw-coordinate $L_2 = 0.604263$, $\max|\Delta|=0.361541$ across silhouette control points \code{cp01}--\code{cp26}) and, via the fourth-hop induced edge $174\to 299$, \textbf{Individual~299} (generation~2, $\text{fit}=1.14855$, archive mutation from sole parent $[174]$, $2/128$ changed coordinates: lattice depth $\Delta = -0.129784\,\mathrm{mm}$ and lattice pitch $\Delta = +0.108820\,\mathrm{mm}$, raw-coordinate $L_2 = 0.169369$).
-\item \textbf{Individual~245} mutates into \textbf{Individual~413} (generation~3, $\text{fit}=1.15296$, archive mutation, sole recorded parent $[245]$, $5/128$ changed coordinates---comet terminal width, cairn depth, handle flute depth, surface texture depth, and texture angle $\Delta=+5.371762^\circ$---with raw-coordinate $L_2=5.385480$), while \textbf{Individual~299} mutates into \textbf{Individual~392} (generation~3, $\text{fit}=1.12512$, mutation, sole recorded parent $[299]$, $8/128$ changed coordinates, raw-coordinate $L_2=4.962176$, $\max|\Delta|=4.850458$). Individual~413 does \emph{not} descend from Individual~392.
-\item \textbf{Individual~526} (generation~4, $\text{fit}=1.15563$, crossover + mutation, recorded parents $[413, 392]$) differs in $7/128$ numeric coordinates from parent~0 Individual~413 (raw-coordinate $L_2=0.724248$, $\max|\Delta|=0.648528$) and in $35/128$ coordinates from parent~1 Individual~392 (raw-coordinate $L_2=1.349493$, $\max|\Delta|=0.894505$).
-\item \textbf{Individual~1095} (generation~9, $\text{fit}=1.15727$, crossover + mutation, recorded parents $[413, 526]$) reuses ancestor Individual~413 across two distinct paths ($413\to 1095$ and $413\to 526\to 1095$), differing in $13/128$ coordinates from parent~0 Individual~413 (raw-coordinate $L_2=0.560427$, $\max|\Delta|=0.277590$) and in $14/128$ coordinates from parent~1 Individual~526 (raw-coordinate $L_2=0.815184$, $\max|\Delta|=0.648528$; $11/128$ coordinates differ from both parents simultaneously, $3$ match only $413$, and $2$ match only $526$, while column~$145$ remains \code{Ti-6Al-4V} across all $8$ edges).
-\end{itemize}
-Crucially, when Individual~1095 was admitted to strict multi-model verification, it failed the regional failure-sequence requirement, demonstrating why high search-stage fitness and recorded lineage do not establish engineering qualification.
+\subsection{Ancestor Reuse in the Retained Ledger}
+Figure~\ref{fig:lineage} uses the current generated inheritance ledger's three-hop view. Individual~1095 has recorded parents 413 and 526, and 526 itself has parents 413 and 392. Individual~413 is therefore reused along the paths $413\to1095$ and $413\to526\to1095$. The dashed $174\to299$ link is a recorded relationship retained as induced closure, distinct from the three-hop edges. The ledger preserves exact coordinate differences and parent ordinals; the main figure emphasizes relationships rather than repeating their raw mixed-unit magnitudes.
+
+This ancestry illustrates a reconstruction capability. Its focal birth's high stored search score and later assessment disagreement are separate observations, developed in Section~\ref{sec:results}; neither ancestry nor score alone establishes physical performance.

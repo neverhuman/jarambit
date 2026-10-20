@@ -1,25 +1,45 @@
-\section{Reproducibility, Supplement Crosswalk, and Publication Provenance}
+\section{Reconstruction and Artifact Access}
 \label{sec:reproducibility}
 
-\subsection{Four Distinct Reproduction Claims}
-This manuscript reconstructs documentation projections and population censuses from retained repository records; it does not rerun finite-element solvers or validate physical hardware. The standalone Rust verification package reads the frozen battery and science catalogs, three-cohort population ledgers, identity registries, and compressed generation-800 archives in read-only check mode without invoking CAD or FEM kernels. Chart reconstruction, solver replay, software-control execution, and physical replication establish different scientific claims and are kept strictly separate.
+\subsection{Four Reproduction Levels}
+\begin{table*}[t]
+\centering
+\caption{Distinct reproduction claims and their scope in this study. The publication/release receipt identifies actual command outcomes for its exact source and outputs.}
+\label{tab:reproduction-levels}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.40\textwidth}>{\raggedright\arraybackslash}p{0.35\textwidth}@{}}
+\toprule
+\textbf{Level} & \textbf{Operation} & \textbf{Evidence boundary} \\
+\midrule
+Report reconstruction & Read retained contracts/archives; check identities; regenerate reporting views and documents & The publication operation; preserves evidence inputs but writes derived/build outputs \\
+Solver replay & Rerun a bound CAD/FEM workflow under a declared environment & Not performed by the reporting rebuild \\
+Software controls & Execute named positive/negative fixtures and admission checks & Actual receipts establish executed cases; catalog definitions alone do not \\
+Physical replication & Fabricate specimens and obtain mechanical observations & Physical observations are not reported in this study \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
-\subsection{Integer-Only Reader Identities and Linked Technical Supplement}
-To keep the main narrative readable with integer-only individual and run identifiers while preserving byte-level auditability, the linked Technical Supplement (\nolinkurl{docs/paper/CROSSWALK_SUPPLEMENT.md} and \nolinkurl{docs/paper/supplement.tex}, governed by \nolinkurl{docs/paper/data/public_ids.v1.json} and \nolinkurl{docs/paper/publication.v2.json}) maps every public identifier to its internal repository alias, producer revision, file path, and SHA-256 digest:
-\begin{itemize}
-\item \textbf{Individual~2000:} Single assessed export in the automatic certification leaderboard ($1$ assessed candidate, $0$ qualified, no promoted champion; STEP solid, $90{,}000$-triangle STL, and $25{,}209$-triangle plate mesh across seven arrays; continuous CAD score $W_{\text{CAD}}=-5.570408$ via the failed-branch formula $-1.0 - 4.619108 + 0.10 s_{\mathrm{mass}}$ across refined tip torsion $0.4710$, refined plate bending $0.3531$, and quadratic solid tip $0.3307$, versus pass-branch quality $1.456983$, with $10/16$ legacy gates and $2/10$ requirement groups met). Separate from the 23-subject historical battery; the $1{,}954{,}560$ native search births in Cohort~3 lack retained Stage-2 CAD assessments.
-\item \textbf{Individual~1095 (Cohort~1 \text{Run~1}, generation~9):} Highest native search birth ($f=1.15727$) across $1{,}984$ retained births and $19$ binary event frames ($2{,}207$ events, $2{,}176$ island-slot memberships); fails strict failure-sequence verification.
-\item \textbf{Individual~2001, Individual~2007, and Individual~2008:} Separately assessed controlled exports. Individual~2001 records $W_{\text{CAD}}=-3.878704$, $G_1=0.623903$, and mass $75.382\,\mathrm{g}$ ($75.1992\,\mathrm{g}$ 3D solid), passing $11$ of $16$ legacy gates and failing $5$; Individual~2007 records $W_{\text{CAD}}=-3.964924$, $G_1=0.621634$, and mass $75.642\,\mathrm{g}$ ($75.5049\,\mathrm{g}$ 3D solid), passing $11$ of $16$ legacy gates and failing the same $5$ gates. Historical 16-gate probe Individual~2008 records $W_{\text{CAD}}=+1.7790$, $G_1=0.878210$, and mass $75.568\,\mathrm{g}$ ($75.323\,\mathrm{g}$ 3D solid) while failing grouped fatigue and edge-profile predicates.
-\item \textbf{Individual~2002 and Individual~2009 (\text{Run~31} in \text{Run~31}--\text{Run~36}):} Across generations $0,1,2$ of \text{Run~31}, cumulative archive scores are $74.167488$ (Individual~2009, $101.108\,\mathrm{g}$), $74.207299$ (Individual~2002, display loss $25.792701$, $101.139\,\mathrm{g}$, $13/26$ legacy flags), and $74.207299$, while round bests are $74.167488$, $74.207299$, and $73.608446$.
-\item \textbf{Cohort~3 Ten-Run Archive (\text{Run~2}--\text{Run~11}) and Supplement 414-Cell Battery Matrix:} Each run's $195{,}456$-row evaluation table is partitioned into twenty $\le 8\,\mathrm{MiB}$ compressed segments ($200$ segments total, compressing $3{,}811{,}896{,}749$ raw bytes into $494{,}843{,}141$ stored bytes with verified $100\%$ SHA-256 round-trip identity; earlier staging ordinals $37..46$ map one-to-one to \text{Run~2}--\text{Run~11}). The exhaustive 23-subject by 18-column historical battery matrix ($414$ cells: \BatteryPass\ passes, \BatteryFail\ failures, \BatteryBlocked\ blocked records), export-identity diagram, and contributor-support plate audit are preserved in the linked Supplement.
-\end{itemize}
+\subsection{Immutable Evidence Entry Points}
+The \href{https://github.com/neverhuman/jarambit/blob/102cdbef52b3710ce360ac34475c96ede0e33970/docs/paper/CROSSWALK_SUPPLEMENT.md}{retained technical crosswalk} provides the public-ID mappings and access to the historical matrix, export identities and original field inventory. The \href{https://github.com/neverhuman/jarambit/blob/102cdbef52b3710ce360ac34475c96ede0e33970/artifacts/versioned-evolution-archives-gen800-population-v1/index.gen800_population.sha256.json}{completed-population archive index} identifies ten run manifests and 200 compressed segments. These links identify the prior retained evidence accession; they are not a claim that the present revised manuscript was authored at that revision. The final publication receipt supplies the matching manuscript/build accession and standalone supplement access. A TeX include fragment is source, not a compiled supplement download.
 
-\subsection{Deterministic Verification Gate}
-The repository verification gate executes two read-only checks from the repository root:
+Candidate, producer, reporting-source and publication identities remain distinct. For example, a certificate hash binds content identity under its scheme; it does not prove a CAD artifact exists. The archived producer revision is preserved with its original inputs rather than replaced by the present manuscript revision. Hash equality establishes byte identity, not correctness of the original computation.
+
+\subsection{Reporting Commands and Writes}
+The reporting environment requires Rust/Cargo with the locked dependencies and complete admitted archives; document production additionally requires LuaLaTeX/IEEEtran, the declared fonts, librsvg and PDF inspection tools. From the repository root, the following existing entry points perform artifact auditing and document checks. Commands are shown at full width so flags remain copyable; actual exits/toolchain/output hashes belong to the final validation receipt.
+
+\begin{figure*}[t]
+\centering
+\begin{minipage}{0.97\textwidth}
 \begin{verbatim}
-cargo run --release --locked --manifest-path \
-  crates/paper-artifacts/Cargo.toml \
+rtk proxy cargo run --release --locked \
+  --manifest-path crates/paper-artifacts/Cargo.toml \
   --example publication_v2_audit
-make -C docs/paper check
+rtk proxy make -C docs/paper check
 \end{verbatim}
-The first command verifies all metadata contracts, decodes the binary event frames of \text{Run~1}, verifies the 57-file one-based join and zero-based negative control of Cohort~2, decompresses and checks the $200$ compressed segments ($3{,}811{,}896{,}749$ raw bytes) and scatter-cache bindings of Cohort~3, and confirms byte-for-byte freshness of all generated outputs without writing files. The second command renders the SVG figures, compiles \code{main.pdf}, verifies zero undefined references or overfull boxes, and checks the 15--20 page budget.
+\end{minipage}
+\caption{Reporting entry points, without invoking a new search, CAD export or mechanical solve. The artifact audit reads retained inputs and checks reporting consistency. The Makefile compiles figures/PDFs and writes build products.}
+\label{fig:reproduction-commands}
+\end{figure*}
+
+The artifact audit decodes admitted historical frames, checks proposal/screen joins, verifies compressed-segment and reporting bindings, and checks generated-output consistency. The document check renders figures and compiles the paper under \nolinkurl{target/ieee/paper/}, and the existing build also updates \nolinkurl{docs/paper/main.pdf}. Evidence inputs remain read only; the entire operation is not filesystem read only. The supplement target, complete input manifest, all-page visual inspection and clickable-link checks are part of the matching publication package rather than implied by the existence of source files.

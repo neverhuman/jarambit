@@ -1,0 +1,66 @@
+\section{Cohort Inventory, Overlap and Descriptive Summaries}
+\label{sec:cohort-inventory-details}
+The inventory separates original run identity, retained capture and record kind. Receipt observation times below identify accession observations, not independently verified historical OS process start/stop times. Exact raw fields and source precision remain in the immutable JSON accessions.
+
+\subsection{Coverage Sources and Status Qualifications}
+H: \nolinkurl{docs/paper/JR_EI_P1_T04_HISTORICAL_RECONCILIATION_RECEIPT_20261019.json} reconciles 1984 births, 2176 memberships, 19 event frames and selected later strict records for historical Run~1. Its 146-column CSV retains numeric coordinates/material; its event stream supplies recorded parentage. Selected geometry/fields do not imply per-birth CAD coverage.
+
+P: \nolinkurl{docs/paper/JR_EI_P1_T05_NEWER_BIRTHS_SCREENS_JOIN_RECEIPT_20261019.json} admits 57 proposal/screen file pairs across 24 directories: 3649 proposals, 2259 one-based joins and 1390 missing screens. The saved screens lack the later ultralight weighted fitness and remain a separate profile. Recorded proposal metadata and selected exports supply partial parentage/geometry coverage; no all-proposal downstream assessment is inferred.
+
+N: \nolinkurl{docs/paper/JR_EI_P1_T08_LOSSLESS_GEN800_POPULATION_ACCESSION_RECEIPT_20261019.json} admits ten complete 146-column population tables (128 numeric coordinates plus material within 146 total fields), 1,954,560 rows and 200 compressed segments. The original CSVs total 3,811,896,749 bytes; compressed segments total 494,843,141 bytes. The admission receipt records lossless identity. Parent columns are absent from these tables; other retained event streams do not by themselves establish a complete analyzed genealogy. Twenty-four separately retained STL artifacts are inventoried apart from the population payload and do not establish per-birth geometry binding. Later CAD/solid assessments and spatial arrays are not retained per birth in this accession.
+
+E: \nolinkurl{docs/paper/data/selection_receipts.v1.json} binds the editorially illustrated Individual~2000 to the automatic manifest and its original field/assessment/verification contracts. CAD and plate fields are available; full solid, strict plate, eigenvector and fatigue spatial arrays are not publication inputs. This record is separate from the historical 23-subject battery. C: the controlled-probe CAD scorecards bind Individuals~2001 and 2007; their ancestry to a particular evolutionary birth remains unestablished. In all rows, physical observations are not reported in this study. No absence is strengthened to ``not performed'' without evidence of that fact.
+
+\subsection{Current Native Directories and Earlier Summary Captures}
+P1-T06 observes its native-summary accession at 2026-10-19T17:41:30Z. P1-T08 records its population accession at 2026-10-19T18:22:30Z. Those are receipt times. The current directory universe has 18 members: ten completed generation-800 directories and eight others. The earlier eleven-file snapshot contains 17,672 summary rows, reaching generation 708. Four original identities occur in both captures. Public Runs~6--9 name those completed runs; they are not four additional replicates merely because earlier summary captures exist.
+
+\begin{table*}[t]
+\centering
+\caption{Earlier summary captures and overlap with completed runs. Exact package IDs are retained for cross-capture identity; capture hashes are in the admitted P1-T06/T08 receipts.}
+\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Original package ID} & \textbf{Earlier rows} & \textbf{Generation range} & \textbf{Later completed run} \\
+\midrule
+\nolinkurl{evo_full_20261018_xbabe2_c01} & 1900 & 0--474 & Not in completed set \\
+\nolinkurl{evo_full_20261018_xbabe2_c02} & 64 & 0--15 & Not in completed set \\
+\nolinkurl{evo_full_20261018_xbabe2_c03} & 72 & 0--17 & Not in completed set \\
+\nolinkurl{evo_full_20261018_xbabe2_c04} & 16 & 0--3 & Not in completed set \\
+\nolinkurl{evo_full_20261018_xbabe2_c05} & 2132 & 0--532 & Not in completed set \\
+\nolinkurl{evo_full_20261018_xbabe2_c06} & 908 & 0--226 & Not in completed set \\
+\nolinkurl{evo_full_20261018_xbabe3_c01} & 2836 & 0--708 & Run~6 \\
+\nolinkurl{evo_full_20261018_xbabe3_c02} & 2792 & 0--697 & Run~7 \\
+\nolinkurl{evo_full_20261018_xbabe3_c03} & 2748 & 0--686 & Run~8 \\
+\nolinkurl{evo_full_20261018_xbabe3_c04} & 2792 & 0--697 & Run~9 \\
+\nolinkurl{evo_full_20261018_xbabe3_c05} & 1412 & 0--352 & Not in completed set \\
+\bottomrule
+\end{tabular}
+\end{table*}
+The eight other current directories are \code{xbabe1/c02}, \code{xbabe2/c01--c06} and \code{xbabe3/c05}; their retained summaries have differing endpoints. The nine aborted crescent attempts are separately admitted by P1-T03: seven retain 216 live-history rows in total and two retain no CSV rows. Aborted island attempts and their proposal files are another record universe; they are not added to these nine crescent attempts or the completed-population denominator.
+
+\subsection{Ten-Run Descriptive Summary}
+The run is the unit for these descriptive comparisons. Sample standard deviations use $s^2=\sum_{r=1}^{10}(x_r-\bar x)^2/9$; no confidence interval or independence of births is asserted. Native fitness includes contextual novelty, so maxima summarize retained preference under each run's context rather than a common physical-performance measurement.
+
+\begin{table*}[t]
+\centering
+\caption{Completed native runs. Each has 195,456 births and 3204 generation/island summary rows. The original records retain additional distributions and exact precision.}
+\label{tab:cohort3-runs}
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Run} & \textbf{Search-legal births} & \textbf{Maximum stored fitness} & \textbf{Generation-800 legal median} \\
+\midrule
+Run~2 & 74874 & 1.1327 & -0.2462 \\
+Run~3 & 77011 & 1.1089 & -0.2211 \\
+Run~4 & 77396 & 1.1380 & -0.1933 \\
+Run~5 & 77625 & 1.1440 & -0.2225 \\
+Run~6 & 70278 & 1.1156 & -0.2534 \\
+Run~7 & 74777 & 1.1228 & -0.2023 \\
+Run~8 & 71550 & 1.1108 & -0.2351 \\
+Run~9 & 76284 & 1.1408 & -0.2072 \\
+Run~10 & 74309 & 1.1186 & -0.2302 \\
+Run~11 & 80132 & 1.1177 & -0.2610 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+The six weighted-reporting files contain fifteen summary rows and do not retain their underlying round populations/CAD. Individual~2002's registry category \code{RetainedExport} and hashes are preserved as original metadata; that category is not evidence that its export geometry or later assessment is present. Its reporting vector remains separate from Individual~2000's response fields. Original registry/contract contradictions require a scoped additive correction rather than silent historical rewriting.

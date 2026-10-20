@@ -1,45 +1,37 @@
 \section{Background and Related Research}
-\subsection{Executable CAD Representations}
-DeepCAD represents a shape as a sequence of CAD operations and learns a Transformer-based model for autoencoding and generation \cite{deepcad}. Text2CAD conditions sequential parametric CAD generation on natural-language descriptions and evaluates visual, parametric and geometric outcomes \cite{text2cad}. These works make construction history part of the generated representation. Jarambit's retained crescent model instead decodes a fixed numerical schema into geometry. It does not learn a general CAD-operation language, and this study supplies no common benchmark against either method.
+\label{sec:background}
+\subsection{Computational Design and Representation}
+Computational design already includes mature approaches to changing structural form. Sigmund and Maute review density, level-set, evolutionary, and other topology-optimization approaches \cite{sigmundmaute}. Jarambit's documented native schema instead varies an application-specific parameterization under a fixed decoder. Its coordinate count is not evidence of an unrestricted topology search or a newly discovered representation language.
 
-This difference matters when interpreting a genome. More numerical parameters do not necessarily express a new topology or construction strategy. A decoder revision can change the represented family without changing vector length. Representation identity therefore includes schema and decoder, not just gene count. The prospective agent research in Section IX concerns assistance with that representation; it is distinct from the implemented search over its parameters.
+DeepCAD learns CAD-operation sequences for autoencoding and generation \cite{deepcad}; Text2CAD generates parametric CAD sequences from text and reports visual, parametric, and geometric evaluations \cite{text2cad}. These representation choices differ from Jarambit's numeric schema. None supplies a common mechanical benchmark for the present study.
 
-\subsection{Evolutionary Engineering and Diversity}
-Evolutionary engineering predates language-model assistance. Lohn \emph{et al.}'s 2003 ST5 antenna report describes two evolutionary representations, fabricated prototypes and comparison with a hand-designed antenna \cite{st5}. Flight qualification was still pending in that report. Its relevance is the connection between representation, computational assessment and physical comparison, rather than evidence that Jarambit has achieved the same experimental maturity.
+Evolutionary engineering also predates language-model assistance. The cited 2003 ST5 report describes evolved antenna representations, fabricated prototypes, and comparison with a hand-designed antenna; flight qualification was still pending in that report \cite{st5}. MAP-Elites retains representatives across user-defined behavioral dimensions \cite{mapelites}. Such archive selection differs from retaining all observed births, and archive occupancy alone does not measure population diversity. Jarambit's cohort-specific archive and score definitions therefore remain part of its reported context.
 
-MAP-Elites organizes retained solutions by behavioral descriptors, preserving alternatives in different niches \cite{mapelites}. Scalar preference and diversity retention answer different questions: which candidate is preferred, and which alternatives remain available? An archive is selected by construction; its distribution is not the distribution of all proposals. Jarambit contains a quality-diversity lane, but the retained cohorts do not establish a common algorithm or descriptor regime across every wave.
+\subsection{Research Provenance and Artifact Access}
+The closest context for this study's evidence links is research provenance. PROV-DM distinguishes entities, activities, derivations, responsible agents, and collections \cite{provdm}. These concepts help explain why a candidate record, a search activity, an exported geometry, and a reporting derivative require distinct identities. Jarambit's retained links are compared on these dimensions; no PROV conformance or general interchange implementation is established here.
 
-\begin{table}[t]
-\caption{Related methods and their reported evaluation scope. These studies are context, not a common benchmark or a performance ranking.}
+The FAIR principles address discovery, access, interoperability, and reuse of research objects \cite{fair}. Software citation principles additionally distinguish persistent identification, access, and specificity of the software version used \cite{softwarecitation}. A hash identifies bytes; meaningful reconstruction also requires retrievable artifacts and interpretation of their types, revisions, and relationships. This study's contribution is a concrete retrospective account of those relationships and gaps, rather than a new general provenance model.
+
+We cite the inspected Jarambit publication baseline as a source snapshot \cite{repo}. It is distinct from the cohort producers and from the final manuscript release accession (Section~\ref{sec:reproducibility}). A methods publication, a source snapshot, an executed binary, and a generated figure likewise denote different objects.
+
+\begin{table*}[t]
+\caption{Context by representation, search, evidence, and validation scope. Rows describe distinct research purposes rather than a performance ranking.}
 \label{tab:related}
-\centering\footnotesize
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}p{.20\columnwidth}p{.36\columnwidth}p{.36\columnwidth}@{}}
+\centering
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{@{}p{.15\textwidth}p{.19\textwidth}p{.18\textwidth}p{.21\textwidth}p{.19\textwidth}@{}}
 \toprule
-Study & Representation/proposal & Evaluation scope \\
+Context & Representation & Search or transformation & Evidence emphasized & Validation scope \\
 \midrule
-DeepCAD & Learned CAD-operation sequences & Autoencoding and shape generation \\
-Text2CAD & Text-conditioned CAD sequences & Visual, parametric and geometric metrics \\
-ST5 report & Evolved antenna encodings & Simulation, fabrication and prototype comparison \\
-FunSearch & Language-model program proposals & Mathematical/algorithmic evaluators \\
-This study & Fixed CAD schema; retained search & Retrospective rankings and numerical-assessment evidence \\
+Topology optimization & Varies by formulation & Numerical design updates & Structural objectives and constraints & Method- and model-specific \\
+DeepCAD / Text2CAD & CAD-operation sequences & Learned generation & Reconstruction or generated CAD & Reported geometric/parametric evaluations \\
+PROV / FAIR & Research objects and relations & Derivation and stewardship & Identity, relationships, and access & Provenance/access context, not mechanics \\
+This study & Fixed CAD schema and candidate identities & Retained evolutionary and assessment records & Coverage, ancestry, scores, and selected numerical observations & Retrospective computational evidence \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
-\subsection{Agents as Proposal Mechanisms}
-FunSearch separates language-model program proposals from execution-based evaluation in mathematical and algorithmic settings \cite{funsearch}. Text2CAD demonstrates text-conditioned CAD generation, but does not by that fact establish autonomous mechanical validation. Together these studies motivate a question about proposal interfaces and evaluators, not a demonstrated agent advantage in Jarambit. Table~\ref{tab:related} distinguishes their evaluation scopes.
+\subsection{Numerical Credibility and Visual Interpretation}
+NASA's models-and-simulations standard supplies context for separating credibility questions; compliance is not claimed \cite{nasa}. The scikit-fem and DOLFINx methods references identify finite-element software roles, while execution provenance must identify the versions and model inputs actually used \cite{skfem,dolfinx}. Selected observable agreement on a shared mesh and admissibility of a grid-refinement estimate answer different questions (Section~\ref{sec:verification}).
 
-An engineering agent could assist with schema documentation, source navigation and typed representation proposals. A proposed grammar or decoder revision also changes the evaluator's domain. Such a proposal needs review and independent assessment before its outcomes can be compared with the original representation. Section IX develops this prospective research boundary.
-
-\subsection{Verification, Validation, and Identity}
-Code verification examines implementation against reference problems; solution verification concerns numerical error for a specified model and observable; validation concerns agreement with the physical system in a declared domain. NASA's models-and-simulations standard supplies credibility context, without a claim of compliance here \cite{nasa}.
-
-The assessment uses scikit-fem for finite-element assembly and a separate DOLFINx path \cite{skfem,dolfinx}. The DOLFINx methods reference describes the software architecture; the archived records identify the specific 0.9.0 environment. A software citation does not certify this model or establish that its outputs were independently reproduced. Matched solvers can share model and discretization errors, which makes their agreement a different observation from convergence or validation.
-
-Content hashes bind bytes, while model identity, execution records and observable definitions supply their meaning. This distinction is essential when geometry, scorecards and fields originate from different revisions.
-
-\subsection{Additive Manufacturing as Opportunity and Constraint}
-NIST's additive-manufacturing test artifact addresses geometric characterization through manufactured features and measurements \cite{nistartifact}. It supports separating geometric expressiveness, nominal CAD precision and measured process capability. Additive manufacturing may make more complex forms practical to investigate; digital detail alone does not establish as-built accuracy.
-
-This study's contribution lies between these research areas: it reconstructs how retained search rankings relate to subsequent numerical-assessment evidence in one executable CAD system. Learned CAD generation, agent advantage and manufacturing accuracy remain separate empirical questions.
+Quantitative views also need explicit units, transformations, masks, and legends. Crameri \emph{et al.} explain how uneven color gradients can introduce visual distinctions absent from the data \cite{crameri}. A percentile summary therefore requires its own interpretation and cannot inherit the physical units of its component fields. The paper's spatial views are reporting devices, not a separately validated visualization method.

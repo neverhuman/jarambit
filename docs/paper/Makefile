@@ -1,41 +1,60 @@
 ROOT := ../..
 OUT := $(abspath $(ROOT)/target/ieee/paper)
 export CARGO_TARGET_DIR := $(abspath $(ROOT)/target)
-.PHONY: all artifacts check clean
-all: artifacts
+CARGO ?= cargo
+GEN_FIGURES := population plate-fields verification assessment battery-matrix weighted-runs reference
+POP_FIGURES := population-latest inheritance
+HERO_SVG := drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg
+CROP_SVG := drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.svg
+HERO_PNG := drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.png
+CROP_PNG := drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.png
+GEN_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(GEN_FIGURES)))
+POP_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(POP_FIGURES)))
+TEX_ENV = TEXINPUTS="$(OUT):" SOURCE_DATE_EPOCH=1792365255 FORCE_SOURCE_DATE=1 TZ=UTC
+.PHONY: all artifacts figures pdfs main supplement audit check clean
+all: artifacts pdfs
+# Reporting reconstruction only; no CAD, FEM, search, tests or CI.
+artifacts:
+	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts
+figures: $(GEN_PNGS) $(POP_PNGS) figures/fig1_hero_blender_v2.png $(CROP_PNG)
+$(OUT):
 	mkdir -p $(OUT)
-	rsvg-convert -w 3600 -o $(OUT)/fitness.png generated/fitness.svg
-	rsvg-convert -w 3600 -o $(OUT)/population.png generated/population.svg
-	rsvg-convert -w 2400 -o $(OUT)/cover-evolution.png generated/cover-evolution.svg
-	rsvg-convert -w 3600 -o $(OUT)/plate-fields.png generated/plate-fields.svg
-	rsvg-convert -w 3600 -o $(OUT)/verification.png generated/verification.svg
-	rsvg-convert -w 3600 -o $(OUT)/assessment.png generated/assessment.svg
-	rsvg-convert -w 3600 -o $(OUT)/battery-matrix.png generated/battery-matrix.svg
-	rsvg-convert -w 3600 -o $(OUT)/lineage.png generated/lineage.svg
-	rsvg-convert -w 3600 -o $(OUT)/export-identity.png generated/export-identity.svg
-	rsvg-convert -w 3600 -o $(OUT)/weighted-runs.png generated/weighted-runs.svg
-	rsvg-convert -w 3600 -o $(OUT)/reference.png generated/reference.svg
-	rsvg-convert -w 3600 -o $(OUT)/population-births.png figures/population-births.svg
-	rsvg-convert -w 3600 -o $(OUT)/population-membership.png figures/population-membership.svg
-	rsvg-convert -w 3600 -o $(OUT)/population-newer.png figures/population-newer.svg
-	rsvg-convert -w 3600 -o $(OUT)/population-latest.png figures/population-latest.svg
-	rsvg-convert -w 3600 -o $(OUT)/fitness-progress.png figures/fitness-progress.svg
-	rsvg-convert -w 3600 -o $(OUT)/inheritance.png figures/inheritance.svg
-	TEXINPUTS="$(OUT):$${TEXINPUTS:-}" SOURCE_DATE_EPOCH=1792365255 FORCE_SOURCE_DATE=1 TZ=UTC lualatex -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) main.tex > $(OUT)/build-pass1.log
-	TEXINPUTS="$(OUT):$${TEXINPUTS:-}" SOURCE_DATE_EPOCH=1792365255 FORCE_SOURCE_DATE=1 TZ=UTC lualatex -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) main.tex > $(OUT)/build-pass2.log
-	cp -f $(OUT)/main.pdf main.pdf
-	shasum -a 256 main.tex references.tex sections/*.tex generated/*.json generated/*.svg generated/*.tex generated/*.md generated/population/*.json *-inputs.v1.json figures/*.svg figures/*.png > $(OUT)/SOURCE_SHA256SUMS
-	find figures/v2 -maxdepth 1 -type f -print0 | sort -z | xargs -0 shasum -a 256 >> $(OUT)/SOURCE_SHA256SUMS
-	shasum -a 256 $(OUT)/main.pdf $(OUT)/fitness.png $(OUT)/population.png $(OUT)/cover-evolution.png $(OUT)/plate-fields.png $(OUT)/verification.png $(OUT)/assessment.png $(OUT)/battery-matrix.png $(OUT)/lineage.png $(OUT)/export-identity.png $(OUT)/weighted-runs.png $(OUT)/reference.png $(OUT)/population-births.png $(OUT)/population-membership.png $(OUT)/population-newer.png $(OUT)/population-latest.png $(OUT)/fitness-progress.png $(OUT)/inheritance.png > $(OUT)/OUTPUT_SHA256SUMS
+$(GEN_PNGS): $(OUT)/%.png: generated/%.svg | $(OUT)
+	rsvg-convert -w 3600 -o $@ $<
+$(POP_PNGS): $(OUT)/%.png: figures/%.svg | $(OUT)
+	rsvg-convert -w 3600 -o $@ $<
+$(HERO_PNG): $(HERO_SVG)
+	rsvg-convert -w 3200 -h 1360 -o $@ $<
+figures/fig1_hero_blender_v2.png: $(HERO_PNG)
+	cp $< $@
+$(CROP_PNG): $(CROP_SVG)
+	rsvg-convert -w 3600 -o $@ $<
+# Main and supplement share cross-document labels.
+pdfs: figures
+	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) main.tex > $(OUT)/main-pass1.log
+	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) main.tex > $(OUT)/main-pass2.log
+	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) supplement-main.tex > $(OUT)/supplement-pass1.log
+	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) supplement-main.tex > $(OUT)/supplement-pass2.log
+	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) main.tex > $(OUT)/main-pass3.log
+	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) main.tex > $(OUT)/main-pass4.log
+	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) supplement-main.tex > $(OUT)/supplement-pass3.log
+	cp $(OUT)/main.pdf main.pdf
+	cp $(OUT)/supplement-main.pdf supplement.pdf
+	{ sed -n 's/^INPUT //p' $(OUT)/main.fls $(OUT)/supplement-main.fls; printf '%s\n' Makefile reproduce.sh $(HERO_SVG) $(CROP_SVG) publication.v2.json figure-semantics.v1.json claim-evidence.v1.json generated/manifest.json; for name in $(GEN_FIGURES); do printf 'generated/%s.svg\n' "$$name"; done; for name in $(POP_FIGURES); do printf 'figures/%s.svg\n' "$$name"; done; printf '%s\n' *-inputs.v1.json data/public_ids.v1.json data/score_profiles.v1.json data/selection_receipts.v1.json; find $(ROOT)/crates/paper-artifacts/src -maxdepth 1 -name '*.rs' -type f; printf '%s\n' $(ROOT)/crates/paper-artifacts/Cargo.toml $(ROOT)/crates/paper-artifacts/Cargo.lock; } | LC_ALL=C sort -u > $(OUT)/INPUT_FILES
+	while IFS= read -r input; do test -f "$$input" || exit 1; sha256sum "$$input" || exit; done < $(OUT)/INPUT_FILES > $(OUT)/SOURCE_SHA256SUMS
+	sha256sum main.pdf supplement.pdf $(OUT)/*.png figures/fig1_hero_blender_v2.png drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.png drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.png > $(OUT)/OUTPUT_SHA256SUMS
 	lualatex --version > $(OUT)/toolchain.txt
 	rsvg-convert --version >> $(OUT)/toolchain.txt
 	kpsewhich IEEEtran.cls >> $(OUT)/toolchain.txt
-	pdfinfo $(OUT)/main.pdf > $(OUT)/pdfinfo.txt
-artifacts:
-	cd $(ROOT) && cargo run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
-	cd $(ROOT) && cargo run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit
-check: all
-	! rg 'Overfull|LaTeX Warning: (Reference|Citation).*undefined' $(OUT)/main.log
+	pdfinfo main.pdf > $(OUT)/pdfinfo.txt
+	pdfinfo supplement.pdf > $(OUT)/supplement-pdfinfo.txt
+main supplement: pdfs
+# Final RR5 validation only; implementation builds use artifacts/pdf targets.
+audit:
+	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
+	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit
+check: audit pdfs
+	! rg 'Overfull|LaTeX Warning: (Reference|Citation).*undefined' $(OUT)/main.log $(OUT)/supplement-main.log
 	awk '/^Pages:/ { if ($$2 < 15 || $$2 > 20) exit 1; found=1 } END { if (!found) exit 1 }' $(OUT)/pdfinfo.txt
 clean:
 	@echo 'Build artifacts remain under target/ieee/paper for inspection; no automatic deletion.'

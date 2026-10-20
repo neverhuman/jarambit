@@ -116,7 +116,11 @@ pub fn read_bounded_file(path: &Path, max_bytes: u64) -> Result<Vec<u8>> {
     let meta = fs::symlink_metadata(path)
         .map_err(|e| format!("corpus: missing or unreadable file {}: {e}", path.display()))?;
     if meta.file_type().is_symlink() || !meta.file_type().is_file() {
-        return Err(format!("corpus: non-regular or symlink file refused: {}", path.display()).into());
+        return Err(format!(
+            "corpus: non-regular or symlink file refused: {}",
+            path.display()
+        )
+        .into());
     }
     let len = meta.len();
     if len == 0 || len > max_bytes {
@@ -173,8 +177,7 @@ pub fn parse_jev1_frames(bytes: &[u8]) -> Result<Vec<Value>> {
         if compressed_len == 0 || (compressed_len as u64) > HARD_SEGMENT_CEILING_BYTES {
             return Err("corpus: JEV1 compressed frame length outside ceiling".into());
         }
-        let expected_fnv1a =
-            u64::from_le_bytes(bytes[offset + 8..offset + 16].try_into().unwrap());
+        let expected_fnv1a = u64::from_le_bytes(bytes[offset + 8..offset + 16].try_into().unwrap());
         let payload_start = offset + 16;
         let payload_end = payload_start + compressed_len;
         if payload_end > bytes.len() {
@@ -246,7 +249,9 @@ pub fn read_and_reconcile_historical_w282(repo_root: &Path) -> Result<Value> {
         || jevl_bytes.len() != 64_162
         || hex_bytes(&jevl_bytes[..16]) != HISTORICAL_JEVL_FIRST16_HEX
     {
-        return Err("corpus: historical evidence.jevl SHA-256, header, or byte length mismatch".into());
+        return Err(
+            "corpus: historical evidence.jevl SHA-256, header, or byte length mismatch".into(),
+        );
     }
     let frames = parse_jev1_frames(&jevl_bytes)?;
     if frames.len() != 19 {
@@ -301,7 +306,9 @@ pub fn read_and_reconcile_historical_w282(repo_root: &Path) -> Result<Value> {
                 "elite" => {
                     let id = ev["id"].as_u64().ok_or("corpus: missing elite id")?;
                     let gen = ev["gen"].as_u64().ok_or("corpus: missing elite gen")?;
-                    let island = ev["island"].as_u64().ok_or("corpus: missing elite island")?;
+                    let island = ev["island"]
+                        .as_u64()
+                        .ok_or("corpus: missing elite island")?;
                     elite_reappearances += 1;
                     *slot_occurrences.entry((gen, island, id)).or_default() += 1;
                 }
@@ -340,7 +347,9 @@ pub fn read_and_reconcile_historical_w282(repo_root: &Path) -> Result<Value> {
     }
     let csv_str = std::str::from_utf8(&csv_bytes)?;
     let mut csv_lines = csv_str.lines();
-    let header = csv_lines.next().ok_or("corpus: empty historical all_evals.csv")?;
+    let header = csv_lines
+        .next()
+        .ok_or("corpus: empty historical all_evals.csv")?;
     let header_cols: Vec<&str> = header.split(',').collect();
     if header_cols.len() != 146 || header_cols[17] != "cp00" || header_cols[145] != "material" {
         return Err(format!(
@@ -653,17 +662,17 @@ pub fn populate_gen800_scatter_grid(repo_root: &Path) -> Result<Value> {
     let mut below_detail_window_points = 0u64;
     let mut excluded_or_invalid_points = 0u64;
 
-    let mut on_row = |_run_idx: usize, gen: u64, fit: f64, legal: bool| -> Result<()> {
+    let mut on_row = |_run_idx: usize, _id: u64, gen: u64, fit: f64, legal: bool| -> Result<()> {
         if gen > 800 || !(-215.0..=1.20).contains(&fit) {
             excluded_or_invalid_points += 1;
-            return Err(format!(
-                "corpus: out-of-bounds native scatter point gen={gen}, fit={fit}"
-            )
-            .into());
+            return Err(
+                format!("corpus: out-of-bounds native scatter point gen={gen}, fit={fit}").into(),
+            );
         }
         let g = gen as usize;
         let norm_full = ((fit.asinh() - ymin_asinh) / (ymax_asinh - ymin_asinh)).clamp(0.0, 1.0);
-        let yb_full = ((norm_full * (full_y_bins - 1) as f64).round() as usize).min(full_y_bins - 1);
+        let yb_full =
+            ((norm_full * (full_y_bins - 1) as f64).round() as usize).min(full_y_bins - 1);
         if legal {
             full_legal[g][yb_full] += 1;
         } else {
@@ -672,8 +681,8 @@ pub fn populate_gen800_scatter_grid(repo_root: &Path) -> Result<Value> {
 
         if fit >= detail_min {
             let norm_det = ((fit - detail_min) / (detail_max - detail_min)).clamp(0.0, 1.0);
-            let yb_det =
-                1 + ((norm_det * (detail_y_bins - 2) as f64).round() as usize).min(detail_y_bins - 2);
+            let yb_det = 1
+                + ((norm_det * (detail_y_bins - 2) as f64).round() as usize).min(detail_y_bins - 2);
             if legal {
                 detail_legal[g][yb_det] += 1;
             } else {
@@ -773,7 +782,10 @@ pub fn populate_gen800_scatter_grid(repo_root: &Path) -> Result<Value> {
         repo_root,
         "docs/paper/generated/population/gen800_scatter_cache.v1.json",
     )?;
-    fs::write(&cache_path, serde_json::to_string_pretty(&cache_doc)? + "\n")?;
+    fs::write(
+        &cache_path,
+        serde_json::to_string_pretty(&cache_doc)? + "\n",
+    )?;
     Ok(json!({
         "schema": cache_doc["schema"],
         "admitted_index_sha256": cache_doc["admitted_index_sha256"],
@@ -819,9 +831,13 @@ pub fn validate_gen800_scatter_cache(
         || fv["unknown_band_points"].as_u64() != Some(0)
         || fv["excluded_or_invalid_points"].as_u64() != Some(0)
         || fv["tuple_schema"].as_str()
-            != Some("[generation_0_to_800, y_asinh_bin_0_to_439, legal_true_count, legal_false_count]")
+            != Some(
+                "[generation_0_to_800, y_asinh_bin_0_to_439, legal_true_count, legal_false_count]",
+            )
     {
-        return Err("corpus: scatter cache full_asinh_view metadata or rendered_raster_px mismatch".into());
+        return Err(
+            "corpus: scatter cache full_asinh_view metadata or rendered_raster_px mismatch".into(),
+        );
     }
 
     let dv = &scatter_cache["upper_score_detail_view"];
@@ -855,14 +871,24 @@ pub fn validate_gen800_scatter_cache(
 
     let (mut f_leg, mut f_pen) = (0u64, 0u64);
     for b in full_bins {
-        let arr = b.as_array().ok_or("corpus: non-array tuple in full_pixels_801x440")?;
+        let arr = b
+            .as_array()
+            .ok_or("corpus: non-array tuple in full_pixels_801x440")?;
         if arr.len() != 4 {
             return Err("corpus: invalid tuple width in full_pixels_801x440".into());
         }
-        let g = arr[0].as_u64().ok_or("corpus: invalid gen in full_pixels_801x440")?;
-        let yb = arr[1].as_u64().ok_or("corpus: invalid y_bin in full_pixels_801x440")?;
-        let l = arr[2].as_u64().ok_or("corpus: invalid legal_count in full_pixels_801x440")?;
-        let p = arr[3].as_u64().ok_or("corpus: invalid penalty_count in full_pixels_801x440")?;
+        let g = arr[0]
+            .as_u64()
+            .ok_or("corpus: invalid gen in full_pixels_801x440")?;
+        let yb = arr[1]
+            .as_u64()
+            .ok_or("corpus: invalid y_bin in full_pixels_801x440")?;
+        let l = arr[2]
+            .as_u64()
+            .ok_or("corpus: invalid legal_count in full_pixels_801x440")?;
+        let p = arr[3]
+            .as_u64()
+            .ok_or("corpus: invalid penalty_count in full_pixels_801x440")?;
         if g > 800 || yb >= 440 || (l == 0 && p == 0) {
             return Err("corpus: out-of-range or zero bin in full_pixels_801x440".into());
         }
@@ -872,14 +898,24 @@ pub fn validate_gen800_scatter_cache(
 
     let (mut d_leg, mut d_pen, mut d_win, mut d_tail) = (0u64, 0u64, 0u64, 0u64);
     for b in detail_bins {
-        let arr = b.as_array().ok_or("corpus: non-array tuple in detail_pixels_801x260")?;
+        let arr = b
+            .as_array()
+            .ok_or("corpus: non-array tuple in detail_pixels_801x260")?;
         if arr.len() != 4 {
             return Err("corpus: invalid tuple width in detail_pixels_801x260".into());
         }
-        let g = arr[0].as_u64().ok_or("corpus: invalid gen in detail_pixels_801x260")?;
-        let yb = arr[1].as_u64().ok_or("corpus: invalid y_bin in detail_pixels_801x260")?;
-        let l = arr[2].as_u64().ok_or("corpus: invalid legal_count in detail_pixels_801x260")?;
-        let p = arr[3].as_u64().ok_or("corpus: invalid penalty_count in detail_pixels_801x260")?;
+        let g = arr[0]
+            .as_u64()
+            .ok_or("corpus: invalid gen in detail_pixels_801x260")?;
+        let yb = arr[1]
+            .as_u64()
+            .ok_or("corpus: invalid y_bin in detail_pixels_801x260")?;
+        let l = arr[2]
+            .as_u64()
+            .ok_or("corpus: invalid legal_count in detail_pixels_801x260")?;
+        let p = arr[3]
+            .as_u64()
+            .ok_or("corpus: invalid penalty_count in detail_pixels_801x260")?;
         if g > 800 || yb >= 260 || (l == 0 && p == 0) {
             return Err("corpus: out-of-range or zero bin in detail_pixels_801x260".into());
         }
@@ -959,11 +995,13 @@ pub fn verify_and_decode_gen800_archive(
     )
 }
 
+/// Callback arguments are archive run ordinal, original CSV id, generation, fit, legal.
+/// IDs remain scoped to their run; row and source-byte admission is unchanged.
 pub fn verify_and_decode_gen800_archive_with_callback(
     archive_root: &Path,
     expected_index_sha256: Option<&str>,
     max_segments_per_run: Option<usize>,
-    mut row_callback: Option<&mut dyn FnMut(usize, u64, f64, bool) -> Result<()>>,
+    mut row_callback: Option<&mut dyn FnMut(usize, u64, u64, f64, bool) -> Result<()>>,
 ) -> Result<Value> {
     let idx_path = resolve_safe_relpath(archive_root, "index.gen800_population.sha256.json")?;
     let idx_bytes = read_bounded_file(&idx_path, HARD_SEGMENT_CEILING_BYTES)?;
@@ -993,7 +1031,10 @@ pub fn verify_and_decode_gen800_archive_with_callback(
             .as_u64()
             .ok_or("corpus: missing bytes in index files")?;
         let sha = sha256_hex(&entry["sha256"], "files[].sha256")?;
-        if indexed_files.insert(rel.to_string(), (bytes, sha)).is_some() {
+        if indexed_files
+            .insert(rel.to_string(), (bytes, sha))
+            .is_some()
+        {
             return Err(format!("corpus: duplicate indexed relative_path {rel}").into());
         }
     }
@@ -1066,8 +1107,8 @@ pub fn verify_and_decode_gen800_archive_with_callback(
             }
         }
 
-        let full_run_decode = max_segments_per_run.is_none()
-            || max_segments_per_run.unwrap() >= segs.len();
+        let full_run_decode =
+            max_segments_per_run.is_none() || max_segments_per_run.unwrap() >= segs.len();
         let limit = max_segments_per_run.unwrap_or(segs.len()).min(segs.len());
 
         let mut run_concat_hasher = Sha256::new();
@@ -1110,10 +1151,9 @@ pub fn verify_and_decode_gen800_archive_with_callback(
             let decomp_len = decomp.len() as u64;
             let decomp_sha = sha256_bytes(&decomp);
             if decomp_len != exp_logical_bytes || decomp_sha != exp_logical_sha {
-                return Err(format!(
-                    "corpus: decompressed payload hash/bytes mismatch in {srel}"
-                )
-                .into());
+                return Err(
+                    format!("corpus: decompressed payload hash/bytes mismatch in {srel}").into(),
+                );
             }
 
             if full_run_decode {
@@ -1137,9 +1177,7 @@ pub fn verify_and_decode_gen800_archive_with_callback(
                     || hcols[17] != "cp00"
                     || hcols[145] != "material"
                 {
-                    return Err(
-                        format!("corpus: invalid 146-column header in {srel}").into(),
-                    );
+                    return Err(format!("corpus: invalid 146-column header in {srel}").into());
                 }
             }
 
@@ -1196,7 +1234,7 @@ pub fn verify_and_decode_gen800_archive_with_callback(
                     run_legal_true += 1;
                 }
                 if let Some(cb) = row_callback.as_deref_mut() {
-                    cb(run_idx, gen, fit, legal)?;
+                    cb(run_idx, id, gen, fit, legal)?;
                 }
                 seg_rows += 1;
             }
@@ -1218,8 +1256,10 @@ pub fn verify_and_decode_gen800_archive_with_callback(
         if full_run_decode {
             let actual_concat_sha = format!("{:x}", run_concat_hasher.finalize());
             let exp_orig_sha = sha256_hex(&run["original_csv_sha256"], "original_csv_sha256")?;
-            let exp_decomp_sha =
-                sha256_hex(&run["decompressed_concat_sha256"], "decompressed_concat_sha256")?;
+            let exp_decomp_sha = sha256_hex(
+                &run["decompressed_concat_sha256"],
+                "decompressed_concat_sha256",
+            )?;
             let exp_orig_bytes = run["original_csv_bytes"]
                 .as_u64()
                 .ok_or("corpus: missing original_csv_bytes")?;
@@ -1234,8 +1274,7 @@ pub fn verify_and_decode_gen800_archive_with_callback(
             }
             if run_rows != run["row_count"].as_u64().unwrap_or(0)
                 || seen_ids.len() as u64 != run["unique_id_count"].as_u64().unwrap_or(0)
-                || seen_gens.len() as u64
-                    != run["distinct_generations_count"].as_u64().unwrap_or(0)
+                || seen_gens.len() as u64 != run["distinct_generations_count"].as_u64().unwrap_or(0)
                 || run_legal_true != run["legal_true_count"].as_u64().unwrap_or(0)
             {
                 return Err(format!(
@@ -1443,8 +1482,7 @@ pub fn validate_gen800_population_accession(pop_index: &Value) -> Result<Value> 
         || custody["v1_second_observed_original"]["sha256"].as_str()
             != Some(V1_SECOND_OBSERVED_SHA256)
         || custody["v1_second_observed_original"]["bytes"].as_u64() != Some(288_343)
-        || custody["v1_current_remote_handoff"]["sha256"].as_str()
-            != Some(V1_CURRENT_REMOTE_SHA256)
+        || custody["v1_current_remote_handoff"]["sha256"].as_str() != Some(V1_CURRENT_REMOTE_SHA256)
         || custody["v2_frozen_handoff"]["sha256"].as_str() != Some(V2_FROZEN_HANDOFF_SHA256)
         || custody["v2_additive_erratum"]["sha256"].as_str() != Some(V2_ERRATUM_SHA256)
     {
@@ -1496,8 +1534,10 @@ pub fn validate_gen800_population_accession(pop_index: &Value) -> Result<Value> 
             return Err("corpus: duplicate gen800 package_id".into());
         }
         let orig_sha = sha256_hex(&run["original_csv_sha256"], "original_csv_sha256")?;
-        let decomp_sha =
-            sha256_hex(&run["decompressed_concat_sha256"], "decompressed_concat_sha256")?;
+        let decomp_sha = sha256_hex(
+            &run["decompressed_concat_sha256"],
+            "decompressed_concat_sha256",
+        )?;
         let orig_bytes = run["original_csv_bytes"]
             .as_u64()
             .ok_or("corpus: missing original_csv_bytes")?;
@@ -1510,7 +1550,9 @@ pub fn validate_gen800_population_accession(pop_index: &Value) -> Result<Value> 
         {
             return Err("corpus: lossless round-trip digest/byte verification failed".into());
         }
-        let rows = run["row_count"].as_u64().ok_or("corpus: missing row_count")?;
+        let rows = run["row_count"]
+            .as_u64()
+            .ok_or("corpus: missing row_count")?;
         let uniq = run["unique_id_count"]
             .as_u64()
             .ok_or("corpus: missing unique_id_count")?;
@@ -1704,7 +1746,7 @@ pub fn validate_repair_receipt_file_bindings(repo_root: &Path, receipt: &Value) 
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use super::*;
     use std::sync::atomic::{AtomicU64, Ordering};
 
@@ -1723,7 +1765,11 @@ mod tests {
         while offset < payload.len() {
             let rem = payload.len() - offset;
             let blk_len = rem.min(131_072);
-            let last_bit = if offset + blk_len == payload.len() { 1u32 } else { 0u32 };
+            let last_bit = if offset + blk_len == payload.len() {
+                1u32
+            } else {
+                0u32
+            };
             // Block_Header: Last_Block (bit 0) | Block_Type=0 (Raw_Block, bits 1..2) | Block_Size << 3
             let hdr = last_bit | ((blk_len as u32) << 3);
             out.push((hdr & 0xFF) as u8);
@@ -1758,7 +1804,9 @@ mod tests {
         for i in 0..120 {
             cols.push(format!("cp{i:02}"));
         }
-        for name in ["th0", "th1", "th2", "r_b", "r_s", "k2", "k3", "k4", "material"] {
+        for name in [
+            "th0", "th1", "th2", "r_b", "r_s", "k2", "k3", "k4", "material",
+        ] {
             cols.push(name.to_string());
         }
         assert_eq!(cols.len(), 146);
@@ -1793,14 +1841,14 @@ mod tests {
         cols.join(",")
     }
 
-    struct TempArchive(PathBuf);
+    pub(crate) struct TempArchive(pub(crate) PathBuf);
     impl Drop for TempArchive {
         fn drop(&mut self) {
             let _ = fs::remove_dir_all(&self.0);
         }
     }
 
-    fn build_minimal_801gen_archive(row_width_delta: isize) -> (TempArchive, String) {
+    pub(crate) fn build_minimal_801gen_archive(row_width_delta: isize) -> (TempArchive, String) {
         let root = std::env::temp_dir().join(format!(
             "jarambit-gen800-test-{}-{}",
             std::process::id(),
@@ -1810,7 +1858,13 @@ mod tests {
 
         let mut csv = make_valid_header_146() + "\n";
         for g in 0..=800u64 {
-            csv.push_str(&make_row_146(g, g, 1.05 + (g as f64) * 0.0001, true, row_width_delta));
+            csv.push_str(&make_row_146(
+                g,
+                g,
+                1.05 + (g as f64) * 0.0001,
+                true,
+                row_width_delta,
+            ));
             csv.push('\n');
         }
         let csv_bytes = csv.into_bytes();
@@ -1920,6 +1974,32 @@ mod tests {
     }
 
     #[test]
+    fn row_callback_preserves_original_ids_with_their_run_namespace() {
+        let (arch, index_sha) = build_minimal_801gen_archive(0);
+        let mut keys = BTreeSet::new();
+        let mut rows = 0u64;
+        let mut on_row =
+            |run: usize, id: u64, generation: u64, fit: f64, legal: bool| -> Result<()> {
+                assert_eq!(id, generation);
+                assert!((fit - (1.05 + generation as f64 * 0.0001)).abs() < 1e-10);
+                assert!(legal);
+                assert!(keys.insert((run, id)));
+                rows += 1;
+                Ok(())
+            };
+        verify_and_decode_gen800_archive_with_callback(
+            &arch.0,
+            Some(&index_sha),
+            None,
+            Some(&mut on_row),
+        )
+        .unwrap();
+        assert_eq!(rows, 8010);
+        assert!(keys.contains(&(0, 0)) && keys.contains(&(9, 0)));
+        assert!(keys.contains(&(0, 800)) && keys.contains(&(9, 800)));
+    }
+
+    #[test]
     fn jr_r1_1_missing_or_tampered_segment_is_refused() {
         let (arch, idx_sha) = build_minimal_801gen_archive(0);
         assert!(verify_and_decode_gen800_archive(&arch.0, Some(&idx_sha), None).is_ok());
@@ -1995,7 +2075,10 @@ mod tests {
         let err = verify_and_decode_gen800_archive(&arch.0, Some(&stale_sha), None)
             .unwrap_err()
             .to_string();
-        assert!(err.contains("stale or mismatched gen800 index sha256"), "{err}");
+        assert!(
+            err.contains("stale or mismatched gen800 index sha256"),
+            "{err}"
+        );
     }
 
     #[test]
@@ -2046,11 +2129,14 @@ mod tests {
     #[test]
     fn sc183x_repair_receipt_binding_validator_rejects_erroneous_v1_and_accepts_repaired() {
         let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let v1_err_path = root.join("docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_V1_OBSERVED_ERRONEOUS_20261019.json");
+        let v1_err_path = root.join(
+            "docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_V1_OBSERVED_ERRONEOUS_20261019.json",
+        );
         let v1_err: Value = serde_json::from_slice(&fs::read(v1_err_path).unwrap()).unwrap();
         assert!(validate_repair_receipt_file_bindings(&root, &v1_err).is_err());
 
-        let repaired_path = root.join("docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_20261019.json");
+        let repaired_path =
+            root.join("docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_20261019.json");
         let repaired: Value = serde_json::from_slice(&fs::read(repaired_path).unwrap()).unwrap();
         assert!(validate_repair_receipt_file_bindings(&root, &repaired).is_ok());
     }

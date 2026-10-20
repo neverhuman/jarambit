@@ -1,0 +1,65 @@
+{
+  "contributor_count_q": {
+    "3": 75,
+    "4": 14800,
+    "5": 10334
+  },
+  "lineage_contract_preserved": true,
+  "new_solver_execution": false,
+  "panels": [
+    {
+      "achieved_whole_domain_fraction": 1.0,
+      "active_denominator_cells": 10334,
+      "coverage_interpretation": "rectangular physical source-domain integral before decorative PIP; not visible ink",
+      "crop_domain_posed_mm": [
+        -28.0,
+        -26.0,
+        84.0,
+        23.0
+      ],
+      "crop_numerator": 14.173756017399967,
+      "panel": "A",
+      "selector": "/mesh/ring",
+      "units": "MPa/N",
+      "whole_domain_denominator": 14.173756017399967
+    },
+    {
+      "achieved_whole_domain_fraction": 0.6451738975904697,
+      "active_denominator_cells": 25209,
+      "coverage_interpretation": "rectangular physical source-domain integral before decorative PIP; not visible ink",
+      "crop_domain_posed_mm": [
+        166.0,
+        4.0,
+        198.5,
+        37.0
+      ],
+      "crop_numerator": 76.87800792873186,
+      "panel": "B",
+      "selector": "/mesh/twist",
+      "units": "MPa/(N mm)",
+      "whole_domain_denominator": 119.15858378004454
+    },
+    {
+      "achieved_whole_domain_fraction": 1.0,
+      "active_denominator_cells": 25209,
+      "coverage_interpretation": "rectangular physical source-domain integral before decorative PIP; not visible ink",
+      "crop_domain_posed_mm": [
+        -20.0,
+        -26.0,
+        196.0,
+        36.0
+      ],
+      "crop_numerator": 900.4388699722552,
+      "panel": "C",
+      "selector": "/mesh/pry",
+      "units": "MPa/N",
+      "whole_domain_denominator": 900.4388699722552
+    }
+  ],
+  "producer_revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
+  "schema": "jarambit.crop_semantics_projection.v1",
+  "scope": "Reporting/source-domain projection; original values/masks unchanged; PNG/PDF visual acceptance separate.",
+  "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
+  "source_sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
+  "source_svg_sha256": "d6cd7e52409f1f4a0dc2e05538442104a78657af313230d7ebcdda90888feda2"
+}
