@@ -10,6 +10,10 @@ Evolutionary engineering also predates language-model assistance. The cited 2003
 \subsection{Research Provenance and Artifact Access}
 The closest context for this study's evidence links is research provenance. PROV-DM distinguishes entities, activities, derivations, responsible agents, and collections \cite{provdm}. These concepts help explain why a candidate record, a search activity, an exported geometry, and a reporting derivative require distinct identities. Jarambit's retained links are compared on these dimensions; no PROV conformance or general interchange implementation is established here.
 
+Implemented provenance systems provide a closer comparison than metadata principles alone. AiiDA stores calculations, workflows, inputs, and outputs in a traversable provenance graph and supports automated computational workflows \cite{aiida}. Workflow Run RO-Crate packages workflow-execution provenance with associated inputs, outputs, and code across execution systems \cite{workflowrunrocrate}. These systems already address provenance capture and exchange.
+
+Jarambit contributes a retrospective case analysis at the boundary between records and published engineering claims: which candidate and observation stage a quantity describes, which denominator a count uses, and which evidence remains unavailable. The present study does not benchmark its packaging against AiiDA or RO-Crate, or establish superior capture, interoperability, or reader comprehension.
+
 The FAIR principles address discovery, access, interoperability, and reuse of research objects \cite{fair}. Software citation principles additionally distinguish persistent identification, access, and specificity of the software version used \cite{softwarecitation}. A hash identifies bytes; meaningful reconstruction also requires retrievable artifacts and interpretation of their types, revisions, and relationships. This study's contribution is a concrete retrospective account of those relationships and gaps, rather than a new general provenance model.
 
 We cite the inspected Jarambit publication baseline as a source snapshot \cite{repo}. It is distinct from the cohort producers and from the final manuscript release accession (Section~\ref{sec:reproducibility}). A methods publication, a source snapshot, an executed binary, and a generated figure likewise denote different objects.
@@ -25,7 +29,7 @@ Context & Representation & Search or transformation & Evidence emphasized & Vali
 \midrule
 Topology optimization & Varies by formulation & Numerical design updates & Structural objectives and constraints & Method- and model-specific \\
 DeepCAD / Text2CAD & CAD-operation sequences & Learned generation & Reconstruction or generated CAD & Reported geometric/parametric evaluations \\
-PROV / FAIR & Research objects and relations & Derivation and stewardship & Identity, relationships, and access & Provenance/access context, not mechanics \\
+Provenance systems & Workflow objects and relations & AiiDA capture; RO-Crate packaging & Execution history, artifacts, and derivation & Provenance/exchange scope, not physical validation \\
 This study & Fixed CAD schema and candidate identities & Retained evolutionary and assessment records & Coverage, ancestry, scores, and selected numerical observations & Retrospective computational evidence \\
 \bottomrule
 \end{tabular}
