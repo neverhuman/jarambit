@@ -1,0 +1,41 @@
+{
+  "schema": "jarambit.population_story.display_contract.v1",
+  "authority": "Retained-data presentation only; no scoring or selection rule change",
+  "full_all_record_companion": "docs/paper/figures/population-latest.svg",
+  "required_all_record_numeric_operations": 1958803,
+  "required_unknown_nonnumeric": 1390,
+  "native_source": "docs/paper/data/gen800_population_density_and_traces.v1.json",
+  "native_run_public_ids": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "generation_addressing": "Admitted dense generations0..800: array indices are explicit positions in the named source array; verify range/count/hash joins before constructing each pointer.",
+  "public_identity": "public_run_id and source-bound package, not legacy reader_label/run_number",
+  "views": [
+    "asinh",
+    "positive-affine",
+    "positive-gap"
+  ],
+  "positive_display_floor": 1e-06,
+  "positive_scale": "Full compatible original run range; constant/singleton1original-unit fallback; overflow-factorized when necessary.",
+  "gap_reference": "One fixed final retained best of this own compatible run; never a running-best reference.",
+  "generation_display": "log10(g+1) for positive views, linear for asinh; generation0 retained",
+  "leader": "Use current raw-stream retained leader ties/order; representative index0 preserves that admitted source order.",
+  "token_authority": "Exact numeric serialization of generated retained-leaders JSON, not asserted to be original CSV spelling.",
+  "median_authority": "Preserved admitted full-population gen_median_fit summary; no legal-only substitution. Not independently recomputed by story renderer.",
+  "unknown_values": "Remain typed missing, never assigned epsilon or zero.",
+  "field_or_score_values_modified": false,
+  "global_comparable_champion": null,
+  "minimum_font_pt": 8.5,
+  "target_font_pt": 9,
+  "placement": "Full text width only; actual rendered print review required",
+  "view_selection": "Bounded comparison; no superiority or selected main variant claimed before actual print-size readback."
+}
