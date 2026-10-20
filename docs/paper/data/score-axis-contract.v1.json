@@ -1,0 +1,26 @@
+{
+  "schema": "jarambit.score_axis_contract.v1",
+  "purpose": "Display-only retained original observations; no score recomputation or selection on a transform.",
+  "predeclared_before_reporting_generation": true,
+  "linear_rule": "constant, or all one sign and max(abs(endpoint))/min(abs(endpoint))<=4",
+  "otherwise": "asinh(y/L)",
+  "linear_threshold_rule": "empirical_Q25_nonzero_abs_v1",
+  "L_definition": "Sort nonzero absolute original observations; select floor(0.25*(n-1)); finite zeros remain in every full-range plot.",
+  "inverse": "L*sinh(t)",
+  "full_domain": "actual original extrema; every numeric observation painted once including overlaps; invalid/outside point is error",
+  "unknown_observations": "nonnumeric count only, neverzero",
+  "ticks": "5 evenly spaced transformed positions with inverse in original units; constant has1; generation ticks are original integer coordinates",
+  "detail_quantiles": [
+    0.01,
+    0.99
+  ],
+  "quantile_definition": "sort original numeric observations; floor(p*(n-1)); all values equal to boundary are inside",
+  "tail_counts": "strictly below, inclusive inside, strictly above; sum equals full original count",
+  "detail_is_additional": true,
+  "full_range_companion": "docs/paper/figures/population-latest.svg",
+  "leader_direction": "argmax for original higher-is-better fitness, argmin for original lower-is-better screen deficit; all exact ties retained",
+  "no_global_comparable_champion": true,
+  "no_subsampling_jitter_hidden_clipping_or_class_majority_substitution": true,
+  "minimum_effective_label_pt": 8.5,
+  "target_effective_label_pt": 9.0
+}

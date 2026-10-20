@@ -1,0 +1,143 @@
+//! Display-axis rules for retained numeric observations, independent of selection.
+use serde_json::{json, Value};
+type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
+
+#[derive(Clone, Copy, Debug)]
+pub(crate) enum ScoreAxis {
+    Linear,
+    Asinh { linear_threshold: f64 },
+}
+
+impl ScoreAxis {
+    pub fn derive(values: &[f64]) -> Result<Self> {
+        let mut sorted = values.to_vec();
+        if sorted.is_empty() || sorted.iter().any(|v| !v.is_finite()) {
+            return Err("score axis: empty or nonfinite source".into());
+        }
+        sorted.sort_by(f64::total_cmp);
+        let (low, high) = (sorted[0], sorted[sorted.len() - 1]);
+        if low == high
+            || (low * high > 0. && low.abs().max(high.abs()) / low.abs().min(high.abs()) <= 4.)
+        {
+            return Ok(Self::Linear);
+        }
+        let mut nonzero: Vec<_> = sorted.iter().map(|v| v.abs()).filter(|v| *v > 0.).collect();
+        nonzero.sort_by(f64::total_cmp);
+        let threshold = quantile_sorted(&nonzero, 0.25).unwrap_or(1.);
+        if !threshold.is_finite() || threshold <= 0. {
+            return Err("score axis: invalid robust linear threshold".into());
+        }
+        Ok(Self::Asinh {
+            linear_threshold: threshold,
+        })
+    }
+
+    pub fn transform(self, value: f64) -> f64 {
+        match self {
+            Self::Linear => value,
+            Self::Asinh { linear_threshold } => {
+                let ratio = value / linear_threshold;
+                if ratio.is_finite() {
+                    ratio.asinh()
+                } else {
+                    value.signum() * (value.abs().ln() - linear_threshold.ln() + 2_f64.ln())
+                }
+            }
+        }
+    }
+
+    pub fn inverse(self, value: f64) -> f64 {
+        match self {
+            Self::Linear => value,
+            Self::Asinh { linear_threshold } => {
+                if value.abs() < 20. {
+                    value.sinh() * linear_threshold
+                } else {
+                    value.signum() * (value.abs() + linear_threshold.ln() - 2_f64.ln()).exp()
+                }
+            }
+        }
+    }
+
+    pub fn ticks(self, domain: [f64; 2]) -> Vec<f64> {
+        if domain[0] == domain[1] {
+            return vec![domain[0]];
+        }
+        (0..5)
+            .map(|i| {
+                self.inverse(
+                    self.transform(domain[0])
+                        + i as f64 / 4. * (self.transform(domain[1]) - self.transform(domain[0])),
+                )
+            })
+            .collect()
+    }
+
+    pub fn metadata(self) -> Value {
+        match self {
+            Self::Linear => {
+                json!({"transform":"linear","inverse":"identity","rule":"constant, or one-sign endpoint absolute ratio<=4"})
+            }
+            Self::Asinh { linear_threshold } => {
+                json!({"transform":"asinh(y/L)","inverse":"L*sinh(t)","linear_threshold_L":linear_threshold,"L_rule":"empirical Q25 of nonzero absolute original observations; floor(p*(n-1)); zero excluded only from L estimation, never from points"})
+            }
+        }
+    }
+}
+
+pub(crate) fn quantile_sorted(sorted: &[f64], probability: f64) -> Option<f64> {
+    if sorted.is_empty() {
+        None
+    } else {
+        Some(sorted[(probability * (sorted.len() - 1) as f64).floor() as usize])
+    }
+}
+
+pub(crate) fn detail_bounds(values: &[f64]) -> Result<[f64; 2]> {
+    if values.is_empty() || values.iter().any(|v| !v.is_finite()) {
+        return Err("score axis: invalid detail source".into());
+    }
+    let mut sorted = values.to_vec();
+    sorted.sort_by(f64::total_cmp);
+    Ok([
+        quantile_sorted(&sorted, 0.01).unwrap(),
+        quantile_sorted(&sorted, 0.99).unwrap(),
+    ])
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn signed_axis_preserves_order_zero_and_inverse() {
+        let axis = ScoreAxis::derive(&[-100., -2., 0., 1., 3.]).unwrap();
+        assert_eq!(axis.transform(0.), 0.);
+        for value in [-100., -1., 0., 1., 100.] {
+            assert!((axis.inverse(axis.transform(value)) - value).abs() < 1e-10);
+        }
+        let points = [-100., -1., 0., 1., 100.].map(|v| axis.transform(v));
+        assert!(points.windows(2).all(|v| v[0] < v[1]));
+        assert!(ScoreAxis::derive(&[f64::INFINITY]).is_err());
+        let extreme = ScoreAxis::Asinh {
+            linear_threshold: 1e-300,
+        };
+        assert!(extreme.transform(1e300).is_finite());
+        assert!((extreme.inverse(extreme.transform(1e300)) / 1e300 - 1.).abs() < 1e-12);
+    }
+
+    #[test]
+    fn quantiles_keep_ties_constants_and_single_observations() {
+        assert_eq!(detail_bounds(&[3.]).unwrap(), [3., 3.]);
+        assert_eq!(detail_bounds(&[2., 2., 2.]).unwrap(), [2., 2.]);
+        let mut values = vec![5.; 100];
+        values[0] = -100.;
+        values[99] = 100.;
+        assert_eq!(detail_bounds(&values).unwrap(), [-100., 5.]);
+        assert!(detail_bounds(&[]).is_err());
+        assert!(matches!(
+            ScoreAxis::derive(&[2., 3., 4.]).unwrap(),
+            ScoreAxis::Linear
+        ));
+    }
+}

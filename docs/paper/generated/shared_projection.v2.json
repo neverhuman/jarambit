@@ -134,12 +134,12 @@
     }
   },
   "figures_sha256": {
-    "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg": "7cfbfe6b1dbe275838ff59b09a8b12239d193b3d835e24c6b6934eceb2cc6dfe",
+    "docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg": "5bcf0b044576bf77708867aa28116329fda45e5866db6cc8cd4e59fb9f850a71",
     "docs/paper/figures/fitness-progress.svg": "f0147dc401f9e6caa801edb61a1bebd3c945830ae3abe8e93fd98764e3a22207",
     "docs/paper/figures/inheritance-details.svg": "669b5c70e4521f6c68e7652e885584d0c4d88562fb2266e3fcbf5a946d079a25",
     "docs/paper/figures/inheritance.svg": "abf568cbf39ce5b7b330bf14794d82fd5f46a7860f376fbc44f23d25c17f2488",
     "docs/paper/figures/population-births.svg": "7bfb9f1d0f71972dedae621baf9ff7487e8ecabf30779a26e55d5c104ed9035b",
-    "docs/paper/figures/population-latest.svg": "f810b0c6a05ab56f5173cfc28f7a8432243cef515c61aa7da981986a31d78241",
+    "docs/paper/figures/population-latest.svg": "bedc134f7bbfa2c56b16f2f3e85f0898d4118f79f5ca654b621a27169677a963",
     "docs/paper/figures/population-membership.svg": "0d872c623ec134a91359ff20ec1bbe81df2e712801760ffbba0802e01a635d12",
     "docs/paper/figures/population-newer.svg": "eb6d5cce390c6b1847ec60e8e3234b9be0d28965c218953d43e7638557db59fd"
   },
