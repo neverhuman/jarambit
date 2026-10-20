@@ -17,7 +17,7 @@
   "erroneous_v1_receipt_preserved_at": "docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_V1_OBSERVED_ERRONEOUS_20261019.json",
   "source_and_binary_bindings": {
     "crates/paper-artifacts/src/corpus.rs": "2b1cba1c136d6950d7f2efe4ac362224e4d57b16247bb0b463a097bbb332576e",
-    "crates/paper-artifacts/src/population.rs": "ab11886a8158e2aa7f09fc8d9daecf1a62892d7b32f333d07e6ccbb2a625f617",
+    "crates/paper-artifacts/src/population.rs": "abf9fb7193f44f30534df87af886ad3ddc5a7882f9076a5c28fa2e53048c26fd",
     "crates/paper-artifacts/src/publication.rs": "96af0475bc82201e1df0ef1022d4bc452b164d0242f18665ba80a2d379107849",
     "crates/paper-artifacts/src/lib.rs": "6624a5b5b769ad38cad27d455767b6453aa2c0c3704b9b992e285be80eb6dc99",
     "crates/paper-artifacts/examples/publication_v2_audit.rs": "25184c01ce3ed129fca33aff0cb7a03ad9fbc00b7372c15fe16376227b46aaa0",
@@ -40,7 +40,7 @@
     "crates/paper-artifacts/src/weighted_runs.rs": "5e4fc448e725a673a7fdb03a047259a5993e2e342f4a7ec9bfcfbef8d59e5b85",
     "crates/paper-artifacts/examples/verify_review_origin.rs": "4537ab767bb8a650484fe24b36297960f729f77df8a1773d9304b6d896413d86",
     "crates/paper-artifacts/examples/fixtures/verify-review-origin-neutral.v1.json": "f60b34fb9a2da2939ee1e6dc3915c97718dadb888ff2b610bf281eaf5d5ea808",
-    "current_executed_reporting_binary_sha256": "3b7c03057caa2ff6bcdd52118db211a99c37cfd6b6df3711a2f2d5188db40a6e"
+    "current_executed_reporting_binary_sha256": "ac4af6926a62f364a8699fd559b67cb6ae65293bf7b4fd58ee93934350b6a4ea"
   },
   "sc_dec_183p_and_183s_fixes_verified": {
     "1_jev1_binary_framing": {
@@ -129,8 +129,8 @@
     "docs/paper/figures/inheritance.svg": "abf568cbf39ce5b7b330bf14794d82fd5f46a7860f376fbc44f23d25c17f2488",
     "docs/paper/generated/shared_projection.v2.json": "1bb3b0b48b61ff1e349148393fe01b3ebed0cae15681190eddc1be049709c696",
     "docs/paper/generated/overview.md": "6282f2ec0367045688ccf626e80f7f1ba9c6f1f72c5b778011639ef61c0e8d05",
-    "docs/paper/generated/manifest.json": "9ebc2cc09edc8605c6a0eefe109c11a97838810a73c43cace584a1956f0f7926",
-    "docs/paper/publication.v2.json": "f1b271d272ad8e016fe00389133ea0846c54ce114cdca399b26a9cd3d3b54edf",
+    "docs/paper/generated/manifest.json": "2eb28ab088596d74911f45c792635ff776ea4c66e583dfb9c7b8fc8fcd029d95",
+    "docs/paper/publication.v2.json": "d7d3a293d422972bba47fb4f58c05cd129c49417579b772a836b157a714e0eb8",
     "docs/paper/generated/population/gen800_scatter_cache.v1.json": "4eabe5a581dcb655b413857bfb3c28741070dc390b3ca71d744aa51f58e7a493",
     "docs/paper/generated/battery-matrix.svg": "831ae3ffa57df6f8bcd5a26f16d0ca745e00da2bc279f4bd9bc13e881665f669",
     "docs/paper/generated/native-runs-2-3.svg": "4725fa63985bbd80230411f3138b44f3c3fc51395b21c29caa10ada2c5ec103c",
@@ -150,7 +150,7 @@
     "docs/paper/generated/plate-fields.svg.manifest.json": "dfad53bf6c43c6969fb5475e312695fc102051a3078fc666dc0e8415c81b723e",
     "docs/paper/generated/population/score-axis.v1.json": "1e40a2dbd40480fc8d6673e5f341e10fd74aa5ff4f251f4133b1e03d7f5f1803",
     "docs/paper/generated/population/inheritance.json": "2af73e7eb28ed859314b98f5d47b1029b2f6366ba8ad321305a2e43d833cdfa9",
-    "docs/paper/generated/hero-mesh-on.svg": "5cb9c1bf37997c9a09df214bb938a81989460153c1a033e248fdf8ed3c5a28b3",
+    "docs/paper/generated/hero-mesh-on.svg": "ea415356e339918ed3927a9f6c5986e499a862a0a277913b0230d1d219dd620f",
     "docs/paper/generated/battery.tex": "08076ef743f6aa223afc97ea96c2ee5407e3c37c7489eb72fa2f67c224608413",
     "docs/paper/generated/reference.json": "f6323031a1b3019db4c2f3b7d39a976aeab0df7d47e151b295383604716f5092",
     "docs/paper/generated/verification.json": "293465c8751203a691b1994eb87f6977d4d6884828a226eb0518c4d088764e1c",
@@ -169,7 +169,7 @@
     "docs/paper/generated/population.svg": "cbfa7fa60d8e3432f88f1e938cd271f45909c88c6cca9d1d6d1e8786cc1a44ca",
     "docs/paper/generated/hero-support.svg": "2fd600725ac1c8b06867c286ee6c0559c35bc063df2b00fe661cc7097ea9ccba",
     "docs/paper/generated/population/retained-leaders.v1.json": "a00ffd38b65cc6e6120a83330d631c39ca6f919b1ef1d038903c15bda7694d7e",
-    "docs/paper/generated/display-composite.v1.json": "653ab17a9a24c3185aff19df4a2d434b0d50d12e3b9e402124d02519f12a1837",
+    "docs/paper/generated/display-composite.v1.json": "1bc18670645e53f93c98668a53df5531e025d701012b7cd1d36d544188b0f9be",
     "docs/paper/generated/export-identity.json": "31922d147d249fa88203742edbf28c1115fe4a54276a99f8ef993d3f27d97bd2",
     "docs/paper/generated/test-field-roster.v1.tsv": "fefc751025c9f3b8c7f4391cf17449fe1da1265b08fd5fc4ad9549d115b96638",
     "docs/paper/generated/verification.svg": "a84d788cf0940ea9b3ce27b5e6e18d4d2b40aa089e4db39944209586c910c2e7",
@@ -196,17 +196,17 @@
     "exit_code": 0
   },
   "integration_rebinding": {
-    "checked_utc": "2026-10-20T10:03:25.908333+00:00",
-    "previous_receipt_sha256": "c56cc5145a9fc4014dfd6c0f35a2109e1e519f39f2e3a1b88b2bfbc54a87515d",
-    "previous_receipt_commit": "d3ba882d554fe14ae1954e06f479ff277eff03b2",
-    "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_D3BA882D_20261020.json",
+    "checked_utc": "2026-10-20T10:32:20.594320+00:00",
+    "previous_receipt_sha256": "c1e2bcad8340530bcf25320c6ffc8313cd562d9102575a48597a56503b4da482",
+    "previous_receipt_commit": "2a3b1a6991fdd3a69596127ab9dcffaec4582095",
+    "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2A3B1A6_20261020.json",
     "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
     "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
-    "reporting_source_commit": "b004c9ca55852cd2d253189407f4fc4e23468c7c",
-    "actual_generation_receipt_sha256": "a17fbe38eecd834be8d038d8514f1b4a851ae4262997c0b84c456be1af4a85df",
-    "actual_generation_log_sha256": "dd015db074dcaf57034e9e0c6c22821ac5ebfa130028b24420d687d73f36f2b8",
-    "executed_reporting_binary_sha256": "3b7c03057caa2ff6bcdd52118db211a99c37cfd6b6df3711a2f2d5188db40a6e",
-    "reason": "Renew active operational source/output bindings after actual V4 retained-data reporting generation, including historical-score/A4/default qualifications and exact fractional weights. Preserve exact D3/510713/102C receipts, all original science/custody constants and every historical execution claim. Expanded bound current reporting source and generated closure is actual on-disk hashing, not inherited test or final-origin PASS. No suites/guard/audit/FEM/search/CI ran; final receiving-main/source/artifact freeze and controls are separate."
+    "reporting_source_commit": "7070b1a8b319f55033fb03e25be0c494545d1621",
+    "actual_generation_receipt_sha256": "1fde487f7fc93c38c97e32a1348d8874eebb1fd5cab8b437499c831354e61a03",
+    "actual_generation_log_sha256": "6dedb7ac1576084b2ebb6892697a38e7b8c79ba96c311b5bd55bff457ddd83ca",
+    "executed_reporting_binary_sha256": "ac4af6926a62f364a8699fd559b67cb6ae65293bf7b4fd58ee93934350b6a4ea",
+    "reason": "Root-authorized canonical narrow successor: identify optional CAD STL tessellation overlay and regenerate only retained reporting derivatives. Defaulthero, scientific values/geometry/masks/scorers/weights/solver and Root detached2a3b D1 unchanged. Preserve exact prior2a3bactive receipt and every historical observation/testclaim. This source/output rebinding is not test, realorigin, CI or finalapproval; affected Root controls remain separate."
   },
   "integration_rebinding_history": [
     {
@@ -242,6 +242,19 @@
       "actual_generation_log_sha256": "3ee9d6a75929705c27f74c0f54607c969abc28ec62a94233d7eac86dd9d0f302",
       "executed_reporting_binary_sha256": "8944aebd08aacd5c9ef1e5c68cce35628585c54752c81619151d65c8bfa4a3a4",
       "reason": "Renew active reporting source/output bindings after the independently reviewed missing-aware display and axis changes. Preserve exact receiving510713 and original102C receipts, all source observations/custody constants and all historical execution claims. Current validation is separately head-bound; this rebinding is not an inherited PASS."
+    },
+    {
+      "checked_utc": "2026-10-20T10:03:25.908333+00:00",
+      "previous_receipt_sha256": "c56cc5145a9fc4014dfd6c0f35a2109e1e519f39f2e3a1b88b2bfbc54a87515d",
+      "previous_receipt_commit": "d3ba882d554fe14ae1954e06f479ff277eff03b2",
+      "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_D3BA882D_20261020.json",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "b004c9ca55852cd2d253189407f4fc4e23468c7c",
+      "actual_generation_receipt_sha256": "a17fbe38eecd834be8d038d8514f1b4a851ae4262997c0b84c456be1af4a85df",
+      "actual_generation_log_sha256": "dd015db074dcaf57034e9e0c6c22821ac5ebfa130028b24420d687d73f36f2b8",
+      "executed_reporting_binary_sha256": "3b7c03057caa2ff6bcdd52118db211a99c37cfd6b6df3711a2f2d5188db40a6e",
+      "reason": "Renew active operational source/output bindings after actual V4 retained-data reporting generation, including historical-score/A4/default qualifications and exact fractional weights. Preserve exact D3/510713/102C receipts, all original science/custody constants and every historical execution claim. Expanded bound current reporting source and generated closure is actual on-disk hashing, not inherited test or final-origin PASS. No suites/guard/audit/FEM/search/CI ran; final receiving-main/source/artifact freeze and controls are separate."
     }
   ],
   "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. The e67 successor86-test attempt failed84passed/2failed and remains preserved. Corrected successor validation is recorded separately with its exact head."
