@@ -6,14 +6,14 @@ The ten completed native runs (Runs~2--11) retain $1{,}954{,}560$ evaluated birt
 
 Figure~\ref{fig:population-latest} keeps the native population separate from the historical $1984$ births and the intermediate campaign's $2259$ numeric screens. The $1390$ proposals lacking screens have no invented score. Within the native archive, $754{,}236$ births ($38.59\%$) are search-legal; $610{,}051$ of those have negative contextual fitness. Score sign consequently cannot stand in for legality. Per-run legal counts range from $70{,}278$ to $80{,}132$, with mean $75{,}424$ and sample standard deviation $2937$ births. Run-maximum stored fitness ranges from $1.1089$ to $1.1440$ (mean $1.1250$, sample standard deviation $0.01285$). These are descriptive summaries of ten selected runs; related births do not provide millions of independent replicates.
 
-% Integration gate: retain this per-record wording only after packet V supplies
-% actual source-streamed point-operation/count/extrema proof for the final figure.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{population-latest.png}
-\caption{Separate score profiles for $1{,}954{,}560$ native births, $1984$ historical births and $2259$ numeric screens. Every numeric record receives a point operation; marks can overlap. Vertical score axes use asinh with ticks in original values. The coverage note discloses $1390$ unscreened proposals without plotting an invented score. Zero numeric exclusions concerns only this admitted figure universe; other campaigns, aborted attempts and unretained records remain outside it.}
+\caption{Full-range overview of separate score profiles: $1{,}954{,}560$ native births, $1984$ historical births and $2259$ numeric screens. Every admitted numeric record receives a point operation ($1{,}958{,}803$ total); overlapping marks do not encode density. The pooled native and historical vertical axes use $\operatorname{asinh}(y/L)$ with $L=0.4054$ and $0.29066$, respectively: the empirical 25th percentile of nonzero absolute scores in each profile. Zeros remain plotted. Screening is linear; ticks show original score values and the profiles remain incomparable. The coverage note discloses $1390$ unscreened proposals without inventing scores. Zero numeric exclusions applies only to this full-range admitted universe; other campaigns, aborted attempts and unretained records remain outside it.}
 \label{fig:population-latest}
 \end{figure*}
+
+Supplement Figure~\ref{S-fig:population-detail} adds empirical 1st--99th percentile detail panels with declared bounds and strict-tail counts. Those panels contain $1{,}919{,}651$ point operations and omit the numeric tails, so the overview's zero-exclusion claim does not apply to them. Separate per-run point and retained-best context views for Runs~2--11 reuse the same retained births, without connecting different runs into a shared trajectory. Their axes use each run's declared $L$ and key, rather than the pooled overview scale. These additional views add no observations or evidence of physical convergence.
 
 \subsection{Recorded Ancestry Enables a Later-Assessment Disagreement to Be Inspected}
 The historical Run~1 retains $1984$ births, complete recorded parent links, $2176$ island-slot memberships and $12$ migration events. The genealogy exposes reuse of ancestors rather than a simple branching tree. Its saved FEM-status categories distinguish $1455$ complete records from $529$ not evaluated; the latter are not failed solves.

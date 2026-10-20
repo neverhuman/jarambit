@@ -1,0 +1,128 @@
+\section{Display Support and Additional Score Views}
+\label{sec:display-score-views}
+
+\subsection{Complete Inventory and Spatial Availability}
+The complete row-level table is retained as
+\nolinkurl{docs/paper/generated/test-field-roster.v1.tsv}, with its source-bound
+JSON contract in \nolinkurl{docs/paper/data/test-field-roster.v1.json}.
+Every row gives its original key, scientific quantity, observation stage,
+availability and exclusion or missing-field reason. The JSON additionally
+binds source observations, hashes, domains, masks and dependencies.
+Table~\ref{tab:display-roster-families} reconciles its universe. Inventory
+membership does not imply an independent test, performed solve or spatial
+response. Scalar-only and incompatible-domain rows remain in the table and
+contribute missing values at every display cell; they are never broadcast.
+
+\begin{table}[ht]
+\centering
+\caption{Inventory reconciliation for Individual~2000's display. The four
+eligible response channels are metadata addenda, not four extra catalog tests.}
+\label{tab:display-roster-families}
+\begin{tabular}{@{}lrp{0.63\textwidth}@{}}
+\toprule
+\textbf{Family} & \textbf{Rows} & \textbf{Spatial interpretation} \\
+\midrule
+Legacy G16 & 16 & Retained predicates/scalars; related single-mesh fields do not duplicate threshold predicates. \\
+Grouped RSV2 & 10 & Grouped or scalar findings; no additional registered response arrays. \\
+Embedded battery & 18 & Software, geometry, scalar or local-result records; no additional plate-response arrays. \\
+Channel metadata & 8 & Four eligible response channels; two dependent derived companions; two geometry quantities. \\
+\midrule
+Total metadata & 52 & $44$ catalog rows plus $8$ channel rows, not $52$ independent tests. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{hero-support.png}
+\caption{Available-channel support for the selected full-range hero, before
+surface projection and decorative overlays. The denominator is the complete
+positive source-triangle area, $3816.272554\,\mathrm{mm}^2$. Support is $q=3$
+on $14{,}875$ cells ($56.4190\%$ of source area), where the original ring
+mask excludes that channel, and $q=4$ on $10{,}334$ cells ($43.5810\%$).
+No source cells have $q=0,1,2$. Coverage is $q/4$, not $q/44$ or $q/52$;
+these are source-area fractions, not visible surface-ink fractions.}
+\label{fig:display-support}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{hero-contrast-preview.png}
+\caption{Additional contrast preview, rather than the selected main rendering.
+The predeclared source-area-weighted 5th--95th percentile index window is
+$[0.1057475260,0.8621273953]$. Below it are $1433$ source cells over
+$190.720950\,\mathrm{mm}^2$; above it are $1199$ cells over
+$190.751611\,\mathrm{mm}^2$. Each tail is approximately $5.0\%$ of original
+\emph{source area}, not $5.0\%$ of cell count. Only this preview saturates
+those tails. Main Figure~\ref{M-fig:cover} retains the full $[0,1]$ key with
+mesh off. Colors are display coordinates, not physical units or fitness.}
+\label{fig:display-contrast}
+\end{figure}
+
+\clearpage
+\subsection{Additional Quantile Detail}
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{population-detail.png}
+\caption{Additional empirical 1st--99th percentile views of the same retained
+observations as main Figure~\ref{M-fig:population-latest}. Strict below/above
+counts are printed for each panel; boundary ties remain inside. The native,
+historical and screening panels contain $1{,}915{,}492$, $1945$ and $2214$
+point operations, respectively ($1{,}919{,}651$ total). Each panel prints its
+actual bounds and transform. Numeric tails are omitted here and remain in
+the full-range main figure. Marks can overlap; occupancy does not encode
+density. These views add no observations.}
+\label{fig:population-detail}
+\end{figure}
+\clearpage
+
+\subsection{Native Run Context}
+These five paired views reuse all $1{,}954{,}560$ retained native birth
+observations. Each run has its own printed $\operatorname{asinh}(y/L)$ key,
+with $L$ given by the declared empirical 25th percentile of nonzero absolute
+scores. Zeros remain plotted. The secondary retained-best trace is monotone
+by construction within its own run; it is not evidence of physical
+convergence and does not connect separate runs. These contextual fitness
+values are not a common scientific quality scale or a downstream assessment.
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{native-runs-2-3.png}
+\caption{Retained birth observations and within-run retained-best context for
+Runs~2--3. Each run keeps its original generation and score values, full
+numeric range and separately printed transform scale.}
+\label{fig:native-runs-2-3}
+\end{figure}
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{native-runs-4-5.png}
+\caption{Retained birth observations and within-run retained-best context for
+Runs~4--5, using each run's separately printed scale.}
+\label{fig:native-runs-4-5}
+\end{figure}
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{native-runs-6-7.png}
+\caption{Retained birth observations and within-run retained-best context for
+Runs~6--7, using each run's separately printed scale.}
+\label{fig:native-runs-6-7}
+\end{figure}
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{native-runs-8-9.png}
+\caption{Retained birth observations and within-run retained-best context for
+Runs~8--9, using each run's separately printed scale.}
+\label{fig:native-runs-8-9}
+\end{figure}
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{native-runs-10-11.png}
+\caption{Retained birth observations and within-run retained-best context for
+Runs~10--11, using each run's separately printed scale.}
+\label{fig:native-runs-10-11}
+\end{figure}
+\clearpage
