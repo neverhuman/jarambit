@@ -691,6 +691,13 @@ fn smart_locator(s:&mut String,m:&Mesh,crop:&crate::saliency::CropReceipt,x:f64,
     let points=crop.locator_crop_quad.iter()
         .map(|p|format!("{:.6},{:.6}",p[0],p[1])).collect::<Vec<_>>().join(" ");
     writeln!(s,"<polygon points=\"{points}\" fill=\"none\" stroke=\"#c5292b\" stroke-width=\"1.5\"/>").unwrap();
+    if crop.record["display_context"].is_object() {
+        text(s,x+388.,y+245.,21,"Display view");
+        return Some(json!({"label":"Display view",
+            "displayed_bbox_source_mm":crop.bbox_source_mm,
+            "red_quad":crop.locator_crop_quad,
+            "target":"exact expanded display viewport; selected saliency ROI recorded separately"}));
+    }
     if crop.coverage.area_fraction.is_some_and(|area| area < 0.01) {
         let center = [
             crop.locator_crop_quad.iter().map(|p| p[0]).sum::<f64>() / 4.,
@@ -770,6 +777,10 @@ pub(crate) fn project_smart(doc: &Value, contract: &Value, policy: &crate::salie
             values:&m.values[field], masked:&mask, missing_reasons:&missing };
         let mut crop = crate::saliency::select(&field_view,&bindings,policy,full_view,zoom_view,locator_view)
             .map_err(|e| format!("plate crop: {e}"))?;
+        if field == "lat" || field == "twist" {
+            crate::saliency::expand_context_viewport(&field_view,&mut crop,zoom_view)
+                .map_err(|e| format!("plate context viewport: {e}"))?;
+        }
         let scale = crop.source_to_panel.xx;
         let origin_x = crop.source_to_panel.tx;
         let origin_y = crop.source_to_panel.ty;
@@ -808,6 +819,18 @@ pub(crate) fn project_smart(doc: &Value, contract: &Value, policy: &crate::salie
         s.push_str("</g>\n");
         if field == "lat" || field == "twist" {
             writeln!(s,"<g clip-path=\"url(#smart-clip-{field})\">").unwrap();
+            let mut edges:BTreeMap<(usize,usize),usize>=BTreeMap::new();
+            for t in &m.tris {
+                for (a,b) in [(t[0],t[1]),(t[1],t[2]),(t[2],t[0])] {
+                    *edges.entry((a.min(b),a.max(b))).or_default()+=1;
+                }
+            }
+            for ((a,b),count) in edges {
+                if count != 1 { continue; }
+                let p=crop.source_to_panel.point(m.xy[a]);
+                let q=crop.source_to_panel.point(m.xy[b]);
+                writeln!(s,"<path d=\"M{:.6},{:.6}L{:.6},{:.6}\" fill=\"none\" stroke=\"#132d3b\" stroke-width=\"1.0\"/>",p[0],p[1],q[0],q[1]).unwrap();
+            }
             writeln!(s,"<circle cx=\"{}\" cy=\"{}\" r=\"{}\" fill=\"none\" stroke=\"#a3442d\" stroke-width=\"1.6\" stroke-dasharray=\"4 3\"/>",origin_x+m.tip[0]*scale,origin_y-m.tip[1]*scale,4.*scale).unwrap();
             s.push_str("</g>\n");
         }
@@ -857,7 +880,12 @@ pub(crate) fn project_smart(doc: &Value, contract: &Value, policy: &crate::salie
             .enumerate()
             .filter_map(|(i, b)| b.then_some(i))
             .collect();
-        let note = if crop.decision == crate::saliency::CropDecision::Zoom {
+        let context = crop.record["display_context"].is_object();
+        let note = if context {
+            format!("Context view: area {:.1}%; excess {:.1}%",
+                100.*crop.coverage.area_fraction.ok_or("missing context area denominator")?,
+                100.*crop.coverage.excess_fraction.ok_or("missing context excess denominator")?)
+        } else if crop.decision == crate::saliency::CropDecision::Zoom {
             format!("Zoom t >= {:.4}; excess {:.1}%; area {:.1}%",
                 crop.chosen_value_threshold.unwrap(),
                 100.*crop.coverage.excess_fraction.ok_or("missing crop excess denominator")?,
@@ -867,7 +895,13 @@ pub(crate) fn project_smart(doc: &Value, contract: &Value, policy: &crate::salie
         } else {
             "Full context; original field and raw scale".into()
         };
-        text(&mut s, x + 15., y + 364., 21, &note);
+        text(&mut s, x + 15., y + if context {350.} else {364.}, 21, &note);
+        if context {
+            let selected_area = crop.record["selection_roi"]["coverage"]["source_area_fraction"]
+                .as_f64().ok_or("missing selected ROI area denominator")?;
+            text(&mut s,x+15.,y+377.,21,&format!("Selected ROI: area {:.1}%; t >= {:.4}",
+                100.*selected_area,crop.chosen_value_threshold.ok_or("missing selected ROI threshold")?));
+        }
         field_summary.insert(field.into(),json!({"selector":format!("/mesh/{field}"),"units":units,"count":m.tris.len(),"association":"triangle","limits":[0.,max],"clipped_count":0,"masked_cell_ids":masked,"raw_zero_count":m.values[field].iter().filter(|v|**v==0.).count(),"plot_transform":{"scale":scale,"origin_x":origin_x,"origin_y":origin_y,"formula":"svg_x=origin_x+source_x*scale; svg_y=origin_y-source_y*scale"}}));
         field_summary.get_mut(field).unwrap()["clipped_count_scope"] = json!("color values only; camera coverage is separate");
         field_summary.get_mut(field).unwrap()["smart_crop"] = crop.record;
@@ -1015,6 +1049,9 @@ mod tests {
                 assert!(smart.contains(&format!("id=\"{field}-{i}\"")));
             }
             assert_eq!(zoomed["fields"][field]["smart_crop"]["colors_renormalized_to_crop"],false);
+            if field == "env_vm" || field == "ring" {
+                assert!(zoomed["fields"][field]["smart_crop"]["display_context"].is_null());
+            }
         }
         assert!(smart.contains("Locator"));
         assert!(smart.contains("stroke=\"#c5292b\""));

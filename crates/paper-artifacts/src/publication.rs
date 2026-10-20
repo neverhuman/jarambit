@@ -1051,6 +1051,10 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     let smart_recipe = read(&root, smart_recipe_path, &mut inputs)?;
     if smart_recipe["schema"] != "jarambit.smart_crop.display_contract.v1"
         || smart_recipe["source_contract"] != "docs/paper/field-inputs.v1.json"
+        || smart_recipe["display_context"] != json!({
+            "version":crate::saliency::CONTEXT_VIEWPORT_VERSION,
+            "fields":["lat","twist"],
+            "minimum_whole_object_x_extent_fraction":crate::saliency::CONTEXT_MIN_WIDTH_FRACTION})
     {
         return Err("smart crop: unadmitted recipe/schema/source contract".into());
     }

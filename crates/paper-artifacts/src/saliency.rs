@@ -140,6 +140,60 @@ impl Coverage {
             "excess_meaning":"display saliency integral above original t50; not physical energy"})
     }
 }
+
+/// Fixed display camera for the distal lateral/torsion panels, independent of
+/// the unchanged saliency selector. No field value or selection is recomputed.
+pub const CONTEXT_MIN_WIDTH_FRACTION: f64 = 0.30;
+pub const CONTEXT_VIEWPORT_VERSION: &str = "jarambit.curved_tip_context_viewport.v1";
+
+pub fn expand_context_viewport(
+    f: &FieldView<'_>, crop: &mut CropReceipt, zoom_view: Viewport,
+) -> Result<()> {
+    if crop.decision != CropDecision::Zoom { return Ok(()); }
+    let p = prepare(f)?;
+    let selected = crop.bbox_source_mm;
+    check_bbox(selected)?;
+    fit(selected, zoom_view)?;
+    if selected[0] < p.bbox[0] || selected[1] < p.bbox[1]
+        || selected[2] > p.bbox[2] || selected[3] > p.bbox[3]
+    { return Err("context viewport selection outside original source bounds".into()); }
+    let aspect = zoom_view.width / zoom_view.height;
+    let width = (selected[2]-selected[0])
+        .max(CONTEXT_MIN_WIDTH_FRACTION*(p.bbox[2]-p.bbox[0]));
+    let height = (selected[3]-selected[1]).max(width/aspect);
+    let width = width.max(height*aspect);
+    let (x0,x1) = bounded_span(selected[0],selected[2],width,p.bbox[0],p.bbox[2]);
+    let (y0,y1) = bounded_span(selected[1],selected[3],height,p.bbox[1],p.bbox[3]);
+    let bbox = [x0,y0,x1,y1];
+    let baseline = crop.record["whole_field_excess_baseline_t50"].as_f64()
+        .ok_or("context viewport missing whole-field excess baseline")?;
+    let selected_coverage = crop.coverage.json();
+    let coverage = measure(f,&p,bbox,baseline)?;
+    let panel = fit(bbox,zoom_view)?;
+    let quad = crop.source_to_locator.rectangle(bbox);
+    crop.record["selection_roi"] = json!({"bbox_source_mm":selected,
+        "chosen_value_threshold":crop.chosen_value_threshold,
+        "coverage":selected_coverage,"decision":"Zoom",
+        "scope":"unchanged saliency-selection result, distinct from the wider display camera"});
+    crop.record["display_context"] = json!({"version":CONTEXT_VIEWPORT_VERSION,
+        "minimum_whole_object_x_extent_fraction":CONTEXT_MIN_WIDTH_FRACTION,
+        "actual_whole_object_x_extent_fraction":(x1-x0)/(p.bbox[2]-p.bbox[0]),
+        "requested_physical_aspect":aspect,
+        "clamped_to_original_source_bounds":true,
+        "contains_complete_selected_roi":true,
+        "aspect_fit_may_letterbox_at_domain_limits":true,
+        "locator_red_rectangle":"exact displayed source-coordinate viewport, not the smaller selection ROI"});
+    crop.record["bbox_source_mm"] = json!(bbox);
+    crop.record["bbox_posed_mm"] = json!(bbox);
+    crop.record["coverage"] = coverage.json();
+    crop.record["source_to_panel"] = panel.json();
+    crop.record["locator_crop_quad"] = json!(quad);
+    crop.bbox_source_mm = bbox;
+    crop.source_to_panel = panel;
+    crop.locator_crop_quad = quad;
+    crop.coverage = coverage;
+    Ok(())
+}
 #[derive(Debug)]
 pub struct CropReceipt {
     pub decision: CropDecision,

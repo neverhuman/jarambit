@@ -3161,7 +3161,7 @@ fn append_positive_point_views(
     outputs: &mut BTreeMap<String, String>,
 ) -> Result<()> {
     use crate::population_story::Preference;
-    use crate::positive_points::{Abscissa, PositivePointRaster, HEIGHT, WIDTH};
+    use crate::positive_points::{Abscissa, PositivePointRaster};
     if native.len() != 1_954_560
         || historical.len() != 1984
         || screening.len() != 2259
@@ -3226,7 +3226,7 @@ fn append_positive_point_views(
                 return Err("positive points: original callback identity order differs".into());
             }
             let prefix=format!("docs/paper/generated/population/positive/run-{public:02}-positive-points-{variant}");
-            let png = encode_point_png_b64(WIDTH, HEIGHT, raster.pixels());
+            let png = raster.score_png_base64()?;
             let title =
                 format!("Run {public}: every retained birth, fixed positive {variant} view");
             let (svg, mut receipt) = raster.render(&png, &title)?;
@@ -3288,7 +3288,7 @@ fn append_positive_point_views(
             let prefix = format!(
                 "docs/paper/generated/population/positive/{name}-positive-points-{variant}"
             );
-            let png = encode_point_png_b64(WIDTH, HEIGHT, raster.pixels());
+            let png = raster.score_png_base64()?;
             let title =
                 format!("{name}: every retained numeric row, fixed positive {variant} view");
             let (svg, mut receipt) = raster.render(&png, &title)?;
