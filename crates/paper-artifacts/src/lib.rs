@@ -1,3 +1,5 @@
+pub mod appearance;
+pub mod hero_appearance;
 mod assessment;
 mod battery;
 pub mod corpus;
