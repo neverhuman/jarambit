@@ -143,7 +143,7 @@
     "producer_revision": "82f450f7fb418e28c4b229031920dec5454435f3",
     "selection_statement": "The GA strict-certified passers did not beat the baseline; two controlled probes passed full 16-gate CAD/solid validation."
   },
-  "missing": "Weighted cohort CAD geometry and round population files are unavailable in retained cohort",
+  "missing": "Three proposal birth/screen pairs and a later unqualified Individual2002 summary are retained across accessions; full underlying CAD/scorecards remain unretained. See reporting-interpretation.v2.json.",
   "per_evaluator": {
     "build.analytic": {
       "pass": 23
@@ -462,5 +462,6 @@
       "round_file": "round_02_screen.json"
     }
   ],
+  "weighted_interpretation": "Historical saved arithmetic; A4 term unadmitted and partly default-compatible/proxy inputs; no current qualification or proven original recipe execution",
   "weighted_stage_lineage": "incomplete; retained summaries are not a homogeneous objective-convergence experiment"
 }
