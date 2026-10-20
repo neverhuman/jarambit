@@ -1046,6 +1046,42 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "docs/paper/generated/plate-fields.json".into(),
         serde_json::to_string_pretty(&plate_summary)? + "\n",
     );
+    // Additional camera view only; retain the complete original plate projection above.
+    let smart_recipe_path = "docs/paper/data/smart-crop-contract.v1.json";
+    let smart_recipe = read(&root, smart_recipe_path, &mut inputs)?;
+    if smart_recipe["schema"] != "jarambit.smart_crop.display_contract.v1"
+        || smart_recipe["source_contract"] != "docs/paper/field-inputs.v1.json"
+    {
+        return Err("smart crop: unadmitted recipe/schema/source contract".into());
+    }
+    let cutoffs = array(&smart_recipe["range_cutoffs"])?;
+    if cutoffs.len() != 3 {
+        return Err("smart crop: expected exact three fixed cutoffs".into());
+    }
+    let smart_policy = crate::saliency::CropPolicy {
+        version: text(&smart_recipe["policy_version"])?.into(),
+        range_cutoffs: [
+            number(&cutoffs[0])?,
+            number(&cutoffs[1])?,
+            number(&cutoffs[2])?,
+        ],
+        min_excess_mass_coverage: number(&smart_recipe["min_excess_mass_coverage"])?,
+        max_bbox_area_fraction: number(&smart_recipe["max_bbox_area_fraction"])?,
+        min_scale_gain: number(&smart_recipe["min_scale_gain"])?,
+        pad_fraction: number(&smart_recipe["pad_fraction"])?,
+    };
+    let (smart_svg, mut smart_receipt) =
+        crate::plate::project_smart(&field_doc, &field_contract, &smart_policy)?;
+    smart_receipt["display_recipe"] =
+        json!({"path":smart_recipe_path,"sha256":inputs[smart_recipe_path]});
+    out.insert(
+        "docs/paper/generated/plate-smart-crops.svg".into(),
+        smart_svg,
+    );
+    out.insert(
+        "docs/paper/generated/plate-smart-crops.v1.json".into(),
+        serde_json::to_string_pretty(&smart_receipt)? + "\n",
+    );
     let verification_contract = read(&root, "docs/paper/verification-inputs.v1.json", &mut inputs)?;
     if verification_contract["producer_revision"] != assessment_manifest["numerical_kernel_commit"]
         || verification_contract["subject"] != field_contract["subject"]
@@ -1510,6 +1546,10 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     for rel in [
         "crates/paper-artifacts/src/publication.rs",
         "crates/paper-artifacts/src/lib.rs",
+        "crates/paper-artifacts/src/appearance.rs",
+        "crates/paper-artifacts/src/hero_appearance.rs",
+        "crates/paper-artifacts/src/population_story.rs",
+        "crates/paper-artifacts/src/saliency.rs",
         "crates/paper-artifacts/src/interpretation.rs",
         "crates/paper-artifacts/src/validation.rs",
         "crates/paper-artifacts/src/historical.rs",
@@ -1595,6 +1635,28 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     out.insert(
         "docs/paper/generated/plate-fields.svg.manifest.json".into(),
         serde_json::to_string_pretty(&plate_manifest)? + "\n",
+    );
+    let mut smart_inputs = BTreeMap::new();
+    for path in [
+        smart_recipe_path,
+        "docs/paper/field-inputs.v1.json",
+        field_source,
+        "crates/paper-artifacts/src/plate.rs",
+        "crates/paper-artifacts/src/saliency.rs",
+    ] {
+        smart_inputs.insert(path.to_string(), inputs[path].clone());
+    }
+    for path in producer_sources.keys() {
+        smart_inputs.insert(path.clone(), inputs[path].clone());
+    }
+    let smart_manifest = json!({"schema":1,"figure":"docs/paper/generated/plate-smart-crops.svg",
+        "figure_sha256":digest(out["docs/paper/generated/plate-smart-crops.svg"].as_bytes()),
+        "inputs":smart_inputs,"script":"crates/paper-artifacts/src/plate.rs",
+        "projection_receipt":"docs/paper/generated/plate-smart-crops.v1.json",
+        "scope":"Display camera crop only; original piecewise-constant raw fields/masks/full-range keys; whole-field exact triangle-area coverage and original plate-boundary locator. No new mechanics or scalar-value clipping."});
+    out.insert(
+        "docs/paper/generated/plate-smart-crops.svg.manifest.json".into(),
+        serde_json::to_string_pretty(&smart_manifest)? + "\n",
     );
     let mut verification_inputs = BTreeMap::new();
     for path in [
