@@ -54,16 +54,16 @@
 <text x="35" y="554" font-size="21">Safety factors · matched quadratic tet mesh</text>
 <text x="35" y="600" font-size="22">Vertex mean</text>
 <path id="solver-nodal_avg-0" d="M185,618 L391.90999999999997,618" stroke="#007e87" stroke-width="7" fill="none" data-value="0.726"/>
-<text x="482" y="625" font-size="21">0.7260</text>
+<text x="482" y="625" font-size="21">0.726</text>
 <path id="solver-nodal_avg-1" d="M185,638 L391.9955,638" stroke="#a3442d" stroke-width="7" fill="none" data-value="0.7263"/>
 <text x="482" y="645" font-size="21">0.7263</text>
-<text x="185" y="674" font-size="21">Relative difference: 0.0413%</text>
+<text x="185" y="674" font-size="21">Rounded-SF difference: 0.0413%</text>
 <text x="35" y="705" font-size="22">Vertex max</text>
 <path id="solver-nodal_max-0" d="M185,723 L375.665,723" stroke="#007e87" stroke-width="7" fill="none" data-value="0.669"/>
-<text x="482" y="730" font-size="21">0.6690</text>
+<text x="482" y="730" font-size="21">0.669</text>
 <path id="solver-nodal_max-1" d="M185,743 L375.7505,743" stroke="#a3442d" stroke-width="7" fill="none" data-value="0.6693"/>
 <text x="482" y="750" font-size="21">0.6693</text>
-<text x="185" y="779" font-size="21">Relative difference: 0.0448%</text>
+<text x="185" y="779" font-size="21">Rounded-SF difference: 0.0448%</text>
 <path d="M185,797 L185,804" stroke="#132d3b" stroke-width="1.5" fill="none"/>
 <text x="171" y="830" font-size="21">0.0</text>
 <path d="M327.5,797 L327.5,804" stroke="#132d3b" stroke-width="1.5" fill="none"/>
@@ -71,7 +71,7 @@
 <path d="M470,797 L470,804" stroke="#132d3b" stroke-width="1.5" fill="none"/>
 <text x="456" y="830" font-size="21">1.0</text>
 <text x="35" y="867" font-size="21">Teal: scikit-fem P2 · Orange: DOLFINx 0.9.0 P2</text>
-<text x="35" y="900" font-size="21">Solver agreement (&lt;= 2%); not physical test.</text>
+<text x="35" y="900" font-size="21">Rounded-SF comparison; no accuracy bound.</text>
 <rect x="620" y="492" width="560" height="435" fill="#f7f7f2" stroke="#d5dfdf"/>
 <text x="635" y="524" font-size="23">D / Regional stress maxima (MPa)</text>
 <text x="635" y="554" font-size="21">Distance bins · plate vs. solid recovery</text>

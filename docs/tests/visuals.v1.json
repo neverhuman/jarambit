@@ -14,7 +14,9 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
@@ -59,13 +61,15 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/reference.svg",
           "figure_manifest": "docs/paper/generated/reference.svg.manifest.json",
-          "figure_manifest_sha256": "0132b26c8046a2d5d270223d69d95b0a78afa05d42e0713ffa891ff6b0b48e89",
+          "figure_manifest_sha256": "37db65df55e8cf726fba96282f93285fa37c0bbd9ee98bbc086452a408f04a46",
           "figure_sha256": "66c970a77f5ad0d38e3262d3d2f6a7e71a10d567214f2c0d5263294e49920e2e",
           "panel": "A--B: original 2D reference overlay, saved rounded descriptors and flags; no new measurement or human approval",
           "projection_receipt": "docs/paper/generated/reference.json",
@@ -86,13 +90,15 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/plate-fields.svg",
           "figure_manifest": "docs/paper/generated/plate-fields.svg.manifest.json",
-          "figure_manifest_sha256": "fcc5511f3062b6fcf08caed8073394d90ffbec0658990f74d5645b9b2725db88",
+          "figure_manifest_sha256": "dfad53bf6c43c6969fb5475e312695fc102051a3078fc666dc0e8415c81b723e",
           "figure_sha256": "86e191a331824e6e7adf893d0f60e516d9081c9441db7d64a84a67d099905add",
           "panel": "B: lateral unit response; one shared field",
           "projection_receipt": "docs/paper/generated/plate-fields.json",
@@ -113,13 +119,15 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/plate-fields.svg",
           "figure_manifest": "docs/paper/generated/plate-fields.svg.manifest.json",
-          "figure_manifest_sha256": "fcc5511f3062b6fcf08caed8073394d90ffbec0658990f74d5645b9b2725db88",
+          "figure_manifest_sha256": "dfad53bf6c43c6969fb5475e312695fc102051a3078fc666dc0e8415c81b723e",
           "figure_sha256": "86e191a331824e6e7adf893d0f60e516d9081c9441db7d64a84a67d099905add",
           "panel": "B: lateral unit response; one shared field",
           "projection_receipt": "docs/paper/generated/plate-fields.json",
@@ -140,19 +148,21 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/assessment.svg",
           "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
-          "figure_manifest_sha256": "8815d087a616c7d2e2e697e5b4b4ce0fde6b8f1040f91448672f20ba1afc547e",
-          "figure_sha256": "b4aa0aed4352d79f9d8ea14609a98569cc9f071728b6e476b99e4cc6b16ddcb0",
+          "figure_manifest_sha256": "b8b12139d7e9e93f8ae1d35ea79d97e91bd9e74a9f6cdb1f8eec5c3b292fe105",
+          "figure_sha256": "c2d56af4fe70d13ef0bcc83e7c2addc10a6c1654ddb0f3f458569fb7f6eeb5eb",
           "panel": "C: original certification/strict scalar pairs; no strict full field or error estimate",
           "projection_receipt": "docs/paper/generated/assessment.json",
-          "projection_receipt_sha256": "6cc368ba6591c0caf22f15feb2989a39d190c9a3c3b26d2fbf3f0d1c631ed56e",
-          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
-          "visual_kind": "retained_scalars_flags_and_support_schematic"
+          "projection_receipt_sha256": "dc9040de663dab3bb09bccd1dd2cb848b0f606fd750ee5bdff95747211a2d939",
+          "scope": "Original scalars/flags retained as history; current buckling value and dependent qualification unestablished; no new eigenmode, solve or score.",
+          "visual_kind": "historical_scalars_flags_and_withdrawn_buckling_interpretation"
         }
       ]
     },
@@ -167,15 +177,17 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/plate-fields.svg",
           "figure_manifest": "docs/paper/generated/plate-fields.svg.manifest.json",
-          "figure_manifest_sha256": "fcc5511f3062b6fcf08caed8073394d90ffbec0658990f74d5645b9b2725db88",
+          "figure_manifest_sha256": "dfad53bf6c43c6969fb5475e312695fc102051a3078fc666dc0e8415c81b723e",
           "figure_sha256": "86e191a331824e6e7adf893d0f60e516d9081c9441db7d64a84a67d099905add",
-          "panel": "C: ring unit response with seated-region source zeros masked",
+          "panel": "C: ring unit response with source half-plane zeros masked",
           "projection_receipt": "docs/paper/generated/plate-fields.json",
           "projection_receipt_sha256": "b0eeebce3952a4d1ff6e106f6c3d64d053d933032049dfa7e19aca171a73151e",
           "scope": "Original 0.25 mm2 plate arrays only; not strict or solid fields; shared fields are not independent tests.",
@@ -194,13 +206,15 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/plate-fields.svg",
           "figure_manifest": "docs/paper/generated/plate-fields.svg.manifest.json",
-          "figure_manifest_sha256": "fcc5511f3062b6fcf08caed8073394d90ffbec0658990f74d5645b9b2725db88",
+          "figure_manifest_sha256": "dfad53bf6c43c6969fb5475e312695fc102051a3078fc666dc0e8415c81b723e",
           "figure_sha256": "86e191a331824e6e7adf893d0f60e516d9081c9441db7d64a84a67d099905add",
           "panel": "D: raw torsion response; regional capacity selection is a separate operation",
           "projection_receipt": "docs/paper/generated/plate-fields.json",
@@ -221,13 +235,15 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/plate-fields.svg",
           "figure_manifest": "docs/paper/generated/plate-fields.svg.manifest.json",
-          "figure_manifest_sha256": "fcc5511f3062b6fcf08caed8073394d90ffbec0658990f74d5645b9b2725db88",
+          "figure_manifest_sha256": "dfad53bf6c43c6969fb5475e312695fc102051a3078fc666dc0e8415c81b723e",
           "figure_sha256": "86e191a331824e6e7adf893d0f60e516d9081c9441db7d64a84a67d099905add",
           "panel": "D: raw torsion response; regional capacity selection is a separate operation",
           "projection_receipt": "docs/paper/generated/plate-fields.json",
@@ -248,19 +264,21 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/assessment.svg",
           "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
-          "figure_manifest_sha256": "8815d087a616c7d2e2e697e5b4b4ce0fde6b8f1040f91448672f20ba1afc547e",
-          "figure_sha256": "b4aa0aed4352d79f9d8ea14609a98569cc9f071728b6e476b99e4cc6b16ddcb0",
+          "figure_manifest_sha256": "b8b12139d7e9e93f8ae1d35ea79d97e91bd9e74a9f6cdb1f8eec5c3b292fe105",
+          "figure_sha256": "c2d56af4fe70d13ef0bcc83e7c2addc10a6c1654ddb0f3f458569fb7f6eeb5eb",
           "panel": "C: original certification/strict scalar pairs; no strict full field or error estimate",
           "projection_receipt": "docs/paper/generated/assessment.json",
-          "projection_receipt_sha256": "6cc368ba6591c0caf22f15feb2989a39d190c9a3c3b26d2fbf3f0d1c631ed56e",
-          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
-          "visual_kind": "retained_scalars_flags_and_support_schematic"
+          "projection_receipt_sha256": "dc9040de663dab3bb09bccd1dd2cb848b0f606fd750ee5bdff95747211a2d939",
+          "scope": "Original scalars/flags retained as history; current buckling value and dependent qualification unestablished; no new eigenmode, solve or score.",
+          "visual_kind": "historical_scalars_flags_and_withdrawn_buckling_interpretation"
         }
       ]
     },
@@ -275,18 +293,20 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/verification.svg",
           "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
-          "figure_manifest_sha256": "54bccc2fa0ef21b3e06791f94ad46a47013cee98247cdf4406b8fc7fc12207d6",
-          "figure_sha256": "70b10825f03567e4b1a44256a7d088ec0996193513329b2e88a781aed456c972",
+          "figure_manifest_sha256": "08c4b2bc1e708c49561c4082251ed88e7512195b77363d4c4ba71625840aa06d",
+          "figure_sha256": "a84d788cf0940ea9b3ce27b5e6e18d4d2b40aa089e4db39944209586c910c2e7",
           "panel": "C--D: matched scalar comparison and binned profiles; no full 3D field",
           "projection_receipt": "docs/paper/generated/verification.json",
-          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
-          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "projection_receipt_sha256": "293465c8751203a691b1994eb87f6977d4d6884828a226eb0518c4d088764e1c",
+          "scope": "Saved mesh observations, matched scalar pairs at source precision and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
           "visual_kind": "retained_scalars_and_binned_profiles"
         }
       ]
@@ -302,19 +322,21 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/assessment.svg",
           "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
-          "figure_manifest_sha256": "8815d087a616c7d2e2e697e5b4b4ce0fde6b8f1040f91448672f20ba1afc547e",
-          "figure_sha256": "b4aa0aed4352d79f9d8ea14609a98569cc9f071728b6e476b99e4cc6b16ddcb0",
-          "panel": "A: support-model schematic and archived scalars; eigen-operator verification remains open",
+          "figure_manifest_sha256": "b8b12139d7e9e93f8ae1d35ea79d97e91bd9e74a9f6cdb1f8eec5c3b292fe105",
+          "figure_sha256": "c2d56af4fe70d13ef0bcc83e7c2addc10a6c1654ddb0f3f458569fb7f6eeb5eb",
+          "panel": "A: historical support record; current buckling engineering interpretation withdrawn",
           "projection_receipt": "docs/paper/generated/assessment.json",
-          "projection_receipt_sha256": "6cc368ba6591c0caf22f15feb2989a39d190c9a3c3b26d2fbf3f0d1c631ed56e",
-          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
-          "visual_kind": "retained_scalars_flags_and_support_schematic"
+          "projection_receipt_sha256": "dc9040de663dab3bb09bccd1dd2cb848b0f606fd750ee5bdff95747211a2d939",
+          "scope": "Original scalars/flags retained as history; current buckling value and dependent qualification unestablished; no new eigenmode, solve or score.",
+          "visual_kind": "historical_scalars_flags_and_withdrawn_buckling_interpretation"
         }
       ]
     },
@@ -329,18 +351,20 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/verification.svg",
           "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
-          "figure_manifest_sha256": "54bccc2fa0ef21b3e06791f94ad46a47013cee98247cdf4406b8fc7fc12207d6",
-          "figure_sha256": "70b10825f03567e4b1a44256a7d088ec0996193513329b2e88a781aed456c972",
+          "figure_manifest_sha256": "08c4b2bc1e708c49561c4082251ed88e7512195b77363d4c4ba71625840aa06d",
+          "figure_sha256": "a84d788cf0940ea9b3ce27b5e6e18d4d2b40aa089e4db39944209586c910c2e7",
           "panel": "A: retained yield-order proxy across mesh levels; no admitted GCI",
           "projection_receipt": "docs/paper/generated/verification.json",
-          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
-          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "projection_receipt_sha256": "293465c8751203a691b1994eb87f6977d4d6884828a226eb0518c4d088764e1c",
+          "scope": "Saved mesh observations, matched scalar pairs at source precision and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
           "visual_kind": "retained_scalars_and_binned_profiles"
         }
       ]
@@ -356,18 +380,20 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/verification.svg",
           "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
-          "figure_manifest_sha256": "54bccc2fa0ef21b3e06791f94ad46a47013cee98247cdf4406b8fc7fc12207d6",
-          "figure_sha256": "70b10825f03567e4b1a44256a7d088ec0996193513329b2e88a781aed456c972",
+          "figure_manifest_sha256": "08c4b2bc1e708c49561c4082251ed88e7512195b77363d4c4ba71625840aa06d",
+          "figure_sha256": "a84d788cf0940ea9b3ce27b5e6e18d4d2b40aa089e4db39944209586c910c2e7",
           "panel": "A--B: valid metadata, but nonpositive-order/oscillatory observations and no admitted GCI",
           "projection_receipt": "docs/paper/generated/verification.json",
-          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
-          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "projection_receipt_sha256": "293465c8751203a691b1994eb87f6977d4d6884828a226eb0518c4d088764e1c",
+          "scope": "Saved mesh observations, matched scalar pairs at source precision and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
           "visual_kind": "retained_scalars_and_binned_profiles"
         }
       ]
@@ -383,18 +409,20 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/verification.svg",
           "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
-          "figure_manifest_sha256": "54bccc2fa0ef21b3e06791f94ad46a47013cee98247cdf4406b8fc7fc12207d6",
-          "figure_sha256": "70b10825f03567e4b1a44256a7d088ec0996193513329b2e88a781aed456c972",
+          "figure_manifest_sha256": "08c4b2bc1e708c49561c4082251ed88e7512195b77363d4c4ba71625840aa06d",
+          "figure_sha256": "a84d788cf0940ea9b3ce27b5e6e18d4d2b40aa089e4db39944209586c910c2e7",
           "panel": "C: original matched-mesh safety-factor observations and stored rounded differences",
           "projection_receipt": "docs/paper/generated/verification.json",
-          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
-          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "projection_receipt_sha256": "293465c8751203a691b1994eb87f6977d4d6884828a226eb0518c4d088764e1c",
+          "scope": "Saved mesh observations, matched scalar pairs at source precision and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
           "visual_kind": "retained_scalars_and_binned_profiles"
         }
       ]
@@ -410,13 +438,15 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/reference.svg",
           "figure_manifest": "docs/paper/generated/reference.svg.manifest.json",
-          "figure_manifest_sha256": "0132b26c8046a2d5d270223d69d95b0a78afa05d42e0713ffa891ff6b0b48e89",
+          "figure_manifest_sha256": "37db65df55e8cf726fba96282f93285fa37c0bbd9ee98bbc086452a408f04a46",
           "figure_sha256": "66c970a77f5ad0d38e3262d3d2f6a7e71a10d567214f2c0d5263294e49920e2e",
           "panel": "A--B: original 2D reference overlay, saved rounded descriptors and flags; no new measurement or human approval",
           "projection_receipt": "docs/paper/generated/reference.json",
@@ -437,13 +467,15 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/plate-fields.svg",
           "figure_manifest": "docs/paper/generated/plate-fields.svg.manifest.json",
-          "figure_manifest_sha256": "fcc5511f3062b6fcf08caed8073394d90ffbec0658990f74d5645b9b2725db88",
+          "figure_manifest_sha256": "dfad53bf6c43c6969fb5475e312695fc102051a3078fc666dc0e8415c81b723e",
           "figure_sha256": "86e191a331824e6e7adf893d0f60e516d9081c9441db7d64a84a67d099905add",
           "panel": "A--C: shared retained envelope and unit-response families; the original grouped flag is separate from these fields",
           "projection_receipt": "docs/paper/generated/plate-fields.json",
@@ -464,19 +496,21 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/assessment.svg",
           "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
-          "figure_manifest_sha256": "8815d087a616c7d2e2e697e5b4b4ce0fde6b8f1040f91448672f20ba1afc547e",
-          "figure_sha256": "b4aa0aed4352d79f9d8ea14609a98569cc9f071728b6e476b99e4cc6b16ddcb0",
+          "figure_manifest_sha256": "b8b12139d7e9e93f8ae1d35ea79d97e91bd9e74a9f6cdb1f8eec5c3b292fe105",
+          "figure_sha256": "c2d56af4fe70d13ef0bcc83e7c2addc10a6c1654ddb0f3f458569fb7f6eeb5eb",
           "panel": "C: original certification/strict scalar pairs; no strict full field or error estimate",
           "projection_receipt": "docs/paper/generated/assessment.json",
-          "projection_receipt_sha256": "6cc368ba6591c0caf22f15feb2989a39d190c9a3c3b26d2fbf3f0d1c631ed56e",
-          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
-          "visual_kind": "retained_scalars_flags_and_support_schematic"
+          "projection_receipt_sha256": "dc9040de663dab3bb09bccd1dd2cb848b0f606fd750ee5bdff95747211a2d939",
+          "scope": "Original scalars/flags retained as history; current buckling value and dependent qualification unestablished; no new eigenmode, solve or score.",
+          "visual_kind": "historical_scalars_flags_and_withdrawn_buckling_interpretation"
         }
       ]
     },
@@ -491,18 +525,20 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/verification.svg",
           "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
-          "figure_manifest_sha256": "54bccc2fa0ef21b3e06791f94ad46a47013cee98247cdf4406b8fc7fc12207d6",
-          "figure_sha256": "70b10825f03567e4b1a44256a7d088ec0996193513329b2e88a781aed456c972",
+          "figure_manifest_sha256": "08c4b2bc1e708c49561c4082251ed88e7512195b77363d4c4ba71625840aa06d",
+          "figure_sha256": "a84d788cf0940ea9b3ce27b5e6e18d4d2b40aa089e4db39944209586c910c2e7",
           "panel": "C--D: matched scalar comparison and binned profiles; no full 3D field",
           "projection_receipt": "docs/paper/generated/verification.json",
-          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
-          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "projection_receipt_sha256": "293465c8751203a691b1994eb87f6977d4d6884828a226eb0518c4d088764e1c",
+          "scope": "Saved mesh observations, matched scalar pairs at source precision and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
           "visual_kind": "retained_scalars_and_binned_profiles"
         }
       ]
@@ -518,19 +554,21 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/assessment.svg",
           "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
-          "figure_manifest_sha256": "8815d087a616c7d2e2e697e5b4b4ce0fde6b8f1040f91448672f20ba1afc547e",
-          "figure_sha256": "b4aa0aed4352d79f9d8ea14609a98569cc9f071728b6e476b99e4cc6b16ddcb0",
+          "figure_manifest_sha256": "b8b12139d7e9e93f8ae1d35ea79d97e91bd9e74a9f6cdb1f8eec5c3b292fe105",
+          "figure_sha256": "c2d56af4fe70d13ef0bcc83e7c2addc10a6c1654ddb0f3f458569fb7f6eeb5eb",
           "panel": "C: original certification/strict scalar pairs; no strict full field or error estimate",
           "projection_receipt": "docs/paper/generated/assessment.json",
-          "projection_receipt_sha256": "6cc368ba6591c0caf22f15feb2989a39d190c9a3c3b26d2fbf3f0d1c631ed56e",
-          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
-          "visual_kind": "retained_scalars_flags_and_support_schematic"
+          "projection_receipt_sha256": "dc9040de663dab3bb09bccd1dd2cb848b0f606fd750ee5bdff95747211a2d939",
+          "scope": "Original scalars/flags retained as history; current buckling value and dependent qualification unestablished; no new eigenmode, solve or score.",
+          "visual_kind": "historical_scalars_flags_and_withdrawn_buckling_interpretation"
         }
       ]
     },
@@ -545,18 +583,20 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/verification.svg",
           "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
-          "figure_manifest_sha256": "54bccc2fa0ef21b3e06791f94ad46a47013cee98247cdf4406b8fc7fc12207d6",
-          "figure_sha256": "70b10825f03567e4b1a44256a7d088ec0996193513329b2e88a781aed456c972",
+          "figure_manifest_sha256": "08c4b2bc1e708c49561c4082251ed88e7512195b77363d4c4ba71625840aa06d",
+          "figure_sha256": "a84d788cf0940ea9b3ce27b5e6e18d4d2b40aa089e4db39944209586c910c2e7",
           "panel": "A: retained yield-order proxy across mesh levels; no admitted GCI",
           "projection_receipt": "docs/paper/generated/verification.json",
-          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
-          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "projection_receipt_sha256": "293465c8751203a691b1994eb87f6977d4d6884828a226eb0518c4d088764e1c",
+          "scope": "Saved mesh observations, matched scalar pairs at source precision and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
           "visual_kind": "retained_scalars_and_binned_profiles"
         }
       ]
@@ -572,19 +612,21 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/assessment.svg",
           "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
-          "figure_manifest_sha256": "8815d087a616c7d2e2e697e5b4b4ce0fde6b8f1040f91448672f20ba1afc547e",
-          "figure_sha256": "b4aa0aed4352d79f9d8ea14609a98569cc9f071728b6e476b99e4cc6b16ddcb0",
+          "figure_manifest_sha256": "b8b12139d7e9e93f8ae1d35ea79d97e91bd9e74a9f6cdb1f8eec5c3b292fe105",
+          "figure_sha256": "c2d56af4fe70d13ef0bcc83e7c2addc10a6c1654ddb0f3f458569fb7f6eeb5eb",
           "panel": "B: separate recorded response factors; in-plane value remains record-only",
           "projection_receipt": "docs/paper/generated/assessment.json",
-          "projection_receipt_sha256": "6cc368ba6591c0caf22f15feb2989a39d190c9a3c3b26d2fbf3f0d1c631ed56e",
-          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
-          "visual_kind": "retained_scalars_flags_and_support_schematic"
+          "projection_receipt_sha256": "dc9040de663dab3bb09bccd1dd2cb848b0f606fd750ee5bdff95747211a2d939",
+          "scope": "Original scalars/flags retained as history; current buckling value and dependent qualification unestablished; no new eigenmode, solve or score.",
+          "visual_kind": "historical_scalars_flags_and_withdrawn_buckling_interpretation"
         }
       ]
     },
@@ -599,19 +641,21 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/assessment.svg",
           "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
-          "figure_manifest_sha256": "8815d087a616c7d2e2e697e5b4b4ce0fde6b8f1040f91448672f20ba1afc547e",
-          "figure_sha256": "b4aa0aed4352d79f9d8ea14609a98569cc9f071728b6e476b99e4cc6b16ddcb0",
+          "figure_manifest_sha256": "b8b12139d7e9e93f8ae1d35ea79d97e91bd9e74a9f6cdb1f8eec5c3b292fe105",
+          "figure_sha256": "c2d56af4fe70d13ef0bcc83e7c2addc10a6c1654ddb0f3f458569fb7f6eeb5eb",
           "panel": "B: original fatigue-model scalar; no fatigue field or measured lifetime",
           "projection_receipt": "docs/paper/generated/assessment.json",
-          "projection_receipt_sha256": "6cc368ba6591c0caf22f15feb2989a39d190c9a3c3b26d2fbf3f0d1c631ed56e",
-          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
-          "visual_kind": "retained_scalars_flags_and_support_schematic"
+          "projection_receipt_sha256": "dc9040de663dab3bb09bccd1dd2cb848b0f606fd750ee5bdff95747211a2d939",
+          "scope": "Original scalars/flags retained as history; current buckling value and dependent qualification unestablished; no new eigenmode, solve or score.",
+          "visual_kind": "historical_scalars_flags_and_withdrawn_buckling_interpretation"
         }
       ]
     },
@@ -884,18 +928,20 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/verification.svg",
           "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
-          "figure_manifest_sha256": "54bccc2fa0ef21b3e06791f94ad46a47013cee98247cdf4406b8fc7fc12207d6",
-          "figure_sha256": "70b10825f03567e4b1a44256a7d088ec0996193513329b2e88a781aed456c972",
+          "figure_manifest_sha256": "08c4b2bc1e708c49561c4082251ed88e7512195b77363d4c4ba71625840aa06d",
+          "figure_sha256": "a84d788cf0940ea9b3ce27b5e6e18d4d2b40aa089e4db39944209586c910c2e7",
           "panel": "A: retained yield-order proxy across mesh levels; no admitted GCI",
           "projection_receipt": "docs/paper/generated/verification.json",
-          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
-          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "projection_receipt_sha256": "293465c8751203a691b1994eb87f6977d4d6884828a226eb0518c4d088764e1c",
+          "scope": "Saved mesh observations, matched scalar pairs at source precision and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
           "visual_kind": "retained_scalars_and_binned_profiles"
         }
       ]
@@ -926,19 +972,21 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/assessment.svg",
           "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
-          "figure_manifest_sha256": "8815d087a616c7d2e2e697e5b4b4ce0fde6b8f1040f91448672f20ba1afc547e",
-          "figure_sha256": "b4aa0aed4352d79f9d8ea14609a98569cc9f071728b6e476b99e4cc6b16ddcb0",
+          "figure_manifest_sha256": "b8b12139d7e9e93f8ae1d35ea79d97e91bd9e74a9f6cdb1f8eec5c3b292fe105",
+          "figure_sha256": "c2d56af4fe70d13ef0bcc83e7c2addc10a6c1654ddb0f3f458569fb7f6eeb5eb",
           "panel": "B: original fatigue-model scalar; no fatigue field or measured lifetime",
           "projection_receipt": "docs/paper/generated/assessment.json",
-          "projection_receipt_sha256": "6cc368ba6591c0caf22f15feb2989a39d190c9a3c3b26d2fbf3f0d1c631ed56e",
-          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
-          "visual_kind": "retained_scalars_flags_and_support_schematic"
+          "projection_receipt_sha256": "dc9040de663dab3bb09bccd1dd2cb848b0f606fd750ee5bdff95747211a2d939",
+          "scope": "Original scalars/flags retained as history; current buckling value and dependent qualification unestablished; no new eigenmode, solve or score.",
+          "visual_kind": "historical_scalars_flags_and_withdrawn_buckling_interpretation"
         }
       ]
     },
@@ -968,18 +1016,20 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/verification.svg",
           "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
-          "figure_manifest_sha256": "54bccc2fa0ef21b3e06791f94ad46a47013cee98247cdf4406b8fc7fc12207d6",
-          "figure_sha256": "70b10825f03567e4b1a44256a7d088ec0996193513329b2e88a781aed456c972",
+          "figure_manifest_sha256": "08c4b2bc1e708c49561c4082251ed88e7512195b77363d4c4ba71625840aa06d",
+          "figure_sha256": "a84d788cf0940ea9b3ce27b5e6e18d4d2b40aa089e4db39944209586c910c2e7",
           "panel": "A--B: valid metadata, but nonpositive-order/oscillatory observations and no admitted GCI",
           "projection_receipt": "docs/paper/generated/verification.json",
-          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
-          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "projection_receipt_sha256": "293465c8751203a691b1994eb87f6977d4d6884828a226eb0518c4d088764e1c",
+          "scope": "Saved mesh observations, matched scalar pairs at source precision and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
           "visual_kind": "retained_scalars_and_binned_profiles"
         }
       ]
@@ -1085,19 +1135,21 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/assessment.svg",
           "figure_manifest": "docs/paper/generated/assessment.svg.manifest.json",
-          "figure_manifest_sha256": "8815d087a616c7d2e2e697e5b4b4ce0fde6b8f1040f91448672f20ba1afc547e",
-          "figure_sha256": "b4aa0aed4352d79f9d8ea14609a98569cc9f071728b6e476b99e4cc6b16ddcb0",
-          "panel": "A: support-model schematic and archived scalars; eigen-operator verification remains open",
+          "figure_manifest_sha256": "b8b12139d7e9e93f8ae1d35ea79d97e91bd9e74a9f6cdb1f8eec5c3b292fe105",
+          "figure_sha256": "c2d56af4fe70d13ef0bcc83e7c2addc10a6c1654ddb0f3f458569fb7f6eeb5eb",
+          "panel": "A: historical support record; current buckling engineering interpretation withdrawn",
           "projection_receipt": "docs/paper/generated/assessment.json",
-          "projection_receipt_sha256": "6cc368ba6591c0caf22f15feb2989a39d190c9a3c3b26d2fbf3f0d1c631ed56e",
-          "scope": "Saved scalars/flags and illustrative support boxes; no strict full field, eigenmode or fatigue field; A4 numerical audit open.",
-          "visual_kind": "retained_scalars_flags_and_support_schematic"
+          "projection_receipt_sha256": "dc9040de663dab3bb09bccd1dd2cb848b0f606fd750ee5bdff95747211a2d939",
+          "scope": "Original scalars/flags retained as history; current buckling value and dependent qualification unestablished; no new eigenmode, solve or score.",
+          "visual_kind": "historical_scalars_flags_and_withdrawn_buckling_interpretation"
         }
       ]
     },
@@ -1127,18 +1179,20 @@
         {
           "binding": {
             "certificate_identity": "db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e",
-            "qualification": "not qualified",
+            "current_dependent_qualification": null,
+            "historical_record_qualified": false,
+            "qualification_state": "unestablished_due_to_unqualified_operator",
             "relationship": "separate assessed example, not a rerun of the atlas historical example or battery",
             "subject": "cert_pipeline_r01_p14_c02"
           },
           "figure": "docs/paper/generated/verification.svg",
           "figure_manifest": "docs/paper/generated/verification.svg.manifest.json",
-          "figure_manifest_sha256": "54bccc2fa0ef21b3e06791f94ad46a47013cee98247cdf4406b8fc7fc12207d6",
-          "figure_sha256": "70b10825f03567e4b1a44256a7d088ec0996193513329b2e88a781aed456c972",
+          "figure_manifest_sha256": "08c4b2bc1e708c49561c4082251ed88e7512195b77363d4c4ba71625840aa06d",
+          "figure_sha256": "a84d788cf0940ea9b3ce27b5e6e18d4d2b40aa089e4db39944209586c910c2e7",
           "panel": "C--D: matched scalar comparison and binned profiles; no full 3D field",
           "projection_receipt": "docs/paper/generated/verification.json",
-          "projection_receipt_sha256": "a467db71712d950d48d09d9dea9b017f8d44075fc72eda2cdb668bbfc0f0ff4d",
-          "scope": "Saved mesh observations, matched scalar pairs and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
+          "projection_receipt_sha256": "293465c8751203a691b1994eb87f6977d4d6884828a226eb0518c4d088764e1c",
+          "scope": "Saved mesh observations, matched scalar pairs at source precision and recovery-dependent profiles; no full solved solid field or admitted GCI estimate.",
           "visual_kind": "retained_scalars_and_binned_profiles"
         }
       ]

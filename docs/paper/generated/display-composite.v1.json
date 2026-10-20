@@ -262447,6 +262447,11 @@
     "path": "docs/paper/data/display-composite-contract.v1.json",
     "sha256": "df34216ea111683233fadcab64d6536f52af2178da300f0ea027f8b19d9b74e9"
   },
+  "current_mask_terminology": {
+    "contract": "docs/paper/data/reporting-interpretation-contract.v2.json",
+    "original_contract_and_mask_bytes_preserved": true,
+    "ring": "source-masked half-plane centroid.x >= sx0 - 3.0; includes seated and unloaded regions"
+  },
   "default_contrast": {
     "domain": [
       0.0,
@@ -262481,7 +262486,7 @@
     "docs/paper/generated/hero-full-range.svg": "5bcf0b044576bf77708867aa28116329fda45e5866db6cc8cd4e59fb9f850a71",
     "docs/paper/generated/hero-mesh-on.svg": "5cb9c1bf37997c9a09df214bb938a81989460153c1a033e248fdf8ed3c5a28b3",
     "docs/paper/generated/hero-support.svg": "2fd600725ac1c8b06867c286ee6c0559c35bc063df2b00fe661cc7097ea9ccba",
-    "docs/paper/generated/test-field-roster.v1.tsv": "c10d9564df80cf3b5f3fa949129f596e197826e7e89d305feba480981c7f2a31"
+    "docs/paper/generated/test-field-roster.v1.tsv": "fefc751025c9f3b8c7f4391cf17449fe1da1265b08fd5fc4ad9549d115b96638"
   },
   "palette": {
     "anchors": [

@@ -153,7 +153,7 @@ Records the existing static ring-traction comparison.
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
 
-**Separate assessed-example visual:** [C: ring unit response with seated-region source zeros masked](../paper/generated/plate-fields.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/plate-fields.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+**Separate assessed-example visual:** [C: ring unit response with source half-plane zeros masked](../paper/generated/plate-fields.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/plate-fields.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="g16-twist_body_1p82nm"></a>
 
@@ -233,7 +233,7 @@ Reports the alternate compliant-support model and its linear stability observati
 
 **Retained example:** [corrected candidate assessment](../../evidence/rs_v2/w283_ultrarunner/w283_p14_c01_cad_eval.json), select `weighted_cad_score.gates` by exact ID. [Predicate authority](../../ops/ci/evaluate_cad_candidate.py). No current qualification follows from a historical favorable field.
 
-**Separate assessed-example visual:** [A: support-model schematic and archived scalars; eigen-operator verification remains open](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+**Separate assessed-example visual:** [A: historical support record; current buckling engineering interpretation withdrawn](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="g16-failure_sequence_1p2"></a>
 
@@ -743,7 +743,7 @@ Records the alternate-support and stability report.
 
 **Actual historical-corpus visual:** [all 23 stored labels in the `side.a4` column](../paper/generated/battery-matrix.svg). [Cell-level source/selector receipt](../paper/generated/battery-matrix.json). These categorical labels are not FEM fields or independent physical-test counts.
 
-**Separate assessed-example visual:** [A: support-model schematic and archived scalars; eigen-operator verification remains open](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
+**Separate assessed-example visual:** [A: historical support record; current buckling engineering interpretation withdrawn](../paper/generated/assessment.svg), for `cert_pipeline_r01_p14_c02`, not qualified. [Projection receipt](../paper/generated/assessment.json). This is a separately bound example, not a rerun of the historical example or the 23-subject battery.
 
 <a id="battery-solid.tip"></a>
 

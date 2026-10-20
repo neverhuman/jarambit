@@ -148,7 +148,7 @@
   "qualification_scope": {
     "assessed_count": 1,
     "champion": null,
-    "cohort_stage2_note": "Cohort 1 top-ranked Individual 1095 (fit=+1.157270) later failed strict assessment (cert_pass_all=false); Cohort 2 and Cohort 3 per-birth Stage-2 3D solid/plate certification records are absent from retained search logs (missing retained assessments, not proof that no computation ever occurred).",
+    "cohort_stage2_note": "Historical Individual1095 (fit=+1.157270,rank1) fails that run's earlier Boolean cert_pass_all predicate; Individual1543 (fit=1.15415,rank8) passes it. This is not later continuous-score rank reversal or 26-requirement qualification. Proposal-linked Individual2002 has a retained later unqualified assessment summary, not full underlying CAD/scorecards. Completed native per-birth later-assessment joins remain absent; missing retention is not proof no computation occurred.",
     "qualified_count": 0,
     "source_relpath": "evidence/evolve_certifiable/automatic/leaderboard.json"
   },

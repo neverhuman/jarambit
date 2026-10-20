@@ -1,7 +1,7 @@
 {
   "global_comparable_champion": null,
   "historical": {
-    "later_assessment": "Individual1095: retained assessment cert_pass_all=false, seq_ok=false; not qualified",
+    "later_assessment": "Individual1095: earlier run-specific Boolean predicate cert_pass_all=false, seq_ok=false; not a later 26-requirement qualification result",
     "native_direction": "higher_is_better",
     "source": "evidence/rs_v2/w282_ultrarunner/search/all_evals.json",
     "source_sha256": "307370108fcede8a4399569582f6ab19d436603246531266afa1754f9ba65363",

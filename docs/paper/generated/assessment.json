@@ -44,6 +44,7 @@
       "value": 0.5286982667797165
     }
   ],
+  "current_qualification": "unestablished_due_to_unqualified_operator",
   "factors": [
     {
       "key": "fat_sf",
@@ -78,183 +79,288 @@
   ],
   "flags": [
     {
+      "admitted_current_met": null,
       "alias": 1,
+      "historical_producer_reported_met": true,
       "id": "cad_watertight_and_single_solid",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": true
     },
     {
+      "admitted_current_met": null,
       "alias": 2,
+      "historical_producer_reported_met": true,
       "id": "geometric_and_holder_gates",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": true
     },
     {
+      "admitted_current_met": null,
       "alias": 3,
+      "historical_producer_reported_met": true,
       "id": "karambit_ring_and_curved_claw",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": true
     },
     {
+      "admitted_current_met": null,
       "alias": 4,
+      "historical_producer_reported_met": true,
       "id": "c6_aesthetic_floor",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": true
     },
     {
+      "admitted_current_met": null,
       "alias": 5,
+      "historical_producer_reported_met": false,
       "id": "cert_hiker_180n",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": false
     },
     {
+      "admitted_current_met": null,
       "alias": 6,
+      "historical_producer_reported_met": false,
       "id": "cert_hunter_260n",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": false
     },
     {
+      "admitted_current_met": null,
       "alias": 7,
+      "historical_producer_reported_met": false,
       "id": "strict_hunter_260n",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": false
     },
     {
+      "admitted_current_met": null,
       "alias": 8,
+      "historical_producer_reported_met": true,
       "id": "cert_ring_pull_1500n",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": true
     },
     {
+      "admitted_current_met": null,
       "alias": 9,
+      "historical_producer_reported_met": true,
       "id": "twist_body_1p82nm",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": true
     },
     {
+      "admitted_current_met": null,
       "alias": 10,
+      "historical_producer_reported_met": false,
       "id": "twist_tip_only_1p82nm",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": false
     },
     {
+      "admitted_current_met": null,
       "alias": 11,
+      "historical_producer_reported_met": false,
       "id": "twist_tip_submodel_strict_1p82nm",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": false
     },
     {
+      "admitted_current_met": null,
       "alias": 12,
+      "historical_producer_reported_met": false,
       "id": "solid_tip_3d_p2_1p82nm",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": false
     },
     {
+      "admitted_current_met": null,
       "alias": 13,
+      "historical_producer_reported_met": true,
       "id": "side_a4_buckling_and_support",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": true
     },
     {
+      "admitted_current_met": null,
       "alias": 14,
+      "historical_producer_reported_met": true,
       "id": "failure_sequence_1p2",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": true
     },
     {
+      "admitted_current_met": null,
       "alias": 15,
+      "historical_producer_reported_met": true,
       "id": "plate_gci_valid_3level",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": true
     },
     {
+      "admitted_current_met": null,
       "alias": 16,
+      "historical_producer_reported_met": true,
       "id": "dolfinx_cross_check_2pct",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "G16",
       "met": true
     },
     {
+      "admitted_current_met": null,
       "alias": 1,
+      "historical_producer_reported_met": true,
       "id": "aesthetic_and_geometric",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "RSV2",
       "met": true
     },
     {
+      "admitted_current_met": null,
       "alias": 2,
+      "historical_producer_reported_met": false,
       "id": "floors_828_joint",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "RSV2",
       "met": false
     },
     {
+      "admitted_current_met": null,
       "alias": 3,
+      "historical_producer_reported_met": false,
       "id": "twist_floor_body_and_tipsub_strict",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "RSV2",
       "met": false
     },
     {
+      "admitted_current_met": null,
       "alias": 4,
+      "historical_producer_reported_met": false,
       "id": "solid_tip_sf",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "RSV2",
       "met": false
     },
     {
+      "admitted_current_met": null,
       "alias": 5,
+      "historical_producer_reported_met": false,
       "id": "strict_hunter_lateral",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "RSV2",
       "met": false
     },
     {
+      "admitted_current_met": null,
       "alias": 6,
+      "historical_producer_reported_met": true,
       "id": "seq_hard",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "RSV2",
       "met": true
     },
     {
+      "admitted_current_met": null,
       "alias": 7,
+      "historical_producer_reported_met": false,
       "id": "human_max",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "RSV2",
       "met": false
     },
     {
+      "admitted_current_met": null,
       "alias": 8,
+      "historical_producer_reported_met": false,
       "id": "fatigue",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "RSV2",
       "met": false
     },
     {
+      "admitted_current_met": null,
       "alias": 9,
+      "historical_producer_reported_met": false,
       "id": "gate_s_sharp_law",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "RSV2",
       "met": false
     },
     {
+      "admitted_current_met": null,
       "alias": 10,
+      "historical_producer_reported_met": false,
       "id": "gate_s_tip_point_brep",
+      "interpretation": "historical producer flag only; not current engineering qualification",
       "kind": "RSV2",
       "met": false
     }
   ],
+  "flags_interpretation": "historical producer flags; admitted_current_met is null and no dependent current PASS is inferred",
   "fresh_solver_execution": false,
+  "historical_qualification": false,
+  "historical_qualification_flags": {
+    "all_engineering_gates_pass": false,
+    "promote_eligible": false,
+    "rs_v2_all_hard": false
+  },
   "note": "Scalar plots, historical CAD subscores/shortfalls, and a labeled support-model schematic; no synthetic fatigue/stability/strict spatial fields, no aggregation or new thresholds.",
   "producer_revision": "e8cb049df7d03c7d3113556812cc140ca99a29c3",
-  "qualification": false,
-  "schema": "jarambit.retained_assessment_projection.v1",
+  "qualification": null,
+  "schema": "jarambit.retained_assessment_projection.v2",
+  "source_contract_schema": "jarambit.retained_assessment_contract.v1",
   "subject": "cert_pipeline_r01_p14_c02",
+  "supersedes_projection_schema": "jarambit.retained_assessment_projection.v1",
   "support": {
+    "admitted_critical_load_n": null,
+    "admitted_engineering_value": null,
     "case_region_comparability": false,
     "certification_multicase_minimum": 1.4353235573963146,
-    "eigen_operator_audit": "open: eigsh applied to K_support^-1 G; Euclidean symmetry and eigenpair residual not established in retained record",
-    "eigenvalue": 7.0350618718604325,
+    "current_qualification": "unestablished_due_to_unqualified_operator",
+    "eigen_operator_audit": "Unqualified K_support^-1 G passed to symmetric eigsh; no retained Euclidean symmetry or eigenpair-residual qualification",
+    "eigenvalue": null,
     "eigenvector_available": false,
+    "historical_producer_reported_critical_load_n": 1829.1160866837124,
+    "historical_producer_reported_status": "pass",
+    "historical_producer_reported_value": 7.0350618718604325,
+    "interpretation_status": "withdrawn",
+    "producer_source": {
+      "path": "ops/ci/side_a4.py",
+      "sha256": "f7a49fa378ca5aa9b0ca661db975723c04f727fde6b5f168822e15593202aeca"
+    },
+    "source": {
+      "path": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_a4.json",
+      "sha256": "788196e1a534b1611df5a777741c7ec77079493c770a73ec2e976f30906cb472"
+    },
     "source_status": "pass",
+    "source_status_context": "historical producer status only",
     "supported_blade_peak_MPa_per_N": 2.4942468866430674,
     "supported_hand_peak_MPa_per_N": 0.47941618381763057,
-    "supported_lateral_ratio": 5.2026756101164
+    "supported_lateral_ratio": 5.2026756101164,
+    "withdrawal_reason": "Unqualified K_support^-1 G passed to symmetric eigsh; no retained Euclidean symmetry or eigenpair-residual qualification"
   },
   "weighted_cad_score_breakdown": {
     "W_CAD": -5.570408,
     "base_feasible": -1.0,
     "failed_branch_formula": "base_feasible (-1.0) - shortfall_penalty (4.619108) + 0.1 * s_mass (0.048700) = -5.570408 (conditional failed branch, not unpenalized_quality_score - shortfall_penalty)",
+    "interpretation": "historical stored arithmetic; not a current engineering qualification; dependent A4 flag is unqualified",
     "nonzero_shortfalls": [
       {
         "key": "twist_tip_strict",
