@@ -150,7 +150,7 @@ cargo build --release --locked
 **Reconstruct the paper and supplement from retained evidence:**
 
 ```sh
-rtk proxy sh docs/paper/reproduce.sh build
+sh docs/paper/reproduce.sh build
 ```
 
 This reads original evidence and writes reporting derivatives, figures, PDFs and build manifests. It invokes no new search, CAD export or mechanical solve. [Prerequisites and separate validation commands](docs/paper/README.md#reconstruct-the-reports).

@@ -53,6 +53,7 @@ jobs:
           export CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true
           export CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS=true
           cargo test --release --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2
+          cargo test --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example verify_review_origin -- --nocapture
           cargo run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
       - name: Build generic claim bridge for operator-admission controls
         run: |
@@ -298,6 +299,9 @@ jobs:
             docs/paper/publication.v2.json
             docs/paper/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_20261019.json
             docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE*.json
+            docs/paper/history/ultralight_weighted_fitness_009f5ac5.source.txt
+            crates/paper-artifacts/examples/verify_review_origin.rs
+            crates/paper-artifacts/examples/fixtures/verify-review-origin-neutral.v1.json
             docs/paper/figures/fig1_hero_blender_v2.png
             docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg
             docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.png
@@ -305,6 +309,7 @@ jobs:
             docs/paper/drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.png
             docs/paper/data/*.json
             docs/paper/generated/display-composite.v1.json
+            docs/paper/generated/reporting-interpretation.v2.json
             docs/paper/generated/test-field-roster.v1.tsv
             docs/paper/generated/hero-*.svg
             docs/paper/generated/population-detail.svg

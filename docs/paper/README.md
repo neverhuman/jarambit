@@ -20,14 +20,14 @@ The [complete row-level inventory](generated/test-field-roster.v1.tsv) preserves
 
 The [score-axis receipt](generated/population/score-axis.v1.json) records each separate scale. The Supplement includes the [additional quantile detail](generated/population-detail.svg) and all five paired native-run views. They reuse the original observations. The [leader receipt](generated/population/retained-leaders.v1.json) retains exact source identities and ties within compatible regimes; it establishes no global comparable champion.
 
-The solid comparison is scikit-fem/PyAMG CG versus DOLFINx/PETSc CG/GAMG on a shared saved mesh with cut-arc clamping and patch loads. Executed scikit-fem/PyAMG versions are unavailable; the retained sidecar identifies DOLFINx 0.9.0 and PETSc 3.22.0. [Implementation details](supplement/numerical-methods.tex).
+The solid comparison is scikit-fem/PyAMG CG versus DOLFINx/PETSc CG/GAMG on a shared saved mesh with cut-arc clamping and patch loads. A retained capture reports Python 3.12.3, scikit-fem 12.0.2, PyAMG 5.3.0, SciPy 1.18.1 and NumPy 2.5.4; the comparison sidecar identifies DOLFINx 0.9.0 and PETSc 3.22.0. Capture precedes possible cache reuse and is not digest-bound by the original solve records, so the exact historical executed environment remains unproven. [Implementation details](supplement/numerical-methods.tex).
 
 ## Reconstruct the reports
 
 From the repository root:
 
 ~~~sh
-rtk proxy sh docs/paper/reproduce.sh build
+sh docs/paper/reproduce.sh build
 ~~~
 
 This reads retained evidence and writes reporting derivatives, PNG figures, main/supplement PDFs, and manifests under the lane's existing target/. It does not run a new search, CAD export, FEM solve, or physical experiment. The complete native input expands to approximately 3.81 GB and is streamed under the allocated resource cap.
@@ -35,12 +35,21 @@ This reads retained evidence and writes reporting derivatives, PNG figures, main
 Prerequisites: Rust/Cargo with locked dependencies, complete archives, LuaLaTeX/IEEEtran, TeX Gyre fonts, librsvg, Fontconfig, and PDF tools. The script defaults to two Cargo build jobs; the caller supplies its machine's resource allocation. Rebuild documents from existing generated figures with:
 
 ~~~sh
-rtk proxy sh docs/paper/reproduce.sh documents
+sh docs/paper/reproduce.sh documents
 ~~~
 
 Display-only parameters are versioned in [display-composite-contract.v1.json](data/display-composite-contract.v1.json) and [score-axis-contract.v1.json](data/score-axis-contract.v1.json): source membership/masks, area-midrank and mean rules, palette anchors, optional contrast bounds, and axis/quantile rules. The renderer checks these admitted definitions; changing a display definition requires a matching reviewed source/contract revision. The build retains release-mode overflow checks and debug assertions.
 
 Final validation uses the check subcommand after the recorded freeze, together with all required repository gates and independent exact-head review. An implementation build does not establish that those checks have passed.
+
+The full retained-archive audit explicitly decodes all 200 segments (1,954,560 rows):
+
+~~~sh
+cargo run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml \
+  --example publication_v2_audit -- --full-zstd
+~~~
+
+`make -C docs/paper audit-full` also checks generated freshness. `audit-quick` decodes one segment per run (10/200), which does not establish full decode. The audit emits its actual scope, configured limit, segment/row counts, source/binary hashes, command, elapsed time and exit. The agent-only `rtk` wrapper is not a public build prerequisite.
 
 ## Source closure and accessions
 
