@@ -252,8 +252,8 @@ pub(crate) fn markdown(p: &Value) -> Result<String> {
             let label = match string(&v["visual_kind"])? {
                 "retained_plate_cell_field" => "Actual retained plate field",
                 "retained_scalars_and_binned_profiles" => "Saved scalars and binned profiles",
-                "retained_scalars_flags_and_support_schematic" => {
-                    "Saved scalars, flags and support schematic"
+                "historical_scalars_flags_and_withdrawn_buckling_interpretation" => {
+                    "Historical scalars/flags; current buckling inference withdrawn"
                 }
                 "retained_silhouettes_and_reference_descriptors" => {
                     "Saved silhouettes, reference descriptors and flags"
