@@ -1153,6 +1153,128 @@ fn point_bounds(values: impl Iterator<Item = f64>) -> Result<[f64; 2]> {
     Ok(bounds)
 }
 
+#[derive(Clone, Copy, Debug)]
+enum DetailDirection {
+    Higher,
+    Lower,
+}
+
+// Membership is computed in original score units, independently of the display
+// transform. Constant domains stay exact; PointRaster centers tied observations.
+fn directed_detail_bounds(values: &[f64], direction: DetailDirection) -> Result<[f64; 2]> {
+    if values.is_empty() || values.iter().any(|value| !value.is_finite()) {
+        return Err("population: empty or nonfinite directed-detail source".into());
+    }
+    let mut sorted = values.to_vec();
+    sorted.sort_by(f64::total_cmp);
+    Ok(match direction {
+        DetailDirection::Higher => [
+            crate::score_axis::quantile_sorted(&sorted, 0.90).unwrap(),
+            sorted[sorted.len() - 1],
+        ],
+        DetailDirection::Lower => [
+            sorted[0],
+            crate::score_axis::quantile_sorted(&sorted, 0.10).unwrap(),
+        ],
+    })
+}
+
+fn detail_row_hash(hash: &mut Sha256, identity: &[u64], value: f64) {
+    hash.update((identity.len() as u64).to_le_bytes());
+    for part in identity {
+        hash.update(part.to_le_bytes());
+    }
+    hash.update(value.to_bits().to_le_bytes());
+}
+
+struct DirectedDetail {
+    bounds: [f64; 2],
+    direction: DetailDirection,
+    expected_counts: [u64; 3],
+    counts: [u64; 3],
+    extremum: f64,
+    cutoff: f64,
+    source_extremum_ties: u64,
+    included_extremum_ties: u64,
+    source_cutoff_ties: u64,
+    included_cutoff_ties: u64,
+    all_rows_hash: Sha256,
+    selected_rows_hash: Sha256,
+    extremum_rows_hash: Sha256,
+}
+
+impl DirectedDetail {
+    fn new(values: &[f64], direction: DetailDirection) -> Result<Self> {
+        let bounds = directed_detail_bounds(values, direction)?;
+        let (extremum, cutoff) = match direction {
+            DetailDirection::Higher => (bounds[1], bounds[0]),
+            DetailDirection::Lower => (bounds[0], bounds[1]),
+        };
+        let mut expected_counts = [0; 3];
+        for &value in values {
+            expected_counts[if value < bounds[0] { 0 } else if value > bounds[1] { 2 } else { 1 }] += 1;
+        }
+        Ok(Self {
+            bounds, direction, expected_counts, counts: [0; 3], extremum, cutoff,
+            source_extremum_ties: values.iter().filter(|&&v| v == extremum).count() as u64,
+            included_extremum_ties: 0,
+            source_cutoff_ties: values.iter().filter(|&&v| v == cutoff).count() as u64,
+            included_cutoff_ties: 0,
+            all_rows_hash: Sha256::new(), selected_rows_hash: Sha256::new(),
+            extremum_rows_hash: Sha256::new(),
+        })
+    }
+
+    fn observe(&mut self, identity: &[u64], value: f64) -> Result<bool> {
+        if identity.is_empty() || !value.is_finite() {
+            return Err("population: malformed directed-detail identity or score".into());
+        }
+        let bucket = if value < self.bounds[0] { 0 } else if value > self.bounds[1] { 2 } else { 1 };
+        self.counts[bucket] += 1;
+        detail_row_hash(&mut self.all_rows_hash, identity, value);
+        self.all_rows_hash.update([bucket as u8]);
+        if bucket == 1 {
+            detail_row_hash(&mut self.selected_rows_hash, identity, value);
+            if value == self.extremum {
+                self.included_extremum_ties += 1;
+                detail_row_hash(&mut self.extremum_rows_hash, identity, value);
+            }
+            self.included_cutoff_ties += u64::from(value == self.cutoff);
+        }
+        Ok(bucket == 1)
+    }
+
+    fn receipt(&self, raster: &PointRaster, identity_fields: &[&str]) -> Result<Value> {
+        let forbidden_tail = match self.direction { DetailDirection::Higher => 2, DetailDirection::Lower => 0 };
+        if self.counts != self.expected_counts || self.counts[forbidden_tail] != 0
+            || raster.point_operations != self.counts[1]
+            || raster.y_domain != self.bounds || raster.observed_y != self.bounds
+            || self.included_extremum_ties != self.source_extremum_ties
+            || self.included_cutoff_ties != self.source_cutoff_ties
+        {
+            return Err("population: directed-detail count, boundary or extremum retention differs".into());
+        }
+        Ok(json!({
+            "direction": match self.direction { DetailDirection::Higher => "higher_is_better", DetailDirection::Lower => "lower_is_better" },
+            "selection": match self.direction { DetailDirection::Higher => "Q90..MAX", DetailDirection::Lower => "MIN..Q10" },
+            "bounds": self.bounds, "membership_bounds_original_units": self.bounds,
+            "display_axis_widened": false, "constant_domain_policy": "exact membership and display domain retained; tied points centered, no widened selection",
+            "numeric_universe": self.expected_counts.iter().sum::<u64>(),
+            "below_inside_above": self.counts, "cutoff": self.cutoff,
+            "cutoff_ties": {"source_count": self.source_cutoff_ties, "included_count": self.included_cutoff_ties},
+            "extremum": {"value": self.extremum, "source_tie_count": self.source_extremum_ties,
+                "included_tie_count": self.included_extremum_ties,
+                "ordered_identity_score_sha256": format!("{:x}", self.extremum_rows_hash.clone().finalize())},
+            "identity_fields": identity_fields,
+            "hash_encoding": "ordered LE u64 identity arity, each identity field, original f64 score bits; all-row hash additionally appends u8 below=0/inside=1/above=2",
+            "all_rows_membership_sha256": format!("{:x}", self.all_rows_hash.clone().finalize()),
+            "selected_identity_score_sha256": format!("{:x}", self.selected_rows_hash.clone().finalize()),
+            "membership_transform": "none; inclusive original scores and all boundary ties",
+            "raster": raster.receipt()?
+        }))
+    }
+}
+
 fn point_panel(
     svg: &mut String,
     raster: &PointRaster,
@@ -1255,12 +1377,12 @@ fn render_population_latest_svg(
     let native_values: Vec<_> = native_points.iter().map(|p| p.3).collect();
     let native_axis = crate::score_axis::ScoreAxis::derive(&native_values)?;
     let native_bounds = point_bounds(native_values.iter().copied())?;
-    let native_detail_bounds = crate::score_axis::detail_bounds(&native_values)?;
+    let mut native_selection = DirectedDetail::new(&native_values, DetailDirection::Higher)?;
+    let native_detail_bounds = native_selection.bounds;
     let mut native =
         PointRaster::new(1201, 321, [0.0, 800.0], native_bounds)?.with_axis(native_axis);
     let mut native_detail =
         PointRaster::new(1201, 321, [0.0, 800.0], native_detail_bounds)?.with_axis(native_axis);
-    let mut native_tails = [0u64; 3];
     let mut native_leaders: BTreeMap<usize, (f64, Vec<(u64, u64)>)> = BTreeMap::new();
     for &(run, id, generation, fit) in &native_points {
         let pixel = native.paint(generation as f64, fit)?;
@@ -1272,15 +1394,7 @@ fn render_population_latest_svg(
         ] {
             paint_hash.update(part);
         }
-        let bucket = if fit < native_detail_bounds[0] {
-            0
-        } else if fit > native_detail_bounds[1] {
-            2
-        } else {
-            1
-        };
-        native_tails[bucket] += 1;
-        if bucket == 1 {
+        if native_selection.observe(&[run as u64, id, generation], fit)? {
             native_detail.paint(generation as f64, fit)?;
         }
         let leader = native_leaders.entry(run).or_insert((fit, Vec::new()));
@@ -1292,6 +1406,7 @@ fn render_population_latest_svg(
             leader.1.push((id, generation));
         }
     }
+    let native_tails = native_selection.counts;
     if native.point_operations != native_visits || native_tails.iter().sum::<u64>() != native_visits
     {
         return Err("population: full/detail point accounting differs".into());
@@ -1332,10 +1447,10 @@ fn render_population_latest_svg(
     }
     let historical_values: Vec<_> = historical_points.iter().map(|p| p.2).collect();
     let historical_axis = crate::score_axis::ScoreAxis::derive(&historical_values)?;
-    let historical_detail_bounds = crate::score_axis::detail_bounds(&historical_values)?;
+    let mut historical_selection = DirectedDetail::new(&historical_values, DetailDirection::Higher)?;
+    let historical_detail_bounds = historical_selection.bounds;
     let mut historical_detail = PointRaster::new(951, 221, [0.0, 16.0], historical_detail_bounds)?
         .with_axis(historical_axis);
-    let mut historical_tails = [0u64; 3];
     let mut historical = PointRaster::new(
         951,
         221,
@@ -1345,15 +1460,7 @@ fn render_population_latest_svg(
     .with_axis(historical_axis);
     for &(id, generation, fit) in &historical_points {
         let pixel = historical.paint(generation as f64, fit)?;
-        let bucket = if fit < historical_detail_bounds[0] {
-            0
-        } else if fit > historical_detail_bounds[1] {
-            2
-        } else {
-            1
-        };
-        historical_tails[bucket] += 1;
-        if bucket == 1 {
+        if historical_selection.observe(&[id, generation], fit)? {
             historical_detail.paint(generation as f64, fit)?;
         }
         for part in [
@@ -1366,6 +1473,8 @@ fn render_population_latest_svg(
             historical_hash.update(part);
         }
     }
+
+    let historical_tails = historical_selection.counts;
 
     // Bind the existing raw joined screen reader to every admitted original pair.
     // Its sorted birth-file index is the x identity, never a synthetic generation.
@@ -1426,10 +1535,10 @@ fn render_population_latest_svg(
     }
     let screening_values: Vec<_> = screen_points.iter().map(|p| p.2).collect();
     let screening_axis = crate::score_axis::ScoreAxis::derive(&screening_values)?;
-    let screening_detail_bounds = crate::score_axis::detail_bounds(&screening_values)?;
+    let mut screening_selection = DirectedDetail::new(&screening_values, DetailDirection::Lower)?;
+    let screening_detail_bounds = screening_selection.bounds;
     let mut screening_detail =
         PointRaster::new(951, 221, [1.0, 57.0], screening_detail_bounds)?.with_axis(screening_axis);
-    let mut screening_tails = [0u64; 3];
     let mut screening = PointRaster::new(
         951,
         221,
@@ -1440,15 +1549,7 @@ fn render_population_latest_svg(
     let mut screening_hash = Sha256::new();
     for &(file, candidate, deficit) in &screen_points {
         let pixel = screening.paint((file + 1) as f64, deficit)?;
-        let bucket = if deficit < screening_detail_bounds[0] {
-            0
-        } else if deficit > screening_detail_bounds[1] {
-            2
-        } else {
-            1
-        };
-        screening_tails[bucket] += 1;
-        if bucket == 1 {
+        if screening_selection.observe(&[file + 1, candidate], deficit)? {
             screening_detail.paint((file + 1) as f64, deficit)?;
         }
         for part in [
@@ -1461,6 +1562,7 @@ fn render_population_latest_svg(
             screening_hash.update(part);
         }
     }
+    let screening_tails = screening_selection.counts;
     let unknown = newer_rec["unscreened_points"]
         .as_array()
         .ok_or("population: missing unknown proposals")?;
@@ -1553,7 +1655,14 @@ fn render_population_latest_svg(
         .copied()
         .fold(f64::INFINITY, f64::min);
     receipt["retained_leaders"] = json!({"native_by_run":native_leader_rows,"historical":{"native_direction":"higher_is_better","value":historical_max,"ties":historical_points.iter().filter(|p| p.2==historical_max).map(|p|json!({"original_id":p.0,"public_individual":p.0,"generation":p.1})).collect::<Vec<_>>(),"source":HISTORICAL_ALL_EVALS_JSON_RELPATH,"source_sha256":HISTORICAL_ALL_EVALS_JSON_SHA256,"later_assessment":"Individual1095: earlier run-specific Boolean predicate cert_pass_all=false, seq_ok=false; not a later 26-requirement qualification result"},"screening":{"native_direction":"lower_is_better","value":screening_min,"ties":screen_points.iter().filter(|p|p.2==screening_min).map(|p|json!({"birth_file_ordinal":p.0+1,"candidate_one_based":p.1,"public_individual":newer_start+proposal_offsets[p.0 as usize]+p.1-1,"source_pair":source_pairs[p.0 as usize]})).collect::<Vec<_>>(),"later_assessment":null},"global_comparable_champion":null,"selection_on_display_transform":false,"tie_rule":"retain all exact original numeric ties in source traversal order"});
-    receipt["detail"] = json!({"policy":"additional empirical Q01–Q99 panels; floor(p*(n-1)); strict tails, boundary ties inside","native":{"bounds":native_detail_bounds,"below_inside_above":native_tails,"raster":native_detail.receipt()?},"historical":{"bounds":historical_detail_bounds,"below_inside_above":historical_tails,"raster":historical_detail.receipt()?},"screening":{"bounds":screening_detail_bounds,"below_inside_above":screening_tails,"raster":screening_detail.receipt()?}});
+    receipt["detail"] = json!({
+        "policy":"higher-is-better Q90..MAX; lower-is-better MIN..Q10; floor(p*(n-1)); inclusive cutoff and extremum ties",
+        "full_range_companion":"docs/paper/figures/population-latest.svg",
+        "pooled_native_scope":"display context only; not a comparable global engineering winner or connected cross-run trajectory",
+        "native":native_selection.receipt(&native_detail, &["archive_run_ordinal","original_id","generation"])?,
+        "historical":historical_selection.receipt(&historical_detail, &["original_id","generation"])?,
+        "screening":screening_selection.receipt(&screening_detail, &["birth_file_ordinal_one_based","candidate_one_based"])?
+    });
     let mut outputs = BTreeMap::new();
     let mut run_context_receipts = Vec::new();
     let run_keys: Vec<_> = native_leaders.keys().copied().collect();
@@ -1635,7 +1744,7 @@ fn render_population_latest_svg(
         );
     }
     receipt["run_context"] = json!(run_context_receipts);
-    receipt["point_operations_by_view"] = json!({"full_overview":native.point_operations+historical.point_operations+screening.point_operations,"additional_quantile_detail":native_detail.point_operations+historical_detail.point_operations+screening_detail.point_operations,"additional_separate_native_run_context":native_points.len(),"interpretation":"The same retained observations are shown in multiple explicitly labeled views; additional views are not new data."});
+    receipt["point_operations_by_view"] = json!({"full_overview":native.point_operations+historical.point_operations+screening.point_operations,"additional_directed_tail_detail":native_detail.point_operations+historical_detail.point_operations+screening_detail.point_operations,"additional_separate_native_run_context":native_points.len(),"interpretation":"The same retained observations are shown in multiple explicitly labeled views; additional views are not new data."});
     let mut full = String::new();
     for detail in [false, true] {
         let height = if detail { 1360 } else { 1280 };
@@ -1643,15 +1752,20 @@ fn render_population_latest_svg(
             r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 {height}" width="1200" height="{height}" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"><rect width="1200" height="{height}" fill="#ffffff"/>"##
         );
         let title = if detail {
-            "Q01–Q99 Detail — Full-Range Companion Retained"
+            "High-Fitness / Low-Deficit Tail Detail — Full Range Retained"
         } else {
             "Every Retained Scored Record — Separate Source Profiles"
         };
-        svg.push_str(&format!(r##"<text x="40" y="42" font-size="25" font-weight="700" fill="#0f172a">{title}</text><text x="40" y="76" font-size="21" fill="#475569">Original score units; source-derived axes; overlapping marks are neutral occupancy.</text>"##));
+        let subtitle = if detail {
+            "Original-score tails; all boundary/extremum ties; companion: population-latest.svg."
+        } else {
+            "Original score units; source-derived axes; overlapping marks are neutral occupancy."
+        };
+        svg.push_str(&format!(r##"<text x="40" y="42" font-size="25" font-weight="700" fill="#0f172a">{title}</text><text x="40" y="76" font-size="21" fill="#475569">{subtitle}</text>"##));
         for (i, (raster, label, x_label, y_label, tails)) in [
             (
                 if detail { &native_detail } else { &native },
-                "A / Runs 2–11 — 1,954,560 native observations",
+                if detail { "A / Runs 2–11 — Higher-fitness tail (pooled context only)" } else { "A / Runs 2–11 — 1,954,560 native observations" },
                 "Recorded generation",
                 "Native contextual fitness (higher is better)",
                 native_tails,
@@ -1662,7 +1776,7 @@ fn render_population_latest_svg(
                 } else {
                     &historical
                 },
-                "B / Run 1 — 1,984 historical births",
+                if detail { "B / Run 1 — Higher-fitness tail" } else { "B / Run 1 — 1,984 historical births" },
                 "Recorded generation",
                 "Historical search fitness (higher is better)",
                 historical_tails,
@@ -1673,7 +1787,7 @@ fn render_population_latest_svg(
                 } else {
                     &screening
                 },
-                "C / 2,259 joined numeric screens",
+                if detail { "C / Joined numeric screens — Lower-deficit tail" } else { "C / 2,259 joined numeric screens" },
                 "Retained birth-file ordinal",
                 "Screen deficit (lower is better)",
                 screening_tails,
@@ -1696,7 +1810,11 @@ fn render_population_latest_svg(
                 y_label,
             );
             if detail {
-                svg.push_str(&format!(r##"<text x="190" y="{}" font-size="21" fill="#475569">Below: {}; inside: {}; above: {}. Full range: population-latest.svg.</text>"##,top+350.0,tails[0],tails[1],tails[2]));
+                let selection = [&native_selection, &historical_selection, &screening_selection][i];
+                let range = if i == 2 { "MIN..Q10" } else { "Q90..MAX" };
+                svg.push_str(&format!(r##"<text x="190" y="{}" font-size="21" fill="#475569">{range}: [{:.4}, {:.4}]; inside {} (all cutoff ties).</text><text x="190" y="{}" font-size="21" fill="#475569">Below {}; above {}; retained extreme {:.4}; {} tied rows.</text>"##,
+                    top+350.0,selection.bounds[0],selection.bounds[1],tails[1],
+                    top+378.0,tails[0],tails[2],selection.extremum,selection.source_extremum_ties));
             }
         }
         svg.push_str(&format!(r##"<text x="40" y="{}" font-size="21" fill="#92400e" data-unknown-proposal-count="1390">1,390 proposals have no retained numeric screen value; no score is imputed.</text>"##,height-20));
@@ -3950,6 +4068,142 @@ pub fn generate_v2_outputs(
 mod tests {
     use super::*;
 
+    fn neutral_tail_receipt(rows: &[(u64, f64)], direction: DetailDirection) -> Value {
+        let values: Vec<_> = rows.iter().map(|row| row.1).collect();
+        let mut selection = DirectedDetail::new(&values, direction).unwrap();
+        let mut raster = PointRaster::new(11, 11, [0., rows.len() as f64], selection.bounds)
+            .unwrap().with_axis(crate::score_axis::ScoreAxis::Linear);
+        for (position, &(id, score)) in rows.iter().enumerate() {
+            if selection.observe(&[id], score).unwrap() {
+                raster.paint(position as f64, score).unwrap();
+            }
+        }
+        selection.receipt(&raster, &["neutral_id"]).unwrap()
+    }
+
+    #[test]
+    fn directed_detail_uses_original_direction_and_retains_extrema() {
+        let values: Vec<_> = (0..=10).map(f64::from).collect();
+        assert_eq!(directed_detail_bounds(&values, DetailDirection::Higher).unwrap(), [9., 10.]);
+        assert_eq!(directed_detail_bounds(&values, DetailDirection::Lower).unwrap(), [0., 1.]);
+        let rows: Vec<_> = values.iter().enumerate().map(|(i, &v)| (i as u64, v)).collect();
+        let higher = neutral_tail_receipt(&rows, DetailDirection::Higher);
+        let lower = neutral_tail_receipt(&rows, DetailDirection::Lower);
+        assert_eq!(higher["below_inside_above"], json!([9, 2, 0]));
+        assert_eq!(lower["below_inside_above"], json!([0, 2, 9]));
+        assert_eq!(higher["extremum"]["value"], 10.);
+        assert_eq!(lower["extremum"]["value"], 0.);
+    }
+
+    #[test]
+    fn directed_detail_includes_every_cutoff_and_extremum_tie() {
+        // Q90 index18 cuts at18, including both18s plus the20 maximum.
+        let mut rows: Vec<_> = (0..=20).map(|id| (id, id as f64)).collect();
+        rows[19].1 = 18.;
+        let higher = neutral_tail_receipt(&rows, DetailDirection::Higher);
+        assert_eq!(higher["bounds"], json!([18., 20.]));
+        assert_eq!(higher["below_inside_above"], json!([18, 3, 0]));
+        assert_eq!(higher["cutoff_ties"], json!({"source_count":2,"included_count":2}));
+        let lower_rows: Vec<_> = rows.iter().map(|&(id, value)| (id, -value)).collect();
+        let lower = neutral_tail_receipt(&lower_rows, DetailDirection::Lower);
+        assert_eq!(lower["bounds"], json!([-20., -18.]));
+        assert_eq!(lower["below_inside_above"], json!([0, 3, 18]));
+        for result in [&higher, &lower] {
+            assert_eq!(result["extremum"]["source_tie_count"], 1);
+            assert_eq!(result["extremum"]["included_tie_count"], 1);
+            assert_eq!(result["raster"]["point_operations"], 3);
+        }
+    }
+
+    #[test]
+    fn directed_detail_all_tied_membership_and_display_stay_exact() {
+        let rows = [(11, 2.), (12, 2.), (13, 2.), (14, 2.)];
+        for direction in [DetailDirection::Higher, DetailDirection::Lower] {
+            let result = neutral_tail_receipt(&rows, direction);
+            assert_eq!(result["membership_bounds_original_units"], json!([2., 2.]));
+            assert_eq!(result["raster"]["score_display_domain"], json!([2., 2.]));
+            assert_eq!(result["display_axis_widened"], false);
+            assert_eq!(result["below_inside_above"], json!([0, 4, 0]));
+            assert_eq!(result["extremum"]["included_tie_count"], 4);
+        }
+    }
+
+    #[test]
+    fn directed_detail_rejects_empty_nonfinite_and_malformed_numeric_input() {
+        assert!(DirectedDetail::new(&[], DetailDirection::Higher).is_err());
+        for bad in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
+            for direction in [DetailDirection::Higher, DetailDirection::Lower] {
+                assert!(directed_detail_bounds(&[0., bad], direction).is_err());
+            }
+        }
+        for bad in [Value::Null, json!("1"), json!("NaN"), json!({})] {
+            assert!(finite_point_number(&bad).is_err());
+        }
+        let mut selection = DirectedDetail::new(&[1.], DetailDirection::Higher).unwrap();
+        assert!(selection.observe(&[], 1.).is_err());
+        assert!(selection.observe(&[1], f64::NAN).is_err());
+        assert_eq!(selection.counts, [0, 0, 0]);
+    }
+
+    #[test]
+    fn directed_detail_count_conservation_rejects_missing_and_extra_visits() {
+        let mut selection = DirectedDetail::new(&[0., 1., 2.], DetailDirection::Higher).unwrap();
+        let mut raster = PointRaster::new(5, 5, [0., 2.], selection.bounds).unwrap();
+        assert!(selection.observe(&[1], 1.).unwrap());
+        raster.paint(1., 1.).unwrap();
+        assert!(selection.receipt(&raster, &["id"]).is_err());
+        assert!(!selection.observe(&[0], 0.).unwrap());
+        assert!(selection.observe(&[2], 2.).unwrap());
+        raster.paint(2., 2.).unwrap();
+        assert!(selection.receipt(&raster, &["id"]).is_ok());
+        assert!(selection.observe(&[2], 2.).unwrap());
+        raster.paint(2., 2.).unwrap();
+        assert!(selection.receipt(&raster, &["id"]).is_err());
+    }
+
+    #[test]
+    fn directed_detail_binding_distinguishes_identity_score_and_order() {
+        let rows = [(1, 0.), (2, 9.), (3, 9.), (4, 10.)];
+        let original = neutral_tail_receipt(&rows, DetailDirection::Higher);
+        let reversed: Vec<_> = rows.iter().rev().copied().collect();
+        let reversed = neutral_tail_receipt(&reversed, DetailDirection::Higher);
+        assert_eq!(original["below_inside_above"], reversed["below_inside_above"]);
+        assert_ne!(original["selected_identity_score_sha256"], reversed["selected_identity_score_sha256"]);
+        let mut identity_changed = rows;
+        identity_changed[3].0 = 999;
+        let changed = neutral_tail_receipt(&identity_changed, DetailDirection::Higher);
+        assert_ne!(original["selected_identity_score_sha256"], changed["selected_identity_score_sha256"]);
+        let mut score_changed = rows;
+        score_changed[3].1 = 11.;
+        let changed = neutral_tail_receipt(&score_changed, DetailDirection::Higher);
+        assert_ne!(original["extremum"]["ordered_identity_score_sha256"], changed["extremum"]["ordered_identity_score_sha256"]);
+    }
+
+    #[test]
+    fn directed_detail_single_observation_and_signed_zero_remain_numeric() {
+        for direction in [DetailDirection::Higher, DetailDirection::Lower] {
+            let one = neutral_tail_receipt(&[(7, -3.)], direction);
+            assert_eq!(one["bounds"], json!([-3., -3.]));
+            assert_eq!(one["below_inside_above"], json!([0, 1, 0]));
+            let zeros = neutral_tail_receipt(&[(1, -0.), (2, 0.)], direction);
+            assert_eq!(zeros["below_inside_above"], json!([0, 2, 0]));
+            let positive_zeros = neutral_tail_receipt(&[(1, 0.), (2, 0.)], direction);
+            assert_ne!(zeros["selected_identity_score_sha256"], positive_zeros["selected_identity_score_sha256"]);
+        }
+    }
+
+    #[test]
+    fn directed_detail_receipt_rejects_undisclosed_axis_widening() {
+        let mut selection = DirectedDetail::new(&[0., 9., 10.], DetailDirection::Higher).unwrap();
+        let mut raster = PointRaster::new(5, 5, [0., 2.], [0., 10.]).unwrap();
+        for (id, value) in [0., 9., 10.].into_iter().enumerate() {
+            if selection.observe(&[id as u64], value).unwrap() {
+                raster.paint(id as f64, value).unwrap();
+            }
+        }
+        assert!(selection.receipt(&raster, &["id"]).is_err());
+    }
+
     #[test]
     fn hero_lighting_recipe_requires_a_bounded_integral_exponent() {
         assert_eq!(hero_shininess(&json!(24.0)).unwrap(),24);
@@ -4427,34 +4681,51 @@ mod tests {
                 assert!(lat_svg.contains(&format!(">{:.4}</text>", value.as_f64().unwrap())));
             }
         }
-        assert!(detail_svg.contains("Q01–Q99 Detail — Full-Range Companion Retained</text>"));
-        for (profile, tails) in [
-            ("native", [19542u64, 1915492, 19526]),
-            ("historical", [19, 1945, 20]),
-            ("screening", [22, 2214, 23]),
+        assert!(detail_svg.contains("High-Fitness / Low-Deficit Tail Detail — Full Range Retained</text>"));
+        for (profile, numeric_universe, selection, extremum, forbidden_tail) in [
+            ("native", 1_954_560u64, "Q90..MAX", 1.144, 2usize),
+            ("historical", 1_984, "Q90..MAX", 1.15727, 2),
+            ("screening", 2_259, "MIN..Q10", 2.769032384488388, 0),
         ] {
-            assert_eq!(
-                points["detail"][profile]["below_inside_above"],
-                json!(tails)
-            );
-            assert_eq!(
-                tails.iter().sum::<u64>(),
-                points[profile]["raster"]["point_operations"]
-                    .as_u64()
-                    .unwrap()
-            );
-            assert_eq!(
-                points["detail"][profile]["raster"]["point_operations"],
-                tails[1]
-            );
+            let detail = &points["detail"][profile];
+            let tails: Vec<_> = detail["below_inside_above"].as_array().unwrap()
+                .iter().map(|count| count.as_u64().unwrap()).collect();
+            assert_eq!(tails.len(), 3);
+            assert_eq!(tails.iter().sum::<u64>(), numeric_universe);
+            assert_eq!(detail["numeric_universe"], numeric_universe);
+            assert_eq!(points[profile]["raster"]["point_operations"], numeric_universe);
+            assert_eq!(tails[forbidden_tail], 0);
+            assert!(tails[1] > 0);
+            assert_eq!(detail["raster"]["point_operations"], tails[1]);
+            assert_eq!(detail["selection"], selection);
+            assert_eq!(detail["extremum"]["value"], json!(extremum));
+            assert_eq!(detail["extremum"]["source_tie_count"], detail["extremum"]["included_tie_count"]);
+            assert!(detail["extremum"]["included_tie_count"].as_u64().unwrap() > 0);
+            assert_eq!(detail["cutoff_ties"]["source_count"], detail["cutoff_ties"]["included_count"]);
+            assert_eq!(detail["display_axis_widened"], false);
+            assert_eq!(detail["bounds"], detail["raster"]["observed_score_extrema"]);
+            for binding in ["all_rows_membership_sha256", "selected_identity_score_sha256"] {
+                assert_eq!(detail[binding].as_str().unwrap().len(), 64);
+            }
             assert!(detail_svg.contains(&format!(
-                "Below: {}; inside: {}; above: {}. Full range: population-latest.svg.</text>",
-                tails[0], tails[1], tails[2]
+                "{selection}: [{:.4}, {:.4}]; inside {} (all cutoff ties).</text>",
+                detail["bounds"][0].as_f64().unwrap(), detail["bounds"][1].as_f64().unwrap(), tails[1]
             )));
-            for value in points["detail"][profile]["bounds"].as_array().unwrap() {
+            assert!(detail_svg.contains(&format!(
+                "Below {}; above {}; retained extreme {:.4}; {} tied rows.</text>",
+                tails[0], tails[2], extremum, detail["extremum"]["source_tie_count"].as_u64().unwrap()
+            )));
+            for value in detail["bounds"].as_array().unwrap() {
                 assert!(detail_svg.contains(&format!(">{:.4}</text>", value.as_f64().unwrap())));
             }
         }
+        // Independent original source namespaces and known full-range extrema
+        // must survive the additional detail selection.
+        assert_eq!(points["native"]["runs"].as_array().unwrap().len(), 10);
+        assert_eq!(points["historical"]["source_path"], HISTORICAL_ALL_EVALS_JSON_RELPATH);
+        assert_eq!(points["historical"]["source_sha256"], HISTORICAL_ALL_EVALS_JSON_SHA256);
+        assert_eq!(points["screening"]["source_pairs"].as_array().unwrap().len(), 57);
+        assert_eq!(points["detail"]["native"]["extremum"]["included_tie_count"], 7);
         let run_context = points["run_context"].as_array().unwrap();
         assert_eq!(run_context.len(), 10);
         for pair in run_context.chunks_exact(2) {

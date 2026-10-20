@@ -10,10 +10,13 @@
   "full_domain": "actual original extrema; every numeric observation painted once including overlaps; invalid/outside point is error",
   "unknown_observations": "nonnumeric count only, neverzero",
   "ticks": "5 evenly spaced transformed positions with inverse in original units; constant has1; generation ticks are original integer coordinates",
-  "detail_quantiles": [
-    0.01,
-    0.99
-  ],
+  "detail_quantiles": {
+    "higher_is_better": [0.90, 1.0],
+    "lower_is_better": [0.0, 0.10]
+  },
+  "detail_membership": "higher-is-better Q90 through actual finite MAX; lower-is-better actual finite MIN through Q10; preserve every cutoff and extremum tie in original score units",
+  "detail_constant_domain": "membership and display bounds remain the exact constant value; coincident points are centered; no widened selection",
+  "detail_accounting": "strict below/inside/above conserved against original numeric universe; higher strict-above=0, lower strict-below=0; bind selected ordered identities/original score bits and all extremum ties",
   "quantile_definition": "sort original numeric observations; floor(p*(n-1)); all values equal to boundary are inside",
   "tail_counts": "strictly below, inclusive inside, strictly above; sum equals full original count",
   "detail_is_additional": true,
