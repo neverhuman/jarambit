@@ -19,7 +19,8 @@ class SwitchbackC93(unittest.TestCase):
         p = open(os.path.join(ROOT, 'designs/switchback/C9.2/README.md'), encoding='utf-8').read()
         self.assertIn('PREVIOUS RELEASE CANDIDATE', p)
         top = open(os.path.join(ROOT, 'README.md'), encoding='utf-8').read()
-        self.assertRegex(top, r'C\.9\.3.*current RC.*release candidate, not the design of record')
+        # Keep the archived study status above; do not promote it in the root publication.
+        self.assertNotRegex(top, r'SWITCHBACK Rev C\.9\.3.*(?:release candidate|current RC)')
 
     def test_board_and_meta(self):
         b = json.load(open(os.path.join(D, 'data', 'w77_results.json')))['board']

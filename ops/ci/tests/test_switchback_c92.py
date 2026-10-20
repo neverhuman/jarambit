@@ -17,7 +17,8 @@ class SwitchbackC92(unittest.TestCase):
         self.assertIn('RELEASE CANDIDATE', t); self.assertIn('NOT the design of record', t)
         self.assertIn('not** a jarambit RS-karambit-v2 verdict', t)
         top = open(os.path.join(ROOT, 'README.md'), encoding='utf-8').read()
-        self.assertRegex(top, r'C\.9\.2.*release candidate.*not.*design of record')
+        # Keep the archived study status above; do not promote it in the root publication.
+        self.assertNotRegex(top, r'SWITCHBACK Rev C\.9\.2.*(?:release candidate|current RC)')
 
 
 if __name__ == '__main__':
