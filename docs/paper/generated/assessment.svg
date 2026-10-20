@@ -6,7 +6,7 @@
 <rect x="20" y="595" width="560" height="485" fill="#f7f7f2" stroke="#d5dfdf"/>
 <rect x="620" y="595" width="560" height="485" fill="#f7f7f2" stroke="#d5dfdf"/>
 <text x="35" y="125" font-size="23">A / Alternate-support buckling model</text>
-<text x="35" y="158" font-size="21">Support schematic (no mode shape retained):</text>
+<text x="35" y="158" font-size="21">Support assumptions (no retained mode):</text>
 <rect x="42" y="174" width="510" height="38" fill="#e4ebec" stroke="#526873"/>
 <text x="56" y="200" font-size="21">Radial pin bearing + flange springs</text>
 <rect x="42" y="222" width="510" height="38" fill="#e4ebec" stroke="#526873"/>

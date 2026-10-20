@@ -19,7 +19,7 @@ Jarambit is a computational design research system linking a geometric represent
 
 [Original run identities and overlapping captures](docs/paper/supplement/cohort-inventory.tex) · [Completed-population archive index](artifacts/versioned-evolution-archives-gen800-population-v1/index.gen800_population.sha256.json)
 
-![Every retained scored observation rendered through a point operation: native search above, historical and screening records below on separate score axes; unknown proposals have a nonnumeric coverage row](docs/paper/figures/population-latest.svg)
+![Every retained scored observation rendered through a point operation: native search above, historical and screening records below on separate score axes; unknown proposals have a nonnumeric coverage note](docs/paper/figures/population-latest.svg)
 
 *The renderer visits 1,954,560 native, 1,984 historical, and 2,259 numeric screening records as 1,958,803 individual point operations. Points can overlap. Neutral occupancy does not replace minority classes with a bin majority, and incompatible scorers retain separate axes. The 1,390 unobserved proposals receive no invented score. [Source, ID, extrema, and point accounting](docs/paper/generated/population/point-rendering.v1.json).*
 

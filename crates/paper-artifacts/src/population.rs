@@ -1391,7 +1391,7 @@ fn render_population_latest_svg(
         "schema": "jarambit.population_point_rendering.v1",
         "numeric_records_visited": native_visits + historical_points.len() as u64 + screen_points.len() as u64,
         "numeric_point_operations": native.point_operations + historical.point_operations + screening.point_operations,
-        "selected_figure_universe": "ten retained native runs, historical births, joined numeric screens; unknown proposals in nonnumeric coverage row",
+        "selected_figure_universe": "ten retained native runs, historical births, joined numeric screens; unknown proposals disclosed in a nonnumeric coverage note",
         "excluded_numeric_records": 0,
         "native": {"admission": admission, "source_visit_sha256": format!("{:x}", visit_hash.finalize()),
             "paint_operation_sha256": format!("{:x}", paint_hash.finalize()),
@@ -1405,13 +1405,13 @@ fn render_population_latest_svg(
             "source_and_paint_sha256": format!("{:x}", historical_hash.finalize()), "raster": historical.receipt()?},
         "screening": {"source_pairs": source_pairs, "identity_namespace": "original birth-file path + one-based candidate index",
             "source_and_paint_sha256": format!("{:x}", screening_hash.finalize()), "raster": screening.receipt()?},
-        "unknown": {"records": unknown.len(), "numeric_point_operations": 0, "display": "nonnumeric coverage row; no invented score",
+        "unknown": {"records": unknown.len(), "numeric_point_operations": 0, "display": "nonnumeric coverage note; no plotted band or invented score",
             "source_identity_sha256": format!("{:x}", unknown_hash.finalize())}
     });
     let mut s = String::from(
         r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1140" width="1200" height="1140" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"><rect width="1200" height="1140" fill="#ffffff"/>"##,
     );
-    s.push_str(r##"<text x="40" y="42" font-size="25" font-weight="700" fill="#0f172a">Every Retained Scored Record, in Separate Source Profiles</text><text x="40" y="76" font-size="21" fill="#475569">1,958,803 source rows → 1,958,803 point operations; overlap is visible occupancy, not density.</text><text x="40" y="112" font-size="23" font-weight="700" fill="#0f172a">A / Runs 2–11 — 1,954,560 native contextual-fitness observations</text>"##);
+    s.push_str(r##"<text x="40" y="42" font-size="25" font-weight="700" fill="#0f172a">Every Retained Scored Record, in Separate Source Profiles</text><text x="40" y="76" font-size="21" fill="#475569">1,958,803 point operations; asinh score axes with original-value ticks; marks can overlap.</text><text x="40" y="112" font-size="23" font-weight="700" fill="#0f172a">A / Runs 2–11 — 1,954,560 native contextual-fitness observations</text>"##);
     point_panel(
         &mut s,
         &native,
@@ -1437,7 +1437,7 @@ fn render_population_latest_svg(
         "Retained birth-file ordinal",
         "Screen deficit (lower is better)",
     );
-    s.push_str(r##"<text x="40" y="1088" font-size="21" fill="#92400e" data-unknown-band-points="1390">Coverage: 1,390 proposals lack a retained numeric screen value; no score is imputed.</text><text x="40" y="1120" font-size="21" fill="#475569">610,051 legal=true rows have fit &lt; 0; -10.0 &lt;= fit &lt; -2.0 observations remain in the full native domain.</text>"##);
+    s.push_str(r##"<text x="40" y="1088" font-size="21" fill="#92400e" data-unknown-proposal-count="1390">Coverage: 1,390 proposals lack a retained numeric screen value; no score is imputed.</text><text x="40" y="1120" font-size="21" fill="#475569">610,051 legal=true rows have fit &lt; 0; -10.0 &lt;= fit &lt; -2.0 observations remain in the full native domain.</text>"##);
     s.push_str(&format!(
         "<metadata id=\"point-rendering-receipt\">{}</metadata></svg>\n",
         xml_escape(&serde_json::to_string(&receipt)?)
@@ -1816,6 +1816,30 @@ fn render_inheritance_svg(inheritance_ledger: &Value, include_details: bool) -> 
     Ok(s)
 }
 
+/// Existing six-anchor light-to-dark blue presentation palette, versioned explicitly.
+const HERO_BLUE_PALETTE_NAME: &str = "jarambit_light_dark_blue_6_v1";
+const HERO_BLUE_PALETTE: [[f64; 3]; 6] = [
+    [239.0, 243.0, 255.0],
+    [198.0, 219.0, 239.0],
+    [158.0, 202.0, 225.0],
+    [107.0, 174.0, 214.0],
+    [49.0, 130.0, 189.0],
+    [8.0, 81.0, 156.0],
+];
+
+/// Shared surface/legend transfer; direct sRGB with no simulated lighting.
+fn hero_blue_rgb(value: f64) -> [u8; 3] {
+    let u = value.clamp(0.0, 1.0) * 5.0;
+    let idx = (u.floor() as usize).min(4);
+    let fraction = u - idx as f64;
+    std::array::from_fn(|channel| {
+        ((1.0 - fraction) * HERO_BLUE_PALETTE[idx][channel]
+            + fraction * HERO_BLUE_PALETTE[idx + 1][channel])
+            .round()
+            .clamp(0.0, 255.0) as u8
+    })
+}
+
 /// Render high-contrast first-page hero SVG (`SC-DEC-183AL` Item 3) directly from retained
 /// `cert_pipeline_r01_p14_c02.stl` (`90,000` triangles) and `cert_pipeline_r01_p14_c02_D1.json`
 /// (`25,209` triangles) under proper `SO(3)` pose (`det = +1.0`) with crisp dark silhouette/hole
@@ -1903,26 +1927,6 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     for v in &mut comp {
         *v = ((*v - c_min) / (c_max - c_min).max(1e-12)).clamp(0.0, 1.0);
     }
-
-    // Sequential light-to-dark blue LUT; the same unchanged index drives surface and key.
-    const HERO_LUT: [[f64; 3]; 6] = [
-        [239.0, 243.0, 255.0],
-        [198.0, 219.0, 239.0],
-        [158.0, 202.0, 225.0],
-        [107.0, 174.0, 214.0],
-        [49.0, 130.0, 189.0],
-        [8.0, 81.0, 156.0],
-    ];
-    let eval_lut = |t: f64| -> [f64; 3] {
-        let u = t.clamp(0.0, 1.0) * 5.0;
-        let idx = (u.floor() as usize).min(4);
-        let f = u - (idx as f64);
-        [
-            (1.0 - f) * HERO_LUT[idx][0] + f * HERO_LUT[idx + 1][0],
-            (1.0 - f) * HERO_LUT[idx][1] + f * HERO_LUT[idx + 1][1],
-            (1.0 - f) * HERO_LUT[idx][2] + f * HERO_LUT[idx + 1][2],
-        ]
-    };
 
     // Proper SO(3) pose R = R_z(-6 deg) * R_x(180 deg) (det = +1.0)
     let theta = -6.0_f64.to_radians();
@@ -2014,7 +2018,7 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     let mut stl_vis: Vec<(f64, [(f64, f64); 3], [u8; 3])> =
         Vec::with_capacity(raw_tris.len() / 2 + 1024);
     for (n_vec, [v0, v1, v2]) in raw_tris {
-        let (nx, ny, nz) = (n_vec[0], n_vec[1], n_vec[2]);
+        let nz = n_vec[2];
         // Under R = R_z(-6 deg) * R_x(180 deg), posed z is -z
         let nzp = -nz;
         if nzp < -0.05 {
@@ -2039,21 +2043,7 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
                 }
             }
         }
-        let base_rgb = eval_lut(comp[best_i]);
-        let nxp = nx * ct - (-ny) * st;
-        let nyp = nx * st + (-ny) * ct;
-        let n_len = (nxp * nxp + nyp * nyp + nzp * nzp).sqrt().max(1e-9);
-        let (unx, uny, unz) = (nxp / n_len, nyp / n_len, nzp / n_len);
-        // Key light from upper-left-front (-0.38, 0.44, 0.81) + bevel rim (0.45, -0.35, 0.82)
-        let dot1 = (-0.38 * unx + 0.44 * uny + 0.81 * unz).max(0.0);
-        let dot2 = (0.45 * unx - 0.35 * uny + 0.82 * unz).max(0.0);
-        let shade = 0.72 + 0.32 * dot1 + 0.08 * dot2;
-        let spec = 14.0 * dot1.powi(6);
-        let rgb = [
-            (base_rgb[0] * shade + spec).round().clamp(0.0, 255.0) as u8,
-            (base_rgb[1] * shade + spec).round().clamp(0.0, 255.0) as u8,
-            (base_rgb[2] * shade + spec).round().clamp(0.0, 255.0) as u8,
-        ];
+        let rgb = hero_blue_rgb(comp[best_i]);
         let p0 = pose_xy(v0[0], v0[1]);
         let p1 = pose_xy(v1[0], v1[1]);
         let p2 = pose_xy(v2[0], v2[1]);
@@ -2072,11 +2062,27 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     let mut s = String::with_capacity(6_400_000);
     s.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 680" width="1600" height="680" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif">"##);
     s.push('\n');
+    let color_metadata = json!({
+        "palette": HERO_BLUE_PALETTE_NAME,
+        "anchors_srgb_0_255": HERO_BLUE_PALETTE,
+        "interpolation": "piecewise_linear_srgb_code_values_then_round_to_u8",
+        "surface_and_legend_transfer": "hero_blue_rgb",
+        "surface_lighting": "none",
+        "scalar_domain": [0.0, 1.0],
+        "scalar_transform": "candidate_minmax_of_mean_available_area_rank_positions",
+        "rank_ties": "deterministic_source_order_not_pooled_tie_midranks",
+        "meaning": "relative_dimensionless_summary_not_stress_fitness_or_probability"
+    });
+    let _ = writeln!(
+        s,
+        "<metadata id=\"hero-color-transfer\">{}</metadata>",
+        xml_escape(&color_metadata.to_string())
+    );
     s.push_str(r##"<rect width="1600" height="680" fill="#ffffff"/>"##);
     s.push_str(r##"<text x="36" y="44" font-size="34" font-weight="700" fill="#0f172a">Individual 2000 — Relative Composite of Five Responses</text>"##);
-    s.push_str(r##"<text x="36" y="80" font-size="28" fill="#334155">Dimensionless summary within this candidate; lighting shows surface shape.</text>"##);
+    s.push_str(r##"<text x="36" y="80" font-size="28" fill="#334155">Dimensionless within-candidate summary; color is not stress or fitness.</text>"##);
 
-    // Draw high-contrast 3D STL surface triangles
+    // Draw projected STL triangles with direct quantitative palette colors.
     for (_, [s0, s1, s2], [r, g, b]) in &stl_vis {
         let _ = write!(
             s,
@@ -2109,20 +2115,20 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
         let r_px = 4.0 * scale;
         let _ = writeln!(
             s,
-            r##"<circle cx="{tx:.2}" cy="{ty:.2}" r="{r_px:.2}" fill="none" stroke="#b91c1c" stroke-width="2.0" stroke-dasharray="5,4"/><text x="{:.2}" y="{:.2}" text-anchor="end" font-size="28" font-weight="600" fill="#991b1b">4.0 mm tip region</text>"##,
+            r##"<circle cx="{tx:.2}" cy="{ty:.2}" r="{r_px:.2}" fill="none" stroke="#b91c1c" stroke-width="2.0" stroke-dasharray="5,4"/><text x="{:.2}" y="{:.2}" text-anchor="end" font-size="28" font-weight="600" fill="#991b1b">4 mm capacity exclusion</text>"##,
             tx - r_px - 10.0,
             ty + 6.0
         );
     }
 
     // High-contrast sequential colorbar + readable dark legend & scale bar
-    s.push_str(r##"<text x="36" y="596" font-size="28" font-weight="700" fill="#0f172a">Relative composite index [0, 1]</text>"##);
+    s.push_str(r##"<text x="36" y="596" font-size="28" font-weight="700" fill="#0f172a">Relative five-field summary [0, 1]</text>"##);
     let cb_x0 = 36.0_f64;
     let cb_w = 640.0_f64;
     let n_steps = 80usize;
     for i in 0..n_steps {
         let t = (i as f64 + 0.5) / (n_steps as f64);
-        let [r, g, b] = eval_lut(t).map(|v| v.round() as u8);
+        let [r, g, b] = hero_blue_rgb(t);
         let x = cb_x0 + (i as f64) * (cb_w / n_steps as f64);
         let w = (cb_w / n_steps as f64) + 0.8;
         let _ = write!(
@@ -2133,9 +2139,9 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     s.push_str(r##"<rect x="36" y="606" width="640" height="18" fill="none" stroke="#0f172a" stroke-width="1.4"/>"##);
     for (frac, lbl, anchor) in [
         (0.0, "0.00", "start"),
-        (0.28, "0.25", "middle"),
+        (0.25, "0.25", "middle"),
         (0.50, "0.50", "middle"),
-        (0.72, "0.75", "middle"),
+        (0.75, "0.75", "middle"),
         (1.00, "1.00", "end"),
     ] {
         let tick_x = cb_x0
@@ -2540,6 +2546,40 @@ mod tests {
     use super::*;
 
     #[test]
+    fn hero_blue_palette_has_fixed_endpoints_and_interpolation() {
+        assert_eq!(hero_blue_rgb(0.0), [239, 243, 255]);
+        assert_eq!(hero_blue_rgb(1.0), [8, 81, 156]);
+        assert_eq!(hero_blue_rgb(-1.0), [239, 243, 255]);
+        assert_eq!(hero_blue_rgb(2.0), [8, 81, 156]);
+        assert_eq!(hero_blue_rgb(0.1), [219, 231, 247]);
+        assert_eq!(hero_blue_rgb(0.5), [133, 188, 220]);
+        assert_eq!(hero_blue_rgb(0.9), [29, 106, 173]);
+    }
+
+    #[test]
+    fn hero_blue_quantized_transfer_has_nonincreasing_linear_light_luminance() {
+        let luminance = |rgb: [u8; 3]| {
+            let linear = rgb.map(|channel| {
+                let value = f64::from(channel) / 255.0;
+                if value <= 0.04045 {
+                    value / 12.92
+                } else {
+                    ((value + 0.055) / 1.055).powf(2.4)
+                }
+            });
+            0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
+        };
+        let first = luminance(hero_blue_rgb(0.0));
+        let mut previous = first;
+        for index in 1..=1000 {
+            let current = luminance(hero_blue_rgb(index as f64 / 1000.0));
+            assert!(current <= previous, "luminance reversal at sample {index}");
+            previous = current;
+        }
+        assert!(previous < first);
+    }
+
+    #[test]
     fn point_raster_oracle_retains_extrema_and_counts_overlapping_operations() {
         // Explicit independent 5x5 oracle: corners and origin, with one overlap.
         let mut raster =
@@ -2700,7 +2740,7 @@ mod tests {
         assert!(lat_svg.contains("-10.0 &lt;= fit &lt; -2.0"));
         assert!(lat_svg.contains("610,051 legal=true rows have fit &lt; 0"));
         assert!(lat_svg.contains(r#"data-numeric-scored-points="1954560""#));
-        assert!(lat_svg.contains(r#"data-unknown-band-points="1390""#));
+        assert!(lat_svg.contains(r#"data-unknown-proposal-count="1390""#));
         assert!(!lat_svg.contains("severe penalty"));
         assert!(!lat_svg.contains("multi-gate pen."));
 

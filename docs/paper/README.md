@@ -12,7 +12,7 @@ The white hero is an exact CAD projection of **Individual 2000**, colored by a d
 
 The [evidence-path diagram](figures/evidence-architecture.svg) separates retained search observations from candidate-specific assessed exports; it asserts no population-wide assessment join. The [compact ancestry view](figures/inheritance.svg) has a separate [detailed coordinate-change view](figures/inheritance-details.svg) in the Supplement.
 
-The main population view processes every retained scored record through a point operation. Native, historical, and screening regimes retain separate axes; unknown proposals have a nonnumeric coverage row. Points can overlap. [Source/ID/extrema/point receipt](generated/population/point-rendering.v1.json).
+The main population view processes every retained scored record through a point operation. Native, historical, and screening regimes retain separate axes; unknown proposals have a nonnumeric coverage note. Points can overlap. [Source/ID/extrema/point receipt](generated/population/point-rendering.v1.json).
 
 The solid comparison is scikit-fem/PyAMG CG versus DOLFINx/PETSc CG/GAMG on a shared saved mesh with cut-arc clamping and patch loads. Executed scikit-fem/PyAMG versions are unavailable; the retained sidecar identifies DOLFINx 0.9.0 and PETSc 3.22.0. [Implementation details](supplement/numerical-methods.tex).
 

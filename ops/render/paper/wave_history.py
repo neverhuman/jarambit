@@ -23,10 +23,6 @@ def _resolve_committed_input(relative, raw, source_root, base_commit):
         cwd=source_root, capture_output=True, check=False)
     if committed.returncode == 0 and committed.stdout == raw:
         return base_commit
-    if source_root == ROOT and relative.startswith('evidence/evolution_waves/'):
-        wt_path = source_root / relative
-        if wt_path.is_file() and wt_path.read_bytes() == raw:
-            return base_commit
     raise ValueError('Wave evidence is not committed unchanged on origin/main: ' + relative)
 
 
@@ -112,7 +108,7 @@ def collect(paths, source_root, preview=False):
         if not preview:
             expected_shas[source] = sha
             if source_root == ROOT and source.startswith('evidence/evolution_waves/'):
-                log_main = subprocess.run(['git', 'log', '-n', '1', '--format=%H', 'origin/main', '--', source],
+                log_main = subprocess.run(['git', 'log', '-n', '1', '--format=%H', base_commit, '--', source],
                     cwd=source_root, capture_output=True, text=True, check=False)
                 input_commits[source] = log_main.stdout.strip() if log_main.returncode == 0 and log_main.stdout.strip() else base_commit
             else:
@@ -174,12 +170,12 @@ def collect(paths, source_root, preview=False):
         for rel_in, exp_sha in expected_shas.items():
             chk = subprocess.run(['git', 'show', ev_commit + ':' + rel_in],
                 cwd=source_root, capture_output=True, check=False)
-            if chk.returncode == 0 and hashlib.sha256(chk.stdout).hexdigest() == exp_sha:
-                continue
-            wt_file = source_root / rel_in
-            if not wt_file.is_file() or hashlib.sha256(wt_file.read_bytes()).hexdigest() != exp_sha:
-                raise ValueError(f'Evidence commit {ev_commit} does not contain exact input {rel_in}')
-        source_commit = ev_commit
+            if chk.returncode or hashlib.sha256(chk.stdout).hexdigest() != exp_sha:
+                # Admission already bound every input to base_commit. Do not
+                # relabel that snapshot as an older commit missing these bytes.
+                break
+        else:
+            source_commit = ev_commit
     result = dict(schema=1, preview=preview, source_commit=source_commit,
         scope='Selected completed Stage-2 assessments; no new solve or certification.',
         waves=waves, points=points)

@@ -32,14 +32,14 @@ class WavePublicationPrep(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.folder = Path(self.tmp.name)
 
-    def committed_board_fixture(self, document=None):
+    def committed_board_fixture(self, document=None, relative='out/control/leaderboard.json'):
         # A tiny Git fixture, not a copy of the project. It retains the real
         # committed observations and needs no cached/fetched remote ref in CI.
-        path = self.folder/'out/control/leaderboard.json'
+        path = self.folder/relative
         path.parent.mkdir(parents=True)
         path.write_bytes(HISTORY.read_bytes() if document is None else
                          (json.dumps(document)+'\n').encode())
-        for args in [('init', '-q'), ('add', 'out/control/leaderboard.json'),
+        for args in [('init', '-q'), ('add', relative),
                      ('-c','user.name=Publication control','-c','user.email=control@example.invalid',
                       '-c','core.hooksPath=/dev/null','commit','-q','-m','Committed observation fixture'),
                      ('update-ref','refs/remotes/origin/main','HEAD')]:
@@ -119,6 +119,77 @@ class WavePublicationPrep(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Source changed'):
             wave_history.write_history_manifest(late, ledger, snippet, data, self.folder, [path])
         self.assertFalse(Path(str(late)+'.manifest.json').exists())
+
+    def test_main_root_wave_paths_require_exact_main_bytes(self):
+        # Neutral publication metadata only, not physical/evolution evidence.
+        original = self.neutral_metadata()
+        relative = 'evidence/evolution_waves/2026-10-17/control/leaderboard.json'
+        path = self.committed_board_fixture(original, relative)
+        base = subprocess.check_output(['git', 'rev-parse', 'origin/main'],
+                                       cwd=self.folder, text=True).strip()
+        with patch.object(wave_history, 'ROOT', self.folder):
+            self.assertEqual(collect([path], self.folder)['source_commit'], base)
+            changed = copy.deepcopy(original)
+            changed['designs'][0]['mass_g'] = 2.0
+            path.write_text(json.dumps(changed)+'\n')
+            with self.assertRaisesRegex(ValueError, 'origin/main'):
+                read_board(path, self.folder)
+            with self.assertRaisesRegex(ValueError, 'origin/main'):
+                collect([path], self.folder)
+            self.assertEqual(read_board(path, self.folder, preview=True)[0], changed)
+
+            untracked = path.parent.parent/'untracked/leaderboard.json'
+            untracked.parent.mkdir()
+            untracked.write_text(json.dumps(original)+'\n')
+            with self.assertRaisesRegex(ValueError, 'origin/main'):
+                read_board(untracked, self.folder)
+            with self.assertRaisesRegex(ValueError, 'origin/main'):
+                collect([untracked], self.folder)
+            self.assertEqual(read_board(untracked, self.folder, preview=True)[0], original)
+
+            # A local-only commit still cannot impersonate pinned origin/main.
+            subprocess.run(['git', 'add', relative], cwd=self.folder, check=True,
+                           capture_output=True)
+            subprocess.run(['git', '-c', 'user.name=Publication control', '-c',
+                'user.email=control@example.invalid', '-c', 'core.hooksPath=/dev/null',
+                'commit', '-q', '-m', 'Local-only neutral change'],
+                cwd=self.folder, check=True, capture_output=True)
+            with self.assertRaisesRegex(ValueError, 'origin/main'):
+                read_board(path, self.folder)
+            with self.assertRaisesRegex(ValueError, 'origin/main'):
+                collect([path], self.folder)
+        self.assertEqual(subprocess.check_output(['git', 'rev-parse', 'origin/main'],
+            cwd=self.folder, text=True).strip(), base)
+
+    def test_mixed_committed_wave_inputs_keep_a_truthful_snapshot(self):
+        # The older dated-folder commit does not contain the later input.
+        first = self.committed_board_fixture(self.neutral_metadata(),
+            'evidence/evolution_waves/2026-10-17/control-old/leaderboard.json')
+        second_rel = 'evidence/evolution_waves/2026-10-18/control-new/leaderboard.json'
+        second = self.folder/second_rel
+        second.parent.mkdir(parents=True)
+        later = self.neutral_metadata()
+        later['designs'][0]['label'] = 'neutral-later'
+        later['designs'][0]['mass_g'] = 2.0
+        second.write_text(json.dumps(later)+'\n')
+        for args in [('add', second_rel),
+                     ('-c', 'user.name=Publication control', '-c',
+                      'user.email=control@example.invalid', '-c',
+                      'core.hooksPath=/dev/null', 'commit', '-q', '-m',
+                      'Later committed neutral input'),
+                     ('update-ref', 'refs/remotes/origin/main', 'HEAD')]:
+            subprocess.run(['git', *args], cwd=self.folder, check=True,
+                           capture_output=True)
+        base = subprocess.check_output(['git', 'rev-parse', 'origin/main'],
+                                       cwd=self.folder, text=True).strip()
+        with patch.object(wave_history, 'ROOT', self.folder):
+            ledger = collect([first, second], self.folder)
+        self.assertEqual(ledger['source_commit'], base)
+        for row in ledger['waves']:
+            committed = subprocess.check_output(
+                ['git', 'show', ledger['source_commit']+':'+row['source']],
+                cwd=self.folder)
+            self.assertEqual(hashlib.sha256(committed).hexdigest(), row['sha256'])
 
     def test_failed_assessment_cannot_enter_final_render_mode(self):
         with self.assertRaisesRegex(ValueError, 'NOT-A-WINNER'):
