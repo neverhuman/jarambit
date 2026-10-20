@@ -1,0 +1,215 @@
+{
+  "schema": "jarambit.q.actual_observation_pin_preparation_review.v1",
+  "recorded_utc": "2026-10-20T20:18:02.367646+00:00",
+  "identity": {
+    "worker": "/root/resume_archive_review",
+    "thread_id": "01a15499-c47f-7b21-8e3a-6873ef1527c0",
+    "mode": "manual",
+    "native_task_id": null,
+    "native_claim_id": null,
+    "native_lease_id": null,
+    "source_author": false,
+    "GitHub_review_submitted": false,
+    "GitHub_review_id": null,
+    "assignment": "Root prospective b2051d7a appearance observation/pin preparation activation; no current final-paper origin-bound review assignment"
+  },
+  "verdict": "ACTUAL_OBSERVED_PINSET_ADMITTED_FOR_EXACT_6C49_SOURCE_INPUT_GEOMETRY_FIELD_MASK_REGISTRATION_CAMERA_DEPENDENCIES_ONLY",
+  "scope": {
+    "head": "6c49e1c888efed2ff2fc65620dabd3a7379b5e1d",
+    "tree": "a09a0965ac7c9d3fc392cfbd467463d9077c4842",
+    "actual_current_readback_clean": true,
+    "entire_head_or_generated_tree_approved": false,
+    "actual_recipe_installed_by_reviewer": false,
+    "actual_recipe_or_expected_values_authored_by_reviewer": false,
+    "future_source_changes_require_dependency_recheck": true
+  },
+  "actual_observation": {
+    "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/narrow-successor-1917/version-212-1939/actual-observation-for-existing-Q/hero-appearance-preflight.6c49.actual.v1.json",
+    "sha256": "660d9c00b84b3f310b36a2749e4a1b6cadf3accf6668a73b7ecf353314104e78",
+    "bytes": 5680,
+    "raw_launcher_sha256": "215630e0ee97fd7dc6b483b736669ec2f7dd88257e9cc55824e9fd792d5fb9b8",
+    "exact_contiguous_JSON_offset": 442,
+    "JSON_bytes_before_final_newline": 5679,
+    "extraction_verified_byte_for_byte": true,
+    "observed_only_status": "OBSERVED_ONLY_NOT_INDEPENDENT_PIN_ADMISSION"
+  },
+  "actual_execution": {
+    "admission_utc": "2026-10-20T20:09:39.522065+00:00",
+    "terminal_utc": "2026-10-20T20:10:17.308856+00:00",
+    "launcher_exit": 0,
+    "cleanup_errors": [],
+    "scientific_or_final_validation_PASS": false,
+    "binary": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/codex-latest-feedback-510713/target/release/examples/hero_appearance_preflight",
+      "actual_sha256": "f49e633473a03ff552e05c5fead1367dc4a7c2142e146dfae873800234125af5",
+      "actual_bytes": 1147032,
+      "actual_mtime_ns": 1792527016271529927,
+      "matches_captured": true
+    },
+    "body_sha256": "299c512046c7f1cf6aa1ec6d2e141d0446bc5e5e87334c8e6e482b7670130159",
+    "grant_sha256": "ba92ea4924c047adf273772d6bae9debd2e04c009caee3d738ecf8671a5fd4e0",
+    "config_sha256": "ef3c129de3b904548644d067855b0319996ca6f66f74ea99cae709fb691d5bca",
+    "cargo_executor_pid": 3886595,
+    "cargo_executor_start_ticks": "71243290",
+    "example_child_pid": null,
+    "example_child_pid_status": "Not individually sampled before exit; no retrospective child identity asserted.",
+    "reporter_uid": 1000,
+    "reporter_cap_effective": 0,
+    "reporter_affinity": [
+      6
+    ],
+    "reporter_nice": 19,
+    "unit": {
+      "unit": "jr-preflight-6c49-5b579cc03f6a7289.scope",
+      "group": "/jarambit.slice/jarambit-evo.slice/jr-preflight-6c49-5b579cc03f6a7289.scope",
+      "invocation": "0adb9288527d46d78b22ffc496bd4e56",
+      "inode": 92697973,
+      "device": 30
+    },
+    "kernel_caps": {
+      "memory_max": "2147483648",
+      "memory_swap_max": "0",
+      "cpu_max": "100000 100000",
+      "cpus_effective": "6"
+    },
+    "manager_properties_at_admission": {
+      "TimeoutStopUSec": "5s",
+      "RuntimeMaxUSec": "9min 52s",
+      "ControlGroup": "/jarambit.slice/jarambit-evo.slice/jr-preflight-6c49-5b579cc03f6a7289.scope",
+      "KillMode": "control-group",
+      "FinalKillSignal": "9",
+      "SendSIGKILL": "yes",
+      "ActiveState": "active",
+      "ActiveEnterTimestampMonotonic": "712432933276",
+      "InvocationID": "0adb9288527d46d78b22ffc496bd4e56"
+    },
+    "terminal_scope_inactive": true,
+    "toolchain_capture": [
+      {
+        "argv": [
+          "/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+          "--version",
+          "--verbose"
+        ],
+        "stdout": "rustc 1.85.1 (4eb161250 2025-03-15)\nbinary: rustc\ncommit-hash: 4eb161250e340c8f48f66e2b929ef4a5bed7c181\ncommit-date: 2025-03-15\nhost: x86_64-unknown-linux-gnu\nrelease: 1.85.1\nLLVM version: 19.1.7\n",
+        "stderr": "",
+        "exit_code": 0,
+        "binary_sha256": "f8d033fd72e878ec60493788c8bffec2e6c154dcab6f0cb4c145af8ada26a7ed"
+      },
+      {
+        "argv": [
+          "/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/cargo",
+          "--version"
+        ],
+        "stdout": "cargo 1.85.1 (d73d2caf9 2024-12-31)\n",
+        "stderr": "",
+        "exit_code": 0,
+        "binary_sha256": "87e9ff02f95ea17d877e7c4eeb0f365f50fe3827f5afec132131ff3b8031a57e"
+      }
+    ],
+    "capture_attribution": "Actual execution was performed through the admitted Captain/Admiral route, not by this reviewer. Reviewer personally read original runtime records, verified copied/raw byte hashes and exact source/binary/body/71-input readbacks; no independent process launch or inferred child argv/PID is claimed."
+  },
+  "independent_factual_joins": {
+    "all22_observed_source_hashes_match_exact_immutable_6c49_and_current_live_files": true,
+    "all22_source_keyset_matches_prior_admitted_keyset": true,
+    "changed_source_file_pins_only": [
+      {
+        "path": "crates/paper-artifacts/src/plate.rs",
+        "historical_source_sha256": "ac4537b4cdd44323dc7d259d0227e0b30b4c57ebc994f70580ed64ee96c200bd",
+        "actual_observed_source_sha256": "118639cf8e9325bc05e68e0c98a37586479b7c1d2e3f783a8296a7fbdde05f2e"
+      },
+      {
+        "path": "crates/paper-artifacts/src/population.rs",
+        "historical_source_sha256": "7b6588592b84114e5affeeba3c17f075975c4886d0890b27be471c0805bfabe9",
+        "actual_observed_source_sha256": "1f53640711e208136b58be28a22efb57f3af502f2d37b093a7406ae6eab97d9d"
+      }
+    ],
+    "all_other_observed_pin_fields_match_prior_recipe_exactly": true,
+    "camera_numeric_rotation_scale_offset_refit_and_digest_match_prior_observation": true,
+    "all5_component_hashes_identical": true,
+    "ordered_geometry_identical": true,
+    "registration_identical": true,
+    "channel_ids_source_faces_source_cells_subject_identical": true,
+    "hero_source_registration_camera_preflight_strict_admission_block_identical_to_prior73_sha256": "99d1c5e2a4a6586be1e85e9f01e2d1e26ff4fd7a8b883b7f0e717daa947a40eb",
+    "actual_binary_file_sha256_matches_captured": true,
+    "all71_captured_input_hashes_match_current_retained_bytes": true,
+    "all8_original_runtime_and_Captain_copy_pairs_equal_and_hash_bound": true,
+    "strict_equality_and_missing_pin_rejection_not_weakened": true
+  },
+  "new_material_findings": [],
+  "finite_installation_disposition": {
+    "allowed": "Sole Captain may copy only the verbatim observed_pins object from the actual observation SHA660d9c00 into the additive recipe, bind this independent receipt and the actual observation by SHA, and preserve prior observation/review/recipe bytes and history. This is review admission of actual independently compared observations, not reviewer-authored expected values.",
+    "source_delta_limit": "Only the observed whole-file plate.rs and population.rs pin updates are admitted relative to prior expected source pins. All geometry/field/mask/contributor/palette/map/camera/registration/source-channel facts remain exactly as observed; no substitution, defaulting or removal.",
+    "stop_if": "Any bound source/input key, source byte, geometry/field/mask/registration/camera/component fact changes, or copied observation/review bytes differ, requires a new precise source/fact review. No automatic admission across arbitrary future heads."
+  },
+  "limits": [
+    "Pin preparation only. No new normals or lighting derivation, rendering, new appearance pixels, source artifact generation, PDF layout, scientific solver/FEM/CAD/scorer/fitness evaluation or physical qualification is established.",
+    "Reviewer did not run Cargo/compiler/tests/preflight/render/CI/API or author a recipe/expected values. Read-only source/data/hash comparison and own target receipts only.",
+    "Current67 authored controls, full-zstd audit, current generated source/output closure, exact CI package membership, all affected page inspections, final origin-bound independent review and production guard/merge/release remain separate obligations.",
+    "Earlier corrected09c0 all51-page witness remains tied to historical bf74/c70f PDF bytes. This receipt grants no later source/artifact/whole-paper/formal approval.",
+    "No reuse of old PR144 formal assignment/runtime dispatch or approval for this source preparation."
+  ],
+  "next_action": "Captain installs only the exact actual observed/admitted facts with historical custody, renews dependent digests/closures at the actual completed successor, and obtains the separately required governed generation. Complete clean artifact freeze and Root controls precede current source/artifact/changed-page and real CI/formal review.",
+  "evidence": [
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/ACTUAL_OBSERVATION_COMPONENT_COMPARISON.json",
+      "sha256": "6a59388f15e0c2b3974f59a4c5143e8ec2c1e7311786cad4fe6451c2af6e050b"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/ACTUAL_OBSERVATION_COMPONENT_COMPARISON.md",
+      "sha256": "33ed49d94f3c52fe6418e11b47106a86ddf222aeaac5c2a64956bd563282f80e"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/Q_ACTUAL_6C49_OBSERVATION_PROVENANCE_JOINS.json",
+      "sha256": "5e8479f91ea968e548d976b26e06b586684e552aa758a14048c9d069a8e6b2a2"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/SOURCE_STATIC_PREPARATION.json",
+      "sha256": "ffa24485ca7f24e8c90ee971b9b5bc13c49f48c2860693135ec47ce269d6f34e"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/SOURCE_STATIC_PREPARATION.md",
+      "sha256": "d179ddd7d2b1e49c5599cbc8aeb186b6820257b424d6976c3b7a46225e269d5d"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/CAPTAIN_ACTUAL_6C49_OBSERVATION_EXECUTION_AND_INDEPENDENT_Q_HANDOFF.json",
+      "sha256": "999a5f734c7e076bceab1d47f76873b8c52251ff2bac51959ac9c820a8c4e4c7"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/FINAL.json",
+      "sha256": "e4fa8d0de6de241f0a79bc6e457ec04e99dcd41c82e9fbcd21783fe1412d36a2"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/actual-admission.json",
+      "sha256": "03dc42944137463f54e225ba0f2bb45db654389732ecc23667cf5f3562143331"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/actual-command.json",
+      "sha256": "5d1c97b299a8f765d4b3ff87fec5d6e801092fc1e6e51393dc187ee40d01eed3"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/commands.jsonl",
+      "sha256": "52e46eb5944bf56373daf78f2dd3d7689c719897dede4f469c98b3dc9074ba66"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/hero-appearance-preflight.6c49.actual.v1.json",
+      "sha256": "660d9c00b84b3f310b36a2749e4a1b6cadf3accf6668a73b7ecf353314104e78"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/inside-ack.json",
+      "sha256": "0de7faf97c32b356d08aaea2a96385f0bb1e8d1c2d9ce3be564bac7f45c326c6"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/inside-report.json",
+      "sha256": "2a9b6692002b802e792b7b81c5ed9ea417ad231c336995381d5d46f2505c1a28"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/launcher.log",
+      "sha256": "215630e0ee97fd7dc6b483b736669ec2f7dd88257e9cc55824e9fd792d5fb9b8"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/6c49-observation-preparation/raw/usage-latest.json",
+      "sha256": "04451126277f8f45b109b5cac187c7ecd35e65eebf544e15c2ce5dc6c182aec5"
+    }
+  ]
+}
