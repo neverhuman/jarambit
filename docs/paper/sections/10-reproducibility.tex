@@ -36,10 +36,8 @@ The reporting environment requires Rust/Cargo with the locked dependencies and c
 \centering
 \begin{minipage}{0.97\textwidth}
 \begin{verbatim}
-rtk proxy cargo run --release --locked \
-  --manifest-path crates/paper-artifacts/Cargo.toml \
-  --example publication_v2_audit
-rtk proxy make -C docs/paper check
+rtk proxy sh docs/paper/reproduce.sh build
+rtk proxy sh docs/paper/reproduce.sh check
 \end{verbatim}
 \end{minipage}
 \caption{Reporting entry points, without invoking a new search, CAD export or mechanical solve. The artifact audit reads retained inputs and checks reporting consistency. The Makefile compiles figures/PDFs and writes build products.}

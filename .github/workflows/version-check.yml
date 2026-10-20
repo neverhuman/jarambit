@@ -295,6 +295,12 @@ jobs:
             target/ieee/paper/native-runs-*.png
             docs/paper/reproduce.sh
             docs/paper/Makefile
+            docs/paper/publication.v2.json
+            docs/paper/figures/fig1_hero_blender_v2.png
+            docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.svg
+            docs/paper/drafts_p3_p5/JR_EI_P4_T01_blender_exact_cad_hero_white.png
+            docs/paper/drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.svg
+            docs/paper/drafts_p3_p5/JR_EI_P4_T04_fem_saliency_crops_and_locators.png
             docs/paper/data/*.json
             docs/paper/generated/display-composite.v1.json
             docs/paper/generated/test-field-roster.v1.tsv

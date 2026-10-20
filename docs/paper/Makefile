@@ -1,6 +1,8 @@
 ROOT := ../..
 OUT := $(abspath $(ROOT)/target/ieee/paper)
 export CARGO_TARGET_DIR := $(abspath $(ROOT)/target)
+export CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS := true
+export CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS := true
 CARGO ?= cargo
 SOURCE_DATE_EPOCH ?= 1792460432
 GEN_FIGURES := population plate-fields verification assessment battery-matrix weighted-runs reference hero-support hero-contrast-preview population-detail native-runs-2-3 native-runs-4-5 native-runs-6-7 native-runs-8-9 native-runs-10-11
