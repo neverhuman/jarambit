@@ -482,6 +482,181 @@
       "repin_owner_fixture": false,
       "mutations": [],
       "now_override": 1704068000
+    },
+    {
+      "name": "positive-neutral-actual-rtk-proxy-prefix",
+      "expect_pass": true,
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "submission",
+          "pointer": "/command/argv",
+          "value": [
+            "rtk",
+            "proxy",
+            "gh",
+            "api",
+            "--method",
+            "POST",
+            "repos/neutral-fixture/review-origin/pulls/17/reviews",
+            "--input",
+            "neutral-review-request.json"
+          ]
+        },
+        {
+          "document": "origin",
+          "pointer": "/command/argv",
+          "value": [
+            "rtk",
+            "proxy",
+            "gh",
+            "api",
+            "--method",
+            "POST",
+            "repos/neutral-fixture/review-origin/pulls/17/reviews",
+            "--input",
+            "neutral-review-request.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "forged-rtk-nonproxy-prefix",
+      "expect_pass": false,
+      "expected_error": "unbound review submission command",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "submission",
+          "pointer": "/command/argv",
+          "value": [
+            "rtk",
+            "shell",
+            "gh",
+            "api",
+            "--method",
+            "POST",
+            "repos/neutral-fixture/review-origin/pulls/17/reviews",
+            "--input",
+            "neutral-review-request.json"
+          ]
+        },
+        {
+          "document": "origin",
+          "pointer": "/command/argv",
+          "value": [
+            "rtk",
+            "shell",
+            "gh",
+            "api",
+            "--method",
+            "POST",
+            "repos/neutral-fixture/review-origin/pulls/17/reviews",
+            "--input",
+            "neutral-review-request.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "forged-arbitrary-prefix",
+      "expect_pass": false,
+      "expected_error": "unbound review submission command",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "submission",
+          "pointer": "/command/argv",
+          "value": [
+            "env",
+            "gh",
+            "api",
+            "--method",
+            "POST",
+            "repos/neutral-fixture/review-origin/pulls/17/reviews",
+            "--input",
+            "neutral-review-request.json"
+          ]
+        },
+        {
+          "document": "origin",
+          "pointer": "/command/argv",
+          "value": [
+            "env",
+            "gh",
+            "api",
+            "--method",
+            "POST",
+            "repos/neutral-fixture/review-origin/pulls/17/reviews",
+            "--input",
+            "neutral-review-request.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "forged-extra-program-inside-rtk-prefix",
+      "expect_pass": false,
+      "expected_error": "unbound review submission command",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "submission",
+          "pointer": "/command/argv",
+          "value": [
+            "rtk",
+            "proxy",
+            "env",
+            "gh",
+            "api",
+            "--method",
+            "POST",
+            "repos/neutral-fixture/review-origin/pulls/17/reviews",
+            "--input",
+            "neutral-review-request.json"
+          ]
+        },
+        {
+          "document": "origin",
+          "pointer": "/command/argv",
+          "value": [
+            "rtk",
+            "proxy",
+            "env",
+            "gh",
+            "api",
+            "--method",
+            "POST",
+            "repos/neutral-fixture/review-origin/pulls/17/reviews",
+            "--input",
+            "neutral-review-request.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "incomplete-rtk-proxy-prefix",
+      "expect_pass": false,
+      "expected_error": "unbound review submission command",
+      "repin_owner_fixture": true,
+      "mutations": [
+        {
+          "document": "submission",
+          "pointer": "/command/argv",
+          "value": [
+            "rtk",
+            "proxy"
+          ]
+        },
+        {
+          "document": "origin",
+          "pointer": "/command/argv",
+          "value": [
+            "rtk",
+            "proxy"
+          ]
+        }
+      ]
     }
   ]
 }
