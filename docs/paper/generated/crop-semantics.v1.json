@@ -61,5 +61,5 @@
   "scope": "Reporting/source-domain projection; original values/masks unchanged; PNG/PDF visual acceptance separate.",
   "source": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json",
   "source_sha256": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
-  "source_svg_sha256": "d6cd7e52409f1f4a0dc2e05538442104a78657af313230d7ebcdda90888feda2"
+  "source_svg_sha256": "a5a1c5d0c5e28460fb657954c107da03168c81904edddf380e4a3a963b1e1373"
 }

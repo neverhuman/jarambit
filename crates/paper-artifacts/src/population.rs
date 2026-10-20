@@ -2044,8 +2044,8 @@ pub fn render_hero_exact_cad_svg(repo_root: &Path) -> Result<String> {
     s.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 680" width="1600" height="680" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif">"##);
     s.push('\n');
     s.push_str(r##"<rect width="1600" height="680" fill="#ffffff"/>"##);
-    s.push_str(r##"<text x="36" y="44" font-size="25" font-weight="700" fill="#0f172a">Individual 2000 — Exact 3D CAD Surface &amp; Registered 5-Map Structural Demand Index (D1)</text>"##);
-    s.push_str(r##"<text x="36" y="72" font-size="21" fill="#334155">Exact STL (44,994 vertices, 90,000 triangles; 0 modifiers) · Proper SO(3) Pose (det = +1.0) · 25,209-Triangle D1 Composite</text>"##);
+    s.push_str(r##"<text x="36" y="44" font-size="25" font-weight="700" fill="#0f172a">Individual 2000 — Retained 5-Map Relative Composite</text>"##);
+    s.push_str(r##"<text x="36" y="72" font-size="21" fill="#334155">Color shows a dimensionless, within-candidate summary of five retained response maps.</text>"##);
 
     // Draw high-contrast 3D STL surface triangles
     for (_, [s0, s1, s2], [r, g, b]) in &stl_vis {
