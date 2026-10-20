@@ -50,8 +50,10 @@ jobs:
           export RUSTC="${toolchain}/rustc"
           export CARGO_TARGET_DIR="$PWD/target/paper-artifacts-ci"
           test -x "$RUSTC"
-          cargo test --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2
-          cargo run --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
+          export CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true
+          export CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS=true
+          cargo test --release --locked --manifest-path crates/paper-artifacts/Cargo.toml -- --test-threads=2
+          cargo run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
       - name: Build generic claim bridge for operator-admission controls
         run: |
           unset CARGO_TARGET_DIR
