@@ -38,8 +38,8 @@
     "crates/paper-artifacts/src/verification.rs": "62604c2f187c020226478ed2b0eb8a9ec4d9e70a68bc1e7d2ff7a31e39d1ba4a",
     "crates/paper-artifacts/src/visuals.rs": "532fca340f3d33bbd37982b521d6075490f1108243ea3549ee7ad062030a95b1",
     "crates/paper-artifacts/src/weighted_runs.rs": "5e4fc448e725a673a7fdb03a047259a5993e2e342f4a7ec9bfcfbef8d59e5b85",
-    "crates/paper-artifacts/examples/verify_review_origin.rs": "4537ab767bb8a650484fe24b36297960f729f77df8a1773d9304b6d896413d86",
-    "crates/paper-artifacts/examples/fixtures/verify-review-origin-neutral.v1.json": "f60b34fb9a2da2939ee1e6dc3915c97718dadb888ff2b610bf281eaf5d5ea808",
+    "crates/paper-artifacts/examples/verify_review_origin.rs": "7ab6f68b14b935828ebba20a9daa3e5daedd90703036a9a0d8c25ae469021652",
+    "crates/paper-artifacts/examples/fixtures/verify-review-origin-neutral.v1.json": "a95ca7612264ee911cdbd17a25695d54e795fbbd5e29c9ac281da5e0456de9ac",
     "current_executed_reporting_binary_sha256": "ac4af6926a62f364a8699fd559b67cb6ae65293bf7b4fd58ee93934350b6a4ea"
   },
   "sc_dec_183p_and_183s_fixes_verified": {
@@ -196,17 +196,17 @@
     "exit_code": 0
   },
   "integration_rebinding": {
-    "checked_utc": "2026-10-20T10:32:20.594320+00:00",
-    "previous_receipt_sha256": "c1e2bcad8340530bcf25320c6ffc8313cd562d9102575a48597a56503b4da482",
-    "previous_receipt_commit": "2a3b1a6991fdd3a69596127ab9dcffaec4582095",
-    "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2A3B1A6_20261020.json",
+    "checked_utc": "2026-10-20T11:03:11.548207+00:00",
+    "previous_receipt_sha256": "1f4fe533e5326242e53262be078120013f7185458e41e36a5ab0b6d05adef58b",
+    "previous_receipt_commit": "2a2cd6822501ef00e95cf3d2058325bf1933b5d7",
+    "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2A2CD68_20261020.json",
     "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
     "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
-    "reporting_source_commit": "7070b1a8b319f55033fb03e25be0c494545d1621",
-    "actual_generation_receipt_sha256": "1fde487f7fc93c38c97e32a1348d8874eebb1fd5cab8b437499c831354e61a03",
-    "actual_generation_log_sha256": "6dedb7ac1576084b2ebb6892697a38e7b8c79ba96c311b5bd55bff457ddd83ca",
+    "reporting_source_commit": "516272fe378464376ea94d602d4e938ba97d8d48",
+    "actual_generation_receipt_sha256": "2a2048c22ea90ee4b35f2c07ee9b9de3dbc1782ea90502a42ed7ccf8379e7851",
+    "actual_generation_log_sha256": "c147a704a18832c83d50fd9728b7b69ff083465cf97296ffa489fb326bddf272",
     "executed_reporting_binary_sha256": "ac4af6926a62f364a8699fd559b67cb6ae65293bf7b4fd58ee93934350b6a4ea",
-    "reason": "Root-authorized canonical narrow successor: identify optional CAD STL tessellation overlay and regenerate only retained reporting derivatives. Defaulthero, scientific values/geometry/masks/scorers/weights/solver and Root detached2a3b D1 unchanged. Preserve exact prior2a3bactive receipt and every historical observation/testclaim. This source/output rebinding is not test, realorigin, CI or finalapproval; affected Root controls remain separate."
+    "reason": "Root-authorized exact reviewer-wrapper origin transport compatibility after actual nonauthor Q source clearance. Preserve full observed outer argv; actual helper JSON input route does not enforce check_eligible and requires prospective same-or-stronger actual read-only eligibility proof. All original56 fixture cases unchanged,25 authored controls added (81total), NONE executed by Captain. The regenerated161-input/65-output reporting manifest is byte-identical to its predecessor; guard/fixture bindings are renewed in this operational receipt and package source closure. All65 reporting output bytes are unchanged. Preserve every historical observation/test claim and prior receipt bytes. Root detached D1 and all scientific source/values/masks/weights/solver untouched; affected final controls and real review-origin remain Root-owned."
   },
   "integration_rebinding_history": [
     {
@@ -255,6 +255,19 @@
       "actual_generation_log_sha256": "dd015db074dcaf57034e9e0c6c22821ac5ebfa130028b24420d687d73f36f2b8",
       "executed_reporting_binary_sha256": "3b7c03057caa2ff6bcdd52118db211a99c37cfd6b6df3711a2f2d5188db40a6e",
       "reason": "Renew active operational source/output bindings after actual V4 retained-data reporting generation, including historical-score/A4/default qualifications and exact fractional weights. Preserve exact D3/510713/102C receipts, all original science/custody constants and every historical execution claim. Expanded bound current reporting source and generated closure is actual on-disk hashing, not inherited test or final-origin PASS. No suites/guard/audit/FEM/search/CI ran; final receiving-main/source/artifact freeze and controls are separate."
+    },
+    {
+      "checked_utc": "2026-10-20T10:32:20.594320+00:00",
+      "previous_receipt_sha256": "c1e2bcad8340530bcf25320c6ffc8313cd562d9102575a48597a56503b4da482",
+      "previous_receipt_commit": "2a3b1a6991fdd3a69596127ab9dcffaec4582095",
+      "previous_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2A3B1A6_20261020.json",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reporting_source_commit": "7070b1a8b319f55033fb03e25be0c494545d1621",
+      "actual_generation_receipt_sha256": "1fde487f7fc93c38c97e32a1348d8874eebb1fd5cab8b437499c831354e61a03",
+      "actual_generation_log_sha256": "6dedb7ac1576084b2ebb6892697a38e7b8c79ba96c311b5bd55bff457ddd83ca",
+      "executed_reporting_binary_sha256": "ac4af6926a62f364a8699fd559b67cb6ae65293bf7b4fd58ee93934350b6a4ea",
+      "reason": "Root-authorized canonical narrow successor: identify optional CAD STL tessellation overlay and regenerate only retained reporting derivatives. Defaulthero, scientific values/geometry/masks/scorers/weights/solver and Root detached2a3b D1 unchanged. Preserve exact prior2a3bactive receipt and every historical observation/testclaim. This source/output rebinding is not test, realorigin, CI or finalapproval; affected Root controls remain separate."
     }
   ],
   "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. The e67 successor86-test attempt failed84passed/2failed and remains preserved. Corrected successor validation is recorded separately with its exact head."
