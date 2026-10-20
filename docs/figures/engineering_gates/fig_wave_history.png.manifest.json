@@ -1,11 +1,11 @@
 {
  "extra": {
-  "base_commit": "9967a93a99e196204ed6aac50d715db52603f370",
+  "base_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
   "command": "python3 ops/render/paper/wave_history.py --output-dir docs/figures/engineering_gates evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w300/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w301/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w302/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w303/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w304/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w305/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w306/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w307/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w308/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w309/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w310/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w311/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w312/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w313/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w314/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w315/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w316/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w318/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w319/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w321/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe2/out/w322/leaderboard.json evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe3/out/w402c3/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe3/out/w404c3/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe3/out/w405c3/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe3/out/w406c3/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe3/out/w406t3/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe3/out/w407t3/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe3/out/w408c3/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe3/out/w408t3/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/leaderboard.json evidence/evolution_waves/2026-10-17/xbabe3/out/w411t3/leaderboard.json",
   "input_commits": {
-   "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/leaderboard.json": "9967a93a99e196204ed6aac50d715db52603f370",
-   "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json": "9967a93a99e196204ed6aac50d715db52603f370",
-   "evidence/evolution_waves/2026-10-17/wave_summary.json": "9967a93a99e196204ed6aac50d715db52603f370",
+   "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/leaderboard.json": "102cdbef52b3710ce360ac34475c96ede0e33970",
+   "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json": "102cdbef52b3710ce360ac34475c96ede0e33970",
+   "evidence/evolution_waves/2026-10-17/wave_summary.json": "102cdbef52b3710ce360ac34475c96ede0e33970",
    "evidence/evolution_waves/2026-10-17/xbabe2/out/w300/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "evidence/evolution_waves/2026-10-17/xbabe2/out/w301/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "evidence/evolution_waves/2026-10-17/xbabe2/out/w302/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
@@ -25,9 +25,9 @@
    "evidence/evolution_waves/2026-10-17/xbabe2/out/w316/leaderboard.json": "b38642b37e6231cda97b07d73cdadec420e23aba",
    "evidence/evolution_waves/2026-10-17/xbabe2/out/w317/leaderboard.json": "17fceb88bccbdde94d38bb112fe38fc70ee61acc",
    "evidence/evolution_waves/2026-10-17/xbabe2/out/w318/leaderboard.json": "8dd2f8b8236078c9feacd7bf02ea732caed19f88",
-   "evidence/evolution_waves/2026-10-17/xbabe2/out/w319/leaderboard.json": "9967a93a99e196204ed6aac50d715db52603f370",
-   "evidence/evolution_waves/2026-10-17/xbabe2/out/w321/leaderboard.json": "9967a93a99e196204ed6aac50d715db52603f370",
-   "evidence/evolution_waves/2026-10-17/xbabe2/out/w322/leaderboard.json": "9967a93a99e196204ed6aac50d715db52603f370",
+   "evidence/evolution_waves/2026-10-17/xbabe2/out/w319/leaderboard.json": "7fca96a583df67e6f8179ba351fc837b086c121a",
+   "evidence/evolution_waves/2026-10-17/xbabe2/out/w321/leaderboard.json": "7fca96a583df67e6f8179ba351fc837b086c121a",
+   "evidence/evolution_waves/2026-10-17/xbabe2/out/w322/leaderboard.json": "7fca96a583df67e6f8179ba351fc837b086c121a",
    "evidence/evolution_waves/2026-10-17/xbabe3/out/w402c3/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "evidence/evolution_waves/2026-10-17/xbabe3/out/w404c3/leaderboard.json": "9c763eebafaa33da1cf827b466d2a2ca37796f1c",
    "evidence/evolution_waves/2026-10-17/xbabe3/out/w405c3/leaderboard.json": "b38642b37e6231cda97b07d73cdadec420e23aba",
@@ -36,19 +36,19 @@
    "evidence/evolution_waves/2026-10-17/xbabe3/out/w407t3/leaderboard.json": "b38642b37e6231cda97b07d73cdadec420e23aba",
    "evidence/evolution_waves/2026-10-17/xbabe3/out/w408c3/leaderboard.json": "17fceb88bccbdde94d38bb112fe38fc70ee61acc",
    "evidence/evolution_waves/2026-10-17/xbabe3/out/w408t3/leaderboard.json": "17fceb88bccbdde94d38bb112fe38fc70ee61acc",
-   "evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/leaderboard.json": "9967a93a99e196204ed6aac50d715db52603f370",
-   "evidence/evolution_waves/2026-10-17/xbabe3/out/w411t3/leaderboard.json": "9967a93a99e196204ed6aac50d715db52603f370"
+   "evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/leaderboard.json": "7fca96a583df67e6f8179ba351fc837b086c121a",
+   "evidence/evolution_waves/2026-10-17/xbabe3/out/w411t3/leaderboard.json": "7fca96a583df67e6f8179ba351fc837b086c121a"
   },
   "point_ledger": "docs/figures/engineering_gates/wave_history_points.json",
   "preview": false,
   "scope": "Selected Stage-2 observations, not population estimates or new certification",
   "snippet_sha256": "0df2037b4e8745dd9a4efcc5400a56521b6de55cc5f29cc399e51f736cdfdbe1",
-  "source_commit": "8dd2f8b8236078c9feacd7bf02ea732caed19f88"
+  "source_commit": "7fca96a583df67e6f8179ba351fc837b086c121a"
  },
  "figure": "docs/figures/engineering_gates/fig_wave_history.png",
  "figure_sha256": "ad59b90ed2a951a4c47bc060de436674dd6d780a3b2cdc1f22b2006eea5e2939",
  "inputs": {
-  "docs/figures/engineering_gates/wave_history_points.json": "893126541c8277d33f543ffcd644423e4f83c1250e8da721be6bf2ec1512fab2",
+  "docs/figures/engineering_gates/wave_history_points.json": "19e05ffac4f5b67a0dff04622fb964013c9c778901c340ab97a76f13fe9f227a",
   "evidence/evolution_plateau/2026-10-17/xbabe2/out/w298/leaderboard.json": "4ae79eda014772848816063e3f157d8899fa3968385700d7d600b2527d9aa748",
   "evidence/evolution_plateau/2026-10-17/xbabe3/out/w401c3/leaderboard.json": "1c2916610a51bb5a1114210e29e587791ad5d2849ccf1f9f206e1c5c276a80fe",
   "evidence/evolution_waves/2026-10-17/wave_summary.json": "341befe85b0941a113ee80fdcdae86fac5fde5ef2c101109ab73e1a15900707e",
@@ -84,7 +84,7 @@
   "evidence/evolution_waves/2026-10-17/xbabe3/out/w408t3/leaderboard.json": "e9b69682cf090106083d7db4f3bcdb5610d8849fb1e5b98ce873466e6f43f036",
   "evidence/evolution_waves/2026-10-17/xbabe3/out/w411c3/leaderboard.json": "70da1cb69f460711300dc34e8f37b996b0e97f479f9c6ea13e4e47116bd2da16",
   "evidence/evolution_waves/2026-10-17/xbabe3/out/w411t3/leaderboard.json": "46d1a7f143dabf7c36b03fb0646b221bfaee19d60a1ac9221d41ea7f0bcd74ba",
-  "ops/render/paper/wave_history.py": "17594d9a89ba113c2d3453c099c56eae6e4b22416644bc9a2ab63a5fbf5d7247"
+  "ops/render/paper/wave_history.py": "68c33b13c3abb2d916f99e2900902d51a8bfe9c33995c1b08aedd120dfe0ab2e"
  },
  "norms": {},
  "schema": 1,

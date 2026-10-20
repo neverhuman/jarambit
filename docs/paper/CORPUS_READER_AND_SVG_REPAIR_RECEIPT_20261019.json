@@ -18,7 +18,7 @@
   "source_and_binary_bindings": {
     "crates/paper-artifacts/src/corpus.rs": "2b1cba1c136d6950d7f2efe4ac362224e4d57b16247bb0b463a097bbb332576e",
     "crates/paper-artifacts/src/population.rs": "0a1a427d155fded80e7efb909e6b18a6196af63f4473e303ff1221292967328c",
-    "crates/paper-artifacts/src/publication.rs": "ac926a17c00caaa1ba6a02b1a0d633b2af4bd2c02c122e03d7792787be9380f5",
+    "crates/paper-artifacts/src/publication.rs": "f2cb3810dff41fd5297da87727d75bc1f73f9ec047bec45981107a15763862b1",
     "crates/paper-artifacts/src/lib.rs": "6722079254b611b1dab6f5f5135be59ff718d567e4d0ebd1448bfd928c0db337",
     "crates/paper-artifacts/examples/publication_v2_audit.rs": "610a5b9a0c03984278db7b150184a101d1bacd10dc79e668e9ec2c36cf5c3919",
     "superseded_stale_debug_binary_sha256": "24f52f1300ee0397dc2c84da7b1bc4ed1309114b63c71a7edd0003a45c3a6f3d"
@@ -110,7 +110,7 @@
     "docs/paper/figures/inheritance.svg": "abf568cbf39ce5b7b330bf14794d82fd5f46a7860f376fbc44f23d25c17f2488",
     "docs/paper/generated/shared_projection.v2.json": "5b3613a6b0bba6c163bf0ccc77579cee6dba55a58ca13844bb9333faf3d2bb77",
     "docs/paper/generated/overview.md": "7340f1111a4ed56bdde38644cd3749c31aa8cfd724d1e3516cdd23997f531d10",
-    "docs/paper/generated/manifest.json": "f192db898876bbee413f850202b4d4d206ac48a262c842181dc6ec64f15ee375",
+    "docs/paper/generated/manifest.json": "5569ca8d69d6d0ee8dd799555c9599cf54fc3e45e24cc6c5aad84fecc4bd0380",
     "docs/paper/publication.v2.json": "2d3851f99f5bcb966f6b1247368acdfb8475a723e8913fbc54a484224ab55d00",
     "docs/paper/generated/population/gen800_scatter_cache.v1.json": "4eabe5a581dcb655b413857bfb3c28741070dc390b3ca71d744aa51f58e7a493"
   },
@@ -121,11 +121,12 @@
     "exit_code": 0
   },
   "integration_rebinding": {
-    "checked_utc": "2026-10-20T05:02:05.610507+00:00",
-    "previous_receipt_sha256": "685b76c0994500441890d732d78869c91215695b335e8016af0eff98dc89915e",
+    "checked_utc": "2026-10-20T05:26:38.287820+00:00",
+    "previous_receipt_sha256": "54624f27c7fb550334656e44df1ce6d3ed7b377f52e4d8e9668362f274e869e3",
+    "previous_receipt_commit": "3c9c334fcc2b308dc21114a7ddd338c844fc9856",
     "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
     "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
-    "reason": "Rebind live reporting source/output identities after the authorized major revision. Original observations, custody constants, erroneous V1 and historical execution claims are unchanged. Strict validator and test definitions are unchanged; final current tests are separate."
+    "reason": "Rebind live publication writer and generated manifest after adding the required common script identity and writer input binding for the static authored architecture SVG. Original observations, custody constants, historical receipt and historical execution claims remain unchanged. Strict validators and test definitions are unchanged; successor validation is separately head-bound."
   },
   "integration_rebinding_history": [
     {
@@ -133,6 +134,13 @@
       "previous_receipt_sha256": "887117c619986e53da111d111b96882d00c25ed9f20498527edf278b24839eca",
       "preserved_original_commit": "d1b65cbe73b3890f07524c86b23c7ece3c9f2767",
       "reason": "Rebind current source/output hashes after EOF-whitespace-only population.rs cleanup. Original observations, custody records, binary history and prior execution claims are unchanged; final local reporting tests are rerun separately."
+    },
+    {
+      "checked_utc": "2026-10-20T05:02:05.610507+00:00",
+      "previous_receipt_sha256": "685b76c0994500441890d732d78869c91215695b335e8016af0eff98dc89915e",
+      "preserved_original_commit": "102cdbef52b3710ce360ac34475c96ede0e33970",
+      "preserved_original_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json",
+      "reason": "Rebind live reporting source/output identities after the authorized major revision. Original observations, custody constants, erroneous V1 and historical execution claims are unchanged. Strict validator and test definitions are unchanged; final current tests are separate."
     }
   ],
   "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. Current RR5 results are recorded in final delivery receipts."

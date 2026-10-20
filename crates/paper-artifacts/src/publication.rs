@@ -1695,6 +1695,7 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
     let mut architecture_inputs = BTreeMap::new();
     for path in [
         architecture_path,
+        "crates/paper-artifacts/src/publication.rs",
         "docs/paper/sections/study-design.tex",
         "docs/paper/supplement/cohort-inventory.tex",
     ] {
@@ -1707,6 +1708,8 @@ pub fn generate(root: &Path, check: bool) -> Result<()> {
         "figure":architecture_path,
         "figure_sha256":architecture_inputs[architecture_path],
         "inputs":architecture_inputs,
+        "script":"crates/paper-artifacts/src/publication.rs",
+        "script_role":"Manifest writer and input validator; the SVG is a static authored explanatory input, not generated CAD or assessment data",
         "role":"Authored explanatory diagram bound to retained study coverage; not a generated assessment join",
         "scope":"Separate search denominators and individually assessed export bundles; no per-birth native CAD/assessment or physical validation claim"
     });
