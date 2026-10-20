@@ -24,7 +24,7 @@
     "superseded_stale_debug_binary_sha256": "24f52f1300ee0397dc2c84da7b1bc4ed1309114b63c71a7edd0003a45c3a6f3d",
     "crates/paper-artifacts/src/display.rs": "636bb74fbdd7be6a5db0e307499aed034b58e29f321837426e177405a711e22b",
     "crates/paper-artifacts/src/score_axis.rs": "65cfdebb8af49bf62f8f4c5ed33326771204b109a491ab4367777700df5a19e7",
-    "crates/paper-artifacts/src/plate.rs": "ac4537b4cdd44323dc7d259d0227e0b30b4c57ebc994f70580ed64ee96c200bd",
+    "crates/paper-artifacts/src/plate.rs": "118639cf8e9325bc05e68e0c98a37586479b7c1d2e3f783a8296a7fbdde05f2e",
     "crates/paper-artifacts/src/assessment.rs": "b184b9a4fac930864a5bee0612b9b634c7fd33def6c418926274c1138d7e7fb9",
     "crates/paper-artifacts/src/battery.rs": "1a727850141d3fcea428f28a67a19d4cbdcf6c934df41376590cf3b004ff93ad",
     "crates/paper-artifacts/src/export_identity.rs": "92c0b4bf4cc3dcb2531f84496580fa9fa4527de452d56b771c59a7c65d4790a9",
@@ -41,7 +41,7 @@
     "crates/paper-artifacts/examples/verify_review_origin.rs": "0b98bc719b4d569ee4842ae58471b585dbffba9f1a7cae7d4d977be188eea13d",
     "crates/paper-artifacts/examples/fixtures/verify-review-origin-neutral.v1.json": "7fdde1b3fe648c63887e3cc34cc476b677f38852ac1c296e9f0249afafc86b57",
     "current_executed_reporting_binary_sha256": "96c3c79155ca0fe5450735d24433f802fca1f269817f05f32f976a021e96ed2f",
-    "README.md": "28e9b601d146ec9b3453b60a2a348f981cb5ca656c85a0333b3b5f293eca2132",
+    "README.md": "72680ef49a194e9877094bfc5927ca84de1aa500136984a1ce2a195aee853cb7",
     "docs/paper/CROSSWALK_SUPPLEMENT.md": "a42c27d8b70bd804dab6da726fa183ca7403a560025ed051d0c2ea9309860bb5",
     "docs/paper/supplement/numerical-methods.tex": "1fe7d935e5ad65ed6dea5600ab4202c107c265233dc71a1a8af171e8ac34d876"
   },
@@ -332,5 +332,26 @@
       "reason": "Direct human bounded successor renews four stale validated crate-source and sixteen generated-output bindings, preserves exact7a active receipt in registered history, and truthfully records the actual retained-report generation at f1b356a3. Reporting source code, every selected report output, all scientific inputs/geometry/fields/weights/masks, validators and thresholds remain unchanged. Existing README source pointer is also renewed to the actual unchanged current README; old README/binary/test observations remain in exact7a history. Actual producer binary96c3c791 was captured before/after successful bounded execution, not guessed or relabelled. Original70test entry and all prior failures/successes retain their own source/date/scope. No current suite/fullzstd/CI/formalapproval is claimed; final required controls and genuine origin remain Root-owned."
     }
   ],
-  "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. The e67 successor86-test attempt failed84passed/2failed and remains preserved. Corrected successor validation is recorded separately with its exact head. Combined contrast/omission successor controls remain unexecuted at this source/output rebinding; their later exact-head results are separate evidence, not this historical focused-test entry. Root1307 residual successor controls remain unexecuted at this source/output rebinding; actual119 controls remain predecessor evidence, with new affected results separate after completefreeze. Current narrow repair successor report generation exited0 at f1b356a3; no tests or full audit have run at this rebinding. Original70test entry and all preceding exact-head evidence remain historical; producer execution is not validationPASS."
+  "focused_test_execution_scope": "Historical70-test execution retained from the original receipt; not a claim that current final-head tests passed. The e67 successor86-test attempt failed84passed/2failed and remains preserved. Corrected successor validation is recorded separately with its exact head. Combined contrast/omission successor controls remain unexecuted at this source/output rebinding; their later exact-head results are separate evidence, not this historical focused-test entry. Root1307 residual successor controls remain unexecuted at this source/output rebinding; actual119 controls remain predecessor evidence, with new affected results separate after completefreeze. Current narrow repair successor report generation exited0 at f1b356a3; no tests or full audit have run at this rebinding. Original70test entry and all preceding exact-head evidence remain historical; producer execution is not validationPASS.",
+  "pending_successor_closure": {
+    "authority": "ROOT_SHADED_HERO_DELIVERED_AND_NARROW_SUCCESSOR_BEFORE_VALIDATION_20261020T1917Z.md",
+    "previous_complete_freeze": "73ffef00ddd35e3cf679074c38fe3625aba966f2",
+    "exact_previous_active_receipt_preserved_path": "docs/paper/history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_73FFEF00_20261020.json",
+    "exact_previous_active_receipt_sha256": "cefacfc5218bfb49bdcc2acd4339a89d6d0abe8a12a7ca13347e976088d9af0f",
+    "current_source_bindings_renewed": [
+      {
+        "path": "crates/paper-artifacts/src/plate.rs",
+        "previous": "ac4537b4cdd44323dc7d259d0227e0b30b4c57ebc994f70580ed64ee96c200bd",
+        "actual_source": "118639cf8e9325bc05e68e0c98a37586479b7c1d2e3f783a8296a7fbdde05f2e"
+      },
+      {
+        "path": "README.md",
+        "previous": "28e9b601d146ec9b3453b60a2a348f981cb5ca656c85a0333b3b5f293eca2132",
+        "actual_source": "72680ef49a194e9877094bfc5927ca84de1aa500136984a1ce2a195aee853cb7"
+      }
+    ],
+    "status": "SOURCE_INCREMENT_ONLY; actualsuccessorproducer/render/package/controlsexecutionpendingfreshgovernedruntimeallocation",
+    "executed_binary_scope": "Existing96c3c791entry is the actual previousf1b/73 generation identity only; no successorbinary/execution/currenttestPASS claimed.",
+    "science_and_actual_ROI_domain": "Unchanged fields, masks, thresholds, mesh, exactquad; newleaderlabels locateexistingROI only."
+  }
 }

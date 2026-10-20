@@ -39,7 +39,7 @@ Jarambit is a computational design research system linking a geometric represent
 
 [Results and scope](docs/paper/sections/08-results.tex) · [Numerical interpretation](docs/paper/sections/07-verification.tex)
 
-## Retained reporting priorities: Individual 2002
+## Recovered recipe priorities and retained reporting vector
 
 ![Twenty configured recipe priorities totaling 100 percent](docs/paper/generated/objective-priorities.v1.svg)
 
