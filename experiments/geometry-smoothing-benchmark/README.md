@@ -60,6 +60,14 @@ Nine library tests and three CLI/export tests pass. They cover three noise ampli
 
 There are no third-party dependencies. `src/lib.rs` owns smoothing and measurement; `src/main.rs` owns synthetic generation settings, exports, report and wireframe comparison; `tests/export_contract.rs` verifies the delivered mesh files. Generated outputs are immutable snapshots of their run; reruns use a new directory.
 
+## Input mesh mode
+
+`--input STL --out NEW_DIRECTORY` smooths a supplied triangle mesh instead of the synthetic sphere. It accepts binary or ASCII STL, welds corners whose coordinates are exactly equal (no tolerance merge), and keeps the input face order and winding. The synthetic sphere options (`--radius-mm`, `--noise-mm`, `--subdivisions`) are refused, and `--label TEXT` names the input in the report. Smoothing settings are the same options as above.
+
+Before smoothing, the welded mesh must be closed, edge-manifold, consistently oriented, free of degenerate and duplicate faces, and one connected component. Otherwise the run exits 1 after writing `input-check.json` with the counts, and nothing is smoothed. After smoothing, a reversed face, changed topology, nonfinite position or displacement over budget exits 2. In that case the run still writes `metrics.json`, `REPORT.md` and the stopped state as `failed-state.stl` and `failed-state-displacement.csv`. Successful runs write `smoothed.stl` and `displacement.csv`. Exit 0 means the input and post-smoothing checks passed.
+
+This is a geometry study. The smoothed mesh is NOT re-scored, re-assessed, certified or qualified, and the sphere pass criteria do not apply. Outputs are hashed with SHA-256 in `metrics.json`. Sharp-feature pinning is not implemented, so the report records zero pins.
+
 ## Limits
 
 This proves geometry changes and measured improvement on these synthetic fixtures. It does not prove success on arbitrary CAD, semantic feature preservation, continuous Hausdorff error, B-rep continuity, or functional performance. Vertex-to-sphere distances are exact at sample vertices; volume is compared with the clean triangulated sphere. Exhaustive triangle-intersection tests and arbitrary surface reconstruction are outside this benchmark. The source mesh remains unchanged.
