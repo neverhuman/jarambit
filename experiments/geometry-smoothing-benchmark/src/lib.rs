@@ -1,6 +1,9 @@
 //! Geometry-changing smoothing on synthetic, nonweapon meshes. Coordinates: mm.
 use std::collections::{BTreeMap, BTreeSet};
 
+pub mod input;
+pub mod sha256;
+
 pub type Point = [f64; 3];
 pub type Face = [usize; 3];
 pub type Result<T> = std::result::Result<T, String>;
@@ -153,6 +156,24 @@ fn topology(mesh: &Mesh) -> Result<Topology> {
 /// Total displacement is capped against the original input, not each pass.
 /// No universal feature-preservation or nonintersection guarantee is made.
 pub fn smooth(mesh: &Mesh, settings: Settings, pins: &[bool]) -> Result<Mesh> {
+    let trace = smooth_traced(mesh, settings, pins)?;
+    match trace.error {
+        Some(error) => Err(error),
+        None => Ok(trace.mesh),
+    }
+}
+
+/// A smoothing run that may stop early. `mesh` is the state when the run stopped
+/// (the end state when `error` is `None`), so a failed check keeps its measurements.
+pub struct Trace {
+    pub mesh: Mesh,
+    pub iterations_completed: usize,
+    pub error: Option<String>,
+}
+
+/// Same arithmetic and checks as `smooth`, but a failed per-iteration check is
+/// returned in `Trace::error` together with the mesh as it stood.
+pub fn smooth_traced(mesh: &Mesh, settings: Settings, pins: &[bool]) -> Result<Trace> {
     settings.validate()?;
     let topo = topology(mesh)?;
     if pins.len() != mesh.vertices.len() {
@@ -164,7 +185,7 @@ pub fn smooth(mesh: &Mesh, settings: Settings, pins: &[bool]) -> Result<Mesh> {
         .map(|(a, b)| *a || *b)
         .collect();
     let mut out = mesh.clone();
-    for _ in 0..settings.iterations {
+    for completed in 0..settings.iterations {
         for weight in [settings.lambda, settings.mu] {
             let old = &out.vertices;
             let next: Vec<Point> = old
@@ -195,16 +216,30 @@ pub fn smooth(mesh: &Mesh, settings: Settings, pins: &[bool]) -> Result<Mesh> {
                 );
             }
         }
-        topology(&out)?;
-        if mesh
+        let failure = if let Err(error) = topology(&out) {
+            Some(error)
+        } else if mesh
             .faces
             .iter()
             .any(|&face| dot(normal(mesh, face), normal(&out, face)) <= 0.0)
         {
-            return Err("smoothing reversed a face relative to the input".into());
+            Some("smoothing reversed a face relative to the input".into())
+        } else {
+            None
+        };
+        if failure.is_some() {
+            return Ok(Trace {
+                mesh: out,
+                iterations_completed: completed,
+                error: failure,
+            });
         }
     }
-    Ok(out)
+    Ok(Trace {
+        mesh: out,
+        iterations_completed: settings.iterations,
+        error: None,
+    })
 }
 
 /// Icosphere housing benchmark. Analytic reference is a sphere, radius in mm.

@@ -8,6 +8,8 @@ use std::{
     path::PathBuf,
 };
 
+mod input_mode;
+
 fn metric_json(m: &Metrics) -> String {
     format!("{{\"radial_rms_mm\":{:.17e},\"radial_p95_mm\":{:.17e},\"radial_max_mm\":{:.17e},\"mean_radius_mm\":{:.17e},\"volume_mm3\":{:.17e},\"min_double_area_mm2\":{:.17e},\"max_displacement_mm\":{:.17e},\"moved_vertices\":{},\"euler_characteristic\":{},\"boundary_vertices\":{}}}",
         m.radial_rms_mm,m.radial_p95_mm,m.radial_max_mm,m.mean_radius_mm,m.volume_mm3,
@@ -142,6 +144,9 @@ fn run() -> Result<bool, String> {
     let mut radius = 30.0;
     let mut noise = 0.8;
     let mut subdivisions = 3;
+    let mut input = None;
+    let mut label = String::from("input mesh");
+    let command = std::env::args().collect::<Vec<_>>().join(" ");
     let mut args = std::env::args().skip(1);
     let mut seen = BTreeSet::new();
     while let Some(key) = args.next() {
@@ -154,6 +159,8 @@ fn run() -> Result<bool, String> {
         }
         let value = args.next().ok_or_else(|| format!("missing value: {key}"))?;
         match key.as_str() {
+            "--input" => input = Some(PathBuf::from(value)),
+            "--label" => label = value,
             "--out" => out = PathBuf::from(value),
             "--iterations" => {
                 settings.iterations = value.parse().map_err(|_| "invalid iterations")?
@@ -170,6 +177,28 @@ fn run() -> Result<bool, String> {
         }
     }
     settings.validate()?;
+    if let Some(input) = input {
+        // Input-mesh mode: the synthetic sphere options do not apply.
+        if seen.contains("--radius-mm")
+            || seen.contains("--noise-mm")
+            || seen.contains("--subdivisions")
+        {
+            return Err("--radius-mm, --noise-mm and --subdivisions are synthetic-only; not valid with --input".into());
+        }
+        if !seen.contains("--out") {
+            return Err("--input requires --out NEW_DIRECTORY".into());
+        }
+        return input_mode::run(&input_mode::Request {
+            input,
+            out,
+            settings,
+            label,
+            command,
+        });
+    }
+    if seen.contains("--label") {
+        return Err("--label is only valid with --input".into());
+    }
     if out.exists() {
         return Err("output directory already exists; select a new directory".into());
     }
