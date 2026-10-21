@@ -1,0 +1,24 @@
+{
+  "rounds": 1,
+  "candidates_per_round": 1,
+  "certify_top": 1,
+  "seed": 2830,
+  "prefix": "auto",
+  "out_dir": "/tmp/claude-0/-home-claude/78c89e1c-65d2-5f9c-a32c-458c8f698b48/scratchpad/repo/jarambit/crates/cli/../../target/evolve-process-controls/1792564334744255780/disagreement",
+  "argv": ["--rounds", "1", "--candidates-per-round", "1", "--top-k-certify", "1", "--threads", "1", "--seeds", "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv", "--out-dir", "/tmp/claude-0/-home-claude/78c89e1c-65d2-5f9c-a32c-458c8f698b48/scratchpad/repo/jarambit/crates/cli/../../target/evolve-process-controls/1792564334744255780/disagreement"],
+  "seeds": [
+    {
+      "family": "p14",
+      "certificate_identity": "400e3d630a482f66c015e0609449b8a4675d2597096c1e654f225a447dc7719b"
+    }
+  ],
+  "schema": "jarambit.regression.run.v1",
+  "run_id": "auto-20261021T063344Z-vm-s2830",
+  "lane": "auto_evolve",
+  "host": "vm",
+  "started_utc": "20261021T063344Z",
+  "git_head": "49dc71f88339",
+  "feature_schema": "jarambit.regression.features.v1",
+  "commit": false,
+  "push": null
+}

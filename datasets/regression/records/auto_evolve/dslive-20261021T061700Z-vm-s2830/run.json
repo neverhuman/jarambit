@@ -1,0 +1,36 @@
+{
+  "rounds": 1,
+  "candidates_per_round": 2,
+  "certify_top": 1,
+  "seed": 2830,
+  "prefix": "dslive",
+  "out_dir": "out/ds_live",
+  "argv": ["--rounds", "1", "--candidates-per-round", "2", "--certify-top", "1", "--threads", "2", "--out-dir", "out/ds_live", "--prefix", "dslive", "--dataset-commit"],
+  "seeds": [
+    {
+      "family": "p14",
+      "certificate_identity": "400e3d630a482f66c015e0609449b8a4675d2597096c1e654f225a447dc7719b"
+    },
+    {
+      "family": "p10",
+      "certificate_identity": "df99be985058362f039f49a07c58894462d5b9ce56cc443a6cf81f3e0dccc9a4"
+    },
+    {
+      "family": "p14",
+      "certificate_identity": "e9618a664a8715ad62452231f40bb9cab1b504ea09e177df433e59a96d33d2ef"
+    },
+    {
+      "family": "p10",
+      "certificate_identity": "64063d69ce5bba79bd71a5d0ba46fef6e6e0adf90e80ef53b3737b4552e71d34"
+    }
+  ],
+  "schema": "jarambit.regression.run.v1",
+  "run_id": "dslive-20261021T061700Z-vm-s2830",
+  "lane": "auto_evolve",
+  "host": "vm",
+  "started_utc": "20261021T061700Z",
+  "git_head": "49dc71f88339",
+  "feature_schema": "jarambit.regression.features.v1",
+  "commit": true,
+  "push": null
+}
