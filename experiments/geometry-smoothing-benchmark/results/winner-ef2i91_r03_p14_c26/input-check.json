@@ -1,0 +1,7 @@
+{
+"schema":"smoothing_input_check.v1",
+"status":"accepted",
+"reasons":[],
+"input":{"path":"/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/i91/by-content/e7ab9c8531255490be6a05c5dab8f629159ee9eae0580bda459a398a03747063/attempt-1792452614126747868/ef2i91_r03_p14_c26.stl","bytes":15435869,"sha256":"7741cf82418984b52e89e4a5f4f97ce49723e0d4513c2c9eada139b4bdeaeba6","format":"ascii"},
+"audit":{"vertices":45468,"faces":90948,"edges":136422,"open_edges":0,"nonmanifold_edges":0,"inconsistent_edges":0,"degenerate_faces":0,"duplicate_faces":0,"unused_vertices":0,"components":1,"euler_characteristic":-6}
+}

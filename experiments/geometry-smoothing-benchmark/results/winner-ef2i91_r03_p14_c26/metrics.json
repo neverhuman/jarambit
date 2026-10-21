@@ -1,0 +1,15 @@
+{
+"schema":"smoothing_input_mesh.v1",
+"status":"fail",
+"not_qualified":true,
+"label":"ef2i91_r03_p14_c26: best evolved design by W_ULTRALIGHT_v1 (fitness 80.253391), not qualified",
+"tool":"geometry-smoothing-benchmark 0.1.0",
+"command":"./target/release/geometry-smoothing-benchmark --input /home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/i91/by-content/e7ab9c8531255490be6a05c5dab8f629159ee9eae0580bda459a398a03747063/attempt-1792452614126747868/ef2i91_r03_p14_c26.stl --out /home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-20261021T231156Z --label ef2i91_r03_p14_c26: best evolved design by W_ULTRALIGHT_v1 (fitness 80.253391), not qualified",
+"input":{"path":"/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/i91/by-content/e7ab9c8531255490be6a05c5dab8f629159ee9eae0580bda459a398a03747063/attempt-1792452614126747868/ef2i91_r03_p14_c26.stl","bytes":15435869,"sha256":"7741cf82418984b52e89e4a5f4f97ce49723e0d4513c2c9eada139b4bdeaeba6","format":"ascii"},
+"input_audit":{"vertices":45468,"faces":90948,"edges":136422,"open_edges":0,"nonmanifold_edges":0,"inconsistent_edges":0,"degenerate_faces":0,"duplicate_faces":0,"unused_vertices":0,"components":1,"euler_characteristic":-6},
+"settings":{"iterations":20,"lambda":0.5,"mu":-0.5,"max_displacement_mm":2,"iterations_completed":0},
+"pins":{"user_pinned_vertices":0,"boundary_pinned_vertices":0},
+"result":{"output_audit":{"vertices":45468,"faces":90948,"edges":136422,"open_edges":0,"nonmanifold_edges":0,"inconsistent_edges":0,"degenerate_faces":0,"duplicate_faces":0,"unused_vertices":0,"components":1,"euler_characteristic":-6},"moved_vertices":45468,"max_displacement_mm":0.9877477117409973,"rms_displacement_mm":0.18942601776251775,"displacement_at_budget":false,"volume_mm3":{"before":20358.296285160777,"after":20292.245834776953,"change_percent":-0.32443997011659675},"bounding_box_mm":{"before":{"min":[-18.4237,-53.4678,-7.5],"max":[190.3329,18.4486,7.5]},"after":{"min":[-18.410365496031748,-53.393791145833326,-7.514265208333334],"max":[190.3122211111111,18.4331746031746,7.514265208333334]},"change":{"min":[0.01333450396825242,0.0740088541666708,-0.014265208333333668],"max":[-0.02067888888888092,-0.015425396825399673,0.014265208333333668]}}},
+"outputs":[{"name":"failed-state.stl","bytes":28695680,"sha256":"ccb765cdca264477ce48c5acd1dc8b8ccf508ccc81417e07a29fe788eaff20f0"},{"name":"failed-state-displacement.csv","bytes":4771319,"sha256":"0e08e3a3eac8a395bf4d1982b2758296feedb1a26e3071908d6e289fd4ffe5a3"}],
+"reasons":["smoothing stopped in iteration 1 of 20: smoothing reversed a face relative to the input","2050 faces reversed relative to input"]
+}

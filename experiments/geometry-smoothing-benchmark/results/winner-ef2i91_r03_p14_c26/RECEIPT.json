@@ -1,0 +1,57 @@
+{
+  "schema": "smoothing_receipt.v1",
+  "work_order": "wo-smoothing-s1",
+  "task": "OWNER-SMOOTHING-20261021-S1",
+  "code_commit": "e6c2b45b2aa31804972e38f1e9ab765586106cb4",
+  "tool": "geometry-smoothing-benchmark 0.1.0",
+  "toolchain": "rustc 1.85.1",
+  "command": "nice -n 10 /usr/bin/time -v ./target/release/geometry-smoothing-benchmark --input /home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/i91/by-content/e7ab9c8531255490be6a05c5dab8f629159ee9eae0580bda459a398a03747063/attempt-1792452614126747868/ef2i91_r03_p14_c26.stl --out /home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-20261021T231156Z --label \"ef2i91_r03_p14_c26: best evolved design by W_ULTRALIGHT_v1 (fitness 80.253391), not qualified\"",
+  "exit_code": 2,
+  "wall_clock": "0:01.33",
+  "max_rss_kbytes": 130928,
+  "winner": {
+    "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/i91/by-content/e7ab9c8531255490be6a05c5dab8f629159ee9eae0580bda459a398a03747063/attempt-1792452614126747868/ef2i91_r03_p14_c26.stl",
+    "bytes": 15435869,
+    "sha256": "7741cf82418984b52e89e4a5f4f97ce49723e0d4513c2c9eada139b4bdeaeba6",
+    "verified_by": "sha256sum before run"
+  },
+  "freeze_check": {
+    "utc": "2026-10-21",
+    "xbabe1": "leaders/fitness.json top ef2i91_r03_p14_c26_genome.csv 80.253391; next ef2i91_r03_p14_c41 80.244979",
+    "xbabe3": "same values as xbabe1",
+    "xbabe2": "no evo_continuous directory and no leaders/fitness.json on Mac-Studio.local (ssh xbabe2 user agent); contributes no entry"
+  },
+  "output_dir": "/home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-20261021T231156Z",
+  "outputs": [
+    {
+      "path": "/home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-20261021T231156Z/failed-state.stl",
+      "bytes": 28695680,
+      "sha256": "ccb765cdca264477ce48c5acd1dc8b8ccf508ccc81417e07a29fe788eaff20f0"
+    },
+    {
+      "path": "/home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-20261021T231156Z/failed-state-displacement.csv",
+      "bytes": 4771319,
+      "sha256": "0e08e3a3eac8a395bf4d1982b2758296feedb1a26e3071908d6e289fd4ffe5a3"
+    },
+    {
+      "path": "/home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-20261021T231156Z/input-check.json",
+      "bytes": 615,
+      "sha256": "e45d56fda4f3ee53d7f0c04fe828a7f4af46a38ddeb1b4e10b19694389a9bae0"
+    },
+    {
+      "path": "/home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-20261021T231156Z/metrics.json",
+      "bytes": 2652,
+      "sha256": "4d2f029a580f6a176297c27eee6e726da037b08e1b0bd212934a30b246d12a02"
+    },
+    {
+      "path": "/home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-20261021T231156Z/REPORT.md",
+      "bytes": 3268,
+      "sha256": "8e69e30ab05c7ce810f84b0a994c37678aa56cf9fdac8352f8ec9bb7b3b6e680"
+    }
+  ],
+  "logs": {
+    "stdout": "target/run-stdout.txt",
+    "time": "target/run-time.txt",
+    "note": "lane-local, not committed"
+  }
+}
