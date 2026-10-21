@@ -13,6 +13,7 @@ use super::gitsync;
 use super::harvest;
 use super::json::{self, Json};
 use super::records::{self, Row, ShardWriter, HASH_COL};
+use std::io::Write as _;
 use std::path::{Path, PathBuf};
 
 pub const LANE: &str = "auto_evolve";
@@ -114,23 +115,54 @@ pub fn flatten_numeric(v: &Json, prefix: &str, out: &mut Vec<(String, f64)>, dep
     }
 }
 
+/// Attempts per base run id: the id itself, then `-n2` .. `-n9`.
+const MAX_RUN_ATTEMPTS: u32 = 9;
+
+/// Claim a new run directory `lane_dir/<id>` that did not exist before. Tries `base`, then
+/// `base-n2` .. `base-n9`; `create_dir` (not `create_dir_all`) makes the claim exclusive.
+/// Returns the run id that won and its directory. Fails after the last attempt or on any other error.
+fn claim_run_dir(lane_dir: &Path, base: &str) -> std::io::Result<(String, PathBuf)> {
+    std::fs::create_dir_all(lane_dir)?;
+    for attempt in 1..=MAX_RUN_ATTEMPTS {
+        let run_id = if attempt == 1 { base.to_string() } else { format!("{base}-n{attempt}") };
+        let dir = lane_dir.join(&run_id);
+        match std::fs::create_dir(&dir) {
+            Ok(()) => return Ok((run_id, dir)),
+            Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => continue,
+            Err(e) => return Err(e),
+        }
+    }
+    Err(std::io::Error::new(
+        std::io::ErrorKind::AlreadyExists,
+        format!("run ids {base} and {base}-n2..-n{MAX_RUN_ATTEMPTS} are all taken"),
+    ))
+}
+
+/// Create `run.json` in a freshly claimed run directory; never overwrites an existing manifest.
+fn write_run_manifest(dir: &Path, text: &str) -> std::io::Result<()> {
+    let mut file = std::fs::OpenOptions::new().write(true).create_new(true).open(dir.join("run.json"))?;
+    file.write_all(text.as_bytes())
+}
+
 impl Recorder {
     pub fn start(root: &Path, cfg: RecorderConfig, prefix: &str, seed: u64, manifest: Json) -> Option<Recorder> {
         if !cfg.enabled {
             return None;
         }
         let secs = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0);
-        let run_id = format!("{}-{}-{}-s{seed}", sanitize(prefix), utc_stamp(secs), host_name());
+        let base_id = format!("{}-{}-{}-s{seed}", sanitize(prefix), utc_stamp(secs), host_name());
         let base = match &cfg.dir {
             Some(d) if d.is_absolute() => d.clone(),
             Some(d) => root.join(d),
             None => root.join(super::engine::DEFAULT_RECORDS),
         };
-        let dir = base.join(LANE).join(&run_id);
-        if let Err(e) = std::fs::create_dir_all(&dir) {
-            eprintln!("dataset recorder: disabled, cannot create {}: {e}", dir.display());
-            return None;
-        }
+        let (run_id, dir) = match claim_run_dir(&base.join(LANE), &base_id) {
+            Ok(claimed) => claimed,
+            Err(e) => {
+                eprintln!("dataset recorder: disabled, cannot claim a run directory under {}: {e}", base.join(LANE).display());
+                return None;
+            }
+        };
         let doc = manifest
             .with("schema", "jarambit.regression.run.v1")
             .with("run_id", run_id.as_str())
@@ -141,8 +173,8 @@ impl Recorder {
             .with("feature_schema", super::featurize::FEATURE_SCHEMA)
             .with("commit", cfg.commit)
             .with("push", cfg.push.as_ref().map(|(r, b)| format!("{r}:{b}")));
-        if let Err(e) = std::fs::write(dir.join("run.json"), doc.pretty()) {
-            eprintln!("dataset recorder: disabled, cannot write run manifest: {e}");
+        if let Err(e) = write_run_manifest(&dir, &doc.pretty()) {
+            eprintln!("dataset recorder: disabled, cannot write run manifest {}: {e}", dir.join("run.json").display());
             return None;
         }
         println!("Dataset recorder: {} (commit={}, push={})", dir.display(), cfg.commit, cfg.push.is_some());
@@ -165,7 +197,7 @@ impl Recorder {
         if rows.is_empty() {
             return;
         }
-        match records::write_shard(&self.dir.join(format!("r{round:02}.s1.csv")), rows) {
+        match records::write_shard_create_new(&self.dir.join(format!("r{round:02}.s1.csv")), rows) {
             Ok(n) => {
                 self.s1_rows += n;
                 self.round_s1 += n;
@@ -272,5 +304,43 @@ mod tests {
             out,
             vec![("s2.em.a".into(), 1.0), ("s2.em.b.c".into(), 1.0), ("s2.em.b.d.0".into(), 1.0), ("s2.em.b.d.1".into(), 2.0)]
         );
+    }
+
+    fn unique_dir(name: &str) -> PathBuf {
+        let nanos = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos();
+        let d = std::env::temp_dir().join(format!("jarambit-recorder-{name}-{}-{nanos}", std::process::id()));
+        std::fs::create_dir_all(&d).unwrap();
+        d
+    }
+
+    #[test]
+    fn claim_run_dir_never_reuses_an_existing_run() {
+        let lane = unique_dir("claim");
+        let (id1, d1) = claim_run_dir(&lane, "run-a").unwrap();
+        assert_eq!((id1.as_str(), d1.clone()), ("run-a", lane.join("run-a")));
+        let (id2, d2) = claim_run_dir(&lane, "run-a").unwrap();
+        assert_eq!(id2, "run-a-n2");
+        assert_ne!(d1, d2);
+        // Exhaust the remaining suffixes, then the claim must fail instead of reusing a directory.
+        for n in 3..=MAX_RUN_ATTEMPTS {
+            assert_eq!(claim_run_dir(&lane, "run-a").unwrap().0, format!("run-a-n{n}"));
+        }
+        assert!(claim_run_dir(&lane, "run-a").is_err());
+        let _ = std::fs::remove_dir_all(&lane);
+    }
+
+    #[test]
+    fn start_twice_keeps_each_manifest_intact() {
+        let root = unique_dir("start");
+        let cfg = || RecorderConfig { enabled: true, dir: Some(root.join("records")), commit: false, push: None };
+        let manifest = || json::parse(r#"{"prefix":"t"}"#).unwrap();
+        let first = Recorder::start(&root, cfg(), "t", 7, manifest()).expect("first recorder");
+        let first_bytes = std::fs::read(first.dir.join("run.json")).unwrap();
+        let second = Recorder::start(&root, cfg(), "t", 7, manifest()).expect("second recorder");
+        assert_ne!(first.dir, second.dir);
+        assert_ne!(first.run_id, second.run_id);
+        assert_eq!(std::fs::read(first.dir.join("run.json")).unwrap(), first_bytes);
+        assert!(second.dir.join("run.json").is_file());
+        let _ = std::fs::remove_dir_all(&root);
     }
 }
