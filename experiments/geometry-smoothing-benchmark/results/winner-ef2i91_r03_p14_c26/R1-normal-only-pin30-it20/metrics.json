@@ -1,0 +1,15 @@
+{
+"schema":"smoothing_input_mesh.v1",
+"status":"pass",
+"not_qualified":true,
+"label":"ef2i91_r03_p14_c26: best evolved design by W_ULTRALIGHT_v1 (fitness 80.253391), not qualified",
+"tool":"geometry-smoothing-benchmark 0.1.0",
+"command":"./target/ladder-bin-s1b --input /home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/i91/by-content/e7ab9c8531255490be6a05c5dab8f629159ee9eae0580bda459a398a03747063/attempt-1792452614126747868/ef2i91_r03_p14_c26.stl --out /home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-s1b-R1-20261021T231908Z --label ef2i91_r03_p14_c26: best evolved design by W_ULTRALIGHT_v1 (fitness 80.253391), not qualified --lambda 0.5 --mu -0.5 --max-displacement-mm 2 --normal-only --pin-feature-angle 30 --iterations 20",
+"input":{"path":"/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/i91/by-content/e7ab9c8531255490be6a05c5dab8f629159ee9eae0580bda459a398a03747063/attempt-1792452614126747868/ef2i91_r03_p14_c26.stl","bytes":15435869,"sha256":"7741cf82418984b52e89e4a5f4f97ce49723e0d4513c2c9eada139b4bdeaeba6","format":"ascii"},
+"input_audit":{"vertices":45468,"faces":90948,"edges":136422,"open_edges":0,"nonmanifold_edges":0,"inconsistent_edges":0,"degenerate_faces":0,"duplicate_faces":0,"unused_vertices":0,"components":1,"euler_characteristic":-6},
+"settings":{"iterations":20,"lambda":0.5,"mu":-0.5,"max_displacement_mm":2,"normal_only":true,"iterations_completed":20},
+"pins":{"feature_angle_deg":30,"feature_edges":10090,"feature_pinned_vertices":8980},
+"result":{"output_audit":{"vertices":45468,"faces":90948,"edges":136422,"open_edges":0,"nonmanifold_edges":0,"inconsistent_edges":0,"degenerate_faces":0,"duplicate_faces":0,"unused_vertices":0,"components":1,"euler_characteristic":-6},"moved_vertices":35182,"moved_over_0_01_mm":6978,"moved_over_0_01_mm_fraction":0.1534705727104777,"max_displacement_mm":0.2369827296563538,"rms_displacement_mm":0.017777765923495382,"displacement_at_budget":false,"volume_mm3":{"before":20358.296285160777,"after":20340.753854867547,"change_percent":-0.0861684595189649},"bounding_box_mm":{"before":{"min":[-18.4237,-53.4678,-7.5],"max":[190.3329,18.4486,7.5]},"after":{"min":[-18.4237,-53.4678,-7.5097964645588196],"max":[190.3329,18.4486,7.509796464559097]},"change":{"min":[0,0,-0.009796464558819551],"max":[0,0,0.009796464559096663]}}},
+"outputs":[{"name":"smoothed.stl","bytes":26941039,"sha256":"895036be4f93beea3ce036946a9a21cbfcf4f262ec62b81433add776047d8888"},{"name":"displacement.csv","bytes":4331489,"sha256":"b5a3061c86c9f6637851140a7b7b944c3ee6e9e765913ce85824f2b69e20b233"}],
+"reasons":[]
+}
