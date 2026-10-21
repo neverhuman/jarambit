@@ -2,7 +2,7 @@
   "figure": "docs/paper/figures/evidence-architecture.svg",
   "figure_sha256": "509ca1e50ee68a26b46767a6462e2b44df9e02d8631efe4713d3abcfd4ecfa57",
   "inputs": {
-    "crates/paper-artifacts/src/publication.rs": "56752442a230aee4b933743d37eb28a663870b4f2d06e96d61156013c065134f",
+    "crates/paper-artifacts/src/publication.rs": "840a56006476b2afd25ade3e4a37e7a6f55e5cce27150f1792553df4a388aadc",
     "docs/paper/figures/evidence-architecture.svg": "509ca1e50ee68a26b46767a6462e2b44df9e02d8631efe4713d3abcfd4ecfa57",
     "docs/paper/sections/study-design.tex": "2a5697a27b3c587db4e1eb86435120ff2c38ed0169f99d5826dea7e5b61bbb9e",
     "docs/paper/supplement/cohort-inventory.tex": "9daeec9e90fb58304e9e3d9d5744cc84dd7cbc5be9c875d63bfd0dd13a447cb2"
