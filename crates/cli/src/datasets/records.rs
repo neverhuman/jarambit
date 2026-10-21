@@ -147,6 +147,43 @@ pub fn write_shard(path: &Path, rows: &[Row]) -> Result<usize, String> {
     Ok(rows.len())
 }
 
+/// Publish a whole shard only if `path` does not exist yet; never replaces an existing file.
+/// The live recorder uses this for per-round Stage-1 shards; `write_shard` keeps its rewrite semantics.
+pub fn write_shard_create_new(path: &Path, rows: &[Row]) -> Result<usize, String> {
+    let columns = columns_for(rows);
+    let mut text = csvio::join(&columns) + "\n";
+    for r in rows {
+        text.push_str(&render(&columns, r)?);
+    }
+    if let Some(dir) = path.parent() {
+        std::fs::create_dir_all(dir).map_err(|e| format!("{}: {e}", dir.display()))?;
+    }
+    let tmp = path.with_extension("csv.create-new.tmp");
+    // `create_new` on the private temp name: if it already exists we did not create it, so we must not remove it.
+    let mut file = std::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(&tmp)
+        .map_err(|e| format!("{}: {e}", tmp.display()))?;
+    if let Err(e) = file.write_all(text.as_bytes()) {
+        drop(file);
+        let _ = std::fs::remove_file(&tmp);
+        return Err(format!("{}: {e}", tmp.display()));
+    }
+    drop(file);
+    // A hard link publishes the complete file and refuses an existing destination.
+    // No fallback to rename: that would silently replace another run's shard.
+    if let Err(e) = std::fs::hard_link(&tmp, path) {
+        let _ = std::fs::remove_file(&tmp);
+        return Err(format!("{}: create-only publication failed: {e}", path.display()));
+    }
+    // Publication succeeded; a failure to unlink our private name must not turn it into an error.
+    if let Err(e) = std::fs::remove_file(&tmp) {
+        eprintln!("dataset shard: published {}; temporary link retained at {}: {e}", path.display(), tmp.display());
+    }
+    Ok(rows.len())
+}
+
 /// Parsed shard: header + rows of raw cells.
 pub struct Shard {
     pub columns: Vec<String>,
@@ -456,5 +493,22 @@ mod tests {
         let mut f = f;
         f.add_derived();
         assert!(f.get(ra, "gd.ring_od").is_finite());
+    }
+
+    #[test]
+    fn write_shard_create_new_refuses_to_replace() {
+        let d = tmpdir("create-new");
+        let path = d.join("r00.s1.csv");
+        let a = genome_row(1.0);
+        assert_eq!(write_shard_create_new(&path, std::slice::from_ref(&a)).unwrap(), 1);
+        let first = std::fs::read(&path).unwrap();
+        write_shard(&d.join("reference.csv"), std::slice::from_ref(&a)).unwrap();
+        assert_eq!(first, std::fs::read(d.join("reference.csv")).unwrap(), "same CSV as write_shard");
+        assert!(!d.join("r00.s1.csv.create-new.tmp").exists(), "private temp name removed after publication");
+        let b = genome_row(2.0);
+        assert!(write_shard_create_new(&path, &[b]).is_err());
+        assert_eq!(std::fs::read(&path).unwrap(), first, "first shard bytes unchanged");
+        assert!(!d.join("r00.s1.csv.create-new.tmp").exists(), "temp removed after refused publication");
+        let _ = std::fs::remove_dir_all(&d);
     }
 }
