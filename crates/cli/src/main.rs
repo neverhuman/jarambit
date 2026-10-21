@@ -11,6 +11,7 @@ mod crescent;
 mod bench;
 mod score_cad;
 mod auto_evolve;
+mod datasets;
 mod version_check;
 mod runner_policy;
 
@@ -63,6 +64,10 @@ fn main() {
     }
     if let Some(pos) = a.iter().position(|s| s == "export-web-data") {
         std::process::exit(score_cad::run_export_web_data_cli(&a[(pos + 1)..]));
+    }
+    if a.get(1).map(String::as_str) == Some("dataset") {
+        // regression dataset factory: build / cv / harvest-waves / commit / featurize / rescreen / ...
+        std::process::exit(datasets::run_dataset_cli(&a[2..]));
     }
     if let Some(pos) = a.iter().position(|s| s == "auto-evolve") {
         std::process::exit(auto_evolve::run_auto_evolve_cli(&a[(pos + 1)..]));

@@ -10,6 +10,7 @@ use jarambit_crescent::{
     },
     pheno, qd,
 };
+use crate::datasets::{self, featurize, records::Row};
 use jarambit_genotype::Rng;
 use serde_json::{json, Value};
 use std::collections::HashSet;
@@ -520,6 +521,7 @@ fn spawn_offspring_batch(
 }
 
 /// Stage 1: provisional parallel FEM ranking. No qualification verdict is issued here.
+#[cfg(test)]
 fn screen_candidate_stage1(
     round: usize,
     idx: usize,
@@ -527,12 +529,38 @@ fn screen_candidate_stage1(
     g: &Genome,
     prefix: &str,
 ) -> Option<ScreenSurvivor> {
+    screen_candidate_stage1_recorded(round, idx, family, g, prefix, false).0
+}
+
+/// Stage 1 plus, when `record` is set, the regression micro-record of this birth (design
+/// features + every screen output). Recording never changes the survivor or its rank.
+fn screen_candidate_stage1_recorded(
+    round: usize,
+    idx: usize,
+    family: &str,
+    g: &Genome,
+    prefix: &str,
+    record: bool,
+) -> (Option<ScreenSurvivor>, Option<Row>) {
+    let label = format!("{prefix}_r{:02}_{family}_c{:02}", round + 1, idx + 1);
     if !g.rs_v2() {
-        return None;
+        let row = record.then(|| {
+            let (mut row, _) = featurize::record_from_genome(g);
+            row.text("meta.status", "not_rs_v2").text("meta.label", &label);
+            row
+        });
+        return (None, row);
     }
     let r = qd::evaluate(g, idx, round, 2.0);
     let p = pheno::build(g);
-    let f = r.fem.as_ref()?;
+    let mut row = record.then(|| {
+        let mut row = featurize::record_from_eval(g, &p, &r);
+        row.text("meta.label", &label);
+        row
+    });
+    let Some(f) = r.fem.as_ref() else {
+        return (None, row);
+    };
     // Search may rank a measured shortfall. It never turns that shortfall into a qualification.
     let deficit = |value: f64, floor: f64| ((floor - value) / floor).max(0.0);
     let (bw, _) = fem::ring_bearing(&p);
@@ -551,8 +579,11 @@ fn screen_candidate_stage1(
         + deficit(f.fat_sf, 1.0)
         + deficit(bw, fem::hm::RING_BEARING_W_MIN_MM)
         + deficit(radius, fem::hm::RING_EDGE_R_MIN_MM);
-    Some(ScreenSurvivor {
-        label: format!("{prefix}_r{:02}_{family}_c{:02}", round + 1, idx + 1),
+    if let Some(row) = row.as_mut() {
+        row.num("s1.screen_deficit", screen_deficit);
+    }
+    let survivor = ScreenSurvivor {
+        label,
         family: family.to_string(),
         g: g.clone(),
         mass_g: p.mass_g,
@@ -560,7 +591,8 @@ fn screen_candidate_stage1(
         fat_sf: f.fat_sf,
         ring_bearing_w_mm: bw,
         screen_deficit,
-    })
+    };
+    (Some(survivor), row)
 }
 
 /// Canonical 20-objective weights (`W_ULTRALIGHT_v1`, total = `100.0%`) per
@@ -942,6 +974,19 @@ fn certify_candidate_stage2(
     })
 }
 
+/// Leaderboard row of one assessed design (also the source of its Stage-2 micro-record).
+fn design_value(c: &AssessedDesign) -> Value {
+    let qualifies = c.all_16_gates && c.rs_v2_all_hard;
+    let ul_fit = stage2_ultralight_weighted_fitness(c);
+    json!({"label":c.label,"family":c.family,"qualified":qualifies,
+        "mass_g":c.mass_g,"mass_3d_g":c.mass_3d_g,"w_cad":c.w_cad,"g1":c.g1,
+        "ultralight_weighted_fitness":ul_fit,
+        "solid_tip_sf":c.solid_tip_sf,"strict_hunter_sf":c.strict_hunter_sf,"seq_ratio":c.seq_ratio,
+        "fat_sf":c.fat_sf,"ring_bearing_w_mm":c.ring_bearing_w_mm,"buckling_eigenvalue_a4":c.buckling_eig,
+        "battery_pass_count":c.battery_pass,"all_16_gates":c.all_16_gates,"rs_v2_all_hard":c.rs_v2_all_hard,
+        "certificate_identity":certification::identity(&c.g),"genome_csv":c.genome_csv,"scorecard_md":c.scorecard_md})
+}
+
 /// Keep qualified genomes, then preserve each rankable seed family before filling search slots.
 fn replacement_elites(
     qualified: impl Iterator<Item = (String, Genome)>,
@@ -1158,7 +1203,7 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
             }
             "-h" | "--help" => {
                 println!(
-                    "Usage: jarambit auto-evolve [--rounds N] [--candidates-per-round K] [--top-k-certify [M]] [--threads T] [--seeds <csv1,csv2>] [--out-dir <dir>] [--prefix <name>] [--seed <u64>]"
+                    "Usage: jarambit auto-evolve [--rounds N] [--candidates-per-round K] [--top-k-certify [M]] [--threads T] [--seeds <csv1,csv2>] [--out-dir <dir>] [--prefix <name>] [--seed <u64>]\n       regression records: [--no-dataset] [--dataset-dir <dir>] [--dataset-commit] [--dataset-push <remote>:<branch>]"
                 );
                 return 0;
             }
@@ -1172,6 +1217,13 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
         return 1;
     }
 
+    let dataset_cfg = match datasets::recorder::RecorderConfig::from_args(args) {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("auto-evolve: {e}");
+            return 1;
+        }
+    };
     let mut elites = load_seed_genomes(&root, seeds_arg.as_deref());
     let mut seed_parent_ids = round_parent_identities(&elites);
     if elites.is_empty() {
@@ -1205,6 +1257,17 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
             return 1;
         }
     }
+    let run_manifest = datasets::json::Json::obj()
+        .with("rounds", rounds)
+        .with("candidates_per_round", candidates_per_round)
+        .with("certify_top", certify_top)
+        .with("seed", seed)
+        .with("prefix", prefix.as_str())
+        .with("out_dir", out_dir.display().to_string())
+        .with("argv", datasets::json::Json::Arr(args.iter().map(datasets::json::Json::from).collect()))
+        .with("seeds", datasets::json::Json::Arr(elites.iter().map(|(f, g)| datasets::json::Json::obj().with("family", f.as_str()).with("certificate_identity", certification::identity(g))).collect()));
+    let mut recorder = datasets::recorder::Recorder::start(&root, dataset_cfg, &prefix, seed, run_manifest);
+    let record = recorder.is_some();
     let mut rng = Rng(seed);
     let mut assessed_all: Vec<AssessedDesign> = Vec::new();
     let mut errors = Vec::new();
@@ -1221,8 +1284,9 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
     for round in 0..rounds {
         seed_parent_ids.extend(round_parent_identities(&elites));
         let batch = spawn_offspring_batch(&elites, candidates_per_round, round, &mut rng);
+        let birth_ids: Vec<String> = batch.iter().map(|(_, g)| certification::identity(g)).collect();
         let births = json!({"round":round,"seed":seed,"source":"spawn_offspring_batch from evolved genome CSV seeds",
-            "genome_header":Genome::csv_header(),"genomes":batch.iter().map(|(family,g)|json!({"family":family,"row":g.csv_row(),"certificate_identity":certification::identity(g)})).collect::<Vec<_>>()});
+            "genome_header":Genome::csv_header(),"genomes":batch.iter().zip(&birth_ids).map(|((family,g),id)|json!({"family":family,"row":g.csv_row(),"certificate_identity":id})).collect::<Vec<_>>()});
         if let Err(e) = std::fs::write(
             out_dir.join(format!("round_{round:02}_births.json")),
             serde_json::to_string_pretty(&births).unwrap() + "\n",
@@ -1233,7 +1297,8 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
         let th = threads.max(1).min(batch.len().max(1));
         let prefix_ref = prefix.as_str();
 
-        let mut survivors: Vec<ScreenSurvivor> = std::thread::scope(|s| {
+        type Screened = (usize, Option<ScreenSurvivor>, Option<Row>);
+        let screened: Vec<Screened> = std::thread::scope(|s| {
             let handles: Vec<_> = (0..th)
                 .map(|t| {
                     let batch_ref = &batch;
@@ -1242,8 +1307,9 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
                             .iter()
                             .enumerate()
                             .filter(|(idx, _)| idx % th == t)
-                            .filter_map(|(idx, (fam, g))| {
-                                screen_candidate_stage1(round, idx, fam, g, prefix_ref)
+                            .map(|(idx, (fam, g))| {
+                                let (survivor, row) = screen_candidate_stage1_recorded(round, idx, fam, g, prefix_ref, record);
+                                (idx, survivor, row)
                             })
                             .collect::<Vec<_>>()
                     })
@@ -1254,6 +1320,17 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
                 .flat_map(|h| h.join().expect("stage1 worker thread"))
                 .collect()
         });
+        // Same survivor order as before recording existed (worker order, rejects dropped).
+        let mut birth_rows: Vec<(usize, Row)> = Vec::new();
+        let mut survivors: Vec<ScreenSurvivor> = Vec::with_capacity(screened.len());
+        for (idx, survivor, row) in screened {
+            if let Some(row) = row {
+                birth_rows.push((idx, row));
+            }
+            if let Some(survivor) = survivor {
+                survivors.push(survivor);
+            }
+        }
 
         // Sort Stage-1 survivors by W_ULTRALIGHT_v1 global weighted fitness (non-veto),
         // breaking ties by lower screen_deficit and lighter mass.
@@ -1285,6 +1362,24 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
         ) {
             eprintln!("auto-evolve: cannot retain screen observations: {e}");
             return 1;
+        }
+        if let Some(rec) = recorder.as_mut() {
+            let fitness: std::collections::HashMap<&str, f64> = ranked
+                .iter()
+                .filter_map(|v| Some((v["label"].as_str()?, v["ultralight_weighted_fitness"].as_f64()?)))
+                .collect();
+            birth_rows.sort_by_key(|(idx, _)| *idx);
+            let rows: Vec<Row> = birth_rows
+                .into_iter()
+                .map(|(idx, mut row)| {
+                    rec.tag(&mut row, round, idx, &batch[idx].0, &birth_ids[idx]);
+                    if let Some(fit) = row.get("meta.label").and_then(|l| fitness.get(l)).copied() {
+                        row.num("s1.ultralight_weighted_fitness", fit);
+                    }
+                    row
+                })
+                .collect();
+            rec.write_round_s1(round, &rows);
         }
 
         // Stage 2 spends its budget on novel offspring first, retaining family-first
@@ -1333,6 +1428,14 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
                         cert.solid_tip_sf,
                         cert.strict_hunter_sf
                     );
+                    if let Some(rec) = recorder.as_mut() {
+                        let design = datasets::json::parse(&design_value(&cert).to_string()).unwrap_or(datasets::json::Json::Null);
+                        let mut genes = Row::new();
+                        featurize::genome_cells(&cert.g, &mut genes);
+                        if let Some(hash) = genes.get(datasets::records::HASH_COL) {
+                            rec.append_s2(round, &design, hash, cert.genome_csv.parent());
+                        }
+                    }
                     assessed_all.push(cert);
                 }
                 Err(e) => {
@@ -1371,6 +1474,19 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
             &survivors,
             &elites,
         );
+        if let Some(rec) = recorder.as_mut() {
+            rec.end_round(round);
+        }
+    }
+    if let Some(rec) = &recorder {
+        println!(
+            "Dataset records: run {} -> {} Stage-1 + {} Stage-2 rows in {}{}",
+            rec.run_id,
+            rec.s1_rows,
+            rec.s2_rows,
+            rec.dir.display(),
+            if rec.warnings.is_empty() { String::new() } else { format!(" ({} warnings)", rec.warnings.len()) }
+        );
     }
 
     assessed_all.sort_by(|a, b| {
@@ -1401,13 +1517,7 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
             c.rs_v2_all_hard,
             c.battery_pass
         );
-        rows.push(json!({"label":c.label,"family":c.family,"qualified":qualifies,
-            "mass_g":c.mass_g,"mass_3d_g":c.mass_3d_g,"w_cad":c.w_cad,"g1":c.g1,
-            "ultralight_weighted_fitness":ul_fit,
-            "solid_tip_sf":c.solid_tip_sf,"strict_hunter_sf":c.strict_hunter_sf,"seq_ratio":c.seq_ratio,
-            "fat_sf":c.fat_sf,"ring_bearing_w_mm":c.ring_bearing_w_mm,"buckling_eigenvalue_a4":c.buckling_eig,
-            "battery_pass_count":c.battery_pass,"all_16_gates":c.all_16_gates,"rs_v2_all_hard":c.rs_v2_all_hard,
-            "certificate_identity":certification::identity(&c.g),"genome_csv":c.genome_csv,"scorecard_md":c.scorecard_md}));
+        rows.push(design_value(c));
     }
     let champion = rows.iter().find(|r| r["qualified"] == true).cloned();
     let best_ultralight = rows

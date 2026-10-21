@@ -16,6 +16,7 @@ fi
 case "$profile" in
   d1) memory=8G; memory_bytes=8589934592; cpus=4 ;;
   version) memory=2G; memory_bytes=2147483648; cpus=1 ;;
+  datasets) memory=8G; memory_bytes=8589934592; cpus=4 ;;
   *) echo "unknown bounded CI profile" >&2; exit 2 ;;
 esac
 [[ -f "$script" && -r "$script" ]] || { echo "CI script missing" >&2; exit 2; }

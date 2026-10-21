@@ -8,3 +8,6 @@ web/node_modules/
 web/dist/
 web/public/data/
 
+/datasets/regression/tables/
+/datasets/regression/cv/
+*.csv.tmp

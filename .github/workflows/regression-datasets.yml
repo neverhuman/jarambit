@@ -1,0 +1,122 @@
+name: regression-datasets
+
+# Builds every regression table from committed micro-records + the gen-800 archives and runs
+# CatBoost k-fold CV on each (final column = target). The step summary is the lift leaderboard:
+# out-of-fold Pearson r with its 95 % CI, Spearman rho, R², and RMSE vs a fold-mean baseline.
+# The dataset engine is dependency-free Rust compiled with rustc alone (no workspace build).
+
+on:
+  pull_request:
+    paths:
+      - 'datasets/regression/**'
+      - 'crates/cli/src/datasets/**'
+      - '.github/workflows/regression-datasets.yml'
+  push:
+    branches: [main, 'data/**']
+    paths:
+      - 'datasets/regression/**'
+      - 'crates/cli/src/datasets/**'
+      - '.github/workflows/regression-datasets.yml'
+  schedule:
+    - cron: '17 9 * * *'
+  workflow_dispatch:
+    inputs:
+      folds:
+        description: 'k for k-fold CV'
+        default: '5'
+      max_rows:
+        description: 'max rows per table used by CV (0 = all)'
+        default: '20000'
+      iterations:
+        description: 'CatBoost iterations per fold'
+        default: '500'
+      only:
+        description: 'only tables whose name contains this substring'
+        default: ''
+      permutations:
+        description: 'target-permutation null runs per table (0 = off)'
+        default: '0'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: regression-datasets-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CATBOOST_VERSION: '1.2.10'
+  # sha256 of https://github.com/catboost/catboost/releases/download/v1.2.10/catboost-linux-x86_64-1.2.10
+  CATBOOST_SHA256: '478dc57f4c19de205b19b709fd4c6af93f79753dc462b6bb49d33c920dddec75'
+
+jobs:
+  lift:
+    name: regression tables + CatBoost k-fold lift
+    runs-on: [self-hosted, linux, x64, xbabe, general]
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash ops/ci/run_bounded.sh datasets {0}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Compile and test the dependency-free dataset engine (pinned Rust 1.85.1)
+        run: |
+          toolchain=/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin
+          export PATH="${toolchain}:/home/ubuntu/.cargo/bin:${PATH}"
+          test -x "${toolchain}/rustc"
+          mkdir -p target/ci-datasets
+          rustc --edition 2021 -D warnings --test crates/cli/src/datasets/standalone.rs -o target/ci-datasets/datasets-tests
+          target/ci-datasets/datasets-tests --test-threads=2
+          rustc --edition 2021 -D warnings -O crates/cli/src/datasets/standalone.rs -o target/ci-datasets/jarambit-datasets
+      - name: Install the pinned CatBoost CLI (sha256-verified, cached per runner)
+        run: |
+          cache="${HOME}/.cache/jarambit/catboost/${CATBOOST_VERSION}"
+          bin="${cache}/catboost"
+          mkdir -p "$cache"
+          if ! echo "${CATBOOST_SHA256}  ${bin}" | sha256sum -c --status 2>/dev/null; then
+            curl --fail --location --silent --show-error \
+              "https://github.com/catboost/catboost/releases/download/v${CATBOOST_VERSION}/catboost-linux-x86_64-${CATBOOST_VERSION}" \
+              --output "${bin}.partial"
+            echo "${CATBOOST_SHA256}  ${bin}.partial" | sha256sum -c -
+            chmod 755 "${bin}.partial"
+            mv "${bin}.partial" "${bin}"
+          fi
+          "${bin}" --version | head -3
+          echo "JARAMBIT_CATBOOST=${bin}" >> "$GITHUB_ENV"
+      - name: Require zstd for the committed gen-800 archives (fail closed)
+        run: zstd --version
+      - name: Build regression tables (final column = target)
+        run: |
+          target/ci-datasets/jarambit-datasets build --out target/regression/tables
+          cat target/regression/tables/index.md >> "$GITHUB_STEP_SUMMARY"
+      - name: CatBoost k-fold CV on every table; publish r-values and lift
+        env:
+          FOLDS: ${{ github.event.inputs.folds || '5' }}
+          MAX_ROWS: ${{ github.event.inputs.max_rows || '20000' }}
+          ITERATIONS: ${{ github.event.inputs.iterations || '500' }}
+          ONLY: ${{ github.event.inputs.only || '' }}
+          PERMUTATIONS: ${{ github.event.inputs.permutations || '0' }}
+        run: |
+          only=()
+          if [ -n "$ONLY" ]; then only=(--only "$ONLY"); fi
+          target/ci-datasets/jarambit-datasets cv \
+            --tables target/regression/tables --out target/regression/cv \
+            --folds "$FOLDS" --max-rows "$MAX_ROWS" --iterations "$ITERATIONS" \
+            --permutations "$PERMUTATIONS" --threads "$(nproc)" --jobs 2 \
+            "${only[@]}" --summary "$GITHUB_STEP_SUMMARY" --fail-on-error
+      - name: Upload leaderboard, per-table CV results, OOF predictions and table cards
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: regression-lift-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            target/regression/cv/leaderboard.json
+            target/regression/cv/leaderboard.md
+            target/regression/cv/*.cv.json
+            target/regression/cv/*.oof.csv
+            target/regression/tables/index.json
+            target/regression/tables/index.md
+            target/regression/tables/*.card.json
+          if-no-files-found: warn
