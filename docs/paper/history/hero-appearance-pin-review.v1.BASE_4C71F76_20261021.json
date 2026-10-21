@@ -1,0 +1,313 @@
+{
+  "schema": "jarambit.q.actual_observation_pin_preparation_review.v1",
+  "recorded_utc": "2026-10-20T21:55:57.693096+00:00",
+  "identity": {
+    "worker": "/root/resume_archive_review",
+    "thread_id": "01a15499-c47f-7b21-8e3a-6873ef1527c0",
+    "mode": "manual",
+    "native_task_id": null,
+    "native_claim_id": null,
+    "native_lease_id": null,
+    "source_author": false,
+    "GitHub_review_submitted": false,
+    "GitHub_review_id": null,
+    "assignment": {
+      "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/ROOT_PROSPECTIVE_NONAUTHOR_PF07_PF08_4FF1CE1_SOURCE_OBSERVATION_REVIEW_ASSIGNMENT.json",
+      "sha256": "ec0674f53acd16603d8ff65e338a78fc0d223b64c02b005c629abaf4ead41c37",
+      "prospective": true
+    }
+  },
+  "verdict": "ACTUAL_OBSERVED_PINSET_ADMITTED_FOR_EXACT_4FF1CE1_SOURCE_INPUT_GEOMETRY_FIELD_MASK_REGISTRATION_CAMERA_DEPENDENCIES_ONLY; PF07_PF08_STATIC_SOURCE_CLEARED; NEW_VISUALS_NOT_APPROVED",
+  "scope": {
+    "head": "4ff1ce172bc2c626e9a1e34f377e379c034f2741",
+    "tree": "1511e88d4662259c7b1f54091d07bf4a4bd526e6",
+    "base": "4213da0ab381bd3b7e0c78c5d240b091672d5a22",
+    "actual_readback_start": {
+      "utc": "2026-10-20T21:53:55.012453+00:00",
+      "head": "4ff1ce172bc2c626e9a1e34f377e379c034f2741",
+      "tree": "1511e88d4662259c7b1f54091d07bf4a4bd526e6",
+      "status": ""
+    },
+    "actual_readback_end": {
+      "utc": "2026-10-20T21:53:55.516344+00:00",
+      "head": "4ff1ce172bc2c626e9a1e34f377e379c034f2741",
+      "tree": "1511e88d4662259c7b1f54091d07bf4a4bd526e6",
+      "status": ""
+    },
+    "actual_current_readback_clean": true,
+    "source_delta_files": 17,
+    "entire_head_or_generated_tree_approved": false,
+    "actual_recipe_installed_by_reviewer": false,
+    "actual_recipe_or_expected_values_authored_by_reviewer": false,
+    "future_source_changes_require_dependency_recheck": true
+  },
+  "actual_observation": {
+    "path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/pf07-pf08-2132/actual-4ff-observation-for-existing-Root-Q/hero-appearance-preflight.4ff1ce1.actual.v1.json",
+    "sha256": "46587bc4dd80a34d081a1b3b0c4487b2b9dafd04a677fbd030cdff1af66fb00b",
+    "bytes": 5680,
+    "raw_launcher_sha256": "9271396b8b1ada962280f3d8fa2f862ae3c26bfc8c18f67ba37eda94856618e9",
+    "exact_contiguous_JSON_offset": 442,
+    "extraction_verified_byte_for_byte": true,
+    "observed_only_status": "OBSERVED_ONLY_NOT_INDEPENDENT_PIN_ADMISSION"
+  },
+  "actual_execution": {
+    "admission_utc": "2026-10-20T21:51:12.159682+00:00",
+    "terminal_utc": "2026-10-20T21:51:50.731980+00:00",
+    "launcher_exit": 0,
+    "cleanup_errors": [],
+    "scientific_or_final_validation_PASS": false,
+    "issuer": "Admiral single effective allocation; no competing Root grant",
+    "grant_sha256": "4b25c3d1c53811c3af89c221afabc1e95772f3865ee7423b0640980244c18742",
+    "config_sha256": "42edf09cf1528e9016248ad1de1f0d9858173743a4fc7b924c0014400903725e",
+    "body_sha256": "28bd0bc22176744daa99c7d8d4a0f2abae4533552b558fb6d9274bcf825560a3",
+    "binary": {
+      "path": "/home/ubuntu/jarambit/.agent/worktrees/codex-latest-feedback-510713/target/release/examples/hero_appearance_preflight",
+      "sha256": "fddbb7de5cfe596d41bce11aa80bb8340d79a80ab5481b62c1c12425ffd255c3",
+      "bytes": 1145440,
+      "mtime_ns": 1792533109805925762,
+      "preserved_path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/pf07-pf08-2132/actual-4ff-observation-for-existing-Root-Q/hero_appearance_preflight.fddbb7de5cfe596d41bce11aa80bb8340d79a80ab5481b62c1c12425ffd255c3.binary",
+      "preserved_exact": true
+    },
+    "reporter": {
+      "pid": 964327,
+      "start": "71852549",
+      "ppid": 964319,
+      "uids": [
+        1000,
+        1000,
+        1000,
+        1000
+      ],
+      "gids": [
+        1000,
+        1000,
+        1000,
+        1000
+      ],
+      "cap": 0,
+      "group": "/jarambit.slice/jarambit-evo.slice/jr-observation-4ff1ce1-58f7bc41da837eae8e354b0a.scope",
+      "affinity": [
+        6
+      ],
+      "nice": 19
+    },
+    "unit": {
+      "unit": "jr-observation-4ff1ce1-58f7bc41da837eae8e354b0a.scope",
+      "group": "/jarambit.slice/jarambit-evo.slice/jr-observation-4ff1ce1-58f7bc41da837eae8e354b0a.scope",
+      "invocation": "14f84d833fc3468d8e1015777e2c761c",
+      "inode": 93440644,
+      "device": 30
+    },
+    "kernel_caps": {
+      "memory_max": "2147483648",
+      "memory_swap_max": "0",
+      "cpu_max": "100000 100000",
+      "cpus_effective": "6"
+    },
+    "manager_properties_at_admission": {
+      "TimeoutStopUSec": "5s",
+      "RuntimeMaxUSec": "9min 52s",
+      "ControlGroup": "/jarambit.slice/jarambit-evo.slice/jr-observation-4ff1ce1-58f7bc41da837eae8e354b0a.scope",
+      "KillMode": "control-group",
+      "FinalKillSignal": "9",
+      "SendSIGKILL": "yes",
+      "ActiveState": "active",
+      "ActiveEnterTimestampMonotonic": "718525521659",
+      "InvocationID": "14f84d833fc3468d8e1015777e2c761c"
+    },
+    "terminal_scope_inactive": true,
+    "example_child_pid": null,
+    "example_child_pid_status": "Not individually sampled before exit; no retrospective child PID or inferred child argv asserted.",
+    "toolchain": {
+      "rustc_information": {
+        "rustc_fingerprint": 27840874149453303,
+        "outputs": {
+          "17747080675513052775": {
+            "success": true,
+            "status": "",
+            "code": 0,
+            "stdout": "rustc 1.85.1 (4eb161250 2025-03-15)\nbinary: rustc\ncommit-hash: 4eb161250e340c8f48f66e2b929ef4a5bed7c181\ncommit-date: 2025-03-15\nhost: x86_64-unknown-linux-gnu\nrelease: 1.85.1\nLLVM version: 19.1.7\n",
+            "stderr": ""
+          },
+          "13331785392996375709": {
+            "success": true,
+            "status": "",
+            "code": 0,
+            "stdout": "___\nlib___.rlib\nlib___.so\nlib___.so\nlib___.a\nlib___.so\n/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu\noff\npacked\nunpacked\n___\ndebug_assertions\npanic=\"unwind\"\nproc_macro\ntarget_abi=\"\"\ntarget_arch=\"x86_64\"\ntarget_endian=\"little\"\ntarget_env=\"gnu\"\ntarget_family=\"unix\"\ntarget_feature=\"fxsr\"\ntarget_feature=\"sse\"\ntarget_feature=\"sse2\"\ntarget_has_atomic=\"16\"\ntarget_has_atomic=\"32\"\ntarget_has_atomic=\"64\"\ntarget_has_atomic=\"8\"\ntarget_has_atomic=\"ptr\"\ntarget_os=\"linux\"\ntarget_pointer_width=\"64\"\ntarget_vendor=\"unknown\"\nunix\n",
+            "stderr": ""
+          }
+        },
+        "successes": {}
+      },
+      "fingerprint": {
+        "rustc": 8750902384292223123,
+        "features": "[]",
+        "declared_features": "[]",
+        "target": 8962875812102519119,
+        "profile": 15200641462840923308,
+        "path": 6071082054886322256,
+        "deps": [
+          [
+            6801039024641860015,
+            "jarambit_paper_artifacts",
+            false,
+            1019924209921727791
+          ],
+          [
+            8160210889872729633,
+            "serde_json",
+            false,
+            16883065541050419937
+          ],
+          [
+            9857275760291862238,
+            "sha2",
+            false,
+            15773705471048356513
+          ],
+          [
+            15667726689128706326,
+            "ruzstd",
+            false,
+            8771396832938277671
+          ]
+        ],
+        "local": [
+          {
+            "CheckDepInfo": {
+              "dep_info": "release/.fingerprint/jarambit-paper-artifacts-6b5b48ce991e6c98/dep-example-hero_appearance_preflight",
+              "checksum": false
+            }
+          }
+        ],
+        "rustflags": [],
+        "config": 2069994364910194474,
+        "compile_kind": 0
+      },
+      "flags_bound_to_actual_body": "release locked; release overflow checks=true, debug assertions=true; cargo jobs/pools/test threads1; SOURCE_DATE_EPOCH1792460432"
+    },
+    "capture_attribution": "Captain performed admitted compile/run. Reviewer personally read original records and immutable source, exact extracted JSON, current and preserved binary/hash/profile, grant/body/config/toolchain/input and copied/raw joins. Reviewer launched no preflight, compiler, suite or rendering; no live process witnessing or individually sampled example PID asserted."
+  },
+  "independent_factual_joins": {
+    "all22_observed_source_hashes_match_exact_immutable_head_and_current_live": true,
+    "all22_source_keyset_matches_prior_admitted_keyset": true,
+    "changed_source_file_pins_only": [
+      {
+        "path": "crates/paper-artifacts/src/plate.rs",
+        "observed_sha256": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e",
+        "immutable_sha256": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e",
+        "live_sha256": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e",
+        "bytes": 46847,
+        "matches": true,
+        "prior_sha256": "118639cf8e9325bc05e68e0c98a37586479b7c1d2e3f783a8296a7fbdde05f2e"
+      },
+      {
+        "path": "crates/paper-artifacts/src/population.rs",
+        "observed_sha256": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
+        "immutable_sha256": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
+        "live_sha256": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
+        "bytes": 234961,
+        "matches": true,
+        "prior_sha256": "1f53640711e208136b58be28a22efb57f3af502f2d37b093a7406ae6eab97d9d"
+      }
+    ],
+    "all_other_observed_pin_fields_match_prior_actual660d_exactly": true,
+    "all_other_actual_observation_facts_match_prior660d": true,
+    "camera_numeric_rotation_scale_offset_refit_and_digest_unchanged": true,
+    "all5_component_hashes_identical": true,
+    "ordered_geometry_identical": true,
+    "registration_identical": true,
+    "channel_ids_source_faces_source_cells_subject_identical": true,
+    "hero_source_loading_binding_camera_preflight_strict_guard_function_invariance": [
+      {
+        "function": "load_hero_source",
+        "sha256": "5e6739dd54fde9bf4e5d09e98dd05d724775d249b5d93591f12822a7628880a6",
+        "bytes": 6552,
+        "unchanged": true
+      },
+      {
+        "function": "hero_appearance_camera",
+        "sha256": "807c3f6ef84b3c517de360e116057bc882f8a04cb80689c360734193c5fbe28f",
+        "bytes": 416,
+        "unchanged": true
+      },
+      {
+        "function": "hero_appearance_binding",
+        "sha256": "e0010701dd9671ece800bf986cfcbb90f34fe41d38693bf06aac5904dfcaf8e6",
+        "bytes": 5866,
+        "unchanged": true
+      },
+      {
+        "function": "hero_appearance_preflight",
+        "sha256": "97687df301744b2dc162ac72207b2054a9e6a417f3980edcd5dd29050be3b7a1",
+        "bytes": 1046,
+        "unchanged": true
+      },
+      {
+        "function": "hero_require_expected_pins",
+        "sha256": "9624c8c72954ab380333035984c123ef3dffad06df479b345bba7f8d0e62275a",
+        "bytes": 1069,
+        "unchanged": true
+      }
+    ],
+    "actual_binary_file_and_preserved_copy_exact": true,
+    "all78_config_input_hashes_match_retained_bytes": true,
+    "all76_source_handoff_inputs_match_retained_bytes": true,
+    "all8_original_runtime_and_Captain_copy_pairs_equal_and_hash_bound": true,
+    "all320_original_source_Git_blob_mode_type_size_identity_vs510713_independently_verified": true,
+    "strict_equality_missing_pin_rejection_not_weakened": true
+  },
+  "static_source_review": {
+    "source_diff_sha256": "aa8329974ae1b723160996305c1447d2570283f609b9a880a47494e0224b2498",
+    "PF07": [
+      "Only lateral/torsion Zoom views expand; source minimum xspan0.30, selected ROI containment, physical aspect pad/clamp/letterbox; all original preparation, selector, masks, rawscale and values retained.",
+      "Expanded crop coverage uses existing exact clipped-triangle whole-field denominators; separately saved selection_roi retains original threshold/coverage. PiP quad uses the same actual displayed source bbox. A/C fallback unchanged.",
+      "Original source-boundary edges are stroked for B/D; no triangle positions, values or scientific definition changes. Contract exact version/fieldIDs/0.30 is admitted failclosed.",
+      "Four new neutral context controls are statically meaningful; source-inspected only, not executed. Recognition/readability require actual new images, not this source review."
+    ],
+    "PF08": [
+      "Correct warmer-is-better preference orientation for all4 Preference\u00d7gap combinations, original-unit inverse key, constant midpoint and invalid/out-of-domain failclosed before mutation.",
+      "Literal positions and mask/census/order/tie core unchanged; only RGB writes added at fixed3x3 footprints in original source order. Overpainting is explicitly last painted source score, not density or average.",
+      "Distinct dark cumulative-best line/light halo; same coordinates/membership/curve; caller delta onlyimport/two RGB encoder calls. All24 positive views share admitted helper; current actual new images are not established.",
+      "Seven new neutral palette/PNG/ordering/constant/nonfinite controls source-inspected, nine existing retained; unexecuted. RGB buffer+1201113bytes per raster and added transform/encoding cost unbenchmarked."
+    ],
+    "docs_and_binding": "Read actual17-path diff incl README/body/supplement/contract/release prep/repair history/Makefile. New source descriptions match implementation, old actual4213 artifacts remain historical pending generation.",
+    "protected_science": "320 original immutable source Git objects match510713/current4ff; no native CSV decompression/recount or scientific rerun.",
+    "child_source_support": {
+      "worker": "/root/resume_archive_review/readonly_display_axis_audit",
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/4ff1ce1/child-pf08-source-review/PF08_SOURCE_REVIEW.json",
+      "sha256": "552148e1eb6e9776a64f64b857bd0db67db584b94786f15a6595df19dcd8541e",
+      "source_author": false,
+      "scope": "PF08 source only; no execution/artifact approval"
+    }
+  },
+  "new_material_findings": [],
+  "finite_installation_disposition": {
+    "allowed": "Sole Captain may copy only the verbatim observed_pins object from actual observation SHA46587bc4dd80a34d081a1b3b0c4487b2b9dafd04a677fbd030cdff1af66fb00b into the additive recipe, bind this independent receipt and actual observation by SHA, and preserve prior observation/review/recipe bytes and history. No redundant Root acknowledgment is required by the prospective assignment. This admits source-compared actual observations, not reviewer-authored expected values.",
+    "source_delta_limit": "Only actual observed whole-file plate.rs and population.rs pin updates relative to prior pins. Geometry/field/mask/contributor/palette/map/camera/registration/source channel facts and all other source pins remain verbatim.",
+    "stop_if": "Any source/input key or byte, geometry/field/mask/registration/camera/component fact changes, copied observation/review differs, or current binary/runtime/source binding drifts, requires precise dependency recheck. No automatic arbitrary-head admission."
+  },
+  "limits": [
+    "Source and actual pin preparation only. Current new B/D curvature recognition/PiP statistics/printed layout, vivid colorbar and Run5 appearance, all affected PDF pages and generated closure still require actual generation and separate review. Old4213 all51 proof cannot approve new visuals.",
+    "No image/normals/fresh physics/scorer/geometry/fitness computed by this actual preflight; no tests/render/build/CI/API/GitHub writes by reviewer. Own target review receipts only.",
+    "All11 new authored controls and required suites are unexecuted at this source-observation review. Observation exit0 is not test/CI/physical qualification PASS.",
+    "No final artifact/whole-paper/formal GitHub approval, actual review origin guard, merge/release or resource grant issued by reviewer. Prior PR144 review runtime/approval is not reused.",
+    "Runtime record views/captured hashes bind the finite job; sampled accounting is not atomic quota. Individual example child PID remains unknown."
+  ],
+  "next_action": "Captain installs only exact actual admitted observations/review/history and dependent source digests, commits; separately governed figure/report/PDF generation, complete clean freeze/current source-output-320 proof and Root local gates precede new changed-page/current artifact/CI/formal review.",
+  "evidence": [
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/4ff1ce1-observation-preparation/Q_ACTUAL_4FF1CE1_SOURCE_OBSERVATION_RAW_JOIN.json",
+      "sha256": "991c1dbfce240f7ad8ef153555712fe5a833bd09da883ed85391671e0518fd5f"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/4ff1ce1-observation-preparation/Q_ACTUAL_4FF1CE1_78_INPUT_AND_320_ORIGINAL_BYTE_READBACK.json",
+      "sha256": "7db29c9512af91b65d528ff7bf53782a85f376ad4624a87627c5858b562c73a9"
+    },
+    {
+      "path": "/Users/bentaylor/Documents/ChatGPT/jarambit/.agent/worktrees/ieee-whitepaper/target/presentation-review-20261020/4ff1ce1/child-pf08-source-review/PF08_SOURCE_REVIEW.json",
+      "sha256": "552148e1eb6e9776a64f64b857bd0db67db584b94786f15a6595df19dcd8541e"
+    }
+  ],
+  "actual_observed_pin_object_sha256_canonical_json": "561e4ef3eb6ff5348018bdf7d11e41e57231506b5dd9233b1156aeb93f900472"
+}
