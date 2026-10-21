@@ -82,6 +82,15 @@ pdfs: figures
 	pdfinfo main.pdf > $(OUT)/pdfinfo.txt
 	pdfinfo supplement.pdf > $(OUT)/supplement-pdfinfo.txt
 main supplement: pdfs
+# Variant B: same source with the smoothing subsection switched on (sections/smoothing-variant.tex).
+pdf-smoothed: figures
+	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) main-smoothed.tex > $(OUT)/main-smoothed-pass1.log
+	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) main-smoothed.tex > $(OUT)/main-smoothed-pass2.log
+	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) main-smoothed.tex > $(OUT)/main-smoothed-pass3.log
+	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) main-smoothed.tex > $(OUT)/main-smoothed-pass4.log
+	cp $(OUT)/main-smoothed.pdf main-smoothed.pdf
+	sha256sum main-smoothed.pdf > $(OUT)/main-smoothed.sha256
+	pdfinfo main-smoothed.pdf > $(OUT)/main-smoothed-pdfinfo.txt
 # Final RR5 validation only; implementation builds use artifacts/pdf targets.
 audit: audit-full
 audit-quick:

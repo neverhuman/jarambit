@@ -1,0 +1,60 @@
+% Variant B only: included by main-smoothed.tex through the JRSmoothedVariant switch.
+\subsection{Geometric Smoothing of the Best Evolved Design}
+\label{sec:smoothing}
+We applied geometric smoothing to the tessellated mesh of the best evolved design by \code{W_ULTRALIGHT_v1} (\code{ef2i91_r03_p14_c26}, fitness 80.253391, 14/18 battery, not qualified). This is a geometry and visual study. The smoothed mesh was not re-scored, re-assessed or re-evaluated for performance, and smoothing changes a tessellated mesh, not the STEP/B-rep CAD model.
+
+\textit{Method.} The input STL was welded by exact coordinate equality into 45,468 vertices and 90,948 triangles. The mesh is closed, edge-manifold, consistently oriented and connected, with Euler characteristic $-6$. We used Taubin $\lambda/\mu$ filtering with $\lambda=0.5$ and $\mu=-0.5$ for 20 iterations. In each pass only the component of the umbrella vector along the area-weighted unit vertex normal is kept (normal-only). Every vertex touching one of the 10,090 interior edges whose two face normals differ by more than $30^\circ$ was pinned (8,980 vertices). Total displacement from the input was capped at 2\,mm. Plain uniform Taubin filtering, without the normal restriction, failed the reversal check on this mesh at its first iteration, with 2,050 faces reversed, so it is not reported as a result. The three settings in the pre-declared sequence were fixed before the run. The first setting passed every check, and the other two were not run.
+
+\begin{table}[t]
+\centering\small
+\caption{Before and after smoothing. Measurements are from the smoothing run's machine-readable record; the before values are those of the input mesh.}
+\label{tab:smoothing}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Measure & Before & After \\
+\midrule
+Vertices / triangles & 45,468 / 90,948 & 45,468 / 90,948 \\
+Euler characteristic & $-6$ & $-6$ \\
+Enclosed volume (mm$^3$) & 20,358.30 & 20,340.75 ($-0.086\%$) \\
+Bounding box $z$ range (mm) & $[-7.500,\,7.500]$ & $[-7.510,\,7.510]$ \\
+Bounding box $x$, $y$ range & unchanged & unchanged \\
+Reversed triangles & -- & 0 \\
+Maximum vertex displacement (mm) & -- & 0.237 (budget 2) \\
+RMS vertex displacement (mm) & -- & 0.0178 \\
+Vertices moved, any amount & -- & 35,182 (77.4\%) \\
+Vertices moved more than 0.01\,mm & -- & 6,978 (15.3\%) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\textit{Results.} Smoothing moved 35,182 of 45,468 vertices, and 6,978 of them by more than 0.01\,mm. The largest displacement was 0.237\,mm and the RMS displacement 0.0178\,mm, which is well inside the 2\,mm budget. The enclosed volume changed by $-0.086\%$. The bounding box changed only in $z$, by about 0.01\,mm on each side. Figure~\ref{fig:smoothing-winner} shows the before and after appearance with the same camera and render settings, and the per-face displacement. The heatmap uses the mean of each face's three corner displacements on a linear scale from 0 to 0.237\,mm. Its colours are unlit, so they encode the displacement value.
+
+\begin{figure*}[t]
+\centering\small
+\begin{minipage}[t]{0.31\textwidth}
+\centering\small
+\includegraphics[width=\linewidth]{smoothing/winner-before.png}\\[2pt]
+{\small Before smoothing}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.31\textwidth}
+\centering\small
+\includegraphics[width=\linewidth]{smoothing/winner-after.png}\\[2pt]
+{\small After smoothing}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.31\textwidth}
+\centering\small
+\includegraphics[width=\linewidth]{smoothing/winner-displacement.png}\\[2pt]
+{\small Mean per-face displacement}
+\end{minipage}\\[6pt]
+\begin{minipage}[t]{0.6\textwidth}
+\centering\small
+\includegraphics[width=\linewidth]{smoothing/winner-displacement-colorbar.png}\\[1pt]
+{\small 0\,mm \hfill 0.237\,mm (maximum)}
+\end{minipage}
+\caption{Best evolved design by \code{W_ULTRALIGHT_v1} (\code{ef2i91_r03_p14_c26}), before smoothing (left), after smoothing (centre) and the displacement heatmap (right). All three use one camera, framed on the input, and the same lighting and render settings. The before and after views use a uniform base colour, so their shading changes only the displayed RGB values. The heatmap colour bar is linear and unlit. This is a geometry view, not a performance view.}
+\label{fig:smoothing-winner}
+\end{figure*}
+
+\textit{Limits.} The smoothed mesh is a triangle mesh. Smoothing does not reconstruct analytic surfaces, establish a continuous Hausdorff bound, test self-intersection, or preserve features beyond the pinned edges. No re-scoring, re-assessment or functional evaluation was run on the smoothed mesh, and this subsection makes no performance claim.

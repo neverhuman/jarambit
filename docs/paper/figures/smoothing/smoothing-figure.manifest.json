@@ -1,0 +1,149 @@
+{
+  "base_rgb": [
+    196,
+    204,
+    214
+  ],
+  "camera": {
+    "framed_on": "before mesh, shared by all three images; no refit",
+    "offset": [
+      173.4415930112014,
+      281.3007736680978
+    ],
+    "rotation": [
+      [
+        0.9945218953682733,
+        -0.10452846326765347,
+        0.0
+      ],
+      [
+        -0.10452846326765347,
+        -0.9945218953682733,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    ],
+    "scale": 4.852640779087544,
+    "sha256": "426ba2761caf958a6e1248d43efaee73c02bde72a0d6c0db39d3ccf14c9b020b"
+  },
+  "code_commit": "b640397",
+  "command": "./target/release/examples/smoothing_figure --before /home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/i91/by-content/e7ab9c8531255490be6a05c5dab8f629159ee9eae0580bda459a398a03747063/attempt-1792452614126747868/ef2i91_r03_p14_c26.stl --before-sha256 7741cf82418984b52e89e4a5f4f97ce49723e0d4513c2c9eada139b4bdeaeba6 --after /home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-s1b-R1-20261021T231908Z/smoothed.stl --after-sha256 895036be4f93beea3ce036946a9a21cbfcf4f262ec62b81433add776047d8888 --code-commit b640397 --out /home/ubuntu/jarambit_runs/smoothing/figure-20261021T232655Z",
+  "geometry": {
+    "face_order_identical": true,
+    "faces": 90948,
+    "max_corner_displacement_mm": 0.2369827296563538,
+    "mean_corner_displacement_mm": 0.006082020257308174,
+    "normals_after": {
+      "blocked_edges": 14050,
+      "capped_corners": 10,
+      "joined_edges": 122372
+    },
+    "normals_before": {
+      "blocked_edges": 15338,
+      "capped_corners": 4,
+      "joined_edges": 121084
+    }
+  },
+  "heatmap": {
+    "range_mm": [
+      0.0,
+      0.2369827296563538
+    ],
+    "stops_srgb": [
+      {
+        "rgb": [
+          18.0,
+          42.0,
+          74.0
+        ],
+        "t": 0.0
+      },
+      {
+        "rgb": [
+          44.0,
+          165.0,
+          141.0
+        ],
+        "t": 0.5
+      },
+      {
+        "rgb": [
+          253.0,
+          231.0,
+          37.0
+        ],
+        "t": 1.0
+      }
+    ],
+    "value": "mean of the three corner displacements per face"
+  },
+  "images": {
+    "winner-after.png": "lit appearance of the after mesh (base colour uniform)",
+    "winner-before.png": "lit appearance of the before mesh (base colour uniform)",
+    "winner-displacement-colorbar.png": "unlit colour scale, linear from 0 mm (left) to heatmap range maximum (right)",
+    "winner-displacement.png": "unlit heatmap of mean per-face corner displacement; colour is the value"
+  },
+  "inputs": {
+    "after": {
+      "bytes": 26941039,
+      "path": "/home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-s1b-R1-20261021T231908Z/smoothed.stl",
+      "sha256": "895036be4f93beea3ce036946a9a21cbfcf4f262ec62b81433add776047d8888"
+    },
+    "before": {
+      "bytes": 15435869,
+      "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/i91/by-content/e7ab9c8531255490be6a05c5dab8f629159ee9eae0580bda459a398a03747063/attempt-1792452614126747868/ef2i91_r03_p14_c26.stl",
+      "sha256": "7741cf82418984b52e89e4a5f4f97ce49723e0d4513c2c9eada139b4bdeaeba6"
+    }
+  },
+  "lighting": {
+    "ambient": 0.35,
+    "diffuse": 0.65,
+    "direction_camera": [
+      -0.35,
+      0.4,
+      1.0
+    ],
+    "shininess": 24,
+    "specular": 0.04
+  },
+  "normals": {
+    "blend": 1.0,
+    "crease_degrees": 15.0,
+    "max_deviation_degrees": 20.0
+  },
+  "not_qualified": true,
+  "outputs": [
+    {
+      "bytes": 1836718,
+      "name": "winner-before.png",
+      "sha256": "a73ccad8fd1a953c2726f93ff9d71be3e7f277291d624881cc6f29b34a070e37"
+    },
+    {
+      "bytes": 1836718,
+      "name": "winner-after.png",
+      "sha256": "49f4a1c10fab4a04e70c67f8ab11ea407c526b0ff223d434804db9abf78d8e2e"
+    },
+    {
+      "bytes": 1836718,
+      "name": "winner-displacement.png",
+      "sha256": "8f0081cf03db5d8340fc2858c70884d9d3fedb9e6ff39e09279140060e7d70b6"
+    },
+    {
+      "bytes": 100901,
+      "name": "winner-displacement-colorbar.png",
+      "sha256": "9655e4a2c381a41a895faaccc2aaf7023891b40fa3af0711cc074011c5d2ea40"
+    }
+  ],
+  "render": {
+    "height": 510,
+    "outline_pixels": 2.0,
+    "renderer": "deterministic Rust CPU depth raster (appearance::render)",
+    "supersample": 2,
+    "width": 1200
+  },
+  "schema": "smoothing_figure.v1"
+}
