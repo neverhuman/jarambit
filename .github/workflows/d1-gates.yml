@@ -26,8 +26,7 @@ jobs:
     name: cargo test --release + D1 gate smoke
     # General local pool; this capability requires the pinned Rust toolchain and memcap.
     runs-on: [self-hosted, linux, x64, xbabe, general, jarambit-d1]
-    # The loaded xbabe3 host exceeded 45 minutes twice; retain a finite ceiling.
-    # runner.name is available on steps, not on the job-level timeout expression.
+    # Retain a finite ceiling for the workspace step and downstream controls.
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -38,8 +37,9 @@ jobs:
         run: python3 -B ops/ci/select_rust_toolchain.py
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
       - name: cargo test --release (all crates, incl. D1 owner-lock gate tests)
-        # Leave time for later checks and cleanup under the job ceiling.
-        timeout-minutes: ${{ runner.name == 'jarambit-xbabe3' && 75 || 45 }}
+        # Retained exporter work exceeded 45 minutes on a general-pool host.
+        # A uniform 75-minute step leaves 15 minutes below the job ceiling.
+        timeout-minutes: 75
         run: |
           export TMPDIR="$PWD/target/ci-d1-tmp/${GITHUB_RUN_ID}/${GITHUB_RUN_ATTEMPT}"
           mkdir -p "$TMPDIR"
