@@ -19,7 +19,7 @@
     "utc": "2026-10-21",
     "xbabe1": "leaders/fitness.json top ef2i91_r03_p14_c26_genome.csv 80.253391; next ef2i91_r03_p14_c41 80.244979",
     "xbabe3": "same values as xbabe1",
-    "xbabe2": "no evo_continuous directory and no leaders/fitness.json on Mac-Studio.local (ssh xbabe2 user agent); contributes no entry"
+    "xbabe2": "local /home/ubuntu/jarambit_runs/evo_continuous/xbabe2/leaders/fitness.json (read with cat on xbabe2, checked by captain 22:58Z): top ef2i91_r03_p14_c26_genome.csv 80.253391. Correction: ssh xbabe2 from xbabe2 reaches Mac-Studio.local, which has no leaders file; that ssh result is not the xbabe2 host."
   },
   "output_dir": "/home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-20261021T231156Z",
   "outputs": [
