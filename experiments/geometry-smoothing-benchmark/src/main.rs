@@ -146,6 +146,7 @@ fn run() -> Result<bool, String> {
     let mut subdivisions = 3;
     let mut input = None;
     let mut label = String::from("input mesh");
+    let mut pin_feature_deg = None;
     let command = std::env::args().collect::<Vec<_>>().join(" ");
     let mut args = std::env::args().skip(1);
     let mut seen = BTreeSet::new();
@@ -157,10 +158,17 @@ fn run() -> Result<bool, String> {
         if !seen.insert(key.clone()) {
             return Err(format!("duplicate option: {key}"));
         }
+        if key == "--normal-only" {
+            settings.normal_only = true;
+            continue;
+        }
         let value = args.next().ok_or_else(|| format!("missing value: {key}"))?;
         match key.as_str() {
             "--input" => input = Some(PathBuf::from(value)),
             "--label" => label = value,
+            "--pin-feature-angle" => {
+                pin_feature_deg = Some(value.parse().map_err(|_| "invalid feature angle")?)
+            }
             "--out" => out = PathBuf::from(value),
             "--iterations" => {
                 settings.iterations = value.parse().map_err(|_| "invalid iterations")?
@@ -193,11 +201,17 @@ fn run() -> Result<bool, String> {
             out,
             settings,
             label,
+            pin_feature_deg,
             command,
         });
     }
-    if seen.contains("--label") {
-        return Err("--label is only valid with --input".into());
+    if seen.contains("--label")
+        || seen.contains("--normal-only")
+        || seen.contains("--pin-feature-angle")
+    {
+        return Err(
+            "--label, --normal-only and --pin-feature-angle are only valid with --input".into(),
+        );
     }
     if out.exists() {
         return Err("output directory already exists; select a new directory".into());

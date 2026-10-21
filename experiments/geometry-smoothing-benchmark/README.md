@@ -64,9 +64,11 @@ There are no third-party dependencies. `src/lib.rs` owns smoothing and measureme
 
 `--input STL --out NEW_DIRECTORY` smooths a supplied triangle mesh instead of the synthetic sphere. It accepts binary or ASCII STL, welds corners whose coordinates are exactly equal (no tolerance merge), and keeps the input face order and winding. The synthetic sphere options (`--radius-mm`, `--noise-mm`, `--subdivisions`) are refused, and `--label TEXT` names the input in the report. Smoothing settings are the same options as above.
 
+Two input-mode options are off by default; the synthetic benchmark output is unchanged without them and refuses them. `--normal-only` keeps, in each pass, only the component of the umbrella vector along the area-weighted unit vertex normal. It is still Taubin lambda/mu filtering, restricted to the normal direction. `--pin-feature-angle DEG` pins every vertex on an interior edge whose two face normals differ by more than `DEG` degrees; the report records the feature-edge and pinned-vertex counts.
+
 Before smoothing, the welded mesh must be closed, edge-manifold, consistently oriented, free of degenerate and duplicate faces, and one connected component. Otherwise the run exits 1 after writing `input-check.json` with the counts, and nothing is smoothed. After smoothing, a reversed face, changed topology, nonfinite position or displacement over budget exits 2. In that case the run still writes `metrics.json`, `REPORT.md` and the stopped state as `failed-state.stl` and `failed-state-displacement.csv`. Successful runs write `smoothed.stl` and `displacement.csv`. Exit 0 means the input and post-smoothing checks passed.
 
-This is a geometry study. The smoothed mesh is NOT re-scored, re-assessed, certified or qualified, and the sphere pass criteria do not apply. Outputs are hashed with SHA-256 in `metrics.json`. Sharp-feature pinning is not implemented, so the report records zero pins.
+This is a geometry study. The smoothed mesh is NOT re-scored, re-assessed, certified or qualified, and the sphere pass criteria do not apply. Outputs are hashed with SHA-256 in `metrics.json`. Metrics also record the fraction of vertices moved more than 0.01 mm, so a pass with little movement is visible.
 
 ## Limits
 
