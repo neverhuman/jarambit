@@ -158,6 +158,12 @@ Stage-1 screen; the additional design features cost ≈ 0.2 s per birth.
    `design_value()` object the leaderboard uses, enriched with the scorecard/RS numeric leaves.
 6. End of round: `git commit --only -- <run dir>`; optional push.
 
+Recording is on by default, so anything that launches `auto-evolve` as a test or process control
+must pass `--no-dataset` / `JARAMBIT_DATASET=0` or send records to a scratch `--dataset-dir`;
+otherwise control runs (for example with a synthetic Stage-2 evaluator) would land in the committed
+records. `crates/cli/tests/evolve_pipeline.rs` does both, and its fail-closed controls assert that
+every birth is recorded but only a receipt-verified Stage-2 result becomes an `s2` row.
+
 ### 8.2 Other producers
 
 * `jarambit dataset rescreen --genomes F [--neighbors N --sigma S] [--random N]` — parallel Stage-1
@@ -250,19 +256,21 @@ unit tests of `featurize`/`recorder` run in the existing `d1-gates` `cargo test 
 ## 13. Initial results
 
 Run on this branch over all 160 tables (recipes above, ≤ 10,000 rows per table, CatBoost 1.2.10,
-500 iterations, random + lineage-grouped 5-fold): 70 minutes on a 2-core VM, 0 errors.
+500 iterations, random + lineage-grouped 5-fold): 70 minutes on a 2-core VM, 0 errors. The 29 tables
+that changed when test-control records were removed from the seed data (all `s2.*`, nine `c.*`/`a.*`)
+were re-run on the corrected tables; the other 131 tables are byte-identical.
 **145 of 160 tables show lift on lineage-grouped folds** (107 strong with R² ≥ 0.5, 20 moderate,
 18 marginal); random folds alone would have called 152.
 
 - **The cheap screen predicts the expensive assessment.** Five Stage-1 screen scalars predict Stage-2
-  solid-tip SF, W_CAD and G1 at grouped r ≥ 0.98 (n = 67 assessed designs, 35 run/family groups).
+  solid-tip SF, W_CAD and G1 at grouped r ≥ 0.98 (n = 66 assessed designs, 34 run/family groups).
   Small n: a strong lead for a pre-certification surrogate, not yet a validated one.
 - **Strength generalises across independent GA runs.** In the gen-800 archives (10 runs, 10,000 rows)
   the held-out-run r is 0.98 for ring pull and 0.83 for lateral strength.
 - **Around the w282/w283 seeds, Ti grade and edge thickness dominate** (top features in 52 and 29 of
   the small Stage-1 tables) because GA mutation flips the titanium grade; the neighbourhoods are narrow.
 - **Not yet predictable:** torsion peak geometry (`twist_at_y`, `twist_t_mm`, `twist_body_kc`) and
-  several CAD surrogates collapse once lineages are held out (`c.blade_tip_to_heel` 0.83 → 0.21).
+  several CAD surrogates collapse once lineages are held out (`c.blade_tip_to_heel` 0.85 → 0.22).
   These need more diverse designs (`rescreen --random`) or local features at the peak.
 - **Redundant targets:** several Stage-1 safety factors are fixed-load rescalings of one capacity and
   share an r (`twist_sf`, `hm_twist_sf`, `twist_tipzone_sf`); adding them to `skip` halves their CV cost.
@@ -271,25 +279,25 @@ Best feature set per target (70 targets):
 
 | target | best feature set | n | lineage groups | r random | r grouped [95 % CI] | R² grouped | verdict |
 |---|---|---:|---:|---:|---|---:|---|
-| `c.th_p05` | `g` | 197 | 8 | 0.999 | 0.997 [0.995, 0.997] | 0.981 | lift (strong) |
+| `c.th_p05` | `g` | 196 | 6 | 0.999 | 0.996 [0.995, 0.997] | 0.982 | lift (strong) |
 | `s1.ring_at_x` | `c` | 155 | 7 | 0.988 | 0.995 [0.993, 0.996] | 0.953 | lift (strong) |
-| `s2.mass_3d_g` | `g` | 67 | 35 | 0.992 | 0.991 [0.986, 0.995] | 0.981 | lift (strong) |
-| `s2.mass_g` | `g` | 67 | 35 | 0.992 | 0.991 [0.986, 0.995] | 0.980 | lift (strong) |
-| `s2.ring_bearing_w_mm` | `g` | 67 | 35 | 0.993 | 0.987 [0.979, 0.992] | 0.971 | lift (strong) |
+| `s2.w_cad` | `s` | 66 | 34 | 0.993 | 0.990 [0.984, 0.994] | 0.978 | lift (strong) |
+| `s2.mass_g` | `g` | 66 | 34 | 0.991 | 0.990 [0.983, 0.994] | 0.977 | lift (strong) |
+| `s2.mass_3d_g` | `g` | 66 | 34 | 0.993 | 0.990 [0.983, 0.994] | 0.977 | lift (strong) |
+| `s2.solid_tip_sf` | `s` | 66 | 34 | 0.996 | 0.990 [0.983, 0.994] | 0.978 | lift (strong) |
+| `s2.g1` | `s` | 66 | 34 | 0.990 | 0.987 [0.979, 0.992] | 0.973 | lift (strong) |
+| `s2.ring_bearing_w_mm` | `g` | 66 | 34 | 0.991 | 0.987 [0.979, 0.992] | 0.969 | lift (strong) |
 | `s1.ring_at_y` | `gc` | 155 | 7 | 0.971 | 0.986 [0.980, 0.990] | 0.932 | lift (strong) |
-| `s2.solid_tip_sf` | `s` | 67 | 35 | 0.989 | 0.986 [0.977, 0.991] | 0.970 | lift (strong) |
 | `s1.sf_ring` | `g` | 155 | 7 | 0.984 | 0.986 [0.980, 0.989] | 0.958 | lift (strong) |
 | `s1.ring_rob` | `g` | 155 | 7 | 0.988 | 0.986 [0.980, 0.989] | 0.958 | lift (strong) |
 | `s1.ring20` | `g` | 155 | 7 | 0.708 | 0.985 [0.980, 0.989] | 0.957 | lift (strong) |
-| `s2.g1` | `g` | 67 | 35 | 0.989 | 0.985 [0.976, 0.991] | 0.969 | lift (strong) |
 | `h.mass_g` | `g` | 10000 | 10 | 0.988 | 0.983 [0.983, 0.984] | 0.964 | lift (strong) |
-| `s2.w_cad` | `s` | 67 | 35 | 0.988 | 0.983 [0.972, 0.989] | 0.964 | lift (strong) |
 | `h.relief_frac` | `g` | 10000 | 10 | 0.982 | 0.979 [0.978, 0.979] | 0.955 | lift (strong) |
 | `h.ring_rob` | `g` | 10000 | 10 | 0.983 | 0.977 [0.976, 0.978] | 0.954 | lift (strong) |
 | `h.hausdorff` | `g` | 10000 | 10 | 0.983 | 0.972 [0.971, 0.973] | 0.945 | lift (strong) |
-| `s2.strict_hunter_sf` | `s` | 67 | 35 | 0.963 | 0.964 [0.942, 0.978] | 0.930 | lift (strong) |
-| `s2.fat_sf` | `s` | 67 | 35 | 0.964 | 0.950 [0.920, 0.969] | 0.900 | lift (strong) |
-| `s2.seq_ratio` | `s` | 67 | 35 | 0.961 | 0.950 [0.920, 0.969] | 0.900 | lift (strong) |
+| `s2.strict_hunter_sf` | `s` | 66 | 34 | 0.972 | 0.966 [0.944, 0.979] | 0.931 | lift (strong) |
+| `s2.fat_sf` | `s` | 66 | 34 | 0.962 | 0.948 [0.916, 0.968] | 0.896 | lift (strong) |
+| `s2.seq_ratio` | `s` | 66 | 34 | 0.961 | 0.946 [0.913, 0.967] | 0.886 | lift (strong) |
 | `s1.screen_deficit` | `g` | 1409 | 46 | 0.968 | 0.933 [0.925, 0.939] | 0.857 | lift (strong) |
 | `s1.seq_ratio` | `g` | 1556 | 48 | 0.941 | 0.910 [0.901, 0.918] | 0.825 | lift (strong) |
 | `s1.fat_sf` | `g` | 1556 | 48 | 0.947 | 0.909 [0.900, 0.917] | 0.819 | lift (strong) |
@@ -317,26 +325,26 @@ Best feature set per target (70 targets):
 | `s1.twist_body_joint_nmm` | `g` | 155 | 7 | 0.935 | 0.785 [0.717, 0.839] | 0.595 | lift (strong) |
 | `h.emd` | `g` | 10000 | 10 | 0.914 | 0.772 [0.764, 0.779] | 0.580 | lift (strong) |
 | `s1.twist_body_sf` | `g` | 155 | 7 | 0.940 | 0.768 [0.695, 0.826] | 0.563 | lift (strong) |
-| `c.grip_len` | `g` | 197 | 8 | 0.988 | 0.764 [0.699, 0.816] | 0.371 | lift (moderate) |
 | `h.spg` | `g` | 10000 | 10 | 0.805 | 0.757 [0.749, 0.766] | 0.549 | lift (strong) |
-| `c.mass_g` | `g` | 197 | 8 | 0.981 | 0.731 [0.659, 0.790] | 0.424 | lift (moderate) |
+| `c.grip_len` | `g` | 196 | 6 | 0.987 | 0.749 [0.680, 0.805] | 0.363 | lift (moderate) |
+| `c.mass_g` | `g` | 196 | 6 | 0.980 | 0.731 [0.658, 0.790] | 0.430 | lift (moderate) |
 | `h.fit` | `g` | 10000 | 10 | 0.801 | 0.728 [0.719, 0.738] | 0.496 | lift (moderate) |
 | `s1.hm_spine_n` | `g` | 155 | 7 | 0.986 | 0.719 [0.634, 0.788] | 0.480 | lift (moderate) |
 | `s1.hm_spine_sf` | `g` | 155 | 7 | 0.817 | 0.719 [0.634, 0.788] | 0.480 | lift (moderate) |
-| `c.ridge_min_halfwidth_mm` | `g` | 197 | 8 | 0.733 | 0.682 [0.600, 0.751] | 0.464 | lift (moderate) |
-| `c.blade_sharpened_arc` | `g` | 197 | 8 | 0.822 | 0.649 [0.561, 0.724] | 0.397 | lift (moderate) |
+| `c.ridge_min_halfwidth_mm` | `g` | 196 | 6 | 0.743 | 0.675 [0.591, 0.745] | 0.452 | lift (moderate) |
 | `h.aes_score` | `g` | 10000 | 10 | 0.862 | 0.649 [0.638, 0.660] | 0.375 | lift (moderate) |
-| `c.sec_min_ioop_blade` | `g` | 197 | 8 | 0.849 | 0.606 [0.509, 0.687] | 0.367 | lift (moderate) |
+| `c.blade_sharpened_arc` | `g` | 196 | 6 | 0.816 | 0.638 [0.547, 0.714] | 0.384 | lift (moderate) |
+| `c.sec_min_ioop_blade` | `g` | 196 | 6 | 0.848 | 0.601 [0.503, 0.683] | 0.360 | lift (moderate) |
+| `s2.buckling_eigenvalue_a4` | `g` | 66 | 34 | 0.650 | 0.556 [0.363, 0.703] | 0.278 | lift (moderate) |
+| `a.score` | `g` | 196 | 6 | 0.877 | 0.539 [0.431, 0.631] | 0.175 | lift (marginal) |
 | `s1.twist_at_x` | `gc` | 155 | 7 | 0.484 | 0.515 [0.389, 0.622] | 0.259 | lift (moderate) |
-| `s2.buckling_eigenvalue_a4` | `g` | 67 | 35 | 0.615 | 0.513 [0.312, 0.671] | 0.210 | lift (moderate) |
-| `a.score` | `g` | 197 | 8 | 0.875 | 0.508 [0.397, 0.605] | 0.162 | lift (marginal) |
 | `s1.lat_at_y` | `gc` | 155 | 7 | 0.943 | 0.431 [0.293, 0.551] | 0.166 | lift (marginal) |
 | `s1.lat_at_x` | `gc` | 155 | 7 | 0.782 | 0.380 [0.236, 0.507] | 0.136 | lift (marginal) |
-| `a.hausdorff` | `g` | 197 | 8 | 0.964 | 0.329 [0.198, 0.448] | 0.075 | lift (marginal) |
+| `a.hausdorff` | `g` | 196 | 6 | 0.968 | 0.340 [0.210, 0.458] | 0.079 | lift (marginal) |
 | `s1.twist_kc` | `g` | 155 | 7 | 0.356 | 0.318 [0.168, 0.453] | 0.092 | lift (marginal) |
 | `s1.twist_tipzone_kc` | `g` | 155 | 7 | 0.448 | 0.318 [0.168, 0.453] | 0.092 | lift (marginal) |
 | `s1.twist_b_mm` | `g` | 155 | 7 | 0.363 | 0.245 [0.091, 0.387] | -0.020 | lift (marginal) |
-| `c.blade_tip_to_heel` | `g` | 197 | 8 | 0.830 | 0.206 [0.068, 0.336] | 0.014 | lift (marginal) |
+| `c.blade_tip_to_heel` | `g` | 196 | 6 | 0.849 | 0.216 [0.078, 0.346] | 0.024 | lift (marginal) |
 | `s1.twist_tipdist` | `g` | 155 | 7 | 0.293 | 0.203 [0.046, 0.349] | -0.025 | lift (marginal) |
 | `s1.twist_body_kc` | `gc` | 155 | 7 | 0.798 | 0.116 [-0.043, 0.269] | -0.023 | weak |
 | `s1.twist_t_mm` | `g` | 155 | 7 | 0.189 | 0.098 [-0.061, 0.251] | -0.071 | weak |
@@ -349,7 +357,7 @@ Built and tested on the pinned Rust 1.85.1 toolchain against `main` @ `49dc71f`;
 | Check | Result |
 |---|---|
 | `cargo build --release --locked -p jarambit` | clean; `Cargo.lock` unchanged |
-| `cargo test --release -p jarambit` (incl. every existing `auto_evolve` test + `tests/evolve_pipeline.rs`) | 91 + 2 passed, 0 failed |
+| `cargo test --release -p jarambit` (incl. every existing `auto_evolve` test + `tests/evolve_pipeline.rs`) | 93 + 2 passed, 0 failed; the integration controls write no records into the repository |
 | Dataset unit tests (codecs, statistics vs hand values, deterministic random and grouped folds, lineage-memorisation control, torn tails, genome-keyed joins, replicate averaging, recipes, leak guard, byte-identical rebuilds, `git commit --only` isolation, harvest joins, gene-list parity with `jarambit_crescent::genome`, stable feature columns, exact gene round-trip, real CatBoost CV finds lift on a learnable table and none on noise) | 27 passed in the crate; the 22 pure ones also pass in the standalone `rustc -D warnings` build |
 | CI clippy gate `cargo clippy -p jarambit -- -A clippy::all -D clippy::disallowed_methods` | passes |
 | `crates/runner-policy` on the new workflow | passes |
@@ -360,7 +368,7 @@ Built and tested on the pinned Rust 1.85.1 toolchain against `main` @ `49dc71f`;
 | `add-physical` | genome-file, hash and certificate-identity rows resolve; replicate specimens average; unknown designs reported (exit 1) |
 | `build` over records + all 10 gen-800 archives | 160 tables, 25 specs skipped with reasons, 58 s |
 
-Not run here: the Stage-2 Python solver stack (skfem/DOLFINx) and the jankurai auditor are not installed on the authoring machine; both run in CI.
+Not run here: the Stage-2 Python solver stack (skfem/DOLFINx) and the jankurai auditor are not installed on the authoring machine; both run in CI. In CI, jankurai 1.7.5 scores this branch 48 with 66 findings, the same as `main` @ `49dc71f` (its first run flagged a local variable named `todo`, since renamed).
 
 ## 15. Runbook
 

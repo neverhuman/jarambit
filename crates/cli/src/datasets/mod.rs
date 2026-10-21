@@ -113,7 +113,7 @@ fn cmd_refeaturize(root: &Path, a: &engine::Args) -> Result<i32, String> {
     let threads = a.num("--threads", jarambit_monte_carlo::max_threads())?.max(1);
     let (frame, _) = records::load_records(&records_dir)?;
     // genomes that only carry genes (no CAD features yet)
-    let mut todo: Vec<(String, Genome)> = Vec::new();
+    let mut gene_only: Vec<(String, Genome)> = Vec::new();
     for r in 0..frame.rows.len() {
         if frame.get(r, "c.mass_g").is_finite() {
             continue;
@@ -126,17 +126,17 @@ fn cmd_refeaturize(root: &Path, a: &engine::Args) -> Result<i32, String> {
             .collect();
         let refs: Vec<&str> = fields.iter().map(String::as_str).collect();
         if let Some(g) = Genome::from_csv(&refs) {
-            todo.push((frame.keys[r].clone(), g));
+            gene_only.push((frame.keys[r].clone(), g));
         }
     }
-    let th = threads.min(todo.len()).max(1);
-    let todo_ref = &todo;
+    let th = threads.min(gene_only.len()).max(1);
+    let gene_only_ref = &gene_only;
     let mut rows: Vec<(usize, Row)> = std::thread::scope(|s| {
         let hs: Vec<_> = (0..th)
             .map(|t| {
                 s.spawn(move || {
                     let mut out = Vec::new();
-                    for (i, (key, g)) in todo_ref.iter().enumerate().filter(|(i, _)| i % th == t) {
+                    for (i, (key, g)) in gene_only_ref.iter().enumerate().filter(|(i, _)| i % th == t) {
                         let (full, _) = featurize::record_from_genome(g);
                         if full.get(HASH_COL) != Some(key.as_str()) {
                             eprintln!("refeaturize: genome hash changed on reload for {key}; skipped");
@@ -250,6 +250,16 @@ fn cmd_rescreen(root: &Path, a: &engine::Args) -> Result<i32, String> {
         written += records::write_shard(&out_dir.join(format!("c{ci:04}.s1.csv")), &rows)?;
         eprintln!("rescreen: {written}/{} genomes", genomes.len());
     }
+    // Committed manifests name the genome file relative to the repository (never a machine path)
+    // and list the seed genome hashes, so the run is reproducible from the records themselves.
+    let genomes_file = a.get("--genomes").map(|p| {
+        let full = resolve(root, &p);
+        match full.strip_prefix(root) {
+            Ok(rel) => rel.to_string_lossy().to_string(),
+            Err(_) => full.file_name().map(|n| n.to_string_lossy().to_string()).unwrap_or(p),
+        }
+    });
+    let seed_hashes: Vec<Json> = lineage[..parents.len()].iter().map(Json::from).collect();
     let manifest = Json::obj()
         .with("schema", "jarambit.regression.run.v1")
         .with("run_id", run_id.as_str())
@@ -257,7 +267,10 @@ fn cmd_rescreen(root: &Path, a: &engine::Args) -> Result<i32, String> {
         .with("fem_area_mm2", area)
         .with("seed", seed)
         .with("random", n_random)
-        .with("genomes_file", a.get("--genomes"))
+        .with("neighbors", n_neighbors)
+        .with("sigma", sigma)
+        .with("genomes_file", genomes_file)
+        .with("seed_genome_hashes", seed_hashes)
         .with("git_head", gitsync::head(root))
         .with("feature_schema", featurize::FEATURE_SCHEMA);
     std::fs::write(out_dir.join("run.json"), manifest.pretty()).map_err(|e| e.to_string())?;
