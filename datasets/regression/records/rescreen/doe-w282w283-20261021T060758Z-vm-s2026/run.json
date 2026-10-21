@@ -1,0 +1,14 @@
+{
+  "schema": "jarambit.regression.run.v1",
+  "run_id": "doe-w282w283-20261021T060758Z-vm-s2026",
+  "lane": "rescreen",
+  "fem_area_mm2": 2,
+  "seed": 2026,
+  "random": 0,
+  "genomes_file": "/tmp/claude-0/-home-claude/78c89e1c-65d2-5f9c-a32c-458c8f698b48/scratchpad/seeds4.csv",
+  "git_head": "49dc71f88339",
+  "feature_schema": "jarambit.regression.features.v1",
+  "neighbors": 45,
+  "sigma": 0.04,
+  "lineage": "meta.parent_hash backfilled from generation order (4 file genomes, then 45 mutation neighbours per genome in file order); rescreen now writes it directly"
+}
