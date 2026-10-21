@@ -4258,7 +4258,7 @@ mod tests {
     #[test]
     fn hero_registration_preflight_preserves_ties_fallback_and_all_component_bindings() {
         use crate::hero_appearance::{CellColor, RegistrationInput};
-        let centroids = [[-1.0, 0.0], [1.0, 0.0], [100.0, 100.0]];
+        let centroids: [[f64; 2]; 3] = [[-1.0, 0.0], [1.0, 0.0], [100.0, 100.0]];
         let mut grid = BTreeMap::<(i32, i32), Vec<usize>>::new();
         for (i, c) in centroids.iter().enumerate() {
             grid.entry(((c[0] * 0.5).floor() as i32, (c[1] * 0.5).floor() as i32))
