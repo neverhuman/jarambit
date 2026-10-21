@@ -13,6 +13,7 @@ One table: technology role → where the code is → README. Crates keep their n
 | `docs/` | `docs/`, `crates/docs` | WHITEPAPER, VERSION, RELEASES, WAVE_LOG, GLOBAL_METRIC, calibration, holder | `docs/README.md`, `crates/docs/README.md` |
 | `cli/` | `crates/cli` (binary `jarambit`) | entry points: evolve, crescent-evolve, crescent-d1, calib, fem-smoke | `cli/README.md`, `crates/cli/README.md` |
 | `ops/` | `ops/ci`, `ops/wave_figures`, `ops/wave_reports`, launch scripts | CI smoke + version check, plate/report packers, multihost launch | `ops/README.md` |
+| `datasets/regression/` | `crates/cli/src/datasets` (`jarambit dataset ...`; dependency-free core also builds with plain `rustc`) | regression micro-records written during evolution, deterministic tables (final column = target), CatBoost k-fold lift CI | `datasets/regression/README.md`, `docs/REGRESSION_DATASETS.md` |
 | (lane) | `crates/crescent` | crescent/C.6 aesthetic lane: spans genotype+phenotype+fem+evolve | `crates/crescent/README.md` |
 
 ## Data flow
