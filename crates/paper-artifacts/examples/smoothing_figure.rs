@@ -95,6 +95,14 @@ fn render_settings(camera: Camera) -> RenderSettings {
     }
 }
 
+/// Linear colour scale for the heatmap, left (0) to right (1), same stops as `colour_at`.
+fn colour_bar(width: usize, height: usize) -> Vec<u8> {
+    let row: Vec<u8> = (0..width)
+        .flat_map(|x| colour_at(x as f64 / (width - 1) as f64))
+        .collect();
+    row.repeat(height)
+}
+
 fn colour_at(t: f64) -> [u8; 3] {
     let t = t.clamp(0.0, 1.0);
     for pair in STOPS.windows(2) {
@@ -253,6 +261,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             "winner-displacement.png",
             &png(&image_h.unlit_rgb, WIDTH, HEIGHT),
         )?,
+        write_new(
+            &out,
+            "winner-displacement-colorbar.png",
+            &png(&colour_bar(WIDTH, 28), WIDTH, 28),
+        )?,
     ];
     let manifest = json!({
         "schema": "smoothing_figure.v1",
@@ -287,6 +300,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             "winner-before.png": "lit appearance of the before mesh (base colour uniform)",
             "winner-after.png": "lit appearance of the after mesh (base colour uniform)",
             "winner-displacement.png": "unlit heatmap of mean per-face corner displacement; colour is the value",
+            "winner-displacement-colorbar.png": "unlit colour scale, linear from 0 mm (left) to heatmap range maximum (right)",
         },
         "heatmap": {"range_mm": [0.0, corner_max], "value": "mean of the three corner displacements per face", "stops_srgb": STOPS.iter().map(|(t, c)| json!({"t": t, "rgb": c})).collect::<Vec<_>>()},
     });
