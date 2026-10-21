@@ -1,0 +1,81 @@
+name: Regression datasets
+
+on:
+  pull_request:
+    paths:
+      - 'crates/datasets/**'
+      - 'crates/cli/**'
+      - 'crates/crescent/**'
+      - 'datasets/regression/**'
+      - 'Cargo.*'
+      - '.github/workflows/regression-datasets.yml'
+  push:
+    branches: [main, 'data/regression-*']
+    paths:
+      - 'crates/datasets/**'
+      - 'crates/cli/**'
+      - 'crates/crescent/**'
+      - 'datasets/regression/**'
+      - 'Cargo.*'
+      - '.github/workflows/regression-datasets.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: regression-datasets-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  regression:
+    name: Grouped CatBoost regression and dataset contracts
+    runs-on: [self-hosted, linux, x64, xbabe, general, jarambit-d1]
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash ops/ci/run_bounded.sh version {0}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Build Rust collectors and dataset CLI
+        run: |
+          toolchain=/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin
+          export PATH="${toolchain}:/home/ubuntu/.cargo/bin:${PATH}"
+          export RUSTC="${toolchain}/rustc" RUSTDOC="${toolchain}/rustdoc"
+          cargo build --release --locked -p jarambit -p jarambit-datasets
+          cargo test --release --locked -p jarambit-datasets
+          cargo clippy --release --locked -p jarambit-datasets --all-targets -- -D warnings
+          cargo test --release --locked -p jarambit-crescent --test search_contract regression_ -- --test-threads=2
+          ./target/release/jarambit regression-registry > target/regression-registry.json
+          cmp target/regression-registry.json datasets/regression/registry.v1.json
+      - name: Install hash-pinned CatBoost CLI
+        run: |
+          mkdir -p target/regression-tools
+          url=$(jq -er '.url' datasets/regression/catboost.lock.json)
+          digest=$(jq -er '.sha256' datasets/regression/catboost.lock.json)
+          curl --fail --location --retry 3 --max-time 180 "$url" -o target/regression-tools/catboost
+          printf '%s  %s\n' "$digest" target/regression-tools/catboost | sha256sum --check --strict -
+          chmod +x target/regression-tools/catboost
+          ./target/regression-tools/catboost --version
+      - name: Real CatBoost control and observed dataset suite
+        run: |
+          toolchain=/home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin
+          export PATH="${toolchain}:/home/ubuntu/.cargo/bin:${PATH}"
+          export RUSTC="${toolchain}/rustc" RUSTDOC="${toolchain}/rustdoc"
+          export JARAMBIT_CATBOOST_BIN="$PWD/target/regression-tools/catboost"
+          cargo test --release --locked -p jarambit-datasets real_catboost_grouped_oof -- --ignored --nocapture
+          attempt="target/regression-ci/${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -p target/regression-ci
+          mkdir "$attempt"
+          ./target/release/jarambit-datasets suite datasets/regression/batches datasets/regression/registry.v1.json "$JARAMBIT_CATBOOST_BIN" "$attempt" datasets/regression/cv.v1.json
+          cat "$attempt/summary.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Retain out-of-fold evidence and per-fold logs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: regression-datasets-${{ github.sha }}-${{ github.run_attempt }}
+          path: target/regression-ci/
+          if-no-files-found: warn
+          retention-days: 30

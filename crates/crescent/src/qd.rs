@@ -221,7 +221,13 @@ pub struct RunOut { pub all: Vec<Rec>, pub archive: std::collections::BTreeMap<(
 pub fn run(cfg: &RunCfg, log: impl FnMut(&str)) -> RunOut { run_with(cfg, &evaluate, log, &mut NullSink) }
 
 /// Single-population GA + MAP-Elites with lineage + evidence events (PR-0.29.1).
-pub fn run_with(cfg: &RunCfg, ev: &EvalFn, mut log: impl FnMut(&str), sink: &mut dyn Sink) -> RunOut {
+pub fn run_with(cfg: &RunCfg, ev: &EvalFn, log: impl FnMut(&str), sink: &mut dyn Sink) -> RunOut {
+    run_observed(cfg, ev, log, sink, &mut |_| Ok(())).expect("infallible observation")
+}
+
+/// Observe each fresh evaluated batch once, before any selection or population reuse.
+/// An observer error stops collection explicitly; it cannot change a solver result.
+pub fn run_observed(cfg: &RunCfg, ev: &EvalFn, mut log: impl FnMut(&str), sink: &mut dyn Sink, observe: &mut dyn FnMut(&[Rec]) -> Result<(), String>) -> Result<RunOut, String> {
     let mut rng = Rng(cfg.seed);
     let seed = Genome::c4_seed(cfg.t_seed);
     let mut next_id = 0usize; let mut cnt = Counters::default();
@@ -229,6 +235,7 @@ pub fn run_with(cfg: &RunCfg, ev: &EvalFn, mut log: impl FnMut(&str), sink: &mut
     while init.len() < cfg.pop { let s = if init.len() % 4 == 0 { 0.25 } else { 0.08 }; let g = seed.mutate(&mut rng, s); init.push(birth(g, &mut next_id, vec![0], "init_mutate", 0)); }
     cnt.fresh_evals += init.len() as u64;
     let mut pop = eval_batch_with(init, 0, cfg, ev);
+    observe(&pop)?;
     let mut all: Vec<Rec> = Vec::new();
     let mut nov_mem: Vec<[f64; DESC_N]> = Vec::new();
     let mut archive: std::collections::BTreeMap<(usize, usize), Rec> = std::collections::BTreeMap::new();
@@ -268,12 +275,13 @@ pub fn run_with(cfg: &RunCfg, ev: &EvalFn, mut log: impl FnMut(&str), sink: &mut
         cnt.fresh_evals += kids.len() as u64;
         let mut newpop: Vec<Rec> = sorted.into_iter().take(n_el).map(|mut r| { r.gen = gen + 1; r }).collect();
         let born = eval_batch_with(kids, gen + 1, cfg, ev);
+        observe(&born)?;
         fresh_ids = born.iter().map(|r| r.id).collect();
         newpop.extend(born);
         pop = newpop;
     }
     sink.event(Event::RunEnd { fresh_evals: cnt.fresh_evals, appearances: cnt.appearances }); sink.end_gen();
-    RunOut { all, archive, history, counters: cnt }
+    Ok(RunOut { all, archive, history, counters: cnt })
 }
 
 
@@ -284,7 +292,12 @@ pub fn run_islands(cfg: &IslandCfg, log: impl FnMut(&str), snap: impl FnMut(usiz
     run_islands_with(cfg, &evaluate, log, snap, &mut NullSink)
 }
 
-pub fn run_islands_with(cfg: &IslandCfg, ev: &EvalFn, mut log: impl FnMut(&str), mut snap: impl FnMut(usize, &[Rec], &std::collections::BTreeMap<(usize, usize), Rec>), sink: &mut dyn Sink) -> RunOut {
+pub fn run_islands_with(cfg: &IslandCfg, ev: &EvalFn, log: impl FnMut(&str), snap: impl FnMut(usize, &[Rec], &std::collections::BTreeMap<(usize, usize), Rec>), sink: &mut dyn Sink) -> RunOut {
+    run_islands_observed(cfg, ev, log, snap, sink, &mut |_| Ok(())).expect("infallible observation")
+}
+
+/// Same search with a durable observation hook, independent of scoring and RNG.
+pub fn run_islands_observed(cfg: &IslandCfg, ev: &EvalFn, mut log: impl FnMut(&str), mut snap: impl FnMut(usize, &[Rec], &std::collections::BTreeMap<(usize, usize), Rec>), sink: &mut dyn Sink, observe: &mut dyn FnMut(&[Rec]) -> Result<(), String>) -> Result<RunOut, String> {
     let b = &cfg.base; let k = cfg.islands.max(1);
     let mut rng = Rng(b.seed);
     let mut seeds = cfg.seeds.clone(); if seeds.is_empty() { seeds.push(Genome::c4_seed(b.t_seed)); }
@@ -297,6 +310,7 @@ pub fn run_islands_with(cfg: &IslandCfg, ev: &EvalFn, mut log: impl FnMut(&str),
         init.push(birth(g, &mut next_id, vec![], op, isl)); } }
     cnt.fresh_evals += init.len() as u64;
     let ev0 = eval_batch_with(init, 0, b, ev);
+    observe(&ev0)?;
     let mut pops: Vec<Vec<Rec>> = ev0.chunks(b.pop).map(|c| c.to_vec()).collect();
     let sig: Vec<f64> = (0..k).map(|i| (0.05 + 0.12 * i as f64 / (k.max(2) - 1) as f64) * sig_scale).collect();
     let mut all: Vec<Rec> = Vec::new();
@@ -355,10 +369,11 @@ pub fn run_islands_with(cfg: &IslandCfg, ev: &EvalFn, mut log: impl FnMut(&str),
         }
         cnt.fresh_evals += kids.len() as u64;
         let born = eval_batch_with(kids, gen + 1, b, ev);
+        observe(&born)?;
         fresh_ids = born.iter().map(|r| r.id).collect();
         let mut it = born.into_iter();
         for (isl, p) in pops.iter_mut().enumerate() { let mut np = keep[isl].clone(); while np.len() < b.pop { if let Some(r) = it.next() { np.push(r); } else { break; } } *p = np; }
     }
     sink.event(Event::RunEnd { fresh_evals: cnt.fresh_evals, appearances: cnt.appearances }); sink.end_gen();
-    RunOut { all, archive, history, counters: cnt }
+    Ok(RunOut { all, archive, history, counters: cnt })
 }

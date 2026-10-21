@@ -1,0 +1,10 @@
+{
+  "folds": 5,
+  "seed": 20261020,
+  "iterations": 500,
+  "depth": 6,
+  "threads": 2,
+  "min_rows": 200,
+  "min_test_rows": 20,
+  "timeout_seconds": 600
+}

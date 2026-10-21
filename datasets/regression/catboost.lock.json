@@ -1,0 +1,6 @@
+{
+  "version": "1.2.10",
+  "platform": "linux-x86_64",
+  "url": "https://github.com/catboost/catboost/releases/download/v1.2.10/catboost-linux-x86_64-1.2.10",
+  "sha256": "478dc57f4c19de205b19b709fd4c6af93f79753dc462b6bb49d33c920dddec75"
+}

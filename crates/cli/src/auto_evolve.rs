@@ -520,6 +520,7 @@ fn spawn_offspring_batch(
 }
 
 /// Stage 1: provisional parallel FEM ranking. No qualification verdict is issued here.
+#[cfg(test)]
 fn screen_candidate_stage1(
     round: usize,
     idx: usize,
@@ -527,12 +528,21 @@ fn screen_candidate_stage1(
     g: &Genome,
     prefix: &str,
 ) -> Option<ScreenSurvivor> {
+    screen_candidate_stage1_observed(round, idx, family, g, prefix, &mut |_| Ok(()))
+        .expect("infallible observer")
+}
+
+fn screen_candidate_stage1_observed(
+    round: usize, idx: usize, family: &str, g: &Genome, prefix: &str,
+    observe: &mut dyn FnMut(&qd::Rec) -> Result<(), String>,
+) -> Result<Option<ScreenSurvivor>, String> {
     if !g.rs_v2() {
-        return None;
+        return Ok(None);
     }
     let r = qd::evaluate(g, idx, round, 2.0);
+    observe(&r)?;
     let p = pheno::build(g);
-    let f = r.fem.as_ref()?;
+    let Some(f) = r.fem.as_ref() else { return Ok(None); };
     // Search may rank a measured shortfall. It never turns that shortfall into a qualification.
     let deficit = |value: f64, floor: f64| ((floor - value) / floor).max(0.0);
     let (bw, _) = fem::ring_bearing(&p);
@@ -551,7 +561,7 @@ fn screen_candidate_stage1(
         + deficit(f.fat_sf, 1.0)
         + deficit(bw, fem::hm::RING_BEARING_W_MIN_MM)
         + deficit(radius, fem::hm::RING_EDGE_R_MIN_MM);
-    Some(ScreenSurvivor {
+    Ok(Some(ScreenSurvivor {
         label: format!("{prefix}_r{:02}_{family}_c{:02}", round + 1, idx + 1),
         family: family.to_string(),
         g: g.clone(),
@@ -560,7 +570,7 @@ fn screen_candidate_stage1(
         fat_sf: f.fat_sf,
         ring_bearing_w_mm: bw,
         screen_deficit,
-    })
+    }))
 }
 
 /// Canonical 20-objective weights (`W_ULTRALIGHT_v1`, total = `100.0%`) per
@@ -1205,6 +1215,11 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
             return 1;
         }
     }
+    let dataset_manifest = jarambit_evidence::RunManifest::new("auto-evolve-stage1", seed, fem::REQUIREMENT_SET_ID)
+        .param("fem_area", 2.0).param("rounds", rounds).param("candidates_per_round", candidates_per_round);
+    let collector = match crate::regression::Collector::open(&out_dir, &dataset_manifest) {
+        Ok(c) => c, Err(e) => { eprintln!("regression collector: {e}"); return 1; }
+    };
     let mut rng = Rng(seed);
     let mut assessed_all: Vec<AssessedDesign> = Vec::new();
     let mut errors = Vec::new();
@@ -1233,27 +1248,26 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
         let th = threads.max(1).min(batch.len().max(1));
         let prefix_ref = prefix.as_str();
 
-        let mut survivors: Vec<ScreenSurvivor> = std::thread::scope(|s| {
+        let survivors_result: Result<Vec<ScreenSurvivor>, String> = std::thread::scope(|s| {
             let handles: Vec<_> = (0..th)
                 .map(|t| {
                     let batch_ref = &batch;
+                    let collector_ref = &collector;
                     s.spawn(move || {
-                        batch_ref
-                            .iter()
-                            .enumerate()
-                            .filter(|(idx, _)| idx % th == t)
-                            .filter_map(|(idx, (fam, g))| {
-                                screen_candidate_stage1(round, idx, fam, g, prefix_ref)
-                            })
-                            .collect::<Vec<_>>()
+                        let mut survivors = Vec::new();
+                        for (idx, (fam, g)) in batch_ref.iter().enumerate().filter(|(idx, _)| idx % th == t) {
+                            if let Some(candidate) = screen_candidate_stage1_observed(round, idx, fam, g, prefix_ref,
+                                &mut |r| collector_ref.batch(std::slice::from_ref(r)))? { survivors.push(candidate); }
+                        }
+                        Ok::<_, String>(survivors)
                     })
                 })
                 .collect();
-            handles
-                .into_iter()
-                .flat_map(|h| h.join().expect("stage1 worker thread"))
-                .collect()
+            let mut all = Vec::new();
+            for h in handles { all.extend(h.join().map_err(|_| "stage1 worker panicked".to_string())??); }
+            Ok(all)
         });
+        let mut survivors = match survivors_result { Ok(s) => s, Err(e) => { eprintln!("{e}"); return 1; } };
 
         // Sort Stage-1 survivors by W_ULTRALIGHT_v1 global weighted fitness (non-veto),
         // breaking ties by lower screen_deficit and lighter mass.

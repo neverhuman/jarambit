@@ -1259,3 +1259,30 @@ fn t04_12_lineage_orphan_positive_and_adverse() {
         Err("migration_ring_order_mismatch")
     );
 }
+
+#[test]
+fn regression_observer_captures_only_fresh_evaluations_and_preserves_search() {
+    let cfg = RunCfg { pop: 10, gens: 3, threads: 2, seed: 121, fem_area: 2.0, t_seed: 5.7 };
+    let ev = |g: &Genome, id, gen, _| base_rec(g, id, gen);
+    let baseline = qd::run_with(&cfg, &ev, |_| {}, &mut jarambit_evidence::NullSink);
+    let mut ids = HashSet::new();
+    let observed = qd::run_observed(&cfg, &ev, |_| {}, &mut jarambit_evidence::NullSink, &mut |rows| {
+        for row in rows { assert!(ids.insert(row.id), "elite/migrant duplicated"); }
+        Ok(())
+    }).unwrap();
+    assert_eq!(ids.len() as u64, observed.counters.fresh_evals);
+    assert_eq!(baseline.history, observed.history);
+    assert_eq!(baseline.all.iter().map(|r| (&r.g,r.fit)).collect::<Vec<_>>(), observed.all.iter().map(|r| (&r.g,r.fit)).collect::<Vec<_>>());
+    assert!(qd::run_observed(&cfg, &ev, |_| {}, &mut jarambit_evidence::NullSink, &mut |_| Err("disk full".into())).is_err());
+}
+
+#[test]
+fn regression_island_observer_sees_initial_and_terminal_birth_batches() {
+    let cfg = IslandCfg { base: RunCfg {pop:8,gens:3,threads:2,seed:122,fem_area:2.0,t_seed:5.7}, islands:2,migrate_every:1,migrants:1,seeds:vec![],kick_frac:0.0 };
+    let ev = |g: &Genome,id,gen,_|base_rec(g,id,gen);
+    let baseline=qd::run_islands_with(&cfg,&ev, |_| {}, |_,_,_| {}, &mut jarambit_evidence::NullSink);
+    let mut ids=HashSet::new();
+    let result=qd::run_islands_observed(&cfg,&ev, |_| {}, |_,_,_| {}, &mut jarambit_evidence::NullSink,&mut |rows| {for r in rows{assert!(ids.insert(r.id));}Ok(())}).unwrap();
+    assert_eq!(ids.len() as u64,result.counters.fresh_evals);
+    assert_eq!(baseline.history,result.history);
+}

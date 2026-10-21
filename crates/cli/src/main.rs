@@ -13,6 +13,7 @@ mod score_cad;
 mod auto_evolve;
 mod version_check;
 mod runner_policy;
+mod regression;
 
 /// Validate an existing history header before any append, then open the log.
 /// A fresh path is created with `fresh_header` and only then opened for append.
@@ -31,6 +32,10 @@ fn prepare_history_log(path: &str, resume_or_fork: bool, current_columns: &[&str
 
 fn main() {
     let a: Vec<String> = std::env::args().collect();
+    if a.get(1).map(String::as_str) == Some("regression-registry") {
+        println!("{}", serde_json::to_string_pretty(&regression::registry()).expect("registry JSON"));
+        return;
+    }
     if a.iter().any(|s| s == "version-check") {
         let root = std::env::current_dir().unwrap_or_else(|e| {
             eprintln!("current directory: {e}");

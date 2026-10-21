@@ -1,0 +1,958 @@
+{
+  "schema": 1,
+  "feature_schema": "crescent_pre_solve_v1",
+  "features": [
+    {
+      "name": "gene.cp00",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp01",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp02",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp03",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp04",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp05",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp06",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp07",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp08",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp09",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp10",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp11",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp12",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp13",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp14",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp15",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp16",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp17",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp18",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp19",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp20",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp21",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp22",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp23",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp24",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp25",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp26",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp27",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp28",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp29",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp30",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp31",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp32",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp33",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp34",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp35",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp36",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp37",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp38",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cp39",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.blade_drop_deg",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.grip_dx",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.ring_wall",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.ring_id",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.neck_fillet",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.t_stock",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.t_tip",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.taper_x0",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.edge_angle_in",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.edge_angle_sp",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.comet_x0",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.comet_x1",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.comet_w0",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.comet_w1",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.comet_bow",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.comet_y",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.eye_scale",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.cairn_d",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.nub_engage",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.holder_wall",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.jimp_scale",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.serr_large_d",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.serr_small_d",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.serr_fine_d",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.spine_sharp_offset",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.relief_d",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.relief_w",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.relief_q",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.lattice_d",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.lattice_pitch",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.lattice_frac",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.lattice_angle",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.lattice_handle",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.lattice_blade",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.fuller_d",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.fuller_w",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.fuller_s0",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.fuller_s1",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.flute_d",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.texture_mode",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.texture_d",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.texture_pitch",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.texture_angle",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.wrap_x0",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.wrap_len",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.pad_x",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.pad_y",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.pad_w",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.pad_l",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.edge_t",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.iso_d",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.iso_pitch",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.iso_rib",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.iso_angle",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.iso_rim",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.iso_blade",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.iso_handle",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.iso_blade_extent",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.iso_grade",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.win_n",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.win_s0",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.win_s1",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.win_w",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.win_fill",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.win_decay",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.rflute_d",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.rflute_w",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.rflute_arc",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.iso_handle_start",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.iso_land",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.perf_d",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.perf_gap",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.perf_angle",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.perf_elong",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.perf_land",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.perf_handle",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.perf_handle_start",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.p1_on",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.rail_w",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.neck_l",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.pocket_d",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.pocket_r",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.k_n",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.k0",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.k1",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.k2",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.k3",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "gene.k4",
+      "kind": "numeric",
+      "unit": "native_genome_unit"
+    },
+    {
+      "name": "material",
+      "kind": "categorical",
+      "unit": "category"
+    },
+    {
+      "name": "cad.mass_g",
+      "kind": "numeric",
+      "unit": "g"
+    },
+    {
+      "name": "cad.blank_g",
+      "kind": "numeric",
+      "unit": "g"
+    },
+    {
+      "name": "cad.stock_mm",
+      "kind": "numeric",
+      "unit": "mm"
+    },
+    {
+      "name": "cad.grip_mm",
+      "kind": "numeric",
+      "unit": "mm"
+    },
+    {
+      "name": "cad.holder_length_mm",
+      "kind": "numeric",
+      "unit": "mm"
+    },
+    {
+      "name": "cad.holder_width_mm",
+      "kind": "numeric",
+      "unit": "mm"
+    },
+    {
+      "name": "cad.holder_angle_deg",
+      "kind": "numeric",
+      "unit": "deg"
+    },
+    {
+      "name": "cad.min_web_mm",
+      "kind": "numeric",
+      "unit": "mm"
+    },
+    {
+      "name": "cad.window_count",
+      "kind": "numeric",
+      "unit": "count"
+    },
+    {
+      "name": "cad.window_area_mm2",
+      "kind": "numeric",
+      "unit": "mm2"
+    },
+    {
+      "name": "cad.perforation_count",
+      "kind": "numeric",
+      "unit": "count"
+    },
+    {
+      "name": "cad.perforation_area_mm2",
+      "kind": "numeric",
+      "unit": "mm2"
+    },
+    {
+      "name": "cad.removed_0_mm3",
+      "kind": "numeric",
+      "unit": "mm3"
+    },
+    {
+      "name": "cad.removed_1_mm3",
+      "kind": "numeric",
+      "unit": "mm3"
+    },
+    {
+      "name": "cad.removed_2_mm3",
+      "kind": "numeric",
+      "unit": "mm3"
+    },
+    {
+      "name": "cad.removed_3_mm3",
+      "kind": "numeric",
+      "unit": "mm3"
+    },
+    {
+      "name": "cad.removed_4_mm3",
+      "kind": "numeric",
+      "unit": "mm3"
+    },
+    {
+      "name": "cad.removed_5_mm3",
+      "kind": "numeric",
+      "unit": "mm3"
+    },
+    {
+      "name": "cad.removed_6_mm3",
+      "kind": "numeric",
+      "unit": "mm3"
+    },
+    {
+      "name": "cad.descriptor_00",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_01",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_02",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_03",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_04",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_05",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_06",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_07",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_08",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_09",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_10",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_11",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_12",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_13",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_14",
+      "kind": "numeric",
+      "unit": "1"
+    },
+    {
+      "name": "cad.descriptor_15",
+      "kind": "numeric",
+      "unit": "1"
+    }
+  ],
+  "targets": [
+    {
+      "name": "lat20",
+      "unit": "N",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "pry20",
+      "unit": "N",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "twist20_nmm",
+      "unit": "N_mm",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "ring20",
+      "unit": "N",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "lat_rob",
+      "unit": "N",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "ring_rob",
+      "unit": "N",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "sf_hiker",
+      "unit": "1",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "sf_hunter",
+      "unit": "1",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "sf_ring",
+      "unit": "1",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "seq_ratio",
+      "unit": "1",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "twist_joint_nmm",
+      "unit": "N_mm",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "twist_sf",
+      "unit": "1",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "twist_body_joint_nmm",
+      "unit": "N_mm",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "twist_hand_joint_nmm",
+      "unit": "N_mm",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "twist_body_sf",
+      "unit": "1",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "twist_tipzone_joint_nmm",
+      "unit": "N_mm",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "twist_tipzone_sf",
+      "unit": "1",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "hm_twist_nmm",
+      "unit": "N_mm",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "hm_tip_inplane_n",
+      "unit": "N",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "hm_spine_n",
+      "unit": "N",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "hm_ringback_n",
+      "unit": "N",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "hm_twist_sf",
+      "unit": "1",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "hm_tip_inplane_sf",
+      "unit": "1",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "hm_spine_sf",
+      "unit": "1",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "hm_ringback_sf",
+      "unit": "1",
+      "fidelity": "crescent_search_plate_fem"
+    },
+    {
+      "name": "fat_sf",
+      "unit": "1",
+      "fidelity": "crescent_search_plate_fem"
+    }
+  ]
+}
