@@ -1,4 +1,5 @@
-//! Geometry-changing smoothing on synthetic, nonweapon meshes. Coordinates: mm.
+//! Geometry-changing smoothing of synthetic, nonweapon meshes and, in input mode, of a
+//! supplied triangle mesh. Coordinates: mm.
 use std::collections::{BTreeMap, BTreeSet};
 
 pub mod input;
@@ -20,6 +21,8 @@ pub struct Settings {
     pub lambda: f64,
     pub mu: f64,
     pub max_displacement_mm: f64,
+    /// Move each vertex only along its area-weighted unit normal (Taubin filtering restricted to the normal).
+    pub normal_only: bool,
 }
 
 impl Default for Settings {
@@ -29,6 +32,7 @@ impl Default for Settings {
             lambda: 0.5,
             mu: -0.5,
             max_displacement_mm: 2.0,
+            normal_only: false,
         }
     }
 }
@@ -188,6 +192,10 @@ pub fn smooth_traced(mesh: &Mesh, settings: Settings, pins: &[bool]) -> Result<T
     for completed in 0..settings.iterations {
         for weight in [settings.lambda, settings.mu] {
             let old = &out.vertices;
+            // Normals of the positions this pass starts from.
+            let normals = settings
+                .normal_only
+                .then(|| vertex_normals(old, &mesh.faces));
             let next: Vec<Point> = old
                 .iter()
                 .enumerate()
@@ -201,7 +209,11 @@ pub fn smooth_traced(mesh: &Mesh, settings: Settings, pins: &[bool]) -> Result<T
                             .fold([0.; 3], |sum, &j| add(sum, old[j])),
                         1.0 / topo.neighbors[i].len() as f64,
                     );
-                    add(point, scale(sub(mean, point), weight))
+                    let mut step = sub(mean, point);
+                    if let Some(normals) = &normals {
+                        step = scale(normals[i], dot(step, normals[i]));
+                    }
+                    add(point, scale(step, weight))
                 })
                 .collect();
             out.vertices = next;
@@ -239,6 +251,79 @@ pub fn smooth_traced(mesh: &Mesh, settings: Settings, pins: &[bool]) -> Result<T
         mesh: out,
         iterations_completed: settings.iterations,
         error: None,
+    })
+}
+
+/// Area-weighted unit vertex normals. Summed unnormalized face normals are weighted by
+/// area; a vertex whose sum is zero or nonfinite gets the zero vector, so it cannot move.
+fn vertex_normals(points: &[Point], faces: &[Face]) -> Vec<Point> {
+    let mut sums = vec![[0.; 3]; points.len()];
+    for &[a, b, c] in faces {
+        let n = cross(sub(points[b], points[a]), sub(points[c], points[a]));
+        for i in [a, b, c] {
+            sums[i] = add(sums[i], n);
+        }
+    }
+    sums.into_iter()
+        .map(|s| {
+            let length = norm(s);
+            if length.is_finite() && length > 0.0 {
+                scale(s, 1.0 / length)
+            } else {
+                [0.; 3]
+            }
+        })
+        .collect()
+}
+
+/// Vertices touching an edge whose two faces meet at more than `degrees`, with the
+/// counts reported in input mode.
+pub struct FeaturePins {
+    pub pinned: Vec<bool>,
+    pub feature_edges: usize,
+    pub pinned_vertices: usize,
+}
+
+/// Pins every vertex on a dihedral feature edge (interior edge whose face normals differ by
+/// more than `degrees`). Boundary edges are not feature edges; they are fixed by `smooth`.
+pub fn feature_pins(mesh: &Mesh, degrees: f64) -> Result<FeaturePins> {
+    topology(mesh)?;
+    if !degrees.is_finite() || !(0.0..180.0).contains(&degrees) {
+        return Err("feature angle must be in [0, 180) degrees".into());
+    }
+    let cos_limit = degrees.to_radians().cos();
+    let unit_normals: Vec<Point> = mesh
+        .faces
+        .iter()
+        .map(|&face| {
+            let n = normal(mesh, face);
+            scale(n, 1.0 / norm(n))
+        })
+        .collect();
+    let mut faces_on_edge: BTreeMap<(usize, usize), Vec<usize>> = BTreeMap::new();
+    for (k, &[a, b, c]) in mesh.faces.iter().enumerate() {
+        for (i, j) in [(a, b), (b, c), (c, a)] {
+            faces_on_edge
+                .entry((i.min(j), i.max(j)))
+                .or_default()
+                .push(k);
+        }
+    }
+    let mut pinned = vec![false; mesh.vertices.len()];
+    let mut feature_edges = 0;
+    for (&(a, b), faces) in &faces_on_edge {
+        if let [f, g] = faces.as_slice() {
+            if dot(unit_normals[*f], unit_normals[*g]) < cos_limit {
+                feature_edges += 1;
+                pinned[a] = true;
+                pinned[b] = true;
+            }
+        }
+    }
+    Ok(FeaturePins {
+        pinned_vertices: pinned.iter().filter(|&&p| p).count(),
+        pinned,
+        feature_edges,
     })
 }
 
@@ -606,6 +691,95 @@ mod tests {
                 "phase={phase}; {after:?}"
             );
         }
+    }
+
+    #[test]
+    fn uniform_laplacian_reversal_stops_with_error_and_keeps_state() {
+        // Deterministic: this noisy closed sphere flips a face under uniform filtering.
+        let source = sphere(2, 30., 3.0).unwrap();
+        let pins = vec![false; source.vertices.len()];
+        let settings = Settings {
+            lambda: 1.0,
+            mu: -1.0,
+            max_displacement_mm: 1000.,
+            ..Settings::default()
+        };
+        let trace = smooth_traced(&source, settings, &pins).unwrap();
+        assert_eq!(
+            trace.error.as_deref(),
+            Some("smoothing reversed a face relative to the input")
+        );
+        assert_eq!(trace.iterations_completed, 13);
+        assert!(smooth(&source, settings, &pins).is_err());
+        let reversed = source
+            .faces
+            .iter()
+            .filter(|&&f| dot(normal(&source, f), normal(&trace.mesh, f)) <= 0.0)
+            .count();
+        assert!(reversed > 0);
+    }
+
+    #[test]
+    fn normal_only_leaves_coplanar_patch_exactly_in_place() {
+        let mut mesh = Mesh {
+            vertices: Vec::new(),
+            faces: Vec::new(),
+        };
+        for y in 0..6 {
+            for x in 0..6 {
+                mesh.vertices.push([x as f64, y as f64, 0.]);
+            }
+        }
+        for y in 0..5 {
+            for x in 0..5 {
+                let i = y * 6 + x;
+                mesh.faces
+                    .extend([[i, i + 1, i + 6], [i + 1, i + 7, i + 6]]);
+            }
+        }
+        let settings = Settings {
+            normal_only: true,
+            ..Settings::default()
+        };
+        let out = smooth(&mesh, settings, &[false; 36]).unwrap();
+        assert_eq!(out.vertices, mesh.vertices, "coplanar patch must not move");
+    }
+
+    #[test]
+    fn feature_pins_triangulated_cube_at_thirty_degrees() {
+        let cube = Mesh {
+            vertices: vec![
+                [-1., -1., -1.],
+                [1., -1., -1.],
+                [1., 1., -1.],
+                [-1., 1., -1.],
+                [-1., -1., 1.],
+                [1., -1., 1.],
+                [1., 1., 1.],
+                [-1., 1., 1.],
+            ],
+            faces: vec![
+                [0, 2, 1],
+                [0, 3, 2],
+                [4, 5, 6],
+                [4, 6, 7],
+                [0, 1, 5],
+                [0, 5, 4],
+                [2, 3, 7],
+                [2, 7, 6],
+                [0, 4, 7],
+                [0, 7, 3],
+                [1, 2, 6],
+                [1, 6, 5],
+            ],
+        };
+        let pins = feature_pins(&cube, 30.).unwrap();
+        assert_eq!(pins.feature_edges, 12);
+        assert_eq!(pins.pinned_vertices, 8);
+        assert!(pins.pinned.iter().all(|&p| p));
+        // Cube edges are 90 degrees; above that angle no edge is a feature.
+        assert_eq!(feature_pins(&cube, 100.).unwrap().feature_edges, 0);
+        assert!(feature_pins(&cube, f64::NAN).is_err());
     }
 
     #[test]

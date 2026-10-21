@@ -2,7 +2,7 @@
 //! smoothing. Geometry only. The smoothed mesh is not re-scored, re-assessed,
 //! certified or qualified, and the sphere criteria of the synthetic benchmark do not apply.
 use geometry_smoothing_benchmark::{
-    cross, dot,
+    cross, dot, feature_pins,
     input::{self, Audit, Format},
     norm,
     sha256::sha256_hex,
@@ -23,6 +23,7 @@ pub struct Request {
     pub settings: Settings,
     pub label: String,
     pub command: String,
+    pub pin_feature_deg: Option<f64>,
 }
 
 struct InputInfo {
@@ -40,6 +41,7 @@ struct Output {
 struct Measure {
     after: Audit,
     moved: usize,
+    moved_over_0_01: usize,
     max_displacement: f64,
     rms_displacement: f64,
     volume_before: f64,
@@ -56,8 +58,16 @@ struct Record {
     audit: Option<Audit>,
     reasons: Vec<String>,
     iterations_completed: usize,
+    pins: PinRecord,
     measure: Option<Measure>,
     outputs: Vec<Output>,
+}
+
+/// Feature pins chosen before smoothing; boundary vertices are fixed separately.
+struct PinRecord {
+    feature_angle_deg: Option<f64>,
+    feature_edges: usize,
+    feature_pinned_vertices: usize,
 }
 
 /// `Ok(true)` passes, `Ok(false)` means a fail-closed check stopped the run after
@@ -76,6 +86,11 @@ pub fn run(request: &Request) -> Result<bool> {
         audit: None,
         reasons: Vec::new(),
         iterations_completed: 0,
+        pins: PinRecord {
+            feature_angle_deg: request.pin_feature_deg,
+            feature_edges: 0,
+            feature_pinned_vertices: 0,
+        },
         measure: None,
         outputs: Vec::new(),
     };
@@ -100,7 +115,15 @@ pub fn run(request: &Request) -> Result<bool> {
         ));
     }
 
-    let pins = vec![false; source.vertices.len()];
+    let pins = match request.pin_feature_deg {
+        Some(degrees) => {
+            let found = feature_pins(&source, degrees)?;
+            record.pins.feature_edges = found.feature_edges;
+            record.pins.feature_pinned_vertices = found.pinned_vertices;
+            found.pinned
+        }
+        None => vec![false; source.vertices.len()],
+    };
     let trace = smooth_traced(&source, request.settings, &pins)?;
     record.iterations_completed = trace.iterations_completed;
     if let Some(error) = &trace.error {
@@ -176,6 +199,7 @@ impl Measure {
         Self {
             after: input::audit(smoothed),
             moved: displacements.iter().filter(|&&d| d > 1e-12).count(),
+            moved_over_0_01: displacements.iter().filter(|&&d| d > 0.01).count(),
             max_displacement: displacements.iter().copied().fold(0.0, f64::max),
             rms_displacement: (displacements.iter().map(|d| d * d).sum::<f64>() / count).sqrt(),
             volume_before: input::signed_volume(source),
@@ -409,9 +433,11 @@ fn metrics_json(request: &Request, record: &Record) -> String {
     let result = match &record.measure {
         None => "null".into(),
         Some(m) => format!(
-            "{{\"output_audit\":{},\"moved_vertices\":{},\"max_displacement_mm\":{},\"rms_displacement_mm\":{},\"displacement_at_budget\":{},\"volume_mm3\":{{\"before\":{},\"after\":{},\"change_percent\":{}}},\"bounding_box_mm\":{{\"before\":{{\"min\":{},\"max\":{}}},\"after\":{{\"min\":{},\"max\":{}}},\"change\":{{\"min\":{},\"max\":{}}}}}}}",
+            "{{\"output_audit\":{},\"moved_vertices\":{},\"moved_over_0_01_mm\":{},\"moved_over_0_01_mm_fraction\":{},\"max_displacement_mm\":{},\"rms_displacement_mm\":{},\"displacement_at_budget\":{},\"volume_mm3\":{{\"before\":{},\"after\":{},\"change_percent\":{}}},\"bounding_box_mm\":{{\"before\":{{\"min\":{},\"max\":{}}},\"after\":{{\"min\":{},\"max\":{}}},\"change\":{{\"min\":{},\"max\":{}}}}}}}",
             audit_json(&m.after),
             m.moved,
+            m.moved_over_0_01,
+            num(m.moved_over_0_01 as f64 / m.after.vertices.max(1) as f64),
             num(m.max_displacement),
             num(m.rms_displacement),
             m.max_displacement >= request.settings.max_displacement_mm * (1.0 - 1e-9),
@@ -440,7 +466,7 @@ fn metrics_json(request: &Request, record: &Record) -> String {
         .collect();
     let s = request.settings;
     format!(
-        "{{\n\"schema\":\"smoothing_input_mesh.v1\",\n\"status\":\"{status}\",\n\"not_qualified\":true,\n\"label\":{},\n\"tool\":{},\n\"command\":{},\n\"input\":{{\"path\":{},\"bytes\":{},\"sha256\":\"{}\",\"format\":{format}}},\n\"input_audit\":{audit},\n\"settings\":{{\"iterations\":{},\"lambda\":{},\"mu\":{},\"max_displacement_mm\":{},\"iterations_completed\":{}}},\n\"pins\":{{\"user_pinned_vertices\":0,\"boundary_pinned_vertices\":0}},\n\"result\":{result},\n\"outputs\":[{}],\n\"reasons\":{}\n}}\n",
+        "{{\n\"schema\":\"smoothing_input_mesh.v1\",\n\"status\":\"{status}\",\n\"not_qualified\":true,\n\"label\":{},\n\"tool\":{},\n\"command\":{},\n\"input\":{{\"path\":{},\"bytes\":{},\"sha256\":\"{}\",\"format\":{format}}},\n\"input_audit\":{audit},\n\"settings\":{{\"iterations\":{},\"lambda\":{},\"mu\":{},\"max_displacement_mm\":{},\"normal_only\":{},\"iterations_completed\":{}}},\n\"pins\":{{\"feature_angle_deg\":{},\"feature_edges\":{},\"feature_pinned_vertices\":{}}},\n\"result\":{result},\n\"outputs\":[{}],\n\"reasons\":{}\n}}\n",
         json_str(&request.label),
         json_str(TOOL),
         json_str(&request.command),
@@ -451,7 +477,11 @@ fn metrics_json(request: &Request, record: &Record) -> String {
         num(s.lambda),
         num(s.mu),
         num(s.max_displacement_mm),
+        s.normal_only,
         record.iterations_completed,
+        record.pins.feature_angle_deg.map_or("null".into(), num),
+        record.pins.feature_edges,
+        record.pins.feature_pinned_vertices,
         outputs.join(","),
         reasons_json(&record.reasons),
     )
@@ -494,8 +524,14 @@ fn report_md(request: &Request, record: &Record) -> String {
     text.push_str("## Smoothing\n\n");
     writeln!(
         text,
-        "Method: `smooth_traced()`, the synthetic benchmark arithmetic, unchanged: {} iterations of paired lambda {} and mu {} Laplacian passes; {} completed. Total displacement is capped at {} mm against the input. Boundary and pinned vertices stay fixed. Pins: none. Sharp-feature pinning is not implemented, and an open boundary is rejected before smoothing.\n",
-        s.iterations, s.lambda, s.mu, record.iterations_completed, s.max_displacement_mm
+        "Method: `smooth_traced()`: {} iterations of paired lambda {} and mu {} Laplacian passes; {} completed. {}Total displacement is capped at {} mm against the input. Boundary and feature-pinned vertices stay fixed. Feature pins: {}. An open boundary is rejected before smoothing.\n",
+        s.iterations, s.lambda, s.mu, record.iterations_completed,
+        if s.normal_only { "Normal-only: each pass keeps only the component of the umbrella vector along the area-weighted unit vertex normal, which is still Taubin lambda/mu filtering restricted to the normal direction. " } else { "" },
+        s.max_displacement_mm,
+        match record.pins.feature_angle_deg {
+            Some(deg) => format!("dihedral edges above {deg} degrees pinned: {} feature edges, {} pinned vertices", record.pins.feature_edges, record.pins.feature_pinned_vertices),
+            None => "none".into(),
+        }
     )
     .unwrap();
     if let Some(m) = &record.measure {
@@ -543,9 +579,12 @@ fn report_md(request: &Request, record: &Record) -> String {
         .unwrap();
         writeln!(
             text,
-            "\nVertices moved: {} of {}. Max displacement {:.6} mm (budget {} mm). RMS displacement {:.6} mm.\n",
+            "\nVertices moved: {} of {} (fraction {:.4}); {} moved more than 0.01 mm (fraction {:.4}). Max displacement {:.6} mm (budget {} mm). RMS displacement {:.6} mm.\n",
             m.moved,
             m.after.vertices,
+            m.moved as f64 / m.after.vertices.max(1) as f64,
+            m.moved_over_0_01,
+            m.moved_over_0_01 as f64 / m.after.vertices.max(1) as f64,
             m.max_displacement,
             s.max_displacement_mm,
             m.rms_displacement
