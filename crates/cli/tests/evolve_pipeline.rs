@@ -35,6 +35,8 @@ fn top_k_cli_keeps_an_unavailable_runtime_unverified() {
             "JARAMBIT_SOLVER_PYTHON",
             "/missing/independent-solver-python",
         )
+        // A process control, not a search: never write regression records into the repository.
+        .env("JARAMBIT_DATASET", "0")
         .output()
         .unwrap();
     assert!(!result.status.success());
@@ -91,9 +93,11 @@ if mode!='missing_rs':
     std::fs::set_permissions(&fake,std::fs::Permissions::from_mode(0o755)).unwrap();
     for mode in ["identity","nonfinite","missing_rs","disagreement"] {
         let out=folder.join(mode);
+        // Synthetic-evaluator records go to a scratch dataset dir, never into datasets/regression/records.
+        let dataset=folder.join(format!("{mode}_dataset"));
         let result=Command::new(env!("CARGO_BIN_EXE_jarambit"))
             .args(["auto-evolve","--rounds","1","--candidates-per-round","1","--top-k-certify","1","--threads","1","--seeds","evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv","--out-dir"])
-            .arg(&out).current_dir(&root).env("JARAMBIT_SOLVER_PYTHON",&fake).env("EVO_TEST_MODE",mode).output().unwrap();
+            .arg(&out).arg("--dataset-dir").arg(&dataset).current_dir(&root).env("JARAMBIT_SOLVER_PYTHON",&fake).env("EVO_TEST_MODE",mode).env_remove("JARAMBIT_DATASET").env_remove("JARAMBIT_DATASET_COMMIT").env_remove("JARAMBIT_DATASET_PUSH").output().unwrap();
         std::fs::write(out.join("command_stdout.txt"),&result.stdout).unwrap();
         std::fs::write(out.join("command_stderr.txt"),&result.stderr).unwrap();
         let report:serde_json::Value=serde_json::from_slice(&std::fs::read(out.join("leaderboard.json")).unwrap()).unwrap();
@@ -103,5 +107,11 @@ if mode!='missing_rs':
             let reason=report["unverified"][0]["reason"].as_str().unwrap();
             let expected=if mode=="identity" {"different genome/model"} else if mode=="missing_rs" {"missing RS-v2 receipt"} else {"missing/nonfinite"};
             assert!(reason.contains(expected),"{reason}");}
+        // Every birth is recorded; only a Stage-2 result that passed the receipt checks becomes an s2 row.
+        let runs:Vec<_>=std::fs::read_dir(dataset.join("auto_evolve")).unwrap().map(|e|e.unwrap().path()).collect();
+        assert_eq!(runs.len(),1,"{runs:?}");
+        assert!(runs[0].join("run.json").is_file()&&runs[0].join("r00.s1.csv").is_file());
+        let s2=std::fs::read_dir(&runs[0]).unwrap().filter(|e|e.as_ref().unwrap().file_name().to_string_lossy().contains(".s2.")).count();
+        assert_eq!(s2,usize::from(mode=="disagreement"),"{mode}");
     }
 }

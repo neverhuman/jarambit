@@ -5,7 +5,19 @@
   "fem_area_mm2": 2,
   "seed": 2026,
   "random": 0,
-  "genomes_file": "/tmp/claude-0/-home-claude/78c89e1c-65d2-5f9c-a32c-458c8f698b48/scratchpad/seeds4.csv",
+  "genomes_file": "seeds4.csv",
+  "genomes_file_rows": [
+    "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv",
+    "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_genome.csv",
+    "evidence/rs_v2/w282_ultrarunner/w282_p14_c01_genome.csv",
+    "evidence/rs_v2/w282_ultrarunner/w282_p10_c02_genome.csv"
+  ],
+  "seed_genome_hashes": [
+    "357fe6b83ecafa1b",
+    "2e7a75016ced02b7",
+    "3f92161206947b3d",
+    "273b0fa929dd1024"
+  ],
   "git_head": "49dc71f88339",
   "feature_schema": "jarambit.regression.features.v1",
   "neighbors": 45,
