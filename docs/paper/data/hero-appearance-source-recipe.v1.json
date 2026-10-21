@@ -1,22 +1,23 @@
 {
   "schema": "jarambit.hero_appearance_source_recipe.v1",
-  "status": "ADMITTED_DISPLAY_SOURCE_RECIPE; ACTUAL_IMAGE_AND_FINAL_PDF_ACCEPTANCE_PENDING",
+  "status": "ADMITTED_DISPLAY_SOURCE_RECIPE; ACTUAL_AFFECTED_FRESHNESS_AND_FINAL_ACCEPTANCE_PENDING",
   "source_predecessor": {
-    "head": "4ff1ce172bc2c626e9a1e34f377e379c034f2741",
-    "tree": "1511e88d4662259c7b1f54091d07bf4a4bd526e6",
-    "population_sha256": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
+    "head": "4c71f768d974edc171c5721eff76abb9c2318aba",
+    "tree": "ddc244c9db0b81345ba264f9f94521008f56ba5c",
+    "population_sha256": "6aad846c81a537beafe698f6c3aa75ebecb068d17f1c1e876e100278170b32e8",
     "previous_admitted_recipe": {
-      "path": "docs/paper/history/hero-appearance-source-recipe.v1.BASE_4FF1CE1_20261020.json",
-      "sha256": "7d431843aa9a176b51b270eccff385cff92e759d0d54577e6676e2a2708ed44e"
+      "path": "docs/paper/history/hero-appearance-source-recipe.v1.BASE_4C71F76_20261021.json",
+      "sha256": "34e84ddeff834ebb268ba0ae6cbd3e7614cf019a8fbd8393f2ece3163a5323b2"
     }
   },
   "pin_admission": {
     "status": "independently_source_reviewed",
     "actual_preflight_receipt_path": "docs/paper/data/hero-appearance-preflight.v1.json",
-    "actual_preflight_receipt_sha256": "46587bc4dd80a34d081a1b3b0c4487b2b9dafd04a677fbd030cdff1af66fb00b",
+    "actual_preflight_receipt_sha256": "697c635854e5db043ab9c04c0e79a164c5ef8d869755ccb40acc6370428d1ad5",
     "independent_source_review_receipt_path": "docs/paper/data/hero-appearance-pin-review.v1.json",
-    "independent_source_review_receipt_sha256": "260b2cfcf9c13c8b519d91d9330e9aa2df55a19f4a9143f241569b7423159c87",
-    "limit": "Exact actual4ff observation/22 source-input pins/geometry/camera/registration/five-component pinset independently admitted; not new B/D or color pixels/PDF/whole-head/formalapproval. Any bound source/fact change requires precise review."
+    "independent_source_review_receipt_sha256": "8092b09bd9c91b9cbaaffc1aa1190c459347793ac38e6b92db01347516b78603",
+    "independent_source_review_original_path": "/home/ubuntu/xbabe2_kicker/captains-20261017/JARAMBIT_PAPER_V4_REVIEW_20261020/presentation-followup-20261020/review-q-4c71-actual-observation/Q_ACTUAL_4C71_OBSERVATION_PIN_ADMISSIBILITY_REVIEW.json",
+    "limit": "Exact actual Root-private4c71 observation/complete22sourcepins and unchangedgeometry/camera/registration/fivecomponents independently admitted. Captain copies actualobservedpins verbatim. Sourceinstall only; no new render, reporting/libtest, wholehead/PDF/CI/formalapproval claim. Prior E0689 compilefailure and historical producer identities preserved."
   },
   "expected_pins": {
     "camera_sha256": "accf46861f3f9a0b0bdff94ad67ee07725d51d6d817461d64615f004a40b17fc",
@@ -44,7 +45,7 @@
       "crates/paper-artifacts/src/display.rs": "636bb74fbdd7be6a5db0e307499aed034b58e29f321837426e177405a711e22b",
       "crates/paper-artifacts/src/hero_appearance.rs": "06ffae640e18d4d6ed8ebe8065c192ad27cf9c74de0c0221da7dab60b5076e98",
       "crates/paper-artifacts/src/plate.rs": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e",
-      "crates/paper-artifacts/src/population.rs": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
+      "crates/paper-artifacts/src/population.rs": "6aad846c81a537beafe698f6c3aa75ebecb068d17f1c1e876e100278170b32e8",
       "docs/paper/assessment-inputs.v1.json": "fac0cd6cc08e731585e243277d401cb4e9a746279f4a544b012d4fae6b928171",
       "docs/paper/data/display-composite-contract.v1.json": "df34216ea111683233fadcab64d6536f52af2178da300f0ea027f8b19d9b74e9",
       "docs/paper/data/display-composite-review.v1.json": "1b4d70b8bcc4668af40427350cba12e876c972ecc1d3f0db792aec44c01b101f",
@@ -116,6 +117,29 @@
     "review": {
       "path": "docs/paper/history/hero-appearance-pin-review.v1.BASE_6C49E1C_20261020.json",
       "sha256": "ba012b7d52ed02615e00d51fc15df8c4a9b247a8378f765365ff1570f016820c"
+    }
+  },
+  "previous_source_predecessor": {
+    "head": "4ff1ce172bc2c626e9a1e34f377e379c034f2741",
+    "tree": "1511e88d4662259c7b1f54091d07bf4a4bd526e6",
+    "population_sha256": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
+    "previous_admitted_recipe": {
+      "path": "docs/paper/history/hero-appearance-source-recipe.v1.BASE_4FF1CE1_20261020.json",
+      "sha256": "7d431843aa9a176b51b270eccff385cff92e759d0d54577e6676e2a2708ed44e"
+    }
+  },
+  "current_binding_predecessor_custody": {
+    "recipe": {
+      "path": "docs/paper/history/hero-appearance-source-recipe.v1.BASE_4C71F76_20261021.json",
+      "sha256": "34e84ddeff834ebb268ba0ae6cbd3e7614cf019a8fbd8393f2ece3163a5323b2"
+    },
+    "observation": {
+      "path": "docs/paper/history/hero-appearance-preflight.v1.BASE_4C71F76_20261021.json",
+      "sha256": "46587bc4dd80a34d081a1b3b0c4487b2b9dafd04a677fbd030cdff1af66fb00b"
+    },
+    "review": {
+      "path": "docs/paper/history/hero-appearance-pin-review.v1.BASE_4C71F76_20261021.json",
+      "sha256": "260b2cfcf9c13c8b519d91d9330e9aa2df55a19f4a9143f241569b7423159c87"
     }
   }
 }

@@ -54,7 +54,7 @@
       "crates/paper-artifacts/src/display.rs": "636bb74fbdd7be6a5db0e307499aed034b58e29f321837426e177405a711e22b",
       "crates/paper-artifacts/src/hero_appearance.rs": "06ffae640e18d4d6ed8ebe8065c192ad27cf9c74de0c0221da7dab60b5076e98",
       "crates/paper-artifacts/src/plate.rs": "11dea06ec8bec0343513e7760498806f74c9f7f23a386bf5f793e1d40a448c1e",
-      "crates/paper-artifacts/src/population.rs": "ef3299307abd51ab6fe2cb379b0726d5ec4c2057c213dbd1de6b8519e1ca2753",
+      "crates/paper-artifacts/src/population.rs": "6aad846c81a537beafe698f6c3aa75ebecb068d17f1c1e876e100278170b32e8",
       "docs/paper/assessment-inputs.v1.json": "fac0cd6cc08e731585e243277d401cb4e9a746279f4a544b012d4fae6b928171",
       "docs/paper/data/display-composite-contract.v1.json": "df34216ea111683233fadcab64d6536f52af2178da300f0ea027f8b19d9b74e9",
       "docs/paper/data/display-composite-review.v1.json": "1b4d70b8bcc4668af40427350cba12e876c972ecc1d3f0db792aec44c01b101f",
