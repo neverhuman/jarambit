@@ -20,7 +20,7 @@ use jarambit_paper_artifacts::appearance::{self, Camera, Lighting, NormalSetting
 use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
 use std::collections::HashMap;
-use std::{fs, path::PathBuf};
+use std::{fs, path::Path, path::PathBuf};
 
 type Res<T> = Result<T, Box<dyn std::error::Error>>;
 
@@ -104,6 +104,17 @@ fn png(rgb: &[u8], width: usize, height: usize) -> Vec<u8> {
     chunk(b"IDAT", &zlib, &mut out);
     chunk(b"IEND", &[], &mut out);
     out
+}
+
+/// Writes a stored PNG and an SVG wrapper of its own size, so `rsvg-convert` can re-encode it
+/// losslessly (as smoothing_ladder_figure does).
+fn put_png(out: &Path, name: &str, bytes: &[u8], w: usize, h: usize) -> Res<()> {
+    fs::write(out.join(name), bytes)?;
+    let svg = format!(
+        "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"{w}\" height=\"{h}\"><image xlink:href=\"{name}\" x=\"0\" y=\"0\" width=\"{w}\" height=\"{h}\"/></svg>"
+    );
+    fs::write(out.join(name.replace(".png", ".svg")), svg)?;
+    Ok(())
 }
 
 fn oblique_rotation(tilt_deg: f64) -> [[f64; 3]; 3] {
@@ -462,7 +473,7 @@ fn hero(a: &Args) -> Res<()> {
         ink(&mut rgb, crease_alpha.as_ref().unwrap(), 0.62);
         let bytes = png(&rgb, layer_w, layer_h);
         let name = format!("layer-{key}.png");
-        fs::write(out.join(&name), &bytes)?;
+        put_png(&out, &name, &bytes, layer_w, layer_h)?;
         outputs.push(json!({"name": name, "sha256": sha(&bytes), "width": layer_w, "height": layer_h}));
         images.push(rgb);
     }
@@ -507,7 +518,7 @@ fn hero(a: &Args) -> Res<()> {
         blend(&mut canvas, img, &cover, origin(k), false);
     }
     let stack = png(&canvas, width, height);
-    fs::write(out.join("hero-stack.png"), &stack)?;
+    put_png(&out, "hero-stack.png", &stack, width, height)?;
     // Label anchors: the projected finger-ring centre of every layer.
     let ring = cam.rotate([0.0, 0.0, 0.0]);
     let ring_px = [cam.offset[0] + ring[0] * cam.scale, cam.offset[1] - ring[1] * cam.scale];
@@ -601,7 +612,7 @@ fn bw(a: &Args) -> Res<()> {
             ink(&mut rgb, &downsample(&mask, width, height, |b| b != 0), 0.95);
             let bytes = png(&rgb, width, height);
             let name = format!("bw-{view}-{label}.png");
-            fs::write(out.join(&name), &bytes)?;
+            put_png(&out, &name, &bytes, width, height)?;
             outputs.push(json!({"name": name, "sha256": sha(&bytes), "width": width, "height": height, "crease_edges": edges.len(), "camera": camera_json(cam)}));
         }
     }
@@ -655,7 +666,7 @@ fn morph(a: &Args) -> Res<()> {
         let r = appearance::render(&lifted, &normals, &tint, RenderSettings { width, height, supersample: SUPERSAMPLE, outline_pixels: outline, camera: cam, lighting: light })?;
         let bytes = png(&r.rgb, width, height);
         let name = format!("morph-{view}.png");
-        fs::write(out.join(&name), &bytes)?;
+        put_png(&out, &name, &bytes, width, height)?;
         outputs.push(json!({"name": name, "sha256": sha(&bytes), "width": width, "height": height, "camera_sha256": cam.digest()}));
     }
     let manifest = json!({

@@ -30,21 +30,26 @@ REPAIR_HISTORY := history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020
 GEN_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(GEN_FIGURES)))
 # Main-page figure of each variant: lit render + 2.5x blade-grind inset + W_ULTRALIGHT_v1 badge.
 COVER_PNGS := figures/cover/cover-unsmoothed.png figures/cover/cover-smoothed.png
+# Main-page figure of variant A: the surface-tension-smoothed design with every retained plate
+# response stacked (pocket-figures writes hero.svg and hero-stack.png).
+POCKET_PNGS := figures/pocket/hero.png
 POP_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(POP_FIGURES)))
 STORY_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(STORY_NAMES)))
 POSITIVE_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(POSITIVE_NAMES)))
 # Pinned evidence-baseline timestamp; actual build UTC belongs to the receipt.
 TEX_ENV = TEXINPUTS="$(OUT):" SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH) FORCE_SOURCE_DATE=1 TZ=UTC
-.PHONY: all artifacts figures pdfs main supplement audit audit-quick audit-full review-origin-controls check clean smoothing-ladder ladder-data ladder-figures ladder-pdf
+.PHONY: all artifacts figures pdfs main supplement audit audit-quick audit-full review-origin-controls check clean smoothing-ladder ladder-data ladder-figures ladder-pdf pocket-figures
 # A report must finish generating before its figure/document consumers start.
 .NOTPARALLEL:
 all: artifacts pdfs
 # Reporting reconstruction only; no CAD, FEM, search, tests or CI.
 artifacts:
 	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts
-figures: $(GEN_PNGS) $(POP_PNGS) $(STORY_PNGS) $(POSITIVE_PNGS) $(README_HERO_PNG) figures/fig1_hero_blender_v2.png $(CROP_PNG) $(COVER_PNGS)
+figures: $(GEN_PNGS) $(POP_PNGS) $(STORY_PNGS) $(POSITIVE_PNGS) $(README_HERO_PNG) figures/fig1_hero_blender_v2.png $(CROP_PNG) $(COVER_PNGS) $(POCKET_PNGS)
 $(COVER_PNGS): figures/cover/cover-%.png: figures/cover/cover-%.svg figures/cover/render-%.png
 	rsvg-convert -w 2000 -h 850 -o $@ $<
+$(POCKET_PNGS): figures/pocket/%.png: figures/pocket/%.svg figures/pocket/hero-stack.png
+	rsvg-convert -w 2000 -o $@ $<
 $(OUT):
 	mkdir -p $(OUT)
 $(GEN_PNGS): $(OUT)/%.png: generated/%.svg | $(OUT)
@@ -151,3 +156,33 @@ check: audit pdfs
 	awk '/^Pages:/ { if ($$2 < 15 || $$2 > 20) exit 1; found=1 } END { if (!found) exit 1 }' $(OUT)/pdfinfo.txt
 clean:
 	@echo 'Build artifacts remain under target/ieee/paper for inspection; no automatic deletion.'
+# Surface-tension pocket smoothing (sections/pocket-smoothing.tex and the variant-A main page).
+# Renders the Stage-2 run bound by the receipt below; the STLs and D1 fields stay outside git,
+# pinned by sha256 in the receipt and checked against it here. Geometry and retained fields only.
+POCKET_RECEIPT := ../../experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json
+POCKET_RUN ?= $(HOME)/jarambit_runs/pocket-smoothing/stage2-final
+POCKET_RAW_STL ?= $(HOME)/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl
+POCKET_FIGS := $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example pocket_smoothing_figures --
+pocket-figures:
+	for f in $(POCKET_RUN)/f075/w406_f075.stl $(POCKET_RUN)/f075/w406_f075_D1.json $(POCKET_RAW_STL); do \
+	  grep -q $$(sha256sum < $$f | cut -c1-64) $(POCKET_RECEIPT) || { echo "$$f does not match $(POCKET_RECEIPT)"; exit 1; }; done
+	rm -rf $(OUT)/pocket-raw figures/pocket && mkdir -p figures/pocket
+	cd $(ROOT) && $(POCKET_FIGS) hero --stl $(POCKET_RUN)/f075/w406_f075.stl --d1 $(POCKET_RUN)/f075/w406_f075_D1.json \
+	  --score $$(sed -n 's/.*"hero_score_100": *\([0-9.]*\).*/\1/p' $(abspath $(POCKET_RECEIPT)) | head -1) --out $(OUT)/pocket-raw/hero
+	cd $(ROOT) && $(POCKET_FIGS) bw --raw $(POCKET_RAW_STL) --ours $(POCKET_RUN)/f075/w406_f075.stl \
+	  --ladder docs/paper/ladder/smoothing-ladder.render.v1.json --out $(OUT)/pocket-raw/bw
+	cd $(ROOT) && $(POCKET_FIGS) morph --stl $(POCKET_RUN)/f075/w406_f075.stl \
+	  --ladder docs/paper/ladder/smoothing-ladder.render.v1.json --out $(OUT)/pocket-raw/morph
+	for d in hero bw morph; do cp $(OUT)/pocket-raw/$$d/$$d.render.v1.json figures/pocket/; done
+	cp $(OUT)/pocket-raw/hero/hero.svg figures/pocket/hero.svg
+	for svg in $(OUT)/pocket-raw/hero/hero-stack.svg $(OUT)/pocket-raw/bw/bw-*.svg $(OUT)/pocket-raw/morph/morph-*.svg; do \
+	  name=$$(basename $$svg .svg); dir=$$(dirname $$svg); \
+	  (cd $$dir && rsvg-convert -o $(abspath figures/pocket)/$$name.png $$name.svg) || exit 1; \
+	  json=$$(case $$name in hero*) echo hero;; bw*) echo bw;; *) echo morph;; esac).render.v1.json; \
+	  printf '{\n  "figure": "docs/paper/figures/pocket/%s.png",\n  "figure_sha256": "%s",\n  "script": "crates/paper-artifacts/examples/pocket_smoothing_figures.rs",\n  "inputs": {\n    "experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json": "%s",\n    "docs/paper/figures/pocket/%s": "%s"\n  },\n  "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"\n}\n' \
+	    $$name $$(sha256sum < figures/pocket/$$name.png | cut -c1-64) $$(sha256sum < $(POCKET_RECEIPT) | cut -c1-64) \
+	    $$json $$(sha256sum < figures/pocket/$$json | cut -c1-64) > figures/pocket/$$name.png.manifest.json; done
+	rsvg-convert -w 2000 -o figures/pocket/hero.png figures/pocket/hero.svg
+	printf '{\n  "figure": "docs/paper/figures/pocket/hero.png",\n  "figure_sha256": "%s",\n  "script": "docs/paper/Makefile",\n  "inputs": {\n    "docs/paper/figures/pocket/hero.svg": "%s",\n    "docs/paper/figures/pocket/hero-stack.png": "%s",\n    "experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json": "%s"\n  },\n  "note": "make figures: rsvg-convert -w 2000 of the SVG (stacked fields + labels + colour key + W_ULTRALIGHT_v1 badge from the receipt)."\n}\n' \
+	  $$(sha256sum < figures/pocket/hero.png | cut -c1-64) $$(sha256sum < figures/pocket/hero.svg | cut -c1-64) \
+	  $$(sha256sum < figures/pocket/hero-stack.png | cut -c1-64) $$(sha256sum < $(POCKET_RECEIPT) | cut -c1-64) > figures/pocket/hero.png.manifest.json

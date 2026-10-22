@@ -853,13 +853,52 @@ pub fn build(p: &Pheno, prm: &Params) -> SmoothField {
     SmoothField { params: prm.clone(), grid: pb.grid, active, d, d0, steiner, report }
 }
 
-/// Per-process cache: the D1, export and probe tools rebuild the same phenotype repeatedly.
-pub fn cached(p: &Pheno, prm: &Params) -> Arc<SmoothField> {
-    static CACHE: OnceLock<Mutex<HashMap<String, Arc<SmoothField>>>> = OnceLock::new();
-    let key = format!("{}|{:?}|{}|{}x{}", prm.key(), p.mat, p.genome.csv_row(), p.field.nx, p.field.ny);
+/// The process-wide setting from `JARAMBIT_POCKET_SMOOTH`, read once. Invalid settings abort
+/// (fail closed).
+pub fn setting() -> Option<&'static Params> {
+    static SETTING: OnceLock<Option<Params>> = OnceLock::new();
+    SETTING.get_or_init(params_from_env).as_ref()
+}
+
+/// Key of a phenotype for the smoothing cache: genome values, material and raster frame.
+fn fingerprint(p: &Pheno) -> u64 {
+    use std::hash::{Hash, Hasher};
+    let mut h = std::collections::hash_map::DefaultHasher::new();
+    for v in &p.genome.v {
+        v.to_bits().hash(&mut h);
+    }
+    std::mem::discriminant(&p.mat).hash(&mut h);
+    format!("{:?}", p.mat).hash(&mut h);
+    (p.field.nx, p.field.ny, p.field.x0.to_bits(), p.field.y0.to_bits(), p.field.g.to_bits()).hash(&mut h);
+    h.finish()
+}
+
+/// Smoothing field of `p` under the process-wide setting, or None when smoothing is off or the
+/// design is not RS-v2. Built once per design and process, from the phenotype's own raster: the
+/// first call for a design happens inside `pheno::build`, where the exporter's thickness law
+/// replaces the raster, so later calls (plate solves, export) reuse that same field.
+pub fn active(p: &Pheno) -> Option<Arc<SmoothField>> {
+    let prm = setting()?;
+    if !p.rs_v2 {
+        return None;
+    }
+    thread_local! {
+        static LAST: std::cell::RefCell<Option<(u64, Arc<SmoothField>)>> = const { std::cell::RefCell::new(None) };
+    }
+    let fp = fingerprint(p);
+    if let Some(sf) = LAST.with(|c| c.borrow().as_ref().filter(|(k, _)| *k == fp).map(|(_, s)| s.clone())) {
+        return Some(sf);
+    }
+    let sf = cached(p, prm, fp);
+    LAST.with(|c| *c.borrow_mut() = Some((fp, sf.clone())));
+    Some(sf)
+}
+
+fn cached(p: &Pheno, prm: &Params, fp: u64) -> Arc<SmoothField> {
+    static CACHE: OnceLock<Mutex<HashMap<u64, Arc<SmoothField>>>> = OnceLock::new();
     let cache = CACHE.get_or_init(|| Mutex::new(HashMap::new()));
     let mut map = cache.lock().unwrap_or_else(|e| e.into_inner());
-    if let Some(sf) = map.get(&key) {
+    if let Some(sf) = map.get(&fp) {
         return sf.clone();
     }
     let sf = Arc::new(build(p, prm));
@@ -868,7 +907,7 @@ pub fn cached(p: &Pheno, prm: &Params) -> Arc<SmoothField> {
             let _ = std::fs::write(&path, serde_json::to_string_pretty(&sf.report).unwrap_or_default() + "\n");
         }
     }
-    map.insert(key, sf.clone());
+    map.insert(fp, sf.clone());
     sf
 }
 

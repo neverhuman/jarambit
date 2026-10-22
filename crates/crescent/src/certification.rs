@@ -49,6 +49,7 @@ pub fn identity(g: &Genome) -> String {
         include_str!("geom.rs"),
         include_str!("lib.rs"),
         include_str!("pheno.rs"),
+        include_str!("pocket_smooth.rs"),
         include_str!("qd.rs"),
         include_str!("record.rs"),
         include_str!("../../physics/src/calib.rs"),
@@ -91,6 +92,13 @@ pub fn identity(g: &Genome) -> String {
     ] {
         bytes.push(0);
         bytes.extend_from_slice(source.as_bytes());
+    }
+    // Opt-in surface-tension pocket smoothing changes the exported CAD, so an enabled setting is
+    // part of the identity: smoothed and as-exported evidence can never share a key. Unset, no
+    // bytes are added.
+    if let Some(prm) = crate::pocket_smooth::setting() {
+        bytes.push(0);
+        bytes.extend_from_slice(format!("pocket_smooth:{}", prm.key()).as_bytes());
     }
     jarambit_evidence::identity::ContentRef::from_bytes("certificate", "actual-export-v1", &bytes)
         .sha256

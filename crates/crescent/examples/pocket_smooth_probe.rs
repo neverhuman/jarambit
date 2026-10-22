@@ -44,7 +44,6 @@ fn main() {
         }
     }
     let p = pheno::build(&g);
-    assert!(p.pocket_smooth.is_none());
     assert!(p.rs_v2, "pocket smoothing is defined for rs_v2 genomes only");
     let holes: Vec<_> = p
         .holes
@@ -68,17 +67,15 @@ fn main() {
         let sf = pocket_smooth::build(&p, &prm);
         let rep = sf.report.clone();
         // Volume check through the exporter's own thickness law: coarse raster cells and the fine grid.
-        let mut ps = p.clone();
-        let sfa = std::sync::Arc::new(sf);
-        ps.pocket_smooth = Some(sfa.clone());
+        let sfa = &sf;
         let fld = &p.field;
         let (mut v0, mut v1) = (0.0f64, 0.0f64);
         for j in 0..fld.ny {
             for i in 0..fld.nx {
                 if fld.th[j * fld.nx + i].is_nan() { continue; }
                 let q = (fld.x0 + (i as f64 + 0.5) * fld.g, fld.y0 + (j as f64 + 0.5) * fld.g);
-                v0 += jarambit_crescent::export::thickness_at(&p, q) * fld.g * fld.g;
-                v1 += jarambit_crescent::export::thickness_at(&ps, q) * fld.g * fld.g;
+                v0 += jarambit_crescent::export::thickness_at_with(&p, q, None) * fld.g * fld.g;
+                v1 += jarambit_crescent::export::thickness_at_with(&p, q, Some(sfa)) * fld.g * fld.g;
             }
         }
         let (mut f0, mut f1) = (0.0f64, 0.0f64);
@@ -90,7 +87,7 @@ fn main() {
                 let s = j * g.nx + i;
                 if sfa.d0[s].is_nan() { continue; }
                 let q = g.center(i, j);
-                let (t0, t1) = (jarambit_crescent::export::thickness_at(&p, q), jarambit_crescent::export::thickness_at(&ps, q));
+                let (t0, t1) = (jarambit_crescent::export::thickness_at_with(&p, q, None), jarambit_crescent::export::thickness_at_with(&p, q, Some(sfa)));
                 f0 += t0 * g.h * g.h;
                 f1 += t1 * g.h * g.h;
                 let a = g.h * g.h;
@@ -115,8 +112,6 @@ fn main() {
         }
         eprintln!("thickness-law volume coarse {v0:.3} -> {v1:.3} ({:+.3}); fine {f0:.3} -> {f1:.3} ({:+.3})", v1 - v0, f1 - f0);
         eprintln!("  active: flow dD {:+.3} mm3; law mismatch {:+.3} (neg {} cells {:+.3}, pos {} cells {:+.3}); inactive diff {:+.3}", bd[0], bd[1], bd[2], bd[3], bd[4], bd[5], bd[6]);
-        drop(ps);
-        let sf = std::sync::Arc::try_unwrap(sfa).ok().expect("sole owner");
         let dv = rep["removed_volume_mm3"]["after"].as_f64().unwrap() - rep["removed_volume_mm3"]["before"].as_f64().unwrap();
         let tag = prm.key().replace([',', '='], "_");
         let pbm = pocket_smooth::problem(&p, &prm);
@@ -164,7 +159,7 @@ fn main() {
                         v0 += sf.d0[t] as f64 * g.h * g.h;
                         v1 += sf.d[t] as f64 * g.h * g.h;
                         let q = g.center(i, j);
-                        t0min = t0min.min(jarambit_crescent::export::thickness_at(&p, q));
+                        t0min = t0min.min(jarambit_crescent::export::thickness_at_with(&p, q, None));
                     }
                 }
                 wstats.insert(name.clone(), serde_json::json!({"max_depth_before": m0, "max_depth_after": m1, "removed_mm3_before": v0, "removed_mm3_after": v1, "min_thickness_unsmoothed": t0min}));

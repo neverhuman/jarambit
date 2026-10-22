@@ -18,6 +18,11 @@ pub struct BorePatch {
 
 /// The same physical thickness law feeds CAD and every plate solve; never use `Field.base`.
 pub fn thickness_at(p: &Pheno, q: P2) -> f64 {
+    thickness_at_with(p, q, crate::pocket_smooth::active(p).as_deref())
+}
+
+/// `thickness_at` with an explicit surface-tension pocket-smoothing field (`None`: as exported).
+pub fn thickness_at_with(p: &Pheno, q: P2, smooth: Option<&crate::pocket_smooth::SmoothField>) -> f64 {
     let raw = p.field.at(q);
     if !p.rs_v2 { return raw.max(0.3); }
     use crate::genome::*;
@@ -33,7 +38,7 @@ pub fn thickness_at(p: &Pheno, q: P2) -> f64 {
     // Pocket/relief operations exclude the grinds. Evaluate their continuous faces exactly,
     // including the scallop boundaries; nearest raster cells cannot define an apex.
     let mut value = if grind < base { grind } else {
-        match p.pocket_smooth.as_ref().and_then(|s| s.depth_at(q)) { Some(d) => base - d, None => raw }
+        match smooth.and_then(|s| s.depth_at(q)) { Some(d) => base - d, None => raw }
     };
     let (radius, _) = bore_dimensions(p);
     if q.0.hypot(q.1) <= p.ring_id / 2.0 + 1.5 * radius + 1e-9 {
@@ -51,7 +56,8 @@ pub fn solid(p: &Pheno, max_area: f64) -> Option<Solid> {
     }).collect();
     // The exported tip mesh itself is the source of the independent solid submodel.
     let area=if p.rs_v2 {max_area.min(0.25)}else{max_area};
-    let steiner:&[P2]=p.pocket_smooth.as_ref().map_or(&[],|s|s.steiner.as_slice());
+    let smooth=crate::pocket_smooth::active(p);
+    let steiner:&[P2]=smooth.as_ref().map_or(&[],|s|s.steiner.as_slice());
     let m=if steiner.is_empty() {fine::mesh_domain(&outer,&holes,area)?} else {fine::mesh_domain_pts(&outer,&holes,steiner,area)?};
     let n=m.xy.len();
     let mut verts:Vec<V3>=m.xy.iter().map(|&q|(q.0,q.1,thickness_at(p,q)/2.0)).collect();
