@@ -694,7 +694,7 @@ fn stage2_ultralight_weighted_fitness(c: &AssessedDesign) -> f64 {
 /// Compute the canonical `W_ULTRALIGHT_v1` global weighted fitness (`[0.0, 100.0]`)
 /// from a genome-backed scorecard (`cad_eval` / `master_scorecard`) and its RS-v2 receipt,
 /// matching `ops/ci/ultralight_weighted_fitness.py::compute_ultralight_weighted_fitness`.
-fn compute_canonical_ultralight_weighted_fitness(cad_eval_doc: &Value, rs_doc: &Value) -> f64 {
+pub(crate) fn compute_canonical_ultralight_weighted_fitness(cad_eval_doc: &Value, rs_doc: &Value) -> f64 {
     let em = cad_eval_doc.get("engineering_metrics").unwrap_or(&Value::Null);
     let wc = cad_eval_doc.get("weighted_cad_score").unwrap_or(&Value::Null);
     let gates_16 = wc.get("gates").unwrap_or(&Value::Null);

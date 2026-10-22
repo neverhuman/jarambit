@@ -35,7 +35,7 @@ STORY_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(STORY_NAMES)))
 POSITIVE_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(POSITIVE_NAMES)))
 # Pinned evidence-baseline timestamp; actual build UTC belongs to the receipt.
 TEX_ENV = TEXINPUTS="$(OUT):" SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH) FORCE_SOURCE_DATE=1 TZ=UTC
-.PHONY: all artifacts figures pdfs main supplement audit audit-quick audit-full review-origin-controls check clean
+.PHONY: all artifacts figures pdfs main supplement audit audit-quick audit-full review-origin-controls check clean smoothing-ladder ladder-data ladder-figures ladder-pdf
 # A report must finish generating before its figure/document consumers start.
 .NOTPARALLEL:
 all: artifacts pdfs
@@ -95,6 +95,39 @@ pdf-smoothed: figures
 	cp $(OUT)/main-smoothed.pdf main-smoothed.pdf
 	sha256sum main-smoothed.pdf > $(OUT)/main-smoothed.sha256
 	pdfinfo main-smoothed.pdf > $(OUT)/main-smoothed-pdfinfo.txt
+# Smoothing ladder of the paper's winner (smoothing-ladder.pdf): ten smoothing levels, each
+# re-scored and rendered for 3D relief. `ladder-data` smooths the exported mesh and re-solves the
+# solid tip at every level (about 30 minutes; its inputs live outside git in WINNER_DIR).
+# `ladder-figures` and `ladder-pdf` rebuild from the committed receipt in ladder/.
+LADDER_LABEL ?= ec1i005_r01_p14_c32
+WINNER_DIR ?= $(HOME)/jarambit_runs/smoothing/inputs/$(LADDER_LABEL)
+SOLVER_PYTHON ?= $(HOME)/.venvs/jarambit-fem-pinned/bin/python
+LADDER_RUN ?= $(HOME)/jarambit_runs/smoothing/$(LADDER_LABEL)-ladder-$(shell date -u +%Y%m%dT%H%M%SZ)
+LADDER_JOBS ?= 5
+smoothing-ladder: ladder-data ladder-figures ladder-pdf
+ladder-data:
+	cd $(ROOT)/experiments/geometry-smoothing-benchmark && $(CARGO) build --release --locked
+	cd $(ROOT) && $(CARGO) build --release --locked -p jarambit
+	cd $(ROOT) && $(CARGO_TARGET_DIR)/release/jarambit smoothing-ladder --winner $(WINNER_DIR) --label $(LADDER_LABEL) \
+	  --smoother $(CARGO_TARGET_DIR)/release/geometry-smoothing-benchmark --solver-python $(SOLVER_PYTHON) \
+	  --out $(LADDER_RUN) --jobs $(LADDER_JOBS) --code-commit $$(git rev-parse HEAD)
+	rm -rf ladder && mkdir ladder
+	cp $(LADDER_RUN)/ladder.json $(LADDER_RUN)/ladder-table.tex $(LADDER_RUN)/ladder-levels.tex $(LADDER_RUN)/ladder-scores.dat ladder/
+ladder-figures:
+	rm -rf $(OUT)/ladder-raw ladder/*.png ladder/*.png.manifest.json
+	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example smoothing_ladder_figure -- \
+	  --ladder docs/paper/ladder/ladder.json --out $(OUT)/ladder-raw --code-commit $$(git rev-parse HEAD)
+	cp $(OUT)/ladder-raw/smoothing-ladder.render.v1.json $(OUT)/ladder-raw/ladder-meta.tex ladder/
+	for svg in $(OUT)/ladder-raw/*.svg; do name=$$(basename $$svg .svg); \
+	  (cd $(OUT)/ladder-raw && rsvg-convert -o $(abspath ladder)/$$name.png $$name.svg) || exit 1; \
+	  printf '{\n  "figure": "docs/paper/ladder/%s.png",\n  "figure_sha256": "%s",\n  "script": "crates/paper-artifacts/examples/smoothing_ladder_figure.rs",\n  "inputs": {\n    "docs/paper/ladder/ladder.json": "%s",\n    "docs/paper/ladder/smoothing-ladder.render.v1.json": "%s"\n  },\n  "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"\n}\n' \
+	    $$name $$(sha256sum < ladder/$$name.png | cut -c1-64) $$(sha256sum < ladder/ladder.json | cut -c1-64) \
+	    $$(sha256sum < ladder/smoothing-ladder.render.v1.json | cut -c1-64) > ladder/$$name.png.manifest.json; done
+ladder-pdf:
+	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) smoothing-ladder.tex > $(OUT)/smoothing-ladder-pass1.log
+	$(TEX_ENV) lualatex -recorder -halt-on-error -interaction=nonstopmode -output-directory=$(OUT) smoothing-ladder.tex > $(OUT)/smoothing-ladder-pass2.log
+	cp $(OUT)/smoothing-ladder.pdf smoothing-ladder.pdf
+	pdfinfo smoothing-ladder.pdf > $(OUT)/smoothing-ladder-pdfinfo.txt
 # Final RR5 validation only; implementation builds use artifacts/pdf targets.
 audit: audit-full
 audit-quick:
