@@ -28,6 +28,8 @@ REPORT_METADATA := generated/display-composite.v1.json generated/test-field-rost
 DISPLAY_ALTERNATIVES := generated/hero-full-range.svg generated/hero-mesh-on.svg
 REPAIR_HISTORY := history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE510713_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_D3BA882D_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2A3B1A6_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2A2CD68_20261020.json history/ultralight_weighted_fitness_009f5ac5.source.txt history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_DD92248_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_7A51C1B2_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_73FFEF00_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_DBC4034_20261020.json history/hero-appearance-source-recipe.v1.BASE_6C49E1C_20261020.json history/hero-appearance-preflight.v1.BASE_6C49E1C_20261020.json history/hero-appearance-pin-review.v1.BASE_6C49E1C_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_6C49E1C_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_BFD49EC_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_26AEDA0_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_4213DA0_20261020.json history/hero-appearance-source-recipe.v1.BASE_4FF1CE1_20261020.json history/hero-appearance-preflight.v1.BASE_4FF1CE1_20261020.json history/hero-appearance-pin-review.v1.BASE_4FF1CE1_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_4FF1CE1_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_6AE781B_20261020.json history/hero-appearance-source-recipe.v1.BASE_4C71F76_20261021.json history/hero-appearance-preflight.v1.BASE_4C71F76_20261021.json history/hero-appearance-pin-review.v1.BASE_4C71F76_20261021.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_4C71F76_20261021.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2E46025_20261021.json
 GEN_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(GEN_FIGURES)))
+# Main-page figure of each variant: lit render + 2.5x blade-grind inset + W_ULTRALIGHT_v1 badge.
+COVER_PNGS := figures/cover/cover-unsmoothed.png figures/cover/cover-smoothed.png
 POP_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(POP_FIGURES)))
 STORY_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(STORY_NAMES)))
 POSITIVE_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(POSITIVE_NAMES)))
@@ -40,7 +42,9 @@ all: artifacts pdfs
 # Reporting reconstruction only; no CAD, FEM, search, tests or CI.
 artifacts:
 	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts
-figures: $(GEN_PNGS) $(POP_PNGS) $(STORY_PNGS) $(POSITIVE_PNGS) $(README_HERO_PNG) figures/fig1_hero_blender_v2.png $(CROP_PNG)
+figures: $(GEN_PNGS) $(POP_PNGS) $(STORY_PNGS) $(POSITIVE_PNGS) $(README_HERO_PNG) figures/fig1_hero_blender_v2.png $(CROP_PNG) $(COVER_PNGS)
+$(COVER_PNGS): figures/cover/cover-%.png: figures/cover/cover-%.svg figures/cover/render-%.png
+	rsvg-convert -w 2000 -h 850 -o $@ $<
 $(OUT):
 	mkdir -p $(OUT)
 $(GEN_PNGS): $(OUT)/%.png: generated/%.svg | $(OUT)

@@ -1,0 +1,21 @@
+{
+  "figure": "docs/paper/figures/cover/render-smoothed.png",
+  "figure_sha256": "6b8a56bd65a91aa93e998f6278078ea1641a14fe5b2f300e16dff80190609d66",
+  "script": "crates/paper-artifacts/examples/smoothing_figure.rs",
+  "inputs": {
+    "docs/paper/figures/cover/smoothing-figure.render.v1.json": "e79c50b12c09913155d78b9ef5595cb27fb5cb6bc454ec1d69a082d99ba91200",
+    "experiments/geometry-smoothing-benchmark/results/winner-ef3i17_r05_p14_c06/R1-normal-only-pin30-it20/RECEIPT.json": "31f049f26822fc3fc2726247790f7b59e600957e4da4e15978d30d38a002893e"
+  },
+  "external_inputs": {
+    "before_stl": {
+      "path": "/home/ubuntu/jarambit_runs/smoothing/inputs/ef3i17_r05_p14_c06/ef3i17_r05_p14_c06.stl",
+      "sha256": "c31d4dbb7ca5380a5f55baa4ca841834fecbc0a7bd845787e088cdc15c633fda"
+    },
+    "after_stl": {
+      "path": "/home/ubuntu/jarambit_runs/smoothing/ef3i17_r05_p14_c06-R1-20261022T082935Z/smoothed.stl",
+      "sha256": "e4ee6a7768b3e27886db1ef2b6d0ef853e62a54656dcb571912627751d532d68"
+    }
+  },
+  "external_inputs_note": "STLs are outside git because of their size; bound by sha256 and by RECEIPT.json.",
+  "postprocess": "Producer output at --width 2000 (stored-deflate PNG) re-encoded losslessly with rsvg-convert; pixel-identical."
+}

@@ -1,35 +1,58 @@
 % Variant B only: included by main-smoothed.tex through the JRSmoothedVariant switch.
 \subsection{Geometric Smoothing of the Best Evolved Design}
 \label{sec:smoothing}
-We applied geometric smoothing to the tessellated mesh of the best evolved design by \code{W_ULTRALIGHT_v1} (\code{ef2i91_r03_p14_c26}, fitness 80.253391, 14/18 battery, not qualified). This is a geometry and visual study. The smoothed mesh was not re-scored, re-assessed or re-evaluated for performance, and smoothing changes a tessellated mesh, not the STEP/B-rep CAD model.
+We applied feature-preserving geometric smoothing to the tessellated mesh of the best evolved design by \code{W_ULTRALIGHT_v1}, \code{ef3i17_r05_p14_c06} ($F=75.983539$, 14/18 battery, not qualified), and re-scored the smoothed geometry. Smoothing changes a tessellated mesh, not the STEP/B-rep CAD model.
 
-\textit{Method.} The input STL was welded by exact coordinate equality into 45,468 vertices and 90,948 triangles. The mesh is closed, edge-manifold, consistently oriented and connected, with Euler characteristic $-6$. We used Taubin $\lambda/\mu$ filtering with $\lambda=0.5$ and $\mu=-0.5$ for 20 iterations. In each pass only the component of the umbrella vector along the area-weighted unit vertex normal is kept (normal-only). Every vertex touching one of the 10,090 interior edges whose two face normals differ by more than $30^\circ$ was pinned (8,980 vertices). Total displacement from the input was capped at 2\,mm. Plain uniform Taubin filtering, without the normal restriction, failed the reversal check on this mesh at its first iteration, with 2,050 faces reversed, so it is not reported as a result. The three settings in the pre-declared sequence were fixed before the run. The first setting passed every check, and the other two were not run.
+\textit{Choice of design.} $F$ is recomputed with the canonical scorer (\code{ops/ci/ultralight_weighted_fitness.py}, which agrees with the Rust scorer in \code{auto-evolve}) from each retained Stage-2 scorecard and RS-v2 receipt. Among the 598 retained assessments on 2026-10-22 this design ranks first. An earlier version of this variant smoothed \code{ef2i91_r03_p14_c26}, whose run leaderboard reported 80.253391. Its canonical score, recomputed from its own retained scorecard, is 75.213491. All 218 leaderboard entries of xbabe2's 2026-10-18 run, and 79 of the 108 on xbabe3, report Stage-2 scores above the canonical recomputation, by up to about 5 points, so stored leaderboard values are not used here.
+
+\textit{Method.} The input STL was welded by exact coordinate equality into 45,696 vertices and 91,400 triangles. It is closed, edge-manifold, consistently oriented and connected, with Euler characteristic $-4$. We used the same pre-declared setting as the earlier run: Taubin $\lambda/\mu$ filtering with $\lambda=0.5$ and $\mu=-0.5$ for 20 iterations, keeping only the component of each umbrella vector along the area-weighted unit vertex normal. Every vertex touching one of the 5,706 edges whose two face normals differ by more than $30^\circ$ was pinned (5,668 vertices), and total displacement was capped at 2\,mm. The tool rejects any iteration that reverses a face relative to the input; all 20 iterations completed.
 
 \begin{table}[t]
 \centering\small
-\caption{Before and after smoothing. Measurements are from the smoothing run's machine-readable record; the before values are those of the input mesh.}
+\caption{Before and after smoothing, from the smoothing run's machine-readable record.}
 \label{tab:smoothing}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lrr@{}}
 \toprule
 Measure & Before & After \\
 \midrule
-Vertices / triangles & 45,468 / 90,948 & 45,468 / 90,948 \\
-Euler characteristic & $-6$ & $-6$ \\
-Enclosed volume (mm$^3$) & 20,358.30 & 20,340.75 ($-0.086\%$) \\
-Bounding box $z$ range (mm) & $[-7.500,\,7.500]$ & $[-7.510,\,7.510]$ \\
+Vertices / triangles & 45,696 / 91,400 & 45,696 / 91,400 \\
+Euler characteristic & $-4$ & $-4$ \\
+Enclosed volume (mm$^3$) & 20,725.33 & 20,710.67 ($-0.071\%$) \\
+Bounding box $z$ range (mm) & $[-7.500,\,7.500]$ & $[-7.512,\,7.512]$ \\
 Bounding box $x$, $y$ range & unchanged & unchanged \\
-Reversed triangles & -- & 0 \\
-Maximum vertex displacement (mm) & -- & 0.237 (budget 2) \\
-RMS vertex displacement (mm) & -- & 0.0178 \\
-Vertices moved, any amount & -- & 35,182 (77.4\%) \\
-Vertices moved more than 0.01\,mm & -- & 6,978 (15.3\%) \\
+Maximum vertex displacement (mm) & -- & 0.229 (budget 2) \\
+RMS vertex displacement (mm) & -- & 0.0153 \\
+Vertices moved, any amount & -- & 31,180 (68.2\%) \\
+Vertices moved more than 0.01\,mm & -- & 5,038 (11.0\%) \\
 \bottomrule
 \end{tabular}%
 }
 \end{table}
 
-\textit{Results.} Smoothing moved 35,182 of 45,468 vertices, and 6,978 of them by more than 0.01\,mm. The largest displacement was 0.237\,mm and the RMS displacement 0.0178\,mm, which is well inside the 2\,mm budget. The enclosed volume changed by $-0.086\%$. The bounding box changed only in $z$, by about 0.01\,mm on each side. Figure~\ref{fig:smoothing-winner} shows the before and after appearance with the same camera and render settings, and the per-face displacement. The heatmap uses the mean of each face's three corner displacements on a linear scale from 0 to 0.237\,mm. Its colours are unlit, so they encode the displacement value.
+\textit{Re-scoring.} Three of the twenty objectives depend on the exported 3D geometry, and those were re-measured. (1) Mass: the exporter computes 3D mass as enclosed volume times $4.43\,\mathrm{g\,cm^{-3}}$. Smoothing changed the enclosed volume by $-14.67\,\mathrm{mm^3}$, giving $91.7483\,\mathrm{g}$ against $91.8133\,\mathrm{g}$. (2) Solid tip: the evaluator builds its P2 TET10 tip submodel (30\,mm cut, four layers) from the exported upper skin. We rebuilt it from the smoothed skin and repeated the \code{scikit-fem} solve and the independent DOLFINx~0.9.0 solve on the same saved mesh (with the pinned solver versions of the original evaluation; an unchanged re-run of the original input reproduces its stored values, $0.3118$ and $0.3135$, exactly). (3) CAD/B-rep: this 5-point objective requires a valid single-solid STEP whose finger-ring bore matches the analytic torus. Smoothing outputs a triangle mesh and moved ring-region vertices by up to 0.229\,mm, so the objective is scored 0. The other seventeen objectives (plate-model responses, sharpness, point profile, ring, holder and aesthetics) are computed from the genome and carry over unchanged. Table~\ref{tab:smoothing-score} gives the result.
+
+\begin{table}[t]
+\centering\small
+\caption{\code{W_ULTRALIGHT_v1} of the design as exported and after smoothing, in points out of 100.}
+\label{tab:smoothing-score}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Objective & Weight & As exported & Smoothed & Change \\
+\midrule
+Ultralight mass & 22 & 9.883616 & 9.900440 & $+0.016824$ \\
+Solid tip (3D P2, cross-check) & 3 & 0.935400 & 0.912900 & $-0.022500$ \\
+CAD watertight B-rep & 5 & 5.000000 & 0.000000 & $-5.000000$ \\
+Other seventeen objectives & 70 & 60.164522 & 60.164522 & 0 \\
+\midrule
+$F$ (\code{W_ULTRALIGHT_v1}) & 100 & 75.983539 & 70.977863 & $-5.005676$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\textit{Results.} Smoothing moved 31,180 of 45,696 vertices, 5,038 of them by more than 0.01\,mm. The largest displacement was 0.229\,mm and the RMS displacement 0.0153\,mm. The enclosed volume changed by $-0.071\%$, and the bounding box changed only in $z$, by about 0.012\,mm on each side. The independent solid-tip safety factor at $1.82\,\mathrm{N\,m}$ fell from 0.3118 to 0.3043 at its nodal maximum and rose from 0.3135 to 0.3163 on the nodal average; the two solvers agree within $0.1\%$ on the smoothed mesh. Re-scored, $F$ falls from 75.983539 to 70.977863: $-5$ from the withheld CAD/B-rep objective, $-0.0225$ from the solid tip and $+0.0168$ from mass. Without the withheld objective, smoothing would change $F$ by $-0.005676$. Figure~\ref{fig:smoothing-winner} shows the before and after appearance with the same camera and render settings, and the per-face displacement. The heatmap uses the mean of each face's three corner displacements on a linear scale from 0 to 0.229\,mm; its colours are unlit, so they encode the displacement value.
 
 \begin{figure*}[t]
 \centering\small
@@ -51,10 +74,10 @@ Vertices moved more than 0.01\,mm & -- & 6,978 (15.3\%) \\
 \begin{minipage}[t]{0.6\textwidth}
 \centering\small
 \includegraphics[width=\linewidth]{smoothing/winner-displacement-colorbar.png}\\[1pt]
-{\small 0\,mm \hfill 0.237\,mm (maximum)}
+{\small 0\,mm \hfill 0.229\,mm (maximum)}
 \end{minipage}
-\caption{Best evolved design by \code{W_ULTRALIGHT_v1} (\code{ef2i91_r03_p14_c26}), before smoothing (left), after smoothing (centre) and the displacement heatmap (right). All three use one camera, framed on the input, and the same lighting and render settings. The before and after views use a uniform base colour, so their shading changes only the displayed RGB values. The heatmap colour bar is linear and unlit. This is a geometry view, not a performance view.}
+\caption{Best evolved design by \code{W_ULTRALIGHT_v1} (\code{ef3i17_r05_p14_c06}), before smoothing (left), after smoothing (centre) and the displacement heatmap (right). All three use one camera, framed on the input, and the same lighting and render settings. The before and after views use a uniform base colour, so their shading changes only the displayed RGB values. The heatmap colour bar is linear and unlit.}
 \label{fig:smoothing-winner}
 \end{figure*}
 
-\textit{Limits.} The smoothed mesh is a triangle mesh. Smoothing does not reconstruct analytic surfaces, establish a continuous Hausdorff bound, test self-intersection, or preserve features beyond the pinned edges. No re-scoring, re-assessment or functional evaluation was run on the smoothed mesh, and this subsection makes no performance claim.
+\textit{Limits.} The smoothed geometry is a triangle mesh. Smoothing does not reconstruct analytic surfaces, establish a continuous Hausdorff bound, test self-intersection, or preserve features beyond the pinned edges. The re-score re-measures only the three objectives that read the exported 3D geometry; the genome-derived objectives were not re-solved on the smoothed shape, whose largest displacement is 0.229\,mm. Neither score is a physical test.

@@ -1,0 +1,11 @@
+{
+  "figure": "docs/paper/figures/cover/cover-unsmoothed.png",
+  "figure_sha256": "57d54907ca2c55464a7e676e609f4270f2e09c2f6582b53f7a299910563e0c6c",
+  "script": "docs/paper/Makefile",
+  "inputs": {
+    "docs/paper/figures/cover/cover-unsmoothed.svg": "74770e25cd0477d7f8bb6c81887101429e6a26b4203a41d18f26ac38c3a5d49d",
+    "docs/paper/figures/cover/render-unsmoothed.png": "6e87c9da448139a6a7a6cc4e91eee0c634a7a90e6823898de177f93153100744",
+    "docs/paper/figures/cover/winner-selection.v1.json": "ee507ea6bcbd7be0783de5ea2f5c42309212efe1a280a727e3fee9d8961c1242"
+  },
+  "note": "make figures: rsvg-convert -w 2000 -h 850 of the SVG (render + 2.5x blade-grind inset + W_ULTRALIGHT_v1 badge 75.98 from winner-selection.v1.json)."
+}

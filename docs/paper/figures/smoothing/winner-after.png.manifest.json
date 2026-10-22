@@ -1,21 +1,22 @@
 {
   "figure": "docs/paper/figures/smoothing/winner-after.png",
-  "figure_sha256": "49f4a1c10fab4a04e70c67f8ab11ea407c526b0ff223d434804db9abf78d8e2e",
+  "figure_sha256": "74815ab54bae530444c03fe5f21d038c9187f8b891acbb599b8e740821db2d46",
   "script": "crates/paper-artifacts/examples/smoothing_figure.rs",
   "inputs": {
-    "docs/paper/figures/smoothing/smoothing-figure.render.v1.json": "4de05601d8c31a16886f9dce21e3f33dcb8557bae638755cef6122fe78e2350e",
-    "experiments/geometry-smoothing-benchmark/results/winner-ef2i91_r03_p14_c26/R1-normal-only-pin30-it20/RECEIPT.json": "f0d5144c8ace8332bf135b842a07a6fe6a807e5e3cac8ddf0bf2a1bc1d8a925d",
-    "experiments/geometry-smoothing-benchmark/results/winner-ef2i91_r03_p14_c26/R1-normal-only-pin30-it20/metrics.json": "f8349140523e07a09c436f72ba3a7b0e991cfd50076d1e3ae8c21c39477096ea"
+    "docs/paper/figures/smoothing/smoothing-figure.render.v1.json": "54899d934cf06bdf2062142d62075540b347183c80728597a3b6e04dd76ac0ea",
+    "experiments/geometry-smoothing-benchmark/results/winner-ef3i17_r05_p14_c06/R1-normal-only-pin30-it20/RECEIPT.json": "31f049f26822fc3fc2726247790f7b59e600957e4da4e15978d30d38a002893e",
+    "experiments/geometry-smoothing-benchmark/results/winner-ef3i17_r05_p14_c06/R1-normal-only-pin30-it20/metrics.json": "da49a8a63f35095a87a706956d0373b6abd7b8681e90adf1293faa1afd989f0e"
   },
   "external_inputs": {
     "before_stl": {
-      "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/i91/by-content/e7ab9c8531255490be6a05c5dab8f629159ee9eae0580bda459a398a03747063/attempt-1792452614126747868/ef2i91_r03_p14_c26.stl",
-      "sha256": "7741cf82418984b52e89e4a5f4f97ce49723e0d4513c2c9eada139b4bdeaeba6"
+      "path": "/home/ubuntu/jarambit_runs/smoothing/inputs/ef3i17_r05_p14_c06/ef3i17_r05_p14_c06.stl",
+      "sha256": "c31d4dbb7ca5380a5f55baa4ca841834fecbc0a7bd845787e088cdc15c633fda"
     },
     "after_stl": {
-      "path": "/home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-s1b-R1-20261021T231908Z/smoothed.stl",
-      "sha256": "895036be4f93beea3ce036946a9a21cbfcf4f262ec62b81433add776047d8888"
+      "path": "/home/ubuntu/jarambit_runs/smoothing/ef3i17_r05_p14_c06-R1-20261022T082935Z/smoothed.stl",
+      "sha256": "e4ee6a7768b3e27886db1ef2b6d0ef853e62a54656dcb571912627751d532d68"
     }
   },
-  "external_inputs_note": "The STL files are outside git because of their size. They are bound here by sha256 and by the RECEIPT.json input record."
+  "external_inputs_note": "The STL files are outside git because of their size. They are bound here by sha256 and by the RECEIPT.json input record.",
+  "postprocess": "Producer output (stored-deflate PNG) re-encoded losslessly with rsvg-convert at the same size; pixel-identical to the producer output listed in smoothing-figure.render.v1.json."
 }

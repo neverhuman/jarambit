@@ -1,0 +1,11 @@
+{
+  "figure": "docs/paper/figures/cover/cover-smoothed.png",
+  "figure_sha256": "9b0cebe647711a4225eb3ce0a7fd2b9a5f558efbe41de47f606617f878606848",
+  "script": "docs/paper/Makefile",
+  "inputs": {
+    "docs/paper/figures/cover/cover-smoothed.svg": "5e2552e95948a10b80c4455c6672cf3adbc0cf6d7fc9584d16d35eae5ff4ffc1",
+    "docs/paper/figures/cover/render-smoothed.png": "6b8a56bd65a91aa93e998f6278078ea1641a14fe5b2f300e16dff80190609d66",
+    "experiments/geometry-smoothing-benchmark/results/winner-ef3i17_r05_p14_c06/rescore/RESCORE.json": "1f25403f11749ef3aa12f9b41875d46a69af151c8ffba3ab34ac2e4da17c9e39"
+  },
+  "note": "make figures: rsvg-convert -w 2000 -h 850 of the SVG (render + 2.5x blade-grind inset + W_ULTRALIGHT_v1 badge 70.98 from RESCORE.json)."
+}
