@@ -99,13 +99,22 @@ pdf-smoothed: figures
 # re-scored and rendered for 3D relief. `ladder-data` smooths the exported mesh and re-solves the
 # solid tip at every level (about 30 minutes; its inputs live outside git in WINNER_DIR).
 # `ladder-figures` and `ladder-pdf` rebuild from the committed receipt in ladder/.
-LADDER_LABEL ?= ec1i005_r01_p14_c32
-WINNER_DIR ?= $(HOME)/jarambit_runs/smoothing/inputs/$(LADDER_LABEL)
+# The label and inputs default to the committed receipt's, so this target re-runs the paper's
+# current winner; set both to ladder a new one. Each is read once (ladder-data replaces ladder/).
+ifndef LADDER_LABEL
+LADDER_LABEL := $(shell python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["label"])' $(CURDIR)/ladder/ladder.json)
+endif
+ifndef WINNER_DIR
+WINNER_DIR := $(shell python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["winner_dir"])' $(CURDIR)/ladder/ladder.json)
+endif
 SOLVER_PYTHON ?= $(HOME)/.venvs/jarambit-fem-pinned/bin/python
-LADDER_RUN ?= $(HOME)/jarambit_runs/smoothing/$(LADDER_LABEL)-ladder-$(shell date -u +%Y%m%dT%H%M%SZ)
+ifndef LADDER_RUN
+LADDER_RUN := $(HOME)/jarambit_runs/smoothing/$(LADDER_LABEL)-ladder-$(shell date -u +%Y%m%dT%H%M%SZ)
+endif
 LADDER_JOBS ?= 5
 smoothing-ladder: ladder-data ladder-figures ladder-pdf
 ladder-data:
+	@test -n "$(LADDER_LABEL)" && test -d "$(WINNER_DIR)" || { echo "ladder-data: no winner inputs (LADDER_LABEL='$(LADDER_LABEL)', WINNER_DIR='$(WINNER_DIR)')" >&2; exit 1; }
 	cd $(ROOT)/experiments/geometry-smoothing-benchmark && $(CARGO) build --release --locked
 	cd $(ROOT) && $(CARGO) build --release --locked -p jarambit
 	cd $(ROOT) && $(CARGO_TARGET_DIR)/release/jarambit smoothing-ladder --winner $(WINNER_DIR) --label $(LADDER_LABEL) \
