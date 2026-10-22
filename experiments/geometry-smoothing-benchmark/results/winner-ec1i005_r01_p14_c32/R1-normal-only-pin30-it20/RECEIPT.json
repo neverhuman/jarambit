@@ -1,0 +1,35 @@
+{
+  "schema": "smoothing_receipt.v1",
+  "task": "OWNER-SMOOTHING-20261022-canonical-winner-refresh",
+  "rung": "R1",
+  "ladder_position": "same pre-declared R1 setting as the 2026-10-21 and 2026-10-22 runs; R2 and R3 are weaker (5 iterations) and were not run",
+  "code_commit": "e07606a8e43666750264ec909ccbae604627ede5",
+  "tool": "geometry-smoothing-benchmark 0.1.0",
+  "tool_binary_sha256": "52501e69297b27fbe5efc747cd3331c8239fd692c2fb27d456900e500b0c0d55",
+  "toolchain": "rustc 1.85.1",
+  "command": "./target/release/geometry-smoothing-benchmark --input /home/ubuntu/jarambit_runs/smoothing/inputs/ec1i005_r01_p14_c32/ec1i005_r01_p14_c32.stl --out /home/ubuntu/jarambit_runs/smoothing/ec1i005_r01_p14_c32-R1-20261022T133904Z --label ec1i005_r01_p14_c32: best evolved design by canonical W_ULTRALIGHT_v1 (76.141571), not qualified --lambda 0.5 --mu -0.5 --max-displacement-mm 2 --normal-only --pin-feature-angle 30 --iterations 20",
+  "exit_code": 0,
+  "winner": {
+    "label": "ec1i005_r01_p14_c32",
+    "canonical_w_ultralight_v1": 76.141571,
+    "selection": "rank 1 of 696 retained Stage-2 assessments by canonical W_ULTRALIGHT_v1 recomputation at 2026-10-22T13:38:23Z (docs/paper/figures/cover/winner-selection.v1.json)",
+    "path": "/home/ubuntu/jarambit_runs/smoothing/inputs/ec1i005_r01_p14_c32/ec1i005_r01_p14_c32.stl",
+    "sha256": "eca6868b8cd08ed65af2c816e210a96a4142675e29b1a0342b09c3bb8ed24eb7",
+    "copied_from": "source=xbabe1:/home/ubuntu/jarambit_runs/evo_continuous/xbabe1/islands/i005/by-content/6ce4dce7e1b6c5b8ea71d05d98e63a60b4ba741b9c4ee9e256ac6856e44acd5c/attempt-1792671069404592127"
+  },
+  "previous_winner_receipt": "experiments/geometry-smoothing-benchmark/results/winner-ef3i17_r05_p14_c06/R1-normal-only-pin30-it20/RECEIPT.json",
+  "output_dir": "/home/ubuntu/jarambit_runs/smoothing/ec1i005_r01_p14_c32-R1-20261022T133904Z",
+  "outputs": [
+    {
+      "name": "smoothed.stl",
+      "bytes": 25533458,
+      "sha256": "2ec17cea923cba63ab04ddbb3597e8d6d34a996b440a4b72c4d83184c92f7e62"
+    },
+    {
+      "name": "displacement.csv",
+      "bytes": 4125471,
+      "sha256": "16d2e2914aea75d0427051838bdbc2d20614154294a1259cbf26a867c2191ebc"
+    }
+  ],
+  "not_qualified": true
+}

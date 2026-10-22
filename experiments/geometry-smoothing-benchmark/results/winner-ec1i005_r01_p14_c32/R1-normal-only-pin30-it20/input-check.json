@@ -1,0 +1,7 @@
+{
+"schema":"smoothing_input_check.v1",
+"status":"accepted",
+"reasons":[],
+"input":{"path":"/home/ubuntu/jarambit_runs/smoothing/inputs/ec1i005_r01_p14_c32/ec1i005_r01_p14_c32.stl","bytes":15514285,"sha256":"eca6868b8cd08ed65af2c816e210a96a4142675e29b1a0342b09c3bb8ed24eb7","format":"ascii"},
+"audit":{"vertices":45736,"faces":91480,"edges":137220,"open_edges":0,"nonmanifold_edges":0,"inconsistent_edges":0,"degenerate_faces":0,"duplicate_faces":0,"unused_vertices":0,"components":1,"euler_characteristic":-4}
+}

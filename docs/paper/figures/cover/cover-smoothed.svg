@@ -9,7 +9,7 @@
   <g transform="translate(1425,655)">
     <rect width="560" height="180" rx="10" fill="#ffffff" stroke="#132D3B" stroke-width="2.5"/>
     <text x="22" y="42" font-family="TeX Gyre Heros" font-size="28" fill="#132D3B">W_ULTRALIGHT_v1 fitness</text>
-    <text x="22" y="118" font-family="TeX Gyre Heros" font-weight="bold" font-size="76" fill="#132D3B">70.98</text>
+    <text x="22" y="118" font-family="TeX Gyre Heros" font-weight="bold" font-size="76" fill="#132D3B">71.24</text>
     <text x="245" y="118" font-family="TeX Gyre Heros" font-size="32" fill="#132D3B">/ 100</text>
     <text x="22" y="160" font-family="TeX Gyre Heros" font-size="26" fill="#A3442D">Smoothed; CAD/B-rep objective withheld</text>
   </g>
