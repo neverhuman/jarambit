@@ -8,18 +8,24 @@
 //! A ~0.7 mm CDT sampling a 0.25 mm staircase of a step is what renders as chipped, jagged walls.
 //!
 //! This module never moves the planform (outline, through-holes), the grind faces, the bore
-//! collar or the brand pad. Each pocket is a basin a liquid would fill (watershed: 4-connected
-//! components of D > D_EPS). Its face z = D/2 then evolves as a liquid surface under surface
-//! tension for time T = r^2/2: graph mean-curvature flow
-//!     z_t = ((1+z_y^2) z_xx - 2 z_x z_y z_xy + (1+z_x^2) z_yy) / (1 + z_x^2 + z_y^2)
-//! plus, per basin, a pressure (Lagrange) term lambda_b |grad D| that keeps the basin's removed
-//! volume (the oil volume) constant. On steep walls the flow moves the pocket outline by its
-//! curvature (chips and spikes, which have the highest curvature, go first; a circle stays a
-//! circle; straight rib edges stay straight; narrow necks pinch or bridge), and it rounds the
-//! top and bottom of each wall into a meniscus. On gentle bowls (dimples, fuller) it acts like
-//! diffusion, so raster terraces flatten while the bowl keeps its volume.
+//! collar, raised features or the brand pad. Each pocket is a basin a liquid would fill
+//! (watershed: connected components of D > D_EPS, merged across gaps narrower than ~r/2). Its
+//! removal depth then evolves for time T = r^2/2 under surface tension with a film slope scale a:
+//!     D_t = ((a^2 + z_y^2) D_xx - 2 z_x z_y D_xy + (a^2 + z_x^2) D_yy) / (a^2 + z_x^2 + z_y^2),
+//! z = D/2 being one face's depth, plus, per basin, a pressure (Lagrange) term lambda_b |grad D|
+//! that keeps the basin's removed volume (the oil volume) constant.
+//!   a = 0 (default): level-set curvature motion, i.e. pure line tension on every depth contour.
+//!       Each contour shortens like a 2-D droplet of fixed area: chips and spikes (highest
+//!       curvature) go first, a chipped circle becomes a clean circle, straight rib edges stay
+//!       straight, corners round to radius ~r, and walls stay as steep as they were, so ribs keep
+//!       their width and the I-beam webs are not thinned.
+//!   a = 1: graph mean-curvature flow of a liquid surface; also rounds each wall into a meniscus
+//!       but spreads depth sideways into the ribs (kept for comparison).
+//! The export mesh gets extra CDT vertices on the smoothed depth contours and in pairs straddling
+//! the grind boundary, so triangle edges follow each wall instead of cutting across it; a jagged
+//! wall in the CAD is as much a sampling artefact of a step as a rough outline.
 //!
-//! Enabled only by `JARAMBIT_POCKET_SMOOTH`, e.g. `r=1.0,h=0.125,grow=0.5,mesh=0.3,rim=1.0,vp=1`.
+//! Enabled only by `JARAMBIT_POCKET_SMOOTH`, e.g. `r=1.0,a=0` (defaults h=0.125,grow=0.5,mesh=0.3,rim=1.0,vp=1).
 //! Unset or empty: no code path changes and exports stay byte-identical.
 
 use crate::genome::*;
@@ -48,11 +54,16 @@ pub struct Params {
     pub rim: f64,
     /// Keep each basin's removed volume constant (pressure term).
     pub vp: bool,
+    /// Film slope scale of one face (mm/mm). Where the face is flatter than `a` it relaxes like a
+    /// liquid film (diffusion); where it is steeper only the outline moves, by its curvature.
+    /// a = 1 is graph mean-curvature flow (a liquid surface); a = 0 is level-set curvature
+    /// motion (pure line tension: walls stay as steep as they were, outlines round off).
+    pub a: f64,
 }
 
 impl Default for Params {
     fn default() -> Self {
-        Params { r: 1.0, h: 0.125, grow: 0.5, mesh: 0.3, rim: 1.0, vp: true }
+        Params { r: 1.0, h: 0.125, grow: 0.5, mesh: 0.3, rim: 1.0, vp: true, a: 0.0 }
     }
 }
 
@@ -74,7 +85,8 @@ impl Params {
                 "mesh" => p.mesh = x,
                 "rim" => p.rim = x,
                 "vp" => p.vp = x != 0.0,
-                other => return Err(format!("{ENV}: unknown key {other:?} (r, h, grow, mesh, rim, vp)")),
+                "a" => p.a = x,
+                other => return Err(format!("{ENV}: unknown key {other:?} (r, h, grow, mesh, rim, vp, a)")),
             }
         }
         p.validate()?;
@@ -98,11 +110,14 @@ impl Params {
         if !(self.rim.is_finite() && (0.0..=5.0).contains(&self.rim)) {
             return Err(format!("{ENV}: rim must be in [0, 5] mm"));
         }
+        if !(self.a.is_finite() && (0.0..=2.0).contains(&self.a)) {
+            return Err(format!("{ENV}: a must be in [0, 2]"));
+        }
         Ok(())
     }
 
     pub fn key(&self) -> String {
-        format!("r={},h={},grow={},mesh={},rim={},vp={}", self.r, self.h, self.grow, self.mesh, self.rim, u8::from(self.vp))
+        format!("r={},h={},grow={},mesh={},rim={},vp={},a={}", self.r, self.h, self.grow, self.mesh, self.rim, u8::from(self.vp), self.a)
     }
 }
 
@@ -298,7 +313,7 @@ fn at(pb: &Problem, d: &[f64], s: usize, i: isize, j: isize) -> f64 {
 }
 
 /// Volume-preserving graph mean-curvature flow of the removal depth for time r^2/2.
-pub fn evolve(pb: &Problem, r: f64, grow: f64, vp: bool) -> Flow {
+pub fn evolve(pb: &Problem, r: f64, grow: f64, vp: bool, a: f64) -> Flow {
     let g = pb.grid;
     let (nx, h) = (g.nx, g.h);
     let n = g.len();
@@ -319,6 +334,7 @@ pub fn evolve(pb: &Problem, r: f64, grow: f64, vp: bool) -> Flow {
     let mut gp = vec![0.0f64; n];
     let mut gm = vec![0.0f64; n];
     let correction_passes = if vp { 40 } else { 0 };
+    let a2 = a * a;
     for it in 0..steps + correction_passes {
         let flowing = it < steps;
         let mut cur = vec![0.0f64; nb + 1];
@@ -343,7 +359,7 @@ pub fn evolve(pb: &Problem, r: f64, grow: f64, vp: bool) -> Flow {
                 let dxx = (e - 2.0 * c + w) / (h * h);
                 let dyy = (no - 2.0 * c + so) / (h * h);
                 let dxy = (ne - nw - se + sw) / (4.0 * h * h);
-                vel[s] = ((1.0 + zy * zy) * dxx - 2.0 * zx * zy * dxy + (1.0 + zx * zx) * dyy) / (1.0 + zx * zx + zy * zy);
+                vel[s] = ((a2 + zy * zy) * dxx - 2.0 * zx * zy * dxy + (a2 + zx * zx) * dyy) / (a2 + zx * zx + zy * zy + 1e-8);
             } else {
                 vel[s] = 0.0;
             }
@@ -517,7 +533,8 @@ pub fn problem(p: &Pheno, prm: &Params) -> Problem {
             let fixed = grind < base - 1e-9
                 || raised
                 || q.0.hypot(q.1) <= bore_r
-                || in_pad(q, 1.0)
+                || in_pad(q, 0.0)
+                || (depth0 == 0.0 && in_pad(q, 1.0))
                 || (depth0 == 0.0 && nn_b.nearest(q, prm.rim) <= prm.rim);
             state[s] = if fixed { FIXED } else { FREE };
             d0[s] = if grind < base - 1e-9 { 0.0 } else { depth0 };
@@ -528,45 +545,168 @@ pub fn problem(p: &Pheno, prm: &Params) -> Problem {
 }
 
 fn steiner_points(sf_grid: Grid, active: &[bool], d: &[f32], state: &[u8], spacing: f64) -> Vec<P2> {
+    // CDT vertices ON the smoothed depth contours (every 0.25 mm of depth, from the rim at
+    // 0.04 mm), thinned to `spacing`, so triangle edges follow each wall instead of cutting it.
     let g = sf_grid;
-    let mut pts = Vec::new();
-    if spacing <= 0.0 {
+    let mut pts: Vec<P2> = Vec::new();
+    if spacing <= 0.0 || g.nx < 6 || g.ny < 6 {
         return pts;
     }
-    let near_edge = |i: usize, j: usize| -> bool {
-        // within two cells of a non-evolving cell or the grid edge
-        for b in j.saturating_sub(2)..=(j + 2).min(g.ny - 1) {
-            for a in i.saturating_sub(2)..=(i + 2).min(g.nx - 1) {
-                let t = b * g.nx + a;
-                if !active[t] || state[t] == OUTSIDE {
-                    return true;
+    let min_d = 0.7 * spacing;
+    let cell = min_d;
+    let mut hash: HashMap<(i64, i64), Vec<usize>> = HashMap::new();
+    let key = |q: P2| (((q.0 - g.x0) / cell).floor() as i64, ((q.1 - g.y0) / cell).floor() as i64);
+    // squares usable for vertices: all four corners evolving, two cells clear of the planform edge
+    let mut ok = vec![false; g.len()];
+    for j in 2..g.ny - 3 {
+        'sq: for i in 2..g.nx - 3 {
+            for b in j - 2..=j + 3 {
+                for a in i - 2..=i + 3 {
+                    if state[b * g.nx + a] == OUTSIDE {
+                        continue 'sq;
+                    }
+                }
+            }
+            let c = [j * g.nx + i, j * g.nx + i + 1, (j + 1) * g.nx + i + 1, (j + 1) * g.nx + i];
+            ok[j * g.nx + i] = c.iter().all(|&t| active[t] && d[t].is_finite());
+        }
+    }
+    let dmax = (0..g.len()).filter(|&s| ok[s]).map(|s| d[s]).fold(0.0f32, f32::max);
+    let mut level = 0.04f32;
+    while level < dmax {
+        for j in 2..g.ny - 3 {
+            for i in 2..g.nx - 3 {
+                let s0 = j * g.nx + i;
+                if !ok[s0] {
+                    continue;
+                }
+                let c = [d[s0], d[s0 + 1], d[s0 + g.nx + 1], d[s0 + g.nx]];
+                let (lo, hi) = c.iter().fold((f32::MAX, f32::MIN), |m, &x| (m.0.min(x), m.1.max(x)));
+                if !(lo <= level && hi > level) {
+                    continue;
+                }
+                // walls and slopes only: a contour wandering over a nearly flat floor adds nothing
+                let gx = ((c[1] + c[2]) - (c[0] + c[3])) as f64 / (2.0 * g.h);
+                let gy = ((c[2] + c[3]) - (c[0] + c[1])) as f64 / (2.0 * g.h);
+                if gx.hypot(gy) < 0.2 {
+                    continue;
+                }
+                let mut cross: Vec<P2> = Vec::with_capacity(4);
+                for e in 0..4 {
+                    let (u, v) = (c[e], c[(e + 1) % 4]);
+                    if (u > level) != (v > level) {
+                        let t = ((level - u) / (v - u)) as f64;
+                        let corner = |k: usize| match k { 0 => (0.0, 0.0), 1 => (1.0, 0.0), 2 => (1.0, 1.0), _ => (0.0, 1.0) };
+                        let (p0, p1) = (corner(e), corner((e + 1) % 4));
+                        cross.push((p0.0 + t * (p1.0 - p0.0), p0.1 + t * (p1.1 - p0.1)));
+                    }
+                }
+                if cross.len() != 2 {
+                    continue;
+                }
+                let (cx, cy) = g.center(i, j);
+                let q = (cx + 0.5 * (cross[0].0 + cross[1].0) * g.h, cy + 0.5 * (cross[0].1 + cross[1].1) * g.h);
+                let (ki, kj) = key(q);
+                let mut clear = true;
+                'nb: for b in kj - 1..=kj + 1 {
+                    for a in ki - 1..=ki + 1 {
+                        if let Some(list) = hash.get(&(a, b)) {
+                            for &k in list {
+                                if (pts[k].0 - q.0).hypot(pts[k].1 - q.1) < min_d {
+                                    clear = false;
+                                    break 'nb;
+                                }
+                            }
+                        }
+                    }
+                }
+                if clear {
+                    hash.entry((ki, kj)).or_default().push(pts.len());
+                    pts.push(q);
                 }
             }
         }
-        i < 2 || j < 2 || i + 2 >= g.nx || j + 2 >= g.ny
+        level += 0.25;
+    }
+    pts
+}
+
+/// Vertex pairs straddling the grind boundary (grind = base) wherever an evolving pocket meets a
+/// grind: the thickness law steps there from the grind face to the pocket floor, and a pair of
+/// rows a cell-width apart lets the CDT draw that step as one clean wall along the true curve.
+fn grind_edge_points(p: &Pheno, pb: &Problem, active: &[bool], d: &[f64], spacing: f64) -> Vec<P2> {
+    let g = pb.grid;
+    let mut pts = Vec::new();
+    if spacing <= 0.0 || g.nx < 6 || g.ny < 6 {
+        return pts;
+    }
+    let min_d = 0.7 * spacing;
+    let eps = 0.4 * g.h;
+    let mut hash: HashMap<(i64, i64), Vec<P2>> = HashMap::new();
+    let key = |q: P2| (((q.0 - g.x0) / min_d).floor() as i64, ((q.1 - g.y0) / min_d).floor() as i64);
+    let clear_of_outline = |i: usize, j: usize| {
+        for b in j - 2..=j + 2 {
+            for a in i - 2..=i + 2 {
+                if pb.state[b * g.nx + a] == OUTSIDE {
+                    return false;
+                }
+            }
+        }
+        true
     };
-    let (w, hgt) = (g.nx as f64 * g.h, g.ny as f64 * g.h);
-    let (ni, nj) = ((w / spacing).floor() as usize, (hgt / (spacing * 0.866)).floor() as usize);
-    for b in 0..nj {
-        let y = g.y0 + (b as f64 + 0.5) * spacing * 0.866;
-        let shift = if b % 2 == 1 { 0.5 * spacing } else { 0.0 };
-        for a in 0..ni {
-            let x = g.x0 + (a as f64 + 0.25) * spacing + shift;
-            let i = ((x - g.x0) / g.h).floor();
-            let j = ((y - g.y0) / g.h).floor();
-            if i < 1.0 || j < 1.0 || i >= (g.nx - 1) as f64 || j >= (g.ny - 1) as f64 {
-                continue;
-            }
-            let (i, j) = (i as usize, j as usize);
+    for j in 2..g.ny - 2 {
+        for i in 2..g.nx - 2 {
             let s = j * g.nx + i;
-            if !active[s] || near_edge(i, j) {
+            if !active[s] || d[s] < 0.05 || !clear_of_outline(i, j) {
                 continue;
             }
-            let gx = (d[s + 1] - d[s - 1]) as f64 / (2.0 * g.h);
-            let gy = (d[s + g.nx] - d[s - g.nx]) as f64 / (2.0 * g.h);
-            // pocket wall: one face slopes faster than 1 in 10
-            if gx.hypot(gy) > 0.2 {
-                pts.push((x, y));
+            let cs = g.center(i, j);
+            let mut fs: Option<f64> = None;
+            for (a, b) in [(i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)] {
+                let t = b * g.nx + a;
+                if pb.state[t] != FIXED {
+                    continue;
+                }
+                let ct = g.center(a, b);
+                let (bt, gt) = base_and_grind(p, ct);
+                let ft = gt - bt;
+                if ft >= -1e-9 {
+                    continue; // fixed for another reason (bore, pad, rim, raised)
+                }
+                let f0 = *fs.get_or_insert_with(|| {
+                    let (b0, g0) = base_and_grind(p, cs);
+                    g0 - b0
+                });
+                if !(f0 >= 0.0) {
+                    continue;
+                }
+                // bisection on the sign of grind - base (the grind law can be unbounded far from an edge)
+                let (mut t0, mut t1) = (0.0f64, 1.0f64);
+                for _ in 0..8 {
+                    let tm = 0.5 * (t0 + t1);
+                    let (bm, gm) = base_and_grind(p, (cs.0 + tm * (ct.0 - cs.0), cs.1 + tm * (ct.1 - cs.1)));
+                    if gm - bm >= 0.0 { t0 = tm } else { t1 = tm }
+                }
+                let tau = 0.5 * (t0 + t1);
+                let (ux, uy) = ((ct.0 - cs.0) / g.h, (ct.1 - cs.1) / g.h);
+                let c = (cs.0 + tau * (ct.0 - cs.0), cs.1 + tau * (ct.1 - cs.1));
+                let (ki, kj) = key(c);
+                let mut clear = true;
+                'nb: for bb in kj - 1..=kj + 1 {
+                    for aa in ki - 1..=ki + 1 {
+                        if let Some(list) = hash.get(&(aa, bb)) {
+                            if list.iter().any(|q| (q.0 - c.0).hypot(q.1 - c.1) < min_d) {
+                                clear = false;
+                                break 'nb;
+                            }
+                        }
+                    }
+                }
+                if clear {
+                    hash.entry((ki, kj)).or_default().push(c);
+                    pts.push((c.0 - eps * ux, c.1 - eps * uy));
+                    pts.push((c.0 + eps * ux, c.1 + eps * uy));
+                }
             }
         }
     }
@@ -609,7 +749,7 @@ fn isoline_length(g: Grid, v: &[f32], level: f32) -> f64 {
 pub fn build(p: &Pheno, prm: &Params) -> SmoothField {
     let started = std::time::Instant::now();
     let pb = problem(p, prm);
-    let flow = evolve(&pb, prm.r, prm.grow, prm.vp);
+    let flow = evolve(&pb, prm.r, prm.grow, prm.vp, prm.a);
     let n = pb.grid.len();
     let active: Vec<bool> = flow.owner.iter().map(|&o| o != 0).collect();
     let d: Vec<f32> = (0..n)
@@ -618,7 +758,10 @@ pub fn build(p: &Pheno, prm: &Params) -> SmoothField {
     let d0: Vec<f32> = (0..n)
         .map(|s| if pb.state[s] == OUTSIDE { f32::NAN } else { pb.d0[s] as f32 })
         .collect();
-    let steiner = steiner_points(pb.grid, &active, &d, &pb.state, prm.mesh);
+    let mut steiner = steiner_points(pb.grid, &active, &d, &pb.state, prm.mesh);
+    let grind_pts = grind_edge_points(p, &pb, &active, &flow.d, prm.mesh);
+    let n_grind_pts = grind_pts.len();
+    steiner.extend(grind_pts);
     let (mut changed, mut max_change, mut sq) = (0usize, 0.0f64, 0.0f64);
     for s in 0..n {
         if active[s] {
@@ -643,7 +786,7 @@ pub fn build(p: &Pheno, prm: &Params) -> SmoothField {
     let report = serde_json::json!({
         "schema": "jarambit.pocket_smooth.v1",
         "research_only": true,
-        "params": {"r_mm": prm.r, "h_mm": prm.h, "grow_mm": prm.grow, "mesh_mm": prm.mesh, "rim_mm": prm.rim, "volume_preserving": prm.vp},
+        "params": {"r_mm": prm.r, "h_mm": prm.h, "grow_mm": prm.grow, "mesh_mm": prm.mesh, "rim_mm": prm.rim, "volume_preserving": prm.vp, "film_slope_a": prm.a},
         "model": "graph mean-curvature flow of the face z = D/2 for T = r^2/2, per-basin volume (pressure) term, planform/grinds/bore/pad fixed",
         "grid": {"x0": pb.grid.x0, "y0": pb.grid.y0, "h": pb.grid.h, "nx": pb.grid.nx, "ny": pb.grid.ny},
         "cells": {
@@ -659,6 +802,7 @@ pub fn build(p: &Pheno, prm: &Params) -> SmoothField {
         "depth_change_mm": {"max": max_change, "rms_changed": if changed > 0 { (sq / changed as f64).sqrt() } else { 0.0 }},
         "isoline_length_by_depth_level_mm": lines,
         "steiner_points": steiner.len(),
+        "grind_edge_points": n_grind_pts,
         "seconds": started.elapsed().as_secs_f64(),
     });
     SmoothField { params: prm.clone(), grid: pb.grid, active, d, d0, steiner, report }
@@ -739,7 +883,7 @@ mod tests {
     fn chipped_circle_becomes_round_and_keeps_volume() {
         let (pb, _) = disk_problem(5.0, 2.0, 0.35, 0.125);
         let (spread0, _) = radial_spread(&pb, &pb.d0, 1.0);
-        let flow = evolve(&pb, 1.0, 0.5, true);
+        let flow = evolve(&pb, 1.0, 0.5, true, 1.0);
         let (spread1, _) = radial_spread(&pb, &flow.d, 1.0);
         assert_eq!(flow.basins, 1);
         assert!(spread1 < 0.35 * spread0, "rim roughness {spread0} -> {spread1}");
@@ -747,11 +891,29 @@ mod tests {
         assert!(rel < 2e-3, "volume drift {rel}");
     }
 
+    fn wall_cells(pb: &Problem, d: &[f64]) -> usize {
+        (0..pb.grid.len()).filter(|&s| d[s] > 0.1 && d[s] < 1.9).count()
+    }
+
+    #[test]
+    fn line_tension_rounds_chips_keeps_walls_steep_and_volume() {
+        let (pb, _) = disk_problem(5.0, 2.0, 0.35, 0.125);
+        let (spread0, _) = radial_spread(&pb, &pb.d0, 1.0);
+        let line = evolve(&pb, 1.0, 0.5, true, 0.0);
+        let film = evolve(&pb, 1.0, 0.5, true, 1.0);
+        let (spread1, _) = radial_spread(&pb, &line.d, 1.0);
+        assert!(spread1 < 0.35 * spread0, "rim roughness {spread0} -> {spread1}");
+        let rel = (line.volume_after_mm3 - line.volume_before_mm3).abs() / line.volume_before_mm3;
+        assert!(rel < 2e-3, "volume drift {rel}");
+        let (w0, wl, wf) = (wall_cells(&pb, &pb.d0), wall_cells(&pb, &line.d), wall_cells(&pb, &film.d));
+        assert!(wl < wf / 2, "line tension should keep the wall steep: raster {w0}, line {wl}, film {wf}");
+    }
+
     #[test]
     fn clean_circle_stays_a_circle() {
         let (pb, _) = disk_problem(5.0, 2.0, 0.0, 0.125);
         let (spread0, a0) = radial_spread(&pb, &pb.d0, 1.0);
-        let flow = evolve(&pb, 1.0, 0.5, true);
+        let flow = evolve(&pb, 1.0, 0.5, true, 1.0);
         let (spread1, a1) = radial_spread(&pb, &flow.d, 1.0);
         assert!(spread1 <= spread0 + 0.05, "{spread0} -> {spread1}");
         // The wall becomes an S-shaped meniscus of width ~r, so the mid-depth contour moves a little.
@@ -761,21 +923,21 @@ mod tests {
     #[test]
     fn without_pressure_the_pocket_shrinks() {
         let (pb, _) = disk_problem(3.0, 2.0, 0.0, 0.125);
-        let flow = evolve(&pb, 1.0, 0.5, false);
+        let flow = evolve(&pb, 1.0, 0.5, false, 1.0);
         assert!(flow.volume_after_mm3 < flow.volume_before_mm3);
     }
 
     #[test]
     fn fixed_and_outside_cells_never_change_and_no_pocket_means_no_change() {
         let (mut pb, _) = disk_problem(5.0, 2.0, 0.35, 0.125);
-        let flow = evolve(&pb, 1.0, 0.5, true);
+        let flow = evolve(&pb, 1.0, 0.5, true, 1.0);
         for s in 0..pb.grid.len() {
             if pb.state[s] != FREE {
                 assert_eq!(flow.d[s], pb.d0[s]);
             }
         }
         pb.d0.iter_mut().for_each(|x| *x = 0.0);
-        let flow = evolve(&pb, 1.0, 0.5, true);
+        let flow = evolve(&pb, 1.0, 0.5, true, 1.0);
         assert_eq!(flow.basins, 0);
         assert!(flow.d.iter().all(|&x| x == 0.0));
     }
@@ -784,7 +946,7 @@ mod tests {
     fn growth_is_bounded_and_depth_respects_dmax() {
         let (mut pb, radius) = disk_problem(5.0, 2.0, 0.35, 0.125);
         pb.dmax.iter_mut().for_each(|x| *x = 2.0);
-        let flow = evolve(&pb, 1.5, 0.5, true);
+        let flow = evolve(&pb, 1.5, 0.5, true, 1.0);
         for j in 0..pb.grid.ny {
             for i in 0..pb.grid.nx {
                 let s = j * pb.grid.nx + i;
@@ -800,8 +962,8 @@ mod tests {
     #[test]
     fn deterministic() {
         let (pb, _) = disk_problem(5.0, 2.0, 0.35, 0.125);
-        let a = evolve(&pb, 1.0, 0.5, true);
-        let b = evolve(&pb, 1.0, 0.5, true);
+        let a = evolve(&pb, 1.0, 0.5, true, 1.0);
+        let b = evolve(&pb, 1.0, 0.5, true, 1.0);
         assert!(a.d.iter().zip(&b.d).all(|(x, y)| x.to_bits() == y.to_bits()));
     }
 
@@ -820,7 +982,7 @@ mod tests {
             }
         }
         let pb = Problem { grid, state: vec![FREE; n], d0, dmax: vec![3.0; n] };
-        let flow = evolve(&pb, 1.0, 0.5, true);
+        let flow = evolve(&pb, 1.0, 0.5, true, 1.0);
         assert_eq!(flow.basins, 2);
         assert!(flow.worst_basin_volume_error < 5e-3, "{}", flow.worst_basin_volume_error);
     }
@@ -828,7 +990,7 @@ mod tests {
     #[test]
     fn params_parse_and_fail_closed() {
         let p = Params::parse("r=1.5,h=0.125,grow=0.4,mesh=0,rim=1.2,vp=0").unwrap();
-        assert_eq!(p, Params { r: 1.5, h: 0.125, grow: 0.4, mesh: 0.0, rim: 1.2, vp: false });
+        assert_eq!(p, Params { r: 1.5, h: 0.125, grow: 0.4, mesh: 0.0, rim: 1.2, vp: false, a: 0.0 });
         assert!(Params::parse("r=9").is_err());
         assert!(Params::parse("h=0.1").is_err());
         assert!(Params::parse("bogus=1").is_err());

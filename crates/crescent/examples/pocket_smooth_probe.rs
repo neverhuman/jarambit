@@ -119,6 +119,7 @@ fn main() {
         let sf = std::sync::Arc::try_unwrap(sfa).ok().expect("sole owner");
         let dv = rep["removed_volume_mm3"]["after"].as_f64().unwrap() - rep["removed_volume_mm3"]["before"].as_f64().unwrap();
         let tag = prm.key().replace([',', '='], "_");
+        let pbm = pocket_smooth::problem(&p, &prm);
         for (name, w) in &windows {
             let g = sf.grid;
             let i0 = (((w[0] - g.x0) / g.h).floor().max(0.0) as usize).min(g.nx - 1);
@@ -134,6 +135,22 @@ fn main() {
                         dmax = dmax.max(v);
                     }
                 }
+            }
+            {
+                // state map: 255 outside, 170 fixed, 110 free but not evolving, 30 evolving, 0 fixed with depth
+                let mut px = Vec::with_capacity(ww * hh);
+                for jj in 0..hh {
+                    let j = j1 - 1 - jj;
+                    for i in i0..i1 {
+                        let t = j * g.nx + i;
+                        px.push(match pbm.state[t] {
+                            pocket_smooth::OUTSIDE => 255,
+                            pocket_smooth::FIXED => if pbm.d0[t] > 0.0 { 0 } else { 170 },
+                            _ => if sf.active[t] { 30 } else { 110 },
+                        });
+                    }
+                }
+                pgm(&out.join(format!("{name}-state-{tag}.pgm")), ww, hh, &px);
             }
             for (field, label) in [(&sf.d0, "before"), (&sf.d, "after")] {
                 let mut px = Vec::with_capacity(ww * hh);
