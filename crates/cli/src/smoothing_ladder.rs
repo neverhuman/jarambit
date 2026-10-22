@@ -23,7 +23,8 @@ use std::process::{Command, Stdio};
 use std::sync::Mutex;
 
 const USAGE: &str = "usage: jarambit smoothing-ladder --winner DIR --label LABEL --smoother BIN --solver-python PY \
---out NEW_DIR [--levels PIN:ITERS,...] [--jobs N] [--code-commit SHA]\n\
+--out NEW_DIR [--levels PIN:ITERS,...] [--jobs N] [--code-commit SHA] [--resume]\n\
+--resume reuses completed smoothing runs and solver outputs in an existing --out directory;\n\
 run from the repository root; DIR holds the design's retained Stage-2 files (<label>.stl, _D1.json,\n\
 _master_scorecard.json, _rs.json, _export_stdout.txt, _genome.csv, _grind_law.json)";
 
@@ -143,12 +144,24 @@ pub fn smoothed_d1(d1: &Value, csv: &str) -> Res<(Value, usize)> {
     Ok((doc, verts.len()))
 }
 
+/// The solid-tip observation of one level. A solve that fails its own checks (residual tolerance,
+/// convergence) or a cross-check that fails leaves the objective unmeasured: zero credit, never a
+/// pass, and the level is still scored (W_ULTRALIGHT_v1 has no hard failures).
+#[derive(Clone, Debug, PartialEq)]
+pub enum Tip {
+    Measured { sk_max: f64, sk_avg: f64, dx_max: f64, dx_avg: f64 },
+    Unmeasured(String),
+}
+
 /// Smoothed scorecard: the as-exported one with only the geometry-reading measurements replaced.
-pub fn smoothed_scorecard(card: &Value, mass_g: f64, skfem: &Value, dolfinx: &Value, level: usize, withhold_brep: bool) -> Res<Value> {
-    let solid = skfem.get("solid").unwrap_or(skfem);
-    let (sk_max, sk_avg) = (num(solid, "/SF_solid_nodal_max")?, num(solid, "/SF_solid_nodal_avg")?);
-    let (dx_max, dx_avg) = (num(dolfinx, "/SF_nodal_max")?, num(dolfinx, "/SF_nodal_avg")?);
-    let err = [((sk_max - dx_max) / dx_max).abs(), ((sk_avg - dx_avg) / dx_avg).abs()];
+pub fn smoothed_scorecard(card: &Value, mass_g: f64, tip: &Tip, level: usize, withhold_brep: bool) -> Res<Value> {
+    // An unmeasured tip scores as the evaluator records it: SF 0 and a failed 100 % disagreement.
+    let (dx_max, dx_avg, err) = match tip {
+        Tip::Measured { sk_max, sk_avg, dx_max, dx_avg } => {
+            (*dx_max, *dx_avg, [((sk_max - dx_max) / dx_max).abs(), ((sk_avg - dx_avg) / dx_avg).abs()])
+        }
+        Tip::Unmeasured(_) => (0.0, 0.0, [1.0, 1.0]),
+    };
     let mut out = card.clone();
     let em = out.get_mut("engineering_metrics").and_then(Value::as_object_mut).ok_or("scorecard lacks engineering_metrics")?;
     em.insert("mass_3d_g".into(), json!(mass_g));
@@ -157,7 +170,7 @@ pub fn smoothed_scorecard(card: &Value, mass_g: f64, skfem: &Value, dolfinx: &Va
     em.insert("solid_tip_dolfinx_rel_err".into(), json!((err[0] * 1e6).round() / 1e6));
     let gates = out.pointer_mut("/weighted_cad_score/gates").and_then(Value::as_object_mut).ok_or("scorecard lacks weighted_cad_score.gates")?;
     gates.insert("solid_tip_3d_p2_1p82nm".into(), json!(dx_max >= 1.0));
-    gates.insert("dolfinx_cross_check_2pct".into(), json!(err.iter().all(|e| *e <= 0.02)));
+    gates.insert("dolfinx_cross_check_2pct".into(), json!(matches!(tip, Tip::Measured { .. }) && err.iter().all(|e| *e <= 0.02)));
     if withhold_brep {
         gates.insert("cad_watertight_and_single_solid".into(), json!(false));
         out["cad"]["cad_valid"] = json!(false);
@@ -165,6 +178,11 @@ pub fn smoothed_scorecard(card: &Value, mass_g: f64, skfem: &Value, dolfinx: &Va
     let subject = out.get("subject").and_then(Value::as_str).unwrap_or("design").to_string();
     out["subject"] = json!(format!("{subject}_smoothed_L{level}"));
     Ok(out)
+}
+
+/// Last non-empty line of a solver log: the reason a failed solve gives for itself.
+fn last_line(text: &str) -> String {
+    text.lines().rev().find(|l| !l.trim().is_empty()).unwrap_or("no output").trim().to_string()
 }
 
 fn run(cmd: &mut Command, log: &Path) -> Res<()> {
@@ -185,10 +203,83 @@ struct Ctx {
     rs: Value,
     d1: Value,
     volume0: f64,
+    /// Reuse completed smoothing runs and solver outputs already in the output directory.
+    resume: bool,
 }
 
 fn file(ctx: &Ctx, suffix: &str) -> PathBuf {
     ctx.winner.join(format!("{}{suffix}", ctx.label))
+}
+
+/// The skfem tip solve and the evaluator's DOLFINx cross-check for one prepared case.
+fn tip_observation(ctx: &Ctx, case: &Path) -> Res<(Tip, Option<Value>, Option<Value>)> {
+    let l = &ctx.label;
+    let skfem_path = case.join(format!("{l}_skfem_raw.json"));
+    let stdout_path = case.join(format!("{l}_skfem_stdout.txt"));
+    let dx_path = case.join(format!("{l}_dolfinx_result.json"));
+    let ran_and_failed = |p: &Path| -> Option<String> {
+        let text = fs::read_to_string(p).ok()?;
+        (!skfem_path.is_file() && text.contains("Traceback")).then(|| last_line(&text))
+    };
+    if ctx.resume {
+        if let Some(reason) = ran_and_failed(&stdout_path) {
+            return Ok((Tip::Unmeasured(format!("tip solve: {reason}")), None, None));
+        }
+    }
+    if !(ctx.resume && skfem_path.is_file()) {
+        let solved = run(
+            Command::new(&ctx.python)
+                .current_dir(&ctx.root)
+                .env("PYTHONPATH", &ctx.root)
+                .env("DUMP_MESH", case.join(format!("{l}_solid_mesh.npz")))
+                .envs([("OMP_NUM_THREADS", "1"), ("OPENBLAS_NUM_THREADS", "1"), ("MKL_NUM_THREADS", "1")])
+                .arg("fem_solid/tip_solid.py")
+                .arg(case.join(format!("{l}_D1.json")))
+                .args(["30", "4", "1"])
+                .arg(&skfem_path),
+            &stdout_path,
+        );
+        if solved.is_err() {
+            let reason = ran_and_failed(&stdout_path).unwrap_or_else(|| "tip solve exited non-zero".into());
+            return Ok((Tip::Unmeasured(format!("tip solve: {reason}")), None, None));
+        }
+    }
+    let skfem = read_json(&skfem_path)?;
+    if skfem.pointer("/solver/converged") != Some(&json!(true)) {
+        return Ok((Tip::Unmeasured("tip solve: solver reports no convergence".into()), Some(skfem), None));
+    }
+    let dolfinx: Value = match fs::read(&dx_path).ok().filter(|b| ctx.resume && !b.is_empty()) {
+        Some(bytes) => serde_json::from_slice(&bytes).map_err(|e| format!("{}: {e}", dx_path.display()))?,
+        None => {
+            // The evaluator's own runtime probe and DOLFINx cross-check, unchanged, on the saved mesh.
+            let probe = "import json,sys;from pathlib import Path;sys.path.insert(0,sys.argv[1])\n\
+from ops.ci.evaluate_cad_candidate import independent_runtime,run_independent_cross_check\n\
+d=Path(sys.argv[2]);rt=independent_runtime();(d/(sys.argv[3]+'_runtime.json')).write_text(json.dumps(rt,indent=2,sort_keys=True))\n\
+print(json.dumps(run_independent_cross_check(d/(sys.argv[3]+'_solid_mesh.npz'),d,sys.argv[3],rt)))";
+            let output = Command::new(&ctx.python)
+                .current_dir(&ctx.root)
+                .args(["-I", "-c", probe])
+                .arg(&ctx.root)
+                .arg(case)
+                .arg(l)
+                .output()
+                .map_err(|e| e.to_string())?;
+            if !output.status.success() {
+                let reason = last_line(&String::from_utf8_lossy(&output.stderr));
+                return Ok((Tip::Unmeasured(format!("DOLFINx cross-check: {reason}")), Some(skfem), None));
+            }
+            write(&dx_path, &output.stdout)?;
+            serde_json::from_slice(&output.stdout).map_err(|e| format!("cross-check output: {e}"))?
+        }
+    };
+    let solid = skfem.get("solid").unwrap_or(&skfem);
+    let tip = Tip::Measured {
+        sk_max: num(solid, "/SF_solid_nodal_max")?,
+        sk_avg: num(solid, "/SF_solid_nodal_avg")?,
+        dx_max: num(&dolfinx, "/SF_nodal_max")?,
+        dx_avg: num(&dolfinx, "/SF_nodal_avg")?,
+    };
+    Ok((tip, Some(skfem), Some(dolfinx)))
 }
 
 /// Smooth, re-solve and re-score one level above 0.
@@ -196,17 +287,21 @@ fn smoothed_level(ctx: &Ctx, index: usize, level: Level) -> Res<Value> {
     let dir = ctx.out.join(format!("L{index}"));
     let smooth = dir.join("smoothing");
     fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
-    run(
-        Command::new(&ctx.smoother)
-            .args(["--input".as_ref(), file(ctx, ".stl").as_os_str(), "--out".as_ref(), smooth.as_os_str()])
-            .args(["--label", &format!("{} smoothing ladder L{index}, not qualified", ctx.label)])
-            .args(["--lambda", "0.5", "--mu", "-0.5", "--max-displacement-mm", "2", "--normal-only"])
-            .args(["--pin-feature-angle", &level.pin_deg.to_string(), "--iterations", &level.iterations.to_string()]),
-        &dir.join("smoothing.log"),
-    )?;
+    if !(ctx.resume && smooth.join("metrics.json").is_file()) {
+        run(
+            Command::new(&ctx.smoother)
+                .args(["--input".as_ref(), file(ctx, ".stl").as_os_str(), "--out".as_ref(), smooth.as_os_str()])
+                .args(["--label", &format!("{} smoothing ladder L{index}, not qualified", ctx.label)])
+                .args(["--lambda", "0.5", "--mu", "-0.5", "--max-displacement-mm", "2", "--normal-only"])
+                .args(["--pin-feature-angle", &level.pin_deg.to_string(), "--iterations", &level.iterations.to_string()]),
+            &dir.join("smoothing.log"),
+        )?;
+    }
     let metrics = read_json(&smooth.join("metrics.json"))?;
-    if metrics["status"] != "pass" || num(&metrics, "/settings/iterations_completed")? as u32 != level.iterations {
-        return Err(format!("L{index}: smoothing did not complete: {}", metrics["reasons"]));
+    if metrics["status"] != "pass" || num(&metrics, "/settings/iterations_completed")? as u32 != level.iterations
+        || num(&metrics, "/pins/feature_angle_deg")? as u32 != level.pin_deg
+    {
+        return Err(format!("L{index}: smoothing did not complete as requested: {}", metrics["reasons"]));
     }
     let csv = String::from_utf8(read(&smooth.join("displacement.csv"))?).map_err(|e| e.to_string())?;
     let (d1, matched) = smoothed_d1(&ctx.d1, &csv)?;
@@ -217,50 +312,40 @@ fn smoothed_level(ctx: &Ctx, index: usize, level: Level) -> Res<Value> {
         fs::copy(file(ctx, suffix), case.join(format!("{l}{suffix}"))).map_err(|e| e.to_string())?;
     }
     let d1_path = case.join(format!("{l}_D1.json"));
-    write(&d1_path, serde_json::to_string(&d1).map_err(|e| e.to_string())?.as_bytes())?;
-    let skfem_path = case.join(format!("{l}_skfem_raw.json"));
-    run(
-        Command::new(&ctx.python)
-            .current_dir(&ctx.root)
-            .env("PYTHONPATH", &ctx.root)
-            .env("DUMP_MESH", case.join(format!("{l}_solid_mesh.npz")))
-            .envs([("OMP_NUM_THREADS", "1"), ("OPENBLAS_NUM_THREADS", "1"), ("MKL_NUM_THREADS", "1")])
-            .arg("fem_solid/tip_solid.py")
-            .arg(&d1_path)
-            .args(["30", "4", "1"])
-            .arg(&skfem_path),
-        &case.join(format!("{l}_skfem_stdout.txt")),
-    )?;
-    // The evaluator's own runtime probe and DOLFINx cross-check, unchanged, on the saved mesh.
-    let probe = "import json,sys;from pathlib import Path;sys.path.insert(0,sys.argv[1])\n\
-from ops.ci.evaluate_cad_candidate import independent_runtime,run_independent_cross_check\n\
-d=Path(sys.argv[2]);rt=independent_runtime();(d/(sys.argv[3]+'_runtime.json')).write_text(json.dumps(rt,indent=2,sort_keys=True))\n\
-print(json.dumps(run_independent_cross_check(d/(sys.argv[3]+'_solid_mesh.npz'),d,sys.argv[3],rt)))";
-    let dx_path = case.join(format!("{l}_dolfinx_result.json"));
-    let output = Command::new(&ctx.python)
-        .current_dir(&ctx.root)
-        .args(["-I", "-c", probe])
-        .arg(&ctx.root)
-        .arg(&case)
-        .arg(l)
-        .output()
-        .map_err(|e| e.to_string())?;
-    if !output.status.success() {
-        return Err(format!("L{index}: DOLFINx cross-check failed: {}", String::from_utf8_lossy(&output.stderr)));
+    let d1_bytes = serde_json::to_string(&d1).map_err(|e| e.to_string())?;
+    if ctx.resume && d1_path.is_file() {
+        // Reused solver outputs must belong to exactly this smoothed skin.
+        if read(&d1_path)? != d1_bytes.as_bytes() {
+            return Err(format!("L{index}: existing {} differs from this level's smoothed D1", d1_path.display()));
+        }
+    } else {
+        write(&d1_path, d1_bytes.as_bytes())?;
     }
-    write(&dx_path, &output.stdout)?;
-    let skfem = read_json(&skfem_path)?;
-    let dolfinx: Value = serde_json::from_slice(&output.stdout).map_err(|e| format!("L{index}: cross-check output: {e}"))?;
-    if skfem.pointer("/solver/converged") != Some(&json!(true)) {
-        return Err(format!("L{index}: skfem tip solve did not converge"));
-    }
+    let (tip, skfem, dolfinx) = tip_observation(ctx, &case)?;
+    write(&case.join("tip_status.json"), (serde_json::to_string_pretty(&match &tip {
+        Tip::Measured { .. } => json!({"status": "measured"}),
+        Tip::Unmeasured(reason) => json!({"status": "unmeasured", "reason": reason}),
+    }).map_err(|e| e.to_string())? + "\n").as_bytes())?;
     let (vb, va) = (num(&metrics, "/result/volume_mm3/before")?, num(&metrics, "/result/volume_mm3/after")?);
     let mass = fixed((ctx.volume0 + (va - vb)) * DENSITY_G_PER_MM3, 4);
-    let card = smoothed_scorecard(&ctx.card, mass, &skfem, &dolfinx, index, true)?;
-    let card_brep = smoothed_scorecard(&ctx.card, mass, &skfem, &dolfinx, index, false)?;
+    let card = smoothed_scorecard(&ctx.card, mass, &tip, index, true)?;
+    let card_brep = smoothed_scorecard(&ctx.card, mass, &tip, index, false)?;
     write(&dir.join(format!("{l}_L{index}_scorecard.json")), (serde_json::to_string_pretty(&card).map_err(|e| e.to_string())? + "\n").as_bytes())?;
-    let solid = skfem.get("solid").unwrap_or(&skfem);
     let stl = read(&smooth.join("smoothed.stl"))?;
+    let solid_tip = match (&tip, &skfem, &dolfinx) {
+        (Tip::Measured { .. }, Some(skfem), Some(dolfinx)) => {
+            let solid = skfem.get("solid").unwrap_or(skfem);
+            json!({
+                "status": "measured",
+                "skfem": {"SF_nodal_max": solid["SF_solid_nodal_max"], "SF_nodal_avg": solid["SF_solid_nodal_avg"], "n_tet": solid["n_tet"], "n_dof": solid["n_dof"],
+                          "iterations": skfem["solver"]["iterations"], "relative_residual": skfem["solver"]["relative_residual"]},
+                "dolfinx": {"SF_nodal_max": dolfinx["SF_nodal_max"], "SF_nodal_avg": dolfinx["SF_nodal_avg"], "ksp_its": dolfinx["ksp_its"]},
+                "rel_err_nodal_max": card["engineering_metrics"]["solid_tip_dolfinx_rel_err"],
+            })
+        }
+        (Tip::Unmeasured(reason), ..) => json!({"status": "unmeasured", "reason": reason, "scored_as": "SF 0, cross-check failed (zero credit on the solid-tip objective)"}),
+        _ => return Err(format!("L{index}: inconsistent tip observation")),
+    };
     Ok(json!({
         "smoothing": {
             "dir": smooth, "smoothed_stl": smooth.join("smoothed.stl"), "smoothed_stl_sha256": sha(&stl),
@@ -272,12 +357,7 @@ print(json.dumps(run_independent_cross_check(d/(sys.argv[3]+'_solid_mesh.npz'),d
         "surface_vertices_matched": matched,
         "case_dir": case,
         "mass_3d_g": mass,
-        "solid_tip": {
-            "skfem": {"SF_nodal_max": solid["SF_solid_nodal_max"], "SF_nodal_avg": solid["SF_solid_nodal_avg"], "n_tet": solid["n_tet"], "n_dof": solid["n_dof"],
-                      "iterations": skfem["solver"]["iterations"], "relative_residual": skfem["solver"]["relative_residual"]},
-            "dolfinx": {"SF_nodal_max": dolfinx["SF_nodal_max"], "SF_nodal_avg": dolfinx["SF_nodal_avg"], "ksp_its": dolfinx["ksp_its"]},
-            "rel_err_nodal_max": card["engineering_metrics"]["solid_tip_dolfinx_rel_err"],
-        },
+        "solid_tip": solid_tip,
         "score": fixed(compute_canonical_ultralight_weighted_fitness(&card, &ctx.rs), 6),
         "score_with_brep": fixed(compute_canonical_ultralight_weighted_fitness(&card_brep, &ctx.rs), 6),
     }))
@@ -291,15 +371,23 @@ pub fn table_tex(levels: &[Value]) -> String {
         let opt = |v: Option<f64>, d: usize| v.map_or("--".to_string(), |x| format!("{x:.d$}"));
         let pins = if lv["iterations"] == 0 { "--".to_string() } else { format!("{}$^\\circ$", lv["pin_deg"]) };
         s += &format!(
-            "L{} & {} & {} & {} & {} & {} & {:.4} & {:.4} & {:.6} & {:.6} \\\\\n",
+            "L{} & {} & {} & {} & {} & {} & {:.4} & {} & {:.6} & {:.6} \\\\\n",
             lv["level"], pins, lv["iterations"],
             opt(f("/smoothing/max_displacement_mm"), 3), opt(f("/smoothing/rms_displacement_mm"), 4),
             opt(f("/smoothing/volume_mm3/change_percent"), 3),
-            f("/mass_3d_g").unwrap_or(f64::NAN), f("/solid_tip/dolfinx/SF_nodal_max").unwrap_or(f64::NAN),
+            f("/mass_3d_g").unwrap_or(f64::NAN), tip_text(lv),
             f("/score").unwrap_or(f64::NAN), f("/score_with_brep").unwrap_or(f64::NAN),
         );
     }
     s
+}
+
+/// The tip column: DOLFINx nodal-maximum SF, or "unmeasured" (scored as 0).
+fn tip_text(lv: &Value) -> String {
+    match lv.pointer("/solid_tip/dolfinx/SF_nodal_max").and_then(Value::as_f64) {
+        Some(sf) if lv["solid_tip"]["status"] == "measured" => format!("{sf:.4}"),
+        _ => "unmeasured".into(),
+    }
 }
 
 /// One `\LadderLevel{level}{pins}{iterations}{F}{F with B-rep}{max mm}{rms mm}{tip SF}{mass g}` per level.
@@ -308,20 +396,21 @@ pub fn levels_tex(levels: &[Value]) -> String {
     for lv in levels {
         let f = |p: &str| lv.pointer(p).and_then(Value::as_f64).unwrap_or(0.0);
         s += &format!(
-            "\\LadderLevel{{{}}}{{{}}}{{{}}}{{{:.6}}}{{{:.6}}}{{{:.3}}}{{{:.4}}}{{{:.4}}}{{{:.4}}}\n",
+            "\\LadderLevel{{{}}}{{{}}}{{{}}}{{{:.6}}}{{{:.6}}}{{{:.3}}}{{{:.4}}}{{{}}}{{{:.4}}}\n",
             lv["level"], lv["pin_deg"], lv["iterations"], f("/score"), f("/score_with_brep"),
-            f("/smoothing/max_displacement_mm"), f("/smoothing/rms_displacement_mm"), f("/solid_tip/dolfinx/SF_nodal_max"), f("/mass_3d_g"),
+            f("/smoothing/max_displacement_mm"), f("/smoothing/rms_displacement_mm"), tip_text(lv), f("/mass_3d_g"),
         );
     }
     s
 }
 
-/// Whitespace-separated table for the PDF's score chart.
+/// Whitespace-separated table for the PDF's score chart; an unmeasured tip is written as SF 0.
 pub fn scores_dat(levels: &[Value]) -> String {
     let mut s = String::from("level rms_mm score score_with_brep tip_sf mass_g\n");
     for lv in levels {
         let f = |p: &str| lv.pointer(p).and_then(Value::as_f64).unwrap_or(0.0);
-        s += &format!("{} {:.5} {:.6} {:.6} {:.4} {:.4}\n", lv["level"], f("/smoothing/rms_displacement_mm"), f("/score"), f("/score_with_brep"), f("/solid_tip/dolfinx/SF_nodal_max"), f("/mass_3d_g"));
+        let tip = if lv["solid_tip"]["status"] == "measured" { f("/solid_tip/dolfinx/SF_nodal_max") } else { 0.0 };
+        s += &format!("{} {:.5} {:.6} {:.6} {:.4} {:.4}\n", lv["level"], f("/smoothing/rms_displacement_mm"), f("/score"), f("/score_with_brep"), tip, f("/mass_3d_g"));
     }
     s
 }
@@ -349,8 +438,9 @@ fn run_ladder(args: &[String]) -> Res<PathBuf> {
     let levels = parse_levels(&arg("--levels").unwrap_or_else(|| DEFAULT_LEVELS.into()))?;
     let jobs: usize = arg("--jobs").map_or(Ok(5), |j| j.parse().map_err(|_| "bad --jobs".to_string()))?.max(1);
     let out = PathBuf::from(need("--out")?);
-    if out.exists() {
-        return Err(format!("{} exists; choose a new output directory", out.display()));
+    let resume = args.iter().any(|a| a == "--resume");
+    if out.exists() && !resume {
+        return Err(format!("{} exists; choose a new output directory or pass --resume", out.display()));
     }
     let label = need("--label")?;
     let winner = PathBuf::from(need("--winner")?);
@@ -368,6 +458,7 @@ fn run_ladder(args: &[String]) -> Res<PathBuf> {
         smoother: smoother.clone(),
         python,
         out: out.clone(),
+        resume,
     };
     fs::create_dir_all(&out).map_err(|e| e.to_string())?;
     let exported = fixed(compute_canonical_ultralight_weighted_fitness(&ctx.card, &ctx.rs), 6);
@@ -395,7 +486,8 @@ fn run_ladder(args: &[String]) -> Res<PathBuf> {
     let mut rows = vec![json!({
         "level": 0, "pin_deg": 0, "iterations": 0, "description": "as exported, stored scorecard, nothing re-solved",
         "mass_3d_g": ctx.card["engineering_metrics"]["mass_3d_g"],
-        "solid_tip": {"dolfinx": {"SF_nodal_max": stored, "SF_nodal_avg": ctx.card["engineering_metrics"]["solid_tip_sf_nodal_avg"]}},
+        "solid_tip": {"status": "measured", "source": "stored Stage-2 evaluation",
+                      "dolfinx": {"SF_nodal_max": stored, "SF_nodal_avg": ctx.card["engineering_metrics"]["solid_tip_sf_nodal_avg"]}},
         "score": exported, "score_with_brep": exported, "smoothed_stl": file(&ctx, ".stl"),
     })];
     let mut failures = Vec::new();
@@ -486,9 +578,8 @@ mod tests {
         let card = json!({"subject": "d", "cad": {"cad_valid": true},
             "engineering_metrics": {"mass_3d_g": 92.7, "solid_tip_sf_nodal_max": 0.35, "spg": 4.0},
             "weighted_cad_score": {"gates": {"cad_watertight_and_single_solid": true, "ring_pull_1500n": true}}});
-        let skfem = json!({"solid": {"SF_solid_nodal_max": 0.377, "SF_solid_nodal_avg": 0.412}});
-        let dx = json!({"SF_nodal_max": 0.3766, "SF_nodal_avg": 0.4123});
-        let out = smoothed_scorecard(&card, 92.6455, &skfem, &dx, 4, true).unwrap();
+        let tip = Tip::Measured { sk_max: 0.377, sk_avg: 0.412, dx_max: 0.3766, dx_avg: 0.4123 };
+        let out = smoothed_scorecard(&card, 92.6455, &tip, 4, true).unwrap();
         assert_eq!(out["engineering_metrics"]["mass_3d_g"], json!(92.6455));
         assert_eq!(out["engineering_metrics"]["solid_tip_sf_nodal_max"], json!(0.3766));
         assert_eq!(out["engineering_metrics"]["spg"], json!(4.0));
@@ -497,8 +588,21 @@ mod tests {
         assert_eq!(out["weighted_cad_score"]["gates"]["dolfinx_cross_check_2pct"], json!(true));
         assert_eq!(out["cad"]["cad_valid"], json!(false));
         assert_eq!(out["subject"], json!("d_smoothed_L4"));
-        let kept = smoothed_scorecard(&card, 92.6455, &skfem, &dx, 4, false).unwrap();
+        let kept = smoothed_scorecard(&card, 92.6455, &tip, 4, false).unwrap();
         assert_eq!(kept["weighted_cad_score"]["gates"]["cad_watertight_and_single_solid"], json!(true));
         assert_eq!(kept["cad"]["cad_valid"], json!(true));
+    }
+
+    #[test]
+    fn an_unmeasured_tip_scores_zero_and_fails_its_cross_check() {
+        let card = json!({"subject": "d", "cad": {"cad_valid": true},
+            "engineering_metrics": {"mass_3d_g": 92.7, "solid_tip_sf_nodal_max": 0.35, "solid_tip_sf_nodal_avg": 0.39},
+            "weighted_cad_score": {"gates": {"solid_tip_3d_p2_1p82nm": false, "dolfinx_cross_check_2pct": true}}});
+        let tip = Tip::Unmeasured("primary solve did not meet its configured 1e-10 tolerance".into());
+        let out = smoothed_scorecard(&card, 92.6, &tip, 7, true).unwrap();
+        assert_eq!(out["engineering_metrics"]["solid_tip_sf_nodal_max"], json!(0.0));
+        assert_eq!(out["engineering_metrics"]["solid_tip_dolfinx_rel_err"], json!(1.0));
+        assert_eq!(out["weighted_cad_score"]["gates"]["dolfinx_cross_check_2pct"], json!(false));
+        assert_eq!(last_line("solved\nTraceback\nRuntimeError: tolerance\n\n"), "RuntimeError: tolerance");
     }
 }
