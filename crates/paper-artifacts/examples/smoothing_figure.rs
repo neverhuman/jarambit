@@ -3,7 +3,9 @@
 //! (framed on the before mesh) and one set of lighting and render settings serve all three.
 //! Geometry only: nothing is re-scored, re-assessed or qualified. Writes a NEW output directory.
 //! Usage: smoothing_figure --before STL --before-sha256 HEX --after STL --after-sha256 HEX \
-//!        --code-commit SHA --out NEW_DIR
+//!        --code-commit SHA --out NEW_DIR [--width PX]
+//! `--width` (default 1200) scales the image and camera framing, and the outline up to the
+//! renderer's 3 px limit; the height keeps the 1200x510 aspect of the hero figure.
 use jarambit_paper_artifacts::appearance::{
     self, Camera, Lighting, NormalSettings, RawMesh, RenderSettings, Vec3,
 };
@@ -20,6 +22,7 @@ const CT: f64 = 0.9945218953682733;
 const ST: f64 = -0.10452846326765347;
 const WIDTH: usize = 1200;
 const HEIGHT: usize = 510;
+const OUTLINE_PIXELS: f64 = 2.0;
 const SUPERSAMPLE: usize = 2;
 // Hero recipe values (docs/paper/generated/hero-appearance.v1.json).
 const BASE_RGB: [u8; 3] = [196, 204, 214];
@@ -59,7 +62,7 @@ fn light() -> Lighting {
 
 /// Frames the before mesh so its projected extent fills the viewport with a margin.
 /// The same camera is used for the after mesh and the heatmap.
-fn camera_for(mesh: &RawMesh) -> Camera {
+fn camera_for(mesh: &RawMesh, width: usize, height: usize) -> Camera {
     let rotation = [[CT, ST, 0.0], [ST, -CT, 0.0], [0.0, 0.0, -1.0]];
     let (mut min, mut max) = ([f64::INFINITY; 2], [f64::NEG_INFINITY; 2]);
     for tri in mesh.triangles() {
@@ -72,24 +75,25 @@ fn camera_for(mesh: &RawMesh) -> Camera {
         }
     }
     let scale =
-        (0.86 * WIDTH as f64 / (max[0] - min[0])).min(0.80 * HEIGHT as f64 / (max[1] - min[1]));
+        (0.86 * width as f64 / (max[0] - min[0])).min(0.80 * height as f64 / (max[1] - min[1]));
     let mid = [(min[0] + max[0]) / 2.0, (min[1] + max[1]) / 2.0];
     Camera {
         rotation,
         scale,
         offset: [
-            WIDTH as f64 / 2.0 - scale * mid[0],
-            HEIGHT as f64 / 2.0 + scale * mid[1],
+            width as f64 / 2.0 - scale * mid[0],
+            height as f64 / 2.0 + scale * mid[1],
         ],
     }
 }
 
-fn render_settings(camera: Camera) -> RenderSettings {
+fn render_settings(camera: Camera, width: usize, height: usize) -> RenderSettings {
     RenderSettings {
-        width: WIDTH,
-        height: HEIGHT,
+        width,
+        height,
         supersample: SUPERSAMPLE,
-        outline_pixels: 2.0,
+        // The renderer accepts at most a 3 px outline.
+        outline_pixels: (OUTLINE_PIXELS * width as f64 / WIDTH as f64).min(3.0),
         camera,
         lighting: light(),
     }
@@ -213,6 +217,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let after_path = PathBuf::from(arg("--after")?);
     let out = PathBuf::from(arg("--out")?);
     let code_commit = arg("--code-commit")?;
+    let width: usize = match args.iter().position(|a| a == "--width") {
+        Some(i) => args.get(i + 1).ok_or("missing --width value")?.parse()?,
+        None => WIDTH,
+    };
+    if !(WIDTH..=7200).contains(&width) {
+        return Err(format!("--width {width} outside {WIDTH}..=7200").into());
+    }
+    let height = (width * HEIGHT + WIDTH / 2) / WIDTH;
     let before = load(&before_path, &arg("--before-sha256")?)?;
     let after = load(&after_path, &arg("--after-sha256")?)?;
     if out.exists() {
@@ -223,8 +235,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if before.mesh.len() != after.mesh.len() {
         return Err("before and after face counts differ".into());
     }
-    let camera = camera_for(&before.mesh);
-    let settings = render_settings(camera);
+    let camera = camera_for(&before.mesh, width, height);
+    let settings = render_settings(camera, width, height);
     let base = vec![BASE_RGB; before.mesh.len()];
 
     let (normals_b, stats_b) = appearance::derive_normals(&before.mesh, NORMALS, None)?;
@@ -254,17 +266,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     fs::create_dir(&out)?;
     let outputs = vec![
-        write_new(&out, "winner-before.png", &png(&image_b.rgb, WIDTH, HEIGHT))?,
-        write_new(&out, "winner-after.png", &png(&image_a.rgb, WIDTH, HEIGHT))?,
+        write_new(&out, "winner-before.png", &png(&image_b.rgb, width, height))?,
+        write_new(&out, "winner-after.png", &png(&image_a.rgb, width, height))?,
         write_new(
             &out,
             "winner-displacement.png",
-            &png(&image_h.unlit_rgb, WIDTH, HEIGHT),
+            &png(&image_h.unlit_rgb, width, height),
         )?,
         write_new(
             &out,
             "winner-displacement-colorbar.png",
-            &png(&colour_bar(WIDTH, 28), WIDTH, 28),
+            &png(&colour_bar(width, 28), width, 28),
         )?,
     ];
     let manifest = json!({
@@ -294,7 +306,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         },
         "lighting": {"direction_camera": light().direction, "ambient": 0.35, "diffuse": 0.65, "specular": 0.04, "shininess": 24},
         "normals": {"crease_degrees": NORMALS.crease_degrees, "blend": NORMALS.blend, "max_deviation_degrees": NORMALS.max_deviation_degrees},
-        "render": {"width": WIDTH, "height": HEIGHT, "supersample": SUPERSAMPLE, "outline_pixels": 2.0, "renderer": "deterministic Rust CPU depth raster (appearance::render)"},
+        "render": {"width": width, "height": height, "supersample": SUPERSAMPLE, "outline_pixels": settings.outline_pixels, "renderer": "deterministic Rust CPU depth raster (appearance::render)"},
         "base_rgb": BASE_RGB,
         "images": {
             "winner-before.png": "lit appearance of the before mesh (base colour uniform)",

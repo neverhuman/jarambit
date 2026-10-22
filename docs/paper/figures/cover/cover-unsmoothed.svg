@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2000" height="850" viewBox="0 0 2000 850">
+  <rect width="2000" height="850" fill="#ffffff"/>
+  <image xlink:href="render-unsmoothed.png" x="0" y="0" width="2000" height="850"/>
+  <rect x="1520" y="400" width="220" height="110" fill="none" stroke="#007E87" stroke-width="3"/>
+  <svg x="15" y="12" width="550" height="275" viewBox="1520 400 220 110"><image xlink:href="render-unsmoothed.png" x="0" y="0" width="2000" height="850"/></svg>
+  <rect x="15" y="12" width="550" height="275" fill="none" stroke="#007E87" stroke-width="3"/>
+  <rect x="18" y="15" width="230" height="40" fill="#ffffff"/>
+  <text x="27" y="45" font-family="TeX Gyre Heros" font-size="26" fill="#007E87">Blade grind, 2.5x</text>
+  <g transform="translate(1425,655)">
+    <rect width="560" height="180" rx="10" fill="#ffffff" stroke="#132D3B" stroke-width="2.5"/>
+    <text x="22" y="42" font-family="TeX Gyre Heros" font-size="28" fill="#132D3B">W_ULTRALIGHT_v1 fitness</text>
+    <text x="22" y="118" font-family="TeX Gyre Heros" font-weight="bold" font-size="76" fill="#132D3B">75.98</text>
+    <text x="245" y="118" font-family="TeX Gyre Heros" font-size="32" fill="#132D3B">/ 100</text>
+    <text x="22" y="160" font-family="TeX Gyre Heros" font-size="26" fill="#A3442D">As exported (not smoothed)</text>
+  </g>
+</svg>

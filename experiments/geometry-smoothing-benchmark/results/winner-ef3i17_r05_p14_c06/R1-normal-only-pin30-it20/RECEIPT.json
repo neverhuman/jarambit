@@ -1,0 +1,34 @@
+{
+  "schema": "smoothing_receipt.v1",
+  "task": "OWNER-SMOOTHING-20261022-canonical-winner",
+  "rung": "R1",
+  "ladder_position": "same pre-declared R1 setting as the 2026-10-21 run; R2 and R3 are weaker (5 iterations) and were not run",
+  "code_commit": "d3f27fed670954540ec7b1067257416e53d7b339",
+  "tool": "geometry-smoothing-benchmark 0.1.0",
+  "tool_binary_sha256": "52501e69297b27fbe5efc747cd3331c8239fd692c2fb27d456900e500b0c0d55",
+  "toolchain": "rustc 1.85.1",
+  "command": "./target/release/geometry-smoothing-benchmark --input /home/ubuntu/jarambit_runs/smoothing/inputs/ef3i17_r05_p14_c06/ef3i17_r05_p14_c06.stl --out /home/ubuntu/jarambit_runs/smoothing/ef3i17_r05_p14_c06-R1-20261022T082935Z --label ef3i17_r05_p14_c06: best evolved design by canonical W_ULTRALIGHT_v1 (75.983539), not qualified --lambda 0.5 --mu -0.5 --max-displacement-mm 2 --normal-only --pin-feature-angle 30 --iterations 20",
+  "exit_code": 0,
+  "winner": {
+    "label": "ef3i17_r05_p14_c06",
+    "canonical_w_ultralight_v1": 75.983539,
+    "selection": "rank 1 of 598 retained Stage-2 assessments by canonical W_ULTRALIGHT_v1 recomputation (docs/paper/figures/cover/winner-selection.v1.json)",
+    "path": "/home/ubuntu/jarambit_runs/smoothing/inputs/ef3i17_r05_p14_c06/ef3i17_r05_p14_c06.stl",
+    "sha256": "c31d4dbb7ca5380a5f55baa4ca841834fecbc0a7bd845787e088cdc15c633fda",
+    "copied_from": "source=xbabe3:/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe3/islands/i17/by-content/35de3fd19bb50a4ce55f625581d0aaab6bed3385813efbc8f50e771b6d5d4292/attempt-1792500097808425283"
+  },
+  "output_dir": "/home/ubuntu/jarambit_runs/smoothing/ef3i17_r05_p14_c06-R1-20261022T082935Z",
+  "outputs": [
+    {
+      "name": "smoothed.stl",
+      "bytes": 26224184,
+      "sha256": "e4ee6a7768b3e27886db1ef2b6d0ef853e62a54656dcb571912627751d532d68"
+    },
+    {
+      "name": "displacement.csv",
+      "bytes": 4236060,
+      "sha256": "5faff0f99bd9fa375b95681e97c83ed0154cc3185a69ef6908d3718302f7a9da"
+    }
+  ],
+  "not_qualified": true
+}

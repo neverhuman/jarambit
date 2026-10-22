@@ -1,0 +1,184 @@
+{
+  "schema": "jarambit.cover_winner_selection.v1",
+  "recorded_utc": "2026-10-22T08:27:49Z",
+  "metric": "W_ULTRALIGHT_v1 (0-100), canonical",
+  "method": "ops/ci/ultralight_weighted_fitness.py::compute_ultralight_weighted_fitness(master_scorecard, rs) on every retained Stage-2 assessment (*_master_scorecard.json with *_rs.json) under ~/jarambit_runs/evo_*/<host>/islands/*/by-content/ on xbabe1, xbabe2 and xbabe3. The Rust auto-evolve scorer (compute_canonical_ultralight_weighted_fitness) returns the same value; checked on ef2i91_r03_p14_c26 (75.213491) and on live runs ec2i002_r02_p14_c37 and ec2i005_r03_p14_c75, whose logged scores equal the recomputation.",
+  "scorer": {
+    "path": "ops/ci/ultralight_weighted_fitness.py",
+    "git_blob_sha1": "9cfb4416d374e875e5846f6e91e2229148b6f5f4",
+    "repo_commit": "d3f27fed670954540ec7b1067257416e53d7b339"
+  },
+  "assessments": 598,
+  "per_host": {
+    "xbabe1": 30,
+    "xbabe2": 404,
+    "xbabe3": 164
+  },
+  "winner": {
+    "canonical_w_ultralight_v1": 75.983539,
+    "label": "ef3i17_r05_p14_c06",
+    "host": "xbabe3",
+    "run": "evo_full_20261018",
+    "island": "i17"
+  },
+  "top20": [
+    {
+      "canonical_w_ultralight_v1": 75.983539,
+      "label": "ef3i17_r05_p14_c06",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i17"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.905040,
+      "label": "ef3i17_r05_p14_c13",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i17"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.888003,
+      "label": "ef3i17_r05_p14_c14",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i17"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.882190,
+      "label": "ef3i17_r04_p14_c102",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i17"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.511106,
+      "label": "ec2i002_r02_p14_c37",
+      "host": "xbabe2",
+      "run": "evo_continuous",
+      "island": "i002"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.497137,
+      "label": "ef3i24_r04_p14_c03",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i24"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.496490,
+      "label": "ef3i24_r05_p14_c17",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i24"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.489089,
+      "label": "ec1i003_r03_p14_c03",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i003"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.473214,
+      "label": "ef3i17_r04_p14_c75",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i17"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.467520,
+      "label": "ef3i17_r04_p14_c03",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i17"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.463948,
+      "label": "ef2i95_r05_p14_c27",
+      "host": "xbabe2",
+      "run": "evo_full_20261018",
+      "island": "i95"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.459958,
+      "label": "ec1i001_r03_p14_c61",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i001"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.455992,
+      "label": "ef2i95_r04_p14_c27",
+      "host": "xbabe2",
+      "run": "evo_full_20261018",
+      "island": "i95"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.453003,
+      "label": "ef3i24_r03_p14_c27",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i24"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.452951,
+      "label": "ef3i24_r04_p14_c01",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i24"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.446509,
+      "label": "ef3i17_r03_p14_c75",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i17"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.442516,
+      "label": "ef3i24_r03_p14_c99",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i24"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.442157,
+      "label": "ef3i20_r03_p14_c109",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i20"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.431875,
+      "label": "ef3i17_r03_p14_c27",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i17"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.429654,
+      "label": "ec1i003_r02_p14_c38",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i003"
+    }
+  ],
+  "leaderboard_inflation": {
+    "note": "Stage-2 scores stored in the 2026-10-18 run leaderboards exceed the canonical recomputation from the same retained scorecards, so stored leaderboard values are not used for selection.",
+    "xbabe2_evo_full_20261018": {
+      "leaderboard_entries": 218,
+      "above_canonical": 218,
+      "equal": 0
+    },
+    "xbabe3_evo_full_20261018": {
+      "leaderboard_entries": 108,
+      "above_canonical": 79,
+      "equal": 29
+    },
+    "example": {
+      "label": "ef2i91_r03_p14_c26",
+      "leaderboard": 80.253391,
+      "canonical": 75.213491
+    }
+  }
+}

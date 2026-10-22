@@ -7,8 +7,8 @@
   "camera": {
     "framed_on": "before mesh, shared by all three images; no refit",
     "offset": [
-      173.4415930112014,
-      281.3007736680978
+      173.46493574274552,
+      281.3077875018172
     ],
     "rotation": [
       [
@@ -27,31 +27,31 @@
         -1.0
       ]
     ],
-    "scale": 4.852640779087544,
-    "sha256": "426ba2761caf958a6e1248d43efaee73c02bde72a0d6c0db39d3ccf14c9b020b"
+    "scale": 4.853767166442394,
+    "sha256": "94109016e723c625eb74f00f83f0d86bca7d72d5b5a5f410b52d50a2f4f1b0b9"
   },
-  "code_commit": "b640397",
-  "command": "./target/release/examples/smoothing_figure --before /home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/i91/by-content/e7ab9c8531255490be6a05c5dab8f629159ee9eae0580bda459a398a03747063/attempt-1792452614126747868/ef2i91_r03_p14_c26.stl --before-sha256 7741cf82418984b52e89e4a5f4f97ce49723e0d4513c2c9eada139b4bdeaeba6 --after /home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-s1b-R1-20261021T231908Z/smoothed.stl --after-sha256 895036be4f93beea3ce036946a9a21cbfcf4f262ec62b81433add776047d8888 --code-commit b640397 --out /home/ubuntu/jarambit_runs/smoothing/figure-20261021T232655Z",
+  "code_commit": "d3f27fed670954540ec7b1067257416e53d7b339+worktree",
+  "command": "crates/paper-artifacts/target/release/examples/smoothing_figure --before /home/ubuntu/jarambit_runs/smoothing/inputs/ef3i17_r05_p14_c06/ef3i17_r05_p14_c06.stl --before-sha256 c31d4dbb7ca5380a5f55baa4ca841834fecbc0a7bd845787e088cdc15c633fda --after /home/ubuntu/jarambit_runs/smoothing/ef3i17_r05_p14_c06-R1-20261022T082935Z/smoothed.stl --after-sha256 e4ee6a7768b3e27886db1ef2b6d0ef853e62a54656dcb571912627751d532d68 --code-commit d3f27fed670954540ec7b1067257416e53d7b339+worktree --out /home/ubuntu/jarambit_runs/smoothing/ef3i17_r05_p14_c06-figures-1200-20261022T083549Z",
   "geometry": {
     "face_order_identical": true,
-    "faces": 90948,
-    "max_corner_displacement_mm": 0.2369827296563538,
-    "mean_corner_displacement_mm": 0.006082020257308174,
+    "faces": 91400,
+    "max_corner_displacement_mm": 0.2289987177339166,
+    "mean_corner_displacement_mm": 0.00441184277019602,
     "normals_after": {
-      "blocked_edges": 14050,
-      "capped_corners": 10,
-      "joined_edges": 122372
+      "blocked_edges": 8178,
+      "capped_corners": 12,
+      "joined_edges": 128922
     },
     "normals_before": {
-      "blocked_edges": 15338,
-      "capped_corners": 4,
-      "joined_edges": 121084
+      "blocked_edges": 9398,
+      "capped_corners": 18,
+      "joined_edges": 127702
     }
   },
   "heatmap": {
     "range_mm": [
       0.0,
-      0.2369827296563538
+      0.2289987177339166
     ],
     "stops_srgb": [
       {
@@ -89,14 +89,14 @@
   },
   "inputs": {
     "after": {
-      "bytes": 26941039,
-      "path": "/home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-s1b-R1-20261021T231908Z/smoothed.stl",
-      "sha256": "895036be4f93beea3ce036946a9a21cbfcf4f262ec62b81433add776047d8888"
+      "bytes": 26224184,
+      "path": "/home/ubuntu/jarambit_runs/smoothing/ef3i17_r05_p14_c06-R1-20261022T082935Z/smoothed.stl",
+      "sha256": "e4ee6a7768b3e27886db1ef2b6d0ef853e62a54656dcb571912627751d532d68"
     },
     "before": {
-      "bytes": 15435869,
-      "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/i91/by-content/e7ab9c8531255490be6a05c5dab8f629159ee9eae0580bda459a398a03747063/attempt-1792452614126747868/ef2i91_r03_p14_c26.stl",
-      "sha256": "7741cf82418984b52e89e4a5f4f97ce49723e0d4513c2c9eada139b4bdeaeba6"
+      "bytes": 15501102,
+      "path": "/home/ubuntu/jarambit_runs/smoothing/inputs/ef3i17_r05_p14_c06/ef3i17_r05_p14_c06.stl",
+      "sha256": "c31d4dbb7ca5380a5f55baa4ca841834fecbc0a7bd845787e088cdc15c633fda"
     }
   },
   "lighting": {
@@ -120,17 +120,17 @@
     {
       "bytes": 1836718,
       "name": "winner-before.png",
-      "sha256": "a73ccad8fd1a953c2726f93ff9d71be3e7f277291d624881cc6f29b34a070e37"
+      "sha256": "3eb11517bcb97c46294990bcbd6712f01817511dd1aa69b2c7d161aa291a0fde"
     },
     {
       "bytes": 1836718,
       "name": "winner-after.png",
-      "sha256": "49f4a1c10fab4a04e70c67f8ab11ea407c526b0ff223d434804db9abf78d8e2e"
+      "sha256": "1a74820d367071d0e1ddbd67519aee2321600c5cf22b3d9ed6cc56a930799804"
     },
     {
       "bytes": 1836718,
       "name": "winner-displacement.png",
-      "sha256": "8f0081cf03db5d8340fc2858c70884d9d3fedb9e6ff39e09279140060e7d70b6"
+      "sha256": "8467b0214b45ce189de1d2f43ddd1af9285771e2c0fd5c163a97604ba1ecb148"
     },
     {
       "bytes": 100901,

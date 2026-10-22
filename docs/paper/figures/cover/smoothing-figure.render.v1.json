@@ -1,0 +1,149 @@
+{
+  "base_rgb": [
+    196,
+    204,
+    214
+  ],
+  "camera": {
+    "framed_on": "before mesh, shared by all three images; no refit",
+    "offset": [
+      289.1082262379092,
+      468.8463125030286
+    ],
+    "rotation": [
+      [
+        0.9945218953682733,
+        -0.10452846326765347,
+        0.0
+      ],
+      [
+        -0.10452846326765347,
+        -0.9945218953682733,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    ],
+    "scale": 8.089611944070656,
+    "sha256": "7a32b86cbc57c95bb1a6fbff3de2ad167117ef8e0653059a34697712f02d73d5"
+  },
+  "code_commit": "d3f27fed670954540ec7b1067257416e53d7b339+worktree",
+  "command": "crates/paper-artifacts/target/release/examples/smoothing_figure --before /home/ubuntu/jarambit_runs/smoothing/inputs/ef3i17_r05_p14_c06/ef3i17_r05_p14_c06.stl --before-sha256 c31d4dbb7ca5380a5f55baa4ca841834fecbc0a7bd845787e088cdc15c633fda --after /home/ubuntu/jarambit_runs/smoothing/ef3i17_r05_p14_c06-R1-20261022T082935Z/smoothed.stl --after-sha256 e4ee6a7768b3e27886db1ef2b6d0ef853e62a54656dcb571912627751d532d68 --code-commit d3f27fed670954540ec7b1067257416e53d7b339+worktree --out /home/ubuntu/jarambit_runs/smoothing/ef3i17_r05_p14_c06-figures-2000-20261022T083237Z --width 2000",
+  "geometry": {
+    "face_order_identical": true,
+    "faces": 91400,
+    "max_corner_displacement_mm": 0.2289987177339166,
+    "mean_corner_displacement_mm": 0.00441184277019602,
+    "normals_after": {
+      "blocked_edges": 8178,
+      "capped_corners": 12,
+      "joined_edges": 128922
+    },
+    "normals_before": {
+      "blocked_edges": 9398,
+      "capped_corners": 18,
+      "joined_edges": 127702
+    }
+  },
+  "heatmap": {
+    "range_mm": [
+      0.0,
+      0.2289987177339166
+    ],
+    "stops_srgb": [
+      {
+        "rgb": [
+          18.0,
+          42.0,
+          74.0
+        ],
+        "t": 0.0
+      },
+      {
+        "rgb": [
+          44.0,
+          165.0,
+          141.0
+        ],
+        "t": 0.5
+      },
+      {
+        "rgb": [
+          253.0,
+          231.0,
+          37.0
+        ],
+        "t": 1.0
+      }
+    ],
+    "value": "mean of the three corner displacements per face"
+  },
+  "images": {
+    "winner-after.png": "lit appearance of the after mesh (base colour uniform)",
+    "winner-before.png": "lit appearance of the before mesh (base colour uniform)",
+    "winner-displacement-colorbar.png": "unlit colour scale, linear from 0 mm (left) to heatmap range maximum (right)",
+    "winner-displacement.png": "unlit heatmap of mean per-face corner displacement; colour is the value"
+  },
+  "inputs": {
+    "after": {
+      "bytes": 26224184,
+      "path": "/home/ubuntu/jarambit_runs/smoothing/ef3i17_r05_p14_c06-R1-20261022T082935Z/smoothed.stl",
+      "sha256": "e4ee6a7768b3e27886db1ef2b6d0ef853e62a54656dcb571912627751d532d68"
+    },
+    "before": {
+      "bytes": 15501102,
+      "path": "/home/ubuntu/jarambit_runs/smoothing/inputs/ef3i17_r05_p14_c06/ef3i17_r05_p14_c06.stl",
+      "sha256": "c31d4dbb7ca5380a5f55baa4ca841834fecbc0a7bd845787e088cdc15c633fda"
+    }
+  },
+  "lighting": {
+    "ambient": 0.35,
+    "diffuse": 0.65,
+    "direction_camera": [
+      -0.35,
+      0.4,
+      1.0
+    ],
+    "shininess": 24,
+    "specular": 0.04
+  },
+  "normals": {
+    "blend": 1.0,
+    "crease_degrees": 15.0,
+    "max_deviation_degrees": 20.0
+  },
+  "not_qualified": true,
+  "outputs": [
+    {
+      "bytes": 5101303,
+      "name": "winner-before.png",
+      "sha256": "9396593713ddba136b0bd10d65f4b4df9634bf45bb7d26408e161f3a260f76aa"
+    },
+    {
+      "bytes": 5101303,
+      "name": "winner-after.png",
+      "sha256": "621e2cca907a6065f69df056067016d8f4c88002711388dc1a9995980a6d6795"
+    },
+    {
+      "bytes": 5101303,
+      "name": "winner-displacement.png",
+      "sha256": "3c4b113416ba4b81a3cf2368174224e0c8a10fcb0a64e656938cccb326d6101d"
+    },
+    {
+      "bytes": 168106,
+      "name": "winner-displacement-colorbar.png",
+      "sha256": "73d210d411864c33f5cd1f457e65d4edaa0412d2b1962a9c43a183c4775dba42"
+    }
+  ],
+  "render": {
+    "height": 850,
+    "outline_pixels": 3.0,
+    "renderer": "deterministic Rust CPU depth raster (appearance::render)",
+    "supersample": 2,
+    "width": 2000
+  },
+  "schema": "smoothing_figure.v1"
+}
