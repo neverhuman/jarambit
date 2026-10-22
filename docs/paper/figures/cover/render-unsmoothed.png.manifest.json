@@ -1,19 +1,19 @@
 {
   "figure": "docs/paper/figures/cover/render-unsmoothed.png",
-  "figure_sha256": "6e87c9da448139a6a7a6cc4e91eee0c634a7a90e6823898de177f93153100744",
+  "figure_sha256": "a7a6e8e66b22bfe05b6c98210f8fed57966cc8505c369170b5a37eb60b23966d",
   "script": "crates/paper-artifacts/examples/smoothing_figure.rs",
   "inputs": {
-    "docs/paper/figures/cover/smoothing-figure.render.v1.json": "e79c50b12c09913155d78b9ef5595cb27fb5cb6bc454ec1d69a082d99ba91200",
-    "experiments/geometry-smoothing-benchmark/results/winner-ef3i17_r05_p14_c06/R1-normal-only-pin30-it20/RECEIPT.json": "31f049f26822fc3fc2726247790f7b59e600957e4da4e15978d30d38a002893e"
+    "docs/paper/figures/cover/smoothing-figure.render.v1.json": "b66bc88b53849224c60088d55d573e1e04c725dac7e6aaef97198d156133de48",
+    "experiments/geometry-smoothing-benchmark/results/winner-ec1i005_r01_p14_c32/R1-normal-only-pin30-it20/RECEIPT.json": "1a1198800731d06ef08faa70daf7188b057a095142f4c4db6b2562db410b8b01"
   },
   "external_inputs": {
     "before_stl": {
-      "path": "/home/ubuntu/jarambit_runs/smoothing/inputs/ef3i17_r05_p14_c06/ef3i17_r05_p14_c06.stl",
-      "sha256": "c31d4dbb7ca5380a5f55baa4ca841834fecbc0a7bd845787e088cdc15c633fda"
+      "path": "/home/ubuntu/jarambit_runs/smoothing/inputs/ec1i005_r01_p14_c32/ec1i005_r01_p14_c32.stl",
+      "sha256": "eca6868b8cd08ed65af2c816e210a96a4142675e29b1a0342b09c3bb8ed24eb7"
     },
     "after_stl": {
-      "path": "/home/ubuntu/jarambit_runs/smoothing/ef3i17_r05_p14_c06-R1-20261022T082935Z/smoothed.stl",
-      "sha256": "e4ee6a7768b3e27886db1ef2b6d0ef853e62a54656dcb571912627751d532d68"
+      "path": "/home/ubuntu/jarambit_runs/smoothing/ec1i005_r01_p14_c32-R1-20261022T133904Z/smoothed.stl",
+      "sha256": "2ec17cea923cba63ab04ddbb3597e8d6d34a996b440a4b72c4d83184c92f7e62"
     }
   },
   "external_inputs_note": "STLs are outside git because of their size; bound by sha256 and by RECEIPT.json.",

@@ -3,18 +3,18 @@
   "figure_sha256": "944d9d625866b2c0eba716f451d72ed214056460692ef4bc79ce3fadff63ed0d",
   "script": "crates/paper-artifacts/examples/smoothing_figure.rs",
   "inputs": {
-    "docs/paper/figures/smoothing/smoothing-figure.render.v1.json": "54899d934cf06bdf2062142d62075540b347183c80728597a3b6e04dd76ac0ea",
-    "experiments/geometry-smoothing-benchmark/results/winner-ef3i17_r05_p14_c06/R1-normal-only-pin30-it20/RECEIPT.json": "31f049f26822fc3fc2726247790f7b59e600957e4da4e15978d30d38a002893e",
-    "experiments/geometry-smoothing-benchmark/results/winner-ef3i17_r05_p14_c06/R1-normal-only-pin30-it20/metrics.json": "da49a8a63f35095a87a706956d0373b6abd7b8681e90adf1293faa1afd989f0e"
+    "docs/paper/figures/smoothing/smoothing-figure.render.v1.json": "12d047550228448eaf698d22869b9fa4d832491099c7215ab42bd5107bd1f506",
+    "experiments/geometry-smoothing-benchmark/results/winner-ec1i005_r01_p14_c32/R1-normal-only-pin30-it20/RECEIPT.json": "1a1198800731d06ef08faa70daf7188b057a095142f4c4db6b2562db410b8b01",
+    "experiments/geometry-smoothing-benchmark/results/winner-ec1i005_r01_p14_c32/R1-normal-only-pin30-it20/metrics.json": "a4866cd77c54de5381587cbecc5ef8b4919f1b00217835dbcf21c968651a77bb"
   },
   "external_inputs": {
     "before_stl": {
-      "path": "/home/ubuntu/jarambit_runs/smoothing/inputs/ef3i17_r05_p14_c06/ef3i17_r05_p14_c06.stl",
-      "sha256": "c31d4dbb7ca5380a5f55baa4ca841834fecbc0a7bd845787e088cdc15c633fda"
+      "path": "/home/ubuntu/jarambit_runs/smoothing/inputs/ec1i005_r01_p14_c32/ec1i005_r01_p14_c32.stl",
+      "sha256": "eca6868b8cd08ed65af2c816e210a96a4142675e29b1a0342b09c3bb8ed24eb7"
     },
     "after_stl": {
-      "path": "/home/ubuntu/jarambit_runs/smoothing/ef3i17_r05_p14_c06-R1-20261022T082935Z/smoothed.stl",
-      "sha256": "e4ee6a7768b3e27886db1ef2b6d0ef853e62a54656dcb571912627751d532d68"
+      "path": "/home/ubuntu/jarambit_runs/smoothing/ec1i005_r01_p14_c32-R1-20261022T133904Z/smoothed.stl",
+      "sha256": "2ec17cea923cba63ab04ddbb3597e8d6d34a996b440a4b72c4d83184c92f7e62"
     }
   },
   "external_inputs_note": "The STL files are outside git because of their size. They are bound here by sha256 and by the RECEIPT.json input record.",

@@ -1,11 +1,11 @@
 {
   "figure": "docs/paper/figures/cover/cover-smoothed.png",
-  "figure_sha256": "9b0cebe647711a4225eb3ce0a7fd2b9a5f558efbe41de47f606617f878606848",
+  "figure_sha256": "dd39924bb4fd843284fbe8ff3f4ad7d46c39d40aa91eac8467ac590ede28ce9c",
   "script": "docs/paper/Makefile",
   "inputs": {
-    "docs/paper/figures/cover/cover-smoothed.svg": "5e2552e95948a10b80c4455c6672cf3adbc0cf6d7fc9584d16d35eae5ff4ffc1",
-    "docs/paper/figures/cover/render-smoothed.png": "6b8a56bd65a91aa93e998f6278078ea1641a14fe5b2f300e16dff80190609d66",
-    "experiments/geometry-smoothing-benchmark/results/winner-ef3i17_r05_p14_c06/rescore/RESCORE.json": "1f25403f11749ef3aa12f9b41875d46a69af151c8ffba3ab34ac2e4da17c9e39"
+    "docs/paper/figures/cover/cover-smoothed.svg": "6711053e3a764771acd01ebd198b3d58144e8430c4bc8a148592da01ba8d7b74",
+    "docs/paper/figures/cover/render-smoothed.png": "b4e351c539a4237d67dfaadae740af865d91747d5d244fa2e908906b132440f8",
+    "experiments/geometry-smoothing-benchmark/results/winner-ec1i005_r01_p14_c32/rescore/RESCORE.json": "2b894a136d5db5397e058712022748abc597968e97352bfaf42f7a326f539f7a"
   },
-  "note": "make figures: rsvg-convert -w 2000 -h 850 of the SVG (render + 2.5x blade-grind inset + W_ULTRALIGHT_v1 badge 70.98 from RESCORE.json)."
+  "note": "make figures: rsvg-convert -w 2000 -h 850 of the SVG (render + 2.5x blade-grind inset + W_ULTRALIGHT_v1 badge 71.24 from RESCORE.json)."
 }

@@ -1,168 +1,33 @@
 {
   "schema": "jarambit.cover_winner_selection.v1",
-  "recorded_utc": "2026-10-22T08:27:49Z",
+  "recorded_utc": "2026-10-22T13:38:23Z",
   "metric": "W_ULTRALIGHT_v1 (0-100), canonical",
-  "method": "ops/ci/ultralight_weighted_fitness.py::compute_ultralight_weighted_fitness(master_scorecard, rs) on every retained Stage-2 assessment (*_master_scorecard.json with *_rs.json) under ~/jarambit_runs/evo_*/<host>/islands/*/by-content/ on xbabe1, xbabe2 and xbabe3. The Rust auto-evolve scorer (compute_canonical_ultralight_weighted_fitness) returns the same value; checked on ef2i91_r03_p14_c26 (75.213491) and on live runs ec2i002_r02_p14_c37 and ec2i005_r03_p14_c75, whose logged scores equal the recomputation.",
+  "method": "ops/ci/ultralight_weighted_fitness.py::compute_ultralight_weighted_fitness(master_scorecard, rs) on every retained Stage-2 assessment (*_master_scorecard.json with *_rs.json) under ~/jarambit_runs/evo_*/<host>/islands/*/by-content/ on xbabe1, xbabe2 and xbabe3, including the continuous-evolution islands (evo_continuous) running since 2026-10-21. The Rust auto-evolve scorer (compute_canonical_ultralight_weighted_fitness) returns the same value; checked on ef2i91_r03_p14_c26 (75.213491) and on live runs ec2i002_r02_p14_c37 and ec2i005_r03_p14_c75, whose logged scores equal the recomputation.",
   "scorer": {
     "path": "ops/ci/ultralight_weighted_fitness.py",
     "git_blob_sha1": "9cfb4416d374e875e5846f6e91e2229148b6f5f4",
-    "repo_commit": "d3f27fed670954540ec7b1067257416e53d7b339"
+    "repo_commit": "e07606a8e43666750264ec909ccbae604627ede5"
   },
-  "assessments": 598,
+  "assessments": 696,
   "per_host": {
-    "xbabe1": 30,
-    "xbabe2": 404,
-    "xbabe3": 164
+    "xbabe1": 48,
+    "xbabe2": 445,
+    "xbabe3": 203
   },
   "winner": {
-    "canonical_w_ultralight_v1": 75.983539,
-    "label": "ef3i17_r05_p14_c06",
-    "host": "xbabe3",
-    "run": "evo_full_20261018",
-    "island": "i17"
+    "canonical_w_ultralight_v1": 76.141571,
+    "label": "ec1i005_r01_p14_c32",
+    "host": "xbabe1",
+    "run": "evo_continuous",
+    "island": "i005"
   },
-  "top20": [
-    {
-      "canonical_w_ultralight_v1": 75.983539,
-      "label": "ef3i17_r05_p14_c06",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i17"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.905040,
-      "label": "ef3i17_r05_p14_c13",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i17"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.888003,
-      "label": "ef3i17_r05_p14_c14",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i17"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.882190,
-      "label": "ef3i17_r04_p14_c102",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i17"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.511106,
-      "label": "ec2i002_r02_p14_c37",
-      "host": "xbabe2",
-      "run": "evo_continuous",
-      "island": "i002"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.497137,
-      "label": "ef3i24_r04_p14_c03",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i24"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.496490,
-      "label": "ef3i24_r05_p14_c17",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i24"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.489089,
-      "label": "ec1i003_r03_p14_c03",
-      "host": "xbabe1",
-      "run": "evo_continuous",
-      "island": "i003"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.473214,
-      "label": "ef3i17_r04_p14_c75",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i17"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.467520,
-      "label": "ef3i17_r04_p14_c03",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i17"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.463948,
-      "label": "ef2i95_r05_p14_c27",
-      "host": "xbabe2",
-      "run": "evo_full_20261018",
-      "island": "i95"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.459958,
-      "label": "ec1i001_r03_p14_c61",
-      "host": "xbabe1",
-      "run": "evo_continuous",
-      "island": "i001"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.455992,
-      "label": "ef2i95_r04_p14_c27",
-      "host": "xbabe2",
-      "run": "evo_full_20261018",
-      "island": "i95"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.453003,
-      "label": "ef3i24_r03_p14_c27",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i24"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.452951,
-      "label": "ef3i24_r04_p14_c01",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i24"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.446509,
-      "label": "ef3i17_r03_p14_c75",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i17"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.442516,
-      "label": "ef3i24_r03_p14_c99",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i24"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.442157,
-      "label": "ef3i20_r03_p14_c109",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i20"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.431875,
-      "label": "ef3i17_r03_p14_c27",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i17"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.429654,
-      "label": "ec1i003_r02_p14_c38",
-      "host": "xbabe1",
-      "run": "evo_continuous",
-      "island": "i003"
-    }
-  ],
+  "previous_selection": {
+    "recorded_utc": "2026-10-22T08:27:49Z",
+    "assessments": 598,
+    "winner_label": "ef3i17_r05_p14_c06",
+    "winner_canonical_w_ultralight_v1": 75.983539,
+    "note": "Superseded when continuous evolution produced four higher-scoring assessments; the earlier winner is still retained, with four assessments now above it and two others tied with it at 75.983539."
+  },
   "leaderboard_inflation": {
     "note": "Stage-2 scores stored in the 2026-10-18 run leaderboards exceed the canonical recomputation from the same retained scorecards, so stored leaderboard values are not used for selection.",
     "xbabe2_evo_full_20261018": {
@@ -180,5 +45,147 @@
       "leaderboard": 80.253391,
       "canonical": 75.213491
     }
-  }
+  },
+  "top20": [
+    {
+      "canonical_w_ultralight_v1": 76.141571,
+      "label": "ec1i005_r01_p14_c32",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i005"
+    },
+    {
+      "canonical_w_ultralight_v1": 76.127401,
+      "label": "ec2i013_r01_p14_c56",
+      "host": "xbabe2",
+      "run": "evo_continuous",
+      "island": "i013"
+    },
+    {
+      "canonical_w_ultralight_v1": 76.113836,
+      "label": "ec2i009_r01_p14_c32",
+      "host": "xbabe2",
+      "run": "evo_continuous",
+      "island": "i009"
+    },
+    {
+      "canonical_w_ultralight_v1": 76.018185,
+      "label": "ec1i005_r01_p14_c31",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i005"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.983539,
+      "label": "ec1i004_r01_p14_c52",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i004"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.983539,
+      "label": "ec1i004_r01_p14_c68",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i004"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.983539,
+      "label": "ef3i17_r05_p14_c06",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i17"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.965826,
+      "label": "ec1i004_r01_p14_c53",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i004"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.959180,
+      "label": "ec2i011_r01_p14_c32",
+      "host": "xbabe2",
+      "run": "evo_continuous",
+      "island": "i011"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.905040,
+      "label": "ef3i17_r05_p14_c13",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i17"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.896846,
+      "label": "ec2i009_r01_p14_c30",
+      "host": "xbabe2",
+      "run": "evo_continuous",
+      "island": "i009"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.888003,
+      "label": "ef3i17_r05_p14_c14",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i17"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.886873,
+      "label": "ec2i016_r01_p14_c64",
+      "host": "xbabe2",
+      "run": "evo_continuous",
+      "island": "i016"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.885381,
+      "label": "ec2i009_r01_p14_c28",
+      "host": "xbabe2",
+      "run": "evo_continuous",
+      "island": "i009"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.882190,
+      "label": "ef3i17_r04_p14_c102",
+      "host": "xbabe3",
+      "run": "evo_full_20261018",
+      "island": "i17"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.744753,
+      "label": "ec1i005_r01_p14_c40",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i005"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.671482,
+      "label": "ec2i012_r01_p14_c06",
+      "host": "xbabe2",
+      "run": "evo_continuous",
+      "island": "i012"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.585194,
+      "label": "ec3i016_r03_p14_c17",
+      "host": "xbabe3",
+      "run": "evo_continuous",
+      "island": "i016"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.582244,
+      "label": "ec3i016_r02_p14_c01",
+      "host": "xbabe3",
+      "run": "evo_continuous",
+      "island": "i016"
+    },
+    {
+      "canonical_w_ultralight_v1": 75.574298,
+      "label": "ec3i016_r02_p14_c02",
+      "host": "xbabe3",
+      "run": "evo_continuous",
+      "island": "i016"
+    }
+  ]
 }

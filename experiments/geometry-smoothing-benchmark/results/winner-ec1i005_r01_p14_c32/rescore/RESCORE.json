@@ -1,0 +1,136 @@
+{
+  "schema": "jarambit.smoothed_rescore.v1",
+  "design": "ec1i005_r01_p14_c32",
+  "code_commit": "e07606a8e43666750264ec909ccbae604627ede5",
+  "case_dir": "/home/ubuntu/jarambit_runs/smoothing/ec1i005_r01_p14_c32-rescore-20261022T133945Z",
+  "result": {
+    "as_exported": 76.141571,
+    "smoothed": 71.236809,
+    "change": -4.904762
+  },
+  "inputs": {
+    "exported_stl_sha256": "eca6868b8cd08ed65af2c816e210a96a4142675e29b1a0342b09c3bb8ed24eb7",
+    "smoothed_stl_sha256": "2ec17cea923cba63ab04ddbb3597e8d6d34a996b440a4b72c4d83184c92f7e62",
+    "master_scorecard_sha256": "f2117348a1f876a03ac5ecc9aeea3634ff8aae6401d2504fbaf34f7acdd3de3c",
+    "rs_receipt_sha256": "cfb5097951fe290877672b751f1621da1f2d7721268b91ca0e494c434ee873b9",
+    "d1_sha256": "932c25ecffe56ebd4a6a60292df25de10f5e749899242b020b642b479e4c1f36",
+    "smoothed_d1_sha256": "0c73b24050c48da2ce91aa65d9ecf9f2dc794ba46bd019bc150faf05018cd561",
+    "copied_from": "source=xbabe1:/home/ubuntu/jarambit_runs/evo_continuous/xbabe1/islands/i005/by-content/6ce4dce7e1b6c5b8ea71d05d98e63a60b4ba741b9c4ee9e256ac6856e44acd5c/attempt-1792671069404592127",
+    "smoothing_receipt": "experiments/geometry-smoothing-benchmark/results/winner-ec1i005_r01_p14_c32/R1-normal-only-pin30-it20/RECEIPT.json"
+  },
+  "method": {
+    "scorer": "ops/ci/ultralight_weighted_fitness.py::compute_ultralight_weighted_fitness on the as-exported master scorecard and on a copy with only the substitutions below; same RS-v2 receipt for both",
+    "substitutions": {
+      "engineering_metrics.mass_3d_g": "exporter volume 20928.245751 mm3 + (smoothed - input) STL volume (20913.202344 - 20928.240005 mm3), times 0.00443 g/mm3, rounded to 4 decimals as the exporter does: 92.6455 g",
+      "engineering_metrics.solid_tip_sf_nodal_max/avg, solid_tip_dolfinx_rel_err, gates.solid_tip_3d_p2_1p82nm, gates.dolfinx_cross_check_2pct": "fem_solid/tip_solid.py (R_CUT 30 mm, NL 4, NSUB 1) on the D1 record with export_surface.verts replaced by the smoothed vertex positions, then ops/ci/evaluate_cad_candidate.run_independent_cross_check (DOLFINx 0.9.0 container) on the same saved mesh; DOLFINx values stored as the evaluator does",
+      "gates.cad_watertight_and_single_solid, cad.cad_valid": "false: owner decision 2026-10-22 to withhold the CAD/B-rep objective, because the smoothed geometry is a triangle mesh with no validated STEP solid and its finger-ring bore no longer matches the analytic torus (ring-region vertices moved up to 0.224 mm)"
+    },
+    "carried_over": "all other engineering metrics and gates (plate-model responses, sharpness, point profile, ring, holder, aesthetics): computed from the genome, not re-solved on the smoothed geometry",
+    "vertex_mapping": "export_surface vertices matched to smoothing-input vertices by coordinates rounded to 4 decimals (45736 of 45736 matched, no duplicate keys); control = the same rounded input positions without smoothing"
+  },
+  "solid_tip": {
+    "stored_as_exported": {
+      "SF_nodal_max": 0.3506,
+      "SF_nodal_avg": 0.394,
+      "SF_skfem_nodal_max": 0.351
+    },
+    "pinned_environment": {
+      "note": "fem_solid/requirements.txt versions (numpy 1.26.4, scipy 1.16.3), as used for the stored evaluation",
+      "original_rerun": {
+        "skfem": {
+          "SF_nodal_max": 0.351,
+          "SF_nodal_avg": 0.394,
+          "n_tet": 77136,
+          "n_dof": 353997,
+          "relative_residual": 8.914411432523912e-11
+        },
+        "dolfinx": {
+          "SF_nodal_max": 0.3506,
+          "SF_nodal_avg": 0.394,
+          "ksp_its": 191
+        },
+        "numpy": "1.26.4",
+        "scipy": "1.16.3"
+      },
+      "control_rounded_input": {
+        "skfem": {
+          "SF_nodal_max": 0.351,
+          "SF_nodal_avg": 0.394,
+          "n_tet": 77136,
+          "n_dof": 353997,
+          "relative_residual": 9.82109847659496e-11
+        },
+        "dolfinx": {
+          "SF_nodal_max": 0.3507,
+          "SF_nodal_avg": 0.394,
+          "ksp_its": 191
+        },
+        "numpy": "1.26.4",
+        "scipy": "1.16.3"
+      },
+      "smoothed": {
+        "skfem": {
+          "SF_nodal_max": 0.377,
+          "SF_nodal_avg": 0.412,
+          "n_tet": 77136,
+          "n_dof": 353997,
+          "relative_residual": 9.895197003912018e-11
+        },
+        "dolfinx": {
+          "SF_nodal_max": 0.3766,
+          "SF_nodal_avg": 0.4123,
+          "ksp_its": 192
+        },
+        "numpy": "1.26.4",
+        "scipy": "1.16.3"
+      }
+    }
+  },
+  "per_objective_points": {
+    "as_exported": {
+      "ultralight_mass": 9.650986,
+      "holder_and_compactness": 8.0,
+      "karambit_ring_and_claw": 7.0,
+      "c6_aesthetic_and_ergo": 9.0,
+      "bore_collar_comfort": 7.875,
+      "cad_watertight_brep": 5.0,
+      "gate_s_sharpness": 4.232143,
+      "gate_s_point_profile": 2.608543,
+      "hiker_lateral_180n": 3.480556,
+      "hunter_lateral_260n": 1.721154,
+      "strict_hunter_260n": 1.330769,
+      "ring_pull_1500n": 2.5,
+      "twist_body_1p82nm": 2.5,
+      "twist_tip_plate_1p82nm": 0.72375,
+      "solid_tip_3d_p2_and_xcheck": 1.0518,
+      "side_a4_buckling": 2.0,
+      "failure_sequence_1p2": 3.5,
+      "plate_gci_3level": 2.0,
+      "human_max_overload": 0.966667,
+      "goodman_fatigue_l7": 1.000204
+    },
+    "smoothed": {
+      "ultralight_mass": 9.668224,
+      "holder_and_compactness": 8.0,
+      "karambit_ring_and_claw": 7.0,
+      "c6_aesthetic_and_ergo": 9.0,
+      "bore_collar_comfort": 7.875,
+      "cad_watertight_brep": 0.0,
+      "gate_s_sharpness": 4.232143,
+      "gate_s_point_profile": 2.608543,
+      "hiker_lateral_180n": 3.480556,
+      "hunter_lateral_260n": 1.721154,
+      "strict_hunter_260n": 1.330769,
+      "ring_pull_1500n": 2.5,
+      "twist_body_1p82nm": 2.5,
+      "twist_tip_plate_1p82nm": 0.72375,
+      "solid_tip_3d_p2_and_xcheck": 1.1298,
+      "side_a4_buckling": 2.0,
+      "failure_sequence_1p2": 3.5,
+      "plate_gci_3level": 2.0,
+      "human_max_overload": 0.966667,
+      "goodman_fatigue_l7": 1.000204
+    }
+  },
+  "not_qualified": true
+}
