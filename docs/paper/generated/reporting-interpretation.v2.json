@@ -2216,10 +2216,10 @@
       "state": "retained_source"
     },
     "runtime_producer": {
-      "original_revision": "510713a8b0a9ba0ae6b4740c8ab81f1e3e3bc5b6",
+      "original_revision": "eb1f52b174588362ecfe568c8e32026e4aebfc87",
       "path": "ops/ci/evaluate_cad_candidate.py",
       "selector": "$ (whole original file; precise claim selectors follow)",
-      "sha256": "f056b5bb4a02f1df94316359bc08a8a4f4ec59ea5c5619dd5ab3e258a489a2e6",
+      "sha256": "b804e3f3dc726c59dd5034a3d28e933146641d73984badc75e9e6ed474268b7b",
       "state": "retained_source"
     },
     "score_profiles": {
