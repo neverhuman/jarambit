@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 from ops.ci.verify_genome_export import compare_bore
-from ops.ci.evaluate_cad_candidate import run_independent_cross_check, independent_agreement
+from ops.ci.evaluate_cad_candidate import run_independent_cross_check, independent_agreement, unmeasured_solid_record, solid_evidence_matches
 
 class BoreComparison(unittest.TestCase):
     def setUp(self):
@@ -42,3 +42,10 @@ class IndependentFailures(unittest.TestCase):
         doc={'stored_solid':{'SF_skfem_nodal_max':1.2,'SF_skfem_nodal_avg':1.3},
              'dolfinx_cross_check':{'SF_nodal_max':1.,'SF_nodal_avg':1.}}
         self.assertFalse(independent_agreement(doc)['within_2pct'])
+    def test_unmeasured_solid_tip_scores_zero_and_is_never_reusable_evidence(self):
+        doc=unmeasured_solid_record('synthetic','a'*64,'primary solid solve unverified','b'*64,'c'*64)
+        self.assertEqual(doc['stored_solid']['SF_nodal_max'],0.0)
+        self.assertFalse(doc['dolfinx_cross_check']['within_2pct'])
+        self.assertFalse(doc['entered_as_solver_run'])
+        self.assertFalse(any(k in doc['stored_solid'] for k in ('n_tet','n_dof','ksp_its')))
+        self.assertFalse(solid_evidence_matches(doc,'b'*64,'c'*64,'a'*64))

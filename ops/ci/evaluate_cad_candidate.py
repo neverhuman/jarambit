@@ -287,6 +287,25 @@ def run_independent_cross_check(mesh_npz: Path, out_dir: Path, label: str, runti
     return doc
 
 
+class SolidTipUnmeasured(RuntimeError):
+    """The 3D tip solve or its independent cross-check produced no observation for this design."""
+
+
+def unmeasured_solid_record(label: str, identity: str, reason: str, genome_sha: str, d1_sha: str) -> dict:
+    """A missing tip observation scores zero on its W_ULTRALIGHT_v1 objective; it is never read as a pass.
+
+    No solver statistics are recorded, so the CAD battery reports `solid.tip` as incomplete.
+    """
+    return {
+        'schema': 'jarambit.stored_solid_tip.v1', 'certificate_identity': identity, 'subject': label,
+        'status': 'unmeasured', 'reason': reason, 'genome_sha256': genome_sha, 'd1_sha256': d1_sha,
+        'entered_as_solver_run': False,
+        'stored_solid': {'SF_nodal_max': 0.0, 'SF_nodal_avg': 0.0},
+        'dolfinx_cross_check': {'status': 'unmeasured', 'SF_nodal_max': 0.0, 'SF_nodal_avg': 0.0,
+                                'rel_err_nodal_max': 1.0, 'rel_err_nodal_avg': 1.0, 'within_2pct': False},
+    }
+
+
 def evaluate_candidate(
     label: str,
     genome_csv: Path,
@@ -435,129 +454,148 @@ def evaluate_candidate(
     skfem_cache = out_dir / f'{label}_skfem_raw.json'
     cached = json.loads(solid_tip_path.read_text()) if solid_tip_path.is_file() else {}
     cached_files = validate_solid_artifacts(cached,out_dir,label)
-    if run_solid or not cached_files or not solid_evidence_matches(cached, _sha256(canon_genome), _sha256(d1_path), d1_doc['certificate_identity']):
-        mesh_npz = out_dir/f'{label}_solid_mesh.npz'
-        raw_solid = skfem_cache
-        py_sheath = runtime['solver_python']
-        amg_path = str(ROOT)
-        env_solid = {
-            **os.environ,
-            'PYTHONPATH': f'{amg_path}:{ROOT}',
-            'DUMP_MESH': str(mesh_npz),
-            'OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','MKL_NUM_THREADS':'1',
-        }
-        primary=subprocess.run(
-            [py_sheath,str(ROOT/'fem_solid'/'tip_solid.py'),str(d1_path),'30','4','1',str(raw_solid)],
-            cwd=ROOT,env=env_solid,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
-        (out_dir/f'{label}_skfem_stdout.txt').write_text(primary.stdout)
-        print(primary.stdout,flush=True)
-        if primary.returncode:raise RuntimeError('primary solid solve unverified; see saved skfem output')
-        sk_doc=json.loads(raw_solid.read_text(encoding='utf-8'))
-        mesh_sha=_sha256(mesh_npz)
-        primary_sha = _sha256(skfem_cache)
-        dx_doc = run_independent_cross_check(mesh_npz, out_dir, label, runtime)
-        if _sha256(skfem_cache) != primary_sha:
-            raise RuntimeError('primary observation changed during independent solve')
-        sk_solid = sk_doc.get('solid', sk_doc)
-        sf_sk_max = float(sk_solid['SF_solid_nodal_max'])
-        sf_dx_max = float(dx_doc['SF_nodal_max'])
-        sf_sk_avg = float(sk_solid['SF_solid_nodal_avg'])
-        sf_dx_avg = float(dx_doc['SF_nodal_avg'])
-        rel_err_max = abs(sf_sk_max - sf_dx_max) / max(sf_dx_max, 1e-9)
-        rel_err_avg = abs(sf_sk_avg - sf_dx_avg) / max(sf_dx_avg, 1e-9)
-        solid_record = {
-            'schema': 'jarambit.stored_solid_tip.v1',
-            'certificate_identity': d1_doc['certificate_identity'],
-            'mesh_sha256':mesh_sha, 'skfem_raw_sha256':_sha256(skfem_cache),
-            'dolfinx_raw_sha256':_sha256(out_dir/f'{label}_dolfinx_raw.json'),
-            'subject': label,
-            'd1_path': str(d1_path.relative_to(ROOT)) if d1_path.is_relative_to(ROOT) else str(d1_path),
-            'd1_sha256': _sha256(d1_path),
-            'genome_sha256': _sha256(canon_genome),
-            'source_step_sha256': _sha256(step_path), 'source_stl_sha256': _sha256(stl_path),
-            'source_surface_sha256': _sha256(surface_path),
-            'genome_data_row_matches_csv': True,
-            'copied_from_another_genome': False,
-            'entered_as_solver_run': True,
-            'solve_rerun': True,
-            'metrics': {
-                'spg': float(mt['spg']),
-                'aes_score': float(mt['aes_score']),
-            },
-            'stored_solid': {
-                'NL': int(sk_solid['NL']),
-                'NSUB': int(sk_solid['NSUB']),
-                'R_CUT': float(sk_solid['R_CUT']),
-                'PATCH_mm': float(sk_solid['PATCH_mm']),
-                'n_tet': int(sk_solid['n_tet']),
-                'n_dof': int(sk_solid['n_dof']),
-                'ksp_its': int(dx_doc['ksp_its']),
-                'primary_solver_stats':sk_doc['solver'],
-                'SF_nodal_max': sf_dx_max,
-                'SF_nodal_avg': sf_dx_avg,
-                'SF_skfem_nodal_max': sf_sk_max,
-                'SF_skfem_nodal_avg': sf_sk_avg,
-                'SF_elem_mean': float(sk_solid['SF_solid_elem_mean']),
-            },
-            'dolfinx_cross_check': {
-                'container': runtime['docker_image'], 'container_image_id':runtime['docker_image_id'],
-                'status': 'verified', 'primary_solver':'skfem_p2', 'independent_solver':'dolfinx_v0.9.0',
-                'mesh_sha256':mesh_sha,
-                'SF_nodal_max': sf_dx_max,
-                'SF_nodal_avg': sf_dx_avg,
-                'ksp_its': int(dx_doc['ksp_its']),
-                'rel_err_nodal_max': round(rel_err_max, 6),
-                'rel_err_nodal_avg': round(rel_err_avg, 6),
-                'within_2pct': bool(rel_err_max <= 0.02 and rel_err_avg <= 0.02),
-            },
-        }
-        solid_tip_path.write_text(json.dumps(solid_record, indent=2, sort_keys=True) + '\n', encoding='utf-8')
-    else:
-        solid_record = json.loads(solid_tip_path.read_text(encoding='utf-8'))
-        if 'metrics' not in solid_record:
-            solid_record['metrics'] = {
-                'spg': float(mt['spg']),
-                'aes_score': float(mt['aes_score']),
+    solid_unmeasured = None
+    try:
+        if run_solid or not cached_files or not solid_evidence_matches(cached, _sha256(canon_genome), _sha256(d1_path), d1_doc['certificate_identity']):
+            mesh_npz = out_dir/f'{label}_solid_mesh.npz'
+            raw_solid = skfem_cache
+            py_sheath = runtime['solver_python']
+            amg_path = str(ROOT)
+            env_solid = {
+                **os.environ,
+                'PYTHONPATH': f'{amg_path}:{ROOT}',
+                'DUMP_MESH': str(mesh_npz),
+                'OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','MKL_NUM_THREADS':'1',
             }
-            solid_record['copied_from_another_genome'] = False
-            solid_record['entered_as_solver_run'] = True
+            primary=subprocess.run(
+                [py_sheath,str(ROOT/'fem_solid'/'tip_solid.py'),str(d1_path),'30','4','1',str(raw_solid)],
+                cwd=ROOT,env=env_solid,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+            (out_dir/f'{label}_skfem_stdout.txt').write_text(primary.stdout)
+            print(primary.stdout,flush=True)
+            if primary.returncode:raise SolidTipUnmeasured('primary solid solve unverified; see saved skfem output')
+            sk_doc=json.loads(raw_solid.read_text(encoding='utf-8'))
+            mesh_sha=_sha256(mesh_npz)
+            primary_sha = _sha256(skfem_cache)
+            try:
+                dx_doc = run_independent_cross_check(mesh_npz, out_dir, label, runtime)
+            except RuntimeError as exc:
+                raise SolidTipUnmeasured(str(exc)) from exc
+            if _sha256(skfem_cache) != primary_sha:
+                raise RuntimeError('primary observation changed during independent solve')
+            sk_solid = sk_doc.get('solid', sk_doc)
+            sf_sk_max = float(sk_solid['SF_solid_nodal_max'])
+            sf_dx_max = float(dx_doc['SF_nodal_max'])
+            sf_sk_avg = float(sk_solid['SF_solid_nodal_avg'])
+            sf_dx_avg = float(dx_doc['SF_nodal_avg'])
+            rel_err_max = abs(sf_sk_max - sf_dx_max) / max(sf_dx_max, 1e-9)
+            rel_err_avg = abs(sf_sk_avg - sf_dx_avg) / max(sf_dx_avg, 1e-9)
+            solid_record = {
+                'schema': 'jarambit.stored_solid_tip.v1',
+                'certificate_identity': d1_doc['certificate_identity'],
+                'mesh_sha256':mesh_sha, 'skfem_raw_sha256':_sha256(skfem_cache),
+                'dolfinx_raw_sha256':_sha256(out_dir/f'{label}_dolfinx_raw.json'),
+                'subject': label,
+                'd1_path': str(d1_path.relative_to(ROOT)) if d1_path.is_relative_to(ROOT) else str(d1_path),
+                'd1_sha256': _sha256(d1_path),
+                'genome_sha256': _sha256(canon_genome),
+                'source_step_sha256': _sha256(step_path), 'source_stl_sha256': _sha256(stl_path),
+                'source_surface_sha256': _sha256(surface_path),
+                'genome_data_row_matches_csv': True,
+                'copied_from_another_genome': False,
+                'entered_as_solver_run': True,
+                'solve_rerun': True,
+                'metrics': {
+                    'spg': float(mt['spg']),
+                    'aes_score': float(mt['aes_score']),
+                },
+                'stored_solid': {
+                    'NL': int(sk_solid['NL']),
+                    'NSUB': int(sk_solid['NSUB']),
+                    'R_CUT': float(sk_solid['R_CUT']),
+                    'PATCH_mm': float(sk_solid['PATCH_mm']),
+                    'n_tet': int(sk_solid['n_tet']),
+                    'n_dof': int(sk_solid['n_dof']),
+                    'ksp_its': int(dx_doc['ksp_its']),
+                    'primary_solver_stats':sk_doc['solver'],
+                    'SF_nodal_max': sf_dx_max,
+                    'SF_nodal_avg': sf_dx_avg,
+                    'SF_skfem_nodal_max': sf_sk_max,
+                    'SF_skfem_nodal_avg': sf_sk_avg,
+                    'SF_elem_mean': float(sk_solid['SF_solid_elem_mean']),
+                },
+                'dolfinx_cross_check': {
+                    'container': runtime['docker_image'], 'container_image_id':runtime['docker_image_id'],
+                    'status': 'verified', 'primary_solver':'skfem_p2', 'independent_solver':'dolfinx_v0.9.0',
+                    'mesh_sha256':mesh_sha,
+                    'SF_nodal_max': sf_dx_max,
+                    'SF_nodal_avg': sf_dx_avg,
+                    'ksp_its': int(dx_doc['ksp_its']),
+                    'rel_err_nodal_max': round(rel_err_max, 6),
+                    'rel_err_nodal_avg': round(rel_err_avg, 6),
+                    'within_2pct': bool(rel_err_max <= 0.02 and rel_err_avg <= 0.02),
+                },
+            }
             solid_tip_path.write_text(json.dumps(solid_record, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+        else:
+            solid_record = json.loads(solid_tip_path.read_text(encoding='utf-8'))
+            if 'metrics' not in solid_record:
+                solid_record['metrics'] = {
+                    'spg': float(mt['spg']),
+                    'aes_score': float(mt['aes_score']),
+                }
+                solid_record['copied_from_another_genome'] = False
+                solid_record['entered_as_solver_run'] = True
+                solid_tip_path.write_text(json.dumps(solid_record, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+    except SolidTipUnmeasured as exc:
+        # W_ULTRALIGHT_v1 has no hard failures: the design is still scored, with zero credit on the
+        # solid-tip objective, and its legacy solid-tip and cross-check gates are logged as failed.
+        solid_unmeasured = str(exc)
+        solid_record = unmeasured_solid_record(label, d1_doc['certificate_identity'], solid_unmeasured,
+                                               _sha256(canon_genome), _sha256(d1_path))
+        solid_tip_path.write_text(json.dumps(solid_record, indent=2, sort_keys=True) + '\n', encoding='utf-8')
 
-    solid_record['dolfinx_cross_check']=independent_agreement(solid_record)
-    solid_tip_path.write_text(json.dumps(solid_record,indent=2,sort_keys=True)+'\n')
+    if solid_unmeasured is None:
+        solid_record['dolfinx_cross_check']=independent_agreement(solid_record)
+        solid_tip_path.write_text(json.dumps(solid_record,indent=2,sort_keys=True)+'\n')
 
     # Write bindings.json + gci-format JSON in a temp solid dir so `rs-v2-eval` binds `solid_tip_sf`
     solid_tmp = str(out_dir / 'solid-bindings')
     Path(solid_tmp).mkdir(exist_ok=True)
-    gci_file = Path(solid_tmp) / f'{label}_gci.json'
-    gci_compat = {
-        'design': label,
-        'certificate_identity': d1_doc['certificate_identity'],
-        'solid_record': solid_record,
-        'SF_nodal_max': {
-            'fine': solid_record['stored_solid']['SF_nodal_max'],
-        },
-        'levels': [
-            {
-                'NL': solid_record['stored_solid']['NL'],
-                'NSUB': solid_record['stored_solid']['NSUB'],
-                'n_tet': solid_record['stored_solid']['n_tet'],
-                'n_dof': solid_record['stored_solid']['n_dof'],
-                'ksp_its': solid_record['stored_solid']['ksp_its'],
-                'SF_nodal_max': solid_record['stored_solid']['SF_nodal_max'],
-            }
-        ],
-    }
-    gci_file.write_text(json.dumps(gci_compat), encoding='utf-8')
-    bindings_compat = {
-        d1_doc['certificate_identity']: {
-            'genome': str(canon_genome),
+    # Without a measured record there is no binding, and rs-v2-eval reports `solid_tip_sf` unverified.
+    if solid_unmeasured is None:
+        gci_file = Path(solid_tmp) / f'{label}_gci.json'
+        gci_compat = {
+            'design': label,
             'certificate_identity': d1_doc['certificate_identity'],
-            'gci': str(gci_file),
-            'gci_sha256':_sha256(gci_file),
+            'solid_record': solid_record,
+            'SF_nodal_max': {
+                'fine': solid_record['stored_solid']['SF_nodal_max'],
+            },
+            'levels': [
+                {
+                    'NL': solid_record['stored_solid']['NL'],
+                    'NSUB': solid_record['stored_solid']['NSUB'],
+                    'n_tet': solid_record['stored_solid']['n_tet'],
+                    'n_dof': solid_record['stored_solid']['n_dof'],
+                    'ksp_its': solid_record['stored_solid']['ksp_its'],
+                    'SF_nodal_max': solid_record['stored_solid']['SF_nodal_max'],
+                }
+            ],
         }
-    }
-    (Path(solid_tmp) / 'bindings.json').write_text(json.dumps(bindings_compat), encoding='utf-8')
+        gci_file.write_text(json.dumps(gci_compat), encoding='utf-8')
+        bindings_compat = {
+            d1_doc['certificate_identity']: {
+                'genome': str(canon_genome),
+                'certificate_identity': d1_doc['certificate_identity'],
+                'gci': str(gci_file),
+                'gci_sha256':_sha256(gci_file),
+            }
+        }
+        (Path(solid_tmp) / 'bindings.json').write_text(json.dumps(bindings_compat), encoding='utf-8')
+    else:
+        # A binding left by an earlier attempt in this folder must not stand in for the failed re-solve.
+        for stale in (Path(solid_tmp) / 'bindings.json', Path(solid_tmp) / f'{label}_gci.json'):
+            stale.unlink(missing_ok=True)
     subprocess.run(
         [
             str(jarambit_bin), 'rs-v2-eval',
