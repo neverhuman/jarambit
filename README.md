@@ -2,11 +2,13 @@
 
 Jarambit is a computational design research system linking a geometric representation, retained search observations, and candidate-specific numerical evidence. This retrospective study asks what readers can reconstruct from those links and where evidence is missing.
 
-[Main paper](docs/paper/main.pdf) · [Standalone supplement](docs/paper/supplement.pdf) · [Reconstruction guide](docs/paper/README.md) · [Evidence crosswalk](docs/paper/CROSSWALK_SUPPLEMENT.md) · [Test atlas](docs/tests/README.md) · [Architecture](TECHNOLOGY_MAP.md)
+[Paper A, as exported](docs/paper/main.pdf) · [Paper B, smoothed](docs/paper/main-smoothed.pdf) · [Smoothing ladder, 10 levels](docs/paper/smoothing-ladder.pdf) · [Standalone supplement](docs/paper/supplement.pdf) · [Reconstruction guide](docs/paper/README.md) · [Evidence crosswalk](docs/paper/CROSSWALK_SUPPLEMENT.md) · [Test atlas](docs/tests/README.md) · [Architecture](TECHNOLOGY_MAP.md)
 
-![Illuminated appearance of the retained response index on Individual 2000's unchanged CAD geometry](docs/paper/figures/hero-appearance.png)
+| A: as exported | B: smoothed and re-scored |
+|---|---|
+| [![w406t3_r01_p10_c16 as exported, W_ULTRALIGHT_v1 fitness 80.30](docs/paper/figures/cover/cover-unsmoothed.png)](docs/paper/main.pdf) | [![w406t3_r01_p10_c16 after feature-preserving smoothing, re-scored fitness 75.34](docs/paper/figures/cover/cover-smoothed.png)](docs/paper/main-smoothed.pdf) |
 
-*Individual 2000 is an editorially selected retained assessed example, not a rank or global winner. Its stable alias is linked by exact certificate and genome hashes to proposal observation 6643; per-child parentage remains unrecorded. Base colors average available, area-weighted response ranks from four retained channels. Lighting changes displayed RGB; use the [unlit quantitative companion](docs/paper/generated/hero-full-range.svg) for the original color key. Geometry, fields, masks and retained fitness are reused, not newly evaluated. This index does not express fitness, safety or qualification. [Source and appearance receipt](docs/paper/generated/hero-appearance.v1.json) · [Definitions and original evidence](docs/paper/CROSSWALK_SUPPLEMENT.md).*
+*Best evolved design by `W_ULTRALIGHT_v1`, `w406t3_r01_p10_c16` (3D mass `83.22 g`, battery 14/18, not qualified), with two-sided isogrid pockets, lattice, relief and pierced-fuller windows. **A**, as exported: `F = 80.299390` of 100, first of the 967 comparable retained assessments of every run since 2026-10-17; re-assessing it with the current evaluator reproduces that score. **B**, after feature-preserving geometric smoothing (30° feature pins, 20 iterations), with 3D mass and the solid-tip submodel re-measured: `F = 75.343635`. The 5-point CAD/B-rep objective is withheld because the smoothed geometry is a triangle mesh without a validated STEP solid (with it kept, `F = 80.343635`). Inset: isogrid pockets at 2.5×. The base colour is uniform, so shading shows geometry only. [Selection record](docs/paper/figures/cover/winner-selection.v1.json) · [Smoothing ladder: no smoothing to strongest, each re-scored](docs/paper/smoothing-ladder.pdf).*
 
 ## Which evidence is retained
 
