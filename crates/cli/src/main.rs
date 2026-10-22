@@ -14,6 +14,7 @@ mod auto_evolve;
 mod datasets;
 mod version_check;
 mod runner_policy;
+mod smoothing_ladder;
 
 /// Validate an existing history header before any append, then open the log.
 /// A fresh path is created with `fresh_header` and only then opened for append.
@@ -68,6 +69,9 @@ fn main() {
     if a.get(1).map(String::as_str) == Some("dataset") {
         // regression dataset factory: build / cv / harvest-waves / commit / featurize / rescreen / ...
         std::process::exit(datasets::run_dataset_cli(&a[2..]));
+    }
+    if let Some(pos) = a.iter().position(|s| s == "smoothing-ladder") {
+        std::process::exit(smoothing_ladder::run_smoothing_ladder_cli(&a[(pos + 1)..]));
     }
     if let Some(pos) = a.iter().position(|s| s == "auto-evolve") {
         std::process::exit(auto_evolve::run_auto_evolve_cli(&a[(pos + 1)..]));
