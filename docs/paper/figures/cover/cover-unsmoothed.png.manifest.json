@@ -5,7 +5,7 @@
   "inputs": {
     "docs/paper/figures/cover/cover-unsmoothed.svg": "0a2a92a355008a031b2eb7c3ced04ba9ed29ec9dd500040d900164a6d529ba18",
     "docs/paper/figures/cover/render-unsmoothed.png": "2e2f07bacb876f9e4f4d1aaaf7d4ec8958e3a46aee8efc3dd046dd7b55859da2",
-    "docs/paper/figures/cover/winner-selection.v1.json": "078b91f7988a2210005aab5c59745ec74488f927e8e7733408762539df1abbcf"
+    "docs/paper/figures/cover/winner-selection.v1.json": "3b7a7cbcf074d5c719c664aa5115ce345898142871f7fccba9bfdc50cbddd88c"
   },
   "note": "make figures: rsvg-convert -w 2000 -h 850 of the SVG (render + 2.5x isogrid-pocket inset + W_ULTRALIGHT_v1 badge 80.30 from winner-selection.v1.json)."
 }
