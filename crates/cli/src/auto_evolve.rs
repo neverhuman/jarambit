@@ -1,6 +1,8 @@
-//! Automated multi-wave evolutionary search with ALL hard engineering gates
-//! (`16/16 W_CAD_v2` + `10/10 RS-karambit-v2 all_hard` + 3D `TET10` solid-tip FEM +
-//! `side.a4` buckling + 3-level Roache `GCI` + strict `0.0625 mm^2` plate + 3D watertight STEP/STL).
+//! Automated multi-wave evolutionary search on the weighted multi-objective `W_ULTRALIGHT_v1`
+//! (`docs/WORKPLAN.md` §5): every candidate gets a continuous score and no gate is a veto. The
+//! legacy `16/16 W_CAD_v2` + `10/10 RS-karambit-v2 all_hard` verdicts (3D `TET10` solid tip,
+//! `side.a4` buckling, 3-level Roache `GCI`, strict `0.0625 mm^2` plate, watertight STEP/STL)
+//! are still measured and logged for reference.
 
 use jarambit_crescent::{
     certification, fem,
@@ -68,6 +70,11 @@ struct ScreenSurvivor {
     fat_sf: f64,
     ring_bearing_w_mm: f64,
     screen_deficit: f64,
+    /// Legacy C.6 aesthetic floor and holder/geometry verdicts: scored objectives, never vetoes.
+    aes_pass: bool,
+    holder_ok: bool,
+    /// False when the plate FEM could not mesh or solve this outline; every FEM objective then scores zero.
+    fem_measured: bool,
 }
 
 #[derive(Clone, Debug)]
@@ -551,20 +558,40 @@ fn screen_candidate_stage1_recorded(
         });
         return (None, row);
     }
-    let r = qd::evaluate(g, idx, round, 2.0);
+    let mut r = qd::evaluate(g, idx, round, 2.0);
     let p = pheno::build(g);
+    // qd::evaluate skips the FEM screen after an aesthetic or holder/geometry reject. Under
+    // W_ULTRALIGHT_v1 those are weighted objectives, so the design is screened and ranked anyway.
+    if r.fem.is_none() && !(r.aes.pass && r.rejects.is_empty()) {
+        r.fem = fem::run(&p, 2.0, false).map(|x| x.0);
+    }
     let mut row = record.then(|| {
         let mut row = featurize::record_from_eval(g, &p, &r);
         row.text("meta.label", &label);
         row
     });
-    let Some(f) = r.fem.as_ref() else {
-        return (None, row);
-    };
     // Search may rank a measured shortfall. It never turns that shortfall into a qualification.
     let deficit = |value: f64, floor: f64| ((floor - value) / floor).max(0.0);
     let (bw, _) = fem::ring_bearing(&p);
     let (radius, _) = pheno::bore_dimensions(&p);
+    // A plate that cannot be meshed or solved has no strength measurement. It stays in the ranking
+    // with zero credit on every FEM objective; its records carry null plus a status, never zeros.
+    let Some(f) = r.fem.as_ref() else {
+        let survivor = ScreenSurvivor {
+            label,
+            family: family.to_string(),
+            g: g.clone(),
+            mass_g: p.mass_g,
+            seq_ratio: 0.0,
+            fat_sf: 0.0,
+            ring_bearing_w_mm: bw,
+            screen_deficit: 0.0,
+            aes_pass: r.aes.pass,
+            holder_ok: r.rejects.is_empty(),
+            fem_measured: false,
+        };
+        return (Some(survivor), row);
+    };
     let screen_deficit = deficit(f.lat_rob, 260.0)
         + deficit(f.lat_rob, SCREEN_LAT_HUNTER_MARGIN_N)
         + deficit(f.sf_hiker, 1.0)
@@ -591,6 +618,9 @@ fn screen_candidate_stage1_recorded(
         fat_sf: f.fat_sf,
         ring_bearing_w_mm: bw,
         screen_deficit,
+        aes_pass: r.aes.pass,
+        holder_ok: r.rejects.is_empty(),
+        fem_measured: true,
     };
     (Some(survivor), row)
 }
@@ -631,13 +661,24 @@ fn stage1_ultralight_weighted_fitness(s: &ScreenSurvivor) -> f64 {
     let s_collar = 0.5 * clamp01(s.ring_bearing_w_mm / 10.0) + 0.5 * clamp01(radius / 1.5);
     let s_seq = clamp01(s.seq_ratio / 1.20);
     let s_fat = clamp01(s.fat_sf / 1.0);
-    let s_struct = clamp01(1.0 / (1.0 + 0.35 * s.screen_deficit.max(0.0)));
+    let s_struct = if s.fem_measured {
+        clamp01(1.0 / (1.0 + 0.35 * s.screen_deficit.max(0.0)))
+    } else {
+        0.0
+    };
+    // Same 1.0 / 0.5 credit the canonical Stage-2 score gives these two legacy gates.
+    let s_holder = if s.holder_ok { 1.0 } else { 0.5 };
+    let s_aes = if s.aes_pass { 1.0 } else { 0.5 };
     let w_mass = ULTRALIGHT_WEIGHTS_V1[0].1;
+    let w_holder = ULTRALIGHT_WEIGHTS_V1[1].1;
+    let w_aes = ULTRALIGHT_WEIGHTS_V1[3].1;
     let w_collar = ULTRALIGHT_WEIGHTS_V1[4].1;
     let w_seq = ULTRALIGHT_WEIGHTS_V1[16].1;
     let w_fat = ULTRALIGHT_WEIGHTS_V1[19].1;
     let score = w_mass * s_mass
-        + 39.0 // geometry, ring, C.6 aesthetic, B-rep, and Gate-S sub-scores
+        + w_holder * s_holder
+        + w_aes * s_aes
+        + 22.0 // ring, B-rep, and Gate-S sub-scores (measured only in Stage 2)
         + w_collar * s_collar
         + w_seq * s_seq
         + w_fat * s_fat
@@ -987,14 +1028,14 @@ fn design_value(c: &AssessedDesign) -> Value {
         "certificate_identity":certification::identity(&c.g),"genome_csv":c.genome_csv,"scorecard_md":c.scorecard_md})
 }
 
-/// Keep qualified genomes, then preserve each rankable seed family before filling search slots.
+/// Keep the Hall-of-Fame genome, then preserve each rankable seed family before filling search slots.
 fn replacement_elites(
-    qualified: impl Iterator<Item = (String, Genome)>,
+    hall_of_fame: impl Iterator<Item = (String, Genome)>,
     survivors: &[ScreenSurvivor],
     previous: &[(String, Genome)],
 ) -> Vec<(String, Genome)> {
     let mut next = Vec::new();
-    for pair in qualified {
+    for pair in hall_of_fame {
         if !next.iter().any(|(_, g)| *g == pair.1) {
             next.push(pair);
         }
@@ -1274,7 +1315,7 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
     let mut round_ultralight_maxima: Vec<f64> = Vec::new();
 
     println!(
-        "=== JARAMBIT AUTO-EVOLVE: ranked search, independent top-k assessment, qualification requires every hard gate ==="
+        "=== JARAMBIT AUTO-EVOLVE: W_ULTRALIGHT_v1 ranked search, independent top-k assessment, legacy gate verdicts logged for reference ==="
     );
     println!(
         "Config: rounds={rounds}, candidates/elite/round={candidates_per_round}, certify_top={certify_top}, threads={threads}, seed={seed}, out={}",
@@ -1353,8 +1394,11 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
         );
 
         let ranked:Vec<_>=survivors.iter().map(|s|json!({"label":s.label,"family":s.family,"certificate_identity":certification::identity(&s.g),
-            "mass_g":s.mass_g,"seq_ratio":s.seq_ratio,"fat_sf":s.fat_sf,"ring_bearing_w_mm":s.ring_bearing_w_mm,
-            "screen_deficit":s.screen_deficit,"ultralight_weighted_fitness":stage1_ultralight_weighted_fitness(s),
+            "mass_g":s.mass_g,"seq_ratio":s.fem_measured.then_some(s.seq_ratio),"fat_sf":s.fem_measured.then_some(s.fat_sf),
+            "ring_bearing_w_mm":s.ring_bearing_w_mm,"screen_deficit":s.fem_measured.then_some(s.screen_deficit),
+            "fem_screen_status":if s.fem_measured {"measured"} else {"unmeasured: plate FEM did not mesh or solve; zero credit on FEM objectives"},
+            "legacy_c6_aesthetic_pass":s.aes_pass,"legacy_holder_and_geometry_pass":s.holder_ok,
+            "ultralight_weighted_fitness":stage1_ultralight_weighted_fitness(s),
             "qualification_status":"pending independent top-k assessment"})).collect();
         if let Err(e) = std::fs::write(
             out_dir.join(format!("round_{round:02}_screen.json")),
@@ -1455,8 +1499,8 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
             .current_dir(&root)
             .status();
 
-        // Hall-of-Fame elitism: preserve any all-gates qualified genome plus the highest
-        // `W_ULTRALIGHT_v1` Stage-2 assessed genome so far (monotone non-decreasing fitness).
+        // Hall-of-Fame elitism: preserve the highest `W_ULTRALIGHT_v1` Stage-2 assessed genome
+        // so far (monotone non-decreasing fitness). Legacy gate verdicts never buy an elite slot.
         let hof_best = assessed_all
             .iter()
             .max_by(|a, b| {
@@ -1465,15 +1509,7 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
                     .unwrap_or(std::cmp::Ordering::Equal)
             })
             .map(|c| (c.family.clone(), c.g.clone()));
-        elites = replacement_elites(
-            assessed_all
-                .iter()
-                .filter(|c| c.all_16_gates && c.rs_v2_all_hard)
-                .map(|c| (c.family.clone(), c.g.clone()))
-                .chain(hof_best),
-            &survivors,
-            &elites,
-        );
+        elites = replacement_elites(hof_best.into_iter(), &survivors, &elites);
         if let Some(rec) = recorder.as_mut() {
             rec.end_round(round);
         }
@@ -1499,7 +1535,7 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
         .iter()
         .filter(|c| c.all_16_gates && c.rs_v2_all_hard)
         .collect();
-    let mut md=String::from("# Evolution certification attempts\n\nSearch rank is provisional. Qualification requires all 16 engineering gates and the complete measured RS-v2 verdict, including both independent fine-mesh solvers.\n\n| Design | Qualified | Mass g | W_CAD | G1 | W_ULTRALIGHT_v1 | Solid tip SF | RS-v2 all_hard | Battery |\n|---|---|---:|---:|---:|---:|---:|---|---|\n");
+    let mut md=String::from("# Evolution certification attempts\n\nSelection ranks every design by `W_ULTRALIGHT_v1` alone. The Qualified, RS-v2 all_hard and Battery columns are the legacy hard-gate verdicts, logged for reference; they never remove a design from the search.\n\n| Design | Qualified | Mass g | W_CAD | G1 | W_ULTRALIGHT_v1 | Solid tip SF | RS-v2 all_hard | Battery |\n|---|---|---:|---:|---:|---:|---:|---|---|\n");
     let mut rows = Vec::new();
     for c in &assessed_all {
         let qualifies = c.all_16_gates && c.rs_v2_all_hard;
@@ -1556,7 +1592,9 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
         qualified.len(),
         errors.len()
     );
-    if assessed_all.is_empty() || !errors.is_empty() {
+    // Designs the evaluator could not score are listed under `unverified`; the island still
+    // succeeded if it scored any design.
+    if assessed_all.is_empty() {
         1
     } else {
         0
@@ -1583,6 +1621,9 @@ mod tests {
             fat_sf: 0.0,
             ring_bearing_w_mm: 12.0,
             screen_deficit,
+            aes_pass: true,
+            holder_ok: true,
+            fem_measured: true,
         }
     }
 
@@ -3282,12 +3323,12 @@ mod tests {
         }
     }
     #[test]
-    fn qualified_elite_survives_replacement_by_four_different_provisional_genomes() {
+    fn hall_of_fame_elite_survives_replacement_by_four_different_provisional_genomes() {
         let seeds = load_seed_genomes(&repo_root(), Some("evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv"));
         let champion = seeds[0].clone();
         let survivors: Vec<_> = (0..4).map(|i| {
             let mut g=champion.1.clone();g.v[genome::EA_IN]=14.0+i as f64;
-            ScreenSurvivor {label:i.to_string(),family:"provisional".into(),g,mass_g:1.,seq_ratio:0.,fat_sf:0.,ring_bearing_w_mm:0.,screen_deficit:0.}
+            ScreenSurvivor {label:i.to_string(),family:"provisional".into(),g,mass_g:1.,seq_ratio:0.,fat_sf:0.,ring_bearing_w_mm:0.,screen_deficit:0.,aes_pass:true,holder_ok:true,fem_measured:true}
         }).collect();
         let next=replacement_elites(std::iter::once(champion.clone()),&survivors,&[]);
         assert_eq!(next.len(),5);assert_eq!(next[0],champion);
@@ -3309,7 +3350,7 @@ mod tests {
             ScreenSurvivor { label: label.into(), family: row["family"].as_str().unwrap().into(), g,
                 mass_g: row["mass_g"].as_f64().unwrap(), seq_ratio: row["seq_ratio"].as_f64().unwrap(),
                 fat_sf: row["fat_sf"].as_f64().unwrap(), ring_bearing_w_mm: row["ring_bearing_w_mm"].as_f64().unwrap(),
-                screen_deficit: row["screen_deficit"].as_f64().unwrap() }
+                screen_deficit: row["screen_deficit"].as_f64().unwrap(), aes_pass: true, holder_ok: true, fem_measured: true }
         }).collect()
     }
     #[test]
@@ -3382,6 +3423,32 @@ mod tests {
         assert!(f_light > f_heavy);
         assert!((0.0..=100.0).contains(&f_light));
         assert!((0.0..=100.0).contains(&f_heavy));
+    }
+    #[test]
+    fn stage1_scores_legacy_gate_misses_instead_of_vetoing_them() {
+        let base = replay_screen("xbabe2", "w298")[0].clone();
+        let f_base = stage1_ultralight_weighted_fitness(&base);
+        // Half credit on the 9% C.6 aesthetic and 8% holder objectives, as the canonical Stage-2 score gives.
+        let aes = ScreenSurvivor { aes_pass: false, ..base.clone() };
+        assert!((f_base - stage1_ultralight_weighted_fitness(&aes) - 4.5).abs() < 1e-6);
+        let holder = ScreenSurvivor { holder_ok: false, ..base.clone() };
+        assert!((f_base - stage1_ultralight_weighted_fitness(&holder) - 4.0).abs() < 1e-6);
+        // No plate FEM: zero credit on every FEM objective, but still a ranked score.
+        let unmeasured = ScreenSurvivor { fem_measured: false, seq_ratio: 0.0, fat_sf: 0.0, screen_deficit: 0.0, ..base.clone() };
+        let f_unmeasured = stage1_ultralight_weighted_fitness(&unmeasured);
+        assert!(f_unmeasured > 0.0 && f_unmeasured < f_base);
+    }
+    #[test]
+    fn aesthetic_reject_is_still_fem_screened_and_ranked() {
+        let seeds = load_seed_genomes(&repo_root(), Some("evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv"));
+        let mut g = seeds[0].1.clone();
+        // Below the 8 mm C.6 ring-neck fillet floor (unclamped: the schema bound is that floor).
+        g.v[genome::NECK_FILLET] = 6.0;
+        let r = qd::evaluate(&g, 0, 0, 2.0);
+        assert!(!r.aes.pass && r.fem.is_none(), "fixture must be a legacy aesthetic reject: {:?}", r.aes.fails);
+        let s = screen_candidate_stage1(0, 0, &seeds[0].0, &g, "test").expect("aesthetic reject stays rankable");
+        assert!(!s.aes_pass && s.fem_measured);
+        assert!(s.seq_ratio > 0.0);
     }
     #[test]
     fn monotone_hall_of_fame_curve_is_non_decreasing() {
@@ -3466,15 +3533,7 @@ mod tests {
                     .unwrap_or(std::cmp::Ordering::Equal)
             })
             .map(|c| (c.family.clone(), c.g.clone()));
-        let next = replacement_elites(
-            assessed
-                .iter()
-                .filter(|c| c.all_16_gates && c.rs_v2_all_hard)
-                .map(|c| (c.family.clone(), c.g.clone()))
-                .chain(hof_best),
-            &screen,
-            &[],
-        );
+        let next = replacement_elites(hof_best.into_iter(), &screen, &[]);
         assert_eq!(next[0].1, g_best);
 
         let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..");
