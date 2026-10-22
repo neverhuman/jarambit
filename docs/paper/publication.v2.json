@@ -22,7 +22,7 @@
     "docs/paper/JR_EI_P1_T08_LOSSLESS_GEN800_POPULATION_ACCESSION_RECEIPT_20261019.json": "79ba4b6da9df8fda27dfa035f20187499cf032420a5b15e90ccfbaa06a1479a1",
     "docs/paper/data/gen800_population_density_and_traces.v1.json": "1ce4cc9292cd11f887ae5ce8f6a9d7626351b256a71ee04957890042d13263a1",
     "docs/paper/data/public_ids.v1.json": "a0c3708415027d0f850f8776c4bfef7cf845ea2181b86aa8bab959a20e59c7ab",
-    "docs/paper/data/reporting-interpretation-contract.v2.json": "b18fd0b3e3557b9654d8f4b3f19678c6b5abad0c47aa12d55406185cfcc46cdc",
+    "docs/paper/data/reporting-interpretation-contract.v2.json": "719fa24574b81b28f7427855965353aace786827cba70d6618b18a8c9016d9ff",
     "docs/paper/data/score_profiles.v1.json": "53d6bf2d3227f5ed0d81fd648141810e25951af5f31862fc17c2343c6e6d8c52",
     "docs/paper/data/selection_receipts.v1.json": "9f8f5f05bef98304e37f3e90d02abc646d10b99d92d745c2f8f501e893f1d2e8",
     "docs/paper/history/ultralight_weighted_fitness_009f5ac5.source.txt": "1adbd37191710d439d3ca388e468499fe48bc217546145deb57f87f1da24770b",
@@ -53,7 +53,7 @@
     "docs/paper/generated/population/point-rendering.v1.json": "62fdd1f2951501bee412b1e4cbff931781587b26a52b1e4e7d5f8de62a293bee",
     "docs/paper/generated/population/retained-leaders.v1.json": "a00ffd38b65cc6e6120a83330d631c39ca6f919b1ef1d038903c15bda7694d7e",
     "docs/paper/generated/population/score-axis.v1.json": "536ef65cd5bacbc0e507b87284e9e662e4c8a9223761c53c8589d5dbf3a0c387",
-    "docs/paper/generated/reporting-interpretation.v2.json": "c9bb7402488683af47c36544081d7a735af5abd661105e6f30e80e7f3b5605a9",
+    "docs/paper/generated/reporting-interpretation.v2.json": "3c55b725adc02e314faed6d34d8bb9039a80b182a127b90c6a1e9c05cc264020",
     "docs/paper/generated/shared_projection.v2.json": "5782bf46e615b483488725cbf4b2d03b61f9ee8410376e2cf5e590132dc4ea4b",
     "docs/paper/generated/test-field-roster.v1.tsv": "fefc751025c9f3b8c7f4391cf17449fe1da1265b08fd5fc4ad9549d115b96638"
   },
