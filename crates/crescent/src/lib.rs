@@ -10,6 +10,7 @@ pub mod c6_ref;
 pub mod geom;
 pub mod genome;
 pub mod pheno;
+pub mod pocket_smooth;
 pub mod aesthetic;
 pub mod gates;
 pub mod fem;

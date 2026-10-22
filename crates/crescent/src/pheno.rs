@@ -74,6 +74,8 @@ pub struct Pheno {
     /// planform area (mm^2, per face) and min rail width actually kept full-thickness (mm).
     pub t_joint: f64, pub pocket_area: f64, pub p1: bool, pub rs_v2: bool,
     pub fails: Vec<String>,
+    /// RESEARCH, default None: surface-tension pocket smoothing (JARAMBIT_POCKET_SMOOTH, rs_v2 only).
+    pub pocket_smooth: Option<std::sync::Arc<crate::pocket_smooth::SmoothField>>,
 }
 
 /// D1 P1 parent safety-factor map (JARAMBIT_P1_SFMAP): raster of the signed distance (mm) INTO the region
@@ -284,7 +286,7 @@ pub fn build(g: &Genome) -> Pheno {
         edge_in, edge_sp, blade, grip_len, ring_od, ring_id, pad, teeth_in, teeth_sp, ripple_in, ripple_sp,
         field: Field { x0: 0.0, y0: 0.0, g: GRID, nx: 0, ny: 0, th: vec![], base: vec![] }, mass_g: 0.0, blank_g: 0.0, area_mm2: 0.0,
         removed: [0.0; NREM], n_win, win_area, n_perf, perf_area, web_clamped: 0, min_web: 0.0, land_full_mm2: 0.0, pad_flat: false, groove_w: 0.0, groove_area: 0.0,
-        t_joint: g.t_joint(), pocket_area: 0.0, p1: g.p1(), rs_v2: g.rs_v2(), fails };
+        t_joint: g.t_joint(), pocket_area: 0.0, p1: g.p1(), rs_v2: g.rs_v2(), fails, pocket_smooth: None };
     thickness_field(g, &mut p);
     p
 }
@@ -475,6 +477,11 @@ fn thickness_field(g: &Genome, p: &mut Pheno) {
                 } } } }
     }
     p.field = Field { x0, y0, g: gsz, nx, ny, th, base: base_v };
+    if rs_v2 {
+        if let Some(prm) = crate::pocket_smooth::params_from_env() {
+            p.pocket_smooth = Some(crate::pocket_smooth::cached(p, &prm));
+        }
+    }
     if rs_v2 {
         let actual: Vec<f32> = p.field.th.iter().enumerate().map(|(k, &v)| {
             if v.is_nan() { return v; }

@@ -32,7 +32,9 @@ pub fn thickness_at(p: &Pheno, q: P2) -> f64 {
     let grind=(g.v[EDGE_TH]+2.0*di*ti).min(g.v[EDGE_TH]+2.0*ds*ts);
     // Pocket/relief operations exclude the grinds. Evaluate their continuous faces exactly,
     // including the scallop boundaries; nearest raster cells cannot define an apex.
-    let mut value = if grind < base { grind } else { raw };
+    let mut value = if grind < base { grind } else {
+        match p.pocket_smooth.as_ref().and_then(|s| s.depth_at(q)) { Some(d) => base - d, None => raw }
+    };
     let (radius, _) = bore_dimensions(p);
     if q.0.hypot(q.1) <= p.ring_id / 2.0 + 1.5 * radius + 1e-9 {
         value = bore_collar_thickness(p, q, value);
@@ -48,7 +50,9 @@ pub fn solid(p: &Pheno, max_area: f64) -> Option<Solid> {
         else {dp_closed(h,0.02)}
     }).collect();
     // The exported tip mesh itself is the source of the independent solid submodel.
-    let m=fine::mesh_domain(&outer,&holes,if p.rs_v2 {max_area.min(0.25)}else{max_area})?;
+    let area=if p.rs_v2 {max_area.min(0.25)}else{max_area};
+    let steiner:&[P2]=p.pocket_smooth.as_ref().map_or(&[],|s|s.steiner.as_slice());
+    let m=if steiner.is_empty() {fine::mesh_domain(&outer,&holes,area)?} else {fine::mesh_domain_pts(&outer,&holes,steiner,area)?};
     let n=m.xy.len();
     let mut verts:Vec<V3>=m.xy.iter().map(|&q|(q.0,q.1,thickness_at(p,q)/2.0)).collect();
     verts.extend(m.xy.iter().map(|&q|(q.0,q.1,-thickness_at(p,q)/2.0)));
