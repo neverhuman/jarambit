@@ -307,7 +307,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let manifest_text = serde_json::to_string_pretty(&manifest)? + "\n";
     write_new(
         &out,
-        "smoothing-figure.manifest.json",
+        "smoothing-figure.render.v1.json",
         manifest_text.as_bytes(),
     )?;
     println!("wrote {}", out.display());

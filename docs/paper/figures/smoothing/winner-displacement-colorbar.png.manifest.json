@@ -1,0 +1,21 @@
+{
+  "figure": "docs/paper/figures/smoothing/winner-displacement-colorbar.png",
+  "figure_sha256": "9655e4a2c381a41a895faaccc2aaf7023891b40fa3af0711cc074011c5d2ea40",
+  "script": "crates/paper-artifacts/examples/smoothing_figure.rs",
+  "inputs": {
+    "docs/paper/figures/smoothing/smoothing-figure.render.v1.json": "4de05601d8c31a16886f9dce21e3f33dcb8557bae638755cef6122fe78e2350e",
+    "experiments/geometry-smoothing-benchmark/results/winner-ef2i91_r03_p14_c26/R1-normal-only-pin30-it20/RECEIPT.json": "f0d5144c8ace8332bf135b842a07a6fe6a807e5e3cac8ddf0bf2a1bc1d8a925d",
+    "experiments/geometry-smoothing-benchmark/results/winner-ef2i91_r03_p14_c26/R1-normal-only-pin30-it20/metrics.json": "f8349140523e07a09c436f72ba3a7b0e991cfd50076d1e3ae8c21c39477096ea"
+  },
+  "external_inputs": {
+    "before_stl": {
+      "path": "/home/ubuntu/jarambit_runs/evo_full_20261018/xbabe2/islands/i91/by-content/e7ab9c8531255490be6a05c5dab8f629159ee9eae0580bda459a398a03747063/attempt-1792452614126747868/ef2i91_r03_p14_c26.stl",
+      "sha256": "7741cf82418984b52e89e4a5f4f97ce49723e0d4513c2c9eada139b4bdeaeba6"
+    },
+    "after_stl": {
+      "path": "/home/ubuntu/jarambit_runs/smoothing/ef2i91_r03_p14_c26-s1b-R1-20261021T231908Z/smoothed.stl",
+      "sha256": "895036be4f93beea3ce036946a9a21cbfcf4f262ec62b81433add776047d8888"
+    }
+  },
+  "external_inputs_note": "The STL files are outside git because of their size. They are bound here by sha256 and by the RECEIPT.json input record."
+}
