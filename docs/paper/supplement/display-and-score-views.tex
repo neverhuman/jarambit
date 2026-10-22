@@ -186,10 +186,12 @@ Runs~10--11, using each run's separately printed scale.}
 \clearpage
 
 \subsection{Bounded Run~5 Display Comparison}
+For a within-run point view, Figure~\ref{fig:run5-gap} maps every retained Run~5 birth using $x_+=g+1$ and $z=(b-f)/s+\varepsilon$, displayed on base-10 logarithmic axes. Here $b=1.1440$ is the fixed final best retained score of Run~5, $s=f_{\max}-f_{\min}$ is its full original numeric range and $\varepsilon=10^{-6}$ is a display floor. The inverse is $f=b-s(z-\varepsilon)$; generation is recovered by $g=x_+-1$. Vertical ticks recover original stored fitness, and zero and negative scores remain admitted. The reference is retrospective, not the current running best or an unknown optimum; the floor permits zero original gap and is not a measured residual. Shifted-gap ratios and plotted slopes have no physical performance interpretation.
+
 Figures~\ref{fig:run5-display-comparison}, \ref{fig:run5-positive-affine}
 and~\ref{fig:run5-gap-summary} reuse the same retained cumulative-best
 and full-population median summaries. These summary panels draw no raw
-birth points. Main Figure~\ref{M-fig:run5-gap} separately projects every
+birth points. Figure~\ref{fig:run5-gap} separately projects every
 Run~5 birth and derives its cumulative-best overlay from those raw rows,
 without a median overlay. The full numeric point universe and its $1390$
 nonnumeric proposals remain in main Figure~\ref{M-fig:population-latest};
@@ -219,6 +221,13 @@ Its full admitted universe remains $1{,}958{,}803$ numeric observations;
 $1390$ missing screens remain nonnumeric. Screening retains its one-based
 birth-file ordinal rather than an invented generation or shared campaign
 trajectory. These views add no observations or physical convergence evidence.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{run-05-positive-points-gap.png}
+\caption{All $195{,}456$ retained Run~5 births, one point operation per original numeric row. Navy--teal--yellow--orange--red maps original fitness through the declared monotone log-axis contrast; warmer means higher stored fitness within Run~5. Source-order marks can overpaint earlier colors; visible color is not density. The dark cumulative-best curve with a light halo uses those same rows, without a median overlay. Positions retain the fixed full-run range and retrospective retained-best reference; ticks recover original fitness and generations. The earliest of seven exact maximum ties is original ID~185541, public alias~781909, at generation~760 with $f=1.1440$; no higher stored value appears through generation~800 at serialized precision. This is neither physical convergence nor a global winner or later CAD/solid assessment. Main Figure~\ref{M-fig:population-latest} retains all separate-profile numeric observations and $1390$ nonnumeric unknown proposals.}
+\label{fig:run5-gap}
+\end{figure}
 
 \begin{figure}[ht]
 \centering
@@ -255,7 +264,7 @@ the positive-gap display, with no raw birth points. The fixed own-run final
 reference, full original range, display floor and inverse match the definitions
 in the main text. Here ticks show normalized gap, with zero original gap at
 the retained best, and original generations; the separate all-point main
-Figure~\ref{M-fig:run5-gap} uses original-fitness ticks. The seven exact maximum
+Figure~\ref{fig:run5-gap} uses original-fitness ticks. The seven exact maximum
 ties, earliest retained attainment at generation~760 and final 40-transition
 stored-score plateau are source observations, not physical convergence,
 qualification or a global winner.}

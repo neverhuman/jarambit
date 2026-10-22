@@ -1,0 +1,168 @@
+Jarambit evolution run trees found on xbabe1-4 (read-only census, 2026-10-22; live data snapshot 14:40:42Z-14:40:45Z)
+========================================================================================================
+
+Legend
+  EXTRACTED  = rows are in stage1_all.tsv / stage2_all.tsv / islands.tsv
+  INVENTORY  = listed in islands.tsv with zero counts (part of an extracted campaign, produced no outputs)
+  REPORTED   = found, not extracted (reason given)
+  Inclusion rule for EXTRACTED: the run's Stage-1 screens carry a numeric `ultralight_weighted_fitness`,
+  or at least one of its Stage-2 scorecards (*_master_scorecard.json + *_rs.json) was produced by an
+  evaluator commit (scorecard `source_commit`) that descends from 9967a93 "land W_ULTRALIGHT_v1 global
+  weighted fitness" (2026-10-18T18:08Z), the commit that added ops/ci/ultralight_weighted_fitness.py.
+  "canonical-fn" below = compute_ultralight_weighted_fitness (evo-v2.2.0 lane, blob 9cfb4416) applied to a
+  REPORTED tree's scorecard+rs pairs, for information only.
+
+---------------------------------------------------------------------------------------------------------
+xbabe1 (Linux, /home/ubuntu)
+---------------------------------------------------------------------------------------------------------
+EXTRACTED  ~/jarambit_runs/evo_continuous/xbabe1/islands/                    run=evo_continuous
+           6 islands (i001-i006, prefix ec1iNNN), 2175 Stage-1 rows, 50 Stage-2 assessments. Continuous
+           keepalive evolution since 2026-10-21 (binary 49dc71f / v2.2.0 e07606a).
+EXTRACTED  ~/jarambit_runs/evo_continuous/xbabe1/_superseded_dup_seed_20261022/  run=evo_continuous:_superseded_dup_seed_20261022
+           3 islands (i001-i003), 263 Stage-1 rows, 4 Stage-2. README: "duplicate seed bug: same RNG seed +
+           parents as xbabe2; replaced 2026-10-22". Killed (exit 143) 2026-10-22T00:20Z. Labels ec1i001..3
+           collide with the current islands/i001..3 labels; ec1i002_r01_p14_c18 is byte-identical (genome) to
+           xbabe2 ec2i002_r01_p14_c18. Not in the 13:38Z canon_scan scope.
+EXTRACTED  ~/jarambit/out/{w501_ul,w501_xb1,w502_xb1}                       run=jarambit/out
+           2026-10-18/19 W_ULTRALIGHT_v1 waves (S3 prefix ..._ultralight_v1). 663 Stage-1 rows (393 carry
+           ultralight_weighted_fitness; w501_xb1's 270 rows predate the field -> empty values), 25 Stage-2
+           (evaluators 9967a93 x11, 009f5ac x13, 9f04b47 x1 = pre-UL, flagged). Best 74.358394 w502_xb1_r01_p14_c15.
+           Also w502_rescore_and_w503.log (w503 never ran: launcher hit IsADirectoryError on w503_xb1.log).
+REPORTED   ~/jarambit_runs/evo_full_20261018/xbabe1/crescent/c01-c05 (+ _aborted_xbabe1_gens60_0047Z/crescent/c01,c02)
+           crescent-evolve lane (native Rust MAP-Elites + island GA). history_live.csv rows 3204/44/3204/3204/3204
+           (+4/4), qd_archive.csv, progress.md. Carries its own search fitness `fit` (+mass_g, SPG, aes_score),
+           not W_ULTRALIGHT_v1. No island/Stage-2 outputs. (xbabe1 has no evo_full_20261018 auto-evolve islands.)
+REPORTED   ~/jarambit/evidence/{evolution_plateau/2026-10-17, evolution_waves/2026-10-17,
+           evolution_waves/2026-10-18_ultralight_v1, evolve_certifiable, rs_v2}  (git-tracked copies; also in
+           ~/jarambit/.agent/worktrees/{evo-main,evo-v2.2.0} and ~/actions-runners/jarambit-xbabe1/_work)
+           Committed evidence copies of the 2026-10-17 xbabe2/xbabe3 waves: plateau 4 dirs, 379 Stage-1 rows
+           (no ultralight field), 11 scorecard+rs pairs (evaluators 6438f07/ae86f18, pre-UL; canonical-fn best
+           79.869405 w401c3_r02_p10_c27); waves 2026-10-17 38 dirs, 1873 Stage-1 rows (no field), no scorecard
+           JSON; 2026-10-18_ultralight_v1 = leaderboard/fitness-curve summaries only (w322, w409_ul, w411c3,
+           w411t3, w501_ul, w501_xb1); evolve_certifiable 1 dir, 7 rows, 1 pair (cert_pipeline_r01_p14_c02,
+           canonical-fn 79.806859). Raw originals are the ~/jarambit/out (xbabe2) and archived (xbabe3) trees.
+REPORTED   /tmp/jarambit-harvest-1317678, /tmp/jarambit-harvest-2521105 (evidence/waves/host/w1)
+           test-harness fixtures, 1 screen row each (keys certificate_identity,label,mass_g,seq_ratio).
+REPORTED   /tmp/gen800_pop_xbabe1/evo_full_20261018_xbabe1_c0{1,3,4,5}: crescent gen-800 population dumps.
+NOT A RUN  ~/jepson_temp/gurobi/reports/* (4 dirs with leaderboard.json; unrelated Gurobi project).
+NOTHING    /mnt/amphora-backup (hygiene-20261021 archive holds no jarambit run trees/tarballs).
+
+---------------------------------------------------------------------------------------------------------
+xbabe2 (Linux, local, /home/ubuntu)
+---------------------------------------------------------------------------------------------------------
+EXTRACTED  ~/jarambit_runs/evo_full_20261018/xbabe2/islands/                 run=evo_full_20261018
+           96 islands (i01-i96, prefix ef2iNN; 86 screened, 40 with Stage-2), 21054 Stage-1 rows,
+           326 Stage-2. i61-i70 never screened (island.json + births only; i70 has STOPPED_MEMORY).
+           Leaderboards here are inflated (not used).
+INVENTORY  ~/jarambit_runs/evo_full_20261018/xbabe2/_aborted_islands_v200_unpatched_0124Z/  24 island dirs, births only.
+EXTRACTED  ~/jarambit_runs/evo_continuous/xbabe2/islands/                    run=evo_continuous
+           16 islands i001-i016 (prefix ec2iNNN) + _failed_i001_path_bug (INVENTORY, "certification tool
+           build failed"), 5104 Stage-1 rows, 129 Stage-2.
+EXTRACTED  ~/jarambit/out/{w323,w324,w325}                                   run=jarambit/out
+           2026-10-18 W_ULTRALIGHT_v1 waves: 498 Stage-1 rows (all with field), 7 Stage-2 (evaluators
+           eb5835d/97d6855/3367c90/6c3d64e/009f5ac, all post-UL). Best 74.333984 w325.
+REPORTED   ~/jarambit/out/w284-w322 (39 wave dirs, 2026-10-16..18, pre-W_ULTRALIGHT)
+           3708 Stage-1 rows without the ultralight field; 139 scorecard+rs pairs + 44 scorecards without rs
+           (w291-w297), scorecards loose in the wave dir for w284-w290. Evaluator commits 1e93e6f..b64f156,
+           all before 9967a93. canonical-fn values: w284-w290 up to 92.290346 (mass ~75 g, solid_tip_sf ~1.5),
+           w298-w320 77.9-79.98, w321/w322 ~71.1. Leaderboard/selection used W_CAD/G1, not W_ULTRALIGHT.
+           Also ~/jarambit/out/rescore_main_4cd0f994 (6 loose scorecards, rescoring) and crescent-style
+           best_*/history.csv/pareto.csv at the top of ~/jarambit/out.
+REPORTED   ~/jarambit_runs/evo_full_20261018/xbabe2/crescent/c01-c06 (+ _aborted_crescent_screenquit_0125Z/c01)
+           crescent lane, history_live.csv rows 1900/64/72/16/2132/908 (+72); own `fit`, not W_ULTRALIGHT_v1.
+REPORTED   ~/jarambit_runs/evo_continuous/canonical/*.tsv, */_aggregate/*.csv, seeds_*: derived tables/seeds.
+REPORTED   ~/jarambit_runs/smoothing (19 dirs), ~/jarambit_runs/smoothing-checks (4 dirs)
+           post-hoc smoothing / re-scoring of winners (ef2i91_r03_p14_c26, ef3i17_r05_p14_c06,
+           ec1i005_r01_p14_c32); 2 loose scorecards in smoothing/inputs. Not evolution.
+REPORTED   committed evidence copies in ~/jarambit (main checkout at 1a56f42) and its worktrees (as on xbabe1).
+REPORTED   /mnt/jope-archive/hygiene-20261021/xbabe2/{jarambit_wt_auto03,jarambit_wt_diag,
+           jarambit_wt_diag.partial-run1,jarambit_paper_wt2,jarambit_smoke_9443b11,jarambit_smoke_dd41756}/target-evidence.tgz
+           contain only target/evolve-process-controls/<id>/{identity,disagreement,nonfinite} unit-test
+           fixtures (1 screen + 1 scorecard each). jarambit_wt_agy_ul (removed 2026-10-21) kept only dirty.patch.
+REPORTED   ~/jarambit-audits/2026-10-18T022458Z-w313-w314-provenance/source-snapshots/out (2 dirs, 353 Stage-1 rows,
+           6 scorecards, no rs) and 2026-10-18T0304Z-w314-provenance (1 dir, 175 rows, 4 scorecards, no rs):
+           provenance snapshots of the pre-UL waves w313/w314. ~/jarambit-audits/2026-10-18T012410Z-pr99-review/
+           receipts/retained-full-builds/0/test-wave-publication (+4 tmp*/out): test fixtures, no screens.
+REPORTED   /tmp/jarambit-harvest-{1293660,2891218,2967419,310129,3187112}: test-harness fixtures (as on xbabe1/3).
+REPORTED   ~/jarambit/.agent/worktrees/* (8 worktrees), ~/actions-runners/jarambit-xbabe2{,-2,-3}/_work,
+           ~/jarambit_tools, ~/jr_rel_x7: only committed evidence copies / gen800 crescent archives.
+NOT A RUN  ~/xflywheel/artifacts/benchmark/leaderboard.json, ~/remote_super/jbaby_smart/loss/arch_search/*/island.json
+           (other projects).
+SEE NOTE   search coverage on xbabe2: see the end of this file.
+
+---------------------------------------------------------------------------------------------------------
+xbabe3 (Linux, /home/ubuntu)
+---------------------------------------------------------------------------------------------------------
+EXTRACTED  ~/jarambit_runs/evo_full_20261018/xbabe3/islands/                 run=evo_full_20261018
+           24 islands (prefix ef3iNN), 7199 Stage-1 rows, 160 Stage-2.
+INVENTORY  ~/jarambit_runs/evo_full_20261018/xbabe3/_aborted_islands_v200_unpatched_0124Z/  16 island dirs, births only.
+EXTRACTED  ~/jarambit_runs/evo_continuous/xbabe3/islands/                    run=evo_continuous
+           16 islands (prefix ec3iNNN), 7247 Stage-1 rows, 53 Stage-2.
+EXTRACTED  ~/jarambit_runs/evo_continuous/xbabe3/_superseded_dup_seed_20261022/  run=evo_continuous:_superseded_dup_seed_20261022
+           8 islands, 553 Stage-1 rows, 0 Stage-2 (killed 2026-10-22T00:19Z, same dup-seed bug).
+EXTRACTED  /mnt/xbabe3-external/hygiene-20261021/xbabe3/jarambit_evo3c/out.tar.zst  (streamed, not unpacked)
+           run=archive:jarambit_evo3c/out, islands w409_ul, w412c3, w412t3 (2026-10-18/19):
+           401 Stage-1 rows (115 with field: w409_ul; w412c3/t3 286 rows predate the field), 18 Stage-2
+           (9967a93 x15, 513e215 x3 = pre-UL, flagged). Best 72.398819. Paths are "<archive>::<member>".
+EXTRACTED  /mnt/xbabe3-external/hygiene-20261021/xbabe3/jarambit_evo3u/out.tar.zst
+           run=archive:jarambit_evo3u/out, islands w413c3, w413t3 (2026-10-19): 328 Stage-1 rows, 17 Stage-2
+           (eb5835d). Best 74.050404. Includes "control" candidates (labels wNNN_rNN_control_cNN).
+REPORTED   same jarambit_evo3c archive, w400c3-w411t3 + stage2_test + seeds (18 dirs, 2026-10-17/18,
+           pre-W_ULTRALIGHT): 1545 Stage-1 rows without field, 81 scorecard+rs pairs, evaluators
+           6438f07..9443b11 (all pre-UL). canonical-fn best 80.299390 (w406t3_r01_p10_c16, 83.2 g, tip 0.68);
+           w411c3/w411t3 (9443b11) 74.21/74.17.
+REPORTED   /mnt/xbabe3-external/hygiene-20261021/xbabe3/jarambit_evo3/out.tar.zst: w284x3-w297x3 (14 dirs,
+           2026-10-16/17), no screens, 56 scorecard+rs pairs (evaluator 1e93e6f, pre-UL), canonical-fn up to
+           92.222715 (mass ~75 g, solid_tip_sf ~1.5).
+REPORTED   /tmp/jr_evo3_waves/w284x3-w310x3 (27 dirs; 14 with leaderboard.json + 56 scorecards, no rs json):
+           copy of the same pre-UL waves. Leaderboard schema jarambit.auto_evolve.leaderboard.v1 (w_cad, g1).
+REPORTED   ~/jarambit_runs/evo_full_20261018/xbabe3/crescent/c01-c06 (3204 rows each)
+           + _aborted_crescent_screenquit_0125Z/c01,c02 (68/60): crescent lane, not W_ULTRALIGHT_v1.
+REPORTED   /tmp/jarambit-harvest-132201, /tmp/jarambit-harvest-4135286: test fixtures (1 row each).
+REPORTED   /tmp/gen800_pop_xbabe3/*, ~/jarambit/.agent/worktrees/evo-main/artifacts/
+           versioned-evolution-archives-gen800-population-v1/*: crescent population archives.
+REPORTED   committed evidence copies in ~/jarambit_evo3_tools/{pr129_c480c3a,pr131_51ffa88,pr132_8f8bff0,
+           pr133_a593b6a,pr134_a60ed96,pr135_1a56f42,pr137_d810c79,pr138_04f8fde,ul_parity}, ~/jr_auto_x7/src,
+           ~/actions-runners/jarambit-xbabe3/_work, worktrees evo-main/evo-v2.2.0;
+           ~/jarambit_evo3_tools/rescore_4cd0f99 (6 loose scorecards) and review83_w282 (1): rescoring only.
+NOTHING ELSE on / , /mnt/xbabe3-external, /mnt/recovery_usb (whole-filesystem find, pruning .git/target).
+
+---------------------------------------------------------------------------------------------------------
+xbabe4 (macOS, /Users/agent)
+---------------------------------------------------------------------------------------------------------
+EXTRACTED  ~/jarambit_runs/evo_full_20261018/xbabe4/islands/                 run=evo_full_20261018
+           4 islands i01-i04 (prefix ef4iNN, git 009f5ac, no binary_sha256/EXIT), 1684 Stage-1 rows,
+           0 Stage-2: every island's run.log ends "Completed assessments: 0; qualified: 0; unverified: 15";
+           by-content holds only 15 *_genome.csv per island. MANIFEST.json (2026-10-21T22:33Z):
+           stage2_scorecards 0, finished false. Nothing to copy, so allruns/xbabe4-copies/ was not created.
+REPORTED   ~/jarambit_runs/evo_full_20261018/xbabe4/crescent/c01,c02 (3204 rows each),
+           _aborted_xbabe4_noseeds_0046Z/crescent, _aborted_xbabe4_gens60_0047Z/crescent (4 rows): crescent lane.
+REPORTED   ~/jr_perfpr, ~/jr_evo_full_20261018/repo: checkouts with the committed evidence copies. Their
+           ops/ci/ultralight_weighted_fitness.py is blob dba5ff35 (NOT 9cfb4416); not used.
+REPORTED   /private/tmp/gen800_pop_xbabe4/*: crescent population dumps.
+           (Searched ~ fully except ~/Library; /private/tmp, /opt, /Users/Shared, /usr/local by name.
+            /Users/chrisb not touched.)
+
+---------------------------------------------------------------------------------------------------------
+Not scanned
+---------------------------------------------------------------------------------------------------------
+S3 (s3://veox-jopedime-datasets-use2/jarambit/...): islands sync there; any run that exists only on S3
+(e.g. raw outputs of removed lanes such as jarambit_wt_agy_ul) is not in this census.
+
+---------------------------------------------------------------------------------------------------------
+Search coverage
+---------------------------------------------------------------------------------------------------------
+xbabe1, xbabe3: whole-filesystem `find / <archive mounts> -xdev` by file name (round_00_screen.json,
+  round_00_births.json, island.json, leaderboard.json, *_master_scorecard.json, history_live.csv, *evo_full*,
+  *evo_continuous*, *jarambit_runs*), pruning .git, target, node_modules and by-content. Both completed.
+  Python walks of ~ also ran on both.
+xbabe4: full walk of ~ (excluding ~/Library), plus a find on /private/tmp, /opt, /Users/Shared and /usr/local.
+xbabe2: 6.7 TB with very large dataset trees (~/scratch, ~/jope-evidence, ~/jain-split, ~/smart_cluster,
+  /mnt/jope-archive/SLIME ...). I stopped the whole-disk finds after about 50 min, before they finished.
+  These were searched completely: ~/jarambit_runs, ~/jarambit (checkout, out/, worktrees), ~/jarambit-audits,
+  ~/jarambit_tools, ~/jr_rel_x7, ~/actions-runners, /tmp, /opt, /srv, /app, /review, /Users, /root
+  (maxdepth 6), and the jarambit lanes in the hygiene archive (tar listings). The partial whole-disk scan found
+  nothing jarambit-related beyond what is listed above. /mnt/jope-archive and /mnt/fast-scratch were only
+  partly scanned (the non-jarambit dataset trees); no jarambit-named directories exist at their top level.
+Hygiene archive tarballs were listed member by member (xbabe2, xbabe3) or checked by name (xbabe1, xbabe4).
+

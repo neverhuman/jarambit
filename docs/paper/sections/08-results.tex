@@ -15,13 +15,32 @@ Figure~\ref{fig:population-latest} keeps the native population separate from the
 
 Supplement Figure~\ref{S-fig:population-detail} adds directed tail detail: empirical Q90 through the actual retained maximum for native and historical higher-is-better fitness, and the actual minimum through Q10 for lower-is-better screening deficit. Cutoffs use $\lfloor p(n-1)\rfloor$ and include all boundary and favorable-extremum ties. Each panel reports its original-unit bounds and exact below/inside/above counts. The opposite tail remains in the full-range overview; its zero-exclusion claim does not apply to the detail selection. Separate per-run point and retained-best context views for Runs~2--11 reuse the same retained births, without connecting different runs into a shared trajectory. Their axes use each run's declared $L$ and key, rather than the pooled overview scale. These additional views add no observations or evidence of physical convergence.
 
-For a within-run point view, Figure~\ref{fig:run5-gap} maps every retained Run~5 birth using $x_+=g+1$ and $z=(b-f)/s+\varepsilon$, displayed on base-10 logarithmic axes. Here $b=1.1440$ is the fixed final best retained score of Run~5, $s=f_{\max}-f_{\min}$ is its full original numeric range and $\varepsilon=10^{-6}$ is a display floor. The inverse is $f=b-s(z-\varepsilon)$; generation is recovered by $g=x_+-1$. Vertical ticks recover original stored fitness, and zero and negative scores remain admitted. The reference is retrospective, not the current running best or an unknown optimum; the floor permits zero original gap and is not a measured residual. Shifted-gap ratios and plotted slopes have no physical performance interpretation. Separate summary-only comparisons appear in Supplement Figures~\ref{S-fig:run5-display-comparison}, \ref{S-fig:run5-positive-affine} and~\ref{S-fig:run5-gap-summary}.
+The newer \code{auto-evolve} campaigns score every design on the canonical \code{W_ULTRALIGHT_v1} (Section~\ref{sec:fitness}) and keep their own records. Figure~\ref{fig:all-runs} shows all of them: \AllRunsIslands{} islands in \AllRunsRuns{} run families on \AllRunsHosts{} hosts, from the first $W_{\mathrm{ULTRALIGHT\_v1}}$ waves of 2026-10-18 to the continuous evolution running since 2026-10-21. Each of the \AllRunsStageTwo{} retained Stage-2 assessments (\AllRunsStageTwoWaves{} from the 2026-10-18/19 waves, \AllRunsStageTwoCampaign{} from the 2026-10-18 island campaign, \AllRunsStageTwoContinuous{} continuous) is re-scored from its own scorecard and RS-v2 receipt; the stored leaderboard values of the 2026-10-18 campaign overstate that score by up to about 5 points and are not used. The cumulative best reaches \AllRunsLeaderScore{} (\AllRunsLeader{}, \AllRunsLeaderHost{}), the design on the title page. The right panel summarises \AllRunsStageOne{} numeric Stage-1 screens as the best screen of each of \AllRunsRounds{} island rounds. These are search observations under one scorer, not physical tests, and a cumulative best is monotone by construction. The per-birth view of native Run~5 and its definitions moved to Supplement Figure~\ref{S-fig:run5-gap}.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{run-05-positive-points-gap.png}
-\caption{All $195{,}456$ retained Run~5 births, one point operation per original numeric row. Navy--teal--yellow--orange--red maps original fitness through the declared monotone log-axis contrast; warmer means higher stored fitness within Run~5. Source-order marks can overpaint earlier colors; visible color is not density. The dark cumulative-best curve with a light halo uses those same rows, without a median overlay. Positions retain the fixed full-run range and retrospective retained-best reference; ticks recover original fitness and generations. The earliest of seven exact maximum ties is original ID~185541, public alias~781909, at generation~760 with $f=1.1440$; no higher stored value appears through generation~800 at serialized precision. This is neither physical convergence nor a global winner or later CAD/solid assessment. Figure~\ref{fig:population-latest} retains all separate-profile numeric observations and $1390$ nonnumeric unknown proposals.}
-\label{fig:run5-gap}
+\begin{tikzpicture}
+\begin{groupplot}[group style={group size=2 by 1, horizontal sep=1.5cm},
+  width=0.5\textwidth, height=6.2cm, xlabel={UTC day, October 2026}, grid=major, grid style={gray!20},
+  tick label style={font=\footnotesize}, label style={font=\small}, title style={font=\small\bfseries},
+  legend style={font=\footnotesize, cells={anchor=west}, fill=white, fill opacity=0.85, text opacity=1}]
+\nextgroupplot[title={Stage 2: every retained assessment}, ylabel={$W_{\mathrm{ULTRALIGHT\_v1}}$ (canonical)}, legend pos=south east]
+\addplot[only marks, mark=triangle*, mark size=1.1pt, color=gray!70!black, opacity=0.6] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{0:0}] {allruns/stage2.dat};
+\addlegendentry{2026-10-18/19 waves}
+\addplot[only marks, mark=*, mark size=0.9pt, color=teal, opacity=0.55] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{1:1}] {allruns/stage2.dat};
+\addlegendentry{2026-10-18 island campaign}
+\addplot[only marks, mark=*, mark size=0.9pt, color=rust, opacity=0.6] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{2:2}] {allruns/stage2.dat};
+\addlegendentry{continuous since 2026-10-21}
+\addplot[thick, color=ink] table[x=day, y=best] {allruns/best.dat};
+\addlegendentry{cumulative best, all runs}
+\nextgroupplot[title={Stage 1: best screen of each island round}, ylabel={Stage-1 \code{W_ULTRALIGHT_v1}}]
+\addplot[only marks, mark=triangle*, mark size=1.1pt, color=gray!70!black, opacity=0.6] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{0:0}] {allruns/stage1-round.dat};
+\addplot[only marks, mark=*, mark size=0.9pt, color=teal, opacity=0.55] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{1:1}] {allruns/stage1-round.dat};
+\addplot[only marks, mark=*, mark size=0.9pt, color=rust, opacity=0.6] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{2:2}] {allruns/stage1-round.dat};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Every \code{auto-evolve} run on every host: \AllRunsIslands{} islands, \AllRunsHosts{} hosts, \AllRunsRuns{} run families. Left: all \AllRunsStageTwo{} retained Stage-2 assessments, each re-scored with the canonical \code{W_ULTRALIGHT_v1} from its own scorecard and RS-v2 receipt, placed at the scorecard's file time; the dark step is the best score over all runs so far, ending at \AllRunsLeaderScore{} (\AllRunsLeader{}). Right: the best Stage-1 screen score of each of \AllRunsRounds{} island rounds (\AllRunsStageOne{} numeric screens). Stage-1 and Stage-2 values are different stages (for the same design the Stage-2 value is typically 2--4 points higher) and are not compared. \AllRunsOlderEvaluator{} Stage-2 scorecards from evaluators that predate \code{W_ULTRALIGHT_v1} are counted in the census but not plotted. No point is a physical test or a qualification. Data: \code{docs/paper/allruns/}.}
+\label{fig:all-runs}
 \end{figure*}
 
 \subsection{Recorded Ancestry Enables a Later-Assessment Disagreement to Be Inspected}
