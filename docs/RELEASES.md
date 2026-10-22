@@ -2,6 +2,26 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v2.2.0 — 2026-10-22 (selection on W_ULTRALIGHT_v1 alone, canonical winner and smoothed paper variant, regression datasets)
+
+- **Evolution selects on `W_ULTRALIGHT_v1` alone (#150).** This completes the 2026-10-18 ruling inside `auto-evolve`.
+  - A Stage-1 aesthetic or holder/geometry reject is FEM-screened and ranked, with the canonical 1.0/0.5 credit on its C.6 and holder objectives.
+  - A plate that cannot be meshed or solved stays ranked with zero FEM credit, recorded as `null` plus a status.
+  - Elites come from the `W_ULTRALIGHT_v1` Hall of Fame only; legacy all-gates qualification no longer buys a slot.
+  - An island fails only when it scored nothing.
+  - Legacy gate verdicts are still measured and logged. Requirement files and thresholds are unchanged.
+- **Canonical winner on the paper's main page (#151).** `ef3i17_r05_p14_c06` (`W_ULTRALIGHT_v1 = 75.983539`) ranks first of the 598 retained Stage-2 assessments re-scored with the canonical `ops/ci/ultralight_weighted_fitness.py`.
+  - `main.pdf` shows it as exported.
+  - `main-smoothed.pdf` shows it after the pre-declared R1 smoothing, re-scored to 70.977863:
+    - 3D mass +0.0168.
+    - Solid tip −0.0225, re-solved with skfem and the DOLFINx cross-check using the pinned `fem_solid` versions.
+    - CAD/B-rep objective −5, withheld because the smoothed geometry is a mesh without a validated STEP solid.
+  - **Correction:** `ef2i91_r03_p14_c26`, the smoothing subject of #149, is 75.213491 canonically. Its 80.253391 came from the 2026-10-18 xbabe2 run leaderboard, which overstates every one of its 218 entries; those stored values are no longer used.
+- **Geometric smoothing (#149).** The smoothing benchmark gains input-mesh mode, `--normal-only` and `--pin-feature-angle`. Adds the smoothing figure producer (now with `--width`) and paper variant B (`docs/paper/main-smoothed.pdf`).
+- **Regression datasets (#147, #148).** `auto-evolve` records a micro-record for every birth and assessment (`--dataset-dir`, create-only run output). Adds dataset tables and a CatBoost k-fold lift CI.
+
+This release adds no qualification claim. No design passes all 26 legacy gates, and physical performance remains unestablished.
+
 ## v2.1.2 — 2026-10-20 (retained-evidence presentation and artifact packaging fixes)
 
 Preparation notes: source changes are recorded here before final generation and validation. Publication remains pending the required local controls, independent review, CI, merge and release gates.
