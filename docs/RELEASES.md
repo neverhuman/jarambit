@@ -7,7 +7,7 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
 - **An unmeasured solid-tip solve scores zero instead of dropping the design (#153).** This was the last hard failure in the evolution loop. When the skfem tip solve or the DOLFINx cross-check produces no observation, the evaluator writes an `unmeasured` tip record with SF 0. Assessment then continues, so the design is scored on the other 19 objectives and gets zero credit on `solid_tip_3d_p2_and_xcheck`.
   - The record is never reusable evidence, the CAD battery reports `solid.tip` incomplete, and rs-v2-eval reports `solid_tip_sf` unverified.
   - The evaluator is part of the certificate identity, so the regeneration identity in `evidence/evolve_certifiable/manifest.json` is re-issued. Exported STEP/STL bytes are unchanged, and the figure manifests that pin it are re-bound metadata-only.
-- **Best evolved design, across every run (#154).** The all-runs census re-scores 967 comparable Stage-2 assessments on xbabe1–4 since 2026-10-17 with the canonical `W_ULTRALIGHT_v1`.
+- **Best evolved design, across every run (#155).** The all-runs census re-scores 967 comparable Stage-2 assessments on xbabe1–4 since 2026-10-17 with the canonical `W_ULTRALIGHT_v1`.
   - `w406t3_r01_p10_c16` ranks first (80.299390, 83.22 g, battery 14/18, not qualified). It comes from the 2026-10-17/18 waves and carries two-sided isogrid pockets, lattice, relief and pierced-fuller windows.
   - Re-assessing its genome with the current Stage-2 evaluator reproduces 80.299390 exactly. Two other designs from those waves also reproduce exactly.
   - The 2026-10-16 evaluators overstate the score: a stored 92.29 re-assesses at 79.166355. Their 142 scorecards are excluded.
@@ -17,7 +17,7 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
   - `main-smoothed.pdf` shows it after R1 smoothing, re-scored to 75.343635. That is −5 for the withheld CAD/B-rep objective, +0.0246 for the solid tip and +0.0196 for mass; with the B-rep objective kept it would be 80.343635.
   - The Individual 2000 hero image is replaced by the winner in relief.
   - The main evolution figure now shows every run on every host. The Run 5 per-birth view moves to the Supplement.
-- **Smoothing ladder in the build (`make -C docs/paper smoothing-ladder`).** `jarambit smoothing-ladder` smooths the winner at ten levels (L0 = none) and re-scores each one, re-solving the tip with skfem and DOLFINx. `smoothing_ladder_figure` renders every level for 3D relief: one oblique camera, raking light, 2.5× thickness exaggeration, height tint, guard/isogrid and blade close-ups, and a shared displacement map. The output is `docs/paper/smoothing-ladder.pdf`.
+- **Smoothing ladder in the build (`make -C docs/paper smoothing-ladder`, #155).** `jarambit smoothing-ladder` smooths the winner at ten levels (L0 = none) and re-scores each one, re-solving the tip with skfem and DOLFINx. `smoothing_ladder_figure` renders every level for 3D relief: one oblique camera, raking light, 2.5× thickness exaggeration, height tint, guard/isogrid and blade close-ups, and a shared displacement map. The output is `docs/paper/smoothing-ladder.pdf`.
 - **Continuous evolution (operations, outside the repo).**
   - Migrants take their canonical score when one exists.
   - The re-assessed lattice designs (`w406t3`, `w401c3`, `w290`) head the seed pool on xbabe1–3.
