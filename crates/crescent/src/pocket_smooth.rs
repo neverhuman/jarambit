@@ -327,6 +327,14 @@ pub fn evolve(pb: &Problem, r: f64, grow: f64, vp: bool, a: f64) -> Flow {
         target[owner[s] as usize] += pb.d0[s];
     }
     let volume_before: f64 = target.iter().sum::<f64>() * h * h;
+    // No basin may end deeper than its own deepest original point: the volume constraint must
+    // widen a basin, never drill it (a thin groove would otherwise deepen toward the minimum web).
+    let mut floor = vec![0.0f64; nb + 1];
+    for &s in &active {
+        let b = owner[s] as usize;
+        floor[b] = floor[b].max(pb.d0[s]);
+    }
+    let cap: Vec<f64> = (0..n).map(|s| if owner[s] != 0 { pb.dmax[s].min(floor[owner[s] as usize]).max(0.0) } else { pb.dmax[s] }).collect();
     let t_end = r * r / 2.0;
     let steps = if r > 0.0 { (t_end / (0.2 * h * h)).ceil() as usize } else { 0 };
     let dt = if steps > 0 { t_end / steps as f64 } else { 0.0 };
@@ -388,7 +396,7 @@ pub fn evolve(pb: &Problem, r: f64, grow: f64, vp: bool, a: f64) -> Flow {
                 let b = owner[s] as usize;
                 let lam = lambda[b];
                 let grad = if lam > 0.0 { gm[s] } else { gp[s] };
-                (d[s] + vel[s] * dt + lam * grad).clamp(0.0, pb.dmax[s].max(0.0))
+                (d[s] + vel[s] * dt + lam * grad).clamp(0.0, cap[s])
             })
             .collect();
         for (k, &s) in active.iter().enumerate() {
@@ -889,6 +897,33 @@ mod tests {
         assert!(spread1 < 0.35 * spread0, "rim roughness {spread0} -> {spread1}");
         let rel = (flow.volume_after_mm3 - flow.volume_before_mm3).abs() / flow.volume_before_mm3;
         assert!(rel < 2e-3, "volume drift {rel}");
+    }
+
+    #[test]
+    fn thin_groove_never_drills_below_its_floor() {
+        // a 0.5 mm wide, 3 mm long V groove, 1.4 mm deep at the centre line
+        let h = 0.125;
+        let nx = (16.0 / h) as usize;
+        let grid = Grid { x0: -8.0, y0: -8.0, h, nx, ny: nx };
+        let n = grid.len();
+        let (state, mut d0) = (vec![FREE; n], vec![0.0; n]);
+        for j in 0..nx {
+            for i in 0..nx {
+                let (x, y) = grid.center(i, j);
+                if x.abs() <= 1.5 && y.abs() <= 0.25 {
+                    d0[j * nx + i] = 1.4 * (1.0 - y.abs() / 0.3);
+                }
+            }
+        }
+        let pb = Problem { grid, state, d0, dmax: vec![5.0; n] };
+        for a in [0.0, 1.0] {
+            let flow = evolve(&pb, 1.0, 0.5, true, a);
+            let deepest = flow.d.iter().cloned().fold(0.0f64, f64::max);
+            let d0max = pb.d0.iter().cloned().fold(0.0f64, f64::max);
+            assert!(deepest <= d0max + 1e-12, "a={a}: groove drilled from {d0max} to {deepest}");
+            let rel = (flow.volume_after_mm3 - flow.volume_before_mm3).abs() / flow.volume_before_mm3;
+            assert!(rel < 5e-3, "a={a}: volume drift {rel}");
+        }
     }
 
     fn wall_cells(pb: &Problem, d: &[f64]) -> usize {

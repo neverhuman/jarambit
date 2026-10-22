@@ -120,6 +120,7 @@ fn main() {
         let dv = rep["removed_volume_mm3"]["after"].as_f64().unwrap() - rep["removed_volume_mm3"]["before"].as_f64().unwrap();
         let tag = prm.key().replace([',', '='], "_");
         let pbm = pocket_smooth::problem(&p, &prm);
+        let mut wstats = serde_json::Map::new();
         for (name, w) in &windows {
             let g = sf.grid;
             let i0 = (((w[0] - g.x0) / g.h).floor().max(0.0) as usize).min(g.nx - 1);
@@ -152,6 +153,22 @@ fn main() {
                 }
                 pgm(&out.join(format!("{name}-state-{tag}.pgm")), ww, hh, &px);
             }
+            {
+                let (mut m0, mut m1, mut v0, mut v1, mut t0min) = (0.0f64, 0.0f64, 0.0f64, 0.0f64, f64::MAX);
+                for j in j0..j1 {
+                    for i in i0..i1 {
+                        let t = j * g.nx + i;
+                        if sf.d0[t].is_nan() { continue; }
+                        m0 = m0.max(sf.d0[t] as f64);
+                        m1 = m1.max(sf.d[t] as f64);
+                        v0 += sf.d0[t] as f64 * g.h * g.h;
+                        v1 += sf.d[t] as f64 * g.h * g.h;
+                        let q = g.center(i, j);
+                        t0min = t0min.min(jarambit_crescent::export::thickness_at(&p, q));
+                    }
+                }
+                wstats.insert(name.clone(), serde_json::json!({"max_depth_before": m0, "max_depth_after": m1, "removed_mm3_before": v0, "removed_mm3_after": v1, "min_thickness_unsmoothed": t0min}));
+            }
             for (field, label) in [(&sf.d0, "before"), (&sf.d, "after")] {
                 let mut px = Vec::with_capacity(ww * hh);
                 for jj in 0..hh {
@@ -169,6 +186,7 @@ fn main() {
             "report": rep,
             "removed_volume_change_mm3": dv,
             "mass_change_g": -dv * rho_g_per_mm3,
+            "window_stats": wstats,
         }));
     }
     let doc = serde_json::json!({
