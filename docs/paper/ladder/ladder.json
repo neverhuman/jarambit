@@ -1,0 +1,445 @@
+{
+  "code_commit": "14b937d30cdaaef490ad608da956ae2791fdab3d",
+  "command": "target/release/jarambit smoothing-ladder --winner /home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16 --label re_w406t3_r01_p10_c16 --smoother /home/ubuntu/jarambit/.agent/worktrees/ladder/experiments/geometry-smoothing-benchmark/target/release/geometry-smoothing-benchmark --solver-python /home/ubuntu/.venvs/jarambit-evo3c/bin/python --out /home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z --jobs 9 --code-commit 14b937d30cdaaef490ad608da956ae2791fdab3d",
+  "inputs": {
+    "d1_sha256": "5cf89741acc66f0085da4d415d9155a63d037764f2b332fae0b80d6b9ebc9089",
+    "exported_stl_sha256": "e574212003bb4c32eb124cb2beda93d6e8ac13d4295b6b0ca46f6795fe5a3bb2",
+    "exporter_volume_mm3": 18786.249505227,
+    "master_scorecard_sha256": "da952bb302ec07ddee7fcb3fbc77fae42c72a800f6d33cdd5c96ad27031d1019",
+    "rs_receipt_sha256": "e513fcb3632499c28126e7773601ade8e26582c698bba9dc6243edca74cab50b"
+  },
+  "label": "re_w406t3_r01_p10_c16",
+  "levels": [
+    {
+      "description": "as exported, stored scorecard, nothing re-solved",
+      "iterations": 0,
+      "level": 0,
+      "mass_3d_g": 83.2231,
+      "pin_deg": 0,
+      "score": 80.29939,
+      "score_with_brep": 80.29939,
+      "smoothed_stl": "/home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl",
+      "solid_tip": {
+        "dolfinx": {
+          "SF_nodal_avg": 0.7569,
+          "SF_nodal_max": 0.6823
+        },
+        "source": "stored Stage-2 evaluation",
+        "status": "measured"
+      }
+    },
+    {
+      "case_dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L1/case",
+      "iterations": 2,
+      "level": 1,
+      "mass_3d_g": 83.2113,
+      "pin_deg": 30,
+      "score": 75.309944,
+      "score_with_brep": 80.309944,
+      "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L1/smoothing/smoothed.stl",
+      "smoothing": {
+        "dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L1/smoothing",
+        "displacement_csv_sha256": "7dbc01dcb253db3611a3fc1e28ac035ab4e0885b10056b2f5680876ce4e295a9",
+        "iterations_completed": 2,
+        "max_displacement_mm": 0.10107246938617824,
+        "moved_over_0_01_mm": 2132,
+        "pinned_vertices": 8802,
+        "rms_displacement_mm": 0.005596796736849934,
+        "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L1/smoothing/smoothed.stl",
+        "smoothed_stl_sha256": "948775b28f56d89ce3052951572782f34f11df49b31e392f09344661dd2cc1fa",
+        "volume_mm3": {
+          "after": 18783.566246142625,
+          "before": 18786.23142557842,
+          "change_percent": -0.014186876417188188
+        }
+      },
+      "solid_tip": {
+        "dolfinx": {
+          "SF_nodal_avg": 0.7424,
+          "SF_nodal_max": 0.6848,
+          "ksp_its": 137
+        },
+        "rel_err_nodal_max": 0.000292,
+        "skfem": {
+          "SF_nodal_avg": 0.742,
+          "SF_nodal_max": 0.685,
+          "iterations": 150,
+          "n_dof": 416475,
+          "n_tet": 91008,
+          "relative_residual": 9.454303421203433e-11
+        },
+        "status": "measured"
+      },
+      "surface_vertices_matched": 44980
+    },
+    {
+      "case_dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L2/case",
+      "iterations": 5,
+      "level": 2,
+      "mass_3d_g": 83.1962,
+      "pin_deg": 30,
+      "score": 75.316252,
+      "score_with_brep": 80.316252,
+      "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L2/smoothing/smoothed.stl",
+      "smoothing": {
+        "dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L2/smoothing",
+        "displacement_csv_sha256": "e3a3ce63422196fef1d7a9f6fb6be5b77c66712a6e51172ee25bff7f9b5ccf04",
+        "iterations_completed": 5,
+        "max_displacement_mm": 0.16561702100424472,
+        "moved_over_0_01_mm": 3786,
+        "pinned_vertices": 8802,
+        "rms_displacement_mm": 0.009348996560057532,
+        "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L2/smoothing/smoothed.stl",
+        "smoothed_stl_sha256": "8a6d67aaaf624ce4fe25b40514dad8eb09706ae289685fb24f89c3cc9da13308",
+        "volume_mm3": {
+          "after": 18780.160032119173,
+          "before": 18786.23142557842,
+          "change_percent": -0.03231831505587923
+        }
+      },
+      "solid_tip": {
+        "dolfinx": {
+          "SF_nodal_avg": 0.7324,
+          "SF_nodal_max": 0.6856,
+          "ksp_its": 137
+        },
+        "rel_err_nodal_max": 0.000583,
+        "skfem": {
+          "SF_nodal_avg": 0.732,
+          "SF_nodal_max": 0.686,
+          "iterations": 149,
+          "n_dof": 416475,
+          "n_tet": 91008,
+          "relative_residual": 9.916807434344463e-11
+        },
+        "status": "measured"
+      },
+      "surface_vertices_matched": 44980
+    },
+    {
+      "case_dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L3/case",
+      "iterations": 10,
+      "level": 3,
+      "mass_3d_g": 83.1758,
+      "pin_deg": 30,
+      "score": 75.327832,
+      "score_with_brep": 80.327832,
+      "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L3/smoothing/smoothed.stl",
+      "smoothing": {
+        "dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L3/smoothing",
+        "displacement_csv_sha256": "1e519729e836711d272bcccd049a494d9fd08f2fc4ccea5e8ce834e23fb5c869",
+        "iterations_completed": 10,
+        "max_displacement_mm": 0.19363870446838016,
+        "moved_over_0_01_mm": 5054,
+        "pinned_vertices": 8802,
+        "rms_displacement_mm": 0.01234848421276312,
+        "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L3/smoothing/smoothed.stl",
+        "smoothed_stl_sha256": "2035eb082b185aa36f1b7909415d917790d7b15315a0f024c767e6fc099adc93",
+        "volume_mm3": {
+          "after": 18775.56526760751,
+          "before": 18786.23142557842,
+          "change_percent": -0.05677646425873428
+        }
+      },
+      "solid_tip": {
+        "dolfinx": {
+          "SF_nodal_avg": 0.7285,
+          "SF_nodal_max": 0.6877,
+          "ksp_its": 137
+        },
+        "rel_err_nodal_max": 0.000436,
+        "skfem": {
+          "SF_nodal_avg": 0.728,
+          "SF_nodal_max": 0.688,
+          "iterations": 150,
+          "n_dof": 416475,
+          "n_tet": 91008,
+          "relative_residual": 9.059075019289159e-11
+        },
+        "status": "measured"
+      },
+      "surface_vertices_matched": 44980
+    },
+    {
+      "case_dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L4/case",
+      "iterations": 20,
+      "level": 4,
+      "mass_3d_g": 83.1472,
+      "pin_deg": 30,
+      "score": 75.343635,
+      "score_with_brep": 80.343635,
+      "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L4/smoothing/smoothed.stl",
+      "smoothing": {
+        "dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L4/smoothing",
+        "displacement_csv_sha256": "9b8507584e51a99648137cf9df23e0984d852ff9363a92eb72aa86e5326bc1c3",
+        "iterations_completed": 20,
+        "max_displacement_mm": 0.21352247019693715,
+        "moved_over_0_01_mm": 6338,
+        "pinned_vertices": 8802,
+        "rms_displacement_mm": 0.015618829620541156,
+        "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L4/smoothing/smoothed.stl",
+        "smoothed_stl_sha256": "157d22c71890d49ae7eee0e755823dcd433c598b749d51e12d9efb1219f2c310",
+        "volume_mm3": {
+          "after": 18769.094073335946,
+          "before": 18786.23142557842,
+          "change_percent": -0.09122293798180524
+        }
+      },
+      "solid_tip": {
+        "dolfinx": {
+          "SF_nodal_avg": 0.7297,
+          "SF_nodal_max": 0.6905,
+          "ksp_its": 137
+        },
+        "rel_err_nodal_max": 0.000724,
+        "skfem": {
+          "SF_nodal_avg": 0.73,
+          "SF_nodal_max": 0.691,
+          "iterations": 149,
+          "n_dof": 416475,
+          "n_tet": 91008,
+          "relative_residual": 9.718295301114911e-11
+        },
+        "status": "measured"
+      },
+      "surface_vertices_matched": 44980
+    },
+    {
+      "case_dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L5/case",
+      "iterations": 60,
+      "level": 5,
+      "mass_3d_g": 83.0962,
+      "pin_deg": 30,
+      "score": 75.185235,
+      "score_with_brep": 80.185235,
+      "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L5/smoothing/smoothed.stl",
+      "smoothing": {
+        "dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L5/smoothing",
+        "displacement_csv_sha256": "67a910260240b2ad5d46b80c59ed7274468695220e1185c87ec307c0647c5119",
+        "iterations_completed": 60,
+        "max_displacement_mm": 0.2517672693871229,
+        "moved_over_0_01_mm": 8450,
+        "pinned_vertices": 8802,
+        "rms_displacement_mm": 0.022230457901619337,
+        "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L5/smoothing/smoothed.stl",
+        "smoothed_stl_sha256": "3f1fc97f908457c61cdc638f0ee24be151ee2374e5d32da39a26e2d542e1361c",
+        "volume_mm3": {
+          "after": 18757.581049180226,
+          "before": 18786.23142557842,
+          "change_percent": -0.15250731106818405
+        }
+      },
+      "solid_tip": {
+        "dolfinx": {
+          "SF_nodal_avg": 0.6755,
+          "SF_nodal_max": 0.6333,
+          "ksp_its": 142
+        },
+        "rel_err_nodal_max": 0.000474,
+        "skfem": {
+          "SF_nodal_avg": 0.675,
+          "SF_nodal_max": 0.633,
+          "iterations": 149,
+          "n_dof": 416475,
+          "n_tet": 91008,
+          "relative_residual": 9.19160107704676e-11
+        },
+        "status": "measured"
+      },
+      "surface_vertices_matched": 44980
+    },
+    {
+      "case_dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L6/case",
+      "iterations": 20,
+      "level": 6,
+      "mass_3d_g": 83.2352,
+      "pin_deg": 60,
+      "score": 75.301958,
+      "score_with_brep": 80.301958,
+      "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L6/smoothing/smoothed.stl",
+      "smoothing": {
+        "dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L6/smoothing",
+        "displacement_csv_sha256": "b2d42f278f26e99c18bb9ad28cfbb9fda79d55bb729452ceb39825f3b86bf342",
+        "iterations_completed": 20,
+        "max_displacement_mm": 0.4230463005664467,
+        "moved_over_0_01_mm": 10924,
+        "pinned_vertices": 5894,
+        "rms_displacement_mm": 0.0361471319020976,
+        "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L6/smoothing/smoothed.stl",
+        "smoothed_stl_sha256": "0ca97fc363f94f5545a50be64903d25cc5cd3a0b6e41b15e9c50e0bdee43c8ab",
+        "volume_mm3": {
+          "after": 18788.975556272733,
+          "before": 18786.23142557842,
+          "change_percent": 0.0146071377071344
+        }
+      },
+      "solid_tip": {
+        "dolfinx": {
+          "SF_nodal_avg": 0.7226,
+          "SF_nodal_max": 0.6842,
+          "ksp_its": 153
+        },
+        "rel_err_nodal_max": 0.000292,
+        "skfem": {
+          "SF_nodal_avg": 0.723,
+          "SF_nodal_max": 0.684,
+          "iterations": 157,
+          "n_dof": 416475,
+          "n_tet": 91008,
+          "relative_residual": 9.375071234337395e-11
+        },
+        "status": "measured"
+      },
+      "surface_vertices_matched": 44980
+    },
+    {
+      "case_dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L7/case",
+      "iterations": 60,
+      "level": 7,
+      "mass_3d_g": 83.1745,
+      "pin_deg": 60,
+      "score": 75.290069,
+      "score_with_brep": 80.290069,
+      "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L7/smoothing/smoothed.stl",
+      "smoothing": {
+        "dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L7/smoothing",
+        "displacement_csv_sha256": "55a537921cd0ca97277218e1462296645a3ea2771055b92afdd6bb963778da6e",
+        "iterations_completed": 60,
+        "max_displacement_mm": 0.4954852823691324,
+        "moved_over_0_01_mm": 14486,
+        "pinned_vertices": 5894,
+        "rms_displacement_mm": 0.05015904918704172,
+        "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L7/smoothing/smoothed.stl",
+        "smoothed_stl_sha256": "4d98d9111d31a03458c60aa68196f3af6f67134e663cb5d29032590d59990318",
+        "volume_mm3": {
+          "after": 18775.26562509563,
+          "before": 18786.23142557842,
+          "change_percent": -0.058371475547014384
+        }
+      },
+      "solid_tip": {
+        "dolfinx": {
+          "SF_nodal_avg": 0.7001,
+          "SF_nodal_max": 0.675,
+          "ksp_its": 172
+        },
+        "rel_err_nodal_max": 0.0,
+        "skfem": {
+          "SF_nodal_avg": 0.7,
+          "SF_nodal_max": 0.675,
+          "iterations": 165,
+          "n_dof": 416475,
+          "n_tet": 91008,
+          "relative_residual": 9.370196413013745e-11
+        },
+        "status": "measured"
+      },
+      "surface_vertices_matched": 44980
+    },
+    {
+      "case_dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L8/case",
+      "iterations": 120,
+      "level": 8,
+      "mass_3d_g": 83.0448,
+      "pin_deg": 60,
+      "score": 75.097738,
+      "score_with_brep": 80.097738,
+      "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L8/smoothing/smoothed.stl",
+      "smoothing": {
+        "dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L8/smoothing",
+        "displacement_csv_sha256": "d25006909026700ce9496f2125ff83f20cf35167bf59a25496a978f81d380cc1",
+        "iterations_completed": 120,
+        "max_displacement_mm": 0.6125878791008221,
+        "moved_over_0_01_mm": 16876,
+        "pinned_vertices": 5894,
+        "rms_displacement_mm": 0.06357334246472743,
+        "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L8/smoothing/smoothed.stl",
+        "smoothed_stl_sha256": "cdb34f484f1c0f65ee0c8cf2571cee7db4037891c61a8bc54d35369be5fd35eb",
+        "volume_mm3": {
+          "after": 18745.979976862294,
+          "before": 18786.23142557842,
+          "change_percent": -0.21426036869383047
+        }
+      },
+      "solid_tip": {
+        "dolfinx": {
+          "SF_nodal_avg": 0.6407,
+          "SF_nodal_max": 0.5997,
+          "ksp_its": 191
+        },
+        "rel_err_nodal_max": 0.0005,
+        "skfem": {
+          "SF_nodal_avg": 0.641,
+          "SF_nodal_max": 0.6,
+          "iterations": 179,
+          "n_dof": 416475,
+          "n_tet": 91008,
+          "relative_residual": 8.39849411705716e-11
+        },
+        "status": "measured"
+      },
+      "surface_vertices_matched": 44980
+    },
+    {
+      "case_dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L9/case",
+      "iterations": 200,
+      "level": 9,
+      "mass_3d_g": 82.8909,
+      "pin_deg": 60,
+      "score": 75.062571,
+      "score_with_brep": 80.062571,
+      "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L9/smoothing/smoothed.stl",
+      "smoothing": {
+        "dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L9/smoothing",
+        "displacement_csv_sha256": "c84a0da774b9ee765b2335956293d1b5e461146da07268f7db30f9fb898698fb",
+        "iterations_completed": 200,
+        "max_displacement_mm": 0.7034412704649278,
+        "moved_over_0_01_mm": 18694,
+        "pinned_vertices": 5894,
+        "rms_displacement_mm": 0.07655081671795866,
+        "smoothed_stl": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L9/smoothing/smoothed.stl",
+        "smoothed_stl_sha256": "9ad4901ad2f7f1b8e7bfa82b785d2a46f47e433f8cce0c4a4483102267120ff5",
+        "volume_mm3": {
+          "after": 18711.237249314112,
+          "before": 18786.23142557842,
+          "change_percent": -0.3991975535987402
+        }
+      },
+      "solid_tip": {
+        "dolfinx": {
+          "SF_nodal_avg": 0.6172,
+          "SF_nodal_max": 0.5747,
+          "ksp_its": 199
+        },
+        "rel_err_nodal_max": 0.000522,
+        "skfem": {
+          "SF_nodal_avg": 0.617,
+          "SF_nodal_max": 0.575,
+          "iterations": 185,
+          "n_dof": 416475,
+          "n_tet": 91008,
+          "relative_residual": 9.798461844979909e-11
+        },
+        "status": "measured"
+      },
+      "surface_vertices_matched": 44980
+    }
+  ],
+  "method": {
+    "carried_over": "every other objective is genome-derived (plate responses, sharpness, point profile, ring, holder, aesthetics) and is not re-solved on the smoothed mesh",
+    "re_measured": "3D mass (exporter volume + smoothed - input STL volume, x 0.00443 g/mm3, 4 decimals) and the solid tip (fem_solid/tip_solid.py R_CUT 30 mm, NL 4, NSUB 1 on the smoothed upper skin, then the evaluator's DOLFINx 0.9.0 cross-check on the same mesh)",
+    "withheld": "CAD/B-rep objective (cad_watertight_and_single_solid, cad.cad_valid) is false on every smoothed level: a smoothed triangle mesh has no validated STEP solid (owner decision 2026-10-22); score_with_brep keeps it as exported"
+  },
+  "not_qualified": true,
+  "schema": "jarambit.smoothing_ladder.v1",
+  "scorer": "crates/cli/src/auto_evolve.rs::compute_canonical_ultralight_weighted_fitness (same value as ops/ci/ultralight_weighted_fitness.py)",
+  "smoother": {
+    "lambda": 0.5,
+    "max_displacement_mm": 2.0,
+    "mu": -0.5,
+    "normal_only": true,
+    "path": "/home/ubuntu/jarambit/.agent/worktrees/ladder/experiments/geometry-smoothing-benchmark/target/release/geometry-smoothing-benchmark",
+    "sha256": "52501e69297b27fbe5efc747cd3331c8239fd692c2fb27d456900e500b0c0d55"
+  },
+  "winner_dir": "/home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16"
+}

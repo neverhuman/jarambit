@@ -1,0 +1,10 @@
+{
+  "figure": "docs/paper/ladder/L3-displacement.png",
+  "figure_sha256": "d262f856c6994b8482762289f552e98a8d37e7c4c4ed2ffc0e44569ba868836f",
+  "script": "crates/paper-artifacts/examples/smoothing_ladder_figure.rs",
+  "inputs": {
+    "docs/paper/ladder/ladder.json": "9682cd4a872bd920b7f24d0e3120214645afc31dd0b35173301b21c868f32de1",
+    "docs/paper/ladder/smoothing-ladder.render.v1.json": "faa96bbdd2f92b93ec87f6cb0972fae0dacba1c36a0fdcd59a62fb4900b4ca07"
+  },
+  "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"
+}

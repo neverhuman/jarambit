@@ -1,33 +1,94 @@
 {
   "schema": "jarambit.cover_winner_selection.v1",
-  "recorded_utc": "2026-10-22T13:38:23Z",
+  "recorded_utc": "2026-10-22T17:05:00Z",
   "metric": "W_ULTRALIGHT_v1 (0-100), canonical",
-  "method": "ops/ci/ultralight_weighted_fitness.py::compute_ultralight_weighted_fitness(master_scorecard, rs) on every retained Stage-2 assessment (*_master_scorecard.json with *_rs.json) under ~/jarambit_runs/evo_*/<host>/islands/*/by-content/ on xbabe1, xbabe2 and xbabe3, including the continuous-evolution islands (evo_continuous) running since 2026-10-21. The Rust auto-evolve scorer (compute_canonical_ultralight_weighted_fitness) returns the same value; checked on ef2i91_r03_p14_c26 (75.213491) and on live runs ec2i002_r02_p14_c37 and ec2i005_r03_p14_c75, whose logged scores equal the recomputation.",
+  "method": "ops/ci/ultralight_weighted_fitness.py::compute_ultralight_weighted_fitness(master_scorecard, rs) on every retained Stage-2 assessment of every auto-evolve run and evolution wave found on xbabe1-xbabe4 since 2026-10-17 (census: docs/paper/allruns/census/, read 2026-10-22T14:40Z; live runs continue). Scorecards from the 2026-10-16 evaluators (1e93e6f3, 4cd0f994e) overstate the canonical score of the same genome under the current evaluator and are excluded; all other evaluators reproduce the current one exactly on re-assessment (see re_assessment).",
   "scorer": {
     "path": "ops/ci/ultralight_weighted_fitness.py",
     "git_blob_sha1": "9cfb4416d374e875e5846f6e91e2229148b6f5f4",
     "repo_commit": "e07606a8e43666750264ec909ccbae604627ede5"
   },
-  "assessments": 696,
+  "assessments": 967,
+  "distinct_genomes": 925,
   "per_host": {
-    "xbabe1": 48,
-    "xbabe2": 445,
-    "xbabe3": 203
+    "xbabe1": 79,
+    "xbabe2": 560,
+    "xbabe3": 328
+  },
+  "excluded_inflated_evaluators": {
+    "scorecards": 142,
+    "evaluators": [
+      "1e93e6f3",
+      "4cd0f994e"
+    ],
+    "reason": "2026-10-16 evaluators: w290_r03_p14_c04 is 92.29 stored but 79.166355 re-assessed with the current evaluator"
   },
   "winner": {
-    "canonical_w_ultralight_v1": 76.141571,
-    "label": "ec1i005_r01_p14_c32",
-    "host": "xbabe1",
-    "run": "evo_continuous",
-    "island": "i005"
+    "canonical_w_ultralight_v1": 80.299390,
+    "label": "w406t3_r01_p10_c16",
+    "host": "xbabe3",
+    "run": "archive:jarambit_evo3c/out",
+    "island": "w406t3",
+    "genome_sha256": "83877fdbb08a",
+    "assessments_of_this_genome": 7,
+    "current_evaluator_bundle": "~/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16 (label re_w406t3_r01_p10_c16, v2.2.0 Stage-2 evaluator, 2026-10-22)"
   },
-  "previous_selection": {
-    "recorded_utc": "2026-10-22T08:27:49Z",
-    "assessments": 598,
-    "winner_label": "ef3i17_r05_p14_c06",
-    "winner_canonical_w_ultralight_v1": 75.983539,
-    "note": "Superseded when continuous evolution produced four higher-scoring assessments; the earlier winner is still retained, with four assessments now above it and two others tied with it at 75.983539."
+  "re_assessment": {
+    "evaluator": "ops/ci/score_cad.py at e07606a (v2.2.0; identical to evo-main 49dc71f, which assessed ec1i005_r01_p14_c32), pinned fem_solid environment, 2026-10-22",
+    "results": [
+      {
+        "label": "w406t3_r01_p10_c16",
+        "stored": 80.299390,
+        "re_assessed": 80.299390,
+        "stored_evaluator": "pre-W_ULTRALIGHT 2026-10-17/18"
+      },
+      {
+        "label": "w401c3_r02_p10_c27",
+        "stored": 79.869405,
+        "re_assessed": 79.869405,
+        "stored_evaluator": "pre-W_ULTRALIGHT 2026-10-17/18"
+      },
+      {
+        "label": "w300_r01_p10_c68",
+        "stored": 79.984072,
+        "re_assessed": 79.984072,
+        "stored_evaluator": "9d641600 (2026-10-17)"
+      },
+      {
+        "label": "w290_r03_p14_c04",
+        "stored": 92.290300,
+        "re_assessed": 79.166355,
+        "stored_evaluator": "1e93e6f3 (2026-10-16)"
+      },
+      {
+        "label": "w286_r02_p10_c01",
+        "stored": 92.219900,
+        "re_assessed": 80.252466,
+        "stored_evaluator": "1e93e6f3 (2026-10-16)"
+      },
+      {
+        "label": "w284_r03_p10_c58",
+        "stored": 92.207800,
+        "re_assessed": 79.573711,
+        "stored_evaluator": "1e93e6f3 (2026-10-16)"
+      }
+    ],
+    "not_re_assessed": "the other 2026-10-16 genomes (132 distinct in the excluded class) have no current-evaluator score"
   },
+  "previous_selections": [
+    {
+      "recorded_utc": "2026-10-22T13:38:23Z",
+      "winner": "ec1i005_r01_p14_c32",
+      "canonical_w_ultralight_v1": 76.141571,
+      "scope": "696 assessments of the W_ULTRALIGHT-era runs only; it ranks 107th among distinct comparable genomes"
+    },
+    {
+      "recorded_utc": "2026-10-22T08:27:49Z",
+      "winner": "ef3i17_r05_p14_c06",
+      "canonical_w_ultralight_v1": 75.983539,
+      "scope": "598 assessments of the 2026-10-18 campaign"
+    }
+  ],
   "leaderboard_inflation": {
     "note": "Stage-2 scores stored in the 2026-10-18 run leaderboards exceed the canonical recomputation from the same retained scorecards, so stored leaderboard values are not used for selection.",
     "xbabe2_evo_full_20261018": {
@@ -46,146 +107,166 @@
       "canonical": 75.213491
     }
   },
-  "top20": [
+  "top20_distinct_genomes": [
     {
-      "canonical_w_ultralight_v1": 76.141571,
-      "label": "ec1i005_r01_p14_c32",
-      "host": "xbabe1",
-      "run": "evo_continuous",
-      "island": "i005"
-    },
-    {
-      "canonical_w_ultralight_v1": 76.127401,
-      "label": "ec2i013_r01_p14_c56",
-      "host": "xbabe2",
-      "run": "evo_continuous",
-      "island": "i013"
-    },
-    {
-      "canonical_w_ultralight_v1": 76.113836,
-      "label": "ec2i009_r01_p14_c32",
-      "host": "xbabe2",
-      "run": "evo_continuous",
-      "island": "i009"
-    },
-    {
-      "canonical_w_ultralight_v1": 76.018185,
-      "label": "ec1i005_r01_p14_c31",
-      "host": "xbabe1",
-      "run": "evo_continuous",
-      "island": "i005"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.983539,
-      "label": "ec1i004_r01_p14_c52",
-      "host": "xbabe1",
-      "run": "evo_continuous",
-      "island": "i004"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.983539,
-      "label": "ec1i004_r01_p14_c68",
-      "host": "xbabe1",
-      "run": "evo_continuous",
-      "island": "i004"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.983539,
-      "label": "ef3i17_r05_p14_c06",
+      "canonical_w_ultralight_v1": 80.299390,
+      "label": "w406t3_r01_p10_c16",
       "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i17"
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w406t3",
+      "genome_sha256": "83877fdbb08a"
     },
     {
-      "canonical_w_ultralight_v1": 75.965826,
-      "label": "ec1i004_r01_p14_c53",
-      "host": "xbabe1",
-      "run": "evo_continuous",
-      "island": "i004"
+      "canonical_w_ultralight_v1": 80.179111,
+      "label": "w406t3_r02_p10_c23",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w406t3",
+      "genome_sha256": "441447033132"
     },
     {
-      "canonical_w_ultralight_v1": 75.959180,
-      "label": "ec2i011_r01_p14_c32",
+      "canonical_w_ultralight_v1": 79.984072,
+      "label": "w300_r01_p10_c68",
       "host": "xbabe2",
-      "run": "evo_continuous",
-      "island": "i011"
+      "run": "jarambit/out",
+      "island": "w300",
+      "genome_sha256": "2b32d32271d9"
     },
     {
-      "canonical_w_ultralight_v1": 75.905040,
-      "label": "ef3i17_r05_p14_c13",
+      "canonical_w_ultralight_v1": 79.971998,
+      "label": "w406t3_r01_p14_c35",
       "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i17"
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w406t3",
+      "genome_sha256": "10df9e82c24b"
     },
     {
-      "canonical_w_ultralight_v1": 75.896846,
-      "label": "ec2i009_r01_p14_c30",
+      "canonical_w_ultralight_v1": 79.930876,
+      "label": "w404c3_r03_p10_c15",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w404c3",
+      "genome_sha256": "ace0e40a9c50"
+    },
+    {
+      "canonical_w_ultralight_v1": 79.918893,
+      "label": "w405c3_r01_p10_c21",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w405c3",
+      "genome_sha256": "32bf4fae97ec"
+    },
+    {
+      "canonical_w_ultralight_v1": 79.913655,
+      "label": "w404c3_r02_p10_c21",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w404c3",
+      "genome_sha256": "132ca4d8c703"
+    },
+    {
+      "canonical_w_ultralight_v1": 79.898664,
+      "label": "w405c3_r02_p10_c15",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w405c3",
+      "genome_sha256": "3ac27f49e2c0"
+    },
+    {
+      "canonical_w_ultralight_v1": 79.869405,
+      "label": "w401c3_r02_p10_c27",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w401c3",
+      "genome_sha256": "a61941ea266e"
+    },
+    {
+      "canonical_w_ultralight_v1": 79.869336,
+      "label": "w404c3_r01_p10_c26",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w404c3",
+      "genome_sha256": "c4679d16c8cc"
+    },
+    {
+      "canonical_w_ultralight_v1": 79.868766,
+      "label": "w401c3_r02_p10_c15",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w401c3",
+      "genome_sha256": "50f7141bbfbb"
+    },
+    {
+      "canonical_w_ultralight_v1": 79.847065,
+      "label": "w402c3_r02_p10_c03",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w402c3",
+      "genome_sha256": "9a34a6ec14bb"
+    },
+    {
+      "canonical_w_ultralight_v1": 79.846886,
+      "label": "w401c3_r01_p10_c14",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w401c3",
+      "genome_sha256": "0247ee94769a"
+    },
+    {
+      "canonical_w_ultralight_v1": 79.837049,
+      "label": "w402c3_r01_p10_c45",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w402c3",
+      "genome_sha256": "deab478dd702"
+    },
+    {
+      "canonical_w_ultralight_v1": 79.835781,
+      "label": "w402c3_r02_p10_c07",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w402c3",
+      "genome_sha256": "74bb43054495"
+    },
+    {
+      "canonical_w_ultralight_v1": 79.806859,
+      "label": "cert_pipeline_r01_p14_c02",
       "host": "xbabe2",
-      "run": "evo_continuous",
-      "island": "i009"
+      "run": "repo-evidence:evolve_certifiable",
+      "island": "automatic",
+      "genome_sha256": "a526b2ef73b2"
     },
     {
-      "canonical_w_ultralight_v1": 75.888003,
-      "label": "ef3i17_r05_p14_c14",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i17"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.886873,
-      "label": "ec2i016_r01_p14_c64",
+      "canonical_w_ultralight_v1": 79.800674,
+      "label": "w298_r01_p14_c43",
       "host": "xbabe2",
-      "run": "evo_continuous",
-      "island": "i016"
+      "run": "jarambit/out",
+      "island": "w298",
+      "genome_sha256": "a677535a04c1"
     },
     {
-      "canonical_w_ultralight_v1": 75.885381,
-      "label": "ec2i009_r01_p14_c28",
+      "canonical_w_ultralight_v1": 79.796882,
+      "label": "w402c3_r01_p14_c39",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w402c3",
+      "genome_sha256": "392004ea0fc3"
+    },
+    {
+      "canonical_w_ultralight_v1": 79.791501,
+      "label": "w401c3_r01_p14_c35",
+      "host": "xbabe3",
+      "run": "archive:jarambit_evo3c/out",
+      "island": "w401c3",
+      "genome_sha256": "6f4350c12dae"
+    },
+    {
+      "canonical_w_ultralight_v1": 79.778549,
+      "label": "w298_r02_p14_c24",
       "host": "xbabe2",
-      "run": "evo_continuous",
-      "island": "i009"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.882190,
-      "label": "ef3i17_r04_p14_c102",
-      "host": "xbabe3",
-      "run": "evo_full_20261018",
-      "island": "i17"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.744753,
-      "label": "ec1i005_r01_p14_c40",
-      "host": "xbabe1",
-      "run": "evo_continuous",
-      "island": "i005"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.671482,
-      "label": "ec2i012_r01_p14_c06",
-      "host": "xbabe2",
-      "run": "evo_continuous",
-      "island": "i012"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.585194,
-      "label": "ec3i016_r03_p14_c17",
-      "host": "xbabe3",
-      "run": "evo_continuous",
-      "island": "i016"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.582244,
-      "label": "ec3i016_r02_p14_c01",
-      "host": "xbabe3",
-      "run": "evo_continuous",
-      "island": "i016"
-    },
-    {
-      "canonical_w_ultralight_v1": 75.574298,
-      "label": "ec3i016_r02_p14_c02",
-      "host": "xbabe3",
-      "run": "evo_continuous",
-      "island": "i016"
+      "run": "jarambit/out",
+      "island": "w298",
+      "genome_sha256": "3f749dbb22eb"
     }
   ]
 }
