@@ -168,6 +168,39 @@ fn load_seed_genomes(root: &Path, seeds_arg: Option<&str>) -> Vec<(String, Genom
     out
 }
 
+/// A seed parent with its known canonical `W_ULTRALIGHT_v1` score from an earlier Stage-2 assessment.
+#[derive(Clone, Debug)]
+struct SeedScore {
+    score: f64,
+    family: String,
+    g: Genome,
+}
+
+/// Read `score<TAB>genome_csv` rows (the keepalive's leader pool) for the `--seeds` paths.
+/// A score is kept only when the seed loads unchanged, because RS-v2 conversion or clamping
+/// makes a different design. These scores only steer parent choice; they are never reported
+/// as this run's assessments.
+fn load_seed_scores(root: &Path, seeds_arg: Option<&str>, scores: &str) -> Vec<SeedScore> {
+    let mut out = Vec::new();
+    for raw in seeds_arg.unwrap_or("").split(',').map(str::trim).filter(|s| !s.is_empty()) {
+        let Some(score) = scores.lines().find_map(|line| {
+            let (score, csv) = line.split_once('\t')?;
+            (csv.trim() == raw).then(|| score.trim().parse::<f64>().ok()).flatten()
+        }) else {
+            continue;
+        };
+        let p = if Path::new(raw).is_absolute() { PathBuf::from(raw) } else { root.join(raw) };
+        let Some(as_written) = crate::crescent::load_seeds(&p.to_string_lossy(), 1).into_iter().next() else {
+            continue;
+        };
+        match load_seed_genomes(root, Some(raw)).into_iter().next() {
+            Some((family, g)) if score.is_finite() && g == as_written => out.push(SeedScore { score, family, g }),
+            _ => eprintln!("auto-evolve: seed score for {raw} ignored: the genome changed on load"),
+        }
+    }
+    out
+}
+
 /// Generate a batch of targeted + stochastic `RS-karambit-v2` offspring around the current elite pool.
 fn spawn_offspring_batch(
     elites: &[(String, Genome)],
@@ -516,10 +549,8 @@ fn spawn_offspring_batch(
                 child.v[FUL_S0] = parent.v[FUL_S0];
             }
             child.v[EDGE_TH] = child.v[EDGE_TH].clamp(0.12, 0.20);
-            if child.rs_v2() {
-                child.v[genome::RING_WALL] =
-                    child.v[genome::RING_WALL].clamp(6.0, b[genome::RING_WALL].1);
-            }
+            // No ring-wall floor above the schema bound: ring strength is a weighted objective,
+            // and a 6 mm floor added ~6 g to every child of a thinner-walled leader.
             child.clamp();
             batch.push((fam.clone(), child));
         }
@@ -1028,6 +1059,22 @@ fn design_value(c: &AssessedDesign) -> Value {
         "certificate_identity":certification::identity(&c.g),"genome_csv":c.genome_csv,"scorecard_md":c.scorecard_md})
 }
 
+/// Hall-of-Fame elitism: the highest `W_ULTRALIGHT_v1` genome so far, from this run's Stage-2
+/// assessments or a seed's known canonical score (monotone non-decreasing fitness). Seeds are not
+/// re-assessed in Stage 2, so without their known scores a better seed would lose its elite slot
+/// to the run's own, lower, best. Legacy gate verdicts never buy an elite slot.
+fn hall_of_fame(assessed: &[AssessedDesign], seed_scores: &[SeedScore]) -> Option<(String, Genome)> {
+    let run_best = assessed
+        .iter()
+        .map(|c| (stage2_ultralight_weighted_fitness(c), &c.family, &c.g));
+    let seed_best = seed_scores.iter().map(|s| (s.score, &s.family, &s.g));
+    run_best
+        .chain(seed_best)
+        .filter(|(score, _, _)| score.is_finite())
+        .max_by(|a, b| a.0.partial_cmp(&b.0).unwrap_or(std::cmp::Ordering::Equal))
+        .map(|(_, family, g)| (family.clone(), g.clone()))
+}
+
 /// Keep the Hall-of-Fame genome, then preserve each rankable seed family before filling search slots.
 fn replacement_elites(
     hall_of_fame: impl Iterator<Item = (String, Genome)>,
@@ -1188,6 +1235,7 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
     let mut threads = jarambit_monte_carlo::max_threads().min(16);
     let mut seed = 2830u64;
     let mut seeds_arg: Option<String> = None;
+    let mut seed_scores_path: Option<PathBuf> = None;
     let mut out_dir = root.join("out/auto_evolve");
     let mut prefix = String::from("auto");
 
@@ -1230,6 +1278,12 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
                     i += 1;
                 }
             }
+            "--seed-scores" => {
+                if let Some(v) = args.get(i + 1) {
+                    seed_scores_path = Some(PathBuf::from(v));
+                    i += 1;
+                }
+            }
             "--out-dir" | "--out" => {
                 if let Some(v) = args.get(i + 1) {
                     out_dir = PathBuf::from(v);
@@ -1244,7 +1298,7 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
             }
             "-h" | "--help" => {
                 println!(
-                    "Usage: jarambit auto-evolve [--rounds N] [--candidates-per-round K] [--top-k-certify [M]] [--threads T] [--seeds <csv1,csv2>] [--out-dir <dir>] [--prefix <name>] [--seed <u64>]\n       regression records: [--no-dataset] [--dataset-dir <dir>] [--dataset-commit] [--dataset-push <remote>:<branch>]"
+                    "Usage: jarambit auto-evolve [--rounds N] [--candidates-per-round K] [--top-k-certify [M]] [--threads T] [--seeds <csv1,csv2>] [--seed-scores <score<TAB>csv file>] [--out-dir <dir>] [--prefix <name>] [--seed <u64>]\n       regression records: [--no-dataset] [--dataset-dir <dir>] [--dataset-commit] [--dataset-push <remote>:<branch>]"
                 );
                 return 0;
             }
@@ -1271,6 +1325,16 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
         eprintln!("auto-evolve: supply at least one valid committed/evolved genome CSV; no external CAD fallback");
         return 1;
     }
+    let seed_scores = match &seed_scores_path {
+        Some(p) => match std::fs::read_to_string(p) {
+            Ok(text) => load_seed_scores(&root, seeds_arg.as_deref(), &text),
+            Err(e) => {
+                eprintln!("auto-evolve: cannot read --seed-scores {}: {e}", p.display());
+                return 1;
+            }
+        },
+        None => Vec::new(),
+    };
     // A direct CLI invocation prepares the same tools that evolve.sh builds up front.
     let examples = root.join("target/release/examples");
     {
@@ -1306,7 +1370,8 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
         .with("prefix", prefix.as_str())
         .with("out_dir", out_dir.display().to_string())
         .with("argv", datasets::json::Json::Arr(args.iter().map(datasets::json::Json::from).collect()))
-        .with("seeds", datasets::json::Json::Arr(elites.iter().map(|(f, g)| datasets::json::Json::obj().with("family", f.as_str()).with("certificate_identity", certification::identity(g))).collect()));
+        .with("seeds", datasets::json::Json::Arr(elites.iter().map(|(f, g)| datasets::json::Json::obj().with("family", f.as_str()).with("certificate_identity", certification::identity(g))).collect()))
+        .with("seed_known_scores", datasets::json::Json::Arr(seed_scores.iter().map(|s| datasets::json::Json::obj().with("certificate_identity", certification::identity(&s.g)).with("w_ultralight_v1", s.score)).collect()));
     let mut recorder = datasets::recorder::Recorder::start(&root, dataset_cfg, &prefix, seed, run_manifest);
     let record = recorder.is_some();
     let mut rng = Rng(seed);
@@ -1321,6 +1386,14 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
         "Config: rounds={rounds}, candidates/elite/round={candidates_per_round}, certify_top={certify_top}, threads={threads}, seed={seed}, out={}",
         out_dir.display()
     );
+    for s in &seed_scores {
+        println!(
+            "Seed with known W_ULTRALIGHT_v1 {:.6} (Hall-of-Fame candidate, not re-assessed): {} {}",
+            s.score,
+            s.family,
+            certification::identity(&s.g)
+        );
+    }
 
     for round in 0..rounds {
         seed_parent_ids.extend(round_parent_identities(&elites));
@@ -1499,16 +1572,7 @@ pub fn run_auto_evolve_cli(args: &[String]) -> i32 {
             .current_dir(&root)
             .status();
 
-        // Hall-of-Fame elitism: preserve the highest `W_ULTRALIGHT_v1` Stage-2 assessed genome
-        // so far (monotone non-decreasing fitness). Legacy gate verdicts never buy an elite slot.
-        let hof_best = assessed_all
-            .iter()
-            .max_by(|a, b| {
-                stage2_ultralight_weighted_fitness(a)
-                    .partial_cmp(&stage2_ultralight_weighted_fitness(b))
-                    .unwrap_or(std::cmp::Ordering::Equal)
-            })
-            .map(|c| (c.family.clone(), c.g.clone()));
+        let hof_best = hall_of_fame(&assessed_all, &seed_scores);
         elites = replacement_elites(hof_best.into_iter(), &survivors, &elites);
         if let Some(rec) = recorder.as_mut() {
             rec.end_round(round);
@@ -2583,6 +2647,82 @@ mod tests {
     }
 
     #[test]
+    fn offspring_of_a_thin_ring_wall_leader_keep_its_ring_wall() {
+        // w406t3_r01_p10_c16 (80.299390) has a 5.2 mm ring wall; a 6 mm child floor cost ~6 g.
+        let mut seeds = load_seed_genomes(
+            &repo_root(),
+            Some("evidence/rs_v2/w283_ultrarunner/w283_p10_c02_genome.csv"),
+        );
+        seeds[0].1.v[genome::RING_WALL] = 5.2;
+        let bounds = genome::bounds();
+        for round in [0, 1, 4] {
+            let batch = spawn_offspring_batch(&seeds, 24, round, &mut Rng(20261022 + round as u64));
+            let kept = batch
+                .iter()
+                .filter(|(_, g)| *g != seeds[0].1 && g.v[genome::RING_WALL] == 5.2)
+                .count();
+            assert!(kept >= 6, "round {round}: only {kept} children kept the 5.2 mm ring wall");
+            for (_, g) in &batch {
+                assert!((bounds[genome::RING_WALL].0..=bounds[genome::RING_WALL].1)
+                    .contains(&g.v[genome::RING_WALL]));
+            }
+        }
+    }
+
+    #[test]
+    fn hall_of_fame_keeps_a_seed_until_the_run_beats_its_known_score() {
+        let seeds = load_seed_genomes(
+            &repo_root(),
+            Some("evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv,evidence/rs_v2/w283_ultrarunner/w283_p10_c02_genome.csv"),
+        );
+        let (seed_family, seed_g) = seeds[1].clone();
+        let run_g = seeds[0].1.clone();
+        let assessed = |score: f64| AssessedDesign {
+            label: "run_best".into(),
+            family: "p14".into(),
+            g: run_g.clone(),
+            mass_g: 90.0,
+            mass_3d_g: 90.0,
+            w_cad: 0.0,
+            g1: 0.0,
+            ultralight_fitness: score,
+            strict_hunter_sf: 0.0,
+            solid_tip_sf: 0.0,
+            seq_ratio: 0.0,
+            fat_sf: 0.0,
+            ring_bearing_w_mm: 0.0,
+            buckling_eig: 0.0,
+            battery_pass: 0,
+            all_16_gates: false,
+            rs_v2_all_hard: false,
+            genome_csv: PathBuf::from("run.csv"),
+            scorecard_md: PathBuf::from("run.md"),
+        };
+        let known = [SeedScore { score: 80.299390, family: seed_family.clone(), g: seed_g.clone() }];
+        assert_eq!(hall_of_fame(&[assessed(76.33)], &known), Some((seed_family, seed_g)));
+        assert_eq!(hall_of_fame(&[assessed(80.5)], &known), Some(("p14".into(), run_g.clone())));
+        assert_eq!(hall_of_fame(&[assessed(76.33)], &[]), Some(("p14".into(), run_g)));
+        assert_eq!(hall_of_fame(&[], &[]), None);
+    }
+
+    #[test]
+    fn seed_scores_match_exact_seed_paths_only() {
+        let root = repo_root();
+        let a = "evidence/rs_v2/w283_ultrarunner/w283_p10_c02_genome.csv";
+        let b = "evidence/rs_v2/w283_ultrarunner/w283_p14_c01_genome.csv";
+        let text = format!("80.299390\t{a}\nnot-a-score\t{b}\n79.0\tother/{b}\n");
+        let scores = load_seed_scores(&root, Some(&format!("{a},{b}")), &text);
+        let unchanged = crate::crescent::load_seeds(&root.join(a).to_string_lossy(), 1)[0].clone()
+            == load_seed_genomes(&root, Some(a))[0].1;
+        assert_eq!(scores.len(), usize::from(unchanged));
+        if let Some(s) = scores.first() {
+            assert_eq!(s.score, 80.299390);
+            assert_eq!(s.g, load_seed_genomes(&root, Some(a))[0].1);
+        }
+        assert!(load_seed_scores(&root, None, &text).is_empty());
+    }
+
+    #[test]
     fn offspring_can_explore_stock_and_rail_architecture_inside_existing_bounds() {
         let seeds = load_seed_genomes(
             &repo_root(),
@@ -2597,9 +2737,6 @@ mod tests {
                 .any(|(_, g)| g.v[genome::T] != seeds[0].1.v[genome::T]));
             for (idx, (_, g)) in batch.iter().enumerate() {
                 assert!(g.rs_v2());
-                if round != 0 || !seeds.iter().any(|(_, parent)| parent == g) {
-                    assert!((6.0..=bounds[genome::RING_WALL].1).contains(&g.v[genome::RING_WALL]));
-                }
                 for (i, &value) in g.v.iter().enumerate() {
                     if i == EDGE_TH {
                         // Genome::clamp preserves the RS-v2 apex below the legacy edge bounds.
