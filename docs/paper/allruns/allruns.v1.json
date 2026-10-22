@@ -1,0 +1,40 @@
+{
+  "census": {
+    "islands.tsv": "607b93d33d983d0de87b88d3af2093be38747521814dcabcee5ebc840e7d9527",
+    "stage1_all.tsv.zst": "4c29b19a255e2d95d088135f5cc57f00142f89ff00d71cc9944962f19442efd4",
+    "stage2_all.tsv": "1da75df7fc877b0f5318b1026a09d851189465d4b1bda8799f06efa4777e3957"
+  },
+  "command": "crates/paper-artifacts/target/release/examples/evolution_all_runs --census docs/paper/allruns/census --out docs/paper/allruns",
+  "counts": {
+    "hosts": [
+      "xbabe1",
+      "xbabe2",
+      "xbabe3",
+      "xbabe4"
+    ],
+    "island_rounds": 494,
+    "islands": 225,
+    "runs": [
+      "archive:jarambit_evo3c/out",
+      "archive:jarambit_evo3u/out",
+      "evo_continuous",
+      "evo_continuous:_superseded_dup_seed_20261022",
+      "evo_full_20261018",
+      "evo_full_20261018:_aborted_islands_v200_unpatched_0124Z",
+      "jarambit/out"
+    ],
+    "stage1_numeric": 46613,
+    "stage2": 785,
+    "stage2_older_evaluator_not_plotted": 4
+  },
+  "leader": {
+    "canonical_w_ultralight_v1": 76.141571,
+    "day": 22.526666666666667,
+    "host": "xbabe1",
+    "label": "ec1i005_r01_p14_c32"
+  },
+  "schema": "jarambit.evolution_all_runs.v1",
+  "score": "canonical W_ULTRALIGHT_v1 recomputed from each retained scorecard and RS-v2 receipt (Stage 2); Stage-1 screen value as recorded by auto-evolve",
+  "time": "UTC day of October 2026 from each record's file modification time",
+  "until": null
+}

@@ -9,6 +9,9 @@
 \usepackage[hidelinks]{hyperref}
 \externaldocument[S-][nocite]{../../target/ieee/paper/supplement-main}[supplement.pdf]
 \usepackage{microtype}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
 \hypersetup{
   pdftitle={Engineered Intelligence: Tracing Computational Design from Search to Evidence},
   pdfauthor={Research draft; author approval pending},
@@ -23,6 +26,7 @@
 \newcommand{\src}[2]{\href{https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/#1}{#2}}
 \newcommand{\test}[1]{\subsubsection{#1}}
 \input{generated/metrics.tex}
+\input{allruns/allruns-meta.tex}
 \providecommand{\CohortOneBirths}{1,984}
 \providecommand{\CohortOneFemComplete}{1,455}
 \providecommand{\CohortOneFemNotEvaluated}{529}
