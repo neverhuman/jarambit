@@ -1,0 +1,52 @@
+{
+ "as_exported": {
+  "score_100": 80.29939,
+  "objectives": {
+   "ultralight_mass": 12.106962,
+   "holder_and_compactness": 8.0,
+   "karambit_ring_and_claw": 7.0,
+   "c6_aesthetic_and_ergo": 9.0,
+   "bore_collar_comfort": 7.875,
+   "cad_watertight_brep": 5.0,
+   "gate_s_sharpness": 4.232143,
+   "gate_s_point_profile": 2.608543,
+   "hiker_lateral_180n": 3.5,
+   "hunter_lateral_260n": 1.745192,
+   "strict_hunter_260n": 1.401538,
+   "ring_pull_1500n": 2.5,
+   "twist_body_1p82nm": 2.5,
+   "twist_tip_plate_1p82nm": 1.3025,
+   "solid_tip_3d_p2_and_xcheck": 2.0469,
+   "side_a4_buckling": 2.0,
+   "failure_sequence_1p2": 3.5,
+   "plate_gci_3level": 2.0,
+   "human_max_overload": 0.966667,
+   "goodman_fatigue_l7": 1.013944
+  }
+ },
+ "smoothed": {
+  "score_100": 75.343635,
+  "objectives": {
+   "ultralight_mass": 12.126607,
+   "holder_and_compactness": 8.0,
+   "karambit_ring_and_claw": 7.0,
+   "c6_aesthetic_and_ergo": 9.0,
+   "bore_collar_comfort": 7.875,
+   "cad_watertight_brep": 0.0,
+   "gate_s_sharpness": 4.232143,
+   "gate_s_point_profile": 2.608543,
+   "hiker_lateral_180n": 3.5,
+   "hunter_lateral_260n": 1.745192,
+   "strict_hunter_260n": 1.401538,
+   "ring_pull_1500n": 2.5,
+   "twist_body_1p82nm": 2.5,
+   "twist_tip_plate_1p82nm": 1.3025,
+   "solid_tip_3d_p2_and_xcheck": 2.0715,
+   "side_a4_buckling": 2.0,
+   "failure_sequence_1p2": 3.5,
+   "plate_gci_3level": 2.0,
+   "human_max_overload": 0.966667,
+   "goodman_fatigue_l7": 1.013944
+  }
+ }
+}

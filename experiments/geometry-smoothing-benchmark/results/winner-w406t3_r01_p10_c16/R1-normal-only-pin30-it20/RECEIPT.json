@@ -1,0 +1,35 @@
+{
+  "schema": "smoothing_receipt.v1",
+  "task": "OWNER-SMOOTHING-20261022-best-comparable-design",
+  "rung": "R1",
+  "ladder_position": "level L4 of the ten-level smoothing ladder (docs/paper/ladder/ladder.json); the same pre-declared R1 setting as the earlier runs",
+  "code_commit": "14b937d30cdaaef490ad608da956ae2791fdab3d",
+  "tool": "geometry-smoothing-benchmark 0.1.0",
+  "tool_binary_sha256": "52501e69297b27fbe5efc747cd3331c8239fd692c2fb27d456900e500b0c0d55",
+  "toolchain": "rustc 1.85.1",
+  "command": "/home/ubuntu/jarambit/.agent/worktrees/ladder/experiments/geometry-smoothing-benchmark/target/release/geometry-smoothing-benchmark --input /home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl --out /home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L4/smoothing --label re_w406t3_r01_p10_c16 smoothing ladder L4, not qualified --lambda 0.5 --mu -0.5 --max-displacement-mm 2 --normal-only --pin-feature-angle 30 --iterations 20",
+  "exit_code": 0,
+  "winner": {
+    "label": "w406t3_r01_p10_c16",
+    "assessment_label": "re_w406t3_r01_p10_c16",
+    "canonical_w_ultralight_v1": 80.29939,
+    "selection": "rank 1 of the comparable retained Stage-2 assessments of every evolution run and wave since 2026-10-17 (docs/paper/figures/cover/winner-selection.v1.json); re-assessed 2026-10-22 with the v2.2.0 Stage-2 evaluator, reproducing its stored 80.299390",
+    "path": "/home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl",
+    "sha256": "e574212003bb4c32eb124cb2beda93d6e8ac13d4295b6b0ca46f6795fe5a3bb2",
+    "re_assessment_dir": "/home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16"
+  },
+  "output_dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L4/smoothing",
+  "outputs": [
+    {
+      "name": "smoothed.stl",
+      "bytes": 26724197,
+      "sha256": "157d22c71890d49ae7eee0e755823dcd433c598b749d51e12d9efb1219f2c310"
+    },
+    {
+      "name": "displacement.csv",
+      "bytes": 4307079,
+      "sha256": "9b8507584e51a99648137cf9df23e0984d852ff9363a92eb72aa86e5326bc1c3"
+    }
+  ],
+  "not_qualified": true
+}

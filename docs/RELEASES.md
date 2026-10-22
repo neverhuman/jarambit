@@ -2,19 +2,25 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
-## v2.2.1 — 2026-10-22 (no hard failure left in Stage-2 assessment, new best evolved design in both papers)
+## v2.2.1 — 2026-10-22 (no hard failure left in Stage-2 assessment; best design across all runs; smoothing ladder; all-runs evolution figure)
 
 - **An unmeasured solid-tip solve scores zero instead of dropping the design (#153).** This was the last hard failure in the evolution loop. When the skfem tip solve or the DOLFINx cross-check produces no observation, the evaluator writes an `unmeasured` tip record with SF 0. Assessment then continues, so the design is scored on the other 19 objectives and gets zero credit on `solid_tip_3d_p2_and_xcheck`.
   - The record is never reusable evidence, the CAD battery reports `solid.tip` incomplete, and rs-v2-eval reports `solid_tip_sf` unverified.
-  - The evaluator is part of the certificate identity, so the regeneration identity in `evidence/evolve_certifiable/manifest.json` is re-issued. Exported STEP/STL bytes are unchanged. The figure manifests that pin it are re-bound metadata-only (`followup_checks/figure_input_rebinding_20261022.json`).
-- **New best evolved design on the paper's main page (#154).** Continuous evolution on xbabe1–3 produced four Stage-2 assessments above the v2.2.0 winner. Of the 696 retained assessments, re-scored with the canonical scorer, `ec1i005_r01_p14_c32` (`W_ULTRALIGHT_v1 = 76.141571`, 92.71 g, battery 15/18, not qualified) ranks first.
-  - `main.pdf` shows it as exported.
-  - `main-smoothed.pdf` shows it after the same R1 smoothing, re-scored to 71.236809:
-    - 3D mass +0.0172.
-    - Solid tip +0.0780: SF 0.3506 → 0.3766, re-solved with skfem and DOLFINx in the pinned environment.
-    - CAD/B-rep objective −5, withheld.
-  - The v2.2.0 winner `ef3i17_r05_p14_c06` (75.983539) is kept as the previous selection.
-- **Continuous-evolution seed pool (operations, outside the repo).** Migrant genomes now take their canonical score when one exists, so the inflated 2026-10-18 leaderboard values (up to 80.25) no longer circulate between hosts.
+  - The evaluator is part of the certificate identity, so the regeneration identity in `evidence/evolve_certifiable/manifest.json` is re-issued. Exported STEP/STL bytes are unchanged, and the figure manifests that pin it are re-bound metadata-only.
+- **Best evolved design, across every run (#154).** The all-runs census re-scores 967 comparable Stage-2 assessments on xbabe1–4 since 2026-10-17 with the canonical `W_ULTRALIGHT_v1`.
+  - `w406t3_r01_p10_c16` ranks first (80.299390, 83.22 g, battery 14/18, not qualified). It comes from the 2026-10-17/18 waves and carries two-sided isogrid pockets, lattice, relief and pierced-fuller windows.
+  - Re-assessing its genome with the current Stage-2 evaluator reproduces 80.299390 exactly. Two other designs from those waves also reproduce exactly.
+  - The 2026-10-16 evaluators overstate the score: a stored 92.29 re-assesses at 79.166355. Their 142 scorecards are excluded.
+  - The best design of the runs after 2026-10-18, `ec1i005_r01_p14_c32` (76.141571), switches the pocket layers off and ranks 107th.
+- **Papers updated.**
+  - `main.pdf` shows the winner as exported.
+  - `main-smoothed.pdf` shows it after R1 smoothing, re-scored to 75.343635. That is −5 for the withheld CAD/B-rep objective, +0.0246 for the solid tip and +0.0196 for mass; with the B-rep objective kept it would be 80.343635.
+  - The Individual 2000 hero image is replaced by the winner in relief.
+  - The main evolution figure now shows every run on every host. The Run 5 per-birth view moves to the Supplement.
+- **Smoothing ladder in the build (`make -C docs/paper smoothing-ladder`).** `jarambit smoothing-ladder` smooths the winner at ten levels (L0 = none) and re-scores each one, re-solving the tip with skfem and DOLFINx. `smoothing_ladder_figure` renders every level for 3D relief: one oblique camera, raking light, 2.5× thickness exaggeration, height tint, guard/isogrid and blade close-ups, and a shared displacement map. The output is `docs/paper/smoothing-ladder.pdf`.
+- **Continuous evolution (operations, outside the repo).**
+  - Migrants take their canonical score when one exists.
+  - The re-assessed lattice designs (`w406t3`, `w401c3`, `w290`) head the seed pool on xbabe1–3.
 
 This release adds no qualification claim. No design passes all 26 legacy gates, and physical performance remains unestablished.
 

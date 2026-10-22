@@ -1,0 +1,15 @@
+{
+"schema":"smoothing_input_mesh.v1",
+"status":"pass",
+"not_qualified":true,
+"label":"re_w406t3_r01_p10_c16 smoothing ladder L4, not qualified",
+"tool":"geometry-smoothing-benchmark 0.1.0",
+"command":"/home/ubuntu/jarambit/.agent/worktrees/ladder/experiments/geometry-smoothing-benchmark/target/release/geometry-smoothing-benchmark --input /home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl --out /home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L4/smoothing --label re_w406t3_r01_p10_c16 smoothing ladder L4, not qualified --lambda 0.5 --mu -0.5 --max-displacement-mm 2 --normal-only --pin-feature-angle 30 --iterations 20",
+"input":{"path":"/home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl","bytes":15269827,"sha256":"e574212003bb4c32eb124cb2beda93d6e8ac13d4295b6b0ca46f6795fe5a3bb2","format":"ascii"},
+"input_audit":{"vertices":44980,"faces":89972,"edges":134958,"open_edges":0,"nonmanifold_edges":0,"inconsistent_edges":0,"degenerate_faces":0,"duplicate_faces":0,"unused_vertices":0,"components":1,"euler_characteristic":-6},
+"settings":{"iterations":20,"lambda":0.5,"mu":-0.5,"max_displacement_mm":2,"normal_only":true,"iterations_completed":20},
+"pins":{"feature_angle_deg":30,"feature_edges":9985,"feature_pinned_vertices":8802},
+"result":{"output_audit":{"vertices":44980,"faces":89972,"edges":134958,"open_edges":0,"nonmanifold_edges":0,"inconsistent_edges":0,"degenerate_faces":0,"duplicate_faces":0,"unused_vertices":0,"components":1,"euler_characteristic":-6},"moved_vertices":34762,"moved_over_0_01_mm":6338,"moved_over_0_01_mm_fraction":0.1409070698088039,"max_displacement_mm":0.21352247019693715,"rms_displacement_mm":0.015618829620541157,"displacement_at_budget":false,"volume_mm3":{"before":18786.23142557842,"after":18769.094073335946,"change_percent":-0.09122293798180525},"bounding_box_mm":{"before":{"min":[-17.6314,-53.4675,-6.501],"max":[191.7778,17.6491,6.501]},"after":{"min":[-17.6314,-53.4675,-6.510396588343146],"max":[191.7778,17.6491,6.510396588343412]},"change":{"min":[0,0,-0.009396588343145496],"max":[0,0,0.009396588343411949]}}},
+"outputs":[{"name":"smoothed.stl","bytes":26724197,"sha256":"157d22c71890d49ae7eee0e755823dcd433c598b749d51e12d9efb1219f2c310"},{"name":"displacement.csv","bytes":4307079,"sha256":"9b8507584e51a99648137cf9df23e0984d852ff9363a92eb72aa86e5326bc1c3"}],
+"reasons":[]
+}

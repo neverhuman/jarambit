@@ -1,0 +1,7 @@
+{
+"schema":"smoothing_input_check.v1",
+"status":"accepted",
+"reasons":[],
+"input":{"path":"/home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl","bytes":15269827,"sha256":"e574212003bb4c32eb124cb2beda93d6e8ac13d4295b6b0ca46f6795fe5a3bb2","format":"ascii"},
+"audit":{"vertices":44980,"faces":89972,"edges":134958,"open_edges":0,"nonmanifold_edges":0,"inconsistent_edges":0,"degenerate_faces":0,"duplicate_faces":0,"unused_vertices":0,"components":1,"euler_characteristic":-6}
+}

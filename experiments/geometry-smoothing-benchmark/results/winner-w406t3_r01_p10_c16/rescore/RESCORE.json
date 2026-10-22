@@ -1,0 +1,57 @@
+{
+  "schema": "jarambit.smoothed_rescore.v1",
+  "design": "w406t3_r01_p10_c16",
+  "assessment_label": "re_w406t3_r01_p10_c16",
+  "code_commit": "14b937d30cdaaef490ad608da956ae2791fdab3d",
+  "source": "smoothing ladder level L4 (R1): docs/paper/ladder/ladder.json, produced by `jarambit smoothing-ladder` (crates/cli/src/smoothing_ladder.rs)",
+  "case_dir": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L4/case",
+  "result": {
+    "as_exported": 80.29939,
+    "smoothed": 75.343635,
+    "change": -4.955755,
+    "smoothed_with_brep_kept": 80.343635
+  },
+  "inputs": {
+    "exported_stl_sha256": "e574212003bb4c32eb124cb2beda93d6e8ac13d4295b6b0ca46f6795fe5a3bb2",
+    "smoothed_stl_sha256": "157d22c71890d49ae7eee0e755823dcd433c598b749d51e12d9efb1219f2c310",
+    "master_scorecard_sha256": "da952bb302ec07ddee7fcb3fbc77fae42c72a800f6d33cdd5c96ad27031d1019",
+    "rs_receipt_sha256": "e513fcb3632499c28126e7773601ade8e26582c698bba9dc6243edca74cab50b",
+    "d1_sha256": "5cf89741acc66f0085da4d415d9155a63d037764f2b332fae0b80d6b9ebc9089",
+    "smoothing_receipt": "experiments/geometry-smoothing-benchmark/results/winner-w406t3_r01_p10_c16/R1-normal-only-pin30-it20/RECEIPT.json"
+  },
+  "method": {
+    "carried_over": "every other objective is genome-derived (plate responses, sharpness, point profile, ring, holder, aesthetics) and is not re-solved on the smoothed mesh",
+    "re_measured": "3D mass (exporter volume + smoothed - input STL volume, x 0.00443 g/mm3, 4 decimals) and the solid tip (fem_solid/tip_solid.py R_CUT 30 mm, NL 4, NSUB 1 on the smoothed upper skin, then the evaluator's DOLFINx 0.9.0 cross-check on the same mesh)",
+    "withheld": "CAD/B-rep objective (cad_watertight_and_single_solid, cad.cad_valid) is false on every smoothed level: a smoothed triangle mesh has no validated STEP solid (owner decision 2026-10-22); score_with_brep keeps it as exported"
+  },
+  "measurements": {
+    "mass_3d_g": {
+      "as_exported": 83.2231,
+      "smoothed": 83.1472
+    },
+    "solid_tip": {
+      "stored_as_exported": {
+        "SF_nodal_avg": 0.7569,
+        "SF_nodal_max": 0.6823
+      },
+      "smoothed": {
+        "dolfinx": {
+          "SF_nodal_avg": 0.7297,
+          "SF_nodal_max": 0.6905,
+          "ksp_its": 137
+        },
+        "rel_err_nodal_max": 0.000724,
+        "skfem": {
+          "SF_nodal_avg": 0.73,
+          "SF_nodal_max": 0.691,
+          "iterations": 149,
+          "n_dof": 416475,
+          "n_tet": 91008,
+          "relative_residual": 9.718295301114911e-11
+        },
+        "status": "measured"
+      }
+    }
+  },
+  "not_qualified": true
+}

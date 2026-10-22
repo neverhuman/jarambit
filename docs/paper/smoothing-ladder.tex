@@ -3,7 +3,7 @@
 % Smoothing ladder of the best evolved design: built by `make smoothing-ladder` from
 % ladder/ (receipt, generated table and level macros, re-encoded renders).
 \usepackage{tgtermes,tgheros}
-\usepackage[margin=0.6in]{geometry}
+\usepackage[margin=0.5in]{geometry}
 \usepackage{amsmath,graphicx,booktabs,array,xcolor,url}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
@@ -19,18 +19,20 @@
 \pagestyle{plain}
 % \LadderLevel{level}{pin deg}{iterations}{F}{F with B-rep}{max mm}{rms mm}{tip SF}{mass g}
 \newcommand{\LadderLevel}[9]{%
-  \clearpage
+  \clearpage\raggedright
   {\sffamily\bfseries\color{ink}\Large Level L#1\quad
    \ifnum#3=0 as exported (no smoothing)\else #3 iterations, feature pins #2$^\circ$\fi}\par
   {\sffamily $F=#4$\quad(with B-rep kept: $#5$)\quad
    max displacement #6\,mm,\ RMS #7\,mm\quad tip SF #8\quad 3D mass #9\,g}\par\smallskip
-  \includegraphics[width=\textwidth]{L#1-oblique.png}\par
+  \centering\includegraphics[width=0.9\textwidth]{L#1-oblique.png}\par
   {\small\color{ink}Whole design, oblique view, raking light, thickness direction exaggerated \LadderExaggeration$\times$; colour is height above the mid-plane (scale on the summary page).}\par
-  \includegraphics[width=\textwidth]{L#1-blade.png}\par
-  {\small\color{ink}Blade close-up (grinds, serrations, tip), same camera rotation, light and colour.}\par
-  \includegraphics[width=\textwidth]{L#1-displacement.png}\par
+  \includegraphics[width=0.49\textwidth]{L#1-guard.png}\hfill\includegraphics[width=0.49\textwidth]{L#1-blade.png}\par
+  {\small\color{ink}Close-ups with the same camera rotation, light and colour: guard and pivot zone (isogrid pockets, fuller windows), left; blade (grinds, serrations, tip), right.}\par
+  \includegraphics[width=0.8\textwidth]{L#1-displacement.png}\par
   {\small\color{ink}Top view; colour is displacement from L0 on the shared scale (summary page). L0 is zero everywhere.}\par}
 \input{ladder/ladder-meta.tex}
+% Expandable input, so generated rows can sit between \midrule and \bottomrule.
+\makeatletter\newcommand{\inputrows}[1]{\@@input #1 }\makeatother
 \begin{document}
 {\sffamily\bfseries\color{ink}\LARGE Smoothing ladder of the best evolved design}\par
 {\sffamily\large \LadderLabel: $W_{\mathrm{ULTRALIGHT\_v1}}=\LadderExported$ as exported, ten smoothing levels}\par
@@ -50,7 +52,7 @@
 Level & Pins & Iter. & Max disp. & RMS disp. & Vol. & Mass & Tip SF & $F$ & $F$ (B-rep kept) \\
  & & & (mm) & (mm) & (\%) & (g) & (DOLFINx) & & \\
 \midrule
-\input{ladder/ladder-table.tex}
+\inputrows{ladder/ladder-table.tex}
 \bottomrule
 \end{tabular}
 \end{center}
@@ -68,10 +70,10 @@ Level & Pins & Iter. & Max disp. & RMS disp. & Vol. & Mass & Tip SF & $F$ & $F$ 
 \end{center}
 
 \textbf{Colour scales.} Height above the mid-plane, 0 to the stock half-thickness \LadderStockHalf\,mm (thicker parts such as the finger ring saturate):\par
-\includegraphics[width=\textwidth]{height-colorbar.png}\par
+\includegraphics[width=\textwidth,height=0.22in]{height-colorbar.png}\par
 {\small 0\,mm \hfill \LadderStockHalf\,mm}\par
 Displacement from L0, shared by all levels, 0 to \LadderDispMax\,mm:\par
-\includegraphics[width=\textwidth]{displacement-colorbar.png}\par
+\includegraphics[width=\textwidth,height=0.22in]{displacement-colorbar.png}\par
 {\small 0\,mm \hfill \LadderDispMax\,mm}\par
 
 \input{ladder/ladder-levels.tex}

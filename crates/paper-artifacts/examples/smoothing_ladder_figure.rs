@@ -1,5 +1,6 @@
 //! Smoothing-ladder figure producer: for every level of a `jarambit smoothing-ladder` receipt,
-//! an oblique relief view of the whole design, an oblique close-up of the blade, and a top-view
+//! an oblique relief view of the whole design, oblique close-ups of the guard (isogrid pockets) and
+//! of the blade, and a top-view
 //! map of the displacement from level 0. Views are chosen to show 3D variation:
 //! - one fixed oblique camera (tilted 55 degrees from the hero top view) and a low raking light;
 //! - z (thickness direction) exaggerated by `--exaggeration` (default 2.5) in the oblique views;
@@ -25,7 +26,9 @@ const CT: f64 = 0.9945218953682733;
 const ST: f64 = -0.10452846326765347;
 const TILT_DEG: f64 = 55.0;
 const SUPERSAMPLE: usize = 2;
-/// Close-up region: everything beyond this x (mm) in the design frame, i.e. blade and tip.
+/// Close-up regions in the design frame (x, mm): the guard and pivot zone, where isogrid
+/// pockets and fuller windows sit, and everything beyond it (blade, grinds, serrations, tip).
+const GUARD_X_MM: [f64; 2] = [70.0, 112.0];
 const DETAIL_X_MM: f64 = 112.0;
 const NORMALS: NormalSettings = NormalSettings {
     crease_degrees: 15.0,
@@ -224,9 +227,11 @@ fn main() -> Res<()> {
     let lifted: Vec<RawMesh> = meshes.iter().map(|m| exaggerate(m, exaggeration)).collect::<Res<_>>()?;
     let all: Vec<Vec3> = lifted[0].triangles().iter().flatten().copied().collect();
     let blade: Vec<Vec3> = lifted[0].triangles().iter().flatten().filter(|v| v[0] >= DETAIL_X_MM).copied().collect();
+    let guard: Vec<Vec3> = lifted[0].triangles().iter().flatten().filter(|v| (GUARD_X_MM[0]..GUARD_X_MM[1]).contains(&v[0])).copied().collect();
     let flat: Vec<Vec3> = base.triangles().iter().flatten().copied().collect();
     let cam_full = frame(oblique_rotation(), &all, width, height, 0.92);
     let cam_detail = frame(oblique_rotation(), &blade, width, height, 0.94);
+    let cam_guard = frame(oblique_rotation(), &guard, width, height, 0.94);
     let cam_top = frame(top_rotation(), &flat, width, height, 0.88);
     let settings = |camera: Camera| RenderSettings {
         width,
@@ -275,11 +280,13 @@ fn main() -> Res<()> {
         let (normals, _) = appearance::derive_normals(lifted, NORMALS, None)?;
         let full = appearance::render(lifted, &normals, &tint, settings(cam_full))?;
         let detail = appearance::render(lifted, &normals, &tint, settings(cam_detail))?;
+        let guard_view = appearance::render(lifted, &normals, &tint, settings(cam_guard))?;
         let (flat_normals, _) = appearance::derive_normals(base, NORMALS, None)?;
         let heat: Vec<[u8; 3]> = disp[i].iter().map(|d| ramp(&DISP_STOPS, d / disp_max)).collect();
         let map = appearance::render(base, &flat_normals, &heat, settings(cam_top))?;
         put(format!("L{i}-oblique.png"), png(&full.rgb, width, height), width, height)?;
         put(format!("L{i}-blade.png"), png(&detail.rgb, width, height), width, height)?;
+        put(format!("L{i}-guard.png"), png(&guard_view.rgb, width, height), width, height)?;
         put(format!("L{i}-displacement.png"), png(&map.unlit_rgb, width, height), width, height)?;
         eprintln!("L{i} rendered");
     }
@@ -295,6 +302,7 @@ fn main() -> Res<()> {
         "views": {
             "oblique": "whole design; camera tilted 55 deg from the hero top view about the screen x axis, framed on level 0 and shared by all levels",
             "blade": format!("close-up of everything at x >= {DETAIL_X_MM} mm (blade, grinds, serrations, tip), same rotation, framed on level 0"),
+            "guard": format!("close-up of {} mm <= x < {} mm (guard and pivot zone: isogrid pockets, fuller windows), same rotation, framed on level 0", GUARD_X_MM[0], GUARD_X_MM[1]),
             "displacement": "hero top view, unlit; colour is the mean of the face's three corner displacements from level 0",
         },
         "z_exaggeration": exaggeration,
@@ -304,7 +312,7 @@ fn main() -> Res<()> {
         "displacement": {"range_mm": [0.0, disp_max], "shared_by_all_levels": true,
                          "stops_srgb": DISP_STOPS.iter().map(|(t, c)| json!({"t": t, "rgb": c})).collect::<Vec<_>>()},
         "lighting": {"direction_camera": raking().direction, "ambient": 0.22, "diffuse": 0.78, "specular": 0.06, "shininess": 40, "kind": "low raking light from the upper left"},
-        "cameras": {"oblique": camera(cam_full), "blade": camera(cam_detail), "displacement": camera(cam_top)},
+        "cameras": {"oblique": camera(cam_full), "blade": camera(cam_detail), "guard": camera(cam_guard), "displacement": camera(cam_top)},
         "render": {"width": width, "height": height, "supersample": SUPERSAMPLE, "outline_pixels": 1.5, "renderer": "deterministic Rust CPU depth raster (appearance::render)"},
         "normals": {"crease_degrees": NORMALS.crease_degrees, "blend": NORMALS.blend, "max_deviation_degrees": NORMALS.max_deviation_degrees},
         "not_qualified": true,

@@ -1,0 +1,10 @@
+{
+  "figure": "docs/paper/ladder/L4-guard.png",
+  "figure_sha256": "9aa9e39a12051d2bdb4a78e0aae90fc5a69c8d65276a7729c84fb28bc9cd1a01",
+  "script": "crates/paper-artifacts/examples/smoothing_ladder_figure.rs",
+  "inputs": {
+    "docs/paper/ladder/ladder.json": "9682cd4a872bd920b7f24d0e3120214645afc31dd0b35173301b21c868f32de1",
+    "docs/paper/ladder/smoothing-ladder.render.v1.json": "faa96bbdd2f92b93ec87f6cb0972fae0dacba1c36a0fdcd59a62fb4900b4ca07"
+  },
+  "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"
+}
