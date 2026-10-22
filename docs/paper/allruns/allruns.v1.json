@@ -1,8 +1,8 @@
 {
   "census": {
-    "islands.tsv": "607b93d33d983d0de87b88d3af2093be38747521814dcabcee5ebc840e7d9527",
-    "stage1_all.tsv.zst": "4c29b19a255e2d95d088135f5cc57f00142f89ff00d71cc9944962f19442efd4",
-    "stage2_all.tsv": "1da75df7fc877b0f5318b1026a09d851189465d4b1bda8799f06efa4777e3957"
+    "islands.tsv": "104fd996ef01002340463ef16fb9d5b85f93c8399723346009457a3097557290",
+    "stage1_all.tsv.zst": "19ffb353804e87e04fd34e119ec6b48e085bcdbbfb97024cd0afde54639f5891",
+    "stage2_all.tsv": "0245d1e1e8825f60448c45e244a6984c016d2c5c901ad78295d41e6c68b7b06b"
   },
   "command": "crates/paper-artifacts/target/release/examples/evolution_all_runs --census docs/paper/allruns/census --out docs/paper/allruns",
   "counts": {
@@ -13,25 +13,27 @@
       "xbabe4"
     ],
     "island_rounds": 494,
-    "islands": 225,
+    "islands": 295,
     "runs": [
+      "archive:jarambit_evo3/out",
       "archive:jarambit_evo3c/out",
       "archive:jarambit_evo3u/out",
       "evo_continuous",
       "evo_continuous:_superseded_dup_seed_20261022",
       "evo_full_20261018",
       "evo_full_20261018:_aborted_islands_v200_unpatched_0124Z",
-      "jarambit/out"
+      "jarambit/out",
+      "repo-evidence:evolve_certifiable"
     ],
     "stage1_numeric": 46613,
-    "stage2": 785,
-    "stage2_older_evaluator_not_plotted": 4
+    "stage2": 967,
+    "stage2_inflated_evaluator_not_plotted": 142
   },
   "leader": {
-    "canonical_w_ultralight_v1": 76.141571,
-    "day": 22.526666666666667,
-    "host": "xbabe1",
-    "label": "ec1i005_r01_p14_c32"
+    "canonical_w_ultralight_v1": 80.29939,
+    "day": 18.12033564814815,
+    "host": "xbabe3",
+    "label": "w406t3_r01_p10_c16"
   },
   "schema": "jarambit.evolution_all_runs.v1",
   "score": "canonical W_ULTRALIGHT_v1 recomputed from each retained scorecard and RS-v2 receipt (Stage 2); Stage-1 screen value as recorded by auto-evolve",
