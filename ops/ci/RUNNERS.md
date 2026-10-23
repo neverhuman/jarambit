@@ -108,6 +108,12 @@ gh api --method POST repos/neverhuman/jarambit/actions/runners/registration-toke
   | ssh <host> 'bash <checkout of main>/ops/ci/runners/docker/deploy.sh jarambit-docker-<host>-<n> <cpuset>'
 ```
 
+On hosts whose Docker engine uses the systemd cgroup driver (xbabe1, xbabe2), `systemctl daemon-reload`
+re-applies each container scope's own properties and resets swap to unlimited; the probe then refuses
+bounded steps. `swap-pin.sh`, run every minute as root by `jarambit-runner-swap-pin.timer`, records
+`MemorySwapMax=0` as a runtime property of every runner container's scope, which survives reloads.
+`deploy.sh` installs it and checks swap 0 after start. xbabe4's colima engine uses cgroupfs.
+
 `deploy.sh` refuses with less than 80 GB free under the Docker root, builds the image (staging
 the host's `~/.jeryu/bin/jankurai`), registers once into the runner's own volume
 (`jarambit-docker-<host>-<n>-state`; the token is not retained) and starts the container with

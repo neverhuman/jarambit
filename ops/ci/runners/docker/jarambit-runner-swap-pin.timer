@@ -1,0 +1,10 @@
+[Unit]
+Description=Re-pin swap 0 for jarambit Docker CI runner containers every minute
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=1min
+AccuracySec=5s
+
+[Install]
+WantedBy=timers.target
