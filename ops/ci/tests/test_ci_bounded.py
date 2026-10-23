@@ -113,6 +113,44 @@ class BoundedCITests(unittest.TestCase):
                                     capture_output=True, timeout=60)
             self.assertEqual(result.returncode, 37, result.stdout + result.stderr)
 
+    def test_container_mode_outside_docker_fails_before_body(self):
+        if Path('/.dockerenv').exists():
+            self.skipTest('host-only control')
+        with tempfile.TemporaryDirectory() as temporary:
+            body = Path(temporary) / 'body.sh'
+            marker = Path(temporary) / 'executed'
+            body.write_text('touch "' + str(marker) + '"\n')
+            result = subprocess.run(['bash', str(WRAPPER), 'd1', str(body)], capture_output=True, text=True,
+                                    env={**os.environ, 'JARAMBIT_CI_CONTAINER': '1'}, timeout=60)
+            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+            self.assertIn('container CI mode outside Docker', result.stderr)
+            self.assertFalse(marker.exists())
+
+    def test_container_supervisor_outside_docker_never_starts_command(self):
+        if Path('/.dockerenv').exists():
+            self.skipTest('host-only control')
+        with tempfile.TemporaryDirectory() as temporary:
+            marker = Path(temporary) / 'executed'
+            result = subprocess.run(['python3', '-B', str(ROOT / 'ops/ci/bounded_process.py'), '--container', '--',
+                                     'touch', str(marker)], capture_output=True, timeout=60)
+            self.assertEqual(result.returncode, 2)
+            self.assertFalse(marker.exists())
+
+    def test_container_cleanup_spares_supervisor_ancestry_and_targets_later_processes(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('bounded_process', ROOT / 'ops/ci/bounded_process.py')
+        supervisor = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(supervisor)
+        chain = supervisor.ancestors(os.getpid())
+        self.assertTrue({os.getpid(), os.getppid(), 1} <= chain)
+        child = subprocess.Popen(['sleep', '30'])
+        try:
+            self.assertNotIn(child.pid, chain)
+            self.assertGreaterEqual(supervisor.start_time(child.pid), supervisor.start_time(os.getpid()))
+        finally:
+            child.kill()
+            child.wait()
+
     def test_inside_marker_cannot_bypass_probe_under_optimized_python(self):
         with tempfile.TemporaryDirectory() as temporary:
             body = Path(temporary) / 'body.sh'

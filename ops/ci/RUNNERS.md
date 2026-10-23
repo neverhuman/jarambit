@@ -11,15 +11,19 @@ narrows the pool; it never falls back to a GitHub-hosted machine.
 | xbabe2 | `jarambit-xbabe2`, `jarambit-xbabe2-2`, `jarambit-xbabe2-3` | Ubuntu 24.04, x64 | `jarambit-d1`, `jarambit-publication`, `jarambit-render` |
 | xbabe3 | `jarambit-xbabe3` | Ubuntu 24.04, x64, systemd service | `jarambit-d1`, `jarambit-publication`, `jarambit-render` |
 | xbabe4 | `jarambit-xbabe4` | Docker Linux/ARM64 on Apple Silicon | Portable general jobs; `docker` |
+| xbabe1–3 | `jarambit-docker-<host>-<n>` | Docker Linux/x64, one runner per container (4 CPUs, 8 GiB, no swap) | `jarambit-d1`, `docker`; no host label |
 
-Each runner also carries its physical host label (`xbabe1` through `xbabe4`).
+Each host runner also carries its physical host label (`xbabe1` through `xbabe4`). The x64 Docker
+runners do not, so host-pinned jobs (`runner-policy`, the xbabe1 synthetic benchmark and the
+xbabe2 publication build) never land on them.
 The `runner-policy` workflow runs its portable routing checks on all four hosts
 on every PR and main push. Its xbabe4 job proves it is running inside Docker.
 Other general jobs can use `[self-hosted, xbabe, general]` without fixing a host.
 
 The D1, publication and render workflows additionally select a provisioned
-capability. D1 requires Rust 1.85.1 with Clippy, Python venv support and the real
-Linux systemd `memcap` wrapper. Publication also needs pandoc 3.1.3 and LuaHBTeX
+capability. D1 requires Rust 1.85.1 with Clippy, Python venv support and an enforced
+resource bound: the real Linux systemd `memcap` wrapper on a host, or the container's own cgroup
+on an x64 Docker runner (below). Publication also needs pandoc 3.1.3 and LuaHBTeX
 1.17.0. Rendering needs Blender 4.2.23, ffmpeg encoders, the OCP Python environment
 and a working 32 GiB/no-swap systemd scope. Do not assign a capability label before
 verifying those prerequisites. Existing resource caps remain enforced.
@@ -79,3 +83,34 @@ Starting the existing container requires no registration token. Preserve the
 `jarambit-xbabe4-runner-state` volume when rebuilding. A native macOS runner is
 not part of this deployment. GitHub runner inventory and actual workflow job
 metadata are the authority for online/busy state and execution placement.
+
+## x64 Docker runners (xbabe1–3)
+
+Source: `ops/ci/runners/docker/{Dockerfile,register.sh,deploy.sh}`. Each runner is one persistent
+container from image `jarambit-runner-x64:2.338.0` (official Actions runner 2.338.0, Ubuntu 24.04,
+Rust 1.85.1 with Clippy under `/home/ubuntu`, Python venv, the OpenCascade/VTK system libraries,
+zstd, ripgrep and the jankurai binary). It runs with 4 CPUs on its own cpuset, 8 GiB memory with
+`--memory-swap` equal (swap 0), a 4096-process limit, all capabilities dropped and
+`no-new-privileges`; it mounts neither the host home nor the Docker socket. Its labels are
+`self-hosted, Linux, X64, xbabe, general, jarambit-d1, docker`.
+
+`run_bounded.sh` runs in container mode there (`JARAMBIT_CI_CONTAINER=1`, set by the image, and
+`/.dockerenv` required). The container's cgroup is the bound, and the probe still verifies
+`memory.max` ≤ the profile, `memory.swap.max` = 0, a CPU affinity no wider than the profile and
+nice 19 before the step body runs; a profile narrower than the container (`version`, 2 GiB)
+therefore fails closed. `bounded_process.py --container` admits only a reporter in the container's
+root cgroup and, at the end or on cancellation, signals every process the step started, sparing
+its own ancestors (the runner). One job runs per container at a time.
+
+```bash
+# On an authenticated administration machine (repository admin), per new runner:
+gh api --method POST repos/neverhuman/jarambit/actions/runners/registration-token --jq .token \
+  | ssh <host> 'bash <checkout of main>/ops/ci/runners/docker/deploy.sh jarambit-docker-<host>-<n> <cpuset>'
+```
+
+`deploy.sh` refuses with less than 80 GB free under the Docker root, builds the image (staging
+the host's `~/.jeryu/bin/jankurai`), registers once into the runner's own volume
+(`jarambit-docker-<host>-<n>-state`; the token is not retained) and starts the container with
+`--restart unless-stopped`. Re-running it without a token rebuilds and restarts an existing
+runner. Choose a cpuset of four physical cores and their SMT siblings inside the host's
+`system.slice` CPUs (`0-50,64-114`), distinct from other runners' affinity.

@@ -22,7 +22,15 @@ esac
 [[ -f "$script" && -r "$script" ]] || { echo "CI script missing" >&2; exit 2; }
 
 if [[ $inside == 0 ]]; then
-  [[ -x /home/ubuntu/bin/memcap ]] || { echo "required memcap unavailable" >&2; exit 1; }
+  # Docker runners (ops/ci/runners/docker): the container's own cgroup is the bound. The probe
+  # below still verifies memory.max, swap 0, affinity and nice, so this fails closed on a host.
+  container=0
+  if [[ ${JARAMBIT_CI_CONTAINER:-} == 1 ]]; then
+    [[ -f /.dockerenv ]] || { echo "container CI mode outside Docker" >&2; exit 1; }
+    container=1
+  else
+    [[ -x /home/ubuntu/bin/memcap ]] || { echo "required memcap unavailable" >&2; exit 1; }
+  fi
   selected=$(python3 - "$cpus" <<'PY'
 import os, sys
 allowed = sorted(os.sched_getaffinity(0))[:int(sys.argv[1])]
@@ -31,6 +39,12 @@ if not allowed:
 print(",".join(map(str, allowed)))
 PY
   )
+  if [[ $container == 1 ]]; then
+    exec python3 "$(dirname "$0")/bounded_process.py" --container -- nice -n 19 taskset -c "$selected" \
+      env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+      CARGO_BUILD_JOBS="$cpus" RUST_TEST_THREADS="$cpus" JARAMBIT_CI_BOUNDED=1 \
+      bash "$0" --inside "$profile" "$script"
+  fi
   export XDG_RUNTIME_DIR="/run/user/$(id -u)"
   export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
   exec python3 "$(dirname "$0")/bounded_process.py" \
