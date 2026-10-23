@@ -2,6 +2,25 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v2.3.1 — 2026-10-23 (Paper A plain, Paper B pocket-smoothed; evolution keeps the leading design's lineage; CI green again)
+
+- **Final paper layout (#159, owner decision).** Paper A (`main.pdf`, 19 pages) shows the best evolved design `w406t3_r01_p10_c16` as exported (80.299390).
+  - Paper B (`main-smoothed.pdf`, 20 pages) shows the same design after surface-tension pocket smoothing at r = 0.75 mm, under Paper A's cover camera and inset: 80.370405, re-assessed in full, with the CAD/B-rep objective kept.
+  - Paper B's *Surface-Tension Pocket Smoothing* section replaces the Taubin section. The stacked plate-field render and the raw-versus-smoothed close-ups share one figure.
+  - Mesh-level Taubin smoothing stays only as the comparison ladder (`smoothing-ladder.pdf`).
+  - v2.3.0 had left `main.pdf` at 21 pages, so `make -C docs/paper check` failed.
+- **Phase-9 source drift recorded (#159, owner decision).** The G16-06-RSV2-08 Phase-9 study pins its production sources and verifier. v2.3.0's pocket smoother changed three of them, so every version-check job failed.
+  - The study receipt stays byte-identical. `experiments/g16-06-rsv2-08/source_history/` keeps the study-time files, and `source_drift.v1.json` lists each changed file with its study and current digests.
+  - `audit_phase9` accepts a changed file only at its recorded digest and only while its history copy matches the receipt; any other change still fails.
+- **Islands keep the leading seed's lineage (#158).** Continuous evolution had plateaued around 76.3, even though every island was seeded with the 80.299390 design `w406t3_r01_p10_c16`.
+  - Every RS-v2 child had its ring wall clamped to at least 6.0 mm. The leader's is 5.2 mm, so each child gained about 6 g and lost 4–5 points in Stage 1. The floor is removed: ring strength is a weighted objective, and the gene stays inside its schema bounds.
+  - Stage 2 does not re-assess exact seed parents, so a seed never entered the Hall of Fame. `auto-evolve --seed-scores` now gives seeds their known canonical score, and the Hall of Fame takes the higher of that and the run's own Stage-2 best. The score steers parent choice only and is never reported as the run's assessment.
+  - `auto_evolve.rs` is outside the certificate identity, so no evidence changes.
+- **Smoothing-ladder target follows the committed winner (#157).** `LADDER_LABEL` and `WINNER_DIR` now come from `docs/paper/ladder/ladder.json`, not the previous winner.
+- **Operations, outside the repo:** the keepalive passes each island its leader pool as `--seed-scores`.
+
+This release adds no qualification claim.
+
 ## v2.3.0 — 2026-10-22 (surface-tension pocket smoothing; smoothed best design on the main page; stacked engineering-field hero)
 
 - **Surface-tension pocket smoothing (`crates/crescent/src/pocket_smooth.rs`, opt-in).** The jagged, chipped walls on weight-saving pockets came from the 0.25 mm thickness raster, read by nearest cell and meshed by a ~0.7 mm CDT. The Taubin mesh smoothing of variant B pins exactly those walls, so it showed no visible difference.
