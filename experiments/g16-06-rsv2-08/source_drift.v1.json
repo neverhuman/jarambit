@@ -1,0 +1,45 @@
+{
+  "schema": "jarambit.phase9_source_drift.v1",
+  "study_receipt": "experiments/g16-06-rsv2-08/phase9_receipt.json",
+  "study_receipt_sha256": "e686af0a5bd674479acfbcfc30af135f9705785cb479e4ce15b13e999b94c6fe",
+  "recorded_utc": "2026-10-23T02:40:00Z",
+  "scope": "The Phase-9 study was produced and verified with the file digests in its receipt; the receipt is kept byte-identical. These tracked files changed afterwards. Each study-time file is kept byte-identical in source_history/, so the recorded provenance stays verifiable, and the verifier accepts the current file only at the digest recorded here; any other change still fails.",
+  "behaviour_with_smoothing_unset": "JARAMBIT_POCKET_SMOOTH unset: no smoothing code path runs, and every export is byte-identical (ops/ci/check_export_regeneration.py PASS: retained STEP/STL bytes and surface payload unchanged); the certificate identity changed and was re-issued (evidence/evolve_certifiable/followup_checks/figure_input_rebinding_20261022_v2_3_0.json). The Phase-9 study was not re-run.",
+  "files": [
+    {
+      "path": "crates/crescent/src/certification.rs",
+      "study_sha256": "eeefc8b1ecbf21df85aefb967e351ada4f0070f8b481959afef419379215c4ac",
+      "history_copy": "experiments/g16-06-rsv2-08/source_history/certification.rs.eeefc8b1ecbf.txt",
+      "current_sha256": "dd6bfbcc5e36df6b3201edef1fc8eab12fe79dd4531618c16666cbf8eb5e4af0",
+      "changed_by": "v2.3.0: default-off surface-tension pocket smoothing (crates/crescent/src/pocket_smooth.rs; hook in export.rs, module in lib.rs, source and enabled setting in certification::identity)"
+    },
+    {
+      "path": "crates/crescent/src/export.rs",
+      "study_sha256": "575eef5f12aebc81a345ef2fe7f52a51ab73e6f7ed837eb1c5e556f2e81bec06",
+      "history_copy": "experiments/g16-06-rsv2-08/source_history/export.rs.575eef5f12ae.txt",
+      "current_sha256": "2d6b5420050910c6f339d1b2137e0efe4a7a8d66fd4b31edeb76ccfe8728f6a0",
+      "changed_by": "v2.3.0: default-off surface-tension pocket smoothing (crates/crescent/src/pocket_smooth.rs; hook in export.rs, module in lib.rs, source and enabled setting in certification::identity)"
+    },
+    {
+      "path": "crates/crescent/src/lib.rs",
+      "study_sha256": "e96dd9ee4e14e0e15a01e4dc342bdc0af3d480489708a36edbaa383145009828",
+      "history_copy": "experiments/g16-06-rsv2-08/source_history/lib.rs.e96dd9ee4e14.txt",
+      "current_sha256": "5b4b5b299c41fba917e8c0d67721344a0d3d3e87093a8a8c5c7362b59b685b44",
+      "changed_by": "v2.3.0: default-off surface-tension pocket smoothing (crates/crescent/src/pocket_smooth.rs; hook in export.rs, module in lib.rs, source and enabled setting in certification::identity)"
+    },
+    {
+      "path": "ops/ci/g16_06_rsv2_08/audit_phase9.py",
+      "study_sha256": "8b668e691427a23a7e14b14b24ea2f601b5d7770015cc7ed8308be9baac823b6",
+      "history_copy": "experiments/g16-06-rsv2-08/source_history/audit_phase9.py.8b668e691427.txt",
+      "current_sha256": "123a220904dd9377690fa4103458ae53b263df9cf1e3ddbed679ce89070e7c65",
+      "changed_by": "this change: the verifier accepts a recorded drift (source_drift.v1.json) only at its recorded digest and only with a history copy matching the receipt"
+    },
+    {
+      "path": "ops/ci/tests/test_portable_phase7.py",
+      "study_sha256": "5722721ba14500e27b1f24b91999c00edd1370b48630d52a5be376a4bdeb960f",
+      "history_copy": "experiments/g16-06-rsv2-08/source_history/test_portable_phase7.py.5722721ba145.txt",
+      "current_sha256": "5ede5f27fa99429153961b5cd6d870e2a7737644d0f190b47ad8639029b55512",
+      "changed_by": "this change: three tests for the recorded-drift path (unrecorded drift fatal, other digest fatal, history copy must match the receipt)"
+    }
+  ]
+}
