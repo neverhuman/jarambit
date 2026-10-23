@@ -27,6 +27,12 @@ RUN curl --fail --location --silent --show-error \
       --default-toolchain 1.85.1 --default-host x86_64-unknown-linux-gnu \
     && rm /tmp/rustup-init
 ENV PATH=/home/ubuntu/.cargo/bin:${PATH}
+# OpenCascade Python for the CAD battery's STEP B-rep check (battery.rs run_step_brep_check looks
+# for /home/ubuntu/.venvs/jarambit-cad), pinned by fem_solid/requirements.txt (staged by deploy.sh).
+COPY --chown=runner:runner fem-solid-requirements.txt /home/ubuntu/.venvs/requirements.txt
+RUN python3 -m venv /home/ubuntu/.venvs/jarambit-cad \
+    && /home/ubuntu/.venvs/jarambit-cad/bin/python -m pip install --no-cache-dir -q -r /home/ubuntu/.venvs/requirements.txt \
+    && /home/ubuntu/.venvs/jarambit-cad/bin/python -c "from OCP.STEPControl import STEPControl_Reader"
 # The jankurai audit binary is staged into the build context by deploy.sh (not in git).
 COPY --chown=runner:runner jankurai /home/ubuntu/.jeryu/bin/jankurai
 COPY --chmod=755 register.sh /opt/register-runner.sh
