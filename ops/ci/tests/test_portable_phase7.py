@@ -52,6 +52,24 @@ class PortablePhase9Tests(unittest.TestCase):
         with patch.object(phase9,'exists',side_effect=present),patch.object(phase9,'digest',side_effect=corrupt),self.assertRaisesRegex(ValueError,'Artifact SHA-256 mismatch'):
             phase9.audit()
 
+    def test_unrecorded_source_drift_is_fatal(self):
+        with patch.object(phase9,'recorded_source_drift',return_value={}),self.assertRaisesRegex(ValueError,'Artifact SHA-256 mismatch: '):
+            phase9.audit()
+
+    def test_recorded_drift_is_accepted_only_at_its_recorded_digest(self):
+        self.assertIn('crates/crescent/src/export.rs',phase9.audit()['recorded_source_drift'])
+        target=ROOT/'crates/crescent/src/export.rs';real_digest=phase9.digest
+        def corrupt(p):return '1'*64 if p==target else real_digest(p)
+        with patch.object(phase9,'digest',side_effect=corrupt),self.assertRaisesRegex(ValueError,'Artifact SHA-256 mismatch: crates/crescent/src/export.rs'):
+            phase9.audit()
+
+    def test_drift_needs_a_history_copy_matching_the_receipt(self):
+        record=json.loads((ROOT/phase9.STUDY/'source_drift.v1.json').read_text())
+        copy=ROOT/record['files'][0]['history_copy'];real_digest=phase9.digest
+        def corrupt(p):return '2'*64 if p==copy else real_digest(p)
+        with patch.object(phase9,'digest',side_effect=corrupt),self.assertRaisesRegex(ValueError,'Source history copy mismatch'):
+            phase9.audit()
+
     def test_threshold_change_rejected(self):
         r=self.document();r['thresholds']['lateral_n']=180.
         with self.assertRaisesRegex(ValueError,'thresholds changed'):self.check(r)

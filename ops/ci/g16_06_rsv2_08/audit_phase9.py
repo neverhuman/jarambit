@@ -115,16 +115,36 @@ def audit_document(root,r,text):
             require(r['section_convergence'][row['name']][k]==change and r['matched_control_ratios'][row['name']][k]==[min(ratios),max(ratios)],'Section convergence/control comparison mismatch')
     require('full qualification=false' in text.lower(),'Qualification limit missing')
 
+def recorded_source_drift(root,here,r):
+    """Tracked files changed after the study: {path: current digest}, each verified.
+
+    The receipt stays byte-identical. A drifted file is accepted only at the digest the record
+    names, and only while its study-time bytes are kept as a history copy matching the receipt."""
+    p=here/'source_drift.v1.json'
+    if not exists(p):return {}
+    d=read(p)
+    require(d.get('schema')=='jarambit.phase9_source_drift.v1' and d.get('study_receipt_sha256')==digest(here/'phase9_receipt.json'),'Source drift record does not bind this receipt')
+    out={}
+    for f in d['files']:
+        rel=f['path'];want=r['source_provenance'].get(rel) or r['sha256'].get(rel)
+        require(not rel.startswith('target/') and want==f['study_sha256'],f'Source drift record differs from receipt: {rel}')
+        require(digest(path(root,f['history_copy']))==f['study_sha256'],f'Source history copy mismatch: {rel}')
+        out[rel]=f['current_sha256']
+    return out
+
 def audit(root=ROOT):
     root=Path(root);here=root/STUDY;r=read(here/'phase9_receipt.json');text=(here/'PHASE9.md').read_text();audit_document(root,r,text)
     checked=missing=0
     refs=dict(r['sha256']);refs.update(r['source_provenance'])
     for row in r['results']+r['early_taper_controls']:refs[row['raw']]=row['raw_sha256']
+    drift=recorded_source_drift(root,here,r);drifted=[]
     for rel,want in refs.items():
         require(len(want)==64 and all(c in '0123456789abcdef' for c in want),'Malformed digest')
         p=path(root,rel)
         if rel.startswith('target/') and not exists(p):missing+=1;continue
-        require(digest(p)==want,f'Artifact SHA-256 mismatch: {rel}');checked+=1
+        got=digest(p)
+        if got!=want and got==drift.get(rel):drifted.append(rel);checked+=1;continue
+        require(got==want,f'Artifact SHA-256 mismatch: {rel}');checked+=1
     for row in r['results']+r['early_taper_controls']:
         p=path(root,row['raw'])
         if exists(p):
@@ -132,6 +152,7 @@ def audit(root=ROOT):
             require(raw['task']==r['task'] and raw['source_provenance']==r['source_provenance'],'Raw production provenance mismatch')
             require(all(raw[k]==v for k,v in row.items() if k in raw),'Published observation/raw mismatch')
     return dict(status='pass',cases=36,mesh_observations=108,control_mesh_observations=6,section_stations=1672,
-        outcome_counts=r['outcome_counts'],artifacts_checked=checked,optional_raw_unavailable=missing,native_replay='not_run',all_gate_qualification=False)
+        outcome_counts=r['outcome_counts'],artifacts_checked=checked,optional_raw_unavailable=missing,native_replay='not_run',all_gate_qualification=False,
+        recorded_source_drift=sorted(drifted))
 
 if __name__=='__main__':print(json.dumps(audit(),sort_keys=True))
