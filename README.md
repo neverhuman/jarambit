@@ -10,6 +10,12 @@ Jarambit is a computational design research system linking a geometric represent
 
 *Best evolved design by `W_ULTRALIGHT_v1`, `w406t3_r01_p10_c16` (3D mass `83.22 g`, battery 14/18, not qualified), with two-sided isogrid pockets, lattice, relief and pierced-fuller windows. **A**, as exported: `F = 80.299390` of 100, first of the 967 comparable retained assessments of every run since 2026-10-17; re-assessing it with the current evaluator reproduces that score. **B**, after feature-preserving geometric smoothing (30° feature pins, 20 iterations), with 3D mass and the solid-tip submodel re-measured: `F = 75.343635`. The 5-point CAD/B-rep objective is withheld because the smoothed geometry is a triangle mesh without a validated STEP solid (with it kept, `F = 80.343635`). Inset: isogrid pockets at 2.5×. The base colour is uniform, so shading shows geometry only. [Selection record](docs/paper/figures/cover/winner-selection.v1.json) · [Smoothing ladder: no smoothing to strongest, each re-scored](docs/paper/smoothing-ladder.pdf).*
 
+## Best design, surface-tension smoothed (v2.3.0)
+
+![w406t3_r01_p10_c16 after surface-tension pocket smoothing: the five retained plate responses, each normalized by its own 99th percentile, stacked on the smoothed CAD with their normalized envelope on top](docs/paper/figures/pocket/hero.png)
+
+*The best evolved design by `W_ULTRALIGHT_v1`, `w406t3_r01_p10_c16`, after surface-tension pocket smoothing (r = 0.75 mm). Every pocket is a watershed basin whose depth contours move by curvature at fixed volume. Chipped walls become clean curves while the outline, grinds, mass and rib widths stay put. A complete Stage-2 re-assessment of the smoothed CAD gives `W_ULTRALIGHT_v1` = 80.370405, against 80.299390 as exported; the design is not qualified. Layers, bottom to top: lateral bending, chord torsion, ring traction, in-plane tip pry and the multi-case envelope, each normalized by its own area-weighted 99th percentile; on top, their normalized envelope. Before and after: [raw guard](docs/paper/figures/pocket/bw-guard-raw.png) vs [smoothed guard](docs/paper/figures/pocket/bw-guard-ours.png). Method, settings and the Stage-2 table: [experiments/pocket-surface-tension-smoothing](experiments/pocket-surface-tension-smoothing/README.md). The smoothing is opt-in (`JARAMBIT_POCKET_SMOOTH=on`); with it unset, exports are unchanged.*
+
 ## Which evidence is retained
 
 | Collection | Retained observations | Principal coverage limit |
@@ -96,7 +102,7 @@ The following generated panels preserve their original model/requirement scope. 
 <summary>Historical generated records, correction table, figures and release details</summary>
 
 <!-- GEN:HEAD:BEGIN -->
-[![version](https://img.shields.io/badge/version-v2.2.1-ff6f00?style=for-the-badge)](https://github.com/neverhuman/jarambit/releases/tag/v2.2.1)
+[![version](https://img.shields.io/badge/version-v2.3.0-ff6f00?style=for-the-badge)](https://github.com/neverhuman/jarambit/releases/tag/v2.3.0)
 [![historical record](https://img.shields.io/badge/historical%20record-w282__p14__c01-2e7d32?style=for-the-badge)](docs/ENGINEERING_GATES_AND_EVOLUTION.md)
 [![mass](https://img.shields.io/badge/mass-75.568%20g%20%2875.323%20g%203D%29-00897b?style=for-the-badge)](docs/WHITEPAPER.md)
 [![G1](https://img.shields.io/badge/G1-0.878210-7b1fa2?style=for-the-badge)](docs/GLOBAL_METRIC.md)
@@ -121,7 +127,7 @@ RS-karambit-v1: screen PASS · promotion FAIL (seq 0.959 < 1.2) · soft: mass 84
 <!-- RS:END -->
 
 <!-- GEN:FIGS:BEGIN -->
-📄 [White paper](docs/WHITEPAPER.md) · 📐 [Engineering gates & evolution paper](docs/ENGINEERING_GATES_AND_EVOLUTION.md) · 📋 [Work plan](docs/WORKPLAN.md) · 📊 [Live status](STATUS.md) · ⚖️ [Patent draft (not filed)](docs/PATENT_DRAFT.md) · 📦 [Release v2.2.1](https://github.com/neverhuman/jarambit/releases/tag/v2.2.1) · 🗺️ [Technology map](TECHNOLOGY_MAP.md)
+📄 [White paper](docs/WHITEPAPER.md) · 📐 [Engineering gates & evolution paper](docs/ENGINEERING_GATES_AND_EVOLUTION.md) · 📋 [Work plan](docs/WORKPLAN.md) · 📊 [Live status](STATUS.md) · ⚖️ [Patent draft (not filed)](docs/PATENT_DRAFT.md) · 📦 [Release v2.3.0](https://github.com/neverhuman/jarambit/releases/tag/v2.3.0) · 🗺️ [Technology map](TECHNOLOGY_MAP.md)
 
 <img src="docs/figures/whitepaper/fig_readme_mass_vs_wave.png" width="96%" alt="Historical pre-#82 model: selected-candidate mass vs wave w20 through w282 from committed evidence JSON, with historical screen record w282_p14_c01 at 75.568 g (75.323 g 3D) labelled"/>
 
@@ -133,7 +139,7 @@ RS-karambit-v1: screen PASS · promotion FAIL (seq 0.959 < 1.2) · soft: mass 84
 <!-- GEN:FIGS:END -->
 
 <!-- GEN:RELEASE:BEGIN -->
-## Release v2.2.1 & Documentation
+## Release v2.3.0 & Documentation
 
 - **Historical 16-gate screen record (`w282_p14_c01`):** `75.568 g` 2.5D raster / `75.323 g` 3D watertight solid, locked `G1 = 0.878210` (`COMPLETE`), `W_CAD = +1.7790` (`16/16` engineering gates pass: strict 0.0625 mm² lateral `262.6 N` / `SF = 1.010`, strict 4–15 mm tip-submodel twist `SF = 1.125`, certified failure sequence `seq_ratio = 1.201 >= 1.20`, 3D P2 tetrahedral solid-tip `SF = 1.4093` with `0.021%` `dolfinx` v0.9.0 vs. `skfem` agreement, and `side.a4` Winkler+bore supported `seq = 4.042`).
 - **Historical 16-gate `W_CAD_v2` mass progression (`w274` → `w282`):** `w274_s2905_c01` (`84.979 g` / `85.021 g` 3D, `W_CAD = +1.4634`) → `w275_s2909_c01` (`81.774 g` / `81.804 g` 3D, `W_CAD = +1.5589`) → `w276_s2913_c01` (`79.995 g` / `80.050 g` 3D, `W_CAD = +1.6381`) → `w277_s2919_c01` (`79.509 g` / `79.656 g` 3D, `W_CAD = +1.6604`) → `w278_s2922_c01` (`78.580 g` / `78.597 g` 3D, `W_CAD = +1.7021`) → `w279_s2928_c01` (`77.535 g` / `77.414 g` 3D, `W_CAD = +1.7212`) → `w280_s2931_c01` (`76.965 g` / `76.834 g` 3D, `W_CAD = +1.7432`) → `w281_s2932_c01` (`75.911 g` / `75.695 g` 3D, `W_CAD = +1.7916`) → `w282_p10_c02` (`75.836 g` / `75.616 g` 3D, `W_CAD = +1.7978`) → `w282_p14_c01` (`75.568 g` / `75.323 g` 3D, `W_CAD = +1.7790`).

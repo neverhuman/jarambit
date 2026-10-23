@@ -1,0 +1,10 @@
+{
+  "figure": "docs/paper/figures/pocket/morph-oblique.png",
+  "figure_sha256": "6ac458a476590c58167914dd836c9dbd591e4203aab55a52d102330ed347c315",
+  "script": "crates/paper-artifacts/examples/pocket_smoothing_figures.rs",
+  "inputs": {
+    "experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json": "f03482d4964d304a1842eb517fda0a050e544bb8a8e3e858f9dd8fc0d9266061",
+    "docs/paper/figures/pocket/morph.render.v1.json": "9ce946356f98dab765c8eff722d0f772fd364deef4e0ec574856fd72caf35fa0"
+  },
+  "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"
+}

@@ -1,0 +1,10 @@
+{
+  "figure": "docs/paper/figures/pocket/bw-blade-ours.png",
+  "figure_sha256": "448c467466761d5dce589e6507019807eef048a0d82e2c396b335a098ceabe3f",
+  "script": "crates/paper-artifacts/examples/pocket_smoothing_figures.rs",
+  "inputs": {
+    "experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json": "f03482d4964d304a1842eb517fda0a050e544bb8a8e3e858f9dd8fc0d9266061",
+    "docs/paper/figures/pocket/bw.render.v1.json": "4c1d514eb2211e7f769b9ec1a7ed68b8fa06877b5a67305fbdbd60126ded06a3"
+  },
+  "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"
+}

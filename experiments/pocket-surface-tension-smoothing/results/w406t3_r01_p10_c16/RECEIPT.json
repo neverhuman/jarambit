@@ -1,0 +1,618 @@
+{
+  "schema": "jarambit.pocket_smoothing_receipt.v1",
+  "research_only": true,
+  "subject": "w406t3_r01_p10_c16",
+  "genome": {
+    "path": "/home/ubuntu/jarambit_runs/reassess-20261022/genomes/w406t3_r01_p10_c16_genome.csv",
+    "sha256": "83877fdbb08a566fd19ee544260dfdca59481ae92ac249d8e008715e327d1a10"
+  },
+  "raw_export_stl": {
+    "path": "/home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl",
+    "sha256": "e574212003bb4c32eb124cb2beda93d6e8ac13d4295b6b0ca46f6795fe5a3bb2"
+  },
+  "evaluator": "ops/ci/score_cad.py (full Stage-2), JARAMBIT_SOLVER_PYTHON = pinned fem_solid venv; W_ULTRALIGHT_v1 from ops/ci/ultralight_weighted_fitness.py",
+  "runs": [
+    {
+      "name": "ctrl",
+      "setting": "off (as exported)",
+      "env": null,
+      "commit": "cae22b74c02245a261ca9c70ee21fc3cbf4c066d",
+      "score_100": 80.29939,
+      "battery_pass": 14,
+      "mass_3d_g": 83.2231,
+      "export_volume_mm3": 18786.249505227,
+      "solid_tip_sf_nodal_max": 0.6823,
+      "solid_tip_sf_nodal_avg": 0.7569,
+      "solid_tip_dolfinx_rel_err": 0.00044,
+      "lat_rob_cert_n": 181.5,
+      "strict_lat_rob_0p0625_n": 182.2,
+      "ring_rob_cert_n": 25734.7,
+      "seq_ratio_cert": 1.29,
+      "twist_body_sf": 2.524,
+      "twist_tip_sf": 0.5,
+      "fat_sf_l7": 0.5069719247950106,
+      "cad_watertight_brep_points": 5.0,
+      "files": {
+        "stl": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2/ctrl/w406_ctrl.stl",
+          "sha256": "107411e45ba29fd4cbff88418b3a85d20c579a93ac4cd27213644c8608399920",
+          "bytes": 15269803
+        },
+        "step": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2/ctrl/w406_ctrl.step",
+          "sha256": "b55e86679d8fc953ed0567395eac46d05aac3647790402f83f02998c7f5a591f",
+          "bytes": 53414100
+        },
+        "d1": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2/ctrl/w406_ctrl_D1.json",
+          "sha256": "7442b58975f6309b1dca754b7dba8f08b6bb2bf1851b57eca034abb208f29d9c",
+          "bytes": 5721183
+        },
+        "master_scorecard": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2/ctrl/w406_ctrl_master_scorecard.json",
+          "sha256": "c844a85252bb21d4c9225a5629824881b292b43a14e152251b4fe0ad9d9dcd78",
+          "bytes": 371961
+        },
+        "solid_tip": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2/ctrl/w406_ctrl_solid_tip.json",
+          "sha256": "d75b045a65a21f5e8a3acf8965bfefaca820e4210df99a195091e637465270f1",
+          "bytes": 2302
+        }
+      },
+      "smoothing_report": null
+    },
+    {
+      "name": "f05",
+      "setting": "r=0.5, a=0",
+      "env": "r=0.5",
+      "commit": "b71732caa4e2061efac780b83a8e1660258c558a",
+      "score_100": 80.164307,
+      "battery_pass": 15,
+      "mass_3d_g": 83.2178,
+      "export_volume_mm3": 18785.063887795,
+      "solid_tip_sf_nodal_max": 0.6353,
+      "solid_tip_sf_nodal_avg": 0.6645,
+      "solid_tip_dolfinx_rel_err": 0.000472,
+      "lat_rob_cert_n": 181.7,
+      "strict_lat_rob_0p0625_n": 182.4,
+      "ring_rob_cert_n": 25707.1,
+      "seq_ratio_cert": 1.445,
+      "twist_body_sf": 2.569,
+      "twist_tip_sf": 0.5,
+      "fat_sf_l7": 0.5075140599243319,
+      "cad_watertight_brep_points": 5.0,
+      "files": {
+        "stl": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f05/w406_f05.stl",
+          "sha256": "a3f4298f3724a674ea4fde8174fa38ce4aaf9dbe4c5bab6981312dabe451e940",
+          "bytes": 22497992
+        },
+        "step": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f05/w406_f05.step",
+          "sha256": "52f5ee45f38bd3b4e3e6ba2201150326214ce4f32ca4bbebda0a72f108241de1",
+          "bytes": 93798105
+        },
+        "d1": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f05/w406_f05_D1.json",
+          "sha256": "cf16282988c4e4ebe6dd7fadbc45b8564b0d06ea9087c9b00729da5f5fb5813f",
+          "bytes": 7386311
+        },
+        "master_scorecard": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f05/w406_f05_master_scorecard.json",
+          "sha256": "2df6fd13f36c9557ac8ef5a13ab3541c87f6e6a7502ee53fa12bbeb930936857",
+          "bytes": 372054
+        },
+        "solid_tip": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f05/w406_f05_solid_tip.json",
+          "sha256": "b7b4cc8ad4bca4a61ffb1879f742ffc86cc56b6d42b19deeef98c52becd10103",
+          "bytes": 2309
+        }
+      },
+      "smoothing_report": {
+        "params": {
+          "film_slope_a": 0.0,
+          "grow_mm": 0.5,
+          "h_mm": 0.125,
+          "meniscus_w_mm": 0.0,
+          "mesh_mm": 0.3,
+          "r_mm": 0.5,
+          "rim_mm": 1.0,
+          "volume_preserving": true
+        },
+        "basins": 16,
+        "steps": 40,
+        "removed_volume_mm3": {
+          "after": 1435.9518074485386,
+          "before": 1435.9518074485386
+        },
+        "worst_basin_volume_error": 0.0,
+        "depth_change_mm": {
+          "max": 3.4459222793579105,
+          "rms_changed": 0.28991316024355007
+        },
+        "isoline_length_by_depth_level_mm": {
+          "0.1": {
+            "after_mm": 830.2551554961632,
+            "before_mm": 913.2727812734371
+          },
+          "0.5": {
+            "after_mm": 814.071938027254,
+            "before_mm": 1034.2184950266542
+          },
+          "1": {
+            "after_mm": 528.0960804824373,
+            "before_mm": 627.2489750065276
+          },
+          "2": {
+            "after_mm": 220.60467879101384,
+            "before_mm": 269.82140278732874
+          }
+        },
+        "steiner_points": 7092,
+        "grind_edge_points": 864,
+        "seconds": 3.106091263
+      }
+    },
+    {
+      "name": "f075",
+      "setting": "r=0.75, a=0 (chosen)",
+      "env": "on",
+      "commit": "b71732caa4e2061efac780b83a8e1660258c558a",
+      "score_100": 80.370405,
+      "battery_pass": 14,
+      "mass_3d_g": 83.2089,
+      "export_volume_mm3": 18783.058330749,
+      "solid_tip_sf_nodal_max": 0.7024,
+      "solid_tip_sf_nodal_avg": 0.7511,
+      "solid_tip_dolfinx_rel_err": 0.000569,
+      "lat_rob_cert_n": 181.8,
+      "strict_lat_rob_0p0625_n": 182.5,
+      "ring_rob_cert_n": 25640.7,
+      "seq_ratio_cert": 1.502,
+      "twist_body_sf": 2.568,
+      "twist_tip_sf": 0.5,
+      "fat_sf_l7": 0.5078956093485285,
+      "cad_watertight_brep_points": 5.0,
+      "files": {
+        "stl": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl",
+          "sha256": "c969693c466594ff9357e5ca3e26c9d074b9cde53f1e0894a04b9580b5ace296",
+          "bytes": 21226508
+        },
+        "step": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.step",
+          "sha256": "ba68e8b4b3cd7ab9b07f2deeb925baa36bf2ba8ae70e5947a69ec8a36fc07247",
+          "bytes": 86715692
+        },
+        "d1": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075_D1.json",
+          "sha256": "2b2c750d42f42320e9c54c00ef0e2c150c19b51b9b465736c1ee39f9e3c93130",
+          "bytes": 7095313
+        },
+        "master_scorecard": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075_master_scorecard.json",
+          "sha256": "ef6b0121d2e3b37bdd6c76245aec9ddfab526f879f4dceccd96a63fece76b5e1",
+          "bytes": 372099
+        },
+        "solid_tip": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075_solid_tip.json",
+          "sha256": "31d69bb3275321e91b571b5409d9f7d0f8077948550641d828b2c5f57d34ad2d",
+          "bytes": 2312
+        }
+      },
+      "smoothing_report": {
+        "params": {
+          "film_slope_a": 0.0,
+          "grow_mm": 0.5,
+          "h_mm": 0.125,
+          "meniscus_w_mm": 0.0,
+          "mesh_mm": 0.3,
+          "r_mm": 0.75,
+          "rim_mm": 1.0,
+          "volume_preserving": true
+        },
+        "basins": 14,
+        "steps": 90,
+        "removed_volume_mm3": {
+          "after": 1435.9518074485838,
+          "before": 1435.9518074485838
+        },
+        "worst_basin_volume_error": 0.0,
+        "depth_change_mm": {
+          "max": 3.4459222793579105,
+          "rms_changed": 0.36390156192804246
+        },
+        "isoline_length_by_depth_level_mm": {
+          "0.1": {
+            "after_mm": 821.2192708481557,
+            "before_mm": 913.2727812734371
+          },
+          "0.5": {
+            "after_mm": 800.9206555327016,
+            "before_mm": 1034.2184950266542
+          },
+          "1": {
+            "after_mm": 512.452107242378,
+            "before_mm": 627.2489750065276
+          },
+          "2": {
+            "after_mm": 211.30176887948792,
+            "before_mm": 269.82140278732874
+          }
+        },
+        "steiner_points": 6765,
+        "grind_edge_points": 848,
+        "seconds": 2.9266796470000003
+      }
+    },
+    {
+      "name": "f10",
+      "setting": "r=1.0, a=0",
+      "env": "r=1.0",
+      "commit": "b71732caa4e2061efac780b83a8e1660258c558a",
+      "score_100": 80.308595,
+      "battery_pass": 14,
+      "mass_3d_g": 83.207,
+      "export_volume_mm3": 18782.613034136,
+      "solid_tip_sf_nodal_max": 0.6811,
+      "solid_tip_sf_nodal_avg": 0.7237,
+      "solid_tip_dolfinx_rel_err": 0.000147,
+      "lat_rob_cert_n": 181.9,
+      "strict_lat_rob_0p0625_n": 182.5,
+      "ring_rob_cert_n": 25589.0,
+      "seq_ratio_cert": 1.554,
+      "twist_body_sf": 2.568,
+      "twist_tip_sf": 0.5,
+      "fat_sf_l7": 0.5082141147160285,
+      "cad_watertight_brep_points": 5.0,
+      "files": {
+        "stl": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f10/w406_f10.stl",
+          "sha256": "002eb61e094a0e83734e23116695528ef35df4a4344b7fa932c3ba4ce4706b54",
+          "bytes": 21034542
+        },
+        "step": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f10/w406_f10.step",
+          "sha256": "d343aab9e007a825fd14bacc300335113ebfc47826e599fdc2420904251d3549",
+          "bytes": 85660660
+        },
+        "d1": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f10/w406_f10_D1.json",
+          "sha256": "7bf199b975a10d1f82ca22a9ce4aa0df1f0d57cd7c7103f1766dd8aa6fc3d151",
+          "bytes": 7050613
+        },
+        "master_scorecard": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f10/w406_f10_master_scorecard.json",
+          "sha256": "a1b2f31bb296832e20cf21db7be64c7779b0e902c7c291f91f394cbfb5204830",
+          "bytes": 372078
+        },
+        "solid_tip": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f10/w406_f10_solid_tip.json",
+          "sha256": "90d7c88faa0d55335b18b6af5d963ff0e086ed6da4dd94590fbbc43a603dc90a",
+          "bytes": 2310
+        }
+      },
+      "smoothing_report": {
+        "params": {
+          "film_slope_a": 0.0,
+          "grow_mm": 0.5,
+          "h_mm": 0.125,
+          "meniscus_w_mm": 0.0,
+          "mesh_mm": 0.3,
+          "r_mm": 1.0,
+          "rim_mm": 1.0,
+          "volume_preserving": true
+        },
+        "basins": 7,
+        "steps": 160,
+        "removed_volume_mm3": {
+          "after": 1435.9518074471364,
+          "before": 1435.9518074471364
+        },
+        "worst_basin_volume_error": 0.0,
+        "depth_change_mm": {
+          "max": 3.445922279289889,
+          "rms_changed": 0.4435544680034204
+        },
+        "isoline_length_by_depth_level_mm": {
+          "0.1": {
+            "after_mm": 806.6795913345408,
+            "before_mm": 913.2727812734371
+          },
+          "0.5": {
+            "after_mm": 791.5703610036321,
+            "before_mm": 1034.2184950266542
+          },
+          "1": {
+            "after_mm": 490.8468996006752,
+            "before_mm": 627.2489750065276
+          },
+          "2": {
+            "after_mm": 201.71740080977807,
+            "before_mm": 269.82140278732874
+          }
+        },
+        "steiner_points": 6853,
+        "grind_edge_points": 832,
+        "seconds": 3.345862405
+      }
+    },
+    {
+      "name": "f15",
+      "setting": "r=1.5, a=0",
+      "env": "r=1.5",
+      "commit": "b71732caa4e2061efac780b83a8e1660258c558a",
+      "score_100": 80.158645,
+      "battery_pass": 14,
+      "mass_3d_g": 83.1869,
+      "export_volume_mm3": 18778.082408946,
+      "solid_tip_sf_nodal_max": 0.6275,
+      "solid_tip_sf_nodal_avg": 0.6751,
+      "solid_tip_dolfinx_rel_err": 0.000797,
+      "lat_rob_cert_n": 182.2,
+      "strict_lat_rob_0p0625_n": 182.7,
+      "ring_rob_cert_n": 25470.4,
+      "seq_ratio_cert": 1.51,
+      "twist_body_sf": 2.567,
+      "twist_tip_sf": 0.5,
+      "fat_sf_l7": 0.5088262320648331,
+      "cad_watertight_brep_points": 5.0,
+      "files": {
+        "stl": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f15/w406_f15.stl",
+          "sha256": "4d5f76846607c1d435a26049a710c7251d6535aafa9e581872899a67abb576fd",
+          "bytes": 20583382
+        },
+        "step": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f15/w406_f15.step",
+          "sha256": "d1f4b9c02d0ffd98d92e6a5dd8c880838702c15789eee34a866e03f3cf1503c7",
+          "bytes": 83113020
+        },
+        "d1": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f15/w406_f15_D1.json",
+          "sha256": "e073894d8ab89e26246ce3260bc30f69195a911e3f4cd1b433bb73663ac4f40a",
+          "bytes": 6943985
+        },
+        "master_scorecard": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f15/w406_f15_master_scorecard.json",
+          "sha256": "ac28ff3db9d5454c5e942f3edc9bce162f527ee0067972169b6f8d1f7b830026",
+          "bytes": 372058
+        },
+        "solid_tip": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f15/w406_f15_solid_tip.json",
+          "sha256": "ce628021db0082275cb38f3c526cb2177d61e906b87db6745ab040741d620c37",
+          "bytes": 2308
+        }
+      },
+      "smoothing_report": {
+        "params": {
+          "film_slope_a": 0.0,
+          "grow_mm": 0.5,
+          "h_mm": 0.125,
+          "meniscus_w_mm": 0.0,
+          "mesh_mm": 0.3,
+          "r_mm": 1.5,
+          "rim_mm": 1.0,
+          "volume_preserving": true
+        },
+        "basins": 7,
+        "steps": 360,
+        "removed_volume_mm3": {
+          "after": 1435.9518074471364,
+          "before": 1435.9518074471364
+        },
+        "worst_basin_volume_error": 0.0,
+        "depth_change_mm": {
+          "max": 3.4459222793476614,
+          "rms_changed": 0.5787922618914938
+        },
+        "isoline_length_by_depth_level_mm": {
+          "0.1": {
+            "after_mm": 727.8352427124966,
+            "before_mm": 913.2727812734371
+          },
+          "0.5": {
+            "after_mm": 767.7068700881318,
+            "before_mm": 1034.2184950266542
+          },
+          "1": {
+            "after_mm": 396.0772901635413,
+            "before_mm": 627.2489750065276
+          },
+          "2": {
+            "after_mm": 175.8274787326496,
+            "before_mm": 269.82140278732874
+          }
+        },
+        "steiner_points": 6185,
+        "grind_edge_points": 808,
+        "seconds": 5.623263349
+      }
+    },
+    {
+      "name": "f20",
+      "setting": "r=2.0, a=0",
+      "env": "r=2.0",
+      "commit": "b71732caa4e2061efac780b83a8e1660258c558a",
+      "score_100": 78.275029,
+      "battery_pass": 13,
+      "mass_3d_g": 83.2001,
+      "export_volume_mm3": 18781.055454078,
+      "solid_tip_sf_nodal_max": 0.0,
+      "solid_tip_sf_nodal_avg": 0.0,
+      "solid_tip_dolfinx_rel_err": 1.0,
+      "lat_rob_cert_n": 182.3,
+      "strict_lat_rob_0p0625_n": 182.8,
+      "ring_rob_cert_n": 25348.6,
+      "seq_ratio_cert": 1.525,
+      "twist_body_sf": 2.567,
+      "twist_tip_sf": 0.5,
+      "fat_sf_l7": 0.5091109396880938,
+      "cad_watertight_brep_points": 5.0,
+      "files": {
+        "stl": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f20/w406_f20.stl",
+          "sha256": "84358e4421e7e629bee9f43177cab8c9be0b0d9582a16e8b9cbd5f96f7e3f51a",
+          "bytes": 20358385
+        },
+        "step": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f20/w406_f20.step",
+          "sha256": "8a5ac05bb7736aeadd5690d7d9a6f3deccb8af0f332b2d9c440a037995d154fc",
+          "bytes": 81844156
+        },
+        "d1": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f20/w406_f20_D1.json",
+          "sha256": "a00ed91048ac1b2ee9f4a415544ea768d99261e70519ebb5f456afe8e12f2686",
+          "bytes": 6893610
+        },
+        "master_scorecard": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f20/w406_f20_master_scorecard.json",
+          "sha256": "915e11f47c0b1b86ea0ea965ca5dd31c40ab95b79ecc65880cef056d9b0508ef",
+          "bytes": 372162
+        },
+        "solid_tip": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f20/w406_f20_solid_tip.json",
+          "sha256": "3230c634049b5a33d6bbedbbaf1d237b3e75702e804f26848f927f79cc27424a",
+          "bytes": 735
+        }
+      },
+      "smoothing_report": {
+        "params": {
+          "film_slope_a": 0.0,
+          "grow_mm": 0.5,
+          "h_mm": 0.125,
+          "meniscus_w_mm": 0.0,
+          "mesh_mm": 0.3,
+          "r_mm": 2.0,
+          "rim_mm": 1.0,
+          "volume_preserving": true
+        },
+        "basins": 7,
+        "steps": 640,
+        "removed_volume_mm3": {
+          "after": 1435.9518074471364,
+          "before": 1435.9518074471364
+        },
+        "worst_basin_volume_error": 0.0,
+        "depth_change_mm": {
+          "max": 3.4459222793457243,
+          "rms_changed": 0.6667588566445602
+        },
+        "isoline_length_by_depth_level_mm": {
+          "0.1": {
+            "after_mm": 680.1985334476808,
+            "before_mm": 913.2727812734371
+          },
+          "0.5": {
+            "after_mm": 745.6262903921453,
+            "before_mm": 1034.2184950266542
+          },
+          "1": {
+            "after_mm": 337.8328148429402,
+            "before_mm": 627.2489750065276
+          },
+          "2": {
+            "after_mm": 137.57978574867312,
+            "before_mm": 269.82140278732874
+          }
+        },
+        "steiner_points": 5763,
+        "grind_edge_points": 778,
+        "seconds": 6.755803974
+      }
+    },
+    {
+      "name": "fg075",
+      "setting": "r=0.75, a=1 (film)",
+      "env": "r=0.75,a=1",
+      "commit": "b71732caa4e2061efac780b83a8e1660258c558a",
+      "score_100": 80.161219,
+      "battery_pass": 14,
+      "mass_3d_g": 83.2629,
+      "export_volume_mm3": 18795.246619471,
+      "solid_tip_sf_nodal_max": 0.6349,
+      "solid_tip_sf_nodal_avg": 0.6752,
+      "solid_tip_dolfinx_rel_err": 0.000158,
+      "lat_rob_cert_n": 182.2,
+      "strict_lat_rob_0p0625_n": 182.7,
+      "ring_rob_cert_n": 25792.1,
+      "seq_ratio_cert": 1.624,
+      "twist_body_sf": 2.592,
+      "twist_tip_sf": 0.5,
+      "fat_sf_l7": 0.5088485154332895,
+      "cad_watertight_brep_points": 5.0,
+      "files": {
+        "stl": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/fg075/w406_fg075.stl",
+          "sha256": "42a9dac86b61dad18d9e38b26a5fef6d141004bed2b00b820a0152fe579d732d",
+          "bytes": 19705090
+        },
+        "step": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/fg075/w406_fg075.step",
+          "sha256": "f2a4d7748f97ab6af4eb234abce315f53c97bd27d1b463bfee7798bf2d162d79",
+          "bytes": 78186394
+        },
+        "d1": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/fg075/w406_fg075_D1.json",
+          "sha256": "fb09e617885170b7a9ff7f0cc74742618983a9c93efc13aa08d53ec2a1c578fc",
+          "bytes": 6743696
+        },
+        "master_scorecard": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/fg075/w406_fg075_master_scorecard.json",
+          "sha256": "14894438fe0485708632ac88412397df6e6a7e65c167a9b39af0d39c92b919d2",
+          "bytes": 372141
+        },
+        "solid_tip": {
+          "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/fg075/w406_fg075_solid_tip.json",
+          "sha256": "5100940e19075e35909af3a08532cedab9ff5d1b639ff267fce12209ccc5a81c",
+          "bytes": 2315
+        }
+      },
+      "smoothing_report": {
+        "params": {
+          "film_slope_a": 1.0,
+          "grow_mm": 0.5,
+          "h_mm": 0.125,
+          "meniscus_w_mm": 0.0,
+          "mesh_mm": 0.3,
+          "r_mm": 0.75,
+          "rim_mm": 1.0,
+          "volume_preserving": true
+        },
+        "basins": 14,
+        "steps": 90,
+        "removed_volume_mm3": {
+          "after": 1435.9518074485838,
+          "before": 1435.9518074485838
+        },
+        "worst_basin_volume_error": 1.3356963992496102e-16,
+        "depth_change_mm": {
+          "max": 3.4082319420146083,
+          "rms_changed": 0.46888746007092624
+        },
+        "isoline_length_by_depth_level_mm": {
+          "0.1": {
+            "after_mm": 733.1298770157557,
+            "before_mm": 913.2727812734371
+          },
+          "0.5": {
+            "after_mm": 811.1968038478848,
+            "before_mm": 1034.2184950266542
+          },
+          "1": {
+            "after_mm": 369.2296502714609,
+            "before_mm": 627.2489750065276
+          },
+          "2": {
+            "after_mm": 204.6417445429545,
+            "before_mm": 269.82140278732874
+          }
+        },
+        "steiner_points": 4931,
+        "grind_edge_points": 856,
+        "seconds": 3.302973897
+      }
+    }
+  ],
+  "hero_score_100": 80.370405
+}

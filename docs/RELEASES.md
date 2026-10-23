@@ -2,6 +2,32 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v2.3.0 — 2026-10-22 (surface-tension pocket smoothing; smoothed best design on the main page; stacked engineering-field hero)
+
+- **Surface-tension pocket smoothing (`crates/crescent/src/pocket_smooth.rs`, opt-in).** The jagged, chipped walls on weight-saving pockets came from the 0.25 mm thickness raster, read by nearest cell and meshed by a ~0.7 mm CDT. The Taubin mesh smoothing of variant B pins exactly those walls, so it showed no visible difference.
+  - The new pass smooths the removal depth before meshing, as oil would settle in a chipped pit. Each pocket is a watershed basin. Its depth contours move by curvature (level-set mean-curvature motion, line tension) for time r²/2. A per-basin pressure term holds the removed volume exactly.
+  - Effects: chips go first, circles become clean circles, rib edges stay straight and corners round to about r. Walls keep their steepness, so rib widths and the I-beam webs are unchanged.
+  - Fixed: the planform and holes, grinds, bore collar, raised features, the brand pad and a 1 mm unpocketed rim. No basin may end deeper than its own original floor.
+  - The exporter adds CDT vertices in three rows along each wall and in pairs across the grind boundary, so walls mesh as clean ribbons.
+  - Switch: `JARAMBIT_POCKET_SMOOTH=on` (r = 0.75 mm, a = 0). It is **off by default**; with it unset every export is byte-identical, and the retained export regeneration check passes unchanged.
+  - Bugs fixed during development, each with a regression test: the ring collar losing ~55 mm³; a 1 mm³ blade groove drilling toward the minimum web and becoming the D1 lateral weak point (205.9 → 201.8 N); and NaN grind-edge vertices.
+- **Post-smoothing fitness of the leading design.** The complete Stage-2 evaluator re-assessed the smoothed CAD. Nothing is withheld, and the STEP solid is valid.
+  - `w406t3_r01_p10_c16` at r = 0.75 mm scores `W_ULTRALIGHT_v1` = **80.370405**, against 80.299390 as exported (+0.071015; 83.21 g, battery 14/18, not qualified).
+  - Other settings: r = 0.5 → 80.164307; 1.0 → 80.308595; 1.5 → 80.158645; 2.0 → 78.275029 (tip solve unmeasured); film a = 1 → 80.161219. An unsmoothed re-run reproduces 80.299390.
+  - The differences come from the 3D solid-tip nodal maximum, which is sensitive to the local triangulation. Mass, lateral, ring, twist and fatigue move by less than 3 %.
+  - Cost: about 40 % more export triangles, and a longer Stage-2 run.
+- **Certificate identity re-issued.** `export.rs`, `lib.rs`, `certification.rs` and the new module are part of `certification::identity`, and so is an enabled setting.
+  - The regeneration identity in `evidence/evolve_certifiable/manifest.json` is therefore re-issued. STEP/STL bytes are unchanged, and `check_export_regeneration.py` passes.
+  - It is re-bound, metadata only, in 25 files (`figure_input_rebinding_20261022_v2_3_0.json`). Generated paper metadata and `docs/tests/visuals.v1.json` are refreshed (hashes only).
+- **Paper.**
+  - `main.pdf` page 1 is a new stacked engineering-field hero on the smoothed CAD. All five retained plate responses (lateral bending, chord torsion, ring traction, in-plane tip pry, multi-case envelope) are each normalized by their own area-weighted 99th percentile and stacked as exploded layers, with the normalized envelope on top. It uses an oblique camera, raking light and depth-tested crease lines.
+  - A new section, *Surface-Tension Pocket Smoothing*, has black-and-white raw-versus-smoothed views and the Stage-2 table.
+  - The observed-morphology relief now shows the smoothed design.
+  - `main-smoothed.pdf` (variant B, Taubin mesh smoothing) is kept and also gains the new section.
+  - New producer `crates/paper-artifacts/examples/pocket_smoothing_figures.rs` and target `make -C docs/paper pocket-figures`.
+
+This release adds no qualification claim. No design passes all 26 legacy gates, and physical performance remains unestablished.
+
 ## v2.2.1 — 2026-10-22 (no hard failure left in Stage-2 assessment; best design across all runs; smoothing ladder; all-runs evolution figure)
 
 - **An unmeasured solid-tip solve scores zero instead of dropping the design (#153).** This was the last hard failure in the evolution loop. When the skfem tip solve or the DOLFINx cross-check produces no observation, the evaluator writes an `unmeasured` tip record with SF 0. Assessment then continues, so the design is scored on the other 19 objectives and gets zero credit on `solid_tip_3d_p2_and_xcheck`.

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2000" height="881" viewBox="0 0 2000 881">
+<rect width="2000" height="881" fill="#ffffff"/>
+<image xlink:href="hero-stack.png" x="0" y="0" width="2000" height="881"/>
+<text x="389" y="754" text-anchor="end" font-family="TeX Gyre Heros" font-weight="normal" font-size="27" fill="#132D3B">Lateral bending</text>
+<text x="389" y="779" text-anchor="end" font-family="TeX Gyre Heros" font-size="20" fill="#55606a">P99 = 3.3643 MPa/N</text>
+<text x="423" y="636" text-anchor="end" font-family="TeX Gyre Heros" font-weight="normal" font-size="27" fill="#132D3B">Chord torsion</text>
+<text x="423" y="661" text-anchor="end" font-family="TeX Gyre Heros" font-size="20" fill="#55606a">P99 = 0.1282 MPa/(N mm)</text>
+<text x="457" y="518" text-anchor="end" font-family="TeX Gyre Heros" font-weight="normal" font-size="27" fill="#132D3B">Ring traction</text>
+<text x="457" y="543" text-anchor="end" font-family="TeX Gyre Heros" font-size="20" fill="#55606a">P99 = 0.0190 MPa/N</text>
+<text x="491" y="400" text-anchor="end" font-family="TeX Gyre Heros" font-weight="normal" font-size="27" fill="#132D3B">In-plane tip pry</text>
+<text x="491" y="425" text-anchor="end" font-family="TeX Gyre Heros" font-size="20" fill="#55606a">P99 = 1.1370 MPa/N</text>
+<text x="525" y="282" text-anchor="end" font-family="TeX Gyre Heros" font-weight="normal" font-size="27" fill="#132D3B">Multi-case envelope</text>
+<text x="525" y="307" text-anchor="end" font-family="TeX Gyre Heros" font-size="20" fill="#55606a">P99 = 867.5955 MPa</text>
+<text x="559" y="164" text-anchor="end" font-family="TeX Gyre Heros" font-weight="bold" font-size="27" fill="#132D3B">Normalized envelope</text>
+<text x="559" y="189" text-anchor="end" font-family="TeX Gyre Heros" font-size="20" fill="#55606a">max of the four unit-load layers</text>
+<defs><linearGradient id="brilliant" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="rgb(46,52,146)"/><stop offset="0.18" stop-color="rgb(38,110,214)"/><stop offset="0.38" stop-color="rgb(32,178,196)"/><stop offset="0.55" stop-color="rgb(92,204,120)"/><stop offset="0.72" stop-color="rgb(246,214,64)"/><stop offset="0.86" stop-color="rgb(246,142,36)"/><stop offset="1" stop-color="rgb(222,46,38)"/></linearGradient></defs>
+<rect x="40" y="44" width="440" height="22" fill="url(#brilliant)" stroke="#132D3B" stroke-width="1.2"/>
+<text x="40" y="90" font-family="TeX Gyre Heros" font-size="20" fill="#132D3B">0</text>
+<text x="480" y="90" text-anchor="end" font-family="TeX Gyre Heros" font-size="20" fill="#132D3B">&#8805; P99 of each test</text>
+<rect x="40" y="104" width="22" height="22" fill="rgb(178,182,188)" stroke="#132D3B" stroke-width="1.2"/>
+<text x="72" y="122" font-family="TeX Gyre Heros" font-size="20" fill="#132D3B">masked by the producer</text>
+<g transform="translate(1500,685)"><rect width="470" height="166" rx="10" fill="#ffffff" stroke="#132D3B" stroke-width="2.5"/>
+<text x="20" y="38" font-family="TeX Gyre Heros" font-size="25" fill="#132D3B">W_ULTRALIGHT_v1 fitness</text>
+<text x="20" y="108" font-family="TeX Gyre Heros" font-weight="bold" font-size="68" fill="#132D3B">80.37</text>
+<text x="222" y="108" font-family="TeX Gyre Heros" font-size="30" fill="#132D3B">/ 100</text>
+<text x="20" y="146" font-family="TeX Gyre Heros" font-size="22" fill="#007E87">Surface-tension pocket smoothing</text></g>
+</svg>

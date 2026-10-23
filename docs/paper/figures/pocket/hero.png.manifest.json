@@ -1,0 +1,11 @@
+{
+  "figure": "docs/paper/figures/pocket/hero.png",
+  "figure_sha256": "76b8e12e21c0d38f9d1629fd2f5f953d038b4ff467b367a2ce2d871e997439ac",
+  "script": "docs/paper/Makefile",
+  "inputs": {
+    "docs/paper/figures/pocket/hero.svg": "4948e77481777cd2069a3365a69739e2618bf0a70dee6250a9c7a5b07093b925",
+    "docs/paper/figures/pocket/hero-stack.png": "3d590fd2c9ce4e2c16f4a4b99c48df1e1982bd64cf44472beff9f6863b37cf8d",
+    "experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json": "f03482d4964d304a1842eb517fda0a050e544bb8a8e3e858f9dd8fc0d9266061"
+  },
+  "note": "make figures: rsvg-convert -w 2000 of the SVG (stacked fields + labels + colour key + W_ULTRALIGHT_v1 badge from the receipt)."
+}

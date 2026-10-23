@@ -1,0 +1,255 @@
+{
+  "association": "each CAD face takes the stored value of the D1 plate triangle containing its centroid (x, y); no interpolation or new solve",
+  "camera": {
+    "offset": [
+      139.21933029971876,
+      121.76374957565616
+    ],
+    "rotation": [
+      [
+        0.9945218953682733,
+        -0.10452846326765347,
+        0.0
+      ],
+      [
+        -0.05539164634622251,
+        -0.5270163110573678,
+        0.848048096156426
+      ],
+      [
+        -0.08864516426829043,
+        -0.8434023999529444,
+        -0.5299192642332049
+      ]
+    ],
+    "scale": 6.301095280349609,
+    "sha256": "ff72c531c5b9eef84e2462de0f66380f70e554ee5e35aae7fcc6913cad46549e"
+  },
+  "colormap": {
+    "masked_rgb": [
+      178,
+      182,
+      188
+    ],
+    "stops_srgb": [
+      {
+        "rgb": [
+          46.0,
+          52.0,
+          146.0
+        ],
+        "t": 0.0
+      },
+      {
+        "rgb": [
+          38.0,
+          110.0,
+          214.0
+        ],
+        "t": 0.18
+      },
+      {
+        "rgb": [
+          32.0,
+          178.0,
+          196.0
+        ],
+        "t": 0.38
+      },
+      {
+        "rgb": [
+          92.0,
+          204.0,
+          120.0
+        ],
+        "t": 0.55
+      },
+      {
+        "rgb": [
+          246.0,
+          214.0,
+          64.0
+        ],
+        "t": 0.72
+      },
+      {
+        "rgb": [
+          246.0,
+          142.0,
+          36.0
+        ],
+        "t": 0.86
+      },
+      {
+        "rgb": [
+          222.0,
+          46.0,
+          38.0
+        ],
+        "t": 1.0
+      }
+    ]
+  },
+  "command": "target/release/examples/pocket_smoothing_figures hero --stl /home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl --d1 /home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075_D1.json --score 80.370405 --out /home/ubuntu/jarambit/.agent/worktrees/research-pocket-smoothing/target/ieee/paper/pocket-raw/hero",
+  "crease_lines": {
+    "depth_tested": true,
+    "dihedral_deg_over": 45.0,
+    "edges": 11480,
+    "strength": 0.62
+  },
+  "envelope_layer": {
+    "definition": "pointwise maximum of the percentile-normalized unit-load layers",
+    "of": [
+      "lat",
+      "twist",
+      "ring",
+      "pry"
+    ]
+  },
+  "fields": [
+    {
+      "channel": "lat",
+      "mask_rule": "non-finite or negative",
+      "masked_area_fraction": 0.0,
+      "name": "Lateral bending",
+      "normalizer": 3.3643,
+      "peak": 7.9502,
+      "percentile": 99.0,
+      "saturated_area_fraction": 0.009553539489145857,
+      "units": "MPa/N"
+    },
+    {
+      "channel": "twist",
+      "mask_rule": "non-finite or negative",
+      "masked_area_fraction": 0.0,
+      "name": "Chord torsion",
+      "normalizer": 0.1282,
+      "peak": 30.2508,
+      "percentile": 99.0,
+      "saturated_area_fraction": 0.00925019382056547,
+      "units": "MPa/(N mm)"
+    },
+    {
+      "channel": "ring",
+      "mask_rule": "non-finite, negative or exactly zero (producer seated-region zeroing)",
+      "masked_area_fraction": 0.5643373268143981,
+      "name": "Ring traction",
+      "normalizer": 0.019,
+      "peak": 0.0264,
+      "percentile": 99.0,
+      "saturated_area_fraction": 0.010313299369234521,
+      "units": "MPa/N"
+    },
+    {
+      "channel": "pry",
+      "mask_rule": "non-finite or negative",
+      "masked_area_fraction": 0.0,
+      "name": "In-plane tip pry",
+      "normalizer": 1.137,
+      "peak": 2.6821,
+      "percentile": 99.0,
+      "saturated_area_fraction": 0.010013299045523259,
+      "units": "MPa/N"
+    },
+    {
+      "channel": "env_vm",
+      "mask_rule": "non-finite or negative",
+      "masked_area_fraction": 0.0,
+      "name": "Multi-case envelope",
+      "normalizer": 867.5955,
+      "peak": 1458.5483,
+      "percentile": 99.0,
+      "saturated_area_fraction": 0.00999809730409742,
+      "units": "MPa"
+    }
+  ],
+  "hero_stack_sha256": "b4003cd1300116419278331871dc7c176f7597e12841c342fdc1238e41a28039",
+  "inputs": {
+    "d1": {
+      "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075_D1.json",
+      "sha256": "2b2c750d42f42320e9c54c00ef0e2c150c19b51b9b465736c1ee39f9e3c93130"
+    },
+    "stl": {
+      "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl",
+      "sha256": "c969693c466594ff9357e5ca3e26c9d074b9cde53f1e0894a04b9580b5ace296"
+    }
+  },
+  "lighting": {
+    "ambient": 0.3,
+    "diffuse": 0.7,
+    "direction_camera": [
+      -0.72,
+      0.58,
+      0.38
+    ],
+    "shininess": 36,
+    "specular": 0.1
+  },
+  "not_qualified": true,
+  "outputs": [
+    {
+      "height": 223,
+      "name": "layer-lat.png",
+      "sha256": "e92dcc2d5904782a83d4bfc68b214a00f6c5ea5d6098aeffc9b70761ca71d9f0",
+      "width": 1400
+    },
+    {
+      "height": 223,
+      "name": "layer-twist.png",
+      "sha256": "4d98e2f2c429ec6098ddcf60540ec7eb6c6e671fe39c3e50a91dbbd74a6d4f23",
+      "width": 1400
+    },
+    {
+      "height": 223,
+      "name": "layer-ring.png",
+      "sha256": "e2c30cd4af8110f76497ec775bb6299d21f38e9ab2eb19adc3b5adb10b9be3bc",
+      "width": 1400
+    },
+    {
+      "height": 223,
+      "name": "layer-pry.png",
+      "sha256": "89961e77ef55b5ae8a7e76624611a121dc0a7bea8eef20ab0912ec5bbc0b309c",
+      "width": 1400
+    },
+    {
+      "height": 223,
+      "name": "layer-env_vm.png",
+      "sha256": "cba020d26a060bccc719e180c59d50af95624b514515f7e5677e273380dd9c16",
+      "width": 1400
+    },
+    {
+      "height": 223,
+      "name": "layer-envelope.png",
+      "sha256": "c5f6341372f8bbffe09a3d27e970a99dc97ffed2abf284ee3cc0e2e2deda0f83",
+      "width": 1400
+    }
+  ],
+  "research_only": true,
+  "schema": "jarambit.pocket_smoothing_hero.v1",
+  "score_shown": 80.370405,
+  "stack": {
+    "canvas": [
+      2000,
+      881
+    ],
+    "layer": [
+      1400,
+      223
+    ],
+    "order_bottom_to_top": [
+      "lat",
+      "twist",
+      "ring",
+      "pry",
+      "env_vm",
+      "envelope"
+    ],
+    "step_px": [
+      -34.0,
+      118.0
+    ]
+  },
+  "tilt_deg": 58.0,
+  "unmapped_faces": 0,
+  "z_exaggeration": 1.25
+}

@@ -1,0 +1,221 @@
+{
+  "command": "target/release/examples/pocket_smoothing_figures bw --raw /home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl --ours /home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl --ladder docs/paper/ladder/smoothing-ladder.render.v1.json --out /home/ubuntu/jarambit/.agent/worktrees/research-pocket-smoothing/target/ieee/paper/pocket-raw/bw",
+  "inputs": {
+    "ladder_render_sha256": "faa96bbdd2f92b93ec87f6cb0972fae0dacba1c36a0fdcd59a62fb4900b4ca07",
+    "ours_stl_sha256": "c969693c466594ff9357e5ca3e26c9d074b9cde53f1e0894a04b9580b5ace296",
+    "raw_stl_sha256": "e574212003bb4c32eb124cb2beda93d6e8ac13d4295b6b0ca46f6795fe5a3bb2"
+  },
+  "lighting": {
+    "ambient": 0.1,
+    "diffuse": 0.9,
+    "direction_camera": [
+      -0.8,
+      0.52,
+      0.3
+    ]
+  },
+  "lines": "black silhouette (1.5 px) and depth-tested crease edges (dihedral over 30 deg)",
+  "material": "white, no specular",
+  "outputs": [
+    {
+      "camera": {
+        "offset": [
+          -877.736504771948,
+          254.6485488873084
+        ],
+        "rotation": [
+          [
+            0.9945218953682732,
+            -0.10452846326765348,
+            0.0
+          ],
+          [
+            -0.059955063458311905,
+            -0.5704343246184221,
+            0.8191520442889918
+          ],
+          [
+            -0.08562470437208512,
+            -0.8146646436810838,
+            -0.5735764363510462
+          ]
+        ],
+        "scale": 17.465337695743067,
+        "sha256": "20efa1df98d9093095895cb58619fbac188d052da50f79c98b3c9e5900081e91"
+      },
+      "crease_edges": 12357,
+      "height": 595,
+      "name": "bw-guard-raw.png",
+      "sha256": "9d267b5caf9efcfea0f2aef658c27e1d8cd4c8e5d842be34b7114a7453bb1a34",
+      "width": 1400
+    },
+    {
+      "camera": {
+        "offset": [
+          -877.736504771948,
+          254.6485488873084
+        ],
+        "rotation": [
+          [
+            0.9945218953682732,
+            -0.10452846326765348,
+            0.0
+          ],
+          [
+            -0.059955063458311905,
+            -0.5704343246184221,
+            0.8191520442889918
+          ],
+          [
+            -0.08562470437208512,
+            -0.8146646436810838,
+            -0.5735764363510462
+          ]
+        ],
+        "scale": 17.465337695743067,
+        "sha256": "20efa1df98d9093095895cb58619fbac188d052da50f79c98b3c9e5900081e91"
+      },
+      "crease_edges": 21187,
+      "height": 595,
+      "name": "bw-guard-ours.png",
+      "sha256": "1670ff0bec0b8b0024714700e3c102e455e338d213ddeebc3f13bc9107df5fa7",
+      "width": 1400
+    },
+    {
+      "camera": {
+        "offset": [
+          -80.61956898771359,
+          269.0015129727239
+        ],
+        "rotation": [
+          [
+            0.9945218953682732,
+            -0.10452846326765348,
+            0.0
+          ],
+          [
+            -0.059955063458311905,
+            -0.5704343246184221,
+            0.8191520442889918
+          ],
+          [
+            -0.08562470437208512,
+            -0.8146646436810838,
+            -0.5735764363510462
+          ]
+        ],
+        "scale": 17.47601209983419,
+        "sha256": "0b92f83d0f750a2d6fff2cb0652f9067e1f2adc4b5b50b0b3ef1a815139ed834"
+      },
+      "crease_edges": 12357,
+      "height": 595,
+      "name": "bw-handle-raw.png",
+      "sha256": "edf7d69c26fc6f922aad765641e7ae39b5113cc0ae85c42b2866ee055f8222e4",
+      "width": 1400
+    },
+    {
+      "camera": {
+        "offset": [
+          -80.61956898771359,
+          269.0015129727239
+        ],
+        "rotation": [
+          [
+            0.9945218953682732,
+            -0.10452846326765348,
+            0.0
+          ],
+          [
+            -0.059955063458311905,
+            -0.5704343246184221,
+            0.8191520442889918
+          ],
+          [
+            -0.08562470437208512,
+            -0.8146646436810838,
+            -0.5735764363510462
+          ]
+        ],
+        "scale": 17.47601209983419,
+        "sha256": "0b92f83d0f750a2d6fff2cb0652f9067e1f2adc4b5b50b0b3ef1a815139ed834"
+      },
+      "crease_edges": 21187,
+      "height": 595,
+      "name": "bw-handle-ours.png",
+      "sha256": "171313246a7908ebbc33f6320bf7f7f39f35efb66fd4df61e1be904b72eaaabf",
+      "width": 1400
+    },
+    {
+      "camera": {
+        "offset": [
+          -1677.1589456448844,
+          319.33083399271123
+        ],
+        "rotation": [
+          [
+            0.9945218953682732,
+            -0.10452846326765348,
+            0.0
+          ],
+          [
+            -0.059955063458311905,
+            -0.5704343246184221,
+            0.8191520442889918
+          ],
+          [
+            -0.08562470437208512,
+            -0.8146646436810838,
+            -0.5735764363510462
+          ]
+        ],
+        "scale": 15.51356715559434,
+        "sha256": "47004fb505c4259fcba47102d7f7f4fd26add42b60b04637fb90a008486d83d4"
+      },
+      "crease_edges": 12357,
+      "height": 595,
+      "name": "bw-blade-raw.png",
+      "sha256": "93532961b72d4ef67c12df0932939984504e4d75228d3acad43f1c1779c6c105",
+      "width": 1400
+    },
+    {
+      "camera": {
+        "offset": [
+          -1677.1589456448844,
+          319.33083399271123
+        ],
+        "rotation": [
+          [
+            0.9945218953682732,
+            -0.10452846326765348,
+            0.0
+          ],
+          [
+            -0.059955063458311905,
+            -0.5704343246184221,
+            0.8191520442889918
+          ],
+          [
+            -0.08562470437208512,
+            -0.8146646436810838,
+            -0.5735764363510462
+          ]
+        ],
+        "scale": 15.51356715559434,
+        "sha256": "47004fb505c4259fcba47102d7f7f4fd26add42b60b04637fb90a008486d83d4"
+      },
+      "crease_edges": 21187,
+      "height": 595,
+      "name": "bw-blade-ours.png",
+      "sha256": "99be843ca6980a6c5ee9219543f4346dc882324565decea9a8b4e2140ea2a50c",
+      "width": 1400
+    }
+  ],
+  "research_only": true,
+  "schema": "jarambit.pocket_smoothing_bw.v1",
+  "views": {
+    "blade": "smoothing-ladder blade camera",
+    "guard": "smoothing-ladder guard camera",
+    "handle": "same rotation, framed on 14 mm <= x < 76 mm of the raw export"
+  },
+  "z_exaggeration": 2.5
+}
