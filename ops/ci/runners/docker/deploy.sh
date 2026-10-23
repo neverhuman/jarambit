@@ -6,6 +6,7 @@
 # existing runner needs no token. The container restarts with the Docker engine.
 # The image is linux/amd64 on every host; on Apple Silicon (xbabe4) run it in a colima VM with
 # Rosetta (DOCKER_CONTEXT=colima-<profile>) and point JANKURAI_BIN at the Linux x86-64 binary.
+# Outside a checkout, FEM_REQUIREMENTS names a copy of fem_solid/requirements.txt.
 set -euo pipefail
 name=$1 cpuset=$2
 [[ $name =~ ^jarambit-docker-xbabe[1-4]-[1-9][0-9]*$ ]] || { echo "bad runner name: $name" >&2; exit 2; }
@@ -25,6 +26,7 @@ fi
 build=$HOME/actions-runners/jarambit-docker-build
 mkdir -p "$build"
 cp "$here/Dockerfile" "$here/register.sh" "$build/"
+cp "${FEM_REQUIREMENTS:-$here/../../../../fem_solid/requirements.txt}" "$build/fem-solid-requirements.txt"
 install -m 755 "${JANKURAI_BIN:-$HOME/.jeryu/bin/jankurai}" "$build/jankurai"
 docker build --pull -q --platform linux/amd64 -t "$image" "$build" >/dev/null
 
