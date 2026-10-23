@@ -3,9 +3,11 @@
 //! (framed on the before mesh) and one set of lighting and render settings serve all three.
 //! Geometry only: nothing is re-scored, re-assessed or qualified. Writes a NEW output directory.
 //! Usage: smoothing_figure --before STL --before-sha256 HEX --after STL --after-sha256 HEX \
-//!        --code-commit SHA --out NEW_DIR [--width PX]
+//!        --code-commit SHA --out NEW_DIR [--width PX] [--remeshed]
 //! `--width` (default 1200) scales the image and camera framing, and the outline up to the
 //! renderer's 3 px limit; the height keeps the 1200x510 aspect of the hero figure.
+//! `--remeshed`: the after mesh is a new export with its own faces (surface-tension pocket
+//! smoothing re-triangulates), so faces cannot be paired; only the two appearance views are written.
 use jarambit_paper_artifacts::appearance::{
     self, Camera, Lighting, NormalSettings, RawMesh, RenderSettings, Vec3,
 };
@@ -231,8 +233,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Err("output directory already exists; select a new directory".into());
     }
 
+    let remeshed = args.iter().any(|a| a == "--remeshed");
     // Same faces in the same order: the smoothing writer emits one facet per input face.
-    if before.mesh.len() != after.mesh.len() {
+    if !remeshed && before.mesh.len() != after.mesh.len() {
         return Err("before and after face counts differ".into());
     }
     let camera = camera_for(&before.mesh, width, height);
@@ -242,7 +245,51 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let (normals_b, stats_b) = appearance::derive_normals(&before.mesh, NORMALS, None)?;
     let (normals_a, stats_a) = appearance::derive_normals(&after.mesh, NORMALS, None)?;
     let image_b = appearance::render(&before.mesh, &normals_b, &base, settings)?;
-    let image_a = appearance::render(&after.mesh, &normals_a, &base, settings)?;
+    let image_a = appearance::render(&after.mesh, &normals_a, &vec![BASE_RGB; after.mesh.len()], settings)?;
+    if remeshed {
+        fs::create_dir(&out)?;
+        let outputs = vec![
+            write_new(&out, "winner-before.png", &png(&image_b.rgb, width, height))?,
+            write_new(&out, "winner-after.png", &png(&image_a.rgb, width, height))?,
+        ];
+        let manifest = json!({
+            "schema": "smoothing_figure.v1",
+            "outputs": outputs,
+            "code_commit": code_commit,
+            "command": std::env::args().collect::<Vec<_>>().join(" "),
+            "not_qualified": true,
+            "inputs": {
+                "before": {"path": before.path.display().to_string(), "bytes": before.bytes.len(), "sha256": sha(&before.bytes)},
+                "after": {"path": after.path.display().to_string(), "bytes": after.bytes.len(), "sha256": sha(&after.bytes)},
+            },
+            "geometry": {
+                "faces_before": before.mesh.len(),
+                "faces_after": after.mesh.len(),
+                "face_order_identical": false,
+                "displacement": "not defined: the after mesh is a new export with its own faces",
+                "normals_before": {"joined_edges": stats_b.joined_edges, "blocked_edges": stats_b.blocked_edges, "capped_corners": stats_b.capped_corners},
+                "normals_after": {"joined_edges": stats_a.joined_edges, "blocked_edges": stats_a.blocked_edges, "capped_corners": stats_a.capped_corners},
+            },
+            "camera": {
+                "rotation": camera.rotation,
+                "scale": camera.scale,
+                "offset": camera.offset,
+                "sha256": camera.digest(),
+                "framed_on": "before mesh, shared by both images; no refit",
+            },
+            "lighting": {"direction_camera": light().direction, "ambient": 0.35, "diffuse": 0.65, "specular": 0.04, "shininess": 24},
+            "normals": {"crease_degrees": NORMALS.crease_degrees, "blend": NORMALS.blend, "max_deviation_degrees": NORMALS.max_deviation_degrees},
+            "render": {"width": width, "height": height, "supersample": SUPERSAMPLE, "outline_pixels": settings.outline_pixels, "renderer": "deterministic Rust CPU depth raster (appearance::render)"},
+            "base_rgb": BASE_RGB,
+            "images": {
+                "winner-before.png": "lit appearance of the before mesh (base colour uniform)",
+                "winner-after.png": "lit appearance of the after mesh (base colour uniform)",
+            },
+        });
+        write_new(&out, "smoothing-figure.render.v1.json", (serde_json::to_string_pretty(&manifest)? + "\n").as_bytes())?;
+        println!("wrote {}", out.display());
+        return Ok(());
+    }
 
     // Per-corner displacement; corners correspond one-to-one by face order and corner index.
     let mut face_disp = Vec::with_capacity(before.mesh.len());

@@ -3,8 +3,8 @@
   "figure_sha256": "2e2f07bacb876f9e4f4d1aaaf7d4ec8958e3a46aee8efc3dd046dd7b55859da2",
   "script": "crates/paper-artifacts/examples/smoothing_figure.rs",
   "inputs": {
-    "docs/paper/figures/cover/smoothing-figure.render.v1.json": "119232b75151fd75349df9d817677c9842530f3da1df663faf9759259daad33a",
-    "experiments/geometry-smoothing-benchmark/results/winner-w406t3_r01_p10_c16/R1-normal-only-pin30-it20/RECEIPT.json": "03a76f2157bc030495f719b368f3cfff91201bb3120c9f23ef41f35afe873094"
+    "docs/paper/figures/cover/smoothing-figure.render.v1.json": "813095476e9270078bb89e04f556ddd18d4abae87a22b95eca407f103b7a9776",
+    "experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json": "f03482d4964d304a1842eb517fda0a050e544bb8a8e3e858f9dd8fc0d9266061"
   },
   "external_inputs": {
     "before_stl": {
@@ -12,8 +12,8 @@
       "sha256": "e574212003bb4c32eb124cb2beda93d6e8ac13d4295b6b0ca46f6795fe5a3bb2"
     },
     "after_stl": {
-      "path": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L4/smoothing/smoothed.stl",
-      "sha256": "157d22c71890d49ae7eee0e755823dcd433c598b749d51e12d9efb1219f2c310"
+      "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl",
+      "sha256": "c969693c466594ff9357e5ca3e26c9d074b9cde53f1e0894a04b9580b5ace296"
     }
   },
   "external_inputs_note": "STLs are outside git because of their size; bound by sha256 and by RECEIPT.json.",

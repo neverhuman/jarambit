@@ -26,7 +26,7 @@ lookup. A pocket wall was therefore a vertical step along a 0.25 mm staircase. T
 (about 0.7 mm triangles) cut straight across those steps, and that is what renders as chipped
 walls.
 
-The Taubin mesh smoother used for variant B pins every vertex on an edge sharper than 30°. Those
+The Taubin mesh smoother of the smoothing ladder (variant B before v2.3.1) pins every vertex on an edge sharper than 30°. Those
 are exactly the chipped walls. Its largest displacement at the declared setting was 0.214 mm, so
 the chipping stayed.
 
@@ -78,7 +78,7 @@ instead of cutting across it.
 
 | Setting | Visual result | Stage-2 F |
 |---|---|---|
-| Taubin mesh smoothing (variant B, L1–L9) | no visible change in the pockets: walls are pinned | 75.06–75.34 (B-rep withheld) |
+| Taubin mesh smoothing (ladder L1–L9) | no visible change in the pockets: walls are pinned | 75.06–75.34 (B-rep withheld) |
 | graph flow a = 1, r = 0.5–2 (first draft) | rounded, but depth spreads into the ribs; ribs vanish at r ≥ 2 | 80.161219 (r = 0.75) |
 | line tension a = 0, r = 0.5 | clean outlines, shapes kept (triangles stay triangles) | 80.164307 |
 | **line tension a = 0, r = 0.75** | **clean outlines, cells rounded, ribs intact** | **80.370405** |
