@@ -23,7 +23,7 @@
   "evidence/evolve_certifiable/automatic/leaderboard.json": "151e18581274a60b4d15581936e09fc02b1a4473e6e9734609a0a0670b47173a",
   "evidence/evolve_certifiable/automatic/round_00_births.json": "53eef1ef54b83c1649187d2299b63f8a413dec6cab34971d231273db7494856c",
   "evidence/evolve_certifiable/automatic/round_00_screen.json": "65fe2c33dd39f8f63eb79be22a27cc4d70fbac7ae9052c35d9948d5be128ecdd",
-  "evidence/evolve_certifiable/manifest.json": "68d47e869490d41bd3b7ea00551a3d9c94aab1d3eb2517b0c2012010249aa697",
+  "evidence/evolve_certifiable/manifest.json": "2cbdf3e10a0a7660bd760a7976d6970f56afbb7596517da3570abf88fd00f850",
   "ops/render/paper/certifiable.py": "67d6eb78818bf1d0fc2559093c5dc51f29e2c71235f6c68383843b158c7f22da"
  },
  "norms": {},

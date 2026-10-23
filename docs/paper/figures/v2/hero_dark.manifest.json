@@ -34,11 +34,11 @@
   "blender": "Blender 4.5.3 LTS",
   "scene": "hero_dark.scene.json",
   "inputs": {
-    "docs/paper/figure-inputs.v1.json": "8119bf95f7352345c5c3d7b94f0c3854a871d2a0abfc86c6a89c9012f1e5968c",
+    "docs/paper/figure-inputs.v1.json": "2ac66bc2b7a7689a0a9f8cbaf6b63de244735d125e4b08b757881f2ee525c03f",
     "ops/render/blender/candidate_scenes.py": "c1c60c5057fc90c8e8fd9442cf8612728f8d320568465310192255a45838bb6d",
     "ops/render/blender/paper_scenes.py": "683153ca121869179ae2db5d31a56892e84ae352b6a472ba0057ed6235dc9c0a",
     "ops/render/blender/rerender.py": "bf121cf602df8427918dd42ec60f47df2bc7b8fbb52f8bbc90119a152baa6e1c",
-    "evidence/evolve_certifiable/manifest.json": "68d47e869490d41bd3b7ea00551a3d9c94aab1d3eb2517b0c2012010249aa697",
+    "evidence/evolve_certifiable/manifest.json": "2cbdf3e10a0a7660bd760a7976d6970f56afbb7596517da3570abf88fd00f850",
     "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02.stl": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022",
     "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_D1.json": "c2811ed8877904254ddc953dc888aedc3d7791b69c040dd6513fe0b763997bab",
     "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_master_scorecard.json": "2f696866a6a5ca02b1c6e554028ddef57bbb1b693d0779a2598bebae8ec135ca",

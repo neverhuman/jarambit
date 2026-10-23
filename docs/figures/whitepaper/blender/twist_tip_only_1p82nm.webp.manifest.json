@@ -106,7 +106,7 @@
   "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_rs.json": "2696a6f5d4dbbcec6a6148c83d5ff48313f7a86682766328be56ea4f203945fb",
   "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_step_check.json": "0368f38bb75ac97fed2f844b3878ec761b709f23063b141a401f0d40561d9ed9",
   "evidence/evolve_certifiable/automatic/leaderboard.json": "151e18581274a60b4d15581936e09fc02b1a4473e6e9734609a0a0670b47173a",
-  "evidence/evolve_certifiable/manifest.json": "68d47e869490d41bd3b7ea00551a3d9c94aab1d3eb2517b0c2012010249aa697",
+  "evidence/evolve_certifiable/manifest.json": "2cbdf3e10a0a7660bd760a7976d6970f56afbb7596517da3570abf88fd00f850",
   "ops/render/blender/paper_scenes.py": "683153ca121869179ae2db5d31a56892e84ae352b6a472ba0057ed6235dc9c0a",
   "ops/render/blender/render_paper.py": "e9f4306a10dca32a1f1539a5ab58e625c49fdcd57bbb025df7d0de9705f1fa94"
  },

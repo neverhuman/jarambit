@@ -237,7 +237,7 @@
   "regeneration": {
     "exports": [
       {
-        "certificate_identity": "aef31f3bf64be3aa97b9ace3c7d318deb7c24ac86a54e95dbb8077f22cb237a0",
+        "certificate_identity": "b75d18a1f10d7d56510e07e08f31ae2cadd65787936835a9009f9be0842cf33a",
         "genome": "evidence/evolve_certifiable/controls/legal_genome/control_genome.csv",
         "historical_prefix": "evidence/evolve_certifiable/controls/legal_genome/control",
         "id": "legal_genome",
@@ -245,11 +245,11 @@
         "sha256": {
           ".step": "eaf27b8ca61d6f7c465867907845eaab39ea6a61431b09f685e67b52471df560",
           ".stl": "14e7960233a4d4c7aa069a148c952d237689f1e16b543bda5e79c51791ff7387",
-          "_surface.json": "ac863e58d06118b81d096ee624c6f516009267b9beb4c1e7dbdb3a90c76311a4"
+          "_surface.json": "b3b9146c40dfe9e08c9e5d6a6565915f3ba35785e51d7f1c3af53a73dd329a2d"
         }
       },
       {
-        "certificate_identity": "b0165dd268baa73862a615c8e7d4321893b6b52bf6934fbc29e5543949e5e76c",
+        "certificate_identity": "87921e14f43ad64dc4dc2661067aa1a6ae470d76f11c628fab9911506c1cbc22",
         "genome": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02_genome.csv",
         "historical_prefix": "evidence/evolve_certifiable/automatic/by-content/db5d8e32e99d0b2d8ef6d7c7f9622a0601487c25b80879bbc8be1a502693c55e/attempt-1792206525341070917/cert_pipeline_r01_p14_c02",
         "id": "automatic",
@@ -257,11 +257,11 @@
         "sha256": {
           ".step": "1a28399c1c6c4a21796a963c91545d120fd99f542818a0e6024b0cd24ca34fa6",
           ".stl": "8e4987c422b2d9973b15e3fbbed64de809c3507abbb83cb6b1b6898753079022",
-          "_surface.json": "dc19df7401abfb4936407d9ba79117addd29d7fcaee3aaefaa69ede68def03ca"
+          "_surface.json": "bc3af40afffe530c6a22693f746352781d9f09ed9a99234439bcb8b8188a08ac"
         }
       }
     ],
-    "policy_identity_update_note": "Re-issued regeneration certificate_identity and _surface.json SHA256 after ops/ci/evaluate_cad_candidate.py scored an unmeasured solid-tip solve as zero credit instead of aborting (earlier re-issue: evaluator STEP/STL/surface binding fixes in battery.rs, cad_ingest.rs, gci.rs, ops/ci/cad_battery.py and ops/ci/evaluate_cad_candidate.py); exported STEP/STL bytes and surface geometric payload are unchanged.",
+    "policy_identity_update_note": "Re-issued regeneration certificate_identity and _surface.json SHA256 after crates/crescent/src/export.rs, lib.rs and certification.rs gained opt-in surface-tension pocket smoothing (pocket_smooth.rs, off by default and part of the identity; earlier re-issue: ops/ci/evaluate_cad_candidate.py scored an unmeasured solid-tip solve as zero credit instead of aborting (earlier re-issue: evaluator STEP/STL/surface binding fixes in battery.rs, cad_ingest.rs, gci.rs, ops/ci/cad_battery.py and ops/ci/evaluate_cad_candidate.py); exported STEP/STL bytes and surface geometric payload are unchanged.",
     "producer_commit": "ec2b706883d816579d4e831a7af83539b6d06af8",
     "schema": "jarambit.export_regeneration.v1"
   },

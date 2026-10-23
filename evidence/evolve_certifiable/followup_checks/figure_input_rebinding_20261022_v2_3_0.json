@@ -1,0 +1,158 @@
+{
+  "scope": "Metadata-only binding refresh after crates/crescent/src/export.rs, lib.rs and certification.rs gained opt-in surface-tension pocket smoothing (crates/crescent/src/pocket_smooth.rs, off by default; the module source and an enabled setting are part of certification::identity): the regeneration certificate_identity and _surface.json SHA256 in evidence/evolve_certifiable/manifest.json were re-issued; exported STEP/STL bytes, surface geometric payload, the original automatic payload, other render inputs and all image bytes are unchanged; no new render or solve.",
+  "base_commit": "efa4de335f63fccf8da25e281370105060391f1e",
+  "proof_before_sha256": "68d47e869490d41bd3b7ea00551a3d9c94aab1d3eb2517b0c2012010249aa697",
+  "proof_after_sha256": "2cbdf3e10a0a7660bd760a7976d6970f56afbb7596517da3570abf88fd00f850",
+  "regeneration_check": "python3 ops/ci/check_export_regeneration.py: PASS, 2 genomes, all STEP/STL/surface SHA256 entries match",
+  "previous_rebinding": "evidence/evolve_certifiable/followup_checks/figure_input_rebinding_20261022.json",
+  "manifests": [
+    {
+      "manifest": "docs/figures/engineering_gates/fig_certifiable_pipeline.png.manifest.json",
+      "before_sha256": "f62678c2d324f67abe0481118e66bab4a4e4082a5221f6a0f69411dc6fa55928",
+      "after_sha256": "e8f931fffcc3c5cc4fa3ab952a969561a81e48490f69d2965dfe3b8605e79285",
+      "unchanged_figure_sha256": "1a07643d7bf43ad7d0ab7eaff68d109dbc2db5baf5094d9e246c9b325932ea3b"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/c6_aesthetic_floor.webp.manifest.json",
+      "before_sha256": "bd6a96923a695aba82a349c8e02872f3550328b0212a9af2e348945851148889",
+      "after_sha256": "8ceda878208d09609bf9e8f97e7d3574eb6b8eeb2c3cac80cb8be8eda27ba3e8",
+      "unchanged_figure_sha256": "b368a838bb45fb311ae6c61e52c1f842bdf466e45c36d09c39d602beebfe577f"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/cad_watertight_and_single_solid.webp.manifest.json",
+      "before_sha256": "48c21efe5dc9c565edc3c745127fe245158e8af9042dd0d9ba59dba817eb217f",
+      "after_sha256": "ef321241cf22a76b0c197876108d2cfda3ef3b40022c33f84cda6fcf0fa3d752",
+      "unchanged_figure_sha256": "51990a003995c236fca30f6cc1a70ccd28121a25ece4101ace67ea9e608f0789"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/cert_hiker_180n.webp.manifest.json",
+      "before_sha256": "f071266a0e76cec11c86153026bd9263a58dcd16b98fc98fff77fb65f6ae10c9",
+      "after_sha256": "66ab7d365e95ab2f2164a2060e66e24fb57c73ba60d36dacc6387058028c8af6",
+      "unchanged_figure_sha256": "69a85aec9b9831df3af7dad60102fbce385e804b54e91a66bf7a16e9b6d441c6"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/cert_hunter_260n.webp.manifest.json",
+      "before_sha256": "f9ee69d9c0ae118e824ff547f7b45f0d713685e016577f7f4d5e04a7ee9aac90",
+      "after_sha256": "adc086e1699fc5dd5af4ec4ac559119780e91432ef7a4e35c90954a105e4c0de",
+      "unchanged_figure_sha256": "cd2ecd8faa7d08ec4d0adcc990b24f432882ea349f0a8a0f26083e2dcb4ba338"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/cert_ring_pull_1500n.webp.manifest.json",
+      "before_sha256": "60fbcd335164f57cd744fcae61c000dd16e8d4d1cd07d9c9ac95d7306e98f677",
+      "after_sha256": "39ed85586ae8cd4a07dc478508a91423f0212f6384822714fb2e46fd4e45ba14",
+      "unchanged_figure_sha256": "92cc1a33592836bbcf1316032dd1764c3908cea7d1527df0f47e9d84cd41e348"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/dolfinx_cross_check_2pct.webp.manifest.json",
+      "before_sha256": "b0b6d0305206bcbb2739af2ae2252716533f2dbf5f0f930aba26d242ce779808",
+      "after_sha256": "25e0c9221fe8506d8b6b1880a17722623a91192287337d2d346b24ba3e350e3e",
+      "unchanged_figure_sha256": "f119536b0de2d79b2cbec9009f32db92aec940860f4386bd0a4213b30ac60747"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/failure_sequence_1p2.webp.manifest.json",
+      "before_sha256": "17339a9e0643f0b42eb0637a633ee32cf5c1752d60923dee68df4144c5353879",
+      "after_sha256": "3e9e7a4c3a8b0f5a2e4eb6a4ca754cdd5f2c34a26411b922aab48901eb1755fa",
+      "unchanged_figure_sha256": "562567ee49cf8774fa8d8e9713ee7ae4ebb737b5f701401e98276474ef2fa556"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/geometric_and_holder_gates.webp.manifest.json",
+      "before_sha256": "e645321b96ceab1cd14face913d2541ad03f9875d7c3ef98e3ae6bc312fbd250",
+      "after_sha256": "51001fbe79a6aecaec501125e917e523c71ee2648249e7e960fd71837449e22e",
+      "unchanged_figure_sha256": "a4641ed0aecc16451fb85ae4c507fb039dcd72583e14879feb939e23dd9cbacc"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/hero_oblique.webp.manifest.json",
+      "before_sha256": "0ccb6c9175299dab9b4844f6987964f5693116822aedbd867eb1df4c3e5ccf52",
+      "after_sha256": "4b9ed644ccfa6c0d73129f53962bb4de9de3a628ad46d47dba66a67d1f5384c6",
+      "unchanged_figure_sha256": "8343fef2819b71cc9178f65ce00adb392b1e1486397a2a854e50eafd036b6aef"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/hero_reverse.webp.manifest.json",
+      "before_sha256": "d42488ef077eb12548099f051aa9599fd25cf10f692c5075515354ff2ee6a74e",
+      "after_sha256": "325b844991d6fa1074a333d8a5c5c16350176b72485583b419563f2a92e7f049",
+      "unchanged_figure_sha256": "a4d531809e2df506947837efe589cb583cb41ccc5720b714f609c257ec6309b1"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/hero_section.webp.manifest.json",
+      "before_sha256": "e26680bb6b4d23602b54fe403bbc2d6b3e4d125e91a892db3886fe349110ea25",
+      "after_sha256": "2115f87e3b8287bc87c3b74c6b70dfbd4fd00504bcb268a8110daedd25b38e20",
+      "unchanged_figure_sha256": "0ff6bb5eea225ad6c6fc8c488dcde4a799dd5a6e875181532e3e9c9273670e23"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/karambit_ring_and_curved_claw.webp.manifest.json",
+      "before_sha256": "286abb12805e8ae8e6e8695782420896bd65a65efef8840372990403ea85b103",
+      "after_sha256": "65dde2d44eea7eabf8f1621bfc18d66e94c1e45fab262a16a05d13a46a943042",
+      "unchanged_figure_sha256": "918aa81652e7f9fef9191d6ddf8bb3f8fd36de9d72d4ab58777902d5d08384fd"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/plate_gci_valid_3level.webp.manifest.json",
+      "before_sha256": "d6546b67f96ef505b88984556fd8185ea68a6af05c265f7bf68246d32cfac795",
+      "after_sha256": "1a6e8ad2cb5f251ec016306eb6f9b3cfc45cff3fbc937a83dcb7ee4323117b3b",
+      "unchanged_figure_sha256": "63d3b1573b75a0857e9ef7efdf382750330f2f4291cb83177b6f7baf7d4b41c2"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/side_a4_buckling_and_support.webp.manifest.json",
+      "before_sha256": "ce2b05a7911264a4a4f210c9923b746016a9436918835dc6bb5518290ac01199",
+      "after_sha256": "7adb4ff48881dd546ba12d70e9e3ec6dd7866170550f5d0d89e17fad1e368997",
+      "unchanged_figure_sha256": "2d65e239af0a04084dc78d75492b97d4c5f063cf2f9f72f456dbbdb30906ac06"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/solid_tip_3d_p2_1p82nm.webp.manifest.json",
+      "before_sha256": "546ecac98dd81e1c83de30a464d9c3c2e10c1eefbeaa57260e6cd74376bb6348",
+      "after_sha256": "7d7ef2ddd9d418fb97474d3d8f31177b1d0a07dffec542194a5b002c1829ef36",
+      "unchanged_figure_sha256": "a2d12cd41a1e05fab1c5d34ee8ea344ea70d7f12d49f600dd978a386a65e9001"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/strict_hunter_260n.webp.manifest.json",
+      "before_sha256": "38df7613dc565dac23d20a23213950a207ee930e1a4f1755e5900d7055f32d2d",
+      "after_sha256": "1b46a597db9bcb71e5dcfe0b967d31d9e1f48e4d254cbd97d722da50c10a03ed",
+      "unchanged_figure_sha256": "4a6c2d4b0a4db3be927e842b5480f18ec314ad569cab148f85a9e95dc5be5026"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/twist_body_1p82nm.webp.manifest.json",
+      "before_sha256": "0ab96a4a6f984a960292db485f69f759185377e81dfef802375a915fb41861c4",
+      "after_sha256": "d9e4a4dd2e19b63c9e60cc10b52861c2269d1d5d81673897c4d87c3e76bb5345",
+      "unchanged_figure_sha256": "dfefad317b65fb75a550c42ac9624ec8942125cc90a7218b240afac9e67fabbd"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/twist_tip_only_1p82nm.webp.manifest.json",
+      "before_sha256": "72e2d68474e192401c474d91e92ececfb4eff4db025b724a3242e73633654884",
+      "after_sha256": "6e0e51d992ce999883a75f1829a3388b64e5a8410c6007998fb0f1864238d77e",
+      "unchanged_figure_sha256": "e924eb27a2fde8858be6e03b7cb900ee74a0271abf129df278eadcc9fe23b623"
+    },
+    {
+      "manifest": "docs/figures/whitepaper/blender/twist_tip_submodel_strict_1p82nm.webp.manifest.json",
+      "before_sha256": "d167420b3b1e8f3943af4165a495487deb5a6ca4c60292181a5cfeab8b446ba0",
+      "after_sha256": "ddcda1d2d2ba1e7d80ae8e45be1da1f191117e6401387fd7d66c1ec8e0e2a5df",
+      "unchanged_figure_sha256": "3851c7d2beae859fd9629c8a34175c2b96fa3f42f1722dfff716d8f5ebe84bc5"
+    },
+    {
+      "manifest": "docs/paper/figure-inputs.v1.json",
+      "before_sha256": "8119bf95f7352345c5c3d7b94f0c3854a871d2a0abfc86c6a89c9012f1e5968c",
+      "after_sha256": "2ac66bc2b7a7689a0a9f8cbaf6b63de244735d125e4b08b757881f2ee525c03f"
+    },
+    {
+      "manifest": "docs/paper/figures/v2/hero_dark.manifest.json",
+      "before_sha256": "c009cc79fed9d746ac1125a99f1064ce75cf96b21741b05f61e536f7700b6b92",
+      "after_sha256": "e6e81ff29207d6f9fe0f5aabd88cb6af57f955dab04330ab4100029ac3cbcaf1",
+      "unchanged_figure_sha256": "29e8f64665e961c8129a663fdbbb2af884961f7c68aeb21fe731c272f81d6698"
+    },
+    {
+      "manifest": "docs/paper/generated/export-identity.svg.manifest.json",
+      "before_sha256": "18b558c88af32950a7607dcdb7627b5875f3ee77e21300720d9f4412ab5ef7e4",
+      "after_sha256": "bb3384e01f3f319325223b65c90ea73d644025c226cb130b5cb0b820010abf57",
+      "unchanged_figure_sha256": "5957a04019a4be54fab1a642913d7f92baa6a09b53fb522ccc21101db1eeb007"
+    },
+    {
+      "manifest": "docs/paper/generated/manifest.json",
+      "before_sha256": "b9281d13f3b16514117fcf4a8678389eaf5ce55fcadc131f5bf9c1f817aecee8",
+      "after_sha256": "d24f1b8ec9b1dd5fef16cc36596de746b4b8bc9e32f124f38fe89bc71a5ef673"
+    },
+    {
+      "manifest": "docs/paper/generated/reference.svg.manifest.json",
+      "before_sha256": "044126bc7a54892c20e0ff40f2d28565c90bf88afdaba610ff377c7a7abc4d48",
+      "after_sha256": "5dc2a73528b07723395e3c26a88703eacc05243bf1030aff6b009015b93a5787",
+      "unchanged_figure_sha256": "66c970a77f5ad0d38e3262d3d2f6a7e71a10d567214f2c0d5263294e49920e2e"
+    }
+  ]
+}
