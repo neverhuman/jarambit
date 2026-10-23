@@ -1,0 +1,5 @@
+# OpenCascade Python for the CAD battery STEP check (battery.rs run_step_brep_check): the same
+# versions as the host venv /home/ubuntu/.venvs/jarambit-sheath that host runners use. With the
+# fem_solid pin (7.8.1.1) the w283 STEP inspection runs for over ten minutes; with 7.9.3 about 53 s.
+cadquery-ocp==7.9.3.1.1
+numpy==2.5.4
