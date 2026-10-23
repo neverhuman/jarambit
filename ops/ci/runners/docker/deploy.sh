@@ -42,4 +42,14 @@ docker run -d --name "$name" --platform linux/amd64 --restart unless-stopped --i
   --log-opt max-size=10m --log-opt max-file=3 \
   --label jarambit.ci.runner=1 \
   -v "$volume:/home/runner" "$image" ./run.sh >/dev/null
+# systemd cgroup driver: `systemctl daemon-reload` would reset the scope's swap to unlimited, and
+# run_bounded.sh would then refuse every bounded step. Pin it now and keep it pinned (swap-pin.sh).
+if [[ $(docker info --format '{{.CgroupDriver}}') == systemd ]]; then
+  sudo -n install -D -m 755 "$here/swap-pin.sh" /usr/local/libexec/jarambit-runner-swap-pin.sh
+  sudo -n install -m 644 "$here/jarambit-runner-swap-pin.service" "$here/jarambit-runner-swap-pin.timer" /etc/systemd/system/
+  sudo -n systemctl daemon-reload
+  sudo -n systemctl enable --now jarambit-runner-swap-pin.timer >/dev/null
+  sudo -n systemctl start jarambit-runner-swap-pin.service
+fi
+[[ $(docker exec "$name" cat /sys/fs/cgroup/memory.swap.max) == 0 ]] || { echo "$name: swap not pinned to 0" >&2; exit 1; }
 echo "$name started on cpus $cpuset ($(docker inspect -f '{{.State.Status}}' "$name"))"
