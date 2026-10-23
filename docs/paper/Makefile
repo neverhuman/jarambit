@@ -156,7 +156,7 @@ check: audit pdfs
 	awk '/^Pages:/ { if ($$2 < 15 || $$2 > 20) exit 1; found=1 } END { if (!found) exit 1 }' $(OUT)/pdfinfo.txt
 clean:
 	@echo 'Build artifacts remain under target/ieee/paper for inspection; no automatic deletion.'
-# Surface-tension pocket smoothing (sections/pocket-smoothing.tex and the variant-A main page).
+# Surface-tension pocket smoothing (variant B: sections/pocket-smoothing.tex and its main page).
 # Renders the Stage-2 run bound by the receipt below; the STLs and D1 fields stay outside git,
 # pinned by sha256 in the receipt and checked against it here. Geometry and retained fields only.
 POCKET_RECEIPT := ../../experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json
@@ -186,3 +186,23 @@ pocket-figures:
 	printf '{\n  "figure": "docs/paper/figures/pocket/hero.png",\n  "figure_sha256": "%s",\n  "script": "docs/paper/Makefile",\n  "inputs": {\n    "docs/paper/figures/pocket/hero.svg": "%s",\n    "docs/paper/figures/pocket/hero-stack.png": "%s",\n    "experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json": "%s"\n  },\n  "note": "make figures: rsvg-convert -w 2000 of the SVG (stacked fields + labels + colour key + W_ULTRALIGHT_v1 badge from the receipt)."\n}\n' \
 	  $$(sha256sum < figures/pocket/hero.png | cut -c1-64) $$(sha256sum < figures/pocket/hero.svg | cut -c1-64) \
 	  $$(sha256sum < figures/pocket/hero-stack.png | cut -c1-64) $$(sha256sum < $(POCKET_RECEIPT) | cut -c1-64) > figures/pocket/hero.png.manifest.json
+	# Variant-B main page: the smoothed export under variant A's cover camera (the as-exported
+	# render is re-made too and must stay pixel-identical), then the same inset and badge.
+	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example smoothing_figure -- \
+	  --before $(POCKET_RAW_STL) --before-sha256 $$(sha256sum < $(POCKET_RAW_STL) | cut -c1-64) \
+	  --after $(POCKET_RUN)/f075/w406_f075.stl --after-sha256 $$(sha256sum < $(POCKET_RUN)/f075/w406_f075.stl | cut -c1-64) \
+	  --code-commit $$(git rev-parse HEAD) --out $(OUT)/pocket-raw/cover --width 2000 --remeshed
+	cp $(OUT)/pocket-raw/cover/smoothing-figure.render.v1.json figures/cover/
+	for pair in before:unsmoothed after:smoothed; do src=$${pair%%:*}; dst=$${pair##*:}; \
+	  printf '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2000" height="850"><image xlink:href="winner-%s.png" width="2000" height="850"/></svg>\n' $$src \
+	    > $(OUT)/pocket-raw/cover/wrap-$$src.svg; \
+	  (cd $(OUT)/pocket-raw/cover && rsvg-convert -o $(abspath figures/cover)/render-$$dst.png wrap-$$src.svg) || exit 1; \
+	  printf '{\n  "figure": "docs/paper/figures/cover/render-%s.png",\n  "figure_sha256": "%s",\n  "script": "crates/paper-artifacts/examples/smoothing_figure.rs",\n  "inputs": {\n    "docs/paper/figures/cover/smoothing-figure.render.v1.json": "%s",\n    "experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json": "%s"\n  },\n  "external_inputs": {\n    "before_stl": {\n      "path": "%s",\n      "sha256": "%s"\n    },\n    "after_stl": {\n      "path": "%s",\n      "sha256": "%s"\n    }\n  },\n  "external_inputs_note": "STLs are outside git because of their size; bound by sha256 and by RECEIPT.json.",\n  "postprocess": "Producer output at --width 2000 (stored-deflate PNG) re-encoded losslessly with rsvg-convert; pixel-identical."\n}\n' \
+	    $$dst $$(sha256sum < figures/cover/render-$$dst.png | cut -c1-64) $$(sha256sum < figures/cover/smoothing-figure.render.v1.json | cut -c1-64) \
+	    $$(sha256sum < $(POCKET_RECEIPT) | cut -c1-64) $(POCKET_RAW_STL) $$(sha256sum < $(POCKET_RAW_STL) | cut -c1-64) \
+	    $(POCKET_RUN)/f075/w406_f075.stl $$(sha256sum < $(POCKET_RUN)/f075/w406_f075.stl | cut -c1-64) > figures/cover/render-$$dst.png.manifest.json; done
+	rsvg-convert -w 2000 -h 850 -o figures/cover/cover-smoothed.png figures/cover/cover-smoothed.svg
+	printf '{\n  "figure": "docs/paper/figures/cover/cover-smoothed.png",\n  "figure_sha256": "%s",\n  "script": "docs/paper/Makefile",\n  "inputs": {\n    "docs/paper/figures/cover/cover-smoothed.svg": "%s",\n    "docs/paper/figures/cover/render-smoothed.png": "%s",\n    "experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json": "%s"\n  },\n  "note": "make figures: rsvg-convert -w 2000 -h 850 of the SVG (render + 2.5x isogrid-pocket inset + W_ULTRALIGHT_v1 badge %s from the receipt hero_score_100)."\n}\n' \
+	  $$(sha256sum < figures/cover/cover-smoothed.png | cut -c1-64) $$(sha256sum < figures/cover/cover-smoothed.svg | cut -c1-64) \
+	  $$(sha256sum < figures/cover/render-smoothed.png | cut -c1-64) $$(sha256sum < $(POCKET_RECEIPT) | cut -c1-64) \
+	  $$(sed -n 's/.*"hero_score_100": *\([0-9.]*\).*/\1/p' $(abspath $(POCKET_RECEIPT)) | head -1) > figures/cover/cover-smoothed.png.manifest.json

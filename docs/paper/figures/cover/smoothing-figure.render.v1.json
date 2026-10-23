@@ -5,7 +5,7 @@
     214
   ],
   "camera": {
-    "framed_on": "before mesh, shared by all three images; no refit",
+    "framed_on": "before mesh, shared by both images; no refit",
     "offset": [
       282.3342619907115,
       472.8898240766666
@@ -30,17 +30,17 @@
     "scale": 8.063901698066465,
     "sha256": "cbf9c747f3b5e597eea174a9fd6a216b0a01d10886437b17d2276505eb6b62ce"
   },
-  "code_commit": "f941c7fdbf6afb538f47f080a7d4a25685b3cd5a",
-  "command": "/home/ubuntu/jarambit/.agent/worktrees/eval-tip-zero/crates/paper-artifacts/target/release/examples/smoothing_figure --before /home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl --before-sha256 e574212003bb4c32eb124cb2beda93d6e8ac13d4295b6b0ca46f6795fe5a3bb2 --after /home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L4/smoothing/smoothed.stl --after-sha256 157d22c71890d49ae7eee0e755823dcd433c598b749d51e12d9efb1219f2c310 --code-commit f941c7fdbf6afb538f47f080a7d4a25685b3cd5a --out /home/ubuntu/jarambit_runs/smoothing/w406t3_r01_p10_c16-figures-2000-20261022T165706Z --width 2000",
+  "code_commit": "f927a0bce2f5510fa815ac03615e6c65f84d894d",
+  "command": "target/release/examples/smoothing_figure --before /home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl --before-sha256 e574212003bb4c32eb124cb2beda93d6e8ac13d4295b6b0ca46f6795fe5a3bb2 --after /home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl --after-sha256 c969693c466594ff9357e5ca3e26c9d074b9cde53f1e0894a04b9580b5ace296 --code-commit f927a0bce2f5510fa815ac03615e6c65f84d894d --out /home/ubuntu/jarambit/.agent/worktrees/paper-pocket/target/ieee/paper/pocket-raw/cover --width 2000 --remeshed",
   "geometry": {
-    "face_order_identical": true,
-    "faces": 89972,
-    "max_corner_displacement_mm": 0.21352247019693715,
-    "mean_corner_displacement_mm": 0.005238420412341994,
+    "displacement": "not defined: the after mesh is a new export with its own faces",
+    "face_order_identical": false,
+    "faces_after": 124864,
+    "faces_before": 89972,
     "normals_after": {
-      "blocked_edges": 13389,
-      "capped_corners": 4,
-      "joined_edges": 121569
+      "blocked_edges": 26415,
+      "capped_corners": 26,
+      "joined_edges": 160881
     },
     "normals_before": {
       "blocked_edges": 14703,
@@ -48,50 +48,15 @@
       "joined_edges": 120255
     }
   },
-  "heatmap": {
-    "range_mm": [
-      0.0,
-      0.21352247019693715
-    ],
-    "stops_srgb": [
-      {
-        "rgb": [
-          18.0,
-          42.0,
-          74.0
-        ],
-        "t": 0.0
-      },
-      {
-        "rgb": [
-          44.0,
-          165.0,
-          141.0
-        ],
-        "t": 0.5
-      },
-      {
-        "rgb": [
-          253.0,
-          231.0,
-          37.0
-        ],
-        "t": 1.0
-      }
-    ],
-    "value": "mean of the three corner displacements per face"
-  },
   "images": {
     "winner-after.png": "lit appearance of the after mesh (base colour uniform)",
-    "winner-before.png": "lit appearance of the before mesh (base colour uniform)",
-    "winner-displacement-colorbar.png": "unlit colour scale, linear from 0 mm (left) to heatmap range maximum (right)",
-    "winner-displacement.png": "unlit heatmap of mean per-face corner displacement; colour is the value"
+    "winner-before.png": "lit appearance of the before mesh (base colour uniform)"
   },
   "inputs": {
     "after": {
-      "bytes": 26724197,
-      "path": "/home/ubuntu/jarambit_runs/smoothing/re_w406t3_r01_p10_c16-ladder-20261022T160510Z/L4/smoothing/smoothed.stl",
-      "sha256": "157d22c71890d49ae7eee0e755823dcd433c598b749d51e12d9efb1219f2c310"
+      "bytes": 21226508,
+      "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl",
+      "sha256": "c969693c466594ff9357e5ca3e26c9d074b9cde53f1e0894a04b9580b5ace296"
     },
     "before": {
       "bytes": 15269827,
@@ -125,17 +90,7 @@
     {
       "bytes": 5101303,
       "name": "winner-after.png",
-      "sha256": "3944e585fd69120427a1090d87ad7f2cfd2e7200d4de8a05d0a6c47b4d0a27b8"
-    },
-    {
-      "bytes": 5101303,
-      "name": "winner-displacement.png",
-      "sha256": "a53ca69f5c108d6b5cac78a81582ae78a65561f97bf5755cca2c38faf47e5a08"
-    },
-    {
-      "bytes": 168106,
-      "name": "winner-displacement-colorbar.png",
-      "sha256": "73d210d411864c33f5cd1f457e65d4edaa0412d2b1962a9c43a183c4775dba42"
+      "sha256": "6a58abbab1679c21a066fe60806cbab250dbbd53db97d6ffc775ce828abe4380"
     }
   ],
   "render": {

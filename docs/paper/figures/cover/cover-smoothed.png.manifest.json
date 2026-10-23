@@ -1,11 +1,11 @@
 {
   "figure": "docs/paper/figures/cover/cover-smoothed.png",
-  "figure_sha256": "a399a29d6ddd04215a85032d5e1ea60aa7a7b51c2571d96371678738070c2a4e",
+  "figure_sha256": "6b6e4e40827320edca40b37031dbf3bc6232b1a09a8491423a8ff8ea6d31e49d",
   "script": "docs/paper/Makefile",
   "inputs": {
-    "docs/paper/figures/cover/cover-smoothed.svg": "d341ca06a29b2e9d693603eb37e298b314eac5b8bc373d4cb0caf3fd73eca075",
-    "docs/paper/figures/cover/render-smoothed.png": "5c20d62181c991d51ebe3b5e7a0233a0e2b8826c703172126979f0618e39da30",
-    "experiments/geometry-smoothing-benchmark/results/winner-w406t3_r01_p10_c16/rescore/RESCORE.json": "9f7d3d5027c1cc555e42df381195fdef94082f4ba807491ef66a7598fd040374"
+    "docs/paper/figures/cover/cover-smoothed.svg": "7c8f3decf311d965a3c420176733fc8bc9ce0e74e54c50e6dd337a6f7efbdb77",
+    "docs/paper/figures/cover/render-smoothed.png": "70ddd2ebfc2e2809dc6a3debeee32d536b1342f2d92a67badfd88e0618f52343",
+    "experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json": "f03482d4964d304a1842eb517fda0a050e544bb8a8e3e858f9dd8fc0d9266061"
   },
-  "note": "make figures: rsvg-convert -w 2000 -h 850 of the SVG (render + 2.5x isogrid-pocket inset + W_ULTRALIGHT_v1 badge 75.34 from RESCORE.json)."
+  "note": "make figures: rsvg-convert -w 2000 -h 850 of the SVG (render + 2.5x isogrid-pocket inset + W_ULTRALIGHT_v1 badge 80.370405 from the receipt hero_score_100)."
 }
