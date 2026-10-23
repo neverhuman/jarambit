@@ -4,6 +4,8 @@
 # A first start reads one short-lived repository registration token on stdin; it is passed to
 # config.sh and not retained (the runner's credentials stay in its own volume). Restarting an
 # existing runner needs no token. The container restarts with the Docker engine.
+# The image is linux/amd64 on every host; on Apple Silicon (xbabe4) run it in a colima VM with
+# Rosetta (DOCKER_CONTEXT=colima-<profile>) and point JANKURAI_BIN at the Linux x86-64 binary.
 set -euo pipefail
 name=$1 cpuset=$2
 [[ $name =~ ^jarambit-docker-xbabe[1-4]-[1-9][0-9]*$ ]] || { echo "bad runner name: $name" >&2; exit 2; }
@@ -12,14 +14,19 @@ here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 image=jarambit-runner-x64:2.338.0
 volume=$name-state
 # Image, work volume and caches need room; keep the host's other services above their guards.
-free_gb=$(df -BG --output=avail "$(docker info --format '{{.DockerRootDir}}')" | tail -1 | tr -dc 0-9)
-(( free_gb >= 80 )) || { echo "only ${free_gb}G free under the Docker root; refusing" >&2; exit 1; }
+root=$(docker info --format '{{.DockerRootDir}}')
+if [[ -d $root ]]; then
+  free_gb=$(df -BG --output=avail "$root" | tail -1 | tr -dc 0-9)
+else  # engine inside a VM (colima): measure its own disk
+  free_gb=$(docker run --rm --platform linux/amd64 --entrypoint df ubuntu:24.04 -BG --output=avail /etc/hostname | tail -1 | tr -dc 0-9)
+fi
+(( free_gb >= 80 )) || { echo "only ${free_gb}G free for the Docker engine; refusing" >&2; exit 1; }
 
 build=$HOME/actions-runners/jarambit-docker-build
 mkdir -p "$build"
 cp "$here/Dockerfile" "$here/register.sh" "$build/"
-install -m 755 "$HOME/.jeryu/bin/jankurai" "$build/jankurai"
-docker build --pull -q -t "$image" "$build" >/dev/null
+install -m 755 "${JANKURAI_BIN:-$HOME/.jeryu/bin/jankurai}" "$build/jankurai"
+docker build --pull -q --platform linux/amd64 -t "$image" "$build" >/dev/null
 
 docker volume inspect "$volume" >/dev/null 2>&1 || docker volume create "$volume" >/dev/null
 if ! docker run --rm -v "$volume:/home/runner" --entrypoint test "$image" -f /home/runner/.runner; then
@@ -29,7 +36,7 @@ if ! docker run --rm -v "$volume:/home/runner" --entrypoint test "$image" -f /ho
   docker run --rm -i -v "$volume:/home/runner" --entrypoint /opt/register-runner.sh "$image" "$name"
 fi
 docker rm -f "$name" >/dev/null 2>&1 || true
-docker run -d --name "$name" --restart unless-stopped --init \
+docker run -d --name "$name" --platform linux/amd64 --restart unless-stopped --init \
   --cpus 4 --cpuset-cpus "$cpuset" --memory 8g --memory-swap 8g --pids-limit 4096 \
   --cap-drop ALL --security-opt no-new-privileges \
   --log-opt max-size=10m --log-opt max-file=3 \

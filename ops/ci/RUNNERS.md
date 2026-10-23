@@ -11,7 +11,7 @@ narrows the pool; it never falls back to a GitHub-hosted machine.
 | xbabe2 | `jarambit-xbabe2`, `jarambit-xbabe2-2`, `jarambit-xbabe2-3` | Ubuntu 24.04, x64 | `jarambit-d1`, `jarambit-publication`, `jarambit-render` |
 | xbabe3 | `jarambit-xbabe3` | Ubuntu 24.04, x64, systemd service | `jarambit-d1`, `jarambit-publication`, `jarambit-render` |
 | xbabe4 | `jarambit-xbabe4` | Docker Linux/ARM64 on Apple Silicon | Portable general jobs; `docker` |
-| xbabe1–3 | `jarambit-docker-<host>-<n>` | Docker Linux/x64, one runner per container (4 CPUs, 8 GiB, no swap) | `jarambit-d1`, `docker`; no host label |
+| xbabe1, xbabe2, xbabe4 | `jarambit-docker-<host>-<n>` | Docker Linux/x64, one runner per container (4 CPUs, 8 GiB, no swap); on xbabe4 under Rosetta in a colima VM | `jarambit-d1`, `docker`; no host label |
 
 Each host runner also carries its physical host label (`xbabe1` through `xbabe4`). The x64 Docker
 runners do not, so host-pinned jobs (`runner-policy`, the xbabe1 synthetic benchmark and the
@@ -84,7 +84,7 @@ Starting the existing container requires no registration token. Preserve the
 not part of this deployment. GitHub runner inventory and actual workflow job
 metadata are the authority for online/busy state and execution placement.
 
-## x64 Docker runners (xbabe1–3)
+## x64 Docker runners (xbabe1, xbabe2, xbabe4)
 
 Source: `ops/ci/runners/docker/{Dockerfile,register.sh,deploy.sh}`. Each runner is one persistent
 container from image `jarambit-runner-x64:2.338.0` (official Actions runner 2.338.0, Ubuntu 24.04,
@@ -114,3 +114,10 @@ the host's `~/.jeryu/bin/jankurai`), registers once into the runner's own volume
 `--restart unless-stopped`. Re-running it without a token rebuilds and restarts an existing
 runner. Choose a cpuset of four physical cores and their SMT siblings inside the host's
 `system.slice` CPUs (`0-50,64-114`), distinct from other runners' affinity.
+
+On xbabe4 (Apple M3 Ultra) the same linux/amd64 image runs under Rosetta in a dedicated colima
+VM, profile `jarambit-x64` (16 CPUs, 64 GiB, 300 GiB disk; Docker context `colima-jarambit-x64`),
+separate from the ARM64 profile `jarambit-ci`. `colima-x64.sh` starts it, and LaunchAgent
+`com.jarambit.ci-runner-x64` runs that at login; the runner containers restart with the engine.
+Deploy with `DOCKER_CONTEXT=colima-jarambit-x64 JANKURAI_BIN=<Linux x86-64 jankurai>` and cpusets
+`0-3`, `4-7`, `8-11`, `12-15`. A bounded release build of `jarambit` there took 151 s from scratch.
