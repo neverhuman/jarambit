@@ -28,6 +28,11 @@ cp "$here/Dockerfile" "$here/register.sh" "$build/"
 cp "$here/cad-battery-requirements.txt" "$build/"
 install -m 755 "${JANKURAI_BIN:-$HOME/.jeryu/bin/jankurai}" "$build/jankurai"
 docker build --pull -q --platform linux/amd64 -t "$image" "$build" >/dev/null
+# Refuse an image missing what the general-pool jobs call (jankurai, pinned Clippy, CAD battery OCP).
+docker run --rm --platform linux/amd64 --entrypoint bash "$image" -c \
+  'test -x /home/ubuntu/.jeryu/bin/jankurai && /home/ubuntu/.jeryu/bin/jankurai --version >/dev/null &&
+   /home/ubuntu/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/cargo-clippy --version >/dev/null &&
+   /home/ubuntu/.venvs/jarambit-sheath/bin/python -c "import OCP"' || { echo "image smoke check failed" >&2; exit 1; }
 
 docker volume inspect "$volume" >/dev/null 2>&1 || docker volume create "$volume" >/dev/null
 if ! docker run --rm -v "$volume:/home/runner" --entrypoint test "$image" -f /home/runner/.runner; then

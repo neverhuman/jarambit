@@ -33,5 +33,7 @@ COPY --chown=runner:runner cad-battery-requirements.txt /home/ubuntu/.venvs/cad-
 RUN python3 -m venv /home/ubuntu/.venvs/jarambit-sheath \
     && /home/ubuntu/.venvs/jarambit-sheath/bin/python -m pip install --no-cache-dir -q -r /home/ubuntu/.venvs/cad-battery-requirements.txt \
     && /home/ubuntu/.venvs/jarambit-sheath/bin/python -c "from OCP.STEPControl import STEPControl_Reader"
+# The jankurai audit binary is staged into the build context by deploy.sh (not in git).
+COPY --chown=runner:runner jankurai /home/ubuntu/.jeryu/bin/jankurai
 COPY --chmod=755 register.sh /opt/register-runner.sh
 WORKDIR /home/runner
