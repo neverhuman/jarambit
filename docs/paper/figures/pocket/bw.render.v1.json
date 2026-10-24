@@ -1,9 +1,9 @@
 {
-  "command": "target/release/examples/pocket_smoothing_figures bw --raw /home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl --ours /home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl --ladder docs/paper/ladder/smoothing-ladder.render.v1.json --out /home/ubuntu/jarambit/.agent/worktrees/research-pocket-smoothing/target/ieee/paper/pocket-raw/bw",
+  "command": "target/release/examples/pocket_smoothing_figures bw --raw /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56.stl --ours /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl --ladder docs/paper/ladder/smoothing-ladder.render.v1.json --out /home/ubuntu/jarambit/.agent/worktrees/paper-refresh/target/ieee/paper/pocket-raw/bw",
   "inputs": {
-    "ladder_render_sha256": "faa96bbdd2f92b93ec87f6cb0972fae0dacba1c36a0fdcd59a62fb4900b4ca07",
-    "ours_stl_sha256": "c969693c466594ff9357e5ca3e26c9d074b9cde53f1e0894a04b9580b5ace296",
-    "raw_stl_sha256": "e574212003bb4c32eb124cb2beda93d6e8ac13d4295b6b0ca46f6795fe5a3bb2"
+    "ladder_render_sha256": "bbca1f08dc8c7d917e6f4fd665e6119d029ec3701b51aa0ace6cf5ada1929410",
+    "ours_stl_sha256": "91ab0b649640a2e78807bde08c3794c1bc90e5a6ebeb929de8b2173263288c65",
+    "raw_stl_sha256": "6a76f809d755cc986905756e7de532803e88306313815b6b8ad271e90e9278ca"
   },
   "lighting": {
     "ambient": 0.1,
@@ -20,8 +20,8 @@
     {
       "camera": {
         "offset": [
-          -877.736504771948,
-          254.6485488873084
+          -875.8082004366207,
+          254.668695774748
         ],
         "rotation": [
           [
@@ -40,20 +40,20 @@
             -0.5735764363510462
           ]
         ],
-        "scale": 17.465337695743067,
-        "sha256": "20efa1df98d9093095895cb58619fbac188d052da50f79c98b3c9e5900081e91"
+        "scale": 17.46270091810085,
+        "sha256": "87bb94faa4d0803da7984d6be9e0dbb2d187577d98631734043ef62262c8594e"
       },
-      "crease_edges": 12357,
+      "crease_edges": 12123,
       "height": 595,
       "name": "bw-guard-raw.png",
-      "sha256": "9d267b5caf9efcfea0f2aef658c27e1d8cd4c8e5d842be34b7114a7453bb1a34",
+      "sha256": "c2299e7d161ce5ff2cc01076acaef667e29d4416ca45ac400583d0c662426ae5",
       "width": 1400
     },
     {
       "camera": {
         "offset": [
-          -877.736504771948,
-          254.6485488873084
+          -875.8082004366207,
+          254.668695774748
         ],
         "rotation": [
           [
@@ -72,20 +72,20 @@
             -0.5735764363510462
           ]
         ],
-        "scale": 17.465337695743067,
-        "sha256": "20efa1df98d9093095895cb58619fbac188d052da50f79c98b3c9e5900081e91"
+        "scale": 17.46270091810085,
+        "sha256": "87bb94faa4d0803da7984d6be9e0dbb2d187577d98631734043ef62262c8594e"
       },
-      "crease_edges": 21187,
+      "crease_edges": 21531,
       "height": 595,
       "name": "bw-guard-ours.png",
-      "sha256": "1670ff0bec0b8b0024714700e3c102e455e338d213ddeebc3f13bc9107df5fa7",
+      "sha256": "87e3d5d604462e23d6a9e9cc4878f803e7be795b5d5bad97463f4a0544ed996a",
       "width": 1400
     },
     {
       "camera": {
         "offset": [
-          -80.61956898771359,
-          269.0015129727239
+          -84.60990591156951,
+          269.032853622736
         ],
         "rotation": [
           [
@@ -104,20 +104,20 @@
             -0.5735764363510462
           ]
         ],
-        "scale": 17.47601209983419,
-        "sha256": "0b92f83d0f750a2d6fff2cb0652f9067e1f2adc4b5b50b0b3ef1a815139ed834"
+        "scale": 17.478192893301625,
+        "sha256": "bf2616587bd0c31d8009f9d790b401a0c93880444bdb5b497d6acefc8c23b237"
       },
-      "crease_edges": 12357,
+      "crease_edges": 12123,
       "height": 595,
       "name": "bw-handle-raw.png",
-      "sha256": "edf7d69c26fc6f922aad765641e7ae39b5113cc0ae85c42b2866ee055f8222e4",
+      "sha256": "6703ca5c763876f01ef3878a4aa5dd4ae651ae19404613109ab50e76a8a8e122",
       "width": 1400
     },
     {
       "camera": {
         "offset": [
-          -80.61956898771359,
-          269.0015129727239
+          -84.60990591156951,
+          269.032853622736
         ],
         "rotation": [
           [
@@ -136,20 +136,20 @@
             -0.5735764363510462
           ]
         ],
-        "scale": 17.47601209983419,
-        "sha256": "0b92f83d0f750a2d6fff2cb0652f9067e1f2adc4b5b50b0b3ef1a815139ed834"
+        "scale": 17.478192893301625,
+        "sha256": "bf2616587bd0c31d8009f9d790b401a0c93880444bdb5b497d6acefc8c23b237"
       },
-      "crease_edges": 21187,
+      "crease_edges": 21531,
       "height": 595,
       "name": "bw-handle-ours.png",
-      "sha256": "171313246a7908ebbc33f6320bf7f7f39f35efb66fd4df61e1be904b72eaaabf",
+      "sha256": "a6f42b87f28c1c3ebd1449d13b0e48df66ba2acf078c412b8aa62112f8c4749b",
       "width": 1400
     },
     {
       "camera": {
         "offset": [
-          -1677.1589456448844,
-          319.33083399271123
+          -1674.1680345575276,
+          318.9148098794355
         ],
         "rotation": [
           [
@@ -168,20 +168,20 @@
             -0.5735764363510462
           ]
         ],
-        "scale": 15.51356715559434,
-        "sha256": "47004fb505c4259fcba47102d7f7f4fd26add42b60b04637fb90a008486d83d4"
+        "scale": 15.492392001196665,
+        "sha256": "f629468fc682c0b1e98bbc173c837840a15abb7afe770240cf8045dffa0ea9bf"
       },
-      "crease_edges": 12357,
+      "crease_edges": 12123,
       "height": 595,
       "name": "bw-blade-raw.png",
-      "sha256": "93532961b72d4ef67c12df0932939984504e4d75228d3acad43f1c1779c6c105",
+      "sha256": "6522c32eb0fef0725b6cb2e250e1b1959a89866775ef0c7406980bb83a35bc57",
       "width": 1400
     },
     {
       "camera": {
         "offset": [
-          -1677.1589456448844,
-          319.33083399271123
+          -1674.1680345575276,
+          318.9148098794355
         ],
         "rotation": [
           [
@@ -200,13 +200,13 @@
             -0.5735764363510462
           ]
         ],
-        "scale": 15.51356715559434,
-        "sha256": "47004fb505c4259fcba47102d7f7f4fd26add42b60b04637fb90a008486d83d4"
+        "scale": 15.492392001196665,
+        "sha256": "f629468fc682c0b1e98bbc173c837840a15abb7afe770240cf8045dffa0ea9bf"
       },
-      "crease_edges": 21187,
+      "crease_edges": 21531,
       "height": 595,
       "name": "bw-blade-ours.png",
-      "sha256": "99be843ca6980a6c5ee9219543f4346dc882324565decea9a8b4e2140ea2a50c",
+      "sha256": "679dc5d4b54e3aefda45b6bf8d6cda70e5dc1ec8f96b75e276f8c09f02977223",
       "width": 1400
     }
   ],

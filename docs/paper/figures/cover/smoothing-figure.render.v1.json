@@ -7,8 +7,8 @@
   "camera": {
     "framed_on": "before mesh, shared by both images; no refit",
     "offset": [
-      282.3342619907115,
-      472.8898240766666
+      282.3333294087098,
+      472.8783797284847
     ],
     "rotation": [
       [
@@ -27,25 +27,25 @@
         -1.0
       ]
     ],
-    "scale": 8.063901698066465,
-    "sha256": "cbf9c747f3b5e597eea174a9fd6a216b0a01d10886437b17d2276505eb6b62ce"
+    "scale": 8.063909271372994,
+    "sha256": "669402aeea0689fcdff5867eaa59ff5fb16c2c8e4bbf1595b04d4b756c7f1ecc"
   },
-  "code_commit": "f927a0bce2f5510fa815ac03615e6c65f84d894d",
-  "command": "target/release/examples/smoothing_figure --before /home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl --before-sha256 e574212003bb4c32eb124cb2beda93d6e8ac13d4295b6b0ca46f6795fe5a3bb2 --after /home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl --after-sha256 c969693c466594ff9357e5ca3e26c9d074b9cde53f1e0894a04b9580b5ace296 --code-commit f927a0bce2f5510fa815ac03615e6c65f84d894d --out /home/ubuntu/jarambit/.agent/worktrees/paper-pocket/target/ieee/paper/pocket-raw/cover --width 2000 --remeshed",
+  "code_commit": "69ece2971a1920389e78a23012325eef0f91407a",
+  "command": "target/release/examples/smoothing_figure --before /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56.stl --before-sha256 6a76f809d755cc986905756e7de532803e88306313815b6b8ad271e90e9278ca --after /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl --after-sha256 91ab0b649640a2e78807bde08c3794c1bc90e5a6ebeb929de8b2173263288c65 --code-commit 69ece2971a1920389e78a23012325eef0f91407a --out /home/ubuntu/jarambit/.agent/worktrees/paper-refresh/target/ieee/paper/pocket-raw/cover --width 2000 --remeshed",
   "geometry": {
     "displacement": "not defined: the after mesh is a new export with its own faces",
     "face_order_identical": false,
-    "faces_after": 124864,
-    "faces_before": 89972,
+    "faces_after": 125172,
+    "faces_before": 89772,
     "normals_after": {
-      "blocked_edges": 26415,
+      "blocked_edges": 26710,
       "capped_corners": 26,
-      "joined_edges": 160881
+      "joined_edges": 161048
     },
     "normals_before": {
-      "blocked_edges": 14703,
-      "capped_corners": 8,
-      "joined_edges": 120255
+      "blocked_edges": 14580,
+      "capped_corners": 22,
+      "joined_edges": 120078
     }
   },
   "images": {
@@ -54,14 +54,14 @@
   },
   "inputs": {
     "after": {
-      "bytes": 21226508,
-      "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl",
-      "sha256": "c969693c466594ff9357e5ca3e26c9d074b9cde53f1e0894a04b9580b5ace296"
+      "bytes": 21277235,
+      "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl",
+      "sha256": "91ab0b649640a2e78807bde08c3794c1bc90e5a6ebeb929de8b2173263288c65"
     },
     "before": {
-      "bytes": 15269827,
-      "path": "/home/ubuntu/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16/re_w406t3_r01_p10_c16.stl",
-      "sha256": "e574212003bb4c32eb124cb2beda93d6e8ac13d4295b6b0ca46f6795fe5a3bb2"
+      "bytes": 15234282,
+      "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56.stl",
+      "sha256": "6a76f809d755cc986905756e7de532803e88306313815b6b8ad271e90e9278ca"
     }
   },
   "lighting": {
@@ -85,12 +85,12 @@
     {
       "bytes": 5101303,
       "name": "winner-before.png",
-      "sha256": "39c890375efd586f557f93d85c6ef11f8f52eaa3ea84b3c02a4c3f2ce70bfa2a"
+      "sha256": "27488b885295f83a8236356ac87eacb98ca73cbe31088d9eff7cdf9bdbae21c8"
     },
     {
       "bytes": 5101303,
       "name": "winner-after.png",
-      "sha256": "6a58abbab1679c21a066fe60806cbab250dbbd53db97d6ffc775ce828abe4380"
+      "sha256": "2595a7c6ad5dcf9ae625cf38f9538a49e56bb760e86744ee22e448eb04297ca3"
     }
   ],
   "render": {

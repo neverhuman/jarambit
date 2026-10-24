@@ -2,8 +2,8 @@
   "association": "each CAD face takes the stored value of the D1 plate triangle containing its centroid (x, y); no interpolation or new solve",
   "camera": {
     "offset": [
-      139.21933029971876,
-      121.76374957565616
+      139.2186015844802,
+      121.79326317720478
     ],
     "rotation": [
       [
@@ -22,8 +22,8 @@
         -0.5299192642332049
       ]
     ],
-    "scale": 6.301095280349609,
-    "sha256": "ff72c531c5b9eef84e2462de0f66380f70e554ee5e35aae7fcc6913cad46549e"
+    "scale": 6.301101198096107,
+    "sha256": "f21fee77aca0a6439826c518166d0ba9ec063caad831e1b8473c6702077de93a"
   },
   "colormap": {
     "masked_rgb": [
@@ -90,11 +90,11 @@
       }
     ]
   },
-  "command": "target/release/examples/pocket_smoothing_figures hero --stl /home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl --d1 /home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075_D1.json --score 80.370405 --out /home/ubuntu/jarambit/.agent/worktrees/research-pocket-smoothing/target/ieee/paper/pocket-raw/hero",
+  "command": "target/release/examples/pocket_smoothing_figures hero --stl /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl --d1 /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56_D1.json --score 80.561227 --out /home/ubuntu/jarambit/.agent/worktrees/paper-refresh/target/ieee/paper/pocket-raw/hero",
   "crease_lines": {
     "depth_tested": true,
     "dihedral_deg_over": 45.0,
-    "edges": 11480,
+    "edges": 11813,
     "strength": 0.62
   },
   "envelope_layer": {
@@ -112,10 +112,10 @@
       "mask_rule": "non-finite or negative",
       "masked_area_fraction": 0.0,
       "name": "Lateral bending",
-      "normalizer": 3.3643,
-      "peak": 7.9502,
+      "normalizer": 3.1637,
+      "peak": 9.0189,
       "percentile": 99.0,
-      "saturated_area_fraction": 0.009553539489145857,
+      "saturated_area_fraction": 0.009564176879014437,
       "units": "MPa/N"
     },
     {
@@ -123,21 +123,21 @@
       "mask_rule": "non-finite or negative",
       "masked_area_fraction": 0.0,
       "name": "Chord torsion",
-      "normalizer": 0.1282,
-      "peak": 30.2508,
+      "normalizer": 0.1276,
+      "peak": 35.2191,
       "percentile": 99.0,
-      "saturated_area_fraction": 0.00925019382056547,
+      "saturated_area_fraction": 0.009254468867324447,
       "units": "MPa/(N mm)"
     },
     {
       "channel": "ring",
       "mask_rule": "non-finite, negative or exactly zero (producer seated-region zeroing)",
-      "masked_area_fraction": 0.5643373268143981,
+      "masked_area_fraction": 0.5673289710654059,
       "name": "Ring traction",
-      "normalizer": 0.019,
-      "peak": 0.0264,
+      "normalizer": 0.0194,
+      "peak": 0.0262,
       "percentile": 99.0,
-      "saturated_area_fraction": 0.010313299369234521,
+      "saturated_area_fraction": 0.010186022460526096,
       "units": "MPa/N"
     },
     {
@@ -145,10 +145,10 @@
       "mask_rule": "non-finite or negative",
       "masked_area_fraction": 0.0,
       "name": "In-plane tip pry",
-      "normalizer": 1.137,
-      "peak": 2.6821,
+      "normalizer": 1.0476,
+      "peak": 2.33,
       "percentile": 99.0,
-      "saturated_area_fraction": 0.010013299045523259,
+      "saturated_area_fraction": 0.009999363148797145,
       "units": "MPa/N"
     },
     {
@@ -156,22 +156,22 @@
       "mask_rule": "non-finite or negative",
       "masked_area_fraction": 0.0,
       "name": "Multi-case envelope",
-      "normalizer": 867.5955,
-      "peak": 1458.5483,
+      "normalizer": 815.6388,
+      "peak": 1289.171,
       "percentile": 99.0,
-      "saturated_area_fraction": 0.00999809730409742,
+      "saturated_area_fraction": 0.009974000893117082,
       "units": "MPa"
     }
   ],
-  "hero_stack_sha256": "b4003cd1300116419278331871dc7c176f7597e12841c342fdc1238e41a28039",
+  "hero_stack_sha256": "544b460170fccb3feb2885411777b554bcbe5de51ddbab4fc191de354ac2612f",
   "inputs": {
     "d1": {
-      "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075_D1.json",
-      "sha256": "2b2c750d42f42320e9c54c00ef0e2c150c19b51b9b465736c1ee39f9e3c93130"
+      "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56_D1.json",
+      "sha256": "992b94f60372864e6f39a868faa18d98add4f2bb17118a47d9f96838d00e273c"
     },
     "stl": {
-      "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl",
-      "sha256": "c969693c466594ff9357e5ca3e26c9d074b9cde53f1e0894a04b9580b5ace296"
+      "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl",
+      "sha256": "91ab0b649640a2e78807bde08c3794c1bc90e5a6ebeb929de8b2173263288c65"
     }
   },
   "lighting": {
@@ -190,43 +190,43 @@
     {
       "height": 223,
       "name": "layer-lat.png",
-      "sha256": "e92dcc2d5904782a83d4bfc68b214a00f6c5ea5d6098aeffc9b70761ca71d9f0",
+      "sha256": "5cfed412ceca26fb09621fab9c264ce494fe2c988249baeab646026face8732e",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-twist.png",
-      "sha256": "4d98e2f2c429ec6098ddcf60540ec7eb6c6e671fe39c3e50a91dbbd74a6d4f23",
+      "sha256": "ffb96e9b670cd5ea51273655e8cdfe5fed0a88e0228513af56e0c4b7cfa27c96",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-ring.png",
-      "sha256": "e2c30cd4af8110f76497ec775bb6299d21f38e9ab2eb19adc3b5adb10b9be3bc",
+      "sha256": "f820cab4d77bc5914e96b438597add4ad8f64b6f5ee7338bffeb72edac916a1d",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-pry.png",
-      "sha256": "89961e77ef55b5ae8a7e76624611a121dc0a7bea8eef20ab0912ec5bbc0b309c",
+      "sha256": "7355c91804368e5410886f484f36b3e3ae205b70ed5f4acf1bc1876216d20909",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-env_vm.png",
-      "sha256": "cba020d26a060bccc719e180c59d50af95624b514515f7e5677e273380dd9c16",
+      "sha256": "d111f6faa26f86da5877a207e03f5f9de9512a182cef9124d4fb3afdc75f6716",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-envelope.png",
-      "sha256": "c5f6341372f8bbffe09a3d27e970a99dc97ffed2abf284ee3cc0e2e2deda0f83",
+      "sha256": "ff5eef5d8d6228df8bba3b63647ee0a9c4655a4fa78d2ea7d2002c54f631c7da",
       "width": 1400
     }
   ],
   "research_only": true,
   "schema": "jarambit.pocket_smoothing_hero.v1",
-  "score_shown": 80.370405,
+  "score_shown": 80.561227,
   "stack": {
     "canvas": [
       2000,

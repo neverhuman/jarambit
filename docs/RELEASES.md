@@ -2,6 +2,24 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v2.4.0 — 2026-10-24 (a better evolved design on both papers; only the winner is smoothed)
+
+- **New best evolved design.** With the plateau fix (#158), the v2.3.1 islands climbed past the paper's 80.299390. The best of the 1,761 comparable retained Stage-2 assessments of every run since 2026-10-17 (census read 2026-10-24T06:09Z, when the v2.3.1 cohort ended) is `ec3i042_r01_p10_c56`, from xbabe3 island i042. That island was seeded with `ec1i012_r04_p10_c101` (80.594628), whose island was seeded with `w406t3_r01_p10_c16`.
+  - As exported it scores `W_ULTRALIGHT_v1` = **80.623796** (83.55 g, battery 13/18, not qualified). A complete Stage-2 re-run with the island's evaluator (v2.3.1) reproduces this exactly, and its STL and STEP match the island's export apart from the label.
+  - Paper A (`main.pdf`, 19 pages) shows it as exported.
+  - Paper B (`main-smoothed.pdf`, 20 pages) shows it after pocket smoothing at r = 0.75 mm: 80.561227 (−0.062569). Lateral capacity, failure sequence and fatigue gain 0.069 points; the 3D solid-tip objective loses 0.131 (nodal maximum 0.6886 → 0.6450). The setting was chosen on `w406t3_r01_p10_c16` and is not re-tuned.
+  - 14 of the 15 pocket basins keep their removed volume exactly; one 0.22 mm³ sliver at the start of the blade taper flattens (total removed volume −0.014 %). The paper and the experiment README say so.
+  - Regenerated for it: covers, the stacked-field hero, the black-and-white and morphology views, the selection record (`winner-selection.v1.json`), the all-runs census and evolution figure, and the smoothing ladder.
+  - Paper B's pocket-smoothing table keeps the settings study on `w406t3_r01_p10_c16` and adds the new design at the chosen setting.
+  - The mesh-smoothing ladder (`smoothing-ladder.pdf`) now has seven levels, L0–L6. On this design, Taubin smoothing with 60° feature pins reverses a face at 60 or more iterations, and the smoother stops (fail-closed), so the former L7–L9 are not published. The face-reversal check is unchanged.
+  - The results section now explains the earlier plateau. The continuous evolution kept the isogrid, lattice and window layers, but until v2.3.1 it clamped every child's ring wall to at least 6 mm, and it peaked at 76.799579.
+- **`make pocket-figures` follows the committed receipt.** `POCKET_SUBJECT` names the subject. The smoothed STL, its D1 fields and the raw export come from that subject's `RECEIPT.json`, as the ladder target does since #157.
+- **Operations, outside the repo:**
+  - To save time, a smoothed Stage-2 started whenever a design became the live #1. Runs of earlier leaders are not reported; those still running when a better design appeared were stopped.
+  - Agents sharing xbabe1–xbabe4 coordinate compute in `~/master_log.md` on xbabe2.
+
+This release adds no qualification claim.
+
 ## v2.3.1 — 2026-10-23 (Paper A plain, Paper B pocket-smoothed; evolution keeps the leading design's lineage; CI green again)
 
 - **Final paper layout (#159, owner decision).** Paper A (`main.pdf`, 19 pages) shows the best evolved design `w406t3_r01_p10_c16` as exported (80.299390).

@@ -1,11 +1,11 @@
 {
   "figure": "docs/paper/figures/cover/cover-unsmoothed.png",
-  "figure_sha256": "9d1eb0264a263b4c6e526d160be9bd91abe997fec9f2b57c76f0e3c6e5f77c10",
+  "figure_sha256": "e1c6d9dc2bf9dbf4d338e4987354b03158faca80f2ba2879fa2797e9942811dc",
   "script": "docs/paper/Makefile",
   "inputs": {
-    "docs/paper/figures/cover/cover-unsmoothed.svg": "0a2a92a355008a031b2eb7c3ced04ba9ed29ec9dd500040d900164a6d529ba18",
-    "docs/paper/figures/cover/render-unsmoothed.png": "2e2f07bacb876f9e4f4d1aaaf7d4ec8958e3a46aee8efc3dd046dd7b55859da2",
-    "docs/paper/figures/cover/winner-selection.v1.json": "3b7a7cbcf074d5c719c664aa5115ce345898142871f7fccba9bfdc50cbddd88c"
+    "docs/paper/figures/cover/cover-unsmoothed.svg": "05b12c5055f2c5a6f8013308d87ae80cdc506725a13a0a17b936abcaae24674b",
+    "docs/paper/figures/cover/render-unsmoothed.png": "3f0a21adfcc8750601676843a1dec420b4d33e974aea70509e44b604b6d609e6",
+    "docs/paper/figures/cover/winner-selection.v1.json": "09a0402ba11c4b6057516f7b0eabdffec843ce4c40fd6e4a6f71650731b571e8"
   },
-  "note": "make figures: rsvg-convert -w 2000 -h 850 of the SVG (render + 2.5x isogrid-pocket inset + W_ULTRALIGHT_v1 badge 80.30 from winner-selection.v1.json)."
+  "note": "make figures: rsvg-convert -w 2000 -h 850 of the SVG (render + 2.5x isogrid-pocket inset + W_ULTRALIGHT_v1 badge 80.62 from winner-selection.v1.json)."
 }

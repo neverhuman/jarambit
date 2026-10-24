@@ -1,0 +1,161 @@
+{
+  "schema": "jarambit.pocket_smoothing_receipt.v1",
+  "research_only": true,
+  "subject": "ec3i042_r01_p10_c56",
+  "genome": {
+    "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/winner/ec3i042_r01_p10_c56/ec3i042_r01_p10_c56_genome.csv",
+    "sha256": "49b0327d442a7d6588c2503459c61cf4fa7b6116dcb8ce5a293b3c574a077566"
+  },
+  "raw_export_stl": {
+    "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56.stl",
+    "sha256": "6a76f809d755cc986905756e7de532803e88306313815b6b8ad271e90e9278ca"
+  },
+  "evaluator": "ops/ci/score_cad.py (full Stage-2), JARAMBIT_SOLVER_PYTHON = pinned fem_solid venv; W_ULTRALIGHT_v1 from ops/ci/ultralight_weighted_fitness.py",
+  "runs": [
+    {
+      "name": "ctrl",
+      "setting": "off (as exported, re-run)",
+      "env": null,
+      "commit": "49bb0ce38149a1b2c0c96bf7052f20730a963136",
+      "host": "xbabe3",
+      "score_100": 80.623796,
+      "battery_pass": 13,
+      "mass_3d_g": 83.5536,
+      "export_volume_mm3": 18860.851411963,
+      "solid_tip_sf_nodal_max": 0.6886,
+      "solid_tip_sf_nodal_avg": 0.738,
+      "solid_tip_dolfinx_rel_err": 0.000581,
+      "lat_rob_cert_n": 201.0,
+      "strict_lat_rob_0p0625_n": 197.9,
+      "ring_rob_cert_n": 26299.5,
+      "seq_ratio_cert": 1.182,
+      "twist_body_sf": 2.5,
+      "twist_tip_sf": 0.507,
+      "fat_sf_l7": 0.5614860190695492,
+      "cad_watertight_brep_points": 5.0,
+      "files": {
+        "stl": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56.stl",
+          "sha256": "6a76f809d755cc986905756e7de532803e88306313815b6b8ad271e90e9278ca",
+          "bytes": 15234282
+        },
+        "step": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56.step",
+          "sha256": "c25ed458f1ad5db6e46872f4b4b17a1bbd207090e7a769a3eee92ff212c11902",
+          "bytes": 53222456
+        },
+        "d1": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56_D1.json",
+          "sha256": "11658e13df4cc88078ec988036c78ed901c1990180ac2af4a502704a65d309b4",
+          "bytes": 5712057
+        },
+        "master_scorecard": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56_master_scorecard.json",
+          "sha256": "92719a79334ac2e48cd31b0216d1becc17be9dfd47d90f6bcefba93a0fd85fcf",
+          "bytes": 372803
+        },
+        "solid_tip": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56_solid_tip.json",
+          "sha256": "f6f62d1e9cf19e29fd30a50d8902d1bcb5b286169c4df9d4607c50e780552d67",
+          "bytes": 2349
+        }
+      },
+      "smoothing_report": null
+    },
+    {
+      "name": "f075",
+      "setting": "r=0.75, a=0 (chosen)",
+      "env": "on",
+      "commit": "49bb0ce38149a1b2c0c96bf7052f20730a963136",
+      "host": "xbabe3",
+      "score_100": 80.561227,
+      "battery_pass": 14,
+      "mass_3d_g": 83.5582,
+      "export_volume_mm3": 18861.894621115,
+      "solid_tip_sf_nodal_max": 0.645,
+      "solid_tip_sf_nodal_avg": 0.6818,
+      "solid_tip_dolfinx_rel_err": 0.0,
+      "lat_rob_cert_n": 201.1,
+      "strict_lat_rob_0p0625_n": 199.9,
+      "ring_rob_cert_n": 26234.2,
+      "seq_ratio_cert": 1.34,
+      "twist_body_sf": 2.509,
+      "twist_tip_sf": 0.507,
+      "fat_sf_l7": 0.5617739041132452,
+      "cad_watertight_brep_points": 5.0,
+      "files": {
+        "stl": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl",
+          "sha256": "91ab0b649640a2e78807bde08c3794c1bc90e5a6ebeb929de8b2173263288c65",
+          "bytes": 21277235
+        },
+        "step": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.step",
+          "sha256": "1e0c309a5b00b7e1fc62089c927b9edd704875b15b79b2f3f03089dd12563cb3",
+          "bytes": 87007684
+        },
+        "d1": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56_D1.json",
+          "sha256": "992b94f60372864e6f39a868faa18d98add4f2bb17118a47d9f96838d00e273c",
+          "bytes": 7104051
+        },
+        "master_scorecard": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56_master_scorecard.json",
+          "sha256": "37ef963bcc78af0350cabc75f5373266fdc6631d85294d909695d53b183ab04b",
+          "bytes": 372722
+        },
+        "solid_tip": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56_solid_tip.json",
+          "sha256": "c3208226f7a2213c9ad4aa7817cd13b97b50314701a3c4479666e2a9b734aad6",
+          "bytes": 2351
+        }
+      },
+      "smoothing_report": {
+        "params": {
+          "film_slope_a": 0.0,
+          "grow_mm": 0.5,
+          "h_mm": 0.125,
+          "meniscus_w_mm": 0.0,
+          "mesh_mm": 0.3,
+          "r_mm": 0.75,
+          "rim_mm": 1.0,
+          "volume_preserving": true
+        },
+        "basins": 15,
+        "steps": 90,
+        "removed_volume_mm3": {
+          "after": 1430.6443827038477,
+          "before": 1430.8429036051493
+        },
+        "worst_basin_volume_error": 0.9206319683769096,
+        "depth_change_mm": {
+          "max": 3.4298795700073246,
+          "rms_changed": 0.3636903424636858
+        },
+        "isoline_length_by_depth_level_mm": {
+          "0.1": {
+            "after_mm": 827.2911906296348,
+            "before_mm": 925.8907659027616
+          },
+          "0.5": {
+            "after_mm": 808.9244724351406,
+            "before_mm": 1052.1859368176426
+          },
+          "1": {
+            "after_mm": 517.1501923928076,
+            "before_mm": 635.1859952679715
+          },
+          "2": {
+            "after_mm": 211.6083625071916,
+            "before_mm": 269.5056876799209
+          }
+        },
+        "steiner_points": 6800,
+        "grind_edge_points": 892,
+        "seconds": 1.6879253269999999
+      }
+    }
+  ],
+  "hero_score_100": 80.561227,
+  "evolution_source": "xbabe3:/home/ubuntu/jarambit_runs/evo_continuous/xbabe3/islands/i042/by-content/3692f86220ff88a0f212455c23727e3f5373f44948b662ec2b500a5ed7698689/attempt-1792816442442081431"
+}

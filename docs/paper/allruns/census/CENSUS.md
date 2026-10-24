@@ -476,3 +476,16 @@ The first point in the timeline (`w412c3_r01_p10_c19`, 18:05:50Z) is one of the 
    - Exit 0 versus 1 does not track qualification: no island qualified, and both codes occur with unverified candidates.
 6. **Some raw outputs exist only in archives.** The raw 2026-10-18/19 xbabe3 waves (w409_ul, w412c3/t3, w413c3/t3) survive only inside the hygiene tarballs. They were read by streaming (`zstd -dc | tarfile`), and nothing was unpacked. The removed lane `~/jarambit_wt_agy_ul` on xbabe2 kept only `dirty.patch`, so any runs it held would exist only on S3, which was not scanned.
 7. **Search coverage.** The search was exhaustive on xbabe1, xbabe3 and xbabe4. On xbabe2, every jarambit tree and the jarambit lanes in the hygiene archive were searched completely, but I stopped the whole-disk `find` over the multi-TB non-jarambit dataset trees after about 50 min. S3 was not scanned. Details are in `runs_found.txt`.
+
+## Refresh 2026-10-24 (v2.4.0): live runs re-read 2026-10-24T06:09:20Z–2026-10-24T06:09:24Z
+
+The census scripts were re-run read-only on xbabe1–xbabe4 with the same scorer (blob 9cfb4416). The archived waves are unchanged.
+All 1109 Stage-2 rows of the 2026-10-22 set reappear unchanged (0 missing).
+- Stage-2 rows: 1109 → 1903 (+794, all `evo_continuous`: {'evo_continuous': 794}); comparable (`ok`): 1761.
+- Islands: 295 → 351.
+- **Best comparable design: `ec3i042_r01_p10_c56` = 80.623796** (xbabe3 i042, scorecard 2026-10-24T04:56:02Z).
+- Best continuous-evolution design per island binary:
+  - `49bb0ce3`: 357 assessments, best `ec3i042_r01_p10_c56` 80.623796
+  - `e07606a8`: 175 assessments, best `ec3i021_r05_p14_c109` 76.799579
+  - `7aaf6d46`: 210 assessments, best `ec2i024_r05_p14_c98` 76.343493
+  - `49dc71f8`: 284 assessments, best `ec1i005_r05_p14_c02` 76.196980

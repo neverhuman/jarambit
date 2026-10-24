@@ -1,10 +1,10 @@
 {
   "figure": "docs/paper/ladder/L4-blade.png",
-  "figure_sha256": "e07e076bafd1f4251e793987bf2b375a3c9c21cb7c01e2fd06a2b94d9aab7643",
+  "figure_sha256": "37da05e34b7d3bec57f329dfc1f2b4d5c59ea6c20d3ccc4fd7c251da6683d016",
   "script": "crates/paper-artifacts/examples/smoothing_ladder_figure.rs",
   "inputs": {
-    "docs/paper/ladder/ladder.json": "9682cd4a872bd920b7f24d0e3120214645afc31dd0b35173301b21c868f32de1",
-    "docs/paper/ladder/smoothing-ladder.render.v1.json": "faa96bbdd2f92b93ec87f6cb0972fae0dacba1c36a0fdcd59a62fb4900b4ca07"
+    "docs/paper/ladder/ladder.json": "fbde73bd27ab9b91352c960cc96a5840517b9268b5bd1d830e1785de5fa84f05",
+    "docs/paper/ladder/smoothing-ladder.render.v1.json": "bbca1f08dc8c7d917e6f4fd665e6119d029ec3701b51aa0ace6cf5ada1929410"
   },
   "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"
 }

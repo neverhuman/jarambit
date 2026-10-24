@@ -1,19 +1,19 @@
 {
   "schema": "jarambit.cover_winner_selection.v1",
-  "recorded_utc": "2026-10-22T17:05:00Z",
+  "recorded_utc": "2026-10-24T06:09:24Z",
   "metric": "W_ULTRALIGHT_v1 (0-100), canonical",
-  "method": "ops/ci/ultralight_weighted_fitness.py::compute_ultralight_weighted_fitness(master_scorecard, rs) on every retained Stage-2 assessment of every auto-evolve run and evolution wave found on xbabe1-xbabe4 since 2026-10-17 (census: docs/paper/allruns/census/, read 2026-10-22T14:40Z; live runs continue). Scorecards from the 2026-10-16 evaluators (1e93e6f3, 4cd0f994e) overstate the canonical score of the same genome under the current evaluator and are excluded; all other evaluators reproduce the current one exactly on re-assessment (see re_assessment).",
+  "method": "ops/ci/ultralight_weighted_fitness.py::compute_ultralight_weighted_fitness(master_scorecard, rs) on every retained Stage-2 assessment of every auto-evolve run and evolution wave found on xbabe1-xbabe4 since 2026-10-17 (census: docs/paper/allruns/census/, read 2026-10-24T06:09:24Z; live runs continue). Scorecards from the 2026-10-16 evaluators (1e93e6f3, 4cd0f994e) overstate the canonical score of the same genome under the current evaluator and are excluded; all other evaluators reproduce the current one exactly on re-assessment (see re_assessment).",
   "scorer": {
     "path": "ops/ci/ultralight_weighted_fitness.py",
     "git_blob_sha1": "9cfb4416d374e875e5846f6e91e2229148b6f5f4",
     "repo_commit": "e07606a8e43666750264ec909ccbae604627ede5"
   },
-  "assessments": 967,
-  "distinct_genomes": 925,
+  "assessments": 1761,
+  "distinct_genomes": 1719,
   "per_host": {
-    "xbabe1": 79,
-    "xbabe2": 560,
-    "xbabe3": 328
+    "xbabe1": 218,
+    "xbabe2": 855,
+    "xbabe3": 688
   },
   "excluded_inflated_evaluators": {
     "scorecards": 142,
@@ -24,14 +24,20 @@
     "reason": "2026-10-16 evaluators: w290_r03_p14_c04 is 92.29 stored but 79.166355 re-assessed with the current evaluator"
   },
   "winner": {
-    "canonical_w_ultralight_v1": 80.299390,
-    "label": "w406t3_r01_p10_c16",
+    "canonical_w_ultralight_v1": 80.623796,
+    "label": "ec3i042_r01_p10_c56",
     "host": "xbabe3",
-    "run": "archive:jarambit_evo3c/out",
-    "island": "w406t3",
-    "genome_sha256": "83877fdbb08a",
-    "assessments_of_this_genome": 7,
-    "current_evaluator_bundle": "~/jarambit_runs/reassess-20261022/w406t3_r01_p10_c16 (label re_w406t3_r01_p10_c16, v2.2.0 Stage-2 evaluator, 2026-10-22)"
+    "run": "evo_continuous",
+    "island": "i042",
+    "genome_sha256": "49b0327d442a",
+    "assessments_of_this_genome": 1,
+    "current_evaluator_bundle": "~/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl on xbabe2 (copied from xbabe3; label re_ec3i042_r01_p10_c56, Stage-2 evaluator at 49bb0ce3 = v2.3.1, the evaluator of its island)"
+  },
+  "winner_re_assessment": {
+    "evaluator": "ops/ci/score_cad.py at 49bb0ce3 (v2.3.1), pinned fem_solid environment, run on xbabe3",
+    "stored": 80.623796,
+    "re_assessed": 80.623796,
+    "export": "STL and STEP identical to the island export apart from the label written into their headers"
   },
   "re_assessment": {
     "evaluator": "ops/ci/score_cad.py at e07606a (v2.2.0; identical to evo-main 49dc71f, which assessed ec1i005_r01_p14_c32), pinned fem_solid environment, 2026-10-22",
@@ -83,6 +89,12 @@
   },
   "previous_selections": [
     {
+      "recorded_utc": "2026-10-22T17:05:00Z",
+      "winner": "w406t3_r01_p10_c16",
+      "canonical_w_ultralight_v1": 80.299390,
+      "scope": "967 comparable assessments of every run since 2026-10-17 (census read 2026-10-22T14:40Z); superseded when the continuous evolution passed it on 2026-10-23"
+    },
+    {
       "recorded_utc": "2026-10-22T13:38:23Z",
       "winner": "ec1i005_r01_p14_c32",
       "canonical_w_ultralight_v1": 76.141571,
@@ -115,164 +127,164 @@
   },
   "top20_distinct_genomes": [
     {
-      "canonical_w_ultralight_v1": 80.299390,
-      "label": "w406t3_r01_p10_c16",
+      "canonical_w_ultralight_v1": 80.623796,
+      "label": "ec3i042_r01_p10_c56",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w406t3",
-      "genome_sha256": "83877fdbb08a"
+      "run": "evo_continuous",
+      "island": "i042",
+      "genome_sha256": "49b0327d442a"
     },
     {
-      "canonical_w_ultralight_v1": 80.179111,
-      "label": "w406t3_r02_p10_c23",
+      "canonical_w_ultralight_v1": 80.619961,
+      "label": "ec1i015_r01_p10_c03",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i015",
+      "genome_sha256": "6c67ed6f4d7e"
+    },
+    {
+      "canonical_w_ultralight_v1": 80.612659,
+      "label": "ec3i042_r01_p10_c04",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w406t3",
-      "genome_sha256": "441447033132"
+      "run": "evo_continuous",
+      "island": "i042",
+      "genome_sha256": "77145cbef815"
     },
     {
-      "canonical_w_ultralight_v1": 79.984072,
-      "label": "w300_r01_p10_c68",
-      "host": "xbabe2",
-      "run": "jarambit/out",
-      "island": "w300",
-      "genome_sha256": "2b32d32271d9"
+      "canonical_w_ultralight_v1": 80.595560,
+      "label": "ec1i015_r01_p10_c19",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i015",
+      "genome_sha256": "0448e98be01f"
     },
     {
-      "canonical_w_ultralight_v1": 79.971998,
-      "label": "w406t3_r01_p14_c35",
+      "canonical_w_ultralight_v1": 80.594628,
+      "label": "ec1i012_r04_p10_c101",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i012",
+      "genome_sha256": "1282bfb3d7d0"
+    },
+    {
+      "canonical_w_ultralight_v1": 80.594628,
+      "label": "ec1i012_r05_p10_c14",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i012",
+      "genome_sha256": "39ab588be9df"
+    },
+    {
+      "canonical_w_ultralight_v1": 80.593330,
+      "label": "ec1i012_r05_p10_c02",
+      "host": "xbabe1",
+      "run": "evo_continuous",
+      "island": "i012",
+      "genome_sha256": "8e72b872cc22"
+    },
+    {
+      "canonical_w_ultralight_v1": 80.581397,
+      "label": "ec3i042_r01_p10_c55",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w406t3",
-      "genome_sha256": "10df9e82c24b"
+      "run": "evo_continuous",
+      "island": "i042",
+      "genome_sha256": "e16b7852e82c"
     },
     {
-      "canonical_w_ultralight_v1": 79.930876,
-      "label": "w404c3_r03_p10_c15",
+      "canonical_w_ultralight_v1": 80.457221,
+      "label": "ec3i040_r02_p10_c99",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w404c3",
-      "genome_sha256": "ace0e40a9c50"
+      "run": "evo_continuous",
+      "island": "i040",
+      "genome_sha256": "bfbcaebc626c"
     },
     {
-      "canonical_w_ultralight_v1": 79.918893,
-      "label": "w405c3_r01_p10_c21",
+      "canonical_w_ultralight_v1": 80.456440,
+      "label": "ec3i040_r01_p10_c29",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w405c3",
-      "genome_sha256": "32bf4fae97ec"
+      "run": "evo_continuous",
+      "island": "i040",
+      "genome_sha256": "d01861881b9c"
     },
     {
-      "canonical_w_ultralight_v1": 79.913655,
-      "label": "w404c3_r02_p10_c21",
+      "canonical_w_ultralight_v1": 80.454680,
+      "label": "ec3i039_r02_p10_c03",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w404c3",
-      "genome_sha256": "132ca4d8c703"
+      "run": "evo_continuous",
+      "island": "i039",
+      "genome_sha256": "2c295f57f983"
     },
     {
-      "canonical_w_ultralight_v1": 79.898664,
-      "label": "w405c3_r02_p10_c15",
+      "canonical_w_ultralight_v1": 80.454507,
+      "label": "ec3i039_r03_p10_c99",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w405c3",
-      "genome_sha256": "3ac27f49e2c0"
+      "run": "evo_continuous",
+      "island": "i039",
+      "genome_sha256": "77f152bdbcb0"
     },
     {
-      "canonical_w_ultralight_v1": 79.869405,
-      "label": "w401c3_r02_p10_c27",
+      "canonical_w_ultralight_v1": 80.446937,
+      "label": "ec3i039_r02_p10_c27",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w401c3",
-      "genome_sha256": "a61941ea266e"
+      "run": "evo_continuous",
+      "island": "i039",
+      "genome_sha256": "8659eaba9657"
     },
     {
-      "canonical_w_ultralight_v1": 79.869336,
-      "label": "w404c3_r01_p10_c26",
+      "canonical_w_ultralight_v1": 80.446894,
+      "label": "ec3i039_r03_p10_c26",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w404c3",
-      "genome_sha256": "c4679d16c8cc"
+      "run": "evo_continuous",
+      "island": "i039",
+      "genome_sha256": "2c89550d8c5b"
     },
     {
-      "canonical_w_ultralight_v1": 79.868766,
-      "label": "w401c3_r02_p10_c15",
+      "canonical_w_ultralight_v1": 80.446859,
+      "label": "ec3i032_r05_p10_c03",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w401c3",
-      "genome_sha256": "50f7141bbfbb"
+      "run": "evo_continuous",
+      "island": "i032",
+      "genome_sha256": "14901a594cb1"
     },
     {
-      "canonical_w_ultralight_v1": 79.847065,
-      "label": "w402c3_r02_p10_c03",
+      "canonical_w_ultralight_v1": 80.446694,
+      "label": "ec3i040_r01_p10_c30",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w402c3",
-      "genome_sha256": "9a34a6ec14bb"
+      "run": "evo_continuous",
+      "island": "i040",
+      "genome_sha256": "3370c7fe022e"
     },
     {
-      "canonical_w_ultralight_v1": 79.846886,
-      "label": "w401c3_r01_p10_c14",
+      "canonical_w_ultralight_v1": 80.444509,
+      "label": "ec3i032_r05_p10_c27",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w401c3",
-      "genome_sha256": "0247ee94769a"
+      "run": "evo_continuous",
+      "island": "i032",
+      "genome_sha256": "9a4c99f735b8"
     },
     {
-      "canonical_w_ultralight_v1": 79.837049,
-      "label": "w402c3_r01_p10_c45",
+      "canonical_w_ultralight_v1": 80.443235,
+      "label": "ec3i041_r01_p10_c16",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w402c3",
-      "genome_sha256": "deab478dd702"
+      "run": "evo_continuous",
+      "island": "i041",
+      "genome_sha256": "43ce1d4662b2"
     },
     {
-      "canonical_w_ultralight_v1": 79.835781,
-      "label": "w402c3_r02_p10_c07",
+      "canonical_w_ultralight_v1": 80.443183,
+      "label": "ec3i039_r01_p10_c03",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w402c3",
-      "genome_sha256": "74bb43054495"
+      "run": "evo_continuous",
+      "island": "i039",
+      "genome_sha256": "4acdfadfc5b5"
     },
     {
-      "canonical_w_ultralight_v1": 79.806859,
-      "label": "cert_pipeline_r01_p14_c02",
-      "host": "xbabe2",
-      "run": "repo-evidence:evolve_certifiable",
-      "island": "automatic",
-      "genome_sha256": "a526b2ef73b2"
-    },
-    {
-      "canonical_w_ultralight_v1": 79.800674,
-      "label": "w298_r01_p14_c43",
-      "host": "xbabe2",
-      "run": "jarambit/out",
-      "island": "w298",
-      "genome_sha256": "a677535a04c1"
-    },
-    {
-      "canonical_w_ultralight_v1": 79.796882,
-      "label": "w402c3_r01_p14_c39",
+      "canonical_w_ultralight_v1": 80.438607,
+      "label": "ec3i039_r01_p10_c19",
       "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w402c3",
-      "genome_sha256": "392004ea0fc3"
-    },
-    {
-      "canonical_w_ultralight_v1": 79.791501,
-      "label": "w401c3_r01_p14_c35",
-      "host": "xbabe3",
-      "run": "archive:jarambit_evo3c/out",
-      "island": "w401c3",
-      "genome_sha256": "6f4350c12dae"
-    },
-    {
-      "canonical_w_ultralight_v1": 79.778549,
-      "label": "w298_r02_p14_c24",
-      "host": "xbabe2",
-      "run": "jarambit/out",
-      "island": "w298",
-      "genome_sha256": "3f749dbb22eb"
+      "run": "evo_continuous",
+      "island": "i039",
+      "genome_sha256": "7ee046ac2975"
     }
   ]
 }

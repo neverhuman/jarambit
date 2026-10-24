@@ -2,8 +2,8 @@
   "cameras": {
     "blade": {
       "offset": [
-        -2395.9413509212636,
-        456.1869057038732
+        -2391.668620796468,
+        455.5925855420507
       ],
       "rotation": [
         [
@@ -22,13 +22,13 @@
           -0.5735764363510462
         ]
       ],
-      "scale": 22.1622387937062,
-      "sha256": "6c78f227e7fb7eb12abdeda1c1f40002c348b9e2087c85c597b852fb731b8fef"
+      "scale": 22.131988573138095,
+      "sha256": "13f68a5019b84d86c8043855481fa9cee474c1a05f454979eb07952d15f4c1cb"
     },
     "displacement": {
       "offset": [
-        265.64436110677457,
-        474.00354091565885
+        265.6434068368194,
+        473.9918304198448
       ],
       "rotation": [
         [
@@ -47,13 +47,13 @@
           -1.0
         ]
       ],
-      "scale": 8.251434295695917,
-      "sha256": "90f4d048ad31e86f2b8e2ea1794241d09eb7636fb210270cec0a18a4e6d3beca"
+      "scale": 8.251442045125854,
+      "sha256": "b11d57400f044d26430393d26a7089c68fb17778c18e8c501a352620cec3d523"
     },
     "guard": {
       "offset": [
-        -1253.9092925313544,
-        363.78364126758345
+        -1251.1545720523154,
+        363.8124225353543
       ],
       "rotation": [
         [
@@ -72,13 +72,13 @@
           -0.5735764363510462
         ]
       ],
-      "scale": 24.950482422490094,
-      "sha256": "d183df869e6b99603a2dc32787ea37054abc3da369749885fba7b0ed0ed5d3d0"
+      "scale": 24.946715597286932,
+      "sha256": "95a0fcc846bcc1aebd5d04e198bd39b583ac23e54b28975cdc2981f4a7a86972"
     },
     "oblique": {
       "offset": [
-        232.26455933890077,
-        424.90020668792874
+        232.26356169303847,
+        424.752779419966
       ],
       "rotation": [
         [
@@ -97,16 +97,16 @@
           -0.5735764363510462
         ]
       ],
-      "scale": 8.626499490954822,
-      "sha256": "08d00cfa6650ab2ea06e4b7db6466eb1b0c89841cc60574d46635b3f64bb394a"
+      "scale": 8.626507592631574,
+      "sha256": "a853ac663ec60c13183eabd3ef5dc04d0e3e209eeb3f6960b8dffcc32e141ed0"
     }
   },
-  "code_commit": "f941c7fdbf6afb538f47f080a7d4a25685b3cd5a",
-  "command": "target/release/examples/smoothing_ladder_figure --ladder docs/paper/ladder/ladder.json --out /home/ubuntu/jarambit/.agent/worktrees/eval-tip-zero/target/ieee/paper/ladder-raw --code-commit f941c7fdbf6afb538f47f080a7d4a25685b3cd5a",
+  "code_commit": "69ece2971a1920389e78a23012325eef0f91407a",
+  "command": "target/release/examples/smoothing_ladder_figure --ladder docs/paper/ladder/ladder.json --out /home/ubuntu/jarambit/.agent/worktrees/paper-refresh/target/ieee/paper/ladder-raw --code-commit 69ece2971a1920389e78a23012325eef0f91407a",
   "displacement": {
     "range_mm": [
       0.0,
-      0.6328124697496039
+      0.3653790530148915
     ],
     "shared_by_all_levels": true,
     "stops_srgb": [
@@ -139,7 +139,7 @@
   "height_tint": {
     "range_mm": [
       0.0,
-      2.6146666666666665
+      2.6163333333333334
     ],
     "range_rule": "0 to the area-weighted median |z| of near-flat faces of level 0 (stock half-thickness); higher faces (ring) saturate",
     "stops_srgb": [
@@ -179,9 +179,9 @@
     "value": "|z| of the face centroid (true, unexaggerated mm)"
   },
   "ladder": {
-    "label": "re_w406t3_r01_p10_c16",
+    "label": "re_ec3i042_r01_p10_c56",
     "path": "docs/paper/ladder/ladder.json",
-    "sha256": "9682cd4a872bd920b7f24d0e3120214645afc31dd0b35173301b21c868f32de1"
+    "sha256": "fbde73bd27ab9b91352c960cc96a5840517b9268b5bd1d830e1785de5fa84f05"
   },
   "lighting": {
     "ambient": 0.22,
@@ -206,280 +206,196 @@
       "bytes": 5101303,
       "height": 850,
       "name": "L0-oblique.png",
-      "sha256": "8ea26f10cf94a4c1a2c05c6c2400f819f1141b50e3380922e68f7176e3b0c16e",
+      "sha256": "0c9f6c8661b3e0c5197d3e0c901b2b58f163c0184fa748a5414396399b831022",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L0-blade.png",
-      "sha256": "53399131839a96aa252b4ad18c982631be4645d47e71faf05f57bce8d8435773",
+      "sha256": "2ee0af0e53125878d0a7908bf8d408047a1e1ff0dc851c006abc96e6a248b41c",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L0-guard.png",
-      "sha256": "fa20bc298cbb2a900787ace3b66e507642be7c85d7277a1db9e49eb258f111e0",
+      "sha256": "2bc394d7c237517a2f368192e37431785b955714cd6feada3095b615cc145df7",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L0-displacement.png",
-      "sha256": "a208a4efaa079d68da556332dc81fe898537468242fbbfb66fb2d9547695fe52",
+      "sha256": "e1eeab6a6c91ac2937560e4f9ff1eb437b6802a80a3f1ecc8002e19fb4453e5c",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L1-oblique.png",
-      "sha256": "d9fbeb68b12cbcabf6f766ce7371dd9c9b640a85749d57f739c4beca2f2546bb",
+      "sha256": "494acaeec79a2154b0cdb6bdad4cc3105359b743ce8236f307b049690b87df11",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L1-blade.png",
-      "sha256": "815fc46aad371f4e7bd0149997269072935ae2688fa7a96b85ea7ed0770f6082",
+      "sha256": "8e172e2d169e953efbd58de3f6812eb5a8c977ff32b093aa567dde961b954bab",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L1-guard.png",
-      "sha256": "9b8dabfb7ed9adfab82e3a287026202414fdf50fb610219912276308da429395",
+      "sha256": "fbbbf54493e4769d24dacf9c0824de10af0c6d019eb69020effd41df4476d953",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L1-displacement.png",
-      "sha256": "a863deb5b61810303381d0b6844c347e39fbcda9c3f4879eebc4baad7a3d5abf",
+      "sha256": "fada77e022a784002b08da364bc79c42bb67e31c4ee2571ccf6f653a1cbc44de",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L2-oblique.png",
-      "sha256": "7acd0274c5606f6b2a759b85f63eba6ca4bef8625c5db18f57d07135d6972ed0",
+      "sha256": "ceb48a5ef385b2034850426ba116798a309411b1c8c08435e3a17f1b36432b36",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L2-blade.png",
-      "sha256": "e2891ede164d8335b7526839b7dd2369d60b70e8f42ff2e588a7d64314911cf9",
+      "sha256": "8ae48f00496360c469ed0e8753aca724c89f4c6697219f5cae56b9975505cd6a",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L2-guard.png",
-      "sha256": "3858d5df3c0d227d93cb75c18aff3d84b73c5549c23eae3c6126cbe88d89dcf1",
+      "sha256": "fd1e567225591eeed40ffc0f69c937acf2b0053794e9d45fbcd5dbf951241ce4",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L2-displacement.png",
-      "sha256": "9d17017bc3e3d0fd9e699fc7463193d5afdaa6ac3dbf4c6062e0134bc6de5b47",
+      "sha256": "1d614f88cb9e66b492c98a27110175256565053feaa379d60f7d5619813b5560",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L3-oblique.png",
-      "sha256": "93227086679d66ce2766259b4986ea27d87fd5ffe361ad7c5afae972f8ff8528",
+      "sha256": "4a2e92b2c924a576d095462eb24590e67915da8e6655f0072a72650045d77219",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L3-blade.png",
-      "sha256": "e5bbbfc6f8dce425c6345cb8e84f102a75b58d14c9b7560c71c2bbdafc7e8d0d",
+      "sha256": "b9fa86e54f6613d71ef0f39d8db77309b4aec82b4186a1eabe038d3f2c6fddda",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L3-guard.png",
-      "sha256": "03594cd7f2da0dbdb0c8ba2d0b4b7f171de31e466c3441ac1ff0149acfe4407c",
+      "sha256": "43abc9739c92c83572de31c6fd45f5c6ebd489d959d09ceefefa2b4e62794876",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L3-displacement.png",
-      "sha256": "d2caf8b0639d7ee2b1d1afaafb630ff26570c4a1d28bec79c4fe1ab52feac88e",
+      "sha256": "f362c6b3795b09b49badeb26674fbdae85dd6e28ecf41bbcf4bf215cdd10b6b1",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L4-oblique.png",
-      "sha256": "fb81082a4775cfb225b9945c2e07a6c0be5b7ed7ea1e9b2f3edb36b2e5475486",
+      "sha256": "84127582ffbba79b6cffe9af94a64895d19742abf2e16a0ca1ed245aeedd2d98",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L4-blade.png",
-      "sha256": "040329d0122250f0e17de1e3745c5a245eee73f0a55de6cdb7db5825ea0435fc",
+      "sha256": "1d17809e194f7157043efdd43090110900cd7755a7b335d958f870cacdec319d",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L4-guard.png",
-      "sha256": "5c8b91d9ff94ff307494f6e13d74131e1faa7e58b60e9157ce18e7d726c15e9e",
+      "sha256": "8ae66e85bc0b486ed14ae65f0657dbeeb83d44d053f1913eb65b2d7b22e8d1ec",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L4-displacement.png",
-      "sha256": "53cdaa3e7ad7d02f10258eec5980c57410efabc3d3148afd1b1d8bcfe9351295",
+      "sha256": "1f63822c8d339bd0b15d1b39028a3ce1e15db7e8008f9b69879b02216fc2a3c3",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L5-oblique.png",
-      "sha256": "db61fb6777a7272ff326ee8f34ff0ab00a63b07bf1b922883decc022d913b7f4",
+      "sha256": "9c457da8287fc7ab93d919f4d4f178e3f70ae162713fe5ab70f7d54a13fdf51b",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L5-blade.png",
-      "sha256": "7568ef6a340646335f9e49ddddefb49ca357191d32b1d8f249c2eba8a0e71614",
+      "sha256": "22181f5739aaaa2cc8a2813a5bf49f1f3cf48d65c5f80014e42b2f9cdbf0302b",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L5-guard.png",
-      "sha256": "5f1e5ea148b8b354df50ca3637b898f2d9771c1fbfa26e0c73a7e4465e233bce",
+      "sha256": "125468950faabd6f6b2736336478a854ee18c54be722e012608cb971ac0805fd",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L5-displacement.png",
-      "sha256": "30a77b552158cc86328c5c17d2c3de1bb8ebb4e8edd2d10050999880a26bc405",
+      "sha256": "e13766eead4e65bcfd8b9648ff7261a5db7c07ee57e991d1760920eaca571160",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L6-oblique.png",
-      "sha256": "b733e17502badb588cfc81c6c009d9cc5e61717be66c31e09b993a7f7f72b0f8",
+      "sha256": "37978358b5e67046316c7883ebe8d0307d30d5240b90244eb841f988ec61752e",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L6-blade.png",
-      "sha256": "efe25a3091c16e50f6f05d6ec7bc6825c451b05d70685734b5ba5d855f94e34a",
+      "sha256": "1809a1abc3c11793fc333a1883e3955ef329303281efeffc9e8d2b635b84dd3c",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L6-guard.png",
-      "sha256": "0b7c3d7d9c2c1f980c8645e7c5d7ab76ad45a4204c86e28c6591046517089369",
+      "sha256": "67a3bb364c32532b6a45511bfc179d8546f8e3cf053f742bc95d753184aea67d",
       "width": 2000
     },
     {
       "bytes": 5101303,
       "height": 850,
       "name": "L6-displacement.png",
-      "sha256": "22fe79edf958aa143c6dec0de78bfc01d2f4ab62273c4578461a6a7a9a771657",
-      "width": 2000
-    },
-    {
-      "bytes": 5101303,
-      "height": 850,
-      "name": "L7-oblique.png",
-      "sha256": "ee45136586a357f0a0f9601917222d061514e52501662d01849a4467c903855a",
-      "width": 2000
-    },
-    {
-      "bytes": 5101303,
-      "height": 850,
-      "name": "L7-blade.png",
-      "sha256": "1fbafebc5472b6fee893e07ec4c944174720f9aebb28faec4dd1e8199236a3fb",
-      "width": 2000
-    },
-    {
-      "bytes": 5101303,
-      "height": 850,
-      "name": "L7-guard.png",
-      "sha256": "b437a3bf24ae6ec63e33ec31d8640239a2a891f53e218390f403de932fd4d977",
-      "width": 2000
-    },
-    {
-      "bytes": 5101303,
-      "height": 850,
-      "name": "L7-displacement.png",
-      "sha256": "9d35844a7a15bb8cc83dad752020d3d26c49c944db9ef3698c2f8e740434df58",
-      "width": 2000
-    },
-    {
-      "bytes": 5101303,
-      "height": 850,
-      "name": "L8-oblique.png",
-      "sha256": "c71a9d22e7885675655ed06e78cdb975847b737578958da34da1931b14fde438",
-      "width": 2000
-    },
-    {
-      "bytes": 5101303,
-      "height": 850,
-      "name": "L8-blade.png",
-      "sha256": "47539d8d1bb49c6092aea40ea935462ae171aa98d13011ac3ad9e47012994df7",
-      "width": 2000
-    },
-    {
-      "bytes": 5101303,
-      "height": 850,
-      "name": "L8-guard.png",
-      "sha256": "c2282e82280d078be995003ca950a39fcd6a4e616f2d50fb634964253fbacdb4",
-      "width": 2000
-    },
-    {
-      "bytes": 5101303,
-      "height": 850,
-      "name": "L8-displacement.png",
-      "sha256": "23e560b1d988b732ceda40def89a5c59b31817929f5141b7e89355333d840036",
-      "width": 2000
-    },
-    {
-      "bytes": 5101303,
-      "height": 850,
-      "name": "L9-oblique.png",
-      "sha256": "17a7d5fbf158ff1bccf563398e3890354366977a99feec0c5663ccbe863cf1d6",
-      "width": 2000
-    },
-    {
-      "bytes": 5101303,
-      "height": 850,
-      "name": "L9-blade.png",
-      "sha256": "2c675c3caabbcc4a3c49c410b49a7a3eff3970dc443b2e72a896cebd8fdae1b6",
-      "width": 2000
-    },
-    {
-      "bytes": 5101303,
-      "height": 850,
-      "name": "L9-guard.png",
-      "sha256": "ba8150ad085281b11f136df40762259daaeb788e9781967eba88703afc61df94",
-      "width": 2000
-    },
-    {
-      "bytes": 5101303,
-      "height": 850,
-      "name": "L9-displacement.png",
-      "sha256": "4a426e56485ab594f7c0b65f4d9b414d9eaac7002edb0059054ae1e946b15999",
+      "sha256": "3a7d5acf9ff7b573c51284f66574f94adbc76cb3a926db0a5bee26a0f592b7d5",
       "width": 2000
     },
     {

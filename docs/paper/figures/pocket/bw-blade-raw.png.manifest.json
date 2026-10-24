@@ -1,10 +1,10 @@
 {
   "figure": "docs/paper/figures/pocket/bw-blade-raw.png",
-  "figure_sha256": "4a4074ffa57a193a77a21d0a39f2f7df42e325303a8d9a1940c5a91c473318ef",
+  "figure_sha256": "f97789d639ba36e04560a77d6a105145992e265b4dab81edd44a407ad66a36df",
   "script": "crates/paper-artifacts/examples/pocket_smoothing_figures.rs",
   "inputs": {
-    "experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json": "f03482d4964d304a1842eb517fda0a050e544bb8a8e3e858f9dd8fc0d9266061",
-    "docs/paper/figures/pocket/bw.render.v1.json": "4c1d514eb2211e7f769b9ec1a7ed68b8fa06877b5a67305fbdbd60126ded06a3"
+    "experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json": "6b59b1793ea715c9cc0d692d1c30070634fdb80f86c22e8e16aa18a9f9d00d9c",
+    "docs/paper/figures/pocket/bw.render.v1.json": "04a92e9bc1e889b6f024ca6b1b85cac45990e178e97fed8486b6cd07782b3310"
   },
   "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"
 }
