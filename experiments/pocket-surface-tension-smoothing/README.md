@@ -120,6 +120,37 @@ receipt pins the sha256 of every STL, STEP, D1 field file and scorecard.
 depth goes from 913 / 1034 / 627 / 270 mm to 821 / 801 / 512 / 211 mm. A chipped outline is
 longer than a smooth one at the same enclosed area. The flow takes 2.8 s for this design.
 
+## Current best design at the chosen setting (v2.4.0)
+
+The continuous evolution of 2026-10-24 produced a better design, `ec3i042_r01_p10_c56` (island i042 on xbabe3, seeded
+with `ec1i012_r04_p10_c101`, 80.594628, from which it differs in 3 genes; 19 of 129 genes differ from `w406t3_r01_p10_c16`,
+mostly slightly). Following the owner's rule, only the winner's smoothed result is reported, and only at the chosen setting
+(r = 0.75 mm, a = 0). To save time, a smoothed run started whenever a design became the live #1; runs of earlier
+leaders are not used, and those still running when a better design appeared were stopped. Both runs are complete Stage-2 assessments at v2.3.1 (49bb0ce3), the
+evaluator of the winner's island:
+
+| Setting | F | ΔF | 3D mass (g) | Tip SF max / avg | Hunter lateral cert / strict (N) | Seq ratio | Battery |
+|---|---:|---:|---:|---|---|---:|---:|
+| as exported (re-run) | 80.623796 | — | 83.5536 | 0.6886 / 0.7380 | 201.0 / 197.9 | 1.18 | 13/18 |
+| **r = 0.75 (on)** | **80.561227** | **−0.062569** | 83.5582 | 0.6450 / 0.6818 | 201.1 / 199.9 | 1.34 | 14/18 |
+
+- The re-run reproduces the island's score exactly, and its STL and STEP match the island's export apart from the label
+  written into their headers.
+- Smoothing gains 0.069 points (failure sequence +0.053, strict hunter +0.015, hunter lateral +0.001, fatigue +0.001)
+  and loses 0.131 on the 3D solid-tip objective (nodal maximum 0.6886 → 0.6450, average 0.7380 → 0.6818) and 0.001 on
+  mass. Unlike on `w406t3_r01_p10_c16`, the tip average falls too, so we do not attribute this to triangulation; the
+  setting was chosen on `w406t3_r01_p10_c16` and is not tuned for this design. The DOLFINx cross-check agrees
+  (`verified`, relative error 0.0000 / 0.0003). Mass changes by +0.005 g and the exported volume by +1.04 mm³; the
+  CAD/B-rep objective keeps its 5 points. 15 basins; 1.69 s.
+- **Volume:** 14 of the 15 basins keep their removed volume exactly. The smallest, a 15-cell 0.216 mm³ sliver at
+  x ≈ 135 mm where the blade taper starts (outside the paper's guard and handle windows), flattens to 0.017 mm³
+  (deepest point 1.39 → 0.10 mm), so `worst_basin_volume_error` is 0.92 and the total removed volume falls by 0.20 mm³
+  (0.014 %).
+- On xbabe3, alongside evolution islands, the smoothed assessment took 83 min and the raw one 26.5 min (peak RSS
+  13.2 / 5.4 GB).
+- `results/ec3i042_r01_p10_c56/` holds the receipt, scores, chosen-run master scorecard and smoothing report. The paper's
+  pocket figures render this subject (`make -C docs/paper pocket-figures`; `POCKET_SUBJECT` selects another receipt).
+
 ## Reproduce
 
 ```sh
@@ -143,6 +174,7 @@ default 1.0) and `vp` (volume preservation, default 1). An invalid setting abort
 
 ## Files
 
+- `results/ec3i042_r01_p10_c56/` — the same files for the current best design (as exported and r = 0.75 mm).
 - `results/w406t3_r01_p10_c16/` — `RECEIPT.json` (inputs, settings, sha256 of every external
   STL/STEP/D1/scorecard, fitness per run), `scores.json` (`W_ULTRALIGHT_v1` objective breakdown
   per run), the master scorecard of the chosen run and its smoothing report.

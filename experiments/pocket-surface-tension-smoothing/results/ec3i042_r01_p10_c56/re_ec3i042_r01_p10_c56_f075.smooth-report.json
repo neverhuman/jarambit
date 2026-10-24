@@ -1,0 +1,60 @@
+{
+  "basins": 15,
+  "cells": {
+    "changed": 86963,
+    "evolving": 99926,
+    "fixed": 117112,
+    "inside": 245100
+  },
+  "depth_change_mm": {
+    "max": 3.4298795700073246,
+    "rms_changed": 0.3636903424636858
+  },
+  "grid": {
+    "h": 0.125,
+    "nx": 1682,
+    "ny": 576,
+    "x0": -17.900791991859094,
+    "y0": -53.71749383291025
+  },
+  "grind_edge_points": 892,
+  "isoline_length_by_depth_level_mm": {
+    "0.1": {
+      "after_mm": 827.2911906296348,
+      "before_mm": 925.8907659027616
+    },
+    "0.5": {
+      "after_mm": 808.9244724351406,
+      "before_mm": 1052.1859368176426
+    },
+    "1": {
+      "after_mm": 517.1501923928076,
+      "before_mm": 635.1859952679715
+    },
+    "2": {
+      "after_mm": 211.6083625071916,
+      "before_mm": 269.5056876799209
+    }
+  },
+  "model": "graph mean-curvature flow of the face z = D/2 for T = r^2/2, per-basin volume (pressure) term, planform/grinds/bore/pad fixed",
+  "params": {
+    "film_slope_a": 0.0,
+    "grow_mm": 0.5,
+    "h_mm": 0.125,
+    "meniscus_w_mm": 0.0,
+    "mesh_mm": 0.3,
+    "r_mm": 0.75,
+    "rim_mm": 1.0,
+    "volume_preserving": true
+  },
+  "removed_volume_mm3": {
+    "after": 1430.6443827038477,
+    "before": 1430.8429036051493
+  },
+  "research_only": true,
+  "schema": "jarambit.pocket_smooth.v1",
+  "seconds": 1.6879253269999999,
+  "steiner_points": 6800,
+  "steps": 90,
+  "worst_basin_volume_error": 0.9206319683769096
+}

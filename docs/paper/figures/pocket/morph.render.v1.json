@@ -1,32 +1,32 @@
 {
-  "command": "target/release/examples/pocket_smoothing_figures morph --stl /home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl --ladder docs/paper/ladder/smoothing-ladder.render.v1.json --out /home/ubuntu/jarambit/.agent/worktrees/research-pocket-smoothing/target/ieee/paper/pocket-raw/morph",
+  "command": "target/release/examples/pocket_smoothing_figures morph --stl /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl --ladder docs/paper/ladder/smoothing-ladder.render.v1.json --out /home/ubuntu/jarambit/.agent/worktrees/paper-refresh/target/ieee/paper/pocket-raw/morph",
   "inputs": {
-    "ladder_render_sha256": "faa96bbdd2f92b93ec87f6cb0972fae0dacba1c36a0fdcd59a62fb4900b4ca07",
+    "ladder_render_sha256": "bbca1f08dc8c7d917e6f4fd665e6119d029ec3701b51aa0ace6cf5ada1929410",
     "stl": {
-      "path": "/home/ubuntu/jarambit_runs/pocket-smoothing/stage2-final/f075/w406_f075.stl",
-      "sha256": "c969693c466594ff9357e5ca3e26c9d074b9cde53f1e0894a04b9580b5ace296"
+      "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl",
+      "sha256": "91ab0b649640a2e78807bde08c3794c1bc90e5a6ebeb929de8b2173263288c65"
     }
   },
   "outputs": [
     {
-      "camera_sha256": "5f0de968e27f8c3af23ca94259df6f78396e52d50d7680e03d228e0148f8902a",
+      "camera_sha256": "55bd5046afd3996ddd1c5cb6bcd628df145fca8497f9632cac6d4150e21ba2d4",
       "height": 850,
       "name": "morph-oblique.png",
-      "sha256": "89265d96ed0dadeab0f8c41c5cba90419b53103ad46358f15355acfbc6cf5e6d",
+      "sha256": "07769479c78c31c8a971f58923abc153231dc13badf21c5e18c5e9f85077c698",
       "width": 2000
     },
     {
-      "camera_sha256": "31b0a9fac41ecfac63ba51057bba33e20d2cbcd4634cc2940e3a849914db6166",
+      "camera_sha256": "b722d836a7eef0a8ac0f928f4dfd4a65c96bb7f3d366e4030138cafff3d50fc9",
       "height": 850,
       "name": "morph-guard.png",
-      "sha256": "eb6e30802540be93e9ffe2d5deddb92963a96d1db3fe790fd7c3867f3388ea29",
+      "sha256": "6f8251df5e7d990fb87cb800c04932468af08bdbbad18bb3f4604b66e0a88eee",
       "width": 2000
     },
     {
-      "camera_sha256": "d82c448edb41dfb4f8d201e38a6f91ac98f8f68fded84a9c1948fa6e65da85cf",
+      "camera_sha256": "00b9ddf326a26569ffc13957ce6ebfd203b380ba99fd49307c1186c944dd2d7c",
       "height": 850,
       "name": "morph-blade.png",
-      "sha256": "9a6e7ea1e2215429a7b1b0dc04980eec658123ea1e68909cea0a97eb8e21fb49",
+      "sha256": "554c4ca4f0ccf9fa3b23f92542e048780f562a5722fac9da4cc9cffa6d432b78",
       "width": 2000
     }
   ],

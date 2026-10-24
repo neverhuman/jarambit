@@ -1,10 +1,10 @@
 {
   "figure": "docs/paper/figures/pocket/bw-guard-ours.png",
-  "figure_sha256": "07ad2ebe2b5c5229cfc0d7e295d82b6b011a5f84246a6f14d6cf055db68df1fc",
+  "figure_sha256": "fc8771a93a4c55d8332d752a11f28f86e2e6e65c76340c70301f2b7d1c2429ff",
   "script": "crates/paper-artifacts/examples/pocket_smoothing_figures.rs",
   "inputs": {
-    "experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json": "f03482d4964d304a1842eb517fda0a050e544bb8a8e3e858f9dd8fc0d9266061",
-    "docs/paper/figures/pocket/bw.render.v1.json": "4c1d514eb2211e7f769b9ec1a7ed68b8fa06877b5a67305fbdbd60126ded06a3"
+    "experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json": "6b59b1793ea715c9cc0d692d1c30070634fdb80f86c22e8e16aa18a9f9d00d9c",
+    "docs/paper/figures/pocket/bw.render.v1.json": "04a92e9bc1e889b6f024ca6b1b85cac45990e178e97fed8486b6cd07782b3310"
   },
   "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"
 }

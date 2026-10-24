@@ -1,10 +1,10 @@
 {
   "figure": "docs/paper/ladder/L6-oblique.png",
-  "figure_sha256": "ffcc53d5c0f774a55124645c90bd8d15fd5e0bcaf3a92e0e15a2d928b650ecd5",
+  "figure_sha256": "721ebb26f19d07efe9b361a2f032ff1b2f6a1032145e40a46379ed50c752c545",
   "script": "crates/paper-artifacts/examples/smoothing_ladder_figure.rs",
   "inputs": {
-    "docs/paper/ladder/ladder.json": "9682cd4a872bd920b7f24d0e3120214645afc31dd0b35173301b21c868f32de1",
-    "docs/paper/ladder/smoothing-ladder.render.v1.json": "faa96bbdd2f92b93ec87f6cb0972fae0dacba1c36a0fdcd59a62fb4900b4ca07"
+    "docs/paper/ladder/ladder.json": "fbde73bd27ab9b91352c960cc96a5840517b9268b5bd1d830e1785de5fa84f05",
+    "docs/paper/ladder/smoothing-ladder.render.v1.json": "bbca1f08dc8c7d917e6f4fd665e6119d029ec3701b51aa0ace6cf5ada1929410"
   },
   "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"
 }

@@ -1,10 +1,10 @@
 {
   "census": {
-    "islands.tsv": "104fd996ef01002340463ef16fb9d5b85f93c8399723346009457a3097557290",
-    "stage1_all.tsv.zst": "19ffb353804e87e04fd34e119ec6b48e085bcdbbfb97024cd0afde54639f5891",
-    "stage2_all.tsv": "0245d1e1e8825f60448c45e244a6984c016d2c5c901ad78295d41e6c68b7b06b"
+    "islands.tsv": "0d107063da481396cc4bff33f757fcca96bf6aec051b2f4297335ff1c4a8c217",
+    "stage1_all.tsv.zst": "75eb1e12893abc6992138f8b83e88122526f41b7ac4b2ad1a2db938e7180a751",
+    "stage2_all.tsv": "f1ef41b184385c8be4760a763fb60c69dc9cd46fc95e77e322cc76f2f52582ac"
   },
-  "command": "crates/paper-artifacts/target/release/examples/evolution_all_runs --census docs/paper/allruns/census --out docs/paper/allruns",
+  "command": "target/release/examples/evolution_all_runs --census docs/paper/allruns/census --out docs/paper/allruns",
   "counts": {
     "hosts": [
       "xbabe1",
@@ -12,8 +12,8 @@
       "xbabe3",
       "xbabe4"
     ],
-    "island_rounds": 494,
-    "islands": 295,
+    "island_rounds": 766,
+    "islands": 351,
     "runs": [
       "archive:jarambit_evo3/out",
       "archive:jarambit_evo3c/out",
@@ -25,15 +25,15 @@
       "jarambit/out",
       "repo-evidence:evolve_certifiable"
     ],
-    "stage1_numeric": 46613,
-    "stage2": 967,
+    "stage1_numeric": 77915,
+    "stage2": 1761,
     "stage2_inflated_evaluator_not_plotted": 142
   },
   "leader": {
-    "canonical_w_ultralight_v1": 80.29939,
-    "day": 18.12033564814815,
+    "canonical_w_ultralight_v1": 80.623796,
+    "day": 24.205578703703704,
     "host": "xbabe3",
-    "label": "w406t3_r01_p10_c16"
+    "label": "ec3i042_r01_p10_c56"
   },
   "schema": "jarambit.evolution_all_runs.v1",
   "score": "canonical W_ULTRALIGHT_v1 recomputed from each retained scorecard and RS-v2 receipt (Stage 2); Stage-1 screen value as recorded by auto-evolve",

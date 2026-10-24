@@ -1,0 +1,220 @@
+{
+  "schema": "jarambit.pocket_smoothing_scores.v1",
+  "metric": "W_ULTRALIGHT_v1",
+  "runs": [
+    {
+      "name": "ctrl",
+      "setting": "off (as exported, re-run)",
+      "score_100": 80.623796,
+      "objectives": {
+        "ultralight_mass": {
+          "weight_pct": 22.0,
+          "normalized_score": 0.546428,
+          "weighted_points": 12.021421
+        },
+        "holder_and_compactness": {
+          "weight_pct": 8.0,
+          "normalized_score": 1.0,
+          "weighted_points": 8.0
+        },
+        "karambit_ring_and_claw": {
+          "weight_pct": 7.0,
+          "normalized_score": 1.0,
+          "weighted_points": 7.0
+        },
+        "c6_aesthetic_and_ergo": {
+          "weight_pct": 9.0,
+          "normalized_score": 1.0,
+          "weighted_points": 9.0
+        },
+        "bore_collar_comfort": {
+          "weight_pct": 9.0,
+          "normalized_score": 0.875,
+          "weighted_points": 7.875
+        },
+        "cad_watertight_brep": {
+          "weight_pct": 5.0,
+          "normalized_score": 1.0,
+          "weighted_points": 5.0
+        },
+        "gate_s_sharpness": {
+          "weight_pct": 5.0,
+          "normalized_score": 0.846429,
+          "weighted_points": 4.232143
+        },
+        "gate_s_point_profile": {
+          "weight_pct": 5.0,
+          "normalized_score": 0.521709,
+          "weighted_points": 2.608543
+        },
+        "hiker_lateral_180n": {
+          "weight_pct": 3.5,
+          "normalized_score": 1.0,
+          "weighted_points": 3.5
+        },
+        "hunter_lateral_260n": {
+          "weight_pct": 2.5,
+          "normalized_score": 0.773077,
+          "weighted_points": 1.932692
+        },
+        "strict_hunter_260n": {
+          "weight_pct": 2.0,
+          "normalized_score": 0.761154,
+          "weighted_points": 1.522308
+        },
+        "ring_pull_1500n": {
+          "weight_pct": 2.5,
+          "normalized_score": 1.0,
+          "weighted_points": 2.5
+        },
+        "twist_body_1p82nm": {
+          "weight_pct": 2.5,
+          "normalized_score": 1.0,
+          "weighted_points": 2.5
+        },
+        "twist_tip_plate_1p82nm": {
+          "weight_pct": 2.5,
+          "normalized_score": 0.5315,
+          "weighted_points": 1.32875
+        },
+        "solid_tip_3d_p2_and_xcheck": {
+          "weight_pct": 3.0,
+          "normalized_score": 0.6886,
+          "weighted_points": 2.0658
+        },
+        "side_a4_buckling": {
+          "weight_pct": 2.0,
+          "normalized_score": 1.0,
+          "weighted_points": 2.0
+        },
+        "failure_sequence_1p2": {
+          "weight_pct": 3.5,
+          "normalized_score": 0.985,
+          "weighted_points": 3.4475
+        },
+        "plate_gci_3level": {
+          "weight_pct": 2.0,
+          "normalized_score": 1.0,
+          "weighted_points": 2.0
+        },
+        "human_max_overload": {
+          "weight_pct": 2.0,
+          "normalized_score": 0.483333,
+          "weighted_points": 0.966667
+        },
+        "goodman_fatigue_l7": {
+          "weight_pct": 2.0,
+          "normalized_score": 0.561486,
+          "weighted_points": 1.122972
+        }
+      }
+    },
+    {
+      "name": "f075",
+      "setting": "r=0.75, a=0 (chosen)",
+      "score_100": 80.561227,
+      "objectives": {
+        "ultralight_mass": {
+          "weight_pct": 22.0,
+          "normalized_score": 0.546374,
+          "weighted_points": 12.020231
+        },
+        "holder_and_compactness": {
+          "weight_pct": 8.0,
+          "normalized_score": 1.0,
+          "weighted_points": 8.0
+        },
+        "karambit_ring_and_claw": {
+          "weight_pct": 7.0,
+          "normalized_score": 1.0,
+          "weighted_points": 7.0
+        },
+        "c6_aesthetic_and_ergo": {
+          "weight_pct": 9.0,
+          "normalized_score": 1.0,
+          "weighted_points": 9.0
+        },
+        "bore_collar_comfort": {
+          "weight_pct": 9.0,
+          "normalized_score": 0.875,
+          "weighted_points": 7.875
+        },
+        "cad_watertight_brep": {
+          "weight_pct": 5.0,
+          "normalized_score": 1.0,
+          "weighted_points": 5.0
+        },
+        "gate_s_sharpness": {
+          "weight_pct": 5.0,
+          "normalized_score": 0.846429,
+          "weighted_points": 4.232143
+        },
+        "gate_s_point_profile": {
+          "weight_pct": 5.0,
+          "normalized_score": 0.521709,
+          "weighted_points": 2.608543
+        },
+        "hiker_lateral_180n": {
+          "weight_pct": 3.5,
+          "normalized_score": 1.0,
+          "weighted_points": 3.5
+        },
+        "hunter_lateral_260n": {
+          "weight_pct": 2.5,
+          "normalized_score": 0.773462,
+          "weighted_points": 1.933654
+        },
+        "strict_hunter_260n": {
+          "weight_pct": 2.0,
+          "normalized_score": 0.768846,
+          "weighted_points": 1.537692
+        },
+        "ring_pull_1500n": {
+          "weight_pct": 2.5,
+          "normalized_score": 1.0,
+          "weighted_points": 2.5
+        },
+        "twist_body_1p82nm": {
+          "weight_pct": 2.5,
+          "normalized_score": 1.0,
+          "weighted_points": 2.5
+        },
+        "twist_tip_plate_1p82nm": {
+          "weight_pct": 2.5,
+          "normalized_score": 0.5315,
+          "weighted_points": 1.32875
+        },
+        "solid_tip_3d_p2_and_xcheck": {
+          "weight_pct": 3.0,
+          "normalized_score": 0.645,
+          "weighted_points": 1.935
+        },
+        "side_a4_buckling": {
+          "weight_pct": 2.0,
+          "normalized_score": 1.0,
+          "weighted_points": 2.0
+        },
+        "failure_sequence_1p2": {
+          "weight_pct": 3.5,
+          "normalized_score": 1.0,
+          "weighted_points": 3.5
+        },
+        "plate_gci_3level": {
+          "weight_pct": 2.0,
+          "normalized_score": 1.0,
+          "weighted_points": 2.0
+        },
+        "human_max_overload": {
+          "weight_pct": 2.0,
+          "normalized_score": 0.483333,
+          "weighted_points": 0.966667
+        },
+        "goodman_fatigue_l7": {
+          "weight_pct": 2.0,
+          "normalized_score": 0.561774,
+          "weighted_points": 1.123548
+        }
+      }
+    }
+  ]
+}

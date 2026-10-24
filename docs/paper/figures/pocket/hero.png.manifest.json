@@ -1,11 +1,11 @@
 {
   "figure": "docs/paper/figures/pocket/hero.png",
-  "figure_sha256": "76b8e12e21c0d38f9d1629fd2f5f953d038b4ff467b367a2ce2d871e997439ac",
+  "figure_sha256": "85c10f26a113103b1c34f0625b3a26258c77fed49f2b59ab580213b4bbd34a96",
   "script": "docs/paper/Makefile",
   "inputs": {
-    "docs/paper/figures/pocket/hero.svg": "4948e77481777cd2069a3365a69739e2618bf0a70dee6250a9c7a5b07093b925",
-    "docs/paper/figures/pocket/hero-stack.png": "3d590fd2c9ce4e2c16f4a4b99c48df1e1982bd64cf44472beff9f6863b37cf8d",
-    "experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json": "f03482d4964d304a1842eb517fda0a050e544bb8a8e3e858f9dd8fc0d9266061"
+    "docs/paper/figures/pocket/hero.svg": "4e1d720c4041967cb1ea6b040774f3e0f2af1d10804c554a62dbeebd0baca75d",
+    "docs/paper/figures/pocket/hero-stack.png": "81417093c310fc47a4a1ee0379b98edea4d6b762e669916a5cff50c754b6d21d",
+    "experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json": "6b59b1793ea715c9cc0d692d1c30070634fdb80f86c22e8e16aa18a9f9d00d9c"
   },
   "note": "make figures: rsvg-convert -w 2000 of the SVG (stacked fields + labels + colour key + W_ULTRALIGHT_v1 badge from the receipt)."
 }
