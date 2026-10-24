@@ -1,21 +1,11 @@
 {
   "figure": "docs/paper/figures/cover/render-unsmoothed.png",
-  "figure_sha256": "3f0a21adfcc8750601676843a1dec420b4d33e974aea70509e44b604b6d609e6",
-  "script": "crates/paper-artifacts/examples/smoothing_figure.rs",
+  "figure_sha256": "695d4718412f474176a612fb14c81c7a7c0a256a566c48efbc5d5d7ba02923b8",
+  "script": "crates/paper-artifacts/examples/pocket_smoothing_figures.rs",
   "inputs": {
-    "docs/paper/figures/cover/smoothing-figure.render.v1.json": "6388e7409b78e67bca8ef9c3e356fb0529a0011eab5e8bbe31b060b0a8ed9e2c",
+    "docs/paper/figures/cover/cover.render.v1.json": "519b5bffef896f867869b0ca8658534a7eed345edd45a19a6311252f162d767a",
     "experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json": "6b59b1793ea715c9cc0d692d1c30070634fdb80f86c22e8e16aa18a9f9d00d9c"
   },
-  "external_inputs": {
-    "before_stl": {
-      "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56.stl",
-      "sha256": "6a76f809d755cc986905756e7de532803e88306313815b6b8ad271e90e9278ca"
-    },
-    "after_stl": {
-      "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl",
-      "sha256": "91ab0b649640a2e78807bde08c3794c1bc90e5a6ebeb929de8b2173263288c65"
-    }
-  },
-  "external_inputs_note": "STLs are outside git because of their size; bound by sha256 and by RECEIPT.json.",
-  "postprocess": "Producer output at --width 2000 (stored-deflate PNG) re-encoded losslessly with rsvg-convert; pixel-identical."
+  "external_inputs_note": "STLs and D1 reports are outside git because of their size; cover.render.v1.json and RECEIPT.json bind them by sha256.",
+  "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"
 }

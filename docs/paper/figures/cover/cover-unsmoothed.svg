@@ -1,11 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2000" height="850" viewBox="0 0 2000 850">
   <rect width="2000" height="850" fill="#ffffff"/>
   <image xlink:href="render-unsmoothed.png" x="0" y="0" width="2000" height="850"/>
-  <rect x="905" y="425" width="220" height="110" fill="none" stroke="#007E87" stroke-width="3"/>
-  <svg x="15" y="12" width="550" height="275" viewBox="905 425 220 110"><image xlink:href="render-unsmoothed.png" x="0" y="0" width="2000" height="850"/></svg>
-  <rect x="15" y="12" width="550" height="275" fill="none" stroke="#007E87" stroke-width="3"/>
-  <rect x="18" y="15" width="300" height="40" fill="#ffffff"/>
-  <text x="27" y="45" font-family="TeX Gyre Heros" font-size="26" fill="#007E87">Isogrid pockets, 2.5x</text>
+  <rect x="905" y="337" width="224" height="94" fill="none" stroke="#132D3B" stroke-width="3"/>
+  <image xlink:href="inset-unsmoothed.png" x="15" y="603" width="560" height="235"/>
+  <rect x="15" y="603" width="560" height="235" fill="none" stroke="#132D3B" stroke-width="3"/>
+  <rect x="18" y="606" width="300" height="40" fill="#ffffff"/>
+  <text x="27" y="636" font-family="TeX Gyre Heros" font-size="26" fill="#132D3B">Isogrid pockets, 2.5x</text>
+  <defs><linearGradient id="brilliant" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="rgb(46,52,146)"/><stop offset="0.18" stop-color="rgb(38,110,214)"/><stop offset="0.38" stop-color="rgb(32,178,196)"/><stop offset="0.55" stop-color="rgb(92,204,120)"/><stop offset="0.72" stop-color="rgb(246,214,64)"/><stop offset="0.86" stop-color="rgb(246,142,36)"/><stop offset="1" stop-color="rgb(222,46,38)"/></linearGradient></defs>
+  <text x="40" y="46" font-family="TeX Gyre Heros" font-size="29" fill="#132D3B">Plate von Mises envelope of the four load cases, MPa</text>
+  <rect x="40" y="56" width="640" height="26" fill="url(#brilliant)" stroke="#132D3B" stroke-width="1.2"/>
+  <line x1="40.0" y1="82" x2="40.0" y2="89" stroke="#132D3B" stroke-width="1.2"/>
+  <text x="40.0" y="115" text-anchor="middle" font-family="TeX Gyre Heros" font-size="26" fill="#132D3B">0</text>
+  <line x1="190.6" y1="82" x2="190.6" y2="89" stroke="#132D3B" stroke-width="1.2"/>
+  <text x="190.6" y="115" text-anchor="middle" font-family="TeX Gyre Heros" font-size="26" fill="#132D3B">200</text>
+  <line x1="341.2" y1="82" x2="341.2" y2="89" stroke="#132D3B" stroke-width="1.2"/>
+  <text x="341.2" y="115" text-anchor="middle" font-family="TeX Gyre Heros" font-size="26" fill="#132D3B">400</text>
+  <line x1="491.8" y1="82" x2="491.8" y2="89" stroke="#132D3B" stroke-width="1.2"/>
+  <text x="491.8" y="115" text-anchor="middle" font-family="TeX Gyre Heros" font-size="26" fill="#132D3B">600</text>
+  <text x="680" y="115" text-anchor="end" font-family="TeX Gyre Heros" font-size="26" fill="#132D3B">&#8805; 850</text>
+  <rect x="710" y="56" width="26" height="26" fill="rgb(178,182,188)" stroke="#132D3B" stroke-width="1.2"/>
+  <text x="748" y="78" font-family="TeX Gyre Heros" font-size="26" fill="#132D3B">tip zone, no plate field (3D solid-tip test)</text>
+  <text x="640" y="694" font-family="TeX Gyre Heros" font-weight="bold" font-size="28" fill="#132D3B">Tests without a stored field</text>
+  <text x="640" y="729" font-family="TeX Gyre Heros" font-size="27" fill="#132D3B">3D solid-tip safety factor</text>
+  <text x="1110" y="729" text-anchor="end" font-family="TeX Gyre Heros" font-size="27" fill="#132D3B">0.689</text>
+  <text x="640" y="764" font-family="TeX Gyre Heros" font-size="27" fill="#132D3B">Fatigue safety factor</text>
+  <text x="1110" y="764" text-anchor="end" font-family="TeX Gyre Heros" font-size="27" fill="#132D3B">0.561</text>
+  <text x="640" y="799" font-family="TeX Gyre Heros" font-size="27" fill="#132D3B">Failure-sequence ratio</text>
+  <text x="1110" y="799" text-anchor="end" font-family="TeX Gyre Heros" font-size="27" fill="#132D3B">1.18</text>
+  <text x="640" y="834" font-family="TeX Gyre Heros" font-size="27" fill="#55606a">Battery 13/18, not qualified</text>
   <g transform="translate(1425,655)">
     <rect width="560" height="180" rx="10" fill="#ffffff" stroke="#132D3B" stroke-width="2.5"/>
     <text x="22" y="42" font-family="TeX Gyre Heros" font-size="28" fill="#132D3B">W_ULTRALIGHT_v1 fitness</text>
