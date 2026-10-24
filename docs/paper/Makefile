@@ -28,7 +28,7 @@ REPORT_METADATA := generated/display-composite.v1.json generated/test-field-rost
 DISPLAY_ALTERNATIVES := generated/hero-full-range.svg generated/hero-mesh-on.svg
 REPAIR_HISTORY := history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE102C_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE510713_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_D3BA882D_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2A3B1A6_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2A2CD68_20261020.json history/ultralight_weighted_fitness_009f5ac5.source.txt history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_DD92248_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_7A51C1B2_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_73FFEF00_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_DBC4034_20261020.json history/hero-appearance-source-recipe.v1.BASE_6C49E1C_20261020.json history/hero-appearance-preflight.v1.BASE_6C49E1C_20261020.json history/hero-appearance-pin-review.v1.BASE_6C49E1C_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_6C49E1C_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_BFD49EC_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_26AEDA0_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_4213DA0_20261020.json history/hero-appearance-source-recipe.v1.BASE_4FF1CE1_20261020.json history/hero-appearance-preflight.v1.BASE_4FF1CE1_20261020.json history/hero-appearance-pin-review.v1.BASE_4FF1CE1_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_4FF1CE1_20261020.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_6AE781B_20261020.json history/hero-appearance-source-recipe.v1.BASE_4C71F76_20261021.json history/hero-appearance-preflight.v1.BASE_4C71F76_20261021.json history/hero-appearance-pin-review.v1.BASE_4C71F76_20261021.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_4C71F76_20261021.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_2E46025_20261021.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_E07606A_20261022.json history/CORPUS_READER_AND_SVG_REPAIR_RECEIPT_BASE_7AAF6D4_20261022.json
 GEN_PNGS := $(addprefix $(OUT)/,$(addsuffix .png,$(GEN_FIGURES)))
-# Main-page figure of each variant: lit render + 2.5x blade-grind inset + W_ULTRALIGHT_v1 badge.
+# Main-page figure of each variant: false-colour render + 2.5x isogrid-pocket inset + MPa key + badge.
 COVER_PNGS := figures/cover/cover-unsmoothed.png figures/cover/cover-smoothed.png
 # Main-page figure of variant A: the surface-tension-smoothed design with every retained plate
 # response stacked (pocket-figures writes hero.svg and hero-stack.png).
@@ -46,7 +46,7 @@ all: artifacts pdfs
 artifacts:
 	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts
 figures: $(GEN_PNGS) $(POP_PNGS) $(STORY_PNGS) $(POSITIVE_PNGS) $(README_HERO_PNG) figures/fig1_hero_blender_v2.png $(CROP_PNG) $(COVER_PNGS) $(POCKET_PNGS)
-$(COVER_PNGS): figures/cover/cover-%.png: figures/cover/cover-%.svg figures/cover/render-%.png
+$(COVER_PNGS): figures/cover/cover-%.png: figures/cover/cover-%.svg figures/cover/render-%.png figures/cover/inset-%.png
 	rsvg-convert -w 2000 -h 850 -o $@ $<
 $(POCKET_PNGS): figures/pocket/%.png: figures/pocket/%.svg figures/pocket/hero-stack.png
 	rsvg-convert -w 2000 -o $@ $<
@@ -191,23 +191,18 @@ pocket-figures:
 	printf '{\n  "figure": "docs/paper/figures/pocket/hero.png",\n  "figure_sha256": "%s",\n  "script": "docs/paper/Makefile",\n  "inputs": {\n    "docs/paper/figures/pocket/hero.svg": "%s",\n    "docs/paper/figures/pocket/hero-stack.png": "%s",\n    "$(POCKET_RECEIPT_REL)": "%s"\n  },\n  "note": "make figures: rsvg-convert -w 2000 of the SVG (stacked fields + labels + colour key + W_ULTRALIGHT_v1 badge from the receipt)."\n}\n' \
 	  $$(sha256sum < figures/pocket/hero.png | cut -c1-64) $$(sha256sum < figures/pocket/hero.svg | cut -c1-64) \
 	  $$(sha256sum < figures/pocket/hero-stack.png | cut -c1-64) $$(sha256sum < $(POCKET_RECEIPT) | cut -c1-64) > figures/pocket/hero.png.manifest.json
-	# Variant-B main page: the smoothed export under variant A's cover camera (the as-exported
-	# render is re-made too and must stay pixel-identical), then the same inset and badge.
-	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example smoothing_figure -- \
-	  --before $(POCKET_RAW_STL) --before-sha256 $$(sha256sum < $(POCKET_RAW_STL) | cut -c1-64) \
-	  --after $(POCKET_STL) --after-sha256 $$(sha256sum < $(POCKET_STL) | cut -c1-64) \
-	  --code-commit $$(git rev-parse HEAD) --out $(OUT)/pocket-raw/cover --width 2000 --remeshed
-	cp $(OUT)/pocket-raw/cover/smoothing-figure.render.v1.json figures/cover/
-	for pair in before:unsmoothed after:smoothed; do src=$${pair%%:*}; dst=$${pair##*:}; \
-	  printf '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2000" height="850"><image xlink:href="winner-%s.png" width="2000" height="850"/></svg>\n' $$src \
-	    > $(OUT)/pocket-raw/cover/wrap-$$src.svg; \
-	  (cd $(OUT)/pocket-raw/cover && rsvg-convert -o $(abspath figures/cover)/render-$$dst.png wrap-$$src.svg) || exit 1; \
-	  printf '{\n  "figure": "docs/paper/figures/cover/render-%s.png",\n  "figure_sha256": "%s",\n  "script": "crates/paper-artifacts/examples/smoothing_figure.rs",\n  "inputs": {\n    "docs/paper/figures/cover/smoothing-figure.render.v1.json": "%s",\n    "$(POCKET_RECEIPT_REL)": "%s"\n  },\n  "external_inputs": {\n    "before_stl": {\n      "path": "%s",\n      "sha256": "%s"\n    },\n    "after_stl": {\n      "path": "%s",\n      "sha256": "%s"\n    }\n  },\n  "external_inputs_note": "STLs are outside git because of their size; bound by sha256 and by RECEIPT.json.",\n  "postprocess": "Producer output at --width 2000 (stored-deflate PNG) re-encoded losslessly with rsvg-convert; pixel-identical."\n}\n' \
-	    $$dst $$(sha256sum < figures/cover/render-$$dst.png | cut -c1-64) $$(sha256sum < figures/cover/smoothing-figure.render.v1.json | cut -c1-64) \
-	    $$(sha256sum < $(POCKET_RECEIPT) | cut -c1-64) $(POCKET_RAW_STL) $$(sha256sum < $(POCKET_RAW_STL) | cut -c1-64) \
-	    $(POCKET_STL) $$(sha256sum < $(POCKET_STL) | cut -c1-64) > figures/cover/render-$$dst.png.manifest.json; done
-	rsvg-convert -w 2000 -h 850 -o figures/cover/cover-smoothed.png figures/cover/cover-smoothed.svg
-	printf '{\n  "figure": "docs/paper/figures/cover/cover-smoothed.png",\n  "figure_sha256": "%s",\n  "script": "docs/paper/Makefile",\n  "inputs": {\n    "docs/paper/figures/cover/cover-smoothed.svg": "%s",\n    "docs/paper/figures/cover/render-smoothed.png": "%s",\n    "$(POCKET_RECEIPT_REL)": "%s"\n  },\n  "note": "make figures: rsvg-convert -w 2000 -h 850 of the SVG (render + 2.5x isogrid-pocket inset + W_ULTRALIGHT_v1 badge %s from the receipt hero_score_100)."\n}\n' \
-	  $$(sha256sum < figures/cover/cover-smoothed.png | cut -c1-64) $$(sha256sum < figures/cover/cover-smoothed.svg | cut -c1-64) \
-	  $$(sha256sum < figures/cover/render-smoothed.png | cut -c1-64) $$(sha256sum < $(POCKET_RECEIPT) | cut -c1-64) \
-	  $$(sed -n 's/.*"hero_score_100": *\([0-9.]*\).*/\1/p' $(abspath $(POCKET_RECEIPT)) | head -1) > figures/cover/cover-smoothed.png.manifest.json
+	# Main page of each paper: the as-exported (A) and smoothed (B) export, each painted with its own
+	# stored multi-case von Mises envelope on one MPa scale, under one camera, light and inset.
+	cd $(ROOT) && $(POCKET_FIGS) cover --receipt $(POCKET_RECEIPT_REL) --out $(OUT)/pocket-raw/cover
+	rm -f figures/cover/smoothing-figure.render.v1.json
+	cp $(OUT)/pocket-raw/cover/cover.render.v1.json $(OUT)/pocket-raw/cover/cover-unsmoothed.svg $(OUT)/pocket-raw/cover/cover-smoothed.svg figures/cover/
+	for v in unsmoothed smoothed; do for part in render inset; do \
+	  (cd $(OUT)/pocket-raw/cover && rsvg-convert -o $(abspath figures/cover)/$$part-$$v.png $$part-$$v.svg) || exit 1; \
+	  printf '{\n  "figure": "docs/paper/figures/cover/%s-%s.png",\n  "figure_sha256": "%s",\n  "script": "crates/paper-artifacts/examples/pocket_smoothing_figures.rs",\n  "inputs": {\n    "docs/paper/figures/cover/cover.render.v1.json": "%s",\n    "$(POCKET_RECEIPT_REL)": "%s"\n  },\n  "external_inputs_note": "STLs and D1 reports are outside git because of their size; cover.render.v1.json and RECEIPT.json bind them by sha256.",\n  "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"\n}\n' \
+	    $$part $$v $$(sha256sum < figures/cover/$$part-$$v.png | cut -c1-64) $$(sha256sum < figures/cover/cover.render.v1.json | cut -c1-64) \
+	    $$(sha256sum < $(POCKET_RECEIPT) | cut -c1-64) > figures/cover/$$part-$$v.png.manifest.json; done; \
+	  rsvg-convert -w 2000 -h 850 -o figures/cover/cover-$$v.png figures/cover/cover-$$v.svg || exit 1; \
+	  printf '{\n  "figure": "docs/paper/figures/cover/cover-%s.png",\n  "figure_sha256": "%s",\n  "script": "docs/paper/Makefile",\n  "inputs": {\n    "docs/paper/figures/cover/cover-%s.svg": "%s",\n    "docs/paper/figures/cover/render-%s.png": "%s",\n    "docs/paper/figures/cover/inset-%s.png": "%s",\n    "$(POCKET_RECEIPT_REL)": "%s"\n  },\n  "note": "make figures: rsvg-convert -w 2000 -h 850 of the SVG written by pocket_smoothing_figures cover (render, 2.5x isogrid-pocket inset, MPa colour key, tests without a stored field and the W_ULTRALIGHT_v1 badge, all from the receipt)."\n}\n' \
+	    $$v $$(sha256sum < figures/cover/cover-$$v.png | cut -c1-64) $$v $$(sha256sum < figures/cover/cover-$$v.svg | cut -c1-64) \
+	    $$v $$(sha256sum < figures/cover/render-$$v.png | cut -c1-64) $$v $$(sha256sum < figures/cover/inset-$$v.png | cut -c1-64) \
+	    $$(sha256sum < $(POCKET_RECEIPT) | cut -c1-64) > figures/cover/cover-$$v.png.manifest.json; done

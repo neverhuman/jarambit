@@ -16,6 +16,13 @@
 //!   morph --stl OURS.stl --ladder LADDER.render.v1.json --out DIR
 //!         The ladder's level-0 oblique and guard views (camera, light, height tint, 2.5x relief)
 //!         of the smoothed CAD.
+//!   cover --receipt RECEIPT.json --out DIR [--width 2000] [--height 850] [--tilt 40]
+//!         [--exaggeration 1] [--cap 850] [--box 40,30,1960,660] [--inset 90.45,-8.62]
+//!         First-page figure of each paper: the as-exported (receipt run `ctrl`) and smoothed
+//!         (`f075`) export, each painted with its own stored multi-case von Mises envelope
+//!         (D1 `env_vm`, MPa) on one absolute colour scale, under one oblique camera, raking light
+//!         and soft shadow, with a 2.5x inset of the isogrid pockets rendered at full resolution.
+//!         STLs and D1 reports are read from the receipt and must match its sha256.
 use jarambit_paper_artifacts::appearance::{self, Camera, Lighting, NormalSettings, RawMesh, RenderSettings, Rendered, Vec3};
 use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
@@ -571,6 +578,240 @@ fn hero(a: &Args) -> Res<()> {
     Ok(())
 }
 
+// ---------------------------------------------------------------- cover
+
+/// One receipt run: its export and D1 report, each checked against the receipt's sha256.
+struct Variant {
+    run: Value,
+    stl: (String, String),
+    d1: (String, String),
+    mesh: RawMesh,
+    doc: Value,
+}
+
+fn variant(receipt: &Value, name: &str) -> Res<Variant> {
+    let run = receipt["runs"].as_array().ok_or("receipt runs")?.iter().find(|r| r["name"] == name).ok_or(format!("receipt run {name}"))?.clone();
+    let read = |kind: &str| -> Res<(String, Vec<u8>)> {
+        let f = &run["files"][kind];
+        let path = f["path"].as_str().ok_or(format!("receipt {name} {kind} path"))?.to_string();
+        let bytes = fs::read(&path)?;
+        if f["sha256"].as_str() != Some(sha(&bytes).as_str()) {
+            return Err(format!("{path} does not match the receipt sha256").into());
+        }
+        Ok((path, bytes))
+    };
+    let (stl_path, stl_bytes) = read("stl")?;
+    let (d1_path, d1_bytes) = read("d1")?;
+    let mesh = appearance::decode_stl(&stl_bytes)?;
+    let doc = serde_json::from_slice(&d1_bytes)?;
+    Ok(Variant { run, stl: (stl_path, sha(&stl_bytes)), d1: (d1_path, sha(&d1_bytes)), mesh, doc })
+}
+
+/// Separable box blur, applied twice (close to a Gaussian of sigma ~ r / 1.2).
+fn blur(v: &[f64], width: usize, height: usize, r: usize) -> Vec<f64> {
+    let mut a = v.to_vec();
+    let n = (2 * r + 1) as f64;
+    for _ in 0..2 {
+        let mut b = vec![0.0; a.len()];
+        for y in 0..height {
+            for x in 0..width {
+                let (lo, hi) = (x.saturating_sub(r), (x + r).min(width - 1));
+                b[y * width + x] = (lo..=hi).map(|k| a[y * width + k]).sum::<f64>() / n;
+            }
+        }
+        for y in 0..height {
+            for x in 0..width {
+                let (lo, hi) = (y.saturating_sub(r), (y + r).min(height - 1));
+                a[y * width + x] = (lo..=hi).map(|k| b[k * width + x]).sum::<f64>() / n;
+            }
+        }
+    }
+    a
+}
+
+/// Puts a soft contact shadow (coverage, offset and blurred) under the render: each pixel is
+/// re-composited in linear light over a darkened instead of a white background.
+fn shadowed(rgb: &[u8], alpha: &[f64], width: usize, height: usize, offset: [isize; 2], r: usize, darkness: f64) -> Vec<u8> {
+    let mut moved = vec![0.0; width * height];
+    for y in 0..height as isize {
+        for x in 0..width as isize {
+            let (sx, sy) = (x - offset[0], y - offset[1]);
+            if sx >= 0 && sy >= 0 && (sx as usize) < width && (sy as usize) < height {
+                moved[y as usize * width + x as usize] = alpha[sy as usize * width + sx as usize];
+            }
+        }
+    }
+    let soft = blur(&moved, width, height, r);
+    let lin = |c: u8| {
+        let x = c as f64 / 255.0;
+        if x <= 0.04045 { x / 12.92 } else { ((x + 0.055) / 1.055).powf(2.4) }
+    };
+    let srgb = |x: f64| {
+        let x = x.clamp(0.0, 1.0);
+        let v = if x <= 0.0031308 { 12.92 * x } else { 1.055 * x.powf(1.0 / 2.4) - 0.055 };
+        (v * 255.0).round() as u8
+    };
+    let mut out = rgb.to_vec();
+    for (i, p) in out.chunks_exact_mut(3).enumerate() {
+        let bg = 1.0 - darkness * soft[i];
+        let uncovered = 1.0 - alpha[i];
+        for c in p.iter_mut() {
+            *c = srgb(lin(*c) - uncovered * (1.0 - bg));
+        }
+    }
+    out
+}
+
+fn cover(a: &Args) -> Res<()> {
+    let receipt_path = a.need("--receipt")?;
+    let out = PathBuf::from(a.need("--out")?);
+    let width: usize = a.get("--width").map_or(Ok(2000), |s| s.parse())?;
+    let height: usize = a.get("--height").map_or(Ok(850), |s| s.parse())?;
+    let tilt: f64 = a.get("--tilt").map_or(Ok(40.0), |s| s.parse())?;
+    let exaggeration: f64 = a.get("--exaggeration").map_or(Ok(1.0), |s| s.parse())?;
+    let cap: f64 = a.get("--cap").map_or(Ok(850.0), |s| s.parse())?;
+    let nums = |key: &str, default: &str| -> Res<Vec<f64>> {
+        a.get(key).unwrap_or_else(|| default.to_string()).split(',').map(|s| s.trim().parse::<f64>().map_err(|e| format!("{key}: {e}").into())).collect()
+    };
+    let bx = nums("--box", "40,30,1960,660")?;
+    let inset_at = nums("--inset", "90.45,-8.62")?;
+    if bx.len() != 4 || inset_at.len() != 2 || !(0.0..=89.0).contains(&tilt) || !(1.0..=4.0).contains(&exaggeration) || !(cap > 0.0) {
+        return Err("--box x0,y0,x1,y1, --inset x,y (mm), --tilt 0..=89, --exaggeration 1..=4, --cap > 0 (MPa)".into());
+    }
+    new_dir(&out)?;
+    let receipt_bytes = fs::read(&receipt_path)?;
+    let receipt: Value = serde_json::from_slice(&receipt_bytes)?;
+    let variants = [("unsmoothed", variant(&receipt, "ctrl")?), ("smoothed", variant(&receipt, "f075")?)];
+    if receipt["raw_export_stl"]["sha256"].as_str() != Some(variants[0].1.stl.1.as_str()) {
+        return Err("receipt raw_export_stl differs from run ctrl".into());
+    }
+    // One camera for both, framed on both exports into --box.
+    let rot = oblique_rotation(tilt);
+    let lifted: Vec<RawMesh> = variants.iter().map(|(_, v)| exaggerate(&v.mesh, exaggeration)).collect::<Res<_>>()?;
+    let (mut lo, mut hi) = ([f64::INFINITY; 2], [f64::NEG_INFINITY; 2]);
+    for m in &lifted {
+        for p in m.triangles().iter().flatten() {
+            for k in 0..2 {
+                let q = rot[k][0] * p[0] + rot[k][1] * p[1] + rot[k][2] * p[2];
+                lo[k] = lo[k].min(q);
+                hi[k] = hi[k].max(q);
+            }
+        }
+    }
+    let scale = ((bx[2] - bx[0]) / (hi[0] - lo[0])).min((bx[3] - bx[1]) / (hi[1] - lo[1]));
+    let mid = [(lo[0] + hi[0]) / 2.0, (lo[1] + hi[1]) / 2.0];
+    let cam = Camera { rotation: rot, scale, offset: [(bx[0] + bx[2]) / 2.0 - scale * mid[0], (bx[1] + bx[3]) / 2.0 + scale * mid[1]] };
+    // Inset: the same camera at 2.5x about the projected mid-plane point --inset.
+    let (zoom, inset_w, inset_h) = (2.5, 560usize, 235usize);
+    let inset_xy = [15.0, height as f64 - inset_h as f64 - 12.0];
+    let q = cam.rotate([inset_at[0], inset_at[1], 0.0]);
+    let inset_cam = Camera { rotation: rot, scale: zoom * scale, offset: [inset_w as f64 / 2.0 - zoom * scale * q[0], inset_h as f64 / 2.0 + zoom * scale * q[1]] };
+    let centre_px = [cam.offset[0] + q[0] * scale, cam.offset[1] - q[1] * scale];
+    let locator = [centre_px[0] - inset_w as f64 / zoom / 2.0, centre_px[1] - inset_h as f64 / zoom / 2.0, inset_w as f64 / zoom, inset_h as f64 / zoom];
+    let light = Lighting { direction: [-0.72, 0.58, 0.38], ambient: 0.22, diffuse: 0.78, specular: 0.14, shininess: 40 };
+    let mut stats = Vec::new();
+    let mut outputs = Vec::new();
+    for ((name, v), lifted) in variants.iter().zip(&lifted) {
+        let m = &v.doc["mesh"];
+        let xy: Vec<[f64; 2]> = m["xy"].as_array().ok_or("mesh.xy")?.iter().map(|p| [p[0].as_f64().unwrap_or(f64::NAN), p[1].as_f64().unwrap_or(f64::NAN)]).collect();
+        let tris: Vec<[usize; 3]> = m["tris"].as_array().ok_or("mesh.tris")?.iter().map(|t| [0, 1, 2].map(|k| t[k].as_u64().unwrap_or(0) as usize)).collect();
+        let env: Vec<f64> = m["env_vm"].as_array().ok_or("mesh.env_vm")?.iter().map(|x| x.as_f64().unwrap_or(f64::NAN)).collect();
+        if env.len() != tris.len() {
+            return Err("mesh.env_vm length differs from mesh.tris".into());
+        }
+        let loc = Locator::new(xy, tris);
+        let areas: Vec<f64> = (0..loc.tris.len()).map(|k| loc.area(k)).collect();
+        // The producer writes exactly zero inside the solid-tip zone (radius 4 mm), which the 3D
+        // solid-tip test covers instead.
+        let field = |k: usize| Some(env[k]).filter(|x| x.is_finite() && *x > 0.0);
+        let pairs: Vec<(f64, f64)> = (0..env.len()).filter_map(|k| field(k).map(|x| (x, areas[k]))).collect();
+        let total: f64 = pairs.iter().map(|p| p.1).sum();
+        let all: f64 = areas.iter().sum();
+        let owner: Vec<Option<usize>> = v.mesh.triangles().iter().map(|t| loc.locate([(t[0][0] + t[1][0] + t[2][0]) / 3.0, (t[0][1] + t[1][1] + t[2][1]) / 3.0])).collect();
+        let colors: Vec<[u8; 3]> = owner.iter().map(|o| match o.and_then(field) { Some(x) => ramp(&BRILLIANT, x / cap), None => MASKED }).collect();
+        stats.push(json!({"variant": name, "run": v.run["name"], "p50_mpa": weighted_percentile(&pairs, 50.0), "p99_mpa": weighted_percentile(&pairs, 99.0),
+            "peak_mpa": pairs.iter().map(|p| p.0).fold(0.0, f64::max), "saturated_area_fraction": pairs.iter().filter(|p| p.0 >= cap).map(|p| p.1).sum::<f64>() / total.max(1e-300),
+            "masked_area_fraction": 1.0 - total / all, "cad_faces": owner.len(), "unmapped_faces": owner.iter().filter(|o| o.is_none()).count()}));
+        let (normals, _) = appearance::derive_normals(lifted, NORMALS, None)?;
+        let edges = crease_edges(lifted, 45.0);
+        for (part, c, w, h, outline) in [("render", cam, width, height, 1.5), ("inset", inset_cam, inset_w, inset_h, 2.0)] {
+            let r = appearance::render(lifted, &normals, &colors, RenderSettings { width: w, height: h, supersample: SUPERSAMPLE, outline_pixels: outline, camera: c, lighting: light })?;
+            let mut rgb = r.rgb.clone();
+            ink(&mut rgb, &downsample(&crease_mask(&edges, c, w, h, &r), w, h, |b| b != 0), 0.55);
+            let k = c.scale / scale;
+            let rgb = shadowed(&rgb, &downsample(&r.coverage, w, h, |b| b != 0), w, h, [(8.0 * k).round() as isize, (14.0 * k).round() as isize], (9.0 * k).round() as usize, 0.30);
+            let bytes = png(&rgb, w, h);
+            let file = format!("{part}-{name}.png");
+            put_png(&out, &file, &bytes, w, h)?;
+            outputs.push(json!({"name": file, "sha256": sha(&bytes), "width": w, "height": h, "crease_edges": edges.len()}));
+        }
+    }
+    // Page figure per variant: render, inset, colour key, the scalar tests that have no field,
+    // and the W_ULTRALIGHT_v1 badge, all from the receipt.
+    let ticks: Vec<f64> = (0..).map(|k| k as f64 * 200.0).take_while(|t| *t < cap - 60.0).collect();
+    for (name, v) in &variants {
+        let r = &v.run;
+        let num = |k: &str| r[k].as_f64().ok_or(format!("receipt {} {k}", name));
+        let (score, tip, fat, seq, battery) = (num("score_100")?, num("solid_tip_sf_nodal_max")?, num("fat_sf_l7")?, num("seq_ratio_cert")?, num("battery_pass")?);
+        let (sub, sub_colour) = if *name == "unsmoothed" { ("As exported (not smoothed)", "#A3442D") } else { ("Pocket smoothing r = 0.75 mm, re-assessed", "#007E87") };
+        let mut svg = format!("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"{width}\" height=\"{height}\" viewBox=\"0 0 {width} {height}\">\n  <rect width=\"{width}\" height=\"{height}\" fill=\"#ffffff\"/>\n  <image xlink:href=\"render-{name}.png\" x=\"0\" y=\"0\" width=\"{width}\" height=\"{height}\"/>\n");
+        svg += &format!("  <rect x=\"{:.0}\" y=\"{:.0}\" width=\"{:.0}\" height=\"{:.0}\" fill=\"none\" stroke=\"#132D3B\" stroke-width=\"3\"/>\n", locator[0], locator[1], locator[2], locator[3]);
+        let (ix, iy) = (inset_xy[0], inset_xy[1]);
+        svg += &format!("  <image xlink:href=\"inset-{name}.png\" x=\"{ix}\" y=\"{iy}\" width=\"{inset_w}\" height=\"{inset_h}\"/>\n  <rect x=\"{ix}\" y=\"{iy}\" width=\"{inset_w}\" height=\"{inset_h}\" fill=\"none\" stroke=\"#132D3B\" stroke-width=\"3\"/>\n  <rect x=\"{:.0}\" y=\"{:.0}\" width=\"300\" height=\"40\" fill=\"#ffffff\"/>\n  <text x=\"{:.0}\" y=\"{:.0}\" font-family=\"TeX Gyre Heros\" font-size=\"26\" fill=\"#132D3B\">Isogrid pockets, 2.5x</text>\n", ix + 3.0, iy + 3.0, ix + 12.0, iy + 33.0);
+        // Colour key.
+        let (kx, ky, kw, kh) = (40.0, 56.0, 640.0, 26.0);
+        svg += "  <defs><linearGradient id=\"brilliant\" x1=\"0\" x2=\"1\" y1=\"0\" y2=\"0\">";
+        for (t, c) in BRILLIANT {
+            svg += &format!("<stop offset=\"{t}\" stop-color=\"rgb({},{},{})\"/>", c[0], c[1], c[2]);
+        }
+        svg += "</linearGradient></defs>\n";
+        svg += &format!("  <text x=\"{kx}\" y=\"{:.0}\" font-family=\"TeX Gyre Heros\" font-size=\"29\" fill=\"#132D3B\">Plate von Mises envelope of the four load cases, MPa</text>\n  <rect x=\"{kx}\" y=\"{ky}\" width=\"{kw}\" height=\"{kh}\" fill=\"url(#brilliant)\" stroke=\"#132D3B\" stroke-width=\"1.2\"/>\n", ky - 10.0);
+        for t in &ticks {
+            let x = kx + kw * t / cap;
+            svg += &format!("  <line x1=\"{x:.1}\" y1=\"{:.0}\" x2=\"{x:.1}\" y2=\"{:.0}\" stroke=\"#132D3B\" stroke-width=\"1.2\"/>\n  <text x=\"{x:.1}\" y=\"{:.0}\" text-anchor=\"middle\" font-family=\"TeX Gyre Heros\" font-size=\"26\" fill=\"#132D3B\">{t:.0}</text>\n", ky + kh, ky + kh + 7.0, ky + kh + 33.0);
+        }
+        svg += &format!("  <text x=\"{:.0}\" y=\"{:.0}\" text-anchor=\"end\" font-family=\"TeX Gyre Heros\" font-size=\"26\" fill=\"#132D3B\">&#8805; {cap:.0}</text>\n", kx + kw, ky + kh + 33.0);
+        svg += &format!("  <rect x=\"{:.0}\" y=\"{:.0}\" width=\"26\" height=\"26\" fill=\"rgb({},{},{})\" stroke=\"#132D3B\" stroke-width=\"1.2\"/>\n  <text x=\"{:.0}\" y=\"{:.0}\" font-family=\"TeX Gyre Heros\" font-size=\"26\" fill=\"#132D3B\">tip zone, no plate field (3D solid-tip test)</text>\n",
+            kx + kw + 30.0, ky, MASKED[0], MASKED[1], MASKED[2], kx + kw + 68.0, ky + 22.0);
+        // Scalar tests without a stored field.
+        let (tx, ty) = (640.0, height as f64 - 156.0);
+        svg += &format!("  <text x=\"{tx}\" y=\"{ty}\" font-family=\"TeX Gyre Heros\" font-weight=\"bold\" font-size=\"28\" fill=\"#132D3B\">Tests without a stored field</text>\n");
+        for (k, (label, value)) in [("3D solid-tip safety factor", format!("{tip:.3}")), ("Fatigue safety factor", format!("{fat:.3}")), ("Failure-sequence ratio", format!("{seq:.2}"))].iter().enumerate() {
+            let y = ty + 35.0 * (k + 1) as f64;
+            svg += &format!("  <text x=\"{tx}\" y=\"{y:.0}\" font-family=\"TeX Gyre Heros\" font-size=\"27\" fill=\"#132D3B\">{label}</text>\n  <text x=\"{:.0}\" y=\"{y:.0}\" text-anchor=\"end\" font-family=\"TeX Gyre Heros\" font-size=\"27\" fill=\"#132D3B\">{value}</text>\n", tx + 470.0);
+        }
+        svg += &format!("  <text x=\"{tx}\" y=\"{:.0}\" font-family=\"TeX Gyre Heros\" font-size=\"27\" fill=\"#55606a\">Battery {battery:.0}/18, not qualified</text>\n", ty + 140.0);
+        svg += &format!("  <g transform=\"translate({:.0},{:.0})\">\n    <rect width=\"560\" height=\"180\" rx=\"10\" fill=\"#ffffff\" stroke=\"#132D3B\" stroke-width=\"2.5\"/>\n    <text x=\"22\" y=\"42\" font-family=\"TeX Gyre Heros\" font-size=\"28\" fill=\"#132D3B\">W_ULTRALIGHT_v1 fitness</text>\n    <text x=\"22\" y=\"118\" font-family=\"TeX Gyre Heros\" font-weight=\"bold\" font-size=\"76\" fill=\"#132D3B\">{score:.2}</text>\n    <text x=\"245\" y=\"118\" font-family=\"TeX Gyre Heros\" font-size=\"32\" fill=\"#132D3B\">/ 100</text>\n    <text x=\"22\" y=\"160\" font-family=\"TeX Gyre Heros\" font-size=\"26\" fill=\"{sub_colour}\">{sub}</text>\n  </g>\n</svg>\n",
+            width as f64 - 575.0, height as f64 - 195.0);
+        fs::write(out.join(format!("cover-{name}.svg")), &svg)?;
+        outputs.push(json!({"name": format!("cover-{name}.svg"), "sha256": sha(svg.as_bytes())}));
+    }
+    let manifest = json!({
+        "schema": "jarambit.pocket_smoothing_cover.v1",
+        "research_only": true,
+        "command": std::env::args().collect::<Vec<_>>().join(" "),
+        "inputs": {"receipt": {"path": receipt_path, "sha256": sha(&receipt_bytes)},
+            "variants": variants.iter().map(|(n, v)| json!({"variant": n, "run": v.run["name"], "stl": {"path": v.stl.0, "sha256": v.stl.1}, "d1": {"path": v.d1.0, "sha256": v.d1.1}})).collect::<Vec<_>>()},
+        "field": {"key": "env_vm", "name": "plate-model von Mises envelope: pointwise maximum over the lateral (260 N), in-plane tip-pry (260 N), torsion (1820 N mm times its 3D correction factor) and ring-pull (1500 N) load cases at the battery floor loads", "units": "MPa",
+            "scale": {"min": 0.0, "cap": cap, "rule": "absolute and shared by both variants; values at or above the cap saturate"},
+            "masked": "exactly zero or non-finite: the producer's solid-tip zone (radius 4 mm), assessed by the 3D solid-tip test"},
+        "association": "each CAD face takes the stored value of its own run's D1 plate triangle containing its centroid (x, y); no interpolation or new solve",
+        "statistics": stats,
+        "colormap": {"stops_srgb": BRILLIANT.iter().map(|(t, c)| json!({"t": t, "rgb": c})).collect::<Vec<_>>(), "masked_rgb": MASKED},
+        "camera": camera_json(cam), "framed_on": "both exports, into the box", "box_px": bx, "tilt_deg": tilt, "z_exaggeration": exaggeration,
+        "inset": {"zoom": zoom, "at_px": inset_xy, "centre_mm": [inset_at[0], inset_at[1], 0.0], "size_px": [inset_w, inset_h], "locator_px": locator, "camera": camera_json(inset_cam)},
+        "lighting": {"direction_camera": light.direction, "ambient": light.ambient, "diffuse": light.diffuse, "specular": light.specular, "shininess": light.shininess},
+        "crease_lines": {"dihedral_deg_over": 45.0, "depth_tested": true, "strength": 0.55},
+        "shadow": {"offset_px": [8, 14], "blur_box_radius_px": 9, "passes": 2, "darkness": 0.30, "note": "display only: composited under the render, not part of the geometry; the inset scales offset and blur by its zoom"},
+        "scalars_from_receipt": ["score_100", "solid_tip_sf_nodal_max", "fat_sf_l7", "seq_ratio_cert", "battery_pass"],
+        "outputs": outputs,
+        "not_qualified": true,
+    });
+    fs::write(out.join("cover.render.v1.json"), serde_json::to_string_pretty(&manifest)? + "\n")?;
+    println!("wrote {}", out.display());
+    Ok(())
+}
+
 // ---------------------------------------------------------------- bw and morph
 
 fn ladder(a: &Args) -> Res<(Value, String)> {
@@ -690,6 +931,7 @@ fn main() -> Res<()> {
         "hero" => hero(&a),
         "bw" => bw(&a),
         "morph" => morph(&a),
-        _ => Err("usage: pocket_smoothing_figures hero|bw|morph ... (see the module comment)".into()),
+        "cover" => cover(&a),
+        _ => Err("usage: pocket_smoothing_figures hero|bw|morph|cover ... (see the module comment)".into()),
     }
 }

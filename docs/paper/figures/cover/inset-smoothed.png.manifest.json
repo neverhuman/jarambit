@@ -1,0 +1,11 @@
+{
+  "figure": "docs/paper/figures/cover/inset-smoothed.png",
+  "figure_sha256": "d4fac897363d06be9919a4c57239e55c23c27206168fef9a801c5ec00e5fab91",
+  "script": "crates/paper-artifacts/examples/pocket_smoothing_figures.rs",
+  "inputs": {
+    "docs/paper/figures/cover/cover.render.v1.json": "519b5bffef896f867869b0ca8658534a7eed345edd45a19a6311252f162d767a",
+    "experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json": "6b59b1793ea715c9cc0d692d1c30070634fdb80f86c22e8e16aa18a9f9d00d9c"
+  },
+  "external_inputs_note": "STLs and D1 reports are outside git because of their size; cover.render.v1.json and RECEIPT.json bind them by sha256.",
+  "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"
+}

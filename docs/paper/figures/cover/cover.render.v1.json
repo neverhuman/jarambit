@@ -1,0 +1,291 @@
+{
+  "association": "each CAD face takes the stored value of its own run's D1 plate triangle containing its centroid (x, y); no interpolation or new solve",
+  "box_px": [
+    40.0,
+    30.0,
+    1960.0,
+    660.0
+  ],
+  "camera": {
+    "offset": [
+      198.88371654925743,
+      377.68467675912603
+    ],
+    "rotation": [
+      [
+        0.9945218953682733,
+        -0.10452846326765347,
+        0.0
+      ],
+      [
+        -0.08007344843395216,
+        -0.7618479715070194,
+        0.6427876096865393
+      ],
+      [
+        -0.0671896010480222,
+        -0.6392663519046988,
+        -0.766044443118978
+      ]
+    ],
+    "scale": 9.001573140137296,
+    "sha256": "3226c493961c5f9de7f1ccf88a0d119a47c6421fa87217fbab3d41bdd5e98a58"
+  },
+  "colormap": {
+    "masked_rgb": [
+      178,
+      182,
+      188
+    ],
+    "stops_srgb": [
+      {
+        "rgb": [
+          46.0,
+          52.0,
+          146.0
+        ],
+        "t": 0.0
+      },
+      {
+        "rgb": [
+          38.0,
+          110.0,
+          214.0
+        ],
+        "t": 0.18
+      },
+      {
+        "rgb": [
+          32.0,
+          178.0,
+          196.0
+        ],
+        "t": 0.38
+      },
+      {
+        "rgb": [
+          92.0,
+          204.0,
+          120.0
+        ],
+        "t": 0.55
+      },
+      {
+        "rgb": [
+          246.0,
+          214.0,
+          64.0
+        ],
+        "t": 0.72
+      },
+      {
+        "rgb": [
+          246.0,
+          142.0,
+          36.0
+        ],
+        "t": 0.86
+      },
+      {
+        "rgb": [
+          222.0,
+          46.0,
+          38.0
+        ],
+        "t": 1.0
+      }
+    ]
+  },
+  "command": "target/release/examples/pocket_smoothing_figures cover --receipt experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json --out /home/ubuntu/jarambit/.agent/worktrees/paper-falsecolour/target/ieee/paper/pocket-raw/cover",
+  "crease_lines": {
+    "depth_tested": true,
+    "dihedral_deg_over": 45.0,
+    "strength": 0.55
+  },
+  "field": {
+    "key": "env_vm",
+    "masked": "exactly zero or non-finite: the producer's solid-tip zone (radius 4 mm), assessed by the 3D solid-tip test",
+    "name": "plate-model von Mises envelope: pointwise maximum over the lateral (260 N), in-plane tip-pry (260 N), torsion (1820 N mm times its 3D correction factor) and ring-pull (1500 N) load cases at the battery floor loads",
+    "scale": {
+      "cap": 850.0,
+      "min": 0.0,
+      "rule": "absolute and shared by both variants; values at or above the cap saturate"
+    },
+    "units": "MPa"
+  },
+  "framed_on": "both exports, into the box",
+  "inputs": {
+    "receipt": {
+      "path": "experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json",
+      "sha256": "6b59b1793ea715c9cc0d692d1c30070634fdb80f86c22e8e16aa18a9f9d00d9c"
+    },
+    "variants": [
+      {
+        "d1": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56_D1.json",
+          "sha256": "11658e13df4cc88078ec988036c78ed901c1990180ac2af4a502704a65d309b4"
+        },
+        "run": "ctrl",
+        "stl": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56.stl",
+          "sha256": "6a76f809d755cc986905756e7de532803e88306313815b6b8ad271e90e9278ca"
+        },
+        "variant": "unsmoothed"
+      },
+      {
+        "d1": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56_D1.json",
+          "sha256": "992b94f60372864e6f39a868faa18d98add4f2bb17118a47d9f96838d00e273c"
+        },
+        "run": "f075",
+        "stl": {
+          "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl",
+          "sha256": "91ab0b649640a2e78807bde08c3794c1bc90e5a6ebeb929de8b2173263288c65"
+        },
+        "variant": "smoothed"
+      }
+    ]
+  },
+  "inset": {
+    "at_px": [
+      15.0,
+      603.0
+    ],
+    "camera": {
+      "offset": [
+        -1764.6069890068975,
+        102.29828063457995
+      ],
+      "rotation": [
+        [
+          0.9945218953682733,
+          -0.10452846326765347,
+          0.0
+        ],
+        [
+          -0.08007344843395216,
+          -0.7618479715070194,
+          0.6427876096865393
+        ],
+        [
+          -0.0671896010480222,
+          -0.6392663519046988,
+          -0.766044443118978
+        ]
+      ],
+      "scale": 22.50393285034324,
+      "sha256": "91a3c4eb66b3f1da647eab331d16849e20e3d2ed6659832a4db60e4dbde28103"
+    },
+    "centre_mm": [
+      90.45,
+      -8.62,
+      0.0
+    ],
+    "locator_px": [
+      904.7265121520164,
+      336.76536450529403,
+      224.0,
+      94.0
+    ],
+    "size_px": [
+      560,
+      235
+    ],
+    "zoom": 2.5
+  },
+  "lighting": {
+    "ambient": 0.22,
+    "diffuse": 0.78,
+    "direction_camera": [
+      -0.72,
+      0.58,
+      0.38
+    ],
+    "shininess": 40,
+    "specular": 0.14
+  },
+  "not_qualified": true,
+  "outputs": [
+    {
+      "crease_edges": 7327,
+      "height": 850,
+      "name": "render-unsmoothed.png",
+      "sha256": "5d52bbb3e578d090a608ac4bc75dc3077f94895d900acd95103f799a83d9bae2",
+      "width": 2000
+    },
+    {
+      "crease_edges": 7327,
+      "height": 235,
+      "name": "inset-unsmoothed.png",
+      "sha256": "2b686f50be638609eab75c668304d9408ca6ff056cdf8201f5db4c7eddd73569",
+      "width": 560
+    },
+    {
+      "crease_edges": 10665,
+      "height": 850,
+      "name": "render-smoothed.png",
+      "sha256": "20243b8ff966a18e6216ff62cfed298bea9a758275f34dd24def09e0dcd1fe96",
+      "width": 2000
+    },
+    {
+      "crease_edges": 10665,
+      "height": 235,
+      "name": "inset-smoothed.png",
+      "sha256": "e03c3c22061e9d55718cd5fedc4897255176fc19b5306a5b14472528f0ad8b83",
+      "width": 560
+    },
+    {
+      "name": "cover-unsmoothed.svg",
+      "sha256": "6b8f2323bf14aaa00c87ec6bfb91d58b164f27ae2eb6def08d99d15c03c9a36b"
+    },
+    {
+      "name": "cover-smoothed.svg",
+      "sha256": "01454b176cfcb1565c55b90922fb511eede021176aa2a28a01634419f1ad071a"
+    }
+  ],
+  "research_only": true,
+  "scalars_from_receipt": [
+    "score_100",
+    "solid_tip_sf_nodal_max",
+    "fat_sf_l7",
+    "seq_ratio_cert",
+    "battery_pass"
+  ],
+  "schema": "jarambit.pocket_smoothing_cover.v1",
+  "shadow": {
+    "blur_box_radius_px": 9,
+    "darkness": 0.3,
+    "note": "display only: composited under the render, not part of the geometry; the inset scales offset and blur by its zoom",
+    "offset_px": [
+      8,
+      14
+    ],
+    "passes": 2
+  },
+  "statistics": [
+    {
+      "cad_faces": 89772,
+      "masked_area_fraction": 0.0030659954206577744,
+      "p50_mpa": 344.3709,
+      "p99_mpa": 822.8067,
+      "peak_mpa": 1289.1977,
+      "run": "ctrl",
+      "saturated_area_fraction": 0.005683465189602787,
+      "unmapped_faces": 0,
+      "variant": "unsmoothed"
+    },
+    {
+      "cad_faces": 125172,
+      "masked_area_fraction": 0.0030659954206577744,
+      "p50_mpa": 342.6226,
+      "p99_mpa": 815.6388,
+      "peak_mpa": 1289.171,
+      "run": "f075",
+      "saturated_area_fraction": 0.0049203746422608104,
+      "unmapped_faces": 0,
+      "variant": "smoothed"
+    }
+  ],
+  "tilt_deg": 40.0,
+  "z_exaggeration": 1.0
+}

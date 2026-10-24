@@ -2,6 +2,19 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v2.4.1 — 2026-10-24 (false-colour engineering fields on both first pages)
+
+- **Owner request.** Each paper's first page now shows its knife in false colour from the engineering tests, with 3D shading. Paper A shows the design as exported; Paper B shows the pocket-smoothed export.
+  - The colour is the plate-model von Mises envelope (D1 `env_vm`, MPa) stored by that design's own Stage-2 assessment. It is the maximum over the lateral (260 N), in-plane tip-pry (260 N), torsion (1820 N mm, with its 3D correction factor) and ring-pull (1500 N) load cases. Paper B's field comes from its re-assessment on the smoothed geometry.
+  - Both pages use one absolute scale, 0 to ≥ 850 MPa, so colours compare directly. The 99th percentiles are 822.8 MPa (A) and 815.6 MPa (B), the peaks are 1289 MPa in both, and 0.57 % and 0.49 % of the area saturates.
+  - Grey marks the 4 mm tip zone. The producer stores no plate value there, because the 3D solid-tip test covers it.
+  - Tests with no stored field are listed as values from the receipt: the 3D solid-tip safety factor (0.689 for A, 0.645 for B), the fatigue safety factor (0.561, 0.562) and the failure-sequence ratio (1.18, 1.34).
+  - The view is oblique (40°) at true thickness under raking light, with a soft shadow. Both pages use one camera, and the 2.5× isogrid-pocket inset is rendered at full resolution. Shading shows the geometry, colour shows the stored response, and nothing is re-solved or re-scored.
+- **`pocket_smoothing_figures cover`** writes both renders, insets and page SVGs, and `cover.render.v1.json` records the camera, scale, colour map, statistics and inputs. It reads both STLs and D1 reports from the subject's `RECEIPT.json` and stops if any sha256 differs. `make pocket-figures` calls it in place of the grey `smoothing_figure` renders, so `smoothing-figure.render.v1.json` is removed.
+- **Unchanged.** Scores, the receipt, the stacked-field hero, the black-and-white and morphology views, the ladder and the supplement are byte-identical. Paper A is still 19 pages and Paper B 20.
+
+This release adds no qualification claim.
+
 ## v2.4.0 — 2026-10-24 (a better evolved design on both papers; only the winner is smoothed)
 
 - **New best evolved design.** With the plateau fix (#158), the v2.3.1 islands climbed past the paper's 80.299390. The best of the 1,761 comparable retained Stage-2 assessments of every run since 2026-10-17 (census read 2026-10-24T06:09Z, when the v2.3.1 cohort ended) is `ec3i042_r01_p10_c56`, from xbabe3 island i042. That island was seeded with `ec1i012_r04_p10_c101` (80.594628), whose island was seeded with `w406t3_r01_p10_c16`.
