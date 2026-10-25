@@ -36,6 +36,10 @@ jobs:
       - name: Select preinstalled pinned Rust toolchain without shared writes
         run: python3 -B ops/ci/select_rust_toolchain.py
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        with:
+          workspaces: |
+            . -> target
+            crates/g3 -> crates/g3/target
       - name: cargo test --release (all crates, incl. D1 owner-lock gate tests)
         # Retained exporter work exceeded 45 minutes on a general-pool host.
         # A uniform 75-minute step leaves 15 minutes below the job ceiling.
@@ -49,6 +53,9 @@ jobs:
         run: cargo clippy --release -p jarambit -- -A clippy::all -D clippy::disallowed_methods
       - name: D1 owner-lock gate tests (explicit, fast)
         run: cargo test --release -p jarambit-crescent d1_lock -- --nocapture
+      - name: G3 standalone crate tests (hermetic 27/27)
+        timeout-minutes: 25
+        run: cargo test --release --locked --manifest-path crates/g3/Cargo.toml -- --test-threads=2
       - name: D1 smoke (crescent-d1 on wave14_c03 reference)
         run: |
           cargo build --release -p jarambit

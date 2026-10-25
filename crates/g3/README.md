@@ -29,25 +29,32 @@ CARGO_INCREMENTAL=0 cargo test --release          # 27 tests
 cargo build --release --bin g3-evolve
 ```
 
-Some parity tests read Python reference fixtures from `~/jarambit_runs/handzone-ergo-20261024/` (the hand-zone
-prototype run directory on xbabe2). Where those files are absent the tests skip, except
-`run6_finalist_fa_g11285_rust_vs_python_parity`, which needs them; run the full suite on xbabe2.
+All 27 tests are hermetic and read their reference fixtures from `tests/fixtures/` (`fa_best_overall_finalist.json`,
+`f075_reference.json`, `g3hz_parity_v1.json`, `g3hz_parity_v3_draftc.json`, and `sobol_test_vector.json`), and run on
+every pull request in `.github/workflows/d1-gates.yml`. Note: if a PR updates dependencies in `crates/crescent` or
+`crates/physics`, refresh `crates/g3/Cargo.lock` (`cargo update --workspace --manifest-path crates/g3/Cargo.toml`) so
+`--locked` remains satisfied.
 `examples/hz_probes.rs` holds the independent review probes (P1 hollow-blade coupling, P2 seam fin, P3 reach,
 P4 vent and cavity versus bevel bands, P5 medial thickness steps): `cargo run --release --example hz_probes`.
+`g3-evolve` writes both `genomes_g3.csv` and `archive.jsonl` (per-niche record with `design_id`, `niche_id`, `tier`,
+`tier_provenance`, `score_100`, `raw_score_100`, `base`, `ergo_multiplier`, `descriptors`, scorer-keyed `inputs`,
+`terms`, and `ergo`) after running `CvtMapElitesArchive::verify_integrity` and `load_and_verify_persisted_dir`.
 
-## Verification record (snapshot S7, 2026-10-25)
+## Verification record (snapshots S7–S9, 2026-10-25)
 
-Tests 27/27; probes P1–P5 pass; 256-evaluation smoke run passes; static reviews of S2 through S7 with no open
-blocking findings. Reports: `review_g3/REVIEW.md`, `REREVIEW_S3.md` (S4), `REREVIEW_S5.md`, `REREVIEW_S6.md` and
-`REREVIEW_S7.md` in the run directory above.
+Tests 27/27; probes P1–P5 pass; 256-evaluation smoke run passes; static reviews of S2 through S8 with no open
+blocking findings. Reports: `review_g3/REVIEW.md`, `REREVIEW_S3.md` (S4), `REREVIEW_S5.md`, `REREVIEW_S6.md`,
+`REREVIEW_S7.md` and `REREVIEW_S8.md` in `~/jarambit_runs/handzone-ergo-20261024/`.
 
 ## Known limitations (read before quoting a W_ERGOLIGHT_v1 number)
 
 - Tier 0 uses analytic surrogates: ring capacities are uncalibrated, and grip length and guard height are read
-  from genes. Tier 1 measures the voxel geometry and solves the plate; only Tier ≥ 1 numbers are measurements.
+  from genes (`archive.jsonl` records `tier_provenance` per row). Tier 1 measures the voxel geometry and solves the
+  plate; only Tier ≥ 1 numbers are measurements.
 - Gate S sharpness is measured on the analytic blade function at fully sharpened stations, not on the voxels.
 - Rust-versus-Python parity: the scorer matches the Python of record exactly on 25 cases. On the production path,
-  only the hand-zone AM mass is asserted (5 cases, 8 %); centre of mass, spin and guard height are not.
-- Fenestration windows start at x ≥ 92 + ½·max(pitch, 6) mm, which removes windows from some short blades.
-- The GPU solver shell-out is unused; Tier 2 uses faer. It is slated for removal.
+  the hand-zone AM mass is asserted on the 5 finalists and 4 representative Sobol designs (9 cases, ≤ 8 %);
+  centre of mass, spin and guard height are asserted on the parity path (`build_g3_sdf_from_params`).
+- Fenestration windows start at `max(x_s0, 92 + ½·max(pitch, 6))` mm with phase shifted by the window half-extent
+  (`S8-4`) so the first window is whole and never clipped at the bound.
 - All results are computational; nothing here is qualified or has been built.

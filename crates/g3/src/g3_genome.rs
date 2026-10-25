@@ -521,6 +521,9 @@ impl G3Genome {
         let schema = cols[0].trim();
         let expected_sha = cols[1].trim();
         let decoder_commit = cols[2].trim().to_string();
+        if decoder_commit.is_empty() {
+            return Err("strict G3.0 loader refused row with empty decoder_commit".to_string());
+        }
         let mut u = Vec::with_capacity(G3_NUM_GENES);
         for (i, s) in cols[3..].iter().enumerate() {
             let v: f64 = s
@@ -539,6 +542,18 @@ impl G3Genome {
         if actual_sha != expected_sha {
             return Err(format!(
                 "G3.0 genome_sha256 mismatch: row claims {expected_sha}, computed {actual_sha}"
+            ));
+        }
+        Ok(genome)
+    }
+
+    /// Strict loader (`I5`) that additionally verifies `decoder_commit == expected_decoder_commit`.
+    pub fn from_csv_row_checked(row: &str, expected_decoder_commit: &str) -> Result<Self, String> {
+        let genome = Self::from_csv_row(row)?;
+        if genome.decoder_commit != expected_decoder_commit {
+            return Err(format!(
+                "G3.0 decoder_commit mismatch: row claims '{}', expected '{}'",
+                genome.decoder_commit, expected_decoder_commit
             ));
         }
         Ok(genome)
@@ -766,45 +781,39 @@ mod tests {
         for (j, &exp) in exp_1023_first8.iter().enumerate() {
             assert_eq!(u1023[j].to_bits(), exp.to_bits(), "row_1023 dim {j}");
         }
-        let json_path =
-            "/home/ubuntu/jarambit_runs/handzone-ergo-20261024/sobol/sobol_joe_kuo_179d.json";
-        if let Ok(raw) = std::fs::read_to_string(json_path) {
-            let doc: serde_json::Value = serde_json::from_str(&raw).expect("parse sobol json");
-            let tv = &doc["test_vector"];
-            let first_8 = tv["first_8"].as_array().expect("first_8");
-            for (r, row_val) in first_8.iter().enumerate() {
-                let pt = unscr.point(r);
-                let row = row_val.as_array().unwrap();
-                assert_eq!(row.len(), G3_NUM_GENES);
-                for (j, v) in row.iter().enumerate() {
-                    let exp = v.as_f64().unwrap();
-                    assert_eq!(pt[j].to_bits(), exp.to_bits(), "first_8[{r}][{j}] bit mismatch");
-                }
-            }
-            let row_1023 = tv["row_1023"].as_array().expect("row_1023");
-            assert_eq!(row_1023.len(), G3_NUM_GENES);
-            for (j, v) in row_1023.iter().enumerate() {
+        let raw = include_str!("../tests/fixtures/sobol_test_vector.json");
+        let doc: serde_json::Value = serde_json::from_str(raw).expect("parse sobol_test_vector.json");
+        let tv = &doc["test_vector"];
+        let first_8 = tv["first_8"].as_array().expect("first_8");
+        for (r, row_val) in first_8.iter().enumerate() {
+            let pt = unscr.point(r);
+            let row = row_val.as_array().unwrap();
+            assert_eq!(row.len(), G3_NUM_GENES);
+            for (j, v) in row.iter().enumerate() {
                 let exp = v.as_f64().unwrap();
-                assert_eq!(u1023[j].to_bits(), exp.to_bits(), "row_1023[{j}] bit mismatch");
+                assert_eq!(pt[j].to_bits(), exp.to_bits(), "first_8[{r}][{j}] bit mismatch");
             }
         }
-        let npy_path =
-            "/home/ubuntu/jarambit_runs/handzone-ergo-20261024/sobol/sobol_unscrambled_179d_1024.npy";
-        if std::path::Path::new(npy_path).exists() {
-            let flat = crate::g3_sandwich::read_npy_f64(npy_path).expect("read sobol npy");
-            assert_eq!(flat.len(), 1024 * G3_NUM_GENES);
-            for r in 0..1024 {
-                let pt = unscr.point(r);
-                for j in 0..G3_NUM_GENES {
-                    let exp = flat[r * G3_NUM_GENES + j];
-                    assert_eq!(
-                        pt[j].to_bits(),
-                        exp.to_bits(),
-                        "sobol_unscrambled_179d_1024.npy [{r}, {j}] bit mismatch"
-                    );
-                }
+        let row_1023 = tv["row_1023"].as_array().expect("row_1023");
+        assert_eq!(row_1023.len(), G3_NUM_GENES);
+        for (j, v) in row_1023.iter().enumerate() {
+            let exp = v.as_f64().unwrap();
+            assert_eq!(u1023[j].to_bits(), exp.to_bits(), "row_1023[{j}] bit mismatch");
+        }
+        // S8-6: Also verify the SHA-256 of the full 1024 x 179 little-endian f64 payload
+        // against sobol_unscrambled_179d_1024.npy (1,466,368 bytes = 183,296 f64 values).
+        let mut npy_payload = Vec::with_capacity(1024 * G3_NUM_GENES * 8);
+        for r in 0..1024 {
+            let pt = unscr.point(r);
+            for &v in &pt {
+                npy_payload.extend_from_slice(&v.to_le_bytes());
             }
         }
+        assert_eq!(
+            crate::sha256_bytes(&npy_payload),
+            "a8d371847ba33a99818aa20ccbf06c69359953828d17f96fb0dee2e34eb1f126",
+            "full 1024x179 unscrambled Sobol payload must match sobol_unscrambled_179d_1024.npy bit-for-bit"
+        );
 
         // 2. Scrambled Sobol uniformity on 64 and 1024 points and pairwise correlation check (B4)
         let tbl = crate::sobol_joe_kuo::Sobol179Table::scrambled(20_261_025);

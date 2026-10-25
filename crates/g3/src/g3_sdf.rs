@@ -1770,22 +1770,31 @@ pub fn eval_blade_thickness_and_sdf2(
     let t_bevel_sp = w_bev_sp * t_bevel_sp_raw + (1.0 - w_bev_sp) * t_medial;
     let t_final = t_medial.min(t_bevel_in).min(t_bevel_sp).min(t_spine_cap);
 
-    // 5-gene continuous level-set medial fenestration inside fuller band (kept >= 3.5 mm from grind edges
-    // and strictly past the guard-to-blade plunge/seam blend zone `x >= 92.0 + 0.5 * win_pitch`, `S5-5` / `P5`)
+    // 5-gene continuous level-set medial fenestration inside fuller band (`S5-5` / `P5` / `S7-1` / `S8-4`):
+    // - Kept >= 3.5 mm from grind edges and strictly past the guard-to-blade plunge/seam blend zone.
+    // - Phase shifted by the window half-extent (`S8-4`) so the first cosine crest sits at
+    //   `x_crest0 = x_bound + half_win_dx`, ensuring the first window is whole and never clipped at `x_bound`.
+    let pitch = p["win_pitch"].max(6.0);
+    let x_s0 = prof.x_heel + p["win_s0"] * (prof.x_tip - prof.x_heel).max(1e-9);
+    let x_bound = x_s0.max(92.0 + 0.5 * pitch);
     if p["win_amp"] > 0.35
-        && x >= 92.0 + 0.5 * p["win_pitch"].max(6.0)
+        && x >= x_bound
         && d_in > 3.5
         && d_sp > 3.5
         && a_tip > tip_reserve + 6.0
-        && u > p["win_s0"]
         && u < p["win_s1"]
     {
         let ang = p["win_angle"].to_radians();
-        let pitch = p["win_pitch"].max(6.0);
-        let wx = ((x - prof.x_heel) * ang.cos() + (y - y_mid) * ang.sin()) / pitch;
-        let wy = (-(x - prof.x_heel) * ang.sin() + (y - y_mid) * ang.cos()) / (0.35 * h_span).max(2.0);
+        let w_span = (0.35 * h_span).max(2.0);
+        let thresh = (1.0 - 0.55 * (p["win_amp"] - 0.35) / 0.65).clamp(-1.0, 1.0);
+        let half_win_dx = (pitch * thresh.acos() / (2.0 * std::f64::consts::PI)) * ang.cos().abs()
+            + w_span * ang.sin().abs()
+            + 0.35;
+        let x_crest0 = x_bound + half_win_dx;
+        let dx = x - x_crest0;
+        let wx = (dx * ang.cos() + (y - y_mid) * ang.sin()) / pitch;
+        let wy = (-dx * ang.sin() + (y - y_mid) * ang.cos()) / w_span;
         let f_win = (2.0 * std::f64::consts::PI * wx).cos() * bump(wy);
-        let thresh = 1.0 - 0.55 * (p["win_amp"] - 0.35) / 0.65;
         if f_win > thresh {
             return (0.0, 0.5);
         }
@@ -2082,18 +2091,14 @@ pub fn build_g3_sdf_from_params_with_origin_shift(
                         continue;
                     }
                     let y_b_probe = y.clamp(yi_b + 1e-3, ys_b - 1e-3);
-                    let (t_b_local, _d2_b_local) = eval_blade_thickness_and_sdf2(
+                    let (t_b_local, _) = eval_blade_thickness_and_sdf2(
                         p,
                         &blade_prof,
                         x.max(blade_prof.x_heel),
                         y_b_probe,
                     );
                     let base = (i * ny + j) * nz;
-                    let t_eff = if t_b_local <= 0.0 {
-                        (1.0 - w_blade) * p["t_guard"]
-                    } else {
-                        (1.0 - w_blade) * p["t_guard"] + w_blade * t_b_local.max(0.16)
-                    };
+                    let t_eff = (1.0 - w_blade) * p["t_guard"] + w_blade * t_b_local.max(0.16);
                     if t_eff >= 0.8 {
                         let half_t = 0.5 * t_eff;
                         for (k, &z) in zs.iter().enumerate() {

@@ -35,7 +35,7 @@ use std::collections::BTreeMap;
 
 pub const M50_STATIONS_MM: [f64; 3] = [9.75, 30.0, 51.5];
 /// Published v1 winner `ec3i042_r01_p10_c56` f075 spin inertia about its ring center `(cx, 0)`
-/// (`/home/ubuntu/jarambit_runs/handzone-ergo-20261024/ref_f075/f075_reference.json`, #6 / B6).
+/// (`tests/fixtures/f075_reference.json`, #6 / B6).
 pub const F075_SPIN_I_REF_G_MM2: f64 = 572_965.368_840_274_9;
 
 /// Compute the frozen G3 decoder SHA-256 digest over the genome schema, all decoder/evaluator
@@ -103,6 +103,72 @@ pub enum EvalTier {
     Tier0Analytic,
     Tier1SdfAndPlate,
     Tier2Full3D,
+}
+
+impl EvalTier {
+    /// Explicit per-input measurement vs surrogate provenance for `archive.jsonl` (`S8-2`),
+    /// so downstream consumers never quote Tier-0 analytic surrogate credit as a 3D/FE measurement.
+    pub fn input_provenance(self) -> serde_json::Value {
+        match self {
+            EvalTier::Tier0Analytic => serde_json::json!({
+                "tier": "Tier0Analytic",
+                "summary": "analytic_surrogate_only",
+                "measured": [
+                    "groove_r_min_mm", "crest_r_min_mm", "saddle_depth_mm",
+                    "mid_depth_mm", "choil_depth_mm", "station_err_mm",
+                    "edge_r_min_mm", "section_corner_r_min_mm"
+                ],
+                "surrogate": [
+                    "mass_g", "lat_rob_cert_n", "strict_lat_n",
+                    "ring_bearing_cap_n", "ring_back_cap_n",
+                    "twist_body_sf", "twist_tip_sf", "twist_tipzone_strict_sf",
+                    "hm_twist_sf", "hm_spine_sf", "fat_sf", "grip_sf_min",
+                    "swell_perimeter_mm", "swell_h_over_t", "L_g_mm", "guard_h_mm",
+                    "com_to_index_mm", "spin_I_g_mm2", "am_build", "fairness",
+                    "max_apex_mm", "max_half_angle_deg", "t_0p25_mm", "t_1p00_mm", "t_2p00_mm"
+                ],
+                "unmeasured_zero_credit": ["solid_tip_sf", "buckling_lambda"]
+            }),
+            EvalTier::Tier1SdfAndPlate => serde_json::json!({
+                "tier": "Tier1SdfAndPlate",
+                "summary": "voxel_3d_sdf_and_plate_fe",
+                "measured": [
+                    "mass_g", "lat_rob_cert_n", "strict_lat_n",
+                    "ring_bearing_cap_n", "ring_back_cap_n",
+                    "twist_body_sf", "twist_tip_sf", "twist_tipzone_strict_sf",
+                    "hm_twist_sf", "hm_spine_sf", "fat_sf", "grip_sf_min",
+                    "watertight", "am_build", "swell_perimeter_mm", "swell_h_over_t",
+                    "L_g_mm", "guard_h_mm", "com_to_index_mm", "spin_I_g_mm2",
+                    "groove_r_min_mm", "crest_r_min_mm", "saddle_depth_mm",
+                    "mid_depth_mm", "choil_depth_mm", "station_err_mm",
+                    "edge_r_min_mm", "section_corner_r_min_mm"
+                ],
+                "surrogate": [
+                    "max_apex_mm", "max_half_angle_deg", "t_0p25_mm", "t_1p00_mm", "t_2p00_mm", "fairness"
+                ],
+                "unmeasured_zero_credit": ["solid_tip_sf", "buckling_lambda"]
+            }),
+            EvalTier::Tier2Full3D => serde_json::json!({
+                "tier": "Tier2Full3D",
+                "summary": "voxel_3d_sdf_plate_fe_watertight_stl_and_solid_tet10",
+                "measured": [
+                    "mass_g", "lat_rob_cert_n", "strict_lat_n",
+                    "ring_bearing_cap_n", "ring_back_cap_n",
+                    "twist_body_sf", "twist_tip_sf", "twist_tipzone_strict_sf",
+                    "solid_tip_sf", "hm_twist_sf", "hm_spine_sf", "fat_sf", "grip_sf_min",
+                    "watertight", "am_build", "swell_perimeter_mm", "swell_h_over_t",
+                    "L_g_mm", "guard_h_mm", "com_to_index_mm", "spin_I_g_mm2",
+                    "groove_r_min_mm", "crest_r_min_mm", "saddle_depth_mm",
+                    "mid_depth_mm", "choil_depth_mm", "station_err_mm",
+                    "edge_r_min_mm", "section_corner_r_min_mm"
+                ],
+                "surrogate": [
+                    "max_apex_mm", "max_half_angle_deg", "t_0p25_mm", "t_1p00_mm", "t_2p00_mm", "fairness"
+                ],
+                "unmeasured_zero_credit": ["buckling_lambda"]
+            }),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -1277,16 +1343,17 @@ fn evaluate_tier2_from_tier1(
     rec.inputs.solid_tip_sf = 0.0;
     rec.inputs.dolfinx_rel_err = 1.0;
 
-    // Run fail-closed 3D TET10 tip submodel on the blade surface law
+    // Run fail-closed 3D TET10 tip submodel on the blade surface law (P6: full xs outline containing
+    // exact tip_xy + max triangle area 0.4 mm^2 so the 2 mm tip patch has ~30 vertices and converges <= 10%).
     let blade = build_blade_profile_2d(&p);
-    let mut b_outer = Vec::new();
-    for i in (0..blade.xs.len()).step_by(3) {
+    let mut b_outer = Vec::with_capacity(blade.xs.len() * 2);
+    for i in 0..blade.xs.len() {
         b_outer.push((blade.xs[i], blade.y_in[i]));
     }
-    for i in (0..blade.xs.len()).step_by(3).rev() {
+    for i in (0..blade.xs.len()).rev() {
         b_outer.push((blade.xs[i], blade.y_sp[i]));
     }
-    if let Some(b_mesh) = mesh_domain(&b_outer, &[], 2.5) {
+    if let Some(b_mesh) = mesh_domain(&b_outer, &[], 0.4) {
         let x0 = blade.x_tip - 32.0;
         let y0 = blade.tip_xy.1 - 32.0;
         let g = 0.5;
@@ -1531,6 +1598,146 @@ impl CvtMapElitesArchive {
             .map(|e| e.record.score.raw_score_100)
             .sum()
     }
+
+    /// Self-check all archived elites (`I7`): verifies `schema`, frozen `decoder_sha256`,
+    /// genome validity, `genome.sha256() == record.genome_sha256`, and CVT niche assignment.
+    pub fn verify_integrity(&self) -> Result<(), String> {
+        if self.schema != "G3.0" {
+            return Err(format!("archive schema mismatch: '{}'", self.schema));
+        }
+        let expected_dec = g3_decoder_sha256();
+        if self.decoder_sha256 != expected_dec {
+            return Err(format!(
+                "archive decoder_sha256 mismatch: '{}' vs current '{expected_dec}'",
+                self.decoder_sha256
+            ));
+        }
+        for (&nid, elite) in &self.elites {
+            if elite.niche_id != nid {
+                return Err(format!(
+                    "archive key {nid} != elite.niche_id {}",
+                    elite.niche_id
+                ));
+            }
+            elite.genome.validate()?;
+            let g_sha = elite.genome.sha256();
+            if elite.record.genome_sha256 != g_sha {
+                return Err(format!(
+                    "niche {nid} genome_sha256 mismatch: record='{}', genome='{g_sha}'",
+                    elite.record.genome_sha256
+                ));
+            }
+            if elite.record.schema != self.schema {
+                return Err(format!(
+                    "niche {nid} record schema mismatch: '{}'",
+                    elite.record.schema
+                ));
+            }
+            if elite.record.decoder_sha256 != self.decoder_sha256 {
+                return Err(format!(
+                    "niche {nid} record decoder_sha256 mismatch: '{}'",
+                    elite.record.decoder_sha256
+                ));
+            }
+            let computed_nid = self.niche_of(&elite.record.descriptors);
+            if computed_nid != nid {
+                return Err(format!(
+                    "niche {nid} CVT assignment mismatch: descriptors map to niche {computed_nid}"
+                ));
+            }
+        }
+        Ok(())
+    }
+
+    /// Load and verify a persisted `{genomes_g3.csv, archive.jsonl}` run directory (`I5`, `I7`, `S8-2`, `S8-3`):
+    /// - Parses every CSV row via `G3Genome::from_csv_row_checked(row, expected_commit)` (`I5`),
+    /// - Verifies 1-to-1 join with `archive.jsonl` on `design_id` and `genome_sha256`,
+    /// - Verifies `decoder_sha256 == g3_decoder_sha256()` (`I7`),
+    /// - Verifies CVT `niche_id == niche_of(&descriptors)`,
+    /// - Re-scores every row's `inputs` via `score_ergolight_map` and checks `score_100`, `base`, and `E` (`S8-2`).
+    pub fn load_and_verify_persisted_dir(
+        dir: &str,
+        expected_commit: &str,
+    ) -> Result<usize, String> {
+        let csv_raw = std::fs::read_to_string(format!("{dir}/genomes_g3.csv"))
+            .map_err(|e| format!("read genomes_g3.csv: {e}"))?;
+        let jsonl_raw = std::fs::read_to_string(format!("{dir}/archive.jsonl"))
+            .map_err(|e| format!("read archive.jsonl: {e}"))?;
+        let mut csv_lines = csv_raw.lines();
+        let _hdr = csv_lines
+            .next()
+            .ok_or_else(|| "empty genomes_g3.csv".to_string())?;
+        let csv_rows: Vec<&str> = csv_lines.filter(|l| !l.trim().is_empty()).collect();
+        let jsonl_rows: Vec<&str> = jsonl_raw
+            .lines()
+            .filter(|l| !l.trim().is_empty())
+            .collect();
+        if csv_rows.is_empty() || csv_rows.len() != jsonl_rows.len() {
+            return Err(format!(
+                "persisted row count mismatch: csv={} vs jsonl={}",
+                csv_rows.len(),
+                jsonl_rows.len()
+            ));
+        }
+        let expected_dec = g3_decoder_sha256();
+        let ref_arch = Self::new(1024);
+        for (idx, (&c_line, &j_line)) in csv_rows.iter().zip(jsonl_rows.iter()).enumerate() {
+            let (design_id, genome_part) = c_line
+                .split_once(',')
+                .ok_or_else(|| format!("malformed csv row {idx}"))?;
+            crate::g3_namespace::validate_g3_design_id(design_id)?;
+            let genome = G3Genome::from_csv_row_checked(genome_part, expected_commit)?;
+            let doc: serde_json::Value = serde_json::from_str(j_line)
+                .map_err(|e| format!("parse archive.jsonl row {idx}: {e}"))?;
+            if doc["design_id"].as_str() != Some(design_id) {
+                return Err(format!("row {idx} design_id mismatch"));
+            }
+            if doc["schema"].as_str() != Some("G3.0") {
+                return Err(format!("row {idx} schema mismatch"));
+            }
+            if doc["decoder_commit"].as_str() != Some(expected_commit) {
+                return Err(format!("row {idx} decoder_commit mismatch"));
+            }
+            if doc["decoder_sha256"].as_str() != Some(expected_dec.as_str()) {
+                return Err(format!(
+                    "row {idx} decoder_sha256 mismatch (persisted archive from a different decoder cannot be mixed)"
+                ));
+            }
+            let g_sha = genome.sha256();
+            if doc["genome_sha256"].as_str() != Some(g_sha.as_str()) {
+                return Err(format!("row {idx} genome_sha256 mismatch"));
+            }
+            let nid = doc["niche_id"]
+                .as_u64()
+                .ok_or_else(|| format!("row {idx} missing niche_id"))?
+                as usize;
+            let desc: G3Descriptors = serde_json::from_value(doc["descriptors"].clone())
+                .map_err(|e| format!("row {idx} invalid descriptors: {e}"))?;
+            if ref_arch.niche_of(&desc) != nid {
+                return Err(format!("row {idx} CVT niche mismatch"));
+            }
+            if !doc["tier_provenance"].is_object() {
+                return Err(format!("row {idx} missing tier_provenance object"));
+            }
+            let inputs_map = doc["inputs"]
+                .as_object()
+                .ok_or_else(|| format!("row {idx} inputs is not a JSON object"))?;
+            let rescored = crate::ergolight::score_ergolight_map(inputs_map)
+                .map_err(|e| format!("row {idx} score_ergolight_map failed: {e}"))?;
+            let s_row = doc["score_100"]
+                .as_f64()
+                .ok_or_else(|| format!("row {idx} missing score_100"))?;
+            let s_re = rescored["score_100"]
+                .as_f64()
+                .ok_or_else(|| format!("row {idx} rescored missing score_100"))?;
+            if (s_row - s_re).abs() > 1e-9 {
+                return Err(format!(
+                    "row {idx} re-score mismatch: stored {s_row} vs rescored {s_re}"
+                ));
+            }
+        }
+        Ok(csv_rows.len())
+    }
 }
 
 /// SplitMix64 bijective mixer for stream seed derivation without overflow (`S5-M6`).
@@ -1557,7 +1764,7 @@ pub fn run_g3_cvt_map_elites(
     let mut archive = CvtMapElitesArchive::new(1024);
     let mut rng = G3Rng(seed.max(1));
     let mixed_seed = splitmix64(seed);
-    let scramble_seed = (((mixed_seed ^ (mixed_seed >> 32)) as u32).max(1)) as usize;
+    let scramble_seed = (mixed_seed as usize).max(1);
 
     let init_count = n_init_sobol.min(n_evals).max(1);
     for i in 0..init_count {

@@ -103,8 +103,13 @@ fn main() {
         eprintln!("g3-evolve error: archive produced zero elites");
         std::process::exit(1);
     }
+    if let Err(e) = arch.verify_integrity() {
+        eprintln!("g3-evolve archive integrity error: {e}");
+        std::process::exit(1);
+    }
 
     let mut csv = format!("design_id,{}\n", G3Genome::csv_header());
+    let mut jsonl = String::new();
     for (&niche, e) in &arch.elites {
         let design_id = format_g3_design_id(host_num, island, niche as u64, &e.genome.sha256());
         if let Err(err) = validate_g3_design_id(&design_id) {
@@ -112,9 +117,37 @@ fn main() {
             std::process::exit(2);
         }
         let _ = writeln!(csv, "{design_id},{}", e.genome.to_csv_row());
+        let score_json = e.record.score.to_json();
+        let row_json = serde_json::json!({
+            "design_id": design_id,
+            "niche_id": niche,
+            "schema": e.record.schema,
+            "genome_sha256": e.record.genome_sha256,
+            "decoder_commit": e.genome.decoder_commit,
+            "decoder_sha256": e.record.decoder_sha256,
+            "tier": e.record.tier,
+            "tier_provenance": e.record.tier.input_provenance(),
+            "score_100": e.record.score.score_100,
+            "raw_score_100": e.record.score.raw_score_100,
+            "base": e.record.score.base,
+            "ergo_multiplier": e.record.score.ergo_multiplier,
+            "descriptors": e.record.descriptors,
+            "inputs": e.record.inputs,
+            "terms": score_json["terms"],
+            "ergo": score_json["ergo"],
+        });
+        let _ = writeln!(jsonl, "{row_json}");
     }
     if let Err(e) = std::fs::write(format!("{out_dir}/genomes_g3.csv"), csv) {
         eprintln!("g3-evolve error writing genomes_g3.csv: {e}");
+        std::process::exit(1);
+    }
+    if let Err(e) = std::fs::write(format!("{out_dir}/archive.jsonl"), jsonl) {
+        eprintln!("g3-evolve error writing archive.jsonl: {e}");
+        std::process::exit(1);
+    }
+    if let Err(e) = jarambit_g3::g3_qd::CvtMapElitesArchive::load_and_verify_persisted_dir(&out_dir, &commit) {
+        eprintln!("g3-evolve persisted archive verification error: {e}");
         std::process::exit(1);
     }
 
