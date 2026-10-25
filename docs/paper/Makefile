@@ -45,6 +45,7 @@ all: artifacts pdfs
 # Reporting reconstruction only; no CAD, FEM, search, tests or CI.
 artifacts:
 	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts
+	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example score_decomposition
 figures: $(GEN_PNGS) $(POP_PNGS) $(STORY_PNGS) $(POSITIVE_PNGS) $(README_HERO_PNG) figures/fig1_hero_blender_v2.png $(CROP_PNG) $(COVER_PNGS) $(POCKET_PNGS)
 $(COVER_PNGS): figures/cover/cover-%.png: figures/cover/cover-%.svg figures/cover/render-%.png figures/cover/inset-%.png
 	rsvg-convert -w 2000 -h 850 -o $@ $<
@@ -149,6 +150,7 @@ audit-quick:
 	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit
 audit-full:
 	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example paper_artifacts -- --check
+	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example score_decomposition -- --check
 	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit -- --full-zstd
 review-origin-controls:
 	cd $(ROOT) && $(CARGO) test --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example verify_review_origin -- --nocapture

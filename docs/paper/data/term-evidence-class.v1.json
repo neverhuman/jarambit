@@ -1,0 +1,196 @@
+{
+  "schema": "jarambit.term_evidence_class.v1",
+  "metric": "W_ULTRALIGHT_v1",
+  "source_scorer": "ops/ci/ultralight_weighted_fitness.py",
+  "classes": [
+    "measured",
+    "rule-based",
+    "constant fallback",
+    "not admitted"
+  ],
+  "terms": [
+    {
+      "key": "ultralight_mass",
+      "label": "3D mass (45-130 g)",
+      "weight_pct": 22.0,
+      "evidence_class": "measured",
+      "failed_requirement_in_f075": false
+    },
+    {
+      "key": "cad_watertight_brep",
+      "label": "Watertight STEP/STL solid",
+      "weight_pct": 5.0,
+      "evidence_class": "measured",
+      "failed_requirement_in_f075": false
+    },
+    {
+      "key": "bore_collar_comfort",
+      "label": "Bore collar (bearing width + edge radius)",
+      "weight_pct": 9.0,
+      "evidence_class": "split",
+      "split_parts": [
+        {
+          "subkey": "bore_collar_bearing_width",
+          "label": "Bore collar: bearing width (>= 10 mm)",
+          "weight_pct": 4.5,
+          "evidence_class": "measured",
+          "expected_normalized_score": 1.0
+        },
+        {
+          "subkey": "bore_collar_edge_radius",
+          "label": "Bore collar: edge radius (1.125 / 1.50 mm)",
+          "weight_pct": 4.5,
+          "evidence_class": "constant fallback",
+          "fallback_formula": "ring_edge_r_fallback_mm / target_mm",
+          "fallback_constants": {
+            "ring_edge_r_fallback_mm": 1.125,
+            "target_mm": 1.5
+          }
+        }
+      ],
+      "failed_requirement_in_f075": false
+    },
+    {
+      "key": "hiker_lateral_180n",
+      "label": "Lateral capacity, hiker (180 N)",
+      "weight_pct": 3.5,
+      "evidence_class": "measured",
+      "failed_requirement_in_f075": false
+    },
+    {
+      "key": "failure_sequence_1p2",
+      "label": "Failure-sequence ratio (1.20)",
+      "weight_pct": 3.5,
+      "evidence_class": "measured",
+      "failed_requirement_in_f075": false
+    },
+    {
+      "key": "ring_pull_1500n",
+      "label": "Ring pull capacity (1500 N)",
+      "weight_pct": 2.5,
+      "evidence_class": "measured",
+      "failed_requirement_in_f075": false
+    },
+    {
+      "key": "twist_body_1p82nm",
+      "label": "Body torsion SF (1.82 N m)",
+      "weight_pct": 2.5,
+      "evidence_class": "measured",
+      "failed_requirement_in_f075": false
+    },
+    {
+      "key": "solid_tip_3d_p2_and_xcheck",
+      "label": "3D solid-tip SF + two-solver check",
+      "weight_pct": 3.0,
+      "evidence_class": "measured",
+      "failed_requirement_in_f075": true
+    },
+    {
+      "key": "hunter_lateral_260n",
+      "label": "Lateral capacity, hunter (260 N)",
+      "weight_pct": 2.5,
+      "evidence_class": "measured",
+      "failed_requirement_in_f075": true
+    },
+    {
+      "key": "strict_hunter_260n",
+      "label": "Lateral capacity, strict mesh (260 N)",
+      "weight_pct": 2.0,
+      "evidence_class": "measured",
+      "failed_requirement_in_f075": true
+    },
+    {
+      "key": "twist_tip_plate_1p82nm",
+      "label": "Tip torsion SF, plate cert./strict",
+      "weight_pct": 2.5,
+      "evidence_class": "measured",
+      "failed_requirement_in_f075": true
+    },
+    {
+      "key": "goodman_fatigue_l7",
+      "label": "Goodman fatigue SF, L7 (0-180 N)",
+      "weight_pct": 2.0,
+      "evidence_class": "measured",
+      "failed_requirement_in_f075": true
+    },
+    {
+      "key": "c6_aesthetic_and_ergo",
+      "label": "C6 form & ergonomic check",
+      "weight_pct": 9.0,
+      "evidence_class": "rule-based",
+      "failed_requirement_in_f075": false
+    },
+    {
+      "key": "holder_and_compactness",
+      "label": "Holder envelope & compactness check",
+      "weight_pct": 8.0,
+      "evidence_class": "rule-based",
+      "failed_requirement_in_f075": false
+    },
+    {
+      "key": "karambit_ring_and_claw",
+      "label": "Ring bore & curved-claw archetype",
+      "weight_pct": 7.0,
+      "evidence_class": "rule-based",
+      "failed_requirement_in_f075": false
+    },
+    {
+      "key": "gate_s_sharpness",
+      "label": "Edge sharpness (0.25 mm, 28 deg fallback)",
+      "weight_pct": 5.0,
+      "evidence_class": "constant fallback",
+      "fallback_formula": "0.5*(0.20/apex_mm) + 0.5*(25.0/half_angle_deg)",
+      "fallback_constants": {
+        "apex_mm": 0.25,
+        "target_apex_mm": 0.20,
+        "half_angle_deg": 28.0,
+        "target_half_angle_deg": 25.0
+      },
+      "failed_requirement_in_f075": true
+    },
+    {
+      "key": "gate_s_point_profile",
+      "label": "Tip point profile (0.45/0.85/1.40 mm fallback)",
+      "weight_pct": 5.0,
+      "evidence_class": "constant fallback",
+      "fallback_formula": "0.25*(0.30/t_025 + 0.60/t_100 + 1.00/t_200 + mono)",
+      "fallback_constants": {
+        "t_025_mm": 0.45,
+        "target_025_mm": 0.30,
+        "t_100_mm": 0.85,
+        "target_100_mm": 0.60,
+        "t_200_mm": 1.40,
+        "target_200_mm": 1.00,
+        "monotone_flag": 0.0
+      },
+      "failed_requirement_in_f075": true
+    },
+    {
+      "key": "human_max_overload",
+      "label": "Human-max overload (0.10/0.35/1.0 fallback)",
+      "weight_pct": 2.0,
+      "evidence_class": "constant fallback",
+      "fallback_formula": "(hm_twist_sf + hm_spine_sf + min(hm_ringback_sf,1.0))/3.0",
+      "fallback_constants": {
+        "hm_twist_sf": 0.10,
+        "hm_spine_sf": 0.35,
+        "hm_ringback_sf_clamped": 1.0
+      },
+      "failed_requirement_in_f075": true
+    },
+    {
+      "key": "side_a4_buckling",
+      "label": "Side-A4 buckling eigenvalue",
+      "weight_pct": 2.0,
+      "evidence_class": "not admitted",
+      "failed_requirement_in_f075": false
+    },
+    {
+      "key": "plate_gci_3level",
+      "label": "Three-level plate GCI flag",
+      "weight_pct": 2.0,
+      "evidence_class": "not admitted",
+      "failed_requirement_in_f075": false
+    }
+  ]
+}
