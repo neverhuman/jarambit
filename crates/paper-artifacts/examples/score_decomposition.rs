@@ -106,18 +106,21 @@ r0_best r1_best r2_best r3_best r4_best r5_best r6_best r7_best r8_best r9_best 
             let mut sum_q10 = 0.0;
             let mut sum_q90 = 0.0;
             for g in g_lo..=g_hi {
-                let l = leg_arr[g].as_f64().unwrap_or(0.0);
-                let t = tot_arr[g].as_f64().unwrap_or(1.0).max(1.0);
+                let l = leg_arr[g].as_f64().ok_or("missing gen_legal_count")?;
+                let t = tot_arr[g].as_f64().ok_or("missing gen_total_count")?;
+                if t <= 0.0 {
+                    return Err(format!("gen_total_count is {t} at generation {g}").into());
+                }
                 sum_leg_pct += 100.0 * l / t;
-                sum_med += med_arr[g].as_f64().unwrap_or(0.0);
-                sum_q10 += q10_arr[g].as_f64().unwrap_or(0.0);
-                sum_q90 += q90_arr[g].as_f64().unwrap_or(0.0);
+                sum_med += med_arr[g].as_f64().ok_or("missing gen_median_fit")?;
+                sum_q10 += q10_arr[g].as_f64().ok_or("missing gen_q10_fit")?;
+                sum_q90 += q90_arr[g].as_f64().ok_or("missing gen_q90_fit")?;
             }
             leg_runs.push(sum_leg_pct / count);
             med_runs.push(sum_med / count);
             q10_runs.push(sum_q10 / count);
             q90_runs.push(sum_q90 / count);
-            best_runs.push(best_arr[g_hi].as_f64().unwrap_or(0.0));
+            best_runs.push(best_arr[g_hi].as_f64().ok_or("missing gen_cum_best_fit")?);
         }
 
         let med_leg = median_f64(leg_runs.clone());
@@ -293,7 +296,7 @@ fn generate_m8_score_decomposition(root: &Path, check: bool) -> Result<()> {
         let key = t["key"].as_str().ok_or("missing key")?;
         let w = t["weight_pct"].as_f64().ok_or("missing weight_pct")?;
         let cls = t["evidence_class"].as_str().ok_or("missing evidence_class")?;
-        let failed_f075 = t["failed_requirement_in_f075"].as_bool().unwrap_or(false);
+        let failed_f075 = t["failed_requirement_in_f075"].as_bool().ok_or("missing failed_requirement_in_f075")?;
 
         let c_obj = &ctrl_objs[key];
         let f_obj = &f075_objs[key];
@@ -314,9 +317,9 @@ fn generate_m8_score_decomposition(root: &Path, check: bool) -> Result<()> {
             let parts = t["split_parts"].as_array().ok_or("missing split_parts")?;
             let p_meas = &parts[0];
             let p_fb = &parts[1];
-            let w_m = p_meas["weight_pct"].as_f64().unwrap_or(4.5);
-            let w_fb = p_fb["weight_pct"].as_f64().unwrap_or(4.5);
-            let s_m = p_meas["expected_normalized_score"].as_f64().unwrap_or(1.0);
+            let w_m = p_meas["weight_pct"].as_f64().ok_or("missing split_parts[0].weight_pct")?;
+            let w_fb = p_fb["weight_pct"].as_f64().ok_or("missing split_parts[1].weight_pct")?;
+            let s_m = p_meas["expected_normalized_score"].as_f64().ok_or("missing split_parts[0].expected_normalized_score")?;
             // Derive fallback half normalized score from recorded combined score
             let s_fb_rec = (c_norm * (w_m + w_fb) - w_m * s_m) / w_fb;
             verify_fallback_score(p_fb, s_fb_rec)?;
@@ -483,60 +486,89 @@ fn generate_m9_winner_requirements(root: &Path, check: bool) -> Result<()> {
         .find(|c| c["id"].as_str() == Some("plate.loads"))
         .ok_or("missing plate.loads")?["detail"]["loads"];
 
-    let lat_ctrl = ctrl["lat_rob_cert_n"].as_f64().unwrap_or(0.0);
-    let lat_f075 = f075["lat_rob_cert_n"].as_f64().unwrap_or(0.0);
-    let strict_ctrl = ctrl["strict_lat_rob_0p0625_n"].as_f64().unwrap_or(0.0);
-    let strict_f075 = f075["strict_lat_rob_0p0625_n"].as_f64().unwrap_or(0.0);
-    let ring_ctrl = ctrl["ring_rob_cert_n"].as_f64().unwrap_or(0.0);
-    let ring_f075 = f075["ring_rob_cert_n"].as_f64().unwrap_or(0.0);
-    let body_tw_ctrl = ctrl["twist_body_sf"].as_f64().unwrap_or(0.0);
-    let body_tw_f075 = f075["twist_body_sf"].as_f64().unwrap_or(0.0);
-    let tip_tw_cert = em["twist_tipzone_sf_cert"].as_f64().unwrap_or(0.0);
-    let tip_tw_strict = em["twist_tipzone_sf_strict"].as_f64().unwrap_or(0.0);
-    let solid_max_ctrl = ctrl["solid_tip_sf_nodal_max"].as_f64().unwrap_or(0.0);
-    let solid_avg_ctrl = ctrl["solid_tip_sf_nodal_avg"].as_f64().unwrap_or(0.0);
-    let solid_max_f075 = f075["solid_tip_sf_nodal_max"].as_f64().unwrap_or(0.0);
-    let solid_avg_f075 = f075["solid_tip_sf_nodal_avg"].as_f64().unwrap_or(0.0);
-    let seq_ctrl = ctrl["seq_ratio_cert"].as_f64().unwrap_or(0.0);
-    let seq_f075 = f075["seq_ratio_cert"].as_f64().unwrap_or(0.0);
-    let fat_f075 = f075["fat_sf_l7"].as_f64().unwrap_or(0.0);
-    let hm_twist = plate_loads["chord_twist_human_max_sf"]["value_n_or_sf"]
-        .as_f64()
-        .unwrap_or(0.0);
-    let hm_spine = plate_loads["spine_sf"]["value_n_or_sf"]
-        .as_f64()
-        .unwrap_or(0.0);
-    let hm_ringback = plate_loads["ring_back_sf"]["value_n_or_sf"]
-        .as_f64()
-        .unwrap_or(0.0);
-    let mass_ctrl = ctrl["mass_3d_g"].as_f64().unwrap_or(0.0);
-    let mass_f075 = f075["mass_3d_g"].as_f64().unwrap_or(0.0);
+    // Every value is read fail-closed: a missing receipt field is an error, never a printed 0.
+    let num = |v: &serde_json::Value, what: &str| -> Result<f64> {
+        v.as_f64().ok_or_else(|| format!("missing {what} in the receipts").into())
+    };
+    let lat_ctrl = num(&ctrl["lat_rob_cert_n"], "ctrl.lat_rob_cert_n")?;
+    let lat_f075 = num(&f075["lat_rob_cert_n"], "f075.lat_rob_cert_n")?;
+    let strict_ctrl = num(&ctrl["strict_lat_rob_0p0625_n"], "ctrl.strict_lat_rob_0p0625_n")?;
+    let strict_f075 = num(&f075["strict_lat_rob_0p0625_n"], "f075.strict_lat_rob_0p0625_n")?;
+    let ring_ctrl = num(&ctrl["ring_rob_cert_n"], "ctrl.ring_rob_cert_n")?;
+    let ring_f075 = num(&f075["ring_rob_cert_n"], "f075.ring_rob_cert_n")?;
+    let body_tw_ctrl = num(&ctrl["twist_body_sf"], "ctrl.twist_body_sf")?;
+    let body_tw_f075 = num(&f075["twist_body_sf"], "f075.twist_body_sf")?;
+    let tip_tw_cert = num(&em["twist_tipzone_sf_cert"], "engineering_metrics.twist_tipzone_sf_cert")?;
+    let tip_tw_strict = num(&em["twist_tipzone_sf_strict"], "engineering_metrics.twist_tipzone_sf_strict")?;
+    let solid_max_ctrl = num(&ctrl["solid_tip_sf_nodal_max"], "ctrl.solid_tip_sf_nodal_max")?;
+    let solid_avg_ctrl = num(&ctrl["solid_tip_sf_nodal_avg"], "ctrl.solid_tip_sf_nodal_avg")?;
+    let solid_max_f075 = num(&f075["solid_tip_sf_nodal_max"], "f075.solid_tip_sf_nodal_max")?;
+    let solid_avg_f075 = num(&f075["solid_tip_sf_nodal_avg"], "f075.solid_tip_sf_nodal_avg")?;
+    let seq_ctrl = num(&ctrl["seq_ratio_cert"], "ctrl.seq_ratio_cert")?;
+    let seq_f075 = num(&f075["seq_ratio_cert"], "f075.seq_ratio_cert")?;
+    let fat_f075 = num(&f075["fat_sf_l7"], "f075.fat_sf_l7")?;
+    let hm_twist = num(&plate_loads["chord_twist_human_max_sf"]["value_n_or_sf"], "plate.loads.chord_twist_human_max_sf")?;
+    let hm_spine = num(&plate_loads["spine_sf"]["value_n_or_sf"], "plate.loads.spine_sf")?;
+    let hm_ringback = num(&plate_loads["ring_back_sf"]["value_n_or_sf"], "plate.loads.ring_back_sf")?;
+    let mass_ctrl = num(&ctrl["mass_3d_g"], "ctrl.mass_3d_g")?;
+    let mass_f075 = num(&f075["mass_3d_g"], "f075.mass_3d_g")?;
+    let wt_ctrl = num(&ctrl["cad_watertight_brep_points"], "ctrl.cad_watertight_brep_points")? > 0.0;
+    let wt_f075 = num(&f075["cad_watertight_brep_points"], "f075.cad_watertight_brep_points")? > 0.0;
+
+    // Status is computed, never typed: met when the measured value (the worse of a pair) reaches the
+    // reference; variant A reads the as-exported run, variant B the smoothed run.
+    let mark = |ok: bool| if ok { r"met $\checkmark$" } else { r"not met $\times$" };
+    let by_variant = |a_ok: bool, b_ok: bool| {
+        if a_ok == b_ok {
+            mark(a_ok).to_string()
+        } else {
+            format!(r"\ifdefined\JRSmoothedVariant {}\else {}\fi", mark(b_ok), mark(a_ok))
+        }
+    };
+    let st_lat_hiker = by_variant(lat_ctrl >= 180.0, lat_f075 >= 180.0);
+    let st_lat_hunter = by_variant(lat_ctrl >= 260.0, lat_f075 >= 260.0);
+    let st_strict = by_variant(strict_ctrl >= 260.0, strict_f075 >= 260.0);
+    let st_ring = by_variant(ring_ctrl >= 1500.0, ring_f075 >= 1500.0);
+    let st_body = by_variant(body_tw_ctrl >= 1.0, body_tw_f075 >= 1.0);
+    let st_tip = mark(tip_tw_cert.min(tip_tw_strict) >= 1.0);
+    let st_solid = by_variant(solid_max_ctrl.min(solid_avg_ctrl) >= 1.0, solid_max_f075.min(solid_avg_f075) >= 1.0);
+    let st_seq = by_variant(seq_ctrl >= 1.2, seq_f075 >= 1.2);
+    let st_fat = mark(fat_f075 >= 1.0);
+    let st_hm = mark(hm_twist.min(hm_spine) >= 1.0);
+    let st_ringback = mark(hm_ringback >= 1.0);
+    let st_wt = by_variant(wt_ctrl, wt_f075);
+    let yn = |b: bool| if b { "yes" } else { "no" };
+    let wt_val = if wt_ctrl == wt_f075 {
+        yn(wt_ctrl).to_string()
+    } else {
+        format!(r"\ifdefined\JRSmoothedVariant {}\else {}\fi", yn(wt_f075), yn(wt_ctrl))
+    };
 
     let tex = format!(
         r#"% Generated by crates/paper-artifacts/examples/score_decomposition.rs -- do not hand-edit.
 \begin{{table}}[t]
 \centering
-\caption{{Cover design (\code{{ec3i042_r01_p10_c56}}) against reference checks (\textbf{{informational; does not veto selection}}). Values come from the retained Stage-2 scorecard and \code{{RECEIPT.json}}.}}
+\caption{{Cover design (\code{{ec3i042_r01_p10_c56}}) against reference checks (\textbf{{informational; does not veto selection}}). Values come from the retained Stage-2 scorecard and \code{{RECEIPT.json}}; each status is computed from the value and its reference, and checks without a measurement say so.}}
 \label{{tab:winner-requirements}}
 \setlength{{\tabcolsep}}{{2.8pt}}
 \begin{{tabular}}{{@{{}}> {{\raggedright\arraybackslash}}p{{0.40\columnwidth}}rrr@{{}}}}
 \toprule
 \textbf{{Requirement}} & \textbf{{Reference}} & \textbf{{Measured}} & \textbf{{Status}} \\
 \midrule
-Lateral, hiker & 180\,N & \ifdefined\JRSmoothedVariant {lat_f075:.1}\else {lat_ctrl:.1}\fi\,N & met $\checkmark$ \\
-Lateral, hunter & 260\,N & \ifdefined\JRSmoothedVariant {lat_f075:.1}\else {lat_ctrl:.1}\fi\,N & not met $\times$ \\
-Lateral, hunter (strict mesh) & 260\,N & \ifdefined\JRSmoothedVariant {strict_f075:.1}\else {strict_ctrl:.1}\fi\,N & not met $\times$ \\
-Ring pull & 1500\,N & \ifdefined\JRSmoothedVariant \num{{{ring_f075:.0}}}\else \num{{{ring_ctrl:.0}}}\fi\,N & met $\checkmark$ \\
-Body torsion SF (1.82\,N\,m) & 1.0 & \ifdefined\JRSmoothedVariant {body_tw_f075:.2}\else {body_tw_ctrl:.2}\fi & met $\checkmark$ \\
-Tip torsion SF (plate cert./strict) & 1.0 & {tip_tw_cert:.2} / {tip_tw_strict:.2} & not met $\times$ \\
-3D solid-tip SF (nodal max/mean) & 1.0 & \ifdefined\JRSmoothedVariant {solid_max_f075:.3} / {solid_avg_f075:.3}\else {solid_max_ctrl:.3} / {solid_avg_ctrl:.3}\fi & not met $\times$ \\
-Failure-sequence ratio & 1.20 & \ifdefined\JRSmoothedVariant {seq_f075:.2}\else {seq_ctrl:.2}\fi & \ifdefined\JRSmoothedVariant met $\checkmark$\else not met $\times$\fi \\
-Goodman fatigue SF (0--180\,N) & 1.0 & {fat_f075:.2} & not met $\times$ \\
-Human-max twist / spine SF & 1.0 & {hm_twist:.2} / {hm_spine:.2} & not met $\times$ \\
-Human-max ring-back SF & 1.0 & {hm_ringback:.2} & met $\checkmark$ \\
-Edge-sharpness law (export) & law & not measured & not met $\times$ \\
-Tip point profile (B-rep) & law & not measured & not met $\times$ \\
-Single watertight STEP/STL solid & yes & yes & met $\checkmark$ \\
+Lateral, hiker & 180\,N & \ifdefined\JRSmoothedVariant {lat_f075:.1}\else {lat_ctrl:.1}\fi\,N & {st_lat_hiker} \\
+Lateral, hunter & 260\,N & \ifdefined\JRSmoothedVariant {lat_f075:.1}\else {lat_ctrl:.1}\fi\,N & {st_lat_hunter} \\
+Lateral, hunter (strict mesh) & 260\,N & \ifdefined\JRSmoothedVariant {strict_f075:.1}\else {strict_ctrl:.1}\fi\,N & {st_strict} \\
+Ring pull & 1500\,N & \ifdefined\JRSmoothedVariant \num{{{ring_f075:.0}}}\else \num{{{ring_ctrl:.0}}}\fi\,N & {st_ring} \\
+Body torsion SF (1.82\,N\,m) & 1.0 & \ifdefined\JRSmoothedVariant {body_tw_f075:.2}\else {body_tw_ctrl:.2}\fi & {st_body} \\
+Tip torsion SF (plate cert./strict) & 1.0 & {tip_tw_cert:.2} / {tip_tw_strict:.2} & {st_tip} \\
+3D solid-tip SF (nodal max/mean) & 1.0 & \ifdefined\JRSmoothedVariant {solid_max_f075:.3} / {solid_avg_f075:.3}\else {solid_max_ctrl:.3} / {solid_avg_ctrl:.3}\fi & {st_solid} \\
+Failure-sequence ratio & 1.20 & \ifdefined\JRSmoothedVariant {seq_f075:.2}\else {seq_ctrl:.2}\fi & {st_seq} \\
+Goodman fatigue SF (0--180\,N) & 1.0 & {fat_f075:.2} & {st_fat} \\
+Human-max twist / spine SF & 1.0 & {hm_twist:.2} / {hm_spine:.2} & {st_hm} \\
+Human-max ring-back SF & 1.0 & {hm_ringback:.2} & {st_ringback} \\
+Edge-sharpness law (export) & law & not measured & not measured \\
+Tip point profile (B-rep) & law & not measured & not measured \\
+Single watertight STEP/STL solid & yes & {wt_val} & {st_wt} \\
 3D mass (continuous preference) & 45--130\,g & \ifdefined\JRSmoothedVariant {mass_f075:.2}\else {mass_ctrl:.2}\fi\,g & informational \\
 \bottomrule
 \end{{tabular}}
