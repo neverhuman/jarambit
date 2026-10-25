@@ -1,10 +1,10 @@
 {
   "figure": "docs/paper/figures/pocket/hero.png",
-  "figure_sha256": "85c10f26a113103b1c34f0625b3a26258c77fed49f2b59ab580213b4bbd34a96",
+  "figure_sha256": "bfd220dcc49e8b42fd5e944c0b35c44890102fe3a07c14f291c2fac44fccd2fa",
   "script": "docs/paper/Makefile",
   "inputs": {
-    "docs/paper/figures/pocket/hero.svg": "4e1d720c4041967cb1ea6b040774f3e0f2af1d10804c554a62dbeebd0baca75d",
-    "docs/paper/figures/pocket/hero-stack.png": "81417093c310fc47a4a1ee0379b98edea4d6b762e669916a5cff50c754b6d21d",
+    "docs/paper/figures/pocket/hero.svg": "e8aeb8370c7705f63551825476dbfab00d9e4c8561cbf0ce2ff1e90c24c4392d",
+    "docs/paper/figures/pocket/hero-stack.png": "13b1fe6c51a55bca8864e4ae0258e67a72d65535efe74a2c9e23cf1460a2f30b",
     "experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json": "6b59b1793ea715c9cc0d692d1c30070634fdb80f86c22e8e16aa18a9f9d00d9c"
   },
   "note": "make figures: rsvg-convert -w 2000 of the SVG (stacked fields + labels + colour key + W_ULTRALIGHT_v1 badge from the receipt)."

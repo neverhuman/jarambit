@@ -34,63 +34,71 @@
     "stops_srgb": [
       {
         "rgb": [
-          46.0,
-          52.0,
-          146.0
+          254.0,
+          236.0,
+          230.0
         ],
         "t": 0.0
       },
       {
         "rgb": [
-          38.0,
-          110.0,
-          214.0
+          252.0,
+          215.0,
+          202.0
         ],
-        "t": 0.18
+        "t": 0.14285714285714285
       },
       {
         "rgb": [
-          32.0,
-          178.0,
-          196.0
+          250.0,
+          180.0,
+          155.0
         ],
-        "t": 0.38
+        "t": 0.2857142857142857
       },
       {
         "rgb": [
-          92.0,
-          204.0,
-          120.0
+          248.0,
+          140.0,
+          101.0
         ],
-        "t": 0.55
+        "t": 0.42857142857142855
       },
       {
         "rgb": [
-          246.0,
-          214.0,
-          64.0
+          228.0,
+          101.0,
+          53.0
         ],
-        "t": 0.72
+        "t": 0.5714285714285714
       },
       {
         "rgb": [
-          246.0,
-          142.0,
-          36.0
+          190.0,
+          75.0,
+          29.0
         ],
-        "t": 0.86
+        "t": 0.7142857142857143
       },
       {
         "rgb": [
-          222.0,
-          46.0,
-          38.0
+          147.0,
+          56.0,
+          20.0
+        ],
+        "t": 0.8571428571428571
+      },
+      {
+        "rgb": [
+          107.0,
+          39.0,
+          12.0
         ],
         "t": 1.0
       }
     ]
   },
-  "command": "target/release/examples/pocket_smoothing_figures hero --stl /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl --d1 /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56_D1.json --score 80.561227 --out /home/ubuntu/jarambit/.agent/worktrees/paper-refresh/target/ieee/paper/pocket-raw/hero",
+  "command": "target/release/examples/pocket_smoothing_figures hero --stl /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl --d1 /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56_D1.json --score 80.561227 --out /home/ubuntu/jarambit/.agent/worktrees/paper-l1/target/ieee/paper/pocket-raw/hero",
   "crease_lines": {
     "depth_tested": true,
     "dihedral_deg_over": 45.0,
@@ -163,7 +171,7 @@
       "units": "MPa"
     }
   ],
-  "hero_stack_sha256": "544b460170fccb3feb2885411777b554bcbe5de51ddbab4fc191de354ac2612f",
+  "hero_stack_sha256": "cb56c4e72e7f5ea9799fbfb4acd8a769640d3531b8a9e58880f02e7f32ab9189",
   "inputs": {
     "d1": {
       "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56_D1.json",
@@ -190,37 +198,37 @@
     {
       "height": 223,
       "name": "layer-lat.png",
-      "sha256": "5cfed412ceca26fb09621fab9c264ce494fe2c988249baeab646026face8732e",
+      "sha256": "a323537abba9f9f349420513474c5a546c6b343e6d57fdbd7aed3eb5a563c7cf",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-twist.png",
-      "sha256": "ffb96e9b670cd5ea51273655e8cdfe5fed0a88e0228513af56e0c4b7cfa27c96",
+      "sha256": "9fb970e318ff7013027795ea072dfdc492ccd7a67c2b851bdc4b11889669b3b5",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-ring.png",
-      "sha256": "f820cab4d77bc5914e96b438597add4ad8f64b6f5ee7338bffeb72edac916a1d",
+      "sha256": "92530e777319bdeb606811f160445366e3a155e3d184213e3340193ff7034436",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-pry.png",
-      "sha256": "7355c91804368e5410886f484f36b3e3ae205b70ed5f4acf1bc1876216d20909",
+      "sha256": "efd1670678ea850cc12fd75ba45ef5b3b7129c55706d4c6997179b9b1b6e7f8f",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-env_vm.png",
-      "sha256": "d111f6faa26f86da5877a207e03f5f9de9512a182cef9124d4fb3afdc75f6716",
+      "sha256": "63ef3ec1c75ddc7d429046c16120784c4152197531e314b6ce4143ad34224a14",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-envelope.png",
-      "sha256": "ff5eef5d8d6228df8bba3b63647ee0a9c4655a4fa78d2ea7d2002c54f631c7da",
+      "sha256": "fa2ee5cf0114edc110d98202f13a1d3efb08e50d0522a445b431854c95af1bc3",
       "width": 1400
     }
   ],
