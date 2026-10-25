@@ -1,11 +1,11 @@
 {
   "figure": "docs/paper/figures/cover/cover-smoothed.png",
-  "figure_sha256": "51d70b1208a573b5ad5e8725213ba73b9a31315f67a52f975856fe777e00bf13",
+  "figure_sha256": "38ba6adf02b3655b27b8e94d8489e8bc4cfb794327f171a82670d2d284b4d946",
   "script": "docs/paper/Makefile",
   "inputs": {
-    "docs/paper/figures/cover/cover-smoothed.svg": "01454b176cfcb1565c55b90922fb511eede021176aa2a28a01634419f1ad071a",
-    "docs/paper/figures/cover/render-smoothed.png": "cd3caf0aa1ac37cc5a803ef1d3fcc5ceb0ed2564225cf69214703c81ac1c5181",
-    "docs/paper/figures/cover/inset-smoothed.png": "d4fac897363d06be9919a4c57239e55c23c27206168fef9a801c5ec00e5fab91",
+    "docs/paper/figures/cover/cover-smoothed.svg": "5e7674e0bac6924fc43f305dc9e50487e0b2d48a5b58ff34e1e7c5539d1f128a",
+    "docs/paper/figures/cover/render-smoothed.png": "1a0d902132e2ce971407d1a31d9d0d4b1a77f07e11edcaa687eddd939484d503",
+    "docs/paper/figures/cover/inset-smoothed.png": "4a11d36aa061565ba1370766df3981203498b0c2111f5afe38c57554a61e10a2",
     "experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json": "6b59b1793ea715c9cc0d692d1c30070634fdb80f86c22e8e16aa18a9f9d00d9c"
   },
   "note": "make figures: rsvg-convert -w 2000 -h 850 of the SVG written by pocket_smoothing_figures cover (render, 2.5x isogrid-pocket inset, MPa colour key, tests without a stored field and the W_ULTRALIGHT_v1 badge, all from the receipt)."

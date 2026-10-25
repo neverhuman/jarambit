@@ -40,63 +40,71 @@
     "stops_srgb": [
       {
         "rgb": [
-          46.0,
-          52.0,
-          146.0
+          254.0,
+          236.0,
+          230.0
         ],
         "t": 0.0
       },
       {
         "rgb": [
-          38.0,
-          110.0,
-          214.0
+          252.0,
+          215.0,
+          202.0
         ],
-        "t": 0.18
+        "t": 0.14285714285714285
       },
       {
         "rgb": [
-          32.0,
-          178.0,
-          196.0
+          250.0,
+          180.0,
+          155.0
         ],
-        "t": 0.38
+        "t": 0.2857142857142857
       },
       {
         "rgb": [
-          92.0,
-          204.0,
-          120.0
+          248.0,
+          140.0,
+          101.0
         ],
-        "t": 0.55
+        "t": 0.42857142857142855
       },
       {
         "rgb": [
-          246.0,
-          214.0,
-          64.0
+          228.0,
+          101.0,
+          53.0
         ],
-        "t": 0.72
+        "t": 0.5714285714285714
       },
       {
         "rgb": [
-          246.0,
-          142.0,
-          36.0
+          190.0,
+          75.0,
+          29.0
         ],
-        "t": 0.86
+        "t": 0.7142857142857143
       },
       {
         "rgb": [
-          222.0,
-          46.0,
-          38.0
+          147.0,
+          56.0,
+          20.0
+        ],
+        "t": 0.8571428571428571
+      },
+      {
+        "rgb": [
+          107.0,
+          39.0,
+          12.0
         ],
         "t": 1.0
       }
     ]
   },
-  "command": "target/release/examples/pocket_smoothing_figures cover --receipt experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json --out /home/ubuntu/jarambit/.agent/worktrees/paper-falsecolour/target/ieee/paper/pocket-raw/cover",
+  "command": "target/release/examples/pocket_smoothing_figures cover --receipt experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json --out /home/ubuntu/jarambit/.agent/worktrees/paper-l1/target/ieee/paper/pocket-raw/cover",
   "crease_lines": {
     "depth_tested": true,
     "dihedral_deg_over": 45.0,
@@ -194,15 +202,15 @@
     "zoom": 2.5
   },
   "lighting": {
-    "ambient": 0.22,
-    "diffuse": 0.78,
+    "ambient": 0.62,
+    "diffuse": 0.38,
     "direction_camera": [
       -0.72,
       0.58,
       0.38
     ],
     "shininess": 40,
-    "specular": 0.14
+    "specular": 0.04
   },
   "not_qualified": true,
   "outputs": [
@@ -210,37 +218,37 @@
       "crease_edges": 7327,
       "height": 850,
       "name": "render-unsmoothed.png",
-      "sha256": "5d52bbb3e578d090a608ac4bc75dc3077f94895d900acd95103f799a83d9bae2",
+      "sha256": "c6388579c5f0842aa498de3a9bb1e37916f63f95f1f2ba2219c1532a41dad93a",
       "width": 2000
     },
     {
       "crease_edges": 7327,
       "height": 235,
       "name": "inset-unsmoothed.png",
-      "sha256": "2b686f50be638609eab75c668304d9408ca6ff056cdf8201f5db4c7eddd73569",
+      "sha256": "b2baa393ee18f5087aa55b6c19681097314854a64d191d796784bbae87dd098d",
       "width": 560
     },
     {
       "crease_edges": 10665,
       "height": 850,
       "name": "render-smoothed.png",
-      "sha256": "20243b8ff966a18e6216ff62cfed298bea9a758275f34dd24def09e0dcd1fe96",
+      "sha256": "df0d12b2a760f69757cb2e75d4ad1834b6b61a9a36dc6c2561be0bab67f8f5f2",
       "width": 2000
     },
     {
       "crease_edges": 10665,
       "height": 235,
       "name": "inset-smoothed.png",
-      "sha256": "e03c3c22061e9d55718cd5fedc4897255176fc19b5306a5b14472528f0ad8b83",
+      "sha256": "f4415638e7371409e3abdd8d7854c13541709fb95d5a1f0843938d6c67565064",
       "width": 560
     },
     {
       "name": "cover-unsmoothed.svg",
-      "sha256": "6b8f2323bf14aaa00c87ec6bfb91d58b164f27ae2eb6def08d99d15c03c9a36b"
+      "sha256": "bf2ec2eeefe0b9e74e31eea9209b5193e4cc1beedeefa01452c5639a49674227"
     },
     {
       "name": "cover-smoothed.svg",
-      "sha256": "01454b176cfcb1565c55b90922fb511eede021176aa2a28a01634419f1ad071a"
+      "sha256": "5e7674e0bac6924fc43f305dc9e50487e0b2d48a5b58ff34e1e7c5539d1f128a"
     }
   ],
   "research_only": true,

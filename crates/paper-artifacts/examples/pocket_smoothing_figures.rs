@@ -35,16 +35,20 @@ const CT: f64 = 0.9945218953682733;
 const ST: f64 = -0.10452846326765347;
 const SUPERSAMPLE: usize = 2;
 const NORMALS: NormalSettings = NormalSettings { crease_degrees: 15.0, blend: 1.0, max_deviation_degrees: 20.0 };
-/// Low (indigo) to saturated (red): luminance stays high enough for the raking light to model the
-/// relief at every value.
-const BRILLIANT: [(f64, [f64; 3]); 7] = [
-    (0.0, [46.0, 52.0, 146.0]),
-    (0.18, [38.0, 110.0, 214.0]),
-    (0.38, [32.0, 178.0, 196.0]),
-    (0.55, [92.0, 204.0, 120.0]),
-    (0.72, [246.0, 214.0, 64.0]),
-    (0.86, [246.0, 142.0, 36.0]),
-    (1.0, [222.0, 46.0, 38.0]),
+/// EI-HEAT-1H, a one-hue sequential ramp for stress fields: OKLCH hue 40 deg held constant, lightness
+/// falling monotonically from 0.956 (near zero) to 0.370 (at the cap) in even steps, chroma at 0.9 of
+/// the sRGB gamut limit (at most 0.17). It replaces the rainbow FIELD_RAMP ramp of v2.4.1, whose
+/// lightness peaked mid-scale (yellow) and read mid-range stress as hot spots; form now comes from the
+/// flatter cover light and the crease lines.
+const FIELD_RAMP: [(f64, [f64; 3]); 8] = [
+    (0.0, [254.0, 236.0, 230.0]),
+    (1.0 / 7.0, [252.0, 215.0, 202.0]),
+    (2.0 / 7.0, [250.0, 180.0, 155.0]),
+    (3.0 / 7.0, [248.0, 140.0, 101.0]),
+    (4.0 / 7.0, [228.0, 101.0, 53.0]),
+    (5.0 / 7.0, [190.0, 75.0, 29.0]),
+    (6.0 / 7.0, [147.0, 56.0, 20.0]),
+    (1.0, [107.0, 39.0, 12.0]),
 ];
 const MASKED: [u8; 3] = [178, 182, 188];
 const WHITE: [u8; 3] = [255, 255, 255];
@@ -469,7 +473,7 @@ fn hero(a: &Args) -> Res<()> {
     let mut cover_alpha: Option<Vec<f64>> = None;
     let mut outputs = Vec::new();
     for (key, vals) in &layers {
-        let colors: Vec<[u8; 3]> = owner.iter().map(|o| match o.and_then(|k| vals[k]) { Some(v) => ramp(&BRILLIANT, v), None => MASKED }).collect();
+        let colors: Vec<[u8; 3]> = owner.iter().map(|o| match o.and_then(|k| vals[k]) { Some(v) => ramp(&FIELD_RAMP, v), None => MASKED }).collect();
         let r = appearance::render(&lifted, &normals, &colors, settings)?;
         if crease_alpha.is_none() {
             let mask = crease_mask(&edges, cam, layer_w, layer_h, &r);
@@ -543,12 +547,12 @@ fn hero(a: &Args) -> Res<()> {
     }
     // Colorbar and badge.
     let (bx, by, bw, bh) = (40.0, 44.0, 440.0, 22.0);
-    svg += "<defs><linearGradient id=\"brilliant\" x1=\"0\" x2=\"1\" y1=\"0\" y2=\"0\">";
-    for (t, c) in BRILLIANT {
+    svg += "<defs><linearGradient id=\"field-ramp\" x1=\"0\" x2=\"1\" y1=\"0\" y2=\"0\">";
+    for (t, c) in FIELD_RAMP {
         svg += &format!("<stop offset=\"{t}\" stop-color=\"rgb({},{},{})\"/>", c[0], c[1], c[2]);
     }
     svg += "</linearGradient></defs>\n";
-    svg += &format!("<rect x=\"{bx}\" y=\"{by}\" width=\"{bw}\" height=\"{bh}\" fill=\"url(#brilliant)\" stroke=\"#132D3B\" stroke-width=\"1.2\"/>\n<text x=\"{bx}\" y=\"{:.0}\" font-family=\"TeX Gyre Heros\" font-size=\"20\" fill=\"#132D3B\">0</text>\n<text x=\"{:.0}\" y=\"{:.0}\" text-anchor=\"end\" font-family=\"TeX Gyre Heros\" font-size=\"20\" fill=\"#132D3B\">&#8805; P{pct} of each test</text>\n<rect x=\"{:.0}\" y=\"{:.0}\" width=\"22\" height=\"22\" fill=\"rgb({},{},{})\" stroke=\"#132D3B\" stroke-width=\"1.2\"/>\n<text x=\"{:.0}\" y=\"{:.0}\" font-family=\"TeX Gyre Heros\" font-size=\"20\" fill=\"#132D3B\">masked by the producer</text>\n",
+    svg += &format!("<rect x=\"{bx}\" y=\"{by}\" width=\"{bw}\" height=\"{bh}\" fill=\"url(#field-ramp)\" stroke=\"#132D3B\" stroke-width=\"1.2\"/>\n<text x=\"{bx}\" y=\"{:.0}\" font-family=\"TeX Gyre Heros\" font-size=\"20\" fill=\"#132D3B\">0</text>\n<text x=\"{:.0}\" y=\"{:.0}\" text-anchor=\"end\" font-family=\"TeX Gyre Heros\" font-size=\"20\" fill=\"#132D3B\">&#8805; P{pct} of each test</text>\n<rect x=\"{:.0}\" y=\"{:.0}\" width=\"22\" height=\"22\" fill=\"rgb({},{},{})\" stroke=\"#132D3B\" stroke-width=\"1.2\"/>\n<text x=\"{:.0}\" y=\"{:.0}\" font-family=\"TeX Gyre Heros\" font-size=\"20\" fill=\"#132D3B\">masked by the producer</text>\n",
         by + bh + 24.0, bx + bw, by + bh + 24.0, bx, by + bh + 38.0, MASKED[0], MASKED[1], MASKED[2], bx + 32.0, by + bh + 56.0);
     svg += &format!("<g transform=\"translate({:.0},{:.0})\"><rect width=\"470\" height=\"166\" rx=\"10\"", width as f64 - 500.0, height as f64 - 196.0);
     svg += &format!(" fill=\"#ffffff\" stroke=\"#132D3B\" stroke-width=\"2.5\"/>\n<text x=\"20\" y=\"38\" font-family=\"TeX Gyre Heros\" font-size=\"25\" fill=\"#132D3B\">W_ULTRALIGHT_v1 fitness</text>\n<text x=\"20\" y=\"108\" font-family=\"TeX Gyre Heros\" font-weight=\"bold\" font-size=\"68\" fill=\"#132D3B\">{score:.2}</text>\n<text x=\"222\" y=\"108\" font-family=\"TeX Gyre Heros\" font-size=\"30\" fill=\"#132D3B\">/ 100</text>\n<text x=\"20\" y=\"146\" font-family=\"TeX Gyre Heros\" font-size=\"22\" fill=\"#007E87\">Surface-tension pocket smoothing</text></g>\n");
@@ -564,7 +568,7 @@ fn hero(a: &Args) -> Res<()> {
         "envelope_layer": {"definition": "pointwise maximum of the percentile-normalized unit-load layers", "of": ENVELOPE_OF},
         "association": "each CAD face takes the stored value of the D1 plate triangle containing its centroid (x, y); no interpolation or new solve",
         "unmapped_faces": unmapped,
-        "colormap": {"stops_srgb": BRILLIANT.iter().map(|(t, c)| json!({"t": t, "rgb": c})).collect::<Vec<_>>(), "masked_rgb": MASKED},
+        "colormap": {"stops_srgb": FIELD_RAMP.iter().map(|(t, c)| json!({"t": t, "rgb": c})).collect::<Vec<_>>(), "masked_rgb": MASKED},
         "camera": camera_json(cam), "tilt_deg": tilt, "z_exaggeration": exaggeration,
         "lighting": {"direction_camera": light.direction, "ambient": light.ambient, "diffuse": light.diffuse, "specular": light.specular, "shininess": light.shininess},
         "crease_lines": {"dihedral_deg_over": crease_deg, "edges": edges.len(), "depth_tested": true, "strength": 0.62},
@@ -708,7 +712,8 @@ fn cover(a: &Args) -> Res<()> {
     let inset_cam = Camera { rotation: rot, scale: zoom * scale, offset: [inset_w as f64 / 2.0 - zoom * scale * q[0], inset_h as f64 / 2.0 + zoom * scale * q[1]] };
     let centre_px = [cam.offset[0] + q[0] * scale, cam.offset[1] - q[1] * scale];
     let locator = [centre_px[0] - inset_w as f64 / zoom / 2.0, centre_px[1] - inset_h as f64 / zoom / 2.0, inset_w as f64 / zoom, inset_h as f64 / zoom];
-    let light = Lighting { direction: [-0.72, 0.58, 0.38], ambient: 0.22, diffuse: 0.78, specular: 0.14, shininess: 40 };
+    // flatter than v2.4.1 (0.22 / 0.78 / 0.14) so the shaded face colour stays on the ramp key
+    let light = Lighting { direction: [-0.72, 0.58, 0.38], ambient: 0.62, diffuse: 0.38, specular: 0.04, shininess: 40 };
     let mut stats = Vec::new();
     let mut outputs = Vec::new();
     for ((name, v), lifted) in variants.iter().zip(&lifted) {
@@ -728,7 +733,7 @@ fn cover(a: &Args) -> Res<()> {
         let total: f64 = pairs.iter().map(|p| p.1).sum();
         let all: f64 = areas.iter().sum();
         let owner: Vec<Option<usize>> = v.mesh.triangles().iter().map(|t| loc.locate([(t[0][0] + t[1][0] + t[2][0]) / 3.0, (t[0][1] + t[1][1] + t[2][1]) / 3.0])).collect();
-        let colors: Vec<[u8; 3]> = owner.iter().map(|o| match o.and_then(field) { Some(x) => ramp(&BRILLIANT, x / cap), None => MASKED }).collect();
+        let colors: Vec<[u8; 3]> = owner.iter().map(|o| match o.and_then(field) { Some(x) => ramp(&FIELD_RAMP, x / cap), None => MASKED }).collect();
         stats.push(json!({"variant": name, "run": v.run["name"], "p50_mpa": weighted_percentile(&pairs, 50.0), "p99_mpa": weighted_percentile(&pairs, 99.0),
             "peak_mpa": pairs.iter().map(|p| p.0).fold(0.0, f64::max), "saturated_area_fraction": pairs.iter().filter(|p| p.0 >= cap).map(|p| p.1).sum::<f64>() / total.max(1e-300),
             "masked_area_fraction": 1.0 - total / all, "cad_faces": owner.len(), "unmapped_faces": owner.iter().filter(|o| o.is_none()).count()}));
@@ -760,12 +765,12 @@ fn cover(a: &Args) -> Res<()> {
         svg += &format!("  <image xlink:href=\"inset-{name}.png\" x=\"{ix}\" y=\"{iy}\" width=\"{inset_w}\" height=\"{inset_h}\"/>\n  <rect x=\"{ix}\" y=\"{iy}\" width=\"{inset_w}\" height=\"{inset_h}\" fill=\"none\" stroke=\"#132D3B\" stroke-width=\"3\"/>\n  <rect x=\"{:.0}\" y=\"{:.0}\" width=\"300\" height=\"40\" fill=\"#ffffff\"/>\n  <text x=\"{:.0}\" y=\"{:.0}\" font-family=\"TeX Gyre Heros\" font-size=\"26\" fill=\"#132D3B\">Isogrid pockets, 2.5x</text>\n", ix + 3.0, iy + 3.0, ix + 12.0, iy + 33.0);
         // Colour key.
         let (kx, ky, kw, kh) = (40.0, 56.0, 640.0, 26.0);
-        svg += "  <defs><linearGradient id=\"brilliant\" x1=\"0\" x2=\"1\" y1=\"0\" y2=\"0\">";
-        for (t, c) in BRILLIANT {
+        svg += "  <defs><linearGradient id=\"field-ramp\" x1=\"0\" x2=\"1\" y1=\"0\" y2=\"0\">";
+        for (t, c) in FIELD_RAMP {
             svg += &format!("<stop offset=\"{t}\" stop-color=\"rgb({},{},{})\"/>", c[0], c[1], c[2]);
         }
         svg += "</linearGradient></defs>\n";
-        svg += &format!("  <text x=\"{kx}\" y=\"{:.0}\" font-family=\"TeX Gyre Heros\" font-size=\"29\" fill=\"#132D3B\">Plate von Mises envelope of the four load cases, MPa</text>\n  <rect x=\"{kx}\" y=\"{ky}\" width=\"{kw}\" height=\"{kh}\" fill=\"url(#brilliant)\" stroke=\"#132D3B\" stroke-width=\"1.2\"/>\n", ky - 10.0);
+        svg += &format!("  <text x=\"{kx}\" y=\"{:.0}\" font-family=\"TeX Gyre Heros\" font-size=\"29\" fill=\"#132D3B\">Plate von Mises envelope of the four load cases, MPa</text>\n  <rect x=\"{kx}\" y=\"{ky}\" width=\"{kw}\" height=\"{kh}\" fill=\"url(#field-ramp)\" stroke=\"#132D3B\" stroke-width=\"1.2\"/>\n", ky - 10.0);
         for t in &ticks {
             let x = kx + kw * t / cap;
             svg += &format!("  <line x1=\"{x:.1}\" y1=\"{:.0}\" x2=\"{x:.1}\" y2=\"{:.0}\" stroke=\"#132D3B\" stroke-width=\"1.2\"/>\n  <text x=\"{x:.1}\" y=\"{:.0}\" text-anchor=\"middle\" font-family=\"TeX Gyre Heros\" font-size=\"26\" fill=\"#132D3B\">{t:.0}</text>\n", ky + kh, ky + kh + 7.0, ky + kh + 33.0);
@@ -797,7 +802,7 @@ fn cover(a: &Args) -> Res<()> {
             "masked": "exactly zero or non-finite: the producer's solid-tip zone (radius 4 mm), assessed by the 3D solid-tip test"},
         "association": "each CAD face takes the stored value of its own run's D1 plate triangle containing its centroid (x, y); no interpolation or new solve",
         "statistics": stats,
-        "colormap": {"stops_srgb": BRILLIANT.iter().map(|(t, c)| json!({"t": t, "rgb": c})).collect::<Vec<_>>(), "masked_rgb": MASKED},
+        "colormap": {"stops_srgb": FIELD_RAMP.iter().map(|(t, c)| json!({"t": t, "rgb": c})).collect::<Vec<_>>(), "masked_rgb": MASKED},
         "camera": camera_json(cam), "framed_on": "both exports, into the box", "box_px": bx, "tilt_deg": tilt, "z_exaggeration": exaggeration,
         "inset": {"zoom": zoom, "at_px": inset_xy, "centre_mm": [inset_at[0], inset_at[1], 0.0], "size_px": [inset_w, inset_h], "locator_px": locator, "camera": camera_json(inset_cam)},
         "lighting": {"direction_camera": light.direction, "ambient": light.ambient, "diffuse": light.diffuse, "specular": light.specular, "shininess": light.shininess},
