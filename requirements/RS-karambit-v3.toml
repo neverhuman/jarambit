@@ -151,6 +151,5 @@ balance = 0.10
 
 [solver]
 stage2_primary = "faer_sparse_cholesky"
-stage2_gpu_experimental = "gpu_cg_jacobi_true_residual_uncalled"
 true_residual_tol = 1e-10
 fail_closed = true

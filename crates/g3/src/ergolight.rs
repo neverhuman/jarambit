@@ -104,6 +104,29 @@ fn round_n(v: f64, digits: i32) -> f64 {
     (v * p).round() / p
 }
 
+fn ser_f64_inf<S: serde::Serializer>(v: &f64, s: S) -> Result<S::Ok, S::Error> {
+    if v.is_infinite() && v.is_sign_positive() {
+        s.serialize_str("inf")
+    } else if v.is_infinite() && v.is_sign_negative() {
+        s.serialize_str("-inf")
+    } else {
+        s.serialize_f64(*v)
+    }
+}
+
+fn de_f64_inf<'de, D: serde::Deserializer<'de>>(d: D) -> Result<f64, D::Error> {
+    let val = Value::deserialize(d)?;
+    if let Some(f) = val.as_f64() {
+        Ok(f)
+    } else if val.as_str() == Some("inf") {
+        Ok(f64::INFINITY)
+    } else if val.as_str() == Some("-inf") {
+        Ok(f64::NEG_INFINITY)
+    } else {
+        Err(serde::de::Error::custom("expected f64 or \"inf\""))
+    }
+}
+
 /// Complete strongly-typed measurement vector for `W_ERGOLIGHT_v1` (real solver keys, no silent defaults).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ErgolightInputs {
@@ -124,10 +147,15 @@ pub struct ErgolightInputs {
     pub hm_twist_sf: f64,
     pub hm_spine_sf: f64,
     pub fat_sf: f64,
+    #[serde(serialize_with = "ser_f64_inf", deserialize_with = "de_f64_inf")]
     pub max_apex_mm: f64,
+    #[serde(serialize_with = "ser_f64_inf", deserialize_with = "de_f64_inf")]
     pub max_half_angle_deg: f64,
+    #[serde(serialize_with = "ser_f64_inf", deserialize_with = "de_f64_inf")]
     pub t_0p25_mm: f64,
+    #[serde(serialize_with = "ser_f64_inf", deserialize_with = "de_f64_inf")]
     pub t_1p00_mm: f64,
+    #[serde(serialize_with = "ser_f64_inf", deserialize_with = "de_f64_inf")]
     pub t_2p00_mm: f64,
     pub point_monotonic: bool,
     pub grip_sf_min: f64,
@@ -151,12 +179,20 @@ pub struct ErgolightInputs {
     pub choil_depth_mm: f64,
     pub mid_depth_mm: f64,
     pub station_err_mm: f64,
+    #[serde(
+        rename = "L_g_mm",
+        alias = "l_g_mm",
+        serialize_with = "ser_f64_inf",
+        deserialize_with = "de_f64_inf"
+    )]
     pub l_g_mm: f64,
     pub guard_h_mm: f64,
     pub tex_amp_mm: f64,
     pub tex_crest_r_mm: f64,
     pub com_to_index_mm: f64,
+    #[serde(rename = "spin_I_g_mm2", alias = "spin_i_g_mm2")]
     pub spin_i_g_mm2: f64,
+    #[serde(rename = "spin_I_ref_g_mm2", alias = "spin_i_ref_g_mm2")]
     pub spin_i_ref_g_mm2: f64,
 }
 
@@ -399,6 +435,21 @@ pub fn score_ergolight_map(m: &Map<String, Value>) -> Result<Value, String> {
         }
         Ok(v)
     };
+    let req_f64_or_inf_sentinel = |k: &str| -> Result<f64, String> {
+        let val = m
+            .get(k)
+            .ok_or_else(|| format!("missing required key '{k}'"))?;
+        if val.as_str() == Some("inf") {
+            return Ok(f64::INFINITY);
+        }
+        let v = val
+            .as_f64()
+            .ok_or_else(|| format!("non-numeric required key '{k}'"))?;
+        if !v.is_finite() {
+            return Err(format!("non-finite value for required key '{k}'"));
+        }
+        Ok(v)
+    };
     let req_bool = |k: &str| -> Result<bool, String> {
         m.get(k)
             .and_then(|v| v.as_bool())
@@ -422,11 +473,11 @@ pub fn score_ergolight_map(m: &Map<String, Value>) -> Result<Value, String> {
         hm_twist_sf: req_f64("hm_twist_sf")?,
         hm_spine_sf: req_f64("hm_spine_sf")?,
         fat_sf: req_f64("fat_sf")?,
-        max_apex_mm: req_f64("max_apex_mm")?,
-        max_half_angle_deg: req_f64("max_half_angle_deg")?,
-        t_0p25_mm: req_f64("t_0p25_mm")?,
-        t_1p00_mm: req_f64("t_1p00_mm")?,
-        t_2p00_mm: req_f64("t_2p00_mm")?,
+        max_apex_mm: req_f64_or_inf_sentinel("max_apex_mm")?,
+        max_half_angle_deg: req_f64_or_inf_sentinel("max_half_angle_deg")?,
+        t_0p25_mm: req_f64_or_inf_sentinel("t_0p25_mm")?,
+        t_1p00_mm: req_f64_or_inf_sentinel("t_1p00_mm")?,
+        t_2p00_mm: req_f64_or_inf_sentinel("t_2p00_mm")?,
         point_monotonic: req_bool("point_monotonic")?,
         grip_sf_min: req_f64("grip_sf_min")?,
         watertight: req_bool("watertight")?,
@@ -447,7 +498,7 @@ pub fn score_ergolight_map(m: &Map<String, Value>) -> Result<Value, String> {
         choil_depth_mm: req_f64("choil_depth_mm")?,
         mid_depth_mm: req_f64("mid_depth_mm")?,
         station_err_mm: req_f64("station_err_mm")?,
-        l_g_mm: req_f64("L_g_mm")?,
+        l_g_mm: req_f64_or_inf_sentinel("L_g_mm")?,
         guard_h_mm: req_f64("guard_h_mm")?,
         tex_amp_mm: req_f64("tex_amp_mm")?,
         tex_crest_r_mm: req_f64("tex_crest_r_mm")?,

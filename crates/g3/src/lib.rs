@@ -101,12 +101,36 @@ mod v1_identity_tests {
 
     #[test]
     fn v1_certification_identity_is_unchanged_from_origin_main() {
+        let policy_doc: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../assurance/testing/policy.json"
+        ))
+        .expect("parse assurance/testing/policy.json");
+        let expected_lock_sha = policy_doc["source_bundle"]["Cargo.lock"]
+            .as_str()
+            .expect("source_bundle.Cargo.lock in policy.json");
         let lock_sha = crate::sha256_bytes(include_bytes!("../../../Cargo.lock"));
         assert_eq!(
-            lock_sha,
-            "a7d57f542f3233c99e86bd0973f79ea894ce007c982fddf9bd5a30414035e41b",
-            "root Cargo.lock must remain byte-for-byte identical to origin/main"
+            lock_sha, expected_lock_sha,
+            "root Cargo.lock must match assurance/testing/policy.json"
         );
+        let manifest_doc: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../evidence/evolve_certifiable/manifest.json"
+        ))
+        .expect("parse evidence/evolve_certifiable/manifest.json");
+        let exports = manifest_doc["regeneration"]["exports"]
+            .as_array()
+            .expect("regeneration.exports array");
+        let expected_ctrl_id = exports
+            .iter()
+            .find(|e| e["id"].as_str() == Some("legal_genome"))
+            .and_then(|e| e["certificate_identity"].as_str())
+            .expect("legal_genome certificate_identity");
+        let expected_auto_id = exports
+            .iter()
+            .find(|e| e["id"].as_str() == Some("automatic"))
+            .and_then(|e| e["certificate_identity"].as_str())
+            .expect("automatic certificate_identity");
+
         let g = jarambit_crescent::genome::Genome::c4_seed(5.7);
         let id = jarambit_crescent::certification::identity(&g);
         println!("v1 certification::identity(c4_seed(5.7)) = {id}");
@@ -123,8 +147,7 @@ mod v1_identity_tests {
             jarambit_crescent::genome::Genome::from_csv(&ctrl_fields).expect("parse control_genome");
         let ctrl_id = jarambit_crescent::certification::identity(&g_ctrl);
         assert_eq!(
-            ctrl_id,
-            "b75d18a1f10d7d56510e07e08f31ae2cadd65787936835a9009f9be0842cf33a",
+            ctrl_id, expected_ctrl_id,
             "control_genome certificate_identity must match pinned evidence/evolve_certifiable/manifest.json"
         );
         let auto_csv = include_str!(
@@ -136,8 +159,7 @@ mod v1_identity_tests {
             jarambit_crescent::genome::Genome::from_csv(&auto_fields).expect("parse cert_pipeline_r01_p14_c02");
         let auto_id = jarambit_crescent::certification::identity(&g_auto);
         assert_eq!(
-            auto_id,
-            "87921e14f43ad64dc4dc2661067aa1a6ae470d76f11c628fab9911506c1cbc22",
+            auto_id, expected_auto_id,
             "cert_pipeline_r01_p14_c02 certificate_identity must match pinned evidence/evolve_certifiable/manifest.json"
         );
     }
@@ -148,9 +170,8 @@ mod v1_identity_tests {
         println!("G3 frozen decoder_sha256 = {dec_sha}");
         assert_eq!(dec_sha.len(), 64);
 
-        let path = "/home/ubuntu/jarambit_runs/handzone-ergo-20261024/final/v3/FA_best_overall/finalist.json";
-        let raw = std::fs::read_to_string(path).expect("read FA finalist.json");
-        let doc: serde_json::Value = serde_json::from_str(&raw).expect("parse FA finalist.json");
+        let raw = include_str!("../tests/fixtures/fa_best_overall_finalist.json");
+        let doc: serde_json::Value = serde_json::from_str(raw).expect("parse FA finalist.json");
 
         // 1. Decode 93-gene u vector in Rust and verify every physical parameter against Python p
         let u93: Vec<f64> = doc["u"]
@@ -292,24 +313,18 @@ mod v1_identity_tests {
         use crate::g3_qd::F075_SPIN_I_REF_G_MM2;
         use crate::g3_sdf::build_g3_sdf_from_params;
 
-        // Verify B6: F075_SPIN_I_REF_G_MM2 matches ref_f075/f075_reference.json
-        let ref_path =
-            "/home/ubuntu/jarambit_runs/handzone-ergo-20261024/ref_f075/f075_reference.json";
-        if let Ok(ref_raw) = std::fs::read_to_string(ref_path) {
-            let ref_doc: serde_json::Value =
-                serde_json::from_str(&ref_raw).expect("parse f075_reference.json");
-            let py_spin_ref = ref_doc["F075_SPIN_I_REF_G_MM2"].as_f64().unwrap();
-            assert!(
-                (F075_SPIN_I_REF_G_MM2 - py_spin_ref).abs() < 1e-6,
-                "F075_SPIN_I_REF_G_MM2 mismatch: Rust={F075_SPIN_I_REF_G_MM2} vs Py={py_spin_ref}"
-            );
-        }
+        // Verify B6: F075_SPIN_I_REF_G_MM2 matches tests/fixtures/f075_reference.json
+        let ref_raw = include_str!("../tests/fixtures/f075_reference.json");
+        let ref_doc: serde_json::Value =
+            serde_json::from_str(ref_raw).expect("parse f075_reference.json");
+        let py_spin_ref = ref_doc["F075_SPIN_I_REF_G_MM2"].as_f64().unwrap();
+        assert!(
+            (F075_SPIN_I_REF_G_MM2 - py_spin_ref).abs() < 1e-6,
+            "F075_SPIN_I_REF_G_MM2 mismatch: Rust={F075_SPIN_I_REF_G_MM2} vs Py={py_spin_ref}"
+        );
 
-        let path = "/home/ubuntu/jarambit_runs/handzone-ergo-20261024/parity/g3hz_parity_v1.json";
-        let Ok(raw) = std::fs::read_to_string(path) else {
-            return;
-        };
-        let doc: serde_json::Value = serde_json::from_str(&raw).expect("parse g3hz_parity_v1.json");
+        let raw = include_str!("../tests/fixtures/g3hz_parity_v1.json");
+        let doc: serde_json::Value = serde_json::from_str(raw).expect("parse g3hz_parity_v1.json");
         let cases = doc["cases"].as_array().expect("cases array");
         assert_eq!(cases.len(), 25);
 
@@ -479,12 +494,8 @@ mod v1_identity_tests {
         use crate::g3_genome::G3Genome;
         use crate::g3_qd::evaluate_ring_2p5d_extruded_tet10;
 
-        let path =
-            "/home/ubuntu/jarambit_runs/handzone-ergo-20261024/final/v3/FA_best_overall/finalist.json";
-        let Ok(raw) = std::fs::read_to_string(path) else {
-            return;
-        };
-        let doc: serde_json::Value = serde_json::from_str(&raw).expect("parse finalist.json");
+        let raw = include_str!("../tests/fixtures/fa_best_overall_finalist.json");
+        let doc: serde_json::Value = serde_json::from_str(raw).expect("parse finalist.json");
         let u93: Vec<f64> = doc["u"]
             .as_array()
             .unwrap()
@@ -546,13 +557,9 @@ mod v1_identity_tests {
         use crate::g3_qd::compute_finger_metrics;
         use crate::g3_sdf::build_g3_sdf_from_params;
 
-        let path =
-            "/home/ubuntu/jarambit_runs/handzone-ergo-20261024/parity/g3hz_parity_v3_draftc.json";
-        let Ok(raw) = std::fs::read_to_string(path) else {
-            return;
-        };
+        let raw = include_str!("../tests/fixtures/g3hz_parity_v3_draftc.json");
         let doc: serde_json::Value =
-            serde_json::from_str(&raw).expect("parse g3hz_parity_v3_draftc.json");
+            serde_json::from_str(raw).expect("parse g3hz_parity_v3_draftc.json");
         assert_eq!(doc["ergolight_draft"].as_str(), Some("c"));
         let cases = doc["cases"].as_array().expect("cases array");
         assert_eq!(cases.len(), 25);
@@ -801,25 +808,23 @@ mod v1_identity_tests {
                     meas.grip_sf_min
                 );
 
-                // S5-6: Production-path assertion (`build_g3_sdf(&g3, 0.40, true)`) of hand-zone AM mass
-                // from `d_am` with `x < 75.6` against `zones.ring/grip.am_g` on the 5 finalists (idx < 5)
-                if idx < 5 {
-                    let prod_grid = crate::g3_sdf::build_g3_sdf(&g3, 0.40, true);
-                    let (prod_ring_d_am_g, prod_grip_d_am_g, prod_hz_d_am_g) =
-                        prod_grid.production_handzone_d_am_masses(p_rust["x_t"]);
-                    let py_ring_am = c["masses"]["zones"]["ring"]["am_g"].as_f64().unwrap();
-                    let py_grip_am = c["masses"]["zones"]["grip"]["am_g"].as_f64().unwrap();
-                    let py_hz_75p6_am = py_ring_am + py_grip_am;
-                    let grip_d_am_rel = (prod_grip_d_am_g - py_grip_am).abs() / py_grip_am;
-                    let hz_d_am_rel = (prod_hz_d_am_g - py_hz_75p6_am).abs() / py_hz_75p6_am;
-                    println!(
-                        "    [prod d_am x<75.6 {name:<16}] ring_d_am={prod_ring_d_am_g:.2} (py={py_ring_am:.2}), grip_d_am={prod_grip_d_am_g:.2} (py={py_grip_am:.2}, rel={grip_d_am_rel:.4}), hz_d_am={prod_hz_d_am_g:.2} (py={py_hz_75p6_am:.2}, rel={hz_d_am_rel:.4})"
-                    );
-                    assert!(
-                        grip_d_am_rel <= 0.08 && hz_d_am_rel <= 0.08,
-                        "case {name}: production d_am hand-zone mass (x < 75.6) grip={prod_grip_d_am_g} vs Py={py_grip_am} (rel={grip_d_am_rel}), total={prod_hz_d_am_g} vs Py={py_hz_75p6_am} (rel={hz_d_am_rel})"
-                    );
-                }
+                // S5-6 / S6-3: Production-path assertion (`build_g3_sdf(&g3, 0.40, true)`) of hand-zone AM mass
+                // from `d_am` with `x < 75.6` against `zones.ring/grip.am_g` across all tested cases (finalists + randoms)
+                let prod_grid = crate::g3_sdf::build_g3_sdf(&g3, 0.40, true);
+                let (prod_ring_d_am_g, prod_grip_d_am_g, prod_hz_d_am_g) =
+                    prod_grid.production_handzone_d_am_masses(p_rust["x_t"]);
+                let py_ring_am = c["masses"]["zones"]["ring"]["am_g"].as_f64().unwrap();
+                let py_grip_am = c["masses"]["zones"]["grip"]["am_g"].as_f64().unwrap();
+                let py_hz_75p6_am = py_ring_am + py_grip_am;
+                let grip_d_am_rel = (prod_grip_d_am_g - py_grip_am).abs() / py_grip_am;
+                let hz_d_am_rel = (prod_hz_d_am_g - py_hz_75p6_am).abs() / py_hz_75p6_am;
+                println!(
+                    "    [prod d_am x<75.6 {name:<16}] ring_d_am={prod_ring_d_am_g:.2} (py={py_ring_am:.2}), grip_d_am={prod_grip_d_am_g:.2} (py={py_grip_am:.2}, rel={grip_d_am_rel:.4}), hz_d_am={prod_hz_d_am_g:.2} (py={py_hz_75p6_am:.2}, rel={hz_d_am_rel:.4})"
+                );
+                assert!(
+                    grip_d_am_rel <= 0.08 && hz_d_am_rel <= 0.08,
+                    "case {name}: production d_am hand-zone mass (x < 75.6) grip={prod_grip_d_am_g} vs Py={py_grip_am} (rel={grip_d_am_rel}), total={prod_hz_d_am_g} vs Py={py_hz_75p6_am} (rel={hz_d_am_rel})"
+                );
             }
         }
         println!(
@@ -1065,7 +1070,12 @@ mod v1_identity_tests {
                         continue;
                     }
                     let (t0, t1) = (thick(i, j), thick(i + 1, j));
-                    if t0 <= 0.0 || t1 <= 0.0 {
+                    if in_seam {
+                        assert!(
+                            t0 > 0.0 && t1 > 0.0,
+                            "S7-5: medial seam band (86..94 mm) must have no zero-thickness holes on sobol({p5_idx}, 5150) at x=({x0:.1},{x1:.1}), y={y:.1}"
+                        );
+                    } else if t0 <= 0.0 || t1 <= 0.0 {
                         continue;
                     }
                     let d_step = (t1 - t0).abs();
@@ -1104,5 +1114,141 @@ mod v1_identity_tests {
             r_short.inputs.grip_sf_min,
             r_long.inputs.grip_sf_min
         );
+
+        // 8. I5, I7, S8-2, S8-3: Verify strict CSV decoder_commit check, archive.jsonl re-scoring + "inf" sentinel,
+        //    and CvtMapElitesArchive self-check (positive and negative cases).
+        let csv_row = g_solid.to_csv_row();
+        assert!(G3Genome::from_csv_row_checked(&csv_row, "22bb8696").is_ok());
+        assert!(G3Genome::from_csv_row_checked(&csv_row, "deadbeef").is_err());
+
+        // S8-2: Serializing ErgolightInputs emits scorer keys (`L_g_mm`, `spin_I_g_mm2`, `spin_I_ref_g_mm2`)
+        // and `"inf"` for +infinity sentinels, and round-trips through `score_ergolight_map`.
+        let mut inp_inf = r_solid.inputs.clone();
+        inp_inf.max_apex_mm = f64::INFINITY;
+        inp_inf.max_half_angle_deg = f64::INFINITY;
+        let inp_val = serde_json::to_value(&inp_inf).expect("serialize ErgolightInputs");
+        assert_eq!(inp_val["max_apex_mm"].as_str(), Some("inf"));
+        assert_eq!(inp_val["max_half_angle_deg"].as_str(), Some("inf"));
+        assert!(inp_val.get("L_g_mm").is_some());
+        assert!(inp_val.get("spin_I_g_mm2").is_some());
+        assert!(inp_val.get("spin_I_ref_g_mm2").is_some());
+        let rescored_inf =
+            crate::ergolight::score_ergolight_map(inp_val.as_object().unwrap()).expect("rescore inf map");
+        assert_eq!(
+            rescored_inf["terms"]["gate_s_sharpness"]["s"].as_f64(),
+            Some(0.0)
+        );
+        let inp_solid_val = serde_json::to_value(&r_solid.inputs).unwrap();
+        let rescored_solid =
+            crate::ergolight::score_ergolight_map(inp_solid_val.as_object().unwrap()).expect("rescore solid map");
+        assert!(
+            (rescored_solid["score_100"].as_f64().unwrap() - r_solid.score.score_100).abs() < 1e-12
+        );
+        assert!(r_solid.tier.input_provenance()["measured"].is_array());
+
+        let mut arch_chk = crate::g3_qd::CvtMapElitesArchive::new(1024);
+        arch_chk.insert(g_solid.clone(), r_solid.clone());
+        assert!(arch_chk.verify_integrity().is_ok());
+        // S8-3 negative tests: tampered genome, tampered descriptor, or tampered decoder_sha256 must fail closed
+        let nid = *arch_chk.elites.keys().next().unwrap();
+        let mut arch_bad_g = arch_chk.clone();
+        arch_bad_g.elites.get_mut(&nid).unwrap().genome.u[0] =
+            (arch_bad_g.elites[&nid].genome.u[0] + 0.25).fract();
+        assert!(arch_bad_g.verify_integrity().is_err());
+        let mut arch_bad_d = arch_chk.clone();
+        arch_bad_d
+            .elites
+            .get_mut(&nid)
+            .unwrap()
+            .record
+            .descriptors
+            .mass_g += 50.0;
+        assert!(arch_bad_d.verify_integrity().is_err());
+        let mut arch_bad_sha = arch_chk.clone();
+        arch_bad_sha.decoder_sha256 = "0".repeat(64);
+        assert!(arch_bad_sha.verify_integrity().is_err());
+
+        // 9. P6 / S9-4: Verify Tier-2 solid-tip TET10 mesh convergence (full xs outline including exact tip_xy,
+        //    max area 0.4 mm^2 vs 0.15 mm^2 agreeing within 15%) across 2 fixture genomes.
+        let mut g_tip2 = g_solid.clone();
+        set_phys(&mut g_tip2, "blade_len", 82.0);
+        set_phys(&mut g_tip2, "hook_drop", 42.0);
+        set_phys(&mut g_tip2, "tip_reserve", 9.0);
+        for (case_idx, g_case) in [&g_solid, &g_tip2].into_iter().enumerate() {
+            let p_c = g_case.decode();
+            let blade_c = build_blade_profile_2d(&p_c);
+            let mut b_outer = Vec::with_capacity(blade_c.xs.len() * 2);
+            for i in 0..blade_c.xs.len() {
+                b_outer.push((blade_c.xs[i], blade_c.y_in[i]));
+            }
+            for i in (0..blade_c.xs.len()).rev() {
+                b_outer.push((blade_c.xs[i], blade_c.y_sp[i]));
+            }
+            let max_x = b_outer
+                .iter()
+                .map(|q| q.0)
+                .fold(f64::NEG_INFINITY, f64::max);
+            assert!(
+                (max_x - blade_c.tip_xy.0).abs() < 1e-9,
+                "P6 case {case_idx}: outline max_x {max_x} must equal blade.tip_xy.0 {}",
+                blade_c.tip_xy.0
+            );
+            let x0 = blade_c.x_tip - 32.0;
+            let y0 = blade_c.tip_xy.1 - 32.0;
+            let th_fn = |x: f64, y: f64| -> Option<f64> {
+                let (t, d2) =
+                    crate::g3_sdf::eval_blade_thickness_and_sdf2(&p_c, &blade_c, x, y);
+                (d2 <= 0.0 && t > 0.05).then_some(t)
+            };
+            let m_04 = jarambit_physics::fine::mesh_domain(&b_outer, &[], 0.4).expect("mesh 0.4");
+            let near_04 = m_04
+                .xy
+                .iter()
+                .filter(|q| (q.0 - blade_c.tip_xy.0).hypot(q.1 - blade_c.tip_xy.1) <= 2.0)
+                .count();
+            assert!(
+                near_04 >= 15,
+                "P6 case {case_idx}: expected >= 15 2D vertices within 2 mm tip patch at area 0.4, got {near_04}"
+            );
+            let res_04 = crate::g3_sandwich::solve_g3_solid_tet10_strict(
+                m_04.xy,
+                m_04.tris,
+                blade_c.tip_xy,
+                p_c["t_core"],
+                x0,
+                y0,
+                0.5,
+                130,
+                130,
+                &th_fn,
+                0,
+            )
+            .expect("solve_g3_solid_tet10_strict area 0.4");
+            let m_015 =
+                jarambit_physics::fine::mesh_domain(&b_outer, &[], 0.15).expect("mesh 0.15");
+            let res_015 = crate::g3_sandwich::solve_g3_solid_tet10_strict(
+                m_015.xy,
+                m_015.tris,
+                blade_c.tip_xy,
+                p_c["t_core"],
+                x0,
+                y0,
+                0.5,
+                130,
+                130,
+                &th_fn,
+                0,
+            )
+            .expect("solve_g3_solid_tet10_strict area 0.15");
+            let rel_diff = (res_04.sf_nodal_max - res_015.sf_nodal_max).abs()
+                / res_015.sf_nodal_max.max(1e-6);
+            assert!(
+                rel_diff <= 0.15,
+                "P6 case {case_idx}: solid_tip_sf area 0.4 ({:.4}) vs 0.15 ({:.4}) rel_diff {:.3} > 0.15",
+                res_04.sf_nodal_max,
+                res_015.sf_nodal_max,
+                rel_diff
+            );
+        }
     }
 }
