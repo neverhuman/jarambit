@@ -8,33 +8,41 @@ Supplement Figure~\ref{S-fig:population-latest} keeps the native population sepa
 
 Supplement Figure~\ref{S-fig:population-detail} adds directed tail detail: empirical Q90 through the actual retained maximum for native and historical higher-is-better fitness, and the actual minimum through Q10 for lower-is-better screening deficit. Cutoffs use $\lfloor p(n-1)\rfloor$ and include all boundary and favorable-extremum ties. Each panel reports its original-unit bounds and exact below/inside/above counts. The opposite tail remains in the full-range overview; its zero-exclusion claim does not apply to the detail selection. Separate per-run point and retained-best context views for Runs~2--11 reuse the same retained births, without connecting different runs into a shared trajectory. Their axes use each run's declared $L$ and key, rather than the pooled overview scale. These additional views add no observations or evidence of physical convergence.
 
-Figure~\ref{fig:all-runs} puts every \code{auto-evolve} run and evolution wave since 2026-10-17 on the canonical \code{W_ULTRALIGHT_v1}: \AllRunsIslands{} islands and waves on \AllRunsHosts{} hosts. Each of the \AllRunsStageTwo{} comparable retained Stage-2 assessments (\AllRunsStageTwoWaves{} from the 2026-10-17/19 waves, \AllRunsStageTwoCampaign{} from the 2026-10-18 island campaign, \AllRunsStageTwoContinuous{} from the continuous evolution running since 2026-10-21) is re-scored from its own scorecard and RS-v2 receipt; stored leaderboard values are not used. Re-assessing retained genomes with the current Stage-2 evaluator reproduces the 2026-10-17/18 scores exactly ($\AllRunsPreviousLeaderScore{}$ and $79.869405$), so those waves are comparable, whereas an early evaluator (\code{1e93e6f3}, 2026-10-16) overstates it: its four re-assessed genomes drop by \AllRunsInflationRange{} points (a stored \AllRunsInflatedStored{} re-assesses at \AllRunsInflatedReassessed{}). Its scorecards and those of a second 2026-10-16 evaluator matched to it by stored metrics, \AllRunsInflated{} in all, are counted but not plotted. The 2026-10-18 campaign lost the isogrid pockets, lattice and pierced-fuller windows of the 2026-10-17/18 leader ($\AllRunsPreviousLeaderScore{}$); the continuous evolution kept them but, until v2.3.1, forced every child's ring wall to at least $6\,\mathrm{mm}$ and peaked at $76.799579$. After v2.3.1 removed that floor and, in the same release, changed how seeds enter the Hall of Fame (the two changes were not separated), it overtook the leader on 2026-10-23 and reached \AllRunsLeaderScore{} (\AllRunsLeader{}, the design on the title page). The right panel summarises \AllRunsStageOne{} numeric Stage-1 screens as the best screen of each of \AllRunsRounds{} island rounds; the earlier waves' screens carry no such value. These are search observations under one scorer, not physical tests, and a cumulative best is monotone by construction. The per-birth view of native Run~5 and its definitions moved to Supplement Figure~\ref{S-fig:run5-gap}.
+Figure~\ref{fig:all-runs} puts every \code{auto-evolve} run and evolution wave since 2026-10-17 on the canonical \code{W_ULTRALIGHT_v1}: \AllRunsIslands{} islands and waves on \AllRunsHosts{} hosts. Each of the \AllRunsStageTwo{} comparable retained Stage-2 assessments (\AllRunsStageTwoWaves{} from the 2026-10-17/19 waves, \AllRunsStageTwoCampaign{} from the 2026-10-18 island campaign, \AllRunsStageTwoContinuous{} from the continuous evolution running since 2026-10-21) is re-scored from its own scorecard and RS-v2 receipt; stored leaderboard values are not used. Re-assessing retained genomes with the current Stage-2 evaluator reproduces the 2026-10-17/18 scores exactly ($\AllRunsPreviousLeaderScore{}$ and $79.869405$), so those waves are comparable, whereas an early evaluator (\code{1e93e6f3}, 2026-10-16) overstates it: its four re-assessed genomes drop by \AllRunsInflationRange{} points (a stored \AllRunsInflatedStored{} re-assesses at \AllRunsInflatedReassessed{}). Its scorecards and those of a second 2026-10-16 evaluator matched to it by stored metrics, \AllRunsInflated{} in all, are counted but not plotted. The 2026-10-18 campaign lost the isogrid pockets, lattice and pierced-fuller windows of the 2026-10-17/18 leader ($\AllRunsPreviousLeaderScore{}$); the continuous evolution kept them but, until v2.3.1, forced every child's ring wall to at least $6\,\mathrm{mm}$ and peaked at $76.799579$. After v2.3.1 removed that floor and, in the same release, changed how seeds enter the Hall of Fame (the two changes were not separated), it overtook the leader on 2026-10-23 and reached \AllRunsLeaderScore{} (\AllRunsLeader{}, the design on the title page). Supplement Figure~\ref{S-fig:all-runs-stage1} summarises \num{\AllRunsStageOne} numeric Stage-1 screens as the best screen of each of \AllRunsRounds{} island rounds; the earlier waves' screens carry no such value. These are search observations under one scorer, not physical tests, and a cumulative best is monotone by construction. The per-birth view of native Run~5 and its definitions moved to Supplement Figure~\ref{S-fig:run5-gap}.
 
-\begin{figure*}[t]
+\begin{figure}[t]
 \centering
 \begin{tikzpicture}
-\begin{groupplot}[group style={group size=2 by 1, horizontal sep=1.5cm},
-  width=0.5\textwidth, height=6.2cm, xlabel={UTC day, October 2026}, grid=major, grid style={gray!20},
-  tick label style={font=\footnotesize}, label style={font=\small}, title style={font=\small\bfseries},
-  legend style={font=\footnotesize, cells={anchor=west}, fill=white, fill opacity=0.85, text opacity=1}]
-\nextgroupplot[title={Stage 2: every retained assessment}, ylabel={$W_{\mathrm{ULTRALIGHT\_v1}}$ (canonical)}, legend pos=south east]
-\addplot[only marks, mark=triangle*, mark size=1.1pt, color=gray!70!black, opacity=0.6] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{0:0}] {allruns/stage2.dat};
-\addlegendentry{2026-10-17/19 waves}
-\addplot[only marks, mark=*, mark size=0.9pt, color=teal, opacity=0.55] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{1:1}] {allruns/stage2.dat};
-\addlegendentry{2026-10-18 island campaign}
-\addplot[only marks, mark=*, mark size=0.9pt, color=rust, opacity=0.6] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{2:2}] {allruns/stage2.dat};
-\addlegendentry{continuous since 2026-10-21}
-\addplot[thick, color=ink] table[x=day, y=best] {allruns/best.dat};
-\addlegendentry{cumulative best, all runs}
-\nextgroupplot[title={Stage 1: best screen of each island round}, ylabel={Stage-1 \code{W_ULTRALIGHT_v1}}]
-\addplot[only marks, mark=triangle*, mark size=1.1pt, color=gray!70!black, opacity=0.6] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{0:0}] {allruns/stage1-round.dat};
-\addplot[only marks, mark=*, mark size=0.9pt, color=teal, opacity=0.55] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{1:1}] {allruns/stage1-round.dat};
-\addplot[only marks, mark=*, mark size=0.9pt, color=rust, opacity=0.6] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{2:2}] {allruns/stage1-round.dat};
-\end{groupplot}
+\begin{axis}[width=\columnwidth, height=5.9cm,
+  font=\sffamily\fontsize{6.8}{8.2}\selectfont, every axis label/.append style={font=\sffamily\fontsize{7}{8.4}\selectfont, text=ink},
+  xmin=17, xmax=24.75, ymin=68, ymax=82.6, xtick={17,18,...,24}, ytick={68,70,...,80},
+  xlabel={UTC day, October 2026 (scorecard file time)}, ylabel={canonical \code{W_ULTRALIGHT_v1}, of 100},
+  ylabel style={yshift=-2pt}, xlabel style={yshift=2pt},
+  axis x line*=bottom, axis y line*=left, axis line style={draw=axisgray, line width=0.4pt},
+  tick style={draw=axisgray, line width=0.4pt}, major tick length=2pt, tick label style={text=slate},
+  xticklabel={\pgfmathprintnumber[assume math mode=true]{\tick}}, yticklabel={\pgfmathprintnumber[assume math mode=true]{\tick}},
+  ymajorgrids, grid style={draw=gridgray, line width=0.3pt},
+  legend style={at={(0,1.0)}, anchor=south west, draw=none, fill=none, font=\sffamily\fontsize{6.6}{8}\selectfont, text=ink,
+    legend columns=2, column sep=5pt, /tikz/every even column/.append style={column sep=6pt}},
+  legend cell align=left, clip=false]
+\addplot[only marks, mark=*, mark size=0.8pt, mark options={fill=seriesA, draw=white, line width=0.12pt}, fill opacity=0.75, draw opacity=0.75]
+  table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{0:0}] {allruns/stage2.dat};
+\addlegendentry{waves 17--19 Oct (\AllRunsStageTwoWaves)}
+\addplot[only marks, mark=*, mark size=0.8pt, mark options={fill=seriesB, draw=white, line width=0.12pt}, fill opacity=0.75, draw opacity=0.75]
+  table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{1:1}] {allruns/stage2.dat};
+\addlegendentry{island campaign 18 Oct (\AllRunsStageTwoCampaign)}
+\addplot[only marks, mark=*, mark size=0.8pt, mark options={fill=seriesC, draw=white, line width=0.12pt}, fill opacity=0.75, draw opacity=0.75]
+  table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{2:2}] {allruns/stage2.dat};
+\addlegendentry{continuous from 21 Oct (\num{\AllRunsStageTwoContinuous})}
+\addplot[ink, line width=0.9pt] table[x=day, y=best] {allruns/best.dat};
+\addlegendentry{best so far, all runs}
+\node[font=\sffamily\fontsize{6.4}{7.6}\selectfont, text=ink, anchor=south east, inner sep=1pt, align=right] at (axis cs:24.74,80.85) {\textbf{\AllRunsLeaderScore}\\[-1pt]{\color{slate}\AllRunsLeader}};
+\node[font=\sffamily\fontsize{6.2}{7.4}\selectfont, text=slate, anchor=north west, inner sep=1pt] at (axis cs:19.45,80.05) {\AllRunsPreviousLeaderScore{} led 18--23 Oct};
+\end{axis}
 \end{tikzpicture}
-\caption{Every \code{auto-evolve} run and evolution wave on every host since 2026-10-17 (\AllRunsIslands{} islands and waves, \AllRunsHosts{} hosts). Left: all \AllRunsStageTwo{} comparable retained Stage-2 assessments, each re-scored with the canonical \code{W_ULTRALIGHT_v1} from its own scorecard and RS-v2 receipt and placed at the scorecard's file time; the dark step is the best score over all runs so far, ending at \AllRunsLeaderScore{} (\AllRunsLeader{}). \AllRunsInflated{} scorecards from the 2026-10-16 evaluators are not plotted (the re-assessed ones overstate the score). Right: the best Stage-1 screen score of each of \AllRunsRounds{} island rounds (\AllRunsStageOne{} numeric screens). Stage-1 and Stage-2 values are different stages (for the same design the Stage-2 value is typically 2--4 points higher) and are not compared. No point is a physical test or a qualification. Data and census: \code{docs/paper/allruns/}.}
+\caption{Every comparable Stage-2 assessment, one canonical scorer: all \num{\AllRunsStageTwo} retained Stage-2 assessments of every \code{auto-evolve} run and evolution wave since 2026-10-17 (\AllRunsIslands{} islands and waves, \AllRunsHosts{} hosts), each re-scored with \code{W_ULTRALIGHT_v1} from its own scorecard and RS-v2 receipt and placed at the scorecard's file time. The dark line is the best score so far over all runs, non-decreasing by construction, ending at \AllRunsLeaderScore{} (\AllRunsLeader{}). \AllRunsInflated{} scorecards from the 2026-10-16 evaluators are not plotted (the re-assessed ones overstate the score). Stage-1 screens are in Supplement Figure~\ref{S-fig:all-runs-stage1}. Search observations, not physical tests or qualification. Data and census: \code{docs/paper/allruns/}.}
 \label{fig:all-runs}
-\end{figure*}
+\end{figure}
 
 \subsection{Recorded Ancestry Enables a Later-Assessment Disagreement to Be Inspected}
 The historical Run~1 retains \num{\BirthCount} births, recorded within-run parent links, $2176$ island-slot memberships and $12$ migration events. Parent identifiers for external seed ancestry are not recorded. The genealogy exposes reuse of ancestors rather than a simple branching tree. Its saved FEM-status categories distinguish \num{\FemComplete} complete records from $529$ not evaluated; the latter are not failed solves.

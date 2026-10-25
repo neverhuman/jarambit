@@ -79,3 +79,23 @@ sh docs/paper/reproduce.sh check
 \caption{Reporting entry points, without invoking a new search, CAD export or mechanical solve. The explicit \code{--full-zstd} flag requests decoding of every compressed segment. The artifact audit reads retained inputs and checks reporting consistency. The Makefile compiles figures/PDFs and writes build products.}
 \label{fig:reproduction-commands}
 \end{figure*}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.62\textwidth, height=6cm, xlabel={UTC day, October 2026}, ylabel={Stage-1 \code{W_ULTRALIGHT_v1}},
+  font=\sffamily\fontsize{8}{9.6}\selectfont, axis x line*=bottom, axis y line*=left, axis line style={draw=axisgray},
+  tick style={draw=axisgray}, tick label style={text=slate}, ymajorgrids, grid style={draw=gridgray, line width=0.3pt},
+  xticklabel={\pgfmathprintnumber[assume math mode=true]{\tick}}, yticklabel={\pgfmathprintnumber[assume math mode=true]{\tick}},
+  legend style={draw=none, fill=none, font=\sffamily\fontsize{7.4}{9}\selectfont, cells={anchor=west}}, legend pos=south east]
+\addplot[only marks, mark=*, mark size=0.9pt, mark options={fill=seriesA, draw=white, line width=0.12pt}] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{0:0}] {allruns/stage1-round.dat};
+\addlegendentry{waves 17--19 Oct}
+\addplot[only marks, mark=*, mark size=0.9pt, mark options={fill=seriesB, draw=white, line width=0.12pt}] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{1:1}] {allruns/stage1-round.dat};
+\addlegendentry{island campaign 18 Oct}
+\addplot[only marks, mark=*, mark size=0.9pt, mark options={fill=seriesC, draw=white, line width=0.12pt}] table[x=day, y=score, restrict expr to domain={\thisrow{campaign}}{2:2}] {allruns/stage1-round.dat};
+\addlegendentry{continuous from 21 Oct}
+\end{axis}
+\end{tikzpicture}
+\caption{Stage-1 companion to main-paper Figure~\ref{M-fig:all-runs}: the best Stage-1 screen score of each of \AllRunsRounds{} island rounds (\num{\AllRunsStageOne} numeric screens); the earlier waves' screens carry no such value. Stage-1 and Stage-2 values are different stages (for the same design the Stage-2 value is typically 2--4 points higher) and are not compared. Data: \code{docs/paper/allruns/stage1-round.dat}.}
+\label{fig:all-runs-stage1}
+\end{figure}
