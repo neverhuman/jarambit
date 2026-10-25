@@ -2,13 +2,29 @@
 
 Jarambit is a computational design research system linking a geometric representation, retained search observations, and candidate-specific numerical evidence. This retrospective study asks what readers can reconstruct from those links and where evidence is missing.
 
-[Paper A, as exported](docs/paper/main.pdf) · [Paper B, pocket-smoothed](docs/paper/main-smoothed.pdf) · [Mesh-smoothing ladder, 7 levels](docs/paper/smoothing-ladder.pdf) · [Standalone supplement](docs/paper/supplement.pdf) · [Reconstruction guide](docs/paper/README.md) · [Evidence crosswalk](docs/paper/CROSSWALK_SUPPLEMENT.md) · [Test atlas](docs/tests/README.md) · [Architecture](TECHNOLOGY_MAP.md)
+[Paper (pocket-smoothed design)](docs/paper/main-smoothed.pdf) · [Mesh-smoothing ladder, 7 levels](docs/paper/smoothing-ladder.pdf) · [Standalone supplement](docs/paper/supplement.pdf) · [Reconstruction guide](docs/paper/README.md) · [Evidence crosswalk](docs/paper/CROSSWALK_SUPPLEMENT.md) · [Test atlas](docs/tests/README.md) · [Architecture](TECHNOLOGY_MAP.md)
 
-| A: as exported | B: pocket-smoothed (r = 0.75 mm), re-assessed |
+## Current design: G3 ergonomic, hollow-AM cohort (computational, in progress)
+
+[![G3 pilot candidate hz4i012_g00085_4cdfea55: anodized titanium hand zone with a smooth, finger-grooved grip, rounded 8 mm ring lip and a double-edged blade](docs/g3/g3-hero.jpg)](crates/g3/README.md)
+
+*`hz4i012_g00085_4cdfea55`, the leading G3 candidate: `W_ERGOLIGHT_v1` draft d **78.11** of 100, **52.3 g** Ti-6Al-4V as scored, 3D solid-tip safety factor 0.51, comfort factor E = 0.977. Smooth, finger-grooved grip with no sharp hand-zone edges (measured: smallest edge radius 2.7 mm against the rules' 2.0 mm, section corners ≥ 4.1 mm, finger grooves ≥ 8.9 mm, no step at the ring junction), a rounded 8 mm lip on a 24.9 mm ring bore, and a double-edged blade; hand zone anodized (blue), blade bare. It is a pilot candidate: computational, not qualified and not built. A fresh draft-d cohort (16 islands × 10,000 evaluations from a quasi-random Sobol start, running now) will replace it.*
+
+**Where the cavities are.** The part is printed hollow: a ~0.9 mm skin over an internal TPMS lattice with a central web and powder-drain ports. Below, the outer shell is drawn as translucent glass and every internal cavity in solid orange; measured from the exported meshes, the grip is **67 %** hollow, the guard/neck **28 %**, the blade body **27 %** (behind solid edges and tip), while the ring itself is solid (the lattice starts at the ring-to-grip junction); **53.5 %** of the envelope overall.
+
+[![X-ray view: translucent outer shell with the internal cavity volume in orange, filling the grip, guard and most of the blade body; the ring, the cutting edges and the tip are solid](docs/g3/g3-cavities-xray.jpg)](docs/g3/RENDERS.md)
+
+| Lengthwise section through the grip centre-line | Cross-section at the palm swell |
 |---|---|
-| [![ec3i042_r01_p10_c56 as exported, W_ULTRALIGHT_v1 fitness 80.62](docs/paper/figures/cover/cover-unsmoothed.png)](docs/paper/main.pdf) | [![ec3i042_r01_p10_c56 after surface-tension pocket smoothing at r = 0.75 mm, re-assessed fitness 80.56](docs/paper/figures/cover/cover-smoothed.png)](docs/paper/main-smoothed.pdf) |
+| [![Lengthwise cutaway: the grip is a hollow shell filled with lattice cells around a central web; ribbed cells in the guard; solid ring](docs/g3/g3-section-lengthwise.jpg)](docs/g3/RENDERS.md) | [![Cross-section of the grip at the palm swell: thin outer skin, central horizontal web, lattice struts and drain holes](docs/g3/g3-section-cross.jpg)](docs/g3/RENDERS.md) |
 
-*Best evolved design by `W_ULTRALIGHT_v1`, `ec3i042_r01_p10_c56` (3D mass `83.55 g`, not qualified), with two-sided isogrid pockets, lattice, relief and pierced-fuller windows. It comes from the continuous evolution of 2026-10-24, in an island seeded with `ec1i012_r04_p10_c101` (80.594628), a descendant of the earlier best design `w406t3_r01_p10_c16` (80.299390). **A**, as exported: `F = 80.623796` of 100 (battery 13/18), first of the 1,761 comparable retained assessments of every run since 2026-10-17; re-assessing it with the current evaluator reproduces that score. **B**, after surface-tension pocket smoothing at r = 0.75 mm inside the CAD export of the same genome, re-assessed by the full Stage-2 evaluator: `F = 80.561227` (battery 14/18), 0.062569 lower: lateral capacity, failure sequence and fatigue improve, and the 3D solid-tip safety factor falls. Each pocket's depth contours move by their own curvature (line tension) with its removed volume held constant (all but one 0.22 mm³ sliver), so chipped walls become clean while ribs keep their width; the design is a new STEP solid and keeps the 5-point CAD/B-rep objective. Colour is the plate-model von Mises envelope stored by each assessment (lateral, tip-pry, torsion and ring-pull load cases at the battery's floor loads), on one MPa scale for A and B, with a one-hue ramp (light = low, dark = high); grey marks the 4 mm tip zone that only the 3D solid-tip test covers. Oblique view at true thickness under soft light; shading shows the geometry, colour the stored response, and nothing is re-solved. Inset: isogrid pockets at 2.5×. [Selection record](docs/paper/figures/cover/winner-selection.v1.json) · [Stacked plate fields of B](docs/paper/figures/pocket/hero.png) · [Pocket-smoothing method and receipts](experiments/pocket-surface-tension-smoothing/README.md) · [Mesh-smoothing ladder, 7 levels](docs/paper/smoothing-ladder.pdf).*
+*Renders: Blender Cycles of the exported meshes exactly (Rust decoder at commit `8ccb16326f4e`, grid 0.2 mm, both meshes watertight); nothing is smoothed for display. Provenance, checksums and settings: [docs/g3/RENDERS.md](docs/g3/RENDERS.md).*
+
+## Published study: the v1 winner, pocket-smoothed
+
+[![ec3i042_r01_p10_c56 after surface-tension pocket smoothing at r = 0.75 mm, re-assessed fitness 80.56](docs/paper/figures/cover/cover-smoothed.png)](docs/paper/main-smoothed.pdf)
+
+*Published study design, `ec3i042_r01_p10_c56`, best by `W_ULTRALIGHT_v1` (3D mass `83.55 g`, not qualified): a flat Ti plate with two-sided isogrid pockets, after surface-tension pocket smoothing at r = 0.75 mm inside the CAD export, re-assessed by the full Stage-2 evaluator at `F = 80.561227` of 100 (battery 14/18). The smoothing rounds the pocket walls only; the plate's outer edges are as designed in v1, which is what the G3 cohort above replaces. Colour is the plate-model von Mises envelope stored by the assessment (lateral, tip-pry, torsion and ring-pull load cases at the battery's floor loads), with the scale on the image; grey marks the 4 mm tip zone that only the 3D solid-tip test covers. The as-exported design and its paper are kept as the record this one builds on ([docs/paper/main.pdf](docs/paper/main.pdf)).*
 
 ## Which evidence is retained
 
@@ -99,7 +115,7 @@ A follow-on study, kept separate from every result above, evolves the hand zone 
 - **Representation and rules:** a 179-gene `G3.0` genome with a voxel decoder for the ring (8 mm comfort lip on a 24.9 mm bore), a compact grooved grip, the guard and a double-edged blade; the interior may be hollow (skin + TPMS lattice + powder ports) for additive manufacture. Rules: [`requirements/RS-karambit-v3.toml`](requirements/RS-karambit-v3.toml) (300 N bearing and 30 N ring-back at SF 2; 4.0 in sharpened arc per edge within an 85.725 mm straight-line reach).
 - **Objective:** `W_ERGOLIGHT_v1`, continuous and multi-objective with ergonomics as a multiplier on the score; no hard gates.
 - **Code:** [`crates/g3`](crates/g3/README.md), a standalone Cargo workspace with its own tests, review probes and known limitations; the v1 pipeline and its certification identity are untouched.
-- **Status:** a 16-island pilot ran on 2026-10-25 to check the pipeline end to end. Its candidates are search observations; none is qualified or built, and none enters the papers' census.
+- **Status:** a 16-island pilot ran on 2026-10-25; the owner then raised the 3D solid-tip weight (`W_ERGOLIGHT_v1` draft d, 0.030 → 0.070) because the pilot's double-edged points were weak, and a fresh draft-d cohort runs from a quasi-random Sobol start (G3 populations start only from Sobol; no hand-made individuals). The leading candidate is shown at the top of this page. All candidates are search observations; none is qualified or built, and none enters the papers' census.
 
 ## Retained history and corrections
 
