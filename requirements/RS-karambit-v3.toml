@@ -1,0 +1,156 @@
+# RS-karambit-v3 — G3 Ergolight Fresh Evolutionary Run (fixed blade, sheath-free, hollow-capable L-PBF Ti-6Al-4V).
+# Authors: Jepson Taylor, Claude-HZ, Helper (2026-10-25).
+# Scope: Veto-free continuous multi-objective requirement set (`W_ERGOLIGHT_v1`, draft-c) for G3.
+# Incorporates:
+#   - tips/constraint/design.md (JARAMBIT-SPEC-ERG-002, Zones 1-3 fixed-blade only; Zone 4 folding datums omitted)
+#   - tips/constraint/Jarambit_Grip_and_Ring_Engineering_Spec.md
+#   - tips/constraint/Jarambit_Handling_Safety_Review.md
+#   - tips/constraint/jarambit_ec3i042_grip_ring_engineering_spec.md
+#   - Owner directives (2026-10-24 / 2026-10-25): engineering study (not a product), fixed blade, no hard gates/vetoes,
+#     no sheath/holder constraints, 300 N bearing on bore inside closest to handle (+/-60 deg about theta=0, pushing +x)
+#     at SF >= 2 (600 N capacity), 30 N ring-back (+x on outer back) at SF >= 2 (60 N capacity), 85.725 mm blade reach
+#     envelope with 4.0 in sharpened-arc cap per edge, compact grip (perimeter 65-75 mm, H/T 1.5-2.0), compound 1+2
+#     choil profile, spinning balance (CoM within 8 mm of index choil, low spin inertia about ring), and GPU Stage-2 solve.
+# RS-karambit-v1 and RS-karambit-v2 remain frozen and byte-for-byte unchanged for published v1/v2 cohorts.
+
+id = "RS-karambit-v3"
+version = 3
+metric = "W_ERGOLIGHT_v1"
+draft = "c"
+study = "engineering study, not a product"
+configuration = "fixed_blade_one_piece_lpbf_ti6al4v_no_sheath"
+hard_gates = false
+
+[constants]
+material = "Ti-6Al-4V"
+density_g_per_cm3 = 4.43
+yield_screening_mpa = 828.0
+e_gpa = 113.8
+nu = 0.34
+mass_ceiling_g = 130.0
+mass_floor_g = 25.0
+sf_knee_base = 0.94
+sf_knee_bonus = 0.06
+sf_knee_tau = 0.15
+blade_reach_max_mm = 85.725
+sharpened_edge_cap_in = 4.0
+
+[loads]
+hiker_lateral_n = 180.0
+hunter_lateral_n = 260.0
+strict_hunter_lateral_n = 260.0
+# Owner 2026-10-25 (~02:15Z): 300 N on bore inside closest to handle (+/-60 deg about theta=0, pushing +x), 30 N on ring back (+x), SF >= 2.0
+ring_bearing_working_n = 300.0
+ring_bearing_sf_min = 2.0
+ring_bearing_capacity_n = 600.0
+ring_back_working_n = 30.0
+ring_back_sf_min = 2.0
+ring_back_capacity_n = 60.0
+twist_floor_nmm = 1820.0
+hm_twist_nmm = 16200.0
+hm_spine_n = 3427.0
+cyclic_lateral_n = 180.0
+seq_target = 1.2
+# Bilateral grip squeeze (design.md CHK-FEA-01): 250 N over 20 mm pad length, sigma_vM <= 450 MPa
+grip_squeeze_n = 250.0
+grip_squeeze_pad_mm = 20.0
+grip_squeeze_allow_mpa = 450.0
+
+[gate_s]
+apex_max_mm = 0.20
+half_angle_max_deg = 25.0
+tip_t025_max_mm = 0.30
+tip_t1_max_mm = 0.60
+tip_t2_max_mm = 1.00
+tip_taper_min_mm = 5.0
+point_monotonic_window_mm = 10.0
+
+[ergonomics.ring]
+bore_d_mm = 24.9
+lip_w_mm = 8.0
+crown_min_mm = 0.2
+crown_max_mm = 0.4
+bore_round_min_mm = 2.5
+bore_round_max_mm = 3.5
+junction_step_max_mm = 0.3
+neck_fillet_r_min_mm = 4.0
+
+[ergonomics.grip]
+pitches_m50_mm = [19.5, 21.0, 22.0]
+stations_m50_mm = [9.75, 30.0, 51.5]
+station_err_max_mm = 2.5
+length_min_mm = 64.0
+length_max_mm = 72.0
+swell_thickness_min_mm = 13.0
+swell_thickness_max_mm = 17.0
+swell_height_min_mm = 25.0
+swell_height_max_mm = 28.0
+swell_perimeter_min_mm = 65.0
+swell_perimeter_max_mm = 75.0
+swell_h_over_t_min = 1.5
+swell_h_over_t_max = 2.0
+edge_r_min_mm = 2.2
+section_corner_r_min_mm = 4.0
+groove_r_min_mm = 10.0
+crest_r_min_mm = 5.0
+saddle_depth_min_mm = 1.5
+saddle_depth_max_mm = 2.5
+mid_depth_min_mm = 1.5
+mid_depth_max_mm = 2.5
+choil_depth_min_mm = 3.5
+choil_depth_max_mm = 4.5
+choil_depth_target_mm = 4.2
+guard_h_min_mm = 12.0
+thumb_ramp_deg = 15.0
+jimp_crest_r_min_mm = 0.5
+tex_amp_min_mm = 0.15
+tex_amp_max_mm = 0.25
+tex_crest_r_min_mm = 0.15
+
+[ergonomics.balance]
+com_to_index_max_mm = 8.0
+spin_inertia_ratio_max = 0.85
+
+[am_build]
+skin_t_min_mm = 0.8
+lattice_strut_min_mm = 0.8
+powder_port_d_min_mm = 2.5
+
+[weights]
+mass = 0.370
+hiker_lateral_180n = 0.035
+hunter_lateral_260n = 0.035
+strict_hunter_260n = 0.020
+ring_bearing_300n_sf2 = 0.025
+ring_back_30n_sf2 = 0.030
+twist_body_1p82nm = 0.025
+twist_tip_1p82nm = 0.025
+solid_tip_3d = 0.030
+side_a4_buckling = 0.020
+failure_sequence_1p2 = 0.035
+plate_gci_3level = 0.020
+human_max_twist_spine = 0.020
+goodman_fatigue_l7 = 0.020
+gate_s_sharpness = 0.050
+gate_s_point_profile = 0.050
+hollow_grip_structure = 0.020
+cad_watertight = 0.040
+karambit_ring_and_claw = 0.040
+form_fairness = 0.040
+am_build = 0.050
+
+[betas]
+ring_lip = 0.18
+grip_section = 0.18
+hand_edges = 0.18
+finger_index = 0.15
+grip_length = 0.08
+guard = 0.08
+grip_surface = 0.05
+balance = 0.10
+
+[solver]
+stage2_primary = "faer_sparse_cholesky"
+stage2_gpu_experimental = "gpu_cg_jacobi_true_residual_uncalled"
+true_residual_tol = 1e-10
+fail_closed = true
