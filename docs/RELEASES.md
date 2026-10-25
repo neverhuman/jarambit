@@ -2,6 +2,29 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v2.4.2 — 2026-10-25 (paper upgrade: layout, page 1, introduction and conclusion, corrections, one file per section)
+
+- **Owner request.** The owner asked for the papers to have "incredible layout, font, and the best possible plots, description, key sections, strong intro, strong conclusion", after studying two outside drafts (`tips/paper/*.tex`). The owner then authorized the work through to release ("Please do what is best and keep this moving forward").
+- **Layout and type (both papers and the Supplement).** `docs/paper/ei-ieee-skin.tex` keeps IEEEtran two-column at 10/12. It adds TeX Gyre Termes with matching Termes Math (previously Computer Modern math beside Termes text), sans headings, captions and tables, one callout style, slate running heads, and thousands-grouped counts. The page count was measured before adoption.
+- **Page 1.** A kicker row, the cover, a row of key numbers drawn only from generated macros, and a new abstract that leads with the design on the page. Papers A and B now have different abstracts.
+- **New introduction and conclusion.** The introduction states the research question, four findings (five in B), the contributions and a scope box. The conclusion gives three lessons from the records, what is not established, six prospective application classes with the evidence each would need (rows are prospective, not results), and the claim stated conditionally. A Data and Code Availability section is added.
+- **Cover colour.** The stress fields on both covers and in Fig. 4a use EI-HEAT-1H, a one-hue sequential ramp (OKLCH hue 40°, lightness monotone from 0.956 to 0.370). It replaces the rainbow ramp, whose mid-scale yellow read as hot spots. The cover light is flatter (0.62/0.38/0.04), so shaded faces keep their key colour. The figures were regenerated from the receipt.
+- **Corrections to v2.4.1:**
+  - Paper B's mesh-smoothing range was a stale 75.06–75.34 from the earlier design's ladder. It is now generated from the winner's ladder: 75.45–75.68.
+  - "Ribs keep their width" now says rib widths were inspected in renders, not measured.
+  - The smoothing time comes from the receipts.
+  - The inflated-evaluator sentence now says only one evaluator was re-assessed and the second was matched by stored metrics.
+  - The v2.3.1 sentence now says the ring-wall floor removal and the seed Hall-of-Fame change landed together and were not separated.
+  - "Raking light" is removed from the cover caption.
+- **Evidence contract.** New generated macros come from receipts: distinct genomes, the leader's re-assessment, the inflation example and range, the previous leader, the Cohort-3 totals, the solver agreement, the smoothing outcomes, the 3D masses and the seed parent's score. 34 numbers that were typed into the sections now come from macros.
+- **Plots.** The census figure is now one column wide, uses the validated categorical palette, and labels the leader and the previous leader's tenure directly. The Stage-1 panel moved to the Supplement.
+- **Room.** Six floats and the response-display subsection moved unchanged to a new Supplement section. Paper A is 16 pages and Paper B 18 (limit 15–20). `make check` now checks both papers.
+- **Citations.** Added Taubin (1995), Osher–Sethian (1988), Gage–Hamilton (1986) and Smith–Winkler (2006).
+- **Parallel editing.** Each section of both papers and of the Supplement is now its own `.tex` file. `docs/paper/SECTIONS.md` indexes them in reading order, with their labels and a claim-before-editing protocol.
+- **Unchanged.** Scores, receipts, census data, the ladder data and every assessment are unchanged. Nothing was re-solved or re-scored.
+
+This release adds no qualification claim.
+
 ## v2.4.1 — 2026-10-24 (false-colour engineering fields on both first pages)
 
 - **Owner request.** Each paper's first page now shows its knife in false colour from the engineering tests, with 3D shading. Paper A shows the design as exported; Paper B shows the pocket-smoothed export.
