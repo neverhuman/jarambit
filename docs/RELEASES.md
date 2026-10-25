@@ -2,6 +2,19 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v2.4.3 — 2026-10-25 (paper Phase 2: native dynamics, score decomposition, requirements table; README and G3 cohort note)
+
+- **Owner request.** "Please ensure README and paper are updated." This release lands the paper study's Phase 2 displays, which the G3 helper agent built and Claude-HZ reviewed and corrected. It also updates the README and adds one prospective paragraph on the separate G3 cohort.
+- **Native-population dynamics (M7).** A generated figure shows the ten completed native runs per logarithmic generation bin: the legal share, and the median with the q10–q90 fitness band. Data: `docs/paper/allruns/native-dynamics.dat`, from the gen800 traces.
+- **Where the cover design's score comes from (M8).** A generated figure decomposes the canonical `W_ULTRALIGHT_v1` score of `ec3i042_r01_p10_c56` by evidence class: measured on exported CAD and FE, rule-based, constant fallback, and not admitted. The classes reproduce 41.44 / 24.00 / 11.18 / 4.00 = 80.62. The contract is `docs/paper/data/term-evidence-class.v1.json`. Fallback-matched terms are computed against the scorer's constants, never assigned by hand.
+- **Requirements table (M9).** The cover design's measured responses are listed against reference checks, captioned "informational; does not veto selection".
+  - Each status is computed from the value and its reference rather than typed.
+  - The two checks with no measurement (the edge-sharpness law and the tip point profile) say "not measured".
+- **Fail-closed generator.** Every numeric receipt read in the Phase 2 generator now errors when the field is missing. Before, a missing value became 0, 1 or 4.5.
+- **README.** The findings match the papers (four, plus a fifth in B). The cover caption names the one-hue ramp. A new section describes the separate G3 ergonomic, hollow-AM cohort (`crates/g3`, `RS-karambit-v3`, `W_ERGOLIGHT_v1`) without claiming results.
+- **Paper discussion.** One paragraph names the follow-on cohort as a research direction. It is versioned and identified separately, so none of its candidates can enter the census, and it reports no result here.
+- **Unchanged.** Scores, receipts, census data, the ladder and every assessment are unchanged. Nothing was re-solved or re-scored, and there is no qualification claim.
+
 ## v2.4.2 — 2026-10-25 (paper upgrade: layout, page 1, introduction and conclusion, corrections, one file per section)
 
 - **Owner request.** The owner asked for the papers to have "incredible layout, font, and the best possible plots, description, key sections, strong intro, strong conclusion", after studying two outside drafts (`tips/paper/*.tex`). The owner then authorized the work through to release ("Please do what is best and keep this moving forward").
