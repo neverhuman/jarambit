@@ -1,5 +1,5 @@
 {
-  "command": "target/release/examples/pocket_smoothing_figures morph --stl /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl --ladder docs/paper/ladder/smoothing-ladder.render.v1.json --out /home/ubuntu/jarambit/.agent/worktrees/paper-refresh/target/ieee/paper/pocket-raw/morph",
+  "command": "target/release/examples/pocket_smoothing_figures morph --stl /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl --ladder docs/paper/ladder/smoothing-ladder.render.v1.json --out /home/ubuntu/jarambit/.agent/worktrees/paper-ei/target/ieee/paper/pocket-raw/morph",
   "inputs": {
     "ladder_render_sha256": "bbca1f08dc8c7d917e6f4fd665e6119d029ec3701b51aa0ace6cf5ada1929410",
     "stl": {

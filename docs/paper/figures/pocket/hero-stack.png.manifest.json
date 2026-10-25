@@ -1,10 +1,10 @@
 {
   "figure": "docs/paper/figures/pocket/hero-stack.png",
-  "figure_sha256": "13b1fe6c51a55bca8864e4ae0258e67a72d65535efe74a2c9e23cf1460a2f30b",
+  "figure_sha256": "318237a1fda2a4293f1d55b0486055b9b2eed06ef3df2e8fbf6c5834d1b07161",
   "script": "crates/paper-artifacts/examples/pocket_smoothing_figures.rs",
   "inputs": {
     "experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json": "6b59b1793ea715c9cc0d692d1c30070634fdb80f86c22e8e16aa18a9f9d00d9c",
-    "docs/paper/figures/pocket/hero.render.v1.json": "7656765299ec6972164b12a7b4dc4e56062d76a8f63aa480f10ac319f5488184"
+    "docs/paper/figures/pocket/hero.render.v1.json": "1635b1507ce6de409df09f2b4704e8870edb6d514e9fa2fa8d94ad33625c201c"
   },
   "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"
 }

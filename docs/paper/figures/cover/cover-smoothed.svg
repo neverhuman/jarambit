@@ -6,7 +6,7 @@
   <rect x="15" y="603" width="560" height="235" fill="none" stroke="#132D3B" stroke-width="3"/>
   <rect x="18" y="606" width="300" height="40" fill="#ffffff"/>
   <text x="27" y="636" font-family="TeX Gyre Heros" font-size="26" fill="#132D3B">Isogrid pockets, 2.5x</text>
-  <defs><linearGradient id="field-ramp" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="rgb(254,236,230)"/><stop offset="0.14285714285714285" stop-color="rgb(252,215,202)"/><stop offset="0.2857142857142857" stop-color="rgb(250,180,155)"/><stop offset="0.42857142857142855" stop-color="rgb(248,140,101)"/><stop offset="0.5714285714285714" stop-color="rgb(228,101,53)"/><stop offset="0.7142857142857143" stop-color="rgb(190,75,29)"/><stop offset="0.8571428571428571" stop-color="rgb(147,56,20)"/><stop offset="1" stop-color="rgb(107,39,12)"/></linearGradient></defs>
+  <defs><linearGradient id="field-ramp" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="rgb(44,11,87)"/><stop offset="0.125" stop-color="rgb(87,16,109)"/><stop offset="0.25" stop-color="rgb(127,31,108)"/><stop offset="0.375" stop-color="rgb(168,45,95)"/><stop offset="0.5" stop-color="rgb(205,66,72)"/><stop offset="0.625" stop-color="rgb(233,98,42)"/><stop offset="0.75" stop-color="rgb(249,141,10)"/><stop offset="0.875" stop-color="rgb(251,189,35)"/><stop offset="1" stop-color="rgb(241,238,114)"/></linearGradient></defs>
   <text x="40" y="46" font-family="TeX Gyre Heros" font-size="29" fill="#132D3B">Plate von Mises envelope of the four load cases, MPa</text>
   <rect x="40" y="56" width="640" height="26" fill="url(#field-ramp)" stroke="#132D3B" stroke-width="1.2"/>
   <line x1="40.0" y1="82" x2="40.0" y2="89" stroke="#132D3B" stroke-width="1.2"/>

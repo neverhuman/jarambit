@@ -1,9 +1,9 @@
 {
   "figure": "docs/paper/figures/cover/inset-unsmoothed.png",
-  "figure_sha256": "f9fda51a5163c1d37eb4dda4a90459f07a4401a7ada61d8a80a44a94a43776c7",
+  "figure_sha256": "1da458704bbb39857ed95a3af9e428922eddac4cbe1e349c7515e65c8c0fbc49",
   "script": "crates/paper-artifacts/examples/pocket_smoothing_figures.rs",
   "inputs": {
-    "docs/paper/figures/cover/cover.render.v1.json": "ccc565af29a0c17deda176d98eaafaeb32bc97e1152fee8c3c1972f3a11a5e26",
+    "docs/paper/figures/cover/cover.render.v1.json": "8f25ad5abc4ba34085ce09d69c5d099164d3376ab8165cc6dc31c8d37eb59510",
     "experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json": "6b59b1793ea715c9cc0d692d1c30070634fdb80f86c22e8e16aa18a9f9d00d9c"
   },
   "external_inputs_note": "STLs and D1 reports are outside git because of their size; cover.render.v1.json and RECEIPT.json bind them by sha256.",

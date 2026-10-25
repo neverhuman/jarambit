@@ -40,71 +40,79 @@
     "stops_srgb": [
       {
         "rgb": [
-          254.0,
-          236.0,
-          230.0
+          44.0,
+          11.0,
+          87.0
         ],
         "t": 0.0
       },
       {
         "rgb": [
-          252.0,
-          215.0,
-          202.0
+          87.0,
+          16.0,
+          109.0
         ],
-        "t": 0.14285714285714285
+        "t": 0.125
       },
       {
         "rgb": [
-          250.0,
-          180.0,
-          155.0
+          127.0,
+          31.0,
+          108.0
         ],
-        "t": 0.2857142857142857
+        "t": 0.25
       },
       {
         "rgb": [
-          248.0,
-          140.0,
-          101.0
+          168.0,
+          45.0,
+          95.0
         ],
-        "t": 0.42857142857142855
+        "t": 0.375
       },
       {
         "rgb": [
-          228.0,
-          101.0,
-          53.0
+          205.0,
+          66.0,
+          72.0
         ],
-        "t": 0.5714285714285714
+        "t": 0.5
       },
       {
         "rgb": [
-          190.0,
-          75.0,
-          29.0
+          233.0,
+          98.0,
+          42.0
         ],
-        "t": 0.7142857142857143
+        "t": 0.625
       },
       {
         "rgb": [
-          147.0,
-          56.0,
-          20.0
+          249.0,
+          141.0,
+          10.0
         ],
-        "t": 0.8571428571428571
+        "t": 0.75
       },
       {
         "rgb": [
-          107.0,
-          39.0,
-          12.0
+          251.0,
+          189.0,
+          35.0
+        ],
+        "t": 0.875
+      },
+      {
+        "rgb": [
+          241.0,
+          238.0,
+          114.0
         ],
         "t": 1.0
       }
     ]
   },
-  "command": "target/release/examples/pocket_smoothing_figures cover --receipt experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json --out /home/ubuntu/jarambit/.agent/worktrees/paper-l1/target/ieee/paper/pocket-raw/cover",
+  "command": "target/release/examples/pocket_smoothing_figures cover --receipt experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json --out /home/ubuntu/jarambit/.agent/worktrees/paper-ei/target/ieee/paper/pocket-raw/cover",
   "crease_lines": {
     "depth_tested": true,
     "dihedral_deg_over": 45.0,
@@ -202,15 +210,15 @@
     "zoom": 2.5
   },
   "lighting": {
-    "ambient": 0.62,
-    "diffuse": 0.38,
+    "ambient": 0.35,
+    "diffuse": 0.65,
     "direction_camera": [
       -0.72,
       0.58,
       0.38
     ],
-    "shininess": 40,
-    "specular": 0.04
+    "shininess": 48,
+    "specular": 0.15
   },
   "not_qualified": true,
   "outputs": [
@@ -218,37 +226,37 @@
       "crease_edges": 7327,
       "height": 850,
       "name": "render-unsmoothed.png",
-      "sha256": "c6388579c5f0842aa498de3a9bb1e37916f63f95f1f2ba2219c1532a41dad93a",
+      "sha256": "8630ab279cd16a56f5a27459384fa08fffdf26241cb0e657814b3860a5d4d9a4",
       "width": 2000
     },
     {
       "crease_edges": 7327,
       "height": 235,
       "name": "inset-unsmoothed.png",
-      "sha256": "b2baa393ee18f5087aa55b6c19681097314854a64d191d796784bbae87dd098d",
+      "sha256": "ec8f14cb4b4695bb886f7caa961f9655b6de423ace0683d0cc4d6520e8061b74",
       "width": 560
     },
     {
       "crease_edges": 10665,
       "height": 850,
       "name": "render-smoothed.png",
-      "sha256": "df0d12b2a760f69757cb2e75d4ad1834b6b61a9a36dc6c2561be0bab67f8f5f2",
+      "sha256": "ebb9e3423654e77585116838fb1743c0cb1f67ae9b0a2f8ac8eb12d835a7ceee",
       "width": 2000
     },
     {
       "crease_edges": 10665,
       "height": 235,
       "name": "inset-smoothed.png",
-      "sha256": "f4415638e7371409e3abdd8d7854c13541709fb95d5a1f0843938d6c67565064",
+      "sha256": "07b5a3d349c46b58fd5b548a304318f59d2b8e05a066710b4c05e734b70faf4d",
       "width": 560
     },
     {
       "name": "cover-unsmoothed.svg",
-      "sha256": "bf2ec2eeefe0b9e74e31eea9209b5193e4cc1beedeefa01452c5639a49674227"
+      "sha256": "df98b76d3082c06c8997a6b28e67f28fd06b8c09874c1f9ea976ad4a9dd097c8"
     },
     {
       "name": "cover-smoothed.svg",
-      "sha256": "5e7674e0bac6924fc43f305dc9e50487e0b2d48a5b58ff34e1e7c5539d1f128a"
+      "sha256": "dfa422c5d7ae160b88af67c56fb3a963c85edeea34000e383720c7e2e60c4ce7"
     }
   ],
   "research_only": true,
