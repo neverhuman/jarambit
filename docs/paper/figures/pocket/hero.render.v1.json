@@ -34,71 +34,79 @@
     "stops_srgb": [
       {
         "rgb": [
-          254.0,
-          236.0,
-          230.0
+          44.0,
+          11.0,
+          87.0
         ],
         "t": 0.0
       },
       {
         "rgb": [
-          252.0,
-          215.0,
-          202.0
+          87.0,
+          16.0,
+          109.0
         ],
-        "t": 0.14285714285714285
+        "t": 0.125
       },
       {
         "rgb": [
-          250.0,
-          180.0,
-          155.0
+          127.0,
+          31.0,
+          108.0
         ],
-        "t": 0.2857142857142857
+        "t": 0.25
       },
       {
         "rgb": [
-          248.0,
-          140.0,
-          101.0
+          168.0,
+          45.0,
+          95.0
         ],
-        "t": 0.42857142857142855
+        "t": 0.375
       },
       {
         "rgb": [
-          228.0,
-          101.0,
-          53.0
+          205.0,
+          66.0,
+          72.0
         ],
-        "t": 0.5714285714285714
+        "t": 0.5
       },
       {
         "rgb": [
-          190.0,
-          75.0,
-          29.0
+          233.0,
+          98.0,
+          42.0
         ],
-        "t": 0.7142857142857143
+        "t": 0.625
       },
       {
         "rgb": [
-          147.0,
-          56.0,
-          20.0
+          249.0,
+          141.0,
+          10.0
         ],
-        "t": 0.8571428571428571
+        "t": 0.75
       },
       {
         "rgb": [
-          107.0,
-          39.0,
-          12.0
+          251.0,
+          189.0,
+          35.0
+        ],
+        "t": 0.875
+      },
+      {
+        "rgb": [
+          241.0,
+          238.0,
+          114.0
         ],
         "t": 1.0
       }
     ]
   },
-  "command": "target/release/examples/pocket_smoothing_figures hero --stl /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl --d1 /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56_D1.json --score 80.561227 --out /home/ubuntu/jarambit/.agent/worktrees/paper-l1/target/ieee/paper/pocket-raw/hero",
+  "command": "target/release/examples/pocket_smoothing_figures hero --stl /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl --d1 /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56_D1.json --score 80.561227 --out /home/ubuntu/jarambit/.agent/worktrees/paper-ei/target/ieee/paper/pocket-raw/hero",
   "crease_lines": {
     "depth_tested": true,
     "dihedral_deg_over": 45.0,
@@ -171,7 +179,7 @@
       "units": "MPa"
     }
   ],
-  "hero_stack_sha256": "cb56c4e72e7f5ea9799fbfb4acd8a769640d3531b8a9e58880f02e7f32ab9189",
+  "hero_stack_sha256": "56570b0a6d76cfe4101db6a165ef385d76dd90874fb7e554876b0c8dc93adf67",
   "inputs": {
     "d1": {
       "path": "/home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56_D1.json",
@@ -183,52 +191,52 @@
     }
   },
   "lighting": {
-    "ambient": 0.3,
-    "diffuse": 0.7,
+    "ambient": 0.35,
+    "diffuse": 0.65,
     "direction_camera": [
       -0.72,
       0.58,
       0.38
     ],
-    "shininess": 36,
-    "specular": 0.1
+    "shininess": 48,
+    "specular": 0.15
   },
   "not_qualified": true,
   "outputs": [
     {
       "height": 223,
       "name": "layer-lat.png",
-      "sha256": "a323537abba9f9f349420513474c5a546c6b343e6d57fdbd7aed3eb5a563c7cf",
+      "sha256": "00e91a199f9364ee589e29217db1d316c4e58ad948e7a8a974635135e5365bc7",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-twist.png",
-      "sha256": "9fb970e318ff7013027795ea072dfdc492ccd7a67c2b851bdc4b11889669b3b5",
+      "sha256": "ac8d60651c7d7be6fc2f2791de89ec99fe8af742734e4c5176a77a8a19739c2a",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-ring.png",
-      "sha256": "92530e777319bdeb606811f160445366e3a155e3d184213e3340193ff7034436",
+      "sha256": "01026a8f8740fcc2426efc3a0e62e19c901781f2e3cbf716cf0ed10f5c5d5903",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-pry.png",
-      "sha256": "efd1670678ea850cc12fd75ba45ef5b3b7129c55706d4c6997179b9b1b6e7f8f",
+      "sha256": "ae69b4d0b36a83b037f200d539835b89551ed5ae2a95ee078bc2e4bca4faf526",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-env_vm.png",
-      "sha256": "63ef3ec1c75ddc7d429046c16120784c4152197531e314b6ce4143ad34224a14",
+      "sha256": "714310803ca4585d691af15734e1b6424380c21c716fff3afcbcb17fcccab041",
       "width": 1400
     },
     {
       "height": 223,
       "name": "layer-envelope.png",
-      "sha256": "fa2ee5cf0114edc110d98202f13a1d3efb08e50d0522a445b431854c95af1bc3",
+      "sha256": "d1049a8bb24b39d34a5287f5054ae362658f2c2161823cf9f5c7888068710925",
       "width": 1400
     }
   ],

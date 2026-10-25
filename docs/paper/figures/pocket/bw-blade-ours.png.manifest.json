@@ -4,7 +4,7 @@
   "script": "crates/paper-artifacts/examples/pocket_smoothing_figures.rs",
   "inputs": {
     "experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json": "6b59b1793ea715c9cc0d692d1c30070634fdb80f86c22e8e16aa18a9f9d00d9c",
-    "docs/paper/figures/pocket/bw.render.v1.json": "04a92e9bc1e889b6f024ca6b1b85cac45990e178e97fed8486b6cd07782b3310"
+    "docs/paper/figures/pocket/bw.render.v1.json": "8babdb8281dc7571826306d9d37246c7c7f5d1670a350f5825f8c49ceb5aa495"
   },
   "postprocess": "stored-deflate producer PNG re-encoded losslessly by rsvg-convert at its own size"
 }

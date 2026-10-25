@@ -1,5 +1,5 @@
 {
-  "command": "target/release/examples/pocket_smoothing_figures bw --raw /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56.stl --ours /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl --ladder docs/paper/ladder/smoothing-ladder.render.v1.json --out /home/ubuntu/jarambit/.agent/worktrees/paper-refresh/target/ieee/paper/pocket-raw/bw",
+  "command": "target/release/examples/pocket_smoothing_figures bw --raw /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.ctrl/re_ec3i042_r01_p10_c56.stl --ours /home/ubuntu/jarambit_runs/paper-refresh-20261024/score/ec3i042_r01_p10_c56.f075/re_ec3i042_r01_p10_c56.stl --ladder docs/paper/ladder/smoothing-ladder.render.v1.json --out /home/ubuntu/jarambit/.agent/worktrees/paper-ei/target/ieee/paper/pocket-raw/bw",
   "inputs": {
     "ladder_render_sha256": "bbca1f08dc8c7d917e6f4fd665e6119d029ec3701b51aa0ace6cf5ada1929410",
     "ours_stl_sha256": "91ab0b649640a2e78807bde08c3794c1bc90e5a6ebeb929de8b2173263288c65",

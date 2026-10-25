@@ -35,20 +35,21 @@ const CT: f64 = 0.9945218953682733;
 const ST: f64 = -0.10452846326765347;
 const SUPERSAMPLE: usize = 2;
 const NORMALS: NormalSettings = NormalSettings { crease_degrees: 15.0, blend: 1.0, max_deviation_degrees: 20.0 };
-/// EI-HEAT-1H, a one-hue sequential ramp for stress fields: OKLCH hue 40 deg held constant, lightness
-/// falling monotonically from 0.956 (near zero) to 0.370 (at the cap) in even steps, chroma at 0.9 of
-/// the sRGB gamut limit (at most 0.17). It replaces the rainbow FIELD_RAMP ramp of v2.4.1, whose
-/// lightness peaked mid-scale (yellow) and read mid-range stress as hot spots; form now comes from the
-/// flatter cover light and the crease lines.
-const FIELD_RAMP: [(f64, [f64; 3]); 8] = [
-    (0.0, [254.0, 236.0, 230.0]),
-    (1.0 / 7.0, [252.0, 215.0, 202.0]),
-    (2.0 / 7.0, [250.0, 180.0, 155.0]),
-    (3.0 / 7.0, [248.0, 140.0, 101.0]),
-    (4.0 / 7.0, [228.0, 101.0, 53.0]),
-    (5.0 / 7.0, [190.0, 75.0, 29.0]),
-    (6.0 / 7.0, [147.0, 56.0, 20.0]),
-    (1.0, [107.0, 39.0, 12.0]),
+/// Inferno truncated to t in [0.15, 0.95] (matplotlib `_inferno_data` sampled at t = 0.15 + 0.10*k for
+/// k = 0..=8, mapped to u = k/8): perceptually uniform sequential ramp where low stress is deep violet,
+/// mid-range stress is crimson/orange, and hotspots glow pale yellow, while trimming the bottom 15 %
+/// (near-black, which would read as shadow/outline on a 3D lit surface) and top 5 % (near-white against
+/// the page background).
+const FIELD_RAMP: [(f64, [f64; 3]); 9] = [
+    (0.0, [44.0, 11.0, 87.0]),
+    (0.125, [87.0, 16.0, 109.0]),
+    (0.25, [127.0, 31.0, 108.0]),
+    (0.375, [168.0, 45.0, 95.0]),
+    (0.5, [205.0, 66.0, 72.0]),
+    (0.625, [233.0, 98.0, 42.0]),
+    (0.75, [249.0, 141.0, 10.0]),
+    (0.875, [251.0, 189.0, 35.0]),
+    (1.0, [241.0, 238.0, 114.0]),
 ];
 const MASKED: [u8; 3] = [178, 182, 188];
 const WHITE: [u8; 3] = [255, 255, 255];
@@ -462,7 +463,7 @@ fn hero(a: &Args) -> Res<()> {
         ((hi[1] - lo[1]) / (hi[0] - lo[0]) * layer_w as f64 / 0.96).ceil() as usize
     };
     let cam = frame(rot, &pts, layer_w, layer_h, 0.96);
-    let light = Lighting { direction: [-0.72, 0.58, 0.38], ambient: 0.30, diffuse: 0.70, specular: 0.10, shininess: 36 };
+    let light = Lighting { direction: [-0.72, 0.58, 0.38], ambient: 0.35, diffuse: 0.65, specular: 0.15, shininess: 48 };
     let settings = RenderSettings { width: layer_w, height: layer_h, supersample: SUPERSAMPLE, outline_pixels: 1.25, camera: cam, lighting: light };
     let (normals, _) = appearance::derive_normals(&lifted, NORMALS, None)?;
     let edges = crease_edges(&lifted, crease_deg);
@@ -712,8 +713,8 @@ fn cover(a: &Args) -> Res<()> {
     let inset_cam = Camera { rotation: rot, scale: zoom * scale, offset: [inset_w as f64 / 2.0 - zoom * scale * q[0], inset_h as f64 / 2.0 + zoom * scale * q[1]] };
     let centre_px = [cam.offset[0] + q[0] * scale, cam.offset[1] - q[1] * scale];
     let locator = [centre_px[0] - inset_w as f64 / zoom / 2.0, centre_px[1] - inset_h as f64 / zoom / 2.0, inset_w as f64 / zoom, inset_h as f64 / zoom];
-    // flatter than v2.4.1 (0.22 / 0.78 / 0.14) so the shaded face colour stays on the ramp key
-    let light = Lighting { direction: [-0.72, 0.58, 0.38], ambient: 0.62, diffuse: 0.38, specular: 0.04, shininess: 40 };
+    // 3D raking key light from upper-left with balanced ambient/diffuse/specular (0.35 / 0.65 / 0.15, shininess 48)
+    let light = Lighting { direction: [-0.72, 0.58, 0.38], ambient: 0.35, diffuse: 0.65, specular: 0.15, shininess: 48 };
     let mut stats = Vec::new();
     let mut outputs = Vec::new();
     for ((name, v), lifted) in variants.iter().zip(&lifted) {
