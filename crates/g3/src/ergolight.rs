@@ -1,4 +1,4 @@
-//! `W_ERGOLIGHT_v1` (draft-c, RS-karambit-v3) — veto-free continuous multi-objective evaluator
+//! `W_ERGOLIGHT_v1` (draft-d, RS-karambit-v3) — veto-free continuous multi-objective evaluator
 //! for the G3 fresh evolutionary cohort (fixed blade, sheath-free, hollow-capable L-PBF Ti-6Al-4V).
 //!
 //! ```text
@@ -20,31 +20,34 @@ use serde::{Deserialize, Serialize};
 use serde_json::{json, Map, Value};
 
 pub const METRIC: &str = "W_ERGOLIGHT_v1";
-pub const DRAFT: &str = "c";
+pub const DRAFT: &str = "d";
 pub const REQUIREMENT_SET: &str = "RS-karambit-v3";
 
-/// Ordered `(key, weight)` table for `W_ERGOLIGHT_v1` draft-c (`sum = 1.000`).
+/// Ordered `(key, weight)` table for `W_ERGOLIGHT_v1` draft-d (`sum = 1.000`).
+/// Owner 2026-10-25 (draft d): `solid_tip_3d` 0.030 -> 0.070; the +0.040 is taken pro-rata (x0.870968, 4 dp)
+/// from the 12 other structural terms, so mass, the Gate-S, build and form terms and every `BETAS` entry are unchanged.
+/// The pilot's double-edged points reached a 3D solid-tip SF of only 0.11-0.51 under the 1.82 N*m tip pry.
 /// Owner 2026-10-25 (~02:15Z): 300 N bearing on bore inside closest to handle (+/-60 deg about theta=0,
 /// pushing +x) at SF >= 2 (600 N capacity), 30 N ring-back (+x on outer back) at SF >= 2 (60 N capacity).
 /// Sheath/holder terms (`holder_and_compactness`) are omitted per owner directive (2026-10-25T00:09Z).
 pub const WEIGHTS: &[(&str, f64)] = &[
     ("mass", 0.370),
-    ("hiker_lateral_180n", 0.035),
-    ("hunter_lateral_260n", 0.035),
-    ("strict_hunter_260n", 0.020),
-    ("ring_bearing_300n_sf2", 0.025),
-    ("ring_back_30n_sf2", 0.030),
-    ("twist_body_1p82nm", 0.025),
-    ("twist_tip_1p82nm", 0.025),
-    ("solid_tip_3d", 0.030),
-    ("side_a4_buckling", 0.020),
-    ("failure_sequence_1p2", 0.035),
+    ("hiker_lateral_180n", 0.0305),
+    ("hunter_lateral_260n", 0.0305),
+    ("strict_hunter_260n", 0.0174),
+    ("ring_bearing_300n_sf2", 0.0218),
+    ("ring_back_30n_sf2", 0.0261),
+    ("twist_body_1p82nm", 0.0218),
+    ("twist_tip_1p82nm", 0.0218),
+    ("solid_tip_3d", 0.070),
+    ("side_a4_buckling", 0.0174),
+    ("failure_sequence_1p2", 0.0305),
     ("plate_gci_3level", 0.020),
-    ("human_max_twist_spine", 0.020),
-    ("goodman_fatigue_l7", 0.020),
+    ("human_max_twist_spine", 0.0174),
+    ("goodman_fatigue_l7", 0.0174),
     ("gate_s_sharpness", 0.050),
     ("gate_s_point_profile", 0.050),
-    ("hollow_grip_structure", 0.020),
+    ("hollow_grip_structure", 0.0174),
     ("cad_watertight", 0.040),
     ("karambit_ring_and_claw", 0.040),
     ("form_fairness", 0.040),
@@ -267,7 +270,7 @@ impl ErgolightScore {
     }
 }
 
-/// Compute normalized structural/build subscores `s_i` (`ergolight.py::terms_from(m)` draft-c parity).
+/// Compute normalized structural/build subscores `s_i` (`ergolight.py::terms_from(m)` parity; draft d changes weights only).
 pub fn terms_from(m: &ErgolightInputs) -> Vec<(&'static str, f64)> {
     let s_mass = c01((130.0 - m.mass_g) / 105.0);
     let s_hiker = sfk(m.lat_rob_cert_n / 180.0);
@@ -388,7 +391,7 @@ pub fn ergo_from(m: &ErgolightInputs) -> Vec<(&'static str, f64)> {
     ]
 }
 
-/// Evaluate `W_ERGOLIGHT_v1` (draft-c) from strongly typed inputs.
+/// Evaluate `W_ERGOLIGHT_v1` (draft-d) from strongly typed inputs.
 pub fn score_ergolight(m: &ErgolightInputs) -> ErgolightScore {
     let s_vec = terms_from(m);
     let e_vec = ergo_from(m);
@@ -509,6 +512,33 @@ pub fn score_ergolight_map(m: &Map<String, Value>) -> Result<Value, String> {
     Ok(score_ergolight(&inputs).to_json())
 }
 
+/// Frozen draft-c weights (draft b used the same table), so the frozen draft-b parity fixtures keep testing the
+/// subscores after draft d re-weighted `solid_tip_3d`.
+#[cfg(test)]
+const WEIGHTS_DRAFT_C: &[(&str, f64)] = &[
+    ("mass", 0.370),
+    ("hiker_lateral_180n", 0.035),
+    ("hunter_lateral_260n", 0.035),
+    ("strict_hunter_260n", 0.020),
+    ("ring_bearing_300n_sf2", 0.025),
+    ("ring_back_30n_sf2", 0.030),
+    ("twist_body_1p82nm", 0.025),
+    ("twist_tip_1p82nm", 0.025),
+    ("solid_tip_3d", 0.030),
+    ("side_a4_buckling", 0.020),
+    ("failure_sequence_1p2", 0.035),
+    ("plate_gci_3level", 0.020),
+    ("human_max_twist_spine", 0.020),
+    ("goodman_fatigue_l7", 0.020),
+    ("gate_s_sharpness", 0.050),
+    ("gate_s_point_profile", 0.050),
+    ("hollow_grip_structure", 0.020),
+    ("cad_watertight", 0.040),
+    ("karambit_ring_and_claw", 0.040),
+    ("form_fairness", 0.040),
+    ("am_build", 0.050),
+];
+
 /// Test-only evaluator for `W_ERGOLIGHT_v1` draft-b (`ring_pull_300n_sf2` and `ring_back_300n_sf2`, both 600 N cap)
 /// against frozen `tools_frozen/` (`run6` and `parity/g3hz_parity_v1.json`).
 #[cfg(test)]
@@ -528,7 +558,11 @@ pub fn score_ergolight_map_draft_b(m: &Map<String, Value>) -> Result<Value, Stri
     let s_pull = sfk(ring_pull_cap_n / 600.0);
     let s_back_b = sfk(ring_back_cap_n / 600.0);
     let s_back_c = sfk(ring_back_cap_n / 60.0);
-    let base_c = doc["base"].as_f64().unwrap_or(0.0);
+    let mut base_c = 0.0;
+    for &(k, w) in WEIGHTS_DRAFT_C {
+        let s_k = doc["terms"][k]["s"].as_f64().ok_or_else(|| format!("missing term {k}"))?;
+        base_c += w * s_k;
+    }
     let base_b = base_c - 0.030 * s_back_c + 0.030 * s_back_b;
     let raw_b = 100.0 * e_mult * base_b;
     doc["draft"] = json!("b");
@@ -721,7 +755,7 @@ mod tests {
         };
         assert_eq!(get_str("", "id"), "RS-karambit-v3");
         assert_eq!(get_str("", "metric"), "W_ERGOLIGHT_v1");
-        assert_eq!(get_str("", "draft"), "c");
+        assert_eq!(get_str("", "draft"), "d");
         assert!((get_f64("constants", "nu") - 0.34).abs() < 1e-12);
         assert!((get_f64("loads", "ring_bearing_working_n") - 300.0).abs() < 1e-12);
         assert!((get_f64("loads", "ring_back_working_n") - 30.0).abs() < 1e-12);
@@ -807,7 +841,7 @@ mod tests {
     }
 
     #[test]
-    fn parity_with_python_ergolight_draft_c_and_real_receipt_keys() {
+    fn parity_with_python_ergolight_draft_d_and_real_receipt_keys() {
         let m = sample_default_inputs();
         let sc = score_ergolight(&m);
         // Inside all target ergonomic bands, every e_k == 1.0 so E == 1.0
@@ -873,7 +907,7 @@ mod tests {
         }
         let doc = score_ergolight_map(&map_obj).unwrap();
         assert_eq!(doc["metric"].as_str(), Some("W_ERGOLIGHT_v1"));
-        assert_eq!(doc["draft"].as_str(), Some("c"));
+        assert_eq!(doc["draft"].as_str(), Some("d"));
         assert_eq!(doc["score_100"].as_f64(), Some(sc.score_100));
 
         // Verify fail-closed rejection on missing solver key or legacy ring_pull_cap_n key

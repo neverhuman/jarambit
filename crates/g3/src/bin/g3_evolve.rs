@@ -2,7 +2,7 @@ use std::fmt::Write as _;
 
 use jarambit_g3::g3_genome::G3Genome;
 use jarambit_g3::g3_namespace::{G3CohortConfig, format_g3_design_id, validate_g3_design_id};
-use jarambit_g3::g3_qd::{g3_decoder_sha256, run_g3_cvt_map_elites, splitmix64};
+use jarambit_g3::g3_qd::{g3_decoder_sha256, run_g3_cvt_map_elites_seeded, splitmix64};
 use jarambit_g3::g3_sdf::extract_watertight_mesh_fail_closed;
 
 fn main() {
@@ -98,7 +98,45 @@ fn main() {
         std::process::exit(1);
     }
 
-    let arch = run_g3_cvt_map_elites(n_init, n_evals, seed, t1_gate, t2_gate, h_vox, &commit);
+    // --seed-genomes <genomes_g3.csv>: continue from an earlier archive. Rows are `design_id,` + the strict G3.0 row
+    // (genome sha256 verified against the row's own commit); genes are re-stamped and re-evaluated, and the source,
+    // its sha256 and each seed's former genome sha256 are recorded in `seeds.json`.
+    let seed_path = sarg("--seed-genomes", "");
+    let mut seeds = Vec::new();
+    if !seed_path.is_empty() {
+        let text = std::fs::read_to_string(&seed_path).unwrap_or_else(|e| {
+            eprintln!("g3-evolve error reading --seed-genomes {seed_path}: {e}");
+            std::process::exit(2);
+        });
+        for (k, line) in text.lines().enumerate().skip(1).filter(|(_, l)| !l.trim().is_empty()) {
+            let row = line.split_once(',').map(|(_, r)| r).unwrap_or("");
+            match G3Genome::from_csv_row(row) {
+                Ok(g) => seeds.push(g),
+                Err(e) => {
+                    eprintln!("g3-evolve error: --seed-genomes line {}: {e}", k + 1);
+                    std::process::exit(2);
+                }
+            }
+        }
+        if seeds.is_empty() {
+            eprintln!("g3-evolve error: --seed-genomes {seed_path} holds no genomes");
+            std::process::exit(2);
+        }
+        let seeds_json = serde_json::json!({
+            "source": seed_path,
+            "source_sha256": jarambit_g3::sha256_bytes(text.as_bytes()),
+            "n_seeds": seeds.len(),
+            "former_genome_sha256": seeds.iter().map(|g| g.sha256()).collect::<Vec<_>>(),
+            "former_decoder_commit": seeds.iter().map(|g| g.decoder_commit.clone()).collect::<Vec<_>>(),
+            "re_evaluated_under_commit": commit,
+        });
+        if let Err(e) = std::fs::write(format!("{out_dir}/seeds.json"), serde_json::to_string_pretty(&seeds_json).unwrap()) {
+            eprintln!("g3-evolve error writing seeds.json: {e}");
+            std::process::exit(1);
+        }
+    }
+
+    let arch = run_g3_cvt_map_elites_seeded(&seeds, n_init, n_evals, seed, t1_gate, t2_gate, h_vox, &commit);
     if arch.elites.is_empty() {
         eprintln!("g3-evolve error: archive produced zero elites");
         std::process::exit(1);

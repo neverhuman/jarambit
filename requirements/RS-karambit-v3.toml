@@ -1,6 +1,6 @@
 # RS-karambit-v3 — G3 Ergolight Fresh Evolutionary Run (fixed blade, sheath-free, hollow-capable L-PBF Ti-6Al-4V).
 # Authors: Jepson Taylor, Claude-HZ, Helper (2026-10-25).
-# Scope: Veto-free continuous multi-objective requirement set (`W_ERGOLIGHT_v1`, draft-c) for G3.
+# Scope: Veto-free continuous multi-objective requirement set (`W_ERGOLIGHT_v1`, draft-d) for G3.
 # Incorporates:
 #   - tips/constraint/design.md (JARAMBIT-SPEC-ERG-002, Zones 1-3 fixed-blade only; Zone 4 folding datums omitted)
 #   - tips/constraint/Jarambit_Grip_and_Ring_Engineering_Spec.md
@@ -16,7 +16,7 @@
 id = "RS-karambit-v3"
 version = 3
 metric = "W_ERGOLIGHT_v1"
-draft = "c"
+draft = "d"
 study = "engineering study, not a product"
 configuration = "fixed_blade_one_piece_lpbf_ti6al4v_no_sheath"
 hard_gates = false
@@ -118,22 +118,23 @@ powder_port_d_min_mm = 2.5
 
 [weights]
 mass = 0.370
-hiker_lateral_180n = 0.035
-hunter_lateral_260n = 0.035
-strict_hunter_260n = 0.020
-ring_bearing_300n_sf2 = 0.025
-ring_back_30n_sf2 = 0.030
-twist_body_1p82nm = 0.025
-twist_tip_1p82nm = 0.025
-solid_tip_3d = 0.030
-side_a4_buckling = 0.020
-failure_sequence_1p2 = 0.035
+hiker_lateral_180n = 0.0305
+hunter_lateral_260n = 0.0305
+strict_hunter_260n = 0.0174
+ring_bearing_300n_sf2 = 0.0218
+ring_back_30n_sf2 = 0.0261
+twist_body_1p82nm = 0.0218
+twist_tip_1p82nm = 0.0218
+# draft d (owner 2026-10-25): solid_tip_3d 0.030 -> 0.070, the +0.040 taken pro-rata from the 12 other structural terms
+solid_tip_3d = 0.070
+side_a4_buckling = 0.0174
+failure_sequence_1p2 = 0.0305
 plate_gci_3level = 0.020
-human_max_twist_spine = 0.020
-goodman_fatigue_l7 = 0.020
+human_max_twist_spine = 0.0174
+goodman_fatigue_l7 = 0.0174
 gate_s_sharpness = 0.050
 gate_s_point_profile = 0.050
-hollow_grip_structure = 0.020
+hollow_grip_structure = 0.0174
 cad_watertight = 0.040
 karambit_ring_and_claw = 0.040
 form_fairness = 0.040

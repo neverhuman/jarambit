@@ -1,5 +1,5 @@
 //! Standalone Jarambit G3 crate (`jarambit-g3`):
-//! - `ergolight`: `W_ERGOLIGHT_v1` (draft-c) continuous multi-objective scorer (`T5`).
+//! - `ergolight`: `W_ERGOLIGHT_v1` (draft-d) continuous multi-objective scorer (`T5`).
 //! - `g3_sandwich`: `SandwichSection`, `SandwichPlate`, `solve_ring_band_t6` (1.5 mm band load),
 //!   and fail-closed `solve_g3_solid_tet10_strict` (`T4.1`).
 //! - `g3_genome`: 179-gene `G3.0` unit-cube genome, `from_hzm93`, strict CSV loader, Sobol generator,
@@ -207,7 +207,7 @@ mod v1_identity_tests {
         let py_score = &doc["evaluate_h025"]["score"];
         let rust_score_on_py_m = crate::ergolight::score_ergolight_map_draft_b(m_obj)
             .expect("score_ergolight_map_draft_b on FA m");
-        // Verify that draft-c strictly rejects a map with only legacy `ring_pull_cap_n` (I1)
+        // Verify that the current draft strictly rejects a map with only legacy `ring_pull_cap_n` (I1)
         assert!(score_ergolight_map(m_obj).is_err());
         let mut m_draft_c = m_obj.clone();
         m_draft_c.insert(
@@ -215,8 +215,8 @@ mod v1_identity_tests {
             m_obj["ring_pull_cap_n"].clone(),
         );
         let rust_score_draft_c =
-            score_ergolight_map(&m_draft_c).expect("score_ergolight_map draft-c on FA m");
-        assert_eq!(rust_score_draft_c["draft"].as_str(), Some("c"));
+            score_ergolight_map(&m_draft_c).expect("score_ergolight_map draft-d on FA m");
+        assert_eq!(rust_score_draft_c["draft"].as_str(), Some("d"));
         assert!(rust_score_draft_c["terms"].get("ring_bearing_300n_sf2").is_some());
         assert!(rust_score_draft_c["terms"].get("ring_back_30n_sf2").is_some());
         let rs_score_100 = rust_score_on_py_m["score_100"].as_f64().unwrap();
@@ -551,16 +551,16 @@ mod v1_identity_tests {
     }
 
     #[test]
-    fn t8_parity_all_25_cases_match_python_g3hz_parity_v3_draftc() {
+    fn t8_parity_all_25_cases_match_python_g3hz_parity_v3_draftd() {
         use crate::ergolight::score_ergolight_map;
         use crate::g3_genome::G3Genome;
         use crate::g3_qd::compute_finger_metrics;
         use crate::g3_sdf::build_g3_sdf_from_params;
 
-        let raw = include_str!("../tests/fixtures/g3hz_parity_v3_draftc.json");
+        let raw = include_str!("../tests/fixtures/g3hz_parity_v3_draftd.json");
         let doc: serde_json::Value =
-            serde_json::from_str(raw).expect("parse g3hz_parity_v3_draftc.json");
-        assert_eq!(doc["ergolight_draft"].as_str(), Some("c"));
+            serde_json::from_str(raw).expect("parse g3hz_parity_v3_draftd.json");
+        assert_eq!(doc["ergolight_draft"].as_str(), Some("d"));
         let cases = doc["cases"].as_array().expect("cases array");
         assert_eq!(cases.len(), 25);
 
@@ -601,15 +601,15 @@ mod v1_identity_tests {
                         max_p_diff = max_p_diff.max(d);
                         assert!(
                             d < 1e-9,
-                            "v3_draftc case {name} decoded parameter {k} mismatch: Rust={v_rs} vs Py={v_py}"
+                            "v3_draftd case {name} decoded parameter {k} mismatch: Rust={v_rs} vs Py={v_py}"
                         );
                     }
                 }
             }
 
-            // 1. Feed each case's `m` to Rust draft-c scorer (`score_ergolight_map`) and assert `terms`, `ergo`, `E`, `base`, and `score_100` to 1e-9
+            // 1. Feed each case's `m` to Rust draft-d scorer (`score_ergolight_map`) and assert `terms`, `ergo`, `E`, `base`, and `score_100` to 1e-9
             let m_obj = c["m"].as_object().unwrap();
-            let rs_score = score_ergolight_map(m_obj).expect("score_ergolight_map draft-c");
+            let rs_score = score_ergolight_map(m_obj).expect("score_ergolight_map draft-d");
             let py_score_100 = c["score_100"].as_f64().unwrap();
             let py_e = c["E"].as_f64().unwrap();
             let py_base = c["base"].as_f64().unwrap();
@@ -748,7 +748,7 @@ mod v1_identity_tests {
                 max_grip_sf_rel_diff = max_grip_sf_rel_diff.max(grip_sf_rel);
 
                 println!(
-                    "  [v3_draftc {name:<16}] mass_am: rs={:.2} py={:.2} (rel={:.4}) | ring_env: rs={:.2} py={:.2} | ring_am: rs={:.2} py={:.2} | grip_env: rs={:.2} py={:.2} | grip_am: rs={:.2} py={:.2} | perim: rs={:.2} py={:.2} | hot: rs={:.3} py={:.3} | lg: rs={:.2} py={:.2} | gh: rs={:.2} py={:.2} | com: rs={:.2} py={:.2} | spin: rs={:.0} py={:.0} | grip_sf: rs={:.3} py={:.3}",
+                    "  [v3_draftd {name:<16}] mass_am: rs={:.2} py={:.2} (rel={:.4}) | ring_env: rs={:.2} py={:.2} | ring_am: rs={:.2} py={:.2} | grip_env: rs={:.2} py={:.2} | grip_am: rs={:.2} py={:.2} | perim: rs={:.2} py={:.2} | hot: rs={:.3} py={:.3} | lg: rs={:.2} py={:.2} | gh: rs={:.2} py={:.2} | com: rs={:.2} py={:.2} | spin: rs={:.0} py={:.0} | grip_sf: rs={:.3} py={:.3}",
                     meas.f075_union_mass_am_g, py_mass_am, mass_rel,
                     meas.ring_env_g, c["masses"]["zones"]["ring"]["envelope_g"].as_f64().unwrap(),
                     meas.ring_am_g, c["masses"]["zones"]["ring"]["am_g"].as_f64().unwrap(),
@@ -828,7 +828,7 @@ mod v1_identity_tests {
             }
         }
         println!(
-            "=== T8 Parity v3 draft-c Summary (25 cases) ===\n  max_p_diff={max_p_diff:.2e}, max_score_diff={max_score_diff:.2e}, max_base_diff={max_base_diff:.2e}, max_e_diff={max_e_diff:.2e}, max_term_diff={max_term_diff:.2e}, max_ergo_diff={max_ergo_diff:.2e}, max_fm_diff={max_fm_diff:.2e}\n  3D SDF (finalists + randoms): max_mass_rel={max_mass_rel_diff:.4}, max_hz_mass_rel={max_hz_mass_rel_diff:.4}, max_perim_rel={max_perim_rel_diff:.4}, max_hot_diff={max_hot_diff:.4}, max_lg_diff={max_lg_diff:.3} mm, max_gh_diff={max_gh_diff:.3} mm, max_com_diff={max_com_diff:.3} mm, max_spin_rel={max_spin_rel_diff:.4}, max_grip_sf_rel={max_grip_sf_rel_diff:.4}"
+            "=== T8 Parity v3 draft-d Summary (25 cases) ===\n  max_p_diff={max_p_diff:.2e}, max_score_diff={max_score_diff:.2e}, max_base_diff={max_base_diff:.2e}, max_e_diff={max_e_diff:.2e}, max_term_diff={max_term_diff:.2e}, max_ergo_diff={max_ergo_diff:.2e}, max_fm_diff={max_fm_diff:.2e}\n  3D SDF (finalists + randoms): max_mass_rel={max_mass_rel_diff:.4}, max_hz_mass_rel={max_hz_mass_rel_diff:.4}, max_perim_rel={max_perim_rel_diff:.4}, max_hot_diff={max_hot_diff:.4}, max_lg_diff={max_lg_diff:.3} mm, max_gh_diff={max_gh_diff:.3} mm, max_com_diff={max_com_diff:.3} mm, max_spin_rel={max_spin_rel_diff:.4}, max_grip_sf_rel={max_grip_sf_rel_diff:.4}"
         );
     }
 

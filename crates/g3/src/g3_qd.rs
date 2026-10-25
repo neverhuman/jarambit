@@ -4,7 +4,7 @@
 //! Strictly constraint- and fitness-driven (Owner directive 2026-10-25T01:13:42Z):
 //! - **Zero manual design of individuals**: populations initialize exclusively from the quasi-random
 //!   Sobol sequence (`sobol_unit_genome`) over $[0, 1]^{179}$.
-//! - **Zero hard gates / vetoes**: every candidate receives a continuous `W_ERGOLIGHT_v1` (draft-c)
+//! - **Zero hard gates / vetoes**: every candidate receives a continuous `W_ERGOLIGHT_v1` (draft-d)
 //!   score in `[0, 100]`.
 //! - **3-Tier Multi-Fidelity Cascade**:
 //!   - **Tier 0 (~2 ms)**: Analytic 1D/2D section integration (ring, hollow grip 250 N squeeze +
@@ -1750,9 +1750,27 @@ pub fn splitmix64(mut x: u64) -> u64 {
     z ^ (z >> 31)
 }
 
-/// Run a pure Sobol-seeded CVT-MAP-Elites evolutionary search under `W_ERGOLIGHT_v1` (draft-c)
+/// Run a pure Sobol-seeded CVT-MAP-Elites evolutionary search under `W_ERGOLIGHT_v1` (draft-d)
 /// with the 3-tier cascade (zero manual design of individuals).
 pub fn run_g3_cvt_map_elites(
+    n_init_sobol: usize,
+    n_evals: usize,
+    seed: u64,
+    tier1_gate_score: f64,
+    tier2_gate_score: f64,
+    h_vox: f64,
+    decoder_commit: &str,
+) -> CvtMapElitesArchive {
+    run_g3_cvt_map_elites_seeded(&[], n_init_sobol, n_evals, seed, tier1_gate_score, tier2_gate_score, h_vox, decoder_commit)
+}
+
+/// As `run_g3_cvt_map_elites`, continuing from earlier genomes: each seed's genes are re-stamped with this run's
+/// `decoder_commit` and **re-evaluated** through the cascade under the current decoder and scorer (never re-weighted
+/// from a stored record), then Sobol fills up to `n_init_sobol` (none if seeds were given and `n_init_sobol` is 0)
+/// and variation continues. Seeds count towards `n_evals`.
+#[allow(clippy::too_many_arguments)]
+pub fn run_g3_cvt_map_elites_seeded(
+    seeds: &[G3Genome],
     n_init_sobol: usize,
     n_evals: usize,
     seed: u64,
@@ -1766,14 +1784,20 @@ pub fn run_g3_cvt_map_elites(
     let mixed_seed = splitmix64(seed);
     let scramble_seed = (mixed_seed as usize).max(1);
 
-    let init_count = n_init_sobol.min(n_evals).max(1);
-    for i in 0..init_count {
+    let n_seeds = seeds.len().min(n_evals);
+    for s in &seeds[..n_seeds] {
+        let g = G3Genome { schema: s.schema.clone(), decoder_commit: decoder_commit.to_string(), u: s.u.clone() };
+        let rec = evaluate_g3_cascade(&g, tier1_gate_score, tier2_gate_score, h_vox);
+        archive.insert(g, rec);
+    }
+    let n_sobol = if n_seeds == 0 { n_init_sobol.min(n_evals).max(1) } else { n_init_sobol.min(n_evals - n_seeds) };
+    for i in 0..n_sobol {
         let g = sobol_unit_genome(i, scramble_seed, decoder_commit);
         let rec = evaluate_g3_cascade(&g, tier1_gate_score, tier2_gate_score, h_vox);
         archive.insert(g, rec);
     }
 
-    for _ in init_count..n_evals {
+    for _ in (n_seeds + n_sobol)..n_evals {
         let Some((child, parent_nid)) = archive.sample_offspring(&mut rng) else {
             break;
         };
@@ -1819,6 +1843,20 @@ mod tests {
             arch_init.qd_score(),
             arch_evol.qd_score()
         );
+        // 3. Seeded continuation: seeds are re-stamped with the run's commit, re-evaluated, and the archive keeps them
+        let seeds: Vec<G3Genome> = (0..12).map(|i| sobol_unit_genome(i, 3, "1111111")).collect();
+        let arch_seeded = run_g3_cvt_map_elites_seeded(&seeds, 0, 60, 7, 999.0, 999.0, 1.0, "22bb8696");
+        assert!(arch_seeded.elites.values().all(|e| e.genome.decoder_commit == "22bb8696"));
+        assert!(arch_seeded.verify_integrity().is_ok());
+        let seeded_best = seeds
+            .iter()
+            .map(|s| {
+                let g = G3Genome { schema: s.schema.clone(), decoder_commit: "22bb8696".into(), u: s.u.clone() };
+                evaluate_tier0_analytic(&g).score.raw_score_100
+            })
+            .fold(f64::MIN, f64::max);
+        assert!(arch_seeded.best_elite().unwrap().record.score.raw_score_100 >= seeded_best);
+
         let best_init = arch_init.best_elite().unwrap().record.score.raw_score_100;
         let best_evol = arch_evol.best_elite().unwrap().record.score.raw_score_100;
         assert!(
