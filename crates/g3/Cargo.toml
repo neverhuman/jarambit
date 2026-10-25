@@ -1,0 +1,19 @@
+[workspace]
+
+[package]
+name = "jarambit-g3"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[[bin]]
+name = "g3-evolve"
+path = "src/bin/g3_evolve.rs"
+
+[dependencies]
+jarambit-crescent = { path = "../crescent" }
+jarambit-physics = { path = "../physics" }
+faer = { version = "0.24", default-features = false, features = ["std", "linalg", "sparse", "sparse-linalg"] }
+rayon = "1.10"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
