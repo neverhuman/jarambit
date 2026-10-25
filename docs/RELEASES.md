@@ -2,6 +2,16 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v2.4.5 — 2026-10-25 (Inferno [0.15, 0.95] stress ramp and 3D raking lighting on cover and hero figures)
+
+- **Owner request.** "Pick a really good color map that looks great (not the default)… also, we want great 3D lighting/shading as well."
+- **Inferno $[0.15, 0.95]$ stress ramp (`pocket_smoothing_figures.rs`).**
+  - The cover and pocket-hero von Mises stress renders now use a 9-stop perceptually uniform **Inferno** colormap truncated to $t \in [0.15, 0.95]$ (deep violet `#2c0b57` at $0\text{ MPa}$ through magenta and orange to pale yellow `#f1ee72` at $\ge 450\text{ MPa}$, avoiding the bottom $15\%$ near-black shadow ambiguity and top $5\%$ near-white page washout, with neutral grey for the masked tip zone).
+- **3D raking lighting and shading.**
+  - `cover()` and `hero()` lighting updated to balanced 3D raking illumination (`ambient = 0.35`, `diffuse = 0.65`, `specular = 0.15`, `shininess = 48`, key light `[-0.72, 0.58, 0.38]`) so pocket wall curvature and bevel relief read clearly without washing out the stress ramp.
+  - Cover, inset, and hero figures (`docs/paper/figures/cover/*`, `docs/paper/figures/pocket/*`) and Paper A / Paper B PDFs (`docs/paper/main.pdf`, `docs/paper/main-smoothed.pdf`) regenerated and verified (`make -C docs/paper check pdf-smoothed`).
+- **Unchanged.** v1 scores, receipts, census, ladder, and G3 `W_ERGOLIGHT_v1` draft d are untouched.
+
 ## v2.4.4 — 2026-10-25 (README leads with the G3 design and its cavities; paper illustration; W_ERGOLIGHT_v1 draft d)
 
 - **Owner request.** "We need image updates ASAP… take the current leading individual hz4i012_g00085_4cdfea55… update the README smoothed image, if there are 3D cavities show a cut away to show where they are. Also update the paper." The owner had noticed that the README and papers still showed the v1 flat plate, whose handle edges are sharp; Paper B's smoothing only rounded the pocket walls.
