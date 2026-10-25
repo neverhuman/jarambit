@@ -153,15 +153,192 @@ fn main() -> Res<()> {
     let hosts: std::collections::BTreeSet<&str> = islands.iter().map(|r| r["host"].as_str()).collect();
     let runs: std::collections::BTreeSet<&str> = islands.iter().map(|r| r["run"].as_str()).collect();
     let first_day = rows.first().map_or(lead_day, |r| r.0);
+
+    // Read winner-selection.v1.json for distinct-genome count, re-assessments, and previous leader.
+    let sel_path = match arg("--selection") {
+        Ok(p) => PathBuf::from(p),
+        Err(_) => out.join("../figures/cover/winner-selection.v1.json"),
+    };
+    let sel_bytes = fs::read(&sel_path)?;
+    let sel: serde_json::Value = serde_json::from_slice(&sel_bytes)?;
+    let distinct_genomes = sel["distinct_genomes"].as_u64().ok_or("missing distinct_genomes")? as usize;
+    let leader_reassessed = sel["winner_re_assessment"]["re_assessed"]
+        .as_f64()
+        .ok_or("missing winner_re_assessment.re_assessed")?;
+    let reassess_list = sel["re_assessment"]["results"]
+        .as_array()
+        .ok_or("missing re_assessment.results")?;
+    // w290_r03_p14_c04 is the named stored-score inflation example from the 2026-10-16 evaluator (1e93e6f3).
+    let w290 = reassess_list
+        .iter()
+        .find(|r| r["label"].as_str() == Some("w290_r03_p14_c04"))
+        .ok_or("missing w290_r03_p14_c04 in re_assessment.results")?;
+    if !w290["stored_evaluator"]
+        .as_str()
+        .is_some_and(|s| s.starts_with("1e93e6f3"))
+    {
+        return Err("w290_r03_p14_c04 stored_evaluator is not 1e93e6f3*".into());
+    }
+    let inflated_stored = w290["stored"].as_f64().ok_or("missing w290 stored")?;
+    let inflated_reassessed = w290["re_assessed"].as_f64().ok_or("missing w290 re_assessed")?;
+    let top20 = sel["top20_distinct_genomes"]
+        .as_array()
+        .ok_or("missing top20_distinct_genomes")?;
+    let seed_parent_score = top20
+        .iter()
+        .find(|r| r["label"].as_str() == Some("ec1i012_r04_p10_c101"))
+        .ok_or("missing ec1i012_r04_p10_c101 in top20_distinct_genomes")?["canonical_w_ultralight_v1"]
+        .as_f64()
+        .ok_or("missing ec1i012_r04_p10_c101 canonical_w_ultralight_v1")?;
+    let mut inf_diffs = Vec::new();
+    for r in reassess_list {
+        if r["stored_evaluator"].as_str().is_some_and(|s| s.starts_with("1e93e6f3")) {
+            let st = r["stored"].as_f64().ok_or("missing stored")?;
+            let re = r["re_assessed"].as_f64().ok_or("missing re_assessed")?;
+            inf_diffs.push(st - re);
+        }
+    }
+    if inf_diffs.is_empty() {
+        return Err("no 1e93e6f3 re-assessment entries found".into());
+    }
+    let inf_min = inf_diffs.iter().copied().fold(f64::INFINITY, f64::min);
+    let inf_max = inf_diffs.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+    let prev0 = &sel["previous_selections"][0];
+    let prev_leader = prev0["winner"].as_str().ok_or("missing previous_selections[0].winner")?;
+    let prev_leader_score = prev0["canonical_w_ultralight_v1"]
+        .as_f64()
+        .ok_or("missing previous_selections[0].canonical_w_ultralight_v1")?;
+
+    // Read gen800_population_density_and_traces.v1.json and verification.json for Cohort 3 and solver macros.
+    let gen800_path = match arg("--gen800") {
+        Ok(p) => PathBuf::from(p),
+        Err(_) => out.join("../data/gen800_population_density_and_traces.v1.json"),
+    };
+    let gen800: serde_json::Value = serde_json::from_slice(&fs::read(&gen800_path)?)?;
+    let c3_total = gen800["total_rows"].as_u64().ok_or("missing total_rows")? as usize;
+    let c3_legal = gen800["total_legal_true_rows"].as_u64().ok_or("missing total_legal_true_rows")? as usize;
+    let c3_runs = gen800["total_runs"].as_u64().ok_or("missing total_runs")? as usize;
+    let g800_runs = gen800["runs"].as_array().ok_or("missing gen800 runs")?;
+    let share_range = |gen_idx: usize| -> Res<(i64, i64)> {
+        let mut pcts = Vec::new();
+        for r in g800_runs {
+            let leg = r["gen_legal_count"][gen_idx].as_f64().ok_or("missing gen_legal_count")?;
+            let tot = r["gen_total_count"][gen_idx].as_f64().ok_or("missing gen_total_count")?;
+            pcts.push((leg / tot * 100.0).round() as i64);
+        }
+        let lo = *pcts.iter().min().ok_or("empty gen800 runs")?;
+        let hi = *pcts.iter().max().ok_or("empty gen800 runs")?;
+        Ok((lo, hi))
+    };
+    let (g0_lo, g0_hi) = share_range(0)?;
+    let (g50_lo, g50_hi) = share_range(50)?;
+
+    let ver_path = match arg("--verification") {
+        Ok(p) => PathBuf::from(p),
+        Err(_) => out.join("../generated/verification.json"),
+    };
+    let ver: serde_json::Value = serde_json::from_slice(&fs::read(&ver_path)?)?;
+    let solver_max_pct = ver["scalar_pairs"]
+        .as_array()
+        .ok_or("missing scalar_pairs")?
+        .iter()
+        .filter_map(|p| p["stored_relative_sf_difference"].as_f64())
+        .fold(0.0_f64, f64::max)
+        * 100.0;
+
+    // Read pocket-smoothing receipts for \Pocket* macros.
+    let win_rec_path = match arg("--winner-receipt") {
+        Ok(p) => PathBuf::from(p),
+        Err(_) => out.join("../../../experiments/pocket-surface-tension-smoothing/results/ec3i042_r01_p10_c56/RECEIPT.json"),
+    };
+    let set_rec_path = match arg("--setting-receipt") {
+        Ok(p) => PathBuf::from(p),
+        Err(_) => out.join("../../../experiments/pocket-surface-tension-smoothing/results/w406t3_r01_p10_c16/RECEIPT.json"),
+    };
+    let win_rec: serde_json::Value = serde_json::from_slice(&fs::read(&win_rec_path)?)?;
+    let set_rec: serde_json::Value = serde_json::from_slice(&fs::read(&set_rec_path)?)?;
+    let find_run = |doc: &serde_json::Value, name: &str| -> Res<serde_json::Value> {
+        doc["runs"]
+            .as_array()
+            .ok_or("missing runs")?
+            .iter()
+            .find(|r| r["name"].as_str() == Some(name))
+            .cloned()
+            .ok_or_else(|| format!("missing run {name}").into())
+    };
+    let w_ctrl = find_run(&win_rec, "ctrl")?;
+    let w_f075 = find_run(&win_rec, "f075")?;
+    let s_ctrl = find_run(&set_rec, "ctrl")?;
+    let s_f075 = find_run(&set_rec, "f075")?;
+    let w_ctrl_score = w_ctrl["score_100"].as_f64().ok_or("w_ctrl score_100")?;
+    let w_f075_score = w_f075["score_100"].as_f64().ok_or("w_f075 score_100")?;
+    let s_ctrl_score = s_ctrl["score_100"].as_f64().ok_or("s_ctrl score_100")?;
+    let s_f075_score = s_f075["score_100"].as_f64().ok_or("s_f075 score_100")?;
+    let delta_f = w_f075_score - w_ctrl_score;
+    let delta_f_set = s_f075_score - s_ctrl_score;
+    let fmt_signed = |d: f64| -> String {
+        if d >= 0.0 {
+            format!("$+{d:.6}$")
+        } else {
+            format!("${d:.6}$")
+        }
+    };
+    let bat_before = w_ctrl["battery_pass"].as_u64().ok_or("w_ctrl battery_pass")?;
+    let bat_after = w_f075["battery_pass"].as_u64().ok_or("w_f075 battery_pass")?;
+    let mass_before = w_ctrl["mass_3d_g"].as_f64().ok_or("w_ctrl mass_3d_g")?;
+    let mass_after = w_f075["mass_3d_g"].as_f64().ok_or("w_f075 mass_3d_g")?;
+    let rep = &w_f075["smoothing_report"];
+    let vol_before = rep["removed_volume_mm3"]["before"].as_f64().ok_or("vol before")?;
+    let vol_after = rep["removed_volume_mm3"]["after"].as_f64().ok_or("vol after")?;
+    let vol_pct = ((vol_after / vol_before - 1.0).abs()) * 100.0;
+    let iso = rep["isoline_length_by_depth_level_mm"]
+        .as_object()
+        .ok_or("isoline_length_by_depth_level_mm")?;
+    let mut iso_pcts = Vec::new();
+    for v in iso.values() {
+        let b = v["before_mm"].as_f64().ok_or("before_mm")?;
+        let af = v["after_mm"].as_f64().ok_or("after_mm")?;
+        iso_pcts.push((1.0 - af / b) * 100.0);
+    }
+    let iso_min = iso_pcts.iter().copied().fold(f64::INFINITY, f64::min).round() as i64;
+    let iso_max = iso_pcts.iter().copied().fold(f64::NEG_INFINITY, f64::max).round() as i64;
+    let w_sec = rep["seconds"].as_f64().ok_or("w_f075 seconds")?;
+    let s_sec = s_f075["smoothing_report"]["seconds"].as_f64().ok_or("s_f075 seconds")?;
+    let sec_min = w_sec.min(s_sec);
+    let sec_max = w_sec.max(s_sec);
+
     let meta = format!(
         "% Generated by evolution_all_runs; do not edit.\n\
 \\newcommand{{\\AllRunsIslands}}{{{}}}\n\\newcommand{{\\AllRunsHosts}}{{{}}}\n\\newcommand{{\\AllRunsRuns}}{{{}}}\n\
-\\newcommand{{\\AllRunsStageTwo}}{{{}}}\n\\newcommand{{\\AllRunsStageTwoWaves}}{{{}}}\n\\newcommand{{\\AllRunsStageTwoCampaign}}{{{}}}\n\\newcommand{{\\AllRunsStageTwoContinuous}}{{{}}}\n\\newcommand{{\\AllRunsInflated}}{{{}}}\n\
+\\newcommand{{\\AllRunsStageTwo}}{{{}}}\n\\newcommand{{\\AllRunsDistinctGenomes}}{{{}}}\n\\newcommand{{\\AllRunsStageTwoWaves}}{{{}}}\n\\newcommand{{\\AllRunsStageTwoCampaign}}{{{}}}\n\\newcommand{{\\AllRunsStageTwoContinuous}}{{{}}}\n\\newcommand{{\\AllRunsInflated}}{{{}}}\n\
 \\newcommand{{\\AllRunsStageOne}}{{{}}}\n\\newcommand{{\\AllRunsRounds}}{{{}}}\n\
-\\newcommand{{\\AllRunsLeader}}{{\\texttt{{{}}}}}\n\\newcommand{{\\AllRunsLeaderScore}}{{{:.6}}}\n\\newcommand{{\\AllRunsLeaderHost}}{{{}}}\n\
-\\newcommand{{\\AllRunsFirstDay}}{{{:.2}}}\n\\newcommand{{\\AllRunsLastDay}}{{{:.2}}}\n",
-        islands.len(), hosts.len(), runs.len(), rows.len(), count(0), count(1), count(2), inflated, screened, rounds.len(),
-        tex_escape(&lead_label), lead_score, lead_host, first_day, last_day,
+\\newcommand{{\\AllRunsLeader}}{{\\texttt{{{}}}}}\n\\newcommand{{\\AllRunsLeaderScore}}{{{:.6}}}\n\\newcommand{{\\AllRunsLeaderReassessed}}{{{:.6}}}\n\\newcommand{{\\AllRunsLeaderHost}}{{{}}}\n\
+\\newcommand{{\\AllRunsInflatedStored}}{{{:.2}}}\n\\newcommand{{\\AllRunsInflatedReassessed}}{{{:.6}}}\n\\newcommand{{\\AllRunsInflationRange}}{{{:.2}--{:.2}}}\n\
+\\newcommand{{\\AllRunsPreviousLeader}}{{\\texttt{{{}}}}}\n\\newcommand{{\\AllRunsPreviousLeaderScore}}{{{:.6}}}\n\
+\\newcommand{{\\SeedParentScore}}{{{:.6}}}\n\
+\\newcommand{{\\AllRunsFirstDay}}{{{:.2}}}\n\\newcommand{{\\AllRunsLastDay}}{{{:.2}}}\n\
+\\newcommand{{\\CohortThreeTotalEvaluations}}{{{}}}\n\\newcommand{{\\CohortThreeLegalEvaluations}}{{{}}}\n\\newcommand{{\\CohortThreeRuns}}{{{}}}\n\
+\\newcommand{{\\NativeLegalShareGenZero}}{{{}--{}}}\n\\newcommand{{\\NativeLegalShareGenFifty}}{{{}--{}}}\n\
+\\newcommand{{\\SolverAgreementMaxPct}}{{{:.4}}}\n\
+\\newcommand{{\\PocketSmoothedScore}}{{{:.6}}}\n\\newcommand{{\\PocketDeltaF}}{{{}}}\n\\newcommand{{\\PocketDeltaFSettingDesign}}{{{}}}\n\
+\\newcommand{{\\PocketBatteryBefore}}{{{}}}\n\\newcommand{{\\PocketBatteryAfter}}{{{}}}\n\
+\\newcommand{{\\PocketMassBefore}}{{{:.2}}}\n\\newcommand{{\\PocketMassAfter}}{{{:.2}}}\n\
+\\newcommand{{\\PocketRemovedVolumePct}}{{{:.3}}}\n\\newcommand{{\\PocketContourRange}}{{{}--{}}}\n\\newcommand{{\\PocketSecondsRange}}{{{:.1}--{:.1}}}\n",
+        islands.len(), hosts.len(), runs.len(),
+        rows.len(), distinct_genomes, count(0), count(1), count(2), inflated,
+        screened, rounds.len(),
+        tex_escape(&lead_label), lead_score, leader_reassessed, lead_host,
+        inflated_stored, inflated_reassessed, inf_min, inf_max,
+        tex_escape(prev_leader), prev_leader_score,
+        seed_parent_score,
+        first_day, last_day,
+        c3_total, c3_legal, c3_runs,
+        g0_lo, g0_hi, g50_lo, g50_hi,
+        solver_max_pct,
+        w_f075_score, fmt_signed(delta_f), fmt_signed(delta_f_set),
+        bat_before, bat_after,
+        mass_before, mass_after,
+        vol_pct, iso_min, iso_max, sec_min, sec_max,
     );
     fs::write(out.join("stage2.dat"), s2)?;
     fs::write(out.join("best.dat"), best)?;
