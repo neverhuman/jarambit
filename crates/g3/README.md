@@ -4,7 +4,7 @@ A standalone Cargo workspace (it is **not** a member of the root workspace). It 
 ergonomic, hollow-AM redesign of the Jarambit knife, in which the finger-ring hand zone and the double-edged blade
 evolve together. It is kept apart from the published v1 pipeline by construction:
 
-- schema `G3.0`, metric `W_ERGOLIGHT_v1` (draft c), rules `requirements/RS-karambit-v3.toml`;
+- schema `G3.0`, metric `W_ERGOLIGHT_v1` (draft d: owner 2026-10-25 raised `solid_tip_3d` from 0.030 to 0.070), rules `requirements/RS-karambit-v3.toml`;
 - design IDs `hz<host>i<island>_g<niche>_<sha8>`, run root under `evo_g3` (never `evo_continuous`);
 - the v1 certification identity (root `Cargo.lock` and pinned v1 certificates) is asserted unchanged by
   `v1_identity_tests::v1_certification_identity_is_unchanged_from_origin_main`.
@@ -30,7 +30,7 @@ cargo build --release --bin g3-evolve
 ```
 
 All 27 tests are hermetic and read their reference fixtures from `tests/fixtures/` (`fa_best_overall_finalist.json`,
-`f075_reference.json`, `g3hz_parity_v1.json`, `g3hz_parity_v3_draftc.json`, and `sobol_test_vector.json`), and run on
+`f075_reference.json`, `g3hz_parity_v1.json`, `g3hz_parity_v3_draftd.json`, and `sobol_test_vector.json`), and run on
 every pull request in `.github/workflows/d1-gates.yml`. Note: if a PR updates dependencies in `crates/crescent` or
 `crates/physics`, refresh `crates/g3/Cargo.lock` (`cargo update --workspace --manifest-path crates/g3/Cargo.toml`) so
 `--locked` remains satisfied.
