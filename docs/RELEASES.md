@@ -2,6 +2,23 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v2.4.4 — 2026-10-25 (README leads with the G3 design and its cavities; paper illustration; W_ERGOLIGHT_v1 draft d)
+
+- **Owner request.** "We need image updates ASAP… take the current leading individual hz4i012_g00085_4cdfea55… update the README smoothed image, if there are 3D cavities show a cut away to show where they are. Also update the paper." The owner had noticed that the README and papers still showed the v1 flat plate, whose handle edges are sharp; Paper B's smoothing only rounded the pocket walls.
+- **README, current design first.**
+  - Cycles renders of the leading G3 candidate `hz4i012_g00085_4cdfea55` (`W_ERGOLIGHT_v1` draft d 78.11, 52.3 g, computational, not qualified or built): a hero view; an **x-ray** with the outer shell as glass and every internal cavity in orange; and lengthwise and cross sections.
+  - Measured from the exported meshes:
+    - **Edges:** smallest hand-zone edge radius 2.7 mm against the rules' 2.0 mm.
+    - **Cavity share:** grip 67 %, guard/neck 28 %, blade body 27 % behind solid edges and tip, ring solid; 53.5 % overall.
+  - Provenance is in `docs/g3/RENDERS.md`.
+- **README, the published study.** The v1 winner now follows with the pocket-smoothed image only, and the header links feature Paper B. Paper A stays in the repository as the record B builds on.
+- **Paper.** A four-panel figure (`fig:g3-candidate`) in the discussion's research-direction subsection illustrates the follow-on cohort's leading candidate. Its caption says it is outside this study's census and not a finding. Paper A is 18 pages and Paper B 19.
+- **G3 objective, draft d (owner decision).**
+  - `solid_tip_3d` rises from 0.030 to 0.070. The +0.040 comes pro-rata from the 12 other structural terms; mass and the ergonomic betas are unchanged, and there is still no hard gate. The pilot's double-edged points had reached a converged 3D solid-tip SF of only 0.11–0.51.
+  - Parity: a draft-d fixture (25 cases); Rust equals Python to 1e-9.
+  - A proposed seeding flag was withdrawn in review: G3 runs start only from Sobol. The draft-d cohort (16 islands × 10,000) runs from a Sobol start.
+- **Unchanged.** v1 scores, receipts, census, ladder and every assessment are untouched; nothing in the v1 study is re-solved or re-scored.
+
 ## v2.4.3 — 2026-10-25 (paper Phase 2: native dynamics, score decomposition, requirements table; README and G3 cohort note)
 
 - **Owner request.** "Please ensure README and paper are updated." This release lands the paper study's Phase 2 displays, which the G3 helper agent built and Claude-HZ reviewed and corrected. It also updates the README and adds one prospective paragraph on the separate G3 cohort.
