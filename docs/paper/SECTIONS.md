@@ -21,11 +21,11 @@ the same time without touching the same file. The order below is the reading ord
 | 2 | `sections/02-background.tex` | Background and Related Research | `sec:background`, `tab:related` |
 | 3 | `sections/study-design.tex` | Study Design and Retained Evidence | `sec:study-design`, `tab:study-coverage`, `fig:evidence-architecture` |
 | 4 | `sections/03-genome.tex` | Representation and Candidate Identity | `sec:genome`, `tab:genome-blocks` |
-| 5 | `sections/observed-morphology.tex` | Observed Morphology and Feature Provenance | `sec:observed-morphology`, `fig:cover` |
+| 5 | `sections/observed-morphology.tex` | Observed Morphology and Feature Provenance | `sec:observed-morphology`, `fig:cover`, `tab:winner-requirements` |
 | 6 | `sections/pocket-smoothing.tex` | Surface-Tension Pocket Smoothing *(Paper B only)* | `sec:pocket-smoothing`, `eq:pocket-flow`, `fig:pocket-bw`, `fig:pocket-fields`, `tab:pocket-score` |
 | 7 | `sections/04-evolution.tex` | Recorded Search and Inheritance | `sec:evolution`, `fig:lineage` |
-| 8 | `sections/05-fitness.tex` | Score Definitions and Comparability | `sec:fitness`, `tab:score-dictionary`, `fig:plate-fields` |
-| 9 | `sections/08-results.tex` | Three Findings from the Retained Records | `sec:results`, `fig:all-runs`, `tab:candidate-evidence` |
+| 8 | `sections/05-fitness.tex` | Score Definitions and Comparability | `sec:fitness`, `tab:score-dictionary`, `fig:score-decomposition`, `fig:plate-fields` |
+| 9 | `sections/08-results.tex` | Three Findings from the Retained Records | `sec:results`, `fig:native-dynamics`, `fig:all-runs`, `tab:candidate-evidence` |
 | 10 | `sections/06-battery.tex` | What the Numerical Observations Represent | `sec:battery`, `tab:observation-families`, `subsec:family-lateral`, `subsec:family-ring`, `subsec:family-torsion`, `subsec:family-solid` … |
 | 11 | `sections/07-verification.tex` | Numerical Agreement and Unresolved Error | `sec:verification`, `fig:verification` |
 | 12 | `sections/10-reproducibility.tex` | Reconstruction and Artifact Access | `sec:reproducibility`, `tab:reproduction-levels` |
@@ -47,5 +47,5 @@ the same time without touching the same file. The order below is the reading ord
 | 5 | `supplement/related-work-notes.tex` | Related-Work Interpretation Notes | `supp:related-work-notes` |
 | 6 | `supplement/moved-from-main.tex` | Material Moved from the Main Paper | `sec:moved-from-main`, `sec:moved-display`, `fig:population-latest`, `fig:assessment`, `fig:objective-priorities` … |
 | 7 | `supplement/historical-battery.tex` | Complete Historical 23-Subject, 18-Evaluator CAD Battery | `sup:battery-matrix`, `fig:battery-matrix` |
-| 8 | `supplement/catalog-crosswalk.tex` | Complete 44-Entry Catalog Crosswalk (\code{G16 | `sup:crosswalk-44` |
+| 8 | `supplement/catalog-crosswalk.tex` | Complete 44-Entry Catalog Crosswalk (\code{G16..RSV2}) | `sup:crosswalk-44` |
 | 9 | `supplement/missing-visuals.tex` | Missing Subsection Visuals and Unavailable Spatial Fields | `sup:missing-disclosures` |
