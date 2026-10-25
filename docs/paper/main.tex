@@ -1,9 +1,8 @@
-\RequirePackage[T1]{fontenc}
 \documentclass[10pt,journal,letterpaper]{IEEEtran}
 % Research white-paper showcase layout: custom single-column opening, IEEEtran two-column body.
 % Venue submission requires the selected venue's unmodified official template.
-\usepackage{tgtermes,tgheros}
 \usepackage{amsmath,amssymb,graphicx,booktabs,array,xcolor,url}
+\input{ei-ieee-skin.tex}
 \usepackage{xurl}
 \usepackage{xr-hyper}
 \usepackage[hidelinks]{hyperref}
@@ -22,11 +21,12 @@
 \definecolor{ink}{HTML}{132D3B}
 \definecolor{teal}{HTML}{007E87}
 \definecolor{rust}{HTML}{A3442D}
-\DeclareRobustCommand{\code}[1]{\texorpdfstring{{\small\nolinkurl{#1}}}{#1}}
+\DeclareRobustCommand{\code}[1]{\texorpdfstring{{\nolinkurl{#1}}}{#1}}% mono is scaled 0.80 in the skin
 \newcommand{\src}[2]{\href{https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/#1}{#2}}
 \newcommand{\test}[1]{\subsubsection{#1}}
 \input{generated/metrics.tex}
 \input{allruns/allruns-meta.tex}
+\input{ladder/ladder-meta.tex}
 \providecommand{\CohortOneBirths}{1,984}
 \providecommand{\CohortOneFemComplete}{1,455}
 \providecommand{\CohortOneFemNotEvaluated}{529}
@@ -69,5 +69,7 @@
 \input{sections/09-agents.tex}
 \input{sections/11-discussion.tex}
 \input{sections/12-conclusion.tex}
+\input{sections/13-data-availability.tex}
+\input{sections/14-acknowledgment.tex}
 \input{references.tex}
 \end{document}

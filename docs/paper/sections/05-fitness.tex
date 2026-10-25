@@ -14,7 +14,7 @@ A search preference, a stored reporting vector, a shortfall score and a mechanic
 \textbf{Quantity / stage} & \textbf{Direction / scale} & \textbf{Meaning and normalization} & \textbf{Comparison / missingness} \\
 \midrule
 Native $f$; historical and completed native search & Higher preferred; conditional negative branches, no common $[0,1]$ scale & Mechanical/mass terms and contextual novelty after legality/feasibility branches & Bound profile, configuration and stage required; novelty changes with context; negative legal scores occur in completed native runs \\
-Screening deficit; intermediate proposals & Lower shortfall preferred; nonnegative stored sum & Stage-1 screening quantity; not the later 20-term reporting vector & Only observed screens have numeric values; 1390 proposals lack screens \\
+Screening deficit; intermediate proposals & Lower shortfall preferred; nonnegative stored sum & Stage-1 screening quantity; not the later 20-term reporting vector & Only observed screens have numeric values; \num{\CohortTwoUnscreenedBirths} proposals lack screens \\
 Weighted $F$; retained reporting curves & Higher preferred; $[0,100]$ & Twenty saved normalized terms with weights totaling 100 & Compatible versioned recipe recovered; exact executed producer and point-stage comparability unresolved; some inputs are default-compatible \\
 $W_{\mathrm{CAD}}$; 16-gate CAD scorecard & Higher preferred; conditional positive/negative branches & Pass-branch quality versus failed-branch normalized-shortfall penalty & Same assessment definition/inputs required; a favorable subscore is not all-gate success \\
 $G_1$; assessment composite & Higher preferred; dimensionless & Weighted solid-tip factor, strength/mass, shape, mass penalty and sequence gap & Missing required inputs produce incomplete status; a screen-tip substitute is marked provisional; does not override gates \\
@@ -27,36 +27,9 @@ The principal reporting definition is
 \begin{equation}
  F=\sum_{i=1}^{20}w_i s_i,\qquad s_i\in[0,1],\quad \sum_iw_i=100.
 \end{equation}
-Its priorities are mass/compactness (30\%), form/comfort proxies (25\%), exported geometry (15\%) and response/verification (30\%). Table~\ref{tab:weighted-priorities} shows sums of \emph{stored weighted contributions} for Individual~2002. The Supplement retains all twenty normalized values, weights and contributions. These are reported observations from its summary, not a recalculation under the present scorer and not measurements transferred from Individual~2000.
+Its priorities are mass/compactness (30\%), form/comfort proxies (25\%), exported geometry (15\%) and response/verification (30\%). Supplement Table~\ref{S-tab:weighted-priorities} shows sums of \emph{stored weighted contributions} for Individual~2002. The Supplement retains all twenty normalized values, weights and contributions. These are reported observations from its summary, not a recalculation under the present scorer and not measurements transferred from Individual~2000.
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{objective-priorities.v1.png}
-\caption{Configured priorities of the recovered twenty-term reporting recipe: twenty weights total $100\%$. The chart describes the recipe, not Individual~2000's contributions or Individual~2002's achieved $F$. It establishes neither gate-free selection nor safety or qualification; historical execution, conditional branches and default-compatible inputs remain separate limitations.}
-\label{fig:objective-priorities}
-\end{figure*}
-
-\begin{table}[t]
-\centering
-\caption{Individual~2002: retained reporting priorities and contributed points. Weights express research preferences; they are not probabilities of safety or qualification.}
-\label{tab:weighted-priorities}
-\small
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}lrr@{}}
-\toprule
-\textbf{Objective group} & \textbf{Weight (\%)} & \textbf{Points} \\
-\midrule
-Mass and compactness & 30 & 15.470 \\
-Form and comfort proxies & 25 & 23.875 \\
-Exported geometry & 15 & 11.841 \\
-Response and verification & 30 & 23.022 \\
-\midrule
-Total & 100 & 74.207 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The saved scalar is $F=74.207299$, with reported raster mass $101.139\,\mathrm{g}$ and solid-mass scalar $101.1384\,\mathrm{g}$. Its exact genome and certificate link to a retained proposal and screen; a separate leaderboard retains a later-assessment summary with \code{qualified=false}. The underlying exported geometry and full scorecard files are not retained at its referenced paths in the checked repository tree. The screen's earlier ``pending independent top-k assessment'' label is not that later summary's outcome. Individual~2000 supplies the illustrated assessed geometry and response fields.
+The saved scalar is $F=\BestFitness{}$, with reported raster mass $101.139\,\mathrm{g}$ and solid-mass scalar $101.1384\,\mathrm{g}$. Its exact genome and certificate link to a retained proposal and screen; a separate leaderboard retains a later-assessment summary with \code{qualified=false}. The underlying exported geometry and full scorecard files are not retained at its referenced paths in the checked repository tree. The screen's earlier ``pending independent top-k assessment'' label is not that later summary's outcome. Individual~2000 supplies the illustrated assessed geometry and response fields.
 
 A versioned twenty-term recipe is recoverable, but its exact historical execution and the curves' point stages remain unresolved. Several saved inputs match that recipe's hard-coded fallbacks for bore radius, edge/point profiles and overload proxies. The four whole terms containing those inputs contribute $15.682353$ points; this is not a claim that every point in those terms is an imputed measurement. Some absent-key Boolean branches also receive favorable defaults. The Supplement distinguishes these default-compatible inputs and historical bookkeeping from new reporting-layer imputation. The original vector is preserved, without rescoring.
 
@@ -67,29 +40,13 @@ Native fitness includes novelty computed against contemporaneous population/arch
 
 A display loss $L=-f$, $100-F$, or $-W_{\mathrm{CAD}}$ reverses numerical order. Minimizing it preserves the original preference for a larger native score. It does not make those different profiles comparable. A cumulative maximum is monotone by construction, so its corresponding loss is nonincreasing by construction; that fact alone is not evidence of continuing physical improvement.
 
-\subsection{Missing-Aware Response Display and Physical-Unit Views}
-The display roster accounts for all $44$ catalog predicates and $8$ retained-channel metadata rows. These $52$ metadata rows are not $52$ independent tests or performed solves. Four distinct retained unit-response channels of Individual~2000 share the original plate triangles: lateral, in-plane tip pry, ring traction and chord torsion. The scaled envelope and its derived safety-factor map remain companion quantities, without another equal weight. Scalar-only, missing or incompatible-domain observations remain missing spatial contributions; no scalar or Individual~2002 reporting term is broadcast onto this geometry.
+The missing-aware response display (the roster of retained channels, the per-cell percentile index and its coverage) is defined in Supplement Section~\ref{S-sec:moved-display}.
 
-Within each eligible channel, the normalization is an ascending area-weighted percentile midrank of valid original response values. All exactly tied values share the midpoint of their pooled area; a constant valid field has rank $0.5$. Original source masks apply, while genuine finite zeros remain valid. For cell $i$, let $K_i$ contain the available normalized channels. The unweighted display index and its support are
-\begin{equation}
- c_i=\frac{1}{q_i}\sum_{k\in K_i}r_{ki},\qquad q_i=|K_i|>0.
-\end{equation}
-An all-missing cell has no index and $q_i=0$, rather than index zero. Contributor identities and coverage $q_i/4$ accompany the index; $44$ and $52$ are inventory counts, not its support denominator. No candidate-specific minimum/maximum stretch follows the mean. A high index denotes relatively high response within the available channels, not safety, fitness, likelihood or merit.
-
-Physical values, within-channel normalization, the available-channel mean and display contrast are separate quantities. The full-range quantitative companion (Supplement Figure~\ref{S-fig:hero-quantitative}) uses a shared flat navy--teal--yellow--orange--red transfer for surface and legend over $[0,1]$; this palette does not claim monotone luminance. Lighting in the main appearance view changes RGB values without changing the underlying index or retained responses. A percentile-window contrast view is a separate coordinate with declared index bounds, saturation counts and source-area fractions, accompanied by the full-range view. The Supplement specifies the roster, masks, normalization and projection limits.
-
-Figure~\ref{fig:plate-fields} gives source-coordinate views of the envelope and three physical-unit responses; the fourth eligible response, in-plane tip pry, appears in Figure~\ref{fig:saliency-crops}C. Its saliency policy selects a concentrated upper-value region only when whole-field coverage, compactness and scale-gain requirements are met; otherwise it retains full context. B/D display a wider context camera spanning at least $30\%$ of the whole object's horizontal extent, while keeping the selected region's statistics separate. An upper-value cutoff is a fraction of the original eligible value range, not a count or area quantile. Gray denotes producer-masked cells, not measured zero stress. Raw torsion retains its tip-patch peak, distinct from the post-exclusion peak used by selected capacity calculations.
+Figure~\ref{fig:plate-fields} gives source-coordinate views of the envelope and three physical-unit responses; the fourth eligible response, in-plane tip pry, appears in Supplement Figure~\ref{S-fig:saliency-crops}C. Its saliency policy selects a concentrated upper-value region only when whole-field coverage, compactness and scale-gain requirements are met; otherwise it retains full context. B/D display a wider context camera spanning at least $30\%$ of the whole object's horizontal extent, while keeping the selected region's statistics separate. An upper-value cutoff is a fraction of the original eligible value range, not a count or area quantile. Gray denotes producer-masked cells, not measured zero stress. Raw torsion retains its tip-patch peak, distinct from the post-exclusion peak used by selected capacity calculations.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{plate-smart-crops.png}
-\caption{Source-bound views of Individual~2000's retained plate responses: A, scaled multi-case envelope (MPa); B, unit lateral response (MPa/N); C, unit ring traction (MPa/N); D, raw unit chord torsion (MPa/(N\,mm)). Each view keeps its full raw color scale, source masks and genuine zeros. B/D widen the camera to show curved blade/tip context; the thin black locator shows the original plate boundary and its red rectangle is the exact displayed viewport. View-area/excess fractions and the smaller selected ROI's area/threshold are reported separately. Coverage uses exact clipped original-triangle areas and each whole eligible field's denominator, not visible ink or local normalization. The source-bound \nolinkurl{plate-smart-crops.v1.json} retains both viewports and statistics. Full context is Supplement Figure~\ref{S-fig:plate-full-context}; in-plane tip pry remains in Figure~\ref{fig:saliency-crops}C.}
+\caption{Source-bound views of Individual~2000's retained plate responses: A, scaled multi-case envelope (MPa); B, unit lateral response (MPa/N); C, unit ring traction (MPa/N); D, raw unit chord torsion (MPa/(N\,mm)). Each view keeps its full raw color scale, source masks and genuine zeros. B/D widen the camera to show curved blade/tip context; the thin black locator shows the original plate boundary and its red rectangle is the exact displayed viewport. View-area/excess fractions and the smaller selected ROI's area/threshold are reported separately. Coverage uses exact clipped original-triangle areas and each whole eligible field's denominator, not visible ink or local normalization. The source-bound \nolinkurl{plate-smart-crops.v1.json} retains both viewports and statistics. Full context is Supplement Figure~\ref{S-fig:plate-full-context}; in-plane tip pry remains in Supplement Figure~\ref{S-fig:saliency-crops}C.}
 \label{fig:plate-fields}
-\end{figure*}
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{JR_EI_P4_T04_fem_saliency_crops_and_locators.png}
-\caption{Individual~2000 retained $0.25\,\mathrm{mm}^2$ plate-field views with whole-object locators. A: ring traction (MPa/N). B: tip chord torsion (MPa/(N\,mm)). C: in-plane tip-pry T6 centroid response (MPa/N), with stored peak $2.9181\,\mathrm{MPa/N}$. Triangle-intersection integrals of absolute response over the rectangular crop windows retain $100\%$, $64.52\%$ and $100\%$ of each whole source-active field's integral, respectively. These are physical source-domain fractions before locator overlays, not visible-ink fractions or safety percentages. B marks values $\ge0.6611\,\mathrm{MPa/(N\,mm)}$ as over-range and discloses the raw peak $34.8589\,\mathrm{MPa/(N\,mm)}$; the capacity exclusion is separate. The Supplement gives the bound domains, masks and denominators.}
-\label{fig:saliency-crops}
 \end{figure*}

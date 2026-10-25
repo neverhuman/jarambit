@@ -100,7 +100,8 @@ pdf-smoothed: figures
 	cp $(OUT)/main-smoothed.pdf main-smoothed.pdf
 	sha256sum main-smoothed.pdf > $(OUT)/main-smoothed.sha256
 	pdfinfo main-smoothed.pdf > $(OUT)/main-smoothed-pdfinfo.txt
-# Smoothing ladder of the paper's winner (smoothing-ladder.pdf): ten smoothing levels, each
+# Smoothing ladder of the paper's winner (smoothing-ladder.pdf): ten levels are run (L0-L9) and L0-L6 are
+# published (L7-L9 fail closed on face reversal); each
 # re-scored and rendered for 3D relief. `ladder-data` smooths the exported mesh and re-solves the
 # solid tip at every level (about 30 minutes; its inputs live outside git in WINNER_DIR).
 # `ladder-figures` and `ladder-pdf` rebuild from the committed receipt in ladder/.
@@ -151,9 +152,11 @@ audit-full:
 	cd $(ROOT) && $(CARGO) run --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example publication_v2_audit -- --full-zstd
 review-origin-controls:
 	cd $(ROOT) && $(CARGO) test --release --locked --manifest-path crates/paper-artifacts/Cargo.toml --example verify_review_origin -- --nocapture
-check: audit pdfs
-	! rg 'Overfull|LaTeX Warning: (Reference|Citation).*undefined' $(OUT)/main.log $(OUT)/supplement-main.log
-	awk '/^Pages:/ { if ($$2 < 15 || $$2 > 20) exit 1; found=1 } END { if (!found) exit 1 }' $(OUT)/pdfinfo.txt
+# Both papers (A: main.pdf, B: main-smoothed.pdf) must build cleanly and stay within 15-20 pages.
+check: audit pdfs pdf-smoothed
+	! rg 'Overfull|LaTeX Warning: (Reference|Citation).*undefined' $(OUT)/main.log $(OUT)/supplement-main.log $(OUT)/main-smoothed.log
+	for f in $(OUT)/pdfinfo.txt $(OUT)/main-smoothed-pdfinfo.txt; do \
+	  awk '/^Pages:/ { if ($$2 < 15 || $$2 > 20) exit 1; found=1 } END { if (!found) exit 1 }' $$f || { echo "$$f: page count outside 15-20"; exit 1; }; done
 clean:
 	@echo 'Build artifacts remain under target/ieee/paper for inspection; no automatic deletion.'
 # Surface-tension pocket smoothing (variant B: sections/pocket-smoothing.tex and its main page).
