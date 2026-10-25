@@ -32,19 +32,4 @@ Candidate, producer, reporting-source and publication identities remain distinct
 \subsection{Reporting Commands and Writes}
 The reporting environment requires Rust/Cargo with the locked dependencies and complete admitted archives; document production additionally requires LuaLaTeX/IEEEtran, the declared fonts, librsvg and PDF inspection tools. From the repository root, the following commands request a full compressed-population audit and retain the existing document-build/check entry points. Commands are shown at full width so flags remain copyable; actual exits/toolchain/output hashes belong to the final validation receipt.
 
-\begin{figure*}[t]
-\centering
-\begin{minipage}{0.97\textwidth}
-\begin{verbatim}
-cargo run --release --locked \
-  --manifest-path crates/paper-artifacts/Cargo.toml \
-  --example publication_v2_audit -- --full-zstd
-sh docs/paper/reproduce.sh build
-sh docs/paper/reproduce.sh check
-\end{verbatim}
-\end{minipage}
-\caption{Reporting entry points, without invoking a new search, CAD export or mechanical solve. The explicit \code{--full-zstd} flag requests decoding of every compressed segment. The artifact audit reads retained inputs and checks reporting consistency. The Makefile compiles figures/PDFs and writes build products.}
-\label{fig:reproduction-commands}
-\end{figure*}
-
-The artifact audit decodes admitted historical frames, checks proposal/screen joins, verifies compressed-segment and reporting bindings, and checks generated-output consistency. Its flag-controlled compressed-segment decoder defaults to one segment per run; \code{--full-zstd} removes that limit. For the admitted completed-population accession, full scope is 200 segments containing $1{,}954{,}560$ rows. The final exact-head receipt must establish the requested mode, actual segment/row counts and successful exit; documenting the command alone does not establish its execution. The document check renders figures and compiles the paper under \nolinkurl{target/ieee/paper/}, and the existing build also updates \nolinkurl{docs/paper/main.pdf}. Evidence inputs remain read only; the entire operation is not filesystem read only. The supplement target, complete input manifest, all-page visual inspection and clickable-link checks are part of the matching publication package rather than implied by the existence of source files.
+The artifact audit decodes admitted historical frames, checks proposal/screen joins, verifies compressed-segment and reporting bindings, and checks generated-output consistency. Its flag-controlled compressed-segment decoder defaults to one segment per run; \code{--full-zstd} removes that limit. For the admitted completed-population accession, full scope is 200 segments containing \num{\CohortThreeTotalEvaluations} rows. The final exact-head receipt must establish the requested mode, actual segment/row counts and successful exit; documenting the command alone does not establish its execution. The document check renders figures and compiles the paper under \nolinkurl{target/ieee/paper/}, and the existing build also updates \nolinkurl{docs/paper/main.pdf}. Evidence inputs remain read only; the entire operation is not filesystem read only. The supplement target, complete input manifest, all-page visual inspection and clickable-link checks are part of the matching publication package rather than implied by the existence of source files.

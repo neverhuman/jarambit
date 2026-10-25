@@ -1,0 +1,81 @@
+% Moved from the main paper in v2.4.2 to keep both papers within 15-20 pages; content unchanged.
+\section{Material Moved from the Main Paper}
+\label{sec:moved-from-main}
+These figures, tables and one subsection appeared in the main paper up to v2.4.1. They moved here unchanged to make room for the census, the cover design and the conclusion; the main text points to each.
+
+\subsection{Missing-Aware Response Display and Physical-Unit Views}
+\label{sec:moved-display}
+The display roster accounts for all $44$ catalog predicates and $8$ retained-channel metadata rows. These $52$ metadata rows are not $52$ independent tests or performed solves. Four distinct retained unit-response channels of Individual~2000 share the original plate triangles: lateral, in-plane tip pry, ring traction and chord torsion. The scaled envelope and its derived safety-factor map remain companion quantities, without another equal weight. Scalar-only, missing or incompatible-domain observations remain missing spatial contributions; no scalar or Individual~2002 reporting term is broadcast onto this geometry.
+
+Within each eligible channel, the normalization is an ascending area-weighted percentile midrank of valid original response values. All exactly tied values share the midpoint of their pooled area; a constant valid field has rank $0.5$. Original source masks apply, while genuine finite zeros remain valid. For cell $i$, let $K_i$ contain the available normalized channels. The unweighted display index and its support are
+\begin{equation}
+ c_i=\frac{1}{q_i}\sum_{k\in K_i}r_{ki},\qquad q_i=|K_i|>0.
+\end{equation}
+An all-missing cell has no index and $q_i=0$, rather than index zero. Contributor identities and coverage $q_i/4$ accompany the index; $44$ and $52$ are inventory counts, not its support denominator. No candidate-specific minimum/maximum stretch follows the mean. A high index denotes relatively high response within the available channels, not safety, fitness, likelihood or merit.
+
+Physical values, within-channel normalization, the available-channel mean and display contrast are separate quantities. The full-range quantitative companion (Figure~\ref{fig:hero-quantitative}) uses a shared flat navy--teal--yellow--orange--red transfer for surface and legend over $[0,1]$; this palette does not claim monotone luminance. Lighting in the main appearance view changes RGB values without changing the underlying index or retained responses. A percentile-window contrast view is a separate coordinate with declared index bounds, saturation counts and source-area fractions, accompanied by the full-range view. The Supplement specifies the roster, masks, normalization and projection limits.
+
+
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{population-latest.png}
+\caption{Full-range overview of separate score profiles: $1{,}954{,}560$ native births, $1984$ historical births and $2259$ numeric screens. Every admitted numeric record receives a point operation ($1{,}958{,}803$ total); overlapping marks do not encode density. The pooled native and historical vertical axes use $\operatorname{asinh}(y/L)$ with $L=0.4054$ and $0.29066$, respectively: the empirical 25th percentile of nonzero absolute scores in each profile. Zeros remain plotted. Screening is linear; ticks show original score values and the profiles remain incomparable. The coverage note discloses $1390$ unscreened proposals without inventing scores. Zero numeric exclusions applies only to this full-range admitted universe; other campaigns, aborted attempts and unretained records remain outside it.}
+\label{fig:population-latest}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{assessment.png}
+\caption{Individual~2000: retained scalar assessment observations and conditional score bookkeeping. A: support assumptions and historical scalars; the buckling record is not admitted as a stability-performance result. B: modified-Goodman factor for the modeled $0$--$180\,\mathrm{N}$ lateral cycle and overload capacity/reference-load factors: $16.2\,\mathrm{N\,m}$ torsion, $1000\,\mathrm{N}$ in-plane tip (record only), $3427\,\mathrm{N}$ spine and $3000\,\mathrm{N}$ ring-back. Larger factors mean greater modeled margin; unity is the named-load reference, not overall qualification. C: certification minimum over $0.25/0.125\,\mathrm{mm}^2$ versus strict $0.0625\,\mathrm{mm}^2$ observations: lateral capacity $168.90$ versus $168.18\,\mathrm{N}$ and local tip-torsion factor $0.524$ versus $0.529$ relative to $1.82\,\mathrm{N\,m}$. D: continuous CAD subscores and shortfalls for this assessed candidate, separate from the retained weighted reporting vector of Individual~2002. This is one assessed automatic export, with no qualified or promoted champion in its retained leaderboard.}
+\label{fig:assessment}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{objective-priorities.v1.png}
+\caption{Configured priorities of the recovered twenty-term reporting recipe: twenty weights total $100\%$. The chart describes the recipe, not Individual~2000's contributions or Individual~2002's achieved $F$. It establishes neither gate-free selection nor safety or qualification; historical execution, conditional branches and default-compatible inputs remain separate limitations.}
+\label{fig:objective-priorities}
+\end{figure*}
+
+\begin{table}[t]
+\centering
+\caption{Individual~2002: retained reporting priorities and contributed points. Weights express research preferences; they are not probabilities of safety or qualification.}
+\label{tab:weighted-priorities}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Objective group} & \textbf{Weight (\%)} & \textbf{Points} \\
+\midrule
+Mass and compactness & 30 & 15.470 \\
+Form and comfort proxies & 25 & 23.875 \\
+Exported geometry & 15 & 11.841 \\
+Response and verification & 30 & 23.022 \\
+\midrule
+Total & 100 & 74.207 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{JR_EI_P4_T04_fem_saliency_crops_and_locators.png}
+\caption{Individual~2000 retained $0.25\,\mathrm{mm}^2$ plate-field views with whole-object locators. A: ring traction (MPa/N). B: tip chord torsion (MPa/(N\,mm)). C: in-plane tip-pry T6 centroid response (MPa/N), with stored peak $2.9181\,\mathrm{MPa/N}$. Triangle-intersection integrals of absolute response over the rectangular crop windows retain $100\%$, $64.52\%$ and $100\%$ of each whole source-active field's integral, respectively. These are physical source-domain fractions before locator overlays, not visible-ink fractions or safety percentages. B marks values $\ge0.6611\,\mathrm{MPa/(N\,mm)}$ as over-range and discloses the raw peak $34.8589\,\mathrm{MPa/(N\,mm)}$; the capacity exclusion is separate. The Supplement gives the bound domains, masks and denominators.}
+\label{fig:saliency-crops}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\begin{minipage}{0.97\textwidth}
+\begin{verbatim}
+cargo run --release --locked \
+  --manifest-path crates/paper-artifacts/Cargo.toml \
+  --example publication_v2_audit -- --full-zstd
+sh docs/paper/reproduce.sh build
+sh docs/paper/reproduce.sh check
+\end{verbatim}
+\end{minipage}
+\caption{Reporting entry points, without invoking a new search, CAD export or mechanical solve. The explicit \code{--full-zstd} flag requests decoding of every compressed segment. The artifact audit reads retained inputs and checks reporting consistency. The Makefile compiles figures/PDFs and writes build products.}
+\label{fig:reproduction-commands}
+\end{figure*}

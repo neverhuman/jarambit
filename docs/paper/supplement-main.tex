@@ -1,9 +1,8 @@
-\RequirePackage[T1]{fontenc}
 \documentclass[11pt,journal,onecolumn,letterpaper]{IEEEtran}
 % Standalone, single-column technical supplement.
 % Venue submission requires the selected venue's unmodified official template.
-\usepackage{tgtermes,tgheros}
 \usepackage{amsmath,amssymb,graphicx,booktabs,array,xcolor,url}
+\input{ei-ieee-skin.tex}
 \usepackage{xurl}
 \usepackage{xr-hyper}
 \usepackage[hidelinks]{hyperref}
@@ -24,6 +23,7 @@
 \newcommand{\src}[2]{\href{https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/#1}{#2}}
 \newcommand{\test}[1]{\subsubsection{#1}}
 \input{generated/metrics.tex}
+\input{allruns/allruns-meta.tex}
 \providecommand{\CohortOneBirths}{1,984}
 \providecommand{\CohortOneFemComplete}{1,455}
 \providecommand{\CohortOneFemNotEvaluated}{529}
@@ -65,6 +65,7 @@ This supplement retains the detailed representation, score, numerical-method, an
 \input{supplement/numerical-methods.tex}
 \input{supplement/cohort-inventory.tex}
 \input{supplement/related-work-notes.tex}
+\input{supplement/moved-from-main.tex}
 \input{supplement.tex}
 \clearpage
 \input{references.tex}

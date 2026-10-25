@@ -1,0 +1,18 @@
+\section{Missing Subsection Visuals and Unavailable Spatial Fields}
+\label{sup:missing-disclosures}
+
+To prevent visual availability from being misread as full spatial-field coverage (`40/44` catalog entries have subsection visual links; `6/44` link to the four retained $0.25\,\mathrm{mm}^2$ plate-field arrays in \code{plate-fields.svg}), we preserve two explicit non-availability ledgers from \code{visuals.rs}:
+\begin{enumerate}
+  \item \textbf{Four Unpictured Geometry/Export Subsection Entries (\code{subsection\_visual\_missing}):}
+    \begin{itemize}
+      \item \code{g16-geometric\_and\_holder\_gates} and \code{g16-karambit\_ring\_and\_curved\_claw}: \emph{``Subsection geometry/reference visual not generated; original flags are retained separately, without an admitted visual comparison.''}
+      \item \code{rsv2-gate\_s\_sharp\_law} and \code{rsv2-gate\_s\_tip\_point\_brep}: \emph{``Subsection exported-measurement visual not generated; nominal geometry and measured export observations must remain distinct.''}
+    \end{itemize}
+  \item \textbf{Four Unavailable Spatial Field Requests (\code{status: archive\_required}):}
+    \begin{itemize}
+      \item \code{strict\_plate\_field}: Only certification/strict scalar summaries ($168.9008\,\mathrm{N}$ vs.\ $168.1786\,\mathrm{N}$ lateral; $0.5239$ vs.\ $0.5287$ local torsion) are retained in the admitted publication input set; the $0.25\,\mathrm{mm}^2$ coarse plate field cannot substitute for a $0.0625\,\mathrm{mm}^2$ spatial array.
+      \item \code{solved\_solid\_field}: Only matched scalar safety-factor pairs and 1D longitudinal binned profiles are retained for the $P_2$ tetrahedral tip submodel; no full 3D volumetric stress array is archived in the publication inputs.
+      \item \code{buckling\_mode}: Only the historical producer-reported scalar $7.0351$ and support schematic are retained. The scalar is not admitted here as a buckling eigenvalue or performance margin; no spatial eigenmode field is retained. Operator/eigenpair validation and dependent qualification inference remain unestablished (Section~\ref{sec:numerical-methods-details}).
+      \item \code{fatigue\_field}: Only the saved modified-Goodman scalar ($n_f = 0.4718$) is retained; no per-element fatigue heatmap or physical cyclic life measurement exists in the admitted archive.
+    \end{itemize}
+\end{enumerate}

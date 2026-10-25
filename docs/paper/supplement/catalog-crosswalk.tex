@@ -1,0 +1,36 @@
+\section{Complete 44-Entry Catalog Crosswalk (\code{G16}, \code{RSV2}, and \code{battery})}
+\label{sup:crosswalk-44}
+
+Every entry in \code{docs/tests/catalog.json} (16 \code{G16} legacy predicates, 10 \code{RSV2} requirement groups, and 18 \code{battery} columns = 44 total entries) is preserved in the machine-readable crosswalk (\code{JR\_EI\_P3\_T04\_atlas\_crosswalk\_44.json}) and summarized below with its exact \code{docs/tests/README.md} anchor, original historical Family~1--11 taxonomy (retained below; the current main paper groups the observations into seven rows in Table~\ref{M-tab:observation-families}, Section~\ref{M-sec:battery} rather than numbering eleven families), and visual binding or explicit missing-visual disclosure:
+\begin{itemize}
+  \item \textbf{Legacy G16 Diagnostics (16 entries):}
+    \code{g16-cad\_watertight\_and\_single\_solid} (Family~1, \code{export-identity.svg} A--B);
+    \code{g16-geometric\_and\_holder\_gates} (Family~1, \emph{subsection visual missing: geometry/reference visual not generated});
+    \code{g16-karambit\_ring\_and\_curved\_claw} (Family~1, \emph{subsection visual missing: geometry/reference visual not generated});
+    \code{g16-c6\_aesthetic\_floor} (Family~2, \code{reference.svg} A--B);
+    \code{g16-cert\_hiker\_180n} (Family~3, \code{plate-fields.svg} B);
+    \code{g16-cert\_hunter\_260n} (Family~3, \code{plate-fields.svg} B);
+    \code{g16-strict\_hunter\_260n} (Family~3, \code{assessment.svg} C);
+    \code{g16-cert\_ring\_pull\_1500n} (Family~4, \code{plate-fields.svg} C);
+    \code{g16-twist\_body\_1p82nm} (Family~5, \code{plate-fields.svg} D);
+    \code{g16-twist\_tip\_only\_1p82nm} (Family~5, \code{plate-fields.svg} D);
+    \code{g16-twist\_tip\_submodel\_strict\_1p82nm} (Family~5, \code{assessment.svg} C);
+    \code{g16-solid\_tip\_3d\_p2\_1p82nm} (Family~6, \code{verification.svg} C--D);
+    \code{g16-side\_a4\_buckling\_and\_support} (Family~7, \code{assessment.svg} A);
+    \code{g16-failure\_sequence\_1p2} (Family~8, \code{verification.svg} A);
+    \code{g16-plate\_gci\_valid\_3level} (Family~10, \code{verification.svg} A--B);
+    \code{g16-dolfinx\_cross\_check\_2pct} (Family~10, \code{verification.svg} C).
+  \item \textbf{Grouped RS-v2 Predicates (10 entries):}
+    \code{rsv2-aesthetic\_and\_geometric} (Family~2, \code{reference.svg} A--B);
+    \code{rsv2-floors\_828\_joint} (Family~3/4, \code{plate-fields.svg} A--C);
+    \code{rsv2-twist\_floor\_body\_and\_tipsub\_strict} (Family~5, \code{assessment.svg} C);
+    \code{rsv2-solid\_tip\_sf} (Family~6, \code{verification.svg} C--D);
+    \code{rsv2-strict\_hunter\_lateral} (Family~3, \code{assessment.svg} C);
+    \code{rsv2-seq\_hard} (Family~8, \code{verification.svg} A);
+    \code{rsv2-human\_max} (Family~4/5, \code{assessment.svg} B);
+    \code{rsv2-fatigue} (Family~9, \code{assessment.svg} B);
+    \code{rsv2-gate\_s\_sharp\_law} (Family~1, \emph{subsection visual missing: exported-measurement visual not generated});
+    \code{rsv2-gate\_s\_tip\_point\_brep} (Family~1, \emph{subsection visual missing: exported-measurement visual not generated}).
+  \item \textbf{Historical Battery Evaluators (18 entries):}
+    All 18 \code{battery-*} anchors map to \code{battery-matrix.svg} (exact evaluator-ID column across all 23 historical subjects), with secondary assessed-example visual links on \code{battery-solid.tip} (\code{verification.svg} C--D, Family~6), \code{battery-plate.seq} (\code{verification.svg} A, Family~8), \code{battery-plate.gci} (\code{verification.svg} A--B, Family~10), \code{battery-side.a4} (\code{assessment.svg} A, Family~7), and \code{battery-plate.l7} (\code{assessment.svg} B, Family~9).
+\end{itemize}

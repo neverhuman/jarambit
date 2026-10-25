@@ -10,7 +10,7 @@ The code is `crates/crescent/src/pocket_smooth.rs`. It is switched on by `JARAMB
 every export is byte-identical to v2.2.1.
 
 **Result.** At r = 0.75 mm the leading design keeps its outline, mass (83.21 g vs 83.22 g) and
-B-rep, and every pocket keeps its removed volume, depth and rib widths. Chipped outlines become
+B-rep, and every pocket keeps its removed volume and depth (rib widths were inspected in renders, not measured). Chipped outlines become
 clean curves: dimples become circles, flutes become clean slots, and isogrid cells get rounded
 corners. The complete Stage-2 re-assessment of the smoothed CAD gives
 **`W_ULTRALIGHT_v1` = 80.370405**, against 80.299390 as exported (+0.071015). Battery 14/18; not
@@ -78,7 +78,7 @@ instead of cutting across it.
 
 | Setting | Visual result | Stage-2 F |
 |---|---|---|
-| Taubin mesh smoothing (ladder L1–L9) | no visible change in the pockets: walls are pinned | 75.06–75.34 (B-rep withheld) |
+| Taubin mesh smoothing (ladder L1–L9) | no visible change in the pockets: walls are pinned | 75.06–75.34 on w406t3 (B-rep withheld); the paper's winner scores 75.45–75.68 on its L1–L6 ladder (`docs/paper/ladder/ladder-scores.dat`) |
 | graph flow a = 1, r = 0.5–2 (first draft) | rounded, but depth spreads into the ribs; ribs vanish at r ≥ 2 | 80.161219 (r = 0.75) |
 | line tension a = 0, r = 0.5 | clean outlines, shapes kept (triangles stay triangles) | 80.164307 |
 | **line tension a = 0, r = 0.75** | **clean outlines, cells rounded, ribs intact** | **80.370405** |
