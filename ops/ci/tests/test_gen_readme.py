@@ -1,4 +1,4 @@
-import json, os, re, subprocess, sys, unittest
+import hashlib, json, os, re, subprocess, sys, unittest, zipfile
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
@@ -6,6 +6,10 @@ if ROOT not in sys.path:
 
 def readme():
     return open(os.path.join(ROOT, 'README.md'), encoding='utf-8').read()
+
+
+def cad_readme():
+    return open(os.path.join(ROOT, 'cad/README.md'), encoding='utf-8').read()
 
 
 def release():
@@ -48,19 +52,65 @@ class GenReadme(unittest.TestCase):
         paths = list(rec['images'].values()) + list(rec['evolution']['figures'].values()) + \
             [c['image'] for c in rec['evolution']['lineage']] + rec['cad_in_git']
         t = readme()
+        ct = cad_readme()
         for p in paths:
             self.assertTrue(os.path.isfile(os.path.join(ROOT, p)), p)
             self.assertIn(p, t)
+        for p in rec['cad_in_git']:
+            top_p = f'cad/{os.path.basename(p)}'
+            self.assertTrue(os.path.isfile(os.path.join(ROOT, top_p)), top_p)
+            self.assertIn(top_p, t)
+            self.assertIn(os.path.basename(p), ct)
+            h1 = hashlib.sha256(open(os.path.join(ROOT, p), 'rb').read()).hexdigest()
+            h2 = hashlib.sha256(open(os.path.join(ROOT, top_p), 'rb').read()).hexdigest()
+            self.assertEqual(h1, h2, f'{top_p} differs from {p}')
+        wid = rec['design_id']
+        for ext in ('AMbuild_mm.stl', 'AMbuild_mm.3mf', 'envelope_mm.stl', 'drawing_mm.dxf', 'spec_paper.pdf', 'xray_cutaway.jpg'):
+            rel = f'cad/{wid}_{ext}'
+            fp = os.path.join(ROOT, rel)
+            self.assertTrue(os.path.isfile(fp), rel)
+            self.assertLess(os.path.getsize(fp), 100 * 1024 * 1024, f'{rel} exceeds 100 MiB quote form limit')
+            self.assertIn(rel, t)
+            self.assertIn(f'{wid}_{ext}', ct)
+        with zipfile.ZipFile(os.path.join(ROOT, f'cad/{wid}_AMbuild_mm.3mf')) as zf:
+            model_head = zf.open('3D/3dmodel.model').read(1024).decode('utf-8')
+            self.assertIn('unit="millimeter"', model_head)
+            self.assertIn('Ti-6Al-4V (design assumption: yield 828 MPa)', model_head)
+        dxf_txt = open(os.path.join(ROOT, f'cad/{wid}_drawing_mm.dxf'), encoding='utf-8').read()
+        self.assertIn('UNITS: MILLIMETERS, 1 DRAWING UNIT = 1 MM', dxf_txt)
+        self.assertIn('0\nCIRCLE\n8\nRING_BORE\n10\n-5.9672\n20\n0.0000\n30\n0.0000\n40\n12.4500\n', dxf_txt)
+        self.assertIn('MIDPLANE_Z0_OUTLINE', dxf_txt)
+        self.assertIn('Z_EXTENT_ENVELOPE', dxf_txt)
+        self.assertTrue(dxf_txt.endswith('0\nEOF\n'))
+
+    def test_cad_readme_discloses_status_and_below_target_safety_factors(self):
+        _, rec = release()
+        ct = cad_readme()
+        i = rec['inputs']
+        fe = rec['fe_certification']
+        self.assertIn(rec['status'], ct)
+        self.assertIn('not qualified for use as a knife', ct)
+        for sf_str in (f'{i["solid_tip_sf"]:.2f}', f'{i["grip_sf_min"]:.2f}', f'{fe["grip_sf"]["spine"]:.2f}',
+                       f'{i["fat_sf"]:.2f}', f'{i["seq_ratio"]:.2f}'):
+            self.assertIn(sf_str, ct)
+        m = re.search(r'```text\n(.*?)\n```', ct, re.S)
+        self.assertIsNotNone(m, 'missing copy-paste order notes block in cad/README.md')
+        notes = m.group(1)
+        self.assertIn(rec['status'], notes)
+        self.assertIn('not qualified for use as a knife', notes)
+        for sf_str in (f'{i["solid_tip_sf"]:.2f}', f'{i["grip_sf_min"]:.2f}', f'{fe["grip_sf"]["spine"]:.2f}',
+                       f'{i["fat_sf"]:.2f}', f'{i["seq_ratio"]:.2f}'):
+            self.assertIn(sf_str, notes)
 
     def test_no_older_data(self):
         # Owner, 2026-10-26: the README describes only the release's best individual. Older designs and runs stay in
         # docs/RELEASES.md and docs/WHITEPAPER.md.
-        t = readme()
-        for old in ('w282', 'w283', 'ec3i042', 'Individual 2000', 'hz4i012_g00085_4cdfea55', 'hz2i012_g00609_d55af923',
-                    'hz4i005_g00310_966138c2', 'hz4i007_g00855_4797529d',
-                    'cohort-d', 'edge-pilot', '41.77', 'G16-', 'Wave 27'):
-            self.assertNotIn(old, t, old)
-        self.assertIsNone(re.search(r'\bPASS\b', t))
+        for doc in (readme(), cad_readme()):
+            for old in ('w282', 'w283', 'ec3i042', 'Individual 2000', 'hz4i012_g00085_4cdfea55', 'hz2i012_g00609_d55af923',
+                        'hz4i005_g00310_966138c2', 'hz4i007_g00855_4797529d',
+                        'cohort-d', 'edge-pilot', '41.77', 'G16-', 'Wave 27'):
+                self.assertNotIn(old, doc, old)
+            self.assertIsNone(re.search(r'\bPASS\b', doc))
 
 
 if __name__ == '__main__':

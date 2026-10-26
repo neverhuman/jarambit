@@ -1,8 +1,10 @@
 # Jarambit 3.0.1: an evolved, 3D-printable titanium karambit
 
-[![release](https://img.shields.io/badge/release-v3.0.1-2f56d6)](https://github.com/neverhuman/jarambit/releases/tag/v3.0.1) [![paper](https://img.shields.io/badge/paper-G3%20v3.0.1%20PDF-2f56d6)](docs/g3/paper/g3-v3.0.1.pdf) ![design](https://img.shields.io/badge/best%20individual-hz4i013__g00995__d206e3c9-555) ![score](https://img.shields.io/badge/W__ERGOLIGHT__v1-80.55-555) ![mass](https://img.shields.io/badge/mass-59.3%20g-555) ![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)
+[![release](https://img.shields.io/badge/release-v3.0.1-2f56d6)](https://github.com/neverhuman/jarambit/releases/tag/v3.0.1) [![paper](https://img.shields.io/badge/paper-G3%20v3.0.1%20PDF-2f56d6)](docs/g3/paper/g3-v3.0.1.pdf) [![3D print CAD](https://img.shields.io/badge/3D%20print%20CAD-cad%2F%20(STL%20%7C%203MF%20%7C%20DXF%20%7C%20PDF)-2f56d6)](cad/) ![design](https://img.shields.io/badge/best%20individual-hz4i013__g00995__d206e3c9-555) ![score](https://img.shields.io/badge/W__ERGOLIGHT__v1-80.55-555) ![mass](https://img.shields.io/badge/mass-59.3%20g-555) ![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)
 
 Every measurement and picture on this page describes one design, **`hz4i013_g00995_d206e3c9`**, the best individual of the v3.0.0 cohort of record, and is generated from [`evidence/g3/v3.0.0/release.json`](evidence/g3/v3.0.0/release.json); the rule values (bounds, loads, targets) are the decoder's own. Status: computational design; not built, printed or physically tested.
+
+**3D printing & CAD upload kit ([`cad/`](cad/)):** ready-to-upload 6-file bundle (each under 50 MiB) — primary print mesh [`cad/hz4i013_g00995_d206e3c9_AMbuild_mm.stl`](cad/hz4i013_g00995_d206e3c9_AMbuild_mm.stl) (Binary STL, mm), unit-embedded [`cad/hz4i013_g00995_d206e3c9_AMbuild_mm.3mf`](cad/hz4i013_g00995_d206e3c9_AMbuild_mm.3mf) (3MF, mm), outer envelope [`cad/hz4i013_g00995_d206e3c9_envelope_mm.stl`](cad/hz4i013_g00995_d206e3c9_envelope_mm.stl), 1:1 2D drawing [`cad/hz4i013_g00995_d206e3c9_drawing_mm.dxf`](cad/hz4i013_g00995_d206e3c9_drawing_mm.dxf) (DXF, mm), engineering spec [`cad/hz4i013_g00995_d206e3c9_spec_paper.pdf`](cad/hz4i013_g00995_d206e3c9_spec_paper.pdf) (PDF), and internal cutaway [`cad/hz4i013_g00995_d206e3c9_xray_cutaway.jpg`](cad/hz4i013_g00995_d206e3c9_xray_cutaway.jpg) (JPG). See [`cad/README.md`](cad/README.md) for copy-paste order notes.
 
 **Paper:** [`docs/g3/paper/g3-v3.0.1.pdf`](docs/g3/paper/g3-v3.0.1.pdf), generated from the same receipt, sets out the design space, objective, search, measurement chain and every limit.
 
@@ -99,17 +101,30 @@ Final ranking:
 - The archive was selected on the 0.4 mm search grid, which undercounts the mass of some designs (see the grid check); only the final ranking is measured at 0.2 mm, so designs the coarse grid scored low were not re-checked.
 - The cohort is 2,500 evaluations per island, a shortened run for this release.
 
-## Download the CAD (binary STL, millimetres)
+## Download the CAD & 3D-printing upload kit (`cad/`, millimetres)
+
+The top-level [`cad/`](cad/) folder contains a ready-to-upload **6-file manufacturing bundle** (every file under 50 MiB, designed for quote forms accepting up to 6 files of 100 MB each in `STL`, `3MF`, `DXF`, `PDF`, or `JPG`), generated automatically from the winning individual:
+
+| # | File in `cad/` | Format | Purpose on a 3D-printing / manufacturing quote form |
+|---:|---|---|---|
+| 1 | [`cad/hz4i013_g00995_d206e3c9_AMbuild_mm.stl`](cad/hz4i013_g00995_d206e3c9_AMbuild_mm.stl) | Binary STL (`mm`) | **Primary 3D print file in git** (`0.45 mm` voxels, `59.72 g`, finest under 50 MiB; outer skin + TPMS lattice + powder ports; cutting edges require post-print grinding — see note below) |
+| 2 | [`cad/hz4i013_g00995_d206e3c9_AMbuild_mm.3mf`](cad/hz4i013_g00995_d206e3c9_AMbuild_mm.3mf) | 3MF (`unit="millimeter"`) | **Modern 3D print package** with `millimeter` units and `Ti-6Al-4V (design assumption: yield 828 MPa)` material embedded |
+| 3 | [`cad/hz4i013_g00995_d206e3c9_envelope_mm.stl`](cad/hz4i013_g00995_d206e3c9_envelope_mm.stl) | Binary STL (`mm`) | **Solid outer envelope companion** (`0.3 mm` voxels; all internal cavities and ports closed) |
+| 4 | [`cad/hz4i013_g00995_d206e3c9_drawing_mm.dxf`](cad/hz4i013_g00995_d206e3c9_drawing_mm.dxf) | AutoCAD R12 DXF (`mm`) | **1:1 2D engineering drawing** (`UNITS: MILLIMETERS`, `1 drawing unit = 1 mm`: exact `z = 0` mid-plane outline, 24.9 mm ring bore at `x = -5.97 mm`, `z`-extent thickness envelope & 30 mm blade section) |
+| 5 | [`cad/hz4i013_g00995_d206e3c9_spec_paper.pdf`](cad/hz4i013_g00995_d206e3c9_spec_paper.pdf) | PDF | **7-page engineering specification & FE paper** (`g3-v3.0.1.pdf`; reports all measured safety factors, including those below 1: solid tip 0.64, grip 0.73 / 0.74, fatigue 0.94, yield-sequence 0.56 vs 1.2) |
+| 6 | [`cad/hz4i013_g00995_d206e3c9_xray_cutaway.jpg`](cad/hz4i013_g00995_d206e3c9_xray_cutaway.jpg) | JPG image | **Lengthwise cutaway render** showing the internal TPMS lattice and powder-evacuation ports |
+
+Mesh assets and high-resolution release files:
 
 | File | Triangles | Size | SHA-256 | Contents | Where |
 |---|---:|---:|---|---|---|
-| `hz4i013_g00995_d206e3c9_AMbuild_mm.stl` | 1,001,372 | 48 MB | `782fc9c3453a22ad…` | print file: skin + TPMS lattice + powder ports, 0.450 mm voxels (finest that fits 50 MiB) | [in git](docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_AMbuild_mm.stl) |
-| `hz4i013_g00995_d206e3c9_envelope_mm.stl` | 911,132 | 43 MB | `6c939b5fa82940e9…` | outer envelope, 0.300 mm voxels (finest that fits 50 MiB) | [in git](docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_envelope_mm.stl) |
+| `hz4i013_g00995_d206e3c9_AMbuild_mm.stl` | 1,001,372 | 48 MB | `782fc9c3453a22ad…` | print file: skin + TPMS lattice + powder ports, 0.450 mm voxels (finest that fits 50 MiB) | [`cad/hz4i013_g00995_d206e3c9_AMbuild_mm.stl`](cad/hz4i013_g00995_d206e3c9_AMbuild_mm.stl) · [archive](docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_AMbuild_mm.stl) |
+| `hz4i013_g00995_d206e3c9_envelope_mm.stl` | 911,132 | 43 MB | `6c939b5fa82940e9…` | outer envelope, 0.300 mm voxels (finest that fits 50 MiB) | [`cad/hz4i013_g00995_d206e3c9_envelope_mm.stl`](cad/hz4i013_g00995_d206e3c9_envelope_mm.stl) · [archive](docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_envelope_mm.stl) |
 | `hz4i013_g00995_d206e3c9_AMbuild_h0.2_mm.stl` | 5,373,548 | 256 MB | `48bbd9db5a48139c…` | print file: skin + TPMS lattice + powder ports, 0.2 mm voxels | [release v3.0.0](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0) |
 | `hz4i013_g00995_d206e3c9_envelope_h0.2_mm.stl` | 2,063,960 | 98 MB | `0e0654b07d78ec33…` | outer envelope, 0.2 mm voxels | [release v3.0.0](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0) |
 | `hz4i013_g00995_d206e3c9_envelope_fineblade_mm.stl` | 3,843,106 | 183 MB | `680e0df5fdfccc03…` | outer envelope; blade (x >= 92 mm) re-meshed at 0.05 mm from the exact decoder law | [release v3.0.0](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0) |
 
-Units are millimetres. The print file is the AM build: the outer skin, the internal TPMS lattice and the powder-removal ports. The files in git are written by [`ops/g3/export_best_stl.sh`](ops/g3/export_best_stl.sh) from the committed genome row, each at the finest voxel pitch that keeps it under 50 MiB; [`hz4i013_g00995_d206e3c9_print_spec.json`](docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_print_spec.json) lists their dimensions, volume, mass, pitch and watertightness.
+Units are millimetres. The print file is the AM build: the outer skin, the internal TPMS lattice and the powder-removal ports. The files in git are written by [`ops/g3/export_best_stl.sh`](ops/g3/export_best_stl.sh) from the committed genome row, each at the finest voxel pitch that keeps it under 50 MiB (`0.45 mm` for `AMbuild_mm.stl` / `.3mf`, `59.72 g` vs `59.3 g` on the `0.2 mm` grid of record); [`cad/hz4i013_g00995_d206e3c9_print_spec.json`](cad/hz4i013_g00995_d206e3c9_print_spec.json) ([archive](docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_print_spec.json)) lists their dimensions, volume, mass, pitch and watertightness. Because a `0.45 mm` voxel grid cannot resolve the `0.05–0.12 mm` apex flat or the `20°` primary bevel near the edge, cutting edges on any print from this mesh would be finished by post-print grinding to the `EDGE-3` angle (`17.5–22.5°` per side); the finer `0.2 mm` print mesh (`hz4i013_g00995_d206e3c9_AMbuild_h0.2_mm.stl`) and `0.05 mm` fine-blade outer envelope (`hz4i013_g00995_d206e3c9_envelope_fineblade_mm.stl`) are attached to [release v3.0.0](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0).
 
 ## Reproduce
 
@@ -130,6 +145,7 @@ The v1 command-line pipeline (`cargo run -p jarambit`) is still in the repositor
 
 ## Repository
 
+- [`cad/`](cad/): 6-file 3D-printing & manufacturing upload kit (`STL`, `3MF`, `DXF`, `PDF`, `JPG`, millimetres) and order notes for `hz4i013_g00995_d206e3c9`, generated automatically from the winner.
 - [`docs/g3/paper/`](docs/g3/paper/): the G3 paper; `make -C docs/g3/paper` rebuilds it from the receipt.
 - [`docs/g3/RELEASE_3.0.0.md`](docs/g3/RELEASE_3.0.0.md): what the v3.0.0 release changed and why; later patches are in `docs/RELEASES.md`.
 - [`docs/g3/RENDERS.md`](docs/g3/RENDERS.md): how every image of the design was made.

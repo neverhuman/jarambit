@@ -42,6 +42,7 @@ _RULE = re.compile(r'^\|[\s:|-]+\|$')
 # until each of these worktree files is the blob in that commit.
 _CHECKOUT_BLOBS = (
     'README.md',
+    'cad/README.md',
     'docs/PROVISIONAL.md',
     'docs/WHITEPAPER.md',
     'crates/cli/src/main.rs',
@@ -161,7 +162,7 @@ def public_document_check(root=ROOT):
     """Scoped PASS and the published RS verdict line. Not a provider resolution."""
     errors = []
     try:
-        for rel, stop in (('README.md', None), ('docs/PROVISIONAL.md', None), ('docs/WHITEPAPER.md', '## Appendix A')):
+        for rel, stop in (('README.md', None), ('cad/README.md', None), ('docs/PROVISIONAL.md', None), ('docs/WHITEPAPER.md', '## Appendix A')):
             errors.extend(_scan_pass(rel, _read(root, rel), stop))
         # v3.0.0 (owner, 2026-10-26: "the README is 100 % accurate with the best individual (no older data)"): the README
         # no longer reports the v1 provisional design, so its RS-karambit-v1 verdict block lives only in PROVISIONAL.md.
