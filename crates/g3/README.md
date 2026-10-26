@@ -52,6 +52,13 @@ blocking findings. Reports: `review_g3/REVIEW.md`, `REREVIEW_S3.md` (S4), `REREV
   from genes (`archive.jsonl` records `tier_provenance` per row). Tier 1 measures the voxel geometry and solves the
   plate; only Tier ≥ 1 numbers are measurements.
 - Gate S sharpness is measured on the analytic blade function at fully sharpened stations, not on the voxels.
+- Edge geometry (`EDGE-1..5`, owner request 2026-10-26: one ideal sharpening angle for the whole two-sided
+  blade). Both edges carry a single primary grind of 17.5–22.5° per side (35–45° inclusive), measured normal to
+  the actual serrated edge and carried at full height until it meets the medial thickness, so there is no
+  micro-bevel and no shoulder. Both grinds run unbroken to the tip (`s1_in`, `s1_sp` are retired); only a
+  5–12 % plunge at the heel stays unsharpened. Apex flat 0.05–0.12 mm. Gate S3 samples the true edge-normal
+  section over 0–2 mm, so a steep shoulder behind the apex band would now be measured. Archives made before this
+  change (decoder `120ba792`) do not reproduce on it and are not comparable.
 - Rust-versus-Python parity: the scorer matches the Python of record exactly on 25 cases. On the production path,
   the hand-zone AM mass is asserted on the 5 finalists and 4 representative Sobol designs (9 cases, ≤ 8 %);
   centre of mass, spin and guard height are asserted on the parity path (`build_g3_sdf_from_params`).
