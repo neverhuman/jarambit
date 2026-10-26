@@ -1,12 +1,12 @@
-# Jarambit 3.0.1: an evolved, 3D-printable titanium karambit
+# Jarambit 3.0.2: an evolved, 3D-printable titanium karambit
 
-[![release](https://img.shields.io/badge/release-v3.0.1-2f56d6)](https://github.com/neverhuman/jarambit/releases/tag/v3.0.1) [![paper](https://img.shields.io/badge/paper-G3%20v3.0.1%20PDF-2f56d6)](docs/g3/paper/g3-v3.0.1.pdf) [![3D print CAD](https://img.shields.io/badge/3D%20print%20CAD-cad%2F%20(STL%20%7C%203MF%20%7C%20DXF%20%7C%20PDF)-2f56d6)](cad/) ![design](https://img.shields.io/badge/best%20individual-hz4i013__g00995__d206e3c9-555) ![score](https://img.shields.io/badge/W__ERGOLIGHT__v1-80.55-555) ![mass](https://img.shields.io/badge/mass-59.3%20g-555) ![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)
+[![release](https://img.shields.io/badge/release-v3.0.2-2f56d6)](https://github.com/neverhuman/jarambit/releases/tag/v3.0.2) [![paper](https://img.shields.io/badge/paper-G3%20v3.0.2%20PDF-2f56d6)](docs/g3/paper/g3-v3.0.2.pdf) [![3D print CAD](https://img.shields.io/badge/3D%20print%20CAD-cad%2F%20(STL%20%7C%203MF%20%7C%20DXF%20%7C%20PDF)-2f56d6)](cad/) ![design](https://img.shields.io/badge/best%20individual-hz4i013__g00995__d206e3c9-555) ![score](https://img.shields.io/badge/W__ERGOLIGHT__v1-80.55-555) ![mass](https://img.shields.io/badge/mass-59.3%20g-555) ![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)
 
 Every measurement and picture on this page describes one design, **`hz4i013_g00995_d206e3c9`**, the best individual of the v3.0.0 cohort of record, and is generated from [`evidence/g3/v3.0.0/release.json`](evidence/g3/v3.0.0/release.json); the rule values (bounds, loads, targets) are the decoder's own. Status: computational design; not built, printed or physically tested.
 
 **3D printing & CAD upload kit ([`cad/`](cad/)):** ready-to-upload 6-file bundle (each under 50 MiB) — primary print mesh [`cad/hz4i013_g00995_d206e3c9_AMbuild_mm.stl`](cad/hz4i013_g00995_d206e3c9_AMbuild_mm.stl) (Binary STL, mm), unit-embedded [`cad/hz4i013_g00995_d206e3c9_AMbuild_mm.3mf`](cad/hz4i013_g00995_d206e3c9_AMbuild_mm.3mf) (3MF, mm), outer envelope [`cad/hz4i013_g00995_d206e3c9_envelope_mm.stl`](cad/hz4i013_g00995_d206e3c9_envelope_mm.stl), 1:1 2D drawing [`cad/hz4i013_g00995_d206e3c9_drawing_mm.dxf`](cad/hz4i013_g00995_d206e3c9_drawing_mm.dxf) (DXF, mm), engineering spec [`cad/hz4i013_g00995_d206e3c9_spec_paper.pdf`](cad/hz4i013_g00995_d206e3c9_spec_paper.pdf) (PDF), and internal cutaway [`cad/hz4i013_g00995_d206e3c9_xray_cutaway.jpg`](cad/hz4i013_g00995_d206e3c9_xray_cutaway.jpg) (JPG). See [`cad/README.md`](cad/README.md) for copy-paste order notes.
 
-**Paper:** [`docs/g3/paper/g3-v3.0.1.pdf`](docs/g3/paper/g3-v3.0.1.pdf), generated from the same receipt, sets out the design space, objective, search, measurement chain and every limit.
+**Paper:** [`docs/g3/paper/g3-v3.0.2.pdf`](docs/g3/paper/g3-v3.0.2.pdf), generated from the same receipt, sets out the design space, objective, search, measurement chain and every limit.
 
 <img src="docs/g3/v3.0.0/img/hero.jpg" alt="The best individual hz4i013_g00995_d206e3c9: anodized grip and ring, double-edged serrated claw blade" width="100%">
 
@@ -111,7 +111,7 @@ The top-level [`cad/`](cad/) folder contains a ready-to-upload **6-file manufact
 | 2 | [`cad/hz4i013_g00995_d206e3c9_AMbuild_mm.3mf`](cad/hz4i013_g00995_d206e3c9_AMbuild_mm.3mf) | 3MF (`unit="millimeter"`) | **Modern 3D print package** with `millimeter` units and `Ti-6Al-4V (design assumption: yield 828 MPa)` material embedded |
 | 3 | [`cad/hz4i013_g00995_d206e3c9_envelope_mm.stl`](cad/hz4i013_g00995_d206e3c9_envelope_mm.stl) | Binary STL (`mm`) | **Solid outer envelope companion** (`0.3 mm` voxels; all internal cavities and ports closed) |
 | 4 | [`cad/hz4i013_g00995_d206e3c9_drawing_mm.dxf`](cad/hz4i013_g00995_d206e3c9_drawing_mm.dxf) | AutoCAD R12 DXF (`mm`) | **1:1 2D engineering drawing** (`UNITS: MILLIMETERS`, `1 drawing unit = 1 mm`: exact `z = 0` mid-plane outline, 24.9 mm ring bore at `x = -5.97 mm`, `z`-extent thickness envelope & 30 mm blade section) |
-| 5 | [`cad/hz4i013_g00995_d206e3c9_spec_paper.pdf`](cad/hz4i013_g00995_d206e3c9_spec_paper.pdf) | PDF | **7-page engineering specification & FE paper** (`g3-v3.0.1.pdf`; reports all measured safety factors, including those below 1: solid tip 0.64, grip 0.73 / 0.74, fatigue 0.94, yield-sequence 0.56 vs 1.2) |
+| 5 | [`cad/hz4i013_g00995_d206e3c9_spec_paper.pdf`](cad/hz4i013_g00995_d206e3c9_spec_paper.pdf) | PDF | **7-page engineering specification & FE paper** (`g3-v3.0.2.pdf`; reports all measured safety factors, including those below 1: solid tip 0.64, grip 0.73 / 0.74, fatigue 0.94, yield-sequence 0.56 vs 1.2) |
 | 6 | [`cad/hz4i013_g00995_d206e3c9_xray_cutaway.jpg`](cad/hz4i013_g00995_d206e3c9_xray_cutaway.jpg) | JPG image | **Lengthwise cutaway render** showing the internal TPMS lattice and powder-evacuation ports |
 
 Mesh assets and high-resolution release files:
@@ -129,14 +129,14 @@ Units are millimetres. The print file is the AM build: the outer skin, the inter
 ## Reproduce
 
 ```bash
-git checkout 80e669e5b558   # decoder a203278d80d2
-cargo build --release --manifest-path crates/g3/Cargo.toml --bin g3-evolve --example pilot_tools --example gripfe
-crates/g3/target/release/g3-evolve --out ~/jarambit_runs/evo_g3/<run>/island01/run --init 64 --evals 2500 \
+# the cohort ran at commit 80e669e5b558; the decoder (hash a203278d80d2) and g3-evolve are unchanged since, so build from this release
+cargo build --release --manifest-path crates/g3/Cargo.toml --bins
+crates/g3/target/release/g3-evolve --out out/<run>/island01/run --init 64 --evals 2500 \
   --seed 4001 --host 4 --island 1 --commit 80e669e5b558 --h 0.4 --tier1-gate 62 --tier2-gate 71 --log-every 50
-crates/g3/target/release/examples/pilot_tools tier2 <root> <rank.jsonl> 32 tier2_top32.jsonl 0.2 4   # ranking of record
-crates/g3/target/release/examples/pilot_tools hconv <root> <id,id,...> 0.4,0.3,0.25,0.2,0.15 grid.jsonl 4   # grid check
-crates/g3/target/release/examples/pilot_tools export <root> hz4i013_g00995_d206e3c9 <out_dir> 0.2   # watertight envelope + AM build
-crates/g3/target/release/examples/gripfe run <root> hz4i013_g00995_d206e3c9 0.4 fe.jsonl 4             # hex8 voxel FE certification
+crates/g3/target/release/g3-pilot tier2 <root> <rank.jsonl> 32 tier2_top32.jsonl 0.2 4   # ranking of record
+crates/g3/target/release/g3-pilot hconv <root> <id,id,...> 0.4,0.3,0.25,0.2,0.15 grid.jsonl 4   # grid check
+crates/g3/target/release/g3-pilot export <root> hz4i013_g00995_d206e3c9 <out_dir> 0.2   # watertight envelope + AM build
+crates/g3/target/release/g3-gripfe run <root> hz4i013_g00995_d206e3c9 0.4 fe.jsonl 4             # hex8 voxel FE certification
 ```
 
 The winner's genome row is [`evidence/g3/v3.0.0/winner_genome.csv`](evidence/g3/v3.0.0/winner_genome.csv); every island's logged history is in [`evidence/g3/v3.0.0/history/`](evidence/g3/v3.0.0/history/).
@@ -145,9 +145,24 @@ The v1 command-line pipeline (`cargo run -p jarambit`) is still in the repositor
 
 ## Repository
 
+**G3 (current)**
+
 - [`cad/`](cad/): 6-file 3D-printing & manufacturing upload kit (`STL`, `3MF`, `DXF`, `PDF`, `JPG`, millimetres) and order notes for `hz4i013_g00995_d206e3c9`, generated automatically from the winner.
-- [`docs/g3/paper/`](docs/g3/paper/): the G3 paper; `make -C docs/g3/paper` rebuilds it from the receipt.
-- [`docs/g3/RELEASE_3.0.0.md`](docs/g3/RELEASE_3.0.0.md): what the v3.0.0 release changed and why; later patches are in `docs/RELEASES.md`.
-- [`docs/g3/RENDERS.md`](docs/g3/RENDERS.md): how every image of the design was made.
-- [`crates/g3/README.md`](crates/g3/README.md): the G3 genome, decoder, objective and their known limitations.
-- [`docs/RELEASES.md`](docs/RELEASES.md): every release. [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md) and [`docs/paper/`](docs/paper/) (Paper B): the earlier v1 study, kept as its own record.
+- [`crates/g3/`](crates/g3/README.md): the G3 genome, decoder, objective and search, and the release tools in `src/bin/`.
+- [`evidence/g3/`](evidence/g3/): the receipt, genome row, island histories and measurements of the v3.0.0 cohort of record.
+- [`docs/g3/`](docs/g3/): the G3 paper (`make -C docs/g3/paper` rebuilds it from the receipt), the images, [`RELEASE_3.0.0.md`](docs/g3/RELEASE_3.0.0.md) and [`RENDERS.md`](docs/g3/RENDERS.md).
+- [`docs/RELEASES.md`](docs/RELEASES.md): every release.
+
+**The v1/v2 study (kept as its own record)**
+
+- [`docs/paper/`](docs/paper/) (Paper B) and [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md): the study, with the other v1 documents indexed in [`docs/README.md`](docs/README.md).
+- [`crates/`](crates/): the v1 pipeline (the `jarambit` CLI in `crates/cli`, plus `crescent`, `physics`, `genotype`, `phenotype`, `evolve`, `monte_carlo`, `redteam`, `evidence` and `docs`; `crescent` and `physics` are shared with G3), and two standalone tools, `paper-artifacts` (Paper B data and figures) and `runner-policy` (CI runner routing).
+- [`evidence/`](evidence/): the study's certified runs, battery records and receipts. [`artifacts/`](artifacts/): the gen-800 population archive read by Paper B.
+- [`experiments/`](experiments/README.md) and [`designs/`](designs/README.md): self-contained studies and the hand-built SWITCHBACK packages.
+- [`requirements/`](requirements/): the requirement sets. [`assurance/`](assurance/), [`metrics/`](metrics/), [`research/science_v1/`](research/science_v1/), [`fem_solid/`](fem_solid/), [`verify/`](verify/), [`bench/`](bench/) and [`datasets/regression/`](datasets/regression/): evidence contracts, the v1 metric, the science suite, the solid-tip submodel, verification targets, the fixed benchmark and the regression datasets.
+- [`sheath/`](sheath/) and [`web/`](web/): the v1 sheath generator and the CAD scorecard studio. [`evolve.sh`](evolve.sh): the v1 auto-evolve driver.
+
+**Tooling**
+
+- [`ops/`](ops/README.md): generators, checks and render pipelines, indexed by workflow. [`.github/workflows/`](.github/workflows/): CI.
+- [`AGENTS.md`](AGENTS.md): rules for contributors and coding agents. [`PYTHON_EXCEPTIONS.md`](PYTHON_EXCEPTIONS.md): every Python file and why it is not Rust yet. [`STATUS.md`](STATUS.md): generated status.

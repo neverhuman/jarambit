@@ -17,7 +17,6 @@ Joint thin+hot 828 MPa (provisional); joint lateral ≥ 260 N at certification m
 
 ## Generators
 - `ops/wave_reports/make_wave_report.py` — offline Python (plotting/reporting only).
-- `ops/wave_reports/backfill_13_16.sh` — backfill of wave13–16 from the D1 collect (`exec-d1/out/d1_w15w16_collect`, `docs/d1/d1_rescreen_p0.csv`) + pre-D1 lattice records (`exec-lattice/docs/lattice/*`).
 - `ops/wave_reports/post_wave_hook.sh N RUN_DIR [SOLVER]` — **evolve post-hook** for wave17+. Append after the evolve command in a run script (`...; ops/wave_reports/post_wave_hook.sh 18 out/wave18_x`), with `WAVE_REPORT_COMMIT=1` to commit+push.
 - `ops/wave_reports/watch_remote_wave.sh N HOST REMOTE_LOG REMOTE_DIR` — xbabe2 watcher for runs on another host: waits for the `EXIT` line the screen wrapper appends, rsyncs the run (no binaries/STL/STEP), runs the hook, commits+pushes. Read-only on the remote run.
 

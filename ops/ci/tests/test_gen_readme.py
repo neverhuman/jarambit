@@ -113,5 +113,16 @@ class GenReadme(unittest.TestCase):
             self.assertIsNone(re.search(r'\bPASS\b', doc))
 
 
+class PythonInventory(unittest.TestCase):
+    def test_python_exceptions_lists_exactly_the_tracked_python_files(self):
+        # AGENTS.md: no new Python files; every existing one is listed with its disposition in PYTHON_EXCEPTIONS.md.
+        tracked = subprocess.check_output(['git', 'ls-files', '*.py'], cwd=ROOT, text=True).split()
+        text = open(os.path.join(ROOT, 'PYTHON_EXCEPTIONS.md'), encoding='utf-8').read()
+        rows = re.findall(r'^\| `([^`]+\.py)` \| \d+ \| `(?:KEEP_WITH_REASON|PORT_TO_RUST)` \|', text, re.M)
+        self.assertEqual(sorted(rows), sorted(tracked))
+        m = re.search(r'Total Tracked `\.py` Files:\*\* `(\d+)`', text)
+        self.assertEqual(int(m.group(1)), len(tracked))
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -1,20 +1,33 @@
-# docs/ — paper, versioning, logs, calibration
+# docs/
 
-Start with the [IEEE-style research white paper](paper/README.md), [complete CAD test atlas](tests/README.md), [178-case science index](tests/science.md), and [detailed engineering specification](PAPER_AND_README_ENGINEERING_SPEC.md). Existing long technical references remain below.
+The current generation is **G3**. Everything else here belongs to the earlier v1/v2 study, which is kept as its own record.
 
-| file | purpose |
+## G3 (current)
+
+| path | what it is |
 |---|---|
-| `WHITEPAPER.md` | living paper (author Jepson Taylor), header carries version + date |
-| `ENGINEERING_GATES_AND_EVOLUTION.md` | comprehensive reference paper covering all 18 CAD battery evaluators, geometric/red-team/aesthetic/FEM/solid/RS-karambit-v2 gates, the 178-group `T00`–`T19` science suite, and multi-wave evolutionary dynamics (`w1` $\rightarrow$ `w273`) |
-| `WHITEPAPER_g3_neckrail.md` | frozen v0.1.0 g3_neckrail paper (branch `release/v0.1.0`, tag `v0.1.0-g3neckrail`) — kept, not superseded |
-| `GLOBAL_METRIC.md` | locked definition of G |
-| `VERSION` | semver of the research state (`0.32.0`) |
-| `RELEASES.md` | changelog per major wave / tag |
-| `WAVE_LOG.md` | every wave and sub-experiment (Wave N.1 …) — no bump/tag for sub-experiments |
-| `WAVE_FIGURE_TEMPLATE.md` | plate layout contract |
-| `CALIBRATION.md`, `calibration/` | FEM calibration + convergence |
-| `HOLDER_ENVELOPE.md` | holder/sheath envelope |
-| `figures/whitepaper/` | best-G plates + 3D CAD renders used by the paper |
-| `figures/engineering_gates/` | manifest-verified evolutionary trajectory, 18-evaluator CAD battery matrix, and 3D CAD/FEM gallery figures |
+| [`g3/paper/`](g3/paper/) | the G3 paper; `make -C docs/g3/paper` rebuilds it from the release receipt |
+| [`g3/v3.0.0/img/`](g3/v3.0.0/img/) | every image of the best individual, listed in the receipt |
+| [`g3/v3.0.0/cad/`](g3/v3.0.0/cad/) | the print and envelope STL files of the cohort of record (the upload kit in [`../cad/`](../cad/) holds the same bytes) |
+| [`g3/RELEASE_3.0.0.md`](g3/RELEASE_3.0.0.md), [`g3/RENDERS.md`](g3/RENDERS.md) | what v3.0.0 changed, and how each image was made |
+| [`g3/history/`](g3/history/) | the earlier G3 pilot design, superseded by v3.0.0 |
+| [`VERSION`](VERSION), [`RELEASES.md`](RELEASES.md) | the release number and the changelog of every release |
 
-Feeds G: GLOBAL_METRIC.md is the authority; the paper Methods section quotes it.
+## v1/v2 study (historical record)
+
+| path | what it is |
+|---|---|
+| [`paper/`](paper/) | Paper B, the IEEE-style paper on the v1/v2 evolution study; [`paper/README.md`](paper/README.md) and [`paper/SECTIONS.md`](paper/SECTIONS.md) map its sources |
+| [`WHITEPAPER.md`](WHITEPAPER.md), [`ENGINEERING_GATES_AND_EVOLUTION.md`](ENGINEERING_GATES_AND_EVOLUTION.md), [`PROVISIONAL.md`](PROVISIONAL.md) | the v1 white paper, the gate and evolution reference, and the v1 provisional design |
+| [`figures/`](figures/) | figures embedded in the white paper and the gate reference, each with a manifest |
+| [`tests/`](tests/) | the CAD test atlas and the science-suite index |
+| [`GLOBAL_METRIC.md`](GLOBAL_METRIC.md), [`CALIBRATION.md`](CALIBRATION.md), [`HOLDER_ENVELOPE.md`](HOLDER_ENVELOPE.md), [`WAVE_FIGURE_TEMPLATE.md`](WAVE_FIGURE_TEMPLATE.md) | v1 metric, calibration, holder envelope and plate-layout specifications |
+| [`EVOLUTION_CERTIFICATION.md`](EVOLUTION_CERTIFICATION.md), [`REGRESSION_DATASETS.md`](REGRESSION_DATASETS.md), [`CI.md`](CI.md) | how v1 evolution runs are certified, recorded as regression datasets, and gated in CI |
+| [`WAVE_LOG.md`](WAVE_LOG.md), [`wave_reports/`](wave_reports/), [`wave27_diversity/`](wave27_diversity/), [`AESTHETIC_GAPS.md`](AESTHETIC_GAPS.md) | the wave-by-wave log, per-wave reports and the wave-27 diversity study |
+| [`calibration/`](calibration/), [`crescent/`](crescent/), [`d1/`](d1/), [`lattice/`](lattice/) | v1 calibration, crescent-lane, D1 and lattice records read by the white paper and its tests |
+| [`market/`](market/) | the 2026-10-13 market census used by the white paper |
+| [`v1/`](v1/) | the v1 engineering specification, roadmap and the science-v1 test plan |
+| [`PAPER_AND_README_ENGINEERING_SPEC.md`](PAPER_AND_README_ENGINEERING_SPEC.md) | the v1 specification for the paper and README |
+| [`patent/`](patent/), [`PATENT_DRAFT.md`](PATENT_DRAFT.md) | the patent draft and its figures |
+| [`sheath/`](sheath/), [`render/`](render/), [`media/`](media/), [`perf/`](perf/) | the v1 sheath plan, render-pipeline notes, the wave-27 turntable, and a performance baseline |
+| [`WHITEPAPER_g3_neckrail.md`](WHITEPAPER_g3_neckrail.md), [`history/`](history/) | frozen snapshots (the v0.1.0 neck-rail paper is unrelated to the G3 generation) |

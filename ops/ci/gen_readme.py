@@ -315,26 +315,35 @@ def readme():
           f'the finer `0.2 mm` print mesh (`{wid}_AMbuild_h0.2_mm.stl`) and `0.05 mm` fine-blade outer envelope (`{wid}_envelope_fineblade_mm.stl`) are attached to [release v{rv}]({REPO}/releases/tag/v{rv}).', '']
     # ---- reproduce + repo
     L += ['## Reproduce', '', '```bash',
-          f'git checkout {pv["git_commit"][:12]}   # decoder {pv["decoder_sha256"][:12]}',
-          'cargo build --release --manifest-path crates/g3/Cargo.toml --bin g3-evolve --example pilot_tools --example gripfe',
-          f'crates/g3/target/release/g3-evolve --out ~/jarambit_runs/evo_g3/<run>/island01/run --init 64 --evals {co["evaluations_per_island"]} \\',
+          f'# the cohort ran at commit {pv["git_commit"][:12]}; the decoder (hash {pv["decoder_sha256"][:12]}) and g3-evolve are unchanged since, so build from this release',
+          'cargo build --release --manifest-path crates/g3/Cargo.toml --bins',
+          f'crates/g3/target/release/g3-evolve --out out/<run>/island01/run --init 64 --evals {co["evaluations_per_island"]} \\',
           f'  --seed 4001 --host 4 --island 1 --commit {pv["git_commit"][:12]} --h {co["h_mm"]} --tier1-gate {co["tier_gates"][0]} --tier2-gate {co["tier_gates"][1]} --log-every 50',
-          f'crates/g3/target/release/examples/pilot_tools tier2 <root> <rank.jsonl> 32 tier2_top32.jsonl {co["ranking_h_mm"]} 4   # ranking of record',
-          f'crates/g3/target/release/examples/pilot_tools hconv <root> <id,id,...> 0.4,0.3,0.25,0.2,0.15 grid.jsonl 4   # grid check',
-          f'crates/g3/target/release/examples/pilot_tools export <root> {wid} <out_dir> 0.2   # watertight envelope + AM build',
-          f'crates/g3/target/release/examples/gripfe run <root> {wid} 0.4 fe.jsonl 4             # hex8 voxel FE certification',
+          f'crates/g3/target/release/g3-pilot tier2 <root> <rank.jsonl> 32 tier2_top32.jsonl {co["ranking_h_mm"]} 4   # ranking of record',
+          f'crates/g3/target/release/g3-pilot hconv <root> <id,id,...> 0.4,0.3,0.25,0.2,0.15 grid.jsonl 4   # grid check',
+          f'crates/g3/target/release/g3-pilot export <root> {wid} <out_dir> 0.2   # watertight envelope + AM build',
+          f'crates/g3/target/release/g3-gripfe run <root> {wid} 0.4 fe.jsonl 4             # hex8 voxel FE certification',
           '```', '',
           f'The winner\'s genome row is [`evidence/g3/v{rv}/winner_genome.csv`](evidence/g3/v{rv}/winner_genome.csv); every island\'s logged history is in '
           f'[`evidence/g3/v{rv}/history/`](evidence/g3/v{rv}/history/).', '',
           'The v1 command-line pipeline (`cargo run -p jarambit`) is still in the repository; its plate level is opt-in with `JARAMBIT_FEM=1`.', '',
           '## Repository', '',
+          '**G3 (current)**', '',
           f'- [`cad/`](cad/): 6-file 3D-printing & manufacturing upload kit (`STL`, `3MF`, `DXF`, `PDF`, `JPG`, millimetres) and order notes for `{wid}`, generated automatically from the winner.',
-          f'- [`docs/g3/paper/`](docs/g3/paper/): the G3 paper; `make -C docs/g3/paper` rebuilds it from the receipt.',
-          f'- [`docs/g3/RELEASE_{rv}.md`](docs/g3/RELEASE_{rv}.md): what the v{rv} release changed and why; later patches are in `docs/RELEASES.md`.',
-          '- [`docs/g3/RENDERS.md`](docs/g3/RENDERS.md): how every image of the design was made.',
-          '- [`crates/g3/README.md`](crates/g3/README.md): the G3 genome, decoder, objective and their known limitations.',
-          '- [`docs/RELEASES.md`](docs/RELEASES.md): every release. [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md) and '
-          '[`docs/paper/`](docs/paper/) (Paper B): the earlier v1 study, kept as its own record.', '']
+          '- [`crates/g3/`](crates/g3/README.md): the G3 genome, decoder, objective and search, and the release tools in `src/bin/`.',
+          f'- [`evidence/g3/`](evidence/g3/): the receipt, genome row, island histories and measurements of the v{rv} cohort of record.',
+          f'- [`docs/g3/`](docs/g3/): the G3 paper (`make -C docs/g3/paper` rebuilds it from the receipt), the images, [`RELEASE_{rv}.md`](docs/g3/RELEASE_{rv}.md) and [`RENDERS.md`](docs/g3/RENDERS.md).',
+          '- [`docs/RELEASES.md`](docs/RELEASES.md): every release.', '',
+          '**The v1/v2 study (kept as its own record)**', '',
+          '- [`docs/paper/`](docs/paper/) (Paper B) and [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md): the study, with the other v1 documents indexed in [`docs/README.md`](docs/README.md).',
+          '- [`crates/`](crates/): the v1 pipeline (the `jarambit` CLI in `crates/cli`, plus `crescent`, `physics`, `genotype`, `phenotype`, `evolve`, `monte_carlo`, `redteam`, `evidence` and `docs`; `crescent` and `physics` are shared with G3), and two standalone tools, `paper-artifacts` (Paper B data and figures) and `runner-policy` (CI runner routing).',
+          '- [`evidence/`](evidence/): the study\'s certified runs, battery records and receipts. [`artifacts/`](artifacts/): the gen-800 population archive read by Paper B.',
+          '- [`experiments/`](experiments/README.md) and [`designs/`](designs/README.md): self-contained studies and the hand-built SWITCHBACK packages.',
+          '- [`requirements/`](requirements/): the requirement sets. [`assurance/`](assurance/), [`metrics/`](metrics/), [`research/science_v1/`](research/science_v1/), [`fem_solid/`](fem_solid/), [`verify/`](verify/), [`bench/`](bench/) and [`datasets/regression/`](datasets/regression/): evidence contracts, the v1 metric, the science suite, the solid-tip submodel, verification targets, the fixed benchmark and the regression datasets.',
+          '- [`sheath/`](sheath/) and [`web/`](web/): the v1 sheath generator and the CAD scorecard studio. [`evolve.sh`](evolve.sh): the v1 auto-evolve driver.', '',
+          '**Tooling**', '',
+          '- [`ops/`](ops/README.md): generators, checks and render pipelines, indexed by workflow. [`.github/workflows/`](.github/workflows/): CI.',
+          '- [`AGENTS.md`](AGENTS.md): rules for contributors and coding agents. [`PYTHON_EXCEPTIONS.md`](PYTHON_EXCEPTIONS.md): every Python file and why it is not Rust yet. [`STATUS.md`](STATUS.md): generated status.', '']
     return '\n'.join(L)
 
 

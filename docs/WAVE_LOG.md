@@ -4,7 +4,7 @@ Every wave and sub-experiment. Major waves map to versions (wave N ↔ 0.N.0); s
 
 | wave | version | status | key change | best G (hard PASS) | where |
 |---|---|---|---|---|---|
-| 1–12 | 0.1–0.12 (retro) | done | NSGA-II islands, MC, plate FEM, crescent lane (6), C.6 anchor (11–13) | — | `docs/figures/wave_heatmaps/` |
+| 1–12 | 0.1–0.12 (retro) | done | NSGA-II islands, MC, plate FEM, crescent lane (6), C.6 anchor (11–13) | — | `docs/figures/wave_heatmaps/` (removed in v3.0.2; tag v3.0.1) |
 | 13–17 | 0.13–0.17 (retro) | done | D1 rules (828 MPa joint, strict 0.0625, seq, twist both modes); CI d1-gates | — | `docs/wave_reports/` |
 | 18–19 | 0.18–0.19 (retro) | done | controlled RSC trial; outline lane | — | exec/wave18-controlled, exec-w19o |
 | 20 | 0.20 (retro) | done | W20 lock: SOLID tip gate, seq soft, holder +1 mm | 0.848 (c11) | exec-w20d `docs/wave20_diversity` |
