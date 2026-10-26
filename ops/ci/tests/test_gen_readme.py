@@ -36,9 +36,9 @@ class GenReadme(unittest.TestCase):
             self.assertGreaterEqual(rec['blade'][edge]['teeth'], 3)  # both edges serrated (SERR-1..4)
 
     def test_every_image_and_cad_file_is_committed(self):
-        _, rec = release()
+        v, rec = release()
         paths = list(rec['images'].values()) + list(rec['evolution']['figures'].values()) + \
-            [c['image'] for c in rec['evolution']['lineage']] + rec['cad_in_git']
+            [c['image'] for c in rec['evolution']['lineage']] + rec['cad_in_git'] + [f'docs/g3/paper/g3-v{v}.pdf']
         t = readme()
         for p in paths:
             self.assertTrue(os.path.isfile(os.path.join(ROOT, p)), p)

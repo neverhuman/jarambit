@@ -1,29 +1,83 @@
 \section{Design space}\label{sec:design}
-\subsection{Genome and decoder}
-A G3.0 genome is 179 real genes in the unit cube (\src{crates/g3/src/g3_genome.rs}{\code{g3_genome.rs}}). The decoder
-maps them to physical parameters and builds a signed distance field (SDF) of the whole knife
-(\src{crates/g3/src/g3_sdf.rs}{\code{g3_sdf.rs}}): a finger ring with a fixed 24.9 mm bore and 8 mm lip, a compact grip
-with finger grooves and a textured surface, a guard, and a curved claw blade whose straight-line reach from the guard
-is capped at 85.725 mm. The interior of the grip and blade is a skin over a triply periodic minimal-surface lattice
-with powder-removal ports, so the part can be printed hollow. The decoder revision of this release, r2, is identified by
-the hash \gDecoder{} of its source files; an archive made under another decoder fails its integrity check.
+\subsection{Genome, constructive SDF and hollow lattice AM}
+A G3.0 genome is a vector of 179 real genes $\mathbf{u} \in [0,1]^{179}$ under schema \code{G3.0}
+(\src{crates/g3/src/g3_genome.rs}{\code{g3_genome.rs}}). The deterministic mapping \code{G3Genome::decode} transforms
+$\mathbf{u}$ into physical parameters (\code{G3Params}) that drive a constructive signed distance field (SDF) of the
+complete knife (\src{crates/g3/src/g3_sdf.rs}{\code{g3_sdf.rs}}):
+\begin{itemize}
+\item \textbf{Retention ring and hand-zone grip:} a finger ring with a fixed 24.9~mm internal bore diameter and an
+8.0~mm nominal radial lip (\code{lip\_w} $\in [6.5, 10.0]$~mm), coupled through a filleted junction to an ergonomic palm
+swell with four anatomical finger saddles, variable section aspect ratio, and a blended procedural surface texture
+(knurl, Turing reaction-diffusion, Voronoi, longitudinal ridge and CPPN bases).
+\item \textbf{Guard and curved claw blade:} an integral finger guard and a curved karambit blade whose straight-line
+chordal reach from the guard is hard-capped at 85.725~mm (3.375~in, \code{BLADE\_REACH\_CAP\_MM}) with a spine-to-tip
+hook drop and a five-station thickness spine tapering smoothly toward the point.
+\item \textbf{Hollow TPMS interior and powder drainage:} inside the exterior shell wall (\code{t\_wall\_grip},
+\code{t\_skin\_blade}), the grip, guard and blade core are hollowed and infilled with a continuous blend of Gyroid and
+Schwarz-D triply periodic minimal-surface (TPMS) lattices (\code{tpms\_val}, \code{tpms\_level\_for\_rho}) reinforced by
+internal stiffening ribs and self-supporting longitudinal corbels. To guarantee manufacturability in L-PBF Ti-6Al-4V,
+the voxelised build undergoes variable-radius 2D-$z$ morphological closing and opening
+(\code{morph\_close\_variable\_2d\_z}, \code{morph\_open\_variable\_2d\_z}), a 26-connectivity solid flood fill
+(\code{keep\_connected\_solid\_26}) that deletes any unanchored island, and a 6-connectivity void flood fill from the
+powder-evacuation ports so that trapped internal cavities are penalized.
+\end{itemize}
+Decoder revision~r2 is locked by the SHA-256 digest \gDecoder{} computed over the canonical decoder source files
+(\code{g3\_decoder\_sha256} in \src{crates/g3/src/g3_genome.rs}{\code{g3_genome.rs}}); any archive or receipt whose
+recorded decoder hash differs fails admission.
 
-\subsection{Edge rules (EDGE-1..5)}
-Each cutting edge has one primary grind whose per-side angle is a gene bounded to 17.5--22.5\textdegree{} (35--45\textdegree{}
-inclusive, centred on 20\textdegree{} as a hard-use edge for titanium). The bevel depth is the true distance to the
-actual, serrated edge polyline, so the angle is the same on the curved claw as on the straight part, and the grind is
-carried at full height until it meets the blade body, with no micro-bevel and no shoulder (EDGE-1, -2, -3). Both grinds
-run unbroken to the point; only a plunge of 5--12\,\% of the edge length next to the guard is unsharpened, inside a
-4.0\,in sharpened-length cap per edge (EDGE-4). The sharpness check reads the true edge-normal section over the first
-2 mm at every steady station, so a shoulder behind the apex would cost score (EDGE-5).
+\subsection{Primary-grind edge laws (EDGE-1..5)}
+To ensure that every decoded candidate is a true two-edged cutting tool rather than a blunt structural strut with a
+cosmetic chamfer, decoder revision~r2 enforces five geometric and measurement rules across both the concave inner edge
+(Edge~A) and the convex spine edge (Edge~B):
+\begin{enumerate}
+\item \textbf{EDGE-1 (Titanium-appropriate primary bevel angle):} the per-side bevel angle genes \code{angle\_in} and
+\code{angle\_sp} are bounded to $[17.5^\circ, 22.5^\circ]$ ($35^\circ$--$45^\circ$ inclusive apex angle, centred on
+$20^\circ$ per side for hard-use Ti-6Al-4V).
+\item \textbf{EDGE-2 (True distance to the serrated edge curve):} at every planform point $(x,y)$ on the blade, the
+local bevel depth is evaluated from the exact Euclidean distance $d_{\text{edge}}(x,y)$ to the serrated edge polyline
+(\code{BladeProfile2D} in \src{crates/g3/src/g3_sdf.rs}{\code{g3_sdf.rs}}), rather than from a longitudinal chord
+projection. Consequently, the per-side grind angle measured along the true edge normal remains constant around the
+curved claw and around every serration scallop.
+\item \textbf{EDGE-3 (Full-height primary grind without micro-bevel or shoulder):} the V-grind thickness ceiling
+$t_{\text{grind}}(d) = t_{\text{apex}} + 2\,d\tan\theta_{\text{edge}}$ is carried outward from the apex until it meets
+the structural core thickness of the blade, with no secondary micro-bevel clamp and no step shoulder behind the edge.
+\item \textbf{EDGE-4 (Full-length sharpened reach with bounded guard plunge):} both edges run unbroken all the way to
+the piercing point ($s_1 = 1.0$). Only a short plunge transition next to the guard (\code{s0\_in}, \code{s0\_sp}
+$\in [0.05, 0.12]$ of the edge arc) remains unsharpened, subject to a 101.6~mm (4.0~in) maximum sharpened arc length
+per edge.
+\item \textbf{EDGE-5 (True edge-normal section audit):} the sharpness evaluator
+(\code{evaluate\_gate\_s\_sharpness} in \src{crates/g3/src/g3_qd.rs}{\code{g3_qd.rs}}) samples the 3D blade thickness
+along the true outward normal $\mathbf{n}_{\text{edge}}$ over the first 2.0~mm behind the apex across both edges, so any
+blunt station or recessed shoulder directly degrades the sharpness score.
+\end{enumerate}
 
-\subsection{Serration rules (SERR-1..4)}
-Both edges are serrated. The serration depth is 0.8--2.2 mm on the inner edge and 0.8--2.0 mm on the spine edge
-(SERR-1); every serrated span holds at least three full-depth teeth (SERR-2); the span starts past the plunge and ends at
-least 18 mm from the point, so the piercing point stays plain (SERR-3). To keep teeth from snapping, the pitch is
-5--9 mm and the depth is at most a quarter of the pitch (SERR-4). Each tooth is checked as built
-(\src{crates/g3/src/g3_qd.rs}{\code{serration_tooth_strength}}): its root is the segment between two neighbouring gullet
-bottoms, with the thickness of the exact blade law along it; a \gToothSnag{} N snag along the edge, amplified by the
-Inglis notch factor $K_t = 1 + 2\sqrt{d/\rho}$ for gullet depth $d$ and radius $\rho$~\cite{inglis1913}, and a
-\gToothPry{} N pry across the blade load the tooth tip. The decoder test suite requires every tooth of 60 Sobol designs
-to reach a safety factor of at least 1 under both cases.
+\subsection{Double-serrated edge and tooth-strength laws (SERR-1..4)}
+Both cutting edges are required to carry functional, break-resistant serrations governed by four rules:
+\begin{enumerate}
+\item \textbf{SERR-1 (Mandatory dual-edge serration depth):} the serration depth genes are bounded to
+$d_{\text{in}} \in [0.8, 2.2]$~mm on the inner edge and $d_{\text{sp}} \in [0.8, 2.0]$~mm on the spine edge, eliminating
+smooth-edge degenerate solutions.
+\item \textbf{SERR-2 (Minimum tooth census):} each serrated span is required to accommodate at least three full-depth
+teeth (\code{serration\_census} in \src{crates/g3/src/g3_genome.rs}{\code{g3_genome.rs}}).
+\item \textbf{SERR-3 (Plunge clearance and plain piercing point):} on each edge, the serrated span starts clear of the
+guard plunge ($s_{0,\text{ser}} \ge s_{\text{plunge}} + 0.06$ on Edge~A; $+0.08$ on Edge~B) and ends at least 18.0~mm
+of arc length before the tip, leaving a smooth, continuous plain-edge kissaki point for piercing and tip prying.
+\item \textbf{SERR-4 (Bounded aspect ratio and as-built tooth-root stress verification):} to prevent narrow, fragile
+teeth, the tooth pitch is bounded to $p_s \in [5.0, 9.0]$~mm and the gullet depth is clamped to at most one quarter of
+the pitch ($d_s \le 0.25\,p_s$, bounding the mean flank angle to at most $26.6^\circ$). Every individual tooth on both
+edges is then verified structurally from the decoded 2D/3D blade geometry
+(\code{serration\_gullets} in \src{crates/g3/src/g3_sdf.rs}{\code{g3_sdf.rs}} and \code{serration\_tooth\_strength} in
+\src{crates/g3/src/g3_qd.rs}{\code{g3_qd.rs}}). For each tooth bounded by adjacent gullet bottoms $\mathbf{g}_0,
+\mathbf{g}_1$ with root chord $c = \|\mathbf{g}_1 - \mathbf{g}_0\|$, tooth height $h_t$, gullet curvature radius $\rho$,
+and five-point Simpson-integrated root thickness $\bar{t}$ and out-of-plane section modulus $Z_{\text{lat}}$, two load
+cases are evaluated against $\sigma_{\text{allow}} = 795$~MPa:
+\begin{equation}
+\sigma_{\text{snag}} = K_t\,\frac{F_{\text{snag}}}{\bar{t}\,c} + K_t\,\frac{6\,F_{\text{snag}}\,h_t}{\bar{t}\,c^2},
+\qquad
+\sigma_{\text{pry}} = \frac{F_{\text{pry}}\,h_t}{Z_{\text{lat}}},
+\end{equation}
+where $F_{\text{snag}} = \gToothSnag$~N acts along the edge at the tooth tip with Inglis notch factor
+$K_t = 1 + 2\sqrt{d_s/\rho}$~\cite{inglis1913}, and $F_{\text{pry}} = \gToothPry$~N acts perpendicular to the blade
+plane at the tooth tip. The decoder regression suite verifies that every tooth across 60 Sobol-sampled genomes achieves
+$\mathrm{SF}_{\text{tooth}} = \sigma_{\text{allow}}/\max(\sigma_{\text{snag}},\sigma_{\text{pry}}) \ge 1.0$.
+\end{enumerate}

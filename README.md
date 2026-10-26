@@ -1,8 +1,8 @@
 # Jarambit 3.0.0: an evolved, 3D-printable titanium karambit
 
-[![release](https://img.shields.io/badge/release-v3.0.0-2f56d6)](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0) ![design](https://img.shields.io/badge/best%20individual-hz4i013__g00995__d206e3c9-555) ![score](https://img.shields.io/badge/W__ERGOLIGHT__v1-80.55-555) ![mass](https://img.shields.io/badge/mass-59.3%20g-555) ![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)
+[![release](https://img.shields.io/badge/release-v3.0.0-2f56d6)](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0) [![paper](https://img.shields.io/badge/paper-G3%20v3.0.0%20PDF-b31b1b)](docs/g3/paper/g3-v3.0.0.pdf) ![design](https://img.shields.io/badge/best%20individual-hz4i013__g00995__d206e3c9-555) ![score](https://img.shields.io/badge/W__ERGOLIGHT__v1-80.55-555) ![mass](https://img.shields.io/badge/mass-59.3%20g-555) ![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)
 
-Every number and picture on this page describes one design, **`hz4i013_g00995_d206e3c9`**, the best individual of the v3.0.0 cohort of record, and is generated from [`evidence/g3/v3.0.0/release.json`](evidence/g3/v3.0.0/release.json). Status: computational design; not built, printed or physically tested.
+Every number and picture on this page and in the [G3 release paper (`docs/g3/paper/g3-v3.0.0.pdf`)](docs/g3/paper/g3-v3.0.0.pdf) describes one design, **`hz4i013_g00995_d206e3c9`**, the best individual of the v3.0.0 cohort of record, and is generated from [`evidence/g3/v3.0.0/release.json`](evidence/g3/v3.0.0/release.json). Status: computational design; not built, printed or physically tested.
 
 <img src="docs/g3/v3.0.0/img/hero.jpg" alt="The best individual hz4i013_g00995_d206e3c9: anodized grip and ring, double-edged serrated claw blade" width="100%">
 
@@ -128,6 +128,7 @@ The v1 command-line pipeline (`cargo run -p jarambit`) is still in the repositor
 
 ## Repository
 
+- [`docs/g3/paper/g3-v3.0.0.pdf`](docs/g3/paper/g3-v3.0.0.pdf): the G3 release paper (LaTeX source in [`docs/g3/paper/`](docs/g3/paper/), macros generated from the release receipt by `g3-release-tex`).
 - [`docs/g3/RELEASE_3.0.0.md`](docs/g3/RELEASE_3.0.0.md): what changed in this release and why.
 - [`crates/g3/README.md`](crates/g3/README.md): the G3 genome, decoder, objective and their known limitations.
 - [`docs/RELEASES.md`](docs/RELEASES.md): every release. [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md): the earlier v1 study, kept as a historical record.

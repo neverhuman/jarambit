@@ -1,19 +1,44 @@
-\section{Introduction}
-A karambit is a curved, ring-handled knife held in a closed fist with the little finger through the ring. Printing one
-in Ti-6Al-4V by laser powder-bed fusion makes a hollow, lattice-filled part possible, which opens a large design space
-but also makes it easy to fool oneself: a coarse voxel model can hide mass, a strength formula can credit material that
-is never built, and an edge can be left unground where a test does not look. G3 is the generation of the Jarambit
-project that designs the whole knife around the hand. This paper reports its v\gVersion{} release.
+\section{Introduction}\label{sec:intro}
+A karambit is a curved, ring-retained utility and defensive knife gripped in a closed fist with the index or little
+finger seated through a rear retention ring. Fabricating a one-piece karambit in Ti-6Al-4V by laser powder-bed fusion
+(L-PBF) opens an expressive three-dimensional design space: the grip and blade core can be hollowed into a skin over a
+triply periodic minimal-surface (TPMS) lattice with integral powder-evacuation ports, while variable-thickness ribs,
+finger grooves and dual-edge bevels are built directly into the single monolithic part. Yet unrestricted evolutionary
+search in three dimensions also creates severe specification traps. A coarse voxel grid can hide mass or bridge thin
+gaps; a beam or plate surrogate can credit interior material that is absent from the printed build; a blade profile can
+leave an unground shoulder where a sparse station check does not look; and deep, narrow serration gullets can inflate
+apparent edge length while leaving brittle needle teeth that snap under an oblique snag.
 
-Three choices define the release. First, \emph{evolution designs the knife}: populations start from scrambled Sobol
-samples, nobody edits an individual, and engineering requirements enter as constraints on what the decoder can express
-or as measured terms of the objective. Second, \emph{the edge is part of the design space, not a post-process}: both
-cutting edges must carry one primary grind at a knife-appropriate angle, run unbroken to the point, and be serrated
-with teeth that do not snap (Section~\ref{sec:design}). Third, \emph{only measurements are reported}: every number in
-this paper and in the repository README is generated from one release receipt, and the strength figures quoted for
-the design come from voxel-SDF geometry, plate and solid finite elements, and a voxel finite-element certification of
-the printed geometry.
+Generation~3 (G3) of the Jarambit project addresses these failure modes by formulating the whole knife---retention
+ring, ergonomic grip, guard, hollow lattice interior, and a double-edged, double-serrated claw blade---inside a unified
+constructive decoder and multi-fidelity finite-element evaluation pipeline. This paper reports the v\gVersion{} release
+and the best individual of its cohort of record, \gDesign{} (commit \gCommit, decoder hash \gDecoder).
 
-The contributions are the decoder rules for edges and serrations (EDGE-1..5, SERR-1..4), the logged evolution of a
-\gIslands-island cohort, the design it found, and a measurement chain whose every step is reproducible from a commit
-and a genome row (Section~\ref{sec:repro}).
+Three architectural principles govern the v\gVersion{} release:
+\begin{enumerate}
+\item \emph{Evolution designs the knife from scratch.} Every island in the cohort is initialised exclusively from
+scrambled low-discrepancy Sobol sequences (\src{crates/g3/src/g3_genome.rs}{\code{g3_genome.rs}}). No hand-tuned seed,
+template CAD model or post-hoc manual edit enters the population. Engineering laws are encoded either as invariant
+geometric mappings inside the decoder or as measured physical responses in the objective.
+\item \emph{Edge and serration mechanics are intrinsic to the decoder.} Rather than treating sharpening and serrations
+as a post-process applied after structural optimisation, decoder revision~r2 enforces five primary-grind invariants
+(EDGE-1..5) and four serration-integrity laws (SERR-1..4) directly on the signed distance field
+(\src{crates/g3/src/g3_sdf.rs}{\code{g3_sdf.rs}}; Section~\ref{sec:design}). Both cutting edges carry a single primary
+bevel at a titanium-appropriate angle (17.5--22.5\textdegree{} per side) measured normal to the true serrated edge
+curve, run unbroken to the piercing point, and carry scalloped serrations whose individual tooth roots are checked
+against combined in-plane snag (\gToothSnag~N) and cross-blade pry (\gToothPry~N) loads
+(\src{crates/g3/src/g3_qd.rs}{\code{serration_tooth_strength}}).
+\item \emph{Every reported quantity traces to a single committed measurement receipt.} All scores, dimensions, safety
+factors, convergence checks and rankings in this paper and in the repository \code{README.md} are generated
+automatically from \code{evidence/g3/v\gVersion/release.json} via
+\src{crates/g3/src/bin/g3_release_tex.rs}{\code{g3_release_tex.rs}} and \src{ops/ci/gen_readme.py}{\code{gen_readme.py}}.
+Analytic Tier-0 screening estimates never appear in reported results; every quoted value comes from voxel-SDF geometry,
+plate and solid finite elements, and an explicit \code{hex8} voxel finite-element certification of the printed part.
+\end{enumerate}
+
+The remainder of this paper details the 179-gene representation and edge/serration decoder laws
+(Section~\ref{sec:design}), the veto-free multiplicative-ergonomics objective \gMetric{} (Section~\ref{sec:objective}),
+the \gIslands-island CVT-MAP-Elites search and three-tier evaluation cascade (Section~\ref{sec:search}), the
+multi-grid and voxel finite-element verification chain (Section~\ref{sec:measure}), the evolutionary trajectory and
+best individual \gDesign{} (Section~\ref{sec:results}), the explicit physical and modelling limits of the result
+(Section~\ref{sec:limits}), and the complete reproduction protocol (Section~\ref{sec:repro}).

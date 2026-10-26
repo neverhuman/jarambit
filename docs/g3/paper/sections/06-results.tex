@@ -6,6 +6,21 @@ score of every island against evaluations, and how the archives filled. The winn
 started from a best measured score of \gScoreSobol{} after its Sobol initialisation. Fig.~\ref{fig:lineage} shows that
 island's best design at each logged checkpoint, from the same camera.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{evolution_best.pdf}\\[2pt]
+\includegraphics[width=\linewidth]{evolution_archive.pdf}
+\caption{Top: best measured score so far of each island (the winning island in colour; the dot marks its first full-3D
+best). Bottom: filled niches and Tier-2 elites per island.}\label{fig:evo}
+\end{figure}
+
+\begin{figure*}[t]
+\centering
+\input{generated/lineage.tex}
+\caption{Best design of island \gWinIsland{} at each logged checkpoint: evaluation, best measured score and mass on the
+search grid. Same camera, light and material for every frame; geometry is the exported mesh.}\label{fig:lineage}
+\end{figure*}
+
 \subsection{Choosing the winner on the print grid}
 The search measures every design on an $h = \gH$ mm grid, and that grid can undercount mass. The search's own leader,
 \gLeader{} (Tier-2 score \gLeaderTierTwo{} at $h = \gH$ mm), weighs \gLeaderMassA{} g at $h = \gH$ mm but
@@ -27,21 +42,6 @@ Design & 0.4 & 0.3 & 0.25 & 0.2 & 0.15 \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{evolution_best.pdf}\\[2pt]
-\includegraphics[width=\linewidth]{evolution_archive.pdf}
-\caption{Top: best measured score so far of each island (the winning island in colour; the dot marks its first full-3D
-best). Bottom: filled niches and Tier-2 elites per island.}\label{fig:evo}
-\end{figure}
-
-\begin{figure*}[t]
-\centering
-\input{generated/lineage.tex}
-\caption{Best design of island \gWinIsland{} at each logged checkpoint: evaluation, best measured score and mass on the
-search grid. Same camera, light and material for every frame; geometry is the exported mesh.}\label{fig:lineage}
-\end{figure*}
-
 \begin{table}[t]
 \caption{Final ranking: Tier 2 at $h = \gHRank$ mm on the platform of record}\label{tab:top}
 \centering
@@ -54,12 +54,6 @@ Rank & Design & Score & Mass (g) \\
 \end{tabular}
 \end{table}
 
-\subsection{The best individual}
-The best individual, \gDesign{} (genome hash \gGenomeSha), scores \gScore{} with a weighted base of \gBase{} and an
-ergonomic multiplier of \gE. Its grip is \gLg{} mm long with a swell perimeter of \gSwellPerim{} mm and a height-to-width
-ratio of \gHoT; the guard is \gGuardH{} mm high and the reach of the blade from the guard is \gReach{} mm. As printed it
-weighs \gMassG{} g. Fig.~\ref{fig:hero} shows it; Table~\ref{tab:best} lists its measurements.
-
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.49\textwidth]{hero.jpg}\hfill\includegraphics[width=0.49\textwidth]{xray.jpg}\\[3pt]
@@ -69,6 +63,12 @@ weighs \gMassG{} g. Fig.~\ref{fig:hero} shows it; Table~\ref{tab:best} lists its
 30 mm from the point, the point, and the spine edge with its serrations. Cycles renders of the exported meshes; the blade
 is meshed at 0.05 mm from the exact decoder law, the rest at 0.2 mm voxels.}\label{fig:hero}
 \end{figure*}
+
+\subsection{The best individual}
+The best individual, \gDesign{} (genome hash \gGenomeSha), scores \gScore{} with a weighted base of \gBase{} and an
+ergonomic multiplier of \gE. Its grip is \gLg{} mm long with a swell perimeter of \gSwellPerim{} mm and a height-to-width
+ratio of \gHoT; the guard is \gGuardH{} mm high and the reach of the blade from the guard is \gReach{} mm. As printed it
+weighs \gMassG{} g. Fig.~\ref{fig:hero} shows it; Table~\ref{tab:best} lists its measurements.
 
 \begin{table}[t]
 \caption{Measurements of the best individual (platform of record)}\label{tab:best}
@@ -97,6 +97,13 @@ Buckling factor $\lambda$ & \gBuck \\
 \end{tabular}
 \end{table}
 
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{edge_sections.pdf}
+\caption{Upper half of the blade section at four stations of each edge, true scale, against a 20\textdegree{} per-side
+grind (dashed). Profiles stop where a lightening slot begins.}\label{fig:edges}
+\end{figure}
+
 \subsection{Edges and serrations}
 Fig.~\ref{fig:edges} plots the blade section at four stations of each edge, measured along the true edge normal with the
 exact decoder law. Every station of an edge lies on one line: edge A at \gEdgeAApexLo--\gEdgeAApexHi\textdegree{} per side
@@ -104,10 +111,3 @@ and edge B at \gEdgeBApexLo--\gEdgeBApexHi\textdegree, with no slope steeper tha
 \gEdgeBSteep\textdegree{} within 2 mm of the edge. Both edges are serrated over the rear part of the blade, and the
 grinds run on through the plain point region to \gEdgeATo{} and \gEdgeBTo{} mm from the point. Under the \gToothSnag{} N snag and \gToothPry{} N pry the weakest tooth has a safety factor
 of \gToothMin, which \gToothReading{} of 1.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{edge_sections.pdf}
-\caption{Upper half of the blade section at four stations of each edge, true scale, against a 20\textdegree{} per-side
-grind (dashed). Profiles stop where a lightening slot begins.}\label{fig:edges}
-\end{figure}

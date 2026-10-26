@@ -1,18 +1,50 @@
 \section{Search}\label{sec:search}
-Each island is a CVT-MAP-Elites archive~\cite{mouret2015,vassiliades2018} of 1,024 niches over eight measured
-behaviour descriptors: hook drop, inner turn angle, silhouette complexity, grip roundness, groove articulation,
-porosity, surface energy and mass (\src{crates/g3/src/g3_qd.rs}{\code{g3_qd.rs}}). An island starts from 64 scrambled
-Joe--Kuo Sobol samples~\cite{joe2008,matousek1998}. Afterwards each child is bred from two archived parents by iso-line
-variation: 40\,\% of parent pairs come from the best-scoring elites, the rest from a curiosity-weighted tournament of
-three that favours niches whose offspring recently improved the archive. A child takes its niche if the niche is empty,
-if it was evaluated at a higher tier than the incumbent, or if it scores higher at the same tier.
+\subsection{CVT-MAP-Elites archive and variation operators}
+Each island evolves a centroidal Voronoi tessellation MAP-Elites (CVT-MAP-Elites) archive~\cite{mouret2015,vassiliades2018}
+of $K = 1{,}024$ niches over an eight-dimensional measured behaviour descriptor space $\mathbf{b} \in [0,1]^8$
+(\code{G3Descriptors} in \src{crates/g3/src/g3_qd.rs}{\code{g3_qd.rs}}):
+(1)~normalized hook drop, (2)~inner edge turn angle, (3)~silhouette perimeter-to-area complexity, (4)~grip section
+roundness $T/H$, (5)~finger groove articulation depth, (6)~internal TPMS porosity fraction, (7)~procedural surface
+texture energy, and (8)~normalized mass. Niche centroids are generated deterministically by Lloyd's relaxation over
+low-discrepancy samples so every island shares an identical 1,024-cell behavioural partition.
 
-Evaluation is a three-tier cascade. Tier 0 is analytic and takes milliseconds. A design scoring at least \gGateOne{} goes
-to Tier 1: a voxel SDF of the whole knife at $h = \gH$ mm, its mass and inertia, and plate finite elements of the blade
-and ring. A Tier-1 score of at least \gGateTwo{} promotes it to Tier 2, which adds a watertight mesh census and a solid
-TET10 model of the point. Only Tier-1 and Tier-2 results are measurements; Tier-0 values never appear in this paper.
+Every island is initialised from 64 Owen-scrambled Joe--Kuo Sobol points~\cite{joe2008,matousek1998} in $[0,1]^{179}$
+(\code{sobol\_owen\_point\_179d} in \src{crates/g3/src/g3_genome.rs}{\code{g3_genome.rs}}), with no hand-crafted or
+previously evolved seeds. Subsequent evaluations breed one child per step from two archived parents via directional
+iso-line variation (\code{iso\_dd\_offspring}, $\sigma_{\text{iso}} = 0.018$, $\sigma_{\text{dir}} = 0.085$) combined
+with sparse single-gene jump perturbations. Parent selection draws 40\,\% of pairs from the top-scoring elites in the
+archive and 60\,\% from a curiosity-weighted three-way tournament that up-weights niches whose offspring recently
+produced archive admissions. Under the tier-aware admission rule (\code{G3CvtArchive::try_insert}), a candidate claims
+its nearest Voronoi cell if the cell is empty, if the candidate was evaluated at a strictly higher fidelity tier than
+the incumbent, or if it achieves a higher score at the same tier.
 
-The islands are independent, with distinct seeds, one thread each. Every island logs its progress every 50 evaluations:
-the best measured score, archive size, Tier-2 count, and at power-of-two evaluation counts the best genome itself, which
-is what Section~\ref{sec:results} plots and renders. Logging draws no random numbers, so a logged run produces the same
-archive as an unlogged one.
+\subsection{Three-tier multi-fidelity evaluation cascade}
+To focus finite-element compute on promising morphologies, every candidate passes through a three-tier cascade
+(\src{crates/g3/src/g3_qd.rs}{\code{g3_qd.rs}}):
+\begin{enumerate}
+\item \textbf{Tier~0 (Analytic geometry \& beam screen):} decodes the 2D blade and grip profiles, verifies geometric
+admissibility, and evaluates closed-form beam, lateral-torsional buckling (\code{ltb\_sum}) and twist surrogates in a
+few milliseconds. Only candidates scoring at least \gGateOne{} advance to Tier~1.
+\item \textbf{Tier~1 (3D voxel SDF \& Reissner--Mindlin plate FE):} voxelises the full 3D knife and internal TPMS
+lattice at pitch $h = \gH$~mm (\code{build\_g3\_grids}), measures exact voxel mass, centre of mass, spin inertia and
+6-connected powder drainage, and solves 3-level Reissner--Mindlin MITC3 triangular shell/plate finite-element models of
+the curved blade and retention ring under the lateral (180~N, 260~N), ring bearing/back (300~N, 30~N), human-maximum
+twist (16.2~N$\cdot$m) and spine (3,427~N) load cases (\code{evaluate\_tier1\_sdf\_and\_plate}). Candidates scoring at
+least \gGateTwo{} at Tier~1 advance to Tier~2.
+\item \textbf{Tier~2 (Watertight mesh census \& 3D TET10 solid-tip FE):} extracts the marching-cubes surface mesh~\cite{lorensen1987}
+with fail-closed grid-shift recovery (\code{extract\_watertight\_mesh\_fail\_closed}: zero boundary edges, zero
+non-manifold edges) and solves a 3D quadratic tetrahedral (\code{TET10}) solid finite-element model of the distal 30~mm
+of the blade under a 1.82~N$\cdot$m tip pry at a converged planform triangle area limit of
+\code{TIP\_FE\_MAX\_AREA\_MM2} $= 0.15$~mm$^2$ (\code{evaluate\_tier2\_elites}).
+\end{enumerate}
+Only Tier-1 and Tier-2 evaluations constitute physical measurements; Tier-0 surrogates are used solely to filter poor
+offspring and are never reported as results.
+
+\subsection{Independent islands and RNG-isolated trajectory logging}
+The cohort runs \gIslands{} independent islands in parallel, each pinned to a single worker thread with a distinct
+deterministic seed derived from host and island indices (\src{crates/g3/src/bin/g3_evolve.rs}{\code{g3_evolve.rs}}).
+Every 50 evaluations (\code{--log-every 50}), \code{run\_g3\_cvt\_map\_elites\_logged} appends a \code{G3HistoryPoint}
+record to \code{history.jsonl} capturing the evaluation count, filled niches, Tier-1 and Tier-2 elite counts, and the
+highest measured (Tier-1/Tier-2) score and mass, together with the full 179-gene CSV row at power-of-two checkpoints and
+whenever a new measured best is discovered. Because trajectory logging reads archive state without drawing from the
+pseudo-random number generator, a logged evolution run produces a bit-for-bit identical archive to an unlogged run.

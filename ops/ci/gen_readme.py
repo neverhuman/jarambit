@@ -146,11 +146,13 @@ def readme():
     L = []
     L += [f'# Jarambit {v}: an evolved, 3D-printable titanium karambit', '',
           f'[![release](https://img.shields.io/badge/release-v{v}-2f56d6)]({REPO}/releases/tag/v{v}) '
+          f'[![paper](https://img.shields.io/badge/paper-G3%20v{v}%20PDF-b31b1b)](docs/g3/paper/g3-v{v}.pdf) '
           f'![design](https://img.shields.io/badge/best%20individual-{q(wid)}-555) '
           f'![score](https://img.shields.io/badge/W__ERGOLIGHT__v1-{sc["score_100"]:.2f}-555) '
           f'![mass](https://img.shields.io/badge/mass-{mass:.1f}%20g-555) '
           f'![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)', '',
-          f'Every number and picture on this page describes one design, **`{wid}`**, the best individual of the v{v} cohort of '
+          f'Every number and picture on this page and in the [G3 release paper (`docs/g3/paper/g3-v{v}.pdf`)](docs/g3/paper/g3-v{v}.pdf) '
+          f'describes one design, **`{wid}`**, the best individual of the v{v} cohort of '
           f'record, and is generated from [`evidence/g3/v{v}/release.json`](evidence/g3/v{v}/release.json). '
           f'Status: {r["status"]}.', '',
           f'<img src="{img["hero"]}" alt="The best individual {wid}: anodized grip and ring, double-edged serrated claw blade" width="100%">', '']
@@ -290,6 +292,7 @@ def readme():
           f'[`evidence/g3/v{v}/history/`](evidence/g3/v{v}/history/).', '',
           'The v1 command-line pipeline (`cargo run -p jarambit`) is still in the repository; its plate level is opt-in with `JARAMBIT_FEM=1`.', '',
           '## Repository', '',
+          f'- [`docs/g3/paper/g3-v{v}.pdf`](docs/g3/paper/g3-v{v}.pdf): the G3 release paper (LaTeX source in [`docs/g3/paper/`](docs/g3/paper/), macros generated from the release receipt by `g3-release-tex`).',
           f'- [`docs/g3/RELEASE_{v}.md`](docs/g3/RELEASE_{v}.md): what changed in this release and why.',
           '- [`crates/g3/README.md`](crates/g3/README.md): the G3 genome, decoder, objective and their known limitations.',
           '- [`docs/RELEASES.md`](docs/RELEASES.md): every release. [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md): the earlier v1 study, kept as a historical record.', '']
