@@ -1382,9 +1382,13 @@ fn serration_wave(phase_01: f64, duty: f64, w_scallop: f64, w_tooth: f64, w_micr
 }
 
 /// Evaluate the bevel blend weights `(win_in, win_sp)` along the inner and spine edges, budgeting
-/// both the 3.0 mm entry/exit ramps and `tip_bevel_lock` strictly inside `[arc_start, arc_len]`
-/// with a 1.5 mm discretization margin (`S5-M3`, `S5-M4`) so `s0_*` and `s1_*` act independently
-/// and the midpoint-rule sharpened arc never exceeds `SHARPENED_EDGE_CAP_MM` (`101.6 mm`, `N6`).
+/// the 3.0 mm entry ramp and `tip_bevel_lock` strictly inside `[arc_start, arc_len]` with a 1.5 mm
+/// discretization margin (`S5-M3`, `S5-M4`) so the midpoint-rule sharpened arc never exceeds
+/// `SHARPENED_EDGE_CAP_MM` (`101.6 mm`, `N6`).
+///
+/// `EDGE-4` (owner 2026-10-26, "ideal sharpness angle for the entire two-sided blade"): both grinds run
+/// unbroken to the tip. `s1_in` / `s1_sp` are retired (read by nothing); the sharpened length is set by the
+/// heel-side start `s0_*` and the per-edge cap, so any unsharpened length sits at the plunge, never at the point.
 #[inline]
 pub fn blade_bevel_window_weights(
     p: &BTreeMap<&'static str, f64>,
@@ -1395,36 +1399,43 @@ pub fn blade_bevel_window_weights(
     a_tip: f64,
 ) -> (f64, f64) {
     let cap_safe = SHARPENED_EDGE_CAP_MM - 1.5; // 100.1 mm margin against ds/2 midpoint discretization
-    let end_in = (p["s1_in"].clamp(0.50, 1.0) * arc_in_mm).max(8.0);
     let start_in = (p["s0_in"].clamp(0.0, 0.50) * arc_in_mm)
-        .min((end_in - 8.0).max(0.0))
+        .min((arc_in_mm - 8.0).max(0.0))
         .max((arc_in_mm - cap_safe).max(0.0));
-    let end_sp = (p["s1_sp"].clamp(0.50, 1.0) * arc_sp_mm).max(8.0);
     let start_sp = (p["s0_sp"].clamp(0.0, 0.50) * arc_sp_mm)
-        .min((end_sp - 8.0).max(0.0))
+        .min((arc_sp_mm - 8.0).max(0.0))
         .max((arc_sp_mm - cap_safe).max(0.0));
     let tip_bevel_lock = 1.0 - smoothstep(2.5, 4.5, a_tip);
     let win_in = if s_arc_in <= start_in {
         0.0
     } else {
-        let exit_in = if p["s1_in"] >= 0.98 {
-            1.0
-        } else {
-            1.0 - smoothstep((end_in - 3.0).max(start_in + 3.5), end_in, s_arc_in)
-        };
-        (smoothstep(start_in, start_in + 3.0, s_arc_in) * exit_in).max(tip_bevel_lock)
+        smoothstep(start_in, start_in + 3.0, s_arc_in).max(tip_bevel_lock)
     };
     let win_sp = if s_arc_sp <= start_sp {
         0.0
     } else {
-        let exit_sp = if p["s1_sp"] >= 0.98 {
-            1.0
-        } else {
-            1.0 - smoothstep((end_sp - 3.0).max(start_sp + 3.5), end_sp, s_arc_sp)
-        };
-        (smoothstep(start_sp, start_sp + 3.0, s_arc_sp) * exit_sp).max(tip_bevel_lock)
+        smoothstep(start_sp, start_sp + 3.0, s_arc_sp).max(tip_bevel_lock)
     };
     (win_in, win_sp)
+}
+
+/// Distance (mm) from `(x, y)` to the edge polyline `(xs, ys)`, searching the segments within 12 mm of sample
+/// `i0` in x (`EDGE-2`: bevels are ground normal to the edge, not along y). Returns 12.0 when no segment is that
+/// close, which is past every primary grind (`(t_core + 1.8) / (2 tan 17.5 deg) < 12`).
+fn edge_normal_distance(xs: &[f64], ys: &[f64], i0: usize, x: f64, y: f64) -> f64 {
+    let dx = ((xs[xs.len() - 1] - xs[0]) / (xs.len() - 1) as f64).abs().max(1e-6);
+    let w = (12.0 / dx).ceil() as usize + 1;
+    let lo = i0.saturating_sub(w);
+    let hi = (i0 + w + 1).min(xs.len() - 1);
+    let mut best = 12.0_f64;
+    for k in lo..hi {
+        let (ax, ay, bx, by) = (xs[k], ys[k], xs[k + 1], ys[k + 1]);
+        let (ex, ey) = (bx - ax, by - ay);
+        let l2 = (ex * ex + ey * ey).max(1e-18);
+        let t = (((x - ax) * ex + (y - ay) * ey) / l2).clamp(0.0, 1.0);
+        best = best.min((x - ax - t * ex).hypot(y - ay - t * ey));
+    }
+    best
 }
 
 pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D {
@@ -1670,8 +1681,9 @@ pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D
 
 /// Evaluate local blade thickness $t(x, y)$ (mm) and signed 2D planform distance $d_2(x, y)$
 /// from `BladeProfile2D`, guaranteeing Gate S1 ($\text{apex} \le 0.19\text{ mm}$), S2 (monotone point
-/// taper with $t(0.25) \le 0.28$, $t(1) \le 0.56$, $t(2) \le 0.95$), S3 ($\text{half-angle} \le 24.5^\circ$),
-/// and the 4.0 in (`101.6 mm`) sharpened-arc cap per edge by construction.
+/// taper with $t(0.25) \le 0.28$, $t(1) \le 0.56$, $t(2) \le 0.95$), S3 (one primary half-angle in
+/// $[17.5^\circ, 22.5^\circ]$ per side, normal to the edge, over the full grind height and to the tip on both
+/// edges, `EDGE-1..4`), and the 4.0 in (`101.6 mm`) sharpened-arc cap per edge by construction.
 pub fn eval_blade_thickness_and_sdf2(
     p: &BTreeMap<&'static str, f64>,
     prof: &BladeProfile2D,
@@ -1744,9 +1756,13 @@ pub fn eval_blade_thickness_and_sdf2(
         ridge_win * p["ridge_amp"] * bump((y - (y_mid + 0.18 * h_span)) / p["ridge_w"].max(1.5));
     let t_medial = (t_spine_cap - fuller_cut + ridge_add).clamp(0.16, t_spine_cap.max(t_core + 1.8));
 
-    // Double-bevel cutting edges measured along the actual curved edge arc length (`M4`, `N6`: <= 101.6 mm per edge)
+    // Double-bevel cutting edges measured along the actual curved edge arc length (`M4`, `N6`: <= 101.6 mm per
+    // edge). The grind window is read at this x, which is continuous; the foot of the normal is not (on a
+    // serrated edge it jumps a whole tooth, which would step the thickness inside the 3 mm entry ramp).
     let s_arc_in = prof.cum_arc_in[i0] * (1.0 - frac) + prof.cum_arc_in[i0 + 1] * frac;
     let s_arc_sp = prof.cum_arc_sp[i0] * (1.0 - frac) + prof.cum_arc_sp[i0 + 1] * frac;
+    let dn_in = edge_normal_distance(&prof.xs, &prof.y_in, i0, x, y);
+    let dn_sp = edge_normal_distance(&prof.xs, &prof.y_sp, i0, x, y);
     let (win_in, win_sp) = blade_bevel_window_weights(
         p,
         prof.arc_in_mm,
@@ -1755,19 +1771,19 @@ pub fn eval_blade_thickness_and_sdf2(
         s_arc_sp,
         a_tip,
     );
-    let tan_in = p["angle_in"].clamp(14.0, 24.5).to_radians().tan();
-    let tan_sp = p["angle_sp"].clamp(14.0, 24.5).to_radians().tan();
-    //Hollow/convex bevel curvature modulation (`grind_curv_in`, `grind_curv_sp`) beyond the 0.4 mm Gate-S3 edge band
-    let curv_in = 1.0 + 0.18 * p["grind_curv_in"] * ((d_in - 0.4).max(0.0) / 6.0).min(1.0);
-    let curv_sp = 1.0 + 0.18 * p["grind_curv_sp"] * ((d_sp - 0.4).max(0.0) / 6.0).min(1.0);
-    let t_bevel_in_raw = p["edge_t_in"].min(0.19) + 2.0 * d_in.max(0.0) * tan_in * curv_in;
-    let t_bevel_sp_raw = p["edge_t_sp"].min(0.19) + 2.0 * d_sp.max(0.0) * tan_sp * curv_sp;
-    // Confine primary bevel grind strictly within the 3.5 mm edge bevel band (`S5-2`: `d <= 3.5 mm`),
-    // while keeping `d <= 2.2 mm` (including the 0.40 mm Gate S3 station) 100% unmodified.
-    let w_bev_in = win_in * (1.0 - smoothstep(2.2, 3.5, d_in));
-    let w_bev_sp = win_sp * (1.0 - smoothstep(2.2, 3.5, d_sp));
-    let t_bevel_in = w_bev_in * t_bevel_in_raw + (1.0 - w_bev_in) * t_medial;
-    let t_bevel_sp = w_bev_sp * t_bevel_sp_raw + (1.0 - w_bev_sp) * t_medial;
+    // Primary grind (`EDGE-1..3`, owner 2026-10-26): one per-side angle in [17.5, 22.5] deg (40 deg inclusive at
+    // the 20 deg centre, a hard-use edge suited to Ti-6Al-4V), measured normal to the actual (serrated) edge and
+    // carried at full height until it meets the medial thickness. No band cap and no shoulder: the old
+    // 2.2-3.5 mm band blended a micro-bevel into the 4-7 mm body at 50-90 deg per side.
+    let tan_in = p["angle_in"].clamp(17.5, 22.5).to_radians().tan();
+    let tan_sp = p["angle_sp"].clamp(17.5, 22.5).to_radians().tan();
+    // Hollow/convex bevel curvature modulation (`grind_curv_in`, `grind_curv_sp`) beyond the 0.4 mm Gate-S3 edge band
+    let curv_in = 1.0 + 0.18 * p["grind_curv_in"] * ((dn_in - 0.4).max(0.0) / 6.0).min(1.0);
+    let curv_sp = 1.0 + 0.18 * p["grind_curv_sp"] * ((dn_sp - 0.4).max(0.0) / 6.0).min(1.0);
+    let t_bevel_in_raw = p["edge_t_in"].min(0.19) + 2.0 * dn_in * tan_in * curv_in;
+    let t_bevel_sp_raw = p["edge_t_sp"].min(0.19) + 2.0 * dn_sp * tan_sp * curv_sp;
+    let t_bevel_in = win_in * t_bevel_in_raw + (1.0 - win_in) * t_medial;
+    let t_bevel_sp = win_sp * t_bevel_sp_raw + (1.0 - win_sp) * t_medial;
     let t_final = t_medial.min(t_bevel_in).min(t_bevel_sp).min(t_spine_cap);
 
     // 5-gene continuous level-set medial fenestration inside fuller band (`S5-5` / `P5` / `S7-1` / `S8-4`):
@@ -1779,8 +1795,8 @@ pub fn eval_blade_thickness_and_sdf2(
     let x_bound = x_s0.max(92.0 + 0.5 * pitch);
     if p["win_amp"] > 0.35
         && x >= x_bound
-        && d_in > 3.5
-        && d_sp > 3.5
+        && dn_in > 3.5
+        && dn_sp > 3.5
         && a_tip > tip_reserve + 6.0
         && u < p["win_s1"]
     {
@@ -2171,7 +2187,10 @@ pub fn build_g3_sdf_from_params_with_origin_shift(
             if !include_blade && x > 82.0 && y.abs() < 7.0 {
                 ro_base = 1.0; // `hzm.py::hole_proximity`
             }
-            r_o2[i * ny + j] = (ro_base * seam) as f32;
+            // `EDGE-1`: the guard edge-rounding opening fades out with the guard-to-blade blend (full at the heel,
+            // none from x = 90), so a 2.2-3.0 mm opening never erases the thin full-height bevel at the plunge
+            let blade_fade = if include_blade { 1.0 - smoothstep(GUARD_X_MM + 4.0, 90.0, x) } else { 1.0 };
+            r_o2[i * ny + j] = (ro_base * seam * blade_fade) as f32;
         }
     }
 
@@ -2212,6 +2231,7 @@ pub fn build_g3_sdf_from_params_with_origin_shift(
                     return;
                 }
                 let w_seam = smoothstep(86.0, 92.0, x) as f32;
+                let w_union = smoothstep(86.0, 87.5, x) as f32;
                 for (j, &y) in ys.iter().enumerate() {
                     let (t_b, d2_b) = eval_blade_thickness_and_sdf2(p, &blade_prof, x, y);
                     let base = j * nz;
@@ -2224,7 +2244,11 @@ pub fn build_g3_sdf_from_params_with_origin_shift(
                         }
                         .clamp(-cl, cl);
                         if x < 92.0 {
-                            slice[base + k] = (1.0 - w_seam) * slice[base + k] + w_seam * db;
+                            // `EDGE-1`: union with the blade, phased in over x 86-87.5, so the hand-zone morphology
+                            // can never erase the thin full-height bevel through the seam (the linear blend alone left
+                            // 3 mm voids) and the union itself adds no step where it starts
+                            let blend = (1.0 - w_seam) * slice[base + k] + w_seam * db;
+                            slice[base + k] = blend.min(db + (1.0 - w_union) * cl);
                         } else {
                             slice[base + k] = db;
                         }

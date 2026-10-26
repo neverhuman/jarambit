@@ -441,13 +441,27 @@ pub fn eval_hollow_grip_sf(
 }
 
 /// Measure Gate S1 (`max_apex_mm`) and Gate S3 (`max_half_angle_deg`) strictly at steady full-window
-/// stations (`win == 1.0`, excluding the 3 mm entry/exit transition ramps and unsharpened spine stations,
-/// `S5-4`, `S6-2`), taking the worst (`max`) station over each active edge and failing closed to
+/// stations (`win == 1.0`, excluding the 3 mm entry ramp and unsharpened spine stations, `S5-4`, `S6-2`),
+/// taking the worst (`max`) station over each active edge and failing closed to
 /// `(f64::INFINITY, f64::INFINITY)` (zero sharpness credit) if any active edge has no qualifying station.
+/// `EDGE-2`/`EDGE-5`: each station is sampled along the true inward edge normal, and the half-angle is the
+/// steeper of the apex band (0 to 0.40 mm) and the rest of the primary bevel (0.40 to 2.0 mm), so a shoulder
+/// behind the apex band is measured instead of being invisible to Gate S3.
 pub fn measure_blade_edge_apex_and_angle(
     p: &BTreeMap<&'static str, f64>,
     blade: &BladeProfile2D,
 ) -> (f64, f64) {
+    // (apex thickness, half-angle) of the section through edge point `(x, y)` along unit inward normal `n`
+    let section = |x: f64, y: f64, n: (f64, f64)| -> Option<(f64, f64)> {
+        let at = |s: f64| eval_blade_thickness_and_sdf2(p, blade, x + s * n.0, y + s * n.1);
+        let ((t0, d0), (t40, d40), (t200, d200)) = (at(1e-6), at(0.40), at(2.0));
+        if d0 > 0.0 || d40 > 0.0 || d200 > 0.0 || t0 <= 0.0 || t40 <= t0 {
+            return None;
+        }
+        let ang_apex = ((t40 - t0) / (2.0 * 0.40)).atan().to_degrees();
+        let ang_bevel = ((t200 - t40) / (2.0 * 1.60)).atan().to_degrees();
+        Some((t0, ang_apex.max(ang_bevel)))
+    };
     let mut max_apex_in = 0.0_f64;
     let mut max_ang_in = 0.0_f64;
     let mut has_in = false;
@@ -463,35 +477,33 @@ pub fn measure_blade_edge_apex_and_angle(
             + (y_mid - blade.tip_xy.1) * blade.tip_inward_dir.1)
             .max(0.0)
             .min((blade.x_tip - x).hypot(y_mid - blade.tip_xy.1));
-        let (win_in, win_sp) = blade_bevel_window_weights(
-            p,
-            blade.arc_in_mm,
-            blade.arc_sp_mm,
-            s_arc_in,
-            s_arc_sp,
-            a_tip,
-        );
+        // a station counts only when the grind is already steady one serration pitch + 2.5 mm of arc behind it:
+        // the window is read at the probe's x, and a 2 mm probe along a skewed normal on a steep tooth flank can sit
+        // that far back along the arc, inside the 3 mm entry ramp; the window rises monotonically to the tip
+        // (`EDGE-4`), so this one look-back suffices
+        let ds = 2.5 + p["ser_pitch_in"].max(p["ser_pitch_sp"]).clamp(0.0, 8.0);
+        let (win_in, win_sp) =
+            blade_bevel_window_weights(p, blade.arc_in_mm, blade.arc_sp_mm, s_arc_in - ds, s_arc_sp - ds, a_tip);
         let tip_res = p["tip_reserve"].max(6.0);
+        let tx = blade.xs[i + 1] - blade.xs[i - 1];
+        let unit = |vx: f64, vy: f64| {
+            let l = vx.hypot(vy).max(1e-12);
+            (vx / l, vy / l)
+        };
         if (win_in - 1.0).abs() <= 1e-6 && a_tip > tip_res {
-            let (t_in_apex, d2_in) =
-                eval_blade_thickness_and_sdf2(p, blade, x, blade.y_in[i] + 1e-12);
-            let (t_in_40, d2_in_40) =
-                eval_blade_thickness_and_sdf2(p, blade, x, blade.y_in[i] + 0.40);
-            if d2_in <= 0.0 && d2_in_40 <= 0.0 && t_in_apex > 0.0 && t_in_40 > t_in_apex {
-                max_apex_in = max_apex_in.max(t_in_apex);
-                let ang = ((t_in_40 - t_in_apex) / (2.0 * 0.40)).atan().to_degrees();
+            // inner edge `y_in` is the lower boundary: inward normal (-ty, tx) points to +y
+            let n = unit(-(blade.y_in[i + 1] - blade.y_in[i - 1]), tx);
+            if let Some((t0, ang)) = section(x, blade.y_in[i], n) {
+                max_apex_in = max_apex_in.max(t0);
                 max_ang_in = max_ang_in.max(ang);
                 has_in = true;
             }
         }
         if (win_sp - 1.0).abs() <= 1e-6 && a_tip > tip_res {
-            let (t_sp_apex, d2_sp) =
-                eval_blade_thickness_and_sdf2(p, blade, x, blade.y_sp[i] - 1e-12);
-            let (t_sp_40, d2_sp_40) =
-                eval_blade_thickness_and_sdf2(p, blade, x, blade.y_sp[i] - 0.40);
-            if d2_sp <= 0.0 && d2_sp_40 <= 0.0 && t_sp_apex > 0.0 && t_sp_40 > t_sp_apex {
-                max_apex_sp = max_apex_sp.max(t_sp_apex);
-                let ang = ((t_sp_40 - t_sp_apex) / (2.0 * 0.40)).atan().to_degrees();
+            // spine edge `y_sp` is the upper boundary: inward normal (ty, -tx) points to -y
+            let n = unit(blade.y_sp[i + 1] - blade.y_sp[i - 1], -tx);
+            if let Some((t0, ang)) = section(x, blade.y_sp[i], n) {
+                max_apex_sp = max_apex_sp.max(t0);
                 max_ang_sp = max_ang_sp.max(ang);
                 has_sp = true;
             }
@@ -1836,6 +1848,34 @@ mod tests {
         assert!(r1.score.score_100 > 20.0);
         assert!(r1.inputs.ring_bearing_cap_n > 200.0);
         assert!(r1.inputs.ring_back_cap_n > 100.0);
+    }
+
+    #[test]
+    fn edge_spec_one_ideal_angle_full_height_to_the_tip_on_both_edges() {
+        // EDGE-1..5 (owner 2026-10-26): every steady Gate-S3 station of both edges measures one primary
+        // half-angle in the [17.5, 22.5] deg band (plus at most the +-18 % hollow/convex modulation), normal to
+        // the edge, over the apex band and the rest of the bevel; both grinds stay on all the way to the tip.
+        for i in 0..60 {
+            let g = sobol_unit_genome(i, 0, "22bb8696");
+            let p = g.decode();
+            let blade = build_blade_profile_2d(&p);
+            let (apex, ang) = measure_blade_edge_apex_and_angle(&p, &blade);
+            assert!(apex.is_finite() && apex <= 0.19 + 1e-9, "Sobol {i}: apex {apex}");
+            assert!((17.0..=24.5).contains(&ang), "Sobol {i}: worst half-angle {ang:.2} deg outside the band");
+            let n = blade.xs.len();
+            for (s_in, s_sp) in [(blade.arc_in_mm - 0.5, blade.arc_sp_mm - 0.5), (blade.arc_in_mm, blade.arc_sp_mm)] {
+                let (w_in, w_sp) =
+                    blade_bevel_window_weights(&p, blade.arc_in_mm, blade.arc_sp_mm, s_in, s_sp, 10.0);
+                assert_eq!((w_in, w_sp), (1.0, 1.0), "Sobol {i}: a grind stops before the tip");
+            }
+            // the section 10 mm behind the tip is ground on both sides: thin at the edge, wedge-shaped inward
+            let k = (0..n).rev().find(|&k| blade.x_tip - blade.xs[k] >= 10.0).unwrap();
+            for (y_edge, sign) in [(blade.y_in[k], 1.0), (blade.y_sp[k], -1.0)] {
+                let t_at = |s: f64| eval_blade_thickness_and_sdf2(&p, &blade, blade.xs[k], y_edge + sign * s).0;
+                assert!(t_at(0.05) <= 0.30, "Sobol {i}: edge 10 mm from the tip is unground ({:.2} mm)", t_at(0.05));
+                assert!(t_at(1.0) > t_at(0.3), "Sobol {i}: no wedge 10 mm from the tip");
+            }
+        }
     }
 
     #[test]
