@@ -25,8 +25,8 @@ use crate::g3_sandwich::{
 };
 use crate::g3_sdf::{
     blade_bevel_window_weights, build_blade_profile_2d, build_g3_sdf, effective_blade_rho,
-    eval_blade_thickness_and_sdf2, eval_grip_slice, extract_watertight_mesh, BladeProfile2D,
-    VoxelGrid3D, GUARD_X_MM, RHO_TI64_G_MM3,
+    eval_blade_thickness_and_sdf2, eval_grip_slice, extract_watertight_mesh, serration_gullets,
+    BladeProfile2D, VoxelGrid3D, GUARD_X_MM, RHO_TI64_G_MM3,
 };
 use jarambit_crescent::export;
 use jarambit_physics::fine::{mesh_domain, NU};
@@ -526,6 +526,100 @@ pub fn measure_blade_edge_apex_and_angle(
     }
     (apex_out, ang_out)
 }
+
+/// Serration tooth strength of one edge as built (`SERR-4`, owner: "the most formidable, but we don't want to break
+/// serrated teeth"). Each tooth spans two neighbouring gullet bottoms (`serration_gullets`; micro-serration ripples
+/// on a gullet floor are floor texture, not load-bearing teeth); its
+/// root section is the segment between them, with the thickness of the exact blade law sampled along it. Two load
+/// cases on the tooth tip, at the tooth height above the root:
+/// - snag: `TOOTH_SNAG_N` along the edge (in-plane bending of the root), times the gullet notch factor
+///   `Kt = 1 + 2 sqrt(d / rho)` (Inglis) with rho the gullet radius fitted through the cut at +-0.6 mm;
+/// - pry: `TOOTH_PRY_N` across the blade (out-of-plane bending of the root, thickness t(s)).
+/// Returns (min SF over teeth and cases, teeth counted, mean flank angle atan(2 d / w) in degrees; w = gullet width).
+pub fn serration_tooth_strength(
+    p: &BTreeMap<&'static str, f64>,
+    blade: &BladeProfile2D,
+    inner: bool,
+) -> (f64, usize, f64) {
+    let (edge, smooth, sign) = if inner {
+        (&blade.y_in, &blade.y_in_smooth, 1.0)
+    } else {
+        (&blade.y_sp, &blade.y_sp_smooth, -1.0)
+    };
+    let xs = &blade.xs;
+    let n = xs.len();
+    let (depth, gullets) = serration_gullets(edge, smooth);
+    if depth < 0.2 {
+        return (f64::INFINITY, 0, 0.0);
+    }
+    let allow = YIELD_TI64_MPA * 0.912;
+    let at = |x: f64, y: f64| eval_blade_thickness_and_sdf2(p, blade, x, y);
+    let interp = |v: &[f64], x: f64| -> f64 {
+        let i = xs.partition_point(|&q| q < x).clamp(1, n - 1);
+        let f = ((x - xs[i - 1]) / (xs[i] - xs[i - 1]).max(1e-12)).clamp(0.0, 1.0);
+        v[i - 1] * (1.0 - f) + v[i] * f
+    };
+    let (mut sf_min, mut flank_sum) = (f64::INFINITY, 0.0_f64);
+    let mut teeth = 0usize;
+    for w in gullets.windows(2) {
+        let (ga, gb) = (w[0], w[1]);
+        let (pa, pb) = ((xs[ga], edge[ga]), (xs[gb], edge[gb]));
+        let b = (pb.0 - pa.0).hypot(pb.1 - pa.1);
+        // tooth height: the furthest point of the outline between the gullets, measured off the root line
+        let (ux, uy) = ((pb.0 - pa.0) / b.max(1e-9), (pb.1 - pa.1) / b.max(1e-9));
+        let mut h_t = 0.0_f64;
+        for k in ga..=gb {
+            h_t = h_t.max(((xs[k] - pa.0) * -uy + (edge[k] - pa.1) * ux).abs());
+        }
+        if b < 0.3 || h_t < 0.2 {
+            continue;
+        }
+        // root section: thickness along the root line, 0.05 mm inside the blade
+        let (nx, ny) = (-uy * sign, ux * sign); // inward: +y side of the inner edge, -y side of the spine edge
+        let m = 40usize;
+        let (mut a0, mut a1, mut a2, mut i_op, mut t_max) = (0.0_f64, 0.0_f64, 0.0_f64, 0.0_f64, 0.0_f64);
+        let ds = b / m as f64;
+        for j in 0..m {
+            let sj = (j as f64 + 0.5) * ds;
+            let (x, y) = (pa.0 + ux * sj + 0.05 * nx, pa.1 + uy * sj + 0.05 * ny);
+            let (t, d2) = at(x, y);
+            let t = if d2 <= 0.0 { t.max(0.0) } else { 0.0 };
+            a0 += t * ds;
+            a1 += t * sj * ds;
+            a2 += t * sj * sj * ds;
+            i_op += t.powi(3) / 12.0 * ds;
+            t_max = t_max.max(t);
+        }
+        if a0 <= 1e-9 || i_op <= 1e-12 {
+            sf_min = 0.0;
+            continue;
+        }
+        let s_bar = a1 / a0;
+        let i_ip = (a2 - a0 * s_bar * s_bar).max(1e-12);
+        let c = s_bar.max(b - s_bar);
+        // gullet radius: circle through the cut at -0.6, 0, +0.6 mm around each gullet bottom
+        let rho_at = |g: usize| -> f64 {
+            let (x1, x2, x3) = (xs[g] - 0.6, xs[g], xs[g] + 0.6);
+            let (y1, y2, y3) = (interp(edge, x1), edge[g], interp(edge, x3));
+            let (a, bb, cc) = ((x2 - x1).hypot(y2 - y1), (x3 - x2).hypot(y3 - y2), (x3 - x1).hypot(y3 - y1));
+            let area2 = ((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)).abs();
+            if area2 < 1e-12 { 1e3 } else { a * bb * cc / (2.0 * area2) }
+        };
+        let rho = rho_at(ga).min(rho_at(gb)).max(0.02);
+        let kt = 1.0 + 2.0 * (h_t / rho).sqrt();
+        let sig_snag = kt * TOOTH_SNAG_N * h_t * c / i_ip;
+        let sig_pry = TOOTH_PRY_N * h_t * (0.5 * t_max) / i_op;
+        sf_min = sf_min.min(allow / sig_snag.max(sig_pry).max(1e-9));
+        flank_sum += (2.0 * h_t / (0.5 * b).max(1e-6)).atan().to_degrees();
+        teeth += 1;
+    }
+    (sf_min, teeth, if teeth > 0 { flank_sum / teeth as f64 } else { 0.0 })
+}
+
+/// Serration tooth load cases (`SERR-4`): a snag along the edge on one tooth (a hard draw-cut catching a single tooth)
+/// and a lateral pry on one tooth. Conservative research assumptions, not measured use loads.
+pub const TOOTH_SNAG_N: f64 = 180.0;
+pub const TOOTH_PRY_N: f64 = 60.0;
 
 /// Max triangle area (mm^2) of the Tier-2 solid-tip TET10 planform mesh (converged on sharp points; see P6).
 pub const TIP_FE_MAX_AREA_MM2: f64 = 0.15;
@@ -1965,6 +2059,11 @@ mod tests {
                 "Sobol {i}: serration depth in {:.2} / sp {:.2} mm", b.serr_depth_in_mm, b.serr_depth_sp_mm);
             assert!(b.serr_teeth_in >= 3 && b.serr_teeth_sp >= 3,
                 "Sobol {i}: teeth in {} / sp {}", b.serr_teeth_in, b.serr_teeth_sp);
+            // SERR-4: no tooth snaps under a single-tooth snag (TOOTH_SNAG_N along the edge) or pry (TOOTH_PRY_N)
+            for inner in [true, false] {
+                let (sf, teeth, _) = serration_tooth_strength(&p, &b, inner);
+                assert!(teeth >= 2 && sf >= 1.0, "Sobol {i}: tooth SF {sf:.2} over {teeth} teeth (inner {inner})");
+            }
             let r0 = evaluate_tier0_analytic(&g);
             // S3: buckling is measured (lateral-torsional, analytic on the exact blade law), never zero credit
             assert!(r0.inputs.buckling_lambda > 0.0 && r0.inputs.buckling_lambda.is_finite(), "Sobol {i}: buckling");

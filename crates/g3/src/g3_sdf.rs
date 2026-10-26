@@ -1373,18 +1373,38 @@ pub struct BladeProfile2D {
     pub serr_teeth_sp: usize,
 }
 
-/// Deepest cut of an edge below its smooth line and the number of cuts deeper than half of it.
-fn serration_census(edge: &[f64], smooth: &[f64]) -> (f64, usize) {
+/// Gullets of a serrated edge: each contiguous run of the outline cut deeper than half the deepest cut below its smooth
+/// line is one gullet (micro-serration ripples on a gullet floor stay inside its run); returns the deepest cut (mm) and
+/// the sample index of each gullet bottom. A tooth is the uncut edge between two neighbouring gullets.
+pub fn serration_gullets(edge: &[f64], smooth: &[f64]) -> (f64, Vec<usize>) {
     let dev: Vec<f64> = edge.iter().zip(smooth).map(|(e, s)| (e - s).abs()).collect();
     let depth = dev.iter().cloned().fold(0.0_f64, f64::max);
-    let mut teeth = 0usize;
-    for k in 1..dev.len().saturating_sub(1) {
-        if dev[k] > 0.5 * depth && dev[k] >= dev[k - 1] && dev[k] > dev[k + 1] {
-            teeth += 1;
+    let mut bottoms = Vec::new();
+    let mut k = 0usize;
+    while k < dev.len() {
+        if depth > 0.0 && dev[k] > 0.5 * depth {
+            let start = k;
+            while k < dev.len() && dev[k] > 0.5 * depth {
+                k += 1;
+            }
+            let run = start..k;
+            bottoms.push(run.clone().max_by(|&a, &b| dev[a].total_cmp(&dev[b])).unwrap());
+        } else {
+            k += 1;
         }
     }
-    (depth, teeth)
+    (depth, bottoms)
 }
+
+/// Deepest serration cut (mm) and number of teeth (gullets bounding a tooth on both sides count; the outermost
+/// gullets of the span bound one tooth each, so teeth = gullets).
+fn serration_census(edge: &[f64], smooth: &[f64]) -> (f64, usize) {
+    let (depth, bottoms) = serration_gullets(edge, smooth);
+    (depth, bottoms.len())
+}
+
+/// Serration tooth depth per unit pitch (`SERR-4`).
+pub const SERR_DEPTH_PER_PITCH: f64 = 0.25;
 
 pub const SHARPENED_EDGE_CAP_MM: f64 = 4.0 * 25.4; // 101.6 mm (4.0 in) per edge
 pub const BLADE_REACH_MAX_MM: f64 = 85.725;
@@ -1506,8 +1526,13 @@ pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D
     };
     let (ser_s0_in, ser_s1_in) = ser_span(p["ser_s0_in"], p["ser_s1_in"]);
     let (ser_s0_sp, ser_s1_sp) = ser_span(p["ser_s0_sp"], p["ser_s1_sp"]);
-    let pitch_in = p["ser_pitch_in"].max(2.0).min((ser_s1_in - ser_s0_in - 0.08) * blade_len / 3.2).max(1.0);
-    let pitch_sp = p["ser_pitch_sp"].max(2.0).min((ser_s1_sp - ser_s0_sp - 0.08) * blade_len / 3.2).max(1.0);
+    let pitch_in = p["ser_pitch_in"].min((ser_s1_in - ser_s0_in - 0.08) * blade_len / 3.2);
+    let pitch_sp = p["ser_pitch_sp"].min((ser_s1_sp - ser_s0_sp - 0.08) * blade_len / 3.2);
+    // `SERR-4` (owner: "the most formidable, but we don't want to break serrated teeth"): pitch >= 5 mm (gene bound;
+    // the serrated span is long enough for 3 teeth at that pitch) and depth <= `SERR_DEPTH_PER_PITCH` of the pitch.
+    // Narrower or deeper teeth fail the single-tooth snag / pry cases of `serration_tooth_strength`.
+    let depth_in = p["ser_depth_in"].min(SERR_DEPTH_PER_PITCH * pitch_in);
+    let depth_sp = p["ser_depth_sp"].min(SERR_DEPTH_PER_PITCH * pitch_sp);
     for i in 0..n_pts {
         let u = (i as f64) / ((n_pts - 1) as f64);
         let x = x_heel + u * blade_len;
@@ -1555,8 +1580,8 @@ pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D
             p["w_tooth_sp"],
             0.0,
         );
-        let ser_in = ser_in_win * p["ser_depth_in"] * wave_in;
-        let ser_sp = ser_sp_win * p["ser_depth_sp"] * wave_sp;
+        let ser_in = ser_in_win * depth_in * wave_in;
+        let ser_sp = ser_sp_win * depth_sp * wave_sp;
 
         let yi_sm = y_center - h_half + 0.3 * d_in;
         let ys_sm = (y_center + h_half + 0.3 * d_sp).max(yi_sm + 0.08);
