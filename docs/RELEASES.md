@@ -40,6 +40,7 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
     repository map in the README.
   - `.gitignore` now covers agent worktrees, build directories and editor files, and no longer hides tracked CAD
     evidence.
+  - A `LICENSE` file: MIT, the license every crate already declares in its `Cargo.toml`.
 - **Fixes.**
   - The README's Reproduce section told readers to check out the cohort's commit and then build tools that did not
     exist at that commit. The decoder and `g3-evolve` have not changed since, so the instructions now build from the

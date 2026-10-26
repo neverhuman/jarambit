@@ -343,7 +343,7 @@ def readme():
           '- [`sheath/`](sheath/) and [`web/`](web/): the v1 sheath generator and the CAD scorecard studio. [`evolve.sh`](evolve.sh): the v1 auto-evolve driver.', '',
           '**Tooling**', '',
           '- [`ops/`](ops/README.md): generators, checks and render pipelines, indexed by workflow. [`.github/workflows/`](.github/workflows/): CI.',
-          '- [`AGENTS.md`](AGENTS.md): rules for contributors and coding agents. [`PYTHON_EXCEPTIONS.md`](PYTHON_EXCEPTIONS.md): every Python file and why it is not Rust yet. [`STATUS.md`](STATUS.md): generated status.', '']
+          '- [`AGENTS.md`](AGENTS.md): rules for contributors and coding agents. [`PYTHON_EXCEPTIONS.md`](PYTHON_EXCEPTIONS.md): every Python file and why it is not Rust yet. [`STATUS.md`](STATUS.md): generated status. [`LICENSE`](LICENSE): MIT.', '']
     return '\n'.join(L)
 
 
