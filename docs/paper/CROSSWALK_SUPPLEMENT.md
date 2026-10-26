@@ -23,9 +23,9 @@ The [main paper](main.pdf) and [standalone technical supplement](supplement.pdf)
 ## Reporting views and retained evidence
 
 - **Export Identity & Topology Provenance Diagram (`Individual 2000`):** [`generated/export-identity.svg`](generated/export-identity.svg) / [`generated/export-identity.json`](generated/export-identity.json)
-- **Separate retained composite reference and field inventory (`Individual 2000`):** [`drafts_p3_p5/JR_EI_P4_T01_T02_hero_white_field_composite.png`](drafts_p3_p5/JR_EI_P4_T01_T02_hero_white_field_composite.png) / [`drafts_p3_p5/D1_PRY_AND_FIELD_COVERAGE_INVENTORY_20261019.json`](drafts_p3_p5/D1_PRY_AND_FIELD_COVERAGE_INVENTORY_20261019.json)
+- **Separate retained composite reference and field inventory (`Individual 2000`):** draft files removed in v3.0.2; they are in git history at tag v3.0.1 under `docs/paper/drafts_p3_p5/`.
 - **Complete 23-Subject × 18-Evaluator Historical Battery Matrix (`414` cells: `221` pass, `81` fail, `112` blocked):** [`generated/battery-matrix.svg`](generated/battery-matrix.svg) / [`generated/battery-matrix.json`](generated/battery-matrix.json)
-- **44-Entry Catalog-to-Observation-Family Crosswalk:** [`drafts_p3_p5/JR_EI_P3_T04_atlas_crosswalk_44.json`](drafts_p3_p5/JR_EI_P3_T04_atlas_crosswalk_44.json) and [`../tests/README.md`](../tests/README.md)
+- **44-Entry Catalog-to-Observation-Family Crosswalk:** draft files removed in v3.0.2; they are in git history at tag v3.0.1 under `docs/paper/drafts_p3_p5/`. See also [`../tests/README.md`](../tests/README.md).
 
 
 Short hash prefixes in the table are navigation aids. Use the original input contracts and archive indexes for full digests and producer revisions. The eleven earlier summary captures and ten completed native runs are overlapping accessions, not twenty-one independent runs. The [cohort inventory](supplement/cohort-inventory.tex) records the eighteen current campaign directories and separate aborted attempts.

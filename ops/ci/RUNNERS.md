@@ -31,10 +31,8 @@ verifying those prerequisites. Existing resource caps remain enforced.
 ## Routing validation
 
 ```bash
-python3 -m venv /tmp/jarambit-runner-policy
-/tmp/jarambit-runner-policy/bin/python -m pip install -r ops/ci/requirements-runners.txt
-/tmp/jarambit-runner-policy/bin/python -B ops/ci/check_runner_policy.py
-/tmp/jarambit-runner-policy/bin/python -B -m unittest discover -s ops/ci/runner_tests -v
+cargo test --locked --manifest-path crates/runner-policy/Cargo.toml
+cargo run --locked --manifest-path crates/runner-policy/Cargo.toml
 actionlint -shellcheck=
 ```
 

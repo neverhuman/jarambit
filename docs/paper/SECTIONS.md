@@ -5,7 +5,7 @@ supplement (`supplement-main.tex`) are assembled from one file per section, so s
 the same time without touching the same file. The order below is the reading order.
 
 **Editing protocol for parallel work**
-- Claim the file(s) before editing (in `~/jarambit/comms.md` or the PR thread) and release them when done; one writer per file.
+- One writer per file: say in the pull request which section files you are editing.
 - Numbers come from generated macros (`generated/*.tex`, `allruns/allruns-meta.tex`, `ladder/ladder-meta.tex`); never type a result.
 - Labels are global across both papers; cross-document references use `S-` (main → supplement) and `M-` (supplement → main).
 - `make -C docs/paper check pdf-smoothed` must pass: both papers 15–20 pages, no overfull boxes or undefined references.

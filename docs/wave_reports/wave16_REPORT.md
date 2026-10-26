@@ -25,7 +25,7 @@ Headline design: **wave16_c01** (best D1 standing in the wave: fewest FAILs, the
 
 ## FEM visuals
 
-![wave16 FEM metrics](wave16_FEM_metrics.png)
+*The FEM-metrics plate for this wave was removed in v3.0.2; it is in git history at tag v3.0.1.*
 
 Panels: von Mises for lateral 260 N, chord torsion 1.82 N·m (tip-only + body peaks), ring pull 1500 N; SF envelope (worst case); body+tip twist SF; tip zoom (tip-only); thickness field; gate table. Map SF is σy(100 °C)/σvm at nominal thickness (no thin factor) and is for locating peaks; the gate SFs are the certified JOINT scalars.
 

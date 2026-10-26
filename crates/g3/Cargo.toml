@@ -14,6 +14,34 @@ path = "src/bin/g3_evolve.rs"
 name = "g3-release-tex"
 path = "src/bin/g3_release_tex.rs"
 
+[[bin]]
+name = "g3-pilot"
+path = "src/bin/g3_pilot.rs"
+
+[[bin]]
+name = "g3-gripfe"
+path = "src/bin/g3_gripfe/main.rs"
+
+[[bin]]
+name = "g3-export-stl"
+path = "src/bin/g3_export_stl.rs"
+
+[[bin]]
+name = "g3-bladefacts"
+path = "src/bin/g3_bladefacts.rs"
+
+[[bin]]
+name = "g3-edgeprofile"
+path = "src/bin/g3_edgeprofile.rs"
+
+[[bin]]
+name = "g3-bladefield"
+path = "src/bin/g3_bladefield.rs"
+
+[[bin]]
+name = "g3-tipconv"
+path = "src/bin/g3_tipconv.rs"
+
 [dependencies]
 jarambit-crescent = { path = "../crescent" }
 jarambit-physics = { path = "../physics" }

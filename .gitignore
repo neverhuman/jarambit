@@ -1,16 +1,40 @@
+# Build output
 /target
+/target_*
+/crates/*/target/
+/experiments/*/target/
 /out*
+*.csv.tmp
+
+# Agent worktrees and local CI scratch (AGENTS.md: extra working copies live in .agent/worktrees/<lane>)
+/.agent/
+/.jankurai/
+
+# CAD files are generated; only these committed ones are tracked
 *.stl
+*.step
 # G3 release CAD is downloadable from git (owner, 2026-10-26); written by ops/g3/export_best_stl.sh
 !/cad/*.stl
 !/docs/g3/v*/cad/*.stl
-*.step
-/target_*
+# Committed v1/v2 evidence and design packages
+!/evidence/**/*.stl
+!/evidence/**/*.step
+!/designs/switchback/*/cad/*.stl
+!/designs/switchback/*/cad/*.step
+
+# Python, editors and OS
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+*.swp
+*~
+
+# Web studio
 web/node_modules/
 web/dist/
 web/public/data/
 
+# Derived regression-dataset tables
 /datasets/regression/tables/
 /datasets/regression/cv/
-*.csv.tmp

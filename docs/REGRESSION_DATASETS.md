@@ -86,7 +86,6 @@ rescreen / harvest-waves / add-physical / refeaturize ─► more shards (same s
 | `evolve.sh` | `JARAMBIT_DATASET_COMMIT=1` by default; documents `JARAMBIT_DATASET_PUSH` |
 | `ops/ci/run_bounded.sh` | `datasets` profile (8 GiB, 4 CPUs) |
 | `.gitignore` | derived `datasets/regression/tables/` and `cv/` |
-| `TECHNOLOGY_MAP.md` | one row for the new lane |
 
 ## 5. Micro-record format
 

@@ -1,5 +1,5 @@
 //! Automated multi-wave evolutionary search on the weighted multi-objective `W_ULTRALIGHT_v1`
-//! (`docs/WORKPLAN.md` §5): every candidate gets a continuous score and no gate is a veto. The
+//! (owner ruling, 2026-10-18): every candidate gets a continuous score and no gate is a veto. The
 //! legacy `16/16 W_CAD_v2` + `10/10 RS-karambit-v2 all_hard` verdicts (3D `TET10` solid tip,
 //! `side.a4` buckling, 3-level Roache `GCI`, strict `0.0625 mm^2` plate, watertight STEP/STL)
 //! are still measured and logged for reference.
@@ -657,7 +657,7 @@ fn screen_candidate_stage1_recorded(
 }
 
 /// Canonical 20-objective weights (`W_ULTRALIGHT_v1`, total = `100.0%`) per
-/// `JEPSON_RULING_20261018T1736Z_jarambit_release_a.md` Addendum (`docs/WORKPLAN.md` §5).
+/// `JEPSON_RULING_20261018T1736Z_jarambit_release_a.md` Addendum (owner ruling, 2026-10-18).
 pub const ULTRALIGHT_WEIGHTS_V1: [(&str, f64); 20] = [
     ("ultralight_mass", 22.0),
     ("holder_and_compactness", 8.0),

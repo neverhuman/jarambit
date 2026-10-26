@@ -2,6 +2,59 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v3.0.2 — 2026-10-26 (patch: repository cleanup; the `cad/` upload kit; G3 release tools as binaries)
+
+- **Owner request:** "a full audit looking for clean up … redundant files, old temp folders, older worktrees, poorly
+  designed code layout … ensure this repo is VERY clean and a great open source", and "no waste in the repo". The
+  owner chose to delete waste but keep the v1/v2 study and its evidence, and not to rewrite git history.
+- **Removed (402 files, 159.8 MB of the tree; all of it stays in git history at tag v3.0.1).** Every file was checked
+  first for references from CI, tests, generators, papers and receipts, and only unreferenced or duplicated files
+  were removed.
+  - **Agent coordination files:** `COMMS.md`, `COORD.md`, `briefs/`, `PY_TO_RUST_PLAN.md`, the agent launchers
+    `ops/start_{codex,grok}.sh`, the render-pipeline status notes, and 34 agent receipts, plans and review notes in `docs/paper/`
+    and `docs/` (work plans, release plans, readiness and capacity notes).
+  - **Stub folders:** `cli/`, `evolve/`, `fem/`, `genotype/`, `monte_carlo/` and `phenotype/` (one README each), and
+    the out-of-date `TECHNOLOGY_MAP.md`. The README's Repository section is now the map.
+  - **Orphan v1 images:**
+    - the wave-27 FEM plates (56 MB);
+    - the quarantined pre-blade-fix heatmaps (26 MB);
+    - the wave 13–17 plates (12 MB);
+    - the v2 marketing stills and videos (9 MB), and a concept render.
+    The data indexes that list these images stay.
+  - **Superseded drafts and duplicates:**
+    - the `docs/paper/drafts_p3_p5/` drafts (only its four live build inputs remain);
+    - `evidence/publication_packet_20261019/`;
+    - seven C9.3 plates identical to C9.2's;
+    - a duplicate validation note and an orphan JSON.
+  - **Experiments and dead code:**
+    - two experiment studies no paper or check uses (`experiments/G16-12-RSV2-04/`, `experiments/rsv2_07/`);
+    - seven unused exploration images;
+    - six dead scripts;
+    - `ops/ci/requirements-runners.txt`.
+    41 Python files fewer in all.
+- **Layout.**
+  - The G3 release tools are binaries in `crates/g3/src/bin/`: `g3-pilot`, `g3-gripfe`, `g3-export-stl`,
+    `g3-bladefacts`, `g3-edgeprofile`, `g3-bladefield` and `g3-tipconv`. Only the review probe `hz_probes` stays an
+    example.
+  - New indexes: `docs/README.md`, `ops/README.md`, `experiments/README.md` and `designs/README.md`, plus a full
+    repository map in the README.
+  - `.gitignore` now covers agent worktrees, build directories and editor files, and no longer hides tracked CAD
+    evidence.
+  - A `LICENSE` file: MIT, the license every crate already declares in its `Cargo.toml`.
+- **Fixes.**
+  - The README's Reproduce section told readers to check out the cohort's commit and then build tools that did not
+    exist at that commit. The decoder and `g3-evolve` have not changed since, so the instructions now build from the
+    release. The G3 paper's §8 says the same.
+  - `ops/ci/RUNNERS.md` pointed at a removed Python checker.
+  - `PYTHON_EXCEPTIONS.md` had wrong line counts.
+- **CI.**
+  - `version-check` now runs `make -C docs/g3/paper check`, so the G3 paper's numbers are gated against the receipt.
+  - A new test checks that `PYTHON_EXCEPTIONS.md` lists exactly the tracked Python files.
+- **The `cad/` upload kit (#174)**, merged after v3.0.1, is part of this release. Its paper copy is
+  `docs/g3/paper/g3-v3.0.2.pdf`.
+- **Unchanged.** The decoder and its hash, the v3.0.0 receipt, cohort and CAD files, and every certified evidence
+  file.
+
 ## v3.0.1 — 2026-10-26 (patch: README, G3 paper, Paper B and STATUS made consistent with the code and the v3.0.0 receipt)
 
 - **Independent check.** Every claim in the G3 paper was checked against `crates/g3` at be36df9f. All corrections are
