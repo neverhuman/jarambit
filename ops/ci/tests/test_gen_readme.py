@@ -1,4 +1,4 @@
-import json, os, re, subprocess, sys, unittest
+import hashlib, json, os, re, subprocess, sys, unittest, zipfile
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
@@ -6,6 +6,10 @@ if ROOT not in sys.path:
 
 def readme():
     return open(os.path.join(ROOT, 'README.md'), encoding='utf-8').read()
+
+
+def cad_readme():
+    return open(os.path.join(ROOT, 'cad/README.md'), encoding='utf-8').read()
 
 
 def release():
@@ -48,19 +52,42 @@ class GenReadme(unittest.TestCase):
         paths = list(rec['images'].values()) + list(rec['evolution']['figures'].values()) + \
             [c['image'] for c in rec['evolution']['lineage']] + rec['cad_in_git']
         t = readme()
+        ct = cad_readme()
         for p in paths:
             self.assertTrue(os.path.isfile(os.path.join(ROOT, p)), p)
             self.assertIn(p, t)
+        for p in rec['cad_in_git']:
+            top_p = f'cad/{os.path.basename(p)}'
+            self.assertTrue(os.path.isfile(os.path.join(ROOT, top_p)), top_p)
+            self.assertIn(top_p, t)
+            self.assertIn(os.path.basename(p), ct)
+            h1 = hashlib.sha256(open(os.path.join(ROOT, p), 'rb').read()).hexdigest()
+            h2 = hashlib.sha256(open(os.path.join(ROOT, top_p), 'rb').read()).hexdigest()
+            self.assertEqual(h1, h2, f'{top_p} differs from {p}')
+        wid = rec['design_id']
+        for ext in ('AMbuild_mm.stl', 'AMbuild_mm.3mf', 'envelope_mm.stl', 'drawing_mm.dxf', 'spec_paper.pdf', 'xray_cutaway.jpg'):
+            rel = f'cad/{wid}_{ext}'
+            fp = os.path.join(ROOT, rel)
+            self.assertTrue(os.path.isfile(fp), rel)
+            self.assertLess(os.path.getsize(fp), 100 * 1024 * 1024, f'{rel} exceeds 100 MiB quote form limit')
+            self.assertIn(rel, t)
+            self.assertIn(f'{wid}_{ext}', ct)
+        with zipfile.ZipFile(os.path.join(ROOT, f'cad/{wid}_AMbuild_mm.3mf')) as zf:
+            model_head = zf.open('3D/3dmodel.model').read(1024).decode('utf-8')
+            self.assertIn('unit="millimeter"', model_head)
+        dxf_txt = open(os.path.join(ROOT, f'cad/{wid}_drawing_mm.dxf'), encoding='utf-8').read()
+        self.assertIn('$INSUNITS\n70\n4\n', dxf_txt)
+        self.assertTrue(dxf_txt.endswith('0\nEOF\n'))
 
     def test_no_older_data(self):
         # Owner, 2026-10-26: the README describes only the release's best individual. Older designs and runs stay in
         # docs/RELEASES.md and docs/WHITEPAPER.md.
-        t = readme()
-        for old in ('w282', 'w283', 'ec3i042', 'Individual 2000', 'hz4i012_g00085_4cdfea55', 'hz2i012_g00609_d55af923',
-                    'hz4i005_g00310_966138c2', 'hz4i007_g00855_4797529d',
-                    'cohort-d', 'edge-pilot', '41.77', 'G16-', 'Wave 27'):
-            self.assertNotIn(old, t, old)
-        self.assertIsNone(re.search(r'\bPASS\b', t))
+        for doc in (readme(), cad_readme()):
+            for old in ('w282', 'w283', 'ec3i042', 'Individual 2000', 'hz4i012_g00085_4cdfea55', 'hz2i012_g00609_d55af923',
+                        'hz4i005_g00310_966138c2', 'hz4i007_g00855_4797529d',
+                        'cohort-d', 'edge-pilot', '41.77', 'G16-', 'Wave 27'):
+                self.assertNotIn(old, doc, old)
+            self.assertIsNone(re.search(r'\bPASS\b', doc))
 
 
 if __name__ == '__main__':

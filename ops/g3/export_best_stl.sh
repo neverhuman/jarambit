@@ -17,3 +17,20 @@ MAX_MB="${4:-50.0}"
 echo "[export_best_stl] Exporting watertight Binary STL (Units: mm) from ${CSV_PATH} -> ${OUT_DIR} (h=${H_MM} mm, max=${MAX_MB} MiB)..."
 cargo run --release --manifest-path "${REPO_ROOT}/crates/g3/Cargo.toml" \
   --example export_print_stl -- "${CSV_PATH}" "${OUT_DIR}" --h "${H_MM}" --max-mb "${MAX_MB}"
+
+# Keep top-level cad/ synced with the cohort-of-record winner so https://github.com/neverhuman/jarambit/tree/main/cad
+# always holds the current winner's 6-file 3D-printing & manufacturing upload kit (STL, 3MF, DXF, PDF, JPG) + README.md.
+if [[ "${OUT_DIR}" == "${REPO_ROOT}/docs/g3/v${RECORD}/cad" ]]; then
+  VERSION="$(tr -d '[:space:]' < "${REPO_ROOT}/docs/VERSION")"
+  DESIGN_ID="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["design_id"])' "${REPO_ROOT}/evidence/g3/v${RECORD}/release.json")"
+  TOP_CAD="${REPO_ROOT}/cad"
+  mkdir -p "${TOP_CAD}"
+  rm -f "${TOP_CAD}"/*.stl "${TOP_CAD}"/*.3mf "${TOP_CAD}"/*.dxf "${TOP_CAD}"/*.pdf "${TOP_CAD}"/*.jpg "${TOP_CAD}"/*_print_spec.json
+  cp -f "${OUT_DIR}"/*.stl "${OUT_DIR}"/*_print_spec.json "${TOP_CAD}/"
+  cargo run --release --manifest-path "${REPO_ROOT}/crates/g3/Cargo.toml" \
+    --example export_print_stl -- --companion-from-dir "${OUT_DIR}" "${TOP_CAD}" "${DESIGN_ID}"
+  cp -f "${REPO_ROOT}/docs/g3/paper/g3-v${VERSION}.pdf" "${TOP_CAD}/${DESIGN_ID}_spec_paper.pdf"
+  cp -f "${REPO_ROOT}/docs/g3/v${RECORD}/img/cut_full.jpg" "${TOP_CAD}/${DESIGN_ID}_xray_cutaway.jpg"
+  python3 "${REPO_ROOT}/ops/ci/gen_readme.py"
+  echo "[export_best_stl] Synced winner 6-file upload kit (STL, 3MF, DXF, PDF, JPG) and cad/README.md into ${TOP_CAD}/"
+fi

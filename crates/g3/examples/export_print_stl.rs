@@ -1,21 +1,27 @@
-//! Standalone Binary STL (`Units: mm`) exporter for the G3 winner genome.
+//! Standalone 3D-Printing & Manufacturing CAD Bundle Exporter (`STL`, `3MF`, `DXF`, `JSON`, `Units: mm`)
+//! for the G3 winner genome.
 //!
 //! Lives outside the hashed decoder files (`g3_genome.rs`, `g3_sdf.rs`, `g3_qd.rs`, `g3_sandwich.rs`,
 //! `ergolight.rs`) so `g3_decoder_sha256()` is 100% unchanged.
 //!
 //! Usage:
-//!   cargo run --release --manifest-path crates/g3/Cargo.toml --example export_print_stl -- \
-//!     [winner_genome.csv] [out_dir] [--h 0.25] [--max-mb 50.0]
-//!
-//! Each of the two meshes is extracted at the finest pitch from --h upward (0.025 mm steps) that fits --max-mb.
+//!   1. Extract from genome CSV and emit STL + 3MF + DXF + print_spec.json:
+//!      cargo run --release --manifest-path crates/g3/Cargo.toml --example export_print_stl -- \
+//!        [winner_genome.csv] [out_dir] [--h 0.25] [--max-mb 50.0]
+//!   2. Generate 3MF + DXF companion files from an existing STL directory:
+//!      cargo run --release --manifest-path crates/g3/Cargo.toml --example export_print_stl -- \
+//!        --companion-from-dir <stl_dir> <out_dir> <design_id>
 
 use jarambit_crescent::export::{census, volume, Solid as SurfaceMesh};
 use jarambit_g3::g3_genome::G3Genome;
 use jarambit_g3::g3_qd::g3_decoder_sha256;
 use jarambit_g3::g3_sdf::{extract_watertight_mesh_fail_closed, RHO_TI64_G_MM3};
 use serde_json::json;
+use std::collections::HashMap;
 use std::fs;
+use std::io::Write;
 use std::path::{Path, PathBuf};
+use std::process::Command;
 
 /// Serialize a `SurfaceMesh` (coordinates in millimetres) as an IEEE-754 little-endian Binary STL
 /// with an explicit `"Units: mm | ..."` 80-byte header for 3D printing bureaus.
@@ -34,7 +40,7 @@ fn write_binary_stl_mm(mesh: &SurfaceMesh, label: &str) -> Vec<u8> {
     buf.extend_from_slice(&(n_tris as u32).to_le_bytes());
 
     for &[i0, i1, i2] in &mesh.tris {
-        let arr = |v: (f64, f64, f64)| [v.0, v.1, v.2]; // crescent's V3 is a tuple
+        let arr = |v: (f64, f64, f64)| [v.0, v.1, v.2];
         let v0 = arr(mesh.verts[i0]);
         let v1 = arr(mesh.verts[i1]);
         let v2 = arr(mesh.verts[i2]);
@@ -72,6 +78,326 @@ fn write_binary_stl_mm(mesh: &SurfaceMesh, label: &str) -> Vec<u8> {
         buf.extend_from_slice(&0u16.to_le_bytes());
     }
     buf
+}
+
+/// Read an IEEE-754 little-endian Binary STL into a deduplicated `SurfaceMesh`.
+fn read_binary_stl_mm(bytes: &[u8]) -> SurfaceMesh {
+    assert!(bytes.len() >= 84, "binary STL too short");
+    let n_tris = u32::from_le_bytes(bytes[80..84].try_into().unwrap()) as usize;
+    assert_eq!(bytes.len(), 84 + n_tris * 50, "binary STL length mismatch");
+    let mut verts: Vec<(f64, f64, f64)> = Vec::new();
+    let mut tris: Vec<[usize; 3]> = Vec::with_capacity(n_tris);
+    let mut vmap: HashMap<[u32; 3], usize> = HashMap::with_capacity(n_tris / 2 + 16);
+
+    for t in 0..n_tris {
+        let base = 84 + t * 50;
+        let mut idx = [0usize; 3];
+        for k in 0..3 {
+            let off = base + 12 + k * 12;
+            let bx = u32::from_le_bytes(bytes[off..off + 4].try_into().unwrap());
+            let by = u32::from_le_bytes(bytes[off + 4..off + 8].try_into().unwrap());
+            let bz = u32::from_le_bytes(bytes[off + 8..off + 12].try_into().unwrap());
+            let key = [bx, by, bz];
+            let vi = *vmap.entry(key).or_insert_with(|| {
+                let id = verts.len();
+                verts.push((
+                    f32::from_bits(bx) as f64,
+                    f32::from_bits(by) as f64,
+                    f32::from_bits(bz) as f64,
+                ));
+                id
+            });
+            idx[k] = vi;
+        }
+        tris.push(idx);
+    }
+    SurfaceMesh {
+        verts,
+        tris,
+        bore: None,
+    }
+}
+
+/// Write a 3D Manufacturing Format (`.3mf`, v1.2.3 OPC ZIP archive) file with explicit
+/// `unit="millimeter"` and `Ti-6Al-4V (Grade 5 / ELI LPBF)` material metadata.
+fn write_3mf_mm(mesh: &SurfaceMesh, design_id: &str, span: [f64; 3], out_3mf: &Path) {
+    let tmp_dir = out_3mf.with_extension("3mf_tmp");
+    let _ = fs::remove_dir_all(&tmp_dir);
+    fs::create_dir_all(tmp_dir.join("_rels")).expect("create _rels");
+    fs::create_dir_all(tmp_dir.join("3D")).expect("create 3D");
+
+    let content_types = r#"<?xml version="1.0" encoding="UTF-8"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="model" ContentType="application/vnd.ms-package.3dmanufacturing-3dmodel+xml"/>
+</Types>
+"#;
+    fs::write(tmp_dir.join("[Content_Types].xml"), content_types).expect("write [Content_Types].xml");
+
+    let rels = r#"<?xml version="1.0" encoding="UTF-8"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Target="/3D/3dmodel.model" Id="rel0" Type="http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel"/>
+</Relationships>
+"#;
+    fs::write(tmp_dir.join("_rels/.rels"), rels).expect("write _rels/.rels");
+
+    let model_path = tmp_dir.join("3D/3dmodel.model");
+    let mut f = std::io::BufWriter::with_capacity(8 * 1024 * 1024, fs::File::create(&model_path).expect("create 3dmodel.model"));
+    writeln!(f, r#"<?xml version="1.0" encoding="UTF-8"?>"#).unwrap();
+    writeln!(
+        f,
+        r#"<model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02">"#
+    )
+    .unwrap();
+    writeln!(f, "  <metadata name=\"Title\">Jarambit G3 {design_id} (AMbuild, mm)</metadata>").unwrap();
+    writeln!(f, "  <metadata name=\"Designer\">Jarambit G3 Evolutionary Search</metadata>").unwrap();
+    writeln!(
+        f,
+        "  <metadata name=\"Description\">Units: mm | Overall dimensions: {:.2} x {:.2} x {:.2} mm | Material: Ti-6Al-4V (Grade 5 / ELI LPBF) | Depowder via neutral-axis drainage ports</metadata>",
+        span[0], span[1], span[2]
+    )
+    .unwrap();
+    writeln!(f, "  <resources>").unwrap();
+    writeln!(f, "    <basematerials id=\"1\">").unwrap();
+    writeln!(
+        f,
+        "      <base name=\"Ti-6Al-4V (Grade 5 / ELI LPBF)\" displaycolor=\"#8A929A\"/>"
+    )
+    .unwrap();
+    writeln!(f, "    </basematerials>").unwrap();
+    writeln!(
+        f,
+        "    <object id=\"2\" name=\"{design_id}_AMbuild_mm\" type=\"model\" pid=\"1\" pindex=\"0\">"
+    )
+    .unwrap();
+    writeln!(f, "      <mesh>").unwrap();
+    writeln!(f, "        <vertices>").unwrap();
+    for &(x, y, z) in &mesh.verts {
+        writeln!(
+            f,
+            "          <vertex x=\"{:.4}\" y=\"{:.4}\" z=\"{:.4}\"/>",
+            x, y, z
+        )
+        .unwrap();
+    }
+    writeln!(f, "        </vertices>").unwrap();
+    writeln!(f, "        <triangles>").unwrap();
+    for &[i0, i1, i2] in &mesh.tris {
+        writeln!(
+            f,
+            "          <triangle v1=\"{}\" v2=\"{}\" v3=\"{}\"/>",
+            i0, i1, i2
+        )
+        .unwrap();
+    }
+    writeln!(f, "        </triangles>").unwrap();
+    writeln!(f, "      </mesh>").unwrap();
+    writeln!(f, "    </object>").unwrap();
+    writeln!(f, "  </resources>").unwrap();
+    writeln!(f, "  <build>").unwrap();
+    writeln!(f, "    <item objectid=\"2\"/>").unwrap();
+    writeln!(f, "  </build>").unwrap();
+    writeln!(f, "</model>").unwrap();
+    f.flush().unwrap();
+    drop(f);
+
+    let abs_out = if out_3mf.is_absolute() {
+        out_3mf.to_path_buf()
+    } else {
+        std::env::current_dir().unwrap().join(out_3mf)
+    };
+    let _ = fs::remove_file(&abs_out);
+    let status = Command::new("zip")
+        .current_dir(&tmp_dir)
+        .args([
+            "-X",
+            "-q",
+            "-9",
+            abs_out.to_str().unwrap(),
+            "[Content_Types].xml",
+            "_rels/.rels",
+            "3D/3dmodel.model",
+        ])
+        .status()
+        .expect("run zip to package .3mf");
+    assert!(status.success(), "zip failed while creating .3mf");
+    let _ = fs::remove_dir_all(&tmp_dir);
+}
+
+/// Generate a 1:1 true-scale 2D AutoCAD DXF (`$INSUNITS = 4`, Millimeters) engineering drawing
+/// containing the planform profile, edge-on thickness profile, 30 mm blade cross-section, and
+/// overall dimension callouts for manufacturing quote forms.
+fn write_dxf_drawing_mm(
+    am_mesh: &SurfaceMesh,
+    env_mesh: &SurfaceMesh,
+    design_id: &str,
+    bmin: [f64; 3],
+    bmax: [f64; 3],
+    span: [f64; 3],
+) -> Vec<u8> {
+    let n_bins = 180usize;
+    let dx = (span[0] / n_bins as f64).max(0.5);
+    let mut y_min_bin = vec![f64::INFINITY; n_bins + 1];
+    let mut y_max_bin = vec![f64::NEG_INFINITY; n_bins + 1];
+    let mut z_max_bin = vec![0.0f64; n_bins + 1];
+
+    for &(x, y, z) in &env_mesh.verts {
+        let bi = (((x - bmin[0]) / dx).round() as isize).clamp(0, n_bins as isize) as usize;
+        y_min_bin[bi] = y_min_bin[bi].min(y);
+        y_max_bin[bi] = y_max_bin[bi].max(y);
+        z_max_bin[bi] = z_max_bin[bi].max(z.abs());
+    }
+
+    // Extract exact cross-section segments at x_sec = bmax[0] - 30.0 mm (30 mm from the point)
+    let x_sec = bmax[0] - 30.0;
+    let mut sec_segs: Vec<([f64; 2], [f64; 2])> = Vec::new();
+    for &[i0, i1, i2] in &am_mesh.tris {
+        let p = [am_mesh.verts[i0], am_mesh.verts[i1], am_mesh.verts[i2]];
+        let mut pts = Vec::new();
+        for &(a, b) in &[(0, 1), (1, 2), (2, 0)] {
+            let (xa, ya, za) = p[a];
+            let (xb, yb, zb) = p[b];
+            if (xa <= x_sec && xb >= x_sec) || (xb <= x_sec && xa >= x_sec) {
+                let denom = xb - xa;
+                if denom.abs() > 1e-9 {
+                    let t = ((x_sec - xa) / denom).clamp(0.0, 1.0);
+                    pts.push([ya + t * (yb - ya), za + t * (zb - za)]);
+                }
+            }
+        }
+        if pts.len() >= 2 {
+            sec_segs.push((pts[0], pts[1]));
+        }
+    }
+
+    let mut dxf = String::with_capacity(256 * 1024);
+    // Header section with explicit $INSUNITS = 4 (Millimeters) and $MEASUREMENT = 1 (Metric)
+    dxf.push_str("0\nSECTION\n2\nHEADER\n");
+    dxf.push_str("9\n$ACADVER\n1\nAC1009\n");
+    dxf.push_str("9\n$INSUNITS\n70\n4\n");
+    dxf.push_str("9\n$MEASUREMENT\n70\n1\n");
+    dxf.push_str(&format!(
+        "9\n$EXTMIN\n10\n{:.3}\n20\n{:.3}\n30\n{:.3}\n",
+        bmin[0] - 10.0,
+        bmin[1] - 45.0,
+        bmin[2]
+    ));
+    dxf.push_str(&format!(
+        "9\n$EXTMAX\n10\n{:.3}\n20\n{:.3}\n30\n{:.3}\n",
+        bmax[0] + 60.0,
+        bmax[1] + 25.0,
+        bmax[2]
+    ));
+    dxf.push_str("0\nENDSEC\n");
+
+    // Entities section
+    dxf.push_str("0\nSECTION\n2\nENTITIES\n");
+
+    fn add_line(dxf: &mut String, layer: &str, x1: f64, y1: f64, x2: f64, y2: f64) {
+        dxf.push_str(&format!(
+            "0\nLINE\n8\n{layer}\n10\n{:.4}\n20\n{:.4}\n30\n0.0\n11\n{:.4}\n21\n{:.4}\n31\n0.0\n",
+            x1, y1, x2, y2
+        ));
+    }
+    fn add_text(dxf: &mut String, layer: &str, x: f64, y: f64, h: f64, txt: &str) {
+        dxf.push_str(&format!(
+            "0\nTEXT\n8\n{layer}\n10\n{:.3}\n20\n{:.3}\n30\n0.0\n40\n{:.2}\n1\n{txt}\n",
+            x, y, h
+        ));
+    }
+
+    // 1. Planform bounding box (1:1 scale, mm)
+    add_line(&mut dxf, "BOUNDING_BOX", bmin[0], bmin[1], bmax[0], bmin[1]);
+    add_line(&mut dxf, "BOUNDING_BOX", bmax[0], bmin[1], bmax[0], bmax[1]);
+    add_line(&mut dxf, "BOUNDING_BOX", bmax[0], bmax[1], bmin[0], bmax[1]);
+    add_line(&mut dxf, "BOUNDING_BOX", bmin[0], bmax[1], bmin[0], bmin[1]);
+
+    // 2. Planform upper & lower silhouette envelopes (1:1 scale, mm)
+    let valid_bins: Vec<(f64, f64, f64, f64)> = (0..=n_bins)
+        .filter_map(|bi| {
+            if y_min_bin[bi].is_finite() && y_max_bin[bi].is_finite() {
+                Some((
+                    bmin[0] + bi as f64 * dx,
+                    y_min_bin[bi],
+                    y_max_bin[bi],
+                    z_max_bin[bi],
+                ))
+            } else {
+                None
+            }
+        })
+        .collect();
+    for w in valid_bins.windows(2) {
+        let (x0, ymin0, ymax0, z0) = w[0];
+        let (x1, ymin1, ymax1, z1) = w[1];
+        add_line(&mut dxf, "PLANFORM_OUTER", x0, ymax0, x1, ymax1);
+        add_line(&mut dxf, "PLANFORM_OUTER", x0, ymin0, x1, ymin1);
+        // Edge-on thickness view offset to y_off = bmin[1] - 22.0 mm
+        let y_off = bmin[1] - 22.0;
+        add_line(&mut dxf, "EDGE_ON_THICKNESS", x0, y_off + z0, x1, y_off + z1);
+        add_line(&mut dxf, "EDGE_ON_THICKNESS", x0, y_off - z0, x1, y_off - z1);
+    }
+    if let (Some(&first), Some(&last)) = (valid_bins.first(), valid_bins.last()) {
+        add_line(&mut dxf, "PLANFORM_OUTER", first.0, first.1, first.0, first.2);
+        add_line(&mut dxf, "PLANFORM_OUTER", last.0, last.1, last.0, last.2);
+    }
+
+    // 3. Retention ring nominal 24.9 mm internal bore circle at (0, 0)
+    dxf.push_str("0\nCIRCLE\n8\nRING_BORE\n10\n0.0\n20\n0.0\n30\n0.0\n40\n12.4500\n");
+
+    // 4. Blade cross-section at 30 mm from the point (drawn to the right of the blade at x_draw = bmax[0] + 25.0 mm)
+    let x_draw = bmax[0] + 25.0;
+    for &(p0, p1) in &sec_segs {
+        add_line(&mut dxf, "BLADE_SECTION_30MM", x_draw + p0[1], p0[0], x_draw + p1[1], p1[0]);
+    }
+
+    // 5. Title block & dimension callouts
+    add_text(
+        &mut dxf,
+        "DIMENSIONS",
+        bmin[0],
+        bmax[1] + 14.0,
+        3.2,
+        &format!("JARAMBIT G3 WINNER: {design_id} (1:1 TRUE SCALE, UNITS: MILLIMETERS)"),
+    );
+    add_text(
+        &mut dxf,
+        "DIMENSIONS",
+        bmin[0],
+        bmax[1] + 9.0,
+        2.5,
+        &format!(
+            "OVERALL BOUNDING BOX: {:.2} mm (L) x {:.2} mm (H) x {:.2} mm (T) | RING BORE: 24.90 mm",
+            span[0], span[1], span[2]
+        ),
+    );
+    add_text(
+        &mut dxf,
+        "DIMENSIONS",
+        bmin[0],
+        bmax[1] + 4.5,
+        2.5,
+        "MATERIAL: Ti-6Al-4V (Grade 5 / ELI LPBF) | HOLLOW TPMS CORE WITH DRAINAGE PORTS",
+    );
+    add_text(
+        &mut dxf,
+        "DIMENSIONS",
+        bmin[0],
+        bmin[1] - 12.0,
+        2.2,
+        "EDGE-ON THICKNESS PROFILE (X-Z PROJECTION, 1:1 MM):",
+    );
+    add_text(
+        &mut dxf,
+        "DIMENSIONS",
+        x_draw - 12.0,
+        bmax[1] + 4.5,
+        2.2,
+        "BLADE SECTION (30 MM FROM POINT):",
+    );
+
+    dxf.push_str("0\nENDSEC\n0\nEOF\n");
+    dxf.into_bytes()
 }
 
 fn mesh_bbox_mm(mesh: &SurfaceMesh) -> ([f64; 3], [f64; 3], [f64; 3]) {
@@ -116,8 +442,33 @@ fn load_first_genome(csv_path: &Path) -> Result<(String, G3Genome), String> {
     Err(format!("no valid G3 genome row found in {}", csv_path.display()))
 }
 
+fn emit_companions(am_mesh: &SurfaceMesh, env_mesh: &SurfaceMesh, design_id: &str, out_dir: &Path) {
+    let (bmin, bmax, span) = mesh_bbox_mm(am_mesh);
+    let threemf_path = out_dir.join(format!("{design_id}_AMbuild_mm.3mf"));
+    write_3mf_mm(am_mesh, design_id, span, &threemf_path);
+
+    let dxf_bytes = write_dxf_drawing_mm(am_mesh, env_mesh, design_id, bmin, bmax, span);
+    let dxf_path = out_dir.join(format!("{design_id}_drawing_mm.dxf"));
+    fs::write(&dxf_path, &dxf_bytes).expect("write DXF drawing");
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
+    if args.get(1).map(|s| s.as_str()) == Some("--companion-from-dir") {
+        let stl_dir = PathBuf::from(args.get(2).expect("stl_dir"));
+        let out_dir = PathBuf::from(args.get(3).expect("out_dir"));
+        let design_id = args.get(4).expect("design_id");
+        fs::create_dir_all(&out_dir).expect("create out_dir");
+        let am_bytes = fs::read(stl_dir.join(format!("{design_id}_AMbuild_mm.stl")))
+            .expect("read AMbuild_mm.stl");
+        let env_bytes = fs::read(stl_dir.join(format!("{design_id}_envelope_mm.stl")))
+            .expect("read envelope_mm.stl");
+        let am_mesh = read_binary_stl_mm(&am_bytes);
+        let env_mesh = read_binary_stl_mm(&env_bytes);
+        emit_companions(&am_mesh, &env_mesh, design_id, &out_dir);
+        return;
+    }
+
     let mut csv_path = PathBuf::from("evidence/g3/v3.0.0/winner_genome.csv");
     let mut out_dir = PathBuf::from("docs/g3/v3.0.0/cad");
     let mut h_start = 0.25f64;
@@ -156,8 +507,6 @@ fn main() {
     let (design_id, genome) = load_first_genome(&csv_path).expect("load genome");
     let max_bytes = (max_mb * 1024.0 * 1024.0) as usize;
 
-    // Each mesh gets the finest voxel pitch (from h_start up in 0.025 mm steps) whose binary STL fits max_mb:
-    // the envelope has far fewer triangles than the lattice-filled AM build, so it can stay much finer.
     let fit = |use_am: bool, what: &str| -> (SurfaceMesh, f64) {
         let mut h = h_start;
         loop {

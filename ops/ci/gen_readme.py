@@ -151,6 +151,7 @@ def readme():
     L += [f'# Jarambit {v}: an evolved, 3D-printable titanium karambit', '',
           f'[![release](https://img.shields.io/badge/release-v{v}-2f56d6)]({REPO}/releases/tag/v{v}) '
           f'[![paper](https://img.shields.io/badge/paper-G3%20v{v}%20PDF-2f56d6)](docs/g3/paper/g3-v{v}.pdf) '
+          f'[![3D print CAD](https://img.shields.io/badge/3D%20print%20CAD-cad%2F%20(STL%20%7C%203MF%20%7C%20DXF%20%7C%20PDF)-2f56d6)](cad/) '
           f'![design](https://img.shields.io/badge/best%20individual-{q(wid)}-555) '
           f'![score](https://img.shields.io/badge/W__ERGOLIGHT__v1-{sc["score_100"]:.2f}-555) '
           f'![mass](https://img.shields.io/badge/mass-{mass:.1f}%20g-555) '
@@ -158,6 +159,14 @@ def readme():
           f'Every measurement and picture on this page describes one design, **`{wid}`**, the best individual of the v{rv} cohort of '
           f'record, and is generated from [`evidence/g3/v{rv}/release.json`](evidence/g3/v{rv}/release.json); the rule values (bounds, loads, targets) are the decoder\'s own. '
           f'Status: {r["status"]}.', '',
+          f'**3D printing & CAD upload kit ([`cad/`](cad/)):** ready-to-upload 6-file bundle (each under 50 MB) — '
+          f'primary print mesh [`cad/{wid}_AMbuild_mm.stl`](cad/{wid}_AMbuild_mm.stl) (Binary STL, mm), '
+          f'unit-embedded [`cad/{wid}_AMbuild_mm.3mf`](cad/{wid}_AMbuild_mm.3mf) (3MF, mm), '
+          f'outer envelope [`cad/{wid}_envelope_mm.stl`](cad/{wid}_envelope_mm.stl), '
+          f'1:1 2D drawing [`cad/{wid}_drawing_mm.dxf`](cad/{wid}_drawing_mm.dxf) (DXF, mm), '
+          f'engineering spec [`cad/{wid}_spec_paper.pdf`](cad/{wid}_spec_paper.pdf) (PDF), and '
+          f'internal cutaway [`cad/{wid}_xray_cutaway.jpg`](cad/{wid}_xray_cutaway.jpg) (JPG). '
+          f'See [`cad/README.md`](cad/README.md) for copy-paste order notes.', '',
           f'**Paper:** [`docs/g3/paper/g3-v{v}.pdf`](docs/g3/paper/g3-v{v}.pdf), generated from the same receipt, sets out the '
           'design space, objective, search, measurement chain and every limit.', '',
           f'<img src="{img["hero"]}" alt="The best individual {wid}: anodized grip and ring, double-edged serrated claw blade" width="100%">', '']
@@ -272,17 +281,31 @@ def readme():
     lim.append(f'The cohort is {co["evaluations_per_island"]:,} evaluations per island, a shortened run for this release.')
     L += ['## Limits of this result', ''] + [f'- {x}' for x in lim] + ['']
     # ---- cad
-    L += ['## Download the CAD (binary STL, millimetres)', '',
+    L += ['## Download the CAD & 3D-printing upload kit (`cad/`, millimetres)', '',
+          'The top-level [`cad/`](cad/) folder contains a ready-to-upload **6-file manufacturing bundle** (every file under 50 MB, '
+          'designed for quote forms accepting up to 6 files of 100 MB each in `STL`, `3MF`, `DXF`, `PDF`, or `JPG`), '
+          'generated automatically from the winning individual:', '',
+          '| # | File in `cad/` | Format | Purpose on a 3D-printing / manufacturing quote form |',
+          '|---:|---|---|---|',
+          f'| 1 | [`cad/{wid}_AMbuild_mm.stl`](cad/{wid}_AMbuild_mm.stl) | Binary STL (`mm`) | **Primary 3D print file** (outer skin + internal TPMS lattice + powder-removal ports) |',
+          f'| 2 | [`cad/{wid}_AMbuild_mm.3mf`](cad/{wid}_AMbuild_mm.3mf) | 3MF (`unit="millimeter"`) | **Modern 3D print package** with `millimeter` units and `Ti-6Al-4V` material embedded |',
+          f'| 3 | [`cad/{wid}_envelope_mm.stl`](cad/{wid}_envelope_mm.stl) | Binary STL (`mm`) | **Solid outer envelope companion** (all internal cavities and ports closed) |',
+          f'| 4 | [`cad/{wid}_drawing_mm.dxf`](cad/{wid}_drawing_mm.dxf) | AutoCAD DXF (`mm`) | **1:1 2D engineering drawing** (`$INSUNITS = 4` mm: planform, ring bore, thickness & 30 mm blade section) |',
+          f'| 5 | [`cad/{wid}_spec_paper.pdf`](cad/{wid}_spec_paper.pdf) | PDF | **7-page engineering specification & FE verification paper** (`g3-v{v}.pdf`) |',
+          f'| 6 | [`cad/{wid}_xray_cutaway.jpg`](cad/{wid}_xray_cutaway.jpg) | JPG image | **Lengthwise cutaway render** showing the internal TPMS lattice and powder-evacuation ports |',
+          '',
+          'Mesh assets and high-resolution release files:', '',
           '| File | Triangles | Size | SHA-256 | Contents | Where |', '|---|---:|---:|---|---|---|']
     for asset in r['release_assets']:
-        where = (f'[in git](docs/g3/v{rv}/cad/{asset["file"]})' if f'docs/g3/v{rv}/cad/{asset["file"]}' in r['cad_in_git']
+        where = (f'[`cad/{asset["file"]}`](cad/{asset["file"]}) · [archive](docs/g3/v{rv}/cad/{asset["file"]})'
+                 if f'docs/g3/v{rv}/cad/{asset["file"]}' in r['cad_in_git']
                  else f'[release v{rv}]({REPO}/releases/tag/v{rv})')
         L.append(f'| `{asset["file"]}` | {asset["triangles"]:,} | {asset["bytes"] / 1048576:.0f} MB | `{asset["sha256"][:16]}…` | {asset["note"]} | {where} |')
     specs = [p for p in r['cad_in_git'] if p.endswith('.json')]
     L += ['', 'Units are millimetres. The print file is the AM build: the outer skin, the internal TPMS lattice and the powder-removal ports. '
           'The files in git are written by [`ops/g3/export_best_stl.sh`](ops/g3/export_best_stl.sh) from the committed genome row, each at the '
           'finest voxel pitch that keeps it under 50 MiB'
-          + (''.join(f'; [`{os.path.basename(p)}`]({p}) lists their dimensions, volume, mass, pitch and watertightness' for p in specs)) + '.', '']
+          + (''.join(f'; [`cad/{os.path.basename(p)}`](cad/{os.path.basename(p)}) ([archive]({p})) lists their dimensions, volume, mass, pitch and watertightness' for p in specs)) + '.', '']
     # ---- reproduce + repo
     L += ['## Reproduce', '', '```bash',
           f'git checkout {pv["git_commit"][:12]}   # decoder {pv["decoder_sha256"][:12]}',
@@ -298,6 +321,7 @@ def readme():
           f'[`evidence/g3/v{rv}/history/`](evidence/g3/v{rv}/history/).', '',
           'The v1 command-line pipeline (`cargo run -p jarambit`) is still in the repository; its plate level is opt-in with `JARAMBIT_FEM=1`.', '',
           '## Repository', '',
+          f'- [`cad/`](cad/): 6-file 3D-printing & manufacturing upload kit (`STL`, `3MF`, `DXF`, `PDF`, `JPG`, millimetres) and order notes for `{wid}`, generated automatically from the winner.',
           f'- [`docs/g3/paper/`](docs/g3/paper/): the G3 paper; `make -C docs/g3/paper` rebuilds it from the receipt.',
           f'- [`docs/g3/RELEASE_{rv}.md`](docs/g3/RELEASE_{rv}.md): what the v{rv} release changed and why; later patches are in `docs/RELEASES.md`.',
           '- [`docs/g3/RENDERS.md`](docs/g3/RENDERS.md): how every image of the design was made.',
@@ -307,10 +331,95 @@ def readme():
     return '\n'.join(L)
 
 
+def cad_readme():
+    v, rv, r = receipt()
+    wid = r['design_id']
+    mass = r['mass']['mesh_g']
+    spec_rel = next(p for p in r['cad_in_git'] if p.endswith('.json'))
+    sp = json.loads(rd(spec_rel))
+    am = sp['am_build_stl']
+    env = sp['outer_envelope_stl']
+    dim = sp['overall_dimensions_mm']
+    sz_kb = lambda rel: os.path.getsize(os.path.join(ROOT, rel)) / 1024.0
+    sz_mb = lambda rel: os.path.getsize(os.path.join(ROOT, rel)) / (1024.0 * 1024.0)
+    L = [
+        f'# 3D Printing & CAD Upload Kit — Winner `{wid}` (v{v})',
+        '',
+        f'This folder contains the ready-to-upload **6-file 3D-printing and manufacturing bundle** (**Units: millimetres**, every file under 50 MB) '
+        f'for **`{wid}`**, the winning individual of the v{rv} cohort of record ([`evidence/g3/v{rv}/release.json`](../evidence/g3/v{rv}/release.json)). '
+        f'It is populated automatically from [`evidence/g3/v{rv}/winner_genome.csv`](../evidence/g3/v{rv}/winner_genome.csv) '
+        'by [`ops/g3/export_best_stl.sh`](../ops/g3/export_best_stl.sh) and [`ops/ci/gen_readme.py`](../ops/ci/gen_readme.py).',
+        '',
+        '## 1. Ready-to-upload 6-file kit (for forms accepting up to 6 files, 100 MB each)',
+        '',
+        'If your printing or manufacturing quote form asks for **"Drawings and related files (STL, OBJ, 3MF, STEP, PDF, images, DXF/DWG, Word, or a zip — up to 6 files, 100 MB each)"**, you can upload all **6 files** below (or just File #1 / File #2 if you only want a single 3D print file):',
+        '',
+        '| # | File | Format | Size | What it is & why to upload it |',
+        '|---:|---|---|---:|---|',
+        f'| **1** | **[`{am["file"]}`]({am["file"]})** | **Binary STL (`mm`)** | **{am["mib"]:.2f} MiB** | **PRIMARY 3D PRINT FILE (upload this first):** complete additive-manufacturing build with the outer skin, internal TPMS lattice, and powder-removal drainage ports ({am["triangles"]:,} triangles). |',
+        f'| **2** | **[`{wid}_AMbuild_mm.3mf`]({wid}_AMbuild_mm.3mf)** | **3MF (`unit="millimeter"`)** | **{sz_mb(f"cad/{wid}_AMbuild_mm.3mf"):.2f} MiB** | **Modern 3D print package:** identical AM build mesh in compressed 3MF 1.2.3 format with `unit="millimeter"` and `Ti-6Al-4V (Grade 5 / ELI LPBF)` material metadata embedded in the header. |',
+        f'| **3** | **[`{env["file"]}`]({env["file"]})** | **Binary STL (`mm`)** | **{env["mib"]:.2f} MiB** | **Solid outer envelope companion:** the unhollowed exterior surface with all internal cavities and ports closed ({env["solid_mass_ti64_g"]:.1f} g if printed solid; {env["triangles"]:,} triangles). |',
+        f'| **4** | **[`{wid}_drawing_mm.dxf`]({wid}_drawing_mm.dxf)** | **AutoCAD DXF (`mm`)** | **{sz_kb(f"cad/{wid}_drawing_mm.dxf"):.0f} KiB** | **1:1 2D engineering drawing (`$INSUNITS = 4` mm):** planform silhouette, 24.9 mm ring bore, edge-on thickness profile, 30 mm blade cross-section, and overall dimension callouts. |',
+        f'| **5** | **[`{wid}_spec_paper.pdf`]({wid}_spec_paper.pdf)** | **PDF** | **{sz_kb(f"cad/{wid}_spec_paper.pdf"):.0f} KiB** | **7-page engineering specification & FE paper:** complete geometry, bevel angles, structural safety factors, and CAD verification tables (`g3-v{v}.pdf`). |',
+        f'| **6** | **[`{wid}_xray_cutaway.jpg`]({wid}_xray_cutaway.jpg)** | **JPG image** | **{sz_kb(f"cad/{wid}_xray_cutaway.jpg"):.0f} KiB** | **Lengthwise cutaway reference image:** visual guide for the print technician showing the outer skin, internal TPMS lattice, and powder-evacuation ports. |',
+        '',
+        f'*(Also included in this folder: [`{os.path.basename(spec_rel)}`]({os.path.basename(spec_rel)}), the machine-readable JSON receipt of dimensions, volumes, masses and SHA-256 digests.)*',
+        '',
+        '## 2. Copy-paste order notes for the printing form',
+        '',
+        'STL files store raw triangle coordinates without a unit header. When uploading to a printing bureau (Protolabs, PCBWay, Craftcloud, Shapeways, Xometry, JLC3DP, or a local L-PBF shop), select **Millimetres (`mm`)** and paste:',
+        '',
+        '```text',
+        sp['order_notes'],
+        '```',
+        '',
+        '| Specification | Value |',
+        '|---|---|',
+        f'| Winning design ID | `{wid}` (genome `{sp["genome_sha256"][:12]}…`, decoder `{sp["decoder_sha256"][:12]}…`) |',
+        f'| Units | `{sp["units"]}` (millimetres) |',
+        f'| Overall bounding box ($L_x \\times H_y \\times T_z$) | `{dim["length_x_mm"]:.2f} × {dim["height_y_mm"]:.2f} × {dim["thickness_z_mm"]:.2f} mm` |',
+        f'| Material | {sp["material"]} (`{sp["density_g_mm3"]} g/mm³`) |',
+        f'| Mass (0.20 mm print mesh / {am["voxel_pitch_h_mm"]:g} mm git mesh) | `{mass:.1f} g` / `{am["mass_ti64_g"]:.2f} g` (`{am["volume_mm3"]:,.1f} mm³`) |',
+        f'| Solid outer envelope mass (if unhollowed) | `{env["solid_mass_ti64_g"]:.1f} g` (`{env["volume_mm3"]:,.1f} mm³`) |',
+        f'| Watertight manifold check (`AMbuild` / `envelope`) | `watertight = {str(am["watertight"]).lower()}` (`{am["boundary_edges"]}` boundary edges, `{am["non_manifold_edges"]}` non-manifold edges) |',
+        '',
+        '## 3. High-resolution release assets (> 50 MB)',
+        '',
+        '| File | Triangles | Size | SHA-256 | Contents | Where |',
+        '|---|---:|---:|---|---|---|',
+    ]
+    for asset in r['release_assets']:
+        where = (f'[in `cad/`]({asset["file"]}) · [archive](../docs/g3/v{rv}/cad/{asset["file"]})'
+                 if f'docs/g3/v{rv}/cad/{asset["file"]}' in r['cad_in_git']
+                 else f'[release v{rv}]({REPO}/releases/tag/v{rv})')
+        L.append(f'| `{asset["file"]}` | {asset["triangles"]:,} | {asset["bytes"] / 1048576:.0f} MB | `{asset["sha256"][:16]}…` | {asset["note"]} | {where} |')
+    L += [
+        '',
+        '## 4. How to regenerate this folder automatically from the winner',
+        '',
+        '```bash',
+        './ops/g3/export_best_stl.sh',
+        '```',
+        '',
+        'This reads [`evidence/g3/RECORD`](../evidence/g3/RECORD), decodes the winning genome row '
+        f'[`evidence/g3/v{rv}/winner_genome.csv`](../evidence/g3/v{rv}/winner_genome.csv), writes the watertight binary STL files '
+        f'and print spec to `docs/g3/v{rv}/cad/`, generates the 6-file upload kit (`STL`, `3MF`, `DXF`, `PDF`, `JPG`) in `cad/`, '
+        'and runs `python3 ops/ci/gen_readme.py` to update this guide and the root [`README.md`](../README.md).',
+        '',
+    ]
+    return '\n'.join(L)
+
+
 if __name__ == '__main__':
-    new = readme()
+    new_readme = readme()
+    new_cad = cad_readme()
     if '--check' in sys.argv:
-        if rd('README.md') != new:
+        if rd('README.md') != new_readme:
             print('README.md is stale: run python3 ops/ci/gen_readme.py'); sys.exit(1)
-        print('README.md up to date'); sys.exit(0)
-    open(os.path.join(ROOT, 'README.md'), 'w', encoding='utf-8').write(new); print('wrote README.md')
+        if rd('cad/README.md') != new_cad:
+            print('cad/README.md is stale: run python3 ops/ci/gen_readme.py'); sys.exit(1)
+        print('README.md and cad/README.md up to date'); sys.exit(0)
+    os.makedirs(os.path.join(ROOT, 'cad'), exist_ok=True)
+    open(os.path.join(ROOT, 'README.md'), 'w', encoding='utf-8').write(new_readme)
+    open(os.path.join(ROOT, 'cad/README.md'), 'w', encoding='utf-8').write(new_cad)
+    print('wrote README.md and cad/README.md')
