@@ -1,7 +1,8 @@
 """Generate README.md for the current release (v3.0.0+) from its committed release receipt. Deterministic: no clock,
-no git, no network. Every number, image and claim about the knife comes from evidence/g3/v<VERSION>/release.json,
+no git, no network. Every measured number and image of the knife comes from evidence/g3/v<RECORD>/release.json,
 written by the release pipeline from the cohort of record (owner, 2026-10-26: "the README is 100 % accurate with the
-best individual (no older data), also it should show the evolution").
+best individual (no older data), also it should show the evolution"). evidence/g3/RECORD names that cohort's release
+(3.0.0); docs/VERSION is the release this README belongs to (a patch release keeps the cohort of record).
 The helpers above `readme()` (rd, js, toml, f, current_record, integrity_status, BATTERY_SUBJECTS) still serve the v1
 white paper, STATUS.md and the certification-integrity generator; README.md no longer reads v1 evidence.
 usage: gen_readme.py          write README.md
@@ -114,12 +115,15 @@ REQUIRED = ('version', 'design_id', 'status', 'provenance', 'cohort', 'score', '
 
 
 def receipt():
+    """(release version, cohort-of-record version, receipt). Fail closed on a missing field, a receipt for another
+    version, or a cohort of record from another major.minor line than the release."""
     v = rd('docs/VERSION').strip()
-    rec = js(f'evidence/g3/v{v}/release.json')
+    rv = rd('evidence/g3/RECORD').strip()
+    rec = js(f'evidence/g3/v{rv}/release.json')
     missing = [k for k in REQUIRED if k not in rec]
-    if missing or rec['version'] != v:
-        raise SystemExit(f'gen_readme: release.json for v{v} is incomplete or for another version ({missing or rec["version"]})')
-    return v, rec
+    if missing or rec['version'] != rv or v.split('.')[:2] != rv.split('.')[:2]:
+        raise SystemExit(f'gen_readme: release.json v{rv} is incomplete or does not belong to release v{v} ({missing or rec["version"]})')
+    return v, rv, rec
 
 
 def meets(value, target, op='>='):
@@ -136,7 +140,7 @@ def picture(light, dark, alt, width=None):
 
 
 def readme():
-    v, r = receipt()
+    v, rv, r = receipt()
     i, sc, pv, co, bl, fe, ev = r['inputs'], r['score'], r['provenance'], r['cohort'], r['blade'], r['fe_certification'], r['evolution']
     a, b = bl['edge_inner'], bl['edge_spine']
     img = r['images']
@@ -146,13 +150,16 @@ def readme():
     L = []
     L += [f'# Jarambit {v}: an evolved, 3D-printable titanium karambit', '',
           f'[![release](https://img.shields.io/badge/release-v{v}-2f56d6)]({REPO}/releases/tag/v{v}) '
+          f'[![paper](https://img.shields.io/badge/paper-G3%20v{v}%20PDF-2f56d6)](docs/g3/paper/g3-v{v}.pdf) '
           f'![design](https://img.shields.io/badge/best%20individual-{q(wid)}-555) '
           f'![score](https://img.shields.io/badge/W__ERGOLIGHT__v1-{sc["score_100"]:.2f}-555) '
           f'![mass](https://img.shields.io/badge/mass-{mass:.1f}%20g-555) '
           f'![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)', '',
-          f'Every number and picture on this page describes one design, **`{wid}`**, the best individual of the v{v} cohort of '
-          f'record, and is generated from [`evidence/g3/v{v}/release.json`](evidence/g3/v{v}/release.json). '
+          f'Every measurement and picture on this page describes one design, **`{wid}`**, the best individual of the v{rv} cohort of '
+          f'record, and is generated from [`evidence/g3/v{rv}/release.json`](evidence/g3/v{rv}/release.json); the rule values (bounds, loads, targets) are the decoder\'s own. '
           f'Status: {r["status"]}.', '',
+          f'**Paper:** [`docs/g3/paper/g3-v{v}.pdf`](docs/g3/paper/g3-v{v}.pdf), generated from the same receipt, sets out the '
+          'design space, objective, search, measurement chain and every limit.', '',
           f'<img src="{img["hero"]}" alt="The best individual {wid}: anodized grip and ring, double-edged serrated claw blade" width="100%">', '']
     # ---- the best individual
     L += ['## The best individual', '',
@@ -168,9 +175,9 @@ def readme():
           f'{b["per_side_angle_bevel_deg"][0]:.1f}–{b["per_side_angle_bevel_deg"][1]:.1f}° | 17.5–22.5° | ground from {b["ground_from_mm_from_point"]:.1f} to '
           f'{b["ground_to_mm_from_point"]:.1f} mm from the point |',
           f'| Steepest slope within 2 mm of either edge | {max(a["steepest_within_2mm_deg"], b["steepest_within_2mm_deg"]):.1f}° | no shoulder | one grind per edge |',
-          f'| Serrations, edge A / B: depth, teeth | {a["serration_depth_mm"]:.2f} mm, {a["teeth"]} / {b["serration_depth_mm"]:.2f} mm, {b["teeth"]} | both edges serrated | '
+          f'| Serrations, edge A / B: depth, scallops | {a["serration_depth_mm"]:.2f} mm, {a["teeth"]} / {b["serration_depth_mm"]:.2f} mm, {b["teeth"]} | both edges serrated | '
           f'mean flank {a["mean_flank_deg"]:.0f}° / {b["mean_flank_deg"]:.0f}° |',
-          f'| Weakest tooth, edge A / B ({bl["tooth_loads_n"]["snag_along_edge"]:.0f} N snag, {bl["tooth_loads_n"]["pry_across_blade"]:.0f} N pry) | '
+          f'| Weakest tooth between scallops, edge A / B ({a["teeth_checked"]} / {b["teeth_checked"]} checked; {bl["tooth_loads_n"]["snag_along_edge"]:.0f} N snag, {bl["tooth_loads_n"]["pry_across_blade"]:.0f} N pry, beam formula) | '
           f'SF {a["tooth_root_sf_min"]:.2f} / {b["tooth_root_sf_min"]:.2f} | ≥ 1 | {meets(min(a["tooth_root_sf_min"], b["tooth_root_sf_min"]), 1.0)} |',
           f'| Solid tip, 1.82 N·m pry (TET10) | SF {i["solid_tip_sf"]:.2f} | ≥ 1 | {meets(i["solid_tip_sf"], 1.0)} |',
           f'| Lateral load at the tip (plate FE) | {i["lat_rob_cert_n"]:.0f} N | ≥ 260 N | {meets(i["lat_rob_cert_n"], 260.0)} |',
@@ -219,10 +226,10 @@ def readme():
                                   + (f'<br><b>{c["role"]}</b>' if c.get('role') else '') + '</td>' for c in lin) + '</tr></table>', '',
           f'Scores and masses under each frame are the search\'s own (h {co["h_mm"]} mm).', '',
           f'**Choosing the winner on the print grid.** The search measures every design on a {co["h_mm"]} mm voxel grid, and that grid can '
-          f'undercount mass. The search\'s own leader, `{gl["design_id"]}` (Tier 2 score {gl["tier2_score_100_h04"]:.2f} at h {co["h_mm"]}), '
+          f'undercount mass. The search\'s own leader, `{gl["design_id"]}` (Tier 2 score {gl["tier2_score_100_h04"]:.2f} at h {co["h_mm"]} on Linux; the search host logged it a little higher), '
           f'weighs {gl["mass_g_h04"]:.1f} g at h {co["h_mm"]} but {gl["mass_g_h02"]:.1f} g at h 0.2 and {gl["mass_g_h015"]:.1f} g at h 0.15, and its Tier-1 score falls from '
-          f'{gl["tier1_score_100_h04"]:.2f} to {gl["tier1_score_100_h02"]:.2f}. So every number of record is measured at h {co["ranking_h_mm"]} mm, '
-          f'the grid of the print file: every elite ordered by its record from the run, the top 32 re-evaluated at Tier 2 at h {co["ranking_h_mm"]} on the search host, '
+          f'{gl["tier1_score_100_h04"]:.2f} to {gl["tier1_score_100_h02"]:.2f}. So the ranking and the mass of record are measured at h {co["ranking_h_mm"]} mm, '
+          f'the grid of the print file (the voxel FE below runs at h {fe["hex8_voxel_fe_h_mm"]} mm): every elite ordered by its record from the run, the top 32 re-evaluated at Tier 2 at h {co["ranking_h_mm"]} on the search host, '
           f'then the top 8 again on Linux x86_64, the platform of record (the winner scored {r["arm64_score_100"]:.2f} on the search host).', '',
           f'Grid check: mass in grams at each voxel pitch h (mm). {gc["evaluation"]}; h 0.2 and h 0.15 agree within {gc["h02_vs_h015_max_rel_pct"]:.1f} % for every design.', '',
           '| Design | ' + ' | '.join(f'h {h}' for h in gc['h_mm']) + ' |', '|---|' + '---:|' * len(gc['h_mm'])]
@@ -237,8 +244,9 @@ def readme():
     L += ['## How the design is constrained and measured', '',
           '- **Edges (EDGE-1..5).** One primary grind per edge at 17.5–22.5° per side, measured normal to the actual serrated edge, at full height '
           'and unbroken to the point; only a short plunge by the guard is unsharpened.',
-          '- **Serrations (SERR-1..4).** Both edges serrated, at least 3 full-depth teeth each, pitch 5–9 mm, depth at most a quarter of the '
-          'pitch, and no serration within 18 mm of the point. Each tooth root is checked under a single-tooth snag and pry.',
+          '- **Serrations (SERR-1..4).** Both edges serrated, at least 3 full-depth scallops each, pitch 5–9 mm, depth at most a quarter of the '
+          'pitch, and no serration within 18 mm of the point. Every tooth between two scallops is checked under a single-tooth snag and pry '
+          '(a beam formula on the exact section law), on this design and on 60 Sobol designs in the decoder\'s tests; the check is not a term of the score.',
           '- **Evolution designs the knife.** Populations start from scrambled Sobol samples only. Nobody edits an individual; the rules above are '
           'constraints on what the decoder can express.',
           f'- **FE certification of this design (hex8 voxel FE on the as-built voxels, h {fe["hex8_voxel_fe_h_mm"]} mm, {fe["stat"]}).** '
@@ -248,7 +256,7 @@ def readme():
           f'- **Tip mesh convergence.** Solid-tip SF {tc["area_0p4"]:.3f} / {tc["area_0p15_production"]:.3f} / {tc["area_0p08"]:.3f} at 0.4 / 0.15 '
           '(production) / 0.08 mm² planform meshes.',
           f'- **Mass.** {mass:.1f} g from the watertight 0.2 mm print mesh; the ranking counted {r["mass"]["ranking_voxel_g"]:.1f} g on its '
-          f'{co["ranking_h_mm"]} mm voxel grid and the search {r["mass"]["search_voxel_g"]:.1f} g on its {co["h_mm"]} mm grid.', '']
+          f'{co["ranking_h_mm"]} mm voxel grid (the score above uses this mass) and the search {r["mass"]["search_voxel_g"]:.1f} g on its {co["h_mm"]} mm grid.', '']
     # ---- limits
     lim = []
     if mass > 50.0:
@@ -267,8 +275,8 @@ def readme():
     L += ['## Download the CAD (binary STL, millimetres)', '',
           '| File | Triangles | Size | SHA-256 | Contents | Where |', '|---|---:|---:|---|---|---|']
     for asset in r['release_assets']:
-        where = (f'[in git](docs/g3/v{v}/cad/{asset["file"]})' if f'docs/g3/v{v}/cad/{asset["file"]}' in r['cad_in_git']
-                 else f'[release v{v}]({REPO}/releases/tag/v{v})')
+        where = (f'[in git](docs/g3/v{rv}/cad/{asset["file"]})' if f'docs/g3/v{rv}/cad/{asset["file"]}' in r['cad_in_git']
+                 else f'[release v{rv}]({REPO}/releases/tag/v{rv})')
         L.append(f'| `{asset["file"]}` | {asset["triangles"]:,} | {asset["bytes"] / 1048576:.0f} MB | `{asset["sha256"][:16]}…` | {asset["note"]} | {where} |')
     specs = [p for p in r['cad_in_git'] if p.endswith('.json')]
     L += ['', 'Units are millimetres. The print file is the AM build: the outer skin, the internal TPMS lattice and the powder-removal ports. '
@@ -286,13 +294,16 @@ def readme():
           f'crates/g3/target/release/examples/pilot_tools export <root> {wid} <out_dir> 0.2   # watertight envelope + AM build',
           f'crates/g3/target/release/examples/gripfe run <root> {wid} 0.4 fe.jsonl 4             # hex8 voxel FE certification',
           '```', '',
-          f'The winner\'s genome row is [`evidence/g3/v{v}/winner_genome.csv`](evidence/g3/v{v}/winner_genome.csv); every island\'s logged history is in '
-          f'[`evidence/g3/v{v}/history/`](evidence/g3/v{v}/history/).', '',
+          f'The winner\'s genome row is [`evidence/g3/v{rv}/winner_genome.csv`](evidence/g3/v{rv}/winner_genome.csv); every island\'s logged history is in '
+          f'[`evidence/g3/v{rv}/history/`](evidence/g3/v{rv}/history/).', '',
           'The v1 command-line pipeline (`cargo run -p jarambit`) is still in the repository; its plate level is opt-in with `JARAMBIT_FEM=1`.', '',
           '## Repository', '',
-          f'- [`docs/g3/RELEASE_{v}.md`](docs/g3/RELEASE_{v}.md): what changed in this release and why.',
+          f'- [`docs/g3/paper/`](docs/g3/paper/): the G3 paper; `make -C docs/g3/paper` rebuilds it from the receipt.',
+          f'- [`docs/g3/RELEASE_{rv}.md`](docs/g3/RELEASE_{rv}.md): what the v{rv} release changed and why; later patches are in `docs/RELEASES.md`.',
+          '- [`docs/g3/RENDERS.md`](docs/g3/RENDERS.md): how every image of the design was made.',
           '- [`crates/g3/README.md`](crates/g3/README.md): the G3 genome, decoder, objective and their known limitations.',
-          '- [`docs/RELEASES.md`](docs/RELEASES.md): every release. [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md): the earlier v1 study, kept as a historical record.', '']
+          '- [`docs/RELEASES.md`](docs/RELEASES.md): every release. [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md) and '
+          '[`docs/paper/`](docs/paper/) (Paper B): the earlier v1 study, kept as its own record.', '']
     return '\n'.join(L)
 
 

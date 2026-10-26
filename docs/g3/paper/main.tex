@@ -1,7 +1,8 @@
 % G3 release paper (v3.0.0+). Every quantity comes from generated/*.tex, which `g3-release-tex` writes from the
 % committed release receipt evidence/g3/v<VERSION>/release.json; build with `make -C docs/g3/paper`.
 \documentclass[10pt,journal,letterpaper]{IEEEtran}
-\usepackage{amsmath,amssymb,graphicx,booktabs,array,xcolor,url}
+\usepackage{amsmath,amssymb,graphicx,booktabs,array,xcolor}
+\usepackage[obeyspaces]{url} % keep spaces inside \code (command lines)
 \input{../../paper/ei-ieee-skin.tex}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
@@ -25,19 +26,19 @@
 \begin{document}
 \title{Evolving a Printable Titanium Karambit under Ergonomic, Edge and Serration Constraints}
 \author{Jepson Taylor%
-\thanks{Release v\gVersion, decoder commit \gCommit{} (decoder hash \gDecoder). All figures and numbers in this paper
-are generated from the release receipt \code{evidence/g3/v\gVersion/release.json}. Status: \gStatus.}}
+\thanks{Release v\gVersion, decoder commit \gCommit{} (decoder hash \gDecoder). Every measured number and every figure of the design in this
+paper is generated from the release receipt \code{evidence/g3/v\gRecord/release.json}. Status: \gStatus.}}
 \maketitle
 
 \begin{abstract}
-We report the best individual of the G3 v\gVersion{} cohort of record, a one-piece Ti-6Al-4V karambit for laser
+We report the best individual of the G3 v\gRecord{} cohort of record, a one-piece Ti-6Al-4V karambit for laser
 powder-bed fusion with a hollow, lattice-filled grip and blade core. No person designed it: \gIslands{} independent
 CVT-MAP-Elites islands ran \gEvalsIsland{} evaluations each from scrambled Sobol samples, and the design space itself
 carries the rules a good edge must follow. Both cutting edges have one primary grind of
 \gEdgeAApexLo--\gEdgeAApexHi\textdegree{} and \gEdgeBApexLo--\gEdgeBApexHi\textdegree{} per side, measured normal to
 the edge and carried to within \gEdgeATo{} and \gEdgeBTo{} mm of the point, and both edges are serrated
-(\gEdgeATeeth{} and \gEdgeBTeeth{} teeth; the weakest tooth has a safety factor of \gToothMin{} under a
-\gToothSnag{} N snag). The design scores \gScore{} under \gMetric{} with an ergonomic multiplier of \gE{} and
+(\gEdgeATeeth{} and \gEdgeBTeeth{} scallops; the weakest of the teeth between them has a safety factor of
+\gToothMin{} under a \gToothSnag{} N snag). The design scores \gScore{} under \gMetric{} with an ergonomic multiplier of \gE{} and
 weighs \gMassG{} g as printed, which \gMassReading. The \gH{} mm search grid undercounted the mass of the
 search's own leader (\gLeaderMassA{} g against \gLeaderMassB{} g at 0.2 mm and \gLeaderMassC{} g at 0.15 mm), so the
 ranking of record is measured on
@@ -66,6 +67,7 @@ Evolutionary design, quality diversity, MAP-Elites, additive manufacturing, Ti-6
 \bibitem{vassiliades2018} V. Vassiliades, K. Chatzilygeroudis, and J.-B. Mouret, ``Using centroidal Voronoi tessellations to scale up the multidimensional archive of phenotypic elites algorithm,'' \emph{IEEE Trans. Evol. Comput.}, vol. 22, no. 4, pp. 623--630, 2018.
 \bibitem{joe2008} S. Joe and F. Y. Kuo, ``Constructing Sobol sequences with better two-dimensional projections,'' \emph{SIAM J. Sci. Comput.}, vol. 30, no. 5, pp. 2635--2654, 2008.
 \bibitem{matousek1998} J. Matou\v{s}ek, ``On the $L_2$-discrepancy for anchored boxes,'' \emph{J. Complexity}, vol. 14, no. 4, pp. 527--556, 1998.
+\bibitem{doi1991} A. Doi and A. Koide, ``An efficient method of triangulating equi-valued surfaces by using tetrahedral cells, \emph{IEICE Trans. Inf. Syst.}, vol. E74-D, no. 1, pp. 214--224, 1991.
 \bibitem{lorensen1987} W. E. Lorensen and H. E. Cline, ``Marching cubes: A high resolution 3D surface construction algorithm,'' \emph{Comput. Graph.}, vol. 21, no. 4, pp. 163--169, 1987.
 \bibitem{inglis1913} C. E. Inglis, ``Stresses in a plate due to the presence of cracks and sharp corners,'' \emph{Trans. Inst. Naval Archit.}, vol. 55, pp. 219--241, 1913.
 \bibitem{timoshenko1961} S. P. Timoshenko and J. M. Gere, \emph{Theory of Elastic Stability}, 2nd ed. New York: McGraw-Hill, 1961.

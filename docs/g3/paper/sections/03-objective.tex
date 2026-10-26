@@ -1,12 +1,64 @@
 \section{Objective}\label{sec:objective}
-Designs are ranked by W\_ERGOLIGHT\_v1, draft d (\src{crates/g3/src/ergolight.rs}{\code{ergolight.rs}}):
+Designs are ranked by \code{W_ERGOLIGHT_v1}, draft~d, under the requirement set \code{RS-karambit-v3}
+(\src{crates/g3/src/ergolight.rs}{\code{ergolight.rs}}):
 \begin{equation}
-\mathrm{score} = 100\, E \sum_i w_i\, s_i, \qquad E = \prod_j e_j^{\beta_j},
+\mathrm{score} = 100\,E \sum_{i=1}^{21} w_i\,s_i, \qquad E = \prod_{k=1}^{8} e_k^{\beta_k},
 \end{equation}
-where $s_i \in [0,1]$ are term scores with weights $w_i$ summing to 1, and $E$ is a geometric-mean ergonomic
-multiplier over eight hand-zone factors $e_j$ (ring lip, grip section, hand-edge radii, finger index, grip length, guard,
-grip surface and balance). Mass carries the largest weight, $w = 0.370$, so lighter is always better; the solid tip
-carries $0.070$; the remaining terms cover lateral and ring capacities, blade and human-maximum twist, spine load,
-buckling, fatigue, failure sequence, sharpness and point profile, hollow-grip structure, watertightness, karambit form,
-fairness and buildability. No term is a hard gate: a design below a target loses score in proportion, and the search
-can still learn from it. Safety-factor terms use a saturating map that rewards factors up to about 1 and little beyond.
+where the 21 term scores $s_i \in [0,1]$ carry weights $\sum_i w_i = 1$, and $E \in [0.3, 1]$ is a geometric-mean
+ergonomic multiplier over eight hand-zone factors $e_k \in [0.3, 1]$ with $\sum_k \beta_k = 1$ (Table~\ref{tab:weights}).
+Because $E$ multiplies the whole sum instead of adding a bonus, a design cannot trade comfort for grams: a hand-zone
+shortfall scales down every point earned elsewhere. Once all eight measurements are inside their target bands, $E = 1$,
+and ergonomics no longer distorts the trade between mass and strength.
+
+\begin{table}[t]
+\caption{Weights $w_i$ and ergonomic exponents $\beta_k$ of \code{W_ERGOLIGHT_v1} (draft~d)}\label{tab:weights}
+\centering
+\setlength{\tabcolsep}{3.2pt}
+\begin{tabular}{@{}lrlr@{}}
+\toprule
+Term $s_i$ & $w_i$ & Factor $e_k$ & $\beta_k$ \\
+\midrule
+Mass & 0.3700 & Ring lip & 0.18 \\
+Solid tip (TET10) & 0.0700 & Grip section & 0.18 \\
+Gate-S edge sharpness & 0.0500 & Hand-edge radii & 0.18 \\
+Gate-S point profile & 0.0500 & Finger index & 0.15 \\
+AM build & 0.0500 & Balance & 0.10 \\
+CAD watertight & 0.0400 & Grip length & 0.08 \\
+Karambit ring and claw & 0.0400 & Guard height & 0.08 \\
+Form fairness & 0.0400 & Grip surface & 0.05 \\
+Lateral, 180~N & 0.0305 & & \\
+Lateral, 260~N & 0.0305 & & \\
+Yield sequence ($\ge 1.2$) & 0.0305 & & \\
+Ring back (30~N, SF~2) & 0.0261 & & \\
+Ring bearing (300~N, SF~2) & 0.0218 & & \\
+Blade-body twist & 0.0218 & & \\
+Blade-tip twist & 0.0218 & & \\
+Plate GCI (3 levels) & 0.0200 & & \\
+Strict lateral, 260~N & 0.0174 & & \\
+Buckling $\lambda$ & 0.0174 & & \\
+Human-max twist and spine & 0.0174 & & \\
+Fatigue (Goodman) & 0.0174 & & \\
+Hollow-grip strength & 0.0174 & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Mass carries the largest weight, $w = 0.370$, mapped linearly from 0 at 130~g to 1 at 25~g. In draft~d the solid-tip term
+carries 0.070, to push the point to resist the 1.82~N$\cdot$m pry, and the two Gate-S sharpness terms and buildability
+carry 0.050 each. Every safety-factor ratio $v = \mathrm{SF}/\mathrm{SF}_\mathrm{req}$ passes through a knee function
+(\code{sfk}),
+\begin{equation}
+\operatorname{sfk}(v) = 0.94\,\min(\max(v, 0), 1) + 0.06\,\bigl(1 - e^{-\max(0, v - 1)/0.15}\bigr),
+\end{equation}
+which gives 94\,\% of a term's credit linearly up to adequacy ($v = 1$) and the last 6\,\% for margin above it, so
+reserve is rewarded without paying for mass that adds nothing. No term is a hard gate: a design below a target loses
+score in proportion, and the search can still learn from it.
+
+Three terms are fixed or capped in this release, and the scores in this paper include them as they are.
+\begin{itemize}
+\item The plate-GCI term is held at 0.5, because no three-level plate refinement runs in the search.
+\item The solid-tip term is capped at 0.8 of its knee value, because the independent cross-check that would lift the cap
+is not run.
+\item The buildability term is the analytic rule (skin at least 0.8~mm, open ports, lattice struts against a 0.8~mm
+minimum) at every tier.
+\end{itemize}

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Generate STATUS.md from repo state (PR-0.28.5). Deterministic: no clock, no git calls.
-Sources: docs/VERSION, docs/RELEASES.md, docs/v1/jarambit_v1_roadmap.json, the provisional design's D1 index record
-(requirements verdict via ops/ci/rs_verdicts.py, G1 via metrics/global_metric.py).
+Sources: docs/VERSION, docs/RELEASES.md, the G3 release receipt named by evidence/g3/RECORD (the current design),
+docs/v1/jarambit_v1_roadmap.json and the v1 provisional design's D1 index record (requirements verdict via
+ops/ci/rs_verdicts.py, G1 via metrics/global_metric.py).
 usage: gen_status.py          write STATUS.md
        gen_status.py --check  exit 1 if STATUS.md differs from what would be generated"""
 import json, os, re, sys
@@ -36,6 +37,21 @@ def latest_release_section(rel):
             continue
         return title, re.findall(r'^- (PR-[0-9.]+[a-z0-9]*)', body, re.M)
     return ('(none)', [])
+
+
+def g3_status(version):
+    """The current design: the best individual of the G3 cohort of record, from its release receipt."""
+    rv = rd('evidence/g3/RECORD').strip()
+    r = json.loads(rd(f'evidence/g3/v{rv}/release.json'))
+    a, b = r['blade']['edge_inner'], r['blade']['edge_spine']
+    return [f'## Current release: G3 v{version}', '',
+            f'- **Best individual:** `{r["design_id"]}`, the best of the v{rv} cohort of record '
+            f'([`evidence/g3/v{rv}/release.json`](evidence/g3/v{rv}/release.json)); status: {r["status"]}.',
+            f'- **Score:** {r["provenance"]["metric"]} {r["score"]["score_100"]:.2f} '
+            f'({r["provenance"]["platform_of_record"]}); **mass** {r["mass"]["mesh_g"]:.1f} g as printed.',
+            f'- **Blade:** both edges ground and serrated ({a["teeth"]} and {b["teeth"]} scallops).',
+            f'- **Full table, evolution and limits:** [`README.md`](README.md) and [`docs/g3/paper/g3-v{version}.pdf`](docs/g3/paper/g3-v{version}.pdf).',
+            '']
 
 
 def generate(context=None):
@@ -89,7 +105,7 @@ def generate(context=None):
             state = 'planned'
         L.append(f"| {v} | {ms['title']} | {state} | {len(ms.get('work_items', []))} |")
     L += ['', 'History: `docs/history/` (archived root STATUS.md / GAPS.md snapshots). Release notes: `docs/RELEASES.md`.', '']
-    L[4:4] = [integrity_status(), '']
+    L[4:4] = g3_status(version) + ['## v1 study (historical record)', '', integrity_status(), '']
     output = '\n'.join(L)
     return rs_verdicts.replace_claim_block(output, context) if context is not None else output
 

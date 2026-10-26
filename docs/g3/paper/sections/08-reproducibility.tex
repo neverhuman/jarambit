@@ -1,12 +1,15 @@
 \section{Reproducibility}\label{sec:repro}
 The release is commit \gCommit{} with decoder hash \gDecoder. The winner's 179-gene row is
-\code{evidence/g3/v\gVersion/winner_genome.csv}; every island's logged history, the ranking records, the edge profile,
-the blade facts and the finite-element results sit next to it under \code{evidence/g3/v\gVersion/}, listed with their
-SHA-256 in \code{SHA256SUMS}. The receipt \code{release.json} is the single source of this paper and of the repository
-README: \code{g3-release-tex} turns it into the macros used here, and \code{ops/ci/gen\_readme.py} into the README. The
-cohort is reproduced by building \code{g3-evolve} at that commit and running each island with its seed, \code{--h
-\gH}, \code{--tier1-gate \gGateOne}, \code{--tier2-gate \gGateTwo} and \code{--log-every 50}; \code{pilot\_tools export}
-rebuilds the watertight envelope and print mesh from the genome row. The binary STL files (millimetres) are listed in
+\code{evidence/g3/v\gRecord/winner_genome.csv}; every island's logged history, the ranking records, the edge profile,
+the blade facts and the finite-element results sit next to it under \code{evidence/g3/v\gRecord/}, listed with their
+SHA-256 in \code{SHA256SUMS}. The receipt \code{release.json} is the single source of every measured number in this paper and in
+the repository README: \code{g3-release-tex} turns it into the macros used here, and \code{ops/ci/gen_readme.py} into the
+README. The cohort is reproduced by building \code{g3-evolve} at that commit and running island $n = 1, \ldots, \gIslands$
+with \code{--init 64 --evals \gEvalsIslandRaw}, \code{--seed} $4000 + n$, \code{--host 4 --island} $n$,
+\code{--commit} \gCommit, \code{--h \gH}, \code{--tier1-gate \gGateOne}, \code{--tier2-gate \gGateTwo} and
+\code{--log-every 50} (the seed, host and island set the random stream, and the commit enters every genome hash).
+\code{pilot_tools tier2} at $h = \gHRank$ re-ranks the elites, \code{pilot_tools hconv} repeats the grid check, and
+\code{pilot_tools export} rebuilds the watertight envelope and print mesh from the genome row. The binary STL files (millimetres) are listed in
 Table~\ref{tab:assets}.
 
 \begin{table}[t]

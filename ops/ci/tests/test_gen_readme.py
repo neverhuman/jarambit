@@ -9,8 +9,10 @@ def readme():
 
 
 def release():
+    """(release version, receipt of the cohort of record named by evidence/g3/RECORD)"""
     v = open(os.path.join(ROOT, 'docs/VERSION')).read().strip()
-    return v, json.load(open(os.path.join(ROOT, f'evidence/g3/v{v}/release.json')))
+    rv = open(os.path.join(ROOT, 'evidence/g3/RECORD')).read().strip()
+    return v, json.load(open(os.path.join(ROOT, f'evidence/g3/v{rv}/release.json')))
 
 
 class GenReadme(unittest.TestCase):
@@ -21,9 +23,15 @@ class GenReadme(unittest.TestCase):
     def test_release_link_matches_docs_version(self):
         v, rec = release()
         t = readme()
-        self.assertEqual(rec['version'], v)
+        self.assertEqual(rec['version'].split('.')[:2], v.split('.')[:2])  # a patch keeps its line's cohort of record
         self.assertIn(f'releases/tag/v{v}', t)
         self.assertNotIn('jepsontaylor/jarambit/releases', t)
+
+    def test_readme_links_the_paper_of_this_release(self):
+        v, _ = release()
+        pdf = f'docs/g3/paper/g3-v{v}.pdf'
+        self.assertTrue(os.path.isfile(os.path.join(ROOT, pdf)), pdf)
+        self.assertIn(f']({pdf})', readme())
 
     def test_headline_numbers_come_from_the_release_receipt(self):
         _, rec = release()

@@ -1,7 +1,10 @@
 //! `g3-release-tex`: LaTeX macros for the G3 release paper, generated from the committed release receipt, so the
 //! paper states no number by hand (owner, 2026-10-26: README and paper "100 % up to date"). Deterministic.
 //!
-//!   g3-release-tex <release.json> <out_dir>
+//!   g3-release-tex <release.json> <out_dir> [release_version]
+//!
+//! `\gRecord` is the receipt's own version (the cohort of record); `\gVersion` is the release the paper belongs to,
+//! which defaults to the receipt's version and differs only for a patch release that keeps the cohort of record.
 //!
 //! Writes `<out_dir>/numbers.tex` (one `\newcommand` per quantity), `<out_dir>/topeight.tex` (ranking rows),
 //! `<out_dir>/lineage.tex` (the lineage strip) and `<out_dir>/assets.tex` (CAD files). A missing field is an error.
@@ -44,8 +47,8 @@ fn count(v: f64) -> String {
 
 fn main() {
     let a: Vec<String> = std::env::args().collect();
-    if a.len() != 3 {
-        eprintln!("usage: g3-release-tex <release.json> <out_dir>");
+    if a.len() != 3 && a.len() != 4 {
+        eprintln!("usage: g3-release-tex <release.json> <out_dir> [release_version]");
         exit(2);
     }
     let r: Value = serde_json::from_str(&fs::read_to_string(&a[1]).expect("release.json")).expect("release.json is JSON");
@@ -55,7 +58,8 @@ fn main() {
     let s = |p: &str| get(&r, p).as_str().unwrap_or_else(|| { eprintln!("g3-release-tex: {p} is not text"); exit(2) }).to_string();
     let f = |p: &str, d: usize| format!("{:.*}", d, num(&r, p));
     let mut m: Vec<(&str, String)> = vec![
-        ("gVersion", s("/version")),
+        ("gVersion", a.get(3).cloned().unwrap_or_else(|| s("/version"))),
+        ("gRecord", s("/version")),
         ("gDesign", format!("\\texttt{{{}}}", tex(&s("/design_id")))),
         ("gStatus", tex(&s("/status"))),
         ("gCommit", format!("\\texttt{{{}}}", &s("/provenance/git_commit")[..12])),
@@ -74,6 +78,7 @@ fn main() {
         ("gDensity", f("/mass/density_g_mm3", 5)),
         ("gIslands", count(num(&r, "/cohort/islands"))),
         ("gEvalsIsland", count(num(&r, "/cohort/evaluations_per_island"))),
+        ("gEvalsIslandRaw", f("/cohort/evaluations_per_island", 0)), // for command lines (no separators)
         ("gEvalsTotal", count(num(&r, "/cohort/evaluations_total"))),
         ("gElites", count(num(&r, "/cohort/elites"))),
         ("gTierTwo", count(num(&r, "/cohort/tier2_elites"))),
@@ -143,7 +148,8 @@ fn main() {
         m.push((names("To"), f(&p("ground_to_mm_from_point"), 1)));
         m.push((names("Plunge"), f(&p("unground_plunge_mm"), 1)));
         m.push((names("Depth"), f(&p("serration_depth_mm"), 2)));
-        m.push((names("Teeth"), f(&p("teeth"), 0)));
+        m.push((names("Teeth"), f(&p("teeth"), 0))); // scallops (gullets) cut to full depth
+        m.push((names("TeethChecked"), f(&p("teeth_checked"), 0))); // teeth between two scallops, strength-checked
         m.push((names("ToothSF"), f(&p("tooth_root_sf_min"), 2)));
         m.push((names("Flank"), f(&p("mean_flank_deg"), 0)));
         m.push((names("Arc"), f(&p("edge_arc_mm"), 1)));

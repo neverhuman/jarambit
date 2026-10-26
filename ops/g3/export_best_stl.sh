@@ -7,9 +7,10 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-VERSION="$(tr -d '[:space:]' < "${REPO_ROOT}/docs/VERSION" 2>/dev/null || echo "3.0.0")"
-CSV_PATH="${1:-${REPO_ROOT}/evidence/g3/v${VERSION}/winner_genome.csv}"
-OUT_DIR="${2:-${REPO_ROOT}/docs/g3/v${VERSION}/cad}"
+# The cohort of record (evidence/g3/RECORD) owns the winner's genome row and its CAD folder; fail closed without it.
+RECORD="$(tr -d '[:space:]' < "${REPO_ROOT}/evidence/g3/RECORD")"
+CSV_PATH="${1:-${REPO_ROOT}/evidence/g3/v${RECORD}/winner_genome.csv}"
+OUT_DIR="${2:-${REPO_ROOT}/docs/g3/v${RECORD}/cad}"
 H_MM="${3:-0.25}"
 MAX_MB="${4:-50.0}"
 

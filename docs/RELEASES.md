@@ -2,6 +2,35 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v3.0.1 — 2026-10-26 (patch: README, G3 paper, Paper B and STATUS made consistent with the code and the v3.0.0 receipt)
+
+- **Independent check.** Every claim in the G3 paper was checked against `crates/g3` at be36df9f. All corrections are
+  wording; no number in the v3.0.0 receipt changes.
+  - **Tooth counts.** The "3 and 5 teeth" are scallops (gullets); 2 and 4 teeth between scallops are strength-checked.
+    That check is a release measurement and a decoder test, not a term of the score.
+  - **Analytic quantities.** The buckling factor and the tooth safety factors are analytic, not finite-element results.
+  - **Fixed terms.** Two objective terms are fixed or capped in this release: the plate GCI at 0.5, and the solid tip at
+    0.8 of its knee value.
+  - **Model and mesh.** Tier 1 is one CST+DKT sandwich-plate mesh, and the ring is a T6 membrane band. Surfaces come
+    from marching tetrahedra.
+  - **Grids.** The voxel FE runs at h 0.4. Only the ranking and the mass of record are at h 0.2.
+  - **Search details.** Niche centres are Halton points, and only three of the eight descriptors are measured. The
+    variation and parent-selection details are now as the code has them.
+  - **Reproduction.** The command now carries every flag that sets the random stream.
+- **G3 paper.**
+  - §1–§4 are rewritten from AGY's expansion in #169, with its errors corrected. Its weight table, `sfk` formula and
+    multiplicative-E argument are taken as written, and so is its float placement.
+  - The paper is `docs/g3/paper/g3-v3.0.1.pdf`. `\gVersion` is the release; `\gRecord` is the cohort of record.
+- **README.** It links the paper, uses the scallop and tooth wording above, and states which grid each number uses.
+- **Paper B.** Figure 10 shows the v3.0.0 best individual instead of the older pilot. The pilot's renders and
+  provenance moved to `docs/g3/history/pilot-hz4i012_g00085/`, and `docs/g3/RENDERS.md` now describes the v3.0.0
+  images.
+- **STATUS.md.** It leads with the current G3 design, and the v1 status follows as a historical record.
+- **Version plumbing.** `evidence/g3/RECORD` (3.0.0) names the cohort of record. The README, paper and
+  `ops/g3/export_best_stl.sh` read the receipt through it, so a patch release keeps the v3.0.0 evidence byte for byte.
+- **Unchanged.** The decoder, the receipt, the cohort, the CAD files and every v1 evidence file. The CAD assets stay
+  attached to the v3.0.0 release.
+
 ## v3.0.0 — 2026-10-26 (major: the G3 generation; README and paper generated from one release receipt)
 
 - **Scope change (owner, 2026-10-26).** G3 becomes the headline: an evolved one-piece Ti-6Al-4V karambit for laser
@@ -34,7 +63,7 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
   - Measured from the exported meshes:
     - **Edges:** smallest hand-zone edge radius 2.7 mm against the rules' 2.0 mm.
     - **Cavity share:** grip 67 %, guard/neck 28 %, blade body 27 % behind solid edges and tip, ring solid; 53.5 % overall.
-  - Provenance is in `docs/g3/RENDERS.md`.
+  - Provenance is in `docs/g3/RENDERS.md` (moved in v3.0.1 to `docs/g3/history/pilot-hz4i012_g00085/RENDERS.md`).
 - **README, the published study.** The v1 winner now follows with the pocket-smoothed image only, and the header links feature Paper B. Paper A stays in the repository as the record B builds on.
 - **Paper.** A four-panel figure (`fig:g3-candidate`) in the discussion's research-direction subsection illustrates the follow-on cohort's leading candidate. Its caption says it is outside this study's census and not a finding. Paper A is 18 pages and Paper B 19.
 - **G3 objective, draft d (owner decision).**
