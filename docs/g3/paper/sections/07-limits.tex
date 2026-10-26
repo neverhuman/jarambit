@@ -1,0 +1,22 @@
+\section{Limits of the result}\label{sec:limits}
+\begin{eibox}{What this result is not}
+It is a computational design. Nothing has been printed, heat-treated, sharpened or tested, and no safety factor here is
+a qualification.
+\end{eibox}
+\begin{itemize}
+\item \textbf{Strength against the targets.} Against a target of 1, the solid tip (\gTipSF) \gTipReading; the grip under
+the spine load (formula \gGripSF, voxel FE \gFeGripSpine) \gGripReading; the human-maximum twist (plate \gHmTwist, voxel FE
+\gFeRootTwist) \gTwistReading; fatigue (\gFat) \gFatReading; and the yield-sequence ratio (\gSeq{} against 1.2)
+\gSeqReading. Lateral capacity \gLatReading{} and the ring \gRingReading.
+\item \textbf{Mass.} The design weighs \gMassG{} g, which \gMassReading.
+\item \textbf{Assumed loads.} The tooth snag and pry loads are conservative research assumptions, not measured use loads.
+The buckling factor is an analytic lateral-torsional estimate~\cite{timoshenko1961}, not an eigenvalue solve.
+\item \textbf{Models.} Voxel finite elements resolve the printed geometry only to $h = \gFeH$ mm and report percentiles,
+not peaks; the plate and beam surrogates of the search differ from them (Table~\ref{tab:fe}). Surfaces come from marching
+cubes on the voxel SDF~\cite{lorensen1987}, except the blade, which is re-meshed at 0.05 mm from the exact decoder law.
+\item \textbf{Coarse search grid.} The archive was selected at $h = \gH$ mm, which undercounts the mass of some
+designs (Table~\ref{tab:grid}); only the final ranking is measured at $h = \gHRank$ mm, so designs that the coarse grid
+scored low were never re-checked.
+\item \textbf{One shortened cohort.} The release cohort is \gEvalsIsland{} evaluations per island on one host; another
+seed or a longer run may find a better design.
+\end{itemize}

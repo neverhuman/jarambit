@@ -10,6 +10,10 @@ license = "MIT"
 name = "g3-evolve"
 path = "src/bin/g3_evolve.rs"
 
+[[bin]]
+name = "g3-release-tex"
+path = "src/bin/g3_release_tex.rs"
+
 [dependencies]
 jarambit-crescent = { path = "../crescent" }
 jarambit-physics = { path = "../physics" }

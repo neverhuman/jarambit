@@ -1,0 +1,22 @@
+\section{Reproducibility}\label{sec:repro}
+The release is commit \gCommit{} with decoder hash \gDecoder. The winner's 179-gene row is
+\code{evidence/g3/v\gVersion/winner_genome.csv}; every island's logged history, the ranking records, the edge profile,
+the blade facts and the finite-element results sit next to it under \code{evidence/g3/v\gVersion/}, listed with their
+SHA-256 in \code{SHA256SUMS}. The receipt \code{release.json} is the single source of this paper and of the repository
+README: \code{g3-release-tex} turns it into the macros used here, and \code{ops/ci/gen\_readme.py} into the README. The
+cohort is reproduced by building \code{g3-evolve} at that commit and running each island with its seed, \code{--h
+\gH}, \code{--tier1-gate \gGateOne}, \code{--tier2-gate \gGateTwo} and \code{--log-every 50}; \code{pilot\_tools export}
+rebuilds the watertight envelope and print mesh from the genome row. The binary STL files (millimetres) are listed in
+Table~\ref{tab:assets}.
+
+\begin{table}[t]
+\caption{CAD files of the best individual (binary STL, millimetres; each file name starts with the design identifier)}\label{tab:assets}
+\centering
+\begin{tabular}{@{}p{0.40\linewidth}rrl@{}}
+\toprule
+File & Triangles & MiB & Where \\
+\midrule
+\gAssetRows
+\bottomrule
+\end{tabular}
+\end{table}

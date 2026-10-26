@@ -1,226 +1,133 @@
-# Jarambit: Engineered Intelligence from Search to Evidence
+# Jarambit 3.0.0: an evolved, 3D-printable titanium karambit
 
-Jarambit is a computational design research system linking a geometric representation, retained search observations, and candidate-specific numerical evidence. This retrospective study asks what readers can reconstruct from those links and where evidence is missing.
+[![release](https://img.shields.io/badge/release-v3.0.0-2f56d6)](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0) ![design](https://img.shields.io/badge/best%20individual-hz4i013__g00995__d206e3c9-555) ![score](https://img.shields.io/badge/W__ERGOLIGHT__v1-80.55-555) ![mass](https://img.shields.io/badge/mass-59.3%20g-555) ![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)
 
-[Paper (pocket-smoothed design)](docs/paper/main-smoothed.pdf) · [Mesh-smoothing ladder, 7 levels](docs/paper/smoothing-ladder.pdf) · [Standalone supplement](docs/paper/supplement.pdf) · [Reconstruction guide](docs/paper/README.md) · [Evidence crosswalk](docs/paper/CROSSWALK_SUPPLEMENT.md) · [Test atlas](docs/tests/README.md) · [Architecture](TECHNOLOGY_MAP.md)
+Every number and picture on this page describes one design, **`hz4i013_g00995_d206e3c9`**, the best individual of the v3.0.0 cohort of record, and is generated from [`evidence/g3/v3.0.0/release.json`](evidence/g3/v3.0.0/release.json). Status: computational design; not built, printed or physically tested.
 
-## Current design: G3 ergonomic, hollow-AM cohort (computational, in progress)
+<img src="docs/g3/v3.0.0/img/hero.jpg" alt="The best individual hz4i013_g00995_d206e3c9: anodized grip and ring, double-edged serrated claw blade" width="100%">
 
-[![G3 pilot candidate hz4i012_g00085_4cdfea55: anodized titanium hand zone with a smooth, finger-grooved grip, rounded 8 mm ring lip and a double-edged blade](docs/g3/g3-hero.jpg)](crates/g3/README.md)
+## The best individual
 
-*`hz4i012_g00085_4cdfea55`, the leading G3 candidate: `W_ERGOLIGHT_v1` draft d **78.11** of 100, **52.3 g** Ti-6Al-4V as scored, 3D solid-tip safety factor 0.51, comfort factor E = 0.977. Smooth, finger-grooved grip with no sharp hand-zone edges (measured: smallest edge radius 2.7 mm against the rules' 2.0 mm, section corners ≥ 4.1 mm, finger grooves ≥ 8.9 mm, no step at the ring junction), a rounded 8 mm lip on a 24.9 mm ring bore, and a double-edged blade; hand zone anodized (blue), blade bare. It is a pilot candidate: computational, not qualified and not built. A fresh draft-d cohort (16 islands × 10,000 evaluations from a quasi-random Sobol start, running now) will replace it.*
+Ti-6Al-4V, laser powder-bed fusion: a hollow grip and blade core filled with a printed lattice, a 64.9 mm grip with a 24.9 mm finger ring, and a double-edged, double-serrated claw blade.
 
-**Where the cavities are.** The part is printed hollow: a ~0.9 mm skin over an internal TPMS lattice with a central web and powder-drain ports. Below, the outer shell is drawn as translucent glass and every internal cavity in solid orange; measured from the exported meshes, the grip is **67 %** hollow, the guard/neck **28 %**, the blade body **27 %** (behind solid edges and tip), while the ring itself is solid (the lattice starts at the ring-to-grip junction); **53.5 %** of the envelope overall.
+| Measure | Value | Target | Reading |
+|---|---|---|---|
+| W_ERGOLIGHT_v1 (draft d), Tier 2, Linux x86_64, h 0.2 mm | 80.55 | higher is better | ergonomic multiplier E 0.988 |
+| Mass of the print file (watertight 0.2 mm mesh × 0.00443 g/mm³) | 59.3 g | under 50 g | **above the limit** |
+| Edge A (inner): per-side angle, apex / bevel | 20.5–20.8° / 19.5–20.8° | 17.5–22.5° | ground from 57.0 to 3.0 mm from the point |
+| Edge B (spine): per-side angle, apex / bevel | 20.6–21.6° / 18.7–21.7° | 17.5–22.5° | ground from 65.1 to 3.1 mm from the point |
+| Steepest slope within 2 mm of either edge | 21.9° | no shoulder | one grind per edge |
+| Serrations, edge A / B: depth, teeth | 1.63 mm, 3 / 1.41 mm, 5 | both edges serrated | mean flank 39° / 36° |
+| Weakest tooth, edge A / B (180 N snag, 60 N pry) | SF 3.47 / 2.83 | ≥ 1 | meets target |
+| Solid tip, 1.82 N·m pry (TET10) | SF 0.64 | ≥ 1 | **below target** |
+| Lateral load at the tip (plate FE) | 337 N | ≥ 260 N | meets target |
+| Grip, worst case (beam formula) / hex8 voxel FE, spine 3427 N | SF 0.73 / 0.74 | ≥ 1 | **below target** |
+| Human-max twist 16.2 N·m (plate FE, blade body) / hex8 voxel FE, root | SF 1.09 / 1.69 | ≥ 1 | meets target |
+| Spine load 3427 N (plate FE) | SF 1.44 | ≥ 1 | meets target |
+| Ring, 300 N bearing / 30 N back at SF 2 | 8677 / 1686 N | ≥ 600 / 60 N | meets target |
+| Fatigue / blade-before-hand yield sequence | 0.94 / 0.56 | ≥ 1 / ≥ 1.2 | **below target** |
+| Lateral-torsional buckling of the blade (analytic) | λ 11.2 | ≥ 1 | meets target |
 
-[![X-ray view: translucent outer shell with the internal cavity volume in orange, filling the grip, guard and most of the blade body; the ring, the cutting edges and the tip are solid](docs/g3/g3-cavities-xray.jpg)](docs/g3/RENDERS.md)
+<table><tr><td width="50%"><img src="docs/g3/v3.0.0/img/cut_b.jpg" alt="Section across the blade 30 mm from the point"><br>Section across the blade, 30 mm from the point: one grind per edge, hollow lattice core.</td><td width="50%"><img src="docs/g3/v3.0.0/img/tip.jpg" alt="The point"><br>The point; the grinds end 3.0 mm (A) and 3.1 mm (B) from it.</td></tr><tr><td><img src="docs/g3/v3.0.0/img/edge_b.jpg" alt="Spine edge with serrations"><br>Spine edge (B): one bevel, serration scallops.</td><td><img src="docs/g3/v3.0.0/img/edge_a.jpg" alt="Inner edge"><br>Inner edge (A).</td></tr><tr><td><img src="docs/g3/v3.0.0/img/xray.jpg" alt="X-ray of the internal cavities"><br>X-ray: internal cavities in amber.</td><td><img src="docs/g3/v3.0.0/img/cut_full.jpg" alt="Lengthwise cut through the grip"><br>Lengthwise cut: skin, lattice and powder ports.</td></tr><tr><td><img src="docs/g3/v3.0.0/img/grip.jpg" alt="Grip"><br>Grip.</td><td><img src="docs/g3/v3.0.0/img/ring.jpg" alt="Ring"><br>Ring, 24.9 mm bore, 8 mm lip.</td></tr><tr><td><img src="docs/g3/v3.0.0/img/blade.jpg" alt="The blade"><br>The blade: both serrated edges and the lightening slots.</td><td><img src="docs/g3/v3.0.0/img/cut_x.jpg" alt="Section across the grip"><br>Section across the grip: skin and lattice core.</td></tr><tr><td><img src="docs/g3/v3.0.0/img/tip_edge.jpg" alt="Edge at the point"><br>The edge at the point.</td><td><img src="docs/g3/v3.0.0/img/top.jpg" alt="Edge-on view"><br>Edge-on: ring, grip and blade thickness.</td></tr><tr><td colspan="2"><img src="docs/g3/v3.0.0/img/side.jpg" alt="Plan view" width="100%"><br>Plan view.</td></tr></table>
 
-| Lengthwise section through the grip centre-line | Cross-section at the palm swell |
-|---|---|
-| [![Lengthwise cutaway: the grip is a hollow shell filled with lattice cells around a central web; ribbed cells in the guard; solid ring](docs/g3/g3-section-lengthwise.jpg)](docs/g3/RENDERS.md) | [![Cross-section of the grip at the palm swell: thin outer skin, central horizontal web, lattice struts and drain holes](docs/g3/g3-section-cross.jpg)](docs/g3/RENDERS.md) |
+Edge sections at four stations per edge, true scale, measured normal to the edge from the exact decoder law (dashed: a 20° per-side grind):
 
-*Renders: Blender Cycles of the exported meshes exactly (Rust decoder at commit `8ccb16326f4e`, grid 0.2 mm, both meshes watertight); nothing is smoothed for display. Provenance, checksums and settings: [docs/g3/RENDERS.md](docs/g3/RENDERS.md).*
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/g3/v3.0.0/img/edge_sections_dark.png"><img src="docs/g3/v3.0.0/img/edge_sections_light.png" alt="Blade cross-sections of both edges"></picture>
 
-## Published study: the v1 winner, pocket-smoothed
+## How evolution produced it
 
-[![ec3i042_r01_p10_c56 after surface-tension pocket smoothing at r = 0.75 mm, re-assessed fitness 80.56](docs/paper/figures/cover/cover-smoothed.png)](docs/paper/main-smoothed.pdf)
+24 independent islands ran 2,500 evaluations each (60,000 in all) on xbabe4 (arm64 macOS), from scrambled Sobol only (64 per island); no seeded or hand-made individuals. Each island is a CVT-MAP-Elites archive of 1,024 behaviour niches under W_ERGOLIGHT_v1 (draft d), with a three-tier cascade: analytic Tier 0, voxel-SDF plus plate-FE Tier 1, and Tier 2 with a watertight mesh and a solid-tip TET10 model (gates 62 and 71, h 0.4 mm). The run kept 3,177 elites, 68 of them at Tier 2. The winner's island (island13) started from a best measured score of 56.54 after its Sobol initialisation.
 
-*Published study design, `ec3i042_r01_p10_c56`, best by `W_ULTRALIGHT_v1` (3D mass `83.55 g`, not qualified): a flat Ti plate with two-sided isogrid pockets, after surface-tension pocket smoothing at r = 0.75 mm inside the CAD export, re-assessed by the full Stage-2 evaluator at `F = 80.561227` of 100 (battery 14/18). The smoothing rounds the pocket walls only; the plate's outer edges are as designed in v1, which is what the G3 cohort above replaces. Colour is the plate-model von Mises envelope stored by the assessment (lateral, tip-pry, torsion and ring-pull load cases at the battery's floor loads), with the scale on the image; grey marks the 4 mm tip zone that only the 3D solid-tip test covers. The as-exported design and its paper are kept as the record this one builds on ([docs/paper/main.pdf](docs/paper/main.pdf)).*
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/g3/v3.0.0/img/evolution_best_dark.png"><img src="docs/g3/v3.0.0/img/evolution_best_light.png" alt="Best measured score so far, every island"></picture>
 
-## Which evidence is retained
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/g3/v3.0.0/img/evolution_archive_dark.png"><img src="docs/g3/v3.0.0/img/evolution_archive_light.png" alt="Archive growth, every island"></picture>
 
-| Collection | Retained observations | Principal coverage limit |
-|---|---|---|
-| Historical genealogy | 1,984 births with recorded parentage and repeated memberships | Selected later evidence does not provide a population-wide assessment rate |
-| Intermediate screening | 3,649 proposals; 2,259 observed screens and 1,390 missing screens | Missing observations remain nonnumeric; later reporting profiles have a different scorer |
-| Ten completed native runs | 1,954,560 genome-and-score records | Complete score tables do not establish retained genealogy or per-birth later CAD assessments |
-| Illustrated assessed export | Individual 2000 geometry, plate fields, and selected numerical records | One computational case; physical observations are not reported in this study |
+The best design of island13 at each logged checkpoint, same camera and light:
 
-[Original run identities and overlapping captures](docs/paper/supplement/cohort-inventory.tex) · [Completed-population archive index](artifacts/versioned-evolution-archives-gen800-population-v1/index.gen800_population.sha256.json)
+<table><tr><td align="center"><img src="docs/g3/v3.0.0/img/lineage_00064.jpg" alt="evaluation 64" width="100%"><br>eval 64: 56.54, 72.1 g</td><td align="center"><img src="docs/g3/v3.0.0/img/lineage_00128.jpg" alt="evaluation 128" width="100%"><br>eval 128: 59.01, 65.3 g</td><td align="center"><img src="docs/g3/v3.0.0/img/lineage_00256.jpg" alt="evaluation 256" width="100%"><br>eval 256: 62.15, 68.0 g</td><td align="center"><img src="docs/g3/v3.0.0/img/lineage_00512.jpg" alt="evaluation 512" width="100%"><br>eval 512: 66.34, 59.9 g</td><td align="center"><img src="docs/g3/v3.0.0/img/lineage_01024.jpg" alt="evaluation 1024" width="100%"><br>eval 1,024: 70.94, 62.4 g</td><td align="center"><img src="docs/g3/v3.0.0/img/lineage_02048.jpg" alt="evaluation 2048" width="100%"><br>eval 2,048: 80.77, 56.0 g<br><b>winner of record</b></td><td align="center"><img src="docs/g3/v3.0.0/img/lineage_02500.jpg" alt="evaluation 2500" width="100%"><br>eval 2,500: 81.70, 51.3 g<br><b>rejected by the grid check</b></td></tr></table>
 
-![Every retained scored observation rendered through a point operation: native search above, historical and screening records below on separate score axes; unknown proposals have a nonnumeric coverage note](docs/paper/figures/population-latest.svg)
+Scores and masses under each frame are the search's own (h 0.4 mm).
 
-*The renderer visits 1,954,560 native, 1,984 historical, and 2,259 numeric screening records as 1,958,803 individual point operations. Points can overlap. Neutral occupancy does not replace minority classes with a bin majority, and incompatible scorers retain separate axes. The 1,390 unobserved proposals receive no invented score. [Source, ID, extrema, and point accounting](docs/paper/generated/population/point-rendering.v1.json).*
+**Choosing the winner on the print grid.** The search measures every design on a 0.4 mm voxel grid, and that grid can undercount mass. The search's own leader, `hz4i013_g00840_2a44149e` (Tier 2 score 81.53 at h 0.4), weighs 51.3 g at h 0.4 but 75.2 g at h 0.2 and 74.6 g at h 0.15, and its Tier-1 score falls from 75.06 to 66.65. So every number of record is measured at h 0.2 mm, the grid of the print file: every elite ordered by its record from the run, the top 32 re-evaluated at Tier 2 at h 0.2 on the search host, then the top 8 again on Linux x86_64, the platform of record (the winner scored 80.55 on the search host).
 
-![Every retained Run 5 birth on a positive log display, with cumulative best from those same observations](docs/paper/generated/population/positive/run-05-positive-points-gap.svg)
+Grid check: mass in grams at each voxel pitch h (mm). Tier 1 (voxel SDF + plate) of the top 8 of the h 0.4 Linux Tier-2 ranking; h 0.2 and h 0.15 agree within 3.3 % for every design.
 
-*Run 5's 195,456 original observations retain negative scores and zeros. Positions use generation+1 and a fixed gap to this run's final retained best, normalized by its complete original range, with a display floor of 1e-6; ticks recover original fitness and generation. Navy through teal/yellow/orange to red encodes original recorded fitness within Run 5 using the stated monotone log-axis contrast; warmer means better. Later source-order marks can overpaint earlier colors, so visible color is not density. The dark cumulative-best curve with a light halo first reaches the final stored maximum at G760, with seven exact ties and no higher retained value through G800. This is a retrospective stored-score plateau, not physical convergence, a comparable global winner or a new assessment. The [complete positive-view index](docs/paper/generated/population/positive/index.v1.json) keeps ten native runs, historical births and screening observations separate; screening file ordinals are not time and have no pooled trajectory. Both positive variants paint all 1,958,803 numeric observations; the 1,390 unknown screens remain nonnumeric. Summary comparisons draw no raw points.*
+| Design | h 0.4 | h 0.3 | h 0.25 | h 0.2 | h 0.15 |
+|---|---:|---:|---:|---:|---:|
+| `hz4i013_g00840_2a44149e` | 51.3 | 55.6 | 54.9 | 75.2 | 74.6 |
+| `hz4i013_g00995_d206e3c9` | 56.0 | 60.0 | 59.0 | 57.0 | 57.5 |
+| `hz4i002_g00995_6f4643f1` | 58.8 | 59.6 | 58.9 | 58.7 | 58.5 |
+| `hz4i013_g00345_be45c4bc` | 55.3 | 59.7 | 56.4 | 56.7 | 57.1 |
+| `hz4i002_g00479_76f5e0ac` | 58.0 | 61.7 | 58.2 | 59.5 | 58.9 |
+| `hz4i013_g00555_5cd1f106` | 50.6 | 54.1 | 54.4 | 52.1 | 53.1 |
+| `hz4i005_g00345_c7922cf1` | 56.8 | 61.0 | 57.6 | 58.5 | 59.7 |
+| `hz4i002_g00785_6b2ff4aa` | 59.1 | 62.0 | 58.8 | 61.8 | 59.8 |
 
-## Findings
+Final ranking:
 
-The papers state four findings; Paper B adds a fifth.
+| Rank | Design | Score (Linux Tier 2, h 0.2) | Mass at h 0.2 |
+|---:|---|---:|---:|
+| 1 | `hz4i013_g00995_d206e3c9` | 80.55 | 57.0 g |
+| 2 | `hz4i002_g00995_6f4643f1` | 80.44 | 58.7 g |
+| 3 | `hz4i013_g00345_be45c4bc` | 79.51 | 56.7 g |
+| 4 | `hz4i002_g00479_76f5e0ac` | 79.39 | 59.5 g |
+| 5 | `hz4i013_g00555_5cd1f106` | 79.27 | 52.1 g |
+| 6 | `hz4i004_g00501_cb3c9e4e` | 79.24 | 57.3 g |
+| 7 | `hz4i002_g00905_b274d4d9` | 78.94 | 59.6 g |
+| 8 | `hz4i007_g00005_98a9344b` | 78.77 | 53.7 g |
 
-1. **Coverage depends on the observation stage.** Extensive search records coexist with uneven parentage, geometry and later-assessment coverage, so a large archive is not a large assessed population.
-2. **A search rank is not an assessment outcome.** Historical ancestry exposes reuse. In the same 1,984-birth Run 1 cohort, Individual 1095 (stored birth rank 1, `f = 1.15727`) has the earlier saved `cert_pass_all=false`, while Individual 1543 (rank 8, `f = 1.15415`) has `cert_pass_all=true`. This categorical contrast does not establish a continuous later-assessment score reversal, later 26-predicate qualification, or a population-wide failure rate.
-3. **A score is only as comparable as its scorer.** An early evaluator overstated the canonical score of the same genomes by 11.97–13.12 points (a stored 92.29 re-assesses at 79.166355); its scorecards are excluded, and every Stage-2 score in the census of 1,761 is recomputed with `W_ULTRALIGHT_v1` from its own retained scorecard.
-4. **Solver agreement and error estimation answer different questions.** Selected solid-model observables agree within 0.05% between scikit-fem/PyAMG and DOLFINx/PETSc on a shared mesh, while separate plate sequences do not admit the retained extrapolated-error estimates.
-5. *(Paper B)* **A geometric post-process is a design change.** Surface-tension pocket smoothing keeps the pockets' removed volume to within 0.014%, yet the same setting moved the score by +0.071 on the design used to choose it and by −0.063 on the current best, so it is judged by a full re-assessment, design by design.
+## How the design is constrained and measured
 
-[Separate retained evidence paths](docs/paper/figures/evidence-architecture.svg) distinguish search observations from assessed exports.
+- **Edges (EDGE-1..5).** One primary grind per edge at 17.5–22.5° per side, measured normal to the actual serrated edge, at full height and unbroken to the point; only a short plunge by the guard is unsharpened.
+- **Serrations (SERR-1..4).** Both edges serrated, at least 3 full-depth teeth each, pitch 5–9 mm, depth at most a quarter of the pitch, and no serration within 18 mm of the point. Each tooth root is checked under a single-tooth snag and pry.
+- **Evolution designs the knife.** Populations start from scrambled Sobol samples only. Nobody edits an individual; the rules above are constraints on what the decoder can express.
+- **FE certification of this design (hex8 voxel FE on the as-built voxels, h 0.4 mm, von Mises q99.9 over the zone).** Grip zone: lateral 3.55, twist 5.50, spine 0.74. Root: lateral 2.08, twist 1.69, spine 1.29. Loads: lateral 260 N at the tip; human-max twist 16.2 N m; spine 3427 N at the blade centroid.
+- **Tip mesh convergence.** Solid-tip SF 0.585 / 0.638 / 0.611 at 0.4 / 0.15 (production) / 0.08 mm² planform meshes.
+- **Mass.** 59.3 g from the watertight 0.2 mm print mesh; the ranking counted 57.0 g on its 0.2 mm voxel grid and the search 56.0 g on its 0.4 mm grid.
 
-![Recorded shared ancestry in the historical cohort](docs/paper/figures/inheritance.svg)
+## Limits of this result
 
-[Results and scope](docs/paper/sections/08-results.tex) · [Numerical interpretation](docs/paper/sections/07-verification.tex)
+- It weighs 59.3 g, above the 50 g goal.
+- Its solid-tip SF is 0.64, below the 1 target.
+- Its grip SF (formula) is 0.73, below the 1 target.
+- Its grip spine SF (FE) is 0.74, below the 1 target.
+- Its fatigue SF is 0.94, below the 1 target.
+- Its yield-sequence ratio is 0.56, below the 1.2 target.
+- It is a computational result: nothing has been printed, heat-treated, sharpened or tested.
+- The archive was selected on the 0.4 mm search grid, which undercounts the mass of some designs (see the grid check); only the final ranking is measured at 0.2 mm, so designs the coarse grid scored low were not re-checked.
+- The cohort is 2,500 evaluations per island, a shortened run for this release.
 
-## Recovered recipe priorities and retained reporting vector
+## Download the CAD (binary STL, millimetres)
 
-![Twenty configured recipe priorities totaling 100 percent](docs/paper/generated/objective-priorities.v1.svg)
+| File | Triangles | Size | SHA-256 | Contents | Where |
+|---|---:|---:|---|---|---|
+| `hz4i013_g00995_d206e3c9_AMbuild_mm.stl` | 1,001,372 | 48 MB | `782fc9c3453a22ad…` | print file: skin + TPMS lattice + powder ports, 0.450 mm voxels (finest that fits 50 MiB) | [in git](docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_AMbuild_mm.stl) |
+| `hz4i013_g00995_d206e3c9_envelope_mm.stl` | 911,132 | 43 MB | `6c939b5fa82940e9…` | outer envelope, 0.300 mm voxels (finest that fits 50 MiB) | [in git](docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_envelope_mm.stl) |
+| `hz4i013_g00995_d206e3c9_AMbuild_h0.2_mm.stl` | 5,373,548 | 256 MB | `48bbd9db5a48139c…` | print file: skin + TPMS lattice + powder ports, 0.2 mm voxels | [release v3.0.0](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0) |
+| `hz4i013_g00995_d206e3c9_envelope_h0.2_mm.stl` | 2,063,960 | 98 MB | `0e0654b07d78ec33…` | outer envelope, 0.2 mm voxels | [release v3.0.0](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0) |
+| `hz4i013_g00995_d206e3c9_envelope_fineblade_mm.stl` | 3,843,106 | 183 MB | `680e0df5fdfccc03…` | outer envelope; blade (x >= 92 mm) re-meshed at 0.05 mm from the exact decoder law | [release v3.0.0](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0) |
 
-The chart shows the recovered recipe's configured weights, not achieved contributions or a new fitness calculation. The saved Individual 2002 vector below is a separate observation. [Recipe source and exact weight accounting](docs/paper/generated/objective-priorities.v1.json).
+Units are millimetres. The print file is the AM build: the outer skin, the internal TPMS lattice and the powder-removal ports. The files in git are written by [`ops/g3/export_best_stl.sh`](ops/g3/export_best_stl.sh) from the committed genome row, each at the finest voxel pitch that keeps it under 50 MiB; [`hz4i013_g00995_d206e3c9_print_spec.json`](docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_print_spec.json) lists their dimensions, volume, mass, pitch and watertightness.
 
-This twenty-term vector belongs to **Individual 2002's retained reporting record**, with saved score **74.207299/100**. Weights, normalized values, and contributions are stored summaries. A recovered historical recipe is source-bound; its original execution and call-input provenance remain unresolved. Several terms are partly compatible with defaults or proxies, distinct from reporting-layer missingness. Exact content links proposal observation 6420 and a later unqualified assessment summary (`W_CAD = -7.414831`); its full underlying CAD and scorecard files are not retained in the admitted tree. The [current interpretation](docs/paper/data/reporting-interpretation-contract.v2.json) preserves the original registry, score vector and evidence.
+## Reproduce
 
-| Reported objective | Weight (%) | Saved normalized value | Contribution (points) |
-|---|---:|---:|---:|
-| Mass preference | 22 | 0.340 | 7.470 |
-| Holder and compactness proxy | 8 | 1.000 | 8.000 |
-| Ring and claw form proxy | 7 | 1.000 | 7.000 |
-| Reference-form proxy | 9 | 1.000 | 9.000 |
-| Bore/collar comfort proxy | 9 | 0.875 | 7.875 |
-| Single-solid B-rep status | 5 | 1.000 | 5.000 |
-| Exported edge-profile proxy | 5 | 0.846 | 4.232 |
-| Exported point-profile proxy | 5 | 0.522 | 2.609 |
-| Certification lateral response, 180 N | 3.5 | 1.000 | 3.500 |
-| Certification lateral response, 260 N | 2.5 | 0.708 | 1.770 |
-| Strict lateral response, 260 N | 2 | 0.758 | 1.515 |
-| Ring traction, 1500 N | 2.5 | 1.000 | 2.500 |
-| Body torsion, 1.82 N m | 2.5 | 1.000 | 2.500 |
-| Local plate torsion, 1.82 N m | 2.5 | 0.260 | 0.650 |
-| Reported solid-tip/comparison proxy | 3 | 0.364 | 1.091 |
-| Reported support/stability proxy | 2 | 1.000 | 2.000 |
-| Elastic yield-order proxy | 3.5 | 1.000 | 3.500 |
-| Reported plate-study status | 2 | 1.000 | 2.000 |
-| Overload proxy | 2 | 0.483 | 0.967 |
-| Goodman fatigue proxy | 2 | 0.514 | 1.029 |
-
-[Exact vector, source hash, and limits](docs/paper/supplement/scores-and-composites.tex) · [Separate score definitions](docs/paper/sections/05-fitness.tex)
-
-## Separately assessed observations: Individual 2000
-
-Individual 2000 supplies the actual spatial fields. Its records distinguish certification minima over 0.25/0.125 mm² from strict 0.0625 mm² observations. The solid comparison shares a saved mesh, material, patch loads, and clamped cut-arc boundary. Selected scalar agreement does not verify every assembly operation or bound physical-model error.
-
-![Retained envelope, lateral, ring-traction and torsion fields with their own units and masks](docs/paper/generated/plate-fields.svg)
-
-[Field contract](docs/paper/field-inputs.v1.json) · [Assessment records](docs/paper/generated/assessment.json) · [Solver/recovery records](docs/paper/generated/verification.json) · [Historical battery](docs/paper/generated/battery-matrix.svg). The battery includes shared controls and completeness labels; its tally is not a count of successful physical assessments.
-
-## What it is
-
-Rust CAD and evaluation core, with a Vite + TypeScript + React evidence studio. The current automatic lane ranks candidates using weighted fitness and sends a selected subset to independent assessment. Other lanes retain their own algorithms and score conventions. [Genome and methodology](docs/paper/sections/03-genome.tex) · [Existing operational guide](docs/EVOLUTION_CERTIFICATION.md).
-
-**Score direction:** retained `W_ULTRALIGHT_v1` is higher-is-better. Historical Stage 1, Stage 2 and reporting paths used different proxies/constants. [PR #135](https://github.com/neverhuman/jarambit/pull/135) later changed Stage-2 ranking to the canonical score; that change does not establish the missing historical producer or make retained score regimes comparable. A future lower-is-better convention remains a separate product direction. [Full interpretation](docs/paper/sections/05-fitness.tex).
-
-## Next: the G3 ergonomic, hollow-AM cohort (in progress)
-
-A follow-on study, kept separate from every result above, evolves the hand zone and the blade together under a different objective. The published ring carried many times the load a finger can apply while the grip was a thin plate with sharp edges, and the v1 genome could not express a fix, so the cohort starts over:
-
-- **Representation and rules:** a 179-gene `G3.0` genome with a voxel decoder for the ring (8 mm comfort lip on a 24.9 mm bore), a compact grooved grip, the guard and a double-edged blade; the interior may be hollow (skin + TPMS lattice + powder ports) for additive manufacture. Rules: [`requirements/RS-karambit-v3.toml`](requirements/RS-karambit-v3.toml) (300 N bearing and 30 N ring-back at SF 2; 4.0 in sharpened arc per edge within an 85.725 mm straight-line reach).
-- **Objective:** `W_ERGOLIGHT_v1`, continuous and multi-objective with ergonomics as a multiplier on the score; no hard gates.
-- **Code:** [`crates/g3`](crates/g3/README.md), a standalone Cargo workspace with its own tests, review probes and known limitations; the v1 pipeline and its certification identity are untouched.
-- **Status:** a 16-island pilot ran on 2026-10-25; the owner then raised the 3D solid-tip weight (`W_ERGOLIGHT_v1` draft d, 0.030 → 0.070) because the pilot's double-edged points were weak, and a fresh draft-d cohort runs from a quasi-random Sobol start (G3 populations start only from Sobol; no hand-made individuals). The leading candidate is shown at the top of this page. All candidates are search observations; none is qualified or built, and none enters the papers' census.
-
-## Retained history and corrections
-
-The following generated panels preserve their original model/requirement scope. Historical screen records do not establish a current qualified design. Certification claims from v1.0.0 remain withdrawn; the separate automatic proof records `champion=null`.
-
-<details>
-<summary>Historical generated records, correction table, figures and release details</summary>
-
-<!-- GEN:HEAD:BEGIN -->
-[![version](https://img.shields.io/badge/version-v2.4.5-ff6f00?style=for-the-badge)](https://github.com/neverhuman/jarambit/releases/tag/v2.4.5)
-[![historical record](https://img.shields.io/badge/historical%20record-w282__p14__c01-2e7d32?style=for-the-badge)](docs/ENGINEERING_GATES_AND_EVOLUTION.md)
-[![mass](https://img.shields.io/badge/mass-75.568%20g%20%2875.323%20g%203D%29-00897b?style=for-the-badge)](docs/WHITEPAPER.md)
-[![G1](https://img.shields.io/badge/G1-0.878210-7b1fa2?style=for-the-badge)](docs/GLOBAL_METRIC.md)
-[![W_CAD](https://img.shields.io/badge/W__CAD-%2B1.7790%20%2816%2F16%20gates%29-1565c0?style=for-the-badge)](docs/ENGINEERING_GATES_AND_EVOLUTION.md)
-[![tip×SPG](https://img.shields.io/badge/tip%C3%97SPG-4.886-0277bd?style=for-the-badge)](docs/WHITEPAPER.md)
-[![status](https://img.shields.io/badge/status-engineering%20provisional%20%C2%B7%20not%20promoted-c62828?style=for-the-badge)](docs/PROVISIONAL.md)
-
-**Historical 16-gate screen record `w282_p14_c01` — 75.568 g (75.323 g 3D solid) · G1 0.878210 (`COMPLETE`) · W_CAD +1.7790 (16/16 engineering gates pass) · strict lateral 262.6 N (SF 1.010) · strict twist SF 1.125 · cert seq 1.201 · 3D P2 solid-tip SF 1.4093 × SPG 3.467 = 4.886 · Ti-6Al-4V 5.9 mm** *(historical Wave-27 reference `g3_tip+00_t60_tt3`: 84.80 g, G1 0.9804, seq 0.959 < 1.20)*
-
-**v1.0.0 certification claims withdrawn (#75–#81).** Neither Wave 283 candidate passes the fixed pipeline. The exported geometry and all requirement thresholds are unchanged. Native-only solid solves are unverified; the results below use actual scikit-fem P2 and DOLFINx solves on the same mesh.
-
-| candidate | raster / solid g | strict lateral N | cert seq | solid-tip SF | G1 | W_CAD | RS-v2 |
-|---|---:|---:|---:|---:|---:|---:|---|
-| `w283_p14_c01` | 75.382 / 75.199 | 176.720 | 0.7436 | 0.9577 | 0.623888 | -3.878704 | FAIL |
-| `w283_p10_c02` | 75.642 / 75.505 | 176.763 | 0.7179 | 0.9578 | 0.621632 | -3.964924 | FAIL |
-
-Source: `evidence/rs_v2/w283_ultrarunner/*_{cad_eval,rs,solid_tip}.json`; raw solver outputs and exact meshes are retained in `evidence/cert_integrity/recertified/`. The retracted certificates are preserved under `evidence/cert_integrity/v1.0.0-retracted/`. Lateral strength, failure sequence, human-maximum loads, fatigue, exported edge sharpness and full 0–10 mm point monotonicity remain blockers; the bore has no verified required fillet. Historical 16-gate screen results below do not establish an RS-v2 all-hard pass or manufacturing promotion. G1 above uses the full-precision RS inputs in each battery record; CAD-eval JSON retains its rounded D1 inputs.
-<!-- GEN:HEAD:END -->
-
-<!-- RS:BEGIN docs/wave27_diversity/plates/wave27_D1_index.json g3_tip+00_t60_tt3_D1 -->
-RS-karambit-v1: screen PASS · promotion FAIL (seq 0.959 < 1.2) · soft: mass 84.80 g over 80 g target (G penalty) · human aesthetic sign-off pending · not promoted
-<!-- RS:END -->
-
-<!-- GEN:FIGS:BEGIN -->
-📄 [White paper](docs/WHITEPAPER.md) · 📐 [Engineering gates & evolution paper](docs/ENGINEERING_GATES_AND_EVOLUTION.md) · 📋 [Work plan](docs/WORKPLAN.md) · 📊 [Live status](STATUS.md) · ⚖️ [Patent draft (not filed)](docs/PATENT_DRAFT.md) · 📦 [Release v2.4.5](https://github.com/neverhuman/jarambit/releases/tag/v2.4.5) · 🗺️ [Technology map](TECHNOLOGY_MAP.md)
-
-<img src="docs/figures/whitepaper/fig_readme_mass_vs_wave.png" width="96%" alt="Historical pre-#82 model: selected-candidate mass vs wave w20 through w282 from committed evidence JSON, with historical screen record w282_p14_c01 at 75.568 g (75.323 g 3D) labelled"/>
-
-*Historical (pre-#82 model) selected-candidate mass vs. wave (`w20` through `w282`, generated by `ops/render/whitepaper_hero_figs.py` and verified by `ops/ci/verify_figures.py`): historical 16-gate screen record **`w282_p14_c01` at `75.568 g` (`75.323 g` 3D solid), `G1 = 0.878210`, `W_CAD = +1.7790`**.*
-
-<img src="docs/figures/whitepaper/fig_web_studio.png" width="96%" alt="Corrected Wave 283 certificate scorecard"/>
-
-*Interactive 3D CAD & Gate Scorecard Web Studio (`web/` — Vite + TypeScript + React + Three.js, exported by `./target/release/jarambit export-web-data --out-dir web/public/data`): 3D STL/STEP inspection, measured 16-gate `W_CAD_v2` breakdown, failed `RS-karambit-v2` scorecard, and 23-subject × 18-evaluator CAD battery matrix. Wave 283 is rejected.*
-<!-- GEN:FIGS:END -->
-
-<!-- GEN:RELEASE:BEGIN -->
-## Release v2.4.5 & Documentation
-
-- **Historical 16-gate screen record (`w282_p14_c01`):** `75.568 g` 2.5D raster / `75.323 g` 3D watertight solid, locked `G1 = 0.878210` (`COMPLETE`), `W_CAD = +1.7790` (`16/16` engineering gates pass: strict 0.0625 mm² lateral `262.6 N` / `SF = 1.010`, strict 4–15 mm tip-submodel twist `SF = 1.125`, certified failure sequence `seq_ratio = 1.201 >= 1.20`, 3D P2 tetrahedral solid-tip `SF = 1.4093` with `0.021%` `dolfinx` v0.9.0 vs. `skfem` agreement, and `side.a4` Winkler+bore supported `seq = 4.042`).
-- **Historical 16-gate `W_CAD_v2` mass progression (`w274` → `w282`):** `w274_s2905_c01` (`84.979 g` / `85.021 g` 3D, `W_CAD = +1.4634`) → `w275_s2909_c01` (`81.774 g` / `81.804 g` 3D, `W_CAD = +1.5589`) → `w276_s2913_c01` (`79.995 g` / `80.050 g` 3D, `W_CAD = +1.6381`) → `w277_s2919_c01` (`79.509 g` / `79.656 g` 3D, `W_CAD = +1.6604`) → `w278_s2922_c01` (`78.580 g` / `78.597 g` 3D, `W_CAD = +1.7021`) → `w279_s2928_c01` (`77.535 g` / `77.414 g` 3D, `W_CAD = +1.7212`) → `w280_s2931_c01` (`76.965 g` / `76.834 g` 3D, `W_CAD = +1.7432`) → `w281_s2932_c01` (`75.911 g` / `75.695 g` 3D, `W_CAD = +1.7916`) → `w282_p10_c02` (`75.836 g` / `75.616 g` 3D, `W_CAD = +1.7978`) → `w282_p14_c01` (`75.568 g` / `75.323 g` 3D, `W_CAD = +1.7790`).
-- **Battery total across 23 subjects × 18 evaluators (414 cells):** `221 pass`, `81 fail`, `112 blocked`.
-- **Scientific assurance catalog (`T00`–`T19`):** **178 definitions with 356 required paired-control slots** in the committed catalog; run the software controls via `python3 -B ops/ci/science_suite.py`. Catalog entries do not establish execution.
-- **Full technical papers, tables, and evidence:**
-  - [White paper (`docs/WHITEPAPER.md`)](docs/WHITEPAPER.md) — page-1 summary, `w20`–`w282` mass curve, market comparison, `w282_p14_c01` 16-gate margin breakdown, and T1→T2 calibration.
-  - [Engineering gates & evolution paper (`docs/ENGINEERING_GATES_AND_EVOLUTION.md`)](docs/ENGINEERING_GATES_AND_EVOLUTION.md) — complete 23-subject × 18-evaluator CAD battery matrix, Margin-vs-Mass Pareto table, `RS-karambit-v2` gate tables, and 3D CAD/FEM gallery.
-  - [Master work plan (`docs/WORKPLAN.md`)](docs/WORKPLAN.md) · [Live status (`STATUS.md`)](STATUS.md) · [Wave log (`docs/WAVE_LOG.md`)](docs/WAVE_LOG.md) · [Release notes (`docs/RELEASES.md`)](docs/RELEASES.md) · [Global metric `G1` (`docs/GLOBAL_METRIC.md`)](docs/GLOBAL_METRIC.md) · [Provisional record (`docs/PROVISIONAL.md`)](docs/PROVISIONAL.md) · [Technology map (`TECHNOLOGY_MAP.md`)](TECHNOLOGY_MAP.md).
-<!-- GEN:RELEASE:END -->
-
-</details>
-
-## Install
-
-Build the Rust workspace with the toolchain pinned in `rust-toolchain.toml`. The evidence studio uses Node/npm; independent solver and CAD/render bindings require the runtimes listed in [PYTHON_EXCEPTIONS.md](PYTHON_EXCEPTIONS.md). [Stack migration policy](PY_TO_RUST_PLAN.md).
-
-```sh
-cargo build --release --locked
+```bash
+git checkout 80e669e5b558   # decoder a203278d80d2
+cargo build --release --manifest-path crates/g3/Cargo.toml --bin g3-evolve --example pilot_tools --example gripfe
+crates/g3/target/release/g3-evolve --out ~/jarambit_runs/evo_g3/<run>/island01/run --init 64 --evals 2500 \
+  --seed 4001 --host 4 --island 1 --commit 80e669e5b558 --h 0.4 --tier1-gate 62 --tier2-gate 71 --log-every 50
+crates/g3/target/release/examples/pilot_tools tier2 <root> <rank.jsonl> 32 tier2_top32.jsonl 0.2 4   # ranking of record
+crates/g3/target/release/examples/pilot_tools hconv <root> <id,id,...> 0.4,0.3,0.25,0.2,0.15 grid.jsonl 4   # grid check
+crates/g3/target/release/examples/pilot_tools export <root> hz4i013_g00995_d206e3c9 <out_dir> 0.2   # watertight envelope + AM build
+crates/g3/target/release/examples/gripfe run <root> hz4i013_g00995_d206e3c9 0.4 fe.jsonl 4             # hex8 voxel FE certification
 ```
 
-## Quick start
+The winner's genome row is [`evidence/g3/v3.0.0/winner_genome.csv`](evidence/g3/v3.0.0/winner_genome.csv); every island's logged history is in [`evidence/g3/v3.0.0/history/`](evidence/g3/v3.0.0/history/).
 
-**Reconstruct the paper and supplement from retained evidence:**
+The v1 command-line pipeline (`cargo run -p jarambit`) is still in the repository; its plate level is opt-in with `JARAMBIT_FEM=1`.
 
-```sh
-sh docs/paper/reproduce.sh build
-```
+## Repository
 
-This reads original evidence and writes reporting derivatives, figures, PDFs and build manifests. It invokes no new search, CAD export or mechanical solve. [Prerequisites and separate validation commands](docs/paper/README.md#reconstruct-the-reports).
-
-**Live Web Studio regeneration (invokes live `score_cad_native` / STL export; separate from report reconstruction):**
-
-```sh
-./target/release/jarambit export-web-data --out-dir web/public/data
-```
-
-A native screen is not an independent certification. The older Monte Carlo lane uses a beam surrogate by default; plate FEM is opt-in with `JARAMBIT_FEM=1`. See the [assessment guide](docs/EVOLUTION_CERTIFICATION.md) for runtime scope and the [paper build](docs/paper/README.md#reconstruct-the-reports) for reproducible documentation artifacts.
-
-## Research and project documentation
-
-[New white paper](docs/paper/README.md) · [Engineering spec](docs/PAPER_AND_README_ENGINEERING_SPEC.md) · [Living technical report](docs/WHITEPAPER.md) · [Detailed engineering reference](docs/ENGINEERING_GATES_AND_EVOLUTION.md) · [Work plan](docs/WORKPLAN.md) · [Status](STATUS.md) · [Release notes](docs/RELEASES.md) · [Technology map](TECHNOLOGY_MAP.md)
-
-The hand-built C.10d concept film and its cross-revision field/weight disclosures remain in [the pre-cleanup README at the audited snapshot](https://github.com/neverhuman/jarambit/blob/009f5ac520fa3afe8ed8025230eef604dbb7f922/README.md#concept-render-hand-built-design-not-pipeline-output). It is separate from evolved, assessed evidence.
-
-<details>
-<summary>Historical market comparison and original source caveats</summary>
-
-The snapshot below retains its historical naming and stored mass scalars. In the current paper, `w411c3_r02_p10_c12` identifies Individual 2002's saved reporting record. Its three round birth/screen pairs and a certificate-matched later unqualified assessment summary are retained; full underlying exported CAD and scorecard files are not retained in the admitted tree. The historical "Stage-2 leader" label does not establish those missing artifacts or prove the recovered recipe's original execution.
-
-<!-- MARKET:CENSUS:BEGIN -->
-## Market weight comparison
-
-The source-audited [October 13, 2026 census](docs/market/2026-10-13/README.md) consolidates eight supplied CSVs plus an additional qualifying polymer model. **119 identifiable entries meet the published 3.375 in blade minimum; 77 have comparable verified published knife weights.** Color-only duplicates are consolidated; genuine material variants and distinct custom examples remain separate. Missing weights and unresolved candidates stay visible in the evidence tables.
-
-**Committed genome-pipeline Stage-2 designs: `w282_p14_c01` at 75.568 g (75.323 g 3D solid, historical 16-gate screen record) and `w411c3_r02_p10_c12` at 101.139 g (101.138 g 3D solid, `W_ULTRALIGHT_v1 = 74.207299`, committed ultralight-v1 Stage-2 leader).** `w282_p14_c01` is nominally lighter than 72 of 77 plotted entries (93.5%) and 52.6% below their 159.32 g median; `g3_tip+00_t60_tt3` (84.80 g, lighter than 71 of 77 or 92.2%, 46.8% below median) remains the historical design of record; and `w411c3_r02_p10_c12` is lighter than 66 of 77 plotted entries (85.7%), 36.5% below median. TALIM titanium lists 51.03 g, so this does not support a lightest-overall claim. None is qualified: `w282_p14_c01` passes the 16 legacy gates but fails RS-karambit-v2 (fatigue, Gate-S sharpness and human-max fail; tip-point unverified); 0 candidates pass RS-karambit-v2 all-hard (champion = null). Stage-2 `W_ULTRALIGHT_v1` is for ranking only, not qualification. All are unmanufactured and unpromoted. Listed commercial lengths use different measurement conventions, and material/weight comparisons establish no performance equivalence.
-
-[Catalog by material](docs/market/2026-10-13/qualified_by_material.csv) · [Complete normalized census](docs/market/2026-10-13/census.csv) · [Exact-grade summary](docs/market/2026-10-13/material_summary.csv) · [Missing/conditional candidate queue](docs/market/2026-10-13/review_queue.csv)
-<!-- MARKET:CENSUS:END -->
-
-</details>
+- [`docs/g3/RELEASE_3.0.0.md`](docs/g3/RELEASE_3.0.0.md): what changed in this release and why.
+- [`crates/g3/README.md`](crates/g3/README.md): the G3 genome, decoder, objective and their known limitations.
+- [`docs/RELEASES.md`](docs/RELEASES.md): every release. [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md): the earlier v1 study, kept as a historical record.

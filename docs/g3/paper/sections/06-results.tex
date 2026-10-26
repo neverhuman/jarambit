@@ -1,0 +1,113 @@
+\section{Results}\label{sec:results}
+\subsection{The evolution}
+The cohort ran \gIslands{} islands of \gEvalsIsland{} evaluations each, \gEvalsTotal{} in all, from \gStarted{} to
+\gFinished{} UTC, and kept \gElites{} elites, \gTierTwo{} of them at Tier 2. Fig.~\ref{fig:evo} shows the best measured
+score of every island against evaluations, and how the archives filled. The winner came from island \gWinIsland, which
+started from a best measured score of \gScoreSobol{} after its Sobol initialisation. Fig.~\ref{fig:lineage} shows that
+island's best design at each logged checkpoint, from the same camera.
+
+\subsection{Choosing the winner on the print grid}
+The search measures every design on an $h = \gH$ mm grid, and that grid can undercount mass. The search's own leader,
+\gLeader{} (Tier-2 score \gLeaderTierTwo{} at $h = \gH$ mm), weighs \gLeaderMassA{} g at $h = \gH$ mm but
+\gLeaderMassB{} g at $h = 0.2$ mm and \gLeaderMassC{} g at $h = 0.15$ mm, and its Tier-1 score falls from
+\gLeaderScoreA{} to \gLeaderScoreB{} (Table~\ref{tab:grid}). The two finest grids agree within \gGridAgree~\% for every design, so every
+number of record is measured at $h = \gHRank$ mm, the grid of the print file.
+The final ranking ordered every elite by its record from the run, re-evaluated the top 32 at Tier 2 at
+$h = \gHRank$ mm, and the top 8 again on the platform of record (Table~\ref{tab:top}).
+
+\begin{table}[t]
+\caption{Grid check: mass (g) of the top 8 of the search-grid ranking at five voxel pitches $h$ (mm), Tier 1}\label{tab:grid}
+\centering
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Design & 0.4 & 0.3 & 0.25 & 0.2 & 0.15 \\
+\midrule
+\gGridRows
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{evolution_best.pdf}\\[2pt]
+\includegraphics[width=\linewidth]{evolution_archive.pdf}
+\caption{Top: best measured score so far of each island (the winning island in colour; the dot marks its first full-3D
+best). Bottom: filled niches and Tier-2 elites per island.}\label{fig:evo}
+\end{figure}
+
+\begin{figure*}[t]
+\centering
+\input{generated/lineage.tex}
+\caption{Best design of island \gWinIsland{} at each logged checkpoint: evaluation, best measured score and mass on the
+search grid. Same camera, light and material for every frame; geometry is the exported mesh.}\label{fig:lineage}
+\end{figure*}
+
+\begin{table}[t]
+\caption{Final ranking: Tier 2 at $h = \gHRank$ mm on the platform of record}\label{tab:top}
+\centering
+\begin{tabular}{@{}rlrr@{}}
+\toprule
+Rank & Design & Score & Mass (g) \\
+\midrule
+\gTopEightRows
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{The best individual}
+The best individual, \gDesign{} (genome hash \gGenomeSha), scores \gScore{} with a weighted base of \gBase{} and an
+ergonomic multiplier of \gE. Its grip is \gLg{} mm long with a swell perimeter of \gSwellPerim{} mm and a height-to-width
+ratio of \gHoT; the guard is \gGuardH{} mm high and the reach of the blade from the guard is \gReach{} mm. As printed it
+weighs \gMassG{} g. Fig.~\ref{fig:hero} shows it; Table~\ref{tab:best} lists its measurements.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.49\textwidth]{hero.jpg}\hfill\includegraphics[width=0.49\textwidth]{xray.jpg}\\[3pt]
+\includegraphics[width=0.32\textwidth]{cut_b.jpg}\hfill\includegraphics[width=0.32\textwidth]{tip.jpg}\hfill
+\includegraphics[width=0.32\textwidth]{edge_b.jpg}
+\caption{\gDesign. Top: the knife, and an x-ray with every internal cavity in amber. Bottom: a section across the blade
+30 mm from the point, the point, and the spine edge with its serrations. Cycles renders of the exported meshes; the blade
+is meshed at 0.05 mm from the exact decoder law, the rest at 0.2 mm voxels.}\label{fig:hero}
+\end{figure*}
+
+\begin{table}[t]
+\caption{Measurements of the best individual (platform of record)}\label{tab:best}
+\centering
+\begin{tabular}{@{}lr@{}}
+\toprule
+Measure & Value \\
+\midrule
+Mass, printed (watertight mesh) & \gMassG{} g \\
+Edge A per-side angle, apex / bevel & \gEdgeAApexLo--\gEdgeAApexHi / \gEdgeABevelLo--\gEdgeABevelHi\textdegree \\
+Edge B per-side angle, apex / bevel & \gEdgeBApexLo--\gEdgeBApexHi / \gEdgeBBevelLo--\gEdgeBBevelHi\textdegree \\
+Grind ends from the point, A / B & \gEdgeATo{} / \gEdgeBTo{} mm \\
+Unsharpened plunge, A / B & \gEdgeAPlunge{} / \gEdgeBPlunge{} mm \\
+Serration depth, A / B & \gEdgeADepth{} / \gEdgeBDepth{} mm \\
+Teeth, A / B & \gEdgeATeeth{} / \gEdgeBTeeth \\
+Weakest tooth SF, A / B & \gEdgeAToothSF{} / \gEdgeBToothSF \\
+Solid tip SF (1.82 N$\cdot$m) & \gTipSF \\
+Lateral capacity (plate FE) & \gLatN{} N \\
+Grip SF (formula) & \gGripSF \\
+Human-max twist SF (plate) & \gHmTwist \\
+Spine 3427 N SF (plate) & \gHmSpine \\
+Ring bearing / back capacity & \gRingBear{} / \gRingBack{} N \\
+Fatigue SF / yield-sequence ratio & \gFat{} / \gSeq \\
+Buckling factor $\lambda$ & \gBuck \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Edges and serrations}
+Fig.~\ref{fig:edges} plots the blade section at four stations of each edge, measured along the true edge normal with the
+exact decoder law. Every station of an edge lies on one line: edge A at \gEdgeAApexLo--\gEdgeAApexHi\textdegree{} per side
+and edge B at \gEdgeBApexLo--\gEdgeBApexHi\textdegree, with no slope steeper than \gEdgeASteep\textdegree{} and
+\gEdgeBSteep\textdegree{} within 2 mm of the edge. Both edges are serrated over the rear part of the blade, and the
+grinds run on through the plain point region to \gEdgeATo{} and \gEdgeBTo{} mm from the point. Under the \gToothSnag{} N snag and \gToothPry{} N pry the weakest tooth has a safety factor
+of \gToothMin, which \gToothReading{} of 1.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{edge_sections.pdf}
+\caption{Upper half of the blade section at four stations of each edge, true scale, against a 20\textdegree{} per-side
+grind (dashed). Profiles stop where a lightening slot begins.}\label{fig:edges}
+\end{figure}
