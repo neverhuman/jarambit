@@ -281,10 +281,10 @@ pub static G3_GENES: [GeneSpec; G3_NUM_GENES] = [
     lin_gene!("angle_in", E, 17.5, 22.5, 20.0), // EDGE-3: per-side primary angle, 35-45 deg inclusive
     lin_gene!("edge_t_in", E, 0.05, 0.12, 0.08),
     lin_gene!("grind_curv_in", E, -0.35, 0.45, 0.0),
-    lin_gene!("ser_s0_in", E, 0.08, 0.35, 0.15),
-    lin_gene!("ser_s1_in", E, 0.45, 0.82, 0.65),
+    lin_gene!("ser_s0_in", E, 0.16, 0.30, 0.20), // SERR-3: starts past the 5-12 % plunge
+    lin_gene!("ser_s1_in", E, 0.55, 0.82, 0.65),
     lin_gene!("ser_pitch_in", E, 2.0, 8.0, 4.5),
-    lin_gene!("ser_depth_in", E, 0.0, 2.2, 0.8),
+    lin_gene!("ser_depth_in", E, 0.8, 2.2, 0.8), // SERR-1: both edges serrated
     lin_gene!("ser_duty_in", E, 0.30, 0.80, 0.55),
     lin_gene!("w_scallop_in", E, 0.0, 1.0, 0.7),
     lin_gene!("w_tooth_in", E, 0.0, 1.0, 0.2),
@@ -295,10 +295,10 @@ pub static G3_GENES: [GeneSpec; G3_NUM_GENES] = [
     lin_gene!("angle_sp", E, 17.5, 22.5, 20.0),
     lin_gene!("edge_t_sp", E, 0.05, 0.12, 0.08),
     lin_gene!("grind_curv_sp", E, -0.35, 0.45, 0.0),
-    lin_gene!("ser_s0_sp", E, 0.10, 0.40, 0.18),
-    lin_gene!("ser_s1_sp", E, 0.45, 0.80, 0.62),
+    lin_gene!("ser_s0_sp", E, 0.16, 0.30, 0.20),
+    lin_gene!("ser_s1_sp", E, 0.55, 0.80, 0.62),
     lin_gene!("ser_pitch_sp", E, 2.0, 8.0, 4.5),
-    lin_gene!("ser_depth_sp", E, 0.0, 2.0, 0.7),
+    lin_gene!("ser_depth_sp", E, 0.8, 2.0, 0.8),
     lin_gene!("ser_duty_sp", E, 0.30, 0.80, 0.55),
     lin_gene!("w_scallop_sp", E, 0.0, 1.0, 0.7),
     lin_gene!("w_tooth_sp", E, 0.0, 1.0, 0.3),

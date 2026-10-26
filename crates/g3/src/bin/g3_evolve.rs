@@ -2,7 +2,7 @@ use std::fmt::Write as _;
 
 use jarambit_g3::g3_genome::G3Genome;
 use jarambit_g3::g3_namespace::{G3CohortConfig, format_g3_design_id, validate_g3_design_id};
-use jarambit_g3::g3_qd::{g3_decoder_sha256, run_g3_cvt_map_elites, splitmix64};
+use jarambit_g3::g3_qd::{g3_decoder_sha256, run_g3_cvt_map_elites_logged, splitmix64};
 use jarambit_g3::g3_sdf::extract_watertight_mesh_fail_closed;
 
 fn main() {
@@ -98,7 +98,11 @@ fn main() {
         std::process::exit(1);
     }
 
-    let arch = run_g3_cvt_map_elites(n_init, n_evals, seed, t1_gate, t2_gate, h_vox, &commit);
+    let log_every = narg("--log-every", 100);
+    let mut history = Vec::new();
+    let arch = run_g3_cvt_map_elites_logged(
+        n_init, n_evals, seed, t1_gate, t2_gate, h_vox, &commit, log_every, &mut history,
+    );
     if arch.elites.is_empty() {
         eprintln!("g3-evolve error: archive produced zero elites");
         std::process::exit(1);
@@ -144,6 +148,15 @@ fn main() {
     }
     if let Err(e) = std::fs::write(format!("{out_dir}/archive.jsonl"), jsonl) {
         eprintln!("g3-evolve error writing archive.jsonl: {e}");
+        std::process::exit(1);
+    }
+    // Evolution history (best-so-far, archive growth; best genome rows at power-of-two checkpoints and the end)
+    let history_jsonl: String = history
+        .iter()
+        .map(|h| serde_json::to_string(h).unwrap() + "\n")
+        .collect();
+    if let Err(e) = std::fs::write(format!("{out_dir}/history.jsonl"), history_jsonl) {
+        eprintln!("g3-evolve error writing history.jsonl: {e}");
         std::process::exit(1);
     }
     if let Err(e) = jarambit_g3::g3_qd::CvtMapElitesArchive::load_and_verify_persisted_dir(&out_dir, &commit) {
