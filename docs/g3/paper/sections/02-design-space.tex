@@ -1,0 +1,29 @@
+\section{Design space}\label{sec:design}
+\subsection{Genome and decoder}
+A G3.0 genome is 179 real genes in the unit cube (\src{crates/g3/src/g3_genome.rs}{\code{g3_genome.rs}}). The decoder
+maps them to physical parameters and builds a signed distance field (SDF) of the whole knife
+(\src{crates/g3/src/g3_sdf.rs}{\code{g3_sdf.rs}}): a finger ring with a fixed 24.9 mm bore and 8 mm lip, a compact grip
+with finger grooves and a textured surface, a guard, and a curved claw blade whose straight-line reach from the guard
+is capped at 85.725 mm. The interior of the grip and blade is a skin over a triply periodic minimal-surface lattice
+with powder-removal ports, so the part can be printed hollow. The decoder revision of this release, r2, is identified by
+the hash \gDecoder{} of its source files; an archive made under another decoder fails its integrity check.
+
+\subsection{Edge rules (EDGE-1..5)}
+Each cutting edge has one primary grind whose per-side angle is a gene bounded to 17.5--22.5\textdegree{} (35--45\textdegree{}
+inclusive, centred on 20\textdegree{} as a hard-use edge for titanium). The bevel depth is the true distance to the
+actual, serrated edge polyline, so the angle is the same on the curved claw as on the straight part, and the grind is
+carried at full height until it meets the blade body, with no micro-bevel and no shoulder (EDGE-1, -2, -3). Both grinds
+run unbroken to the point; only a plunge of 5--12\,\% of the edge length next to the guard is unsharpened, inside a
+4.0\,in sharpened-length cap per edge (EDGE-4). The sharpness check reads the true edge-normal section over the first
+2 mm at every steady station, so a shoulder behind the apex would cost score (EDGE-5).
+
+\subsection{Serration rules (SERR-1..4)}
+Both edges are serrated. The serration depth is 0.8--2.2 mm on the inner edge and 0.8--2.0 mm on the spine edge
+(SERR-1); every serrated span holds at least three full-depth teeth (SERR-2); the span starts past the plunge and ends at
+least 18 mm from the point, so the piercing point stays plain (SERR-3). To keep teeth from snapping, the pitch is
+5--9 mm and the depth is at most a quarter of the pitch (SERR-4). Each tooth is checked as built
+(\src{crates/g3/src/g3_qd.rs}{\code{serration_tooth_strength}}): its root is the segment between two neighbouring gullet
+bottoms, with the thickness of the exact blade law along it; a \gToothSnag{} N snag along the edge, amplified by the
+Inglis notch factor $K_t = 1 + 2\sqrt{d/\rho}$ for gullet depth $d$ and radius $\rho$~\cite{inglis1913}, and a
+\gToothPry{} N pry across the blade load the tooth tip. The decoder test suite requires every tooth of 60 Sobol designs
+to reach a safety factor of at least 1 under both cases.

@@ -1,0 +1,12 @@
+\section{Objective}\label{sec:objective}
+Designs are ranked by W\_ERGOLIGHT\_v1, draft d (\src{crates/g3/src/ergolight.rs}{\code{ergolight.rs}}):
+\begin{equation}
+\mathrm{score} = 100\, E \sum_i w_i\, s_i, \qquad E = \prod_j e_j^{\beta_j},
+\end{equation}
+where $s_i \in [0,1]$ are term scores with weights $w_i$ summing to 1, and $E$ is a geometric-mean ergonomic
+multiplier over eight hand-zone factors $e_j$ (ring lip, grip section, hand-edge radii, finger index, grip length, guard,
+grip surface and balance). Mass carries the largest weight, $w = 0.370$, so lighter is always better; the solid tip
+carries $0.070$; the remaining terms cover lateral and ring capacities, blade and human-maximum twist, spine load,
+buckling, fatigue, failure sequence, sharpness and point profile, hollow-grip structure, watertightness, karambit form,
+fairness and buildability. No term is a hard gate: a design below a target loses score in proportion, and the search
+can still learn from it. Safety-factor terms use a saturating map that rewards factors up to about 1 and little beyond.

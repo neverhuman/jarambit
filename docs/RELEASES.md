@@ -2,6 +2,20 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v3.0.0 — 2026-10-26 (major: the G3 generation; README and paper generated from one release receipt)
+
+- **Scope change (owner, 2026-10-26).** G3 becomes the headline: an evolved one-piece Ti-6Al-4V karambit for laser
+  powder-bed fusion, with a hollow lattice-filled grip and blade core. The README and the new G3 paper
+  (`docs/g3/paper/g3-v3.0.0.pdf`) describe only the best individual of the v3.0.0 cohort of record. Both are generated from
+  `evidence/g3/v3.0.0/release.json`, and the README also shows the evolution.
+- **Decoder r2** (#170, #171): one ideal grind on both full edges (EDGE-1..5); both edges serrated with teeth that do
+  not snap (SERR-1..4); measured human-max twist and buckling; a converged solid-tip mesh; evolution history logging.
+- **Process.** #171 and the release PR were merged under the owner's "no need to wait for CI" instruction (labelled on
+  each PR). G3.1 (#169) moves to v3.1. Details, the audit status table and the owner requests are in
+  [`docs/g3/RELEASE_3.0.0.md`](g3/RELEASE_3.0.0.md).
+- **Unchanged.** The v1 study (white paper, Paper B, v1 evidence and certification inputs) is untouched apart from the
+  version header.
+
 ## v2.4.5 — 2026-10-25 (Inferno [0.15, 0.95] stress ramp and 3D raking lighting on cover and hero figures)
 
 - **Owner request.** "Pick a really good color map that looks great (not the default)… also, we want great 3D lighting/shading as well."

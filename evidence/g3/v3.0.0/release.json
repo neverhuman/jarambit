@@ -1,0 +1,549 @@
+{
+ "arm64_score_100": 80.54776,
+ "blade": {
+  "edge_inner": {
+   "edge_arc_mm": 67.06685244809702,
+   "ground_from_mm_from_point": 56.99193912308173,
+   "ground_stations": 28,
+   "ground_to_mm_from_point": 3.0035773251562716,
+   "mean_flank_deg": 38.574472995432174,
+   "per_side_angle_apex_deg": [
+    20.512319860264714,
+    20.808737587774864
+   ],
+   "per_side_angle_bevel_deg": [
+    19.513032212903997,
+    20.831937674173346
+   ],
+   "primary_angle_gene_deg": 20.80677115040249,
+   "serration_depth_mm": 1.631175053719499,
+   "sharpened_arc_mm": 60.72263812950051,
+   "stations": 34,
+   "steepest_within_2mm_deg": 20.861811998316277,
+   "teeth": 3,
+   "teeth_checked": 2,
+   "thickness_0p05mm_in_mm": [
+    0.10339772975336678,
+    0.10398827838778685
+   ],
+   "tooth_root_sf_min": 3.4749589860185894,
+   "unground_plunge_mm": 9.711697432983435
+  },
+  "edge_spine": {
+   "edge_arc_mm": 77.3357670621577,
+   "ground_from_mm_from_point": 65.12217889598739,
+   "ground_stations": 32,
+   "ground_to_mm_from_point": 3.095214038505574,
+   "mean_flank_deg": 36.19304670703615,
+   "per_side_angle_apex_deg": [
+    20.576171981034413,
+    21.607528542243223
+   ],
+   "per_side_angle_bevel_deg": [
+    18.65496201727645,
+    21.716842635779646
+   ],
+   "primary_angle_gene_deg": 21.59825702481368,
+   "serration_depth_mm": 1.4103024370848765,
+   "sharpened_arc_mm": 69.5415625035508,
+   "stations": 39,
+   "steepest_within_2mm_deg": 21.85740949000078,
+   "teeth": 5,
+   "teeth_checked": 4,
+   "thickness_0p05mm_in_mm": [
+    0.12934592721828364,
+    0.1314082586180808
+   ],
+   "tooth_root_sf_min": 2.8307800401955188,
+   "unground_plunge_mm": 11.87234306249259
+  },
+  "gate_s": {
+   "max_apex_mm": 0.09181976841826715,
+   "max_half_angle_deg": 21.746458561096897
+  },
+  "reach_chord_mm": 69.2531899571499,
+  "tooth_loads_n": {
+   "pry_across_blade": 60.0,
+   "snag_along_edge": 180.0
+  }
+ },
+ "cad_in_git": [
+  "docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_AMbuild_mm.stl",
+  "docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_envelope_mm.stl",
+  "docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_print_spec.json"
+ ],
+ "cohort": {
+  "elites": 3177,
+  "evaluations_per_island": 2500,
+  "evaluations_total": 60000,
+  "finished_utc": "2026-10-26T12:32:55Z",
+  "h_mm": 0.4,
+  "host": "xbabe4 (arm64 macOS)",
+  "init": "scrambled Sobol only (64 per island); no seeded or hand-made individuals",
+  "islands": 24,
+  "ranking": "every elite by its h 0.4 record from the run; Tier 2 at h 0.2 for the top 32 (arm64); Tier 2 at h 0.2 again on Linux x86_64 for the top 8",
+  "ranking_h_mm": 0.2,
+  "run": "g3-v3-cohort-20261026",
+  "started_utc": "2026-10-26T11:03:49Z",
+  "tier2_elites": 68,
+  "tier_gates": [
+   62,
+   71
+  ],
+  "top8_linux": [
+   {
+    "design_id": "hz4i013_g00995_d206e3c9",
+    "mass_g": 57.00229848002011,
+    "score_100": 80.54776
+   },
+   {
+    "design_id": "hz4i002_g00995_6f4643f1",
+    "mass_g": 58.73371968002268,
+    "score_100": 80.438087
+   },
+   {
+    "design_id": "hz4i013_g00345_be45c4bc",
+    "mass_g": 56.68390552000361,
+    "score_100": 79.510806
+   },
+   {
+    "design_id": "hz4i002_g00479_76f5e0ac",
+    "mass_g": 59.484835040005535,
+    "score_100": 79.3903
+   },
+   {
+    "design_id": "hz4i013_g00555_5cd1f106",
+    "mass_g": 52.05076344002298,
+    "score_100": 79.267398
+   },
+   {
+    "design_id": "hz4i004_g00501_cb3c9e4e",
+    "mass_g": 57.31952192000642,
+    "score_100": 79.241721
+   },
+   {
+    "design_id": "hz4i002_g00905_b274d4d9",
+    "mass_g": 59.59363584000059,
+    "score_100": 78.938306
+   },
+   {
+    "design_id": "hz4i007_g00005_98a9344b",
+    "mass_g": 53.65495504000605,
+    "score_100": 78.771234
+   }
+  ]
+ },
+ "descriptors": {
+  "grip_roundness_h_over_t": 1.5910138152146578,
+  "groove_articulation_mm": 6.920425860608145,
+  "hook_drop_mm": 25.901049596226354,
+  "inner_turn_deg": 50.859664975902774,
+  "mass_g": 57.00229848002011,
+  "porosity_frac": 0.522206299894663,
+  "silhouette_complexity": 5.733258105216059,
+  "surface_energy": 0.12465170087779068
+ },
+ "design_id": "hz4i013_g00995_d206e3c9",
+ "evolution": {
+  "figures": {
+   "evolution_archive_dark": "docs/g3/v3.0.0/img/evolution_archive_dark.png",
+   "evolution_archive_light": "docs/g3/v3.0.0/img/evolution_archive_light.png",
+   "evolution_best_dark": "docs/g3/v3.0.0/img/evolution_best_dark.png",
+   "evolution_best_light": "docs/g3/v3.0.0/img/evolution_best_light.png"
+  },
+  "history_dir": "evidence/g3/v3.0.0/history",
+  "lineage": [
+   {
+    "best_genome_sha256": "84419e769e6016641db890b4fbff3bcb3efd0a46d6d2892e79c8515089b8194d",
+    "best_mass_g": 72.08779520001994,
+    "best_score_100": 56.538512,
+    "best_tier": "Tier1SdfAndPlate",
+    "evals": 64,
+    "image": "docs/g3/v3.0.0/img/lineage_00064.jpg",
+    "role": null
+   },
+   {
+    "best_genome_sha256": "fc9b8333144ca0fa3ff7ce76b33ea9c55881a244196e81a3bb200fca78ae1500",
+    "best_mass_g": 65.29947584002399,
+    "best_score_100": 59.012646,
+    "best_tier": "Tier1SdfAndPlate",
+    "evals": 128,
+    "image": "docs/g3/v3.0.0/img/lineage_00128.jpg",
+    "role": null
+   },
+   {
+    "best_genome_sha256": "9a8ba47250b97e60da41062072eb5475e960762863583ba857873bab2ff10486",
+    "best_mass_g": 67.95747584001984,
+    "best_score_100": 62.148006,
+    "best_tier": "Tier1SdfAndPlate",
+    "evals": 256,
+    "image": "docs/g3/v3.0.0/img/lineage_00256.jpg",
+    "role": null
+   },
+   {
+    "best_genome_sha256": "2483cae0333d72d4b1bbce3e141f06e3e6903632ec89c363e38a7b3ba4f5284a",
+    "best_mass_g": 59.898703360007296,
+    "best_score_100": 66.34282,
+    "best_tier": "Tier1SdfAndPlate",
+    "evals": 512,
+    "image": "docs/g3/v3.0.0/img/lineage_00512.jpg",
+    "role": null
+   },
+   {
+    "best_genome_sha256": "283b1543477e9898d338d50cd9d0f3e5d1a4da4852a316d5d64d215696641c5b",
+    "best_mass_g": 62.40757184001781,
+    "best_score_100": 70.935773,
+    "best_tier": "Tier1SdfAndPlate",
+    "evals": 1024,
+    "image": "docs/g3/v3.0.0/img/lineage_01024.jpg",
+    "role": null
+   },
+   {
+    "best_genome_sha256": "d206e3c9f4c30ec51e06b08784bc0943786e0523fed3cdc3c141788165bd61ed",
+    "best_mass_g": 55.96599744000671,
+    "best_score_100": 80.769797,
+    "best_tier": "Tier2Full3D",
+    "evals": 2048,
+    "image": "docs/g3/v3.0.0/img/lineage_02048.jpg",
+    "role": "winner of record"
+   },
+   {
+    "best_genome_sha256": "2a44149e5c3b8c7a6d0560902ddc54083c24a138b3107b1a0766f8e4a4601a1f",
+    "best_mass_g": 51.27657664000445,
+    "best_score_100": 81.699085,
+    "best_tier": "Tier2Full3D",
+    "evals": 2500,
+    "image": "docs/g3/v3.0.0/img/lineage_02500.jpg",
+    "role": "rejected by the grid check"
+   }
+  ],
+  "summary": "evidence/g3/v3.0.0/evolution_summary.json",
+  "winner_island": "island13",
+  "winner_island_after_sobol": {
+   "best_score_100": 56.538512,
+   "evals": 64,
+   "tier": "Tier1SdfAndPlate"
+  }
+ },
+ "fe_certification": {
+  "allow_mpa": 674.237230960503,
+  "formula_sf": {
+   "sf_lat": 5.068185193192327,
+   "sf_spine": 0.8960830740290979,
+   "sf_twist": 12.693184631535464
+  },
+  "grip_sf": {
+   "lat": 3.5507938003611406,
+   "spine": 0.7442507201565155,
+   "twist": 5.501311035170241
+  },
+  "hex8_voxel_fe_h_mm": 0.4,
+  "loads": "lateral 260 N at the tip; human-max twist 16.2 N m; spine 3427 N at the blade centroid",
+  "root_sf": {
+   "lat": 2.075064176417368,
+   "spine": 1.28820005542982,
+   "twist": 1.6879846628864787
+  },
+  "stat": "von Mises q99.9 over the zone",
+  "tip_tet10_sf_by_mesh_area_mm2": {
+   "area_0p08": 0.611,
+   "area_0p15_production": 0.638,
+   "area_0p4": 0.585
+  }
+ },
+ "figures": {
+  "edge_sections_dark": "docs/g3/v3.0.0/img/edge_sections_dark.png",
+  "edge_sections_light": "docs/g3/v3.0.0/img/edge_sections_light.png",
+  "edge_sections_pdf": "docs/g3/v3.0.0/img/edge_sections.pdf",
+  "evolution_archive_pdf": "docs/g3/v3.0.0/img/evolution_archive.pdf",
+  "evolution_best_pdf": "docs/g3/v3.0.0/img/evolution_best.pdf"
+ },
+ "grid_check": {
+  "evaluation": "Tier 1 (voxel SDF + plate) of the top 8 of the h 0.4 Linux Tier-2 ranking",
+  "h02_vs_h015_max_rel_pct": 3.27102238680248,
+  "h_mm": [
+   0.4,
+   0.3,
+   0.25,
+   0.2,
+   0.15
+  ],
+  "rows": [
+   {
+    "design_id": "hz4i013_g00840_2a44149e",
+    "mass_g": [
+     51.27657664000445,
+     55.60716743999996,
+     54.89143781247932,
+     75.21119328002108,
+     74.5920852749779
+    ],
+    "tier1_score_100": [
+     75.061658,
+     73.457689,
+     73.803983,
+     66.652253,
+     66.842839
+    ]
+   },
+   {
+    "design_id": "hz4i013_g00995_d206e3c9",
+    "mass_g": [
+     55.96599744000671,
+     60.01072920000706,
+     59.0156293749765,
+     57.00229848002011,
+     57.490516597481516
+    ],
+    "tier1_score_100": [
+     73.51223,
+     72.253878,
+     72.668984,
+     73.276014,
+     73.081607
+    ]
+   },
+   {
+    "design_id": "hz4i002_g00995_6f4643f1",
+    "mass_g": [
+     58.77369600001589,
+     59.58324306001182,
+     58.90591765623301,
+     58.73371968002268,
+     58.45478251497936
+    ],
+    "tier1_score_100": [
+     72.779681,
+     72.445017,
+     72.712986,
+     72.761369,
+     72.819485
+    ]
+   },
+   {
+    "design_id": "hz4i013_g00345_be45c4bc",
+    "mass_g": [
+     55.27902848000708,
+     59.73024375000769,
+     56.43501593748615,
+     56.68390552000361,
+     57.063598605006554
+    ],
+    "tier1_score_100": [
+     73.463413,
+     71.672188,
+     72.834402,
+     72.780088,
+     72.668589
+    ]
+   },
+   {
+    "design_id": "hz4i002_g00479_76f5e0ac",
+    "mass_g": [
+     58.04249792002915,
+     61.65967266000654,
+     58.24612453123046,
+     59.484835040005535,
+     58.86571762122108
+    ],
+    "tier1_score_100": [
+     72.711639,
+     71.37529,
+     72.574043,
+     72.134302,
+     72.306909
+    ]
+   },
+   {
+    "design_id": "hz4i013_g00555_5cd1f106",
+    "mass_g": [
+     50.563807360013065,
+     54.14326064999963,
+     54.417427812498076,
+     52.05076344002298,
+     53.10897802877526
+    ],
+    "tier1_score_100": [
+     73.338798,
+     71.798929,
+     71.89639,
+     72.70852,
+     72.193968
+    ]
+   },
+   {
+    "design_id": "hz4i005_g00345_c7922cf1",
+    "mass_g": [
+     56.839806080004166,
+     60.98052708000621,
+     57.576433124991176,
+     58.47064856002278,
+     59.70481167375868
+    ],
+    "tier1_score_100": [
+     72.022144,
+     70.575288,
+     71.778923,
+     71.402033,
+     70.938017
+    ]
+   },
+   {
+    "design_id": "hz4i002_g00785_6b2ff4aa",
+    "mass_g": [
+     59.13376640001895,
+     62.008096590005465,
+     58.769625937479795,
+     61.76231576001439,
+     59.80604658747651
+    ],
+    "tier1_score_100": [
+     72.163736,
+     71.272593,
+     72.190282,
+     71.257178,
+     72.056028
+    ]
+   }
+  ],
+  "search_leader": {
+   "design_id": "hz4i013_g00840_2a44149e",
+   "mass_g_h015": 74.5920852749779,
+   "mass_g_h02": 75.21119328002108,
+   "mass_g_h04": 51.27657664000445,
+   "tier1_score_100_h02": 66.652253,
+   "tier1_score_100_h04": 75.061658,
+   "tier2_score_100_h04": 81.527545
+  },
+  "why": "the search grid (h 0.4) can undercount the mass of a design; h 0.2 and h 0.15 agree, so every number of record is measured at h 0.2"
+ },
+ "images": {
+  "blade": "docs/g3/v3.0.0/img/blade.jpg",
+  "cut_b": "docs/g3/v3.0.0/img/cut_b.jpg",
+  "cut_full": "docs/g3/v3.0.0/img/cut_full.jpg",
+  "cut_x": "docs/g3/v3.0.0/img/cut_x.jpg",
+  "edge_a": "docs/g3/v3.0.0/img/edge_a.jpg",
+  "edge_b": "docs/g3/v3.0.0/img/edge_b.jpg",
+  "grip": "docs/g3/v3.0.0/img/grip.jpg",
+  "hero": "docs/g3/v3.0.0/img/hero.jpg",
+  "ring": "docs/g3/v3.0.0/img/ring.jpg",
+  "side": "docs/g3/v3.0.0/img/side.jpg",
+  "tip": "docs/g3/v3.0.0/img/tip.jpg",
+  "tip_edge": "docs/g3/v3.0.0/img/tip_edge.jpg",
+  "top": "docs/g3/v3.0.0/img/top.jpg",
+  "xray": "docs/g3/v3.0.0/img/xray.jpg"
+ },
+ "inputs": {
+  "L_g_mm": 64.89894611519622,
+  "am_build": 0.9996289768366712,
+  "bore_round": 3.055296981798495,
+  "buckling_lambda": 11.19141644396679,
+  "choil_depth_mm": 3.8568495045339883,
+  "com_to_index_mm": 7.034464356748927,
+  "crest_r_min_mm": 4.970976515059015,
+  "crown": 0.31682694099554154,
+  "dolfinx_rel_err": 1.0,
+  "edge_r_min_mm": 2.550367371279084,
+  "fairness": 0.99155574728775,
+  "fat_sf": 0.9424949299448069,
+  "gci_admitted": false,
+  "grip_sf_min": 0.7255129669223788,
+  "groove_r_min_mm": 11.268476880859613,
+  "guard_h_mm": 11.399999999999999,
+  "hm_spine_sf": 1.4448660557942972,
+  "hm_twist_sf": 1.0881262134831762,
+  "junction_step_mm": 0.0,
+  "karambit_ok": true,
+  "lat_rob_cert_n": 337.40968659066306,
+  "lip_w": 8.0,
+  "mass_g": 57.00229848002011,
+  "max_apex_mm": 0.09181976841826715,
+  "max_half_angle_deg": 21.746458561096897,
+  "mid_depth_mm": 1.333290628551369,
+  "point_monotonic": true,
+  "ring_back_cap_n": 1685.526404923872,
+  "ring_bearing_cap_n": 8676.959521612853,
+  "saddle_depth_mm": 1.7302857275227872,
+  "section_corner_r_min_mm": 4.024919579516642,
+  "seq_ratio": 0.5590632957395315,
+  "solid_tip_sf": 0.638,
+  "spin_I_g_mm2": 312938.76500848227,
+  "spin_I_ref_g_mm2": 572965.3688402749,
+  "station_err_mm": 1.1999999999999993,
+  "strict_lat_n": 337.40968659066306,
+  "swell_h_over_t": 1.5910138152146578,
+  "swell_perimeter_mm": 64.40175421586603,
+  "t_0p25_mm": 0.2495565844388354,
+  "t_1p00_mm": 0.45066375781587903,
+  "t_2p00_mm": 0.878180270207797,
+  "tex_amp_mm": 0.18930120729751074,
+  "tex_crest_r_mm": 0.35185930998943515,
+  "twist_body_sf": 4.0,
+  "twist_tip_sf": 3.0,
+  "twist_tipzone_strict_sf": 3.0,
+  "watertight": true
+ },
+ "mass": {
+  "density_g_mm3": 0.00443,
+  "envelope_volume_mm3": 26954.265636738564,
+  "mesh_g": 59.29664333144599,
+  "mesh_volume_mm3": 13385.24680168081,
+  "ranking_voxel_g": 57.00229848002011,
+  "search_voxel_g": 55.96599744000671
+ },
+ "provenance": {
+  "decoder_revision": "r2 (EDGE-1..5, SERR-1..4, measured hm_twist and buckling)",
+  "decoder_sha256": "a203278d80d236af78b23e9721fdeec7ae6500f1c2d357308f0ca483c0fec6ee",
+  "genome_csv": "evidence/g3/v3.0.0/winner_genome.csv",
+  "genome_sha256": "d206e3c9f4c30ec51e06b08784bc0943786e0523fed3cdc3c141788165bd61ed",
+  "git_commit": "80e669e5b558091b32ee926e8974145efae3492e",
+  "metric": "W_ERGOLIGHT_v1 draft d",
+  "platform_of_record": "Linux x86_64 (xbabe2), Tier 2 at h 0.2 mm",
+  "schema": "G3.0"
+ },
+ "release_assets": [
+  {
+   "bytes": 50068684,
+   "file": "hz4i013_g00995_d206e3c9_AMbuild_mm.stl",
+   "note": "print file: skin + TPMS lattice + powder ports, 0.450 mm voxels (finest that fits 50 MiB)",
+   "sha256": "782fc9c3453a22ad0f80458d94515ea4c189aa6aec5f1e14cee9828ffc039d8c",
+   "triangles": 1001372
+  },
+  {
+   "bytes": 45556684,
+   "file": "hz4i013_g00995_d206e3c9_envelope_mm.stl",
+   "note": "outer envelope, 0.300 mm voxels (finest that fits 50 MiB)",
+   "sha256": "6c939b5fa82940e907d8d1c72954778cf5899b505134fdb992575d892727e5dc",
+   "triangles": 911132
+  },
+  {
+   "bytes": 268677484,
+   "file": "hz4i013_g00995_d206e3c9_AMbuild_h0.2_mm.stl",
+   "note": "print file: skin + TPMS lattice + powder ports, 0.2 mm voxels",
+   "sha256": "48bbd9db5a48139c981fba10a9f3e5d333077f9c4113284efd013909e1d9ad49",
+   "triangles": 5373548
+  },
+  {
+   "bytes": 103198084,
+   "file": "hz4i013_g00995_d206e3c9_envelope_h0.2_mm.stl",
+   "note": "outer envelope, 0.2 mm voxels",
+   "sha256": "0e0654b07d78ec334eca5b4ea934c6187ce28cb1417d3e5bdd5d11b6c7f8a610",
+   "triangles": 2063960
+  },
+  {
+   "bytes": 192155384,
+   "file": "hz4i013_g00995_d206e3c9_envelope_fineblade_mm.stl",
+   "note": "outer envelope; blade (x >= 92 mm) re-meshed at 0.05 mm from the exact decoder law",
+   "sha256": "680e0df5fdfccc036271f7d67dd4934d6764b6f206305eeeab83cae2815ada68",
+   "triangles": 3843106
+  }
+ ],
+ "score": {
+  "E": 0.9882194984060405,
+  "base": 0.8150796465416782,
+  "score_100": 80.54776
+ },
+ "search_score_100": 80.769797,
+ "status": "computational design; not built, printed or physically tested",
+ "version": "3.0.0"
+}

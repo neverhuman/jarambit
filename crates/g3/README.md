@@ -20,16 +20,29 @@ evolve together. It is kept apart from the published v1 pipeline by construction
 | `ergolight.rs` | `W_ERGOLIGHT_v1`: continuous multi-objective score with ergonomics as a multiplier; no hard gates |
 | `g3_qd.rs` | Three-tier evaluation (analytic, voxel + plate, solid tip) and CVT-MAP-Elites |
 | `bin/g3_evolve.rs` | `g3-evolve --out <path containing evo_g3> --init N --evals N --seed S --host H --island I --commit SHA` |
+| `bin/g3_release_tex.rs` | `g3-release-tex <release.json> <out_dir>`: the LaTeX macros of the G3 paper, from the release receipt |
+
+Release tools (v3.0.0), in `examples/`; none of them changes the decoder or its hash:
+
+| Example | Role |
+|---|---|
+| `pilot_tools` | Re-evaluate archived designs at Tier 2, export the watertight envelope and AM build, grid convergence |
+| `bladefacts` | Measured blade facts of one design (serrations as built, tooth-root SF, Gate S, sharpened arcs) as JSON |
+| `edgeprofile` | True edge-normal cross-sections of both edges |
+| `bladefield` | The exact blade thickness law on a fine grid, for re-meshing the blade at 0.05 mm |
+| `tipconv` | Solid-tip TET10 mesh convergence (0.4 / 0.15 / 0.08 mm²) |
+| `gripfe` | Hex8 voxel FE certification of the grip and blade root on the design's own AM voxels (vendored `voxel_fe`) |
+| `export_print_stl` | Binary STL (mm) of a genome row for printing; `ops/g3/export_best_stl.sh` runs it on the release winner |
 
 ## Build and test
 
 ```sh
 cd crates/g3
-CARGO_INCREMENTAL=0 cargo test --release          # 27 tests
+CARGO_INCREMENTAL=0 cargo test --release          # 29 tests
 cargo build --release --bin g3-evolve
 ```
 
-All 27 tests are hermetic and read their reference fixtures from `tests/fixtures/` (`fa_best_overall_finalist.json`,
+All 29 tests are hermetic and read their reference fixtures from `tests/fixtures/` (`fa_best_overall_finalist.json`,
 `f075_reference.json`, `g3hz_parity_v1.json`, `g3hz_parity_v3_draftd.json`, and `sobol_test_vector.json`), and run on
 every pull request in `.github/workflows/d1-gates.yml`. Note: if a PR updates dependencies in `crates/crescent` or
 `crates/physics`, refresh `crates/g3/Cargo.lock` (`cargo update --workspace --manifest-path crates/g3/Cargo.toml`) so
@@ -64,6 +77,10 @@ blocking findings. Reports: `review_g3/REVIEW.md`, `REREVIEW_S3.md` (S4), `REREV
     0.8–2.0 mm (spine) deep, at least 3 full-depth teeth per edge (the pitch is capped on the span at full
     amplitude). The serrated span starts past the plunge and ends at least 18 mm from the point, so the piercing
     point stays plain. `BladeProfile2D` records the depth and tooth count as built.
+  - Teeth that do not snap (`SERR-4`, owner: "we don't want to break serrated teeth"): pitch 5–9 mm and depth at
+    most a quarter of the pitch (`SERR_DEPTH_PER_PITCH`). `serration_tooth_strength` checks every tooth root, the
+    section between neighbouring gullet bottoms, under a 180 N snag along the edge times the Inglis notch factor
+    of the gullet and a 60 N pry across the blade. The loads are assumptions, not measurements.
   - `hm_twist_sf` (16.2 N·m human-max twist) is the blade-body SF of the 1.82 N·m plate solve scaled linearly; it
     used to read the tip zone through a 4.0 clamp, which capped it at 0.337 for every design. On the edge-pilot
     winner it reads 1.01 against 1.64 from a hex8 voxel FE of the root, so it errs on the safe side.

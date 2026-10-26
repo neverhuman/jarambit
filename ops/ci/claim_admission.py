@@ -163,7 +163,10 @@ def public_document_check(root=ROOT):
     try:
         for rel, stop in (('README.md', None), ('docs/PROVISIONAL.md', None), ('docs/WHITEPAPER.md', '## Appendix A')):
             errors.extend(_scan_pass(rel, _read(root, rel), stop))
-        for rel in ('README.md', 'docs/PROVISIONAL.md'):
+        # v3.0.0 (owner, 2026-10-26: "the README is 100 % accurate with the best individual (no older data)"): the README
+        # no longer reports the v1 provisional design, so its RS-karambit-v1 verdict block lives only in PROVISIONAL.md.
+        # The README is still scanned for unscoped PASS claims (above) and the JARAMBIT_FEM opt-in (below).
+        for rel in ('docs/PROVISIONAL.md',):
             errors.extend(_verdict_block(root, rel))
         errors.extend(_evaluator_errors(root))
     except (OSError, UnicodeError, json.JSONDecodeError, KeyError, claims.Refusal) as error:

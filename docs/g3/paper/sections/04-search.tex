@@ -1,0 +1,18 @@
+\section{Search}\label{sec:search}
+Each island is a CVT-MAP-Elites archive~\cite{mouret2015,vassiliades2018} of 1,024 niches over eight measured
+behaviour descriptors: hook drop, inner turn angle, silhouette complexity, grip roundness, groove articulation,
+porosity, surface energy and mass (\src{crates/g3/src/g3_qd.rs}{\code{g3_qd.rs}}). An island starts from 64 scrambled
+Joe--Kuo Sobol samples~\cite{joe2008,matousek1998}. Afterwards each child is bred from two archived parents by iso-line
+variation: 40\,\% of parent pairs come from the best-scoring elites, the rest from a curiosity-weighted tournament of
+three that favours niches whose offspring recently improved the archive. A child takes its niche if the niche is empty,
+if it was evaluated at a higher tier than the incumbent, or if it scores higher at the same tier.
+
+Evaluation is a three-tier cascade. Tier 0 is analytic and takes milliseconds. A design scoring at least \gGateOne{} goes
+to Tier 1: a voxel SDF of the whole knife at $h = \gH$ mm, its mass and inertia, and plate finite elements of the blade
+and ring. A Tier-1 score of at least \gGateTwo{} promotes it to Tier 2, which adds a watertight mesh census and a solid
+TET10 model of the point. Only Tier-1 and Tier-2 results are measurements; Tier-0 values never appear in this paper.
+
+The islands are independent, with distinct seeds, one thread each. Every island logs its progress every 50 evaluations:
+the best measured score, archive size, Tier-2 count, and at power-of-two evaluation counts the best genome itself, which
+is what Section~\ref{sec:results} plots and renders. Logging draws no random numbers, so a logged run produces the same
+archive as an unlogged one.

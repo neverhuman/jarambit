@@ -1,0 +1,100 @@
+{
+ "islands": 24,
+ "evaluations_per_island": 2500,
+ "evaluations_total": 60000,
+ "final_niches_total": 3177,
+ "final_tier2_total": 68,
+ "winner_island": "island13",
+ "winner_island_after_sobol": {
+  "evals": 64,
+  "best_score_100": 56.538512,
+  "tier": "Tier1SdfAndPlate"
+ },
+ "winner_island_first_tier2": {
+  "evals": 1200,
+  "best_score_100": 77.707335
+ },
+ "winner_island_final": {
+  "evals": 2500,
+  "best_score_100": 81.699085,
+  "best_mass_g": 51.27657664000445,
+  "best_genome_sha256": "2a44149e5c3b8c7a6d0560902ddc54083c24a138b3107b1a0766f8e4a4601a1f"
+ },
+ "island_final_best": {
+  "island01": 77.671005,
+  "island02": 80.456399,
+  "island03": 77.567521,
+  "island04": 78.54187,
+  "island05": 79.060717,
+  "island06": 78.067639,
+  "island07": 78.782403,
+  "island08": 76.926398,
+  "island09": 78.584305,
+  "island10": 78.421974,
+  "island11": 77.68227,
+  "island12": 70.689376,
+  "island13": 81.699085,
+  "island14": 70.964468,
+  "island15": 77.863336,
+  "island16": 78.025332,
+  "island17": 69.230095,
+  "island18": 77.795837,
+  "island19": 70.440719,
+  "island20": 70.290045,
+  "island21": 77.389976,
+  "island22": 69.178695,
+  "island23": 69.613708,
+  "island24": 70.861476
+ },
+ "checkpoints": [
+  {
+   "evals": 64,
+   "best_score_100": 56.538512,
+   "best_mass_g": 72.08779520001994,
+   "tier": "Tier1SdfAndPlate",
+   "genome_sha256": "84419e769e6016641db890b4fbff3bcb3efd0a46d6d2892e79c8515089b8194d"
+  },
+  {
+   "evals": 128,
+   "best_score_100": 59.012646,
+   "best_mass_g": 65.29947584002399,
+   "tier": "Tier1SdfAndPlate",
+   "genome_sha256": "fc9b8333144ca0fa3ff7ce76b33ea9c55881a244196e81a3bb200fca78ae1500"
+  },
+  {
+   "evals": 256,
+   "best_score_100": 62.148006,
+   "best_mass_g": 67.95747584001984,
+   "tier": "Tier1SdfAndPlate",
+   "genome_sha256": "9a8ba47250b97e60da41062072eb5475e960762863583ba857873bab2ff10486"
+  },
+  {
+   "evals": 512,
+   "best_score_100": 66.34282,
+   "best_mass_g": 59.898703360007296,
+   "tier": "Tier1SdfAndPlate",
+   "genome_sha256": "2483cae0333d72d4b1bbce3e141f06e3e6903632ec89c363e38a7b3ba4f5284a"
+  },
+  {
+   "evals": 1024,
+   "best_score_100": 70.935773,
+   "best_mass_g": 62.40757184001781,
+   "tier": "Tier1SdfAndPlate",
+   "genome_sha256": "283b1543477e9898d338d50cd9d0f3e5d1a4da4852a316d5d64d215696641c5b"
+  },
+  {
+   "evals": 2048,
+   "best_score_100": 80.769797,
+   "best_mass_g": 55.96599744000671,
+   "tier": "Tier2Full3D",
+   "genome_sha256": "d206e3c9f4c30ec51e06b08784bc0943786e0523fed3cdc3c141788165bd61ed"
+  },
+  {
+   "evals": 2500,
+   "best_score_100": 81.699085,
+   "best_mass_g": 51.27657664000445,
+   "tier": "Tier2Full3D",
+   "genome_sha256": "2a44149e5c3b8c7a6d0560902ddc54083c24a138b3107b1a0766f8e4a4601a1f"
+  }
+ ]
+}
