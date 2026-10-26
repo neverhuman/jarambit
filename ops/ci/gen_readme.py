@@ -159,7 +159,7 @@ def readme():
           f'Every measurement and picture on this page describes one design, **`{wid}`**, the best individual of the v{rv} cohort of '
           f'record, and is generated from [`evidence/g3/v{rv}/release.json`](evidence/g3/v{rv}/release.json); the rule values (bounds, loads, targets) are the decoder\'s own. '
           f'Status: {r["status"]}.', '',
-          f'**3D printing & CAD upload kit ([`cad/`](cad/)):** ready-to-upload 6-file bundle (each under 50 MB) — '
+          f'**3D printing & CAD upload kit ([`cad/`](cad/)):** ready-to-upload 6-file bundle (each under 50 MiB) — '
           f'primary print mesh [`cad/{wid}_AMbuild_mm.stl`](cad/{wid}_AMbuild_mm.stl) (Binary STL, mm), '
           f'unit-embedded [`cad/{wid}_AMbuild_mm.3mf`](cad/{wid}_AMbuild_mm.3mf) (3MF, mm), '
           f'outer envelope [`cad/{wid}_envelope_mm.stl`](cad/{wid}_envelope_mm.stl), '
@@ -281,17 +281,21 @@ def readme():
     lim.append(f'The cohort is {co["evaluations_per_island"]:,} evaluations per island, a shortened run for this release.')
     L += ['## Limits of this result', ''] + [f'- {x}' for x in lim] + ['']
     # ---- cad
+    spec_rel = next(p for p in r['cad_in_git'] if p.endswith('.json'))
+    sp = json.loads(rd(spec_rel))
+    am = sp['am_build_stl']
+    env = sp['outer_envelope_stl']
     L += ['## Download the CAD & 3D-printing upload kit (`cad/`, millimetres)', '',
-          'The top-level [`cad/`](cad/) folder contains a ready-to-upload **6-file manufacturing bundle** (every file under 50 MB, '
+          'The top-level [`cad/`](cad/) folder contains a ready-to-upload **6-file manufacturing bundle** (every file under 50 MiB, '
           'designed for quote forms accepting up to 6 files of 100 MB each in `STL`, `3MF`, `DXF`, `PDF`, or `JPG`), '
           'generated automatically from the winning individual:', '',
           '| # | File in `cad/` | Format | Purpose on a 3D-printing / manufacturing quote form |',
           '|---:|---|---|---|',
-          f'| 1 | [`cad/{wid}_AMbuild_mm.stl`](cad/{wid}_AMbuild_mm.stl) | Binary STL (`mm`) | **Primary 3D print file** (outer skin + internal TPMS lattice + powder-removal ports) |',
-          f'| 2 | [`cad/{wid}_AMbuild_mm.3mf`](cad/{wid}_AMbuild_mm.3mf) | 3MF (`unit="millimeter"`) | **Modern 3D print package** with `millimeter` units and `Ti-6Al-4V` material embedded |',
-          f'| 3 | [`cad/{wid}_envelope_mm.stl`](cad/{wid}_envelope_mm.stl) | Binary STL (`mm`) | **Solid outer envelope companion** (all internal cavities and ports closed) |',
-          f'| 4 | [`cad/{wid}_drawing_mm.dxf`](cad/{wid}_drawing_mm.dxf) | AutoCAD DXF (`mm`) | **1:1 2D engineering drawing** (`$INSUNITS = 4` mm: planform, ring bore, thickness & 30 mm blade section) |',
-          f'| 5 | [`cad/{wid}_spec_paper.pdf`](cad/{wid}_spec_paper.pdf) | PDF | **7-page engineering specification & FE verification paper** (`g3-v{v}.pdf`) |',
+          f'| 1 | [`cad/{wid}_AMbuild_mm.stl`](cad/{wid}_AMbuild_mm.stl) | Binary STL (`mm`) | **Primary 3D print file in git** (`{am["voxel_pitch_h_mm"]:g} mm` voxels, `{am["mass_ti64_g"]:.2f} g`, finest under 50 MiB; outer skin + TPMS lattice + powder ports; cutting edges require post-print grinding — see note below) |',
+          f'| 2 | [`cad/{wid}_AMbuild_mm.3mf`](cad/{wid}_AMbuild_mm.3mf) | 3MF (`unit="millimeter"`) | **Modern 3D print package** with `millimeter` units and `Ti-6Al-4V (design assumption: yield 828 MPa)` material embedded |',
+          f'| 3 | [`cad/{wid}_envelope_mm.stl`](cad/{wid}_envelope_mm.stl) | Binary STL (`mm`) | **Solid outer envelope companion** (`{env["voxel_pitch_h_mm"]:g} mm` voxels; all internal cavities and ports closed) |',
+          f'| 4 | [`cad/{wid}_drawing_mm.dxf`](cad/{wid}_drawing_mm.dxf) | AutoCAD R12 DXF (`mm`) | **1:1 2D engineering drawing** (`UNITS: MILLIMETERS`, `1 drawing unit = 1 mm`: exact `z = 0` mid-plane outline, 24.9 mm ring bore at `x = -5.97 mm`, `z`-extent thickness envelope & 30 mm blade section) |',
+          f'| 5 | [`cad/{wid}_spec_paper.pdf`](cad/{wid}_spec_paper.pdf) | PDF | **7-page engineering specification & FE paper** (`g3-v{v}.pdf`; reports all measured safety factors, including those below 1: solid tip {i["solid_tip_sf"]:.2f}, grip {i["grip_sf_min"]:.2f} / {fe["grip_sf"]["spine"]:.2f}, fatigue {i["fat_sf"]:.2f}, yield-sequence {i["seq_ratio"]:.2f} vs 1.2) |',
           f'| 6 | [`cad/{wid}_xray_cutaway.jpg`](cad/{wid}_xray_cutaway.jpg) | JPG image | **Lengthwise cutaway render** showing the internal TPMS lattice and powder-evacuation ports |',
           '',
           'Mesh assets and high-resolution release files:', '',
@@ -304,8 +308,11 @@ def readme():
     specs = [p for p in r['cad_in_git'] if p.endswith('.json')]
     L += ['', 'Units are millimetres. The print file is the AM build: the outer skin, the internal TPMS lattice and the powder-removal ports. '
           'The files in git are written by [`ops/g3/export_best_stl.sh`](ops/g3/export_best_stl.sh) from the committed genome row, each at the '
-          'finest voxel pitch that keeps it under 50 MiB'
-          + (''.join(f'; [`cad/{os.path.basename(p)}`](cad/{os.path.basename(p)}) ([archive]({p})) lists their dimensions, volume, mass, pitch and watertightness' for p in specs)) + '.', '']
+          f'finest voxel pitch that keeps it under 50 MiB (`{am["voxel_pitch_h_mm"]:g} mm` for `AMbuild_mm.stl` / `.3mf`, `{am["mass_ti64_g"]:.2f} g` vs `{mass:.1f} g` on the `0.2 mm` grid of record)'
+          + (''.join(f'; [`cad/{os.path.basename(p)}`](cad/{os.path.basename(p)}) ([archive]({p})) lists their dimensions, volume, mass, pitch and watertightness' for p in specs))
+          + f'. Because a `{am["voxel_pitch_h_mm"]:g} mm` voxel grid cannot resolve the `0.05–0.12 mm` apex flat or the `20°` primary bevel near the edge, '
+          f'cutting edges on any print from this mesh would be finished by post-print grinding to the `EDGE-3` angle (`17.5–22.5°` per side); '
+          f'the finer `0.2 mm` print mesh (`{wid}_AMbuild_h0.2_mm.stl`) and `0.05 mm` fine-blade outer envelope (`{wid}_envelope_fineblade_mm.stl`) are attached to [release v{rv}]({REPO}/releases/tag/v{rv}).', '']
     # ---- reproduce + repo
     L += ['## Reproduce', '', '```bash',
           f'git checkout {pv["git_commit"][:12]}   # decoder {pv["decoder_sha256"][:12]}',
@@ -335,6 +342,8 @@ def cad_readme():
     v, rv, r = receipt()
     wid = r['design_id']
     mass = r['mass']['mesh_g']
+    i = r['inputs']
+    fe = r['fe_certification']
     spec_rel = next(p for p in r['cad_in_git'] if p.endswith('.json'))
     sp = json.loads(rd(spec_rel))
     am = sp['am_build_stl']
@@ -342,13 +351,30 @@ def cad_readme():
     dim = sp['overall_dimensions_mm']
     sz_kb = lambda rel: os.path.getsize(os.path.join(ROOT, rel)) / 1024.0
     sz_mb = lambda rel: os.path.getsize(os.path.join(ROOT, rel)) / (1024.0 * 1024.0)
+    order_notes = (
+        f'Units: mm | Overall dimensions: {dim["length_x_mm"]:.2f} x {dim["height_y_mm"]:.2f} x {dim["thickness_z_mm"]:.2f} mm | '
+        f'Material: Ti-6Al-4V (design assumption: yield 828 MPa) | Depowder via neutral-axis drainage ports | '
+        f'Status: {r["status"]} — below-target safety factors (solid-tip SF {i["solid_tip_sf"]:.2f}, '
+        f'grip SF {i["grip_sf_min"]:.2f} formula / {fe["grip_sf"]["spine"]:.2f} FE spine, '
+        f'fatigue SF {i["fat_sf"]:.2f}, yield-sequence ratio {i["seq_ratio"]:.2f} vs 1.2 target; mass {mass:.1f} g vs 50 g goal); '
+        f'not qualified for use as a knife'
+    )
     L = [
-        f'# 3D Printing & CAD Upload Kit — Winner `{wid}` (v{v})',
+        f'# 3D Printing & CAD Upload Kit — Winner `{wid}` (release v{v}, cohort of record v{rv})',
         '',
-        f'This folder contains the ready-to-upload **6-file 3D-printing and manufacturing bundle** (**Units: millimetres**, every file under 50 MB) '
+        f'This folder contains the ready-to-upload **6-file 3D-printing and manufacturing bundle** (**Units: millimetres**, every file under 50 MiB) '
         f'for **`{wid}`**, the winning individual of the v{rv} cohort of record ([`evidence/g3/v{rv}/release.json`](../evidence/g3/v{rv}/release.json)). '
         f'It is populated automatically from [`evidence/g3/v{rv}/winner_genome.csv`](../evidence/g3/v{rv}/winner_genome.csv) '
         'by [`ops/g3/export_best_stl.sh`](../ops/g3/export_best_stl.sh) and [`ops/ci/gen_readme.py`](../ops/ci/gen_readme.py).',
+        '',
+        f'**Status & limits ({r["status"]}):** this design is **not qualified for use as a knife**. '
+        f'Its 0.20 mm print-mesh mass is **{mass:.1f} g** (above the 50 g goal; `{am["mass_ti64_g"]:.2f} g` on the `{am["voxel_pitch_h_mm"]:g} mm` in-git mesh), '
+        f'and several structural safety factors are below target: solid-tip SF **{i["solid_tip_sf"]:.2f}** (< 1), '
+        f'grip SF **{i["grip_sf_min"]:.2f}** (beam formula) / **{fe["grip_sf"]["spine"]:.2f}** (hex8 voxel FE spine, < 1), '
+        f'fatigue SF **{i["fat_sf"]:.2f}** (< 1), and blade-before-hand yield-sequence ratio **{i["seq_ratio"]:.2f}** (< 1.2 target). '
+        f'Because the in-git print mesh (`{am["file"]}` / `{wid}_AMbuild_mm.3mf`) is extracted on a **{am["voxel_pitch_h_mm"]:g} mm** voxel grid (the finest pitch under 50 MiB), '
+        f'it cannot represent the `0.05–0.12 mm` apex flat or the `20°` primary bevel at the cutting edge; cutting edges would be finished by grinding after printing to the `EDGE-3` angle (`17.5–22.5°` per side), '
+        f'or you can download the `0.2 mm` print mesh (`{wid}_AMbuild_h0.2_mm.stl`) and `0.05 mm` fine-blade mesh (`{wid}_envelope_fineblade_mm.stl`) from [release v{rv}]({REPO}/releases/tag/v{rv}).',
         '',
         '## 1. Ready-to-upload 6-file kit (for forms accepting up to 6 files, 100 MB each)',
         '',
@@ -356,11 +382,11 @@ def cad_readme():
         '',
         '| # | File | Format | Size | What it is & why to upload it |',
         '|---:|---|---|---:|---|',
-        f'| **1** | **[`{am["file"]}`]({am["file"]})** | **Binary STL (`mm`)** | **{am["mib"]:.2f} MiB** | **PRIMARY 3D PRINT FILE (upload this first):** complete additive-manufacturing build with the outer skin, internal TPMS lattice, and powder-removal drainage ports ({am["triangles"]:,} triangles). |',
-        f'| **2** | **[`{wid}_AMbuild_mm.3mf`]({wid}_AMbuild_mm.3mf)** | **3MF (`unit="millimeter"`)** | **{sz_mb(f"cad/{wid}_AMbuild_mm.3mf"):.2f} MiB** | **Modern 3D print package:** identical AM build mesh in compressed 3MF 1.2.3 format with `unit="millimeter"` and `Ti-6Al-4V (Grade 5 / ELI LPBF)` material metadata embedded in the header. |',
-        f'| **3** | **[`{env["file"]}`]({env["file"]})** | **Binary STL (`mm`)** | **{env["mib"]:.2f} MiB** | **Solid outer envelope companion:** the unhollowed exterior surface with all internal cavities and ports closed ({env["solid_mass_ti64_g"]:.1f} g if printed solid; {env["triangles"]:,} triangles). |',
-        f'| **4** | **[`{wid}_drawing_mm.dxf`]({wid}_drawing_mm.dxf)** | **AutoCAD DXF (`mm`)** | **{sz_kb(f"cad/{wid}_drawing_mm.dxf"):.0f} KiB** | **1:1 2D engineering drawing (`$INSUNITS = 4` mm):** planform silhouette, 24.9 mm ring bore, edge-on thickness profile, 30 mm blade cross-section, and overall dimension callouts. |',
-        f'| **5** | **[`{wid}_spec_paper.pdf`]({wid}_spec_paper.pdf)** | **PDF** | **{sz_kb(f"cad/{wid}_spec_paper.pdf"):.0f} KiB** | **7-page engineering specification & FE paper:** complete geometry, bevel angles, structural safety factors, and CAD verification tables (`g3-v{v}.pdf`). |',
+        f'| **1** | **[`{am["file"]}`]({am["file"]})** | **Binary STL (`mm`)** | **{am["mib"]:.2f} MiB** | **PRIMARY 3D PRINT FILE IN GIT (upload this first):** complete additive-manufacturing build at `{am["voxel_pitch_h_mm"]:g} mm` voxel pitch (finest under 50 MiB; `{am["mass_ti64_g"]:.2f} g`, {am["triangles"]:,} triangles) with outer skin, internal TPMS lattice, and powder-removal ports; cutting edges require post-print grinding. |',
+        f'| **2** | **[`{wid}_AMbuild_mm.3mf`]({wid}_AMbuild_mm.3mf)** | **3MF (`unit="millimeter"`)** | **{sz_mb(f"cad/{wid}_AMbuild_mm.3mf"):.2f} MiB** | **Modern 3D print package:** identical `{am["voxel_pitch_h_mm"]:g} mm` AM build mesh in compressed 3MF 1.2.3 format with `unit="millimeter"` and `Ti-6Al-4V (design assumption: yield 828 MPa)` material metadata embedded in the header. |',
+        f'| **3** | **[`{env["file"]}`]({env["file"]})** | **Binary STL (`mm`)** | **{env["mib"]:.2f} MiB** | **Solid outer envelope companion:** the unhollowed exterior surface at `{env["voxel_pitch_h_mm"]:g} mm` voxel pitch with all internal cavities and ports closed ({env["solid_mass_ti64_g"]:.1f} g if printed solid; {env["triangles"]:,} triangles). |',
+        f'| **4** | **[`{wid}_drawing_mm.dxf`]({wid}_drawing_mm.dxf)** | **AutoCAD R12 DXF (`mm`)** | **{sz_kb(f"cad/{wid}_drawing_mm.dxf"):.0f} KiB** | **1:1 2D engineering drawing (`UNITS: MILLIMETERS`, `1 drawing unit = 1 mm`):** exact `z = 0` mid-plane outline, 24.9 mm ring bore at decoded `x = -5.97 mm`, `z`-extent thickness envelope (not a section), 30 mm blade cross-section, and overall dimension callouts. |',
+        f'| **5** | **[`{wid}_spec_paper.pdf`]({wid}_spec_paper.pdf)** | **PDF** | **{sz_kb(f"cad/{wid}_spec_paper.pdf"):.0f} KiB** | **7-page engineering specification & FE paper (`g3-v{v}.pdf`):** complete geometry, bevel angles, CAD verification tables, and measured structural safety factors (including below-1 values: solid tip {i["solid_tip_sf"]:.2f}, grip {i["grip_sf_min"]:.2f} / {fe["grip_sf"]["spine"]:.2f}, fatigue {i["fat_sf"]:.2f}, yield-sequence {i["seq_ratio"]:.2f} vs 1.2). |',
         f'| **6** | **[`{wid}_xray_cutaway.jpg`]({wid}_xray_cutaway.jpg)** | **JPG image** | **{sz_kb(f"cad/{wid}_xray_cutaway.jpg"):.0f} KiB** | **Lengthwise cutaway reference image:** visual guide for the print technician showing the outer skin, internal TPMS lattice, and powder-evacuation ports. |',
         '',
         f'*(Also included in this folder: [`{os.path.basename(spec_rel)}`]({os.path.basename(spec_rel)}), the machine-readable JSON receipt of dimensions, volumes, masses and SHA-256 digests.)*',
@@ -370,7 +396,7 @@ def cad_readme():
         'STL files store raw triangle coordinates without a unit header. When uploading to a printing bureau (Protolabs, PCBWay, Craftcloud, Shapeways, Xometry, JLC3DP, or a local L-PBF shop), select **Millimetres (`mm`)** and paste:',
         '',
         '```text',
-        sp['order_notes'],
+        order_notes,
         '```',
         '',
         '| Specification | Value |',
@@ -378,12 +404,12 @@ def cad_readme():
         f'| Winning design ID | `{wid}` (genome `{sp["genome_sha256"][:12]}…`, decoder `{sp["decoder_sha256"][:12]}…`) |',
         f'| Units | `{sp["units"]}` (millimetres) |',
         f'| Overall bounding box ($L_x \\times H_y \\times T_z$) | `{dim["length_x_mm"]:.2f} × {dim["height_y_mm"]:.2f} × {dim["thickness_z_mm"]:.2f} mm` |',
-        f'| Material | {sp["material"]} (`{sp["density_g_mm3"]} g/mm³`) |',
+        f'| Material | Ti-6Al-4V (design assumption: yield 828 MPa, `{sp["density_g_mm3"]} g/mm³`) |',
         f'| Mass (0.20 mm print mesh / {am["voxel_pitch_h_mm"]:g} mm git mesh) | `{mass:.1f} g` / `{am["mass_ti64_g"]:.2f} g` (`{am["volume_mm3"]:,.1f} mm³`) |',
         f'| Solid outer envelope mass (if unhollowed) | `{env["solid_mass_ti64_g"]:.1f} g` (`{env["volume_mm3"]:,.1f} mm³`) |',
         f'| Watertight manifold check (`AMbuild` / `envelope`) | `watertight = {str(am["watertight"]).lower()}` (`{am["boundary_edges"]}` boundary edges, `{am["non_manifold_edges"]}` non-manifold edges) |',
         '',
-        '## 3. High-resolution release assets (> 50 MB)',
+        '## 3. High-resolution release assets (> 50 MiB)',
         '',
         '| File | Triangles | Size | SHA-256 | Contents | Where |',
         '|---|---:|---:|---|---|---|',

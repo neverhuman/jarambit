@@ -75,9 +75,32 @@ class GenReadme(unittest.TestCase):
         with zipfile.ZipFile(os.path.join(ROOT, f'cad/{wid}_AMbuild_mm.3mf')) as zf:
             model_head = zf.open('3D/3dmodel.model').read(1024).decode('utf-8')
             self.assertIn('unit="millimeter"', model_head)
+            self.assertIn('Ti-6Al-4V (design assumption: yield 828 MPa)', model_head)
         dxf_txt = open(os.path.join(ROOT, f'cad/{wid}_drawing_mm.dxf'), encoding='utf-8').read()
-        self.assertIn('$INSUNITS\n70\n4\n', dxf_txt)
+        self.assertIn('UNITS: MILLIMETERS, 1 DRAWING UNIT = 1 MM', dxf_txt)
+        self.assertIn('0\nCIRCLE\n8\nRING_BORE\n10\n-5.9672\n20\n0.0000\n30\n0.0000\n40\n12.4500\n', dxf_txt)
+        self.assertIn('MIDPLANE_Z0_OUTLINE', dxf_txt)
+        self.assertIn('Z_EXTENT_ENVELOPE', dxf_txt)
         self.assertTrue(dxf_txt.endswith('0\nEOF\n'))
+
+    def test_cad_readme_discloses_status_and_below_target_safety_factors(self):
+        _, rec = release()
+        ct = cad_readme()
+        i = rec['inputs']
+        fe = rec['fe_certification']
+        self.assertIn(rec['status'], ct)
+        self.assertIn('not qualified for use as a knife', ct)
+        for sf_str in (f'{i["solid_tip_sf"]:.2f}', f'{i["grip_sf_min"]:.2f}', f'{fe["grip_sf"]["spine"]:.2f}',
+                       f'{i["fat_sf"]:.2f}', f'{i["seq_ratio"]:.2f}'):
+            self.assertIn(sf_str, ct)
+        m = re.search(r'```text\n(.*?)\n```', ct, re.S)
+        self.assertIsNotNone(m, 'missing copy-paste order notes block in cad/README.md')
+        notes = m.group(1)
+        self.assertIn(rec['status'], notes)
+        self.assertIn('not qualified for use as a knife', notes)
+        for sf_str in (f'{i["solid_tip_sf"]:.2f}', f'{i["grip_sf_min"]:.2f}', f'{fe["grip_sf"]["spine"]:.2f}',
+                       f'{i["fat_sf"]:.2f}', f'{i["seq_ratio"]:.2f}'):
+            self.assertIn(sf_str, notes)
 
     def test_no_older_data(self):
         # Owner, 2026-10-26: the README describes only the release's best individual. Older designs and runs stay in

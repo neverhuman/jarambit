@@ -8,9 +8,9 @@
 //!   1. Extract from genome CSV and emit STL + 3MF + DXF + print_spec.json:
 //!      cargo run --release --manifest-path crates/g3/Cargo.toml --example export_print_stl -- \
 //!        [winner_genome.csv] [out_dir] [--h 0.25] [--max-mb 50.0]
-//!   2. Generate 3MF + DXF companion files from an existing STL directory:
+//!   2. Generate 3MF + DXF companion files from the genome CSV and an existing STL directory:
 //!      cargo run --release --manifest-path crates/g3/Cargo.toml --example export_print_stl -- \
-//!        --companion-from-dir <stl_dir> <out_dir> <design_id>
+//!        --companion-from-dir <winner_genome.csv> <stl_dir> <out_dir>
 
 use jarambit_crescent::export::{census, volume, Solid as SurfaceMesh};
 use jarambit_g3::g3_genome::G3Genome;
@@ -119,7 +119,7 @@ fn read_binary_stl_mm(bytes: &[u8]) -> SurfaceMesh {
 }
 
 /// Write a 3D Manufacturing Format (`.3mf`, v1.2.3 OPC ZIP archive) file with explicit
-/// `unit="millimeter"` and `Ti-6Al-4V (Grade 5 / ELI LPBF)` material metadata.
+/// `unit="millimeter"` and `Ti-6Al-4V (design assumption: yield 828 MPa)` material metadata.
 fn write_3mf_mm(mesh: &SurfaceMesh, design_id: &str, span: [f64; 3], out_3mf: &Path) {
     let tmp_dir = out_3mf.with_extension("3mf_tmp");
     let _ = fs::remove_dir_all(&tmp_dir);
@@ -153,7 +153,7 @@ fn write_3mf_mm(mesh: &SurfaceMesh, design_id: &str, span: [f64; 3], out_3mf: &P
     writeln!(f, "  <metadata name=\"Designer\">Jarambit G3 Evolutionary Search</metadata>").unwrap();
     writeln!(
         f,
-        "  <metadata name=\"Description\">Units: mm | Overall dimensions: {:.2} x {:.2} x {:.2} mm | Material: Ti-6Al-4V (Grade 5 / ELI LPBF) | Depowder via neutral-axis drainage ports</metadata>",
+        "  <metadata name=\"Description\">Units: mm | Overall dimensions: {:.2} x {:.2} x {:.2} mm | Material: Ti-6Al-4V (design assumption: yield 828 MPa) | Depowder via neutral-axis drainage ports</metadata>",
         span[0], span[1], span[2]
     )
     .unwrap();
@@ -161,7 +161,7 @@ fn write_3mf_mm(mesh: &SurfaceMesh, design_id: &str, span: [f64; 3], out_3mf: &P
     writeln!(f, "    <basematerials id=\"1\">").unwrap();
     writeln!(
         f,
-        "      <base name=\"Ti-6Al-4V (Grade 5 / ELI LPBF)\" displaycolor=\"#8A929A\"/>"
+        "      <base name=\"Ti-6Al-4V (design assumption: yield 828 MPa)\" displaycolor=\"#8A929A\"/>"
     )
     .unwrap();
     writeln!(f, "    </basematerials>").unwrap();
@@ -224,28 +224,57 @@ fn write_3mf_mm(mesh: &SurfaceMesh, design_id: &str, span: [f64; 3], out_3mf: &P
     let _ = fs::remove_dir_all(&tmp_dir);
 }
 
-/// Generate a 1:1 true-scale 2D AutoCAD DXF (`$INSUNITS = 4`, Millimeters) engineering drawing
-/// containing the planform profile, edge-on thickness profile, 30 mm blade cross-section, and
-/// overall dimension callouts for manufacturing quote forms.
+/// Generate a 1:1 true-scale 2D AutoCAD R12 (`AC1009`) DXF engineering drawing (1 drawing unit = 1 mm)
+/// containing the exact `z = 0` mid-plane outline of the outer envelope, the decoded ring bore circle,
+/// the `z`-extent thickness envelope, the `x = bmax[0] - 30 mm` blade cross-section, and overall
+/// dimension callouts for manufacturing quote forms.
 fn write_dxf_drawing_mm(
     am_mesh: &SurfaceMesh,
     env_mesh: &SurfaceMesh,
     design_id: &str,
+    ring_cx: f64,
+    ring_r: f64,
     bmin: [f64; 3],
     bmax: [f64; 3],
     span: [f64; 3],
 ) -> Vec<u8> {
     let n_bins = 180usize;
     let dx = (span[0] / n_bins as f64).max(0.5);
-    let mut y_min_bin = vec![f64::INFINITY; n_bins + 1];
-    let mut y_max_bin = vec![f64::NEG_INFINITY; n_bins + 1];
     let mut z_max_bin = vec![0.0f64; n_bins + 1];
+    let mut has_bin = vec![false; n_bins + 1];
 
-    for &(x, y, z) in &env_mesh.verts {
+    for &(x, _y, z) in &env_mesh.verts {
         let bi = (((x - bmin[0]) / dx).round() as isize).clamp(0, n_bins as isize) as usize;
-        y_min_bin[bi] = y_min_bin[bi].min(y);
-        y_max_bin[bi] = y_max_bin[bi].max(y);
         z_max_bin[bi] = z_max_bin[bi].max(z.abs());
+        has_bin[bi] = true;
+    }
+
+    // Extract exact mid-plane outline segments at z = 0.0 mm from the outer envelope mesh
+    let z_mid = 0.0_f64;
+    let mut mid_segs: Vec<([f64; 2], [f64; 2])> = Vec::new();
+    for &[i0, i1, i2] in &env_mesh.tris {
+        let p = [env_mesh.verts[i0], env_mesh.verts[i1], env_mesh.verts[i2]];
+        let mut pts: Vec<[f64; 2]> = Vec::with_capacity(3);
+        for &(a, b) in &[(0, 1), (1, 2), (2, 0)] {
+            let (xa, ya, za) = p[a];
+            let (xb, yb, zb) = p[b];
+            if (za <= z_mid && zb >= z_mid) || (zb <= z_mid && za >= z_mid) {
+                let denom = zb - za;
+                if denom.abs() > 1e-9 {
+                    let t = ((z_mid - za) / denom).clamp(0.0, 1.0);
+                    let pt = [xa + t * (xb - xa), ya + t * (yb - ya)];
+                    if !pts
+                        .iter()
+                        .any(|q| (q[0] - pt[0]).hypot(q[1] - pt[1]) < 1e-6)
+                    {
+                        pts.push(pt);
+                    }
+                }
+            }
+        }
+        if pts.len() >= 2 {
+            mid_segs.push((pts[0], pts[1]));
+        }
     }
 
     // Extract exact cross-section segments at x_sec = bmax[0] - 30.0 mm (30 mm from the point)
@@ -253,7 +282,7 @@ fn write_dxf_drawing_mm(
     let mut sec_segs: Vec<([f64; 2], [f64; 2])> = Vec::new();
     for &[i0, i1, i2] in &am_mesh.tris {
         let p = [am_mesh.verts[i0], am_mesh.verts[i1], am_mesh.verts[i2]];
-        let mut pts = Vec::new();
+        let mut pts: Vec<[f64; 2]> = Vec::with_capacity(3);
         for &(a, b) in &[(0, 1), (1, 2), (2, 0)] {
             let (xa, ya, za) = p[a];
             let (xb, yb, zb) = p[b];
@@ -261,7 +290,13 @@ fn write_dxf_drawing_mm(
                 let denom = xb - xa;
                 if denom.abs() > 1e-9 {
                     let t = ((x_sec - xa) / denom).clamp(0.0, 1.0);
-                    pts.push([ya + t * (yb - ya), za + t * (zb - za)]);
+                    let pt = [ya + t * (yb - ya), za + t * (zb - za)];
+                    if !pts
+                        .iter()
+                        .any(|q| (q[0] - pt[0]).hypot(q[1] - pt[1]) < 1e-6)
+                    {
+                        pts.push(pt);
+                    }
                 }
             }
         }
@@ -270,11 +305,10 @@ fn write_dxf_drawing_mm(
         }
     }
 
-    let mut dxf = String::with_capacity(256 * 1024);
-    // Header section with explicit $INSUNITS = 4 (Millimeters) and $MEASUREMENT = 1 (Metric)
+    let mut dxf = String::with_capacity(512 * 1024);
+    // R12 (AC1009) ASCII DXF header; units are stated explicitly in the DIMENSIONS note block (1 unit = 1 mm)
     dxf.push_str("0\nSECTION\n2\nHEADER\n");
     dxf.push_str("9\n$ACADVER\n1\nAC1009\n");
-    dxf.push_str("9\n$INSUNITS\n70\n4\n");
     dxf.push_str("9\n$MEASUREMENT\n70\n1\n");
     dxf.push_str(&format!(
         "9\n$EXTMIN\n10\n{:.3}\n20\n{:.3}\n30\n{:.3}\n",
@@ -312,53 +346,49 @@ fn write_dxf_drawing_mm(
     add_line(&mut dxf, "BOUNDING_BOX", bmax[0], bmax[1], bmin[0], bmax[1]);
     add_line(&mut dxf, "BOUNDING_BOX", bmin[0], bmax[1], bmin[0], bmin[1]);
 
-    // 2. Planform upper & lower silhouette envelopes (1:1 scale, mm)
-    let valid_bins: Vec<(f64, f64, f64, f64)> = (0..=n_bins)
+    // 2. Exact mid-plane z = 0.0 mm outline of the outer envelope (1:1 scale, mm)
+    for &(p0, p1) in &mid_segs {
+        add_line(&mut dxf, "MIDPLANE_Z0_OUTLINE", p0[0], p0[1], p1[0], p1[1]);
+    }
+
+    // 3. Z-extent thickness envelope (max |z| vs x, offset to y_off = bmin[1] - 22.0 mm; not a section)
+    let valid_z_bins: Vec<(f64, f64)> = (0..=n_bins)
         .filter_map(|bi| {
-            if y_min_bin[bi].is_finite() && y_max_bin[bi].is_finite() {
-                Some((
-                    bmin[0] + bi as f64 * dx,
-                    y_min_bin[bi],
-                    y_max_bin[bi],
-                    z_max_bin[bi],
-                ))
+            if has_bin[bi] {
+                Some((bmin[0] + bi as f64 * dx, z_max_bin[bi]))
             } else {
                 None
             }
         })
         .collect();
-    for w in valid_bins.windows(2) {
-        let (x0, ymin0, ymax0, z0) = w[0];
-        let (x1, ymin1, ymax1, z1) = w[1];
-        add_line(&mut dxf, "PLANFORM_OUTER", x0, ymax0, x1, ymax1);
-        add_line(&mut dxf, "PLANFORM_OUTER", x0, ymin0, x1, ymin1);
-        // Edge-on thickness view offset to y_off = bmin[1] - 22.0 mm
-        let y_off = bmin[1] - 22.0;
-        add_line(&mut dxf, "EDGE_ON_THICKNESS", x0, y_off + z0, x1, y_off + z1);
-        add_line(&mut dxf, "EDGE_ON_THICKNESS", x0, y_off - z0, x1, y_off - z1);
-    }
-    if let (Some(&first), Some(&last)) = (valid_bins.first(), valid_bins.last()) {
-        add_line(&mut dxf, "PLANFORM_OUTER", first.0, first.1, first.0, first.2);
-        add_line(&mut dxf, "PLANFORM_OUTER", last.0, last.1, last.0, last.2);
+    let y_off = bmin[1] - 22.0;
+    for w in valid_z_bins.windows(2) {
+        let (x0, z0) = w[0];
+        let (x1, z1) = w[1];
+        add_line(&mut dxf, "Z_EXTENT_ENVELOPE", x0, y_off + z0, x1, y_off + z1);
+        add_line(&mut dxf, "Z_EXTENT_ENVELOPE", x0, y_off - z0, x1, y_off - z1);
     }
 
-    // 3. Retention ring nominal 24.9 mm internal bore circle at (0, 0)
-    dxf.push_str("0\nCIRCLE\n8\nRING_BORE\n10\n0.0\n20\n0.0\n30\n0.0\n40\n12.4500\n");
+    // 4. Retention ring nominal 24.9 mm internal bore circle at decoded (cx, 0)
+    dxf.push_str(&format!(
+        "0\nCIRCLE\n8\nRING_BORE\n10\n{:.4}\n20\n0.0000\n30\n0.0000\n40\n{:.4}\n",
+        ring_cx, ring_r
+    ));
 
-    // 4. Blade cross-section at 30 mm from the point (drawn to the right of the blade at x_draw = bmax[0] + 25.0 mm)
+    // 5. Blade cross-section at 30 mm from the point (drawn to the right of the blade at x_draw = bmax[0] + 25.0 mm)
     let x_draw = bmax[0] + 25.0;
     for &(p0, p1) in &sec_segs {
         add_line(&mut dxf, "BLADE_SECTION_30MM", x_draw + p0[1], p0[0], x_draw + p1[1], p1[0]);
     }
 
-    // 5. Title block & dimension callouts
+    // 6. Title block & dimension callouts
     add_text(
         &mut dxf,
         "DIMENSIONS",
         bmin[0],
         bmax[1] + 14.0,
         3.2,
-        &format!("JARAMBIT G3 WINNER: {design_id} (1:1 TRUE SCALE, UNITS: MILLIMETERS)"),
+        &format!("JARAMBIT G3 WINNER: {design_id} (1:1 TRUE SCALE, UNITS: MILLIMETERS, 1 DRAWING UNIT = 1 MM)"),
     );
     add_text(
         &mut dxf,
@@ -367,8 +397,8 @@ fn write_dxf_drawing_mm(
         bmax[1] + 9.0,
         2.5,
         &format!(
-            "OVERALL BOUNDING BOX: {:.2} mm (L) x {:.2} mm (H) x {:.2} mm (T) | RING BORE: 24.90 mm",
-            span[0], span[1], span[2]
+            "OVERALL BOUNDING BOX: {:.2} mm (L) x {:.2} mm (H) x {:.2} mm (T) | RING BORE: {:.2} mm AT X = {:.2} mm",
+            span[0], span[1], span[2], ring_r * 2.0, ring_cx
         ),
     );
     add_text(
@@ -377,7 +407,7 @@ fn write_dxf_drawing_mm(
         bmin[0],
         bmax[1] + 4.5,
         2.5,
-        "MATERIAL: Ti-6Al-4V (Grade 5 / ELI LPBF) | HOLLOW TPMS CORE WITH DRAINAGE PORTS",
+        "MATERIAL: Ti-6Al-4V (design assumption: yield 828 MPa) | MID-PLANE Z=0 OUTLINE + 30 MM BLADE SECTION",
     );
     add_text(
         &mut dxf,
@@ -385,7 +415,7 @@ fn write_dxf_drawing_mm(
         bmin[0],
         bmin[1] - 12.0,
         2.2,
-        "EDGE-ON THICKNESS PROFILE (X-Z PROJECTION, 1:1 MM):",
+        "Z-EXTENT THICKNESS ENVELOPE (MAX |Z| VS X, NOT A SECTION):",
     );
     add_text(
         &mut dxf,
@@ -442,12 +472,23 @@ fn load_first_genome(csv_path: &Path) -> Result<(String, G3Genome), String> {
     Err(format!("no valid G3 genome row found in {}", csv_path.display()))
 }
 
-fn emit_companions(am_mesh: &SurfaceMesh, env_mesh: &SurfaceMesh, design_id: &str, out_dir: &Path) {
+fn emit_companions(
+    am_mesh: &SurfaceMesh,
+    env_mesh: &SurfaceMesh,
+    design_id: &str,
+    genome: &G3Genome,
+    out_dir: &Path,
+) {
+    let params = genome.decode();
+    let ring_cx = params["cx"];
+    let ring_r = params["R_b"];
     let (bmin, bmax, span) = mesh_bbox_mm(am_mesh);
     let threemf_path = out_dir.join(format!("{design_id}_AMbuild_mm.3mf"));
     write_3mf_mm(am_mesh, design_id, span, &threemf_path);
 
-    let dxf_bytes = write_dxf_drawing_mm(am_mesh, env_mesh, design_id, bmin, bmax, span);
+    let dxf_bytes = write_dxf_drawing_mm(
+        am_mesh, env_mesh, design_id, ring_cx, ring_r, bmin, bmax, span,
+    );
     let dxf_path = out_dir.join(format!("{design_id}_drawing_mm.dxf"));
     fs::write(&dxf_path, &dxf_bytes).expect("write DXF drawing");
 }
@@ -455,17 +496,18 @@ fn emit_companions(am_mesh: &SurfaceMesh, env_mesh: &SurfaceMesh, design_id: &st
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.get(1).map(|s| s.as_str()) == Some("--companion-from-dir") {
-        let stl_dir = PathBuf::from(args.get(2).expect("stl_dir"));
-        let out_dir = PathBuf::from(args.get(3).expect("out_dir"));
-        let design_id = args.get(4).expect("design_id");
+        let csv_path = PathBuf::from(args.get(2).expect("winner_genome.csv"));
+        let stl_dir = PathBuf::from(args.get(3).expect("stl_dir"));
+        let out_dir = PathBuf::from(args.get(4).expect("out_dir"));
         fs::create_dir_all(&out_dir).expect("create out_dir");
+        let (design_id, genome) = load_first_genome(&csv_path).expect("load genome");
         let am_bytes = fs::read(stl_dir.join(format!("{design_id}_AMbuild_mm.stl")))
             .expect("read AMbuild_mm.stl");
         let env_bytes = fs::read(stl_dir.join(format!("{design_id}_envelope_mm.stl")))
             .expect("read envelope_mm.stl");
         let am_mesh = read_binary_stl_mm(&am_bytes);
         let env_mesh = read_binary_stl_mm(&env_bytes);
-        emit_companions(&am_mesh, &env_mesh, design_id, &out_dir);
+        emit_companions(&am_mesh, &env_mesh, &design_id, &genome, &out_dir);
         return;
     }
 
