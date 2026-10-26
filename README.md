@@ -1,8 +1,10 @@
-# Jarambit 3.0.0: an evolved, 3D-printable titanium karambit
+# Jarambit 3.0.1: an evolved, 3D-printable titanium karambit
 
-[![release](https://img.shields.io/badge/release-v3.0.0-2f56d6)](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0) ![design](https://img.shields.io/badge/best%20individual-hz4i013__g00995__d206e3c9-555) ![score](https://img.shields.io/badge/W__ERGOLIGHT__v1-80.55-555) ![mass](https://img.shields.io/badge/mass-59.3%20g-555) ![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)
+[![release](https://img.shields.io/badge/release-v3.0.1-2f56d6)](https://github.com/neverhuman/jarambit/releases/tag/v3.0.1) [![paper](https://img.shields.io/badge/paper-G3%20v3.0.1%20PDF-2f56d6)](docs/g3/paper/g3-v3.0.1.pdf) ![design](https://img.shields.io/badge/best%20individual-hz4i013__g00995__d206e3c9-555) ![score](https://img.shields.io/badge/W__ERGOLIGHT__v1-80.55-555) ![mass](https://img.shields.io/badge/mass-59.3%20g-555) ![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)
 
-Every number and picture on this page describes one design, **`hz4i013_g00995_d206e3c9`**, the best individual of the v3.0.0 cohort of record, and is generated from [`evidence/g3/v3.0.0/release.json`](evidence/g3/v3.0.0/release.json). Status: computational design; not built, printed or physically tested.
+Every measurement and picture on this page describes one design, **`hz4i013_g00995_d206e3c9`**, the best individual of the v3.0.0 cohort of record, and is generated from [`evidence/g3/v3.0.0/release.json`](evidence/g3/v3.0.0/release.json); the rule values (bounds, loads, targets) are the decoder's own. Status: computational design; not built, printed or physically tested.
+
+**Paper:** [`docs/g3/paper/g3-v3.0.1.pdf`](docs/g3/paper/g3-v3.0.1.pdf), generated from the same receipt, sets out the design space, objective, search, measurement chain and every limit.
 
 <img src="docs/g3/v3.0.0/img/hero.jpg" alt="The best individual hz4i013_g00995_d206e3c9: anodized grip and ring, double-edged serrated claw blade" width="100%">
 
@@ -17,8 +19,8 @@ Ti-6Al-4V, laser powder-bed fusion: a hollow grip and blade core filled with a p
 | Edge A (inner): per-side angle, apex / bevel | 20.5–20.8° / 19.5–20.8° | 17.5–22.5° | ground from 57.0 to 3.0 mm from the point |
 | Edge B (spine): per-side angle, apex / bevel | 20.6–21.6° / 18.7–21.7° | 17.5–22.5° | ground from 65.1 to 3.1 mm from the point |
 | Steepest slope within 2 mm of either edge | 21.9° | no shoulder | one grind per edge |
-| Serrations, edge A / B: depth, teeth | 1.63 mm, 3 / 1.41 mm, 5 | both edges serrated | mean flank 39° / 36° |
-| Weakest tooth, edge A / B (180 N snag, 60 N pry) | SF 3.47 / 2.83 | ≥ 1 | meets target |
+| Serrations, edge A / B: depth, scallops | 1.63 mm, 3 / 1.41 mm, 5 | both edges serrated | mean flank 39° / 36° |
+| Weakest tooth between scallops, edge A / B (2 / 4 checked; 180 N snag, 60 N pry, beam formula) | SF 3.47 / 2.83 | ≥ 1 | meets target |
 | Solid tip, 1.82 N·m pry (TET10) | SF 0.64 | ≥ 1 | **below target** |
 | Lateral load at the tip (plate FE) | 337 N | ≥ 260 N | meets target |
 | Grip, worst case (beam formula) / hex8 voxel FE, spine 3427 N | SF 0.73 / 0.74 | ≥ 1 | **below target** |
@@ -48,7 +50,7 @@ The best design of island13 at each logged checkpoint, same camera and light:
 
 Scores and masses under each frame are the search's own (h 0.4 mm).
 
-**Choosing the winner on the print grid.** The search measures every design on a 0.4 mm voxel grid, and that grid can undercount mass. The search's own leader, `hz4i013_g00840_2a44149e` (Tier 2 score 81.53 at h 0.4), weighs 51.3 g at h 0.4 but 75.2 g at h 0.2 and 74.6 g at h 0.15, and its Tier-1 score falls from 75.06 to 66.65. So every number of record is measured at h 0.2 mm, the grid of the print file: every elite ordered by its record from the run, the top 32 re-evaluated at Tier 2 at h 0.2 on the search host, then the top 8 again on Linux x86_64, the platform of record (the winner scored 80.55 on the search host).
+**Choosing the winner on the print grid.** The search measures every design on a 0.4 mm voxel grid, and that grid can undercount mass. The search's own leader, `hz4i013_g00840_2a44149e` (Tier 2 score 81.53 at h 0.4 on Linux; the search host logged it a little higher), weighs 51.3 g at h 0.4 but 75.2 g at h 0.2 and 74.6 g at h 0.15, and its Tier-1 score falls from 75.06 to 66.65. So the ranking and the mass of record are measured at h 0.2 mm, the grid of the print file (the voxel FE below runs at h 0.4 mm): every elite ordered by its record from the run, the top 32 re-evaluated at Tier 2 at h 0.2 on the search host, then the top 8 again on Linux x86_64, the platform of record (the winner scored 80.55 on the search host).
 
 Grid check: mass in grams at each voxel pitch h (mm). Tier 1 (voxel SDF + plate) of the top 8 of the h 0.4 Linux Tier-2 ranking; h 0.2 and h 0.15 agree within 3.3 % for every design.
 
@@ -79,11 +81,11 @@ Final ranking:
 ## How the design is constrained and measured
 
 - **Edges (EDGE-1..5).** One primary grind per edge at 17.5–22.5° per side, measured normal to the actual serrated edge, at full height and unbroken to the point; only a short plunge by the guard is unsharpened.
-- **Serrations (SERR-1..4).** Both edges serrated, at least 3 full-depth teeth each, pitch 5–9 mm, depth at most a quarter of the pitch, and no serration within 18 mm of the point. Each tooth root is checked under a single-tooth snag and pry.
+- **Serrations (SERR-1..4).** Both edges serrated, at least 3 full-depth scallops each, pitch 5–9 mm, depth at most a quarter of the pitch, and no serration within 18 mm of the point. Every tooth between two scallops is checked under a single-tooth snag and pry (a beam formula on the exact section law), on this design and on 60 Sobol designs in the decoder's tests; the check is not a term of the score.
 - **Evolution designs the knife.** Populations start from scrambled Sobol samples only. Nobody edits an individual; the rules above are constraints on what the decoder can express.
 - **FE certification of this design (hex8 voxel FE on the as-built voxels, h 0.4 mm, von Mises q99.9 over the zone).** Grip zone: lateral 3.55, twist 5.50, spine 0.74. Root: lateral 2.08, twist 1.69, spine 1.29. Loads: lateral 260 N at the tip; human-max twist 16.2 N m; spine 3427 N at the blade centroid.
 - **Tip mesh convergence.** Solid-tip SF 0.585 / 0.638 / 0.611 at 0.4 / 0.15 (production) / 0.08 mm² planform meshes.
-- **Mass.** 59.3 g from the watertight 0.2 mm print mesh; the ranking counted 57.0 g on its 0.2 mm voxel grid and the search 56.0 g on its 0.4 mm grid.
+- **Mass.** 59.3 g from the watertight 0.2 mm print mesh; the ranking counted 57.0 g on its 0.2 mm voxel grid (the score above uses this mass) and the search 56.0 g on its 0.4 mm grid.
 
 ## Limits of this result
 
@@ -128,6 +130,8 @@ The v1 command-line pipeline (`cargo run -p jarambit`) is still in the repositor
 
 ## Repository
 
-- [`docs/g3/RELEASE_3.0.0.md`](docs/g3/RELEASE_3.0.0.md): what changed in this release and why.
+- [`docs/g3/paper/`](docs/g3/paper/): the G3 paper; `make -C docs/g3/paper` rebuilds it from the receipt.
+- [`docs/g3/RELEASE_3.0.0.md`](docs/g3/RELEASE_3.0.0.md): what the v3.0.0 release changed and why; later patches are in `docs/RELEASES.md`.
+- [`docs/g3/RENDERS.md`](docs/g3/RENDERS.md): how every image of the design was made.
 - [`crates/g3/README.md`](crates/g3/README.md): the G3 genome, decoder, objective and their known limitations.
-- [`docs/RELEASES.md`](docs/RELEASES.md): every release. [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md): the earlier v1 study, kept as a historical record.
+- [`docs/RELEASES.md`](docs/RELEASES.md): every release. [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md) and [`docs/paper/`](docs/paper/) (Paper B): the earlier v1 study, kept as its own record.

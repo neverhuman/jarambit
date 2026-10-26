@@ -74,13 +74,16 @@ blocking findings. Reports: `review_g3/REVIEW.md`, `REREVIEW_S3.md` (S4), `REREV
   change (decoder `120ba792`) do not reproduce on it and are not comparable.
 - Decoder r2 (v3.0.0):
   - Both edges are serrated (`SERR-1..3`, owner: "double-edged, double-serrated"): 0.8–2.2 mm (inner) and
-    0.8–2.0 mm (spine) deep, at least 3 full-depth teeth per edge (the pitch is capped on the span at full
+    0.8–2.0 mm (spine) deep, at least 3 full-depth scallops per edge (the pitch is capped on the span at full
     amplitude). The serrated span starts past the plunge and ends at least 18 mm from the point, so the piercing
-    point stays plain. `BladeProfile2D` records the depth and tooth count as built.
+    point stays plain. `BladeProfile2D` records the depth and the scallop count (`serr_teeth_*`) as built.
   - Teeth that do not snap (`SERR-4`, owner: "we don't want to break serrated teeth"): pitch 5–9 mm and depth at
-    most a quarter of the pitch (`SERR_DEPTH_PER_PITCH`). `serration_tooth_strength` checks every tooth root, the
-    section between neighbouring gullet bottoms, under a 180 N snag along the edge times the Inglis notch factor
-    of the gullet and a 60 N pry across the blade. The loads are assumptions, not measurements.
+    most a quarter of the pitch (`SERR_DEPTH_PER_PITCH`). `serration_tooth_strength` checks every tooth between two
+    scallops (its root is the section between the two gullet bottoms; the end tooth of a span is not checked) on the
+    exact 2D section law: a 180 N snag along the edge in pure bending times the Inglis notch factor
+    `1 + 2 sqrt(h_t / rho)`, and a 60 N pry across the blade, against 828 MPa x 0.912 = 755 MPa. It runs in the
+    decoder tests (60 Sobol designs, SF >= 1) and in the release measurement (`examples/bladefacts.rs`); it is not a
+    term of the score. The loads are assumptions, not measurements.
   - `hm_twist_sf` (16.2 N·m human-max twist) is the blade-body SF of the 1.82 N·m plate solve scaled linearly; it
     used to read the tip zone through a 4.0 clamp, which capped it at 0.337 for every design. On the edge-pilot
     winner it reads 1.01 against 1.64 from a hex8 voxel FE of the root, so it errs on the safe side.

@@ -2,7 +2,7 @@
 
 v3.0.0 makes G3 the headline of the repository: a one-piece Ti-6Al-4V karambit for laser powder-bed fusion, designed
 around the hand and evolved from scrambled Sobol samples. The README and the G3 paper
-([`docs/g3/paper/g3-v3.0.0.pdf`](paper/g3-v3.0.0.pdf)) describe the best individual of the cohort of record. Both are
+(`docs/g3/paper/`; the v3.0.0 PDF is attached to the [v3.0.0 release](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0)) describe the best individual of the cohort of record. Both are
 generated from one receipt, [`evidence/g3/v3.0.0/release.json`](../../evidence/g3/v3.0.0/release.json); no number in either
 is typed by hand.
 
@@ -26,11 +26,12 @@ is typed by hand.
   - The grind runs unbroken to the point; only a 5–12 % plunge by the guard is unsharpened.
   - Gate S3 reads the true edge-normal section over 0–2 mm.
 - SERR-1..4: both edges serrated.
-  - Depth is 0.8–2.2 mm on the inner edge and 0.8–2.0 mm on the spine edge, with at least 3 full-depth teeth per edge.
+  - Depth is 0.8–2.2 mm on the inner edge and 0.8–2.0 mm on the spine edge, with at least 3 full-depth scallops per edge.
   - The pitch is 5–9 mm and the depth at most a quarter of the pitch.
   - The serrated span starts past the plunge and ends at least 18 mm from the point.
-  - Every tooth is checked under a 180 N snag along the edge (times an Inglis gullet notch factor) and a 60 N pry
-    across the blade.
+  - Every tooth between two scallops is checked under a 180 N snag along the edge (times an Inglis gullet notch
+    factor) and a 60 N pry across the blade: in the decoder tests on 60 Sobol designs and on the released design. The
+    check is not a term of the score.
 - Measured terms that were formulas or dead weights:
   - human-max twist is the blade-body plate solve scaled to 16.2 N·m, where it used to be capped at 0.337;
   - buckling is a lateral-torsional estimate, where it used to be zero credit.

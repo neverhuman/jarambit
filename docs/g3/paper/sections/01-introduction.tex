@@ -1,19 +1,39 @@
-\section{Introduction}
-A karambit is a curved, ring-handled knife held in a closed fist with the little finger through the ring. Printing one
-in Ti-6Al-4V by laser powder-bed fusion makes a hollow, lattice-filled part possible, which opens a large design space
-but also makes it easy to fool oneself: a coarse voxel model can hide mass, a strength formula can credit material that
-is never built, and an edge can be left unground where a test does not look. G3 is the generation of the Jarambit
-project that designs the whole knife around the hand. This paper reports its v\gVersion{} release.
+\section{Introduction}\label{sec:intro}
+A karambit is a curved knife with a finger ring at the pommel, held in a closed fist; in this design the little finger
+goes through the ring. Printing one in Ti-6Al-4V by laser powder-bed fusion (L-PBF) makes a hollow part possible: the
+grip and the blade core become a skin over a triply periodic minimal-surface (TPMS) lattice with ports to remove the
+powder. That opens a large three-dimensional design space, and with it several ways for a search to fool itself. A
+coarse voxel grid can hide mass. A beam or plate formula can credit material that is never built. A blade can keep an
+unground shoulder where a sparse sharpness check does not look. And deep, narrow serrations can lengthen the edge while
+leaving needle teeth that snap on the first hard snag.
 
-Three choices define the release. First, \emph{evolution designs the knife}: populations start from scrambled Sobol
-samples, nobody edits an individual, and engineering requirements enter as constraints on what the decoder can express
-or as measured terms of the objective. Second, \emph{the edge is part of the design space, not a post-process}: both
-cutting edges must carry one primary grind at a knife-appropriate angle, run unbroken to the point, and be serrated
-with teeth that do not snap (Section~\ref{sec:design}). Third, \emph{only measurements are reported}: every number in
-this paper and in the repository README is generated from one release receipt, and the strength figures quoted for
-the design come from voxel-SDF geometry, plate and solid finite elements, and a voxel finite-element certification of
-the printed geometry.
+G3 is the generation of the Jarambit project that designs the whole knife around the hand: the ring, the grip, the
+guard, the hollow interior and a double-edged, double-serrated claw blade come from one decoder and are scored by one
+multi-fidelity evaluation chain. This paper reports its v\gVersion{} release and the best individual of the cohort of
+record, \gDesign{} (decoder commit \gCommit, decoder hash \gDecoder).
 
-The contributions are the decoder rules for edges and serrations (EDGE-1..5, SERR-1..4), the logged evolution of a
-\gIslands-island cohort, the design it found, and a measurement chain whose every step is reproducible from a commit
-and a genome row (Section~\ref{sec:repro}).
+Three choices define the release.
+\begin{enumerate}
+\item \emph{Evolution designs the knife.} Every island starts from scrambled Sobol samples
+(\src{crates/g3/src/g3_genome.rs}{\code{g3_genome.rs}}); no seed design, template or hand edit enters a population.
+Engineering requirements enter either as constraints on what the decoder can express or as terms of the objective.
+\item \emph{The edge is part of the design space, not a post-process.} The decoder gives both cutting edges one primary
+grind at 17.5--22.5\textdegree{} per side, measured normal to the actual serrated edge and run unbroken to the point
+(EDGE-1..5), and serrates both edges within bounds chosen so that the teeth do not snap (SERR-1..4;
+Section~\ref{sec:design}). The strength of every tooth between two scallops is checked under a \gToothSnag{} N snag and a
+\gToothPry{} N pry, on 60 Sobol designs in the decoder's tests and on the released design
+(\src{crates/g3/src/g3_qd.rs}{\code{serration_tooth_strength}}).
+\item \emph{Every measured number has one source.} Each measured quantity of the design in this paper and in the
+repository README is generated from one release receipt, \code{evidence/g3/v\gRecord/release.json}, by
+\src{crates/g3/src/bin/g3_release_tex.rs}{\code{g3-release-tex}} and \src{ops/ci/gen_readme.py}{\code{gen_readme.py}}; the
+rule constants (gene bounds, loads, allowables) are the decoder's own and are quoted as written. The measurements are
+voxel geometry, plate and solid finite elements and a voxel finite-element certification of the printed part; three
+quantities are not finite-element results and are labelled where they appear: the buckling factor (an analytic
+estimate), the tooth safety factors (a beam formula on the exact section law) and the edge geometry (measured on the
+exact section law rather than on voxels).
+\end{enumerate}
+
+Section~\ref{sec:design} describes the genome and the edge and serration rules, Section~\ref{sec:objective} the
+objective, Section~\ref{sec:search} the search and its evaluation tiers, Section~\ref{sec:measure} the measurement and
+verification chain, Section~\ref{sec:results} the evolution and the design it found, Section~\ref{sec:limits} the limits
+of the result and Section~\ref{sec:repro} how to reproduce it.
