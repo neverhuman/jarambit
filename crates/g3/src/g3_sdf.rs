@@ -1365,7 +1365,46 @@ pub struct BladeProfile2D {
     pub arc_sp_mm: f64,
     pub sharpened_arc_in_mm: f64,
     pub sharpened_arc_sp_mm: f64,
+    /// Serrations as built (`SERR`): the deepest cut of the outline below its smooth line (mm) and the number of
+    /// teeth (cuts deeper than half that), per edge
+    pub serr_depth_in_mm: f64,
+    pub serr_depth_sp_mm: f64,
+    pub serr_teeth_in: usize,
+    pub serr_teeth_sp: usize,
 }
+
+/// Gullets of a serrated edge: each contiguous run of the outline cut deeper than half the deepest cut below its smooth
+/// line is one gullet (micro-serration ripples on a gullet floor stay inside its run); returns the deepest cut (mm) and
+/// the sample index of each gullet bottom. A tooth is the uncut edge between two neighbouring gullets.
+pub fn serration_gullets(edge: &[f64], smooth: &[f64]) -> (f64, Vec<usize>) {
+    let dev: Vec<f64> = edge.iter().zip(smooth).map(|(e, s)| (e - s).abs()).collect();
+    let depth = dev.iter().cloned().fold(0.0_f64, f64::max);
+    let mut bottoms = Vec::new();
+    let mut k = 0usize;
+    while k < dev.len() {
+        if depth > 0.0 && dev[k] > 0.5 * depth {
+            let start = k;
+            while k < dev.len() && dev[k] > 0.5 * depth {
+                k += 1;
+            }
+            let run = start..k;
+            bottoms.push(run.clone().max_by(|&a, &b| dev[a].total_cmp(&dev[b])).unwrap());
+        } else {
+            k += 1;
+        }
+    }
+    (depth, bottoms)
+}
+
+/// Deepest serration cut (mm) and number of teeth (gullets bounding a tooth on both sides count; the outermost
+/// gullets of the span bound one tooth each, so teeth = gullets).
+fn serration_census(edge: &[f64], smooth: &[f64]) -> (f64, usize) {
+    let (depth, bottoms) = serration_gullets(edge, smooth);
+    (depth, bottoms.len())
+}
+
+/// Serration tooth depth per unit pitch (`SERR-4`).
+pub const SERR_DEPTH_PER_PITCH: f64 = 0.25;
 
 pub const SHARPENED_EDGE_CAP_MM: f64 = 4.0 * 25.4; // 101.6 mm (4.0 in) per edge
 pub const BLADE_REACH_MAX_MM: f64 = 85.725;
@@ -1476,6 +1515,24 @@ pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D
         p["edge_sp_c8"],
     ];
 
+    // `SERR-2` (owner: "double-edged, double-serrated"): each serrated span carries at least 3 teeth, so the pitch is
+    // capped at a third of the span; depth floors (`SERR-1`) and the post-plunge start (`SERR-3`) are gene bounds
+    // The span ends at least 18 mm from the point (past the point taper's fade at tip_reserve + 3 mm and outside the
+    // solid-tip FE read-out, 4-15 mm), leaving the piercing point plain; the pitch is capped on the part of the span at
+    // full amplitude (inside the 0.04 entry and exit ramps), so all 3+ teeth are cut to depth.
+    let ser_span = |s0: f64, s1: f64| {
+        let s1 = s1.min(1.0 - (tip_reserve + 3.0).max(18.0) / blade_len).max(s0 + 0.16);
+        (s0, s1)
+    };
+    let (ser_s0_in, ser_s1_in) = ser_span(p["ser_s0_in"], p["ser_s1_in"]);
+    let (ser_s0_sp, ser_s1_sp) = ser_span(p["ser_s0_sp"], p["ser_s1_sp"]);
+    let pitch_in = p["ser_pitch_in"].min((ser_s1_in - ser_s0_in - 0.08) * blade_len / 3.2);
+    let pitch_sp = p["ser_pitch_sp"].min((ser_s1_sp - ser_s0_sp - 0.08) * blade_len / 3.2);
+    // `SERR-4` (owner: "the most formidable, but we don't want to break serrated teeth"): pitch >= 5 mm (gene bound;
+    // the serrated span is long enough for 3 teeth at that pitch) and depth <= `SERR_DEPTH_PER_PITCH` of the pitch.
+    // Narrower or deeper teeth fail the single-tooth snag / pry cases of `serration_tooth_strength`.
+    let depth_in = p["ser_depth_in"].min(SERR_DEPTH_PER_PITCH * pitch_in);
+    let depth_sp = p["ser_depth_sp"].min(SERR_DEPTH_PER_PITCH * pitch_sp);
     for i in 0..n_pts {
         let u = (i as f64) / ((n_pts - 1) as f64);
         let x = x_heel + u * blade_len;
@@ -1502,31 +1559,29 @@ pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D
         }
 
         // Serrated contour modulation (faded out inside tip_reserve so Gate S2 point is clean)
-        let ser_in_win =
-            smoothstep(p["ser_s0_in"], p["ser_s0_in"] + 0.04, u)
-                * (1.0 - smoothstep(p["ser_s1_in"] - 0.04, p["ser_s1_in"], u))
-                * tip_fade;
-        let ser_sp_win =
-            smoothstep(p["ser_s0_sp"], p["ser_s0_sp"] + 0.04, u)
-                * (1.0 - smoothstep(p["ser_s1_sp"] - 0.04, p["ser_s1_sp"], u))
-                * tip_fade;
+        let ser_in_win = smoothstep(ser_s0_in, ser_s0_in + 0.04, u)
+            * (1.0 - smoothstep(ser_s1_in - 0.04, ser_s1_in, u))
+            * tip_fade;
+        let ser_sp_win = smoothstep(ser_s0_sp, ser_s0_sp + 0.04, u)
+            * (1.0 - smoothstep(ser_s1_sp - 0.04, ser_s1_sp, u))
+            * tip_fade;
         let s_mm = u * blade_len;
         let wave_in = serration_wave(
-            s_mm / p["ser_pitch_in"].max(2.0),
+            s_mm / pitch_in,
             p["ser_duty_in"],
             p["w_scallop_in"],
             p["w_tooth_in"],
             p["w_micro_in"],
         );
         let wave_sp = serration_wave(
-            s_mm / p["ser_pitch_sp"].max(2.0),
+            s_mm / pitch_sp,
             p["ser_duty_sp"],
             p["w_scallop_sp"],
             p["w_tooth_sp"],
             0.0,
         );
-        let ser_in = ser_in_win * p["ser_depth_in"] * wave_in;
-        let ser_sp = ser_sp_win * p["ser_depth_sp"] * wave_sp;
+        let ser_in = ser_in_win * depth_in * wave_in;
+        let ser_sp = ser_sp_win * depth_sp * wave_sp;
 
         let yi_sm = y_center - h_half + 0.3 * d_in;
         let ys_sm = (y_center + h_half + 0.3 * d_sp).max(yi_sm + 0.08);
@@ -1658,6 +1713,8 @@ pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D
         }
     }
 
+    let (serr_depth_in_mm, serr_teeth_in) = serration_census(&y_in, &y_in_smooth);
+    let (serr_depth_sp_mm, serr_teeth_sp) = serration_census(&y_sp, &y_sp_smooth);
     BladeProfile2D {
         x_heel,
         x_tip,
@@ -1676,6 +1733,10 @@ pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D
         arc_sp_mm,
         sharpened_arc_in_mm,
         sharpened_arc_sp_mm,
+        serr_depth_in_mm,
+        serr_depth_sp_mm,
+        serr_teeth_in,
+        serr_teeth_sp,
     }
 }
 

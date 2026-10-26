@@ -25,8 +25,8 @@ use crate::g3_sandwich::{
 };
 use crate::g3_sdf::{
     blade_bevel_window_weights, build_blade_profile_2d, build_g3_sdf, effective_blade_rho,
-    eval_blade_thickness_and_sdf2, eval_grip_slice, extract_watertight_mesh, BladeProfile2D,
-    VoxelGrid3D, GUARD_X_MM, RHO_TI64_G_MM3,
+    eval_blade_thickness_and_sdf2, eval_grip_slice, extract_watertight_mesh, serration_gullets,
+    BladeProfile2D, VoxelGrid3D, GUARD_X_MM, RHO_TI64_G_MM3,
 };
 use jarambit_crescent::export;
 use jarambit_physics::fine::{mesh_domain, NU};
@@ -115,11 +115,11 @@ impl EvalTier {
                 "summary": "analytic_surrogate_only",
                 "measured": [
                     "groove_r_min_mm", "crest_r_min_mm", "saddle_depth_mm",
-                    "mid_depth_mm", "choil_depth_mm", "station_err_mm",
-                    "edge_r_min_mm", "section_corner_r_min_mm"
+                    "mid_depth_mm", "choil_depth_mm", "station_err_mm"
                 ],
+                "design_law": ["edge_r_min_mm", "section_corner_r_min_mm"],
                 "surrogate": [
-                    "mass_g", "lat_rob_cert_n", "strict_lat_n",
+                    "buckling_lambda", "mass_g", "lat_rob_cert_n", "strict_lat_n",
                     "ring_bearing_cap_n", "ring_back_cap_n",
                     "twist_body_sf", "twist_tip_sf", "twist_tipzone_strict_sf",
                     "hm_twist_sf", "hm_spine_sf", "fat_sf", "grip_sf_min",
@@ -127,7 +127,7 @@ impl EvalTier {
                     "com_to_index_mm", "spin_I_g_mm2", "am_build", "fairness",
                     "max_apex_mm", "max_half_angle_deg", "t_0p25_mm", "t_1p00_mm", "t_2p00_mm"
                 ],
-                "unmeasured_zero_credit": ["solid_tip_sf", "buckling_lambda"]
+                "unmeasured_zero_credit": ["solid_tip_sf"]
             }),
             EvalTier::Tier1SdfAndPlate => serde_json::json!({
                 "tier": "Tier1SdfAndPlate",
@@ -140,13 +140,13 @@ impl EvalTier {
                     "watertight", "am_build", "swell_perimeter_mm", "swell_h_over_t",
                     "L_g_mm", "guard_h_mm", "com_to_index_mm", "spin_I_g_mm2",
                     "groove_r_min_mm", "crest_r_min_mm", "saddle_depth_mm",
-                    "mid_depth_mm", "choil_depth_mm", "station_err_mm",
-                    "edge_r_min_mm", "section_corner_r_min_mm"
+                    "mid_depth_mm", "choil_depth_mm", "station_err_mm"
                 ],
+                "design_law": ["edge_r_min_mm", "section_corner_r_min_mm"],
                 "surrogate": [
-                    "max_apex_mm", "max_half_angle_deg", "t_0p25_mm", "t_1p00_mm", "t_2p00_mm", "fairness"
+                    "buckling_lambda", "max_apex_mm", "max_half_angle_deg", "t_0p25_mm", "t_1p00_mm", "t_2p00_mm", "fairness"
                 ],
-                "unmeasured_zero_credit": ["solid_tip_sf", "buckling_lambda"]
+                "unmeasured_zero_credit": ["solid_tip_sf"]
             }),
             EvalTier::Tier2Full3D => serde_json::json!({
                 "tier": "Tier2Full3D",
@@ -159,13 +159,13 @@ impl EvalTier {
                     "watertight", "am_build", "swell_perimeter_mm", "swell_h_over_t",
                     "L_g_mm", "guard_h_mm", "com_to_index_mm", "spin_I_g_mm2",
                     "groove_r_min_mm", "crest_r_min_mm", "saddle_depth_mm",
-                    "mid_depth_mm", "choil_depth_mm", "station_err_mm",
-                    "edge_r_min_mm", "section_corner_r_min_mm"
+                    "mid_depth_mm", "choil_depth_mm", "station_err_mm"
                 ],
+                "design_law": ["edge_r_min_mm", "section_corner_r_min_mm"],
                 "surrogate": [
-                    "max_apex_mm", "max_half_angle_deg", "t_0p25_mm", "t_1p00_mm", "t_2p00_mm", "fairness"
+                    "buckling_lambda", "max_apex_mm", "max_half_angle_deg", "t_0p25_mm", "t_1p00_mm", "t_2p00_mm", "fairness"
                 ],
-                "unmeasured_zero_credit": ["buckling_lambda"]
+                "unmeasured_zero_credit": []
             }),
         }
     }
@@ -527,6 +527,103 @@ pub fn measure_blade_edge_apex_and_angle(
     (apex_out, ang_out)
 }
 
+/// Serration tooth strength of one edge as built (`SERR-4`, owner: "the most formidable, but we don't want to break
+/// serrated teeth"). Each tooth spans two neighbouring gullet bottoms (`serration_gullets`; micro-serration ripples
+/// on a gullet floor are floor texture, not load-bearing teeth); its
+/// root section is the segment between them, with the thickness of the exact blade law sampled along it. Two load
+/// cases on the tooth tip, at the tooth height above the root:
+/// - snag: `TOOTH_SNAG_N` along the edge (in-plane bending of the root), times the gullet notch factor
+///   `Kt = 1 + 2 sqrt(d / rho)` (Inglis) with rho the gullet radius fitted through the cut at +-0.6 mm;
+/// - pry: `TOOTH_PRY_N` across the blade (out-of-plane bending of the root, thickness t(s)).
+/// Returns (min SF over teeth and cases, teeth counted, mean flank angle atan(2 d / w) in degrees; w = gullet width).
+pub fn serration_tooth_strength(
+    p: &BTreeMap<&'static str, f64>,
+    blade: &BladeProfile2D,
+    inner: bool,
+) -> (f64, usize, f64) {
+    let (edge, smooth, sign) = if inner {
+        (&blade.y_in, &blade.y_in_smooth, 1.0)
+    } else {
+        (&blade.y_sp, &blade.y_sp_smooth, -1.0)
+    };
+    let xs = &blade.xs;
+    let n = xs.len();
+    let (depth, gullets) = serration_gullets(edge, smooth);
+    if depth < 0.2 {
+        return (f64::INFINITY, 0, 0.0);
+    }
+    let allow = YIELD_TI64_MPA * 0.912;
+    let at = |x: f64, y: f64| eval_blade_thickness_and_sdf2(p, blade, x, y);
+    let interp = |v: &[f64], x: f64| -> f64 {
+        let i = xs.partition_point(|&q| q < x).clamp(1, n - 1);
+        let f = ((x - xs[i - 1]) / (xs[i] - xs[i - 1]).max(1e-12)).clamp(0.0, 1.0);
+        v[i - 1] * (1.0 - f) + v[i] * f
+    };
+    let (mut sf_min, mut flank_sum) = (f64::INFINITY, 0.0_f64);
+    let mut teeth = 0usize;
+    for w in gullets.windows(2) {
+        let (ga, gb) = (w[0], w[1]);
+        let (pa, pb) = ((xs[ga], edge[ga]), (xs[gb], edge[gb]));
+        let b = (pb.0 - pa.0).hypot(pb.1 - pa.1);
+        // tooth height: the furthest point of the outline between the gullets, measured off the root line
+        let (ux, uy) = ((pb.0 - pa.0) / b.max(1e-9), (pb.1 - pa.1) / b.max(1e-9));
+        let mut h_t = 0.0_f64;
+        for k in ga..=gb {
+            h_t = h_t.max(((xs[k] - pa.0) * -uy + (edge[k] - pa.1) * ux).abs());
+        }
+        if b < 0.3 || h_t < 0.2 {
+            continue;
+        }
+        // root section: thickness along the root line, 0.05 mm inside the blade
+        let (nx, ny) = (-uy * sign, ux * sign); // inward: +y side of the inner edge, -y side of the spine edge
+        let m = 40usize;
+        let (mut a0, mut a1, mut a2, mut i_op, mut t_max) = (0.0_f64, 0.0_f64, 0.0_f64, 0.0_f64, 0.0_f64);
+        let ds = b / m as f64;
+        for j in 0..m {
+            let sj = (j as f64 + 0.5) * ds;
+            let (x, y) = (pa.0 + ux * sj + 0.05 * nx, pa.1 + uy * sj + 0.05 * ny);
+            let (t, d2) = at(x, y);
+            let t = if d2 <= 0.0 { t.max(0.0) } else { 0.0 };
+            a0 += t * ds;
+            a1 += t * sj * ds;
+            a2 += t * sj * sj * ds;
+            i_op += t.powi(3) / 12.0 * ds;
+            t_max = t_max.max(t);
+        }
+        if a0 <= 1e-9 || i_op <= 1e-12 {
+            sf_min = 0.0;
+            continue;
+        }
+        let s_bar = a1 / a0;
+        let i_ip = (a2 - a0 * s_bar * s_bar).max(1e-12);
+        let c = s_bar.max(b - s_bar);
+        // gullet radius: circle through the cut at -0.6, 0, +0.6 mm around each gullet bottom
+        let rho_at = |g: usize| -> f64 {
+            let (x1, x2, x3) = (xs[g] - 0.6, xs[g], xs[g] + 0.6);
+            let (y1, y2, y3) = (interp(edge, x1), edge[g], interp(edge, x3));
+            let (a, bb, cc) = ((x2 - x1).hypot(y2 - y1), (x3 - x2).hypot(y3 - y2), (x3 - x1).hypot(y3 - y1));
+            let area2 = ((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)).abs();
+            if area2 < 1e-12 { 1e3 } else { a * bb * cc / (2.0 * area2) }
+        };
+        let rho = rho_at(ga).min(rho_at(gb)).max(0.02);
+        let kt = 1.0 + 2.0 * (h_t / rho).sqrt();
+        let sig_snag = kt * TOOTH_SNAG_N * h_t * c / i_ip;
+        let sig_pry = TOOTH_PRY_N * h_t * (0.5 * t_max) / i_op;
+        sf_min = sf_min.min(allow / sig_snag.max(sig_pry).max(1e-9));
+        flank_sum += (2.0 * h_t / (0.5 * b).max(1e-6)).atan().to_degrees();
+        teeth += 1;
+    }
+    (sf_min, teeth, if teeth > 0 { flank_sum / teeth as f64 } else { 0.0 })
+}
+
+/// Serration tooth load cases (`SERR-4`): a snag along the edge on one tooth (a hard draw-cut catching a single tooth)
+/// and a lateral pry on one tooth. Conservative research assumptions, not measured use loads.
+pub const TOOTH_SNAG_N: f64 = 180.0;
+pub const TOOTH_PRY_N: f64 = 60.0;
+
+/// Max triangle area (mm^2) of the Tier-2 solid-tip TET10 planform mesh (converged on sharp points; see P6).
+pub const TIP_FE_MAX_AREA_MM2: f64 = 0.15;
+
 /// Fast Tier-0 analytic/1D-section evaluation (~2 ms per individual).
 /// Computes continuous `ErgolightInputs`, `ErgolightScore`, and `G3Descriptors` directly from the
 /// decoded geometry laws so weak individuals can be weeded out before 3D voxelization.
@@ -620,8 +717,10 @@ pub fn evaluate_tier0_analytic(genome: &G3Genome) -> G3EvalRecord {
     let dx_b = (blade.x_tip - blade.x_heel) / (n_bx as f64);
     let mut min_blade_lat_n = f64::INFINITY;
     let mut min_twist_body_sf = f64::INFINITY;
+    let mut min_twist_body_sf_raw = f64::INFINITY; // unclamped, for the 16.2 N*m human-max twist (`S2`)
     let mut min_twist_tip_sf = f64::INFINITY;
     let mut min_hm_spine_sf = f64::INFINITY;
+    let (mut ltb_sum, mut ltb_n) = (0.0_f64, 0usize); // sum of sqrt(E I_y G J) over blade stations (`S3`)
     let mut blade_area_2d = 0.0_f64;
     let mut m_blade_total = 0.0_f64;
 
@@ -637,6 +736,7 @@ pub fn evaluate_tier0_analytic(genome: &G3Genome) -> G3EvalRecord {
         let mut col_env = 0.0_f64;
         let mut col_cav = 0.0_f64;
         let mut col_i_yy = 0.0_f64;
+        let mut col_j_open = 0.0_f64;
         let mut t_max_slice = 0.2_f64;
         for j in 0..n_by {
             let y = yi + (j as f64 + 0.5) * dy_b;
@@ -653,6 +753,7 @@ pub fn evaluate_tier0_analytic(genome: &G3Genome) -> G3EvalRecord {
                 col_cav += hc * dx_b * dy_b;
                 let sec = SandwichSection::from_skin_and_lattice(t_xy, skin_t, rho_blade_eff, 0.0);
                 col_i_yy += (sec.t3_bend / 12.0) * dy_b;
+                col_j_open += (sec.t3_bend / 3.0) * dy_b; // open thin-section J, a lower bound for hollow sections
             }
         }
         let dv_am = (col_env - col_cav) + col_cav * rho_blade_eff;
@@ -666,6 +767,11 @@ pub fn evaluate_tier0_analytic(genome: &G3Genome) -> G3EvalRecord {
         _my_total += dm * y_mid;
         i_spin += dm * ((x - cx).powi(2) + y_mid.powi(2));
 
+        if col_i_yy > 0.0 && col_j_open > 0.0 {
+            let g_ti = E_TI64_MPA / (2.0 * (1.0 + NU));
+            ltb_sum += (E_TI64_MPA * col_i_yy * g_ti * col_j_open).sqrt();
+            ltb_n += 1;
+        }
         // Structural section checks along the blade using true Euclidean distance to tip_xy (`B3`, `S5-1`: 4.0 mm exclusion)
         let a_tip = (x - blade.tip_xy.0).hypot(y_mid - blade.tip_xy.1);
         if a_tip >= 4.0 {
@@ -678,9 +784,11 @@ pub fn evaluate_tier0_analytic(genome: &G3Genome) -> G3EvalRecord {
             // Saint-Venant / Bredt torsion of the blade section at 1.82 N*m (1820 N*mm)
             let j_tors = 0.31 * h_b * t_max_slice.powi(3);
             let tau_1820 = 1820.0 * t_max_slice / j_tors.max(0.1);
-            let sf_tw = (allow / (3.0_f64.sqrt() * tau_1820).max(1e-6)).min(4.0);
+            let sf_tw_raw = allow / (3.0_f64.sqrt() * tau_1820).max(1e-6);
+            let sf_tw = sf_tw_raw.min(4.0);
             if a_tip > 15.0 {
                 min_twist_body_sf = min_twist_body_sf.min(sf_tw);
+                min_twist_body_sf_raw = min_twist_body_sf_raw.min(sf_tw_raw);
             } else {
                 min_twist_tip_sf = min_twist_tip_sf.min(sf_tw);
             }
@@ -837,10 +945,23 @@ pub fn evaluate_tier0_analytic(genome: &G3Genome) -> G3EvalRecord {
         twist_tipzone_strict_sf: twist_tip_sf,
         solid_tip_sf: 0.0,
         dolfinx_rel_err: 1.0,
-        buckling_lambda: 0.0,
+        // `S3`: lateral-torsional buckling of the blade as a cantilever from the heel under the 3427 N spine load
+        // spread along its length (Timoshenko: q_cr L = 12.85 sqrt(E I_y G J) / L^2, station-averaged section)
+        buckling_lambda: if ltb_n > 0 {
+            let l_b = (blade.x_tip - blade.x_heel).max(10.0);
+            (12.85 * (ltb_sum / ltb_n as f64) / (l_b * l_b) / 3427.0).clamp(0.0, 50.0)
+        } else {
+            0.0
+        },
         seq_ratio,
         gci_admitted: false,
-        hm_twist_sf: (twist_tip_sf * (1820.0 / 16_200.0)).clamp(0.0, 2.0),
+        // `S2`: the 16.2 N*m human-max twist loads the blade body (root side), not the tip zone; scale the unclamped
+        // 1.82 N*m body SF linearly (the old `twist_tip_sf * 1820/16200` read the tip zone through a 4.0 clamp: <= 0.337)
+        hm_twist_sf: if min_twist_body_sf_raw.is_finite() {
+            (min_twist_body_sf_raw * (1820.0 / 16_200.0)).clamp(0.0, 3.0)
+        } else {
+            0.0
+        },
         hm_spine_sf,
         fat_sf,
         max_apex_mm,
@@ -1079,7 +1200,6 @@ fn evaluate_tier1_with_grid(genome: &G3Genome, h_vox: f64) -> (G3EvalRecord, Vox
     rec.inputs.twist_body_sf = 0.0;
     rec.inputs.twist_tip_sf = 0.0;
     rec.inputs.twist_tipzone_strict_sf = 0.0;
-    rec.inputs.buckling_lambda = 0.0;
     rec.inputs.hm_twist_sf = 0.0;
     rec.inputs.hm_spine_sf = 0.0;
     rec.inputs.seq_ratio = 0.0;
@@ -1218,6 +1338,9 @@ fn evaluate_tier1_with_grid(genome: &G3Genome, h_vox: f64) -> (G3EvalRecord, Vox
                         if pk_body > 1e-6 && pk_body.is_finite() {
                             let sf_body = (allow_plate / pk_body).clamp(0.0, 4.0);
                             rec.inputs.twist_body_sf = sf_body;
+                            // `S2`: human-max twist = the same plate solve's body peak scaled from 1.82 to 16.2 N*m
+                            rec.inputs.hm_twist_sf =
+                                (allow_plate / pk_body * (1820.0 / 16_200.0)).clamp(0.0, 3.0);
                         }
                         if pk_tip > 1e-6 && pk_tip.is_finite() {
                             let sf_tip = (allow_plate / pk_tip).clamp(0.0, 3.0);
@@ -1228,9 +1351,6 @@ fn evaluate_tier1_with_grid(genome: &G3Genome, h_vox: f64) -> (G3EvalRecord, Vox
                                 sf_tip
                             };
                             rec.inputs.twist_tipzone_strict_sf = sf_strict;
-                            // B2 remainder: exact 1.82 N*m -> 16.2 N*m physical scaling without * 3.2 inflation
-                            rec.inputs.hm_twist_sf =
-                                (sf_strict * (1820.0 / 16_200.0)).clamp(0.0, 2.0);
                         }
                     }
                 }
@@ -1355,8 +1475,9 @@ fn evaluate_tier2_from_tier1(
     rec.inputs.solid_tip_sf = 0.0;
     rec.inputs.dolfinx_rel_err = 1.0;
 
-    // Run fail-closed 3D TET10 tip submodel on the blade surface law (P6: full xs outline containing
-    // exact tip_xy + max triangle area 0.4 mm^2 so the 2 mm tip patch has ~30 vertices and converges <= 10%).
+    // Run fail-closed 3D TET10 tip submodel on the blade surface law (P6: full xs outline containing exact tip_xy,
+    // max triangle area `TIP_FE_MAX_AREA_MM2`). r2: on the sharp EDGE-spec points 0.4 mm^2 was 3-19 % off a 0.15 mm^2
+    // mesh, while 0.15 and 0.08 mm^2 agree within 0.7-8.2 % on the 8 edge-pilot top designs, so 0.15 is the production mesh.
     let blade = build_blade_profile_2d(&p);
     let mut b_outer = Vec::with_capacity(blade.xs.len() * 2);
     for i in 0..blade.xs.len() {
@@ -1365,7 +1486,7 @@ fn evaluate_tier2_from_tier1(
     for i in (0..blade.xs.len()).rev() {
         b_outer.push((blade.xs[i], blade.y_sp[i]));
     }
-    if let Some(b_mesh) = mesh_domain(&b_outer, &[], 0.4) {
+    if let Some(b_mesh) = mesh_domain(&b_outer, &[], TIP_FE_MAX_AREA_MM2) {
         let x0 = blade.x_tip - 32.0;
         let y0 = blade.tip_xy.1 - 32.0;
         let g = 0.5;
@@ -1773,10 +1894,79 @@ pub fn run_g3_cvt_map_elites(
     h_vox: f64,
     decoder_commit: &str,
 ) -> CvtMapElitesArchive {
+    run_g3_cvt_map_elites_logged(
+        n_init_sobol,
+        n_evals,
+        seed,
+        tier1_gate_score,
+        tier2_gate_score,
+        h_vox,
+        decoder_commit,
+        0,
+        &mut Vec::new(),
+    )
+}
+
+/// One snapshot of a run's progress, for the evolution figures and the lineage renders of a release.
+/// Logging reads the archive only; it draws no random numbers, so a logged run is identical to an unlogged one.
+#[derive(Debug, Clone, Serialize)]
+pub struct G3HistoryPoint {
+    pub evals: usize,
+    pub niches: usize,
+    pub n_tier2: usize,
+    pub qd_score: f64,
+    pub best_tier: EvalTier,
+    pub best_raw_score_100: f64,
+    pub best_score_100: f64,
+    pub best_mass_g: f64,
+    pub best_niche: usize,
+    pub best_genome_sha256: String,
+    /// The best genome's strict CSV row, at power-of-two evaluation counts and at the end of the run.
+    pub best_genome_row: Option<String>,
+}
+
+fn history_point(archive: &CvtMapElitesArchive, evals: usize, with_row: bool) -> Option<G3HistoryPoint> {
+    let best = archive.best_elite()?;
+    Some(G3HistoryPoint {
+        evals,
+        niches: archive.elites.len(),
+        n_tier2: archive.elites.values().filter(|e| e.record.tier == EvalTier::Tier2Full3D).count(),
+        qd_score: archive.qd_score(),
+        best_tier: best.record.tier,
+        best_raw_score_100: best.record.score.raw_score_100,
+        best_score_100: best.record.score.score_100,
+        best_mass_g: best.record.inputs.mass_g,
+        best_niche: best.niche_id,
+        best_genome_sha256: best.genome.sha256(),
+        best_genome_row: with_row.then(|| best.genome.to_csv_row()),
+    })
+}
+
+/// `run_g3_cvt_map_elites` that also appends a `G3HistoryPoint` to `history` every `log_every` evaluations
+/// (`0` disables logging), after the Sobol initialisation, and after the last evaluation.
+#[allow(clippy::too_many_arguments)]
+pub fn run_g3_cvt_map_elites_logged(
+    n_init_sobol: usize,
+    n_evals: usize,
+    seed: u64,
+    tier1_gate_score: f64,
+    tier2_gate_score: f64,
+    h_vox: f64,
+    decoder_commit: &str,
+    log_every: usize,
+    history: &mut Vec<G3HistoryPoint>,
+) -> CvtMapElitesArchive {
     let mut archive = CvtMapElitesArchive::new(1024);
     let mut rng = G3Rng(seed.max(1));
     let mixed_seed = splitmix64(seed);
     let scramble_seed = (mixed_seed as usize).max(1);
+    let mut log = |archive: &CvtMapElitesArchive, evals: usize, last: bool| {
+        if log_every > 0 && (last || evals % log_every == 0 || evals.is_power_of_two()) {
+            if let Some(h) = history_point(archive, evals, last || evals.is_power_of_two()) {
+                history.push(h);
+            }
+        }
+    };
 
     let init_count = n_init_sobol.min(n_evals).max(1);
     for i in 0..init_count {
@@ -1784,6 +1974,8 @@ pub fn run_g3_cvt_map_elites(
         let rec = evaluate_g3_cascade(&g, tier1_gate_score, tier2_gate_score, h_vox);
         archive.insert(g, rec);
     }
+    let mut evals = init_count;
+    log(&archive, evals, evals == n_evals);
 
     for _ in init_count..n_evals {
         let Some((child, parent_nid)) = archive.sample_offspring(&mut rng) else {
@@ -1792,6 +1984,11 @@ pub fn run_g3_cvt_map_elites(
         let rec = evaluate_g3_cascade(&child, tier1_gate_score, tier2_gate_score, h_vox);
         let improved = archive.insert(child, rec);
         archive.update_curiosity(parent_nid, improved);
+        evals += 1;
+        log(&archive, evals, evals == n_evals);
+    }
+    if evals < n_evals {
+        log(&archive, evals, true); // the archive stopped offering parents: still close the history
     }
     archive
 }
@@ -1848,6 +2045,50 @@ mod tests {
         assert!(r1.score.score_100 > 20.0);
         assert!(r1.inputs.ring_bearing_cap_n > 200.0);
         assert!(r1.inputs.ring_back_cap_n > 100.0);
+    }
+
+    #[test]
+    fn r2_both_edges_serrated_measured_twist_and_buckling() {
+        // SERR-1..3: every design the decoder can express carries real serrations on both edges
+        let mut hm = Vec::new();
+        for i in 0..60 {
+            let g = sobol_unit_genome(i, 0, "22bb8696");
+            let p = g.decode();
+            let b = build_blade_profile_2d(&p);
+            assert!(b.serr_depth_in_mm >= 0.6 && b.serr_depth_sp_mm >= 0.6,
+                "Sobol {i}: serration depth in {:.2} / sp {:.2} mm", b.serr_depth_in_mm, b.serr_depth_sp_mm);
+            assert!(b.serr_teeth_in >= 3 && b.serr_teeth_sp >= 3,
+                "Sobol {i}: teeth in {} / sp {}", b.serr_teeth_in, b.serr_teeth_sp);
+            // SERR-4: no tooth snaps under a single-tooth snag (TOOTH_SNAG_N along the edge) or pry (TOOTH_PRY_N)
+            for inner in [true, false] {
+                let (sf, teeth, _) = serration_tooth_strength(&p, &b, inner);
+                assert!(teeth >= 2 && sf >= 1.0, "Sobol {i}: tooth SF {sf:.2} over {teeth} teeth (inner {inner})");
+            }
+            let r0 = evaluate_tier0_analytic(&g);
+            // S3: buckling is measured (lateral-torsional, analytic on the exact blade law), never zero credit
+            assert!(r0.inputs.buckling_lambda > 0.0 && r0.inputs.buckling_lambda.is_finite(), "Sobol {i}: buckling");
+            hm.push(r0.inputs.hm_twist_sf);
+        }
+        // S2: the human-max twist is read on the blade body, not capped at 3 * 1820/16200 = 0.337 any more
+        assert!(hm.iter().filter(|&&v| v > 0.34).count() > hm.len() / 2, "hm_twist still capped: {hm:?}");
+
+        // Evolution history: logging draws no random numbers, so the archive is identical, and best-so-far never drops
+        let plain = run_g3_cvt_map_elites(16, 64, 3, 999.0, 999.0, 1.0, "22bb8696");
+        let mut hist = Vec::new();
+        let logged = run_g3_cvt_map_elites_logged(16, 64, 3, 999.0, 999.0, 1.0, "22bb8696", 8, &mut hist);
+        assert_eq!(plain.elites.len(), logged.elites.len());
+        for (k, e) in &plain.elites {
+            let f = &logged.elites[k];
+            assert_eq!((e.genome.sha256(), e.record.score.raw_score_100.to_bits()),
+                       (f.genome.sha256(), f.record.score.raw_score_100.to_bits()));
+        }
+        assert_eq!(hist.first().map(|h| h.evals), Some(16));
+        assert_eq!(hist.last().map(|h| h.evals), Some(64));
+        assert!(hist.last().unwrap().best_genome_row.is_some());
+        for w in hist.windows(2) {
+            assert!((w[1].best_tier, w[1].best_raw_score_100) >= (w[0].best_tier, w[0].best_raw_score_100) || w[1].best_tier > w[0].best_tier);
+            assert!(w[1].evals > w[0].evals && w[1].niches >= w[0].niches);
+        }
     }
 
     #[test]

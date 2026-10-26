@@ -1092,14 +1092,16 @@ mod v1_identity_tests {
             );
         }
 
-        // 7. S5-7 & S5-8 & B2: Verify buckling_lambda == 0.0, uninflated hm_twist_sf, and production grip_sf_min sensitivity to blade length
-        assert_eq!(r_solid.inputs.buckling_lambda, 0.0);
-        assert!(
-            (r_solid.inputs.hm_twist_sf
-                - r_solid.inputs.twist_tipzone_strict_sf * (1820.0 / 16_200.0))
-                .abs()
-                < 1e-9
-        );
+        // 7. S5-7 & S5-8 & B2, r2 S2/S3: buckling_lambda is measured (lateral-torsional, analytic on the exact blade
+        //    law), hm_twist_sf is the plate's blade-body SF scaled linearly from 1.82 to 16.2 N*m (no inflation), and
+        //    production grip_sf_min depends on blade length
+        assert!(r_solid.inputs.buckling_lambda > 0.0 && r_solid.inputs.buckling_lambda.is_finite());
+        let hm_from_body = r_solid.inputs.twist_body_sf * (1820.0 / 16_200.0);
+        if r_solid.inputs.twist_body_sf < 4.0 {
+            assert!((r_solid.inputs.hm_twist_sf - hm_from_body).abs() < 1e-9);
+        } else {
+            assert!(r_solid.inputs.hm_twist_sf >= hm_from_body - 1e-9 && r_solid.inputs.hm_twist_sf <= 3.0);
+        }
         let mut g_short = g_solid.clone();
         set_phys(&mut g_short, "blade_len", 60.0);
         set_phys(&mut g_short, "hook_drop", 25.0);
@@ -1169,7 +1171,8 @@ mod v1_identity_tests {
         assert!(arch_bad_sha.verify_integrity().is_err());
 
         // 9. P6 / S9-4: Verify Tier-2 solid-tip TET10 mesh convergence (full xs outline including exact tip_xy,
-        //    max area 0.4 mm^2 vs 0.15 mm^2 agreeing within 15%) across 2 fixture genomes.
+        //    the production max area `TIP_FE_MAX_AREA_MM2` vs a finer 0.08 mm^2 agreeing within 15%) across 2 fixture
+        //    genomes.
         let mut g_tip2 = g_solid.clone();
         set_phys(&mut g_tip2, "blade_len", 82.0);
         set_phys(&mut g_tip2, "hook_drop", 42.0);
@@ -1200,7 +1203,8 @@ mod v1_identity_tests {
                     crate::g3_sdf::eval_blade_thickness_and_sdf2(&p_c, &blade_c, x, y);
                 (d2 <= 0.0 && t > 0.05).then_some(t)
             };
-            let m_04 = jarambit_physics::fine::mesh_domain(&b_outer, &[], 0.4).expect("mesh 0.4");
+            let a_prod = crate::g3_qd::TIP_FE_MAX_AREA_MM2;
+            let m_04 = jarambit_physics::fine::mesh_domain(&b_outer, &[], a_prod).expect("production mesh");
             let near_04 = m_04
                 .xy
                 .iter()
@@ -1208,7 +1212,7 @@ mod v1_identity_tests {
                 .count();
             assert!(
                 near_04 >= 15,
-                "P6 case {case_idx}: expected >= 15 2D vertices within 2 mm tip patch at area 0.4, got {near_04}"
+                "P6 case {case_idx}: expected >= 15 2D vertices within 2 mm tip patch at area {a_prod}, got {near_04}"
             );
             let res_04 = crate::g3_sandwich::solve_g3_solid_tet10_strict(
                 m_04.xy,
@@ -1223,9 +1227,9 @@ mod v1_identity_tests {
                 &th_fn,
                 0,
             )
-            .expect("solve_g3_solid_tet10_strict area 0.4");
+            .expect("solve_g3_solid_tet10_strict production area");
             let m_015 =
-                jarambit_physics::fine::mesh_domain(&b_outer, &[], 0.15).expect("mesh 0.15");
+                jarambit_physics::fine::mesh_domain(&b_outer, &[], 0.08).expect("mesh 0.08");
             let res_015 = crate::g3_sandwich::solve_g3_solid_tet10_strict(
                 m_015.xy,
                 m_015.tris,
@@ -1239,12 +1243,12 @@ mod v1_identity_tests {
                 &th_fn,
                 0,
             )
-            .expect("solve_g3_solid_tet10_strict area 0.15");
+            .expect("solve_g3_solid_tet10_strict area 0.08");
             let rel_diff = (res_04.sf_nodal_max - res_015.sf_nodal_max).abs()
                 / res_015.sf_nodal_max.max(1e-6);
             assert!(
                 rel_diff <= 0.15,
-                "P6 case {case_idx}: solid_tip_sf area 0.4 ({:.4}) vs 0.15 ({:.4}) rel_diff {:.3} > 0.15",
+                "P6 case {case_idx}: solid_tip_sf production area ({:.4}) vs 0.08 ({:.4}) rel_diff {:.3} > 0.15",
                 res_04.sf_nodal_max,
                 res_015.sf_nodal_max,
                 rel_diff

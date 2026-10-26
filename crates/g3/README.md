@@ -42,7 +42,7 @@ P4 vent and cavity versus bevel bands, P5 medial thickness steps): `cargo run --
 
 ## Verification record (snapshots S7–S9, 2026-10-25)
 
-Tests 27/27; probes P1–P5 pass; 256-evaluation smoke run passes; static reviews of S2 through S8 with no open
+Tests 27/27 (29/29 at decoder r2); probes P1–P5 pass; 256-evaluation smoke run passes; static reviews of S2 through S8 with no open
 blocking findings. Reports: `review_g3/REVIEW.md`, `REREVIEW_S3.md` (S4), `REREVIEW_S5.md`, `REREVIEW_S6.md`,
 `REREVIEW_S7.md` and `REREVIEW_S8.md` in `~/jarambit_runs/handzone-ergo-20261024/`.
 
@@ -59,6 +59,24 @@ blocking findings. Reports: `review_g3/REVIEW.md`, `REREVIEW_S3.md` (S4), `REREV
   5–12 % plunge at the heel stays unsharpened. Apex flat 0.05–0.12 mm. Gate S3 samples the true edge-normal
   section over 0–2 mm, so a steep shoulder behind the apex band would now be measured. Archives made before this
   change (decoder `120ba792`) do not reproduce on it and are not comparable.
+- Decoder r2 (v3.0.0):
+  - Both edges are serrated (`SERR-1..3`, owner: "double-edged, double-serrated"): 0.8–2.2 mm (inner) and
+    0.8–2.0 mm (spine) deep, at least 3 full-depth teeth per edge (the pitch is capped on the span at full
+    amplitude). The serrated span starts past the plunge and ends at least 18 mm from the point, so the piercing
+    point stays plain. `BladeProfile2D` records the depth and tooth count as built.
+  - `hm_twist_sf` (16.2 N·m human-max twist) is the blade-body SF of the 1.82 N·m plate solve scaled linearly; it
+    used to read the tip zone through a 4.0 clamp, which capped it at 0.337 for every design. On the edge-pilot
+    winner it reads 1.01 against 1.64 from a hex8 voxel FE of the root, so it errs on the safe side.
+  - `buckling_lambda` is the lateral-torsional buckling factor of the blade as a cantilever under the 3427 N spine
+    load (Timoshenko, station-averaged sqrt(E·I_y·G·J)). It is an analytic surrogate, labelled as such, and no
+    longer a zero-credit term.
+  - `edge_r_min_mm` and `section_corner_r_min_mm` are labelled `design_law` in the tier provenance: they come
+    from genes and the exact section law, not from the voxel mesh.
+  - The Tier-2 solid-tip TET10 uses a 0.15 mm² planform mesh (`TIP_FE_MAX_AREA_MM2`). On sharp points 0.4 mm² was
+    3–19 % away from 0.15 mm², while 0.15 and 0.08 mm² agree within 0.7–8.2 %.
+  - `g3-evolve --log-every N` writes `history.jsonl`: best-so-far, archive size, QD score and Tier-2 count every
+    N evaluations, with the best genome row at power-of-two counts and at the end. Logging draws no random
+    numbers, so logged and unlogged runs give identical archives (tested).
 - Rust-versus-Python parity: the scorer matches the Python of record exactly on 25 cases. On the production path,
   the hand-zone AM mass is asserted on the 5 finalists and 4 representative Sobol designs (9 cases, ≤ 8 %);
   centre of mass, spin and guard height are asserted on the parity path (`build_g3_sdf_from_params`).

@@ -53,7 +53,7 @@ jobs:
         run: cargo clippy --release -p jarambit -- -A clippy::all -D clippy::disallowed_methods
       - name: D1 owner-lock gate tests (explicit, fast)
         run: cargo test --release -p jarambit-crescent d1_lock -- --nocapture
-      - name: G3 standalone crate tests (hermetic 27/27)
+      - name: G3 standalone crate tests (hermetic)
         timeout-minutes: 25
         run: cargo test --release --locked --manifest-path crates/g3/Cargo.toml -- --test-threads=2
       - name: D1 smoke (crescent-d1 on wave14_c03 reference)
