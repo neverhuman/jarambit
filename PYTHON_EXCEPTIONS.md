@@ -1,11 +1,11 @@
 # Python Exceptions Manifest (`PYTHON_EXCEPTIONS.md`)
 
 **Authority:** `JEPSON_RULING_20261018T1940Z_stack_rust_jankurai.md` (`2026-10-18T19:40Z` / `1:40 PM MDT`)
-**Allowed Languages Policy:** Rust (`crates/`) for backend, CLI, tools, and compute; Vite + TypeScript + React (`web/`) for UI. Python is allowed **only** where strictly necessary for C++/Fortran scientific/CAD kernel bindings with no workable pure-Rust equivalent (`dolfinx`/`petsc4py`/`scikit-fem` 3D $P_2$ tetrahedral FEM, `OCP`/`cadquery` OpenCascade B-rep kernel, and embedded Blender `bpy` Cycles scripts). **No new Python files are permitted.** Every existing tracked `.py` file (`319` files, `56,252` LOC) is listed below with its one-line disposition (`KEEP_WITH_REASON` vs `PORT_TO_RUST` (phases `PY-PORT-01..04`)).
+**Allowed Languages Policy:** Rust (`crates/`) for backend, CLI, tools, and compute; Vite + TypeScript + React (`web/`) for UI. Python is allowed **only** where strictly necessary for C++/Fortran scientific/CAD kernel bindings with no workable pure-Rust equivalent (`dolfinx`/`petsc4py`/`scikit-fem` 3D $P_2$ tetrahedral FEM, `OCP`/`cadquery` OpenCascade B-rep kernel, and embedded Blender `bpy` Cycles scripts). **No new Python files are permitted.** Every existing tracked `.py` file (`319` files, `56,239` LOC) is listed below with its one-line disposition (`KEEP_WITH_REASON` vs `PORT_TO_RUST` (phases `PY-PORT-01..04`)).
 
-- **Total Tracked `.py` Files:** `319` (`56252` LOC)
+- **Total Tracked `.py` Files:** `319` (`56239` LOC)
 - **`KEEP_WITH_REASON` (3D $P_2$ `dolfinx`/`skfem` FEM + OpenCascade `OCP` B-rep + Blender `bpy` C++ kernel bindings):** `41` files (`9782` LOC)
-- **`PORT_TO_RUST` (scheduled for phased Rust migration, phases `PY-PORT-01..04`):** `278` files (`46470` LOC)
+- **`PORT_TO_RUST` (scheduled for phased Rust migration, phases `PY-PORT-01..04`):** `278` files (`46457` LOC)
 
 | Path | LOC | Disposition | Phase | One-Line Justification |
 |---|---:|---|---|---|
@@ -116,8 +116,8 @@
 | `ops/ci/g16_06_rsv2_08/__init__.py` | 1 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/g16_06_rsv2_08/__init__.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/g16_06_rsv2_08/audit_phase9.py` | 158 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/g16_06_rsv2_08/audit_phase9.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/gen_cert_integrity.py` | 46 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/gen_cert_integrity.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
-| `ops/ci/gen_readme.py` | 451 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/gen_readme.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
-| `ops/ci/gen_status.py` | 127 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/gen_status.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
+| `ops/ci/gen_readme.py` | 411 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/gen_readme.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
+| `ops/ci/gen_status.py` | 152 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/gen_status.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/gen_whitepaper.py` | 176 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/gen_whitepaper.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/publication_inventory.py` | 145 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/publication_inventory.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/rs_verdicts.py` | 204 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/rs_verdicts.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
@@ -139,7 +139,7 @@
 | `ops/ci/tests/test_evolve_certifiable.py` | 69 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/tests/test_evolve_certifiable.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/tests/test_evolve_committed_evidence.py` | 36 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/tests/test_evolve_committed_evidence.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/tests/test_figures.py` | 48 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/tests/test_figures.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
-| `ops/ci/tests/test_gen_readme.py` | 117 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/tests/test_gen_readme.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
+| `ops/ci/tests/test_gen_readme.py` | 119 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/tests/test_gen_readme.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/tests/test_gen_whitepaper.py` | 89 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/tests/test_gen_whitepaper.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/tests/test_paper_observations.py` | 164 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/tests/test_paper_observations.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |
 | `ops/ci/tests/test_patent_figures.py` | 43 | `PORT_TO_RUST` | `PY-PORT-01` | CI / Fitness / Doc-Sync / Verification script (`ops/ci/tests/test_patent_figures.py`) — scheduled to port to `crates/cli` (`jarambit ci ...`) after `v0.31.0` per `JEPSON_RULING_20261018T1940Z` Item 3. |

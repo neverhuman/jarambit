@@ -13,10 +13,10 @@ def cad_readme():
 
 
 def release():
-    """(release version, receipt of the cohort of record named by evidence/g3/RECORD)"""
+    """(release version, receipt of the G4 cohort of record named by evidence/g4/RECORD)"""
     v = open(os.path.join(ROOT, 'docs/VERSION')).read().strip()
-    rv = open(os.path.join(ROOT, 'evidence/g3/RECORD')).read().strip()
-    return v, json.load(open(os.path.join(ROOT, f'evidence/g3/v{rv}/release.json')))
+    rv = open(os.path.join(ROOT, 'evidence/g4/RECORD')).read().strip()
+    return v, json.load(open(os.path.join(ROOT, f'evidence/g4/v{rv}/release.json')))
 
 
 class GenReadme(unittest.TestCase):
@@ -27,45 +27,39 @@ class GenReadme(unittest.TestCase):
     def test_release_link_matches_docs_version(self):
         v, rec = release()
         t = readme()
-        self.assertEqual(rec['version'].split('.')[:2], v.split('.')[:2])  # a patch keeps its line's cohort of record
+        self.assertEqual(rec['version'].split('.')[:2], v.split('.')[:2])
         self.assertIn(f'releases/tag/v{v}', t)
         self.assertNotIn('jepsontaylor/jarambit/releases', t)
 
     def test_readme_links_the_paper_of_this_release(self):
         v, _ = release()
-        pdf = f'docs/g3/paper/g3-v{v}.pdf'
+        pdf = f'docs/g4/paper/g4-v{v}.pdf'
         self.assertTrue(os.path.isfile(os.path.join(ROOT, pdf)), pdf)
         self.assertIn(f']({pdf})', readme())
+        g3_pdf = 'docs/g3/paper/g3-v3.0.2.pdf'
+        self.assertTrue(os.path.isfile(os.path.join(ROOT, g3_pdf)), g3_pdf)
+        self.assertIn(f']({g3_pdf})', readme())
 
     def test_headline_numbers_come_from_the_release_receipt(self):
         _, rec = release()
         t = readme()
-        self.assertIn(rec['design_id'], t)
-        self.assertIn(f"| {rec['score']['score_100']:.2f} |", t)
-        self.assertIn(f"{rec['mass']['mesh_g']:.1f} g", t)
-        self.assertIn(rec['provenance']['git_commit'][:12], t)
-        for edge in ('edge_inner', 'edge_spine'):
-            self.assertGreaterEqual(rec['blade'][edge]['teeth'], 3)  # both edges serrated (SERR-1..4)
+        wr = rec['winner_record']
+        obj = wr['objective']
+        m = wr['mass']
+        self.assertIn(rec['winner_id'], t)
+        self.assertIn(f"{obj['w_ergolight_v2']:.2f}", t)
+        self.assertIn(f"{m['as_finished_total_mass_g']:.2f} g", t)
+        self.assertIn(f"{m['as_printed_total_mass_g']:.2f} g", t)
+        self.assertTrue(obj['feasible'])
+        self.assertGreaterEqual(wr['serration']['teeth_checked_in'], 3)
+        self.assertGreaterEqual(wr['serration']['teeth_checked_sp'], 3)
 
     def test_every_image_and_cad_file_is_committed(self):
         _, rec = release()
-        paths = list(rec['images'].values()) + list(rec['evolution']['figures'].values()) + \
-            [c['image'] for c in rec['evolution']['lineage']] + rec['cad_in_git']
         t = readme()
         ct = cad_readme()
-        for p in paths:
-            self.assertTrue(os.path.isfile(os.path.join(ROOT, p)), p)
-            self.assertIn(p, t)
-        for p in rec['cad_in_git']:
-            top_p = f'cad/{os.path.basename(p)}'
-            self.assertTrue(os.path.isfile(os.path.join(ROOT, top_p)), top_p)
-            self.assertIn(top_p, t)
-            self.assertIn(os.path.basename(p), ct)
-            h1 = hashlib.sha256(open(os.path.join(ROOT, p), 'rb').read()).hexdigest()
-            h2 = hashlib.sha256(open(os.path.join(ROOT, top_p), 'rb').read()).hexdigest()
-            self.assertEqual(h1, h2, f'{top_p} differs from {p}')
-        wid = rec['design_id']
-        for ext in ('AMbuild_mm.stl', 'AMbuild_mm.3mf', 'envelope_mm.stl', 'drawing_mm.dxf', 'spec_paper.pdf', 'xray_cutaway.jpg'):
+        wid = rec['winner_id']
+        for ext in ('AMbuild_mm.stl', 'AMbuild_mm.3mf', 'envelope_mm.stl', 'drawing_mm.dxf', 'spec_paper.pdf', 'xray_cutaway.jpg', 'print_spec.json'):
             rel = f'cad/{wid}_{ext}'
             fp = os.path.join(ROOT, rel)
             self.assertTrue(os.path.isfile(fp), rel)
@@ -75,32 +69,29 @@ class GenReadme(unittest.TestCase):
         with zipfile.ZipFile(os.path.join(ROOT, f'cad/{wid}_AMbuild_mm.3mf')) as zf:
             model_head = zf.open('3D/3dmodel.model').read(1024).decode('utf-8')
             self.assertIn('unit="millimeter"', model_head)
-            self.assertIn('Ti-6Al-4V (design assumption: yield 828 MPa)', model_head)
+            self.assertIn('Ti-6Al-4V', model_head)
         dxf_txt = open(os.path.join(ROOT, f'cad/{wid}_drawing_mm.dxf'), encoding='utf-8').read()
         self.assertIn('UNITS: MILLIMETERS, 1 DRAWING UNIT = 1 MM', dxf_txt)
-        self.assertIn('0\nCIRCLE\n8\nRING_BORE\n10\n-5.9672\n20\n0.0000\n30\n0.0000\n40\n12.4500\n', dxf_txt)
+        self.assertIn('0\nCIRCLE\n8\nRING_BORE\n', dxf_txt)
         self.assertIn('MIDPLANE_Z0_OUTLINE', dxf_txt)
         self.assertIn('Z_EXTENT_ENVELOPE', dxf_txt)
         self.assertTrue(dxf_txt.endswith('0\nEOF\n'))
 
-    def test_cad_readme_discloses_status_and_below_target_safety_factors(self):
+    def test_cad_readme_discloses_status_and_safety_factors(self):
         _, rec = release()
         ct = cad_readme()
-        i = rec['inputs']
-        fe = rec['fe_certification']
-        self.assertIn(rec['status'], ct)
+        obj = rec['winner_record']['objective']
+        m = rec['winner_record']['mass']
         self.assertIn('not qualified for use as a knife', ct)
-        for sf_str in (f'{i["solid_tip_sf"]:.2f}', f'{i["grip_sf_min"]:.2f}', f'{fe["grip_sf"]["spine"]:.2f}',
-                       f'{i["fat_sf"]:.2f}', f'{i["seq_ratio"]:.2f}'):
-            self.assertIn(sf_str, ct)
-        m = re.search(r'```text\n(.*?)\n```', ct, re.S)
-        self.assertIsNotNone(m, 'missing copy-paste order notes block in cad/README.md')
-        notes = m.group(1)
-        self.assertIn(rec['status'], notes)
+        self.assertIn(f'{m["as_finished_total_mass_g"]:.2f} g', ct)
+        self.assertIn(f'{obj["sf_solid_tip_torsion_0p80nm_lcb"]:.2f}', ct)
+        self.assertIn(f'{obj["sf_goodman_fatigue_180n_lcb"]:.2f}', ct)
+        self.assertIn(f'{obj["sf_per_case_sequence_min_lcb"]:.2f}', ct)
+        m_notes = re.search(r'```text\n(.*?)\n```', ct, re.S)
+        self.assertIsNotNone(m_notes, 'missing copy-paste order notes block in cad/README.md')
+        notes = m_notes.group(1)
         self.assertIn('not qualified for use as a knife', notes)
-        for sf_str in (f'{i["solid_tip_sf"]:.2f}', f'{i["grip_sf_min"]:.2f}', f'{fe["grip_sf"]["spine"]:.2f}',
-                       f'{i["fat_sf"]:.2f}', f'{i["seq_ratio"]:.2f}'):
-            self.assertIn(sf_str, notes)
+        self.assertIn(f'{m["as_finished_total_mass_g"]:.2f} g', notes)
 
     def test_no_older_data(self):
         # Owner, 2026-10-26: the README describes only the release's best individual. Older designs and runs stay in

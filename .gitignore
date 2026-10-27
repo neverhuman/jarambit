@@ -15,6 +15,7 @@
 *.step
 # G3 release CAD is downloadable from git (owner, 2026-10-26); written by ops/g3/export_best_stl.sh
 !/cad/*.stl
+!/cad/v*/*.stl
 !/docs/g3/v*/cad/*.stl
 # Committed v1/v2 evidence and design packages
 !/evidence/**/*.stl

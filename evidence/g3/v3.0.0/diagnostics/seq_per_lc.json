@@ -1,0 +1,35 @@
+{
+  "decoder_sha256": "a203278d80d236af78b23e9721fdeec7ae6500f1c2d357308f0ca483c0fec6ee",
+  "design_id": "hz4i013_g00995_d206e3c9",
+  "goodman_fatigue_180n_audit": {
+    "corrected_fat_sf_from_true_plate_peak": 1.0582,
+    "joint_k_t_core": 0.8906,
+    "overstated_stress_in_v3_mpa": 441.72,
+    "reported_v3_fat_sf_with_double_knockdown": 0.9425,
+    "t_core_mm": 4.266225520770207,
+    "true_peak_stress_at_180n_mpa": 393.4
+  },
+  "legacy_v3_mixed_load_case_index": {
+    "note": "Divided grip_sf_min (governed by 3427 N spine = 0.7255) by blade 260 N lateral SF (1.2977)",
+    "value": 0.5591
+  },
+  "mass_of_record_score_audit": {
+    "delta_score_100": -0.799,
+    "reported_print_mesh_mass_g": 59.297,
+    "score_100_at_print_mesh_mass": 79.7488,
+    "score_100_at_voxel_mass": 80.5478,
+    "scored_ranking_voxel_mass_g": 57.002
+  },
+  "per_load_case_sequence_ratio_formula": {
+    "lateral_260n": 3.9054,
+    "spine_3427n": 0.6202,
+    "twist_16p2nm": 11.6652
+  },
+  "per_load_case_sequence_ratio_voxel_fe": {
+    "governing_blade_case": 2.7361585182167794,
+    "lateral_260n": 2.7362,
+    "spine_3427n": 0.5151,
+    "twist_16p2nm": 5.0558
+  },
+  "schema": "jarambit.g3.diagnostics.seq_per_lc.v1"
+}

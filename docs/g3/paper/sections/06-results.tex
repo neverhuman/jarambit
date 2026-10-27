@@ -69,7 +69,7 @@ is meshed at 0.05 mm from the exact decoder law, the rest at 0.2 mm voxels.}\lab
 The best individual, \gDesign{} (genome hash \gGenomeSha), scores \gScore{} with a weighted base of \gBase{} and an
 ergonomic multiplier of \gE. Its grip is \gLg{} mm long with a swell perimeter of \gSwellPerim{} mm and a height-to-width
 ratio of \gHoT; the guard is \gGuardH{} mm high and the reach of the blade from the guard is \gReach{} mm. As printed it
-weighs \gMassG{} g. Fig.~\ref{fig:hero} shows it; Table~\ref{tab:best} lists its measurements.
+weighs \gMassG{} g (67.97~g finished CAD mass after bevel grinding; zone partition: ring 9.8~g, grip 37.9~g, guard 4.2~g, blade 19.2~g). Fig.~\ref{fig:hero} shows it; Table~\ref{tab:best} lists its measurements.
 
 \begin{table}[t]
 \caption{Measurements of the best individual (platform of record)}\label{tab:best}
@@ -92,7 +92,8 @@ Grip SF, worst of four cases (formula) & \gGripSF \\
 Human-max twist SF (plate) & \gHmTwist \\
 Spine 3427 N SF (plate) & \gHmSpine \\
 Ring bearing / back capacity & \gRingBear{} / \gRingBack{} N \\
-Fatigue SF / yield-sequence ratio & \gFat{} / \gSeq \\
+Fatigue SF / yield-sequence ratio (2 blade cases) & \gFat{} / \gSeq \\
+Sequence ratio: lateral / twist / spine & 2.38 / 2.61 / 0.253 \\
 Buckling factor $\lambda$ (analytic) & \gBuck \\
 \bottomrule
 \end{tabular}
@@ -110,6 +111,6 @@ Fig.~\ref{fig:edges} plots the blade section at four stations of each edge, meas
 exact decoder law. Every station of an edge lies on one line: edge A at \gEdgeAApexLo--\gEdgeAApexHi\textdegree{} per side
 and edge B at \gEdgeBApexLo--\gEdgeBApexHi\textdegree, with no slope steeper than \gEdgeASteep\textdegree{} and
 \gEdgeBSteep\textdegree{} within 2 mm of the edge. Both edges are serrated over the rear part of the blade, and the
-grinds run on through the plain point region to \gEdgeATo{} and \gEdgeBTo{} mm from the point. Of the teeth between scallops (\gEdgeATeethChecked{} on edge A and \gEdgeBTeethChecked{} on edge B), the weakest has a
+grinds run on through the plain point region to \gEdgeATo{} and \gEdgeBTo{} mm from the point. Of the interior teeth bounded by two adjacent scallops (\gEdgeATeethChecked{} of \gEdgeATeeth{} scallops on edge A and \gEdgeBTeethChecked{} of \gEdgeBTeeth{} scallops on edge B), the weakest has a
 safety factor of \gToothMin{} under the \gToothSnag{} N snag and \gToothPry{} N pry, which \gToothReading{} of 1; the end
-tooth of each span, bounded by a scallop on one side only, is not checked.
+tooth of each span, bounded by a scallop on one side only, is not checked in v3.0.0.

@@ -1,0 +1,70 @@
+{
+  "theta_tip_deg": 39.5,
+  "gate_s4_limit_deg": 55.0,
+  "sweep": [
+    {
+      "t_tip_crown_mm": 0.0,
+      "point_angle_3mm_deg": 43.509740257806165,
+      "tip_torsion_0p80nm_sf": 2.0839311094151434,
+      "tip_pry_60n_sf": 23.24061922357828,
+      "blade_tip_mass_g": 4.102623301549556,
+      "delta_tip_mass_g": 0.0
+    },
+    {
+      "t_tip_crown_mm": 0.1,
+      "point_angle_3mm_deg": 43.509740257806165,
+      "tip_torsion_0p80nm_sf": 2.0839311094151434,
+      "tip_pry_60n_sf": 23.24061922357828,
+      "blade_tip_mass_g": 4.102623301549556,
+      "delta_tip_mass_g": 0.0
+    },
+    {
+      "t_tip_crown_mm": 0.2,
+      "point_angle_3mm_deg": 43.509740257806165,
+      "tip_torsion_0p80nm_sf": 2.2577232609228606,
+      "tip_pry_60n_sf": 24.578064411598763,
+      "blade_tip_mass_g": 4.112651311505764,
+      "delta_tip_mass_g": 0.010028009956207562
+    },
+    {
+      "t_tip_crown_mm": 0.30000000000000004,
+      "point_angle_3mm_deg": 43.509740257806165,
+      "tip_torsion_0p80nm_sf": 2.6345915546766694,
+      "tip_pry_60n_sf": 27.365198127804508,
+      "blade_tip_mass_g": 4.132707331418178,
+      "delta_tip_mass_g": 0.030084029868621798
+    },
+    {
+      "t_tip_crown_mm": 0.4,
+      "point_angle_3mm_deg": 43.509740257806165,
+      "tip_torsion_0p80nm_sf": 3.0503633808509734,
+      "tip_pry_60n_sf": 30.30198963089661,
+      "blade_tip_mass_g": 4.152763351330594,
+      "delta_tip_mass_g": 0.05014004978103781
+    },
+    {
+      "t_tip_crown_mm": 0.5,
+      "point_angle_3mm_deg": 43.509740257806165,
+      "tip_torsion_0p80nm_sf": 3.507780593168969,
+      "tip_pry_60n_sf": 33.38843892087509,
+      "blade_tip_mass_g": 4.172819371243011,
+      "delta_tip_mass_g": 0.07019606969345471
+    },
+    {
+      "t_tip_crown_mm": 0.6000000000000001,
+      "point_angle_3mm_deg": 43.509740257806165,
+      "tip_torsion_0p80nm_sf": 4.0079925453538525,
+      "tip_pry_60n_sf": 36.62454599773994,
+      "blade_tip_mass_g": 4.192875391155426,
+      "delta_tip_mass_g": 0.09025208960586983
+    },
+    {
+      "t_tip_crown_mm": 0.7000000000000001,
+      "point_angle_3mm_deg": 43.509740257806165,
+      "tip_torsion_0p80nm_sf": 4.551522966128816,
+      "tip_pry_60n_sf": 40.01031086149116,
+      "blade_tip_mass_g": 4.21293141106784,
+      "delta_tip_mass_g": 0.11030810951828407
+    }
+  ]
+}

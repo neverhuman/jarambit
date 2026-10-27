@@ -1,0 +1,125 @@
+# loads-v4.toml — Machine-readable load cases & HM-1 hand boundary conditions for G4 (v4.0.0).
+
+schema = "jarambit.loads.v4"
+
+[hand_model_hm1]
+winkler_kn_n_per_mm3 = 50.0
+winkler_kt_n_per_mm3 = 15.0
+finger_stations_x_mm = [19.5, 40.5, 62.5]
+palm_swell_x_range_mm = [22.0, 58.0]
+ring_bore_radius_mm = 12.45
+active_set_iterations = 4
+
+[[load_cases]]
+id = "LC-LAT-180"
+kind = "blade_tip_lateral"
+force_n = 180.0
+moment_nmm = 0.0
+patch_distal_mm = [4.0, 7.0]
+sf_required = 1.00
+check_sequence = false
+
+[[load_cases]]
+id = "LC-LAT-260"
+kind = "blade_tip_lateral"
+force_n = 260.0
+moment_nmm = 0.0
+patch_distal_mm = [4.0, 7.0]
+sf_required = 1.15
+check_sequence = true
+
+[[load_cases]]
+id = "LC-TW-1820"
+kind = "blade_body_torsion"
+force_n = 0.0
+moment_nmm = 1820.0
+patch_distal_mm = [4.0, 16.0]
+sf_required = 1.20
+check_sequence = true
+
+[[load_cases]]
+id = "LC-TW-16200"
+kind = "blade_root_max_torsion"
+force_n = 0.0
+moment_nmm = 16200.0
+patch_distal_mm = [15.0, 45.0]
+sf_required = 1.10
+check_sequence = true
+
+[[load_cases]]
+id = "LC-TIP-1"
+kind = "tip_bisector_torsion"
+force_n = 0.0
+moment_nmm = 800.0
+legacy_origin_moment_nmm = 1820.0
+embedded_tip_mm = 5.0
+readout_window_mm = [3.0, 12.0]
+submodel_cut_mm = 20.0
+sf_required = 1.20
+check_sequence = false
+
+[[load_cases]]
+id = "LC-TIP-2"
+kind = "tip_bisector_lateral_pry"
+force_n = 60.0
+moment_nmm = 0.0
+embedded_tip_mm = 5.0
+readout_window_mm = [3.0, 12.0]
+submodel_cut_mm = 20.0
+sf_required = 1.20
+check_sequence = false
+
+[[load_cases]]
+id = "LC-SPINE-PUSH"
+kind = "spine_static_push"
+force_n = 500.0
+moment_nmm = 0.0
+spine_span_frac = [0.15, 0.85]
+sf_required = 1.50
+check_sequence = false
+
+[[load_cases]]
+id = "LC-BATON"
+kind = "spine_dynamic_impulse"
+force_n = 3427.0
+moment_nmm = 0.0
+spine_span_frac = [0.15, 0.85]
+sf_required = 1.10
+is_overload_ultimate = true
+check_sequence = false
+
+[[load_cases]]
+id = "LC-RING-1"
+kind = "ring_bore_bearing"
+force_n = 300.0
+moment_nmm = 0.0
+angle_span_deg = [-60.0, 60.0]
+sf_required = 2.00
+check_sequence = false
+
+[[load_cases]]
+id = "LC-RING-2"
+kind = "ring_outer_back"
+force_n = 30.0
+moment_nmm = 0.0
+angle_span_deg = [150.0, 210.0]
+sf_required = 2.00
+check_sequence = false
+
+[[load_cases]]
+id = "LC-SQUEEZE"
+kind = "grip_bilateral_squeeze"
+force_n = 250.0
+moment_nmm = 0.0
+pad_length_mm = 20.0
+sf_required = 1.20
+check_sequence = false
+
+[[load_cases]]
+id = "LC-COMB-1"
+kind = "combined_lateral_torsion"
+force_n = 182.0
+moment_nmm = 1274.0
+patch_distal_mm = [4.0, 16.0]
+sf_required = 1.10
+check_sequence = true

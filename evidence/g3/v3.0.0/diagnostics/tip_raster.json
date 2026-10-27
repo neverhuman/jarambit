@@ -1,0 +1,39 @@
+{
+  "design_id": "hz4i013_g00995_d206e3c9",
+  "half_cell_raster_shift_audit_at_0p15_mm2": {
+    "delta_sf": -0.09,
+    "half_cell_shift_mm": 0.25,
+    "raster_pitch_g_mm": 0.5,
+    "sf_cell_center_aligned": 0.548,
+    "sf_v3_node_sampled_shifted": 0.638
+  },
+  "mesh_series_reported_v3": {
+    "area_0p08": 0.611,
+    "area_0p15_production": 0.638,
+    "area_0p4": 0.585
+  },
+  "monotone_converged": false,
+  "planform_point_geometry": {
+    "h_exp_gene_decoded": 0.6265,
+    "note": "h_exp = 0.626 < 1.0 produces a rounded bullet-nose planform (included angle ~88 deg at 3 mm) that passes thickness-only Gate S2.",
+    "stations": [
+      {
+        "dist_from_tip_mm": 1.0,
+        "included_angle_deg": 110.13,
+        "planform_width_mm": 2.863
+      },
+      {
+        "dist_from_tip_mm": 2.0,
+        "included_angle_deg": 98.84,
+        "planform_width_mm": 4.67
+      },
+      {
+        "dist_from_tip_mm": 3.0,
+        "included_angle_deg": 92.22,
+        "planform_width_mm": 6.237
+      }
+    ],
+    "tip_angle_gene_decoded_deg": 33.3
+  },
+  "schema": "jarambit.g3.diagnostics.tip_raster.v1"
+}

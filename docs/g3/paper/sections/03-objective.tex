@@ -56,9 +56,10 @@ score in proportion, and the search can still learn from it.
 
 Three terms are fixed or capped in this release, and the scores in this paper include them as they are.
 \begin{itemize}
-\item The plate-GCI term is held at 0.5, because no three-level plate refinement runs in the search.
+\item The plate-GCI term is held at 0.5, because no three-level plate refinement~\cite{roache1998} runs in the search (see \code{evidence/g3/v3.0.0/diagnostics/plate_meshconv.json} for the post-hoc 3-level convergence check).
 \item The solid-tip term is capped at 0.8 of its knee value, because the independent cross-check that would lift the cap
 is not run.
 \item The buildability term is the analytic rule (skin at least 0.8~mm, open ports, lattice struts against a 0.8~mm
 minimum) at every tier.
+\item In \code{g3_sandwich.rs}, the Goodman fatigue ratio is evaluated from $180/\mathrm{cap\_lat\_n}$ ($0.220$~MPa, capped at 10) rather than $180\,\sigma_{1\mathrm{N}}$ ($166$~MPa, true Goodman $\mathrm{SF}=1.84$), and the yield-sequence ratio is taken over the two lateral/twist blade cases (\code{evidence/g3/v3.0.0/diagnostics/seq_per_lc.json}).
 \end{itemize}

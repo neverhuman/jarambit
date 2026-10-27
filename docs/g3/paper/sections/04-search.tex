@@ -2,7 +2,7 @@
 \subsection{Archive, start and variation}
 Each island is a MAP-Elites archive~\cite{mouret2015,vassiliades2018} of 1,024 niches in an eight-dimensional behaviour
 space (\src{crates/g3/src/g3_qd.rs}{\code{CvtMapElitesArchive}}). The niche centres are the first 1,024 points of a
-Halton sequence, so every island shares the same partition. The descriptors are hook drop, inner turn angle, silhouette
+low-discrepancy Halton sequence (rather than Lloyd-relaxed CVT centroids), so every island shares the same partition. The descriptors are hook drop, inner turn angle, silhouette
 complexity, grip section height-to-width ratio, finger-groove articulation, porosity, surface-texture energy and mass.
 The last three are re-measured on the voxel model at Tier~1 and above; the other five come from the genes and the 2D
 profile.
@@ -15,7 +15,7 @@ decays when they do not.
 \code{reproduce_iso_line_dd} then combines three steps:
 \begin{itemize}
 \item with probability 0.15, a crossover that swaps one whole gene module from the second parent;
-\item self-adaptive step sizes, one per gene module, carried in five genes of the genome (0.01--0.20) and mutated
+\item self-adaptive step sizes, one per gene module, carried in five genes of the genome (0.01--0.20; four mapped to active module step sizes and the fifth reserved) and mutated
 log-normally;
 \item an iso-line step: Gaussian noise at the module's step size plus $0.25\,\mathcal{N}(0,1)$ times the difference to
 the second parent.
@@ -30,7 +30,7 @@ To spend finite-element time on promising designs, every child passes through a 
 lateral-torsional buckling estimate, take a few milliseconds. A design scoring at least \gGateOne{} goes on to Tier~1.
 \item \textbf{Tier~1, voxel model and plate.} A voxel SDF of the whole knife and its lattice at $h = \gH$~mm
 (\code{build_g3_sdf}) gives mass, centre of mass, spin inertia and the grip section. One sandwich-plate finite-element
-mesh of the blade (CST membrane and DKT bending) gives the lateral capacity under a unit load, the blade twist at
+mesh of the blade (CST membrane and DKT bending~\cite{batoz1980}, meshed on the outer silhouette \code{mesh_domain(\&b_outer, \&[], 0.9)} without subtracting internal fuller cutouts) gives the lateral capacity under a unit load, the blade twist at
 1.82~N$\cdot$m (scaled linearly to the 16.2~N$\cdot$m human maximum) and the stress under the 3,427~N spine load. A T6
 membrane model of the ring band gives its bearing and back capacities. A Tier-1 score of at least \gGateTwo{} promotes
 the design to Tier~2.

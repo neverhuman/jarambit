@@ -3,18 +3,18 @@
 The cohort ran on \gHost. Floating-point libraries differ between platforms, so the final ranking was repeated on
 \gPlatform, which is the platform of record for every number below; the winner scored \gScoreArm{} on the search host
 and \gScore{} on the platform of record. The search grid is $h = \gH$ mm and the ranking grid $h = \gHRank$ mm
-(Section~\ref{sec:results}). Mass is reported from the watertight 0.2 mm mesh of the printed part (\gVolAM{} mm$^3$ at
-\gDensity{} g/mm$^3$, \gMassG{} g); the ranking counted \gMassRankG{} g on its voxel grid and the search \gMassVoxelG{} g.
+(Section~\ref{sec:results}). Mass is reported from the watertight 0.2 mm mesh of the as-printed part (\gVolAM{} mm$^3$ at
+\gDensity{} g/mm$^3$, \gMassG{} g, which includes the $+0.30$~mm bevel grind allowance; the finished CAD mesh after bevel grinding weighs 67.97~g, partitioned across ring 9.8~g, grip 37.9~g, guard 4.2~g and blade 19.2~g as recorded in \code{evidence/g3/v3.0.0/diagnostics/zone_mass.json}); the ranking counted \gMassRankG{} g on its voxel grid and the search \gMassVoxelG{} g.
 
 \subsection{Solid tip}
-The point is checked by a solid TET10 model of the last 30 mm of the blade under a 1.82 N$\cdot$m pry, reading the
+The point is checked by a solid TET10 model of the last 30 mm of the blade under a 1.82 N$\cdot$m pry applied about the global origin-to-tip chord and rasterised at $0.4$~mm voxel corners (\code{evidence/g3/v3.0.0/diagnostics/tip_raster.json}), reading the
 peak nodal von Mises stress 4--15 mm from the point. Its planform mesh was refined until it converged on sharp points:
 for this design the safety factor is \gTipConvA, \gTipConvB{} and \gTipConvC{} at maximum triangle areas of 0.4, 0.15
 (production) and 0.08 mm$^2$.
 
 \subsection{Voxel finite-element certification}
 The plate and beam models of the search are fast surrogates. For the winner we also solved the printed geometry
-itself: a hex8 linear-elastic model on its AM-build voxels at $h = \gFeH$ mm (skin, lattice, ribs and ports as built),
+itself: a plain trilinear hex8 linear-elastic model on its AM-build voxels at $h = \gFeH$ mm ($\sim$2.3 elements across a 0.8~mm skin, solved with Jacobi-PCG to relative residual $10^{-2}$),
 in two zones, the grip and the blade root. Each zone is clamped at one end and loaded at the other with the wrench of
 three cases: 260 N lateral at the tip, the 16.2 N$\cdot$m human-maximum twist, and 3427 N on the spine at the blade
 centroid. We report the 99.9th-percentile von Mises stress of each zone against an allowable of \gFeAllow{} MPa, not a

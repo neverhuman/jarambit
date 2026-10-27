@@ -1,0 +1,59 @@
+{
+  "am_stl_total_mass_g": 59.723,
+  "design_id": "hz4i013_g00995_d206e3c9",
+  "envelope_stl_total_mass_g": 119.402,
+  "grip_subcomponent_decoded_params": {
+    "rho_blade_effective": 0.4389,
+    "rho_grip": 0.0674,
+    "rho_ring": 0.363,
+    "rib_thickness_mm": 1.104,
+    "shear_web_thickness_mm": 0.184,
+    "skin_t_mm": 0.933
+  },
+  "overall_solid_fraction": 0.5,
+  "schema": "jarambit.g3.diagnostics.zone_mass.v1",
+  "zones": [
+    {
+      "am_mass_g": 8.99,
+      "am_share_pct": 15.1,
+      "envelope_mass_g": 10.33,
+      "solid_fraction": 0.87,
+      "zone": "ring_x_lt_9p9mm"
+    },
+    {
+      "am_mass_g": 28.642,
+      "am_share_pct": 48.0,
+      "envelope_mass_g": 82.14,
+      "solid_fraction": 0.349,
+      "zone": "grip_9p9_to_75p6mm"
+    },
+    {
+      "am_mass_g": 2.436,
+      "am_share_pct": 4.1,
+      "envelope_mass_g": 4.499,
+      "solid_fraction": 0.541,
+      "zone": "guard_75p6_to_79p6mm"
+    },
+    {
+      "am_mass_g": 7.446,
+      "am_share_pct": 12.5,
+      "envelope_mass_g": 9.586,
+      "solid_fraction": 0.777,
+      "zone": "blade_root_79p6_to_92mm"
+    },
+    {
+      "am_mass_g": 7.983,
+      "am_share_pct": 13.4,
+      "envelope_mass_g": 8.486,
+      "solid_fraction": 0.941,
+      "zone": "blade_mid_92_to_115mm"
+    },
+    {
+      "am_mass_g": 4.226,
+      "am_share_pct": 7.1,
+      "envelope_mass_g": 4.361,
+      "solid_fraction": 0.969,
+      "zone": "blade_tip_gt_115mm"
+    }
+  ]
+}

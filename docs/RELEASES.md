@@ -2,6 +2,34 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v4.0.0 — 2026-10-27 (major: the G4 generation — declarative 130-gene `G4.0` schema, `RS-karambit-v4`, true-3D physics & V&V suite, feasibility-first constrained QD search, and certified 35.42 g sub-50 g winner)
+
+- **Owner request & feedback sweep.** Address all external peer-review and internal audit findings in `tips/feedback/*.md` — 20 Research Integrity findings (`F01`–`F20`), 26 Physics/Measurement findings (`AG-01`–`AG-26`), 12 Genome findings (`F-G1`–`F-G12`), 11 Requirement findings (`F-R1`–`F-R11`), 8 Search findings (`F-S1`–`F-S8`), 15 HPC targets (`H-1`–`H-15`), and 16 G3 paper errata (`P-1`–`P-16`) — while keeping every v1/v2 and v3.0.0 certified input (`g3_decoder_sha256()`) byte-for-byte unchanged (`AGENTS.md`).
+- **Declarative `G4.0` genome (`genome/G4.0.toml`).**
+  - **130 live genes (`D = 130`, `D_core = 114`, `D_T = 16`, 0 dead genes)** across 9 modules (`H`, `G`, `P`, `Z`, `X`, `I`, `E`, `T`, `A`), replacing G3's 35 dead/weak genes (`F-G1`, `F-G2`) and hardcoded grip floor (`F-G3`, `AG-05`).
+  - **32 new structural & topological levers (`NG-01`–`NG-32`):** tip-bisector diamond crown (`t_tip_crown_mm`, `l_tip_crown_mm`, Study `E06`), $C^2$ flange thickening (`skin_flange_c2`), dorsal baton pad (`skin_dorsal_s1`), internal web lightening holes (`rib_hole_frac`), multi-bulkhead reinforcement, ring hollowing + radial port (`ring_hollow_t`, `ring_port_d`), and true-3D camber/twist/chisel (`camber_z1_mm`, `camber_z2_mm`, `twist_tip_deg`, `chisel_bias`).
+- **Unified requirement specification (`requirements/RS-karambit-v4.toml`, `loads-v4.toml`, `materials-v4.toml`, `frame-v4.toml`, `PROVENANCE.md`).**
+  - Explicit traceability for every load (`180 N` hiker, `260 N` hunter, `1.82 N·m` body twist, `16.2 N·m` two-hand torque, `0.80 N·m` tip torsion, `60 N` tip pry, `500 N` spine push, `3427 N` baton impact against `sigma_ult = 895 MPa`, `300 N` ring bearing, `30 N` ring back, `250 N` grip squeeze) and Ti-6Al-4V ELI HIP property (`sigma_y = 828 MPa`, `sigma_e = 510 MPa`).
+  - Dual mass ledger (`as_printed_mass_g` vs `as_finished_mass_g`) and true per-load-case blade-before-grip yield-sequence ledger (`F03`, `AG-15`).
+- **True-3D implicit decoder & sub-voxel physics (`crates/g4`).**
+  - **Curvilinear coordinate frame (`(s, n_c, z)`):** replaces G3's `atan2` polar branch cut (`AG-01`) and $z$-independent 2.5D profile (`AG-02`).
+  - **Sub-voxel polynomial volume integration (`AG-06`):** $O(h^2)$ divergence-theorem face + tet quadrature eliminate G3's $50.8\text{ g} \to 62.6\text{ g}$ voxel step-function undercount (`F01`), reducing grid drift between $h = 0.40\text{ mm}$ and $h = 0.20\text{ mm}$ to `0.05 %` (`<= 2.0 %` gate).
+  - **Resolution-invariant drainability (`AG-07`):** morphological erosion by $r_{\text{esc}} = 0.50\text{ mm}$ before 26-connected flood fill guarantees $\beta_0 = 1$, $\beta_2 = 0$ sealed voids, and `0.0 mm³` trapped powder (`F02`).
+  - **Multi-point `HM-1` Winkler hand contact equilibrium (`AG-14`):** 4-finger compliant contact replacing the non-physical ring-only clamp (`0.61 -> 9.81` baton SF), paired with Hoff/Plantema sandwich face-wrinkling checks (`AG-21`).
+  - **Hole-aware plate FE with 3-level Roache GCI (`AG-17`, `AG-18`, `F04`), frame-invariant `TET10` solid-tip FE (`AG-19`, `AG-20`), 2D `T6` serration tooth FE on all teeth including end teeth (`AG-22`, `F05`), and locking-free B-bar `hex8` voxel FE (`AG-23`).**
+  - **11 / 11 V&V verification benchmarks pass (`crates/g4/tests/vv_suite.rs`):** NAFEMS `LE1`/`LE10`, Euler-Bernoulli B-bar patch test, Kirsch stress concentration, Roache 3-level GCI, rigid-body `SO(3)` invariance, and analytical spherical shell volume.
+- **Feasibility-first constrained QD search (`crates/g4/src/search.rs`, `g4-evolve`).**
+  - **Deb's lexicographic superiority (`FI-2Pop` dual archive):** separates feasible designs ($V(x) = 0$, ranked by `W_ERGOLIGHT_v2`) from infeasible stepping stones ($V(x) > 0$, ranked by violation sum of squares), eliminating penalty-slope gaming (`F01`, `F-S3`).
+  - **Measured 6D behavioral descriptors (`F09`, `F-S1`), Lloyd-relaxed CVT centroids (`F-S2`), 4-emitter UCB1 bandit (`F-S4`), and isotonic-calibrated 3-tier cascade with probabilistic LCB (`F-S6`).**
+- **Certified G4 v4.0.0 winner (`g4v400_s042_62763aa2`, [`evidence/g4/v4.0.0/release.json`](../evidence/g4/v4.0.0/release.json)).**
+  - **Feasible across all 29 hard gates (`V(x) = 0.0000`, minimum margin `+0.0250`)** with **`W_ERGOLIGHT_v2 = 92.45`** (`W_ERGOLIGHT_v1 = 94.90`).
+  - **Sub-50 g mass:** **`35.42 g` as-finished** / **`35.68 g` as-printed** (`67.3 %` hollowness vs `108.30 g` solid outer envelope; `0.05 %` grid drift).
+  - **All 17 structural LCB safety factors $\ge 1.00$:** solid-tip torsion SF `3.41` (LCB `3.29`), `HM-1` grip governing SF `6.43` (LCB `6.19`), human-max twist SF `1.72` (LCB `1.66`), Goodman fatigue SF `2.40` (LCB `2.31`), per-case yield-sequence ratio `7.54` lateral / `8.68` twist / `2.22` spine (LCB `2.17` vs `1.20` floor), and `9 / 9` serration teeth checked (`min tooth SF = 12.53`).
+- **Papers, diagnostics & `cad/` upload kit.**
+  - New G4 paper [`docs/g4/paper/g4-v4.0.0.pdf`](g4/paper/g4-v4.0.0.pdf) generated from `evidence/g4/v4.0.0/release.json` via `g4-release-tex`.
+  - G3 paper [`docs/g3/paper/g3-v3.0.2.pdf`](g3/paper/g3-v3.0.2.pdf) updated with all 16 errata (`P-1`–`P-16`) and backed by [`evidence/g3/v3.0.0/diagnostics/`](../evidence/g3/v3.0.0/diagnostics/).
+  - Top-level [`cad/`](../cad/) updated with the 6-file upload kit for `g4v400_s042_62763aa2` (`STL`, `3MF`, `DXF`, `PDF`, `JPG`, `print_spec.json`); the v3.0.0 kit is archived in [`cad/v3.0.0/`](../cad/v3.0.0/).
+
 ## v3.0.2 — 2026-10-26 (patch: repository cleanup; the `cad/` upload kit; G3 release tools as binaries)
 
 - **Owner request:** "a full audit looking for clean up … redundant files, old temp folders, older worktrees, poorly

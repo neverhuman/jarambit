@@ -1,0 +1,37 @@
+[workspace]
+
+[package]
+name = "jarambit-g4"
+version = "4.0.0"
+edition = "2021"
+license = "MIT"
+build = "build.rs"
+
+[[bin]]
+name = "g4-evolve"
+path = "src/bin/g4_evolve.rs"
+
+[[bin]]
+name = "g4-studies"
+path = "src/bin/g4_studies.rs"
+
+[[bin]]
+name = "g4-export"
+path = "src/bin/g4_export.rs"
+
+[[bin]]
+name = "g4-release-tex"
+path = "src/bin/g4_release_tex.rs"
+
+[dependencies]
+jarambit-crescent = { path = "../crescent" }
+jarambit-physics = { path = "../physics" }
+jarambit-evidence = { path = "../evidence" }
+jarambit-g3 = { path = "../g3" }
+faer = { version = "0.24", default-features = false, features = ["std", "linalg", "sparse", "sparse-linalg"] }
+libm = "0.2"
+rayon = "1.10"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+zstd = "0.13"

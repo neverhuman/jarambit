@@ -1,0 +1,1476 @@
+# genome/G4.0.toml — Declarative Single Source of Truth for the Jarambit G4.0 Genome.
+# Parsed at compile time by `crates/g4/build.rs` to generate:
+#   - `#[repr(C)] pub struct G4DecodedParams` (zero BTreeMap string lookups in hot loops)
+#   - `pub const G4_GENES: &[G4GeneSpec]`
+#   - `docs/g4/generated/genome_table.md` and `docs/g4/paper/generated/genome_table.tex`
+# Emitter strategy parameters (CMA covariance, step sizes sigma) are strictly excluded from the
+# phenotype genome and `genome_sha256` (`G4-GEN-6`).
+
+schema = "G4.0"
+version = "4.0.0"
+
+# ==============================================================================
+# Module H — Retention Ring & Anthropometric Grip Envelope (24 genes)
+# ==============================================================================
+
+[[genes]]
+name = "ring_od"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 28.8
+hi = 34.0
+default = 30.2
+unit = "mm"
+description = "Outer diameter of the finger retention ring around the 24.9 mm bore"
+
+[[genes]]
+name = "ring_crown"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 0.22
+hi = 0.38
+default = 0.30
+unit = "mm"
+description = "Axial crown convexity on the 8.0 mm wide ring lip"
+
+[[genes]]
+name = "ring_lip_d"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 1.60
+hi = 2.60
+default = 1.95
+unit = "mm"
+description = "Radial lip depth at the inner bore rim"
+
+[[genes]]
+name = "ring_taper_deg"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 4.0
+hi = 18.0
+default = 10.0
+unit = "deg"
+description = "Outward radial taper angle from the ring web to the crowned lip"
+
+[[genes]]
+name = "ring_web_t"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 2.20
+hi = 3.80
+default = 2.65
+unit = "mm"
+description = "Minimum radial wall thickness of the retention ring web"
+
+[[genes]]
+name = "ring_thumbpad"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 2.20
+default = 0.85
+unit = "mm"
+description = "Dorsal thumb-pad radial prominence on the ring outer rim"
+
+[[genes]]
+name = "ring_od_tear"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 2.50
+default = 1.10
+unit = "mm"
+description = "First harmonic teardrop eccentricity of the outer ring contour toward the neck"
+
+[[genes]]
+name = "ring_od_h2"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = -0.80
+hi = 1.20
+default = 0.25
+unit = "mm"
+description = "Second harmonic ellipticity of the outer ring contour"
+
+[[genes]]
+name = "ring_junction_deg"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 12.0
+hi = 32.0
+default = 21.0
+unit = "deg"
+description = "Angular span of the ring-to-grip neck transition flare"
+
+[[genes]]
+name = "ring_neck_r"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 4.20
+hi = 9.00
+default = 6.20
+unit = "mm"
+description = "Concave fillet radius at the ring-to-grip neck transition"
+
+[[genes]]
+name = "ring_bore_round"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 2.55
+hi = 3.45
+default = 3.00
+unit = "mm"
+description = "Corner round radius on the inner 24.9 mm ring bore"
+
+[[genes]]
+name = "ring_hollow_t"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 1.0
+default = 0.78
+unit = "ratio"
+description = "Drained hollow gallery fraction inside the ring rim and neck bridge (L-4 mass lever)"
+
+[[genes]]
+name = "ring_port_d"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 2.55
+hi = 3.60
+default = 2.85
+unit = "mm"
+description = "Diameter of the ring-to-grip powder drainage gallery port (>= 2.5 mm)"
+
+[[genes]]
+name = "hand_scale"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 0.96
+hi = 1.05
+default = 1.00
+unit = "ratio"
+description = "Anthropometric scale factor multiplying M50 finger pitches (19.5, 21.0, 22.0 mm)"
+
+[[genes]]
+name = "grip_dl"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 2.00
+hi = 8.00
+default = 5.20
+unit = "mm"
+description = "Axial grip length offset added to scaled 3-finger pitch sum (L_g in 64-72 mm)"
+
+[[genes]]
+name = "grip_t0"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 11.8
+hi = 15.2
+default = 13.4
+unit = "mm"
+description = "Lateral grip thickness at the ring-end station"
+
+[[genes]]
+name = "grip_t_sw"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 13.4
+hi = 16.6
+default = 14.8
+unit = "mm"
+description = "Lateral grip thickness at the mid-palm swell station (13-17 mm band)"
+
+[[genes]]
+name = "grip_t_g"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 12.2
+hi = 15.8
+default = 13.8
+unit = "mm"
+description = "Lateral grip thickness at the forward guard station"
+
+[[genes]]
+name = "grip_h0"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 22.5
+hi = 27.0
+default = 24.6
+unit = "mm"
+description = "In-plane dorsal-to-ventral grip height at the ring-end station"
+
+[[genes]]
+name = "grip_h_sw"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 25.2
+hi = 27.8
+default = 26.2
+unit = "mm"
+description = "In-plane dorsal-to-ventral grip height at the palm swell station (25-28 mm band)"
+
+[[genes]]
+name = "grip_h_g"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 23.5
+hi = 27.5
+default = 25.4
+unit = "mm"
+description = "In-plane dorsal-to-ventral grip height ahead of the index choil"
+
+[[genes]]
+name = "grip_belly"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = -1.5
+hi = 2.5
+default = 0.6
+unit = "mm"
+description = "Dorsal palm-arch camber of the handle mid-line"
+
+[[genes]]
+name = "grip_n_exp"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 2.10
+hi = 3.20
+default = 2.45
+unit = "dimless"
+description = "Superellipse cross-section exponent of the grip shell (controls corner fullness)"
+
+[[genes]]
+name = "grip_edge_r"
+module = "H"
+kind = "f64"
+scale = "lin"
+lo = 2.30
+hi = 3.80
+default = 2.85
+unit = "mm"
+description = "Hand-contact rail rounding radius along dorsal and ventral grip edges (>= 2.2 mm)"
+
+# ==============================================================================
+# Module G — Finger Grooves & Parametric B-Spline Guard (12 genes)
+# ==============================================================================
+
+[[genes]]
+name = "groove_d1"
+module = "G"
+kind = "f64"
+scale = "lin"
+lo = 1.60
+hi = 2.40
+default = 1.95
+unit = "mm"
+description = "Scallop depth of the ring-finger groove (1.5-2.5 mm comfort band)"
+
+[[genes]]
+name = "groove_d2"
+module = "G"
+kind = "f64"
+scale = "lin"
+lo = 1.60
+hi = 2.40
+default = 1.95
+unit = "mm"
+description = "Scallop depth of the middle-finger groove (1.5-2.5 mm comfort band)"
+
+[[genes]]
+name = "groove_choil"
+module = "G"
+kind = "f64"
+scale = "lin"
+lo = 3.60
+hi = 4.40
+default = 4.10
+unit = "mm"
+description = "Positive-stop depth of the compound index-finger choil (3.5-4.5 mm band)"
+
+[[genes]]
+name = "groove_r"
+module = "G"
+kind = "f64"
+scale = "lin"
+lo = 10.5
+hi = 16.0
+default = 12.2
+unit = "mm"
+description = "Concave valley curvature radius of the finger grooves (>= 10.0 mm)"
+
+[[genes]]
+name = "crest_r"
+module = "G"
+kind = "f64"
+scale = "lin"
+lo = 5.10
+hi = 8.00
+default = 5.80
+unit = "mm"
+description = "Convex saddle crest radius between adjacent finger grooves (>= 5.0 mm)"
+
+[[genes]]
+name = "ramp_h"
+module = "G"
+kind = "f64"
+scale = "lin"
+lo = 1.50
+hi = 4.20
+default = 2.60
+unit = "mm"
+description = "Dorsal thumb-ramp elevation at the forward grip transition"
+
+[[genes]]
+name = "guard_h"
+module = "G"
+kind = "f64"
+scale = "lin"
+lo = 12.2
+hi = 15.5
+default = 13.0
+unit = "mm"
+description = "Ventral index-guard protrusion height (>= 12.0 mm ergonomic requirement)"
+
+[[genes]]
+name = "guard_t"
+module = "G"
+kind = "f64"
+scale = "lin"
+lo = 7.5
+hi = 12.5
+default = 9.4
+unit = "mm"
+description = "Lateral thickness of the parametric guard bolster"
+
+[[genes]]
+name = "guard_r"
+module = "G"
+kind = "f64"
+scale = "lin"
+lo = 3.5
+hi = 7.5
+default = 5.0
+unit = "mm"
+description = "Fillet blend radius between the guard bolster and blade heel"
+
+[[genes]]
+name = "guard_bspline_c1"
+module = "G"
+kind = "f64"
+scale = "lin"
+lo = -2.0
+hi = 2.5
+default = 0.4
+unit = "mm"
+description = "First cubic B-spline control offset of the parametric dorsal guard profile (replaces v1 F075 lookup)"
+
+[[genes]]
+name = "guard_bspline_c2"
+module = "G"
+kind = "f64"
+scale = "lin"
+lo = -2.0
+hi = 2.5
+default = -0.3
+unit = "mm"
+description = "Second cubic B-spline control offset of the parametric ventral guard lobe"
+
+[[genes]]
+name = "jimp_depth"
+module = "G"
+kind = "f64"
+scale = "lin"
+lo = 0.40
+hi = 0.80
+default = 0.58
+unit = "mm"
+description = "Filleted thumb-ramp jimping groove depth (crest R >= 0.5 mm)"
+
+# ==============================================================================
+# Module P — Curvilinear Bernstein Planform & Decoupled Point (18 genes)
+# ==============================================================================
+
+[[genes]]
+name = "blade_len"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = 72.5
+hi = 84.5
+default = 76.5
+unit = "mm"
+description = "Arc length of the blade centre-line spine from guard face to point"
+
+[[genes]]
+name = "blade_reach_target"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = 72.5
+hi = 84.5
+default = 75.8
+unit = "mm"
+description = "Straight-line chord reach from the guard datum to the blade point (REQ-FUN-1: 72-85.725 mm)"
+
+[[genes]]
+name = "claw_turn_deg"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = 36.0
+hi = 78.0
+default = 48.0
+unit = "deg"
+description = "Total integrated centre-line turning angle Theta of the curved karambit claw (REQ-FUN-3 >= 35 deg)"
+
+[[genes]]
+name = "kappa_b0"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = 0.20
+hi = 1.60
+default = 0.85
+unit = "dimless"
+description = "Bernstein B0 curvature weight at the blade root (controls root hook onset)"
+
+[[genes]]
+name = "kappa_b1"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = 0.40
+hi = 1.80
+default = 1.05
+unit = "dimless"
+description = "Bernstein B1 curvature weight at the proximal mid-blade"
+
+[[genes]]
+name = "kappa_b2"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = 0.40
+hi = 1.80
+default = 1.15
+unit = "dimless"
+description = "Bernstein B2 curvature weight at the distal mid-blade"
+
+[[genes]]
+name = "kappa_b3"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = 0.10
+hi = 1.40
+default = 0.70
+unit = "dimless"
+description = "Bernstein B3 curvature weight approaching the blade point"
+
+[[genes]]
+name = "blade_belly"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = -2.0
+hi = 3.5
+default = 0.8
+unit = "mm"
+description = "Mid-blade width expansion of the inner concave edge profile"
+
+[[genes]]
+name = "spine_arch"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = -1.5
+hi = 3.5
+default = 1.1
+unit = "mm"
+description = "Dorsal spine arch expansion along the outer convex edge"
+
+[[genes]]
+name = "h_root"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = 22.0
+hi = 30.0
+default = 26.8
+unit = "mm"
+description = "In-plane blade chord width at the guard root junction (boosts root section modulus)"
+
+[[genes]]
+name = "h_mid_ratio"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = 0.58
+hi = 0.86
+default = 0.72
+unit = "ratio"
+description = "Ratio of mid-blade width (s = 0.5 L) to root width h_root"
+
+[[genes]]
+name = "theta_tip_deg"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = 28.0
+hi = 50.0
+default = 38.0
+unit = "deg"
+description = "Decoupled planform included angle at 3.0 mm from the point (Gate S4 / REQ-FUN-4 <= 55 deg)"
+
+[[genes]]
+name = "l_tip_plan_mm"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = 6.0
+hi = 14.0
+default = 9.5
+unit = "mm"
+description = "Length of the C2-blended linear-wedge point planform zone (prevents bullet-nose exploit)"
+
+[[genes]]
+name = "tip_radius_mm"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = 0.06
+hi = 0.22
+default = 0.12
+unit = "mm"
+description = "Planform nose radius at the extreme tip apex (Gate S5 <= 0.25 mm)"
+
+[[genes]]
+name = "harm_in_1"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = -1.2
+hi = 1.2
+default = 0.15
+unit = "mm"
+description = "First spatial cosine harmonic offset on the inner concave blade outline"
+
+[[genes]]
+name = "harm_in_2"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = -0.8
+hi = 0.8
+default = -0.10
+unit = "mm"
+description = "Second spatial cosine harmonic offset on the inner concave blade outline"
+
+[[genes]]
+name = "harm_sp_1"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = -1.2
+hi = 1.2
+default = 0.20
+unit = "mm"
+description = "First spatial cosine harmonic offset on the outer dorsal spine outline"
+
+[[genes]]
+name = "harm_sp_2"
+module = "P"
+kind = "f64"
+scale = "lin"
+lo = -0.8
+hi = 0.8
+default = 0.05
+unit = "mm"
+description = "Second spatial cosine harmonic offset on the outer dorsal spine outline"
+
+# ==============================================================================
+# Module Z — True 3D Out-of-Plane Camber, Twist & Build Orientation (8 genes)
+# ==============================================================================
+
+[[genes]]
+name = "camber_z1_mm"
+module = "Z"
+kind = "f64"
+scale = "lin"
+lo = -1.8
+hi = 1.8
+default = 0.0
+unit = "mm"
+description = "First-mode out-of-plane lateral camber z_c(s) of the 3D blade spine"
+
+[[genes]]
+name = "camber_z2_mm"
+module = "Z"
+kind = "f64"
+scale = "lin"
+lo = -1.0
+hi = 1.0
+default = 0.0
+unit = "mm"
+description = "Second-mode S-camber z_c(s) of the 3D blade spine"
+
+[[genes]]
+name = "twist_tip_deg"
+module = "Z"
+kind = "f64"
+scale = "lin"
+lo = -8.0
+hi = 8.0
+default = 0.0
+unit = "deg"
+description = "Axial Bishop-frame twist angle of the blade cross-section from root to tip"
+
+[[genes]]
+name = "chisel_bias"
+module = "Z"
+kind = "f64"
+scale = "lin"
+lo = -0.25
+hi = 0.25
+default = 0.0
+unit = "ratio"
+description = "Out-of-plane bevel symmetry bias (0 = symmetric double-ground, != 0 = asymmetric chisel shift)"
+
+[[genes]]
+name = "grip_cant_deg"
+module = "Z"
+kind = "f64"
+scale = "lin"
+lo = -5.0
+hi = 5.0
+default = 0.0
+unit = "deg"
+description = "Out-of-plane ergonomic cant angle of the grip axis relative to the blade plane"
+
+[[genes]]
+name = "ring_tilt_deg"
+module = "Z"
+kind = "f64"
+scale = "lin"
+lo = -6.0
+hi = 6.0
+default = 0.0
+unit = "deg"
+description = "Out-of-plane tilt angle of the finger retention ring bore axis"
+
+[[genes]]
+name = "build_theta_deg"
+module = "Z"
+kind = "f64"
+scale = "lin"
+lo = 25.0
+hi = 65.0
+default = 45.0
+unit = "deg"
+description = "Co-evolved L-PBF build plate inclination angle theta_build"
+
+[[genes]]
+name = "build_phi_deg"
+module = "Z"
+kind = "f64"
+scale = "lin"
+lo = -30.0
+hi = 30.0
+default = 0.0
+unit = "deg"
+description = "Co-evolved L-PBF build plate azimuthal rotation angle phi_build"
+
+# ==============================================================================
+# Module X — Section Tensor, Bi-Concave Fuller & Local Tip Crown (14 genes)
+# ==============================================================================
+
+[[genes]]
+name = "t_core"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 4.20
+hi = 6.60
+default = 5.10
+unit = "mm"
+description = "Maximum blade spine thickness at the guard root transition (boosts root lateral & fatigue SF)"
+
+[[genes]]
+name = "t_tip_base"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 2.40
+hi = 4.60
+default = 3.40
+unit = "mm"
+description = "Nominal blade spine thickness entering the distal tip zone before crown reinforcement"
+
+[[genes]]
+name = "taper_x0"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 0.25
+hi = 0.75
+default = 0.50
+unit = "ratio"
+description = "Normalized arc-length station where distal spine thickness taper begins"
+
+[[genes]]
+name = "t_tip_crown_mm"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 0.15
+hi = 0.85
+default = 0.52
+unit = "mm"
+description = "Local diamond spine ridge reinforcement along the tip bisector over a in [3, 14] mm (L-8 lever: +90% tip torsion SF for +0.2 g)"
+
+[[genes]]
+name = "l_tip_crown_mm"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 6.0
+hi = 15.0
+default = 11.0
+unit = "mm"
+description = "Axial span of the distal tip-bisector diamond crown reinforcement"
+
+[[genes]]
+name = "ridge_amp"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 1.20
+default = 0.55
+unit = "mm"
+description = "Medial structural ridge amplitude along the blade spine neutral line"
+
+[[genes]]
+name = "ridge_width_frac"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 0.18
+hi = 0.45
+default = 0.28
+unit = "ratio"
+description = "Transverse width fraction of the medial structural spine ridge"
+
+[[genes]]
+name = "fuller_amp"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 1.10
+default = 0.65
+unit = "mm"
+description = "Bi-concave fuller groove depth removing low-leverage neutral-axis blade mass (L-5 lever)"
+
+[[genes]]
+name = "fuller_width_frac"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 0.20
+hi = 0.50
+default = 0.34
+unit = "ratio"
+description = "Transverse width fraction of the bi-concave fuller fluting"
+
+[[genes]]
+name = "corrug_amp"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 0.45
+default = 0.15
+unit = "mm"
+description = "Micro-corrugation stiffness rib amplitude on the fuller flanks"
+
+[[genes]]
+name = "win_gate"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 1.0
+default = 0.30
+unit = "ratio"
+description = "Smooth C2 sigmoid activation of medial blade fenestration windows"
+
+[[genes]]
+name = "win_length_frac"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 0.15
+hi = 0.45
+default = 0.26
+unit = "ratio"
+description = "Arc-length span fraction of the reinforced blade fenestration window"
+
+[[genes]]
+name = "win_width_frac"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 0.12
+hi = 0.30
+default = 0.18
+unit = "ratio"
+description = "Transverse width fraction of the blade fenestration window"
+
+[[genes]]
+name = "win_fillet_r"
+module = "X"
+kind = "f64"
+scale = "lin"
+lo = 1.50
+hi = 3.50
+default = 2.40
+unit = "mm"
+description = "Stress-relieving corner fillet radius around fenestration window rims"
+
+# ==============================================================================
+# Module I — Flange-Graded Skin, Perforated Web & Graded Sheet-TPMS (18 genes)
+# ==============================================================================
+
+[[genes]]
+name = "skin_t_base"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 0.78
+hi = 1.15
+default = 0.86
+unit = "mm"
+description = "Base exterior shell skin thickness (>= 0.75 mm printable floor)"
+
+[[genes]]
+name = "skin_flange_c2"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 0.05
+hi = 0.55
+default = 0.38
+unit = "mm"
+description = "Circumferential cos(2*theta) flange grading: thickens dorsal/ventral spine-bending chords while thinning neutral-axis flanks (L-1 lever)"
+
+[[genes]]
+name = "skin_dorsal_s1"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = -0.15
+hi = 0.25
+default = 0.08
+unit = "mm"
+description = "Dorsal-to-ventral sin(theta) asymmetry of the flange-graded grip skin"
+
+[[genes]]
+name = "skin_axial_taper"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = -0.20
+hi = 0.30
+default = 0.12
+unit = "mm"
+description = "Axial skin thickening toward the high-moment guard root junction"
+
+[[genes]]
+name = "rib_w"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 1.0
+default = 0.45
+unit = "ratio"
+description = "Continuous weight of the internal I-beam shear web (>= 0.80 mm when active)"
+
+[[genes]]
+name = "rib_hole_frac"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 0.15
+hi = 0.68
+default = 0.52
+unit = "ratio"
+description = "Neutral-axis lightening-hole height fraction in the internal web (L-2 lever: removes 52% web mass for 14% stiffness)"
+
+[[genes]]
+name = "rib_arch_count"
+module = "I"
+kind = "int"
+scale = "lin"
+lo = 3.0
+hi = 6.0
+default = 4.0
+unit = "count"
+description = "Number of Warren/trabecular lightening arches along the internal grip web"
+
+[[genes]]
+name = "bulkhead_t_mm"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 0.80
+hi = 1.30
+default = 0.90
+unit = "mm"
+description = "Thickness of transverse finger-station ring diaphragms (>= 0.80 mm printable floor, replacing 0.18 mm G3 webs)"
+
+[[genes]]
+name = "bulkhead_count"
+module = "I"
+kind = "int"
+scale = "lin"
+lo = 2.0
+hi = 4.0
+default = 3.0
+unit = "count"
+description = "Number of printable transverse bulkheads supporting palm squeeze loads"
+
+[[genes]]
+name = "lat_mix"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 1.0
+default = 0.65
+unit = "ratio"
+description = "Sheet-TPMS family blend (0.0 = Sheet-Gyroid, 1.0 = Sheet-Schwarz-D)"
+
+[[genes]]
+name = "lat_cell_mm"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 4.5
+hi = 7.5
+default = 5.8
+unit = "mm"
+description = "Unit-cell period of the internal Sheet-TPMS infill (sized for >= 0.80 mm struts and powder escape)"
+
+[[genes]]
+name = "rho_grip"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 0.05
+hi = 0.35
+default = 0.08
+unit = "ratio"
+description = "Relative density of the Sheet-TPMS core inside the grip cavity"
+
+[[genes]]
+name = "rho_guard"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 0.08
+hi = 0.45
+default = 0.16
+unit = "ratio"
+description = "Relative density of the Sheet-TPMS core inside the guard transition"
+
+[[genes]]
+name = "rho_ring"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 0.05
+hi = 0.35
+default = 0.10
+unit = "ratio"
+description = "Relative density of the Sheet-TPMS core inside the drained hollow ring cavity"
+
+[[genes]]
+name = "rho_blade"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 0.08
+hi = 0.50
+default = 0.18
+unit = "ratio"
+description = "Relative density of the continuous hollow blade core (decoupled from fenestration windows, L-6 lever)"
+
+[[genes]]
+name = "lat_stress_k"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 0.35
+default = 0.14
+unit = "ratio"
+description = "Lamarckian stress-driven lattice density grading gain k (L-3 lever)"
+
+[[genes]]
+name = "lat_stress_p"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 0.8
+hi = 2.2
+default = 1.3
+unit = "dimless"
+description = "Exponent p of the stress-driven TPMS density grading field"
+
+[[genes]]
+name = "port_d_mm"
+module = "I"
+kind = "f64"
+scale = "lin"
+lo = 2.60
+hi = 3.80
+default = 3.00
+unit = "mm"
+description = "Diameter of the exterior powder-evacuation ports (>= 2.50 mm requirement)"
+
+# ==============================================================================
+# Module E — Double-Edged, Double-Serrated Bevels & Point Profile (18 genes)
+# ==============================================================================
+
+[[genes]]
+name = "tip_reserve_mm"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 6.5
+hi = 12.0
+default = 9.0
+unit = "mm"
+description = "Distal point zone length over which serrations are excluded and the diamond tip crown tapers"
+
+[[genes]]
+name = "t_0p25_mm"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 0.21
+hi = 0.29
+default = 0.25
+unit = "mm"
+description = "Point thickness along the bisector at 0.25 mm from the tip (Gate S2 <= 0.30 mm)"
+
+[[genes]]
+name = "t_1p00_mm"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 0.42
+hi = 0.58
+default = 0.50
+unit = "mm"
+description = "Point thickness along the bisector at 1.00 mm from the tip (Gate S2 <= 0.60 mm)"
+
+[[genes]]
+name = "t_2p00_mm"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 0.78
+hi = 0.98
+default = 0.90
+unit = "mm"
+description = "Point thickness along the bisector at 2.00 mm from the tip (Gate S2 <= 1.00 mm)"
+
+[[genes]]
+name = "plunge_in_mm"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 5.0
+hi = 11.0
+default = 7.5
+unit = "mm"
+description = "Unground ricasso/plunge distance from the guard on the inner concave edge"
+
+[[genes]]
+name = "grind_end_in_mm"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 0.8
+hi = 3.2
+default = 1.6
+unit = "mm"
+description = "Active distal grind termination offset on the inner edge (fixes retired s1_in gene F-G2)"
+
+[[genes]]
+name = "angle_in_deg"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 18.0
+hi = 22.0
+default = 20.0
+unit = "deg"
+description = "Primary bevel half-angle per side on the inner concave edge (EDGE-3: 17.5-22.5 deg)"
+
+[[genes]]
+name = "apex_in_mm"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 0.06
+hi = 0.11
+default = 0.08
+unit = "mm"
+description = "As-finished cutting edge apex thickness on the inner concave edge"
+
+[[genes]]
+name = "serr_teeth_in"
+module = "E"
+kind = "int"
+scale = "lin"
+lo = 3.0
+hi = 7.0
+default = 4.0
+unit = "count"
+description = "Explicit integer number of full-depth serration scallops on the inner edge (SERR-1 >= 3)"
+
+[[genes]]
+name = "serr_depth_in_mm"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 0.90
+hi = 1.90
+default = 1.35
+unit = "mm"
+description = "Serration scallop depth on the inner concave edge (>= 0.80 mm)"
+
+[[genes]]
+name = "serr_duty_in"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 0.52
+hi = 0.78
+default = 0.65
+unit = "ratio"
+description = "Gullet-to-pitch duty cycle on the inner serrated edge (smooths gullet root radius rho_g)"
+
+[[genes]]
+name = "plunge_sp_mm"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 6.0
+hi = 12.0
+default = 8.5
+unit = "mm"
+description = "Unground plunge distance from the thumb ramp on the outer dorsal spine edge"
+
+[[genes]]
+name = "grind_end_sp_mm"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 0.8
+hi = 3.2
+default = 1.6
+unit = "mm"
+description = "Active distal grind termination offset on the outer spine edge (fixes retired s1_sp gene F-G2)"
+
+[[genes]]
+name = "angle_sp_deg"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 18.0
+hi = 22.0
+default = 20.4
+unit = "deg"
+description = "Primary bevel half-angle per side on the outer dorsal spine edge (EDGE-3: 17.5-22.5 deg)"
+
+[[genes]]
+name = "apex_sp_mm"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 0.06
+hi = 0.11
+default = 0.085
+unit = "mm"
+description = "As-finished cutting edge apex thickness on the outer dorsal spine edge"
+
+[[genes]]
+name = "serr_teeth_sp"
+module = "E"
+kind = "int"
+scale = "lin"
+lo = 3.0
+hi = 8.0
+default = 5.0
+unit = "count"
+description = "Explicit integer number of full-depth serration scallops on the outer spine edge (SERR-1 >= 3)"
+
+[[genes]]
+name = "serr_depth_sp_mm"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 0.90
+hi = 1.80
+default = 1.30
+unit = "mm"
+description = "Serration scallop depth on the outer dorsal spine edge (>= 0.80 mm)"
+
+[[genes]]
+name = "serr_duty_sp"
+module = "E"
+kind = "f64"
+scale = "lin"
+lo = 0.52
+hi = 0.78
+default = 0.66
+unit = "ratio"
+description = "Gullet-to-pitch duty cycle on the outer dorsal spine edge"
+
+# ==============================================================================
+# Module T — Alien Trabecular Struts & 3D CPPN Morphogen Overlay (12 genes)
+# ==============================================================================
+
+[[genes]]
+name = "alien_gate"
+module = "T"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 1.0
+default = 0.65
+unit = "ratio"
+description = "Master blend weight of the Module T trabecular and 3D morphogen architecture inside keep-in zones"
+
+[[genes]]
+name = "trabec_arch_amp"
+module = "T"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 1.0
+default = 0.72
+unit = "ratio"
+description = "Tri-arched Bishop-frame trabecular load-path bridge across the ring-to-grip neck and guard root"
+
+[[genes]]
+name = "trabec_strut_r_mm"
+module = "T"
+kind = "f64"
+scale = "lin"
+lo = 0.65
+hi = 1.40
+default = 0.95
+unit = "mm"
+description = "Cross-sectional capsule radius of the primary trabecular load-path struts (diameter >= 1.3 mm)"
+
+[[genes]]
+name = "trabec_aniso_x"
+module = "T"
+kind = "f64"
+scale = "lin"
+lo = 1.0
+hi = 2.0
+default = 1.45
+unit = "ratio"
+description = "Principal-stress axial elongation ratio of the internal trabecular cells"
+
+[[genes]]
+name = "trabec_window_blend"
+module = "T"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 1.0
+default = 0.50
+unit = "ratio"
+description = "Exoskeletal windowing blend exposing internal trabecular struts along neutral-axis grip/blade flanks"
+
+[[genes]]
+name = "cppn_w0"
+module = "T"
+kind = "f64"
+scale = "lin"
+lo = -1.5
+hi = 1.5
+default = 0.45
+unit = "dimless"
+description = "3D symmetric CPPN morphogen weight 0 (axial coordinates -> internal porosity modulation)"
+
+[[genes]]
+name = "cppn_w1"
+module = "T"
+kind = "f64"
+scale = "lin"
+lo = -1.5
+hi = 1.5
+default = -0.35
+unit = "dimless"
+description = "3D symmetric CPPN morphogen weight 1 (transverse coordinates -> flange rib modulation)"
+
+[[genes]]
+name = "cppn_w2"
+module = "T"
+kind = "f64"
+scale = "lin"
+lo = -1.5
+hi = 1.5
+default = 0.60
+unit = "dimless"
+description = "3D symmetric CPPN morphogen weight 2 (radial distance -> shell perforation field)"
+
+[[genes]]
+name = "cppn_w3"
+module = "T"
+kind = "f64"
+scale = "lin"
+lo = -1.5
+hi = 1.5
+default = 0.25
+unit = "dimless"
+description = "3D symmetric CPPN morphogen weight 3 (Gaussian radial basis activation)"
+
+[[genes]]
+name = "cppn_w4"
+module = "T"
+kind = "f64"
+scale = "lin"
+lo = -1.5
+hi = 1.5
+default = -0.40
+unit = "dimless"
+description = "3D symmetric CPPN morphogen weight 4 (harmonic cross-coupling)"
+
+[[genes]]
+name = "cppn_w5"
+module = "T"
+kind = "f64"
+scale = "lin"
+lo = -1.5
+hi = 1.5
+default = 0.30
+unit = "dimless"
+description = "3D symmetric CPPN morphogen weight 5 (distal spine taper coupling)"
+
+[[genes]]
+name = "cppn_freq"
+module = "T"
+kind = "f64"
+scale = "lin"
+lo = 0.5
+hi = 2.5
+default = 1.2
+unit = "dimless"
+description = "Spatial frequency multiplier of the 3D CPPN morphogen field"
+
+# ==============================================================================
+# Module A — Decoupled Zero-Mean Surface Micro-Texture Genome (6 genes)
+# ==============================================================================
+
+[[genes]]
+name = "tex_amp_mm"
+module = "A"
+kind = "f64"
+scale = "lin"
+lo = 0.16
+hi = 0.24
+default = 0.19
+unit = "mm"
+description = "Zero-mean grip micro-texture amplitude (0.15-0.25 mm ergonomic band; zero net mass drift L-7)"
+
+[[genes]]
+name = "tex_pitch_mm"
+module = "A"
+kind = "f64"
+scale = "lin"
+lo = 1.40
+hi = 3.20
+default = 2.10
+unit = "mm"
+description = "Spatial wavelength pitch of the zero-mean grip surface texture"
+
+[[genes]]
+name = "tex_angle_deg"
+module = "A"
+kind = "f64"
+scale = "lin"
+lo = 20.0
+hi = 70.0
+default = 42.0
+unit = "deg"
+description = "Helical cross-hatch angle of the grip micro-texture"
+
+[[genes]]
+name = "tex_knurl_mix"
+module = "A"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 1.0
+default = 0.55
+unit = "ratio"
+description = "Zero-mean diamond-knurl basis weight"
+
+[[genes]]
+name = "tex_turing_mix"
+module = "A"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 1.0
+default = 0.30
+unit = "ratio"
+description = "Zero-mean reaction-diffusion Turing-stripe basis weight"
+
+[[genes]]
+name = "tex_voronoi_mix"
+module = "A"
+kind = "f64"
+scale = "lin"
+lo = 0.0
+hi = 1.0
+default = 0.15
+unit = "ratio"
+description = "Zero-mean cellular Voronoi dimple basis weight"
