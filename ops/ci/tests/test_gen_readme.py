@@ -180,7 +180,8 @@ class RequirementSetV5(unittest.TestCase):
         # 1 % of E must cost at least min_grams_per_percent_e of mass credit at a score near 80
         pts_per_g = 100.0 * o['mass_weight'] / (self.rs['mass']['ceiling_g'] - self.rs['mass']['floor_g'])
         self.assertGreaterEqual(o['e_exponent'] * 0.80 / pts_per_g, o['min_grams_per_percent_e'])
-        self.assertAlmostEqual(o['mass_weight'] + o['worst_margin_weight'] + sum(o['weights'].values()), 1.0, places=9)
+        self.assertAlmostEqual(o['mass_weight'] + sum(o['weights'].values()), 1.0, places=9)
+        self.assertGreater(o['worst_margin_exponent'], 0.0)
         self.assertAlmostEqual(sum(o['betas'].values()), 1.0, places=9)
         self.assertEqual(self.rs['generation'], 'G5')
 

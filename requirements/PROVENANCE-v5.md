@@ -150,6 +150,15 @@ of fitness for use.
 - **Permanent set.** The computation is linear-elastic, so "no yield at the limit load with SF 1.2" stands in for
   "no permanent set". The GOST-style 1 mm set test is a physical test.
 - **Objective weights.** The weights and exponents of W_ERGOLIGHT_v2 are design choices made under the owner's rules
-  (`owner-objective`): mass 0.30, the worst safety-factor margin 0.25, the other terms 0.45, and E^5. They are tested
-  for two properties before the decoder is frozen: raising any failing safety factor to its requirement must outscore
-  the mass it costs, and 1 % of E must cost at least 10 g of mass credit.
+  (`owner-objective`):
+  - mass 0.30, structural margins 0.495, geometry terms 0.205;
+  - the worst safety-factor margin as a multiplier W = min(1, s(μ)/0.94);
+  - E^5.
+
+  They are tested for two properties before the decoder is frozen: raising any failing safety factor to its
+  requirement must outscore the mass it costs, and 1 % of E must cost at least 10 g of mass credit.
+- **Worst margin, multiplied (G5 pilot, 2026-10-27).** At first the worst margin was an additive 0.25 term. In the
+  pilot (12 islands × 600 evaluations), designs failing several load cases (fatigue v = 0.12, tip twist 0.23,
+  ultimate 0.24) scored within 12 % of a 90 g design meeting every case, because E^5 multiplied their comfort lead.
+  As a multiplier, comfort and mass cannot buy back a failed load case. Its 0.25 weight went to the structural terms
+  (doubled) and the form term.

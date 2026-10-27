@@ -79,6 +79,10 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
     - Lloyd CVT niche centres;
     - promotion by rank within the island, in place of fixed score gates;
     - sparse mutation, about 3 genes per module.
+  - **Pilot** (xbabe4, 12 islands × 600 evaluations, dev root):
+    - a 90 g design already meets every RS-v5 load case;
+    - but designs failing several cases scored within 12 % of it, because E⁵ multiplied their comfort lead over an
+      additive worst-margin term. The worst margin now multiplies the score.
   - **Solid tip** (`crates/g5/src/tip_tet10.rs`):
     - the TET10 tip submodel with the RS-v5 tip loads, about the tip bisector (G3's axis ran from the coordinate
       origin), with RS-v5 material and the strict residual rule;

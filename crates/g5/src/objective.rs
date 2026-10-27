@@ -1,12 +1,15 @@
 //! `W_ERGOLIGHT_v2`: the G5 objective, from RS-karambit-v5 `[objective]` (owner rules: continuous, no hard gates,
 //! ergonomics never traded for grams).
 //!
-//! score = 100 · E^k · (w_mass · s_mass + w_worst · s(μ) + Σ_i w_i · s_i)
+//! score = 100 · E^k · W · (w_mass · s_mass + Σ_i w_i · s_i)
 //!
 //! - **Structural terms.** One per load case, with v = SF / SF_req (`loads::G5Loads`, `[margins]`), scored by
 //!   s(v) = 0.94 · v⁴ below 1 and 0.94 + 0.06 · (1 − e^(−(v − 1)/τ)) above. A failed SF earns little; G3's
 //!   `sfk` gave 94 % credit at v → 1⁻ and 0.94·v below.
-//! - **Worst margin.** μ = min_i v_i over the structural terms, so the binding case is always worth raising.
+//! - **Worst margin.** μ = min_i v_i over the structural terms. It multiplies the score,
+//!   W = min(1, s(μ)/0.94)^worst_margin_exponent, so comfort and mass cannot buy back a failed load case. The G5
+//!   pilot (2026-10-27) found that with an additive 0.25 term, a design failing five cases scored within 12 % of one
+//!   meeting all of them.
 //! - **Mass.** s_mass = (ceiling − m)/(ceiling − floor), linear down to the floor.
 //! - **Geometry terms**, measured on the decoded design:
 //!   - edge: angle and apex flat in their bands;
@@ -37,6 +40,13 @@ pub fn s_margin(v: f64) -> f64 {
     } else {
         o.below_one_scale + o.knee_bonus * (1.0 - (-(v - 1.0) / o.knee_tau).exp())
     }
+}
+
+/// The worst-margin multiplier W = min(1, s(μ)/below_one_scale)^worst_margin_exponent: 1 when every load case meets its
+/// requirement, μ⁴ below.
+pub fn worst_margin_multiplier(mu: f64) -> f64 {
+    let o = &rs_v5().objective;
+    (s_margin(mu) / o.below_one_scale).min(1.0).powf(o.worst_margin_exponent)
 }
 
 /// One-sided upper band: 1 at or below `hi`, falling linearly to 0 at `hi + fall`.
@@ -191,18 +201,20 @@ pub fn score_v2(x: &ObjectiveInputs) -> ErgolightScore {
     };
     let mass = &rs.mass;
     let s_mass = c01((mass.ceiling_g - x.inputs.mass_g) / (mass.ceiling_g - mass.floor_g));
-    let s_worst = s_margin(mu);
+    let w_worst = worst_margin_multiplier(mu);
+    let k = e_mult * w_worst;
+    // "worst_margin" carries the multiplier W itself (weight 0: it scales every term, it is not added)
     let mut terms_out = vec![
-        ("mass", o.mass_weight, s_mass, 100.0 * e_mult * o.mass_weight * s_mass),
-        ("worst_margin", o.worst_margin_weight, s_worst, 100.0 * e_mult * o.worst_margin_weight * s_worst),
+        ("mass", o.mass_weight, s_mass, 100.0 * k * o.mass_weight * s_mass),
+        ("worst_margin", 0.0, w_worst, 0.0),
     ];
-    let mut base = o.mass_weight * s_mass + o.worst_margin_weight * s_worst;
-    for (k, w) in o.weights.entries() {
-        let s = s_of(k);
+    let mut base = o.mass_weight * s_mass;
+    for (key, w) in o.weights.entries() {
+        let s = s_of(key);
         base += w * s;
-        terms_out.push((k, w, s, 100.0 * e_mult * w * s));
+        terms_out.push((key, w, s, 100.0 * k * w * s));
     }
-    let raw_score_100 = 100.0 * e_mult * base;
+    let raw_score_100 = 100.0 * k * base;
     ErgolightScore {
         metric: METRIC,
         draft: DRAFT,
@@ -233,16 +245,18 @@ mod tests {
     #[test]
     fn raising_a_failing_safety_factor_outscores_the_mass_it_costs() {
         // Plan rule: a single failing SF raised to its requirement is worth more than the mass it costs. A single
-        // failing SF is the worst margin, so its own weight and the worst-margin weight both apply; even the smallest
-        // weight, lifted from 0.85 of its requirement, buys more than 10 g of mass credit.
+        // failing SF is the worst margin, so it lifts the multiplier W from W(v0) to 1. Even at a low base (0.6),
+        // that gain is worth more than 10 g of mass credit (relative gain in score vs relative value of a gram).
         let o = &rs_v5().objective;
         let m = &rs_v5().mass;
-        let per_gram = o.mass_weight / (m.ceiling_g - m.floor_g);
-        let w_min = o.weights.entries().iter().map(|e| e.1).fold(f64::INFINITY, f64::min);
-        for v0 in [0.5_f64, 0.7, 0.85] {
-            let gain = (w_min + o.worst_margin_weight) * (s_margin(1.0) - s_margin(v0));
-            assert!(gain > 10.0 * per_gram, "v {v0}: gain {gain} vs 10 g = {}", 10.0 * per_gram);
+        let base = 0.6;
+        let per_gram_rel = o.mass_weight / (m.ceiling_g - m.floor_g) / base;
+        for v0 in [0.5_f64, 0.7, 0.85, 0.95] {
+            let rel_gain = 1.0 / worst_margin_multiplier(v0) - 1.0;
+            assert!(rel_gain > 10.0 * per_gram_rel, "v {v0}: {rel_gain} vs 10 g = {}", 10.0 * per_gram_rel);
         }
+        assert_eq!(worst_margin_multiplier(1.0), 1.0);
+        assert_eq!(worst_margin_multiplier(2.0), 1.0);
     }
 
     #[test]

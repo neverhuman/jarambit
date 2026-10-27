@@ -96,7 +96,8 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
      Twist is converged at 0.15 mm²; axial and side change 13–19 % to 0.08 mm², the certification mesh.
 5. **`W_ERGOLIGHT_v2`.** Done, in `objective.rs`; scores every tier.
    - **Structural terms:** one per load case, v = SF/SF_req, scored 0.94·v⁴ below 1 with a knee above.
-   - **Worst margin:** weight 0.25.
+   - **Worst margin:** a multiplier W = min(1, s(μ)/0.94) on the whole score, so comfort and mass cannot buy back a
+     failed load case (pilot finding, 2026-10-27).
    - **Mass:** linear, weight 0.30.
    - **Geometry terms:**
      - edge angle and apex;
