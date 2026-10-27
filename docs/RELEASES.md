@@ -2,82 +2,75 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
-## Unreleased
+## v5.0.0 — 2026-10-27 (major: the G5 generation under RS-karambit-v5; README, paper and `cad/` generated from one receipt)
 
-- **`requirements/RS-karambit-v5.toml`**, the requirement set for the G5 generation (release v5.0.0; G4 was the withdrawn v4.0.0 prototype), with `requirements/PROVENANCE-v5.md`.
-  - **Why.** The owner asked for "the BEST possible constraints for the best possible knife". Every value now cites
-    a standard, a handbook or a paper, or is a dated owner decision.
-  - **How it applies.** Each requirement is a decoder construction rule or a continuous objective term (no hard
-    gates).
-  - **Owner decisions (2026-10-27):**
-    - grip perimeter 84–100 mm (floor 78.5 mm);
-    - no batoning, so the 3,427 N spine case is dropped;
-    - a sourced tip set (150 N axial, 10 N side, 0.3 N·m twist) replaces the 1.82 N·m tip twist;
-    - a blunt-point penalty (≤ 75° at 1 mm, ≤ 60° at 3 mm, ≤ 3.0 mm wide at 2 mm);
-    - medium serrations (pitch 4–6 mm, depth 0.8–1.5 mm, gullet ≥ 0.5 mm).
-  - **From the literature:**
-    - stress-relieved L-PBF at the ASTM F2924 minima, with an 80 °C derate and a thin-wall law;
-    - fatigue by surface class with FKM mean stress;
-    - edges at 20–25° per side for titanium;
-    - a 15 mm guard;
-    - NASA/MIL hand-edge radii and contact-pressure limits;
-    - NASA-STD-6030 margins (1.2 on yield, 1.3 on ultimate; the ring keeps the owner's SF 2);
-    - powder ports ≥ 3 mm, two per cavity.
-  - **Not yet in force.** It applies from the G5 cohort onward. A test checks that every cited source resolves in the
-    provenance.
-- **`crates/g5`**, the G5 generation, in development: a standalone copy of the validated G3 crate, renamed to the G5
-  namespace. It has no results and no frozen decoder.
-  - **Strict requirement loader.** `requirements.rs` reads RS-karambit-v5 into typed structs. An unknown, missing or
-    mistyped key is an error. Cross-key rules fail closed: no hard gates, weights and betas summing to 1, and the owner
-    rule that 1 % of E costs at least 10 g.
-  - **Decoder hash.** Covers the G5 sources, the loader and RS-karambit-v5. It is computed once per process.
-  - **Guards.**
-    - The G3 decoder of record (`a203278d…`) and the v1 identity are asserted unchanged.
-    - G5 design IDs (`kv…`) refuse v1 (`ec…`) and G3 (`hz…`) IDs.
-    - Until `G5_DECODER_FROZEN`, `g5-evolve` writes only to development roots (`evo_g5_dev`).
-  - **CI.** `d1-gates` runs the crate's tests.
-- **G5 measurement fixes** (from the G3 audit):
-  - **Mass.** Partial-volume mass, with a check that h and h/2 agree within 2 %. On the G3 winner at h 0.4 it gives
-    59.29 g, where the watertight print mesh gives 59.30 g and whole-voxel counting gave 55.97 g.
-  - **Blur.** The hand-zone blur radius is set in millimetres.
-  - **Tip raster.** The tip thickness is sampled at cell centres.
-  - **Drainage.** Powder drains only through passages ≥ 1 mm wide (`[am] drain_channel_min_mm`, a lower bound from
-    Carrozza et al. 2023). Undrainable cavities are measured, kept solid in the mass, and recorded. G3 drained a
-    cavity through any one-voxel path, which is why the same design weighed 51.3 g at h 0.4 and 75.2 g at h 0.2.
-  - **Material** (`crates/g5/src/material.rs`):
-    - the RS-karambit-v5 values at 80 °C: E 106.7 GPa, G 41.4 GPa, ν 0.31, yield 750.8 MPa, ultimate 823.4 MPa;
-    - a thin-wall law on the nominal section, where each wall face adds its own rough-layer depth;
-    - fatigue by surface class with FKM mean stress.
-
-    These replace G3's 828 MPa, 113.8 GPa, ν 0.34 and the (t − 0.1)/t · 0.912 factor. The blade fatigue check no
-    longer divides the stress by that factor before applying Marin factors (audit F-M-2). RS-v5
-    `stiffness_uses_effective_thickness` is now `false`: Xie's law is fitted to nominal-section stress, so the rough
-    layer is counted once.
-  - **Decoder G5.0** (139 genes):
-    - **Removed:** the texture CPPN, the dead genes, the cusped serration shapes and `exo_open`.
-    - **Added:** grip perimeter and H/T genes (the swell section is built to them), a port-diameter gene, and a
-      point-angle and point-length module (a rounded wedge that caps the point's width).
-    - **Bounds and rules:**
-      - RS-v5 bounds for edge angle, serrations, guard and hand-edge radius;
-      - finger pitch 19–21 mm;
-      - gullet radius ≥ 0.5 mm by construction;
-      - a sheet-TPMS lattice ≥ 0.8 mm;
-      - ports in every hollow zone, clear of the rib and cut through the sheet, plus drain tunnels in the shear webs.
-    - **Sobol designs:** h 0.4 and h 0.2 masses agree within 0.6 %.
-  - **Load cases** (`crates/g5/src/loads.rs`):
-    - **Coverage:** every RS-karambit-v5 case, from integrated blade sections (Tier 0) and a converging whole-blade
-      plate with window holes (Tier 1). This includes the ultimate 18 N·m, the ring swept in 12 directions, the end
-      teeth, per-case sequence, surface-class fatigue and tip buckling.
-    - **What it shows on Sobol designs:** the binding cases are the ultimate lateral, the tip side load and tip
-      twist, and fatigue of a hollow blade's as-built cavity faces.
-  - **Objective `W_ERGOLIGHT_v2`** (`crates/g5/src/objective.rs`):
-    - **Terms:** continuous and with no gates. Structural credit is 0.94·v⁴ below the requirement, plus a
-      worst-margin term (0.25), linear mass (0.30), geometry terms (edge, point, serration, AM drainage, form) and E⁵.
-    - **What binds on random Sobol designs:** tip twist, fatigue and the ultimate lateral case. This drives the search
-      toward a stout, sharp point and a solid or finished blade.
-  - **Finding on G3.** Under this rule, the G3 v3.0.0 winner's lattice reaches its 2.8 mm powder ports only through
-    two 0.85 mm slits beside the 1.1 mm mid-plane rib. Its cavity counts as undrainable (13,005 mm³). This is a G3
-    decoder limitation: depowdering of the G3 design is unverified. The G5 decoder must place ports clear of ribs.
+- **Cohort of record v5.0.0.** The best individual is **`kv4i012_g00009_dd6ffea5`**, rank 1 of 32 at Tier 2
+  (h 0.2 mm, solid-tip TET10 at 0.08 mm²).
+  - **Score:** W_ERGOLIGHT_v2 59.34, with hand multiplier E 0.740 and worst-margin multiplier W 1.000.
+  - **Mass:** 83.3 g of record (partial volume at h 0.2 mm); the watertight print mesh is 84.5 g.
+  - **Load cases:** it meets every RS-karambit-v5 load case on every plate mesh (0.6 / 0.3 / 0.15 mm²). The lowest margins of record (minimum over the meshes) are fatigue 1.005 and tip axial 1.070.
+  - **Receipt:** `evidence/g5/v5.0.0/release.json`, written by `g5-release`, which checks every link and fails closed.
+- **The cohort.** 16 islands × 3,000 evaluations on xbabe4 (decoder `c63629d4b310…`,
+  freeze label `bf3e37fa`), started only from scrambled Sobol samples: no seeded or hand-made individuals.
+  - **Control:** 2 random-search islands with the same budget, decoder, objective and promotion.
+  - **Result:** all 16 of 16 evolving islands beat the best random-search island
+    (42.9). The island median rose from 16.2
+    after the Sobol start to 54.0.
+  - **Origin of the winner:** evolution found it in island12 at 2,425 evaluations.
+- **Certification**, by a protocol posted before any result:
+  - every final elite re-evaluated at Tier 1, which reproduces each Tier-1 archive row bit for bit (706 rows);
+  - the top 32 at Tier 2;
+  - a five-grid check of the top 8;
+  - a launch re-run of island01 on the platform of record, bit for bit;
+  - the top 8 again on Linux x86_64.
+  - the plate cases of the finalists, in rank order, re-solved on 0.6 / 0.3 / 0.15 mm² on the platform of record (the 0.3 mm² rows reproduce the ranking bit for bit); the winner is the first design meeting every load case on every mesh (release check B1).
+- **Findings recorded in the receipt:**
+  - **Search leader.** `kv4i012_g00204_19a0b6f0` (63.4 on the search grid) falls to rank 23 at Tier 2. Its
+    solid tip carries the axial case at a margin of 0.96; the section model of the search grid had estimated
+    1.15.
+  - **Not bit-identical across architectures.** The platform maths libraries differ. Top-8 scores agree within
+    1.24 %, and the winner ranks 1 on Linux x86_64 as on arm64.
+  - **Blade texture (decoder limit).** The winner's genome scopes the evolved surface texture onto the blade (depth 0.20 mm, blade scope 0.99).
+    - The frozen G5.0 decoder carves it into the flats and the bevels, so the as-printed edge is notched.
+    - The edge measurements use the exact bevel law, which grinding restores (finishing allowance 0.5 mm per face).
+    - Keeping texture off the bevels is left to a later generation.
+- **What changed from G3** (details in PRs #179–#189, `crates/g5/README.md` and `requirements/PROVENANCE-v5.md`):
+  - **Requirements** — `RS-karambit-v5`, sourced: each value cites a standard, handbook or paper, or is a dated owner decision.
+    Every requirement is a decoder construction rule or a continuous objective term.
+  - **Measurement:**
+    - partial-volume mass, with a 2 % h/h-over-2 rule;
+    - blur radii in millimetres;
+    - a cell-centred tip raster;
+    - powder drainage through passages ≥ 1 mm, with sealed pockets measured and penalised.
+  - **Material** — RS-v5 at 80 °C, a thin-wall law on the nominal section, and surface-class fatigue
+    with FKM mean stress.
+  - **Decoder G5.0**, 134 genes:
+    - a grip built to its perimeter and H/T genes, with a guard hung from it;
+    - a point-angle module;
+    - raised-cosine serrations with a gullet radius ≥ 0.5 mm;
+    - a sheet-TPMS core with ports clear of the rib;
+    - windows and texture CPPN retired.
+  - **Loads** — every RS-v5 case: integrated sections (Tier 0), a converging whole-blade plate (Tier 1), a TET10 solid tip (Tier 2),
+    a T6 ring sweep and tip buckling.
+  - **Objective `W_ERGOLIGHT_v2`** — continuous, with no gates:
+    - credit 0.94·v^4 below each requirement;
+    - the worst margin multiplies the score;
+    - mass weight 0.3;
+    - E^5.
+  - **Search** — Lloyd CVT niches, rank promotion and sparse mutation.
+  - **V&V** — `evidence/g5/v5.0.0/vv/`, written by `g5-vv`.
+- **Development pilots** (`evo_g5_dev`, not records) found the fixes made before the freeze:
+  - the worst margin as a multiplier;
+  - the guard hung from the scaled grip;
+  - crevices separated from sealed cavities;
+  - the windows retired.
+- **Release checks and records:**
+  - the receipt keeps the G3-era evaluator fields that W_ERGOLIGHT_v2 does not read apart, as `legacy_unscored` (B2);
+  - a test recomputes the G5 decoder hash and asserts it equals the receipt's (`g5_decoder_of_record_is_unchanged`);
+  - `requirements/PROVENANCE-v5.md` lists the evaluator's model constants (meshes, patches, read-out windows, ring
+    sweep, TPMS laws, search settings) with their basis.
+- **History kept.** G3 v3.0.0 (`evidence/g3/`, `docs/g3/`, `crates/g3/`) and the v1/v2 study stay as their own record.
+  The README now shows only the G5 winner and its evolution. The G3 paper stays at `docs/g3/paper/g3-v4.0.1.pdf`.
 
 ## v4.0.1 — 2026-10-27 (patch: v4.0.0 withdrawn; the G3 v3.0.0 cohort of record is current again; G3 errata and diagnostics)
 

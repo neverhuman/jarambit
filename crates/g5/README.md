@@ -1,25 +1,25 @@
-# jarambit-g5: the G5 generation (in development, not frozen)
+# jarambit-g5: the G5 generation (decoder G5.0, frozen for v5.0.0)
 
 `jarambit-g5` is the G5 genome, decoder, evaluator and search. G5 targets the requirement set
 [`requirements/RS-karambit-v5.toml`](../../requirements/RS-karambit-v5.toml) (sources:
-[`PROVENANCE-v5.md`](../../requirements/PROVENANCE-v5.md)) and the objective `W_ERGOLIGHT_v2`. It is planned for
+[`PROVENANCE-v5.md`](../../requirements/PROVENANCE-v5.md)) and the objective `W_ERGOLIGHT_v2`. It is the generation of
 release v5.0.0.
 
 ## Status
 
-**This crate has no results.** It starts as a copy of the validated G3 crate ([`crates/g3`](../g3/README.md), the
-v3.0.0 cohort of record), renamed to the G5 namespace. Reviewed pull requests then change it to RS-karambit-v5.
-Until that work is complete:
+**The decoder is frozen (crate version 5.0.0).**
+- `G5_DECODER_FROZEN` is `true`, so record cohorts run under an `evo_g5` root. The development pilots ran under
+  `evo_g5_dev` and none of their numbers are records.
+- The freeze V&V receipts are in [`evidence/g5/v5.0.0/vv/`](../../evidence/g5/v5.0.0/vv/), written by `g5-vv`.
+- The cohort of record and its winner arrive with the v5.0.0 release receipt.
 
-- the decoder, the physics and the objective are still the G3 ones;
-- `G5_DECODER_FROZEN` is `false`, so `g5-evolve` accepts only development run roots (`evo_g5_dev`);
-- no run of this crate can become a cohort of record, and no number from it may appear in the README or a paper.
+G5 started as a copy of the validated G3 crate ([`crates/g3`](../g3/README.md), the v3.0.0 cohort of record).
+Reviewed pull requests then changed it to RS-karambit-v5. `crates/g4` is the withdrawn v4.0.0 prototype (see its
+`WITHDRAWN.md`); G5 does not use it.
 
-`crates/g4` is the withdrawn v4.0.0 prototype (see its `WITHDRAWN.md`). G5 does not use it.
+## What G5 changed from G3
 
-## What G5 will change
-
-The planned changes, in order (`docs/RELEASES.md`, Unreleased):
+In order (`docs/RELEASES.md`):
 
 1. **Measurement fixes from the G3 audit.** Done (first four items):
    - partial-volume mass (`g5_sdf::solid_fraction`), with the 2 % grid agreement check
@@ -29,12 +29,10 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
      Undrainable cavities stay solid in the mass, and their volume is recorded (`AmConnectivityStats`);
    - the tip thickness raster sampled at cell centres.
 
-   Still to do:
-   - the yield sequence per load case;
-   - the fatigue knock-down applied once;
-   - Lloyd CVT niche centres;
-   - promotion by rank;
-   - sparse mutation.
+   Later PRs fixed the remaining audit items:
+   - the yield sequence per load case (`loads.rs`);
+   - the fatigue knock-down applied once (`material.rs`);
+   - Lloyd CVT niche centres, promotion by rank and sparse mutation (search, `g5_qd.rs` and `g5_genome.rs`).
 2. **Material.** Done, in `material.rs`:
    - stress-relieved L-PBF Ti-6Al-4V at 825/895 MPa, with the 80 °C derate (×0.91 on yield, ×0.92 on ultimate,
      ×0.97 on E and G);
@@ -45,12 +43,13 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
    Every evaluator takes E, ν, G and its allowables from this module. Still to do:
    - the sheet-TPMS laws (with the decoder);
    - the solid-tip TET10 still uses the physics crate's hard-coded G3 material until the load-case PR copies it.
-3. **Decoder G5.0.** Done: 139 genes, down from G3's 179.
+3. **Decoder G5.0.** Done: 134 genes, down from G3's 179.
    - **Removed:**
      - the 37 texture genes (Turing, Voronoi and a 32-weight CPPN); the knurl and ridge that remain are zero-mean;
      - the retired `s1_*` edge-stop genes;
      - the cusped tooth and micro serration genes;
-     - `exo_open`.
+     - `exo_open`;
+     - the five fenestration-window genes (see load cases).
    - **Added**, in requirement units:
      - `grip_perim` and `grip_hot`: the swell section is scaled to them, and measures within 2 %;
      - `port_d`;
@@ -85,14 +84,24 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
      - fatigue by surface class (a hollow blade's cavity faces are as-built);
      - the blade-before-hand sequence per load case;
      - buckling of the point under 150 N, as a Rayleigh-Ritz column (checked against Euler).
-   - **Tier-1 plate:** the whole blade at 0.3 mm². Windows are traced as conforming mesh holes (marching squares on
-     the decoder's window field), and the loads are smooth: a 2 mm patch, a couple on the blade body, a held 20 mm
-     region. Lateral and twist agree within 10 % between 0.3 and 0.15 mm²; G3's plate did not converge.
+   - **Tier-1 plate:** the whole blade at 0.3 mm², with smooth loads: a 2 mm patch, a couple on the blade body, a
+     held 20 mm region. Lateral and twist agree within 15 % between 0.3 and 0.15 mm²; the single-element peak in the
+     thin bevels scatters about ±6 %. G3's plate did not converge.
+   - **No fenestration windows:** G5.0 retired them (5 genes, 134 genes in all). Their lens-shaped slot ends raised
+     the plate stress beyond what the search mesh resolves: a windowed design's lateral SF fell from 0.64 to 0.38
+     between 0.3 and 0.08 mm².
 
-   Still to do: the solid-tip TET10 (Tier 2) with the RS-v5 tip loads, and the ergonomic contact pressures.
+   - **Tier-2 solid tip** (`tip_tet10.rs`, a parameterised copy of `physics::solid_tet10`):
+     - the RS-v5 axial, side and twist tip cases about the tip bisector, with E and ν from RS-v5;
+     - stresses read at the RS-v5 stations;
+     - a residual check that keeps 1e-10, accepting at the float64 floor only with a componentwise backward error
+       ≤ 1e-12, plus two steps of iterative refinement.
+     The section model is conservative against it (side 0.57 against 0.79, twist 0.39 against 0.80 on one design).
+     Twist is converged at 0.15 mm²; axial and side change 13–19 % to 0.08 mm², the certification mesh.
 5. **`W_ERGOLIGHT_v2`.** Done, in `objective.rs`; scores every tier.
    - **Structural terms:** one per load case, v = SF/SF_req, scored 0.94·v⁴ below 1 with a knee above.
-   - **Worst margin:** weight 0.25.
+   - **Worst margin:** a multiplier W = min(1, s(μ)/0.94) on the whole score, so comfort and mass cannot buy back a
+     failed load case (pilot finding, 2026-10-27).
    - **Mass:** linear, weight 0.30.
    - **Geometry terms:**
      - edge angle and apex;
@@ -107,7 +116,23 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
      - a record re-scores bit-for-bit from its measurements.
    - **Decoder change:** the point wedge now sets the point directly (sharper or stouter), and `tip_reserve` (4–12 mm)
      and `t_tip` (1.5–5 mm) allow the stout, quickly thickening point the tip loads need.
-6. **V&V, then the decoder freeze.** Followed by cohorts started only from Sobol samples (no hand-set genomes), with
+6. **Search.** Done:
+   - **CVT centres:** the 1024 niche centres are a Lloyd CVT (20 iterations over 16 Sobol samples per centre,
+     computed once per process), replacing G3's Halton points.
+   - **Promotion** (`RankPromotion`): the top `--tier1-top` (default 0.4) of an island's last 256 Tier-0 scores go
+     to Tier 1, replacing G3's fixed 62/71 gates, which left 8 of 24 G3 islands without a Tier-2 evaluation. Tier 2
+     stays off (`--tier2-top 0`) until the solid tip carries the RS-v5 tip loads.
+   - **Mutation:** each gene moves with probability 3/n_module, about 15 genes per child where G3 moved all 179.
+7. **V&V, then the decoder freeze.** Done. Three development pilots on xbabe4 (12 islands × 600 / 1,500 / 600
+   evaluations) found the objective and decoder issues fixed above. `g5-vv` writes the freeze receipts:
+   - grid agreement;
+   - plate and solid-tip mesh studies;
+   - decoder construction targets;
+   - sheet-TPMS density;
+   - Ritz/Euler and Lloyd/Halton checks;
+   - the objective properties.
+
+   Followed by cohorts started only from Sobol samples (no hand-set genomes), with
    at least 5 seeds plus baselines.
 
 ## Guards that already apply

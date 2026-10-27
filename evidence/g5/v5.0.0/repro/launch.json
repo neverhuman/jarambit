@@ -1,0 +1,22 @@
+{
+  "recorded_by": "Claude-HZ, from the launch commands of 2026-10-27T10:49:54Z; g5-release checks it against the runs, and the re-run below reproduces island01",
+  "archive_niches": 1024,
+  "cohort": {
+    "root": "cohort-20261027", "host": 4, "islands": "01-16", "init": 64, "evals": 3000, "h": 0.4, "tier1_top": 0.4,
+    "tier2_top": 0.0, "log_every": 25, "commit": "bf3e37fa", "seed": "host * 1000 + island", "rayon_threads": 1,
+    "binary": "g5-evolve-bf3e37fa (arm64 macOS)",
+    "binary_sha256": "55243328208fcf75880866073c9fc993f828113c0eba89cf1ed642ee607d7e74",
+    "command": "RECORD=1 H_VOX=0.4 T1_TOP=0.4 T2_TOP=0 LOG_EVERY=25 evo_g5_supervise.sh g5-evolve-bf3e37fa ~/jarambit_runs/evo_g5 cohort-20261027 16 3000 64 4 bf3e37fa 64 30"
+  },
+  "baseline": {
+    "root": "baseline-20261027", "host": 4, "islands": "17-18", "init": 3000, "evals": 3000, "h": 0.4, "tier1_top": 0.4,
+    "tier2_top": 0.0, "log_every": 25, "commit": "bf3e37fa", "seed": "host * 1000 + island", "rayon_threads": 1,
+    "binary": "g5-evolve-bf3e37fa (arm64 macOS)",
+    "binary_sha256": "55243328208fcf75880866073c9fc993f828113c0eba89cf1ed642ee607d7e74",
+    "command": "RECORD=1 BASELINE=1 ISLAND_OFFSET=16 H_VOX=0.4 T1_TOP=0.4 T2_TOP=0 LOG_EVERY=25 evo_g5_supervise.sh g5-evolve-bf3e37fa ~/jarambit_runs/evo_g5 baseline-20261027 2 3000 64 4 bf3e37fa 64 30"
+  },
+  "repro": {
+    "island": "island01", "platform": "arm64 macOS (xbabe4), the platform of record",
+    "command": "g5-evolve --out <dir> --init 64 --evals 200 --seed 4001 --host 4 --island 1 --commit bf3e37fa --h 0.4 --tier1-top 0.4 --tier2-top 0 --log-every 25"
+  }
+}

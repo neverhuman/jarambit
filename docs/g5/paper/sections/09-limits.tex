@@ -1,0 +1,43 @@
+\section{Limits of the result and evidence gaps}\label{sec:limits}
+\begin{eibox}{What this result is not}
+It is a computational design (\gStatus). Nothing has been printed, stress-relieved, ground or physically tested, and no
+safety factor reported here is a qualification for use.
+\end{eibox}
+\begin{itemize}
+\item \textbf{Outcome against the targets.} The best individual \gDesign{} has worst safety-factor margin ratio
+$\mu = \gWorstMarginRatio$ (on \gWorstMarginCase, multiplier $W = \gW$), finished partial-volume mass \gMassFinishedG{}~g
+(\gMassG{}~g on the $0.20$~mm mesh, which \gMassReading), and sealed internal void volume \gSealedVoid{}~$\mathrm{mm^3}$
+(printed solid in the build field, $d_\mathrm{am} = -h$, so the mass counts solid titanium rather than trapped powder).
+\item \textbf{Blade surface texture (frozen \code{G5.0} decoder limit).} The frozen \code{G5.0} decoder allows the evolved
+surface texture to reach the blade zone (for \gDesign, texture depth \code{tex\_amp} $= \gTexAmp$~mm, pitch $\gTexPitch$~mm, and
+\code{scope\_blade} $= \gScopeBladeThree$), carving inward across both the blade flats and the bevels so the as-decoded edge is
+notched. The edge cross-sections (Fig.~\ref{fig:edges}) and edge measurements evaluate the exact bevel law, which post-build
+grinding restores because the \code{RS-karambit-v5} finishing allowance ($\gReqEdgeFinishMm$~mm per ground face) exceeds the
+$\gTexAmp$~mm texture depth. Restricting surface texture outside the bevels is deferred to a later decoder generation.
+\item \textbf{Cross-platform floating-point differences (\code{ranking.linux\_check}).} Results are reproducible bit-for-bit on
+the platform of record: re-running \code{island01} for \gReproEvals{} evaluations reproduced all \gReproEntries{} logged history
+entries identically, and re-evaluating all \gCohortElites{} final elites at Tier~1 reproduced all \gTierOneReproduced{} Tier-1
+archive rows bit-for-bit. Across architectures (\code{arm64} macOS vs.\ Linux \code{x86\_64}), results are not bit-identical
+because platform maths libraries (\code{sin}, \code{exp}, \code{powf}) differ in the last bits: on Linux \code{x86\_64},
+\code{island01} stays on the same best genome through \gLinuxEvoEvals{} evaluations (best score within \gLinuxEvoRelDiff), and
+across the top \gLinuxDesigns{} finalists at Tier~2 the scores agree within \gLinuxMaxRelDiffPct\,\% (\gLinuxMaxRelDiff) and the
+winner ranks \#\gLinuxWinRank{} on both platforms.
+\item \textbf{Linear-elastic surrogates and solid-tip readout windows.} All structural evaluations are linear-elastic. Permanent set
+under the GOST~R~51501-99 deflection test~\cite{gost51501} is represented by no yield at $\mathrm{SF} = \gReqSfYield$, not by an
+elastoplastic solve. The 3D \code{TET10} tip submodel reports $\mathrm{SF} = \sigma_\mathrm{allow} / \sigma_{\mathrm{vM},\max}$
+from the nodal maximum von Mises stress within each case's readout window ($r \in [\gTipAxFromMm, 10.0]$~mm for axial,
+$[\gTipAxFromMm, \gTipLatHiMm]$~mm for side load, and $[\gTipTwReadLoMm, 15.0]$~mm for twist) to stay clear of the loaded
+patch ($0.75$~mm axial/lateral, $1.0$~mm twist) and the clamped cut plane ($r_\mathrm{cut} = 30$~mm).
+\item \textbf{Homogenised TPMS core and first-order hand patch.} In the blade and grip section models, the sheet-TPMS lattice
+is represented by the Naghavi \emph{et al.}~\cite{naghavi2022} and Timercan \emph{et al.}~\cite{timercan2021} compression
+scaling laws; periodic unit-cell finite-element homogenisation and tension-fatigue testing of the printed sheet lattice are not
+yet performed. Hand contact pressure uses a first-order patch area ($60\,\%$ of grip length times half the swell perimeter)
+rather than a deformable soft-tissue contact solve.
+\item \textbf{Evidence gaps requiring physical coupon and part tests (\code{PROVENANCE-v5.md}).} As documented in
+\src{requirements/PROVENANCE-v5.md}{\code{PROVENANCE-v5.md}}, ten domain inputs rest on derived bounds or single-orientation
+studies and require physical test replacement before any fitness-for-use claim: per-tooth snag/pry loads ($\gReqSnagN/\gReqPryN$~N),
+off-axis tip side/twist shares ($\gReqTipLatN$~N, $\gReqTipTwNm$~N$\cdot$m), ISO~8442-5~\cite{iso8442-5} edge retention of ground L-PBF
+Ti-6Al-4V, little-finger ring avulsion hazard~\cite{hidh}, wet skin-on-titanium friction ($\mu = 0.15$), down-skin thin-wall
+roughness depth ($T_s = 0.10$~mm), $80\,^\circ\mathrm{C}$ L-PBF tensile derating, and the $1.22$~m MIL-STD-810H transit drop
+test~\cite{mil810h,fl1}.
+\end{itemize}

@@ -1,0 +1,78 @@
+\section{The continuous objective W\_ERGOLIGHT\_v2}\label{sec:objective}
+Under the owner's rules (\code{owner-objective}), \code{W\_ERGOLIGHT\_v2} (\src{crates/g5/src/objective.rs}{\code{objective.rs}})
+is strictly continuous with no hard rejection gates, while preventing comfort or low mass from compensating for a failed
+structural load case:
+\begin{equation}\label{eq:scorev2}
+\mathrm{score} = 100\,E^5\,W \Bigl(w_\mathrm{mass}\,s_\mathrm{mass} + \sum_{i=1}^{21} w_i\,s_i\Bigr),
+\qquad E = \prod_{k=1}^{8} e_k^{\beta_k}.
+\end{equation}
+Table~\ref{tab:weights} lists the weights $w_i$ ($\sum w = 1.00$ including $w_\mathrm{mass} = 0.30$) and the ergonomic
+exponents $\beta_k$ ($\sum \beta_k = 1.00$).
+
+\begin{table}[t]
+\caption{Weights $w_i$ and ergonomic exponents $\beta_k$ of \code{W\_ERGOLIGHT\_v2} (\code{RS-karambit-v5.toml})}\label{tab:weights}
+\centering
+\EItablefont
+\setlength{\tabcolsep}{2.4pt}
+\begin{tabular}{@{}lrlr@{}}
+\toprule
+Term $s_i$ & $w_i$ & Ergonomic factor $e_k$ & $\beta_k$ \\
+\midrule
+Mass ($\gReqMassCeil \to \gReqMassFloor$~g) & \gWMass & Grip section ($P$, $H/T$) & \gBetaGripSec \\
+Point geometry & \gWPoint & Ring ($w_\mathrm{lip}$, crown) & \gBetaRing \\
+AM build (void $\mathrm{mm^3}$) & \gWAmBuild & Hand-contact radii & \gBetaEdges \\
+Fatigue (FKM class) & \gWFatigue & Contact pressure & \gBetaPressure \\
+Yield sequence ($\ge \gReqSeqRatio$) & \gWSequence & Guard height ($\ge \gReqGuardH$~mm) & \gBetaGuard \\
+Edge bevel \& apex & \gWEdge & Grip length ($\ge \gReqLg$~mm) & \gBetaGripLen \\
+Lateral limit ($\gReqLatLimNm$~N$\cdot$m) & \gWLatLim & Balance (CoM \& $I$) & \gBetaBalance \\
+Lateral ult.\ ($\gReqLatUltNm$~N$\cdot$m) & \gWLatUlt & Grip surface texture & \gBetaSurface \\
+Body twist ($\gReqTwistLimNm$~N$\cdot$m) & \gWTwistLim & & \\
+Tip axial ($\gReqTipAxN$~N) & \gWTipAx & \textbf{Multipliers} & \textbf{Exp.} \\
+Tip lateral ($\gReqTipLatN$~N) & \gWTipLat & Ergonomics $E = \prod e_k^{\beta_k}$ & $\gEExp$ \\
+Tip twist ($\gReqTipTwNm$~N$\cdot$m) & \gWTipTw & Worst margin $W = \min(1, \mu^4)$ & $1.0$ \\
+Grip squeeze ($\gReqGripSqN$~N) & \gWGripSq & & \\
+Guard push ($\gReqGuardPushN$~N) & \gWGuardPush & & \\
+Ring bearing ($\gReqRingBearN$~N) & \gWRingBear & & \\
+Serration teeth ($\gReqSnagN/\gReqPryN$~N) & \gWTeeth & & \\
+Form fairness \& arch & \gWForm & & \\
+Ring back ($\gReqRingBackN$~N) & \gWRingBack & & \\
+Ring 12-dir.\ ($\gReqRingAnyN$~N) & \gWRingAny & & \\
+Axial pull ($\gReqPullN$~N) & \gWPull & & \\
+Tip buckling ($\lambda \ge \gReqBuckling$) & \gWBuckling & & \\
+Serration depth \& count & \gWSerration & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Quartic sub-threshold penalty and worst-margin multiplier}
+Each of the 16 structural terms compares its safety factor (or buckling eigenvalue) against its requirement via the ratio
+$v_i = \mathrm{SF}_i / \mathrm{SF}_{\mathrm{req},i}$. Instead of G3's linear ramp below $1.0$, \code{s\_margin} applies a
+quartic penalty below adequacy and a saturating exponential reserve above it:
+\begin{equation}
+s(v) = \begin{cases}
+0.94\,v^4, & 0 \le v < 1, \\
+0.94 + 0.06\,\bigl(1 - e^{-(v - 1)/0.15}\bigr), & v \ge 1.
+\end{cases}
+\end{equation}
+Thus a safety factor at $64\,\%$ of its requirement ($v = 0.64$) earns less than $0.16$ of its term weight rather than $0.60$.
+Furthermore, let $\mu = \min_{i \in \{1..16\}} v_i$ be the worst safety-factor ratio across all 16 structural cases. In our
+initial G5 pilot ($12$ islands $\times 600$ evaluations), an additive $0.25$ worst-margin term still allowed a design failing
+five load cases to score within $12\,\%$ of an all-passing $90$~g design when $E^5$ multiplied a small comfort advantage.
+In \code{W\_ERGOLIGHT\_v2}, the worst margin therefore multiplies the entire score:
+\begin{equation}
+W(\mu) = \min\bigl(1,\, s(\mu)/0.94\bigr) = \min\bigl(1,\, \mu^4\bigr).
+\end{equation}
+When every structural case meets its requirement ($\mu \ge 1$), $W = 1$ and the multiplier is inactive. When any single load
+case falls short ($\mu < 1$), $W = \mu^4$ scales down every point earned by mass, geometry, and ergonomics. A unit test in
+\src{crates/g5/src/objective.rs}{\code{objective.rs}} verifies that lifting a single failing safety factor from any
+$v_0 \in [0.5, 0.95]$ to $1.0$ outscores $10$~g of mass reduction.
+
+\subsection{Geometry terms, ergonomic exponent and unmeasured quantities}
+The five geometry terms score distance to the \code{RS-karambit-v5} bands on the decoded model: primary edge angle
+($20$--$25^\circ$) and apex flat ($0.05$--$0.12$~mm); planform point included angles ($\le 75^\circ$ at $1$~mm, $\le 60^\circ$
+at $3$~mm), width at $2$~mm ($\le 3.0$~mm), and tip thicknesses at $0.25$, $1.0$ and $2.0$~mm; serration depth ($0.8$--$1.5$~mm)
+and scallop count ($\ge 3$ per edge); AM build drainability $\exp(-V_\mathrm{sealed}/300~\mathrm{mm^3})$ at Tier~1 and above
+($0$ at Tier~0 where voids are unmeasured); and form fairness. Raising $E$ to the fifth power ($E^5$) ensures that $1\,\%$ of
+ergonomic shortfall costs \gGramsPerPctE{}~g of mass credit at the winning design (\gPtsPerGram{} points per gram), exceeding
+the $10$~g minimum in \code{RS-karambit-v5}. Quantities that require physical testing (such as ISO~8442-5 edge retention and
+cutting force) are not guessed by formula and earn zero credit in the score.

@@ -287,7 +287,7 @@ strict!(Objective {
     below_one_exponent: f64,
     knee_bonus: f64,
     knee_tau: f64,
-    worst_margin_weight: f64,
+    worst_margin_exponent: f64,
     mass_weight: f64,
     e_exponent: f64,
     min_grams_per_percent_e: f64,
@@ -514,12 +514,14 @@ impl RsV5 {
         }
         let o = &self.objective;
         let wsum: f64 = o.weights.entries().iter().map(|(_, w)| w).sum::<f64>()
-            + o.mass_weight
-            + o.worst_margin_weight;
+            + o.mass_weight;
         if (wsum - 1.0).abs() > 1e-9 {
             return Err(format!(
                 "RS-karambit-v5: objective weights sum to {wsum}, expected 1"
             ));
+        }
+        if !(o.worst_margin_exponent > 0.0) {
+            return Err("RS-karambit-v5: objective.worst_margin_exponent must be positive".into());
         }
         let bsum: f64 = o.betas.entries().iter().map(|(_, b)| b).sum();
         if (bsum - 1.0).abs() > 1e-9 {
@@ -616,7 +618,7 @@ mod tests {
                 .unwrap_err()
                 .contains("hard_gates")
         );
-        assert!(parse_rs_v5(&edited("form = 0.0225", "form = 0.0325"))
+        assert!(parse_rs_v5(&edited("form = 0.0250", "form = 0.0350"))
             .unwrap_err()
             .contains("sum to"));
         assert!(

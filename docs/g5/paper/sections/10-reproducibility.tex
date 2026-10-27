@@ -1,0 +1,24 @@
+\section{Reproducibility}\label{sec:repro}
+The cohort ran at freeze commit \gCommit{} with frozen decoder hash \gDecoder. The winner's \gGeneCount-gene row is committed
+at \code{evidence/g5/v\gRecord/winner\_genome.csv}; every island's logged history, the baseline island histories, the Tier-2
+ranking records, and the verification JSONs under \code{evidence/g5/v\gRecord/vv/} sit alongside the single release receipt
+\code{evidence/g5/v\gRecord/release.json}. \src{crates/g5/src/bin/g5_release_tex.rs}{\code{g5-release-tex}} generates every
+macro in \code{docs/g5/paper/generated/}, and \src{ops/ci/gen_readme.py}{\code{ops/ci/gen\_readme.py}} generates the root
+\code{README.md} and \code{cad/README.md} from the same receipt. The cohort is reproduced on the platform of record by building
+\code{g5-evolve} from this release and running each island $n = 1, \ldots, \gIslands$ with \code{--init \gLaunchInit{} --evals \gEvalsIslandRaw},
+\code{--seed} $4000 + n$, \code{--host \gLaunchHost{} --island} $n$, \code{--commit} \gCommit, \code{--h \gH},
+\code{--tier1-top \gLaunchTierOneTop}, \code{--tier2-top \gLaunchTierTwoTop}, and \code{--log-every \gLaunchLogEvery}. The in-git
+binary STL meshes and release archive files generated from the winner and cohort are listed in Table~\ref{tab:assets}.
+
+\begin{table}[t]
+\caption{In-git CAD meshes of \gDesign{} (files \code{<design>\_<name>}) and release assets (files
+\code{g5-v\gRecord-[<design>\_]<name>})}\label{tab:assets}
+\centering
+\begin{tabular}{@{}p{0.44\linewidth}rrl@{}}
+\toprule
+File & Triangles & MiB & Where \\
+\midrule
+\gAssetRows
+\bottomrule
+\end{tabular}
+\end{table}

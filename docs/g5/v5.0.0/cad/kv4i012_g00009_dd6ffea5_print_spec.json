@@ -1,0 +1,55 @@
+{
+  "am_build_stl": {
+    "boundary_edges": 0,
+    "bytes": 47358084,
+    "file": "kv4i012_g00009_dd6ffea5_AMbuild_mm.stl",
+    "mass_ti64_g": 85.52,
+    "max_edge_degree": 1,
+    "mib": 45.16,
+    "non_manifold_edges": 0,
+    "sha256": "82927c6555c64dc7dafe39e1404b675dfec38637eeee15158ed95c911be1e182",
+    "triangles": 947160,
+    "vertices": 473472,
+    "volume_mm3": 19305.1,
+    "voxel_pitch_h_mm": 0.5,
+    "watertight": true
+  },
+  "decoder_sha256": "c63629d4b31058f54470c3ed0fd5f2a7f4f492dfdb11ebb04c4a4588e50ffa9b",
+  "density_g_mm3": 0.00443,
+  "design_id": "kv4i012_g00009_dd6ffea5",
+  "genome_sha256": "dd6ffea58ee06a7f15dcb648b5b934e9e1a1aafa8e7a343742e8443f20f636e1",
+  "material": "Ti-6Al-4V, L-PBF, stress-relieved (ASTM F2924 min yield 825 MPa, 750.8 MPa at 80 C)",
+  "order_notes": "Units: mm | Overall dimensions: 177.26 x 49.57 x 18.97 mm | Material: Ti-6Al-4V LPBF | Remove powder through the ports in every hollow zone before stress relief",
+  "outer_envelope_stl": {
+    "boundary_edges": 0,
+    "bytes": 44525084,
+    "file": "kv4i012_g00009_dd6ffea5_envelope_mm.stl",
+    "max_edge_degree": 1,
+    "mib": 42.46,
+    "non_manifold_edges": 0,
+    "sha256": "fdf6932e00ae1550f7e6e2f9fa9b9032721fc9d1b04db74ce0e230de2c5b0ee4",
+    "solid_mass_ti64_g": 162.85,
+    "triangles": 890500,
+    "vertices": 445250,
+    "volume_mm3": 36760.1,
+    "voxel_pitch_h_mm": 0.325,
+    "watertight": true
+  },
+  "overall_dimensions_mm": {
+    "bbox_max_mm": [
+      150.35,
+      16.77,
+      9.48
+    ],
+    "bbox_min_mm": [
+      -26.91,
+      -32.8,
+      -9.48
+    ],
+    "height_y_mm": 49.57,
+    "length_x_mm": 177.26,
+    "thickness_z_mm": 18.97
+  },
+  "schema": "G5.0",
+  "units": "mm"
+}

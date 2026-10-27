@@ -26,6 +26,7 @@ pub mod material;
 pub mod objective;
 pub mod requirements;
 pub mod sobol_joe_kuo;
+pub mod tip_tet10;
 
 /// Pure-Rust FIPS 180-4 SHA-256 hex digest helper (matches `battery::sha256_bytes` bit-for-bit).
 pub fn sha256_bytes(data: &[u8]) -> String {
@@ -101,8 +102,8 @@ pub fn sha256_bytes(data: &[u8]) -> String {
     )
 }
 
-/// Guards for the records this crate must never change: the G3 decoder of the v3.0.0 cohort of record, and the
-/// cached G5 decoder hash.
+/// Guards for the records this crate must never change: the G3 decoder of the v3.0.0 cohort of record, the G5
+/// decoder of the v5.0.0 cohort of record, and the cached G5 decoder hash.
 #[cfg(test)]
 mod record_guards {
     /// The G3 decoder hash, computed exactly as `crates/g3/src/g3_qd.rs::g3_decoder_sha256`, must still equal the
@@ -135,6 +136,19 @@ mod record_guards {
             serde_json::from_str(include_str!("../../../evidence/g3/v3.0.0/release.json")).expect("G3 receipt");
         let recorded = receipt["provenance"]["decoder_sha256"].as_str().expect("provenance.decoder_sha256");
         assert_eq!(crate::sha256_bytes(&bytes), recorded, "the G3 v3.0.0 decoder of record changed");
+    }
+
+    /// The G5 decoder of the v5.0.0 cohort of record: the decoder is frozen, and its hash, recomputed from source,
+    /// equals the hash recorded in the v5.0.0 receipt. It fails if any decoder-hashed file changes (the G5 sources,
+    /// RS-karambit-v5, the shared physics and crescent files, or the crate lock file).
+    #[test]
+    fn g5_decoder_of_record_is_unchanged() {
+        assert!(crate::g5_namespace::G5_DECODER_FROZEN, "the v5.0.0 decoder is frozen");
+        let receipt: serde_json::Value =
+            serde_json::from_str(include_str!("../../../evidence/g5/v5.0.0/release.json")).expect("G5 receipt");
+        let recorded = receipt["provenance"]["decoder_sha256"].as_str().expect("provenance.decoder_sha256");
+        assert_eq!(crate::g5_qd::g5_decoder_sha256_uncached(), recorded, "the G5 v5.0.0 decoder of record changed");
+        assert_eq!(crate::g5_qd::g5_decoder_sha256(), recorded);
     }
 
     /// RS-karambit-v5 `[mass] grid_agreement_max_frac`: the partial-volume mass of a Sobol design agrees between
@@ -192,7 +206,7 @@ mod record_guards {
         let g = crate::g5_genome::sobol_unit_genome(2, 3, "tier1-loads");
         let rec = crate::g5_qd::evaluate_tier1_sdf_and_plate(&g, 0.5);
         let l = rec.loads;
-        assert_eq!(l.blade_model, "plate", "{l:?}");
+        assert_eq!(l.blade_model, crate::loads::BladeModel::Plate, "{l:?}");
         assert!(l.ring_any_direction_sf <= l.ring_bearing_sf * 300.0 / 300.0 + 1e-12, "{l:?}");
         assert!(l.teeth_sf.is_finite() && l.teeth_sf > 0.0, "{l:?}");
         assert!(l.seq_min().is_finite() && l.seq_min() > 0.0, "{l:?}");
@@ -290,46 +304,34 @@ mod v1_identity_tests {
                 .unwrap_or_else(|| panic!("missing gene {name}"))
         };
 
-        // 1. N1 + P1: Unvented blade (win_amp = 0.20 <= 0.35) gets zero mass credit for rho_blade = 0.06;
-        //    vented blade (win_amp = 0.50 > 0.35) drops mass_g AND moves plate strength terms + am_build.
+        // 1. A hollow blade (rho_blade 0.06, vented by its own blade vents) is never heavier than the solid blade; what
+        //    of its cavity cannot drain is printed solid and reported; the plate (homogenised core) loses capacity
         let set_phys = |g: &mut G5Genome, name: &str, phys: f64| {
             let i = idx_of(name);
             g.u[i] = G5_GENES[i].unit_from_phys(phys).clamp(0.0, 1.0);
         };
         let mut g_solid = G5Genome::benchmark_reference("22bb8696");
         set_phys(&mut g_solid, "rho_blade", 1.0);
-        set_phys(&mut g_solid, "win_amp", 0.20);
-        set_phys(&mut g_solid, "lat_cell", 4.0);
-
-        let mut g_unvented = g_solid.clone();
-        set_phys(&mut g_unvented, "rho_blade", 0.06);
-
-        let mut g_vented = g_unvented.clone();
-        set_phys(&mut g_vented, "win_amp", 0.50);
-
+        set_phys(&mut g_solid, "lat_cell", 5.0);
+        let mut g_vented = g_solid.clone();
+        set_phys(&mut g_vented, "rho_blade", 0.06);
         let r_solid = evaluate_tier1_sdf_and_plate(&g_solid, 0.8);
-        let r_unvented = evaluate_tier1_sdf_and_plate(&g_unvented, 0.8);
         let r_vented = evaluate_tier1_sdf_and_plate(&g_vented, 0.8);
-
+        let undrained = r_vented.am_connectivity.sealed_void_mm3 + r_vented.am_connectivity.crevice_mm3
+            - r_solid.am_connectivity.sealed_void_mm3
+            - r_solid.am_connectivity.crevice_mm3;
         assert!(
-            (r_solid.inputs.mass_g - r_unvented.inputs.mass_g).abs() < 1e-6,
-            "P1/N1: unvented blade (win_amp=0.20 <= 0.35) must not get mass credit for rho_blade=0.06 (solid={} vs unvented={})",
-            r_solid.inputs.mass_g,
-            r_unvented.inputs.mass_g
-        );
-        assert!(
-            r_vented.inputs.mass_g < r_solid.inputs.mass_g - 1.0,
-            "P1/N1: vented hollow blade (win_amp=0.50 > 0.35, rho_blade=0.06) must reduce mass_g (vented={} vs solid={})",
+            r_vented.inputs.mass_g <= r_solid.inputs.mass_g + 1e-6
+                && (r_vented.inputs.mass_g < r_solid.inputs.mass_g - 1.0 || undrained > 100.0),
+            "a hollow blade must be lighter, or report its undrained cavity (hollow={} vs solid={} g, undrained {undrained} mm3)",
             r_vented.inputs.mass_g,
             r_solid.inputs.mass_g
         );
         assert!(
-            r_vented.inputs.twist_body_sf < r_solid.inputs.twist_body_sf
-                && r_vented.inputs.hm_spine_sf < r_solid.inputs.hm_spine_sf
-                && r_vented.inputs.am_build < r_solid.inputs.am_build,
-            "P1/N1: vented hollow blade must reduce plate capacities and am_build (vented twist_body={} vs solid={})",
-            r_vented.inputs.twist_body_sf,
-            r_solid.inputs.twist_body_sf
+            r_vented.loads.lateral_limit_sf < r_solid.loads.lateral_limit_sf,
+            "a hollow blade must lose plate capacity (hollow={} vs solid={})",
+            r_vented.loads.lateral_limit_sf,
+            r_solid.loads.lateral_limit_sf
         );
 
         // 2. N2: Full G5 SDF (`include_blade == true`) has zero phantom f075 spine fin outside evolved blade for x > 94.0

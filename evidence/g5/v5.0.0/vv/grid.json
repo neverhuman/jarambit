@@ -1,0 +1,62 @@
+{
+  "max_rel_diff": 0.03635938490370904,
+  "requirement_max_frac": 0.02,
+  "rows": [
+    {
+      "design": 0,
+      "mass_h02_g": 156.13485634179094,
+      "mass_h04_g": 150.45788900317444,
+      "rel_diff": 0.03635938490370904,
+      "sealed_h02_mm3": 1410.23536307771,
+      "sealed_h04_mm3": 171.97952382281835,
+      "within_requirement": false
+    },
+    {
+      "design": 1,
+      "mass_h02_g": 143.49049515069933,
+      "mass_h04_g": 142.77651368638067,
+      "rel_diff": 0.004975810164769539,
+      "sealed_h02_mm3": 3466.2463579026166,
+      "sealed_h04_mm3": 3241.8960402048806,
+      "within_requirement": true
+    },
+    {
+      "design": 2,
+      "mass_h02_g": 120.65777916233041,
+      "mass_h04_g": 121.01019977271773,
+      "rel_diff": 0.002920827922028744,
+      "sealed_h02_mm3": 368.55852441368296,
+      "sealed_h04_mm3": 320.85732629806097,
+      "within_requirement": true
+    },
+    {
+      "design": 3,
+      "mass_h02_g": 159.1306713839741,
+      "mass_h04_g": 158.45968577512576,
+      "rel_diff": 0.004216569961106195,
+      "sealed_h02_mm3": 997.3308451236409,
+      "sealed_h04_mm3": 899.2730165451109,
+      "within_requirement": true
+    },
+    {
+      "design": 4,
+      "mass_h02_g": 119.6885417259072,
+      "mass_h04_g": 119.4156381084964,
+      "rel_diff": 0.0022801148169702633,
+      "sealed_h02_mm3": 682.7094239147364,
+      "sealed_h04_mm3": 637.0064480710704,
+      "within_requirement": true
+    },
+    {
+      "design": 5,
+      "mass_h02_g": 150.0451453253619,
+      "mass_h04_g": 150.50286987913765,
+      "rel_diff": 0.0030505788959930683,
+      "sealed_h02_mm3": 146.15710541023594,
+      "sealed_h04_mm3": 387.97160198664346,
+      "within_requirement": true
+    }
+  ],
+  "seed_offset": 9,
+  "study": "partial-volume mass, h 0.4 vs h 0.2"
+}

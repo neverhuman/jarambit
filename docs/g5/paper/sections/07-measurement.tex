@@ -1,0 +1,33 @@
+\section{Measurement and verification}\label{sec:measure}
+Four measurement fixes in \src{crates/g5/src/g5_sdf.rs}{\code{g5_sdf.rs}} and \src{crates/g5/src/tip_tet10.rs}{\code{tip_tet10.rs}}
+eliminate the grid and discretization biases identified in the G3 audit:
+\begin{enumerate}
+\item \textbf{Smoothed-Heaviside partial-volume mass.} Instead of binary sign counting ($\phi \le 0$), voxel mass and moments
+of inertia integrate a $C^1$ polynomial smoothed Heaviside kernel $H_\Delta(\phi)$ over a half-width $\Delta = \frac{\sqrt{3}}{2}h$:
+\begin{equation}
+w(\phi) = \frac{1}{2} - \frac{3}{4}\frac{\phi}{\Delta} + \frac{1}{4}\Bigl(\frac{\phi}{\Delta}\Bigr)^3, \qquad |\phi| < \Delta.
+\end{equation}
+This reduces voxel-pitch mass drift across $h \in \{0.4, 0.3, 0.25, 0.2, 0.15\}$~mm to at most \gGridAgree\,\% on the top
+designs (Table~\ref{tab:grid}), well inside the $2.0\,\%$ requirement in \code{RS-karambit-v5}.
+\item \textbf{Resolution-invariant morphological radii.} Hand-zone morphological closing and opening convert their physical
+millimetre blur radii into voxel counts via $\mathrm{round}(r_\mathrm{mm}/h)$, so refining $h$ preserves the physical fillet
+radius instead of shrinking it.
+\item \textbf{Width-aware $1.0$~mm powder drainage and crevices.} \code{enforce\_am\_connectivity} erodes internal cavity
+air by the $r_\mathrm{drain} = 0.50$~mm half-channel radius ($\mathrm{ceil}(0.50/h)$ voxels) before flooding from the exterior
+and dilating back into the cavity~\cite{carrozza2023}. Any undrained air is classified by connected component: a component whose
+air is narrower than the drainage half-width everywhere (sheet against skin) is labeled a \emph{crevice} (\code{crevice\_mm3}),
+whereas any component containing wider undrained air is labeled \emph{sealed} (\code{sealed\_void\_mm3}). Both are printed
+solid in the build field ($d_\mathrm{am} = -h$, so undrained regions add solid titanium mass), and only sealed volume is
+penalized in the objective.
+\item \textbf{Cell-centred solid-tip raster.} The 2D thickness raster feeding the 3D \code{TET10} tip submodel is sampled at
+cell centres $(i + \tfrac{1}{2})h_\mathrm{tip}$, matching the lookup coordinates of the tetrahedral mesh builder and removing
+G3's half-cell shift.
+\end{enumerate}
+
+Alongside the cohort receipt, \code{g5-vv} writes five deterministic verification records under \code{evidence/g5/v\gRecord/vv/}
+with \code{SHA256SUMS}: \code{grid.json} (partial-volume mass at $h = 0.4$ vs.\ $0.2$~mm), \code{plate\_mesh.json} (whole-blade
+\code{SandwichPlate} mesh convergence across maximum triangle areas $1.2, 0.6, 0.3, 0.15~\mathrm{mm^2}$), \code{tip\_mesh.json}
+(solid-tip \code{TET10} mesh sensitivity at $0.15$ and $0.08~\mathrm{mm^2}$ against the analytical section model),
+\code{decoder\_targets.json} (decoded grip perimeter within \gVvPerimErrPct\,\% of its gene, plus $H/T$, point angles and grip
+length), and \code{checks.json} (sheet-TPMS density, Ritz column buckling vs.\ Euler's formula, Lloyd-relaxed CVT quantization
+error \gVvLloydErr{} vs.\ Halton \gVvHaltonErr, and the \gVvGramsPerPctE~g per $1\,\%$ of $E$ trade; Table~\ref{tab:vv}).

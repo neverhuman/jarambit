@@ -1,0 +1,80 @@
+\section{Structural load cases and multi-fidelity models}\label{sec:loads}
+\src{crates/g5/src/loads.rs}{\code{loads.rs}} and \src{crates/g5/src/tip_tet10.rs}{\code{tip_tet10.rs}} evaluate all 16
+structural safety-factor margins defined in \code{RS-karambit-v5.toml}. Every limit load is compared against the governing
+wall's $80\,^\circ\mathrm{C}$, thin-wall-derated allowable (\src{crates/g5/src/material.rs}{\code{material.rs}}) with
+$\mathrm{SF}_\mathrm{req} = 1.2$ on yield, $1.3$ on ultimate, $2.0$ on the owner's ring loads, $1.0$ on surface-class FKM
+fatigue, $1.2$ on per-case blade-before-hand yield sequence, and $\lambda_\mathrm{req} = 1.5$ on tip buckling.
+
+\subsection{Tier 0: integrated curvilinear blade and grip sections}
+At Tier~0, \code{Midline::of} traces the smoothed blade midline from the point ($s = 0$) to the guard heel, and
+\code{blade\_section} integrates the exact decoded thickness law across the planform normal to the midline every $1.5$~mm,
+accounting for the homogenised sheet-TPMS core stiffness where the blade is hollow. An external force $\mathbf{F}$ applied at
+$\mathbf{q}$ is resolved at each station into axial tension $N$, through-thickness bending $M_b$, in-plane bending $M_\mathrm{ip}$,
+and Saint-Venant open-section torsion $T$, superposed conservatively as
+\begin{equation}
+\begin{aligned}
+\sigma_\mathrm{n} &= |N|/A + |M_b|\,t_\mathrm{max}/(2I_\mathrm{minor}) + |M_\mathrm{ip}|\,c_\mathrm{major}/I_\mathrm{major}, \\
+\sigma_\mathrm{eq} &= \sqrt{\sigma_\mathrm{n}^2 + 3\bigl(|T|\,t_\mathrm{max}/J\bigr)^2}.
+\end{aligned}
+\end{equation}
+This section chain evaluates:
+\begin{itemize}
+\item \textbf{Lateral bend (\code{lateral\_limit}, \code{lateral\_ultimate}):} Out-of-plane force applied $5$~mm behind the
+point producing a $12$~N$\cdot$m limit root moment (checked against yield at $\mathrm{SF} \ge 1.2$) and an $18$~N$\cdot$m
+ultimate root moment (checked against ultimate strength at $\mathrm{SF} \ge 1.3$). On a curved claw, a lateral force near the
+tip induces coupled bending and torsion at every proximal station.
+\item \textbf{Body twist (\code{twist\_limit}):} $16.2$~N$\cdot$m maximum forearm supination torque~\cite{osullivan2002}
+about the blade axis ($\mathrm{SF} \ge 1.2$).
+\item \textbf{Axial pull (\code{pull}):} $600$~N pull along the grip axis reacted over the distal $20$~mm of the blade~\cite{hidh}.
+\item \textbf{Hollow grip, guard and ring (\code{grip\_squeeze}, \code{guard\_push}, \code{ring\_*}):} The hollow grip wall
+and internal web are checked under the $800$~N distributed hand squeeze (normal force sum $2.3\times 800$~N~\cite{seo2008hf})
+and under the reaction wrenches of the lateral, twist (with at most $2.0$~N$\cdot$m palmar friction credit~\cite{seo2011,buchholz1988})
+and pull cases. The guard lobe is checked as a root section under a $300$~N forward hand slip~\cite{cochran1986}. The pommel
+ring is solved with quadratic six-node membrane triangles (\code{T6}) under $300$~N bearing ($\pm 60^\circ$ arc,
+$\mathrm{SF} \ge 2.0$), $30$~N back pull ($\mathrm{SF} \ge 2.0$), and a 12-direction in-plane sweep of $300$~N every $30^\circ$
+($\mathrm{SF} \ge 1.2$).
+\item \textbf{All-tooth serration check (\code{teeth}):} Every tooth on both edges---including both end teeth bounded by a
+gullet on one side and the plain edge on the other---is checked on the 2D section law under a $180$~N in-plane snag (with the
+Inglis notch factor $K_t = 1 + 2\sqrt{h_t/\rho}$ of its rounded gullet~\cite{inglis1913}) and a $60$~N lateral pry shared over
+three teeth ($20$~N per tooth).
+\item \textbf{Surface-class FKM fatigue (\code{fatigue}) and per-case sequence (\code{sequence}):} High-cycle fatigue ($10^6$
+cycles) combines the $4.7$~N$\cdot$m reversed lateral root moment and $7.0$~N$\cdot$m twist duty~\cite{tirloni2021,mcgorry2005}
+on the ground blade against the $200$~MPa ground allowable, and checks the hollow grip and ring under the working grip
+($130$~N peak) and little-finger ($25$~N) duty with FKM mean-stress sensitivity $M = 0.6$ and $K_f = K_t$ on as-built
+faces~\cite{benedetti2018,johnsen2024,nicoletto2018}. The yield-sequence ratio
+$\mathrm{seq} = \min_{c \in \{\text{lat, twist, pull}\}} \mathrm{SF}_\mathrm{hand}(c)/\mathrm{SF}_\mathrm{blade}(c)$ is
+evaluated per load case separately (\code{per\_load\_case = true}, target $\ge 1.2$).
+\item \textbf{Tip buckling (\code{buckling}):} Rayleigh--Ritz two-mode eigenvalue solve~\cite{timoshenko1961} of the tapered
+distal blade cantilevered $30$~mm from the point under the $150$~N axial tip compression load, using wide-plate flexural
+rigidity $D(s) = E\,b(s)\,t(s)^3 / [12(1 - \nu^2)]$ integrated over 60 stations ($\lambda_\mathrm{req} = 1.5$).
+\end{itemize}
+
+\subsection{Tier 1: whole-blade sandwich plate}
+At Tier~1, \code{plate\_blade\_cases} (\src{crates/g5/src/loads.rs}{\code{loads.rs}}) replaces the Tier-0 section estimates
+for \code{lateral\_limit}, \code{lateral\_ultimate}, \code{twist\_limit}, \code{pull}, \code{fatigue}, and \code{sequence}
+with a whole-blade \code{SandwichPlate} finite-element solve (constant-strain membrane triangles plus discrete Kirchhoff
+bending triangles~\cite{batoz1980}) at production maximum triangle area $\gVvPlateProdArea~\mathrm{mm^2}$. Retiring G3's sharp-cornered fenestration
+windows and distributing the lateral patch load around $5$~mm from the point, the torsional couple over the working span, and
+the $\gReqPullN$~N pull over the distal $20$~mm removes window-corner singularities; across the four verification meshes
+($1.2, 0.6, 0.3, 0.15~\mathrm{mm^2}$ in \code{vv/plate\_mesh.json}), lateral safety factors vary non-monotonically by up to
+\gVvPlateLatSpreadPct\,\% while twist safety factors stay within \gVvPlateTwistSpreadPct\,\% (Section~\ref{sec:measure}).
+
+\subsection{Tier 2: three-case quadratic tetrahedral (\code{TET10}) solid tip}
+At Tier~2, \code{tip\_solid\_cases} (\src{crates/g5/src/tip_tet10.rs}{\code{tip_tet10.rs}}) replaces the beam-section tip
+estimates with a 3D quadratic 10-node tetrahedral (\code{TET10}) submodel of the distal $30$~mm of the blade, meshed at maximum
+planform triangle area $0.08~\mathrm{mm^2}$ across four thickness layers (cell-centred thickness sampling) and clamped at the
+$r_\mathrm{cut} = 30$~mm arc. Three independent linear-elastic solves are executed on the submodel under the sourced
+\code{RS-karambit-v5} tip loads:
+\begin{enumerate}
+\item \textbf{Tip axial ($\gReqTipAxN$~N, EN~388 puncture level~4~\cite{en388}):} In-plane compression along the local tip bisector,
+distributed over a load patch of radius $0.75$~mm at the point; evaluated over the readout window
+$r \in [\gTipAxFromMm, 10.0]$~mm ($\mathrm{SF} \ge \gReqSfYield$).
+\item \textbf{Tip lateral ($\gReqTipLatN$~N side load):} Out-of-plane $+z$ shear distributed over a $0.75$~mm patch at the point;
+evaluated over the readout window $r \in [\gTipAxFromMm, \gTipLatHiMm]$~mm ($\mathrm{SF} \ge \gReqSfYield$).
+\item \textbf{Tip twist ($\gReqTipTwNm$~N$\cdot$m about the local tip bisector):} Opposing $\pm z$ couple applied at
+$r = \gTipTwApplyMm$~mm behind the point over a $\pm 1.0$~mm patch half-width so the discrete nodal forces sum to zero net
+force and an exact $300$~N$\cdot$mm torque about the tip bisector; evaluated over the readout window
+$r \in [\gTipTwReadLoMm, 15.0]$~mm ($\mathrm{SF} \ge \gReqSfYield$).
+\end{enumerate}
+Each case reports $\mathrm{SF} = \sigma_\mathrm{allow} / \sigma_{\mathrm{vM},\max}$ from the nodal maximum von Mises stress
+within its per-case readout window (\code{readout\_mm}) against the ground-blade allowable ($750.75$~MPa).
