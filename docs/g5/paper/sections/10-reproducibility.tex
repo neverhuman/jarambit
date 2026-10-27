@@ -1,14 +1,16 @@
 \section{Reproducibility}\label{sec:repro}
-The cohort ran at freeze commit \gCommit{} with frozen decoder hash \gDecoder. The winner's \gGeneCount-gene row is committed
-at \code{evidence/g5/v\gRecord/winner\_genome.csv}; every island's logged history, the baseline island histories, the Tier-2
-ranking records, and the verification JSONs under \code{evidence/g5/v\gRecord/vv/} sit alongside the single release receipt
-\code{evidence/g5/v\gRecord/release.json}. \src{crates/g5/src/bin/g5_release_tex.rs}{\code{g5-release-tex}} generates every
-macro in \code{docs/g5/paper/generated/}, and \src{ops/ci/gen_readme.py}{\code{ops/ci/gen\_readme.py}} generates the root
-\code{README.md} and \code{cad/README.md} from the same receipt. The cohort is reproduced on the platform of record by building
-\code{g5-evolve} from this release and running each island $n = 1, \ldots, \gIslands$ with \code{--init \gLaunchInit{} --evals \gEvalsIslandRaw},
-\code{--seed} $4000 + n$, \code{--host \gLaunchHost{} --island} $n$, \code{--commit} \gCommit, \code{--h \gH},
-\code{--tier1-top \gLaunchTierOneTop}, \code{--tier2-top \gLaunchTierTwoTop}, and \code{--log-every \gLaunchLogEvery}. The in-git
-binary STL meshes and release archive files generated from the winner and cohort are listed in Table~\ref{tab:assets}.
+The cohort of record v\gRecord{} ran the frozen decoder (hash \gDecoder, freeze label \gCommit). The winner's \gGeneCount-gene row is
+committed at \code{evidence/g5/v\gRecord/winner\_genome.csv}, beside the single release receipt
+\code{evidence/g5/v\gRecord/release.json}, every island's launch record and history, every pool's recorded sources, the final
+pool, the Tier-2 ranking, the grid check, the plate-mesh check, the cross-host re-run, the v5.0.0 winner's records on the same
+platform, and the GPU-spike and fleet-sizing measurements. \src{crates/g5/src/bin/g5_release.rs}{\code{g5-release receipt-v6}}
+writes the receipt only after recomputing every merge of the lineage byte for byte and checking every link (Section~\ref{sec:continuation});
+\src{crates/g5/src/bin/g5_release_tex.rs}{\code{g5-release-tex}} generates every macro in \code{docs/g5/paper/generated/}, and
+\src{ops/ci/gen_readme.py}{\code{ops/ci/gen\_readme.py}} generates the root \code{README.md} and \code{cad/README.md} from the same
+receipt. An island is reproduced by building the static binaries from this release and running
+\src{crates/g5/src/bin/g5_continue.rs}{\code{g5-continue run}} with the arguments of its launch record (\code{--pool}, \code{--evals},
+\code{--seed}, \code{--host}, \code{--island}, \code{--commit} \gCommit, \code{--h \gH}); a pool, with \code{g5-continue merge} over
+its recorded sources in order. The in-git meshes and the release assets are listed in Table~\ref{tab:assets}.
 
 \begin{table}[t]
 \caption{In-git CAD meshes of \gDesign{} (files \code{<design>\_<name>}) and release assets (files

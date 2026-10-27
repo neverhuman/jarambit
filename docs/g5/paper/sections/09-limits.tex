@@ -14,14 +14,17 @@ surface texture to reach the blade zone (for \gDesign, texture depth \code{tex\_
 notched. The edge cross-sections (Fig.~\ref{fig:edges}) and edge measurements evaluate the exact bevel law, which post-build
 grinding restores because the \code{RS-karambit-v5} finishing allowance ($\gReqEdgeFinishMm$~mm per ground face) exceeds the
 $\gTexAmp$~mm texture depth. Restricting surface texture outside the bevels is deferred to a later decoder generation.
-\item \textbf{Cross-platform floating-point differences (\code{ranking.linux\_check}).} Results are reproducible bit-for-bit on
-the platform of record: re-running \code{island01} for \gReproEvals{} evaluations reproduced all \gReproEntries{} logged history
-entries identically, and re-evaluating all \gCohortElites{} final elites at Tier~1 reproduced all \gTierOneReproduced{} Tier-1
-archive rows bit-for-bit. Across architectures (\code{arm64} macOS vs.\ Linux \code{x86\_64}), results are not bit-identical
-because platform maths libraries (\code{sin}, \code{exp}, \code{powf}) differ in the last bits: on Linux \code{x86\_64},
-\code{island01} stays on the same best genome through \gLinuxEvoEvals{} evaluations (best score within \gLinuxEvoRelDiff), and
-across the top \gLinuxDesigns{} finalists at Tier~2 the scores agree within \gLinuxMaxRelDiffPct\,\% (\gLinuxMaxRelDiff) and the
-winner ranks \#\gLinuxWinRank{} on both platforms.
+\item \textbf{One platform of record.} v5.0.0's \code{arm64} records agreed closely with, but were not bit-identical to,
+\code{x86\_64} re-evaluations, because the platforms' maths libraries differ in the last bits. v\gRecord{} runs every search and
+certification step on one platform (static \code{x86\_64} binaries, natively or in a \code{linux/amd64} container): every archive
+row re-scores bit for bit, every pool is recomputed from its sources, \gReproIsland{} re-run on \gReproHost{} reproduced all
+\gReproEntries{} logged history entries over \gReproEvals{} evaluations, and re-evaluating all \gCohortElites{} elites of the final
+pool reproduced all \gTierOneReproduced{} Tier-1 rows. A different libm (another platform) would again agree closely rather than
+exactly.
+\item \textbf{The search grid can rank designs it cannot keep.} The search scores at $h = \gH$~mm with a section model of the tip;
+the ranking re-scores the shortlist at $h = \gHRank$~mm with the solid tip and the winner must also pass the grid check and every
+load case on every plate mesh. A design that leads the search grid can therefore rank lower, which is why the search-grid best of the
+lineage (\gPoolFinalBest) is not the score of record (\gScore).
 \item \textbf{Linear-elastic surrogates and solid-tip readout windows.} All structural evaluations are linear-elastic. Permanent set
 under the GOST~R~51501-99 deflection test~\cite{gost51501} is represented by no yield at $\mathrm{SF} = \gReqSfYield$, not by an
 elastoplastic solve. The 3D \code{TET10} tip submodel reports $\mathrm{SF} = \sigma_\mathrm{allow} / \sigma_{\mathrm{vM},\max}$

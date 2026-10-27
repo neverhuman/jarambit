@@ -5,20 +5,23 @@
 RAW_VERSION := $(shell cat ../../VERSION)
 ROOT        := ../../..
 RECORD      := $(shell cat $(ROOT)/evidence/g5/RECORD)
-VERSION     := $(if $(filter 5.%,$(RAW_VERSION)),$(RAW_VERSION),$(RECORD))
+VERSION     := $(if $(filter 5.% 6.%,$(RAW_VERSION)),$(RAW_VERSION),$(RECORD))
+IMG         := ../v$(RECORD)/img
+FIGURES     := $(patsubst %.svg,%.pdf,$(wildcard $(IMG)/*.svg $(IMG)/fem/*.svg))
 RECEIPT     := $(ROOT)/evidence/g5/v$(RECORD)/release.json
 PDF         := g5-v$(VERSION).pdf
 TEXGEN       = cargo run --quiet --release --locked --manifest-path $(ROOT)/crates/g5/Cargo.toml --bin g5-release-tex --
 
 all: $(PDF)
 
-generated/numbers.tex: $(RECEIPT) ../../VERSION $(ROOT)/crates/g5/src/bin/g5_release_tex.rs $(wildcard $(ROOT)/evidence/g5/v$(RECORD)/vv/*.json) ../v$(RECORD)/img/manifest.json $(wildcard ../v$(RECORD)/cad/*.json)
+generated/numbers.tex: $(RECEIPT) ../../VERSION $(ROOT)/crates/g5/src/bin/g5_release_tex.rs $(wildcard $(ROOT)/evidence/g5/v$(RECORD)/vv/*.json) $(wildcard $(ROOT)/evidence/g5/v$(RECORD)/spike/*.json $(ROOT)/evidence/g5/v$(RECORD)/fleet/*.json) $(IMG)/manifest.json $(wildcard ../v$(RECORD)/cad/*.json)
 	$(TEXGEN) $(RECEIPT) generated $(VERSION)
 
-../v$(RECORD)/img/evolution.pdf: ../v$(RECORD)/img/evolution.svg
+# every SVG figure of the record (evolution, fitness budget and terms, FEM renderings) as PDF
+$(IMG)/%.pdf: $(IMG)/%.svg
 	rsvg-convert -f pdf -o $@ $<
 
-$(PDF): main.tex $(wildcard sections/*.tex) generated/numbers.tex ../v$(RECORD)/img/evolution.pdf ../../paper/ei-ieee-skin.tex
+$(PDF): main.tex $(wildcard sections/*.tex) generated/numbers.tex $(FIGURES) ../../paper/ei-ieee-skin.tex
 	latexmk -lualatex -interaction=nonstopmode -halt-on-error -outdir=build main.tex
 	cp build/main.pdf $(PDF)
 
