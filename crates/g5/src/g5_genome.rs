@@ -1,13 +1,11 @@
-//! `G5.0` 179-gene modular genome schema (`T4.2`, `G3_GENOME_SPEC.md` v1.1 + T9 `neck_in`) for the
-//! fixed-blade, sheath-free, hollow-capable L-PBF Ti-6Al-4V Jarambit evolutionary cohort.
+//! `G5.0` 139-gene modular genome schema (derived from G3's 179-gene `G3_GENOME_SPEC.md` v1.1) for the
+//! fixed-blade, sheath-free, hollow-capable L-PBF Ti-6Al-4V Jarambit under RS-karambit-v5.
 //!
 //! Design principles (Owner directive 2026-10-25T01:13:42Z):
 //! - **Evolutionary search drives all 3D geometry**: no agent-hand-crafted individuals, no hidden
 //!   offspring gene overrides, and no v1 parent-pool seeds.
-//! - **Unit hypercube encoding**: `u in [0, 1]^179`, mapped linearly or log-uniformly to physical
-//!   parameters by `decode()`.
-//! - **First 94 genes (`0..94`) match `tools_frozen_v3/hzm.py::GENES` 1-to-1 in order** so hand-zone
-//!   vectors can be exchanged directly without index permutation.
+//! - **Unit hypercube encoding**: `u in [0, 1]^139`, mapped linearly or log-uniformly to physical
+//!   parameters by `decode()`. Sobol starts use the first 139 Joe-Kuo dimensions.
 //! - **Strict CSV/JSON loader**: requires `schema=G5.0` and a verified `genome_sha256` over exact
 //!   IEEE-754 little-endian bits; refuses v1 90/117/128-gene rows.
 //! - **Variation**: reflective `Iso+Line-DD` mutation (`child = a + sigma_m * N(0, I) + 0.25 * N(0, 1) * (b - a)`),
@@ -17,7 +15,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
 pub const G5_SCHEMA: &str = "G5.0";
-pub const G5_NUM_GENES: usize = 179;
+pub const G5_NUM_GENES: usize = 139;
 pub const FIXED_BORE_D_MM: f64 = 24.9;
 pub const FIXED_LIP_W_MM: f64 = 8.0;
 pub const M50_PITCHES_MM: [f64; 3] = [19.5, 21.0, 22.0];
@@ -108,8 +106,9 @@ macro_rules! log_gene {
     };
 }
 
-/// Complete 179-gene table for `G5.0`.
-/// Indices `0..94` match `tools_frozen_v3/hzm.py::GENES` in exact order.
+/// Complete 139-gene table for `G5.0`: the G3 table without its 37 texture genes, the two retired edge-stop genes,
+/// the five cusped-serration genes and `exo_open` (G3's port-radius gene), plus five genes in requirement units
+/// (grip perimeter and H/T, port diameter, point angle, point length).
 pub static G5_GENES: [GeneSpec; G5_NUM_GENES] = [
     // ---- Module H: Ring (11 genes, 0..11) ----
     lin_gene!("ring_od", H, 29.5, 35.0, 30.6),
@@ -124,9 +123,9 @@ pub static G5_GENES: [GeneSpec; G5_NUM_GENES] = [
     lin_gene!("junction_deg", H, 30.0, 50.0, 40.0),
     lin_gene!("neck_r", H, 4.0, 12.0, 8.0),
     lin_gene!("bore_round", H, 2.0, 3.5, 2.8),
-    // ---- Module H: Grip (27 genes, 11..38) ----
+    // ---- Module H: Grip (29 genes, 11..40) ----
     lin_gene!("hand_scale", H, 0.90, 1.10, 1.0),
-    lin_gene!("dL", H, -1.0, 5.0, 3.0),
+    lin_gene!("dL", H, 4.0, 14.0, 9.0), // G5.0: grip length >= 69 mm with 19-21 mm finger pitches
     lin_gene!("T0", H, 8.0, 12.0, 10.0),
     lin_gene!("T_sw", H, 13.0, 17.0, 15.0),
     lin_gene!("T_g", H, 11.0, 15.0, 13.0),
@@ -138,6 +137,9 @@ pub static G5_GENES: [GeneSpec; G5_NUM_GENES] = [
     lin_gene!("yb0", H, -12.0, -9.0, -10.5),
     lin_gene!("yb_g", H, -13.5, -10.5, -12.0),
     lin_gene!("belly", H, -1.5, 1.0, 0.0),
+    // G5.0: the swell section is scaled to this perimeter and height/thickness (RS-karambit-v5 [ergonomics.grip])
+    lin_gene!("grip_perim", H, 78.0, 104.0, 92.0),
+    lin_gene!("grip_hot", H, 1.40, 1.90, 1.65),
     lin_gene!("d_ring", H, 1.0, 3.0, 2.0),
     lin_gene!("w_ring", H, 7.0, 11.0, 9.0),
     lin_gene!("d_mid", H, 0.0, 3.0, 2.1),
@@ -150,87 +152,54 @@ pub static G5_GENES: [GeneSpec; G5_NUM_GENES] = [
     lin_gene!("n0", H, 2.2, 3.2, 2.5),
     lin_gene!("n1", H, 2.2, 3.2, 2.5),
     lin_gene!("skew", H, -0.20, 0.20, 0.0),
-    lin_gene!("edge_r", H, 2.2, 3.0, 2.5),
+    lin_gene!("edge_r", H, 3.0, 4.5, 3.5), // G5.0: >= 3 mm on 6.5-25 mm sections [ergonomics.edges]
     lin_gene!("ramp_h", H, 0.0, 3.0, 1.5),
-    // ---- Module H: Guard & spine (6 genes, 38..44) ----
-    lin_gene!("h_g", H, 10.0, 15.0, 12.0),
+    // ---- Module H: Guard & spine (6 genes, 40..46) ----
+    lin_gene!("h_g", H, 10.0, 18.0, 15.0), // G5.0: guard target 15 mm, floor 10 mm
     lin_gene!("t_guard", H, 5.5, 10.0, 6.5),
-    lin_gene!("guard_r", H, 5.0, 10.0, 7.0),
+    lin_gene!("guard_r", H, 5.0, 11.0, 7.0),
     lin_gene!("jimp_n", H, 0.0, 8.0, 6.0),
     lin_gene!("jimp_p", H, 1.8, 2.8, 2.5),
     lin_gene!("jimp_d", H, 0.4, 0.7, 0.6),
-    // ---- Module S: Surface morphogen (42 genes, 44..86) ----
+    // ---- Module S: Surface texture: knurl and ridge, zero-mean (5 genes, 46..51) ----
     lin_gene!("tex_amp", S, 0.0, 0.25, 0.18),
     lin_gene!("tex_pitch", S, 1.2, 2.6, 1.6),
     lin_gene!("tex_angle", S, -45.0, 45.0, 0.0),
     lin_gene!("w_knurl", S, 0.0, 1.0, 1.0),
-    lin_gene!("w_turing", S, 0.0, 1.0, 0.0),
-    lin_gene!("w_voronoi", S, 0.0, 1.0, 0.0),
     lin_gene!("w_ridge", S, 0.0, 1.0, 0.0),
-    lin_gene!("w_cppn", S, 0.0, 1.0, 0.0),
-    lin_gene!("turing_mix", S, 0.0, 1.0, 0.5),
-    lin_gene!("seed", S, 0.0, 1.0, 0.5),
-    lin_gene!("cppn_00", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_01", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_02", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_03", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_04", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_05", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_06", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_07", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_08", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_09", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_10", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_11", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_12", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_13", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_14", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_15", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_16", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_17", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_18", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_19", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_20", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_21", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_22", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_23", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_24", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_25", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_26", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_27", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_28", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_29", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_30", S, -2.0, 2.0, 0.0),
-    lin_gene!("cppn_31", S, -2.0, 2.0, 0.0),
-    // ---- Module I: Interior base (7 genes, 86..93) ----
+    // ---- Module I: Interior base (7 genes, 51..58) ----
     lin_gene!("skin_t", I, 0.8, 1.2, 1.0),
     lin_gene!("lat_mix", I, 0.0, 1.0, 0.0),
-    lin_gene!("lat_cell", I, 4.0, 7.0, 5.0),
+    lin_gene!("lat_cell", I, 5.0, 12.0, 8.0), // G5.0: sheet TPMS >= 0.8 mm needs larger cells for low density
     lin_gene!("rho_grip", I, 0.06, 1.0, 0.10),
     lin_gene!("rho_guard", I, 0.06, 1.0, 1.0),
     lin_gene!("rho_ring", I, 0.06, 1.0, 1.0),
     lin_gene!("rib_w", I, 0.0, 1.0, 0.0),
-    // ---- Module H v2 (T9): grip sweep starts this far inside the ring tangent with a rounded end cap (gene 93) ----
+    // ---- Module H v2 (T9): grip sweep starts this far inside the ring tangent with a rounded end cap (gene 58) ----
     lin_gene!("neck_in", H, 3.0, 8.0, 5.0),
-    // ---- Module S extensions (3 genes, 94..97) ----
+    // ---- Module S extensions (3 genes, 59..62) ----
     lin_gene!("scope_grip", S, 0.0, 1.0, 1.0),
     lin_gene!("scope_ring", S, 0.0, 1.0, 0.15),
     lin_gene!("scope_blade", S, 0.0, 1.0, 0.25),
-    // ---- Module I extensions (7 genes, 97..104) ----
+    // ---- Module I extensions (8 genes, 62..70) ----
     lin_gene!("rho_blade", I, 0.06, 1.0, 0.35),
     lin_gene!("lat_grade", I, 0.0, 1.0, 0.20),
     lin_gene!("port_n", I, 2.0, 4.0, 2.0),
+    lin_gene!("port_d", I, 3.0, 4.0, 3.2), // G5.0: powder port and drain-hole diameter >= [am] port_d_min_mm
     lin_gene!("lat_aniso_x", I, 0.70, 1.60, 1.15),
     lin_gene!("rho_grad_wall", I, 0.0, 0.50, 0.20),
     lin_gene!("shear_web_amp", I, 0.0, 1.0, 0.30),
-    lin_gene!("exo_open", I, 0.0, 1.0, 0.0),
-    // ---- Module B: Blade planform, 3D ridge, fuller corrugation, fenestration (41 genes, 104..145) ----
+    // ---- Module B: Blade planform, 3D ridge, fuller corrugation, fenestration (44 genes, 70..114) ----
     lin_gene!("blade_len", B, 60.0, 85.725, 85.725),
     lin_gene!("sweep_deg", B, -12.0, 12.0, -3.5),
     lin_gene!("hook_drop", B, 25.0, 55.0, 41.5),
     lin_gene!("blade_belly", B, -6.0, 6.0, 0.0),
     lin_gene!("spine_arch", B, -4.0, 8.0, 2.0),
     lin_gene!("tip_angle", B, 18.0, 40.0, 26.0),
+    // G5.0 point module: a rounded wedge of this included planform angle over the last point_len mm (its tip
+    // radius is the construction constant `g5_sdf::POINT_TIP_RADIUS_MM`)
+    lin_gene!("point_angle", B, 30.0, 80.0, 55.0),
+    lin_gene!("point_len", B, 3.0, 12.0, 6.0),
     lin_gene!("h_root", B, 18.0, 30.0, 25.5),
     lin_gene!("h_exp", B, 0.60, 1.60, 1.05),
     // Inner-edge cosine basis offsets a_k in +-(6/k) mm
@@ -270,39 +239,32 @@ pub static G5_GENES: [GeneSpec; G5_NUM_GENES] = [
     lin_gene!("win_s0", B, 0.08, 0.35, 0.15),
     lin_gene!("win_s1", B, 0.45, 0.85, 0.68),
     lin_gene!("win_angle", B, -40.0, 40.0, 15.0),
-    // ---- Module E: Double-edged, double-serrated bevels + tip_reserve (29 genes, 145..174) ----
+    // ---- Module E: Double-edged, double-serrated bevels + tip_reserve (22 genes, 114..136) ----
     lin_gene!("tip_reserve", E, 6.0, 12.0, 8.0),
     lin_gene!("t_0p25_target", E, 0.18, 0.28, 0.24),
     lin_gene!("t_1p00_target", E, 0.38, 0.56, 0.48),
     lin_gene!("t_2p00_target", E, 0.65, 0.95, 0.82),
     // Inner edge `in` (13)
     lin_gene!("s0_in", E, 0.05, 0.12, 0.06),
-    lin_gene!("s1_in", E, 0.85, 1.00, 0.98), // retired by EDGE-4: both grinds always reach the tip
-    lin_gene!("angle_in", E, 17.5, 22.5, 20.0), // EDGE-3: per-side primary angle, 35-45 deg inclusive
+    lin_gene!("angle_in", E, 20.0, 25.0, 22.0), // G5.0: per-side angle [edge]
     lin_gene!("edge_t_in", E, 0.05, 0.12, 0.08),
     lin_gene!("grind_curv_in", E, -0.35, 0.45, 0.0),
     lin_gene!("ser_s0_in", E, 0.16, 0.24, 0.20), // SERR-3: starts past the 5-12 % plunge
     lin_gene!("ser_s1_in", E, 0.62, 0.82, 0.70),
-    lin_gene!("ser_pitch_in", E, 5.0, 9.0, 6.0), // SERR-4: teeth strong enough not to snap
-    lin_gene!("ser_depth_in", E, 0.8, 2.2, 0.8), // SERR-1: both edges serrated
-    lin_gene!("ser_duty_in", E, 0.30, 0.80, 0.55),
-    lin_gene!("w_scallop_in", E, 0.0, 1.0, 0.7),
-    lin_gene!("w_tooth_in", E, 0.0, 1.0, 0.2),
-    lin_gene!("w_micro_in", E, 0.0, 1.0, 0.1),
+    lin_gene!("ser_pitch_in", E, 4.0, 6.0, 5.0), // G5.0: [serration] pitch
+    lin_gene!("ser_depth_in", E, 0.8, 1.5, 1.0), // G5.0: [serration] depth
+    lin_gene!("ser_duty_in", E, 0.45, 0.85, 0.65),
     // Spine edge `sp` (12)
     lin_gene!("s0_sp", E, 0.05, 0.12, 0.06),
-    lin_gene!("s1_sp", E, 0.60, 1.00, 0.95), // retired by EDGE-4
-    lin_gene!("angle_sp", E, 17.5, 22.5, 20.0),
+    lin_gene!("angle_sp", E, 20.0, 25.0, 22.0), // G5.0: per-side angle [edge]
     lin_gene!("edge_t_sp", E, 0.05, 0.12, 0.08),
     lin_gene!("grind_curv_sp", E, -0.35, 0.45, 0.0),
     lin_gene!("ser_s0_sp", E, 0.16, 0.24, 0.20),
     lin_gene!("ser_s1_sp", E, 0.62, 0.80, 0.68),
-    lin_gene!("ser_pitch_sp", E, 5.0, 9.0, 6.0),
-    lin_gene!("ser_depth_sp", E, 0.8, 2.0, 0.8),
-    lin_gene!("ser_duty_sp", E, 0.30, 0.80, 0.55),
-    lin_gene!("w_scallop_sp", E, 0.0, 1.0, 0.7),
-    lin_gene!("w_tooth_sp", E, 0.0, 1.0, 0.3),
-    // ---- Module M: Self-adaptive per-module mutation step sizes (5 genes, 174..179) ----
+    lin_gene!("ser_pitch_sp", E, 4.0, 6.0, 5.0), // G5.0: [serration] pitch
+    lin_gene!("ser_depth_sp", E, 0.8, 1.5, 1.0), // G5.0: [serration] depth
+    lin_gene!("ser_duty_sp", E, 0.45, 0.85, 0.65),
+    // ---- Module M: Self-adaptive per-module mutation step sizes (5 genes, 136..139) ----
     log_gene!("sigma_B", M, 0.01, 0.20, 0.05),
     log_gene!("sigma_E", M, 0.01, 0.20, 0.04),
     log_gene!("sigma_H", M, 0.01, 0.20, 0.05),
@@ -330,7 +292,7 @@ impl TryFrom<RawG5Genome> for G5Genome {
     }
 }
 
-/// Unit-hypercube genome `u in [0, 1]^179` with strict `G5.0` provenance.
+/// Unit-hypercube genome `u in [0, 1]^139` with strict `G5.0` provenance.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(try_from = "RawG5Genome")]
 pub struct G5Genome {
@@ -340,7 +302,7 @@ pub struct G5Genome {
 }
 
 impl G5Genome {
-    /// Fail-closed validation of schema, decoder_commit, gene count (`179`), and unit-cube `[0, 1]` bounds.
+    /// Fail-closed validation of schema, decoder_commit, gene count (`G5_NUM_GENES`), and unit-cube `[0, 1]` bounds.
     pub fn validate(&self) -> Result<(), String> {
         if self.schema != G5_SCHEMA {
             return Err(format!(
@@ -382,46 +344,6 @@ impl G5Genome {
         }
     }
 
-    /// Test-only helper to lift a 93-gene (v1) or 94-gene (v2/v3 with `neck_in`) hand-zone unit vector
-    /// into a 179-gene `G5Genome` with neutral extension genes for fixture parity tests
-    /// (`G3_GENOME_SPEC.md` §1 forbids silent upgrades in production).
-    #[cfg(test)]
-    pub fn from_hzm93(u_hzm: &[f64], decoder_commit: &str) -> Result<Self, String> {
-        if u_hzm.len() != 93 && u_hzm.len() != 94 {
-            return Err(format!("expected 93 or 94 HZM genes, got {}", u_hzm.len()));
-        }
-        let mut g = Self::benchmark_reference(decoder_commit);
-        for (i, &val) in u_hzm.iter().enumerate() {
-            if !val.is_finite() || !(0.0..=1.0).contains(&val) {
-                return Err(format!("hzm gene {i} out of [0, 1]: {val}"));
-            }
-            g.u[i] = val;
-        }
-        // Set extension genes to strictly neutral values so 94-gene parity tests match Python (`N3`)
-        let set_phys = |g: &mut Self, name: &str, phys: f64| {
-            if let Some((idx, spec)) = G5_GENES.iter().enumerate().find(|(_, s)| s.name == name) {
-                g.u[idx] = spec.unit_from_phys(phys);
-            }
-        };
-        set_phys(&mut g, "scope_grip", 1.0);
-        set_phys(&mut g, "scope_ring", 0.0);
-        set_phys(&mut g, "scope_blade", 0.0);
-        set_phys(&mut g, "rho_blade", 1.0);
-        set_phys(&mut g, "lat_grade", 0.0);
-        set_phys(&mut g, "port_n", 2.0);
-        set_phys(&mut g, "lat_aniso_x", 1.0);
-        set_phys(&mut g, "rho_grad_wall", 0.0);
-        set_phys(&mut g, "shear_web_amp", 0.0);
-        set_phys(&mut g, "exo_open", 0.0);
-        set_phys(&mut g, "win_amp", 0.0);
-        set_phys(&mut g, "ridge_amp", 0.0);
-        set_phys(&mut g, "fuller_depth", 0.0);
-        set_phys(&mut g, "fuller_corrug_amp", 0.0);
-        set_phys(&mut g, "ser_depth_in", 0.0);
-        set_phys(&mut g, "ser_depth_sp", 0.0);
-        Ok(g)
-    }
-
     /// Exact IEEE-754 little-endian SHA-256 content hash of `(schema, decoder_commit, u)`.
     pub fn sha256(&self) -> String {
         let mut bytes = Vec::with_capacity(32 + self.u.len() * 8);
@@ -435,11 +357,11 @@ impl G5Genome {
         crate::sha256_bytes(&bytes)
     }
 
-    /// Decode unit coordinates `u in [0, 1]^179` into physical parameters and derived hand-zone datums.
+    /// Decode unit coordinates `u in [0, 1]^139` into physical parameters and derived hand-zone datums.
     /// Fails closed (panics) if `self.validate()` fails (`I11`, `N9`).
     pub fn decode(&self) -> BTreeMap<&'static str, f64> {
         self.validate()
-            .expect("G5Genome::decode requires a valid 179-gene G5.0 genome");
+            .expect("G5Genome::decode requires a valid G5.0 genome");
         let mut p = BTreeMap::new();
         for (spec, &u_val) in G5_GENES.iter().zip(self.u.iter()) {
             p.insert(spec.name, spec.phys_from_unit(u_val));
@@ -450,9 +372,12 @@ impl G5Genome {
         p.insert("sharpened_edge_cap_mm", 4.0 * 25.4);
         p.insert("blade_reach_max_mm", 85.725);
         let hs = p["hand_scale"];
-        let p0 = M50_PITCHES_MM[0] * hs;
-        let p1 = M50_PITCHES_MM[1] * hs;
-        let p2 = M50_PITCHES_MM[2] * hs;
+        // G5.0: finger (groove) pitches within RS-karambit-v5 [ergonomics.grip] groove_pitch_min/max_mm
+        let gp = &crate::requirements::rs_v5().ergonomics.grip;
+        let pitch = |m50: f64| (m50 * hs).clamp(gp.groove_pitch_min_mm, gp.groove_pitch_max_mm);
+        let p0 = pitch(M50_PITCHES_MM[0]);
+        let p1 = pitch(M50_PITCHES_MM[1]);
+        let p2 = pitch(M50_PITCHES_MM[2]);
         let l_g = p0 + p1 + p2 + p["dL"];
         let r_od = p["ring_od"] * 0.5;
         let r_b = FIXED_BORE_D_MM * 0.5;
@@ -470,14 +395,6 @@ impl G5Genome {
         p.insert("R_b", r_b);
         p.insert("x_t", x_t);
         p.insert("cx", cx);
-        p
-    }
-
-    /// Test-only decoder applying legacy v1 `web_t in [1.8, 4.0]` for `run6` / `g3hz_parity_v1.json` fixtures.
-    #[cfg(test)]
-    pub fn decode_legacy_v1_for_test(&self) -> BTreeMap<&'static str, f64> {
-        let mut p = self.decode();
-        p.insert("web_t", 1.8 + self.u[4].clamp(0.0, 1.0) * (4.0 - 1.8));
         p
     }
 
@@ -601,13 +518,14 @@ impl G5Rng {
     }
 }
 
-/// Generate a scrambled Joe-Kuo 179-dimension Sobol genome in $[0, 1]^{179}$ using
-/// `new-joe-kuo-6.21201` direction numbers with Matousek Linear Matrix Scrambling (LMS) + digital shift
-/// seeded by `seed_offset` (zero manual design bias, zero v1 seeds).
+/// Generate a scrambled Joe-Kuo Sobol genome in $[0, 1]^{139}$ (the first `G5_NUM_GENES` of the 179 tabulated
+/// `new-joe-kuo-6.21201` dimensions; any leading subset of a Sobol sequence is itself a Sobol sequence) with
+/// Matousek Linear Matrix Scrambling (LMS) + digital shift seeded by `seed_offset` (zero manual design bias, zero
+/// v1 or G3 seeds).
 pub fn sobol_unit_genome(index: usize, seed_offset: usize, decoder_commit: &str) -> G5Genome {
     let seed = (seed_offset as u64).wrapping_add(20_261_025);
     let tbl = crate::sobol_joe_kuo::Sobol179Table::scrambled(seed);
-    let u = tbl.point(index);
+    let u = tbl.point(index)[..G5_NUM_GENES].to_vec();
     G5Genome {
         schema: G5_SCHEMA.to_string(),
         decoder_commit: decoder_commit.to_string(),
@@ -615,10 +533,11 @@ pub fn sobol_unit_genome(index: usize, seed_offset: usize, decoder_commit: &str)
     }
 }
 
-/// Generate an unscrambled Joe-Kuo 179-dimension Sobol genome (`scipy.stats.qmc.Sobol(d=179, scramble=False)`).
+/// Generate an unscrambled Joe-Kuo Sobol genome (the first `G5_NUM_GENES` dimensions of
+/// `scipy.stats.qmc.Sobol(d=179, scramble=False)`).
 pub fn sobol_unit_genome_unscrambled(index: usize, decoder_commit: &str) -> G5Genome {
     let tbl = crate::sobol_joe_kuo::Sobol179Table::unscrambled();
-    let u = tbl.point(index);
+    let u = tbl.point(index)[..G5_NUM_GENES].to_vec();
     G5Genome {
         schema: G5_SCHEMA.to_string(),
         decoder_commit: decoder_commit.to_string(),
@@ -627,7 +546,7 @@ pub fn sobol_unit_genome_unscrambled(index: usize, decoder_commit: &str) -> G5Ge
 }
 
 /// Produce an offspring genome via self-adaptive `Iso+Line-DD` mutation and optional module-level
-/// crossover (`p = 0.15`), using reflective bounds in `[0, 1]^179` (`G3_GENOME_SPEC.md` §4).
+/// crossover (`p = 0.15`), using reflective bounds in `[0, 1]^139` (`G3_GENOME_SPEC.md` §4).
 /// Never applies any manual gene overrides.
 pub fn reproduce_iso_line_dd(
     parent_a: &G5Genome,
@@ -655,7 +574,7 @@ pub fn reproduce_iso_line_dd(
         }
     }
 
-    // 2. Self-adapt Module M step sizes (indices 174..179) via log-normal mutation with reflective bounds
+    // 2. Self-adapt Module M step sizes (the last 5 genes) via log-normal mutation with reflective bounds
     let m_start = G5_NUM_GENES - 5;
     let tau = 1.0 / (2.0 * (G5_NUM_GENES as f64).sqrt()).sqrt();
     for i in m_start..G5_NUM_GENES {
@@ -697,19 +616,36 @@ mod tests {
     use super::*;
 
     #[test]
-    fn g5_gene_table_has_179_genes_and_first_94_match_hzm_v2() {
+    fn g5_gene_table_has_139_unique_genes_without_texture_cppn_or_retired_genes() {
         assert_eq!(G5_GENES.len(), G5_NUM_GENES);
+        let mut names: Vec<&str> = G5_GENES.iter().map(|g| g.name).collect();
+        names.sort_unstable();
+        names.dedup();
+        assert_eq!(names.len(), G5_NUM_GENES, "gene names must be unique");
+        for gone in ["cppn_00", "cppn_31", "w_turing", "w_voronoi", "w_cppn", "turing_mix", "seed", "s1_in", "s1_sp",
+            "w_scallop_in", "w_tooth_in", "w_micro_in", "w_scallop_sp", "w_tooth_sp", "exo_open", "tip_radius"]
+        {
+            assert!(!names.contains(&gone), "{gone} is retired in G5.0");
+        }
+        for new in ["grip_perim", "grip_hot", "port_d", "point_angle", "point_len"] {
+            assert!(names.contains(&new), "{new} is a G5.0 gene");
+        }
         assert_eq!(G5_GENES[0].name, "ring_od");
-        assert_eq!(G5_GENES[10].name, "bore_round");
-        assert_eq!(G5_GENES[11].name, "hand_scale");
-        assert_eq!(G5_GENES[43].name, "jimp_d");
-        assert_eq!(G5_GENES[44].name, "tex_amp");
-        assert_eq!(G5_GENES[85].name, "cppn_31");
-        assert_eq!(G5_GENES[86].name, "skin_t");
-        assert_eq!(G5_GENES[92].name, "rib_w");
-        assert_eq!(G5_GENES[93].name, "neck_in");
-        assert_eq!(G5_GENES[174].name, "sigma_B");
-        assert_eq!(G5_GENES[178].name, "sigma_I");
+        assert_eq!(G5_GENES[G5_NUM_GENES - 5].name, "sigma_B");
+        assert_eq!(G5_GENES[G5_NUM_GENES - 1].name, "sigma_I");
+        // Gene bounds that encode RS-karambit-v5 requirements
+        let rs = crate::requirements::rs_v5();
+        let bounds = |n: &str| {
+            let g = G5_GENES.iter().find(|g| g.name == n).unwrap();
+            (g.lo, g.hi)
+        };
+        assert_eq!(bounds("angle_in"), (rs.edge.per_side_angle_min_deg, rs.edge.per_side_angle_max_deg));
+        assert_eq!(bounds("angle_sp"), (rs.edge.per_side_angle_min_deg, rs.edge.per_side_angle_max_deg));
+        assert_eq!(bounds("ser_pitch_in"), (rs.serration.pitch_min_mm, rs.serration.pitch_max_mm));
+        assert_eq!(bounds("ser_depth_sp"), (rs.serration.depth_min_mm, rs.serration.depth_max_mm));
+        assert_eq!(bounds("port_d").0, rs.am.port_d_min_mm);
+        assert!(bounds("grip_perim").0 <= rs.ergonomics.grip.perimeter_floor_mm);
+        assert!(bounds("grip_perim").1 >= rs.ergonomics.grip.perimeter_max_mm);
     }
 
     #[test]
@@ -788,14 +724,14 @@ mod tests {
         for (r, row_val) in first_8.iter().enumerate() {
             let pt = unscr.point(r);
             let row = row_val.as_array().unwrap();
-            assert_eq!(row.len(), G5_NUM_GENES);
+            assert_eq!(row.len(), 179);
             for (j, v) in row.iter().enumerate() {
                 let exp = v.as_f64().unwrap();
                 assert_eq!(pt[j].to_bits(), exp.to_bits(), "first_8[{r}][{j}] bit mismatch");
             }
         }
         let row_1023 = tv["row_1023"].as_array().expect("row_1023");
-        assert_eq!(row_1023.len(), G5_NUM_GENES);
+        assert_eq!(row_1023.len(), 179);
         for (j, v) in row_1023.iter().enumerate() {
             let exp = v.as_f64().unwrap();
             assert_eq!(u1023[j].to_bits(), exp.to_bits(), "row_1023[{j}] bit mismatch");

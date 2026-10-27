@@ -12,8 +12,6 @@ use crate::material::{self, AS_BUILT_WALL};
 use jarambit_physics::fine::{c_plane, corners, von_mises, Mesh, P2, T6};
 use serde::{Deserialize, Serialize};
 
-/// Gibson-Ashby relative stiffness exponent for stretching/bending-dominated TPMS network lattices.
-pub const GIBSON_ASHBY_EXP: f64 = 1.8;
 
 /// Combined service-temperature and thin-wall knock-down of an as-built wall of thickness `t_joint_mm`: its yield
 /// allowable over the room-temperature bulk yield of RS-karambit-v5 (replaces G3's `(t − 0.1)/t · 0.912`).
@@ -46,15 +44,16 @@ impl SandwichSection {
     }
 
     /// Analytic symmetric sandwich section with outer skins of thickness `skin_t` (each side),
-    /// interior cavity height $h_c = \max(0, t_{\text{env}} - 2 t_{\text{skin}})$, lattice density
-    /// $\rho \in [0.06, 1.0]$ ($\rho_e = \rho^{1.8}$), and optional mid-plane solid rib of half-thickness `rib_half_t`.
+    /// interior cavity height $h_c = \max(0, t_{\text{env}} - 2 t_{\text{skin}})$, a core of relative stiffness
+    /// `rel_stiffness` (`material::core_relative_stiffness`; 1 = solid), and optional mid-plane solid rib of
+    /// half-thickness `rib_half_t`.
     #[inline]
-    pub fn from_skin_and_lattice(t_env: f64, skin_t: f64, rho: f64, rib_half_t: f64) -> Self {
+    pub fn from_skin_and_lattice(t_env: f64, skin_t: f64, rel_stiffness: f64, rib_half_t: f64) -> Self {
         let t_env = t_env.max(0.05);
-        if rho >= 0.9999 || t_env <= 2.0 * skin_t {
+        if rel_stiffness >= 0.9999 || t_env <= 2.0 * skin_t {
             return Self::solid(t_env);
         }
-        let rho_e = rho.clamp(0.0, 1.0).powf(GIBSON_ASHBY_EXP);
+        let rho_e = rel_stiffness.clamp(0.0, 1.0);
         let hc = (t_env - 2.0 * skin_t.max(0.0)).max(0.0);
         let h_rib = (2.0 * rib_half_t.max(0.0)).min(hc);
         let t_mem = (t_env - hc) + rho_e * (hc - h_rib) + h_rib;
@@ -74,12 +73,12 @@ impl SandwichSection {
         cav_z: &[bool],
         z_coords: &[f64],
         h: f64,
-        rho: f64,
+        rel_stiffness: f64,
         rib_half_t: f64,
     ) -> Self {
         debug_assert_eq!(solid_z.len(), cav_z.len());
         debug_assert_eq!(solid_z.len(), z_coords.len());
-        let rho_e = rho.clamp(0.0, 1.0).powf(GIBSON_ASHBY_EXP);
+        let rho_e = rel_stiffness.clamp(0.0, 1.0);
         let mut n_solid = 0usize;
         let mut t_mem = 0.0_f64;
         let mut i_yy = 0.0_f64;
@@ -1748,7 +1747,7 @@ mod tests {
     #[test]
     fn hollow_sandwich_has_strictly_higher_bending_stiffness_and_lower_skin_stress_than_equal_mass_solid() {
         // 8 mm total envelope, 1.0 mm skins, 10 % TPMS infill -> true equal-mass solid thickness = 2*1.0 + 0.10*(8.0 - 2.0) = 2.60 mm (I10)
-        let sand = SandwichSection::from_skin_and_lattice(8.0, 1.0, 0.10, 0.0);
+        let sand = SandwichSection::from_skin_and_lattice(8.0, 1.0, 0.10_f64.powf(1.8), 0.0);
         let t_equal_mass: f64 = 2.0 * 1.0 + 0.10 * (8.0 - 2.0 * 1.0);
         assert!((t_equal_mass - 2.60).abs() < 1e-12);
         let eq_mass_solid = SandwichSection::solid(t_equal_mass);
