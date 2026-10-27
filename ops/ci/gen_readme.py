@@ -656,19 +656,33 @@ def g5v6_verification(r, rv):
             f'(rank correlation {sp["screen"]["spearman_tier0_tier1"]:.2f}). The 3× bar for adopting it is out of reach, so the search stays on the CPUs.']
 
 
-def g5v6_fem(rv):
-    """v6 on: the FEM renderings of every load case (g5-fem-fields), from their index in docs/g5/v<rv>/img/fem/."""
-    ix = js(f'docs/g5/v{rv}/img/fem/index.json')
-    L = ['## FEM renderings of every load case', '', ix['caption'], '', '<table>']
-    cases = ix['cases']
-    for k in range(0, len(cases), 2):
-        L.append('<tr>' + ''.join(f'<td width="50%"><img src="{c["svg"]}" alt="{c["title"]}" width="100%"><br>{c["title"]}: {c["reading"]}</td>'
-                                  for c in cases[k:k + 2]) + '</tr>')
+def g5v6_fem(r, rv):
+    """v6 on: the FEM renderings of every load case (g5-fem-fields, docs/g5/v<rv>/img/fem/figures.json). Fail closed:
+    the figures must be of this receipt's design and decoder, and every scored value they re-solve must match."""
+    fx = js(f'docs/g5/v{rv}/img/fem/figures.json')
+    if fx['design_id'] != r['design_id'] or fx['decoder_sha256'] != r['provenance']['decoder_sha256']:
+        raise SystemExit('gen_readme: the FEM figures are not of the winner of record')
+    gated = [x for x in fx['figures'] if x['gated']]
+    if fx['mismatches'] or not all(x['match'] for x in gated) or not all(x['match'] for x in fx['reproduced']):
+        raise SystemExit('gen_readme: a FEM rendering does not reproduce its scored value')
+    d = f'docs/g5/v{rv}/img/fem'
+    cell = lambda x: (f'<td width="50%"><img src="{d}/{x["svg"]}" alt="{x["title"]}" width="100%"><br>{x["title"]}: SF {x["sf"]:.2f}</td>'
+                      if x['gated'] else
+                      f'<td width="50%"><img src="{d}/{x["svg"]}" alt="{x["title"]}" width="100%"><br>{x["title"]}: hex8 FE SF {x["sf"]:.2f} '
+                      f'(score model {x["record_sf"]:.2f})</td>')
+    figs = fx['figures']
+    L = ['## FEM renderings of every load case', '',
+         f'Each load case of `{r["design_id"]}` re-solved by `g5-fem-fields` on the ranking grid (h {fx["h"]:g} mm), with the field the scored '
+         f'solvers discard: von Mises stress, the governing point and the deformed shape. The {len(fx["reproduced"])} scored values these solves '
+         'produce match the receipt bit for bit.', '', '<table>']
+    for k in range(0, len(figs), 2):
+        L.append('<tr>' + ''.join(cell(x) for x in figs[k:k + 2]) + '</tr>')
     L += ['</table>', '']
-    if ix.get('crosschecks'):
-        L += ['Independent hex8 voxel FE of the cases the score models analytically (a check, not used by the score):', '',
-              '| Case | Score model SF | Hex8 FE SF |', '|---|---:|---:|']
-        L += [f'| {c["title"]} | {c["model_sf"]:.2f} | {c["fe_sf"]:.2f} |' for c in ix['crosschecks']]
+    xc = [x for x in figs if not x['gated']]
+    if xc:
+        L += ['The score models grip squeeze, guard push and teeth analytically. The hex8 voxel FE of the same design is an independent '
+              'check, not used by the score:', '', '| Case | Score model SF | Hex8 FE SF |', '|---|---:|---:|']
+        L += [f'| {x["title"]} | {x["record_sf"]:.2f} | {x["sf"]:.2f} |' for x in xc]
         L.append('')
     return L
 
@@ -786,7 +800,7 @@ def readme_g5():
     # ---- v6: where the score comes from, the FEM renderings, the evolution (the comparison with the v5.0.0 winner is in
     # docs/RELEASES.md and the paper: the README describes only this release's best individual)
     if v6:
-        L += g5v6_fitness(r) + g5v6_fem(rv) + g5v6_evolution(r, rk, gc, man)
+        L += g5v6_fitness(r) + g5v6_fem(r, rv) + g5v6_evolution(r, rk, gc, man)
     # ---- evolution (v5.0.0)
     base_best = None if v6 else max(ev['baseline_final_best_score_100'])
     L += [] if v6 else ['## How evolution produced it', '',
