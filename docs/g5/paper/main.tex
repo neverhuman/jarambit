@@ -44,13 +44,16 @@ stress-relieved Ti-6Al-4V properties derated to $80\,^\circ\mathrm{C}$ service t
 law per face pair, and surface-class FKM high-cycle fatigue. Structural adequacy is evaluated across 16 load cases combining
 whole-blade sandwich-plate finite elements, a 12-direction ring sweep, Rayleigh--Ritz tip buckling, all-tooth
 serration checks (including end teeth), and a three-case quadratic tetrahedral (\code{TET10}) solid-tip submodel ($\gReqTipAxN$~N axial,
-$\gReqTipLatN$~N lateral, and $\gReqTipTwNm$~N$\cdot$m local tip twist). Across \gIslands{} independent MAP-Elites islands (\gEvalsIsland{} evaluations
-each, \gEvalsTotal{} total) compared against \gBaselineIslands{} scrambled-Sobol random-search baseline islands of equal budget,
-all \gBeatingBaseline{} evolving islands surpass the best random-search baseline island on the $h = \gH$~mm search grid
-(\gBaselineBest{} max; evolving cohort median \gCohortMed, range \gCohortMin--\gCohortMax). Re-evaluated at Tier~2 ($h = \gHRank$~mm),
-the winning design \gDesign{} scores \gScore{} under \code{W\_ERGOLIGHT\_v2} (ergonomic multiplier $E = \gE$, worst-margin
-multiplier $W = \gW$) at a finished partial-volume mass of \gMassFinishedG{}~g
-(\gMassG{}~g on the $h = \gHRank$~mm watertight mesh). We detail the literature provenance, decoder, load models, objective,
+$\gReqTipLatN$~N lateral, and $\gReqTipTwNm$~N$\cdot$m local tip twist). Release v\gRecord{} continues the v5.0.0 cohort with the
+decoder and objective unchanged, on one platform of record whose results are byte-identical across four hosts: from the
+\gVFiveElites{} re-evaluated v5.0.0 elites, \gIslands{} warm-started islands ran \gRounds{} rounds (\gEvalsTotal{} evaluations) with
+migration through a recorded pool lineage, raising the best search-grid score from \gPoolZeroBest{} to \gPoolFinalBest{}, \gLineageVsControl{}
+the best of \gControlIslands{} fresh-start control islands (\gControlBest). Re-evaluated at Tier~2 ($h = \gHRank$~mm), the winning
+design \gDesign{} scores \gScore{} under \code{W\_ERGOLIGHT\_v2} (hand multiplier $E = \gE$, worst-margin multiplier $W = \gW$),
+\gVsVFiveScore{} the v5.0.0 winner re-evaluated on the same platform (\gVFiveScore), at a finished partial-volume mass of
+\gMassFinishedG{}~g (\gMassG{}~g on the $h = \gHRank$~mm watertight mesh), and meets all \gCases{} load cases. We render the
+finite-element field of every load case, break the score into the points each requirement earns and the points the multipliers
+take, and report why a GPU pre-screen cannot pay for itself in this search. We detail the literature provenance, decoder, load models, objective,
 search, verification studies, evolutionary trajectory, and every remaining limitation of the computational result.
 \end{abstract}
 

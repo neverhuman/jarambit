@@ -1,28 +1,27 @@
 \section{Results}\label{sec:results}
-\subsection{Evolution and comparison with the random-search baseline}
-The cohort of record ran \gIslands{} evolving islands of \gEvalsIsland{} evaluations each (\gEvalsTotal{} total evaluations) on
-\gHost{} from \gStarted{} to \gFinished{} UTC, plus \gBaselineIslands{} scrambled-Sobol random-search control islands
-(\gBaselineEvals{} evaluations) under identical tier promotion and scoring. Fig.~\ref{fig:evo} plots the best score of every
-island against evaluations, compared with the random-search control. Whereas the \gBaselineIslands{} random-search control
-islands reached a best score of \gBaselineBest, \gBeatingBaseline{} of the \gIslands{} evolving islands surpassed that mark
-(cohort median rose from \gCohortSobolMed{} after the Sobol start to \gCohortMed). In the winning island (\gWinIsland, which
-started at \gScoreSobol{} after its Sobol initialization), the best score on the $h = \gH$~mm search grid reached \gScoreSearch;
-the winner of record \gDesign{} was first found at evaluation \gWinFoundEvals{} (\gWinnerSearchScore{} on the $h = \gH$~mm
-search grid and \gScore{} at Tier~2 on the $h = \gHRank$~mm ranking grid). Fig.~\ref{fig:lineage} shows the best design of
-\gWinIsland{} at each logged checkpoint from a fixed camera.
+\subsection{The continuation and its fresh-start control}
+Starting from the \gPoolZeroNiches{} niches of the re-evaluated v5.0.0 elites (best \gPoolZeroBest{} on the $h = \gH$~mm search
+grid), \gIslands{} warm-started islands ran \gRounds{} rounds of \gEvalsIsland{} evaluations on \gHostCount{} hosts (\gHostList;
+\gEvalsTotal{} evaluations in all, at most \gRoundDepth{} rounds deep on one host). The pool lineage (\gPools{} pools, Fig.~\ref{fig:evo})
+raised the best search-grid score by \gLineageGain{} to \gPoolFinalBest{}, over \gPoolFinalNiches{} niches in the final pool
+\gFinalPool. The \gControlIslands{} fresh-start control islands (\gControlEvals{} evaluations each, no pool) reached at best
+\gControlBest, so the lineage ended \gLineageVsControl{} the best fresh start. The winner of record \gDesign{} came from
+\gWinOrigin{} (\gWinnerSearchScore{} on the search grid, \gScore{} at Tier~2 on the $h = \gHRank$~mm ranking grid).
+Fig.~\ref{fig:lineage} shows the best design of pools of the lineage from a fixed camera.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{evolution.pdf}
-\caption{Best \code{W\_ERGOLIGHT\_v2} score found against evaluations across all \gIslands{} evolving islands (winning island
-\gWinIsland{} highlighted) against the scrambled-Sobol random-search control (\gBaselineBest{} max).}\label{fig:evo}
+\caption{Best \code{W\_ERGOLIGHT\_v2} score (Tier~1, $h = \gH$~mm) against the evaluations spent, log scale: the pool lineage
+from the re-evaluation of the v5.0.0 elites on (a step at each merge), the \gControlIslands{} fresh-start control islands as their
+best against their combined evaluations (best \gControlBest), and the v5.0.0 winner on the same grid (\gVFiveTierOne).}\label{fig:evo}
 \end{figure}
 
 \begin{figure*}[t]
 \centering
 \input{generated/lineage.tex}
-\caption{Best design of \gWinIsland{} at each logged checkpoint: evaluation count, \code{W\_ERGOLIGHT\_v2} score, and mass on
-the search grid. Fixed camera, lighting and material across all frames.}\label{fig:lineage}
+\caption{Best design of pools of the lineage: pool, \code{W\_ERGOLIGHT\_v2} score and mass on the search grid. Fixed camera,
+lighting and material across all frames.}\label{fig:lineage}
 \end{figure*}
 
 \subsection{Grid check and final Tier-2 ranking}
@@ -31,10 +30,8 @@ To verify grid independence, the top designs were evaluated across five voxel pi
 $0.15$~mm grids agree within \gGridAgree\,\%, and the search's $0.40$~mm mass matches the $0.20$~mm mass of record within
 \gGridSpanPct\,\%. Table~\ref{tab:top} lists the top designs from the final Tier-2 ranking (shortlist \gShortlist) at
 $h = \gHRank$~mm and $0.08~\mathrm{mm^2}$ solid-tip mesh resolution; the top eight rows span \gScore--\gTopLast. Re-ranking
-the shortlist at Tier~2 is essential: the search-grid leader \gSearchLeaderId{} (\gSearchLeaderTierOne{} at Tier~1, where the 1D
-section model estimated tip axial SF~\gSearchLeaderTipSecAx) drops to rank~\gSearchLeaderRank{} at Tier~2 (\gSearchLeaderTierTwo)
-because its 3D \code{TET10} solid-tip submodel carries the $\gReqTipAxN$~N axial case at SF~\gSearchLeaderTipSolAx{} (margin
-$v = \gSearchLeaderMargin$ against the $\gReqSfYield$ requirement). Because the plate's lateral safety factor is not monotone in the mesh (Section~\ref{sec:measure}),
+the shortlist at Tier~2 matters, because Tier~1 checks the tip with a section model and Tier~2 with the 3D \code{TET10} solid: the
+search-grid leader \gSearchLeaderId{} (\gSearchLeaderTierOne{} at Tier~1) is at \gSearchLeaderRank{} of the Tier-2 ranking. Because the plate's lateral safety factor is not monotone in the mesh (Section~\ref{sec:measure}),
 the winner is chosen on its plate cases re-solved at \gPlateCheckMeshes~mm$^2$ on the platform of record (whose production-mesh
 rows reproduce the ranking bit for bit): in rank order, the first design meeting every load case on every mesh. That is
 \gDesign, with worst margin $\mu = \gWorstMarginRatio$ over the meshes (\gWorstMarginProdMesh{} on the production mesh).
@@ -75,7 +72,8 @@ wedge, and the spine edge with its rounded-gullet serrations, as decoded (before
 
 \subsection{The best individual (\gDesign)}
 The winning individual, \gDesign{} (genome hash \gGenomeSha), scores \gScore{} under \code{W\_ERGOLIGHT\_v2} with weighted base
-\gBase, ergonomic multiplier $E = \gE$ ($E^5 = \gEFive$), and worst-margin multiplier $W = \gW$ (worst safety-factor ratio
+\gBase, hand multiplier $E = (\prod_j e_j^{\beta_j})^{\gEExp} = \gE$ ($\prod_j e_j^{\beta_j} = \gEGeo$), and worst-margin multiplier
+$W = \gW$ (worst safety-factor ratio
 $\mu = \gWorstMarginRatio$ on \gWorstMarginCase). Its finished partial-volume mass of record at $h = \gHRank$~mm is
 \gMassFinishedG{}~g (\gMassG{}~g on the watertight print mesh; solid outer envelope \gVolEnv{}~$\mathrm{mm^3}$, \gMassEnvG{}~g).
 Its grip is \gLg{}~mm long with a swell perimeter of \gSwellPerim{}~mm ($84$--$100$~mm target band) and height-to-thickness ratio
@@ -129,8 +127,8 @@ Tip buckling $\lambda$ ($\gReqTipAxN$~N, Ritz) & \gLoadBuckling & $\ge \gReqBuck
 \end{table}
 
 \begin{table}[t]
-\caption{Verification studies (\code{evidence/g5/v\gRecord/vv/} and \code{release.json}): plate refinement, solid-tip
-refinement and solver checks}\label{tab:vv}
+\caption{Verification studies (\code{evidence/g5/v5.0.0/vv/}, unchanged decoder, and \code{release.json}): plate refinement,
+solid-tip refinement and solver checks}\label{tab:vv}
 \centering
 \EItablefont
 \setlength{\tabcolsep}{2.4pt}
@@ -144,7 +142,7 @@ Tip \code{TET10} (sec/$0.15/0.08$) & Axial SF & \gVvTipAxA & \gVvTipAxB & \gVvTi
 Tip \code{TET10} (sec/$0.15/0.08$) & Lateral SF & \gVvTipLatA & \gVvTipLatB & \gVvTipLatC \\
 Tip \code{TET10} (sec/$0.15/0.08$) & Twist SF & \gVvTipTwA & \gVvTipTwB & \gVvTipTwC \\
 Tier-1 determinism & Archive rows & \gCohortElites & --- & \gTierOneReproduced{} exact \\
-Linux \code{x86\_64} Tier 2 & Max rel.\ diff & \gLinuxDesigns{} top & --- & \gLinuxMaxRelDiff \\
+Cross-host re-run & History entries & \gReproEvals{} evals & --- & \gReproEntries{} exact \\
 Ritz vs.\ Euler column & $|\Delta P_\mathrm{cr}|/P_\mathrm{cr}$ & --- & --- & \gVvRitzErr \\
 \bottomrule
 \end{tabular}
@@ -155,4 +153,32 @@ Ritz vs.\ Euler column & $|\Delta P_\mathrm{cr}|/P_\mathrm{cr}$ & --- & --- & \g
 \includegraphics[width=\linewidth]{edge_sections.pdf}
 \caption{Upper half of the blade cross-section at four stations along each edge of \gDesign, true scale, measured normal to
 the serrated edge from the exact decoder law (dashed: $\gReqEdgeMin^\circ$ per side, the requirement's minimum).}\label{fig:edges}
+\end{figure}
+
+\subsection{Against the v5.0.0 winner on the same platform}
+Re-evaluated on the v\gRecord{} platform of record, the v5.0.0 winner \gVFiveId{} scores \gVFiveScore{} at Tier~2 (\gVFiveTierOne{}
+at Tier~1 on the search grid), with worst margin \gVFiveWorst, \gVFiveMet{} of \gCases{} load cases met and \gVFiveMass~g; its
+v5.0.0 record was made on \code{arm64}. \gDesign{} scores \gScore, \gVsVFiveScore{} the v5.0.0 winner, with worst margin
+\gWorstMarginRatio{}, \gCasesMet{} of \gCases{} cases met and \gMassFinishedG~g (\gVsVFiveMass{} it). Its hand multiplier is
+$E = \gE$ (v5.0.0: \gVFiveE), with grip length and perimeter \gLg{} and \gSwellPerim~mm (v5.0.0: \gVFiveLg{} and \gVFivePerim~mm).
+
+\subsection{Where the score comes from}
+The score is $100\,E\,W\,\mathrm{base}$, so its 100 points split into what the design earns, what the two multipliers take and the
+credit its terms fall short of (Fig.~\ref{fig:budget}). \gDesign{} earns \gBudgetEarned: structural safety \gBudgetStruct{} (the
+\gCases{} load-case margins), mass \gBudgetMass, cutting geometry \gBudgetCut{} (edge, point and serrations) and build and form
+\gBudgetBuild. The multipliers take \gBudgetLost{} ($E = \gE$, $W = \gW$) and \gBudgetUnmet{} is unmet credit
+($1 - \mathrm{base}$). Each term's points against the most it could earn are in Fig.~\ref{fig:terms}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fitness_budget.pdf}
+\caption{The 100 points of the score of \gDesign: earned by group, lost to the multipliers ($100\,\mathrm{base}\,(1 - E\,W)$) and
+unmet credit ($100\,(1 - \mathrm{base})$). The three sum to 100 (\code{g5-release fitness}).}\label{fig:budget}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fitness_terms.pdf}
+\caption{Points earned by each weighted term of \gDesign{} (bars, coloured by group) against $100 \times$ its weight, the most it
+could earn at full credit with $E = W = 1$ (tracks).}\label{fig:terms}
 \end{figure}

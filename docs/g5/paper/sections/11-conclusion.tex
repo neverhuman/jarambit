@@ -5,11 +5,13 @@ perimeter, palm-swell aspect ratio, rounded-gullet serrations, sheet-TPMS wall t
 expressed directly in requirement units, so every candidate has a full-sized handle and width-checked drainage; the point
 angle is a continuous penalty rather than a construction rule (the winner measures \gPointAngleThree\textdegree{} at
 3~mm against a $\gReqPtThree^\circ$ target). In \code{W\_ERGOLIGHT\_v2} the multiplicative worst-margin factor $W$ and the
-ergonomic multiplier $E^5$ make it costly, not impossible, to trade structural adequacy or hand comfort for grams.
-Across \gEvalsTotal{} evaluations on \gIslands{} islands, all \gBeatingBaseline{} evolving islands beat the best island of
-an equal-budget scrambled-Sobol random search on the $h = \gH$~mm search grid (\gBaselineBest; evolving median \gCohortMed).
-The best individual \gDesign{} scores \gScore{} at Tier~2 ($h = \gHRank$~mm), weighs \gMassFinishedG{}~g (finished partial
-volume; \gMassG{}~g print mesh) and meets every load case, with worst margin ratio $\mu = \gWorstMarginRatio$ as the minimum
-over the plate meshes \gPlateCheckMeshes~mm$^2$ (\gWorstMarginProdMesh{} on the production mesh) and ergonomic multiplier
-$E = \gE$. It is a computational design: printing, stress relief, grinding of the bevels and mechanical tests against the
-evidence gaps of Section~\ref{sec:limits} are the next steps, before any claim of fitness for use.
+hand multiplier $E$ (the \gEExp th power of the weighted product of the hand factors) make it costly, not impossible, to trade
+structural adequacy or hand comfort for grams. v\gRecord{} continued the v5.0.0 cohort on one platform of record: from the
+re-evaluated v5.0.0 elites, \gIslands{} warm-started islands in \gRounds{} rounds (\gEvalsTotal{} evaluations) raised the best
+search-grid score from \gPoolZeroBest{} to \gPoolFinalBest, \gLineageVsControl{} the best of \gControlIslands{} fresh-start control
+islands (\gControlBest). The best individual \gDesign{} scores \gScore{} at Tier~2 ($h = \gHRank$~mm), \gVsVFiveScore{} the
+v5.0.0 winner on the same platform (\gVFiveScore), weighs \gMassFinishedG{}~g (finished partial volume; \gMassG{}~g print mesh)
+and meets every load case, with worst margin ratio $\mu = \gWorstMarginRatio$ as the minimum over the plate meshes
+\gPlateCheckMeshes~mm$^2$ and hand multiplier $E = \gE$. Of its 100 points it earns \gBudgetEarned; the multipliers take
+\gBudgetLost{} and \gBudgetUnmet{} is unmet credit. It is a computational design: printing, stress relief, grinding of the bevels
+and mechanical tests against the evidence gaps of Section~\ref{sec:limits} are the next steps, before any claim of fitness for use.

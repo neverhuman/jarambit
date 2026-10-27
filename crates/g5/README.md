@@ -17,6 +17,21 @@ G5 started as a copy of the validated G3 crate ([`crates/g3`](../g3/README.md), 
 Reviewed pull requests then changed it to RS-karambit-v5. `crates/g4` is the withdrawn v4.0.0 prototype (see its
 `WITHDRAWN.md`); G5 does not use it.
 
+## Tools (`src/bin/`, outside the decoder hash)
+
+| Tool | What it does |
+|---|---|
+| `g5-evolve` | One island of a cohort: scrambled-Sobol start, then the CVT MAP-Elites search (the v5.0.0 cohort). |
+| `g5-continue` | v6.0.0 continuation. `run` is one island from a pool (or a Sobol start). `reeval` evaluates genomes at Tier 1. `merge` keeps the best record per niche over archives, in a recorded order. `screen` measures the Tier-0 pre-screen against Tier 1. Every record read from disk must re-score bit for bit. |
+| `g5-pilot` | Re-evaluation of archived designs: `eval` (Tier 1), `tier2`, `hconv` (five grids), `export` (watertight STL). |
+| `g5-release` | The release receipt. `receipt` (v5.0.0); `receipt-v6`, which recomputes every merge of the lineage (`g5_release/v6.rs`); `top`; `plate-meshes` (B1); and `fitness` (the 100-point budget and per-term figures). |
+| `g5-release-tex` | The paper's LaTeX macros, from the receipt. |
+| `g5-vv` | The verification studies behind the decoder freeze (`evidence/g5/v5.0.0/vv/`). |
+| `g5-export-stl` | The CAD kit of a genome: STL, 3MF, DXF and the print spec. |
+| `g5-gripfe`, `g5-tipconv`, `g5-bladefacts`, `g5-bladefield`, `g5-edgeprofile` | Release checks and figures inherited from v3.0.0: hex8 grip FE, tip mesh convergence, blade facts, the blade thickness field and the edge sections. |
+
+`src/bin/g5_shared/archive.rs` holds the archive rows shared by `g5-continue` and `g5-release`: reading, bit-exact re-scoring, writing and merging.
+
 ## What G5 changed from G3
 
 In order (`docs/RELEASES.md`):
