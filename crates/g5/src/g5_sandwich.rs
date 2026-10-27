@@ -657,6 +657,8 @@ pub struct RingCaseResult {
 pub struct RingBandSummary {
     pub bearing: RingCaseResult,
     pub back: RingCaseResult,
+    /// Lowest capacity of the bore bearing band over 12 directions (N).
+    pub any_direction_min_capacity_n: f64,
     pub joint_k: f64,
     pub t_joint: f64,
     pub n_el: usize,
@@ -837,10 +839,12 @@ pub fn solve_ring_band_t6(
         r_out = max_r_rear;
     }
 
-    let assemble_band_load = |is_bearing: bool| -> Option<(Vec<f64>, f64, usize)> {
-        // Owner 2026-10-25 (~02:15Z, fe2d.py v3): both handle-side bore bearing (+/-60 deg about theta=0)
-        // and outer ring-back push in +x (`dirx = +1.0`).
-        let dirx = 1.0_f64;
+    // Bearing band of +/-60 deg on the bore centred at `theta_c`, pushing the bore outward along theta_c (the owner's
+    // bearing case is theta_c = 0, toward the handle); `None` selects the owner's ring-back case (outer rear, +x).
+    let assemble_band_load = |bearing_at: Option<f64>| -> Option<(Vec<f64>, f64, usize)> {
+        let is_bearing = bearing_at.is_some();
+        let theta_c = bearing_at.unwrap_or(0.0);
+        let (dirx, diry) = if is_bearing { (theta_c.cos(), theta_c.sin()) } else { (1.0, 0.0) };
         let mut f = vec![0.0; n6 * 2];
         let mut lb = 0.0_f64;
         let mut n_load = 0usize;
@@ -857,7 +861,9 @@ pub fn solve_ring_band_t6(
                 let rq = (xq - cx).hypot(yq);
                 let in_band = if is_bearing {
                     let thq = yq.atan2(xq - cx);
-                    (rq < r_b + 1.5) && (thq.abs() < 60.0_f64.to_radians())
+                    let dth = (thq - theta_c + std::f64::consts::PI).rem_euclid(2.0 * std::f64::consts::PI)
+                        - std::f64::consts::PI;
+                    (rq < r_b + 1.5) && (dth.abs() < 60.0_f64.to_radians())
                 } else {
                     (xq < cx - 0.7 * r_od) && (rq > r_out - 1.5)
                 };
@@ -871,6 +877,7 @@ pub fn solve_ring_band_t6(
                 let n_shape = t6_shape(&l);
                 for (k, &nd) in t6_nodes.iter().enumerate() {
                     f[nd * 2] += dirx * wq * n_shape[k];
+                    f[nd * 2 + 1] += diry * wq * n_shape[k];
                 }
             }
         }
@@ -884,8 +891,8 @@ pub fn solve_ring_band_t6(
     };
 
     let jk = joint_k(t_joint);
-    let eval_case = |is_bearing: bool| -> Option<RingCaseResult> {
-        let (f, lb, n_load_pts) = assemble_band_load(is_bearing)?;
+    let eval_case = |bearing_at: Option<f64>| -> Option<RingCaseResult> {
+        let (f, lb, n_load_pts) = assemble_band_load(bearing_at)?;
         let mut f_free = vec![0.0; nf];
         for (d, &g) in map.iter().enumerate() {
             if g >= 0 {
@@ -939,11 +946,16 @@ pub fn solve_ring_band_t6(
         })
     };
 
-    let bearing = eval_case(true)?;
-    let back = eval_case(false)?;
+    let bearing = eval_case(Some(0.0))?;
+    let back = eval_case(None)?;
+    // RS-karambit-v5 [loads.ring] any_direction_n: the bore bearing band swept round the ring every 30 deg
+    let any_direction_min_capacity_n = (0..12)
+        .filter_map(|k| eval_case(Some((k as f64 * 30.0).to_radians())).map(|c| c.capacity_n))
+        .fold(f64::INFINITY, f64::min);
     Some(RingBandSummary {
         bearing,
         back,
+        any_direction_min_capacity_n,
         joint_k: jk,
         t_joint,
         n_el: mesh.tris.len(),

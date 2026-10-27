@@ -70,13 +70,26 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
 
    Still to do: the finishing allowance (printed against finished geometry) and the declared build orientation for
    face classes.
-4. **Load cases:**
-   - lateral 12/18 N·m and twist 16.2 N·m, reacted by a hand model;
-   - the tip set (150 N, 10 N, 0.3 N·m);
-   - grip 800 N, guard 300 N, pull 600 N;
-   - the ring at 300 N in every direction plus the owner's 300 N / 30 N at SF 2;
-   - the teeth;
-   - buckling under the tip axial load.
+4. **Load cases.** Done for Tiers 0 and 1, in `loads.rs`; recorded on every evaluation as `G5EvalRecord::loads`.
+   - **Blade sections:** integrated from the decoded thickness law along the smoothed midline. Each force is resolved
+     into axial force, bending through the thickness, in-plane bending and torsion, so a claw's offset point loads
+     its body in torsion.
+   - **Cases:**
+     - lateral 12 N·m (SF 1.2) and 18 N·m ultimate (SF 1.3), applied 5 mm behind the point;
+     - body twist 16.2 N·m over the working span;
+     - tip axial 150 N, tip side 10 N and tip twist 0.3 N·m;
+     - pull 600 N with the last 20 mm held;
+     - the teeth (180 N snag; 60 N pry shared by three teeth; end teeth included);
+     - grip squeeze 800 N, guard push 300 N;
+     - the ring 300 N / 30 N at SF 2, plus 300 N in 12 directions;
+     - fatigue by surface class (a hollow blade's cavity faces are as-built);
+     - the blade-before-hand sequence per load case;
+     - buckling of the point under 150 N, as a Rayleigh-Ritz column (checked against Euler).
+   - **Tier-1 plate:** the whole blade at 0.3 mm². Windows are traced as conforming mesh holes (marching squares on
+     the decoder's window field), and the loads are smooth: a 2 mm patch, a couple on the blade body, a held 20 mm
+     region. Lateral and twist agree within 10 % between 0.3 and 0.15 mm²; G3's plate did not converge.
+
+   Still to do: the solid-tip TET10 (Tier 2) with the RS-v5 tip loads, and the ergonomic contact pressures.
 5. **`W_ERGOLIGHT_v2`**, continuous and with no hard gates:
    - safety-factor credit `0.94·v⁴` below the requirement, plus a worst-margin term;
    - the blunt-point penalty;

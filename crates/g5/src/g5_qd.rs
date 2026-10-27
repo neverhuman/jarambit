@@ -60,6 +60,7 @@ pub fn g5_decoder_sha256_uncached() -> String {
         include_str!("g5_qd.rs"),
         include_str!("requirements.rs"),
         include_str!("material.rs"),
+        include_str!("loads.rs"),
         include_str!("../../../requirements/RS-karambit-v5.toml"),
         include_str!("../../physics/src/fine.rs"),
         include_str!("../../physics/src/solid_tet10.rs"),
@@ -189,6 +190,8 @@ pub struct G5EvalRecord {
     pub descriptors: G5Descriptors,
     /// Sealed (undrainable) cavity volume and removed floating solid measured on `d_am` (zero at Tier 0).
     pub am_connectivity: AmConnectivityStats,
+    /// RS-karambit-v5 load cases (`loads`): analytic at Tier 0, blade cases by plate FE from Tier 1.
+    pub loads: crate::loads::G5Loads,
 }
 
 /// Exact perimeter of an asymmetric superellipse section with top semi-height `a_top`, bottom
@@ -524,9 +527,9 @@ pub fn measure_blade_edge_apex_and_angle(
 /// on a gullet floor are floor texture, not load-bearing teeth); its
 /// root section is the segment between them, with the thickness of the exact blade law sampled along it. Two load
 /// cases on the tooth tip, at the tooth height above the root:
-/// - snag: `TOOTH_SNAG_N` along the edge (in-plane bending of the root), times the gullet notch factor
+/// - snag: `tooth_snag_n()` along the edge (in-plane bending of the root), times the gullet notch factor
 ///   `Kt = 1 + 2 sqrt(d / rho)` (Inglis) with rho the gullet radius fitted through the cut at +-0.6 mm;
-/// - pry: `TOOTH_PRY_N` across the blade (out-of-plane bending of the root, thickness t(s)).
+/// - pry: `tooth_pry_per_tooth_n()` across the blade (out-of-plane bending of the root, thickness t(s)).
 /// Returns (min SF over teeth and cases, teeth counted, mean flank angle atan(2 d / w) in degrees; w = gullet width).
 pub fn serration_tooth_strength(
     p: &BTreeMap<&'static str, f64>,
@@ -554,7 +557,16 @@ pub fn serration_tooth_strength(
     };
     let (mut sf_min, mut flank_sum) = (f64::INFINITY, 0.0_f64);
     let mut teeth = 0usize;
-    for w in gullets.windows(2) {
+    // RS-karambit-v5 [serration] check_end_teeth: the outermost teeth stand between the first (last) gullet and a
+    // virtual end one mean gullet spacing beyond it, so they are checked too (G3 skipped them)
+    let mut stations = gullets.clone();
+    if rs_v5_check_end_teeth() && gullets.len() >= 2 {
+        let span = (gullets[gullets.len() - 1] - gullets[0]) / (gullets.len() - 1);
+        stations.insert(0, gullets[0].saturating_sub(span));
+        stations.push((gullets[gullets.len() - 1] + span).min(n - 1));
+    }
+    let (snag_n, pry_n) = (tooth_snag_n(), tooth_pry_per_tooth_n());
+    for w in stations.windows(2) {
         let (ga, gb) = (w[0], w[1]);
         let (pa, pb) = ((xs[ga], edge[ga]), (xs[gb], edge[gb]));
         let b = (pb.0 - pa.0).hypot(pb.1 - pa.1);
@@ -598,10 +610,12 @@ pub fn serration_tooth_strength(
             let area2 = ((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)).abs();
             if area2 < 1e-12 { 1e3 } else { a * bb * cc / (2.0 * area2) }
         };
-        let rho = rho_at(ga).min(rho_at(gb)).max(0.02);
+        let is_gullet = |g: usize| gullets.contains(&g);
+        let rho_g = |g: usize| if is_gullet(g) { rho_at(g) } else { 1e3 };
+        let rho = rho_g(ga).min(rho_g(gb)).max(0.02);
         let kt = 1.0 + 2.0 * (h_t / rho).sqrt();
-        let sig_snag = kt * TOOTH_SNAG_N * h_t * c / i_ip;
-        let sig_pry = TOOTH_PRY_N * h_t * (0.5 * t_max) / i_op;
+        let sig_snag = kt * snag_n * h_t * c / i_ip;
+        let sig_pry = pry_n * h_t * (0.5 * t_max) / i_op;
         sf_min = sf_min.min(allow / sig_snag.max(sig_pry).max(1e-9));
         flank_sum += (2.0 * h_t / (0.5 * b).max(1e-6)).atan().to_degrees();
         teeth += 1;
@@ -609,10 +623,20 @@ pub fn serration_tooth_strength(
     (sf_min, teeth, if teeth > 0 { flank_sum / teeth as f64 } else { 0.0 })
 }
 
-/// Serration tooth load cases (`SERR-4`): a snag along the edge on one tooth (a hard draw-cut catching a single tooth)
-/// and a lateral pry on one tooth. Conservative research assumptions, not measured use loads.
-pub const TOOTH_SNAG_N: f64 = 180.0;
-pub const TOOTH_PRY_N: f64 = 60.0;
+/// Serration tooth loads (RS-karambit-v5 [loads.teeth]): a snag along the edge on one tooth.
+pub fn tooth_snag_n() -> f64 {
+    crate::requirements::rs_v5().loads.teeth.snag_n
+}
+
+/// Lateral pry per tooth: [loads.teeth] pry_n shared over pry_teeth_sharing teeth.
+pub fn tooth_pry_per_tooth_n() -> f64 {
+    let t = &crate::requirements::rs_v5().loads.teeth;
+    t.pry_n / t.pry_teeth_sharing as f64
+}
+
+fn rs_v5_check_end_teeth() -> bool {
+    crate::requirements::rs_v5().serration.check_end_teeth
+}
 
 /// Max triangle area (mm^2) of the Tier-2 solid-tip TET10 planform mesh (converged on sharp points; see P6).
 pub const TIP_FE_MAX_AREA_MM2: f64 = 0.15;
@@ -1041,6 +1065,11 @@ pub fn evaluate_tier0_analytic(genome: &G5Genome) -> G5EvalRecord {
     };
 
     let _ = m_blade_total;
+    let mut loads = crate::loads::analytic_loads(&p, &blade, ring_bearing_cap_n, ring_back_cap_n);
+    loads.teeth_sf = [true, false]
+        .iter()
+        .map(|&inner| serration_tooth_strength(&p, &blade, inner).0)
+        .fold(f64::INFINITY, f64::min);
     G5EvalRecord {
         schema: genome.schema.clone(),
         decoder_sha256: g5_decoder_sha256(),
@@ -1050,6 +1079,7 @@ pub fn evaluate_tier0_analytic(genome: &G5Genome) -> G5EvalRecord {
         score,
         descriptors,
         am_connectivity: AmConnectivityStats::default(),
+        loads,
     }
 }
 
@@ -1286,8 +1316,16 @@ fn evaluate_tier1_with_grid(genome: &G5Genome, h_vox: f64) -> (G5EvalRecord, Vox
         {
             rec.inputs.ring_bearing_cap_n = rb_res.bearing.capacity_n;
             rec.inputs.ring_back_cap_n = rb_res.back.capacity_n;
+            let ring = &crate::requirements::rs_v5().loads.ring;
+            rec.loads.ring_bearing_sf = rb_res.bearing.capacity_n / ring.bearing_n;
+            rec.loads.ring_back_sf = rb_res.back.capacity_n / ring.back_n;
+            rec.loads.ring_any_direction_sf = rb_res.any_direction_min_capacity_n / ring.any_direction_n;
         }
     }
+
+    // RS-karambit-v5 blade cases on the fine whole-blade plate (`loads::plate_blade_cases`). If the mesh or a checked
+    // solve fails, the Tier-0 analytic values stay and the record keeps `blade_model = "analytic"`.
+    let _ = crate::loads::plate_blade_cases(&p, &blade, &mut rec.loads);
 
     // Solve SandwichPlate on the blade domain for all plate structural terms (`B2`, `B3`, `I6`, `N1`).
     // Fail-closed: zero out all Tier-0 analytic blade estimates before running the checked plate solver.
