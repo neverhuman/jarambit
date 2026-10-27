@@ -14,7 +14,7 @@ def cad_readme():
 
 def is_g5():
     v = open(os.path.join(ROOT, 'docs/VERSION')).read().strip()
-    return v.startswith('5.') and os.path.exists(os.path.join(ROOT, 'evidence/g5/RECORD'))
+    return int(v.split('.')[0]) >= 5 and os.path.exists(os.path.join(ROOT, 'evidence/g5/RECORD'))
 
 
 def release():
@@ -159,6 +159,9 @@ class GenReadme(unittest.TestCase):
         if is_g5():
             # the G3 winner of record and its headline numbers belong to docs/g3/, not to the G5 README
             old_ids.extend(['hz4i013_g00995_d206e3c9', 'hz4i008_g00849_597619df', 'hz4i', 'W_ERGOLIGHT_v1'])
+            _, rec = release()
+            if 'lineage' in rec and rec['design_id'] != 'kv4i012_g00009_dd6ffea5':
+                old_ids.append('kv4i012_g00009_dd6ffea5')  # the v5.0.0 winner: its comparison is in docs/RELEASES.md and the paper
         for doc in (readme(), cad_readme()):
             for old in old_ids:
                 self.assertNotIn(old, doc, old)
@@ -188,7 +191,7 @@ class PublicWording(unittest.TestCase):
     def test_diagnostics_are_listed_and_hashed(self):
         _, rec = release()
         if is_g5():
-            d = os.path.join(ROOT, f'evidence/g5/v{rec["version"]}/vv')
+            d = os.path.join(ROOT, rec['provenance']['vv'])  # v6 keeps the v5.0.0 studies of the unchanged decoder
             sums = dict(reversed(l.split()) for l in open(os.path.join(d, 'SHA256SUMS')) if l.strip())
             self.assertGreaterEqual(len(sums), 3)
             for fname, expected_sha in sums.items():
