@@ -68,6 +68,8 @@ pub const HANDZONE_SDF_BLUR_SIGMA_MM: f64 = 0.4;
 pub struct AmConnectivityStats {
     pub sealed_void_mm3: f64,
     pub floating_solid_mm3: f64,
+    /// False until the AM field has been built and checked (Tier 0 does not build it)
+    pub measured: bool,
 }
 
 /// 3D regular voxel grid dimensions and origin.
@@ -1076,7 +1078,7 @@ pub fn enforce_am_connectivity(
     let hv = h as f64;
     let dv = hv * hv * hv;
     let r_clear = (0.5 * drain_channel_min_mm) as f32;
-    let mut stats = AmConnectivityStats::default();
+    let mut stats = AmConnectivityStats { measured: true, ..Default::default() };
     let exterior = |idx: usize| d_env.is_some_and(|env| env[idx] >= 0.0);
     let wide = |idx: usize| d_am[idx] > 0.0 && (exterior(idx) || d_am[idx] >= r_clear);
     let nbrs6 = |i: usize, j: usize, k: usize| {
@@ -1733,12 +1735,13 @@ pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D
         let y_center = y_root_mid + (y_tip - y_root_mid) * u.powf(1.35) + arch + sweep_shift;
         let h_u_g3 = h_root * (1.0 - u).max(0.0).powf(h_exp)
             + 2.0 * dist_to_tip * (0.5 * p["tip_angle"].to_radians()).tan() * u;
-        // G5.0 point module (owner 2026-10-27: penalise a blunt point): within `point_len` of the tip the blade is
-        // no wider than a rounded wedge of `point_angle`, fading back to the G3 law over the next 4 mm. G3's
-        // (1 - u)^h_exp law with h_exp < 1 made a bullet nose (the G3 winner: 110 deg at 1 mm).
+        // G5.0 point module: within `point_len` of the tip the planform is a rounded wedge of `point_angle`, fading
+        // to the G3 law over the next 4 mm, so the gene sets the point directly (sharper or stouter). G3's
+        // (1 - u)^h_exp law could make a bullet nose (the G3 winner: 110 deg at 1 mm) or a needle that cannot carry
+        // the RS-karambit-v5 tip loads.
         let w_pt = 1.0 - smoothstep(p["point_len"], p["point_len"] + 4.0, dist_to_tip);
         let h_wedge = 2.0 * rounded_wedge_half_width(dist_to_tip, p["point_angle"], POINT_TIP_RADIUS_MM);
-        let h_u = h_u_g3 * (1.0 - w_pt) + h_u_g3.min(h_wedge) * w_pt;
+        let h_u = h_u_g3 * (1.0 - w_pt) + h_wedge * w_pt;
         let h_half = 0.5 * h_u.max(0.08);
 
         // Cosine basis modulation (vanishes at u=0 and u=1, and faded inside tip_reserve)

@@ -222,7 +222,7 @@ pub static G5_GENES: [GeneSpec; G5_NUM_GENES] = [
     lin_gene!("edge_sp_c8", B, -0.75, 0.75, 0.0),
     // Thickness & 3D cross-section ridge + fuller corrugation
     lin_gene!("t_core", B, 4.0, 7.0, 5.8),
-    lin_gene!("t_tip", B, 1.5, 4.5, 2.4),
+    lin_gene!("t_tip", B, 1.5, 5.0, 2.4), // G5.0: a stout point can carry the tip loads
     lin_gene!("taper_x0", B, 0.35, 0.80, 0.55),
     lin_gene!("fuller_depth", B, 0.0, 1.8, 0.9),
     lin_gene!("fuller_width", B, 3.0, 10.0, 6.0),
@@ -240,7 +240,7 @@ pub static G5_GENES: [GeneSpec; G5_NUM_GENES] = [
     lin_gene!("win_s1", B, 0.45, 0.85, 0.68),
     lin_gene!("win_angle", B, -40.0, 40.0, 15.0),
     // ---- Module E: Double-edged, double-serrated bevels + tip_reserve (22 genes, 114..136) ----
-    lin_gene!("tip_reserve", E, 6.0, 12.0, 8.0),
+    lin_gene!("tip_reserve", E, 4.0, 12.0, 8.0), // G5.0: the tip may thicken sooner (tip twist)
     lin_gene!("t_0p25_target", E, 0.18, 0.28, 0.24),
     lin_gene!("t_1p00_target", E, 0.38, 0.56, 0.48),
     lin_gene!("t_2p00_target", E, 0.65, 0.95, 0.82),
