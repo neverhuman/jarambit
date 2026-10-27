@@ -53,6 +53,17 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
     longer divides the stress by that factor before applying Marin factors (audit F-M-2). RS-v5
     `stiffness_uses_effective_thickness` is now `false`: Xie's law is fitted to nominal-section stress, so the rough
     layer is counted once.
+  - **Decoder G5.0** (139 genes):
+    - **Removed:** the texture CPPN, the dead genes, the cusped serration shapes and `exo_open`.
+    - **Added:** grip perimeter and H/T genes (the swell section is built to them), a port-diameter gene, and a
+      point-angle and point-length module (a rounded wedge that caps the point's width).
+    - **Bounds and rules:**
+      - RS-v5 bounds for edge angle, serrations, guard and hand-edge radius;
+      - finger pitch 19–21 mm;
+      - gullet radius ≥ 0.5 mm by construction;
+      - a sheet-TPMS lattice ≥ 0.8 mm;
+      - ports in every hollow zone, clear of the rib and cut through the sheet, plus drain tunnels in the shear webs.
+    - **Sobol designs:** h 0.4 and h 0.2 masses agree within 0.6 %.
   - **Finding on G3.** Under this rule, the G3 v3.0.0 winner's lattice reaches its 2.8 mm powder ports only through
     two 0.85 mm slits beside the 1.1 mm mid-plane rib. Its cavity counts as undrainable (13,005 mm³). This is a G3
     decoder limitation: depowdering of the G3 design is unverified. The G5 decoder must place ports clear of ribs.

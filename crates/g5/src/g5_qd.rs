@@ -194,24 +194,7 @@ pub struct G5EvalRecord {
 /// Exact perimeter of an asymmetric superellipse section with top semi-height `a_top`, bottom
 /// semi-height `a_bot`, half-thickness `b`, and exponent `n`.
 pub fn superellipse_perim(a_top: f64, a_bot: f64, b: f64, n: f64) -> f64 {
-    let b = b.max(0.5);
-    let n = n.clamp(1.8, 4.0);
-    let p = 2.0 / n;
-    let quad_arc = |a: f64| -> f64 {
-        let a = a.max(0.5);
-        let steps = 64usize;
-        let mut len = 0.0_f64;
-        let mut prev = (a, 0.0_f64);
-        for i in 1..=steps {
-            let t = (i as f64 / steps as f64) * std::f64::consts::FRAC_PI_2;
-            let (s, c) = t.sin_cos();
-            let cur = (a * c.powf(p), b * s.powf(p));
-            len += (cur.0 - prev.0).hypot(cur.1 - prev.1);
-            prev = cur;
-        }
-        len
-    };
-    2.0 * (quad_arc(a_top) + quad_arc(a_bot))
+    crate::g5_sdf::superellipse_perimeter(a_top, a_bot, b, n)
 }
 
 /// Minimum curvature radius of a superellipse quarter-arc $(y/a)^n + (z/b)^n = 1$ (`evaluate.py::superellipse_rmin` parity).
@@ -367,7 +350,7 @@ pub fn eval_hollow_grip_sf(
     blade_centroid_x: f64,
 ) -> f64 {
     let rho_g = p["rho_grip"];
-    let rho_e = rho_g.powf(1.8);
+    let rho_e = material::core_relative_stiffness(rho_g, p["lat_cell"], p["lat_mix"]);
     let hollow = rho_g < 0.95;
     let skin_t = p["skin_t"];
     let allow = material::yield_allowable(skin_t, AS_BUILT_WALL);
@@ -385,7 +368,7 @@ pub fn eval_hollow_grip_sf(
         let sec_sand = SandwichSection::from_skin_and_lattice(
             t_sec,
             skin_t,
-            if hollow { rho_g } else { 1.0 },
+            rho_e,
             if p["rib_w"] > 0.0 {
                 0.4 + 0.4 * p["rib_w"]
             } else {
@@ -748,6 +731,7 @@ pub fn evaluate_tier0_analytic(genome: &G5Genome) -> G5EvalRecord {
 
     // 3. Blade volume, inertia, and sandwich structural capacities (`N1`: unified `effective_blade_rho(&p)`)
     let rho_blade_eff = effective_blade_rho(&p);
+    let blade_core_e = material::core_relative_stiffness(rho_blade_eff, p["lat_cell"], p["lat_mix"]);
     let n_bx = 40usize;
     let n_by = 16usize;
     let dx_b = (blade.x_tip - blade.x_heel) / (n_bx as f64);
@@ -787,7 +771,7 @@ pub fn evaluate_tier0_analytic(genome: &G5Genome) -> G5EvalRecord {
                     0.0
                 };
                 col_cav += hc * dx_b * dy_b;
-                let sec = SandwichSection::from_skin_and_lattice(t_xy, skin_t, rho_blade_eff, 0.0);
+                let sec = SandwichSection::from_skin_and_lattice(t_xy, skin_t, blade_core_e, 0.0);
                 col_i_yy += (sec.t3_bend / 12.0) * dy_b;
                 col_j_open += (sec.t3_bend / 3.0) * dy_b; // open thin-section J, a lower bound for hollow sections
             }
@@ -1069,6 +1053,48 @@ pub fn evaluate_tier0_analytic(genome: &G5Genome) -> G5EvalRecord {
     }
 }
 
+/// Planform point of the blade (RS-karambit-v5 `[point]`): the included angle between the two edges seen from the
+/// tip at 1 mm and 3 mm, and the width across the edges at 2 mm. Each edge point is the point of that edge's outline
+/// at the given straight-line distance from the tip.
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+pub struct PointPlanform {
+    pub angle_1mm_deg: f64,
+    pub angle_3mm_deg: f64,
+    pub width_2mm: f64,
+}
+
+pub fn measure_point_planform(b: &BladeProfile2D) -> PointPlanform {
+    let tip = b.tip_xy;
+    let n = b.xs.len();
+    let at = |ys: &[f64], s: f64| -> (f64, f64) {
+        let mut prev = (b.xs[n - 1], ys[n - 1]);
+        let mut d_prev = (prev.0 - tip.0).hypot(prev.1 - tip.1);
+        for k in (0..n - 1).rev() {
+            let cur = (b.xs[k], ys[k]);
+            let d_cur = (cur.0 - tip.0).hypot(cur.1 - tip.1);
+            if d_cur >= s {
+                let f = ((s - d_prev) / (d_cur - d_prev).max(1e-12)).clamp(0.0, 1.0);
+                return (prev.0 + f * (cur.0 - prev.0), prev.1 + f * (cur.1 - prev.1));
+            }
+            prev = cur;
+            d_prev = d_cur;
+        }
+        prev
+    };
+    let angle = |s: f64| -> f64 {
+        let (a, c) = (at(&b.y_in, s), at(&b.y_sp, s));
+        let (va, vc) = ((a.0 - tip.0, a.1 - tip.1), (c.0 - tip.0, c.1 - tip.1));
+        let cosv = (va.0 * vc.0 + va.1 * vc.1) / (va.0.hypot(va.1) * vc.0.hypot(vc.1)).max(1e-12);
+        cosv.clamp(-1.0, 1.0).acos().to_degrees()
+    };
+    let (a2, c2) = (at(&b.y_in, 2.0), at(&b.y_sp, 2.0));
+    PointPlanform {
+        angle_1mm_deg: angle(1.0),
+        angle_3mm_deg: angle(3.0),
+        width_2mm: (a2.0 - c2.0).hypot(a2.1 - c2.1),
+    }
+}
+
 /// Mass of one design on two grids, h and h/2, for the RS-karambit-v5 `[mass] grid_agreement_max_frac` check.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize)]
 pub struct MassGridAgreement {
@@ -1284,6 +1310,7 @@ fn evaluate_tier1_with_grid(genome: &G5Genome, h_vox: f64) -> (G5EvalRecord, Vox
     if let Some(b_mesh) = mesh_domain(&b_outer, &[], 3.5) {
         let skin_t = p["skin_t"];
         let rho_blade_eff = effective_blade_rho(&p);
+        let blade_core_e = material::core_relative_stiffness(rho_blade_eff, p["lat_cell"], p["lat_mix"]);
         let secs: Vec<SandwichSection> = b_mesh
             .tris
             .iter()
@@ -1291,7 +1318,7 @@ fn evaluate_tier1_with_grid(genome: &G5Genome, h_vox: f64) -> (G5EvalRecord, Vox
                 let xm = (b_mesh.xy[t[0]].0 + b_mesh.xy[t[1]].0 + b_mesh.xy[t[2]].0) / 3.0;
                 let ym = (b_mesh.xy[t[0]].1 + b_mesh.xy[t[1]].1 + b_mesh.xy[t[2]].1) / 3.0;
                 let (th, _) = eval_blade_thickness_and_sdf2(&p, &blade, xm, ym);
-                SandwichSection::from_skin_and_lattice(th.max(0.3), skin_t, rho_blade_eff, 0.0)
+                SandwichSection::from_skin_and_lattice(th.max(0.3), skin_t, blade_core_e, 0.0)
             })
             .collect();
         let s_plate = SandwichPlate::new(b_mesh.clone(), p["t_core"], material::e_mpa(), material::nu())
@@ -2076,7 +2103,8 @@ mod tests {
                 rec.score.score_100
             );
             assert!(rec.inputs.max_apex_mm <= 0.19 + 1e-9);
-            assert!(rec.inputs.max_half_angle_deg <= 24.5 + 1e-9);
+            // RS-karambit-v5 [edge] 20-25 deg per side, plus the hollow/convex grind modulation beyond 0.4 mm
+            assert!(rec.inputs.max_half_angle_deg <= 26.0 + 1e-9);
             assert!(rec.inputs.point_monotonic);
         }
 
@@ -2126,10 +2154,11 @@ mod tests {
                 "Sobol {i}: serration depth in {:.2} / sp {:.2} mm", b.serr_depth_in_mm, b.serr_depth_sp_mm);
             assert!(b.serr_teeth_in >= 3 && b.serr_teeth_sp >= 3,
                 "Sobol {i}: teeth in {} / sp {}", b.serr_teeth_in, b.serr_teeth_sp);
-            // SERR-4: no tooth snaps under a single-tooth snag (TOOTH_SNAG_N along the edge) or pry (TOOTH_PRY_N)
+            // Tooth strength is measured on every edge; under RS-karambit-v5 it is a scored term ([loads.teeth]),
+            // not a decoder guarantee as G3's SERR-4 was
             for inner in [true, false] {
                 let (sf, teeth, _) = serration_tooth_strength(&p, &b, inner);
-                assert!(teeth >= 2 && sf >= 1.0, "Sobol {i}: tooth SF {sf:.2} over {teeth} teeth (inner {inner})");
+                assert!(teeth >= 2 && sf.is_finite() && sf > 0.0, "Sobol {i}: tooth SF {sf:.2} over {teeth} teeth (inner {inner})");
             }
             let r0 = evaluate_tier0_analytic(&g);
             // S3: buckling is measured (lateral-torsional, analytic on the exact blade law), never zero credit
@@ -2161,7 +2190,7 @@ mod tests {
     #[test]
     fn edge_spec_one_ideal_angle_full_height_to_the_tip_on_both_edges() {
         // EDGE-1..5 (owner 2026-10-26): every steady Gate-S3 station of both edges measures one primary
-        // half-angle in the [17.5, 22.5] deg band (plus at most the +-18 % hollow/convex modulation), normal to
+        // half-angle in the RS-karambit-v5 [20, 25] deg band (plus the hollow/convex modulation beyond 0.4 mm), normal to
         // the edge, over the apex band and the rest of the bevel; both grinds stay on all the way to the tip.
         for i in 0..60 {
             let g = sobol_unit_genome(i, 0, "22bb8696");
@@ -2169,7 +2198,7 @@ mod tests {
             let blade = build_blade_profile_2d(&p);
             let (apex, ang) = measure_blade_edge_apex_and_angle(&p, &blade);
             assert!(apex.is_finite() && apex <= 0.19 + 1e-9, "Sobol {i}: apex {apex}");
-            assert!((17.0..=24.5).contains(&ang), "Sobol {i}: worst half-angle {ang:.2} deg outside the band");
+            assert!((19.5..=26.0).contains(&ang), "Sobol {i}: worst half-angle {ang:.2} deg outside the band");
             let n = blade.xs.len();
             for (s_in, s_sp) in [(blade.arc_in_mm - 0.5, blade.arc_sp_mm - 0.5), (blade.arc_in_mm, blade.arc_sp_mm)] {
                 let (w_in, w_sp) =

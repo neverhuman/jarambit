@@ -137,9 +137,71 @@ pub fn fatigue_sf(sigma_a: f64, sigma_m: f64, class: FatigueClass) -> f64 {
     fatigue_strength_mpa(class) / fkm_equivalent_amplitude(sigma_a, sigma_m).max(1e-9)
 }
 
+/// Surface area per unit volume of a sheet TPMS, times the cell size (gyroid 3.09, Schwarz-D 3.84), blended by
+/// `lat_mix` as the decoder blends the two level sets.
+pub fn tpms_area_density_times_cell(lat_mix: f64) -> f64 {
+    let m = lat_mix.clamp(0.0, 1.0);
+    (1.0 - m) * 3.0936 + m * 3.8377
+}
+
+/// Sheet thickness (mm) that gives relative density `rho` in cells of size `cell_mm` (rho = S t / cell), floored at
+/// `[am] sheet_min_mm`.
+pub fn tpms_sheet_thickness(rho: f64, cell_mm: f64, lat_mix: f64) -> f64 {
+    let t = rho.max(0.0) * cell_mm / tpms_area_density_times_cell(lat_mix);
+    t.max(rs_v5().am.sheet_min_mm)
+}
+
+/// Relative density of a sheet of thickness `t_mm` in cells of size `cell_mm`, capped at 1.
+pub fn tpms_density_of_sheet(t_mm: f64, cell_mm: f64, lat_mix: f64) -> f64 {
+    (tpms_area_density_times_cell(lat_mix) * t_mm / cell_mm.max(1e-9)).min(1.0)
+}
+
+/// Homogenised relative stiffness E*/Es of a sheet TPMS core of relative density `rho` ([material.tpms]: gyroid
+/// 0.29 ρ^1.6, Schwarz-D 0.23 ρ^1.2, blended by `lat_mix`; lower bounds until calibrated by FE homogenisation).
+pub fn tpms_relative_stiffness(rho: f64, lat_mix: f64) -> f64 {
+    let t = &rs_v5().material.tpms;
+    let m = lat_mix.clamp(0.0, 1.0);
+    let rho = rho.clamp(0.0, 1.0);
+    ((1.0 - m) * t.gyroid_stiffness_c * rho.powf(t.gyroid_stiffness_n)
+        + m * t.schwarz_d_stiffness_c * rho.powf(t.schwarz_d_stiffness_n))
+    .min(1.0)
+}
+
+/// Relative stiffness of a zone's core from its density gene: solid (1) at `rho >= 0.95`, otherwise the sheet TPMS
+/// law at the density the decoder actually builds (the sheet floor can raise it above the gene).
+pub fn core_relative_stiffness(rho_gene: f64, cell_mm: f64, lat_mix: f64) -> f64 {
+    if rho_gene >= 0.95 {
+        return 1.0;
+    }
+    let t = tpms_sheet_thickness(rho_gene, cell_mm, lat_mix);
+    tpms_relative_stiffness(tpms_density_of_sheet(t, cell_mm, lat_mix), lat_mix)
+}
+
+/// Homogenised relative strength σ*/σys of a sheet TPMS core ([material.tpms]: gyroid 0.55 ρ^1.5, Schwarz-D
+/// 0.42 ρ^1.14).
+pub fn tpms_relative_strength(rho: f64, lat_mix: f64) -> f64 {
+    let t = &rs_v5().material.tpms;
+    let m = lat_mix.clamp(0.0, 1.0);
+    let rho = rho.clamp(0.0, 1.0);
+    ((1.0 - m) * t.gyroid_strength_c * rho.powf(t.gyroid_strength_n)
+        + m * t.schwarz_d_strength_c * rho.powf(t.schwarz_d_strength_n))
+    .min(1.0)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn sheet_tpms_thickness_density_and_laws() {
+        // 0.8 mm floor: a 10 % gyroid in 5 mm cells would be 0.16 mm thick, so it is thickened (and denser)
+        assert_eq!(tpms_sheet_thickness(0.10, 5.0, 0.0), 0.8);
+        assert!((tpms_density_of_sheet(0.8, 5.0, 0.0) - 0.494976).abs() < 1e-6);
+        let t = tpms_sheet_thickness(0.4, 8.0, 0.0);
+        assert!((tpms_density_of_sheet(t, 8.0, 0.0) - 0.4).abs() < 1e-12);
+        assert!((tpms_relative_stiffness(0.3, 0.0) - 0.29 * 0.3_f64.powf(1.6)).abs() < 1e-12);
+        assert!((tpms_relative_strength(0.3, 1.0) - 0.42 * 0.3_f64.powf(1.14)).abs() < 1e-12);
+    }
 
     #[test]
     fn service_values_follow_rs_karambit_v5() {

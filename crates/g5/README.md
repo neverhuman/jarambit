@@ -45,13 +45,31 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
    Every evaluator takes E, ν, G and its allowables from this module. Still to do:
    - the sheet-TPMS laws (with the decoder);
    - the solid-tip TET10 still uses the physics crate's hard-coded G3 material until the load-case PR copies it.
-3. **Decoder G5.0:**
-   - the 20–25° edge on the finished blade, with a finishing allowance;
-   - 4–6 mm serrations with gullet radius ≥ 0.5 mm;
-   - the sharp-point planform;
-   - the 84–100 mm grip, the 15 mm guard and the hand-edge radii;
-   - ports ≥ 3 mm, two per cavity;
-   - a declared build orientation.
+3. **Decoder G5.0.** Done: 139 genes, down from G3's 179.
+   - **Removed:**
+     - the 37 texture genes (Turing, Voronoi and a 32-weight CPPN); the knurl and ridge that remain are zero-mean;
+     - the retired `s1_*` edge-stop genes;
+     - the cusped tooth and micro serration genes;
+     - `exo_open`.
+   - **Added**, in requirement units:
+     - `grip_perim` and `grip_hot`: the swell section is scaled to them, and measures within 2 %;
+     - `port_d`;
+     - `point_angle` and `point_len`: a rounded wedge (tip radius 0.175 mm) bounds the point.
+   - **Construction rules:**
+     - gene bounds on the RS-v5 bands: edge 20–25°, serration pitch 4–6 mm and depth 0.8–1.5 mm, guard height
+       10–18 mm, hand-edge radius ≥ 3 mm;
+     - finger pitches clamped to 19–21 mm, grip length ≥ 69 mm;
+     - each serration scallop widened until its gullet radius is ≥ 0.5 mm;
+     - a sheet-TPMS lattice at least 0.8 mm thick, using the RS-v5 sheet laws;
+     - ports clear of the rib, at least two per cavity half, in every hollow zone, cut one cell deep so both TPMS
+       labyrinths drain;
+     - drain tunnels through the shear webs.
+   - **On Sobol designs:**
+     - grid agreement is 0.13–0.53 %;
+     - most designs drain (150–1,000 mm³ sealed).
+
+   Still to do: the finishing allowance (printed against finished geometry) and the declared build orientation for
+   face classes.
 4. **Load cases:**
    - lateral 12/18 N·m and twist 16.2 N·m, reacted by a hand model;
    - the tip set (150 N, 10 N, 0.3 N·m);

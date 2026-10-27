@@ -123,7 +123,7 @@ fn formula_cases(p: &BTreeMap<&'static str, f64>, tip_xy: (f64, f64), xc: f64) -
     let is_g5_1 = p.get("g5_schema_ver").copied().unwrap_or(0.0) >= 1.0;
     let flange = if is_g5_1 { p.get("flange_amp_grip").copied().unwrap_or(0.0) } else { 0.0 };
     let rho_g = p["rho_grip"];
-    let rho_e = rho_g.powf(1.8);
+    let rho_e = mat::core_relative_stiffness(rho_g, p["lat_cell"], p["lat_mix"]);
     let hollow = rho_g < 0.95;
     let skin_t = p["skin_t"];
     let skin_tq = skin_t + 0.40 * flange;
@@ -137,7 +137,7 @@ fn formula_cases(p: &BTreeMap<&'static str, f64>, tip_xy: (f64, f64), xc: f64) -
         let a_enc = std::f64::consts::PI * 0.25 * h_sec * t_sec;
         let perim = std::f64::consts::PI
             * (3.0 * 0.5 * (h_sec + t_sec) - ((1.5 * h_sec + 0.5 * t_sec) * (0.5 * h_sec + 1.5 * t_sec)).sqrt());
-        let sec = SandwichSection::from_skin_and_lattice(t_sec, skin_tq, if hollow { rho_g } else { 1.0 },
+        let sec = SandwichSection::from_skin_and_lattice(t_sec, skin_tq, rho_e,
             if p["rib_w"] > 0.0 { 0.4 + 0.4 * p["rib_w"] } else { 0.0 });
         let i_yy = (0.78 * h_sec) * sec.t3_bend / 12.0;
         let h_in = (h_sec - 2.0 * (skin_t + 0.75 * flange)).max(0.0);

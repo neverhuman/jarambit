@@ -3,12 +3,15 @@
 //! `4859931147d42ce465b8605cb277f957d98b839d03194fdf06579357906d193b`) with Matousek Linear Matrix
 //! Scrambling (LMS) + 30-bit digital shift.
 
-use crate::g5_genome::{G5Rng, G5_NUM_GENES};
+use crate::g5_genome::G5Rng;
 
 pub const SOBOL_BITS: usize = 30;
 const INV_TWO_POW_30: f64 = 1.0 / ((1u64 << SOBOL_BITS) as f64);
 
-pub const SOBOL_POLY: [u32; G5_NUM_GENES] = [
+/// Dimensions tabulated here (the G3 genome size); G5.0 genomes use the leading `G5_NUM_GENES` of them.
+pub const SOBOL_DIMS: usize = 179;
+
+pub const SOBOL_POLY: [u32; SOBOL_DIMS] = [
     1, 3, 7, 11, 13, 19, 25, 37, 41, 47, 55, 59, 61, 67, 91, 97,
     103, 109, 115, 131, 137, 143, 145, 157, 167, 171, 185, 191, 193, 203, 211, 213,
     229, 239, 241, 247, 253, 285, 299, 301, 333, 351, 355, 357, 361, 369, 391, 397,
@@ -23,7 +26,7 @@ pub const SOBOL_POLY: [u32; G5_NUM_GENES] = [
     2257, 2273, 2279,
 ];
 
-pub const SOBOL_VINIT: [[u32; 18]; G5_NUM_GENES] = [
+pub const SOBOL_VINIT: [[u32; 18]; SOBOL_DIMS] = [
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -208,18 +211,18 @@ pub const SOBOL_VINIT: [[u32; 18]; G5_NUM_GENES] = [
 /// Precomputed 30-bit Joe-Kuo Sobol direction numbers and digital shifts for 179 dimensions.
 #[derive(Debug, Clone)]
 pub struct Sobol179Table {
-    pub v: [[u32; SOBOL_BITS]; G5_NUM_GENES],
-    pub shifts: [u32; G5_NUM_GENES],
+    pub v: [[u32; SOBOL_BITS]; SOBOL_DIMS],
+    pub shifts: [u32; SOBOL_DIMS],
 }
 
 impl Sobol179Table {
     /// Build the unscrambled Joe-Kuo Sobol direction table (`scipy.stats.qmc.Sobol(d=179, scramble=False)`).
     pub fn unscrambled() -> Self {
-        let mut v = [[0u32; SOBOL_BITS]; G5_NUM_GENES];
+        let mut v = [[0u32; SOBOL_BITS]; SOBOL_DIMS];
         for k in 0..SOBOL_BITS {
             v[0][k] = 1u32 << (SOBOL_BITS - 1 - k);
         }
-        for j in 1..G5_NUM_GENES {
+        for j in 1..SOBOL_DIMS {
             let p = SOBOL_POLY[j];
             let deg = (31 - p.leading_zeros()) as usize;
             for k in 0..deg {
@@ -237,7 +240,7 @@ impl Sobol179Table {
         }
         Self {
             v,
-            shifts: [0u32; G5_NUM_GENES],
+            shifts: [0u32; SOBOL_DIMS],
         }
     }
 
@@ -246,7 +249,7 @@ impl Sobol179Table {
         let mut tbl = Self::unscrambled();
         let mut rng = G5Rng(seed ^ 0xA5A5_5A5A_F0F0_0F0F);
         let mask_all = (1u32 << SOBOL_BITS) - 1;
-        for j in 0..G5_NUM_GENES {
+        for j in 0..SOBOL_DIMS {
             let mut rows = [0u32; SOBOL_BITS];
             for r in 0..SOBOL_BITS {
                 let rnd = rng.next_u64() as u32;
@@ -275,8 +278,8 @@ impl Sobol179Table {
     /// Evaluate the `index`-th 179D point using Antonov-Saleev Gray code `g = index ^ (index >> 1)`.
     pub fn point(&self, index: usize) -> Vec<f64> {
         let g = (index ^ (index >> 1)) as u32;
-        let mut out = Vec::with_capacity(G5_NUM_GENES);
-        for j in 0..G5_NUM_GENES {
+        let mut out = Vec::with_capacity(SOBOL_DIMS);
+        for j in 0..SOBOL_DIMS {
             let mut val = self.shifts[j];
             let mut gg = g;
             let mut k = 0usize;

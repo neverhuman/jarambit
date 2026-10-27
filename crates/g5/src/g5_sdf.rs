@@ -412,7 +412,7 @@ impl VoxelGrid3D {
         };
 
         // Measure voxel-section grip_sf_min at s in {0.25, 0.50, 0.75} (`evaluate.py::grip_beam_sf` parity, N8, N13, S5-7)
-        let rho_e = p["rho_grip"].powf(1.8);
+        let rho_e = crate::material::core_relative_stiffness(p["rho_grip"], p["lat_cell"], p["lat_mix"]);
         let hollow = p["rho_grip"] < 0.95;
         let skin_t_f64 = p["skin_t"].max(0.4);
         let allow = crate::material::yield_allowable(skin_t_f64, crate::material::AS_BUILT_WALL);
@@ -996,6 +996,36 @@ pub fn tpms_val(
     (1.0 - lat_mix) * (gy / 1.5) + lat_mix * (sd / 1.41)
 }
 
+/// `tpms_val` and the magnitude of its gradient (1/mm), for the first-order distance |f| / |grad f| to the level set
+/// f = 0 that the G5.0 sheet TPMS uses.
+pub fn tpms_val_and_grad(
+    x: f64,
+    y: f64,
+    z: f64,
+    lat_cell: f64,
+    lat_mix: f64,
+    lat_aniso_x: f64,
+) -> (f64, f64) {
+    let k = 2.0 * std::f64::consts::PI / lat_cell.max(1.0);
+    let ax = lat_aniso_x.max(0.5);
+    let (sx, cx) = ((x / ax) * k).sin_cos();
+    let (sy, cy) = (y * k).sin_cos();
+    let (sz, cz) = (z * k).sin_cos();
+    let gy = sx * cy + sy * cz + sz * cx;
+    let gy_d = [cx * cy - sz * sx, -sx * sy + cy * cz, -sy * sz + cz * cx];
+    let sd = sx * sy * sz + sx * cy * cz + cx * sy * cz + cx * cy * sz;
+    let sd_d = [
+        cx * sy * sz + cx * cy * cz - sx * sy * cz - sx * cy * sz,
+        sx * cy * sz - sx * sy * cz + cx * cy * cz - cx * sy * sz,
+        sx * sy * cz - sx * cy * sz - cx * sy * sz + cx * cy * cz,
+    ];
+    let m = lat_mix;
+    let f = (1.0 - m) * (gy / 1.5) + m * (sd / 1.41);
+    let g = |a: usize| (1.0 - m) * gy_d[a] / 1.5 + m * sd_d[a] / 1.41;
+    let (gx, gyy, gz) = (g(0) * k / ax, g(1) * k, g(2) * k);
+    (f, (gx * gx + gyy * gyy + gz * gz).sqrt())
+}
+
 /// Compute the threshold `c` such that `P(tpms_val(X, Y, Z) > c) == target_rho` over one unit cell
 /// (`G3_GENOME_SPEC.md` v1.1 §7 Rule 3).
 pub fn tpms_level_for_rho(lat_cell: f64, lat_mix: f64, lat_aniso_x: f64, target_rho: f64) -> f64 {
@@ -1276,7 +1306,54 @@ pub struct GripSliceCurve {
     pub s: f64,
 }
 
+/// Perimeter of the asymmetric superellipse grip section `(|y|/a)^n + (|z|/b)^n = 1` with top and bottom
+/// semi-heights `a_top`, `a_bot` and half-thickness `b` (64-segment quarter arcs).
+pub fn superellipse_perimeter(a_top: f64, a_bot: f64, b: f64, n: f64) -> f64 {
+    let b = b.max(0.5);
+    let n = n.clamp(1.8, 4.0);
+    let p = 2.0 / n;
+    let quad_arc = |a: f64| -> f64 {
+        let a = a.max(0.5);
+        let steps = 64usize;
+        let mut len = 0.0_f64;
+        let mut prev = (a, 0.0_f64);
+        for i in 1..=steps {
+            let t = (i as f64 / steps as f64) * std::f64::consts::FRAC_PI_2;
+            let (s, c) = t.sin_cos();
+            let cur = (a * c.powf(p), b * s.powf(p));
+            len += (cur.0 - prev.0).hypot(cur.1 - prev.1);
+            prev = cur;
+        }
+        len
+    };
+    2.0 * (quad_arc(a_top) + quad_arc(a_bot))
+}
+
+/// Evaluate the grip section at `x` (G5.0). The G3 profile genes set the shape along the grip; the section is then
+/// scaled about its mid-height so that the swell section has perimeter `grip_perim` and height/thickness
+/// `grip_hot` (RS-karambit-v5 `[ergonomics.grip]`, design at the requirement level). The scaling fades out over the
+/// 14 mm grip-to-guard taper, so the guard is unchanged.
 pub fn eval_grip_slice(p: &BTreeMap<&'static str, f64>, x: f64) -> GripSliceCurve {
+    let raw = eval_grip_slice_g3(p, x);
+    let sw = eval_grip_slice_g3(p, p["x_t"] + p["s_sw"] * p["L_g"]);
+    let a_t = (sw.yt - sw.ym).max(0.5);
+    let a_b = (sw.ym - sw.yb).max(0.5);
+    let b = 0.5 * sw.t_sec.max(1.0);
+    let k = p["grip_hot"] * (2.0 * b) / (a_t + a_b);
+    let sz = p["grip_perim"] / superellipse_perimeter(k * a_t, k * a_b, b, sw.n_exp).max(1e-6);
+    let sy = sz * k;
+    let w = 1.0 - smoothstep(p["L_g"] - 6.0, p["L_g"] + 8.0, raw.s);
+    let (fy, fz) = (1.0 + w * (sy - 1.0), 1.0 + w * (sz - 1.0));
+    GripSliceCurve {
+        yt: raw.ym + fy * (raw.yt - raw.ym),
+        yb: raw.ym - fy * (raw.ym - raw.yb),
+        t_sec: (raw.t_sec * fz).max(0.3),
+        ..raw
+    }
+}
+
+/// The G3 grip section law (profile genes only), before the G5.0 perimeter and H/T scaling.
+fn eval_grip_slice_g3(p: &BTreeMap<&'static str, f64>, x: f64) -> GripSliceCurve {
     let l_g = p["L_g"];
     let x_t = p["x_t"];
     let s = x - x_t;
@@ -1481,20 +1558,34 @@ fn serration_census(edge: &[f64], smooth: &[f64]) -> (f64, usize) {
 }
 
 /// Serration tooth depth per unit pitch (`SERR-4`).
+/// RS-karambit-v5 `[serration] depth_max_fraction_of_pitch` (a test checks it).
 pub const SERR_DEPTH_PER_PITCH: f64 = 0.25;
 
 pub const SHARPENED_EDGE_CAP_MM: f64 = 4.0 * 25.4; // 101.6 mm (4.0 in) per edge
 pub const BLADE_REACH_MAX_MM: f64 = 85.725;
 
 #[inline]
-fn serration_wave(phase_01: f64, duty: f64, w_scallop: f64, w_tooth: f64, w_micro: f64) -> f64 {
-    let duty = duty.clamp(0.25, 0.85);
+/// One serration period (G5.0): a raised-cosine scallop of width `duty` (fraction of the pitch) and unit depth, flat
+/// between scallops. G3's triangular-tooth and micro components cut cusped gullets; G5.0 keeps only the scallop,
+/// whose gullet radius is set by `serration_duty_for_gullet`.
+fn serration_wave(phase_01: f64, duty: f64) -> f64 {
+    let duty = duty.clamp(0.25, 0.95);
     let u = (phase_01.rem_euclid(1.0) / duty).clamp(0.0, 1.0);
-    let scallop = 0.5 * (1.0 - (2.0 * std::f64::consts::PI * u).cos());
-    let tooth = 1.0 - (2.0 * u - 1.0).abs();
-    let micro = scallop * (0.7 + 0.3 * (6.0 * std::f64::consts::PI * u).sin().abs());
-    let w_sum = (w_scallop + w_tooth + w_micro).max(1e-6);
-    (w_scallop * scallop + w_tooth * tooth + w_micro * micro) / w_sum
+    0.5 * (1.0 - (2.0 * std::f64::consts::PI * u).cos())
+}
+
+/// Gullet radius (mm) of a raised-cosine scallop of width `w` and depth `d`: y = d (1 − cos(2πs/w))/2 has curvature
+/// 2π²d/w² at its root.
+pub fn serration_gullet_radius(w_mm: f64, depth_mm: f64) -> f64 {
+    w_mm * w_mm / (2.0 * std::f64::consts::PI * std::f64::consts::PI * depth_mm.max(1e-9))
+}
+
+/// Scallop duty (fraction of the pitch) widened as needed so the gullet radius is at least
+/// `[serration] gullet_radius_min_mm`, and at most 0.95 of the pitch.
+pub fn serration_duty_for_gullet(duty_gene: f64, pitch_mm: f64, depth_mm: f64) -> f64 {
+    let r_min = crate::requirements::rs_v5().serration.gullet_radius_min_mm;
+    let w_min = (2.0 * std::f64::consts::PI * std::f64::consts::PI * r_min * depth_mm.max(0.0)).sqrt();
+    duty_gene.max(w_min / pitch_mm.max(1e-9)).min(0.95)
 }
 
 /// Evaluate the bevel blend weights `(win_in, win_sp)` along the inner and spine edges, budgeting
@@ -1554,6 +1645,24 @@ fn edge_normal_distance(xs: &[f64], ys: &[f64], i0: usize, x: f64, y: f64) -> f6
     best
 }
 
+/// Planform tip radius of the finished point (mm): the midpoint of RS-karambit-v5 `[point] tip_radius_min/max_mm`.
+/// A construction constant, not a gene: it lies below the planform sampling and the voxel grid, so a gene would not
+/// change the evaluated geometry.
+pub const POINT_TIP_RADIUS_MM: f64 = 0.175;
+
+/// Half-width (mm) of the G5.0 point at distance `d` behind its tip: a planform wedge of included angle `angle_deg`
+/// whose apex is rounded to radius `r` (circle tangent to both flanks).
+pub fn rounded_wedge_half_width(d: f64, angle_deg: f64, r: f64) -> f64 {
+    let a = (0.5 * angle_deg).clamp(1.0, 89.0).to_radians();
+    let c = r / a.sin(); // virtual apex to circle centre
+    let dp = d.max(0.0) + (c - r); // distance from the virtual apex
+    if dp >= c * a.cos() * a.cos() {
+        dp * a.tan()
+    } else {
+        (r * r - (c - dp) * (c - dp)).max(0.0).sqrt()
+    }
+}
+
 pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D {
     let x_heel = GUARD_X_MM + 4.0;
     let blade_len = p["blade_len"].clamp(60.0, BLADE_REACH_MAX_MM);
@@ -1610,6 +1719,8 @@ pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D
     // Narrower or deeper teeth fail the single-tooth snag / pry cases of `serration_tooth_strength`.
     let depth_in = p["ser_depth_in"].min(SERR_DEPTH_PER_PITCH * pitch_in);
     let depth_sp = p["ser_depth_sp"].min(SERR_DEPTH_PER_PITCH * pitch_sp);
+    let duty_in = serration_duty_for_gullet(p["ser_duty_in"], pitch_in, depth_in);
+    let duty_sp = serration_duty_for_gullet(p["ser_duty_sp"], pitch_sp, depth_sp);
     for i in 0..n_pts {
         let u = (i as f64) / ((n_pts - 1) as f64);
         let x = x_heel + u * blade_len;
@@ -1620,8 +1731,14 @@ pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D
         let arch = p["spine_arch"] * (std::f64::consts::PI * u).sin();
         let sweep_shift = blade_len * sweep_rad.tan() * u * (1.0 - u);
         let y_center = y_root_mid + (y_tip - y_root_mid) * u.powf(1.35) + arch + sweep_shift;
-        let h_u = h_root * (1.0 - u).max(0.0).powf(h_exp)
+        let h_u_g3 = h_root * (1.0 - u).max(0.0).powf(h_exp)
             + 2.0 * dist_to_tip * (0.5 * p["tip_angle"].to_radians()).tan() * u;
+        // G5.0 point module (owner 2026-10-27: penalise a blunt point): within `point_len` of the tip the blade is
+        // no wider than a rounded wedge of `point_angle`, fading back to the G3 law over the next 4 mm. G3's
+        // (1 - u)^h_exp law with h_exp < 1 made a bullet nose (the G3 winner: 110 deg at 1 mm).
+        let w_pt = 1.0 - smoothstep(p["point_len"], p["point_len"] + 4.0, dist_to_tip);
+        let h_wedge = 2.0 * rounded_wedge_half_width(dist_to_tip, p["point_angle"], POINT_TIP_RADIUS_MM);
+        let h_u = h_u_g3 * (1.0 - w_pt) + h_u_g3.min(h_wedge) * w_pt;
         let h_half = 0.5 * h_u.max(0.08);
 
         // Cosine basis modulation (vanishes at u=0 and u=1, and faded inside tip_reserve)
@@ -1643,20 +1760,8 @@ pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D
             * (1.0 - smoothstep(ser_s1_sp - 0.04, ser_s1_sp, u))
             * tip_fade;
         let s_mm = u * blade_len;
-        let wave_in = serration_wave(
-            s_mm / pitch_in,
-            p["ser_duty_in"],
-            p["w_scallop_in"],
-            p["w_tooth_in"],
-            p["w_micro_in"],
-        );
-        let wave_sp = serration_wave(
-            s_mm / pitch_sp,
-            p["ser_duty_sp"],
-            p["w_scallop_sp"],
-            p["w_tooth_sp"],
-            0.0,
-        );
+        let wave_in = serration_wave(s_mm / pitch_in, duty_in);
+        let wave_sp = serration_wave(s_mm / pitch_sp, duty_sp);
         let ser_in = ser_in_win * depth_in * wave_in;
         let ser_sp = ser_sp_win * depth_sp * wave_sp;
 
@@ -1913,8 +2018,9 @@ pub fn eval_blade_thickness_and_sdf2(
     // the 20 deg centre, a hard-use edge suited to Ti-6Al-4V), measured normal to the actual (serrated) edge and
     // carried at full height until it meets the medial thickness. No band cap and no shoulder: the old
     // 2.2-3.5 mm band blended a micro-bevel into the 4-7 mm body at 50-90 deg per side.
-    let tan_in = p["angle_in"].clamp(17.5, 22.5).to_radians().tan();
-    let tan_sp = p["angle_sp"].clamp(17.5, 22.5).to_radians().tan();
+    let ed = &crate::requirements::rs_v5().edge;
+    let tan_in = p["angle_in"].clamp(ed.per_side_angle_min_deg, ed.per_side_angle_max_deg).to_radians().tan();
+    let tan_sp = p["angle_sp"].clamp(ed.per_side_angle_min_deg, ed.per_side_angle_max_deg).to_radians().tan();
     // Hollow/convex bevel curvature modulation (`grind_curv_in`, `grind_curv_sp`) beyond the 0.4 mm Gate-S3 edge band
     let curv_in = 1.0 + 0.18 * p["grind_curv_in"] * ((dn_in - 0.4).max(0.0) / 6.0).min(1.0);
     let curv_sp = 1.0 + 0.18 * p["grind_curv_sp"] * ((dn_sp - 0.4).max(0.0) / 6.0).min(1.0);
@@ -1958,64 +2064,27 @@ pub fn eval_blade_thickness_and_sdf2(
 }
 
 /// Evaluate the G5 multi-modal surface texture displacement `tx in [-1, 1]`
-/// using `w_knurl`, `w_turing`, `w_voronoi`, `w_ridge`, `w_cppn`, and `cppn_00..31` (`N5`: fixed `(sa, ca) = ang.sin_cos()`).
+/// using `w_knurl` and `w_ridge` (G5.0 retires the Turing, Voronoi and 32-weight CPPN patterns).
 #[inline]
-fn eval_surface_texture(p: &BTreeMap<&'static str, f64>, sx: f64, sy: f64, l_g: f64) -> f64 {
+fn eval_surface_texture(p: &BTreeMap<&'static str, f64>, sx: f64, sy: f64, _l_g: f64) -> f64 {
     let pitch = p["tex_pitch"].max(1.2);
     let ang = p["tex_angle"].to_radians();
     let (sa, ca) = ang.sin_cos();
     let u = (sx * ca + sy * sa) / pitch;
     let v = (-sx * sa + sy * ca) / pitch;
+    // Zero-mean patterns, so the texture moves surface material without biasing the mass: the knurl's mean
+    // 2 (2/pi)^2 - 1 is subtracted, and the ridge is a cosine
+    let knurl_mean = 8.0 / (std::f64::consts::PI * std::f64::consts::PI) - 1.0;
     let knurl = (std::f64::consts::PI * (u + v)).sin().abs()
         * (std::f64::consts::PI * (u - v)).sin().abs()
         * 2.0
-        - 1.0;
+        - 1.0
+        - knurl_mean;
     let ridge = (2.0 * std::f64::consts::PI * u).cos();
-    let seed = p["seed"];
-    let turing = (2.0 * std::f64::consts::PI * (u + 0.35 * (2.0 * v + seed).sin())).sin()
-        * (1.0 - p["turing_mix"])
-        + p["turing_mix"] * (2.0 * std::f64::consts::PI * (v + 0.35 * (2.0 * u - seed).cos())).cos();
-    let fu = u.fract() - 0.5;
-    let fv = v.fract() - 0.5;
-    let voronoi = 1.0 - 2.0 * (fu * fu + fv * fv).sqrt().min(1.0);
-    // 32-weight CPPN (`cppn_00..31`: 2 -> 8 -> 1 tanh/sin/gauss network)
-    let xn = (sx / l_g.max(1.0)) * 2.0 - 1.0;
-    let yn = (sy / 25.0).clamp(-1.0, 1.0);
-    let rn = (xn * xn + yn * yn).sqrt();
-    let c0 = [
-        p["cppn_00"], p["cppn_01"], p["cppn_02"], p["cppn_03"],
-        p["cppn_04"], p["cppn_05"], p["cppn_06"], p["cppn_07"],
-    ];
-    let c1 = [
-        p["cppn_08"], p["cppn_09"], p["cppn_10"], p["cppn_11"],
-        p["cppn_12"], p["cppn_13"], p["cppn_14"], p["cppn_15"],
-    ];
-    let c2 = [
-        p["cppn_16"], p["cppn_17"], p["cppn_18"], p["cppn_19"],
-        p["cppn_20"], p["cppn_21"], p["cppn_22"], p["cppn_23"],
-    ];
-    let c3 = [
-        p["cppn_24"], p["cppn_25"], p["cppn_26"], p["cppn_27"],
-        p["cppn_28"], p["cppn_29"], p["cppn_30"], p["cppn_31"],
-    ];
-    let mut acc = 0.0_f64;
-    for h_i in 0..8 {
-        let z = c0[h_i] * xn + c1[h_i] * yn + c2[h_i] * rn;
-        let act = if h_i % 2 == 0 {
-            (2.5 * z).tanh()
-        } else {
-            (std::f64::consts::PI * z).sin()
-        };
-        acc += c3[h_i] * act;
-    }
-    let cppn = acc.tanh();
     let wk = p["w_knurl"].max(0.0);
-    let wt = p["w_turing"].max(0.0);
-    let wv = p["w_voronoi"].max(0.0);
     let wr = p["w_ridge"].max(0.0);
-    let wc = p["w_cppn"].max(0.0);
-    let w_tot = (wk + wt + wv + wr + wc).max(1e-6);
-    ((wk * knurl + wt * turing + wv * voronoi + wr * ridge + wc * cppn) / w_tot).clamp(-1.0, 1.0)
+    let w_tot = (wk + wr).max(1e-6);
+    ((wk * knurl + wr * ridge) / w_tot).clamp(-1.0, 1.0)
 }
 
 /// Build the complete 3D SDF (`VoxelGrid3D`) for a `G5Genome` at voxel spacing `h` (mm),
@@ -2318,7 +2387,16 @@ pub fn build_g5_sdf_from_params_with_origin_shift(
             let mut ro_base = if r < r_od + 1.0 {
                 0.75 * wt * 0.5
             } else if x > GUARD_X_MM + 1.0 {
-                (0.8 * p["t_guard"] * 0.5).clamp(2.2, 3.0)
+                // RS-karambit-v5 [ergonomics.edges]: >= 3 mm on sections 6.5-25 mm thick, >= 1.5 mm below; the
+                // opening radius stays under half the guard thickness so the guard survives the opening
+                let ed = &crate::requirements::rs_v5().ergonomics.edges;
+                let t_g = p["t_guard"];
+                let r_req = if t_g >= ed.thick_section_min_mm {
+                    ed.radius_min_thick_section_mm
+                } else {
+                    ed.radius_min_mm
+                };
+                r_req.max(0.4 * t_g).min(0.49 * t_g)
             } else {
                 p["edge_r"]
             };
@@ -2502,7 +2580,7 @@ pub fn build_g5_sdf_from_params_with_origin_shift(
             } else {
                 1.0
             };
-            let rho_stiff = rho_z.powf(1.8);
+            let rho_stiff = crate::material::core_relative_stiffness(rho_z, p["lat_cell"], p["lat_mix"]);
             let base = (i * ny + j) * nz;
             let mut w_col = 0.0_f64;
             for k in 0..nz {
@@ -2516,7 +2594,7 @@ pub fn build_g5_sdf_from_params_with_origin_shift(
         }
     }
 
-    // 6. Surface texture (`tex_amp`, `w_knurl..w_cppn`, `cppn_00..31`, `scope_grip/ring/blade`) and dorsal jimping (`jimp_n/p/d`)
+    // 6. Surface texture (`tex_amp`, `w_knurl`, `w_ridge`, `scope_grip/ring/blade`) and dorsal jimping (`jimp_n/p/d`)
     let tex_amp = p["tex_amp"];
     let jimp_n = p["jimp_n"].round() as i32;
     if tex_amp > 0.0 || jimp_n >= 1 {
@@ -2596,19 +2674,33 @@ pub fn build_g5_sdf_from_params_with_origin_shift(
         let lat_grade = p["lat_grade"];
         let rho_grad_wall = p["rho_grad_wall"];
         let shear_web_amp = p["shear_web_amp"];
-        let exo_open = p["exo_open"];
         let rib_half = if p["rib_w"] > 0.0 {
             (0.4 + 0.4 * p["rib_w"]) as f32
         } else {
             -1.0
         };
-        let c_grip = tpms_level_for_rho(lat_cell, lat_mix, lat_aniso_x, p["rho_grip"]);
-        let c_guard = tpms_level_for_rho(lat_cell, lat_mix, lat_aniso_x, p["rho_guard"]);
-        let c_ring = tpms_level_for_rho(lat_cell, lat_mix, lat_aniso_x, p["rho_ring"]);
-        let c_blade = tpms_level_for_rho(lat_cell, lat_mix, lat_aniso_x, rho_blade_eff);
+        // G5.0 sheet TPMS ([material.tpms] strut_tpms_allowed = false): solid within half a sheet thickness of the
+        // level set f = 0, measured by the first-order distance |f| / |grad f|. The thickness gives each zone its
+        // target density and is floored at [am] sheet_min_mm (`material::tpms_sheet_thickness`).
+        let t_sheet = |rho: f64| crate::material::tpms_sheet_thickness(rho, lat_cell, lat_mix);
+        let (t_ring, t_grip, t_guard, t_blade) = (
+            t_sheet(p["rho_ring"]),
+            t_sheet(p["rho_grip"]),
+            t_sheet(p["rho_guard"]),
+            t_sheet(rho_blade_eff),
+        );
+        // Ports and drain holes ([am] port_d_min_mm, ports_per_cavity_min): `port_d` wide, cut on both sides of
+        // the mid-plane rib (which splits a cavity into two halves) so no port opens onto the rib
+        let port_r = 0.5 * p["port_d"];
+        let z_offs: Vec<f64> = if rib_half > 0.0 {
+            let zo = rib_half as f64 + port_r + 0.3;
+            vec![-zo, zo]
+        } else {
+            vec![0.0]
+        };
+        let web_st = [p["centre_ring"], p["centre_mid"], p["centre_idx"]];
 
         let mut am = d.clone();
-        let scale_lat = (lat_cell / (2.0 * std::f64::consts::PI) * 1.2) as f32;
         if any_core {
             for i in 0..nx {
                 let x = xs[i];
@@ -2626,6 +2718,7 @@ pub fn build_g5_sdf_from_params_with_origin_shift(
                 } else {
                     (-1e9, 1e9)
                 };
+                let y_web_axis = eval_grip_slice(p, x).ym;
                 for j in 0..ny {
                     let y = ys[j];
                     if include_blade && x >= blade_prof.x_heel && (y - yi_b < 3.6 || ys_b - y < 3.6)
@@ -2633,14 +2726,14 @@ pub fn build_g5_sdf_from_params_with_origin_shift(
                         continue;
                     }
                     let r = r_grid[i * ny + j];
-                    let (rho_z, c_lvl) = if x < p["x_t"] || r < r_od + 1.0 {
-                        (p["rho_ring"], c_ring)
+                    let (rho_z, t_lvl) = if x < p["x_t"] || r < r_od + 1.0 {
+                        (p["rho_ring"], t_ring)
                     } else if x < GUARD_X_MM {
-                        (p["rho_grip"], c_grip)
+                        (p["rho_grip"], t_grip)
                     } else if x < 92.0 {
-                        (p["rho_guard"], c_guard)
+                        (p["rho_guard"], t_guard)
                     } else {
-                        (rho_blade_eff, c_blade)
+                        (rho_blade_eff, t_blade)
                     };
                     if rho_z >= 0.95 {
                         continue;
@@ -2650,22 +2743,33 @@ pub fn build_g5_sdf_from_params_with_origin_shift(
                         let idx = base + k;
                         let dv = d[idx];
                         if do_core[idx] <= 0.5 && dv < -skin_t {
-                            let f = tpms_val(x, y, z, lat_cell, lat_mix, lat_aniso_x);
-                            // Radial/wall density grading (`lat_grade`, `rho_grad_wall`)
+                            let (f, gnorm) = tpms_val_and_grad(x, y, z, lat_cell, lat_mix, lat_aniso_x);
+                            // Wall grading (`lat_grade`, `rho_grad_wall`) thickens the sheet near the skin
                             let depth_past_skin = (-dv - skin_t).max(0.0) as f64;
                             let wall_boost = rho_grad_wall * (-depth_past_skin / 2.0).exp()
                                 + 0.15 * lat_grade * (1.0 - (z.abs() / 6.0).min(1.0));
-                            let mut li = (((c_lvl - wall_boost) - f) as f32) * scale_lat;
+                            let half_t = 0.5 * t_lvl * (1.0 + wall_boost);
+                            let mut li = (f.abs() / gnorm.max(1e-6) - half_t) as f32;
                             if rib_half > 0.0 {
                                 li = li.min((z.abs() as f32) - rib_half);
                             }
-                            // Internal transverse shear webs (`shear_web_amp` builds real internal webs in `d_am`)
+                            // Internal transverse shear webs, each with drain holes on the grip axis (one per
+                            // rib side), so the web compartments form one drainable cavity
                             if shear_web_amp > 0.05 {
-                                let web_half = (0.35 * shear_web_amp) as f32;
+                                let web_half = 0.35 * shear_web_amp;
                                 let s_grip = x - p["x_t"];
-                                for &st in &[p["centre_ring"], p["centre_mid"], p["centre_idx"]] {
-                                    let dw = ((s_grip - st).abs() as f32) - web_half;
-                                    li = li.min(dw);
+                                let hole = z_offs
+                                    .iter()
+                                    .map(|&zo| port_r - (y - y_web_axis).hypot(z - zo))
+                                    .fold(f64::NEG_INFINITY, f64::max);
+                                for &st in &web_st {
+                                    let dw = ((s_grip - st).abs() - web_half).max(hole);
+                                    li = li.min(dw as f32);
+                                }
+                                // A sheet TPMS splits the cavity into two interleaved labyrinths: the hole runs on
+                                // as a tunnel through the sheet for half a cell each side, so both reach it
+                                if web_st.iter().any(|&st| (s_grip - st).abs() < 0.5 * lat_cell) {
+                                    li = li.max(hole as f32);
                                 }
                             }
                             let void_d = li.min(-(dv + skin_t));
@@ -2675,20 +2779,45 @@ pub fn build_g5_sdf_from_params_with_origin_shift(
                 }
             }
         }
-        // Powder drainage ports into the grip cavity (`port_n` in 2..=4, strictly in `x < GUARD_X_MM - 1.5`)
-        // plus a z-axis medial face vent port into the blade cavity when `rho_blade_eff < 0.95` (`N14`, `S5-2`).
-        let n_ports = (p["port_n"].round() as usize).clamp(2, 4);
-        let mut port_xs = vec![p["x_t"] + p["centre_ring"], GUARD_X_MM - 4.0];
-        if n_ports >= 3 {
-            port_xs.push(p["x_t"] + p["centre_mid"]);
+        // Ports run one lattice cell into the cavity, cutting through the sheet, so both TPMS labyrinths drain
+        let carve_depth = skin_t + (lat_cell as f32).max(1.5);
+        // Grip ports along -y through the grip underside, between the webs (`port_n` stations in 2..=4)
+        if p["rho_grip"] < 0.95 {
+            let n_ports = (p["port_n"].round() as usize).clamp(2, 4);
+            let cand = [
+                0.5 * (web_st[0] + web_st[1]),
+                GUARD_X_MM - 4.0 - p["x_t"],
+                0.5 * web_st[0],
+                0.5 * (web_st[1] + web_st[2]),
+            ];
+            for &ps in cand.iter().take(n_ports) {
+                let px = p["x_t"] + ps;
+                for (i, &x) in xs.iter().enumerate() {
+                    if x >= GUARD_X_MM - 1.5 || (x - px).abs() > port_r + 1.0 {
+                        continue;
+                    }
+                    for (j, &y) in ys.iter().enumerate() {
+                        if y >= 0.0 {
+                            continue;
+                        }
+                        let base = (i * ny + j) * nz;
+                        for (k, &z) in zs.iter().enumerate() {
+                            if d[base + k] > -carve_depth {
+                                for &zo in &z_offs {
+                                    let cyl = ((x - px).hypot(z - zo) - port_r) as f32;
+                                    am[base + k] = am[base + k].max(-cyl);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
-        if n_ports >= 4 {
-            port_xs.push((p["x_t"] + p["centre_idx"]).min(GUARD_X_MM - 6.5));
-        }
-        let port_r = 1.25 + 0.35 * exo_open;
-        for px in port_xs {
+        // Guard ports along -y through the guard underside
+        if p["rho_guard"] < 0.95 {
+            let px = GUARD_X_MM + 3.0;
             for (i, &x) in xs.iter().enumerate() {
-                if x >= GUARD_X_MM - 1.5 || (x - px).abs() > port_r + 1.0 {
+                if (x - px).abs() > port_r + 1.0 {
                     continue;
                 }
                 for (j, &y) in ys.iter().enumerate() {
@@ -2697,78 +2826,108 @@ pub fn build_g5_sdf_from_params_with_origin_shift(
                     }
                     let base = (i * ny + j) * nz;
                     for (k, &z) in zs.iter().enumerate() {
-                        let cyl = ((x - px).hypot(z) - port_r) as f32;
-                        if d[base + k] > -skin_t - 1.0 {
-                            am[base + k] = am[base + k].max(-cyl);
+                        if d[base + k] > -carve_depth {
+                            for &zo in &z_offs {
+                                let cyl = ((x - px).hypot(z - zo) - port_r) as f32;
+                                am[base + k] = am[base + k].max(-cyl);
+                            }
                         }
                     }
                 }
             }
         }
+        // Ring ports: two radial ports through the rear of the ring outer wall (150 and 210 degrees from +x, away
+        // from the grip and clear of the bore)
+        if p["rho_ring"] < 0.95 {
+            let cx = p["cx"];
+            let r_b = p["R_b"];
+            for th_deg in [150.0_f64, 210.0] {
+                let (sn, cs) = th_deg.to_radians().sin_cos();
+                for (i, &x) in xs.iter().enumerate() {
+                    for (j, &y) in ys.iter().enumerate() {
+                        let (vx, vy) = (x - cx, y);
+                        let along = vx * cs + vy * sn;
+                        if along < r_b + 1.0 {
+                            continue;
+                        }
+                        let perp = (vx - along * cs).hypot(vy - along * sn);
+                        if perp > port_r + 1.0 {
+                            continue;
+                        }
+                        let base = (i * ny + j) * nz;
+                        for (k, &z) in zs.iter().enumerate() {
+                            if d[base + k] > -carve_depth {
+                                for &zo in &z_offs {
+                                    let cyl = (perp.hypot(z - zo) - port_r) as f32;
+                                    am[base + k] = am[base + k].max(-cyl);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // Blade vents along z through both faces at two medial stations (30 % and 55 % of the blade), when the
+        // blade is hollow; each station sits inside the cavity and >= 3.5 mm + port radius from both edges
         if include_blade && rho_blade_eff < 0.95 {
-            // Drill blade drain port along +z (`z >= 0`) at a medial station `(px, py)` on the blade
-            // centerline that sits inside the blade cavity and >= 3.5 mm + b_port_r from both edges (`S5-2`, `P4`).
-            let b_port_r = 1.20_f64;
             let k_mid = zs
                 .iter()
                 .enumerate()
                 .min_by(|(_, a), (_, b)| a.abs().total_cmp(&b.abs()))
                 .map(|(k, _)| k)
                 .unwrap_or(nz / 2);
-            let x_target = blade_prof.x_heel + 0.35 * (blade_prof.x_tip - blade_prof.x_heel);
-            let mut best_station: Option<(f64, f64)> = None;
-            let mut best_dist = f64::INFINITY;
-            for (i, &x) in xs.iter().enumerate() {
-                if x < 92.5 || x > blade_prof.x_tip - p["tip_reserve"].max(6.0) - 6.0 {
-                    continue;
-                }
-                let u_b = ((x - blade_prof.x_heel)
-                    / (blade_prof.x_tip - blade_prof.x_heel).max(1e-9))
-                .clamp(0.0, 1.0);
+            let profile_at = |x: f64| {
+                let u_b = ((x - blade_prof.x_heel) / (blade_prof.x_tip - blade_prof.x_heel).max(1e-9))
+                    .clamp(0.0, 1.0);
                 let idx_f = u_b * ((blade_prof.xs.len() - 1) as f64);
                 let i0 = (idx_f.floor() as usize).min(blade_prof.xs.len() - 2);
                 let frac = idx_f - (i0 as f64);
-                let yi_b = blade_prof.y_in[i0] * (1.0 - frac) + blade_prof.y_in[i0 + 1] * frac;
-                let ys_b = blade_prof.y_sp[i0] * (1.0 - frac) + blade_prof.y_sp[i0 + 1] * frac;
-                let py = 0.5 * (yi_b + ys_b);
-                if py - yi_b < 3.5 + b_port_r + 0.4 || ys_b - py < 3.5 + b_port_r + 0.4 {
-                    continue;
-                }
-                let j_mid = (((py - ys[0]) / h).round() as isize).clamp(0, ny as isize - 1) as usize;
-                if core[(i * ny + j_mid) * nz + k_mid] {
-                    let dist = (x - x_target).abs();
-                    if dist < best_dist {
-                        best_dist = dist;
-                        best_station = Some((x, py));
-                    }
-                }
-            }
-            if let Some((px, py)) = best_station {
+                (
+                    blade_prof.y_in[i0] * (1.0 - frac) + blade_prof.y_in[i0 + 1] * frac,
+                    blade_prof.y_sp[i0] * (1.0 - frac) + blade_prof.y_sp[i0 + 1] * frac,
+                )
+            };
+            for frac_target in [0.30_f64, 0.55] {
+                let x_target = blade_prof.x_heel + frac_target * (blade_prof.x_tip - blade_prof.x_heel);
+                let mut best_station: Option<(f64, f64)> = None;
+                let mut best_dist = f64::INFINITY;
                 for (i, &x) in xs.iter().enumerate() {
-                    if (x - px).abs() > b_port_r + 1.0 {
+                    if x < 92.5 || x > blade_prof.x_tip - p["tip_reserve"].max(6.0) - 6.0 {
                         continue;
                     }
-                    let u_b = ((x - blade_prof.x_heel)
-                        / (blade_prof.x_tip - blade_prof.x_heel).max(1e-9))
-                    .clamp(0.0, 1.0);
-                    let idx_f = u_b * ((blade_prof.xs.len() - 1) as f64);
-                    let i0 = (idx_f.floor() as usize).min(blade_prof.xs.len() - 2);
-                    let frac = idx_f - (i0 as f64);
-                    let yi_b = blade_prof.y_in[i0] * (1.0 - frac) + blade_prof.y_in[i0 + 1] * frac;
-                    let ys_b = blade_prof.y_sp[i0] * (1.0 - frac) + blade_prof.y_sp[i0 + 1] * frac;
+                    let (yi_b, ys_b) = profile_at(x);
+                    let py = 0.5 * (yi_b + ys_b);
+                    if py - yi_b < 3.5 + port_r + 0.4 || ys_b - py < 3.5 + port_r + 0.4 {
+                        continue;
+                    }
+                    let j_mid = (((py - ys[0]) / h).round() as isize).clamp(0, ny as isize - 1) as usize;
+                    if core[(i * ny + j_mid) * nz + k_mid] {
+                        let dist = (x - x_target).abs();
+                        if dist < best_dist {
+                            best_dist = dist;
+                            best_station = Some((x, py));
+                        }
+                    }
+                }
+                let Some((px, py)) = best_station else { continue };
+                for (i, &x) in xs.iter().enumerate() {
+                    if (x - px).abs() > port_r + 1.0 {
+                        continue;
+                    }
+                    let (yi_b, ys_b) = profile_at(x);
                     for (j, &y) in ys.iter().enumerate() {
-                        // Never allow any blade port voxel to enter the 3.5 mm edge bevel bands (`S5-2`, `P4`)
+                        // Never cut into the 3.5 mm edge bevel bands (`S5-2`, `P4`)
                         if y - yi_b < 3.6 || ys_b - y < 3.6 {
                             continue;
                         }
                         let r_xy = (x - px).hypot(y - py);
-                        if r_xy > b_port_r + 0.5 {
+                        if r_xy > port_r + 0.5 {
                             continue;
                         }
-                        let cyl_z = (r_xy - b_port_r) as f32;
+                        let cyl_z = (r_xy - port_r) as f32;
                         let base = (i * ny + j) * nz;
-                        for (k, &z) in zs.iter().enumerate() {
-                            if z >= 0.0 && d[base + k] > -skin_t - 1.0 {
+                        for k in 0..nz {
+                            if d[base + k] > -carve_depth {
                                 am[base + k] = am[base + k].max(-cyl_z);
                             }
                         }
@@ -3155,32 +3314,38 @@ mod tests {
     }
 
     #[test]
-    fn rule3_tpms_cavity_solid_fraction_matches_target_rho() {
-        let cell = 5.0;
-        let mix = 0.35;
-        let aniso = 1.2;
-        for &target_rho in &[0.15, 0.30, 0.50] {
-            let c = tpms_level_for_rho(cell, mix, aniso, target_rho);
-            let n = 32usize;
-            let mut solid_cnt = 0usize;
-            let total = n * n * n;
-            for i in 0..n {
-                let x = ((i as f64 + 0.5) / n as f64) * cell * aniso;
-                for j in 0..n {
-                    let y = ((j as f64 + 0.5) / n as f64) * cell;
-                    for k in 0..n {
-                        let z = ((k as f64 + 0.5) / n as f64) * cell;
-                        if tpms_val(x, y, z, cell, mix, aniso) > c {
-                            solid_cnt += 1;
+    fn rule3_sheet_tpms_solid_fraction_matches_target_rho() {
+        // A sheet of thickness t = rho * cell / S around f = 0 (first-order distance |f| / |grad f|) fills about
+        // rho of the cell, for gyroid and Schwarz-D sheets
+        let cell = 8.0;
+        let aniso = 1.0;
+        for &mix in &[0.0, 1.0] {
+            for &target_rho in &[0.25, 0.40] {
+                let t = crate::material::tpms_sheet_thickness(target_rho, cell, mix);
+                let n = 40usize;
+                let mut solid_cnt = 0usize;
+                for i in 0..n {
+                    let x = ((i as f64 + 0.5) / n as f64) * cell * aniso;
+                    for j in 0..n {
+                        let y = ((j as f64 + 0.5) / n as f64) * cell;
+                        for k in 0..n {
+                            let z = ((k as f64 + 0.5) / n as f64) * cell;
+                            let (f, g) = tpms_val_and_grad(x, y, z, cell, mix, aniso);
+                            if f.abs() / g.max(1e-6) < 0.5 * t {
+                                solid_cnt += 1;
+                            }
                         }
                     }
                 }
+                let actual_rho = (solid_cnt as f64) / ((n * n * n) as f64);
+                // The expected density is that of the sheet actually built (the 0.8 mm floor can raise it)
+                let built_rho = crate::material::tpms_density_of_sheet(t, cell, mix);
+                println!("mix {mix} target {target_rho}: sheet {t:.3} mm, built {built_rho:.4}, measured {actual_rho:.4}");
+                assert!(
+                    (actual_rho - built_rho).abs() < 0.05,
+                    "sheet TPMS fraction {actual_rho} differed from the built density {built_rho} (mix {mix}) by >= 0.05"
+                );
             }
-            let actual_rho = (solid_cnt as f64) / (total as f64);
-            assert!(
-                (actual_rho - target_rho).abs() < 0.02,
-                "TPMS fraction {actual_rho} differed from target {target_rho} by >= 0.02"
-            );
         }
     }
 
