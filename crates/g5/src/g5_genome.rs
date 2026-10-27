@@ -1,11 +1,11 @@
-//! `G5.0` 139-gene modular genome schema (derived from G3's 179-gene `G3_GENOME_SPEC.md` v1.1) for the
+//! `G5.0` 134-gene modular genome schema (derived from G3's 179-gene `G3_GENOME_SPEC.md` v1.1) for the
 //! fixed-blade, sheath-free, hollow-capable L-PBF Ti-6Al-4V Jarambit under RS-karambit-v5.
 //!
 //! Design principles (Owner directive 2026-10-25T01:13:42Z):
 //! - **Evolutionary search drives all 3D geometry**: no agent-hand-crafted individuals, no hidden
 //!   offspring gene overrides, and no v1 parent-pool seeds.
-//! - **Unit hypercube encoding**: `u in [0, 1]^139`, mapped linearly or log-uniformly to physical
-//!   parameters by `decode()`. Sobol starts use the first 139 Joe-Kuo dimensions.
+//! - **Unit hypercube encoding**: `u in [0, 1]^134`, mapped linearly or log-uniformly to physical
+//!   parameters by `decode()`. Sobol starts use the first 134 Joe-Kuo dimensions.
 //! - **Strict CSV/JSON loader**: requires `schema=G5.0` and a verified `genome_sha256` over exact
 //!   IEEE-754 little-endian bits; refuses v1 90/117/128-gene rows.
 //! - **Variation**: reflective `Iso+Line-DD` mutation (`child = a + sigma_m * N(0, I) + 0.25 * N(0, 1) * (b - a)`),
@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
 pub const G5_SCHEMA: &str = "G5.0";
-pub const G5_NUM_GENES: usize = 139;
+pub const G5_NUM_GENES: usize = 134;
 pub const FIXED_BORE_D_MM: f64 = 24.9;
 pub const FIXED_LIP_W_MM: f64 = 8.0;
 pub const M50_PITCHES_MM: [f64; 3] = [19.5, 21.0, 22.0];
@@ -106,9 +106,10 @@ macro_rules! log_gene {
     };
 }
 
-/// Complete 139-gene table for `G5.0`: the G3 table without its 37 texture genes, the two retired edge-stop genes,
-/// the five cusped-serration genes and `exo_open` (G3's port-radius gene), plus five genes in requirement units
-/// (grip perimeter and H/T, port diameter, point angle, point length).
+/// Complete 134-gene table for `G5.0`: the G3 table without its 37 texture genes, the two retired edge-stop genes,
+/// the five cusped-serration genes, `exo_open` (G3's port-radius gene) and the five fenestration-window genes (lens
+/// slots whose tight ends raise the plate stress beyond what the search mesh resolves), plus five genes in requirement
+/// units (grip perimeter and H/T, port diameter, point angle, point length).
 pub static G5_GENES: [GeneSpec; G5_NUM_GENES] = [
     // ---- Module H: Ring (11 genes, 0..11) ----
     lin_gene!("ring_od", H, 29.5, 35.0, 30.6),
@@ -181,7 +182,7 @@ pub static G5_GENES: [GeneSpec; G5_NUM_GENES] = [
     lin_gene!("scope_grip", S, 0.0, 1.0, 1.0),
     lin_gene!("scope_ring", S, 0.0, 1.0, 0.15),
     lin_gene!("scope_blade", S, 0.0, 1.0, 0.25),
-    // ---- Module I extensions (8 genes, 62..70) ----
+    // ---- Module I extensions (7 genes, 62..69) ----
     lin_gene!("rho_blade", I, 0.06, 1.0, 0.35),
     lin_gene!("lat_grade", I, 0.0, 1.0, 0.20),
     lin_gene!("port_n", I, 2.0, 4.0, 2.0),
@@ -189,7 +190,7 @@ pub static G5_GENES: [GeneSpec; G5_NUM_GENES] = [
     lin_gene!("lat_aniso_x", I, 0.70, 1.60, 1.15),
     lin_gene!("rho_grad_wall", I, 0.0, 0.50, 0.20),
     lin_gene!("shear_web_amp", I, 0.0, 1.0, 0.30),
-    // ---- Module B: Blade planform, 3D ridge, fuller corrugation, fenestration (44 genes, 70..114) ----
+    // ---- Module B: Blade planform, 3D ridge, fuller corrugation (38 genes, 69..107) ----
     lin_gene!("blade_len", B, 60.0, 85.725, 85.725),
     lin_gene!("sweep_deg", B, -12.0, 12.0, -3.5),
     lin_gene!("hook_drop", B, 25.0, 55.0, 41.5),
@@ -234,12 +235,7 @@ pub static G5_GENES: [GeneSpec; G5_NUM_GENES] = [
     lin_gene!("ridge_s1", B, 0.55, 0.92, 0.80),
     lin_gene!("fuller_corrug_amp", B, 0.0, 1.2, 0.3),
     // 5-gene level-set medial fenestration field
-    lin_gene!("win_amp", B, 0.0, 1.0, 0.25),
-    lin_gene!("win_pitch", B, 6.0, 18.0, 10.0),
-    lin_gene!("win_s0", B, 0.08, 0.35, 0.15),
-    lin_gene!("win_s1", B, 0.45, 0.85, 0.68),
-    lin_gene!("win_angle", B, -40.0, 40.0, 15.0),
-    // ---- Module E: Double-edged, double-serrated bevels + tip_reserve (22 genes, 114..136) ----
+    // ---- Module E: Double-edged, double-serrated bevels + tip_reserve (22 genes, 107..129) ----
     lin_gene!("tip_reserve", E, 4.0, 12.0, 8.0), // G5.0: the tip may thicken sooner (tip twist)
     lin_gene!("t_0p25_target", E, 0.18, 0.28, 0.24),
     lin_gene!("t_1p00_target", E, 0.38, 0.56, 0.48),
@@ -264,7 +260,7 @@ pub static G5_GENES: [GeneSpec; G5_NUM_GENES] = [
     lin_gene!("ser_pitch_sp", E, 4.0, 6.0, 5.0), // G5.0: [serration] pitch
     lin_gene!("ser_depth_sp", E, 0.8, 1.5, 1.0), // G5.0: [serration] depth
     lin_gene!("ser_duty_sp", E, 0.45, 0.85, 0.65),
-    // ---- Module M: Self-adaptive per-module mutation step sizes (5 genes, 136..139) ----
+    // ---- Module M: Self-adaptive per-module mutation step sizes (5 genes, 129..134) ----
     log_gene!("sigma_B", M, 0.01, 0.20, 0.05),
     log_gene!("sigma_E", M, 0.01, 0.20, 0.04),
     log_gene!("sigma_H", M, 0.01, 0.20, 0.05),
@@ -292,7 +288,7 @@ impl TryFrom<RawG5Genome> for G5Genome {
     }
 }
 
-/// Unit-hypercube genome `u in [0, 1]^139` with strict `G5.0` provenance.
+/// Unit-hypercube genome `u in [0, 1]^134` with strict `G5.0` provenance.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(try_from = "RawG5Genome")]
 pub struct G5Genome {
@@ -357,7 +353,7 @@ impl G5Genome {
         crate::sha256_bytes(&bytes)
     }
 
-    /// Decode unit coordinates `u in [0, 1]^139` into physical parameters and derived hand-zone datums.
+    /// Decode unit coordinates `u in [0, 1]^134` into physical parameters and derived hand-zone datums.
     /// Fails closed (panics) if `self.validate()` fails (`I11`, `N9`).
     pub fn decode(&self) -> BTreeMap<&'static str, f64> {
         self.validate()
@@ -518,7 +514,7 @@ impl G5Rng {
     }
 }
 
-/// Generate a scrambled Joe-Kuo Sobol genome in $[0, 1]^{139}$ (the first `G5_NUM_GENES` of the 179 tabulated
+/// Generate a scrambled Joe-Kuo Sobol genome in $[0, 1]^{134}$ (the first `G5_NUM_GENES` of the 179 tabulated
 /// `new-joe-kuo-6.21201` dimensions; any leading subset of a Sobol sequence is itself a Sobol sequence) with
 /// Matousek Linear Matrix Scrambling (LMS) + digital shift seeded by `seed_offset` (zero manual design bias, zero
 /// v1 or G3 seeds).
@@ -546,7 +542,7 @@ pub fn sobol_unit_genome_unscrambled(index: usize, decoder_commit: &str) -> G5Ge
 }
 
 /// Produce an offspring genome via self-adaptive `Iso+Line-DD` mutation and optional module-level
-/// crossover (`p = 0.15`), using reflective bounds in `[0, 1]^139` (`G3_GENOME_SPEC.md` §4).
+/// crossover (`p = 0.15`), using reflective bounds in `[0, 1]^134` (`G3_GENOME_SPEC.md` §4).
 /// Never applies any manual gene overrides.
 pub fn reproduce_iso_line_dd(
     parent_a: &G5Genome,
@@ -622,14 +618,15 @@ mod tests {
     use super::*;
 
     #[test]
-    fn g5_gene_table_has_139_unique_genes_without_texture_cppn_or_retired_genes() {
+    fn g5_gene_table_has_134_unique_genes_without_texture_cppn_or_retired_genes() {
         assert_eq!(G5_GENES.len(), G5_NUM_GENES);
         let mut names: Vec<&str> = G5_GENES.iter().map(|g| g.name).collect();
         names.sort_unstable();
         names.dedup();
         assert_eq!(names.len(), G5_NUM_GENES, "gene names must be unique");
         for gone in ["cppn_00", "cppn_31", "w_turing", "w_voronoi", "w_cppn", "turing_mix", "seed", "s1_in", "s1_sp",
-            "w_scallop_in", "w_tooth_in", "w_micro_in", "w_scallop_sp", "w_tooth_sp", "exo_open", "tip_radius"]
+            "w_scallop_in", "w_tooth_in", "w_micro_in", "w_scallop_sp", "w_tooth_sp", "exo_open", "tip_radius",
+            "win_amp", "win_pitch", "win_s0", "win_s1", "win_angle"]
         {
             assert!(!names.contains(&gone), "{gone} is retired in G5.0");
         }

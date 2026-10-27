@@ -1678,7 +1678,7 @@ fn evaluate_tier2_from_tier1(
 // ---------------- 1024-Niche CVT-MAP-Elites Archive ----------------
 
 /// Halton points in [0, 1]^8 (bases 2..19), the Lloyd starting set.
-fn halton8(n: usize) -> Vec<[f64; 8]> {
+pub fn halton8(n: usize) -> Vec<[f64; 8]> {
     const BASES: [usize; 8] = [2, 3, 5, 7, 11, 13, 17, 19];
     (0..n)
         .map(|idx| {

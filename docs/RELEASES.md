@@ -53,8 +53,9 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
     longer divides the stress by that factor before applying Marin factors (audit F-M-2). RS-v5
     `stiffness_uses_effective_thickness` is now `false`: Xie's law is fitted to nominal-section stress, so the rough
     layer is counted once.
-  - **Decoder G5.0** (139 genes):
-    - **Removed:** the texture CPPN, the dead genes, the cusped serration shapes and `exo_open`.
+  - **Decoder G5.0** (134 genes):
+    - **Removed:** the texture CPPN, the dead genes, the cusped serration shapes, `exo_open` and the fenestration
+      windows (lens-shaped slots whose ends raised the plate stress beyond what the search mesh resolves).
     - **Added:** grip perimeter and H/T genes (the swell section is built to them), a port-diameter gene, and a
       point-angle and point-length module (a rounded wedge that caps the point's width).
     - **Bounds and rules:**

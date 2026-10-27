@@ -43,12 +43,13 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
    Every evaluator takes E, ν, G and its allowables from this module. Still to do:
    - the sheet-TPMS laws (with the decoder);
    - the solid-tip TET10 still uses the physics crate's hard-coded G3 material until the load-case PR copies it.
-3. **Decoder G5.0.** Done: 139 genes, down from G3's 179.
+3. **Decoder G5.0.** Done: 134 genes, down from G3's 179.
    - **Removed:**
      - the 37 texture genes (Turing, Voronoi and a 32-weight CPPN); the knurl and ridge that remain are zero-mean;
      - the retired `s1_*` edge-stop genes;
      - the cusped tooth and micro serration genes;
-     - `exo_open`.
+     - `exo_open`;
+     - the five fenestration-window genes (see load cases).
    - **Added**, in requirement units:
      - `grip_perim` and `grip_hot`: the swell section is scaled to them, and measures within 2 %;
      - `port_d`;
@@ -83,9 +84,12 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
      - fatigue by surface class (a hollow blade's cavity faces are as-built);
      - the blade-before-hand sequence per load case;
      - buckling of the point under 150 N, as a Rayleigh-Ritz column (checked against Euler).
-   - **Tier-1 plate:** the whole blade at 0.3 mm². Windows are traced as conforming mesh holes (marching squares on
-     the decoder's window field), and the loads are smooth: a 2 mm patch, a couple on the blade body, a held 20 mm
-     region. Lateral and twist agree within 10 % between 0.3 and 0.15 mm²; G3's plate did not converge.
+   - **Tier-1 plate:** the whole blade at 0.3 mm², with smooth loads: a 2 mm patch, a couple on the blade body, a
+     held 20 mm region. Lateral and twist agree within 15 % between 0.3 and 0.15 mm²; the single-element peak in the
+     thin bevels scatters about ±6 %. G3's plate did not converge.
+   - **No fenestration windows:** G5.0 retired them (5 genes, 134 genes in all). Their lens-shaped slot ends raised
+     the plate stress beyond what the search mesh resolves: a windowed design's lateral SF fell from 0.64 to 0.38
+     between 0.3 and 0.08 mm².
 
    - **Tier-2 solid tip** (`tip_tet10.rs`, a parameterised copy of `physics::solid_tet10`):
      - the RS-v5 axial, side and twist tip cases about the tip bisector, with E and ν from RS-v5;

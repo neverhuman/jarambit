@@ -157,6 +157,11 @@ of fitness for use.
 
   They are tested for two properties before the decoder is frozen: raising any failing safety factor to its
   requirement must outscore the mass it costs, and 1 % of E must cost at least 10 g of mass credit.
+- **Contact area (an assumption, grade D).** The pressure limits come from the sources above. The hand's contact patch
+  on the grip is not tabulated in them (Seo & Armstrong 2008 report contact area only as a figure), so
+  W_ERGOLIGHT_v2 takes it as the front half of the swell perimeter along 60 % of the grip length. The factor depends
+  on the design only through grip length × perimeter, the same direction as the 84–100 mm band. A measured hand
+  model can replace it.
 - **Worst margin, multiplied (G5 pilot, 2026-10-27).** At first the worst margin was an additive 0.25 term. In the
   pilot (12 islands × 600 evaluations), designs failing several load cases (fatigue v = 0.12, tip twist 0.23,
   ultimate 0.24) scored within 12 % of a 90 g design meeting every case, because E^5 multiplied their comfort lead.

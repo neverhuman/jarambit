@@ -42,6 +42,10 @@ path = "src/bin/g5_bladefield.rs"
 name = "g5-tipconv"
 path = "src/bin/g5_tipconv.rs"
 
+[[bin]]
+name = "g5-vv"
+path = "src/bin/g5_vv.rs"
+
 [dependencies]
 jarambit-crescent = { path = "../crescent" }
 jarambit-physics = { path = "../physics" }

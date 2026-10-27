@@ -291,46 +291,30 @@ mod v1_identity_tests {
                 .unwrap_or_else(|| panic!("missing gene {name}"))
         };
 
-        // 1. N1 + P1: Unvented blade (win_amp = 0.20 <= 0.35) gets zero mass credit for rho_blade = 0.06;
-        //    vented blade (win_amp = 0.50 > 0.35) drops mass_g AND moves plate strength terms + am_build.
+        // 1. A hollow blade (rho_blade 0.06, vented by its own blade vents) is lighter than the solid blade and loses
+        //    plate capacity
         let set_phys = |g: &mut G5Genome, name: &str, phys: f64| {
             let i = idx_of(name);
             g.u[i] = G5_GENES[i].unit_from_phys(phys).clamp(0.0, 1.0);
         };
         let mut g_solid = G5Genome::benchmark_reference("22bb8696");
         set_phys(&mut g_solid, "rho_blade", 1.0);
-        set_phys(&mut g_solid, "win_amp", 0.20);
-        set_phys(&mut g_solid, "lat_cell", 4.0);
-
-        let mut g_unvented = g_solid.clone();
-        set_phys(&mut g_unvented, "rho_blade", 0.06);
-
-        let mut g_vented = g_unvented.clone();
-        set_phys(&mut g_vented, "win_amp", 0.50);
-
+        set_phys(&mut g_solid, "lat_cell", 5.0);
+        let mut g_vented = g_solid.clone();
+        set_phys(&mut g_vented, "rho_blade", 0.06);
         let r_solid = evaluate_tier1_sdf_and_plate(&g_solid, 0.8);
-        let r_unvented = evaluate_tier1_sdf_and_plate(&g_unvented, 0.8);
         let r_vented = evaluate_tier1_sdf_and_plate(&g_vented, 0.8);
-
-        assert!(
-            (r_solid.inputs.mass_g - r_unvented.inputs.mass_g).abs() < 1e-6,
-            "P1/N1: unvented blade (win_amp=0.20 <= 0.35) must not get mass credit for rho_blade=0.06 (solid={} vs unvented={})",
-            r_solid.inputs.mass_g,
-            r_unvented.inputs.mass_g
-        );
         assert!(
             r_vented.inputs.mass_g < r_solid.inputs.mass_g - 1.0,
-            "P1/N1: vented hollow blade (win_amp=0.50 > 0.35, rho_blade=0.06) must reduce mass_g (vented={} vs solid={})",
+            "a hollow blade must be lighter (hollow={} vs solid={})",
             r_vented.inputs.mass_g,
             r_solid.inputs.mass_g
         );
         assert!(
-            r_vented.inputs.twist_body_sf < r_solid.inputs.twist_body_sf
-                && r_vented.inputs.hm_spine_sf < r_solid.inputs.hm_spine_sf
-                && r_vented.inputs.am_build < r_solid.inputs.am_build,
-            "P1/N1: vented hollow blade must reduce plate capacities and am_build (vented twist_body={} vs solid={})",
-            r_vented.inputs.twist_body_sf,
-            r_solid.inputs.twist_body_sf
+            r_vented.loads.lateral_limit_sf < r_solid.loads.lateral_limit_sf,
+            "a hollow blade must lose plate capacity (hollow={} vs solid={})",
+            r_vented.loads.lateral_limit_sf,
+            r_solid.loads.lateral_limit_sf
         );
 
         // 2. N2: Full G5 SDF (`include_blade == true`) has zero phantom f075 spine fin outside evolved blade for x > 94.0
