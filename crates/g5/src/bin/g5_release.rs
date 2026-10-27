@@ -5,6 +5,9 @@
 //!   g5-release top <tier2_h020.jsonl> <n>     the ranking's top n design ids, comma-separated (for the grid check)
 //!   g5-release plate-meshes <cohort_root> <tier2_h020.jsonl> <n> <out.jsonl> [threads=4]
 //!                                             the top n designs' plate cases on the check meshes (platform of record)
+//!   g5-release receipt-v6 <repo_root> <run_root> <cert_dir> [shortlist=32] [grid_top=8]
+//!                                             the v6.0.0 receipt: the continuation's lineage, then the same
+//!                                             certification (module `g5_release/v6.rs`)
 //!   g5-release fitness <release.json> <out_dir>
 //!                                             the fitness figures of a receipt: the 100-point budget (donut) and the
 //!                                             points per term (ranked bars), checked to sum to the score
@@ -52,6 +55,11 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+#[path = "g5_shared/archive.rs"]
+mod archive;
+#[path = "g5_release/v6.rs"]
+mod v6;
 const H_SEARCH: f64 = 0.4;
 const H_RECORD: f64 = 0.2;
 const H_FINE: f64 = 0.15;
@@ -439,7 +447,8 @@ fn rank(t2: &[Value]) -> Vec<&Value> {
 const USAGE: &str = "usage: g5-release receipt <repo_root> <cohort_root> <baseline_root> <cert_dir> [shortlist=32] [grid_top=8]\n\
                      \x20      g5-release top <tier2_h020.jsonl> <n>\n\
                      \x20      g5-release plate-meshes <cohort_root> <tier2_h020.jsonl> <n> <out.jsonl> [threads=4]\n\
-                     \x20      g5-release fitness <release.json> <out_dir>";
+                     \x20      g5-release fitness <release.json> <out_dir>\n\
+                     \x20      g5-release receipt-v6 <repo_root> <run_root> <cert_dir> [shortlist=32] [grid_top=8]";
 
 fn main() {
     let a: Vec<String> = std::env::args().collect();
@@ -451,6 +460,7 @@ fn main() {
             println!("{}", ids.join(","));
         }
         Some("receipt") if a.len() >= 6 => receipt(&a[2..]),
+        Some("receipt-v6") if a.len() >= 5 => v6::receipt_v6(&a[2..]),
         Some("plate-meshes") if a.len() >= 6 => {
             let threads: usize = a.get(6).map_or(4, |v| v.parse().unwrap_or_else(|_| fail(USAGE)));
             rayon::ThreadPoolBuilder::new().num_threads(threads).build_global().ok();
