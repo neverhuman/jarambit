@@ -640,30 +640,6 @@ def g5v6_evolution(r, rk, gc, man):
     return L + ['']
 
 
-def g5v6_vs_v5(r, rk):
-    """v6 on: the winner against the v5.0.0 winner, both on the v6 platform of record (same decoder and objective)."""
-    v5 = rk['v5_winner_same_platform']
-    sc, eg, ms, mgm = r['score'], r['ergonomics'], r['mass'], r['margins_min_over_plate_meshes']
-    rows = [('W_ERGOLIGHT_v2 (Tier 2, h 0.2 mm)', f'{v5["score"]["score_100"]:.2f}', f'{sc["score_100"]:.2f}', sc['score_100'] >= v5['score']['score_100']),
-            ('Worst margin (minimum over the plate meshes)', f'{v5["worst_margin"]:.3f}', f'{r["worst_margin"]:.3f}', r['worst_margin'] >= 1.0),
-            ('Load cases met', f'{v5["cases_met"]} of {v5["cases"]}', f'{r["cases_met"]} of {r["cases"]}', r['cases_met'] >= v5['cases_met']),
-            ('Mass of record', f'{v5["mass_g"]:.1f} g', f'{ms["of_record_g"]:.1f} g', ms['of_record_g'] <= v5['mass_g']),
-            ('Hand multiplier E', f'{v5["score"]["E"]:.3f}', f'{sc["E"]:.3f}', sc['E'] >= v5['score']['E']),
-            ('Grip length / perimeter', f'{v5["grip_length_mm"]:.1f} / {v5["grip_perimeter_mm"]:.1f} mm',
-             f'{eg["grip_length_mm"]:.1f} / {eg["grip_perimeter_mm"]:.1f} mm', None),
-            ('Genome (sha256)', f'`{v5["genome_sha256"][:12]}`', f'`{r["provenance"]["genome_sha256"][:12]}`', None)]
-    L = [f'## v{r["version"]} against v5.0.0', '',
-         f'Both winners on the v{r["version"]} platform of record, with the same decoder, requirement set and objective (the v5.0.0 winner '
-         f'`{v5["design_id"]}` re-evaluated here; its v5.0.0 record was made on arm64):', '',
-         '| Measure | v5.0.0 winner | v' + r['version'] + ' winner | Not worse |', '|---|---:|---:|:---:|']
-    for name, a, b, ok in rows:
-        L.append(f'| {name} | {a} | {b} | {"—" if ok is None else ("yes" if ok else "**no**")} |')
-    L += ['', '| Load case | v5.0.0 margin | v' + r['version'] + ' margin |', '|---|---:|---:|']
-    for k in CASE_KEYS:
-        L.append(f'| {k.replace("_", " ")} | {v5["margins_min_over_plate_meshes"][k]:.3f} | {mgm[k]:.3f} |')
-    return L + ['']
-
-
 def g5v6_verification(r, rv):
     """v6 on: the first bullets of Verification and limits (platform, reproduction, lineage, GPU spike)."""
     co, rp = r['cohort'], r['cohort']['reproduced']
@@ -807,9 +783,10 @@ def readme_g5():
           f'Edge sections at four stations per edge, true scale, from the exact decoder law (dashed: {ed_rs["per_side_angle_min_deg"]:g}° per side, '
           'the smallest angle the requirement allows):', '',
           picture(img['edge_sections_light'], img['edge_sections_dark'], 'Blade cross-sections of both edges'), '']
-    # ---- v6: where the score comes from, the FEM renderings, the evolution, against v5.0.0
+    # ---- v6: where the score comes from, the FEM renderings, the evolution (the comparison with the v5.0.0 winner is in
+    # docs/RELEASES.md and the paper: the README describes only this release's best individual)
     if v6:
-        L += g5v6_fitness(r) + g5v6_fem(rv) + g5v6_evolution(r, rk, gc, man) + g5v6_vs_v5(r, rk)
+        L += g5v6_fitness(r) + g5v6_fem(rv) + g5v6_evolution(r, rk, gc, man)
     # ---- evolution (v5.0.0)
     base_best = None if v6 else max(ev['baseline_final_best_score_100'])
     L += [] if v6 else ['## How evolution produced it', '',

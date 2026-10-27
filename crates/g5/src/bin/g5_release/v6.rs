@@ -540,7 +540,7 @@ pub fn receipt_v6(a: &[String]) {
             .collect()
     };
     let figure = format!("docs/g5/v{version}/img/evolution.svg");
-    let svg = evolution_v6_svg(&lineage, &round_rows, &control, v5_t1, reeval.len() as f64);
+    let svg = evolution_v6_svg(&lineage, &round_rows, &control, reeval.len() as f64);
     if fs::read_to_string(repo.join(&figure)).ok().as_deref() != Some(svg.as_str()) {
         fs::write(repo.join(&figure), svg).unwrap();
     }
@@ -671,9 +671,9 @@ fn lineage_name(p: &Path, root: &Path) -> String {
 
 /// The v6 evolution figure, best score (Tier 1, h 0.4) against the evaluations spent, log scale: the pool lineage (series
 /// 1, blue) from the re-evaluation of the v5.0.0 elites on, a step at each merge; the fresh-start control (series 2, orange,
-/// dashed) as the best over all its islands against their combined evaluations; the v5.0.0 winner's Tier-1 score on this
-/// platform as a dotted reference. The validated pair of `evolution_svg`.
-fn evolution_v6_svg(lineage: &[Value], rounds: &[Value], control: &[V6Island], v5_t1: f64, reeval_evals: f64) -> String {
+/// dashed) as the best over all its islands against their combined evaluations. Only this release's runs are drawn (the
+/// README shows no older design); the paper compares the v5.0.0 winner in its text. The validated pair of `evolution_svg`.
+fn evolution_v6_svg(lineage: &[Value], rounds: &[Value], control: &[V6Island], reeval_evals: f64) -> String {
     let mut pts: Vec<(f64, f64, String)> = Vec::new();
     let mut cum = reeval_evals;
     for l in lineage {
@@ -701,7 +701,7 @@ fn evolution_v6_svg(lineage: &[Value], rounds: &[Value], control: &[V6Island], v
     let xs: Vec<f64> = pts.iter().map(|p| p.0).chain(ctl.iter().map(|p| p.0)).collect();
     let (xlo, xhi) = (xs.iter().copied().fold(f64::INFINITY, f64::min).max(1.0), xs.iter().copied().fold(1.0, f64::max));
     let (lx0, lx1) = (xlo.log10().floor(), xhi.log10().ceil().max(xlo.log10().floor() + 1.0));
-    let vals: Vec<f64> = pts.iter().map(|p| p.1).chain(ctl.iter().map(|p| p.1)).chain([v5_t1]).collect();
+    let vals: Vec<f64> = pts.iter().map(|p| p.1).chain(ctl.iter().map(|p| p.1)).collect();
     let lo = (vals.iter().copied().fold(f64::INFINITY, f64::min) / 10.0).floor() * 10.0;
     let hi = (vals.iter().copied().fold(f64::NEG_INFINITY, f64::max) / 5.0).ceil() * 5.0;
     let (w, h, l, r, t, b) = (760.0, 400.0, 48.0, 210.0, 78.0, 46.0);
@@ -733,8 +733,7 @@ fn evolution_v6_svg(lineage: &[Value], rounds: &[Value], control: &[V6Island], v
     o += &format!(
         "<title id=\"t\">Best score found against evaluations spent, v6 continuation and fresh-start control</title>\n<desc id=\"d\">\
          The pool lineage starts from the re-evaluated v5.0.0 elites at {:.1} and reaches {:.1} after {:.0} evaluations; the {} \
-         fresh-start control islands reach {cbest:.1} after {cspent:.0} evaluations; the v5.0.0 winner scores {v5_t1:.1} on the same \
-         grid.</desc>\n",
+         fresh-start control islands reach {cbest:.1} after {cspent:.0} evaluations.</desc>\n",
         pts.first().map_or(0.0, |p| p.1),
         last.1,
         last.0,
@@ -746,7 +745,7 @@ fn evolution_v6_svg(lineage: &[Value], rounds: &[Value], control: &[V6Island], v
         "<text class=\"t2\" x=\"{l}\" y=\"45\">W_ERGOLIGHT_v2, Tier 1 at h 0.4 mm · evaluations on a log scale, summed over \
          each search's islands</text>\n"
     );
-    let lg = [("win", "Pool lineage (warm start)"), ("base", "Fresh-start control"), ("ref", "v5.0.0 winner (same grid)")];
+    let lg = [("win", "Pool lineage (warm start)"), ("base", "Fresh-start control")];
     let mut lgx = l;
     for (cls, name) in lg {
         o += &format!("<line class=\"{cls}\" x1=\"{lgx}\" y1=\"62\" x2=\"{}\" y2=\"62\"/>", lgx + 22.0);
@@ -770,7 +769,6 @@ fn evolution_v6_svg(lineage: &[Value], rounds: &[Value], control: &[V6Island], v
     o += &format!("<line class=\"axis\" x1=\"{l}\" x2=\"{}\" y1=\"{}\" y2=\"{}\"/>\n", w - r, h - b, h - b);
     o += &format!("<text class=\"tk\" x=\"{:.1}\" y=\"{}\" text-anchor=\"middle\">evaluations spent (log scale)</text>\n",
                   0.5 * (l + w - r), h - 8.0);
-    o += &format!("<line class=\"ref\" x1=\"{l}\" x2=\"{}\" y1=\"{:.1}\" y2=\"{:.1}\"/>\n", w - r, y(v5_t1), y(v5_t1));
     let path = |p: &[(f64, f64)]| -> String {
         let mut d = format!("M{:.1} {:.1}", x(p[0].0), y(p[0].1));
         for q in &p[1..] {
@@ -792,7 +790,6 @@ fn evolution_v6_svg(lineage: &[Value], rounds: &[Value], control: &[V6Island], v
     let mut labels = vec![
         (y(last.1), format!("pool lineage · {:.1}", last.1)),
         (y(cbest), format!("control · best {cbest:.1}")),
-        (y(v5_t1), format!("v5.0.0 winner · {v5_t1:.1}")),
     ];
     labels.sort_by(|a, b| a.0.total_cmp(&b.0));
     for k in 1..labels.len() {
