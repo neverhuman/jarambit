@@ -62,6 +62,7 @@ pub fn g5_decoder_sha256_uncached() -> String {
         include_str!("material.rs"),
         include_str!("loads.rs"),
         include_str!("objective.rs"),
+        include_str!("tip_tet10.rs"),
         include_str!("../../../requirements/RS-karambit-v5.toml"),
         include_str!("../../physics/src/fine.rs"),
         include_str!("../../physics/src/solid_tet10.rs"),
@@ -1630,6 +1631,13 @@ fn evaluate_tier2_from_tier1(
     }
     for i in (0..blade.xs.len()).rev() {
         b_outer.push((blade.xs[i], blade.y_sp[i]));
+    }
+    // RS-karambit-v5 tip cases on the TET10 solid (`loads::tip_solid_cases`); the section values stay if it fails
+    if let Some(ts) = crate::loads::tip_solid_cases(&p, &blade) {
+        rec.loads.tip_axial_sf = ts.axial_sf;
+        rec.loads.tip_lateral_sf = ts.lateral_sf;
+        rec.loads.tip_twist_sf = ts.twist_sf;
+        rec.loads.tip_model = crate::loads::TipModel::Solid;
     }
     if let Some(b_mesh) = mesh_domain(&b_outer, &[], TIP_FE_MAX_AREA_MM2) {
         let x0 = blade.x_tip - 32.0;

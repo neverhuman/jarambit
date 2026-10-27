@@ -79,6 +79,11 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
     - Lloyd CVT niche centres;
     - promotion by rank within the island, in place of fixed score gates;
     - sparse mutation, about 3 genes per module.
+  - **Solid tip** (`crates/g5/src/tip_tet10.rs`):
+    - the TET10 tip submodel with the RS-v5 tip loads, about the tip bisector (G3's axis ran from the coordinate
+      origin), with RS-v5 material and the strict residual rule;
+    - Tier 2 records solid-FE tip safety factors;
+    - certification mesh 0.08 mm².
   - **Finding on G3.** Under this rule, the G3 v3.0.0 winner's lattice reaches its 2.8 mm powder ports only through
     two 0.85 mm slits beside the 1.1 mm mid-plane rib. Its cavity counts as undrainable (13,005 mm³). This is a G3
     decoder limitation: depowdering of the G3 design is unverified. The G5 decoder must place ports clear of ribs.

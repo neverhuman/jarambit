@@ -26,6 +26,7 @@ pub mod material;
 pub mod objective;
 pub mod requirements;
 pub mod sobol_joe_kuo;
+pub mod tip_tet10;
 
 /// Pure-Rust FIPS 180-4 SHA-256 hex digest helper (matches `battery::sha256_bytes` bit-for-bit).
 pub fn sha256_bytes(data: &[u8]) -> String {

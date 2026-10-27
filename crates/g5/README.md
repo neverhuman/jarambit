@@ -87,7 +87,13 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
      the decoder's window field), and the loads are smooth: a 2 mm patch, a couple on the blade body, a held 20 mm
      region. Lateral and twist agree within 10 % between 0.3 and 0.15 mm²; G3's plate did not converge.
 
-   Still to do: the solid-tip TET10 (Tier 2) with the RS-v5 tip loads, and the ergonomic contact pressures.
+   - **Tier-2 solid tip** (`tip_tet10.rs`, a parameterised copy of `physics::solid_tet10`):
+     - the RS-v5 axial, side and twist tip cases about the tip bisector, with E and ν from RS-v5;
+     - stresses read at the RS-v5 stations;
+     - a residual check that keeps 1e-10, accepting at the float64 floor only with a componentwise backward error
+       ≤ 1e-12, plus two steps of iterative refinement.
+     The section model is conservative against it (side 0.57 against 0.79, twist 0.39 against 0.80 on one design).
+     Twist is converged at 0.15 mm²; axial and side change 13–19 % to 0.08 mm², the certification mesh.
 5. **`W_ERGOLIGHT_v2`.** Done, in `objective.rs`; scores every tier.
    - **Structural terms:** one per load case, v = SF/SF_req, scored 0.94·v⁴ below 1 with a knee above.
    - **Worst margin:** weight 0.25.

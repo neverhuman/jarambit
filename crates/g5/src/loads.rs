@@ -283,10 +283,22 @@ pub enum BladeModel {
     Plate,
 }
 
+/// Model of the tip cases.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum TipModel {
+    /// Integrated sections (Tiers 0 and 1)
+    #[default]
+    Sections,
+    /// TET10 solid submodel (Tier 2, `tip_tet10`)
+    Solid,
+}
+
 /// Every RS-karambit-v5 safety factor of one design, with the governing quantities.
 #[derive(Debug, Clone, Copy, PartialEq, Default, Serialize, Deserialize)]
 pub struct G5Loads {
     pub blade_model: BladeModel,
+    pub tip_model: TipModel,
     #[serde(with = "f64x")]
     pub lateral_force_n: f64,
     #[serde(with = "f64x")]
@@ -678,6 +690,7 @@ pub fn analytic_loads(p: &Params, b: &BladeProfile2D, ring_bearing_cap_n: f64, r
     let hand_pull = grip_pull_sf.min(ring_any_direction_sf);
     G5Loads {
         blade_model: BladeModel::Analytic,
+        tip_model: TipModel::Sections,
         lateral_force_n: f_lat,
         lateral_arm_mm: arm,
         lateral_limit_sf,
@@ -1007,6 +1020,96 @@ pub fn plate_blade_cases_at(p: &Params, b: &BladeProfile2D, loads: &mut G5Loads,
     true
 }
 
+/// Tip safety factors from the TET10 solid submodel (`tip_tet10`).
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct TipSolid {
+    pub axial_sf: f64,
+    pub lateral_sf: f64,
+    pub twist_sf: f64,
+    pub n_dof: usize,
+}
+
+/// Maximum triangle area of the solid-tip mesh (mm²). On three Sobol designs the twist SF agrees within 2 % between
+/// 0.15 and 0.08 mm², but the axial and side SFs (read from 1 mm, close to the loaded point) fall 13-19 %, so the
+/// finer mesh is used. It costs 1-2.5 min per design (three solves of 0.3-0.4 M DOF), so Tier 2 is a finalist stage.
+pub const TIP_FE_MAX_AREA_MM2: f64 = 0.08;
+
+/// The three RS-karambit-v5 tip cases on the TET10 solid submodel of the last 30 mm of the blade: axial 150 N and
+/// side 10 N on the last 0.75 mm, read from 1 mm (side: to 2.5 mm); twist 0.3 N m on a 1 mm patch 3 mm behind the
+/// point, read from 4.5 mm. Fails closed (`None`) if a mesh, a solve or its residual check fails.
+pub fn tip_solid_cases(p: &Params, b: &BladeProfile2D) -> Option<TipSolid> {
+    tip_solid_cases_at(p, b, TIP_FE_MAX_AREA_MM2)
+}
+
+/// `tip_solid_cases` on a mesh of the given maximum triangle area (convergence studies).
+pub fn tip_solid_cases_at(p: &Params, b: &BladeProfile2D, max_area_mm2: f64) -> Option<TipSolid> {
+    use crate::tip_tet10::{solve_solid_tet10, SolidTipInput, ThicknessField, TipLoad};
+    let rs = rs_v5();
+    let tip = b.tip_xy;
+    let ml = Midline::of(b);
+    let (_, axis) = ml.at(0.0);
+    let n = b.xs.len();
+    let near: Vec<usize> = (0..n)
+        .filter(|&i| (b.xs[i] - tip.0).hypot(0.5 * (b.y_in[i] + b.y_sp[i]) - tip.1) <= 34.0)
+        .collect();
+    if near.len() < 8 {
+        return None;
+    }
+    let mut outer: Vec<(f64, f64)> = near.iter().map(|&i| (b.xs[i], b.y_in[i])).collect();
+    outer.extend(near.iter().rev().map(|&i| (b.xs[i], b.y_sp[i])));
+    let holes: Vec<Vec<(f64, f64)>> = window_holes(p, b)
+        .into_iter()
+        .filter(|h| h.iter().all(|&(x, y)| (x - tip.0).hypot(y - tip.1) <= 33.0))
+        .collect();
+    let mesh = jarambit_physics::fine::mesh_domain(&outer, &holes, max_area_mm2)?;
+    let (g, nr) = (0.25_f64, 272usize);
+    let (x0, y0) = (tip.0 - 34.0, tip.1 - 34.0);
+    let mut th = Vec::with_capacity(nr * nr);
+    for j in 0..nr {
+        let y = y0 + (j as f64 + 0.5) * g;
+        for i in 0..nr {
+            let x = x0 + (i as f64 + 0.5) * g;
+            let (t, d2) = eval_blade_thickness_and_sdf2(p, b, x, y);
+            th.push(if d2 <= 0.0 && t > 0.05 { Some(t) } else { None });
+        }
+    }
+    let field = ThicknessField { x0, y0, g, nx: nr, ny: nr, th };
+    let allow = material::yield_allowable(1.0, GROUND_WALL);
+    let ld = &rs.loads.tip;
+    let solve = |load: TipLoad, patch: f64, readout: (f64, f64)| -> Option<(f64, usize)> {
+        let input = SolidTipInput {
+            xy: mesh.xy.clone(),
+            tris: mesh.tris.clone(),
+            tip_xy: tip,
+            axis,
+            field: field.clone(),
+            r_cut: 30.0,
+            nl: 4,
+            nsub: 0,
+            patch_mm: patch,
+            e_mpa: material::e_mpa(),
+            nu: material::nu(),
+            load,
+            readout_mm: readout,
+            allow_mpa: allow,
+        };
+        let r = solve_solid_tet10(&input);
+        let r = r?;
+        // Direct solve, and a relative residual <= 1e-10, or at the float64 floor with a componentwise backward error
+        // <= 1e-12 (the G3 V-S1 acceptance rule; the threshold is never loosened)
+        let converged = r.rel_res <= 1e-10 || (r.rel_res <= r.residual_floor && r.backward_error <= 1e-12);
+        let ok = r.ksp_its == 1 && r.rel_res.is_finite() && converged && r.nodal_max_peak.mpa > 0.0;
+        ok.then(|| (allow / r.nodal_max_peak.mpa, r.n_dof))
+    };
+    let s_tw = ld.twist_apply_mm_from_point;
+    let (axial_sf, n_dof) = solve(TipLoad::Axial { f_n: ld.axial_n }, 0.75, (ld.axial_no_yield_from_mm, 10.0))?;
+    let st_hi = ld.lateral_check_stations_mm.iter().copied().fold(0.0, f64::max) + 0.5;
+    let (lateral_sf, _) = solve(TipLoad::Lateral { f_n: ld.lateral_n }, 0.75, (ld.axial_no_yield_from_mm, st_hi))?;
+    let (twist_sf, _) =
+        solve(TipLoad::Twist { t_nmm: ld.twist_nm * 1000.0, at_mm: s_tw }, 1.0, (s_tw + 1.5, 15.0))?;
+    Some(TipSolid { axial_sf, lateral_sf, twist_sf, n_dof })
+}
+
 /// Guard push ([loads.guard]): the lobe below the grip as a cantilever from the grip underside, loaded in +x at 60 %
 /// of its height; the root section is the lobe's x-extent where it is at least 40 % deep, `t_guard` thick.
 pub fn guard_push_sf(p: &Params) -> f64 {
@@ -1072,6 +1175,19 @@ mod tests {
         // An in-plane pull along +x at the axis is pure tension here (q pulled away from the heel side at +x)
         let (n3, _, mip3, _) = section_forces(&sec, (-10.0, 0.0), (-50.0, 0.0, 0.0));
         assert!((n3 - 50.0).abs() < 1e-9 && mip3.abs() < 1e-12);
+    }
+
+    #[test]
+    fn solid_tip_solves_the_three_rs_v5_tip_cases() {
+        // A stout point (sobol 21: 78 deg): every case solves, passes the residual rule and gives a finite SF
+        let g = crate::g5_genome::sobol_unit_genome(22, 0, "obj");
+        let p = g.decode();
+        let b = crate::g5_sdf::build_blade_profile_2d(&p);
+        let t = tip_solid_cases_at(&p, &b, 0.15).expect("solid tip solve");
+        for v in [t.axial_sf, t.lateral_sf, t.twist_sf] {
+            assert!(v.is_finite() && v > 0.0, "{t:?}");
+        }
+        assert!(t.n_dof > 50_000, "{t:?}");
     }
 
     #[test]
