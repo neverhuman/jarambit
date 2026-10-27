@@ -1,0 +1,39 @@
+\section{FEM renderings of every load case}\label{sec:fem}
+The scored solvers return safety factors and discard their fields. \src{crates/g5/src/bin/g5_fem_fields/main.rs}{\code{g5-fem-fields}}
+re-solves each of the \gFemCases{} load cases of \gDesign{} on the ranking grid ($h = \gFemH$~mm) with copies of the scored models
+(the whole-blade CST+DKT sandwich plate, the \code{TET10} solid tip, the \code{T6} ring with its twelve-direction sweep and the
+Rayleigh--Ritz column, now with its mode) and keeps the fields: von Mises stress on a five-band sequential scale, the governing
+point and the deformed shape (Figs.~\ref{fig:fem1} and~\ref{fig:fem2}). The \gFemReproduced{} scored values these solves produce
+(the safety factors, the Ritz eigenvalue, the sequence ratios and the governing points) match the receipt bit for bit on the
+platform of record; the tool fails if any does not.
+
+The score models grip squeeze, guard push and teeth analytically. For those three, the figures show an independent hex8 voxel
+finite-element solve on the design's own additive-manufacturing voxel field instead, reported beside the score model and not used by
+it (Table~\ref{tab:hex8}).
+
+\begin{table}[t]
+\caption{Independent hex8 voxel FE against the score's analytic models (\gDesign; safety factor, required $\gReqSfYield$)}\label{tab:hex8}
+\centering
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Case & Score model & Hex8 FE \\
+\midrule
+Grip squeeze ($\gReqGripSqN$~N) & \gFemModelGrip & \gFemHexGrip \\
+Guard push ($\gReqGuardPushN$~N) & \gFemModelGuard & \gFemHexGuard \\
+Serration teeth ($\gReqSnagN/\gReqPryN$~N) & \gFemModelTeeth & \gFemHexTeeth \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure*}[p]
+\centering
+\input{generated/fem1.tex}
+\caption{FEM renderings of the load cases of \gDesign{} (1 of 2): von Mises stress, governing point and deformed shape, as
+re-solved by \code{g5-fem-fields}; each panel states its mesh, load and safety factor.}\label{fig:fem1}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+\input{generated/fem2.tex}
+\caption{FEM renderings of the load cases of \gDesign{} (2 of 2), including the hex8 checks of the analytic cases.}\label{fig:fem2}
+\end{figure*}
