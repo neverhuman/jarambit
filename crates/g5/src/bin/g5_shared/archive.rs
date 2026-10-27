@@ -143,3 +143,42 @@ pub fn merge_dirs(dirs: &[&str]) -> Result<Merged, String> {
     }
     Ok(Merged { archive, ids, rows_per_source })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use jarambit_g5::g5_genome::sobol_unit_genome;
+    use jarambit_g5::g5_namespace::format_g5_design_id;
+    use jarambit_g5::g5_qd::evaluate_tier0_analytic;
+
+    fn sample() -> (String, G5Genome, Value) {
+        let g = sobol_unit_genome(3, 7, "bf3e37fa");
+        let rec = evaluate_tier0_analytic(&g);
+        let id = format_g5_design_id(2, 1, 5, &g.sha256());
+        let row = row_json(&id, 5, &g, &rec);
+        (id, g, row)
+    }
+
+    #[test]
+    fn a_row_rebuilds_its_record_bit_for_bit() {
+        let (id, g, row) = sample();
+        let rec = record_from_row(&id, &g, &row).unwrap();
+        assert_eq!(row_json(&id, 5, &g, &rec), row);
+    }
+
+    #[test]
+    fn edited_rows_are_refused() {
+        let (id, g, row) = sample();
+        let mut score = row.clone();
+        let s = score["raw_score_100"].as_f64().unwrap();
+        score["raw_score_100"] = json!(f64::from_bits(s.to_bits() + 1));
+        assert!(record_from_row(&id, &g, &score).is_err(), "a score one ulp off");
+        let mut dec = row.clone();
+        dec["decoder_sha256"] = json!("0".repeat(64));
+        assert!(record_from_row(&id, &g, &dec).is_err(), "another decoder");
+        let other = format_g5_design_id(2, 1, 5, &"f".repeat(64));
+        assert!(record_from_row(&other, &g, &row).is_err(), "an id that does not end in the genome hash");
+        let g2 = sobol_unit_genome(4, 7, "bf3e37fa");
+        assert!(record_from_row(&id, &g2, &row).is_err(), "another genome");
+    }
+}
