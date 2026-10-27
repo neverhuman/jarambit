@@ -64,6 +64,12 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
       - a sheet-TPMS lattice ≥ 0.8 mm;
       - ports in every hollow zone, clear of the rib and cut through the sheet, plus drain tunnels in the shear webs.
     - **Sobol designs:** h 0.4 and h 0.2 masses agree within 0.6 %.
+  - **Load cases** (`crates/g5/src/loads.rs`):
+    - **Coverage:** every RS-karambit-v5 case, from integrated blade sections (Tier 0) and a converging whole-blade
+      plate with window holes (Tier 1). This includes the ultimate 18 N·m, the ring swept in 12 directions, the end
+      teeth, per-case sequence, surface-class fatigue and tip buckling.
+    - **What it shows on Sobol designs:** the binding cases are the ultimate lateral, the tip side load and tip
+      twist, and fatigue of a hollow blade's as-built cavity faces.
   - **Finding on G3.** Under this rule, the G3 v3.0.0 winner's lattice reaches its 2.8 mm powder ports only through
     two 0.85 mm slits beside the 1.1 mm mid-plane rib. Its cavity counts as undrainable (13,005 mm³). This is a G3
     decoder limitation: depowdering of the G3 design is unverified. The G5 decoder must place ports clear of ribs.

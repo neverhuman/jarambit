@@ -21,6 +21,7 @@ pub mod g5_namespace;
 pub mod g5_qd;
 pub mod g5_sandwich;
 pub mod g5_sdf;
+pub mod loads;
 pub mod material;
 pub mod requirements;
 pub mod sobol_joe_kuo;
@@ -181,6 +182,19 @@ mod record_guards {
             }
         }
         assert_eq!(crate::g5_sdf::SERR_DEPTH_PER_PITCH, rs.serration.depth_max_fraction_of_pitch);
+    }
+
+    /// Tier 1 records the RS-karambit-v5 load cases with the plate blade model and the ring sweep, and the sweep is
+    /// never weaker than the owner's bearing direction it includes.
+    #[test]
+    fn tier1_records_rs_v5_loads_with_plate_and_ring_sweep() {
+        let g = crate::g5_genome::sobol_unit_genome(2, 3, "tier1-loads");
+        let rec = crate::g5_qd::evaluate_tier1_sdf_and_plate(&g, 0.5);
+        let l = rec.loads;
+        assert_eq!(l.blade_model, "plate", "{l:?}");
+        assert!(l.ring_any_direction_sf <= l.ring_bearing_sf * 300.0 / 300.0 + 1e-12, "{l:?}");
+        assert!(l.teeth_sf.is_finite() && l.teeth_sf > 0.0, "{l:?}");
+        assert!(l.seq_min().is_finite() && l.seq_min() > 0.0, "{l:?}");
     }
 
     #[test]

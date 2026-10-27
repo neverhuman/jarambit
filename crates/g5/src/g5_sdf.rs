@@ -1927,14 +1927,14 @@ pub fn build_blade_profile_2d(p: &BTreeMap<&'static str, f64>) -> BladeProfile2D
 /// taper with $t(0.25) \le 0.28$, $t(1) \le 0.56$, $t(2) \le 0.95$), S3 (one primary half-angle in
 /// $[17.5^\circ, 22.5^\circ]$ per side, normal to the edge, over the full grind height and to the tip on both
 /// edges, `EDGE-1..4`), and the 4.0 in (`101.6 mm`) sharpened-arc cap per edge by construction.
-pub fn eval_blade_thickness_and_sdf2(
+pub fn eval_blade_thickness_sdf2_window(
     p: &BTreeMap<&'static str, f64>,
     prof: &BladeProfile2D,
     x: f64,
     y: f64,
-) -> (f64, f64) {
+) -> (f64, f64, f64) {
     if x < prof.x_heel || x > prof.x_tip {
-        return (0.0, 20.0);
+        return (0.0, 20.0, f64::NEG_INFINITY);
     }
     let u = ((x - prof.x_heel) / (prof.x_tip - prof.x_heel).max(1e-9)).clamp(0.0, 1.0);
     let idx_f = u * ((prof.xs.len() - 1) as f64);
@@ -1946,7 +1946,7 @@ pub fn eval_blade_thickness_and_sdf2(
     let d_sp = ys - y;
     let d2 = -(d_in.min(d_sp));
     if d2 > 0.0 {
-        return (0.0, d2);
+        return (0.0, d2, f64::NEG_INFINITY);
     }
 
     // Distance from the tip measured along the inward tip bisector (`B3`: works for any hook_drop / sweep_deg)
@@ -2034,6 +2034,8 @@ pub fn eval_blade_thickness_and_sdf2(
     // - Kept >= 3.5 mm from grind edges and strictly past the guard-to-blade plunge/seam blend zone.
     // - Phase shifted by the window half-extent (`S8-4`) so the first cosine crest sits at
     //   `x_crest0 = x_bound + half_win_dx`, ensuring the first window is whole and never clipped at `x_bound`.
+    // Margin of the fenestration level set (positive inside a window; -inf where no window can be)
+    let mut window_margin = f64::NEG_INFINITY;
     let pitch = p["win_pitch"].max(6.0);
     let x_s0 = prof.x_heel + p["win_s0"] * (prof.x_tip - prof.x_heel).max(1e-9);
     let x_bound = x_s0.max(92.0 + 0.5 * pitch);
@@ -2056,11 +2058,25 @@ pub fn eval_blade_thickness_and_sdf2(
         let wy = (-dx * ang.sin() + (y - y_mid) * ang.cos()) / w_span;
         let f_win = (2.0 * std::f64::consts::PI * wx).cos() * bump(wy);
         if f_win > thresh {
-            return (0.0, 0.5);
+            return (0.0, 0.5, f_win - thresh);
         }
+        window_margin = f_win - thresh;
     }
 
-    (t_final, d2)
+    (t_final, d2, window_margin)
+}
+
+/// Finished blade thickness `t(x, y)` (mm) and the 2D signed distance to the planform outline (negative inside;
+/// positive inside a fenestration window as well).
+#[inline]
+pub fn eval_blade_thickness_and_sdf2(
+    p: &BTreeMap<&'static str, f64>,
+    prof: &BladeProfile2D,
+    x: f64,
+    y: f64,
+) -> (f64, f64) {
+    let (t, d2, _) = eval_blade_thickness_sdf2_window(p, prof, x, y);
+    (t, d2)
 }
 
 /// Evaluate the G5 multi-modal surface texture displacement `tx in [-1, 1]`

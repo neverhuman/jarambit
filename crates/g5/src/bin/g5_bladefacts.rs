@@ -4,7 +4,7 @@
 //!
 //!   bladefacts <root> <design_id> <out.json>
 use jarambit_g5::g5_genome::G5Genome;
-use jarambit_g5::g5_qd::{g5_decoder_sha256, measure_blade_edge_apex_and_angle, serration_tooth_strength, TOOTH_PRY_N, TOOTH_SNAG_N};
+use jarambit_g5::g5_qd::{g5_decoder_sha256, measure_blade_edge_apex_and_angle, serration_tooth_strength, tooth_pry_per_tooth_n, tooth_snag_n};
 use jarambit_g5::g5_sdf::build_blade_profile_2d;
 use std::{fs, path::Path};
 
@@ -41,7 +41,7 @@ fn main() {
         "design_id": a[2], "genome_sha256": g.sha256(), "genome_row": row, "decoder_sha256": g5_decoder_sha256(),
         "gate_s": {"max_apex_mm": apex, "max_half_angle_deg": half},
         "edge_inner": edge(true), "edge_spine": edge(false),
-        "tooth_loads_n": {"snag_along_edge": TOOTH_SNAG_N, "pry_across_blade": TOOTH_PRY_N},
+        "tooth_loads_n": {"snag_along_edge": tooth_snag_n(), "pry_across_blade_per_tooth": tooth_pry_per_tooth_n()},
         "reach_chord_mm": b.reach_chord_mm, "blade_len_gene_mm": p["blade_len"], "tip_xy": b.tip_xy,
     });
     fs::write(&a[3], serde_json::to_string_pretty(&out).unwrap()).unwrap();
