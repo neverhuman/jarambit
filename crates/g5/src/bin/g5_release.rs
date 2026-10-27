@@ -5,6 +5,9 @@
 //!   g5-release top <tier2_h020.jsonl> <n>     the ranking's top n design ids, comma-separated (for the grid check)
 //!   g5-release plate-meshes <cohort_root> <tier2_h020.jsonl> <n> <out.jsonl> [threads=4]
 //!                                             the top n designs' plate cases on the check meshes (platform of record)
+//!   g5-release fitness <release.json> <out_dir>
+//!                                             the fitness figures of a receipt: the 100-point budget (donut) and the
+//!                                             points per term (ranked bars), checked to sum to the score
 //!
 //! Inputs (written by g5-evolve and g5-pilot; no number is typed by hand):
 //! - `<cohort_root>`: `islandNN/run/{archive.jsonl, genomes_g5.csv, history.jsonl}` and `supervisor.log`;
@@ -435,7 +438,8 @@ fn rank(t2: &[Value]) -> Vec<&Value> {
 
 const USAGE: &str = "usage: g5-release receipt <repo_root> <cohort_root> <baseline_root> <cert_dir> [shortlist=32] [grid_top=8]\n\
                      \x20      g5-release top <tier2_h020.jsonl> <n>\n\
-                     \x20      g5-release plate-meshes <cohort_root> <tier2_h020.jsonl> <n> <out.jsonl> [threads=4]";
+                     \x20      g5-release plate-meshes <cohort_root> <tier2_h020.jsonl> <n> <out.jsonl> [threads=4]\n\
+                     \x20      g5-release fitness <release.json> <out_dir>";
 
 fn main() {
     let a: Vec<String> = std::env::args().collect();
@@ -451,6 +455,10 @@ fn main() {
             let threads: usize = a.get(6).map_or(4, |v| v.parse().unwrap_or_else(|_| fail(USAGE)));
             rayon::ThreadPoolBuilder::new().num_threads(threads).build_global().ok();
             plate_meshes(Path::new(&a[2]), Path::new(&a[3]), a[4].parse().unwrap_or_else(|_| fail(USAGE)), Path::new(&a[5]));
+        }
+        Some("fitness") if a.len() == 4 => {
+            let b = write_fitness_figures(&serde_json::from_str(&read(Path::new(&a[2]))).unwrap_or_else(|e| fail(e)), Path::new(&a[3]));
+            println!("{}", serde_json::to_string_pretty(&fitness_budget_json(&b)).unwrap());
         }
         _ => fail(USAGE),
     }
@@ -942,4 +950,306 @@ fn evolution_svg(cohort: &[Island], baseline: &[Island], winner_island: &str, wi
         o += &format!("<text class=\"lb\" x=\"{}\" y=\"{:.1}\">{text}</text>\n", w - r + 10.0, ly + 4.0);
     }
     o + "</svg>\n"
+}
+
+/// The groups of the fitness figures, in their fixed colour order (light, dark: the validated categorical slots 1–4).
+const FITNESS_GROUPS: [(&str, &str, &str, &str); 4] = [
+    ("structural", "Structural safety", "#2a78d6", "#3987e5"),
+    ("mass", "Mass", "#eb6834", "#d95926"),
+    ("cutting", "Cutting geometry", "#1baf7a", "#199e70"),
+    ("build", "Build and form", "#eda100", "#c98500"),
+];
+
+/// A W_ERGOLIGHT_v2 score as a 100-point budget: 100 = earned + lost to the multipliers + unmet credit, with
+/// earned = Σ points = 100·E·W·base, lost to the multipliers = 100·base·(1 − E·W) and unmet credit = 100·(1 − base).
+struct FitnessBudget {
+    /// (term, readable name, group, points earned, most it could earn = 100·weight)
+    terms: Vec<(String, &'static str, &'static str, f64, f64)>,
+    score: f64,
+    e: f64,
+    w: f64,
+    base: f64,
+    lost_multipliers: f64,
+    unmet: f64,
+    mass_s: f64,
+    /// hand factors below full credit, as (name, e, e^β), lowest e^β first
+    hand_losses: Vec<(String, f64, f64)>,
+}
+
+impl FitnessBudget {
+    fn group_points(&self, g: &str) -> f64 {
+        self.terms.iter().filter(|t| t.2 == g).map(|t| t.3).sum()
+    }
+}
+
+/// "Edge angle" -> "edge angle", but "AM drainage" stays.
+fn lower_first(name: &str) -> String {
+    let mut c = name.chars();
+    match (c.next(), c.next()) {
+        (Some(a), Some(b)) if !b.is_uppercase() => a.to_lowercase().chain(name.chars().skip(1)).collect(),
+        _ => name.to_string(),
+    }
+}
+
+fn term_name(t: &str) -> &'static str {
+    match t {
+        "am_build" => "AM drainage",
+        "buckling" => "Buckling",
+        "edge" => "Edge angle",
+        "fatigue" => "Fatigue",
+        "form" => "Form",
+        "grip_squeeze" => "Grip squeeze",
+        "guard_push" => "Guard push",
+        "lateral_limit" => "Lateral, limit",
+        "lateral_ultimate" => "Lateral, ultimate",
+        "mass" => "Mass",
+        "point" => "Point",
+        "pull" => "Pull",
+        "ring_any_direction" => "Ring, any direction",
+        "ring_back" => "Ring, back",
+        "ring_bearing" => "Ring, bearing",
+        "sequence" => "Failure sequence",
+        "serration" => "Serration",
+        "teeth" => "Teeth",
+        "tip_axial" => "Tip, axial",
+        "tip_lateral" => "Tip, lateral",
+        "tip_twist" => "Tip, twist",
+        "twist_limit" => "Twist, limit",
+        _ => fail(format!("fitness figure: no name for score term '{t}'")),
+    }
+}
+
+/// The budget of a receipt's score, checked: every weighted term in exactly one group (the structural group is the
+/// objective's own margin list), the points summing to the score, the score equal to 100·E·W·base, and the budget to 100.
+fn fitness_budget(receipt: &Value) -> FitnessBudget {
+    let sc = &receipt["score"];
+    let (e, w, base, score) = (f(sc, "/E"), f(sc, "/worst_margin_W"), f(sc, "/base"), f(sc, "/raw_score_100"));
+    let loads: G5Loads = serde_json::from_value(receipt["loads"].clone()).unwrap_or_else(|x| fail(format!("receipt loads: {x}")));
+    let structural: BTreeSet<&str> = objective::margins(&loads).iter().map(|m| m.0).collect();
+    let group = |t: &str| -> Option<&'static str> {
+        if structural.contains(t) {
+            Some("structural")
+        } else {
+            match t {
+                "mass" => Some("mass"),
+                "edge" | "point" | "serration" => Some("cutting"),
+                "am_build" | "form" => Some("build"),
+                "worst_margin" => None, // weight 0: it acts as the multiplier W
+                _ => fail(format!("fitness figure: score term '{t}' is in no group")),
+            }
+        }
+    };
+    let Some(Value::Object(tm)) = sc.get("terms") else { fail("receipt score: no terms") };
+    let mut terms = Vec::new();
+    let mut base_sum = 0.0;
+    for (t, v) in tm {
+        let (pts, wt, s_) = (f(v, "/points"), f(v, "/weight"), f(v, "/s"));
+        base_sum += wt * s_;
+        match group(t) {
+            Some(g) => terms.push((t.clone(), term_name(t), g, pts, 100.0 * wt)),
+            None if wt == 0.0 && pts == 0.0 => {}
+            None => fail(format!("fitness figure: '{t}' has weight {wt} and {pts} points")),
+        }
+    }
+    if terms.iter().filter(|t| t.2 == "structural").count() != structural.len() {
+        fail("fitness figure: the score does not carry every structural margin term");
+    }
+    let earned: f64 = terms.iter().map(|t| t.3).sum();
+    let close = |a: f64, b: f64| (a - b).abs() <= 1e-9 * a.abs().max(1.0);
+    if !close(earned, score) || !close(100.0 * e * w * base, score) || !close(base_sum, base) {
+        fail(format!("fitness figure: points {earned} / 100·E·W·base {} / Σ w·s {base_sum} do not match score {score}", 100.0 * e * w * base));
+    }
+    let (lost_multipliers, unmet) = (100.0 * base * (1.0 - e * w), 100.0 * (1.0 - base));
+    if !close(earned + lost_multipliers + unmet, 100.0) {
+        fail("fitness figure: the budget does not sum to 100");
+    }
+    let Some(Value::Object(hf)) = sc.get("hand_factors") else { fail("receipt score: no hand_factors") };
+    let mut hand_losses: Vec<(String, f64, f64)> = hf
+        .iter()
+        .map(|(k, v)| (k.replace('_', " "), f(v, "/e"), f(v, "/e").powf(f(v, "/beta"))))
+        .filter(|h| h.1 < 1.0)
+        .collect();
+    hand_losses.sort_by(|a, b| a.2.total_cmp(&b.2));
+    terms.sort_by(|a, b| b.3.total_cmp(&a.3).then_with(|| a.0.cmp(&b.0)));
+    let mass_s = f(sc, "/terms/mass/s");
+    FitnessBudget { terms, score, e, w, base, lost_multipliers, unmet, mass_s, hand_losses }
+}
+
+/// The SVG `<style>` of the fitness figures: literal colours per class, re-stepped for dark mode, as in `evolution_svg`.
+fn fitness_style() -> String {
+    let theme = |dark: bool| {
+        let (bg, ink, ink2, muted, track, lossm, lossu) = if dark {
+            ("#1a1a19", "#f0efec", "#c3c2b7", "#898781", "#2c2c2a", "#898781", "#383835")
+        } else {
+            ("#fcfcfb", "#0b0b0b", "#52514e", "#898781", "#e1e0d9", "#898781", "#c3c2b7")
+        };
+        let mut c = format!(
+            ".bg{{fill:{bg}}}.t1,.v{{fill:{ink}}}.t2,.lb{{fill:{ink2}}}.tk{{fill:{muted}}}.trk{{fill:{track}}}\
+             .sl{{stroke:{bg}}}.lm{{fill:{lossm}}}.lu{{fill:{lossu}}}"
+        );
+        for (k, _, light, dk) in FITNESS_GROUPS {
+            c += &format!(".g-{k}{{fill:{}}}", if dark { dk } else { light });
+        }
+        c
+    };
+    format!(
+        "<style>\n{}\n@media (prefers-color-scheme: dark){{{}}}\n\
+         .t1{{font-size:15px;font-weight:600}}.t2,.lb{{font-size:12px}}.tk{{font-size:11px}}.v{{font-size:12px;font-weight:600}}\
+         .big{{font-size:34px;font-weight:600}}.sl{{stroke-width:2;stroke-linejoin:round}}\n</style>\n",
+        theme(false),
+        theme(true)
+    )
+}
+
+fn svg_open(w: f64, h: f64, title: &str, desc: &str) -> String {
+    format!(
+        "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 {w} {h}\" width=\"{w}\" height=\"{h}\" role=\"img\" \
+         aria-labelledby=\"t d\" font-family=\"system-ui, -apple-system, 'Segoe UI', sans-serif\">\n{}<title id=\"t\">{title}</title>\n\
+         <desc id=\"d\">{desc}</desc>\n<rect class=\"bg\" width=\"{w}\" height=\"{h}\" rx=\"8\"/>\n",
+        fitness_style()
+    )
+}
+
+/// Donut of the 100-point budget: the four earned groups in their colours, then the two losses in neutral inks.
+fn fitness_budget_svg(b: &FitnessBudget, design: &str) -> String {
+    let (w, h, cx, cy, ro, ri) = (760.0, 400.0, 196.0, 236.0, 136.0, 86.0);
+    let hand = match b.hand_losses.first() {
+        Some((n, e, _)) => format!("E = {:.3} (hand: {n} e = {e:.3})", b.e),
+        None => format!("E = {:.3} (hand)", b.e),
+    };
+    let mut slices: Vec<(String, String, f64, String)> = FITNESS_GROUPS
+        .iter()
+        .map(|(k, name, _, _)| {
+            let detail = match *k {
+                "structural" => format!("{} load-case margins", b.terms.iter().filter(|t| t.2 == "structural").count()),
+                "mass" => format!("mass credit s = {:.3}", b.mass_s),
+                _ => b.terms.iter().filter(|t| t.2 == *k).map(|t| lower_first(t.1)).collect::<Vec<_>>().join(", "),
+            };
+            (format!("g-{k}"), name.to_string(), b.group_points(k), detail)
+        })
+        .collect();
+    slices.push(("lm".into(), "Lost to the multipliers".into(), b.lost_multipliers, format!("{hand} · W = {:.3}", b.w)));
+    slices.push(("lu".into(), "Unmet credit".into(), b.unmet, format!("base = {:.3}: terms short of full credit", b.base)));
+    let mut o = svg_open(
+        w,
+        h,
+        "Where the 100 points of the score go",
+        &format!(
+            "W_ERGOLIGHT_v2 score of {design}: {:.1} of 100 points earned. {}",
+            b.score,
+            slices.iter().map(|s| format!("{} {:.1}", s.1, s.2)).collect::<Vec<_>>().join("; ")
+        ),
+    );
+    o += "<text class=\"t1\" x=\"24\" y=\"30\">Where the 100 points of the score go</text>\n";
+    o += &format!(
+        "<text class=\"t2\" x=\"24\" y=\"50\">{design} · W_ERGOLIGHT_v2 = 100 · E · W · base = {:.1} earned</text>\n",
+        b.score
+    );
+    // slices clockwise from 12 o'clock, with a 2 px surface gap
+    let pt = |a: f64, r: f64| (cx + r * a.sin(), cy - r * a.cos());
+    let mut a0 = 0.0;
+    for (cls, name, v, detail) in &slices {
+        if *v <= 0.0 {
+            continue;
+        }
+        let a1 = a0 + std::f64::consts::TAU * v / 100.0;
+        let large = if a1 - a0 > std::f64::consts::PI { 1 } else { 0 };
+        let ((x0, y0), (x1, y1), (x2, y2), (x3, y3)) = (pt(a0, ro), pt(a1, ro), pt(a1, ri), pt(a0, ri));
+        o += &format!(
+            "<path class=\"{cls} sl\" d=\"M{x0:.2} {y0:.2} A{ro} {ro} 0 {large} 1 {x1:.2} {y1:.2} L{x2:.2} {y2:.2} \
+             A{ri} {ri} 0 {large} 0 {x3:.2} {y3:.2} Z\"><title>{name}: {v:.2} points ({detail})</title></path>\n"
+        );
+        a0 = a1;
+    }
+    o += &format!("<text class=\"t1 big\" x=\"{cx}\" y=\"{}\" text-anchor=\"middle\">{:.1}</text>\n", cy + 6.0, b.score);
+    o += &format!("<text class=\"tk\" x=\"{cx}\" y=\"{}\" text-anchor=\"middle\">of 100 points earned</text>\n", cy + 26.0);
+    // legend with values (the direct labels): swatch, name, value, detail
+    let (lx, vx) = (380.0, 736.0);
+    for (k, (cls, name, v, detail)) in slices.iter().enumerate() {
+        let y = 102.0 + 46.0 * k as f64;
+        o += &format!("<rect class=\"{cls}\" x=\"{lx}\" y=\"{}\" width=\"12\" height=\"12\" rx=\"3\"/>", y - 10.0);
+        o += &format!("<text class=\"t2\" x=\"{}\" y=\"{y}\">{name}</text>", lx + 20.0);
+        o += &format!("<text class=\"v\" x=\"{vx}\" y=\"{y}\" text-anchor=\"end\">{v:.1}</text>\n");
+        o += &format!("<text class=\"tk\" x=\"{}\" y=\"{}\">{detail}</text>\n", lx + 20.0, y + 16.0);
+    }
+    o += &format!(
+        "<text class=\"tk\" x=\"24\" y=\"{}\">Earned = Σ term points; lost to the multipliers = 100 · base · (1 − E · W); \
+         unmet credit = 100 · (1 − base). The three sum to 100.</text>\n",
+        h - 14.0
+    );
+    o + "</svg>\n"
+}
+
+/// Ranked bars of every weighted term: points earned (bar, its group's colour) against the most it could earn (track).
+fn fitness_terms_svg(b: &FitnessBudget, design: &str) -> String {
+    let (lx, x0, x1, top, pitch) = (24.0, 168.0, 640.0, 96.0, 19.0);
+    let h = top + pitch * b.terms.len() as f64 + 40.0;
+    let w = 760.0;
+    let vmax = b.terms.iter().map(|t| t.4).fold(0.0, f64::max);
+    let x = |v: f64| x0 + (x1 - x0) * v / vmax;
+    let mut o = svg_open(
+        w,
+        h,
+        "Points per score term",
+        &format!(
+            "{design}: points earned by each of the {} weighted terms of W_ERGOLIGHT_v2, against the most each could earn. {}",
+            b.terms.len(),
+            b.terms.iter().map(|t| format!("{} {:.2} of {:.1}", t.1, t.3, t.4)).collect::<Vec<_>>().join("; ")
+        ),
+    );
+    o += &format!("<text class=\"t1\" x=\"{lx}\" y=\"30\">Points per score term: earned (bar) and the most it could earn (track)</text>\n");
+    o += &format!(
+        "<text class=\"t2\" x=\"{lx}\" y=\"50\">{design} · earned = 100 · E · W · weight · s; the track is 100 · weight (full \
+         credit, E = W = 1)</text>\n"
+    );
+    let mut gx = lx;
+    for (k, name, _, _) in FITNESS_GROUPS {
+        o += &format!("<rect class=\"g-{k}\" x=\"{gx}\" y=\"62\" width=\"12\" height=\"12\" rx=\"3\"/>");
+        o += &format!("<text class=\"lb\" x=\"{}\" y=\"72\">{name}</text>\n", gx + 18.0);
+        gx += 18.0 + 7.0 * name.len() as f64 + 24.0;
+    }
+    for (k, (t, name, g, pts, most)) in b.terms.iter().enumerate() {
+        let y = top + pitch * k as f64;
+        o += &format!("<text class=\"lb\" x=\"{}\" y=\"{:.1}\" text-anchor=\"end\">{name}</text>", x0 - 10.0, y + 9.0);
+        o += &format!("<rect class=\"trk\" x=\"{x0}\" y=\"{y:.1}\" width=\"{:.2}\" height=\"12\" rx=\"3\"/>", x(*most) - x0);
+        o += &format!(
+            "<rect class=\"g-{g}\" x=\"{x0}\" y=\"{y:.1}\" width=\"{:.2}\" height=\"12\" rx=\"3\"><title>{name} ({t}): {pts:.3} of \
+             {most:.1} points</title></rect>",
+            (x(*pts) - x0).max(0.0)
+        );
+        o += &format!("<text class=\"tk\" x=\"{:.1}\" y=\"{:.1}\">{pts:.2} / {most:.1}</text>\n", x(*most) + 8.0, y + 10.0);
+    }
+    o += &format!(
+        "<text class=\"tk\" x=\"{lx}\" y=\"{}\">Each bar falls short of its track by the multipliers (E = {:.3}, W = {:.3}) \
+         and by its own credit s. The bars sum to the score, {:.1}.</text>\n",
+        h - 14.0,
+        b.e,
+        b.w,
+        b.score
+    );
+    o + "</svg>\n"
+}
+
+/// Write the two fitness figures for a receipt (only when they change, as for the evolution figure).
+fn write_fitness_figures(receipt: &Value, out_dir: &Path) -> FitnessBudget {
+    let b = fitness_budget(receipt);
+    let design = s(receipt, "/design_id");
+    fs::create_dir_all(out_dir).unwrap_or_else(|e| fail(format!("{}: {e}", out_dir.display())));
+    for (name, svg) in [("fitness_budget.svg", fitness_budget_svg(&b, design)), ("fitness_terms.svg", fitness_terms_svg(&b, design))] {
+        let p = out_dir.join(name);
+        if fs::read_to_string(&p).ok().as_deref() != Some(svg.as_str()) {
+            fs::write(&p, svg).unwrap_or_else(|e| fail(format!("{}: {e}", p.display())));
+        }
+    }
+    b
+}
+
+fn fitness_budget_json(b: &FitnessBudget) -> Value {
+    let mut groups = Map::new();
+    for (k, _, _, _) in FITNESS_GROUPS {
+        groups.insert(k.to_string(), json!(b.group_points(k)));
+    }
+    json!({"earned": b.score, "groups": groups, "lost_to_multipliers": b.lost_multipliers, "unmet_credit": b.unmet,
+           "E": b.e, "worst_margin_W": b.w, "base": b.base,
+           "rule": "100 = earned (sum of term points = 100*E*W*base) + 100*base*(1-E*W) + 100*(1-base)"})
 }
