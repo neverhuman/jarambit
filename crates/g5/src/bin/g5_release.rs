@@ -1190,12 +1190,20 @@ fn fitness_budget_svg(b: &FitnessBudget, design: &str) -> String {
     o + "</svg>\n"
 }
 
-/// Ranked bars of every weighted term: points earned (bar, its group's colour) against the most it could earn (track).
+/// Bars of every weighted term: points earned (bar, its group's colour) against the most it could earn (track), grouped in
+/// a fixed order (mass, structural, cutting, build) and ranked within each group. The group order keeps every change of
+/// colour between neighbouring bars on a validated adjacent pair of the palette; every bar carries its name and value.
 fn fitness_terms_svg(b: &FitnessBudget, design: &str) -> String {
+    const ORDER: [&str; 4] = ["mass", "structural", "cutting", "build"];
+    let mut terms = b.terms.clone();
+    terms.sort_by(|x, y| {
+        let gi = |g: &str| ORDER.iter().position(|o| *o == g).unwrap_or(ORDER.len());
+        gi(x.2).cmp(&gi(y.2)).then_with(|| y.3.total_cmp(&x.3)).then_with(|| x.0.cmp(&y.0))
+    });
     let (lx, x0, x1, top, pitch) = (24.0, 168.0, 640.0, 96.0, 19.0);
-    let h = top + pitch * b.terms.len() as f64 + 40.0;
+    let h = top + pitch * terms.len() as f64 + 40.0;
     let w = 760.0;
-    let vmax = b.terms.iter().map(|t| t.4).fold(0.0, f64::max);
+    let vmax = terms.iter().map(|t| t.4).fold(0.0, f64::max);
     let x = |v: f64| x0 + (x1 - x0) * v / vmax;
     let mut o = svg_open(
         w,
@@ -1203,8 +1211,8 @@ fn fitness_terms_svg(b: &FitnessBudget, design: &str) -> String {
         "Points per score term",
         &format!(
             "{design}: points earned by each of the {} weighted terms of W_ERGOLIGHT_v2, against the most each could earn. {}",
-            b.terms.len(),
-            b.terms.iter().map(|t| format!("{} {:.2} of {:.1}", t.1, t.3, t.4)).collect::<Vec<_>>().join("; ")
+            terms.len(),
+            terms.iter().map(|t| format!("{} {:.2} of {:.1}", t.1, t.3, t.4)).collect::<Vec<_>>().join("; ")
         ),
     );
     o += &format!("<text class=\"t1\" x=\"{lx}\" y=\"30\">Points per score term: earned (bar) and the most it could earn (track)</text>\n");
@@ -1213,12 +1221,13 @@ fn fitness_terms_svg(b: &FitnessBudget, design: &str) -> String {
          credit, E = W = 1)</text>\n"
     );
     let mut gx = lx;
-    for (k, name, _, _) in FITNESS_GROUPS {
+    for k in ORDER {
+        let name = FITNESS_GROUPS.iter().find(|g| g.0 == k).map(|g| g.1).unwrap();
         o += &format!("<rect class=\"g-{k}\" x=\"{gx}\" y=\"62\" width=\"12\" height=\"12\" rx=\"3\"/>");
         o += &format!("<text class=\"lb\" x=\"{}\" y=\"72\">{name}</text>\n", gx + 18.0);
         gx += 18.0 + 7.0 * name.len() as f64 + 24.0;
     }
-    for (k, (t, name, g, pts, most)) in b.terms.iter().enumerate() {
+    for (k, (t, name, g, pts, most)) in terms.iter().enumerate() {
         let y = top + pitch * k as f64;
         o += &format!("<text class=\"lb\" x=\"{}\" y=\"{:.1}\" text-anchor=\"end\">{name}</text>", x0 - 10.0, y + 9.0);
         o += &format!("<rect class=\"trk\" x=\"{x0}\" y=\"{y:.1}\" width=\"{:.2}\" height=\"12\" rx=\"3\"/>", x(*most) - x0);
