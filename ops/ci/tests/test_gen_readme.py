@@ -141,6 +141,50 @@ class PublicWording(unittest.TestCase):
             self.assertEqual(json.loads(body)['design_id'], rec['design_id'], name)
 
 
+class RequirementSetV5(unittest.TestCase):
+    # requirements/RS-karambit-v5.toml: every value names its sources, and PROVENANCE-v5.md resolves every key.
+    def setUp(self):
+        import tomllib
+        self.text = open(os.path.join(ROOT, 'requirements/RS-karambit-v5.toml'), encoding='utf-8').read()
+        self.rs = tomllib.loads(self.text)
+        self.prov = open(os.path.join(ROOT, 'requirements/PROVENANCE-v5.md'), encoding='utf-8').read()
+
+    def test_every_cited_source_resolves(self):
+        cited = set()
+        for line in self.text.splitlines():
+            if '#' in line:
+                for group in re.findall(r'\[([a-z0-9][a-z0-9-]*(?:, *[a-z0-9][a-z0-9-]*)*)\]', line.split('#', 1)[1]):
+                    cited.update(k.strip() for k in group.split(','))
+        rows = [l for l in self.prov.splitlines() if l.startswith('| `')]
+        listed = set(k for l in rows for k in re.findall(r'`([a-z0-9][a-z0-9-]*)`', l.split('|')[1]))
+        tables = set()
+        def walk(d):
+            for k, v in d.items():
+                if isinstance(v, dict):
+                    tables.add(k); walk(v)
+        walk(self.rs)
+        cited -= tables  # comments may refer to a section of this file, such as [margins]
+        self.assertTrue(cited, 'no source keys found')
+        self.assertEqual(sorted(cited - listed), [], 'source keys without a provenance row')
+
+    def test_continuous_objective_and_owner_decisions(self):
+        self.assertIs(self.rs['hard_gates'], False)  # owner: no hard gates
+        for key in ('owner-ring', 'owner-reach', 'owner-balance', 'owner-objective', 'owner-point', 'owner-grip',
+                    'owner-serration'):
+            self.assertIn(f'| `{key}` |', self.prov, key)
+        p, e = self.rs['point'], self.rs['edge']
+        self.assertEqual((p['angle_max_at_1mm_deg'], p['angle_max_at_3mm_deg']), (75.0, 60.0))  # owner, 2026-10-27
+        self.assertLessEqual(p['width_max_at_2mm'], 3.5)
+        self.assertEqual((e['per_side_angle_min_deg'], e['per_side_angle_max_deg']), (20.0, 25.0))
+        o = self.rs['objective']
+        # 1 % of E must cost at least min_grams_per_percent_e of mass credit at a score near 80
+        pts_per_g = 100.0 * o['mass_weight'] / (self.rs['mass']['ceiling_g'] - self.rs['mass']['floor_g'])
+        self.assertGreaterEqual(o['e_exponent'] * 0.80 / pts_per_g, o['min_grams_per_percent_e'])
+        self.assertAlmostEqual(o['mass_weight'] + o['worst_margin_weight'] + sum(o['weights'].values()), 1.0, places=9)
+        self.assertAlmostEqual(sum(o['betas'].values()), 1.0, places=9)
+        self.assertEqual(self.rs['generation'], 'G5')
+
+
 class PythonInventory(unittest.TestCase):
     def test_python_exceptions_lists_exactly_the_tracked_python_files(self):
         # AGENTS.md: no new Python files; every existing one is listed with its disposition in PYTHON_EXCEPTIONS.md.
