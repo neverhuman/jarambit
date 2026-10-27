@@ -2,6 +2,30 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## Unreleased
+
+- **`requirements/RS-karambit-v5.toml`**, the requirement set for the G4 generation, with `requirements/PROVENANCE-v5.md`.
+  - **Why.** The owner asked for "the BEST possible constraints for the best possible knife". Every value now cites
+    a standard, a handbook or a paper, or is a dated owner decision.
+  - **How it applies.** Each requirement is a decoder construction rule or a continuous objective term (no hard
+    gates).
+  - **Owner decisions (2026-10-27):**
+    - grip perimeter 84–100 mm (floor 78.5 mm);
+    - no batoning, so the 3,427 N spine case is dropped;
+    - a sourced tip set (150 N axial, 10 N side, 0.3 N·m twist) replaces the 1.82 N·m tip twist;
+    - a blunt-point penalty (≤ 75° at 1 mm, ≤ 60° at 3 mm, ≤ 3.0 mm wide at 2 mm);
+    - medium serrations (pitch 4–6 mm, depth 0.8–1.5 mm, gullet ≥ 0.5 mm).
+  - **From the literature:**
+    - stress-relieved L-PBF at the ASTM F2924 minima, with an 80 °C derate and a thin-wall law;
+    - fatigue by surface class with FKM mean stress;
+    - edges at 20–25° per side for titanium;
+    - a 15 mm guard;
+    - NASA/MIL hand-edge radii and contact-pressure limits;
+    - NASA-STD-6030 margins (1.2 on yield, 1.3 on ultimate; the ring keeps the owner's SF 2);
+    - powder ports ≥ 3 mm, two per cavity.
+  - **Not yet in force.** It applies from the G4 cohort onward; no code reads it yet. A test checks that every cited
+    source resolves in the provenance.
+
 ## v4.0.1 — 2026-10-27 (patch: v4.0.0 withdrawn; the G3 v3.0.0 cohort of record is current again; G3 errata and diagnostics)
 
 - **v4.0.0 is withdrawn (owner decision, 2026-10-27; tag and GitHub release kept, marked WITHDRAWN).** The cohort of

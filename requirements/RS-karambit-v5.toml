@@ -1,0 +1,308 @@
+# RS-karambit-v5: requirement set for the G4 generation (fixed blade, one-piece hollow L-PBF Ti-6Al-4V, sheath-free).
+#
+# Owner (2026-10-27): "I want the BEST possible constraints for the best possible knife, please do what is best."
+# Every value below carries a source key; requirements/PROVENANCE-v5.md resolves each key to its source, its evidence
+# grade and the reason for the value. Owner decisions are dated there. RS-karambit-v4 (requirements/RS-karambit-v4.toml)
+# belongs to the withdrawn v4.0.0 prototype and is not used.
+#
+# Rules that hold for every entry:
+# - No hard gates. Each requirement is either a construction rule of the decoder (valid by construction, never by
+#   rejection) or a continuous term of the objective. Integrity checks (non-finite values, failed meshes, failed solves,
+#   an unread key) fail closed.
+# - Every load is a limit load: the largest load expected in use, from human-strength data. A limit load is checked
+#   against the allowable with the safety factors in [margins]. Fatigue uses the service loads in [fatigue].
+# - The implementation reads every key of this file. A key it does not read is an error.
+
+id = "RS-karambit-v5"
+version = 5
+generation = "G4"
+metric = "W_ERGOLIGHT_v2"
+study = "engineering study, not a product"
+configuration = "fixed_blade_one_piece_lpbf_ti6al4v_stress_relieved_no_sheath"
+hard_gates = false
+
+[margins]
+# NASA-STD-6030 low-demand class: yield margin of safety >= 0.2, ultimate >= 0.3 [nasa6030]
+sf_yield = 1.2
+sf_ultimate = 1.3
+# Owner (2026-10-25): the ring is sized for 300 N bearing and 30 N back at SF 2 [owner-ring]
+sf_ring = 2.0
+
+[material]
+# Stress-relieved L-PBF Ti-6Al-4V, on the plate, in vacuum, 700 C/1 h to 800 C/2 h; HIP optional, never assumed;
+# as-built (not stress-relieved) parts are outside this set [ncamp, eos, vrancken]
+name = "Ti-6Al-4V, L-PBF, stress-relieved"
+yield_mpa = 825.0            # ASTM F2924 minimum [f2924]
+ultimate_mpa = 895.0         # ASTM F2924 minimum [f2924]
+elongation_min = 0.10        # ASTM F2924 minimum [f2924]
+e_gpa = 110.0                # [hdbk5j, vrancken]
+nu = 0.31                    # [hdbk5j]
+g_gpa = 42.7                 # [hdbk5j]
+density_g_per_cm3 = 4.43     # [hdbk5j]
+density_min_g_per_cm3 = 4.37 # [ncamp]
+# Hot-car service temperature 80 C: Fty ratio 0.91, Ftu ratio 0.92, E ratio 0.97 [hdbk5j]
+service_temp_c = 80.0
+k_temp_yield = 0.91
+k_temp_ultimate = 0.92
+k_temp_modulus = 0.97
+fracture_toughness_min_mpa_sqrt_m = 50.0   # stress-relieved [cain2015]
+
+[material.thin_wall]
+# Strength of a printed wall of thickness t: k_t = (1 - 2*Ts/t)^n, n = 1.8 for yield and 2.1 for ultimate [xie2026]
+yield_exponent = 1.8
+ultimate_exponent = 2.1
+ts_up_skin_mm = 0.03         # vertical and up-skin faces [xie2026]
+ts_down_skin_mm = 0.10       # down-skin faces below 45 degrees, back-calculated from 0-degree struts [murchio2024]
+ts_ground_mm = 0.0           # ground faces
+stiffness_uses_effective_thickness = true   # t_eff = t - 2*Ts [xie2026]
+
+[material.fatigue]
+# Fatigue strength amplitude at 1e6 cycles, R = -1, by surface class [benedetti2018, nicoletto2018, wycisk2014,
+# pagliari2025, murchio2024, wycisk2015, nasa6030]
+as_built_thick_mpa = 100.0   # as-built, >= 1.5 mm, vertical or up-skin
+as_built_thin_mpa = 60.0     # as-built, < 1.5 mm or down-skin
+ground_mpa = 200.0           # ground, >= 0.3 mm removed, stress-relieved
+hip_ground_mpa = 350.0       # HIP and ground (only if the part is HIPed)
+thin_threshold_mm = 1.5
+mean_stress_method = "FKM"   # sigma_a_eq = sigma_a + M * sigma_m [benedetti2018, johnsen2024]
+mean_stress_sensitivity = 0.6
+notch_rule = "Kf_equals_Kt_on_as_built"     # no notch-sensitivity credit on as-built faces [nicoletto2018, kahlin2017]
+cycles = 1.0e6
+
+[material.tpms]
+# Homogenised laws for sheet TPMS (relative density rho): E*/Es = C_E * rho^n_E, sigma*/sigma_ys = C_s * rho^n_s
+# [naghavi2022, timercan2021]; stiffness constants are lower bounds until calibrated by FE homogenisation of the cell
+gyroid_stiffness_c = 0.29
+gyroid_stiffness_n = 1.6
+gyroid_strength_c = 0.55
+gyroid_strength_n = 1.5
+schwarz_d_stiffness_c = 0.23
+schwarz_d_stiffness_n = 1.2
+schwarz_d_strength_c = 0.42
+schwarz_d_strength_n = 1.14
+strut_tpms_allowed = false   # strut TPMS is weaker and more anisotropic [kelly2019, lietaert2018]
+fatigue_ratio_compression = 0.15   # sigma_max at 1e6 <= 0.15 sigma_y*, compression-compression [benedetti2021, alana2021]
+fatigue_ratio_tension = 0.10       # tension or reversed loading (extrapolated) [benedetti2021]
+
+[loads]
+# Point of the knife = the tip of the claw; "the blade frame" has x along the local blade centre-line at the point,
+# z normal to the blade plane. Forces are applied over a 2 mm patch unless stated.
+
+[loads.lateral_bend]
+# Bending normal to the blade plane, force applied 5 mm back from the point, reacted by the hand model [kong2007,
+# mil1472h, yoshii2015, gost51501, mil8662e]
+apply_mm_from_point = 5.0
+limit_root_moment_nm = 12.0      # checked at sf_yield
+ultimate_root_moment_nm = 18.0   # checked at sf_ultimate against ultimate_mpa; covers the former 260 N "hunter" case
+permanent_set_max_mm = 1.0       # GOST R 51501-99 style deflection check [gost51501]
+
+[loads.body_twist]
+# Twist of the blade about its own axis, reacted through grip, guard and ring (no friction credit above 2 N m)
+# [osullivan2002, en8442, kong2007, seo2011]
+service_nm = 7.0                 # fatigue and stiffness [bogazici2010, kong2007]
+limit_nm = 16.2                  # maximum forearm supination, checked at sf_yield [osullivan2002]
+friction_credit_max_nm = 2.0     # [seo2011, kong2005, buchholz1988]
+
+[loads.tip]
+# The point: piercing, side load and twist [en388, gilchrist2008, nolan2013, hainsworth2008]
+axial_n = 150.0                  # along the tip bisector; no yield at stations >= 1 mm, no buckling
+axial_no_yield_from_mm = 1.0
+lateral_n = 10.0                 # at the point; no yield at the 1 mm and 2 mm stations; the last 0.25 mm may yield
+lateral_check_stations_mm = [1.0, 2.0]
+twist_nm = 0.3                   # about the tip axis, applied 3 mm back from the point
+twist_apply_mm_from_point = 3.0
+
+[loads.grip]
+# Squeeze of the hollow grip by the hand [dodds2014, hidh, seo2008hf]
+limit_squeeze_n = 800.0          # resultant, distributed as finger and palm pressure (sum of normals ~2.3x)
+normal_sum_factor = 2.3
+working_typical_n = 55.0         # knife-work grip, mean [tirloni2021]
+working_peak_n = 130.0           # knife-work grip, peak [tirloni2021]
+p95_male_grip_n = 661.0          # [dodds2014]
+
+[loads.guard]
+# Hand sliding forward onto the guard [cochran1986]
+limit_push_n = 300.0             # 1.7 x the 178 N slip push of the guard study, checked at sf_yield
+
+[loads.ring]
+# Owner (2026-10-25) ring loads, kept: 300 N on the bore inside closest to the handle (+/-60 degrees, pushing +x)
+# and 30 N on the ring back, at sf_ring [owner-ring]; plus 300 N in any in-plane direction at sf_yield [cochran1986]
+bearing_n = 300.0
+bearing_arc_deg = 60.0
+back_n = 30.0
+any_direction_n = 300.0
+working_n = 25.0                 # little-finger share of a peak working grip [tirloni2021, kong2005]
+
+[loads.pull]
+# One-hand pull along the grip axis (misuse, levering) [hidh]
+limit_n = 600.0
+
+[loads.teeth]
+# Serration teeth [mil1472h, us4823467]
+snag_n = 180.0                   # in-plane on one tooth, no yield with the notch factor of its gullet
+pry_n = 60.0                     # across the blade, shared over three teeth
+pry_teeth_sharing = 3
+
+[loads.drop]
+# Drop onto a hard floor; a physical acceptance test, not a computed term [mil810h, fl1]
+height_m = 1.22
+orientations = 26
+point_set_max_mm = 0.5
+computed = false
+
+[fatigue]
+# Duty for the fatigue check: blade lateral root moment, fully reversed, 1e6 cycles [tirloni2021, mcgorry2005]
+blade_root_moment_amplitude_nm = 4.7
+twist_amplitude_nm = 7.0
+cycles = 1.0e6
+sf_fatigue = 1.0                 # the strengths in [material.fatigue] already carry the NASA 60 % rule
+
+[sequence]
+# The blade should yield before anything in the hand: for each limit load case separately,
+# SF(grip, guard, ring) / SF(blade) >= 1.2 [rs-v3, g3-diagnostics]
+per_load_case = true
+ratio_min = 1.2
+
+[buckling]
+# Lateral-torsional buckling of the blade under the limit lateral load, by eigenvalue solve
+lambda_min = 1.5
+
+[edge]
+# EDGE-1..5 stay as rules of the decoder (one full-height grind per edge, normal to the actual serrated edge,
+# unbroken to the point except a short plunge). The angle band moves up for titanium [thomas2018, zhang2023, landes].
+# The decoder models the FINISHED blade; the printed blade adds finishing_allowance_mm on every ground face, so its
+# edge is blunt grind stock by design.
+per_side_angle_min_deg = 20.0
+per_side_angle_max_deg = 25.0
+behind_edge_thickness_05mm_min = 0.36   # finished thickness 0.5 mm behind the edge (tan of 20-25 deg) [thomas2018]
+behind_edge_thickness_05mm_max = 0.47
+behind_edge_thickness_1mm_max = 0.80
+finished_apex_flat_min_mm = 0.05        # the finished CAD edge; the real apex is sharpened below CAD resolution
+finished_apex_flat_max_mm = 0.12
+finishing_allowance_mm = 0.5            # per ground face [barricelli2022, eos, beretta2017]
+finishing_allowance_min_mm = 0.3
+plunge_fraction_min = 0.05
+plunge_fraction_max = 0.12
+sharpened_arc_max_mm = 101.6            # 4.0 in per edge [owner-reach]
+blade_reach_max_mm = 85.725             # 3.375 in, straight line from the guard [owner-reach]
+# Physical acceptance of the finished edge (not computed): ISO 8442-5 [iso8442-5]
+iso8442_initial_cut_min_mm = 50.0
+iso8442_retention_plain_min_mm = 150.0
+iso8442_retention_serrated_min_mm = 1500.0
+
+[serration]
+# Owner (2026-10-27): medium serrations, ground after printing, both edges [owner-serration, us4823467]
+pitch_min_mm = 4.0
+pitch_max_mm = 6.0
+depth_min_mm = 0.8
+depth_max_mm = 1.5
+depth_max_fraction_of_pitch = 0.25
+gullet_radius_min_mm = 0.5
+full_depth_scallops_min = 3
+span_start_fraction_min = 0.16
+span_start_fraction_max = 0.24
+span_end_from_point_min_mm = 18.0
+check_end_teeth = true
+
+[point]
+# Owner (2026-10-27): penalise a blunt point (continuous). Included planform angle and width near the point, tip
+# radius, and tip thickness (Gate S2), all on the finished geometry [owner-point, hainsworth2008, gilchrist2008]
+angle_max_at_1mm_deg = 75.0
+angle_max_at_3mm_deg = 60.0
+width_max_at_2mm = 3.0
+tip_radius_min_mm = 0.10
+tip_radius_max_mm = 0.25
+thickness_max_at_025mm = 0.30
+thickness_max_at_1mm = 0.60
+thickness_max_at_2mm = 1.00
+
+[ergonomics.grip]
+# Owner (2026-10-27): the evidence band [owner-grip, kong2005, cochran1986, seo2011, ansur2]
+perimeter_min_mm = 84.0
+perimeter_max_mm = 100.0
+perimeter_floor_mm = 78.5        # smallest handle ever tested (25 mm round); strong penalty below
+height_over_thickness_min = 1.5
+height_over_thickness_max = 1.8
+length_min_mm = 69.0             # three P95 male index widths of 23 mm [faa-hfds]
+groove_pitch_min_mm = 19.0       # if grooves are used; shallow or none is preferred [niosh2004, faa-hfds]
+groove_pitch_max_mm = 21.0
+
+[ergonomics.guard]
+# Effective guard height above the index-finger seat [cochran1986]
+height_target_mm = 15.0          # no gain above 15.2 mm
+height_floor_mm = 10.0           # strong penalty below
+fillet_min_mm = 5.0
+fillet_max_mm = 11.0
+
+[ergonomics.edges]
+# Hand-contact edge radii [hidh, mil1472h, niosh2004]
+radius_min_mm = 1.5
+radius_min_thick_section_mm = 3.0      # where the local section is 6.5-25 mm
+thick_section_min_mm = 6.5
+thick_section_max_mm = 25.0
+full_round_below_mm = 3.0              # lips thinner than this are fully rounded
+jimping_radius_min_mm = 0.75
+
+[ergonomics.pressure]
+# Contact pressure on the hand [fransson1993, johansson1999, aldien2005]
+all_day_kpa_at_typical = 104.0
+discomfort_finger_kpa = 188.0
+discomfort_palm_kpa = 200.0
+discomfort_thenar_kpa = 100.0
+pain_finger_kpa = 560.0
+pain_palm_kpa = 576.0
+pain_thenar_kpa = 505.0
+
+[ergonomics.friction]
+# Skin on titanium [buchholz1988, seo2011]
+mu_nominal = 0.30
+mu_wet = 0.15
+mu_credit_max = 0.5
+
+[ergonomics.ring]
+# Owner (2026-10-24/25): fixed bore and lip; the little finger goes through the ring [owner-ring]
+bore_d_mm = 24.9
+lip_w_mm = 8.0
+working_pressure_max_kpa = 188.0       # 25 N on the little finger [johansson1999]
+
+[ergonomics.balance]
+# Owner (2026-10-24): spinning is a use case [owner-balance]
+com_to_index_max_mm = 8.0
+spin_inertia_ratio_max = 0.85
+
+[am]
+# L-PBF design and process rules [nasa6030, renishaw2017, carrozza2023, xometry, materialise, solukon]
+skin_min_mm = 0.8
+skin_min_load_bearing_mm = 1.0
+sheet_min_mm = 0.8
+port_d_min_mm = 3.0
+ports_per_cavity_min = 2
+closed_voids_allowed = false           # measured on the decoded geometry, never by formula
+overhang_min_deg = 45.0                # down-skin faces steeper than this from horizontal need no support
+horizontal_hole_max_mm = 8.0           # larger horizontal holes need a teardrop or diamond shape
+ledge_max_mm = 0.5
+supports_on_edges_allowed = false
+build_orientation_declared = true
+
+[mass]
+# The mass of record is the finished knife: the watertight mesh of the decoded (finished) geometry. Search and
+# certification use the same definition (partial-volume integral of the same field). The as-printed mass, with the
+# finishing allowance, is reported beside it. The 50 g goal is reported as a mass frontier, not a gate.
+ceiling_g = 130.0
+floor_g = 25.0
+goal_g = 50.0
+grid_agreement_max_frac = 0.02
+
+[objective]
+# W_ERGOLIGHT_v2, continuous, no veto [owner-objective]:
+#   score = 100 * E^k * sum_i w_i s_i,  E = prod_k e_k^beta_k (measured hand factors)
+# Safety-factor ratios v = SF / SF_req earn s = below_one_scale * v^below_one_exponent below 1 and the margin knee
+# above 1; a worst-margin term rewards the smallest v over every load case.
+below_one_scale = 0.94
+below_one_exponent = 4.0
+knee_bonus = 0.06
+knee_tau = 0.15
+worst_margin_weight = 0.25
+mass_weight = 0.30
+e_exponent = 5.0                       # 1 % of E must cost at least min_grams_per_percent_e of mass credit
+min_grams_per_percent_e = 10.0
