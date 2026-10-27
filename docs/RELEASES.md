@@ -23,8 +23,19 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
     - NASA/MIL hand-edge radii and contact-pressure limits;
     - NASA-STD-6030 margins (1.2 on yield, 1.3 on ultimate; the ring keeps the owner's SF 2);
     - powder ports ≥ 3 mm, two per cavity.
-  - **Not yet in force.** It applies from the G5 cohort onward; no code reads it yet. A test checks that every cited
-    source resolves in the provenance.
+  - **Not yet in force.** It applies from the G5 cohort onward. A test checks that every cited source resolves in the
+    provenance.
+- **`crates/g5`**, the G5 generation, in development: a standalone copy of the validated G3 crate, renamed to the G5
+  namespace. It has no results and no frozen decoder.
+  - **Strict requirement loader.** `requirements.rs` reads RS-karambit-v5 into typed structs. An unknown, missing or
+    mistyped key is an error. Cross-key rules fail closed: no hard gates, weights and betas summing to 1, and the owner
+    rule that 1 % of E costs at least 10 g.
+  - **Decoder hash.** Covers the G5 sources, the loader and RS-karambit-v5. It is computed once per process.
+  - **Guards.**
+    - The G3 decoder of record (`a203278d…`) and the v1 identity are asserted unchanged.
+    - G5 design IDs (`kv…`) refuse v1 (`ec…`) and G3 (`hz…`) IDs.
+    - Until `G5_DECODER_FROZEN`, `g5-evolve` writes only to development roots (`evo_g5_dev`).
+  - **CI.** `d1-gates` runs the crate's tests.
 
 ## v4.0.1 — 2026-10-27 (patch: v4.0.0 withdrawn; the G3 v3.0.0 cohort of record is current again; G3 errata and diagnostics)
 

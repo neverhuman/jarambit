@@ -387,6 +387,7 @@ def readme():
           '**G3 (current)**', '',
           f'- [`cad/`](cad/): 6-file 3D-printing & manufacturing upload kit (`STL`, `3MF`, `DXF`, `PDF`, `JPG`, millimetres) and order notes for `{wid}`, generated automatically from the winner.',
           '- [`crates/g3/`](crates/g3/README.md): the G3 genome, decoder, objective and search, and the release tools in `src/bin/`.',
+          '- [`crates/g5/`](crates/g5/README.md): the G5 generation under RS-karambit-v5, in development (no results; not frozen).',
           f'- [`evidence/g3/`](evidence/g3/): the receipt, genome row, island histories and measurements of the v{rv} cohort of record.',
           f'- [`docs/g3/`](docs/g3/): the G3 paper (`make -C docs/g3/paper` rebuilds it from the receipt), the images, [`RELEASE_{rv}.md`](docs/g3/RELEASE_{rv}.md), [`RENDERS.md`](docs/g3/RENDERS.md) and the [provenance](docs/g3/provenance/README.md) of its requirement set.',
           '- [`docs/RELEASES.md`](docs/RELEASES.md): every release.', '',

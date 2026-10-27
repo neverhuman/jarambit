@@ -1,0 +1,52 @@
+[workspace]
+
+[package]
+name = "jarambit-g5"
+version = "5.0.0-dev"
+edition = "2021"
+license = "MIT"
+
+[[bin]]
+name = "g5-evolve"
+path = "src/bin/g5_evolve.rs"
+
+[[bin]]
+name = "g5-release-tex"
+path = "src/bin/g5_release_tex.rs"
+
+[[bin]]
+name = "g5-pilot"
+path = "src/bin/g5_pilot.rs"
+
+[[bin]]
+name = "g5-gripfe"
+path = "src/bin/g5_gripfe/main.rs"
+
+[[bin]]
+name = "g5-export-stl"
+path = "src/bin/g5_export_stl.rs"
+
+[[bin]]
+name = "g5-bladefacts"
+path = "src/bin/g5_bladefacts.rs"
+
+[[bin]]
+name = "g5-edgeprofile"
+path = "src/bin/g5_edgeprofile.rs"
+
+[[bin]]
+name = "g5-bladefield"
+path = "src/bin/g5_bladefield.rs"
+
+[[bin]]
+name = "g5-tipconv"
+path = "src/bin/g5_tipconv.rs"
+
+[dependencies]
+jarambit-crescent = { path = "../crescent" }
+jarambit-physics = { path = "../physics" }
+faer = { version = "0.24", default-features = false, features = ["std", "linalg", "sparse", "sparse-linalg"] }
+rayon = "1.10"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = { version = "1.1", default-features = false, features = ["parse", "serde", "std"] }
