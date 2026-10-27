@@ -64,6 +64,101 @@ fn count(v: f64) -> String {
     if n < 0 { format!("-{out}") } else { out }
 }
 
+/// The v6.0.0 macros: the continuation (warm start, pool lineage, rounds, control), the cross-host re-run, the v5.0.0
+/// winner on the same platform, the fitness budget and the GPU spike (`spike/spike.json` beside the receipt).
+fn v6_macros(r: &Value, receipt_path: &Path) -> Vec<(&'static str, String)> {
+    let f = |ptr: &str, d: usize| format!("{:.*}", d, num(r, ptr));
+    let arr = |ptr: &str| get(r, ptr).as_array().unwrap_or_else(|| fail(format!("{ptr} not array"))).clone();
+    let lineage = arr("/lineage");
+    let (p0, pn) = (&lineage[0], lineage.last().unwrap());
+    let rounds = arr("/cohort/rounds");
+    let hosts: std::collections::BTreeSet<String> = rounds.iter().map(|x| str_val(x, "/host")).collect();
+    let control_best = arr("/baseline/final_best_score_100").iter().map(|v| v.as_f64().unwrap_or_else(|| fail("control score"))).fold(f64::NEG_INFINITY, f64::max);
+    let lead_rank = get(r, "/ranking/search_leader/tier2_rank");
+    let spike_path = receipt_path.parent().expect("receipt dir").join("spike/spike.json");
+    let sp: Value = serde_json::from_str(&fs::read_to_string(&spike_path).unwrap_or_else(|e| fail(format!("{}: {e}", spike_path.display()))))
+        .unwrap_or_else(|e| fail(format!("{}: {e}", spike_path.display())));
+    let spf = |ptr: &str, d: usize| format!("{:.*}", d, num(&sp, ptr));
+    let sizing_path = receipt_path.parent().expect("receipt dir").join("fleet/sizing.json");
+    let sz: Value = serde_json::from_str(&fs::read_to_string(&sizing_path).unwrap_or_else(|e| fail(format!("{}: {e}", sizing_path.display()))))
+        .unwrap_or_else(|e| fail(format!("{}: {e}", sizing_path.display())));
+    if sz["outputs_identical_tunables"] != serde_json::json!(true) {
+        fail("fleet/sizing.json: the malloc tunables changed an output");
+    }
+    vec![
+        ("gVFiveElites", count(num(r, "/warm_start/v5_elites"))),
+        ("gLaunchTierOneTopPct", format!("{:.0}", 100.0 * num(r, "/cohort/promotion/tier1_top"))),
+        ("gArchiveNiches", count(num(p0, "/archive_niches"))),
+        ("gPoolZeroNiches", count(num(p0, "/niches"))),
+        ("gPoolZeroBest", format!("{:.2}", num(p0, "/best_raw_score_100"))),
+        ("gPoolFinalNiches", count(num(pn, "/niches"))),
+        ("gPoolFinalBest", format!("{:.2}", num(pn, "/best_raw_score_100"))),
+        ("gPools", count(lineage.len() as f64)),
+        ("gFinalPool", format!("\\texttt{{{}}}", tex(&str_val(r, "/cohort/final_pool")))),
+        ("gRounds", count(rounds.len() as f64)),
+        ("gRoundDepth", count(num(r, "/cohort/round_depth_max"))),
+        ("gHostCount", count(hosts.len() as f64)),
+        ("gHostList", tex(&hosts.into_iter().collect::<Vec<_>>().join(", "))),
+        ("gControlIslands", count(num(r, "/baseline/islands"))),
+        ("gControlEvals", count(num(r, "/baseline/evaluations_per_island"))),
+        ("gControlBest", format!("{control_best:.2}")),
+        ("gReproIsland", format!("\\texttt{{{}}}", tex(&str_val(r, "/cohort/reproduced/island")))),
+        ("gReproHost", tex(&str_val(r, "/cohort/reproduced/rerun/rerun_host"))),
+        ("gReproEvals", count(num(r, "/cohort/reproduced/rerun/evaluations"))),
+        ("gReproEntries", count(num(r, "/cohort/reproduced/history_entries_identical"))),
+        ("gWinnerSearchScore", f("/search_score_100", 2)),
+        ("gWinOrigin", tex(&str_val(r, "/evolution/winner_island"))),
+        ("gSearchLeaderId", format!("\\texttt{{{}}}", tex(&str_val(r, "/ranking/search_leader/design_id")))),
+        ("gSearchLeaderTierOne", f("/ranking/search_leader/tier1_h04_score_100", 2)),
+        ("gSearchLeaderRank", lead_rank.as_f64().map_or("outside the shortlist".to_string(), |k| format!("rank {}", count(k)))),
+        ("gVFiveId", format!("\\texttt{{{}}}", tex(&str_val(r, "/ranking/v5_winner_same_platform/design_id")))),
+        ("gVFiveScore", f("/ranking/v5_winner_same_platform/score/score_100", 2)),
+        ("gVFiveTierOne", f("/ranking/v5_winner_same_platform/tier1_h04_score_100", 2)),
+        ("gVFiveWorst", f("/ranking/v5_winner_same_platform/worst_margin", 3)),
+        ("gVFiveMass", f("/ranking/v5_winner_same_platform/mass_g", 1)),
+        ("gVFiveMet", count(num(r, "/ranking/v5_winner_same_platform/cases_met"))),
+        ("gVFiveE", f("/ranking/v5_winner_same_platform/score/E", 3)),
+        ("gVFiveLg", f("/ranking/v5_winner_same_platform/grip_length_mm", 1)),
+        ("gVFivePerim", f("/ranking/v5_winner_same_platform/grip_perimeter_mm", 1)),
+        ("gCasesMet", count(num(r, "/cases_met"))),
+        ("gCases", count(num(r, "/cases"))),
+        ("gBudgetEarned", f("/fitness_budget/earned", 1)),
+        ("gBudgetStruct", f("/fitness_budget/groups/structural", 1)),
+        ("gBudgetMass", f("/fitness_budget/groups/mass", 1)),
+        ("gBudgetCut", f("/fitness_budget/groups/cutting", 1)),
+        ("gBudgetBuild", f("/fitness_budget/groups/build", 1)),
+        ("gBudgetLost", f("/fitness_budget/lost_to_multipliers", 1)),
+        ("gBudgetUnmet", f("/fitness_budget/unmet_credit", 1)),
+        ("gSpikeEdtPct", spf("/profile/euclidean_distance_transform_pct", 0)),
+        ("gSpikeConnPct", spf("/profile/am_connectivity_pct", 0)),
+        ("gSpikePlatePct", spf("/profile/plate_skyline_solve_pct", 0)),
+        ("gSpikeKernelBound", spf("/bounds/voxel_kernel_offload_max_speedup_tier1", 2)),
+        ("gSpikeScreenBound", spf("/bounds/perfect_free_screen_top10_speedup", 2)),
+        ("gSpikeSpearman", spf("/screen/spearman_tier0_tier1", 2)),
+        ("gSpikeKept", count(num(&sp, "/screen/tier1_top10_kept_by_tier0_top40"))),
+        ("gSpikeTopTen", count(num(&sp, "/screen/tier1_top10"))),
+        ("gSpikeTierOneShare", format!("{:.0}", 100.0 * num(&sp, "/screen/share_of_island_time_in_tier1"))),
+        ("gSpikeTierZeroS", spf("/screen/mean_tier0_s", 2)),
+        ("gSpikeTierOneS", spf("/screen/mean_tier1_s", 1)),
+        ("gSpikeChildren", count(num(&sp, "/screen/n"))),
+        ("gSizingGenomes", count(num(&sz, "/genomes"))),
+        ("gSizingOneS", format!("{:.1}", num(&sz, "/one_per_ccx_s_per_eval"))),
+        ("gSizingFourS", format!("{:.1}", num(&sz, "/four_per_ccx_s_per_eval"))),
+        ("gSizingGain", format!("{:.2}", num(&sz, "/throughput_gain_four_vs_one_per_ccx"))),
+        ("gSizingFaultRatio", format!("{:.0}", num(&sz, "/fault_ratio"))),
+        // comparisons in words, so the text stays true whatever the numbers are
+        ("gVsVFiveScore", cmp_word(num(r, "/score/score_100"), num(r, "/ranking/v5_winner_same_platform/score/score_100"), "higher than", "lower than", "equal to")),
+        ("gVsVFiveMass", cmp_word(num(r, "/mass/of_record_g"), num(r, "/ranking/v5_winner_same_platform/mass_g"), "heavier than", "lighter than", "as heavy as")),
+        ("gLineageVsControl", cmp_word(num(pn, "/best_raw_score_100"), control_best, "above", "below", "level with")),
+        ("gLineageGain", format!("{:.2}", num(pn, "/best_raw_score_100") - num(p0, "/best_raw_score_100"))),
+    ]
+}
+
+/// "higher than" when a > b, "lower than" when a < b, else the third word.
+fn cmp_word(a: f64, b: f64, more: &str, less: &str, same: &str) -> String {
+    (if a > b { more } else if a < b { less } else { same }).to_string()
+}
+
 fn main() {
     let a: Vec<String> = std::env::args().collect();
     if a.len() != 3 && a.len() != 4 {
@@ -99,8 +194,10 @@ fn main() {
     let worst_v = num(&r, "/worst_margin");
     let w_mult = num(&r, "/score/worst_margin_W");
 
-    let e_geo = num(&r, "/score/E");
-    let e_pow = e_geo.powf(rs.objective.e_exponent);
+    // the receipt's E is the hand multiplier itself, (prod_j e_j^beta_j)^e_exponent; gEGeo is the product inside
+    let e_mult = num(&r, "/score/E");
+    let e_inner = e_mult.powf(1.0 / rs.objective.e_exponent);
+    let v6 = r.get("lineage").is_some();
 
     let commit_label = str_val(&r, "/provenance/decoder_commit_label");
     let dec_full = str_val(&r, "/provenance/decoder_sha256");
@@ -111,22 +208,12 @@ fn main() {
     let env_mm3 = num(&r, "/mass/envelope_mesh_volume_mm3");
     let density = num(&r, "/mass/density_g_mm3");
 
-    let win_island = str_val(&r, "/evolution/winner_island");
-    let evo_islands = get(&r, "/evolution/islands")
-        .as_array()
-        .unwrap_or_else(|| fail("/evolution/islands not array"));
-    let win_isl_obj = evo_islands
-        .iter()
-        .find(|i| str_val(i, "/island") == win_island)
-        .unwrap_or_else(|| fail(format!("winner_island {win_island} missing in /evolution/islands")));
-    let score_sobol = num(win_isl_obj, "/after_sobol_init/best_score_100");
-    let score_search = num(win_isl_obj, "/final/best_score_100");
-
+    let win_island = if v6 { String::new() } else { str_val(&r, "/evolution/winner_island") };
     let base_isl = num(&r, "/baseline/islands");
     let base_evals_per = num(&r, "/baseline/evaluations_per_island");
-    let base_scores = get(&r, "/evolution/baseline_final_best_score_100")
+    let base_scores = get(&r, if v6 { "/baseline/final_best_score_100" } else { "/evolution/baseline_final_best_score_100" })
         .as_array()
-        .unwrap_or_else(|| fail("/evolution/baseline_final_best_score_100 not array"));
+        .unwrap_or_else(|| fail("baseline final best scores not an array"));
     let base_best = base_scores
         .iter()
         .map(|v| v.as_f64().unwrap_or_else(|| fail("baseline score not number")))
@@ -145,8 +232,8 @@ fn main() {
         ("gGeneCount", G5_NUM_GENES.to_string()),
         ("gScore", f("/score/score_100", 2)),
         ("gBase", f("/score/base", 3)),
-        ("gE", format!("{e_geo:.3}")),
-        ("gEFive", format!("{e_pow:.3}")),
+        ("gE", format!("{e_mult:.3}")),
+        ("gEGeo", format!("{e_inner:.3}")),
         ("gW", format!("{w_mult:.3}")),
         ("gWorstMarginRatio", format!("{worst_v:.3}")),
         ("gWorstMarginProdMesh", f("/worst_margin_production_mesh", 3)),
@@ -180,49 +267,6 @@ fn main() {
         ("gH", f("/cohort/h_mm", 1)),
         ("gHRank", f("/ranking/h_mm", 1)),
         ("gShortlist", count(num(&r, "/ranking/shortlist"))),
-        ("gStarted", tex(&str_val(&r, "/cohort/started_utc"))),
-        ("gFinished", tex(&str_val(&r, "/cohort/finished_utc"))),
-        ("gArchiveNiches", count(num(&r, "/cohort/launch/archive_niches"))),
-        ("gLaunchInit", count(num(&r, "/cohort/launch/cohort/init"))),
-        ("gLaunchHost", f("/cohort/launch/cohort/host", 0)),
-        (
-            "gLaunchTierOneTopPct",
-            format!("{:.0}", 100.0 * num(&r, "/cohort/launch/cohort/tier1_top")),
-        ),
-        (
-            "gLaunchTierOneTop",
-            format!("{}", num(&r, "/cohort/launch/cohort/tier1_top")),
-        ),
-        (
-            "gLaunchTierTwoTop",
-            format!("{}", num(&r, "/cohort/launch/cohort/tier2_top")),
-        ),
-        ("gLaunchLogEvery", f("/cohort/launch/cohort/log_every", 0)),
-        ("gReproEvals", count(num(&r, "/cohort/reproduced/evaluations"))),
-        ("gReproEntries", count(num(&r, "/cohort/reproduced/history_entries_identical"))),
-        ("gBaselineIslands", count(base_isl)),
-        ("gBaselineEvals", count(base_isl * base_evals_per)),
-        ("gBaselineBest", format!("{base_best:.2}")),
-        ("gBeatingBaseline", count(num(&r, "/evolution/cohort_islands_beating_best_baseline"))),
-        ("gCohortSobolMed", f("/evolution/cohort_after_sobol_init_median_score_100", 2)),
-        ("gCohortMed", f("/evolution/cohort_final_best_score_100/median", 2)),
-        ("gCohortMin", f("/evolution/cohort_final_best_score_100/min", 2)),
-        ("gCohortMax", f("/evolution/cohort_final_best_score_100/max", 2)),
-        ("gWinIsland", tex(&win_island)),
-        ("gWinFoundEvals", count(num(&r, "/evolution/winner_first_island_best_at_evals"))),
-        ("gScoreSobol", format!("{score_sobol:.2}")),
-        ("gScoreSearch", format!("{score_search:.2}")),
-        ("gWinnerSearchScore", f("/search_score_100", 2)),
-        (
-            "gSearchLeaderId",
-            format!("\\texttt{{{}}}", tex(&str_val(&r, "/ranking/search_leader/design_id"))),
-        ),
-        ("gSearchLeaderTierOne", f("/ranking/search_leader/tier1_h04_score_100", 2)),
-        ("gSearchLeaderTierTwo", f("/ranking/search_leader/tier2_h02_score_100", 2)),
-        ("gSearchLeaderRank", count(num(&r, "/ranking/search_leader/tier2_rank"))),
-        ("gSearchLeaderMargin", f("/ranking/search_leader/tier2_worst_margin", 2)),
-        ("gSearchLeaderTipSecAx", f("/ranking/search_leader/tip_sf_sections_h04/axial", 2)),
-        ("gSearchLeaderTipSolAx", f("/ranking/search_leader/tip_sf_solid_h02/axial", 2)),
         ("gSealedVoid", f("/am/sealed_void_mm3", 1)),
         ("gCreviceVoid", f("/am/crevice_mm3", 1)),
         ("gPortCount", format!("{port_n:.0}")),
@@ -248,19 +292,77 @@ fn main() {
         ("gTexPitch", f("/decoded/tex_pitch", 2)),
         ("gScopeBlade", f("/decoded/scope_blade", 2)),
         ("gScopeBladeThree", f("/decoded/scope_blade", 3)),
-        ("gLinuxDesigns", count(num(&r, "/ranking/linux_check/designs"))),
-        ("gLinuxMaxRelDiff", format!("{:.2e}", num(&r, "/ranking/linux_check/max_rel_diff"))),
-        ("gLinuxMaxRelDiffPct", format!("{:.2}", 100.0 * num(&r, "/ranking/linux_check/max_rel_diff"))),
-        ("gLinuxWinRank", count(num(&r, "/ranking/linux_check/winner_rank_linux"))),
-        ("gLinuxEvoEvals", count(num(&r, "/ranking/linux_check/evolution/same_best_genome_through_evals"))),
-        (
-            "gLinuxEvoRelDiff",
-            format!(
-                "{:.2e}",
-                num(&r, "/ranking/linux_check/evolution/max_rel_diff_best_score_while_same_genome")
-            ),
-        ),
     ];
+
+    if v6 {
+        m.extend(v6_macros(&r, receipt_path));
+    } else {
+        let evo_islands = get(&r, "/evolution/islands").as_array().unwrap_or_else(|| fail("/evolution/islands not array"));
+        let win_isl_obj = evo_islands
+            .iter()
+            .find(|i| str_val(i, "/island") == win_island)
+            .unwrap_or_else(|| fail(format!("winner_island {win_island} missing in /evolution/islands")));
+        let score_sobol = num(win_isl_obj, "/after_sobol_init/best_score_100");
+        let score_search = num(win_isl_obj, "/final/best_score_100");
+        let v5: Vec<(&str, String)> = vec![
+        ("gStarted", tex(&str_val(&r, "/cohort/started_utc"))),
+            ("gFinished", tex(&str_val(&r, "/cohort/finished_utc"))),
+            ("gArchiveNiches", count(num(&r, "/cohort/launch/archive_niches"))),
+            ("gLaunchInit", count(num(&r, "/cohort/launch/cohort/init"))),
+            ("gLaunchHost", f("/cohort/launch/cohort/host", 0)),
+            (
+                "gLaunchTierOneTopPct",
+                format!("{:.0}", 100.0 * num(&r, "/cohort/launch/cohort/tier1_top")),
+            ),
+            (
+                "gLaunchTierOneTop",
+                format!("{}", num(&r, "/cohort/launch/cohort/tier1_top")),
+            ),
+            (
+                "gLaunchTierTwoTop",
+                format!("{}", num(&r, "/cohort/launch/cohort/tier2_top")),
+            ),
+            ("gLaunchLogEvery", f("/cohort/launch/cohort/log_every", 0)),
+            ("gReproEvals", count(num(&r, "/cohort/reproduced/evaluations"))),
+            ("gReproEntries", count(num(&r, "/cohort/reproduced/history_entries_identical"))),
+            ("gBaselineIslands", count(base_isl)),
+            ("gBaselineEvals", count(base_isl * base_evals_per)),
+            ("gBaselineBest", format!("{base_best:.2}")),
+            ("gBeatingBaseline", count(num(&r, "/evolution/cohort_islands_beating_best_baseline"))),
+            ("gCohortSobolMed", f("/evolution/cohort_after_sobol_init_median_score_100", 2)),
+            ("gCohortMed", f("/evolution/cohort_final_best_score_100/median", 2)),
+            ("gCohortMin", f("/evolution/cohort_final_best_score_100/min", 2)),
+            ("gCohortMax", f("/evolution/cohort_final_best_score_100/max", 2)),
+            ("gWinIsland", tex(&win_island)),
+            ("gWinFoundEvals", count(num(&r, "/evolution/winner_first_island_best_at_evals"))),
+            ("gScoreSobol", format!("{score_sobol:.2}")),
+            ("gScoreSearch", format!("{score_search:.2}")),
+            ("gWinnerSearchScore", f("/search_score_100", 2)),
+            (
+                "gSearchLeaderId",
+                format!("\\texttt{{{}}}", tex(&str_val(&r, "/ranking/search_leader/design_id"))),
+            ),
+            ("gSearchLeaderTierOne", f("/ranking/search_leader/tier1_h04_score_100", 2)),
+            ("gSearchLeaderTierTwo", f("/ranking/search_leader/tier2_h02_score_100", 2)),
+            ("gSearchLeaderRank", count(num(&r, "/ranking/search_leader/tier2_rank"))),
+            ("gSearchLeaderMargin", f("/ranking/search_leader/tier2_worst_margin", 2)),
+            ("gSearchLeaderTipSecAx", f("/ranking/search_leader/tip_sf_sections_h04/axial", 2)),
+            ("gSearchLeaderTipSolAx", f("/ranking/search_leader/tip_sf_solid_h02/axial", 2)),
+            ("gLinuxDesigns", count(num(&r, "/ranking/linux_check/designs"))),
+            ("gLinuxMaxRelDiff", format!("{:.2e}", num(&r, "/ranking/linux_check/max_rel_diff"))),
+            ("gLinuxMaxRelDiffPct", format!("{:.2}", 100.0 * num(&r, "/ranking/linux_check/max_rel_diff"))),
+            ("gLinuxWinRank", count(num(&r, "/ranking/linux_check/winner_rank_linux"))),
+            ("gLinuxEvoEvals", count(num(&r, "/ranking/linux_check/evolution/same_best_genome_through_evals"))),
+            (
+                "gLinuxEvoRelDiff",
+                format!(
+                "{:.2e}",
+                    num(&r, "/ranking/linux_check/evolution/max_rel_diff_best_score_while_same_genome")
+            ),
+            ),
+        ];
+        m.extend(v5);
+    }
 
     // 16 RS-karambit-v5 load cases: SF on the production plate mesh, margin of record v = min over the plate check meshes
     let load_macros: [(&str, &str, f64, &str); 16] = [
@@ -287,7 +389,7 @@ fn main() {
     }
 
     // Mass-vs-ergonomics trade at the winning design under W_ERGOLIGHT_v2
-    let pts_per_g = 100.0 * e_pow * w_mult * rs.objective.mass_weight / (rs.mass.ceiling_g - rs.mass.floor_g);
+    let pts_per_g = 100.0 * e_mult * w_mult * rs.objective.mass_weight / (rs.mass.ceiling_g - rs.mass.floor_g);
     let grams_per_pct_e = rs.objective.grams_per_percent_e(num(&r, "/score/base"), &rs.mass);
     m.push(("gPtsPerGram", format!("{pts_per_g:.3}")));
     m.push(("gGramsPerPctE", format!("{grams_per_pct_e:.1}")));
@@ -351,8 +453,14 @@ fn main() {
     m.push(("gGridAgree", format!("{max_h02_h015_pct:.2}")));
     m.push(("gGridSpanPct", format!("{max_h04_h02_pct:.2}")));
 
-    // Verification & validation receipts (vv/*.json next to release.json)
-    let vv_dir = receipt_path.parent().expect("receipt dir").join("vv");
+    // Verification & validation receipts (the receipt's provenance.vv, relative to the repository root)
+    let ev_dir = receipt_path.parent().expect("receipt dir");
+    let repo_root = ev_dir
+        .parent()
+        .and_then(Path::parent)
+        .and_then(Path::parent)
+        .unwrap_or_else(|| fail("cannot resolve repo root from receipt path"));
+    let vv_dir = repo_root.join(str_val(&r, "/provenance/vv"));
     let read_vv = |name: &str| -> Value {
         let p = vv_dir.join(format!("{name}.json"));
         serde_json::from_str(&fs::read_to_string(&p).unwrap_or_else(|e| fail(format!("{}: {e}", p.display()))))
@@ -501,15 +609,12 @@ fn main() {
     m.push(("gBetaBalance", format!("{:.2}", rs.objective.betas.balance)));
     m.push(("gBetaSurface", format!("{:.2}", rs.objective.betas.grip_surface)));
     m.push(("gEExp", format!("{:.1}", rs.objective.e_exponent)));
+    // promotion constants of the search, from the code (`RankPromotion`)
+    m.push(("gPromoWindow", jarambit_g5::g5_qd::RankPromotion::WINDOW.to_string()));
+    m.push(("gPromoWarmup", jarambit_g5::g5_qd::RankPromotion::WARMUP.to_string()));
 
     // Lineage strip (from docs/g5/v<rv>/img/manifest.json + evidence/g5/v<rv>/history/<win_island>.jsonl)
     let rv = str_val(&r, "/version");
-    let ev_dir = receipt_path.parent().expect("receipt dir");
-    let repo_root = ev_dir
-        .parent()
-        .and_then(Path::parent)
-        .and_then(Path::parent)
-        .unwrap_or_else(|| fail("cannot resolve repo root from receipt path"));
     let manifest_path = repo_root.join(format!("docs/g5/v{rv}/img/manifest.json"));
     let manifest: Value = serde_json::from_str(
         &fs::read_to_string(&manifest_path)
@@ -517,8 +622,7 @@ fn main() {
     )
     .unwrap_or_else(|e| fail(format!("{}: {e}", manifest_path.display())));
     let hist_path = ev_dir.join("history").join(format!("{win_island}.jsonl"));
-    let hist_txt = fs::read_to_string(&hist_path)
-        .unwrap_or_else(|e| fail(format!("{}: {e}", hist_path.display())));
+    let hist_txt = if v6 { String::new() } else { fs::read_to_string(&hist_path).unwrap_or_else(|e| fail(format!("{}: {e}", hist_path.display()))) };
     let mut hist_map = std::collections::BTreeMap::new();
     for line in hist_txt.lines() {
         if line.trim().is_empty() {
@@ -533,12 +637,18 @@ fn main() {
         .as_array()
         .unwrap_or_else(|| fail("manifest /lineage not array"));
     let w = 0.98 / lin.len().max(1) as f64;
-    let mut l = String::from("% generated by g5-release-tex: best design of the winning island at each logged checkpoint\n");
+    let mut l = String::from("% generated by g5-release-tex: best design of the winning island (v6: of the pool lineage) at each checkpoint\n");
+    let lineage = if v6 { get(&r, "/lineage").as_array().unwrap_or_else(|| fail("/lineage not array")).clone() } else { Vec::new() };
     for c in lin {
-        let ev_n = num(c, "/evals").round() as i64;
-        let &(sc_100, mg_g) = hist_map
-            .get(&ev_n)
-            .unwrap_or_else(|| fail(format!("eval {ev_n} missing in {}", hist_path.display())));
+        let (label, (sc_100, mg_g)) = if v6 {
+            let pool = str_val(c, "/pool");
+            let p = lineage.iter().find(|x| str_val(x, "/pool") == pool).unwrap_or_else(|| fail(format!("manifest pool {pool} not in /lineage")));
+            (format!("pool {}", tex(&pool)), (num(p, "/best_raw_score_100"), num(p, "/best_mass_g")))
+        } else {
+            let ev_n = num(c, "/evals").round() as i64;
+            let &v = hist_map.get(&ev_n).unwrap_or_else(|| fail(format!("eval {ev_n} missing in {}", hist_path.display())));
+            (format!("eval {}", count(ev_n as f64)), v)
+        };
         let role_str = match c.get("role").and_then(Value::as_str) {
             Some(role) if !role.is_empty() => format!("\\\\ \\textbf{{{}}}", tex(role)),
             _ => String::new(),
@@ -546,9 +656,9 @@ fn main() {
         let _ = writeln!(
             l,
             "\\begin{{minipage}}[t]{{{w:.3}\\textwidth}}\\centering\\includegraphics[width=\\linewidth]{{../../../{}}}\\\\[-1pt]\
-            {{\\EItablefont eval {}\\\\ {:.2}, {:.1} g{role_str}}}\\end{{minipage}}\\hfill",
+            {{\\EItablefont {}\\\\ {:.2}, {:.1} g{role_str}}}\\end{{minipage}}\\hfill",
             str_val(c, "/image"),
-            count(ev_n as f64),
+            label,
             sc_100,
             mg_g,
         );
