@@ -54,6 +54,10 @@ path = "src/bin/g5_release.rs"
 name = "g5-continue"
 path = "src/bin/g5_continue.rs"
 
+[[bin]]
+name = "g5-fem-fields"
+path = "src/bin/g5_fem_fields/main.rs"
+
 [dependencies]
 jarambit-crescent = { path = "../crescent" }
 jarambit-physics = { path = "../physics" }
