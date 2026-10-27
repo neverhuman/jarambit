@@ -5,14 +5,14 @@ A G3.0 genome is a vector of 179 genes $\mathbf{u} \in [0,1]^{179}$
 from which the decoder builds a signed distance field (SDF) of the whole knife
 (\src{crates/g3/src/g3_sdf.rs}{\code{g3_sdf.rs}}).
 \begin{itemize}
-\item \textbf{Ring and grip.} The finger ring has a fixed 24.9~mm bore and a fixed 8~mm lip width; the lip's radial
+\item \textbf{Ring and grip.} The finger ring has a fixed 24.9~mm bore and an 8~mm lip width (gene \code{ring_lip_w} locked to 8.0~mm in r2); the lip's radial
 depth is a gene (1.5--2.8~mm). A filleted junction joins it to a compact grip with a palm swell, a variable section and
-three finger grooves (ring, middle and index finger). The grip surface carries a procedural texture blended from five
+three finger grooves (ring, middle and index finger)\cite{pheasant2006}. The grip surface carries a procedural texture blended from five
 bases: knurl, a sinusoidal stripe pattern, Voronoi cells, longitudinal ridges and a small compositional
 pattern-producing network.
 \item \textbf{Guard and blade.} An integral guard leads to a curved claw blade whose straight-line reach from the guard
-is capped at 85.725~mm (3.375~in, \code{BLADE_REACH_MAX_MM}); its hook drop is a gene. The blade thickness tapers
-linearly from a core value (4--7~mm) to a tip value (1.5--4.5~mm), with a dorsal ridge and fuller, and the last
+is capped at 85.725~mm (3.375~in, \code{BLADE_REACH_MAX_MM}) in the chord solver (after serration-scallop and edge-curve offsets, the Euclidean tip-to-guard distance can exceed this cap by up to $\sim$0.5~mm); its hook drop is a gene. The blade thickness tapers
+via a smoothstep cubic Hermite curve ($3u^2 - 2u^3$) from a core value (4--7~mm) to a tip value (1.5--4.5~mm), with a dorsal ridge and fuller, and the last
 6--12~mm before the point follow a five-knot monotone profile.
 \item \textbf{Hollow interior.} Inside a skin of 0.8--1.2~mm, the grip, guard and blade core are filled with a blend of
 Gyroid and Schwarz-D lattices (\code{tpms_val}, \code{tpms_level_for_rho}) with stiffening ribs and shear webs, and
@@ -77,6 +77,6 @@ $F_\mathrm{p} = \gToothPry$~N across the blade:
 \sigma_\mathrm{pry} = \frac{F_\mathrm{p}\, h_t\, t_\mathrm{max}/2}{I_\mathrm{op}},
 \end{gather}
 where $\rho$ is the smaller radius of the circles through each gullet bottom and the outline $\pm0.6$~mm either side
-of it (the Inglis notch factor~\cite{inglis1913}). The tooth's safety factor is
-$755~\mathrm{MPa}/\max(\sigma_\mathrm{snag}, \sigma_\mathrm{pry})$, using the Ti-6Al-4V yield stress of 828~MPa derated
-by 0.912. The decoder's tests require at least 1 for every checked tooth of the 60 designs.
+of it (the Inglis notch factor~\cite{inglis1913,peterson1974}, applied to the in-plane snag term). The tooth's safety factor is
+$755~\mathrm{MPa}/\max(\sigma_\mathrm{snag}, \sigma_\mathrm{pry})$ (taking the larger of the two decoupled load cases rather than their von Mises combination), using the Ti-6Al-4V yield stress of 828~MPa~\cite{astmf3001} derated
+by 0.912. Because each interior tooth is defined between two adjacent gullet minima, $N$ scallops define $N-1$ interior teeth; the decoder's tests require at least 1 for every checked interior tooth of the 60 designs.

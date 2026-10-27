@@ -1,0 +1,14 @@
+{
+  "sphere_r10_exact_mm3": 4188.790204786391,
+  "sphere_r10_h04_mm3": 4190.883076437069,
+  "sphere_r10_rel_err_pct": 0.04996363026934012,
+  "torus_r12_r3_exact_mm3": 2131.8345506353016,
+  "torus_r12_r3_h04_mm3": 2136.3715928060346,
+  "torus_r12_r3_rel_err_pct": 0.2128233717471617,
+  "drainable_port_3p0mm_h04": true,
+  "drainable_port_3p0mm_h02": true,
+  "drainable_port_3p0mm_h01": true,
+  "blocked_port_0p8mm_h04": false,
+  "blocked_port_0p8mm_h02": false,
+  "blocked_port_0p8mm_h01": false
+}

@@ -2,12 +2,12 @@
 
 **Jepson Taylor**
 
-**Version 3.0.2 — 2026-10-26** (living document; version from `docs/VERSION`, checked by CI; since v3.0.0 the README and `docs/g3/paper/` headline the G3 generation, and this v1 study is unchanged). **Certification erratum:** the Wave 283 all-hard and 16-gate pass claims are withdrawn. Neither committed candidate qualifies under the repaired pipeline. The generated tables below contain the corrected results. Historical screens remain historical evidence; no design is promoted.
+**Version 4.0.0 — 2026-10-27** (living document; version from `docs/VERSION`, checked by CI; since v4.0.0 the README and `docs/g4/paper/` headline the G4 generation alongside the preserved G3 v3.0.2 record in `docs/g3/paper/`, and this v1 study is unchanged). **Certification erratum:** the Wave 283 all-hard and 16-gate pass claims are withdrawn. Neither committed candidate qualifies under the repaired pipeline. The generated tables below contain the corrected results. Historical screens remain historical evidence; no design is promoted.
 
 **Abstract** — *jarambit* is a Rust-native pipeline that evolves fixed-blade titanium hiking/utility karambits (SWITCHBACK class) under hard manufacturability and safety constraints, verified by a plate FEM screen plus a solid tip submodel, made robust by Monte Carlo over tolerances, temperature (−10…100 °C) and cut media, and ranked across waves by a single GLOBAL metric **G** that combines solid-tip safety factor, strength-per-gram, aesthetics, mass and failure sequence. Hard limits reject qualification; search may rank infeasible candidates by negative fitness, and G never overrides a gate.
 
 <!-- GEN:WP_STATUS:BEGIN -->
-**Honest status (v3.0.2, generated from `evidence/rs_v2/*.json`).** 0 of 6 named designs meet every RS-karambit-v2 hard gate; the v1.0.0 certification claims are withdrawn; no design is promoted. The v1 gate set (RS-karambit-v2) adds human-maximum loads, seq ≥ 1.2 as a hard gate, fatigue and ring handling to the v1 screen; Table IV-A lists every shortfall.
+**Honest status (v4.0.0, generated from `evidence/rs_v2/*.json`).** 0 of 6 named designs meet every RS-karambit-v2 hard gate; the v1.0.0 certification claims are withdrawn; no design is promoted. The v1 gate set (RS-karambit-v2) adds human-maximum loads, seq ≥ 1.2 as a hard gate, fatigue and ring handling to the v1 screen; Table IV-A lists every shortfall.
 
 **v1.0.0 certification claims withdrawn (#75–#81).** Neither Wave 283 candidate passes the fixed pipeline. The exported geometry and all requirement thresholds are unchanged. Native-only solid solves are unverified; the results below use actual scikit-fem P2 and DOLFINx solves on the same mesh.
 

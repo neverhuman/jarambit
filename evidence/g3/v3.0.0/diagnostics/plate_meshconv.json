@@ -1,0 +1,57 @@
+{
+  "design_id": "hz4i013_g00995_d206e3c9",
+  "full_180_station_at_0p25_mm2": {
+    "full_180_station_outline": true,
+    "goodman_fatigue_180n_sf_corrected": 0.7428,
+    "hm_spine_3427n_sf": 0.637,
+    "hm_twist_16p2nm_sf": 0.9359,
+    "lateral_capacity_n": 236.837,
+    "max_area_mm2": 0.25,
+    "n_nodes": 5376,
+    "n_tris": 9975
+  },
+  "note": "G3 Tier 1 used max_area = 3.5 mm^2 on every 4th outline station (45 stations) with gci_admitted = false (0.5 constant credit).",
+  "schema": "jarambit.g3.diagnostics.plate_meshconv.v1",
+  "subsampled_45_station_series": [
+    {
+      "full_180_station_outline": false,
+      "goodman_fatigue_180n_sf_corrected": 1.0582,
+      "hm_spine_3427n_sf": 1.4449,
+      "hm_twist_16p2nm_sf": 1.0881,
+      "lateral_capacity_n": 337.41,
+      "max_area_mm2": 3.5,
+      "n_nodes": 374,
+      "n_tris": 642
+    },
+    {
+      "full_180_station_outline": false,
+      "goodman_fatigue_180n_sf_corrected": 0.5978,
+      "hm_spine_3427n_sf": 1.0959,
+      "hm_twist_16p2nm_sf": 1.17,
+      "lateral_capacity_n": 190.612,
+      "max_area_mm2": 1.0,
+      "n_nodes": 1158,
+      "n_tris": 2153
+    },
+    {
+      "full_180_station_outline": false,
+      "goodman_fatigue_180n_sf_corrected": 0.7953,
+      "hm_spine_3427n_sf": 0.9661,
+      "hm_twist_16p2nm_sf": 0.8311,
+      "lateral_capacity_n": 253.563,
+      "max_area_mm2": 0.25,
+      "n_nodes": 4455,
+      "n_tris": 8620
+    },
+    {
+      "full_180_station_outline": false,
+      "goodman_fatigue_180n_sf_corrected": 0.3231,
+      "hm_spine_3427n_sf": 0.8208,
+      "hm_twist_16p2nm_sf": 0.6384,
+      "lateral_capacity_n": 103.022,
+      "max_area_mm2": 0.0625,
+      "n_nodes": 17367,
+      "n_tris": 34187
+    }
+  ]
+}

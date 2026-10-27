@@ -1,0 +1,19 @@
+# frame-v4.toml — Coordinate datums, anthropometric envelopes, and functional keep-out zones for G4.
+
+schema = "jarambit.frame.v4"
+
+[datums]
+ring_bore_d_mm = 24.9
+ring_bore_r_mm = 12.45
+ring_lip_w_mm = 8.0
+guard_reference_x_mm = 75.6
+blade_reach_max_mm = 85.725
+sharpened_arc_max_mm = 101.6
+
+[keep_out]
+# Module T (Alien trabecular/CPPN overlay) is strictly prohibited from intruding into:
+ring_bore_clearance_mm = 12.45
+finger_channel_clearance_r_mm = 9.5
+bevel_band_clearance_mm = 3.60
+tip_reserve_clearance_mm = 12.0
+palm_contact_pad_clearance_mm = 1.50

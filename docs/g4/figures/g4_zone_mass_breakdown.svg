@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" width="680" height="320">
+  <rect width="680" height="320" fill="#ffffff"/>
+  <text x="340" y="28" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#1a202c">
+    Anatomical Zone Mass Breakdown: v3.0.0 (59.72 g STL) vs G4 v4.0.0 (35.42 g Certified)
+  </text>
+  <g transform="translate(80, 55)" font-family="sans-serif" font-size="12">
+    <text x="-10" y="22" text-anchor="end" fill="#4a5568">v3.0.0 (59.72 g)</text>
+    <rect x="0" y="6" width="80" height="24" fill="#2b6cb0"/><text x="40" y="22" text-anchor="middle" fill="#fff">Ring 8.99g</text>
+    <rect x="80" y="6" width="256" height="24" fill="#3182ce"/><text x="208" y="22" text-anchor="middle" fill="#fff">Grip 28.64g</text>
+    <rect x="336" y="6" width="22" height="24" fill="#4299e1"/>
+    <rect x="358" y="6" width="176" height="24" fill="#63b3ed"/><text x="446" y="22" text-anchor="middle" fill="#1a202c">Blade 19.66g</text>
+
+    <text x="-10" y="82" text-anchor="end" font-weight="bold" fill="#1a202c">G4 v4.0.0 (35.42 g)</text>
+    <rect x="0" y="66" width="32.8" height="24" fill="#22543d"/>
+    <rect x="32.8" y="66" width="178.2" height="24" fill="#2f855a"/><text x="122.0" y="82" text-anchor="middle" fill="#fff">Grip 19.94g</text>
+    <rect x="211.1" y="66" width="15.5" height="24" fill="#38a169"/>
+    <rect x="226.6" y="66" width="90.1" height="24" fill="#68d391"/><text x="271.7" y="82" text-anchor="middle" fill="#1a202c">Blade 10.07g</text>
+  </g>
+  <text x="340" y="220" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#2d3748">
+    Ring: 3.67 g | Grip: 19.94 g | Guard: 1.74 g | Blade (Root/Mid/Tip): 2.98 / 4.32 / 2.78 g
+  </text>
+  <text x="340" y="250" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#4a5568">
+    All 17 structural LCB safety factors &gt;= 1.00 | Roache 3-level GCI = 0.37% | Sequence min = 2.17
+  </text>
+</svg>

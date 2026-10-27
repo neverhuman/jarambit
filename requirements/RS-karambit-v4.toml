@@ -1,0 +1,147 @@
+# RS-karambit-v4 — G4 Feasibility-First Constrained Quality-Diversity Requirement Set.
+# Authors: Jepson Taylor, AGY, Claude-HZ (2026-10-26).
+# Scope: Feasibility-first constrained optimization (`W_ERGOLIGHT_v2`) for the G4 3D implicit karambit engine.
+# Every key in this file is consumed by `crates/g4/src/objective/rs_v4.rs` and verified by `UT-31`.
+# RS-karambit-v1, RS-karambit-v2, and RS-karambit-v3 remain frozen and byte-for-byte unchanged.
+
+id = "RS-karambit-v4"
+version = 4
+metric = "W_ERGOLIGHT_v2"
+legacy_metric = "W_ERGOLIGHT_v1"
+study = "engineering study, not a product"
+configuration = "fixed_blade_one_piece_lpbf_ti6al4v_hip_post_ground_bevels"
+hard_gates = true
+provenance_doc = "requirements/PROVENANCE.md"
+loads_file = "requirements/loads-v4.toml"
+materials_file = "requirements/materials-v4.toml"
+frame_file = "requirements/frame-v4.toml"
+
+[constants]
+material = "Ti-6Al-4V-ELI-HIP"
+density_g_per_cm3 = 4.43
+yield_bulk_mpa = 828.0
+uts_bulk_mpa = 895.0
+e_gpa = 113.8
+nu = 0.342
+mass_ceiling_g = 130.0
+mass_target_g = 50.0
+mass_stretch_g = 45.0
+mass_floor_g = 25.0
+lcb_confidence_k = 1.645
+max_grid_mass_drift_frac = 0.02
+max_plate_gci_3level = 0.05
+bevel_grind_stock_mm = 0.30
+
+[function_floors]
+blade_reach_min_mm = 72.0
+blade_reach_max_mm = 85.725
+sharpened_arc_min_mm = 60.0
+sharpened_arc_max_mm = 101.6
+claw_turning_angle_min_deg = 35.0
+claw_hook_drop_min_mm = 26.0
+point_included_angle_3mm_max_deg = 55.0
+point_width_2mm_max_mm = 3.50
+point_tip_radius_max_mm = 0.25
+
+[gate_s]
+apex_min_mm = 0.05
+apex_max_mm = 0.14
+half_angle_min_deg = 17.5
+half_angle_max_deg = 22.5
+tip_t025_max_mm = 0.30
+tip_t1_max_mm = 0.60
+tip_t2_max_mm = 1.00
+tip_taper_min_mm = 5.0
+point_monotonic_window_mm = 10.0
+serration_min_teeth_per_edge = 3
+serration_min_depth_mm = 0.80
+
+[structural_gates]
+hiker_lateral_180n_sf_min = 1.00
+hunter_lateral_260n_sf_min = 1.15
+twist_body_1p82nm_sf_min = 1.20
+hm_twist_16p2nm_sf_min = 1.10
+solid_tip_torsion_0p80nm_sf_min = 1.20
+solid_tip_pry_60n_sf_min = 1.20
+spine_push_500n_sf_min = 1.50
+spine_baton_3427n_ult_sf_min = 1.10
+ring_bearing_300n_sf_min = 2.00
+ring_back_30n_sf_min = 2.00
+grip_squeeze_250n_sf_min = 1.20
+tooth_snag_pry_sf_min = 1.25
+goodman_fatigue_180n_sf_min = 1.10
+buckling_lambda_min = 1.50
+combined_lat_twist_sf_min = 1.10
+per_case_sequence_ratio_min = 1.20
+face_wrinkling_sf_min = 1.20
+
+[ergonomics.ring]
+bore_d_mm = 24.9
+lip_w_mm = 8.0
+crown_min_mm = 0.2
+crown_max_mm = 0.4
+bore_round_min_mm = 2.5
+bore_round_max_mm = 3.5
+junction_step_max_mm = 0.3
+neck_fillet_r_min_mm = 4.0
+
+[ergonomics.grip]
+pitches_m50_mm = [19.5, 21.0, 22.0]
+stations_m50_mm = [9.75, 30.0, 51.5]
+station_err_max_mm = 2.5
+length_min_mm = 64.0
+length_max_mm = 72.0
+swell_thickness_min_mm = 13.0
+swell_thickness_max_mm = 17.0
+swell_height_min_mm = 25.0
+swell_height_max_mm = 28.0
+swell_perimeter_min_mm = 65.0
+swell_perimeter_max_mm = 75.0
+swell_h_over_t_min = 1.5
+swell_h_over_t_max = 2.0
+edge_r_min_mm = 2.2
+section_corner_r_min_mm = 4.0
+groove_r_min_mm = 10.0
+crest_r_min_mm = 5.0
+saddle_depth_min_mm = 1.5
+saddle_depth_max_mm = 2.5
+mid_depth_min_mm = 1.5
+mid_depth_max_mm = 2.5
+choil_depth_min_mm = 3.5
+choil_depth_max_mm = 4.5
+choil_depth_target_mm = 4.2
+guard_h_min_mm = 12.0
+thumb_ramp_deg = 15.0
+jimp_crest_r_min_mm = 0.5
+tex_amp_min_mm = 0.15
+tex_amp_max_mm = 0.25
+tex_crest_r_min_mm = 0.15
+
+[ergonomics.balance]
+com_to_index_max_mm = 8.0
+spin_inertia_ratio_max = 0.85
+
+[am_build]
+skin_t_min_mm = 0.75
+rib_or_web_t_min_mm = 0.80
+lattice_strut_min_mm = 0.80
+powder_port_d_min_mm = 2.50
+powder_escape_erosion_r_mm = 0.50
+require_zero_sealed_voids = true
+require_single_solid_component = true
+
+[betas]
+ring_lip = 0.18
+grip_section = 0.18
+hand_edges = 0.18
+finger_index = 0.15
+grip_length = 0.08
+guard = 0.08
+grip_surface = 0.05
+balance = 0.10
+
+[solver]
+stage2_primary = "faer_sparse_cholesky"
+vfe_primary = "gmg_pcg_bbar_hex8"
+true_residual_tol = 1e-10
+fail_closed = true

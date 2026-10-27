@@ -1,8 +1,8 @@
 # G3 release paper. Every number comes from the release receipt via g3-release-tex.
 #   make -C docs/g3/paper          generated/*.tex from evidence/g3/v$(RECORD)/release.json, then the PDF
 #   make -C docs/g3/paper check    fail if generated/*.tex is stale against the receipt
-# VERSION is the release; RECORD (evidence/g3/RECORD) the cohort of record whose receipt the paper reports.
-VERSION := $(shell cat ../../VERSION)
+# VERSION is the final G3 3.x release (3.0.2); RECORD (evidence/g3/RECORD) the cohort of record whose receipt the paper reports.
+VERSION := 3.0.2
 ROOT    := ../../..
 RECORD  := $(shell cat $(ROOT)/evidence/g3/RECORD)
 RECEIPT := $(ROOT)/evidence/g3/v$(RECORD)/release.json

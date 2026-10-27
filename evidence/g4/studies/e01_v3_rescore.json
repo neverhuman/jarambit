@@ -1,0 +1,25 @@
+{
+  "v3_winner_id": "hz2i012_g00609_d55af923",
+  "v3_voxel_mass_g": 57.001957,
+  "v3_stl_mesh_mass_g": 59.297415,
+  "v3_legacy_score_voxel": 80.547841,
+  "v3_legacy_score_mesh": 79.748766,
+  "v3_sequence_ratios_ring_clamp_fe": [
+    2.736205,
+    5.055825,
+    0.515064
+  ],
+  "v3_sequence_min_ring_clamp_fe": 0.515064,
+  "v3_sequence_ratios_hm1_winkler": [
+    2.98412,
+    4.8124,
+    1.6245
+  ],
+  "v3_sequence_min_hm1_winkler": 1.6245,
+  "v3_point_angle_1mm_deg": 110.125736,
+  "v3_point_angle_3mm_deg": 92.222536,
+  "v3_tip_torsion_origin_chord_1p82nm_sf": 0.431066,
+  "v3_tip_torsion_local_bisector_0p80nm_sf": 1.0842,
+  "v3_goodman_fatigue_double_knockdown_sf": 0.942516,
+  "v3_goodman_fatigue_corrected_true_stress_sf": 1.058214
+}
