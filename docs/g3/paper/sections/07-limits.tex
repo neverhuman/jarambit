@@ -6,19 +6,24 @@ a qualification.
 \begin{itemize}
 \item \textbf{Strength against the targets.} Against a target of 1, the solid tip (\gTipSF) \gTipReading; the grip under
 the spine load (worst of four cases by the beam formula \gGripSF; spine load by voxel FE \gFeGripSpine) \gGripReading; the human-maximum twist (plate \gHmTwist, voxel FE
-\gFeRootTwist) \gTwistReading; fatigue (\gFat{} in the v3.0.0 formula; true Goodman $\mathrm{SF}=1.84$ at $\sigma_{180\mathrm{N}}=166$~MPa) \gFatReading; and the yield-sequence ratio (\gSeq{} against 1.2 over the two blade cases: lateral $2.38$, twist $2.61$; spine-baton sequence ratio $0.253$ under ring-clamped cantilever assumptions, \code{evidence/g3/v3.0.0/diagnostics/seq_per_lc.json})
+\gFeRootTwist) \gTwistReading; fatigue (\gFat) \gFatReading; and the yield-sequence ratio (\gSeq{} against 1.2)
 \gSeqReading. Lateral capacity \gLatReading{} and the ring \gRingReading.
-\item \textbf{Mass.} The design weighs \gMassG{} g as printed (including $+0.30$~mm bevel grind stock; 67.97~g finished CAD mass), which \gMassReading.
+\item \textbf{Mass.} The print mesh weighs \gMassG{} g, which \gMassReading; the score used the \gMassRankG{} g ranking-grid
+count (Table~\ref{tab:mass}).
 \item \textbf{Assumed loads.} The tooth snag and pry loads are conservative research assumptions, not measured use loads.
 The buckling factor is an analytic lateral-torsional estimate~\cite{timoshenko1961}, not an eigenvalue solve.
 \item \textbf{Models.} Voxel finite elements resolve the printed geometry only to $h = \gFeH$ mm and report percentiles,
-not peaks; the plate and beam surrogates of the search differ from them (Table~\ref{tab:fe}), and the plate mesh covers the outer blade silhouette without internal fuller holes. Surfaces come from marching
+not peaks; the plate and beam surrogates of the search differ from them (Table~\ref{tab:fe}). Surfaces come from marching
 tetrahedra on the voxel SDF~\cite{doi1991}, except the blade, which is re-meshed at 0.05 mm from the exact decoder law
-with marching cubes~\cite{lorensen1987}. Three objective terms are held fixed, capped or evaluated analytically in this release
-(Section~\ref{sec:objective}), and the buckling factor is an analytic estimate.
+with marching cubes~\cite{lorensen1987}. Two objective terms are held fixed or capped in this release
+(Section~\ref{sec:objective}), and the buckling factor is an analytic estimate. The plate capacities do not converge
+under mesh refinement, and the tip model reads its thickness raster half a cell off (Section~\ref{sec:diag}).
 \item \textbf{Coarse search grid.} The archive was selected at $h = \gH$ mm, which undercounts the mass of some
 designs (Table~\ref{tab:grid}); only the final ranking is measured at $h = \gHRank$ mm, so designs that the coarse grid
 scored low were never re-checked.
+\item \textbf{Definitions and credit.} The yield-sequence ratio mixes two load cases and the fatigue stress applies the
+thin-wall knock-down twice (Section~\ref{sec:diag}). Tier~1 credits a watertight mesh it does not build; only Tier~2
+censuses one. The guard outline reuses tables from the earlier design f075, so that part of the shape is a human prior.
 \item \textbf{One shortened cohort.} The release cohort is \gEvalsIsland{} evaluations per island on one host; another
 seed or a longer run may find a better design.
 \end{itemize}

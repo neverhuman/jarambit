@@ -9,7 +9,7 @@
 \usepackage{microtype}
 \input{generated/numbers.tex}
 \hypersetup{
-  pdftitle={Evolving a printable titanium karambit under ergonomic, edge and serration constraints (G3 v\gVersion)},
+  pdftitle={Evolving a titanium karambit for laser powder-bed fusion under ergonomic, edge and serration constraints (G3 v\gVersion)},
   pdfauthor={Jepson Taylor},
   pdflang={en-US},
   pdfkeywords={evolutionary design, quality diversity, MAP-Elites, additive manufacturing, Ti-6Al-4V, finite elements, knife design}
@@ -18,28 +18,28 @@
 \newcommand{\src}[2]{\href{https://github.com/neverhuman/jarambit/blob/v\gVersion/#1}{#2}}
 \makeatletter
 \fancypagestyle{headings}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
-  \fancyhead[L]{\sffamily\fontsize{6.6}{8}\selectfont\color{slate}\addfontfeature{LetterSpace=8}JARAMBIT G3\enspace{\color{hair}|}\enspace\addfontfeature{LetterSpace=0}An evolved, printable titanium karambit (v\gVersion)}%
+  \fancyhead[L]{\sffamily\fontsize{6.6}{8}\selectfont\color{slate}\addfontfeature{LetterSpace=8}JARAMBIT G3\enspace{\color{hair}|}\enspace\addfontfeature{LetterSpace=0}An evolved titanium karambit for L-PBF (v\gVersion)}%
   \fancyhead[R]{\sffamily\fontsize{6.6}{8}\selectfont\color{slate}\thepage}}
 \makeatother
 \pagestyle{headings}
 
 \begin{document}
-\title{Evolving a Printable Titanium Karambit under Ergonomic, Edge and Serration Constraints}
+\title{Evolving a Titanium Karambit for Laser Powder-Bed Fusion under Ergonomic, Edge and Serration Constraints}
 \author{Jepson Taylor%
-\thanks{Release v\gVersion, decoder commit \gCommit{} (decoder hash \gDecoder). Every measured number and every figure of the design in this
+\thanks{Release v\gVersion, decoder commit \gCommit{} (decoder hash \gDecoder). Every computed number and every figure of the design in this
 paper is generated from the release receipt \code{evidence/g3/v\gRecord/release.json}. Status: \gStatus.}}
 \maketitle
 
 \begin{abstract}
 We report the best individual of the G3 v\gRecord{} cohort of record, a one-piece Ti-6Al-4V karambit for laser
-powder-bed fusion with a hollow, lattice-filled grip and blade core. No person designed it: \gIslands{} independent
-CVT-MAP-Elites islands ran \gEvalsIsland{} evaluations each from scrambled Sobol samples, and the design space itself
-carries the rules a good edge must follow. Both cutting edges have one primary grind of
+powder-bed fusion with a hollow, lattice-filled grip and blade core. No genome was set or edited by hand: \gIslands{} independent
+MAP-Elites islands ran \gEvalsIsland{} evaluations each from scrambled Sobol samples, and the design space itself
+carries the rules a good edge must follow; the decoder, the objective and its rules are human-authored. Both cutting edges have one primary grind of
 \gEdgeAApexLo--\gEdgeAApexHi\textdegree{} and \gEdgeBApexLo--\gEdgeBApexHi\textdegree{} per side, measured normal to
 the edge and carried to within \gEdgeATo{} and \gEdgeBTo{} mm of the point, and both edges are serrated
 (\gEdgeATeeth{} and \gEdgeBTeeth{} scallops; the weakest of the teeth between them has a safety factor of
 \gToothMin{} under a \gToothSnag{} N snag). The design scores \gScore{} under \gMetric{} with an ergonomic multiplier of \gE{} and
-weighs \gMassG{} g as printed, which \gMassReading. The \gH{} mm search grid undercounted the mass of the
+its print mesh weighs \gMassG{} g, which \gMassReading. The \gH{} mm search grid undercounted the mass of the
 search's own leader (\gLeaderMassA{} g against \gLeaderMassB{} g at 0.2 mm and \gLeaderMassC{} g at 0.15 mm), so the
 ranking of record is measured on
 the \gHRank{} mm grid of the print file. Against a safety-factor target of 1, its solid tip
@@ -62,7 +62,7 @@ Evolutionary design, quality diversity, MAP-Elites, additive manufacturing, Ti-6
 \input{sections/08-reproducibility}
 \input{sections/09-conclusion}
 
-\begin{thebibliography}{20}
+\begin{thebibliography}{9}
 \bibitem{mouret2015} J.-B. Mouret and J. Clune, ``Illuminating search spaces by mapping elites,'' \emph{arXiv:1504.04909}, 2015.
 \bibitem{vassiliades2018} V. Vassiliades, K. Chatzilygeroudis, and J.-B. Mouret, ``Using centroidal Voronoi tessellations to scale up the multidimensional archive of phenotypic elites algorithm,'' \emph{IEEE Trans. Evol. Comput.}, vol. 22, no. 4, pp. 623--630, 2018.
 \bibitem{joe2008} S. Joe and F. Y. Kuo, ``Constructing Sobol sequences with better two-dimensional projections,'' \emph{SIAM J. Sci. Comput.}, vol. 30, no. 5, pp. 2635--2654, 2008.
@@ -71,11 +71,5 @@ Evolutionary design, quality diversity, MAP-Elites, additive manufacturing, Ti-6
 \bibitem{lorensen1987} W. E. Lorensen and H. E. Cline, ``Marching cubes: A high resolution 3D surface construction algorithm,'' \emph{Comput. Graph.}, vol. 21, no. 4, pp. 163--169, 1987.
 \bibitem{inglis1913} C. E. Inglis, ``Stresses in a plate due to the presence of cracks and sharp corners,'' \emph{Trans. Inst. Naval Archit.}, vol. 55, pp. 219--241, 1913.
 \bibitem{timoshenko1961} S. P. Timoshenko and J. M. Gere, \emph{Theory of Elastic Stability}, 2nd ed. New York: McGraw-Hill, 1961.
-\bibitem{batoz1980} J.-L. Batoz, K.-J. Bathe, and L.-W. Ho, ``A study of three-node triangular plate bending elements,'' \emph{Int. J. Numer. Methods Eng.}, vol. 15, no. 12, pp. 1771--1812, 1980.
-\bibitem{roache1998} P. J. Roache, \emph{Verification and Validation in Computational Science and Engineering}. Albuquerque, NM: Hermosa Publishers, 1998.
-\bibitem{peterson1974} R. E. Peterson, \emph{Stress Concentration Factors}. New York: Wiley, 1974.
-\bibitem{gibson1997} L. J. Gibson and M. F. Ashby, \emph{Cellular Solids: Structure and Properties}, 2nd ed. Cambridge, U.K.: Cambridge Univ. Press, 1997.
-\bibitem{pheasant2006} S. Pheasant and C. M. Haslegrave, \emph{Bodyspace: Anthropometry, Ergonomics and the Design of Work}, 3rd ed. Boca Raton, FL: CRC Press, 2006.
-\bibitem{astmf3001} ASTM F3001-14, \emph{Standard Specification for Additive Manufacturing Titanium-6 Aluminum-4 Vanadium ELI (Extra Low Interstitial) with Powder Bed Fusion}, ASTM International, 2021.
 \end{thebibliography}
 \end{document}

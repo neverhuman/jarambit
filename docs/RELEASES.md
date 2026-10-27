@@ -2,7 +2,67 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
-## v4.0.0 — 2026-10-27 (major: the G4 generation — declarative 130-gene `G4.0` schema, `RS-karambit-v4`, true-3D physics & V&V suite, feasibility-first constrained QD search, and certified 35.42 g sub-50 g winner)
+## v4.0.1 — 2026-10-27 (patch: v4.0.0 withdrawn; the G3 v3.0.0 cohort of record is current again; G3 errata and diagnostics)
+
+- **v4.0.0 is withdrawn (owner decision, 2026-10-27; tag and GitHub release kept, marked WITHDRAWN).** The cohort of
+  record v3.0.0 and its best individual `hz4i013_g00995_d206e3c9` are current again in the README, `cad/` and STATUS.
+  v4.0.0 is withdrawn for three reasons:
+  - **Not evolved.** Its winner is not an evolved design. Every initial population, including the "Sobol" baseline,
+    was seeded with the hand-authored default genome of `genome/G4.0.toml`. A hand-coded rule set pushes named genes
+    toward chosen values. The winner lies within a median of 0.031 (normalised units) of those defaults, after 254
+    evaluations per run (neverhumanbot's post-merge review of #176).
+  - **Not under the owner's loads.** The tip twist was 0.80 N·m where RS-karambit-v3 has 1.82 N·m. The 3,427 N spine
+    case was judged on ultimate strength, not first yield. HIP material was assumed, which is an open owner decision.
+    The search used hard gates (feasibility-first) and a Lamarckian repair emitter. Both conflict with the owner's v4
+    decisions of 2026-10-27: a continuous objective with no gates, and every RS-karambit-v3 load value kept.
+  - **Not reviewed.** #176 was merged 60 s after it was opened, before CI finished.
+  - **Further findings of an independent code review**, each checked against the code and the receipt:
+    - the lateral capacity is a clamp (stress per newton clamped to [0.68, 0.96] MPa/N, so 862.5 N = 828 / 0.96);
+    - the plate convergence study is synthesized from the fine-mesh value (order forced to 2.000, GCI to 0.375 %);
+    - at the RS-v3 tip twist of 1.82 N·m the winner's TET10 safety factor is 0.161;
+    - the exported CAD kit is built through the G3 bridge and scaled in z to the scored mass, so it is not the evaluated
+      design.
+- **What stays.** The G4 prototype (`crates/g4`, `genome/G4.0.toml`, `requirements/*-v4.toml` and
+  `requirements/PROVENANCE.md`, `evidence/g4/`, `docs/g4/`) stays in the tree, unchanged, as an experimental
+  prototype. Each folder has a `WITHDRAWN.md` notice. Its CAD kit left `cad/` and remains in git history. The genuine
+  G4 will be v4.1.0 under the owner's rules.
+- **G3 errata and diagnostics** (prepared as v3.0.3, which was never released; the receipt is unchanged):
+  - **Diagnostics.** `crates/g3/src/bin/g3_diagnostics.rs`, written by AGY and re-run byte for byte before adoption,
+    writes `evidence/g3/v3.0.0/diagnostics/` with its own `SHA256SUMS`:
+    - yield sequence per load case: 2.74 lateral, 5.06 twist, 0.52 spine (the coded 0.56 mixes two cases);
+    - fatigue with the thin-wall knock-down applied once: 1.06, not 0.94;
+    - solid tip with the half-cell raster offset removed: SF 0.55, not 0.64, and a blunt planform point;
+    - plate mesh refinement: 337 / 191 / 254 / 103 N, which does not converge, so the plate's "meets target"
+      readings hold on the search mesh only;
+    - the four masses: 56.0 search voxels, 57.0 ranking voxels (scored), 59.3 print mesh (of record), 59.7 upload
+      mesh. At the print-mesh mass it would score 79.75.
+  - **Wording**, in the G3 paper, README, STATUS and `crates/g3/README.md`. Every new number is generated from the
+    receipt or the diagnostics by `g3-release-tex` and the generators.
+    - "pry" → twist about the axis from the origin to the point;
+    - "refined until it converged" → a non-monotone mesh study;
+    - "No person designed it" → no genome was set or edited by hand, and the decoder, objective and rules are
+      human-authored (the guard reuses f075 tables);
+    - "cannot trade comfort for grams" → 1 % of E is worth 2.3 g;
+    - "printable/as printed" → L-PBF and "print mesh";
+    - "CVT" → fixed Halton centres;
+    - "FE certification" → voxel FE check;
+    - checkpoint sequence, not lineage;
+    - "best" is first of a top eight spread over 1.8 points;
+    - STATUS no longer lists unreleased v0.33–v0.38 milestones as released;
+    - the `doi1991` reference gets its closing quotes;
+    - v4.0.0's edits to the G3 paper sections are reverted, because they carried hand-typed numbers that
+      contradicted the diagnostics.
+  - **Provenance.** `docs/g3/provenance/` gives the SHA-256 of each document RS-karambit-v3 cites and what G3 took
+    from it, plus a frozen `G3_GENOME_SPEC.md` v1.1.
+  - **Tests.** They keep the overclaims out of the public G3 text and check the diagnostics hashes.
+    `ops/ci/gen_readme.py` accepts a cohort of record from another major.minor line only when the release's own
+    entry here names it.
+- **Paper:** `docs/g3/paper/g3-v4.0.1.pdf` (7 pages), with its copy in `cad/`. The v4.0.0 build had overwritten
+  `g3-v3.0.2.pdf`; that file leaves the tree, and the v3.0.2 release asset is unchanged.
+
+## v4.0.0 — 2026-10-27 — WITHDRAWN in v4.0.1 (major: the G4 generation — declarative 130-gene `G4.0` schema, `RS-karambit-v4`, true-3D physics & V&V suite, feasibility-first constrained QD search, and certified 35.42 g sub-50 g winner)
+
+> **Withdrawn in v4.0.1** (owner decision, 2026-10-27). The claims below are kept as the record of what v4.0.0 stated; they are not results. See the v4.0.1 entry.
 
 - **Owner request & feedback sweep.** Address all external peer-review and internal audit findings in `tips/feedback/*.md` — 20 Research Integrity findings (`F01`–`F20`), 26 Physics/Measurement findings (`AG-01`–`AG-26`), 12 Genome findings (`F-G1`–`F-G12`), 11 Requirement findings (`F-R1`–`F-R11`), 8 Search findings (`F-S1`–`F-S8`), 15 HPC targets (`H-1`–`H-15`), and 16 G3 paper errata (`P-1`–`P-16`) — while keeping every v1/v2 and v3.0.0 certified input (`g3_decoder_sha256()`) byte-for-byte unchanged (`AGENTS.md`).
 - **Declarative `G4.0` genome (`genome/G4.0.toml`).**

@@ -6,8 +6,9 @@ Designs are ranked by \code{W_ERGOLIGHT_v1}, draft~d, under the requirement set 
 \end{equation}
 where the 21 term scores $s_i \in [0,1]$ carry weights $\sum_i w_i = 1$, and $E \in [0.3, 1]$ is a geometric-mean
 ergonomic multiplier over eight hand-zone factors $e_k \in [0.3, 1]$ with $\sum_k \beta_k = 1$ (Table~\ref{tab:weights}).
-Because $E$ multiplies the whole sum instead of adding a bonus, a design cannot trade comfort for grams: a hand-zone
-shortfall scales down every point earned elsewhere. Once all eight measurements are inside their target bands, $E = 1$,
+Because $E$ multiplies the whole sum instead of adding a bonus, a hand-zone shortfall scales down every point earned
+elsewhere. It does not forbid trading comfort for grams: at the best individual, 1\,\% of $E$ is worth \gGramsPerPctE{} g
+of mass credit (\gPtsPerGram{} points per gram). Once all eight measurements are inside their target bands, $E = 1$,
 and ergonomics no longer distorts the trade between mass and strength.
 
 \begin{table}[t]
@@ -44,7 +45,7 @@ Hollow-grip strength & 0.0174 & & \\
 \end{table}
 
 Mass carries the largest weight, $w = 0.370$, mapped linearly from 0 at 130~g to 1 at 25~g. In draft~d the solid-tip term
-carries 0.070, to push the point to resist the 1.82~N$\cdot$m pry, and the two Gate-S sharpness terms and buildability
+carries 0.070, to push the point to resist the 1.82~N$\cdot$m twist, and the two Gate-S sharpness terms and buildability
 carry 0.050 each. Every safety-factor ratio $v = \mathrm{SF}/\mathrm{SF}_\mathrm{req}$ passes through a knee function
 (\code{sfk}),
 \begin{equation}
@@ -56,10 +57,9 @@ score in proportion, and the search can still learn from it.
 
 Three terms are fixed or capped in this release, and the scores in this paper include them as they are.
 \begin{itemize}
-\item The plate-GCI term is held at 0.5, because no three-level plate refinement~\cite{roache1998} runs in the search (see \code{evidence/g3/v3.0.0/diagnostics/plate_meshconv.json} for the post-hoc 3-level convergence check).
+\item The plate-GCI term is held at 0.5, because no three-level plate refinement runs in the search.
 \item The solid-tip term is capped at 0.8 of its knee value, because the independent cross-check that would lift the cap
 is not run.
 \item The buildability term is the analytic rule (skin at least 0.8~mm, open ports, lattice struts against a 0.8~mm
 minimum) at every tier.
-\item In \code{g3_sandwich.rs}, the Goodman fatigue ratio is evaluated from $180/\mathrm{cap\_lat\_n}$ ($0.220$~MPa, capped at 10) rather than $180\,\sigma_{1\mathrm{N}}$ ($166$~MPa, true Goodman $\mathrm{SF}=1.84$), and the yield-sequence ratio is taken over the two lateral/twist blade cases (\code{evidence/g3/v3.0.0/diagnostics/seq_per_lc.json}).
 \end{itemize}
