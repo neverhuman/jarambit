@@ -4,7 +4,7 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
 
 ## Unreleased
 
-- **`requirements/RS-karambit-v5.toml`**, the requirement set for the G4 generation, with `requirements/PROVENANCE-v5.md`.
+- **`requirements/RS-karambit-v5.toml`**, the requirement set for the G5 generation (release v5.0.0; G4 was the withdrawn v4.0.0 prototype), with `requirements/PROVENANCE-v5.md`.
   - **Why.** The owner asked for "the BEST possible constraints for the best possible knife". Every value now cites
     a standard, a handbook or a paper, or is a dated owner decision.
   - **How it applies.** Each requirement is a decoder construction rule or a continuous objective term (no hard
@@ -23,7 +23,7 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
     - NASA/MIL hand-edge radii and contact-pressure limits;
     - NASA-STD-6030 margins (1.2 on yield, 1.3 on ultimate; the ring keeps the owner's SF 2);
     - powder ports ≥ 3 mm, two per cavity.
-  - **Not yet in force.** It applies from the G4 cohort onward; no code reads it yet. A test checks that every cited
+  - **Not yet in force.** It applies from the G5 cohort onward; no code reads it yet. A test checks that every cited
     source resolves in the provenance.
 
 ## v4.0.1 — 2026-10-27 (patch: v4.0.0 withdrawn; the G3 v3.0.0 cohort of record is current again; G3 errata and diagnostics)

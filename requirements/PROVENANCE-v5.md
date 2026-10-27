@@ -1,6 +1,6 @@
 # RS-karambit-v5: provenance of every requirement
 
-`requirements/RS-karambit-v5.toml` is the requirement set of the G4 generation. Each value there names one or more
+`requirements/RS-karambit-v5.toml` is the requirement set of the G5 generation (release v5.0.0; G4 was the withdrawn v4.0.0 prototype). Each value there names one or more
 source keys in square brackets, and this page resolves every key. Grades say how strong the evidence is: **S** a
 standard or handbook, **P** a peer-reviewed paper read in full, **p** a paper known through its abstract or a review,
 **V** a vendor guide, **D** derived here from the cited values, **O** an owner decision.
@@ -33,6 +33,7 @@ v4.0.0 prototype and is not used.
 | Lateral | 180 / 260 N at the tip | 12 N·m limit, 18 N·m ultimate, applied 5 mm back from the point | Human wrist and arm strength; every bend standard loads well back from the point [yoshii2015, mil1472h, mil8662e, gost51501] |
 | Body twist | 1.82 N·m (floor), 16.2 N·m human max | 7 N·m service, 16.2 N·m limit | 1.82 N·m is below cutlery handle-twist tests [en8442, osullivan2002] |
 | Tip | 1.82 N·m twist | 150 N axial, 10 N side, 0.3 N·m twist at 3 mm | Owner decision (above) [en388, gilchrist2008, nolan2013] |
+| Buckling | analytic lateral-torsional estimate | eigenvalue λ ≥ 1.5 under the tip axial load | A load normal to the flat blade has no buckling eigenvalue; in-plane compression of the point does (D) |
 | Spine | 3,427 N | dropped | Owner decision (above) |
 | Grip squeeze | 250 N, 450 MPa | 800 N limit, plus contact-pressure limits at 55 / 130 / 661 N | Above P95 male grip and the NASA crew maximum [dodds2014, hidh, tirloni2021] |
 | Guard | soft, 12 mm | 15 mm target, 10 mm floor, 300 N load | Guard effectiveness levels off at 15.2 mm [cochran1986] |
@@ -133,3 +134,17 @@ of fitness for use.
 - **Temperature.** No L-PBF tensile data exists at 60–100 °C; the derate uses the wrought handbook curve, which is
   conservative.
 - **Drop.** The drop case is a physical test by design (MIL-STD-810H procedure, pass criteria assumed).
+
+## Consistency notes
+
+- **Behind-edge thickness.** With one grind (EDGE-1), the thickness behind the edge follows from the angle and the
+  apex flat: t(d) = apex + 2 d tan θ. This gives 0.36–0.47 mm plus the apex at 0.5 mm. A separate limit would either
+  repeat the angle band or contradict it, so none is set.
+- **Ring bore.** The 24.9 mm bore is larger than the 8 mm horizontal-hole rule allows. It is printed with a
+  support-free teardrop crown and machined round, inside the finishing allowance.
+- **Permanent set.** The computation is linear-elastic, so "no yield at the limit load with SF 1.2" stands in for
+  "no permanent set". The GOST-style 1 mm set test is a physical test.
+- **Objective weights.** The weights and exponents of W_ERGOLIGHT_v2 are design choices made under the owner's rules
+  (`owner-objective`): mass 0.30, the worst safety-factor margin 0.25, the other terms 0.45, and E^5. They are tested
+  for two properties before the decoder is frozen: raising any failing safety factor to its requirement must outscore
+  the mass it costs, and 1 % of E must cost at least 10 g of mass credit.

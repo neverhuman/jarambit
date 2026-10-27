@@ -1,4 +1,4 @@
-# RS-karambit-v5: requirement set for the G4 generation (fixed blade, one-piece hollow L-PBF Ti-6Al-4V, sheath-free).
+# RS-karambit-v5: requirement set for the G5 generation (release v5.0.0) (fixed blade, one-piece hollow L-PBF Ti-6Al-4V, sheath-free).
 #
 # Owner (2026-10-27): "I want the BEST possible constraints for the best possible knife, please do what is best."
 # Every value below carries a source key; requirements/PROVENANCE-v5.md resolves each key to its source, its evidence
@@ -15,7 +15,7 @@
 
 id = "RS-karambit-v5"
 version = 5
-generation = "G4"
+generation = "G5"   # G4 was the withdrawn v4.0.0 prototype
 metric = "W_ERGOLIGHT_v2"
 study = "engineering study, not a product"
 configuration = "fixed_blade_one_piece_lpbf_ti6al4v_stress_relieved_no_sheath"
@@ -94,7 +94,8 @@ fatigue_ratio_tension = 0.10       # tension or reversed loading (extrapolated) 
 apply_mm_from_point = 5.0
 limit_root_moment_nm = 12.0      # checked at sf_yield
 ultimate_root_moment_nm = 18.0   # checked at sf_ultimate against ultimate_mpa; covers the former 260 N "hunter" case
-permanent_set_max_mm = 1.0       # GOST R 51501-99 style deflection check [gost51501]
+physical_set_test_max_mm = 1.0   # GOST R 51501-99 style deflection test, physical [gost51501]; computed linear-elastic,
+                                 # where no yield at sf_yield means no permanent set
 
 [loads.body_twist]
 # Twist of the blade about its own axis, reacted through grip, guard and ring (no friction credit above 2 N m)
@@ -134,8 +135,10 @@ any_direction_n = 300.0
 working_n = 25.0                 # little-finger share of a peak working grip [tirloni2021, kong2005]
 
 [loads.pull]
-# One-hand pull along the grip axis (misuse, levering) [hidh]
+# One-hand pull along the grip axis (pulling the knife out of a cut): applied by the hand model on grip and ring,
+# reacted by the blade held over its last 20 mm [hidh]
 limit_n = 600.0
+held_length_from_point_mm = 20.0
 
 [loads.teeth]
 # Serration teeth [mil1472h, us4823467]
@@ -164,7 +167,9 @@ per_load_case = true
 ratio_min = 1.2
 
 [buckling]
-# Lateral-torsional buckling of the blade under the limit lateral load, by eigenvalue solve
+# Elastic buckling of the blade under the limit tip axial load (in-plane compression along the tip bisector), by
+# eigenvalue solve of the blade with the hand model; a load normal to the flat blade has no buckling eigenvalue
+load_case = "tip_axial"
 lambda_min = 1.5
 
 [edge]
@@ -174,9 +179,8 @@ lambda_min = 1.5
 # edge is blunt grind stock by design.
 per_side_angle_min_deg = 20.0
 per_side_angle_max_deg = 25.0
-behind_edge_thickness_05mm_min = 0.36   # finished thickness 0.5 mm behind the edge (tan of 20-25 deg) [thomas2018]
-behind_edge_thickness_05mm_max = 0.47
-behind_edge_thickness_1mm_max = 0.80
+# Behind-edge thickness is not a separate requirement: with one grind (EDGE-1) it follows from the angle and the apex
+# flat, t(d) = apex + 2 d tan(theta), i.e. 0.36-0.47 mm plus the apex at 0.5 mm behind the edge [thomas2018].
 finished_apex_flat_min_mm = 0.05        # the finished CAD edge; the real apex is sharpened below CAD resolution
 finished_apex_flat_max_mm = 0.12
 finishing_allowance_mm = 0.5            # per ground face [barricelli2022, eos, beretta2017]
@@ -280,6 +284,7 @@ ports_per_cavity_min = 2
 closed_voids_allowed = false           # measured on the decoded geometry, never by formula
 overhang_min_deg = 45.0                # down-skin faces steeper than this from horizontal need no support
 horizontal_hole_max_mm = 8.0           # larger horizontal holes need a teardrop or diamond shape
+ring_bore_machined = true              # the ring bore is printed with a support-free teardrop crown and machined round
 ledge_max_mm = 0.5
 supports_on_edges_allowed = false
 build_orientation_declared = true
@@ -306,3 +311,39 @@ worst_margin_weight = 0.25
 mass_weight = 0.30
 e_exponent = 5.0                       # 1 % of E must cost at least min_grams_per_percent_e of mass credit
 min_grams_per_percent_e = 10.0
+
+[objective.weights]
+# The remaining 0.45 of the weight (mass 0.30 and the worst-margin term 0.25 above). Structural terms score
+# v = SF / SF_req per load case; geometry terms score measured distance to their bands [owner-objective]
+lateral_limit = 0.0175
+lateral_ultimate = 0.0175
+twist_limit = 0.0175
+tip_axial = 0.0175
+tip_lateral = 0.0175
+tip_twist = 0.0175
+grip_squeeze = 0.0175
+guard_push = 0.0150
+ring_bearing = 0.0150
+ring_back = 0.0100
+ring_any_direction = 0.0100
+pull = 0.0100
+teeth = 0.0150
+fatigue = 0.0200
+sequence = 0.0200
+buckling = 0.0100
+edge = 0.0400
+point = 0.0600
+serration = 0.0200
+am_build = 0.0600
+form = 0.0225
+
+[objective.betas]
+# Geometric-mean exponents of the ergonomic multiplier E (sum 1); each factor is measured on the decoded geometry
+grip_section = 0.20
+ring = 0.15
+hand_edges = 0.15
+contact_pressure = 0.15
+guard = 0.10
+grip_length = 0.10
+balance = 0.10
+grip_surface = 0.05
