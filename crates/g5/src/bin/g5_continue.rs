@@ -5,6 +5,7 @@
 //!                      [--h 0.4] [--tier1-top 0.4] [--tier2-top 0] [--log-every 25] [--stl]
 //!   g5-continue reeval --out DIR --genomes CSV[,CSV...] [--h 0.4] [--threads 4] [--shard k/n]
 //!   g5-continue merge  --out DIR --from DIR[,DIR...]
+//!   g5-continue screen --out DIR --pool DIR --n 200 --seed S [--h 0.4] [--threads 2]
 //!
 //! `run` is one island. Without `--pool` it is exactly `g5-evolve` (Sobol start of `--init`, then the same loop);
 //! with `--pool` it starts from that archive (its records inserted as they are, after a bit-exact re-score) and
@@ -13,21 +14,20 @@
 //! read from disk is rebuilt from its row and re-scored with W_ERGOLIGHT_v2; it must reproduce the row's score bit
 //! for bit and carry this binary's decoder hash, and every genome must re-hash to its design id (fail closed).
 //! Outputs are the `g5-evolve` files (archive.jsonl, genomes_g5.csv, history.jsonl) plus launch.json or pool.json;
-//! no STL unless `--stl` (the v5 islands wrote 330 MB each).
+//! no STL unless `--stl` (the v5 islands wrote 330 MB each). `screen` measures the Tier-1 pre-screen (the GPU spike's
+//! question): for `--n` offspring of the pool it records the Tier-0 and Tier-1 scores and times, and how well the Tier-0
+//! rank (the screen the search uses) finds the children that Tier 1 ranks best.
 use std::collections::HashMap;
 use std::fmt::Write as _;
 use std::fs;
 
-use jarambit_g5::ergolight::ErgolightInputs;
 use jarambit_g5::g5_genome::{sobol_unit_genome, G5Genome, G5Rng};
 use jarambit_g5::g5_namespace::{format_g5_design_id, validate_g5_design_id, G5CohortConfig};
 use jarambit_g5::g5_qd::{
-    evaluate_tier1_sdf_and_plate, g5_decoder_sha256, measure_point_planform, splitmix64, CvtMapElitesArchive,
-    EvalTier, G5Descriptors, G5EvalRecord, G5HistoryPoint, RankPromotion,
+    evaluate_tier1_sdf_and_plate, g5_decoder_sha256, splitmix64, CvtMapElitesArchive, EvalTier, G5EvalRecord,
+    G5HistoryPoint, RankPromotion,
 };
-use jarambit_g5::g5_sdf::{build_blade_profile_2d, extract_watertight_mesh_fail_closed, AmConnectivityStats};
-use jarambit_g5::loads::G5Loads;
-use jarambit_g5::objective::{score_v2, ObjectiveInputs};
+use jarambit_g5::g5_sdf::extract_watertight_mesh_fail_closed;
 use jarambit_g5::sha256_bytes;
 use serde_json::{json, Value};
 
@@ -68,93 +68,20 @@ fn check_root(dir: &str) {
     fs::create_dir_all(dir).unwrap_or_else(|e| fail(format!("{dir}: {e}")));
 }
 
-/// The W_ERGOLIGHT_v2 score of a record's measurements (the same call as `g5_qd::score_record`).
-fn rescore(g: &G5Genome, inputs: &ErgolightInputs, loads: &G5Loads, am: &AmConnectivityStats) -> jarambit_g5::ergolight::ErgolightScore {
-    let blade = build_blade_profile_2d(&g.decode());
-    let point = measure_point_planform(&blade);
-    score_v2(&ObjectiveInputs { inputs, loads, point: &point, am, blade: &blade })
-}
+#[path = "g5_shared/archive.rs"]
+mod archive;
 
-/// A record rebuilt from its archive row; fails unless it re-scores bit for bit under this binary's decoder.
 fn record_from_row(id: &str, g: &G5Genome, row: &Value) -> G5EvalRecord {
-    let take = |k: &str| row.get(k).cloned().unwrap_or_else(|| fail(format!("{id}: row has no {k}")));
-    let hash = g5_decoder_sha256();
-    if row["decoder_sha256"] != json!(hash) {
-        fail(format!("{id}: row from decoder {}, this binary is {hash}", row["decoder_sha256"]));
-    }
-    if row["genome_sha256"] != json!(g.sha256()) || !id.ends_with(&g.sha256()[..8]) {
-        fail(format!("{id}: genome does not re-hash to its row and id"));
-    }
-    let inputs: ErgolightInputs = serde_json::from_value(take("inputs")).unwrap_or_else(|e| fail(format!("{id} inputs: {e}")));
-    let loads: G5Loads = serde_json::from_value(take("loads")).unwrap_or_else(|e| fail(format!("{id} loads: {e}")));
-    let am: AmConnectivityStats = serde_json::from_value(take("am_connectivity")).unwrap_or_else(|e| fail(format!("{id} am: {e}")));
-    let descriptors: G5Descriptors = serde_json::from_value(take("descriptors")).unwrap_or_else(|e| fail(format!("{id} descriptors: {e}")));
-    let tier: EvalTier = serde_json::from_value(take("tier")).unwrap_or_else(|e| fail(format!("{id} tier: {e}")));
-    let score = rescore(g, &inputs, &loads, &am);
-    let stored = row["raw_score_100"].as_f64().unwrap_or_else(|| fail(format!("{id}: raw_score_100")));
-    if score.raw_score_100.to_bits() != stored.to_bits() {
-        fail(format!("{id}: re-score {} != stored {stored}", score.raw_score_100));
-    }
-    G5EvalRecord {
-        schema: take("schema").as_str().unwrap_or_else(|| fail(format!("{id}: schema"))).to_string(),
-        decoder_sha256: hash,
-        genome_sha256: g.sha256(),
-        tier,
-        inputs,
-        score,
-        descriptors,
-        am_connectivity: am,
-        loads,
-    }
+    archive::record_from_row(id, g, row).unwrap_or_else(|e| fail(e))
 }
 
-/// The (design id, genome, archive row) triples of one archive directory, in file order, genomes verified.
 fn read_dir_rows(dir: &str) -> Vec<(String, G5Genome, Value)> {
-    let csv = fs::read_to_string(format!("{dir}/genomes_g5.csv")).unwrap_or_else(|e| fail(format!("{dir}/genomes_g5.csv: {e}")));
-    let mut genomes: HashMap<String, G5Genome> = HashMap::new();
-    for line in csv.lines().skip(1).filter(|l| !l.trim().is_empty()) {
-        let (id, row) = line.split_once(',').unwrap_or_else(|| fail(format!("{dir}: bad genome row")));
-        validate_g5_design_id(id).unwrap_or_else(|e| fail(format!("{id}: {e}")));
-        let g = G5Genome::from_csv_row(row).unwrap_or_else(|e| fail(format!("{id}: {e}")));
-        genomes.insert(id.to_string(), g);
-    }
-    let jsonl = fs::read_to_string(format!("{dir}/archive.jsonl")).unwrap_or_else(|e| fail(format!("{dir}/archive.jsonl: {e}")));
-    let rows: Vec<(String, G5Genome, Value)> = jsonl
-        .lines()
-        .filter(|l| !l.trim().is_empty())
-        .map(|l| {
-            let v: Value = serde_json::from_str(l).unwrap_or_else(|e| fail(format!("{dir}: {e}")));
-            let id = v["design_id"].as_str().unwrap_or_else(|| fail(format!("{dir}: row without design_id"))).to_string();
-            let g = genomes.remove(&id).unwrap_or_else(|| fail(format!("{dir}: {id} has no genome row")));
-            (id, g, v)
-        })
-        .collect();
-    if !genomes.is_empty() {
-        fail(format!("{dir}: {} genome rows without an archive row", genomes.len()));
-    }
-    rows
-}
-
-fn row_json(id: &str, niche: usize, g: &G5Genome, rec: &G5EvalRecord) -> Value {
-    let score_json = rec.score.to_json();
-    json!({
-        "design_id": id, "niche_id": niche, "schema": rec.schema, "genome_sha256": rec.genome_sha256,
-        "decoder_commit": g.decoder_commit, "decoder_sha256": rec.decoder_sha256, "tier": rec.tier,
-        "tier_provenance": rec.tier.input_provenance(), "score_100": rec.score.score_100,
-        "raw_score_100": rec.score.raw_score_100, "base": rec.score.base, "ergo_multiplier": rec.score.ergo_multiplier,
-        "descriptors": rec.descriptors, "inputs": rec.inputs, "loads": rec.loads, "am_connectivity": rec.am_connectivity,
-        "metric": rec.score.metric, "terms": score_json["terms"], "ergo": score_json["ergo"],
-    })
+    archive::read_dir_rows(dir).unwrap_or_else(|e| fail(e))
 }
 
 /// Write rows as `g5-evolve` does (genomes_g5.csv + archive.jsonl).
 fn write_rows(dir: &str, rows: &[(String, usize, &G5Genome, &G5EvalRecord)]) {
-    let mut csv = format!("design_id,{}\n", G5Genome::csv_header());
-    let mut jsonl = String::new();
-    for (id, niche, g, rec) in rows {
-        let _ = writeln!(csv, "{id},{}", g.to_csv_row());
-        let _ = writeln!(jsonl, "{}", row_json(id, *niche, g, rec));
-    }
+    let (csv, jsonl) = archive::rows_text(rows);
     fs::write(format!("{dir}/genomes_g5.csv"), csv).unwrap_or_else(|e| fail(format!("{dir}: {e}")));
     fs::write(format!("{dir}/archive.jsonl"), jsonl).unwrap_or_else(|e| fail(format!("{dir}: {e}")));
 }
@@ -317,30 +244,105 @@ fn reeval(a: &Args) {
 fn merge(a: &Args) {
     let out = a.req("--out");
     check_root(&out);
-    let mut archive = CvtMapElitesArchive::new(1024);
-    let mut ids: HashMap<String, String> = HashMap::new();
-    let mut sources = Vec::new();
-    let mut n_rows = 0;
-    for dir in a.req("--from").split(',') {
-        let rows = read_dir_rows(dir);
-        sources.push(json!({"dir": dir, "rows": rows.len(), "archive.jsonl": sha_file(&format!("{dir}/archive.jsonl"))}));
-        for (id, g, row) in rows {
-            let rec = record_from_row(&id, &g, &row);
-            ids.entry(g.sha256()).or_insert(id);
-            archive.insert(g, rec);
-            n_rows += 1;
-        }
-    }
-    archive.verify_integrity().unwrap_or_else(|e| fail(format!("archive integrity: {e}")));
-    let named: Vec<(String, usize, &G5Genome, &G5EvalRecord)> =
-        archive.elites.iter().map(|(&nid, e)| (ids[&e.genome.sha256()].clone(), nid, &e.genome, &e.record)).collect();
-    write_rows(&out, &named);
-    let best = archive.best_elite().unwrap_or_else(|| fail("empty merge"));
+    let from = a.req("--from");
+    let dirs: Vec<&str> = from.split(',').collect();
+    let m = archive::merge_dirs(&dirs).unwrap_or_else(|e| fail(e));
+    write_rows(&out, &m.named());
+    let sources: Vec<Value> = m
+        .rows_per_source
+        .iter()
+        .map(|(dir, n)| json!({"dir": dir, "rows": n, "archive.jsonl": sha_file(&format!("{dir}/archive.jsonl"))}))
+        .collect();
+    let best = m.archive.best_elite().unwrap_or_else(|| fail("empty merge"));
     let pool = json!({"tool": "g5-continue merge", "decoder_sha256": g5_decoder_sha256(), "sources": sources,
-        "rows_read": n_rows, "niches": archive.elites.len(), "qd_score": archive.qd_score(),
-        "best_design_id": ids[&best.genome.sha256()], "best_raw_score_100": best.record.score.raw_score_100});
+        "rows_read": m.rows_read(), "niches": m.archive.elites.len(), "qd_score": m.archive.qd_score(),
+        "best_design_id": m.ids[&best.genome.sha256()], "best_raw_score_100": best.record.score.raw_score_100});
     fs::write(format!("{out}/pool.json"), serde_json::to_string_pretty(&pool).unwrap() + "\n").unwrap_or_else(|e| fail(e));
-    println!("g5-continue merge: {n_rows} rows -> {} niches, best {:.4} -> {out}", archive.elites.len(), best.record.score.raw_score_100);
+    println!("g5-continue merge: {} rows -> {} niches, best {:.4} -> {out}", m.rows_read(), m.archive.elites.len(),
+             best.record.score.raw_score_100);
+}
+
+/// Spearman rank correlation (average ranks for ties).
+fn spearman(x: &[f64], y: &[f64]) -> f64 {
+    let rank = |v: &[f64]| -> Vec<f64> {
+        let mut idx: Vec<usize> = (0..v.len()).collect();
+        idx.sort_by(|&a, &b| v[a].total_cmp(&v[b]));
+        let mut r = vec![0.0; v.len()];
+        let mut i = 0;
+        while i < idx.len() {
+            let mut j = i;
+            while j + 1 < idx.len() && v[idx[j + 1]] == v[idx[i]] {
+                j += 1;
+            }
+            for &k in &idx[i..=j] {
+                r[k] = 0.5 * (i + j) as f64;
+            }
+            i = j + 1;
+        }
+        r
+    };
+    let (rx, ry) = (rank(x), rank(y));
+    let n = x.len() as f64;
+    let (mx, my) = (rx.iter().sum::<f64>() / n, ry.iter().sum::<f64>() / n);
+    let cov: f64 = rx.iter().zip(&ry).map(|(a, b)| (a - mx) * (b - my)).sum();
+    let vx: f64 = rx.iter().map(|a| (a - mx).powi(2)).sum();
+    let vy: f64 = ry.iter().map(|b| (b - my).powi(2)).sum();
+    cov / (vx * vy).sqrt()
+}
+
+fn screen(a: &Args) {
+    use jarambit_g5::g5_qd::evaluate_tier0_analytic;
+    use rayon::prelude::*;
+    use std::time::Instant;
+    let out = a.req("--out");
+    check_root(&out);
+    let (n, h) = (a.n("--n", 200), a.f("--h", 0.4));
+    let seed: u64 = a.get("--seed").map_or(1, |v| v.parse().unwrap_or_else(|e| fail(format!("--seed: {e}"))));
+    rayon::ThreadPoolBuilder::new().num_threads(a.n("--threads", 2)).build_global().ok();
+    let dir = a.req("--pool");
+    let mut archive = CvtMapElitesArchive::new(1024);
+    for (id, g, row) in read_dir_rows(&dir) {
+        let rec = record_from_row(&id, &g, &row);
+        archive.insert(g, rec);
+    }
+    let mut rng = G5Rng(splitmix64(seed).max(1));
+    let children: Vec<G5Genome> = (0..n).filter_map(|_| archive.sample_offspring(&mut rng).map(|c| c.0)).collect();
+    let rows: Vec<(f64, f64, f64, f64)> = children
+        .par_iter()
+        .map(|g| {
+            let t = Instant::now();
+            let s0 = evaluate_tier0_analytic(g).score.raw_score_100;
+            let d0 = t.elapsed().as_secs_f64();
+            let t = Instant::now();
+            let s1 = evaluate_tier1_sdf_and_plate(g, h).score.raw_score_100;
+            (s0, d0, s1, t.elapsed().as_secs_f64())
+        })
+        .collect();
+    let mut jsonl = String::new();
+    for (k, r) in rows.iter().enumerate() {
+        let _ = writeln!(jsonl, "{}", json!({"child": k, "tier0_score": r.0, "tier0_s": r.1, "tier1_score": r.2, "tier1_s": r.3}));
+    }
+    fs::write(format!("{out}/screen.jsonl"), jsonl).unwrap_or_else(|e| fail(e));
+    let (s0, s1): (Vec<f64>, Vec<f64>) = rows.iter().filter(|r| r.0.is_finite() && r.2.is_finite()).map(|r| (r.0, r.2)).unzip();
+    let m = s0.len();
+    // the screen the search uses: promote the top 40 % by Tier 0; how many of the Tier-1 top 10 % does it keep?
+    let top_by = |v: &[f64], frac: f64| -> Vec<usize> {
+        let mut idx: Vec<usize> = (0..v.len()).collect();
+        idx.sort_by(|&a, &b| v[b].total_cmp(&v[a]));
+        idx.truncate(((frac * v.len() as f64).ceil() as usize).max(1));
+        idx
+    };
+    let promoted = top_by(&s0, 0.4);
+    let best1 = top_by(&s1, 0.1);
+    let kept = best1.iter().filter(|i| promoted.contains(i)).count();
+    let mean = |f: fn(&(f64, f64, f64, f64)) -> f64| rows.iter().map(f).sum::<f64>() / rows.len() as f64;
+    let (t0, t1) = (mean(|r| r.1), mean(|r| r.3));
+    let summary = json!({"tool": "g5-continue screen", "pool": dir, "n": rows.len(), "finite": m, "h": h, "seed": seed,
+        "spearman_tier0_tier1": spearman(&s0, &s1), "tier1_top10_kept_by_tier0_top40": kept, "tier1_top10": best1.len(),
+        "mean_tier0_s": t0, "mean_tier1_s": t1, "island_s_per_eval_at_tier1_top_0.4": t0 + 0.4 * t1,
+        "share_of_island_time_in_tier1": 0.4 * t1 / (t0 + 0.4 * t1)});
+    fs::write(format!("{out}/screen.json"), serde_json::to_string_pretty(&summary).unwrap() + "\n").unwrap_or_else(|e| fail(e));
+    println!("{}", serde_json::to_string_pretty(&summary).unwrap());
 }
 
 fn main() {
@@ -349,6 +351,7 @@ fn main() {
         Some("run") => run(&a),
         Some("reeval") => reeval(&a),
         Some("merge") => merge(&a),
-        _ => fail("usage: g5-continue run|reeval|merge ... (see the module documentation)"),
+        Some("screen") => screen(&a),
+        _ => fail("usage: g5-continue run|reeval|merge|screen ... (see the module documentation)"),
     }
 }
