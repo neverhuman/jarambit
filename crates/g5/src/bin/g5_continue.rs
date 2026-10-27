@@ -207,6 +207,8 @@ fn run(a: &Args) {
     let mut log = |archive: &CvtMapElitesArchive, evals: usize, last: bool| {
         if log_every > 0 && (last || evals % log_every == 0 || evals.is_power_of_two()) {
             if let Some(p) = history_point(archive, evals, last || evals.is_power_of_two()) {
+                // progress for the supervisors (stderr only; the outputs do not change)
+                eprintln!("g5-continue progress: evals={evals} niches={} best={:.4}", p.niches, p.best_raw_score_100);
                 history.push(p);
             }
         }
