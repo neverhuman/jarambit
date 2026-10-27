@@ -504,9 +504,301 @@ def cad_readme():
     return '\n'.join(L)
 
 
+# ---------------------------------------------------------------- G5 (v5.0.0 on)
+# Sources, all committed: the receipt evidence/g5/v<RECORD>/release.json (g5-release), its vv/ studies and history/,
+# the render manifest docs/g5/v<RECORD>/img/manifest.json, the CAD folder docs/g5/v<RECORD>/cad/ (print spec) and
+# requirements/RS-karambit-v5.toml. Every lookup is strict: a missing key stops generation (no default numbers).
+REQUIRED_G5 = (
+    'version', 'design_id', 'status', 'provenance', 'cohort', 'baseline', 'ranking', 'grid_check', 'rank_of_record',
+    'score', 'loads', 'margins', 'worst_margin', 'meets_every_load_case', 'mass', 'am', 'blade', 'point', 'ergonomics',
+    'decoded', 'evolution', 'release_assets',
+)
+GIT_FILE_MAX_MIB = 50  # repository rule (v3.0.2): no committed file above 50 MiB; larger meshes are release assets
+
+
+def receipt_g5():
+    """(release version, G5 cohort-of-record version, receipt). Fail closed on any missing field or version mismatch."""
+    v = rd('docs/VERSION').strip()
+    rv = rd('evidence/g5/RECORD').strip()
+    rec = js(f'evidence/g5/v{rv}/release.json')
+    missing = [k for k in REQUIRED_G5 if k not in rec]
+    if missing or rec['version'] != rv or not record_declared(v, rv):
+        raise SystemExit(f'gen_readme: G5 release.json v{rv} is incomplete or does not belong to release v{v} ({missing or rec["version"]})')
+    return v, rv, rec
+
+
+def g5_files(rv):
+    """The render manifest, the CAD folder listing (committed files, each within GIT_FILE_MAX_MIB) and its print spec."""
+    man = js(f'docs/g5/v{rv}/img/manifest.json')
+    for p in list(man['images'].values()) + [c['image'] for c in man['lineage']]:
+        if not os.path.isfile(os.path.join(ROOT, p)):
+            raise SystemExit(f'gen_readme: manifest names a missing image {p}')
+    cad_dir = f'docs/g5/v{rv}/cad'
+    cad = sorted(f'{cad_dir}/{n}' for n in os.listdir(os.path.join(ROOT, cad_dir)))
+    big = [p for p in cad if os.path.getsize(os.path.join(ROOT, p)) > GIT_FILE_MAX_MIB * 1048576]
+    if big:
+        raise SystemExit(f'gen_readme: committed CAD files above {GIT_FILE_MAX_MIB} MiB: {big}')
+    spec = js(next(p for p in cad if p.endswith('_print_spec.json')))
+    return man, cad, spec
+
+
+def g5_load_cases(rs, ld, mg):
+    """The 16 RS-karambit-v5 structural cases: label from RS-karambit-v5.toml, safety factor from the receipt's loads,
+    requirement from [margins], margin v = SF / SF_req from the receipt (objective::margins)."""
+    L, T = rs['loads'], rs['loads']['tip']
+    lb, bt, gr, gd, rg, pl, th = (L[k] for k in ('lateral_bend', 'body_twist', 'grip', 'guard', 'ring', 'pull', 'teeth'))
+    mf, y, u, ring = rs['material']['fatigue'], rs['margins']['sf_yield'], rs['margins']['sf_ultimate'], rs['margins']['sf_ring']
+    return [
+        (f'Lateral bending, limit: {lb["limit_root_moment_nm"]:g} N·m root moment, load {lb["apply_mm_from_point"]:g} mm from the point (blade plate, grip)',
+         min(ld['lateral_limit_sf'], ld['grip_lateral_sf']), y, mg['lateral_limit']),
+        (f'Lateral bending, ultimate: {lb["ultimate_root_moment_nm"]:g} N·m (blade plate)', ld['lateral_ultimate_sf'], u, mg['lateral_ultimate']),
+        (f'Body twist, limit: {bt["limit_nm"]:g} N·m (blade plate, grip)', min(ld['twist_limit_sf'], ld['grip_twist_sf']), y, mg['twist_limit']),
+        (f'Tip, axial: {T["axial_n"]:g} N along the tip bisector (TET10 solid)', ld['tip_axial_sf'], y, mg['tip_axial']),
+        (f'Tip, side load: {T["lateral_n"]:g} N at the point (TET10 solid)', ld['tip_lateral_sf'], y, mg['tip_lateral']),
+        (f'Tip, twist: {T["twist_nm"]:g} N·m, {T["twist_apply_mm_from_point"]:g} mm from the point (TET10 solid)', ld['tip_twist_sf'], y, mg['tip_twist']),
+        (f'Grip squeeze: {gr["limit_squeeze_n"]:g} N', ld['grip_squeeze_sf'], y, mg['grip_squeeze']),
+        (f'Guard push: {gd["limit_push_n"]:g} N', ld['guard_push_sf'], y, mg['guard_push']),
+        (f'Ring bearing: {rg["bearing_n"]:g} N on the handle side of the bore (T6 ring)', ld['ring_bearing_sf'], ring, mg['ring_bearing']),
+        (f'Ring back pull: {rg["back_n"]:g} N (T6 ring)', ld['ring_back_sf'], ring, mg['ring_back']),
+        (f'Ring, any in-plane direction: {rg["any_direction_n"]:g} N (T6 ring sweep)', ld['ring_any_direction_sf'], y, mg['ring_any_direction']),
+        (f'Axial pull: {pl["limit_n"]:g} N, held over the {pl["held_length_from_point_mm"]:g} mm nearest the point', min(ld['pull_sf'], ld['grip_pull_sf']), y, mg['pull']),
+        (f'Serration teeth: {th["snag_n"]:g} N snag, {th["pry_n"]:g} N pry shared by {th["pry_teeth_sharing"]} teeth (every tooth)', ld['teeth_sf'], y, mg['teeth']),
+        (f'Fatigue: {rs["fatigue"]["cycles"]:,.0f} cycles, {mf["mean_stress_method"]} mean stress (blade and hand zone)',
+         min(ld['fatigue_sf'], ld['hand_fatigue_sf']), rs['fatigue']['sf_fatigue'], mg['fatigue']),
+        ('Yield sequence: the blade yields before the hand zone, per load case (lateral / twist / pull)',
+         min(ld['seq_lateral'], ld['seq_twist'], ld['seq_pull']), rs['sequence']['ratio_min'], mg['sequence']),
+        (f'Tip buckling under the {T["axial_n"]:g} N axial load (Rayleigh–Ritz eigenvalue λ)', ld['buckling_lambda'], rs['buckling']['lambda_min'], mg['buckling']),
+    ]
+
+
+def readme_g5():
+    v, rv, r = receipt_g5()
+    rs = toml('requirements/RS-karambit-v5.toml')
+    man, cad, spec = g5_files(rv)
+    img = man['images']
+    sc, pv, co, bs, rk, gc = r['score'], r['provenance'], r['cohort'], r['baseline'], r['ranking'], r['grid_check']
+    ld, mg, ms, am, bl, pt, eg, dc, ev = (r[k] for k in ('loads', 'margins', 'mass', 'am', 'blade', 'point', 'ergonomics', 'decoded', 'evolution'))
+    la, lc, sl = co['launch'], rk['linux_check'], rk['search_leader']
+    wid = r['design_id']
+    mat, am_rs, ed_rs, sr_rs, pt_rs, ms_rs = (rs[k] for k in ('material', 'am', 'edge', 'serration', 'point', 'mass'))
+    eg_rs = rs['ergonomics']
+    ein, esp = bl['edge_inner'], bl['edge_spine']
+    hist = {h['evals']: h for h in (json.loads(l) for l in rd(f'{ev["history_dir"]}/{ev["winner_island"]}.jsonl').splitlines() if l.strip())}
+    q = lambda s: s.replace('-', '--').replace('_', '__').replace(' ', '%20')
+    mgm = r['margins_min_over_plate_meshes']  # B1: each case's margin of record is its minimum over the plate meshes
+    pmc = r['plate_mesh_check']
+    pick = ('It is the top-ranked design' if r['rank_of_record'] == 1
+            else f'The higher-ranked designs fail a mesh, so the winner is rank {r["rank_of_record"]}')
+    worst = min((x for x in mgm.items() if isinstance(x[1], float)), key=lambda kv: kv[1])
+    paper = f'docs/g5/paper/g5-v{v}.pdf'
+    am_file, env_file = spec['am_build_stl']['file'], spec['outer_envelope_stl']['file']
+    kit = {n: f'cad/{wid}_{n}' for n in ('AMbuild_mm.stl', 'AMbuild_mm.3mf', 'envelope_mm.stl', 'drawing_mm.dxf', 'spec_paper.pdf', 'xray_cutaway.jpg')}
+    L = [f'# Jarambit {v}: an evolved titanium karambit for laser powder-bed fusion', '',
+         f'[![release](https://img.shields.io/badge/release-v{v}-2f56d6)]({REPO}/releases/tag/v{v}) '
+         f'[![paper](https://img.shields.io/badge/paper-G5%20v{v}%20PDF-2f56d6)]({paper}) '
+         f'[![3D print CAD](https://img.shields.io/badge/3D%20print%20CAD-cad%2F%20(STL%20%7C%203MF%20%7C%20DXF%20%7C%20PDF)-2f56d6)](cad/) '
+         f'![design](https://img.shields.io/badge/best%20individual-{q(wid)}-555) '
+         f'![score](https://img.shields.io/badge/W__ERGOLIGHT__v2-{sc["score_100"]:.2f}-555) '
+         f'![mass](https://img.shields.io/badge/mass-{ms["of_record_g"]:.1f}%20g-555) '
+         f'![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)', '',
+         f'Every computed number and picture on this page describes one design, **`{wid}`**, the best individual of the G5 '
+         f'v{rv} cohort of record. They are generated from [`evidence/g5/v{rv}/release.json`](evidence/g5/v{rv}/release.json), '
+         f'its verification studies and the sourced requirement set [`requirements/RS-karambit-v5.toml`](requirements/RS-karambit-v5.toml) '
+         f'([provenance](requirements/PROVENANCE-v5.md)). Status: {r["status"]}.', '',
+         f'**Paper:** [`{paper}`]({paper}), generated from the same receipt. **3D printing:** the upload kit in [`cad/`](cad/).', '',
+         f'<img src="{img["hero"]}" alt="The best individual {wid}" width="100%">', '',
+         '## The best individual', '',
+         f'Titanium ({mat["name"]}): a {eg["grip_length_mm"]:.1f} mm grip of {eg["grip_perimeter_mm"]:.1f} mm '
+         f'perimeter with a {eg_rs["ring"]["bore_d_mm"]:g} mm finger ring, a hollow core of sheet-TPMS lattice with powder ports, and a '
+         f'double-edged claw blade with serrations on both edges ({ein["teeth"]} and {esp["teeth"]} teeth). '
+         f'It meets {"every" if r["meets_every_load_case"] else "not every"} RS-karambit-v5 load case: the lowest margin is '
+         f'{worst[0].replace("_", " ")}, {worst[1]:.3f} (the minimum over the plate meshes {" / ".join(f"{a:g}" for a in pmc["max_area_mm2"])} mm²).', '',
+         '| Measure | Value | Requirement (RS-karambit-v5) | Reading |', '|---|---|---|---|',
+         f'| W_ERGOLIGHT_v2, Tier 2 at h {rk["h_mm"]:g} mm (rank {r["rank_of_record"]} of {rk["shortlist"]}) | **{sc["score_100"]:.2f}** | higher is better | '
+         f'hand multiplier E {sc["E"]:.3f} (raised to the {rs["objective"]["e_exponent"]:g}th power), worst-margin multiplier W {sc["worst_margin_W"]:.3f} |',
+         f'| Mass of record (partial volume at h {rk["h_mm"]:g} mm, × {ms["density_g_mm3"]} g/mm³) | **{ms["of_record_g"]:.1f} g** | ceiling {ms_rs["ceiling_g"]:g} g; '
+         f'{ms_rs["goal_g"]:g} g goal (a frontier, not a requirement) | {meets(ms["of_record_g"], ms_rs["ceiling_g"], "<=")}; watertight print mesh {ms["print_mesh_g"]:.1f} g |',
+         f'| Grip length / perimeter / height-to-thickness | {eg["grip_length_mm"]:.1f} mm / {eg["grip_perimeter_mm"]:.1f} mm / {eg["grip_h_over_t"]:.2f} | '
+         f'≥ {eg_rs["grip"]["length_min_mm"]:g} mm / {eg_rs["grip"]["perimeter_min_mm"]:g}–{eg_rs["grip"]["perimeter_max_mm"]:g} mm / '
+         f'{eg_rs["grip"]["height_over_thickness_min"]:g}–{eg_rs["grip"]["height_over_thickness_max"]:g} | '
+         f'{meets(eg["grip_length_mm"], eg_rs["grip"]["length_min_mm"])} |',
+         f'| Guard height / centre of mass to the index finger | {eg["guard_height_mm"]:.1f} mm / {eg["com_to_index_mm"]:.1f} mm | '
+         f'≥ {eg_rs["guard"]["height_target_mm"]:g} mm / ≤ {eg_rs["balance"]["com_to_index_max_mm"]:g} mm | '
+         f'{meets(eg["guard_height_mm"], eg_rs["guard"]["height_target_mm"])} / {meets(eg["com_to_index_mm"], eg_rs["balance"]["com_to_index_max_mm"], "<=")} |',
+         f'| Point: included angle at 1 mm / at 3 mm; width at 2 mm | {pt["angle_1mm_deg"]:.1f}° / {pt["angle_3mm_deg"]:.1f}°; {pt["width_2mm"]:.2f} mm | '
+         f'≤ {pt_rs["angle_max_at_1mm_deg"]:g}° / ≤ {pt_rs["angle_max_at_3mm_deg"]:g}°; ≤ {pt_rs["width_max_at_2mm"]:g} mm | '
+         f'{meets(pt["angle_1mm_deg"], pt_rs["angle_max_at_1mm_deg"], "<=")} / {meets(pt["angle_3mm_deg"], pt_rs["angle_max_at_3mm_deg"], "<=")}; '
+         f'{meets(pt["width_2mm"], pt_rs["width_max_at_2mm"], "<=")} (a continuous penalty, not a gate) |',
+         f'| Edges A (inner) / B (spine): per-side grind angle | {ein["per_side_angle_gene_deg"]:.1f}° / {esp["per_side_angle_gene_deg"]:.1f}° | '
+         f'{ed_rs["per_side_angle_min_deg"]:g}–{ed_rs["per_side_angle_max_deg"]:g}° | largest measured half-angle {bl["max_half_angle_deg"]:.1f}°, apex at most {bl["max_apex_mm"]:.3f} mm thick |',
+         f'| Serrations A / B: depth, teeth | {ein["serration_depth_mm"]:.2f} mm, {ein["teeth"]} / {esp["serration_depth_mm"]:.2f} mm, {esp["teeth"]} | '
+         f'{sr_rs["depth_min_mm"]:g}–{sr_rs["depth_max_mm"]:g} mm; gullet radius ≥ {sr_rs["gullet_radius_min_mm"]:g} mm by construction | '
+         f'weakest tooth SF {ein["tooth_root_sf_min"]:.2f} / {esp["tooth_root_sf_min"]:.2f} |',
+         f'| Hand comfort factors (1 = within every limit; E is their weighted product) | '
+         + ', '.join(f'{k.replace("_", " ")} {x["e"]:.2f}' for k, x in sorted(eg['hand_factors'].items(), key=lambda kv: kv[1]['e']) if x['e'] < 1)
+         + ' | NASA/MIL hand limits (contact pressure, edge radii, grip section) | the other factors are 1.00 |',
+         f'| Powder: sealed cavity / thin crevices (printed solid) | {am["sealed_void_mm3"]:.0f} mm³ / {am["crevice_mm3"]:.0f} mm³ | '
+         f'no closed voids; drainage passages ≥ {am_rs["drain_channel_min_mm"]:g} mm | sealed volume is penalised by the score; '
+         f'{dc["port_n"]:.0f} ports of {dc["port_d"]:.1f} mm (≥ {am_rs["port_d_min_mm"]:g} mm) |',
+         '', f'Every RS-karambit-v5 load case, as a safety factor (SF) against its requirement. The margin is v = SF / requirement; '
+         f'the smallest margin sets the worst-margin multiplier W once it falls below 1. SF is on the production plate mesh '
+         f'({pmc["production_max_area_mm2"]:g} mm²), as scored; the margin of record is the minimum over the plate meshes '
+         f'{" / ".join(f"{a:g}" for a in pmc["max_area_mm2"])} mm² (cases not solved on the plate are mesh-independent):', '',
+         '| Load case | SF | Requirement | Margin v (score mesh) | Margin v of record (min over meshes) |', '|---|---:|---:|---:|---:|']
+    for (label, sf, req, m), key in zip(g5_load_cases(rs, ld, mg), ('lateral_limit', 'lateral_ultimate', 'twist_limit', 'tip_axial', 'tip_lateral', 'tip_twist',
+                                                                  'grip_squeeze', 'guard_push', 'ring_bearing', 'ring_back', 'ring_any_direction',
+                                                                  'pull', 'teeth', 'fatigue', 'sequence', 'buckling')):
+        L.append(f'| {label} | {sf:.2f} | ≥ {req:g} | {m:.3f} | {mgm[key]:.3f} |')
+    g = lambda k, alt: f'<img src="{img[k]}" alt="{alt}">'
+    L += ['', '<table><tr>'
+          f'<td width="50%">{g("side", "Plan view")}<br>Plan view.</td><td width="50%">{g("top", "Edge-on view")}<br>Edge-on: ring, grip and blade thickness.</td></tr><tr>'
+          f'<td>{g("blade", "The blade")}<br>The blade, reach {bl["reach_chord_mm"]:.1f} mm.</td><td>{g("tip", "The point")}<br>The point: {pt["angle_1mm_deg"]:.0f}° at 1 mm.</td></tr><tr>'
+          f'<td>{g("edge_a", "Inner edge")}<br>Inner edge (A), {ein["teeth"]} teeth, as decoded (before grinding).</td><td>{g("edge_b", "Spine edge")}<br>Spine edge (B), {esp["teeth"]} teeth, as decoded (before grinding).</td></tr><tr>'
+          f'<td>{g("grip", "Grip")}<br>Grip, {eg["grip_perimeter_mm"]:.1f} mm perimeter.</td><td>{g("ring", "Ring")}<br>Ring, {eg_rs["ring"]["bore_d_mm"]:g} mm bore.</td></tr><tr>'
+          f'<td>{g("xray", "X-ray of the internal cavities")}<br>X-ray of the hollow core.</td><td>{g("cut_full", "Lengthwise cut")}<br>Lengthwise cut: skin, lattice and ports.</td></tr><tr>'
+          f'<td>{g("cut_x", "Section across the grip")}<br>Section across the grip.</td><td>{g("cut_b", "Section across the blade")}<br>Section across the blade.</td></tr><tr>'
+          f'<td>{g("tip_edge", "Edge at the point")}<br>The edge at the point, as decoded (before grinding).</td><td></td></tr></table>', '',
+          f'Edge sections at four stations per edge, true scale, from the exact decoder law (dashed: {ed_rs["per_side_angle_min_deg"]:g}° per side, '
+          'the smallest angle the requirement allows):', '',
+          picture(img['edge_sections_light'], img['edge_sections_dark'], 'Blade cross-sections of both edges'), '']
+    # ---- evolution
+    base_best = max(ev['baseline_final_best_score_100'])
+    L += ['## How evolution produced it', '',
+          f'{co["islands"]} independent islands each ran {int(co["evaluations_per_island"]):,} evaluations ({int(co["evaluations_total"]):,} in all) of a '
+          f'MAP-Elites search over {la["archive_niches"]:,} Lloyd-relaxed niches, starting only from scrambled Sobol samples '
+          f'({la["cohort"]["init"]} per island; no seeded or hand-made individuals). Alongside them, {bs["islands"]} control islands drew '
+          f'{int(bs["evaluations_per_island"]):,} Sobol samples each with the same decoder, objective and promotion, and no evolution.', '',
+          f'**All {ev["cohort_islands_beating_best_baseline"]} of {co["islands"]} evolving islands beat the best random-search island** '
+          f'({base_best:.1f}). The island median rose from {ev["cohort_after_sobol_init_median_score_100"]:.1f} after the Sobol start to '
+          f'{ev["cohort_final_best_score_100"]["median"]:.1f} (range {ev["cohort_final_best_score_100"]["min"]:.1f}–{ev["cohort_final_best_score_100"]["max"]:.1f}). '
+          f'Evolution found the winner in {ev["winner_island"]} at {ev["winner_first_island_best_at_evals"]:,} evaluations.', '',
+          f'<img src="{ev["figure"]}" alt="Best score found against evaluations, every island of the cohort of record" width="100%">', '',
+          f'The best design of {ev["winner_island"]} at checkpoints of its run, same camera and light (scores on the h {co["h_mm"]:g} mm search grid):', '',
+          '<table><tr>' + ''.join(
+              f'<td align="center"><img src="{c["image"]}" alt="{ev["winner_island"]} at {c["evals"]} evaluations" width="100%"><br>'
+              f'{c["evals"]:,} evaluations<br>{hist[c["evals"]]["best_score_100"]:.1f}, {hist[c["evals"]]["best_mass_g"]:.0f} g'
+              + (f'<br><b>{c["role"]}</b>' if c['role'] else '') + '</td>' for c in man['lineage']) + '</tr></table>', '',
+          f'**Why the search leader is not the winner.** The best design on the search grid, `{sl["design_id"]}` '
+          f'({sl["tier1_h04_score_100"]:.1f}), ranks {sl["tier2_rank"]} once re-scored at Tier 2. On the TET10 solid its tip carries the '
+          f'{rs["loads"]["tip"]["axial_n"]:g} N axial case at SF {sl["tip_sf_solid_h02"]["axial"]:.2f}, below the {rs["margins"]["sf_yield"]:g} required, '
+          f'where the section model of the search had given {sl["tip_sf_sections_h04"]["axial"]:.2f}. Every finalist is judged on the solid.', '',
+          f'Tier-2 ranking (h {rk["h_mm"]:g} mm, solid tip at {rk["tip_mesh_max_area_mm2"]:g} mm²) and the grid check of the top {lc["designs"]} '
+          f'(partial-volume mass in grams at h = {" / ".join(f"{h:g}" for h in gc["h_mm"])} mm; the h {rk["h_mm"]:g} and h {gc["h_mm"][-1]:g} mm '
+          f'masses must agree within {100 * gc["requirement_max_frac"]:g} %):', '',
+          '| Rank | Design | Island | Score | E | W | Mass (g) | Mass at the five grids (g) | h 0.2 vs 0.15 |', '|---:|---|---|---:|---:|---:|---:|---|---:|']
+    grid = {x['design_id']: x for x in gc['rows']}
+    for t in rk['rows'][:lc['designs']]:
+        x = grid[t['design_id']]
+        L.append(f'| {t["rank"]} | `{t["design_id"]}` | {t["island"]} | {t["score_100"]:.2f} | {t["E"]:.3f} | {t["worst_margin_W"]:.3f} | '
+                 f'{t["mass_g"]:.1f} | {" / ".join(f"{m:.1f}" for m in x["mass_g"])} | {100 * x["mass_rel_h020_vs_h015"]:.2f} % |')
+    # ---- verification and limits
+    vv = lambda n: js(f'evidence/g5/v{rv}/vv/{n}.json')
+    tg, ck, pm = vv('decoder_targets'), vv('checks'), vv('plate_mesh')
+    spread = lambda key: max(100 * (max(x[key] for x in row['plate']) / min(x[key] for x in row['plate']) - 1) for row in pm['rows'])
+    areas = ' / '.join(f'{x["max_area_mm2"]:g}' for x in pm['rows'][0]['plate'])
+    rp = co['reproduced']
+    L += ['', '## Verification and limits', '',
+          f'- **Reproducible on the platform of record.** Re-evaluating all {co["elites"]:,} final elites reproduces every Tier-1 archive row bit for bit '
+          f'({co["tier1_rows_reproduced"]} rows), and {rp["island"]} re-run from the launch record reproduces its history bit for bit '
+          f'({rp["history_entries_identical"]} entries over {rp["evaluations"]} evaluations, {rp["platform"]}).',
+          f'- **Not bit-identical across architectures.** On Linux x86_64 the platform maths library differs: the top {lc["designs"]} Tier-2 scores agree within '
+          f'{100 * lc["max_rel_diff"]:.2f} % (bit-identical: {"yes" if lc["bit_identical"] else "no"}), the winner ranks {lc["winner_rank_linux"]} there as well, '
+          f'and {lc["evolution"]["island"]} keeps the same best design through all {lc["evolution"]["same_best_genome_through_evals"]} evaluations compared.',
+          f'- **Plate mesh sensitivity** ([`vv/plate_mesh.json`](evidence/g5/v{rv}/vv/plate_mesh.json)). Across plate meshes of {areas} mm² the '
+          f'lateral safety factor of the study designs varies by up to {spread("lateral_sf"):.0f} % (not monotone) and the twist safety factor by up to '
+          f'{spread("twist_sf"):.0f} %; the search and ranking use {pm["production_max_area_mm2"]:g} mm². So the winner was chosen on the minimum over '
+          f'{" / ".join(f"{a:g}" for a in pmc["max_area_mm2"])} mm² ([`plate_meshes.jsonl`](evidence/g5/v{rv}/plate_meshes.jsonl), solved on the platform of '
+          f'record, whose {pmc["production_max_area_mm2"]:g} mm² rows reproduce the ranking bit for bit): in rank order, the first design meeting every load case '
+          f'on every mesh. {pick}; its lowest margin over the meshes is '
+          f'{worst[0].replace("_", " ")} {worst[1]:.3f}.',
+          f'- **Numerical studies** ([`evidence/g5/v{rv}/vv/`](evidence/g5/v{rv}/vv/)): grid agreement of mass, blade-plate and solid-tip mesh studies, '
+          f'the grip perimeter within {100 * tg["max_perimeter_rel_err"]:.2f} % of its gene, Rayleigh–Ritz against Euler within {abs(ck["ritz_column"]["rel_err"]):.0e}, '
+          f'and Lloyd niches with {100 * (1 - ck["cvt_1024"]["lloyd_quantisation_error"] / ck["cvt_1024"]["halton_quantisation_error"]):.1f} % less quantisation error than Halton.',
+          f'- **Texture on the blade.** The frozen G5.0 decoder lets the evolved surface texture reach the blade (here texture depth '
+          f'{dc["tex_amp"]:.2f} mm, blade scope {dc["scope_blade"]:.2f}), bevels included, and the renders and print meshes show it. The edge '
+          f'figures and measurements use the exact bevel law, which grinding after printing restores: the requirement\'s finishing allowance '
+          f'({ed_rs["finishing_allowance_mm"]:g} mm per ground face) exceeds the texture depth. Keeping texture off the bevels is a decoder change for a later generation.',
+          f'- **Status: {r["status"]}.** Nothing here is a qualification for use. The safety factors are computed from models with the '
+          'limits stated in the paper; the material values are specification minima, not measured coupons.',
+          '- **Evidence gaps** listed in [`requirements/PROVENANCE-v5.md`](requirements/PROVENANCE-v5.md) need physical tests before any build: '
+          'tooth loads, tip load shares, edge retention, thin-wall roughness, lattice homogenisation, the temperature derate and the drop test.', '']
+    # ---- CAD
+    L += ['## 3D printing and CAD (`cad/`, millimetres)', '',
+          f'The upload kit in [`cad/`](cad/) holds six files for `{wid}`, each under {GIT_FILE_MAX_MIB} MiB, generated from the winner\'s genome row '
+          f'([`evidence/g5/v{rv}/winner_genome.csv`](evidence/g5/v{rv}/winner_genome.csv)). Order notes are in [`cad/README.md`](cad/README.md).', '',
+          '| File | What it is |', '|---|---|',
+          f'| [`{kit["AMbuild_mm.stl"]}`]({kit["AMbuild_mm.stl"]}) | print file: skin, sheet-TPMS lattice and powder ports, {spec["am_build_stl"]["voxel_pitch_h_mm"]:g} mm voxels, {spec["am_build_stl"]["triangles"]:,} triangles |',
+          f'| [`{kit["AMbuild_mm.3mf"]}`]({kit["AMbuild_mm.3mf"]}) | the same print mesh as 3MF, with millimetre units |',
+          f'| [`{kit["envelope_mm.stl"]}`]({kit["envelope_mm.stl"]}) | outer envelope, {spec["outer_envelope_stl"]["voxel_pitch_h_mm"]:g} mm voxels |',
+          f'| [`{kit["drawing_mm.dxf"]}`]({kit["drawing_mm.dxf"]}) | 1:1 plan drawing (DXF, mm) |',
+          f'| [`{kit["spec_paper.pdf"]}`]({kit["spec_paper.pdf"]}) | the G5 paper |',
+          f'| [`{kit["xray_cutaway.jpg"]}`]({kit["xray_cutaway.jpg"]}) | cutaway of the hollow core |', '',
+          f'Finer meshes and the full evaluation records are release assets of [v{v}]({REPO}/releases/tag/v{v}), each with its SHA-256 in the receipt:', '',
+          '| Asset | Size | SHA-256 |', '|---|---:|---|']
+    for a in r['release_assets']:
+        L.append(f'| `{a["file"]}` | {a["bytes"] / 1048576:.1f} MiB | `{a["sha256"][:16]}…` |')
+    # ---- reproduce
+    lr = la['cohort']
+    L += ['', '## Reproduce', '', '```bash',
+          'cargo build --release --locked --manifest-path crates/g5/Cargo.toml --bins',
+          f'# one island of the cohort of record (decoder {pv["decoder_sha256"][:12]}, freeze label {lr["commit"]}); seed = host × 1000 + island',
+          f'crates/g5/target/release/g5-evolve --out ~/jarambit_runs/evo_g5/<run>/island01/run --init {lr["init"]} --evals {lr["evals"]} \\',
+          f'  --seed {int(lr["host"]) * 1000 + 1} --host {lr["host"]} --island 1 --commit {lr["commit"]} --h {lr["h"]:g} '
+          f'--tier1-top {lr["tier1_top"]:g} --tier2-top {lr["tier2_top"]:g} --log-every {lr["log_every"]}',
+          f'crates/g5/target/release/g5-pilot eval <cohort_root> eval_h040.jsonl {co["h_mm"]:g} 4',
+          f'crates/g5/target/release/g5-pilot tier2 <cohort_root> eval_h040.jsonl {rk["shortlist"]} tier2_h020.jsonl {rk["h_mm"]:g} 4',
+          f'crates/g5/target/release/g5-release receipt . <cohort_root> <control_root> <cert_dir> {rk["shortlist"]} {lc["designs"]}',
+          f'crates/g5/target/release/g5-vv evidence/g5/v{rv}/vv 4', '```', '',
+          f'Every island\'s genomes and history are in [`evidence/g5/v{rv}/`](evidence/g5/v{rv}/), so any elite can be re-evaluated.', '',
+          '## Repository', '',
+          '- [`crates/g5/`](crates/g5/README.md): the G5 genome (G5.0), decoder, materials, load models, objective, search and release tools.',
+          '- [`requirements/`](requirements/RS-karambit-v5.toml): RS-karambit-v5 and its [provenance](requirements/PROVENANCE-v5.md).',
+          f'- [`evidence/g5/v{rv}/`](evidence/g5/v{rv}/): the receipt, the winner\'s genome, every island\'s history, the ranking, the grid check and `vv/`.',
+          f'- [`docs/g5/`](docs/g5/): the paper, the images and the CAD archive. [`docs/RELEASES.md`](docs/RELEASES.md): every release.',
+          '- Earlier generations, kept as their own record: G3 ([`docs/g3/`](docs/g3/), [`crates/g3/`](crates/g3/README.md)), the withdrawn G4 '
+          'prototype ([`crates/g4/WITHDRAWN.md`](crates/g4/WITHDRAWN.md)) and the v1/v2 study ([`docs/paper/`](docs/paper/), [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md)). '
+          'The v1 command-line pipeline (`cargo run -p jarambit`) is still in the repository; its plate level is opt-in with `JARAMBIT_FEM=1`.', '']
+    return '\n'.join(L)
+
+
+def cad_readme_g5():
+    v, rv, r = receipt_g5()
+    rs = toml('requirements/RS-karambit-v5.toml')
+    _, _, spec = g5_files(rv)
+    wid, ms, mg = r['design_id'], r['mass'], r['margins']
+    mat, ed_rs = rs['material'], rs['edge']
+    dim, am_s, env_s = spec['overall_dimensions_mm'], spec['am_build_stl'], spec['outer_envelope_stl']
+    worst = sorted(((k, x) for k, x in mg.items() if isinstance(x, float)), key=lambda kv: kv[1])[:3]
+    notes = (f'Units: mm | Overall {dim["length_x_mm"]:.1f} x {dim["height_y_mm"]:.1f} x {dim["thickness_z_mm"]:.1f} mm | '
+             f'Material: {mat["name"]} | Remove powder through the ports in every hollow zone before stress relief | '
+             f'Grind both cutting edges after printing ({ed_rs["per_side_angle_min_deg"]:g}-{ed_rs["per_side_angle_max_deg"]:g} deg per side, '
+             f'{ed_rs["finishing_allowance_mm"]:g} mm allowance per ground face) | Machine the ring bore round | '
+             f'Status: {r["status"]}; not qualified for use as a knife')
+    size = lambda n: os.path.getsize(os.path.join(ROOT, 'cad', n)) / 1048576
+    files = [(am_s['file'], 'print file: skin, sheet-TPMS lattice, powder ports'), (f'{wid}_AMbuild_mm.3mf', 'the print mesh as 3MF (millimetres)'),
+             (env_s['file'], 'outer envelope'), (f'{wid}_drawing_mm.dxf', '1:1 plan drawing'), (f'{wid}_spec_paper.pdf', f'the G5 paper (v{v})'),
+             (f'{wid}_xray_cutaway.jpg', 'cutaway of the hollow core')]
+    L = [f'# 3D printing and CAD upload kit: `{wid}` (release v{v})', '',
+         f'Six files for the best individual of the G5 v{rv} cohort of record ([`evidence/g5/v{rv}/release.json`](../evidence/g5/v{rv}/release.json)), '
+         f'in millimetres, each under {GIT_FILE_MAX_MIB} MiB. Generated from [`evidence/g5/v{rv}/winner_genome.csv`](../evidence/g5/v{rv}/winner_genome.csv).', '',
+         f'**Status: {r["status"]}.** This design is not qualified for use as a knife. Its mass of record is {ms["of_record_g"]:.1f} g '
+         f'(this print mesh, at {am_s["voxel_pitch_h_mm"]:g} mm voxels: {am_s["mass_ti64_g"]:.1f} g). Its lowest computed margins are '
+         + ', '.join(f'{k.replace("_", " ")} {x:.2f}' for k, x in worst) + '.', '',
+         '| File | Size | What it is |', '|---|---:|---|']
+    for n, what in files:
+        L.append(f'| [`{n}`]({n}) | {size(n):.1f} MiB | {what} |')
+    L += ['', '## Order notes (copy into the quote form)', '', '```text', notes, '```', '',
+          f'Release assets of v{v} (too large for git), each with its SHA-256 in the receipt:', '',
+          '| Asset | Size | SHA-256 |', '|---|---:|---|']
+    L += [f'| `{a["file"]}` | {a["bytes"] / 1048576:.1f} MiB | `{a["sha256"][:16]}…` |' for a in r['release_assets']] + ['']
+    return '\n'.join(L)
+
+
 if __name__ == '__main__':
-    new_readme = readme()
-    new_cad = cad_readme()
+    v_cur = rd('docs/VERSION').strip()
+    is_g5 = v_cur.startswith('5.') and os.path.isfile(os.path.join(ROOT, 'evidence/g5/RECORD'))
+    new_readme = readme_g5() if is_g5 else readme()
+    new_cad = cad_readme_g5() if is_g5 else cad_readme()
     if '--check' in sys.argv:
         if rd('README.md') != new_readme:
             print('README.md is stale: run python3 ops/ci/gen_readme.py'); sys.exit(1)

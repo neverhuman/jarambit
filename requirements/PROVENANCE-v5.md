@@ -150,6 +150,46 @@ of fitness for use.
 - **Permanent set.** The computation is linear-elastic, so "no yield at the limit load with SF 1.2" stands in for
   "no permanent set". The GOST-style 1 mm set test is a physical test.
 - **Objective weights.** The weights and exponents of W_ERGOLIGHT_v2 are design choices made under the owner's rules
-  (`owner-objective`): mass 0.30, the worst safety-factor margin 0.25, the other terms 0.45, and E^5. They are tested
-  for two properties before the decoder is frozen: raising any failing safety factor to its requirement must outscore
-  the mass it costs, and 1 % of E must cost at least 10 g of mass credit.
+  (`owner-objective`):
+  - mass 0.30, structural margins 0.495, geometry terms 0.205;
+  - the worst safety-factor margin as a multiplier W = min(1, s(μ)/0.94);
+  - E^5.
+
+  They are tested for two properties before the decoder is frozen: raising any failing safety factor to its
+  requirement must outscore the mass it costs, and 1 % of E must cost at least 10 g of mass credit.
+- **Contact area (an assumption, grade D).** The pressure limits come from the sources above. The hand's contact patch
+  on the grip is not tabulated in them (Seo & Armstrong 2008 report contact area only as a figure), so
+  W_ERGOLIGHT_v2 takes it as the front half of the swell perimeter along 60 % of the grip length. The factor depends
+  on the design only through grip length × perimeter, the same direction as the 84–100 mm band. A measured hand
+  model can replace it.
+- **Worst margin, multiplied (G5 pilot, 2026-10-27).** At first the worst margin was an additive 0.25 term. In the
+  pilot (12 islands × 600 evaluations), designs failing several load cases (fatigue v = 0.12, tip twist 0.23,
+  ultimate 0.24) scored within 12 % of a 90 g design meeting every case, because E^5 multiplied their comfort lead.
+  As a multiplier, comfort and mass cannot buy back a failed load case. Its 0.25 weight went to the structural terms
+  (doubled) and the form term.
+
+## Model constants in code (not requirement values)
+
+The G5.0 evaluator also fixes numerical and modelling constants that are not RS-karambit-v5 keys. Each is a modelling
+choice, with the evidence for it; none is a sourced requirement. The decoder hash covers every file named here except
+`g5_release.rs`.
+
+| Constant | Value | Where | What it sets | Basis |
+|---|---|---|---|---|
+| Production plate mesh | 0.3 mm² max triangle area | `loads.rs` `PLATE_MAX_AREA_MM2` | Tier-1/2 blade plate cases | `vv/plate_mesh.json`: lateral SF spread up to 20 % across 1.2–0.15 mm², twist within 6 % |
+| Plate check meshes | 0.6 / 0.3 / 0.15 mm² | `g5_release.rs` `PLATE_MESH_CHECK_MM2` | the winner's margins of record: the minimum over these meshes | release check B1; the 0.3 mm² rows must reproduce the ranking bit for bit |
+| Solid-tip mesh | 0.08 mm² planform triangles, 4 layers, cut at 30 mm | `loads.rs` `TIP_FE_MAX_AREA_MM2`, `tip_solid_cases_at` | TET10 tip cases | `vv/tip_mesh.json` (0.15 vs 0.08 mm²) |
+| Tip load patches | 0.75 mm (axial, side), 1.0 mm (twist) | `loads.rs` `tip_solid_cases_at` | the load is spread over a patch, not a node | avoids a point-load singularity; read-out windows begin at the RS `[loads.tip]` stations |
+| Tip read-out windows | axial and side: from `axial_no_yield_from_mm` to 10 mm and to max(`lateral_check_stations_mm`) + 0.5 mm; twist: 1.5 mm past `twist_apply_mm_from_point` to 15 mm | `loads.rs` `tip_solid_cases_at` | SF = allowable / nodal maximum in the window | the RS stations; 1.5 mm keeps the twist read-out off the load band |
+| Ring sweep | 12 in-plane directions | `g5_sandwich.rs` `solve_ring_band_t6` | `ring_any_direction_sf` | 30° steps; the case is the minimum capacity over them |
+| Point tip radius | 0.175 mm | `g5_sdf.rs` `POINT_TIP_RADIUS_MM` | the rounded wedge of the point module | inside RS `[point] tip_radius_min_mm`–`tip_radius_max_mm` (0.1–0.25 mm) |
+| Serration depth per pitch | 0.25 | `g5_sdf.rs` `SERR_DEPTH_PER_PITCH` | upper bound on depth | equals RS `[serration] depth_max_fraction_of_pitch` |
+| Sheet-TPMS area density × cell | gyroid 3.0936, Schwarz-D 3.8377 | `material.rs` `tpms_area_density_times_cell` | sheet thickness for a relative density | sheet-TPMS geometry; `vv/checks.json` measures the built density 6–9 % below the target |
+| Sheet-TPMS stiffness | gyroid 0.29 ρ^1.6, Schwarz-D 0.23 ρ^1.2 | `material.rs` `tpms_relative_stiffness` | homogenised core stiffness | lower bounds after Naghavi et al. 2022 and Timercan et al. 2021, until FE homogenisation (an evidence gap above) |
+| Sealed-void scale | 300 mm³ | `objective.rs` (AM term e^(−sealed/300)) | how fast sealed powder pockets cost score | design choice: 300 mm³ (about 1.3 % of the volume of a 100 g knife) cuts the AM term to e^−1 = 37 % |
+| Hand-factor floor | 0.3 | `objective.rs` `clamp_e` | lowest value of each hand factor | bounds each factor below, so one very poor measure cannot drive E to zero on its own |
+| Guard push lever | load at 60 % of the guard height; root where the lobe is ≥ 40 % deep | `loads.rs` `guard_push_sf` | guard bending case | engineering choice for a fingertip on the lobe |
+| Archive niches | 1,024 | `g5_qd.rs` `run_g5_cvt_map_elites` | MAP-Elites archive size | recorded in the launch record (`cohort.launch.archive_niches`) |
+| Lloyd relaxation | 16 Sobol samples per centre, 20 iterations | `g5_qd.rs` `lloyd_cvt_centroids` | CVT niche centres | `vv/checks.json`: 12.5 % lower quantisation error than Halton |
+| Sparse mutation | each gene of a module mutates with p = min(1, 3 / genes in the module) | `g5_genome.rs` | variation operator | about three genes per module per child (unit test `lloyd_cvt_rank_promotion_and_sparse_mutation`) |
+| Hand-zone blur | σ 0.4 mm | `g5_sdf.rs` `HANDZONE_SDF_BLUR_SIGMA_MM` | surface smoothing in the hand zone, in millimetres | grid-independent radius (the G3 audit fix) |

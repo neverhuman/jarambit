@@ -23,9 +23,9 @@ pub const G5_DESIGN_ID_PREFIX: &str = "kv";
 pub const V1_DESIGN_ID_PREFIX: &str = "ec";
 pub const G3_DESIGN_ID_PREFIX: &str = "hz";
 
-/// False until the G5 decoder and objective are complete and frozen (alpha.1). While false, `g5-evolve` runs only
-/// as a development run under an `evo_g5_dev` root, and nothing it writes can become a cohort of record.
-pub const G5_DECODER_FROZEN: bool = false;
+/// True from the decoder freeze (2026-10-27): record cohorts run under an `evo_g5` root. Before it, `g5-evolve` ran
+/// only as development runs under `evo_g5_dev`, and nothing written there can become a cohort of record.
+pub const G5_DECODER_FROZEN: bool = true;
 pub const G5_DEV_RUN_ROOT_DIR: &str = "evo_g5_dev";
 pub const G5_RUN_ROOT_DIR: &str = "evo_g5";
 pub const V1_RUN_ROOT_DIR: &str = "evo_continuous";

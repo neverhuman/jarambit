@@ -1,0 +1,15 @@
+\section{Conclusion}\label{sec:conclusion}
+Rebuilding the Jarambit pipeline around the literature-sourced requirement set \code{RS-karambit-v5} and the \code{G5.0}
+decoder addressed the representation, load-case, drainage and objective flaws exposed by the G3 diagnostics. The grip
+perimeter, palm-swell aspect ratio, rounded-gullet serrations, sheet-TPMS wall thickness and rib-clear drainage ports are
+expressed directly in requirement units, so every candidate has a full-sized handle and width-checked drainage; the point
+angle is a continuous penalty rather than a construction rule (the winner measures \gPointAngleThree\textdegree{} at
+3~mm against a $\gReqPtThree^\circ$ target). In \code{W\_ERGOLIGHT\_v2} the multiplicative worst-margin factor $W$ and the
+ergonomic multiplier $E^5$ make it costly, not impossible, to trade structural adequacy or hand comfort for grams.
+Across \gEvalsTotal{} evaluations on \gIslands{} islands, all \gBeatingBaseline{} evolving islands beat the best island of
+an equal-budget scrambled-Sobol random search on the $h = \gH$~mm search grid (\gBaselineBest; evolving median \gCohortMed).
+The best individual \gDesign{} scores \gScore{} at Tier~2 ($h = \gHRank$~mm), weighs \gMassFinishedG{}~g (finished partial
+volume; \gMassG{}~g print mesh) and meets every load case, with worst margin ratio $\mu = \gWorstMarginRatio$ as the minimum
+over the plate meshes \gPlateCheckMeshes~mm$^2$ (\gWorstMarginProdMesh{} on the production mesh) and ergonomic multiplier
+$E = \gE$. It is a computational design: printing, stress relief, grinding of the bevels and mechanical tests against the
+evidence gaps of Section~\ref{sec:limits} are the next steps, before any claim of fitness for use.

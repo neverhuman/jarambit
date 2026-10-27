@@ -1,0 +1,88 @@
+\section{Related work and requirement provenance}\label{sec:related}
+Every numerical threshold, material constant, and load case in \src{requirements/RS-karambit-v5.toml}{\code{RS-karambit-v5.toml}}
+carries an explicit citation key resolved in \src{requirements/PROVENANCE-v5.md}{\code{PROVENANCE-v5.md}}. An automated test
+(\src{ops/ci/tests/test_gen_readme.py}{\code{RequirementSetV5}}) verifies that every key cited in \code{RS-karambit-v5.toml}
+resolves in \code{PROVENANCE-v5.md} and that the Rust loader (\src{crates/g5/src/requirements.rs}{\code{requirements.rs}})
+reads every field with \code{deny\_unknown\_fields}.
+
+\subsection{L-PBF Ti-6Al-4V properties, thin walls and surface-class fatigue}
+For stress-relieved L-PBF Ti-6Al-4V (vacuum heat treatment at $700\,^\circ\mathrm{C}$ for $1$~h to $800\,^\circ\mathrm{C}$ for
+$2$~h on the build plate~\cite{ncamp,eos,vrancken2012}), ASTM~F2924-14(2021)~\cite{f2924} sets minimum room-temperature
+tensile properties of $\sigma_{y0} = 825$~MPa, $\sigma_{u0} = 895$~MPa, and $10\,\%$ elongation, with fracture toughness
+$K_{Ic} \ge 50~\mathrm{MPa}\sqrt{\mathrm{m}}$~\cite{cain2015}. To cover hot-vehicle storage and field service at
+$80\,^\circ\mathrm{C}$, MIL-HDBK-5J~\cite{hdbk5j} temperature knockdowns ($0.91$ on yield, $0.92$ on ultimate, $0.97$ on
+modulus) give service base properties of $\sigma_y = 750.75$~MPa, $\sigma_u = 823.4$~MPa, $E = 106.7$~GPa, $G = 41.4$~GPa,
+and $\nu = 0.31$ at $\rho = 4.43~\mathrm{g/cm^3}$. Following NASA-STD-6030~\cite{nasa6030} for low-demand metallic AM
+hardware, limit loads require a yield safety factor $\mathrm{SF}_y = 1.2$ ($\mathrm{MS} \ge 0.2$) and ultimate loads require
+$\mathrm{SF}_u = 1.3$ ($\mathrm{MS} \ge 0.3$), while the pommel ring retains $\mathrm{SF}_\mathrm{ring} = 2.0$.
+
+Thin L-PBF walls lose apparent strength because sintered surface powder and melt-pool roughness produce a non-load-bearing
+outer skin of depth $T_s$ on each face. Xie \emph{et al.}~\cite{xie2026} fit the nominal-section knockdown law
+\begin{equation}\label{eq:xie}
+k_t(t) = \bigl(1 - (T_{s,a} + T_{s,b})/t\bigr)^n,
+\end{equation}
+with $n = 1.8$ for yield and $n = 2.1$ for ultimate strength across $0.2$--$1.0$~mm walls. Combining Xie \emph{et al.} with
+Murchio \emph{et al.}~\cite{murchio2024} and Barricelli \emph{et al.}~\cite{barricelli2022} on build-angle roughness gives
+$T_s = 0.03$~mm on vertical and up-skin faces, $T_s = 0.10$~mm on down-skin faces below $45^\circ$, and $T_s = 0.0$~mm on
+post-print ground faces where at least $0.3$--$0.5$~mm of stock removes subsurface lack-of-fusion pores~\cite{beretta2017,eos}.
+Because~\eqref{eq:xie} is fitted to stress computed on the nominal thickness $t$, \src{crates/g5/src/material.rs}{\code{material.rs}}
+evaluates stiffness and stress on the nominal section and applies $k_t(t)$ exactly once, to the material allowable.
+
+High-cycle fatigue ($10^6$ cycles) of L-PBF Ti-6Al-4V is governed by surface condition rather than wrought Marin
+factors~\cite{benedetti2018,nicoletto2018,wycisk2014,wycisk2015,pagliari2025}. Johnsen \emph{et al.}~\cite{johnsen2024} and
+Benedetti \emph{et al.}~\cite{benedetti2018} show that modified Goodman underpredicts mean-stress sensitivity on rough AM
+surfaces, whereas the FKM linear mean-stress correction $\sigma_{a,\mathrm{eq}} = \sigma_a + M\,\sigma_m$ with $M = 0.6$
+matches experimental data, and as-built notches exhibit full theoretical stress concentration ($K_f \approx K_t$)~\cite{nicoletto2018,kahlin2017}.
+Incorporating the NASA-STD-6030 $60\,\%$ AM fatigue factor~\cite{nasa6030}, \code{RS-karambit-v5} assigns fully reversed
+($R = -1$) $10^6$-cycle fatigue allowables of $100$~MPa for thick as-built walls ($\ge 1.5$~mm), $60$~MPa for thin or
+down-skin as-built walls ($< 1.5$~mm), and $200$~MPa for ground blade surfaces.
+
+\subsection{Sheet TPMS lattices and powder-drainage physics}
+Experimental comparisons of architected Ti-6Al-4V cellular solids show that sheet-based TPMS lattices (Gyroid and Schwarz-D)
+are stiffer, stronger, and less anisotropic than skeletal strut lattices at equal relative density~\cite{kelly2019,lietaert2018,naghavi2022,timercan2021},
+while cellular fatigue remains well below $0.4\,\sigma_y^*$ at $10^6$ cycles~\cite{benedetti2021,alana2021}. Accordingly,
+\code{RS-karambit-v5} forbids strut TPMS, enforces a minimum sheet thickness of $0.8$~mm~\cite{renishaw2017}, and uses the
+Naghavi \emph{et al.}~\cite{naghavi2022} and Timercan \emph{et al.}~\cite{timercan2021} Gibson--Ashby scaling laws
+$E^*/E_s = C_E \rho^{n_E}$ and $\sigma^*/\sigma_{ys} = C_s \rho^{n_s}$ for core homogenisation. For powder evacuation,
+Carrozza \emph{et al.}~\cite{carrozza2023} demonstrate that while $0.3$~mm walls and $1.0$~mm channels can be resolved in
+L-PBF Ti-6Al-4V, residual powder adheres inside passages narrower than $1.0$~mm. Together with industrial depowdering
+rules~\cite{nasa6030,solukon}, \code{RS-karambit-v5} requires at least two ports of diameter $\ge 3.0$~mm per cavity and
+classifies an internal void as drained only if a passage of width $\ge 1.0$~mm connects it to the exterior.
+
+\subsection{Human hand biomechanics, anthropometry and knife loads}
+Ergonomic bands and hand-applied limit loads are drawn from normative anthropometry and biomechanics~\cite{ansur2,faa-hfds,hidh,mil1472h,niosh2004}.
+Dodds \emph{et al.}~\cite{dodds2014} establish a 95th-percentile male grip squeeze of $661$~N, while the NASA Human
+Integration Design Handbook (HIDH)~\cite{hidh} sets a maximum crew grip of $783$~N ($800$~N limit squeeze in
+\code{RS-karambit-v5}) and one-hand axial pull of $449$--$587$~N ($600$~N limit pull). Seo and Armstrong~\cite{seo2008hf}
+show that total normal contact force around a cylindrical handle integrates to $\approx 2.3\times$ the grip squeeze force.
+In occupational knife cutting, Tirloni \emph{et al.}~\cite{tirloni2021} and McGorry \emph{et al.}~\cite{mcgorry2005} measure
+mean working grip forces of $53$--$55$~N and peak working forces of $130$--$131$~N. Handle comfort and torque transmission
+peak for grip perimeters of $84$--$100$~mm (floor $78.5$~mm)~\cite{kong2005} and elliptical cross-sections with
+height-to-thickness ratio $H/T \in [1.5, 1.8]$~\cite{seo2011}, with a minimum grip length of $69$~mm (three 95th-percentile
+male finger breadths of $23$~mm~\cite{faa-hfds}). Hand-contact pressure limits follow Fransson-Hall and Kilbom~\cite{fransson1993}
+($104$~kPa all-day acceptable pressure) and Johansson \emph{et al.}~\cite{johansson1999} / Aldien \emph{et al.}~\cite{aldien2005}
+($188$~kPa finger discomfort, $560$~kPa finger pain). Cochran and Riley~\cite{cochran1986} show that guard slip resistance
+plateaus at a guard height of $15.2$~mm ($178$~N slip force; $300$~N limit push in \code{RS-karambit-v5}).
+
+For blade bending and torsion, Yoshii \emph{et al.}~\cite{yoshii2015} and MIL-STD-1472H~\cite{mil1472h} bound human wrist
+flexion/extension torque to $\approx 12$~N$\cdot$m, matching cutlery and survival-knife bend standards that apply lateral
+loads back from the point~\cite{gost51501,mil8662e}; \code{RS-karambit-v5} sets a $12$~N$\cdot$m limit root moment and an
+$18$~N$\cdot$m ultimate root moment applied $5$~mm behind the point. Forearm supination torque reaches $16.2$~N$\cdot$m in
+maximum exertion~\cite{osullivan2002} and $4.7$--$7.0$~N$\cdot$m in repetitive wrist-twist tasks~\cite{kong2007,en8442},
+with palmar skin friction on metal bounded by $\mu \approx 0.30$ dry and $0.15$ wet~\cite{buchholz1988}. At the point,
+EN~388 puncture level~4 ($150$~N axial)~\cite{en388} exceeds human skin and clothing stab penetration forces ($8$--$60$~N)~\cite{gilchrist2008,nolan2013},
+while Hainsworth \emph{et al.}~\cite{hainsworth2008} show that tip radius ($0.10$--$0.25$~mm) and planform angle govern
+penetration. Primary edge angles are raised from $17.5$--$22.5^\circ$ (G3) to $20$--$25^\circ$ per side ($40$--$50^\circ$
+inclusive) because $\mathrm{Ti\text{-}6Al\text{-}4V}$ requires $\tan\theta \approx 1.4$--$1.5\times$ that of hardened steel
+for comparable edge-rolling resistance~\cite{thomas2018,zhang2023,landes2006,iso8442-5}, paired with medium rounded-gullet
+serrations ($4$--$6$~mm pitch, $0.8$--$1.5$~mm depth, gullet radius $\ge 0.5$~mm)~\cite{us4823467,inglis1913}.
+
+\subsection{Quality-diversity optimization and multi-fidelity mechanics}
+MAP-Elites~\cite{mouret2015} illuminates a behaviour space by keeping the best individual in each phenotypic niche.
+Vassiliades \emph{et al.}~\cite{vassiliades2018} introduced centroidal Voronoi tessellations (CVT) via Lloyd's
+algorithm~\cite{lloyd1982} to partition high-dimensional descriptor spaces uniformly, together with directional variation
+(\code{Iso+LineDD})~\cite{vassiliades2018b} seeded from low-discrepancy scrambled Sobol sequences~\cite{joe2008,matousek1998}.
+In structural evaluation, discrete Kirchhoff triangular (DKT) plate elements~\cite{batoz1980} combined with constant-strain
+membrane triangles model curved thin shells, marching cubes~\cite{lorensen1987} and marching tetrahedra~\cite{doi1991}
+extract two-manifold surfaces from implicit fields, and Rayleigh--Ritz energy methods~\cite{timoshenko1961} and mesh
+refinement studies~\cite{roache1998} verify elastic stability and discretization error.

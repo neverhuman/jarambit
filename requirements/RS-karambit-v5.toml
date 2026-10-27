@@ -303,42 +303,44 @@ grid_agreement_max_frac = 0.02
 
 [objective]
 # W_ERGOLIGHT_v2, continuous, no veto [owner-objective]:
-#   score = 100 * E^k * sum_i w_i s_i,  E = prod_k e_k^beta_k (measured hand factors)
+#   score = 100 * E^k * W * sum_i w_i s_i,  E = prod_k e_k^beta_k (measured hand factors)
 # Safety-factor ratios v = SF / SF_req earn s = below_one_scale * v^below_one_exponent below 1 and the margin knee
-# above 1; a worst-margin term rewards the smallest v over every load case.
+# above 1. The worst margin mu = min v over every load case multiplies the score: W = min(1, s(mu)/below_one_scale)^
+# worst_margin_exponent, so comfort and mass cannot buy back a failed load case (pilot 2026-10-27: with an additive
+# 0.25 worst-margin term, a design failing five cases scored within 12 % of a design meeting all of them).
 below_one_scale = 0.94
 below_one_exponent = 4.0
 knee_bonus = 0.06
 knee_tau = 0.15
-worst_margin_weight = 0.25
+worst_margin_exponent = 1.0
 mass_weight = 0.30
 e_exponent = 5.0                       # 1 % of E must cost at least min_grams_per_percent_e of mass credit
 min_grams_per_percent_e = 10.0
 
 [objective.weights]
-# The remaining 0.45 of the weight (mass 0.30 and the worst-margin term 0.25 above). Structural terms score
-# v = SF / SF_req per load case; geometry terms score measured distance to their bands [owner-objective]
-lateral_limit = 0.0175
-lateral_ultimate = 0.0175
-twist_limit = 0.0175
-tip_axial = 0.0175
-tip_lateral = 0.0175
-tip_twist = 0.0175
-grip_squeeze = 0.0175
-guard_push = 0.0150
-ring_bearing = 0.0150
-ring_back = 0.0100
-ring_any_direction = 0.0100
-pull = 0.0100
-teeth = 0.0150
-fatigue = 0.0200
-sequence = 0.0200
-buckling = 0.0100
+# The remaining 0.70 of the weight (mass 0.30 above). Structural terms score v = SF / SF_req per load case;
+# geometry terms score measured distance to their bands [owner-objective]
+lateral_limit = 0.0350
+lateral_ultimate = 0.0350
+twist_limit = 0.0350
+tip_axial = 0.0350
+tip_lateral = 0.0350
+tip_twist = 0.0350
+grip_squeeze = 0.0350
+guard_push = 0.0300
+ring_bearing = 0.0300
+ring_back = 0.0200
+ring_any_direction = 0.0200
+pull = 0.0200
+teeth = 0.0300
+fatigue = 0.0400
+sequence = 0.0400
+buckling = 0.0200
 edge = 0.0400
 point = 0.0600
 serration = 0.0200
 am_build = 0.0600
-form = 0.0225
+form = 0.0250
 
 [objective.betas]
 # Geometric-mean exponents of the ergonomic multiplier E (sum 1); each factor is measured on the decoded geometry

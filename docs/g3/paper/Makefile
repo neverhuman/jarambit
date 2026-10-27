@@ -2,7 +2,8 @@
 #   make -C docs/g3/paper          generated/*.tex from evidence/g3/v$(RECORD)/release.json, then the PDF
 #   make -C docs/g3/paper check    fail if generated/*.tex is stale against the receipt
 # VERSION is the release; RECORD (evidence/g3/RECORD) the cohort of record whose receipt the paper reports.
-VERSION := $(shell cat ../../VERSION)
+# The G3 line ended at v4.0.1: from v5.0.0 the release headlines G5 (docs/g5/paper), so this paper keeps its version
+VERSION := 4.0.1
 ROOT    := ../../..
 RECORD  := $(shell cat $(ROOT)/evidence/g3/RECORD)
 RECEIPT := $(ROOT)/evidence/g3/v$(RECORD)/release.json

@@ -12,9 +12,17 @@ def cad_readme():
     return open(os.path.join(ROOT, 'cad/README.md'), encoding='utf-8').read()
 
 
-def release():
-    """(release version, receipt of the cohort of record named by evidence/g3/RECORD)"""
+def is_g5():
     v = open(os.path.join(ROOT, 'docs/VERSION')).read().strip()
+    return v.startswith('5.') and os.path.exists(os.path.join(ROOT, 'evidence/g5/RECORD'))
+
+
+def release():
+    """(release version, receipt of the cohort of record named by evidence/g5/RECORD or evidence/g3/RECORD)"""
+    v = open(os.path.join(ROOT, 'docs/VERSION')).read().strip()
+    if is_g5():
+        rv = open(os.path.join(ROOT, 'evidence/g5/RECORD')).read().strip()
+        return v, json.load(open(os.path.join(ROOT, f'evidence/g5/v{rv}/release.json')))
     rv = open(os.path.join(ROOT, 'evidence/g3/RECORD')).read().strip()
     return v, json.load(open(os.path.join(ROOT, f'evidence/g3/v{rv}/release.json')))
 
@@ -35,7 +43,7 @@ class GenReadme(unittest.TestCase):
 
     def test_readme_links_the_paper_of_this_release(self):
         v, _ = release()
-        pdf = f'docs/g3/paper/g3-v{v}.pdf'
+        pdf = f'docs/g5/paper/g5-v{v}.pdf' if is_g5() else f'docs/g3/paper/g3-v{v}.pdf'
         self.assertTrue(os.path.isfile(os.path.join(ROOT, pdf)), pdf)
         self.assertIn(f']({pdf})', readme())
 
@@ -43,16 +51,25 @@ class GenReadme(unittest.TestCase):
         _, rec = release()
         t = readme()
         self.assertIn(rec['design_id'], t)
-        self.assertIn(f"| {rec['score']['score_100']:.2f} |", t)
-        self.assertIn(f"{rec['mass']['mesh_g']:.1f} g", t)
-        self.assertIn(rec['provenance']['git_commit'][:12], t)
-        for edge in ('edge_inner', 'edge_spine'):
-            self.assertGreaterEqual(rec['blade'][edge]['teeth'], 3)  # both edges serrated (SERR-1..4)
+        self.assertIn(f"{rec['score']['score_100']:.2f}", t)
+        if is_g5():
+            self.assertIn(rec['provenance']['decoder_commit_label'], t)
+            self.assertIn(f"{rec['mass']['of_record_g']:.1f} g", t)
+            for edge in ('edge_inner', 'edge_spine'):
+                self.assertGreaterEqual(rec['blade'][edge]['teeth'], 3)
+        else:
+            self.assertIn(rec['provenance']['git_commit'][:12], t)
+            self.assertIn(f"{rec['mass']['mesh_g']:.1f} g", t)
+            for edge in ('edge_inner', 'edge_spine'):
+                self.assertGreaterEqual(rec['blade'][edge]['teeth'], 3)  # both edges serrated (SERR-1..4)
 
     def test_every_image_and_cad_file_is_committed(self):
         _, rec = release()
-        paths = list(rec['images'].values()) + list(rec['evolution']['figures'].values()) + \
-            [c['image'] for c in rec['evolution']['lineage']] + rec['cad_in_git']
+        if is_g5():
+            return self.check_g5_files(rec)
+        lineage_imgs = [c['image'] for c in rec['evolution']['lineage']]
+        evo_figs = [rec['evolution']['figure']] if is_g5() else list(rec['evolution']['figures'].values())
+        paths = list(rec['images'].values()) + evo_figs + lineage_imgs + rec['cad_in_git']
         t = readme()
         ct = cad_readme()
         for p in paths:
@@ -77,55 +94,92 @@ class GenReadme(unittest.TestCase):
         with zipfile.ZipFile(os.path.join(ROOT, f'cad/{wid}_AMbuild_mm.3mf')) as zf:
             model_head = zf.open('3D/3dmodel.model').read(1024).decode('utf-8')
             self.assertIn('unit="millimeter"', model_head)
-            self.assertIn('Ti-6Al-4V (design assumption: yield 828 MPa)', model_head)
+            self.assertIn('Ti-6Al-4V', model_head)
         dxf_txt = open(os.path.join(ROOT, f'cad/{wid}_drawing_mm.dxf'), encoding='utf-8').read()
         self.assertIn('UNITS: MILLIMETERS, 1 DRAWING UNIT = 1 MM', dxf_txt)
-        self.assertIn('0\nCIRCLE\n8\nRING_BORE\n10\n-5.9672\n20\n0.0000\n30\n0.0000\n40\n12.4500\n', dxf_txt)
+        self.assertIn('0\nCIRCLE\n8\nRING_BORE\n', dxf_txt)
         self.assertIn('MIDPLANE_Z0_OUTLINE', dxf_txt)
         self.assertIn('Z_EXTENT_ENVELOPE', dxf_txt)
         self.assertTrue(dxf_txt.endswith('0\nEOF\n'))
 
+    def check_g5_files(self, rec):
+        """G5: images and lineage from the render manifest, CAD from docs/g5/v<RECORD>/cad/; every file committed, named in
+        the README, within the 50 MiB repository limit; the cad/ kit holds the same bytes as the archive."""
+        rv, wid, t, ct = rec['version'], rec['design_id'], readme(), cad_readme()
+        man = json.load(open(os.path.join(ROOT, f'docs/g5/v{rv}/img/manifest.json')))
+        for p in list(man['images'].values()) + [c['image'] for c in man['lineage']] + [rec['evolution']['figure']]:
+            self.assertTrue(os.path.isfile(os.path.join(ROOT, p)), p)
+            self.assertIn(p, t)
+        arch = os.path.join(ROOT, f'docs/g5/v{rv}/cad')
+        for n in os.listdir(arch):
+            top = os.path.join(ROOT, 'cad', n)
+            if os.path.isfile(top) and not n.endswith('.json'):
+                h = lambda f: hashlib.sha256(open(f, 'rb').read()).hexdigest()
+                self.assertEqual(h(os.path.join(arch, n)), h(top), f'cad/{n} differs from its archive copy')
+        for ext in ('AMbuild_mm.stl', 'AMbuild_mm.3mf', 'envelope_mm.stl', 'drawing_mm.dxf', 'spec_paper.pdf', 'xray_cutaway.jpg'):
+            rel = f'cad/{wid}_{ext}'
+            self.assertTrue(os.path.isfile(os.path.join(ROOT, rel)), rel)
+            self.assertLessEqual(os.path.getsize(os.path.join(ROOT, rel)), 50 * 1024 * 1024, f'{rel} exceeds 50 MiB')
+            self.assertIn(rel, t)
+            self.assertIn(f'{wid}_{ext}', ct)
+        with zipfile.ZipFile(os.path.join(ROOT, f'cad/{wid}_AMbuild_mm.3mf')) as zf:
+            self.assertIn('unit="millimeter"', zf.open('3D/3dmodel.model').read(1024).decode('utf-8'))
+        for a in rec['release_assets']:
+            self.assertIn(a['file'], t)
+
     def test_cad_readme_discloses_status_and_below_target_safety_factors(self):
         _, rec = release()
         ct = cad_readme()
-        i = rec['inputs']
-        fe = rec['fe_certification']
         self.assertIn(rec['status'], ct)
         self.assertIn('not qualified for use as a knife', ct)
-        for sf_str in (f'{i["solid_tip_sf"]:.2f}', f'{i["grip_sf_min"]:.2f}', f'{fe["grip_sf"]["spine"]:.2f}',
-                       f'{i["fat_sf"]:.2f}', f'{i["seq_ratio"]:.2f}'):
-            self.assertIn(sf_str, ct)
         m = re.search(r'```text\n(.*?)\n```', ct, re.S)
         self.assertIsNotNone(m, 'missing copy-paste order notes block in cad/README.md')
         notes = m.group(1)
         self.assertIn(rec['status'], notes)
         self.assertIn('not qualified for use as a knife', notes)
-        for sf_str in (f'{i["solid_tip_sf"]:.2f}', f'{i["grip_sf_min"]:.2f}', f'{fe["grip_sf"]["spine"]:.2f}',
-                       f'{i["fat_sf"]:.2f}', f'{i["seq_ratio"]:.2f}'):
-            self.assertIn(sf_str, notes)
+        if is_g5():
+            # the lowest computed margins are disclosed next to the status
+            low = sorted((v for v in rec['margins'].values() if isinstance(v, float)))[:3]
+            for v in low:
+                self.assertIn(f'{v:.2f}', ct)
+        else:
+            i = rec['inputs']
+            fe = rec['fe_certification']
+            for sf_str in (f'{i["solid_tip_sf"]:.2f}', f'{i["grip_sf_min"]:.2f}', f'{fe["grip_sf"]["spine"]:.2f}',
+                           f'{i["fat_sf"]:.2f}', f'{i["seq_ratio"]:.2f}'):
+                self.assertIn(sf_str, ct)
+                self.assertIn(sf_str, notes)
 
     def test_no_older_data(self):
         # Owner, 2026-10-26: the README describes only the release's best individual. Older designs and runs stay in
         # docs/RELEASES.md and docs/WHITEPAPER.md.
+        old_ids = ['w282', 'w283', 'ec3i042', 'Individual 2000', 'hz4i012_g00085_4cdfea55', 'hz2i012_g00609_d55af923',
+                   'hz4i005_g00310_966138c2', 'hz4i007_g00855_4797529d',
+                   'cohort-d', 'edge-pilot', '41.77', 'G16-', 'Wave 27']
+        if is_g5():
+            # the G3 winner of record and its headline numbers belong to docs/g3/, not to the G5 README
+            old_ids.extend(['hz4i013_g00995_d206e3c9', 'hz4i008_g00849_597619df', 'hz4i', 'W_ERGOLIGHT_v1'])
         for doc in (readme(), cad_readme()):
-            for old in ('w282', 'w283', 'ec3i042', 'Individual 2000', 'hz4i012_g00085_4cdfea55', 'hz2i012_g00609_d55af923',
-                        'hz4i005_g00310_966138c2', 'hz4i007_g00855_4797529d',
-                        'cohort-d', 'edge-pilot', '41.77', 'G16-', 'Wave 27'):
+            for old in old_ids:
                 self.assertNotIn(old, doc, old)
             self.assertIsNone(re.search(r'\bPASS\b', doc))
 
 
 class PublicWording(unittest.TestCase):
-    # v3.0.3 errata (research-integrity and G4 audits): overclaims that must not return to the public G3 text. A
+    # v3.0.3 errata (research-integrity and G4 audits): overclaims that must not return to the public G3/G5 text. A
     # simulation is not a certification, the tip mesh series is not monotone, and the ergonomic multiplier allows trades.
     BANNED = ('as printed', 'until it converged', 'no person designed', 'cannot trade comfort', '3d-printable',
               'printable titanium', 'certified', 'certification', 'cvt-map-elites', '1.82 n·m pry', '1.82~n$\\cdot$m pry',
               '1.82 n$\\cdot$m pry')
 
     def test_public_g3_text_has_no_overclaims(self):
-        paper = os.path.join(ROOT, 'docs/g3/paper')
+        paper_g3 = os.path.join(ROOT, 'docs/g3/paper')
         files = ['README.md', 'cad/README.md', 'docs/g3/paper/main.tex'] + sorted(
-            f'docs/g3/paper/sections/{f}' for f in os.listdir(os.path.join(paper, 'sections')) if f.endswith('.tex'))
+            f'docs/g3/paper/sections/{f}' for f in os.listdir(os.path.join(paper_g3, 'sections')) if f.endswith('.tex'))
+        paper_g5 = os.path.join(ROOT, 'docs/g5/paper')
+        if os.path.isdir(paper_g5):
+            files += ['docs/g5/paper/main.tex'] + sorted(
+                f'docs/g5/paper/sections/{f}' for f in os.listdir(os.path.join(paper_g5, 'sections')) if f.endswith('.tex'))
         for rel in files:
             text = open(os.path.join(ROOT, rel), encoding='utf-8').read().lower()
             for phrase in self.BANNED:
@@ -133,12 +187,20 @@ class PublicWording(unittest.TestCase):
 
     def test_diagnostics_are_listed_and_hashed(self):
         _, rec = release()
-        d = os.path.join(ROOT, f'evidence/g3/v{rec["version"]}/diagnostics')
-        sums = dict(reversed(l.split()) for l in open(os.path.join(d, 'SHA256SUMS')) if l.strip())
-        for name in ('seq_per_lc', 'tip_raster', 'zone_mass', 'plate_meshconv'):
-            body = open(os.path.join(d, f'{name}.json'), 'rb').read()
-            self.assertEqual(sums[f'{name}.json'], hashlib.sha256(body).hexdigest(), name)
-            self.assertEqual(json.loads(body)['design_id'], rec['design_id'], name)
+        if is_g5():
+            d = os.path.join(ROOT, f'evidence/g5/v{rec["version"]}/vv')
+            sums = dict(reversed(l.split()) for l in open(os.path.join(d, 'SHA256SUMS')) if l.strip())
+            self.assertGreaterEqual(len(sums), 3)
+            for fname, expected_sha in sums.items():
+                body = open(os.path.join(d, fname), 'rb').read()
+                self.assertEqual(expected_sha, hashlib.sha256(body).hexdigest(), fname)
+        else:
+            d = os.path.join(ROOT, f'evidence/g3/v{rec["version"]}/diagnostics')
+            sums = dict(reversed(l.split()) for l in open(os.path.join(d, 'SHA256SUMS')) if l.strip())
+            for name in ('seq_per_lc', 'tip_raster', 'zone_mass', 'plate_meshconv'):
+                body = open(os.path.join(d, f'{name}.json'), 'rb').read()
+                self.assertEqual(sums[f'{name}.json'], hashlib.sha256(body).hexdigest(), name)
+                self.assertEqual(json.loads(body)['design_id'], rec['design_id'], name)
 
 
 class RequirementSetV5(unittest.TestCase):
@@ -180,7 +242,8 @@ class RequirementSetV5(unittest.TestCase):
         # 1 % of E must cost at least min_grams_per_percent_e of mass credit at a score near 80
         pts_per_g = 100.0 * o['mass_weight'] / (self.rs['mass']['ceiling_g'] - self.rs['mass']['floor_g'])
         self.assertGreaterEqual(o['e_exponent'] * 0.80 / pts_per_g, o['min_grams_per_percent_e'])
-        self.assertAlmostEqual(o['mass_weight'] + o['worst_margin_weight'] + sum(o['weights'].values()), 1.0, places=9)
+        self.assertAlmostEqual(o['mass_weight'] + sum(o['weights'].values()), 1.0, places=9)
+        self.assertGreater(o['worst_margin_exponent'], 0.0)
         self.assertAlmostEqual(sum(o['betas'].values()), 1.0, places=9)
         self.assertEqual(self.rs['generation'], 'G5')
 

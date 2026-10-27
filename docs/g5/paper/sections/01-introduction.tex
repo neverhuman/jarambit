@@ -1,0 +1,40 @@
+\section{Introduction}\label{sec:intro}
+A karambit is a curved knife with a retention ring at the pommel, held in a closed fist with the little finger through the
+ring. Fabricating a one-piece karambit in Ti-6Al-4V by laser powder-bed fusion (L-PBF) makes a hollow interior possible:
+the grip and the blade core can be built as a thin outer skin over a triply periodic minimal-surface (TPMS) lattice with
+ports to evacuate unmelted powder. That structural freedom also creates failure modes where an evolutionary search can
+exploit its own evaluation surrogates. In the preceding G3 release (\code{v3.0.0} and the \code{v3.0.3} diagnostic audit),
+six concrete gaps emerged between what the search rewarded and what the geometry would actually do:
+\begin{enumerate}
+\item \textbf{Grid-dependent mass and drainage.} A coarse $h = 0.4$~mm voxel count undercounted mass relative to the
+$0.2$~mm print mesh, and a single-voxel air path could drain an internal cavity at $0.4$~mm while closing off at $0.2$~mm.
+Worse, the G3 winner's $2.8$~mm ports straddled its $1.1$~mm mid-plane rib, splitting each port into two $0.85$~mm slits
+that fail the $1.0$~mm powder-drainage threshold~\cite{carrozza2023}.
+\item \textbf{Additive soft objective.} In \code{W\_ERGOLIGHT\_v1}, safety-factor ratios $v = \mathrm{SF}/\mathrm{SF}_\mathrm{req}$
+earned $0.94\,v$ linearly below $1.0$, and mass carried weight $0.370$ while individual structural terms carried
+$0.0174$--$0.0700$. The search rationally traded structural adequacy on the solid tip and hollow grip for grams of mass
+credit.
+\item \textbf{Unphysical tip and spine loads.} G3 applied the full $1.82$~N$\cdot$m handle twist to the last $3$~mm of the
+point about the global origin-to-point chord. Because a sharp titanium point ($w \le 3$~mm at $2$~mm from the tip) can carry
+only $\sim 0.2$--$0.45$~N$\cdot$m, the $1.82$~N$\cdot$m load taught the search to evolve a blunt, spatulate point
+($> 90^\circ$ included planform angle). Conversely, G3 loaded the double-edged claw with a $3,427$~N batoning impulse taken
+from an Olympic boxing study~\cite{walilko2005}, even though a blade sharpened on both edges has no spine to strike.
+\item \textbf{Material and fatigue miscalibration.} G3 used wrought-plate A-basis yield ($828$~MPa), applied machined-steel
+Marin factors with modified Goodman mean-stress correction to as-built L-PBF surfaces~\cite{benedetti2018,johnsen2024}, and
+divided the fatigue stress by the thin-wall knockdown factor a second time after the allowable already carried it.
+\item \textbf{Non-converging plate windows and unchecked end teeth.} Lens-shaped fenestration windows in the G3 blade
+concentrated membrane and bending stress at sharp corners so that the whole-blade plate capacity failed to converge under
+mesh refinement, and the serration check skipped the end tooth at each end of a serrated span.
+\item \textbf{Search bloat and fixed promotion gates.} G3 carried 179 genes (including inactive genes and a small neural
+network for grip texture), used Halton points rather than Lloyd-relaxed centroidal Voronoi tessellation (CVT) niche
+centres, and promoted candidates across tiers with fixed score thresholds that drifted as the population improved.
+\end{enumerate}
+
+G5 (\src{crates/g5/src/lib.rs}{\code{crates/g5}}, release v\gVersion) is a clean-sheet rebuild under the sourced requirement
+set \src{requirements/RS-karambit-v5.toml}{\code{RS-karambit-v5.toml}} and its literature provenance document
+\src{requirements/PROVENANCE-v5.md}{\code{PROVENANCE-v5.md}}. Every requirement is either enforced by construction in the
+\code{G5.0} decoder (\src{crates/g5/src/g5_genome.rs}{\code{g5_genome.rs}}, \src{crates/g5/src/g5_sdf.rs}{\code{g5_sdf.rs}})
+or scored continuously by \code{W\_ERGOLIGHT\_v2} (\src{crates/g5/src/objective.rs}{\code{objective.rs}}), where the worst
+structural margin multiplies the entire score so that neither comfort nor mass can buy back a failed load case. This paper
+reports the v\gRecord{} cohort of record and its best individual, \gDesign{} (decoder commit \gCommit, decoder hash
+\gDecoder).

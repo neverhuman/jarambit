@@ -1,0 +1,56 @@
+{
+  "images": {
+    "blade": "docs/g5/v5.0.0/img/blade.jpg",
+    "cut_b": "docs/g5/v5.0.0/img/cut_b.jpg",
+    "cut_full": "docs/g5/v5.0.0/img/cut_full.jpg",
+    "cut_x": "docs/g5/v5.0.0/img/cut_x.jpg",
+    "edge_a": "docs/g5/v5.0.0/img/edge_a.jpg",
+    "edge_b": "docs/g5/v5.0.0/img/edge_b.jpg",
+    "edge_sections_dark": "docs/g5/v5.0.0/img/edge_sections_dark.png",
+    "edge_sections_light": "docs/g5/v5.0.0/img/edge_sections_light.png",
+    "grip": "docs/g5/v5.0.0/img/grip.jpg",
+    "hero": "docs/g5/v5.0.0/img/hero.jpg",
+    "ring": "docs/g5/v5.0.0/img/ring.jpg",
+    "side": "docs/g5/v5.0.0/img/side.jpg",
+    "tip": "docs/g5/v5.0.0/img/tip.jpg",
+    "tip_edge": "docs/g5/v5.0.0/img/tip_edge.jpg",
+    "top": "docs/g5/v5.0.0/img/top.jpg",
+    "xray": "docs/g5/v5.0.0/img/xray.jpg"
+  },
+  "lineage": [
+    {
+      "evals": 64,
+      "image": "docs/g5/v5.0.0/img/lineage_0064.jpg",
+      "role": ""
+    },
+    {
+      "evals": 256,
+      "image": "docs/g5/v5.0.0/img/lineage_0256.jpg",
+      "role": ""
+    },
+    {
+      "evals": 1024,
+      "image": "docs/g5/v5.0.0/img/lineage_1024.jpg",
+      "role": ""
+    },
+    {
+      "evals": 2048,
+      "image": "docs/g5/v5.0.0/img/lineage_2048.jpg",
+      "role": ""
+    },
+    {
+      "evals": 2425,
+      "image": "docs/g5/v5.0.0/img/lineage_2425.jpg",
+      "role": "winner of record"
+    },
+    {
+      "evals": 3000,
+      "image": "docs/g5/v5.0.0/img/lineage_3000.jpg",
+      "role": "search-grid leader"
+    }
+  ],
+  "meshes": {
+    "cutaways": "g5-v5.0.0-kv4i012_g00009_dd6ffea5_AMbuild_h0.2_mm.stl (h = 0.20 mm, 6,078,904 tris)",
+    "exterior": "g5-v5.0.0-kv4i012_g00009_dd6ffea5_envelope_h0.2_mm.stl (h = 0.20 mm, 2,372,660 tris)"
+  }
+}
