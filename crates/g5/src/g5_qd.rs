@@ -26,7 +26,7 @@ use crate::g5_sandwich::{
 use crate::g5_sdf::{
     blade_bevel_window_weights, build_blade_profile_2d, build_g5_sdf, effective_blade_rho,
     eval_blade_thickness_and_sdf2, eval_grip_slice, extract_watertight_mesh, serration_gullets,
-    BladeProfile2D, VoxelGrid3D, GUARD_X_MM, RHO_TI64_G_MM3,
+    solid_fraction, AmConnectivityStats, BladeProfile2D, VoxelGrid3D, GUARD_X_MM, RHO_TI64_G_MM3,
 };
 use jarambit_crescent::export;
 use jarambit_physics::fine::{mesh_domain, NU};
@@ -186,6 +186,8 @@ pub struct G5EvalRecord {
     pub inputs: ErgolightInputs,
     pub score: ErgolightScore,
     pub descriptors: G5Descriptors,
+    /// Sealed (undrainable) cavity volume and removed floating solid measured on `d_am` (zero at Tier 0).
+    pub am_connectivity: AmConnectivityStats,
 }
 
 /// Exact perimeter of an asymmetric superellipse section with top semi-height `a_top`, bottom
@@ -1038,6 +1040,46 @@ pub fn evaluate_tier0_analytic(genome: &G5Genome) -> G5EvalRecord {
         inputs,
         score,
         descriptors,
+        am_connectivity: AmConnectivityStats::default(),
+    }
+}
+
+/// Mass of one design on two grids, h and h/2, for the RS-karambit-v5 `[mass] grid_agreement_max_frac` check.
+#[derive(Debug, Clone, Copy, PartialEq, Serialize)]
+pub struct MassGridAgreement {
+    pub h_mm: f64,
+    pub mass_h_g: f64,
+    pub mass_half_h_g: f64,
+    /// |m(h) − m(h/2)| / m(h/2).
+    pub rel_diff: f64,
+    pub sealed_void_h_mm3: f64,
+    pub sealed_void_half_h_mm3: f64,
+}
+
+impl MassGridAgreement {
+    /// True when the two masses agree within the requirement set's tolerance.
+    pub fn within_requirement(&self) -> bool {
+        self.rel_diff <= crate::requirements::rs_v5().mass.grid_agreement_max_frac
+    }
+}
+
+/// Build the AM field at h and at h/2 and compare the partial-volume masses. Finalists must agree within
+/// `[mass] grid_agreement_max_frac` (2 %); a design that does not is reported, never ranked on the coarse mass.
+pub fn mass_grid_agreement(genome: &G5Genome, h: f64) -> MassGridAgreement {
+    let coarse = build_g5_sdf(genome, h, true);
+    let cx = genome.decode()["cx"];
+    let (m_h, ..) = coarse.am_mass_com_inertia(cx);
+    let sealed_h = coarse.am_connectivity.sealed_void_mm3;
+    drop(coarse);
+    let fine = build_g5_sdf(genome, 0.5 * h, true);
+    let (m_h2, ..) = fine.am_mass_com_inertia(cx);
+    MassGridAgreement {
+        h_mm: h,
+        mass_h_g: m_h,
+        mass_half_h_g: m_h2,
+        rel_diff: (m_h - m_h2).abs() / m_h2.max(1e-9),
+        sealed_void_h_mm3: sealed_h,
+        sealed_void_half_h_mm3: fine.am_connectivity.sealed_void_mm3,
     }
 }
 
@@ -1056,23 +1098,20 @@ fn evaluate_tier1_with_grid(genome: &G5Genome, h_vox: f64) -> (G5EvalRecord, Vox
     let p = genome.decode();
     let grid = build_g5_sdf(genome, h_vox, true);
 
-    // Measure voxel envelope & AM porosity across the full-knife 3D SDF grid
-    let mut env_vox = 0usize;
-    let mut am_vox = 0usize;
+    // Envelope and AM volumes by partial volume, for the porosity descriptor
+    let mut env_vox = 0.0_f64;
+    let mut am_vox = 0.0_f64;
     let d_am = grid.d_am.as_deref().unwrap_or(&grid.d);
     for (&dv, &amv) in grid.d.iter().zip(d_am.iter()) {
-        if dv < 0.0 {
-            env_vox += 1;
-        }
-        if amv < 0.0 {
-            am_vox += 1;
-        }
+        env_vox += solid_fraction(dv, grid.h);
+        am_vox += solid_fraction(amv, grid.h);
     }
-    rec.descriptors.porosity_frac = if env_vox > 0 {
-        (1.0 - (am_vox as f64) / (env_vox as f64)).clamp(0.0, 0.85)
+    rec.descriptors.porosity_frac = if env_vox > 0.0 {
+        (1.0 - am_vox / env_vox).clamp(0.0, 0.85)
     } else {
         0.0
     };
+    rec.am_connectivity = grid.am_connectivity;
 
     // Integrate full-knife AM mass, CoM, and spin inertia strictly from the 3D AM voxel grid (B5)
     let cx = p["cx"];

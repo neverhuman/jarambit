@@ -134,6 +134,16 @@ mod record_guards {
         assert_eq!(crate::sha256_bytes(&bytes), recorded, "the G3 v3.0.0 decoder of record changed");
     }
 
+    /// RS-karambit-v5 `[mass] grid_agreement_max_frac`: the partial-volume mass of a Sobol design agrees between
+    /// h 0.4 and h 0.2 (whole-voxel counting and one-voxel drainage gaps made G3 masses move by up to 47 %).
+    #[test]
+    fn partial_volume_mass_agrees_between_h_and_half_h() {
+        let g = crate::g5_genome::sobol_unit_genome(5, 7, "gridcheck");
+        let a = crate::g5_qd::mass_grid_agreement(&g, 0.4);
+        println!("{a:?}");
+        assert!(a.within_requirement(), "{a:?}");
+    }
+
     #[test]
     fn cached_g5_decoder_hash_equals_a_fresh_recompute() {
         let cached = crate::g5_qd::g5_decoder_sha256();
@@ -858,8 +868,10 @@ mod v1_identity_tests {
                     meas.grip_sf_min
                 );
 
-                // S5-6 / S6-3: Production-path assertion (`build_g5_sdf(&g5, 0.40, true)`) of hand-zone AM mass
-                // from `d_am` with `x < 75.6` against `zones.ring/grip.am_g` across all tested cases (finalists + randoms)
+                // S5-6 / S6-3: production-path hand-zone AM mass from `d_am` (`x < 75.6`). G5 drains powder only
+                // through passages >= `[am] drain_channel_min_mm` wide and keeps undrainable cavities solid, so its
+                // mass can only exceed the G3/Python reference (which drained through any voxel path); the partial-
+                // volume mass may differ from the reference's voxel count by a few per cent.
                 let prod_grid = crate::g5_sdf::build_g5_sdf(&g5, 0.40, true);
                 let (prod_ring_d_am_g, prod_grip_d_am_g, prod_hz_d_am_g) =
                     prod_grid.production_handzone_d_am_masses(p_rust["x_t"]);
@@ -871,9 +883,10 @@ mod v1_identity_tests {
                 println!(
                     "    [prod d_am x<75.6 {name:<16}] ring_d_am={prod_ring_d_am_g:.2} (py={py_ring_am:.2}), grip_d_am={prod_grip_d_am_g:.2} (py={py_grip_am:.2}, rel={grip_d_am_rel:.4}), hz_d_am={prod_hz_d_am_g:.2} (py={py_hz_75p6_am:.2}, rel={hz_d_am_rel:.4})"
                 );
+                let _ = (grip_d_am_rel, hz_d_am_rel);
                 assert!(
-                    grip_d_am_rel <= 0.08 && hz_d_am_rel <= 0.08,
-                    "case {name}: production d_am hand-zone mass (x < 75.6) grip={prod_grip_d_am_g} vs Py={py_grip_am} (rel={grip_d_am_rel}), total={prod_hz_d_am_g} vs Py={py_hz_75p6_am} (rel={hz_d_am_rel})"
+                    prod_hz_d_am_g >= 0.95 * py_hz_75p6_am && prod_grip_d_am_g >= 0.95 * py_grip_am,
+                    "case {name}: production d_am hand-zone mass (x < 75.6) grip={prod_grip_d_am_g} vs Py={py_grip_am}, total={prod_hz_d_am_g} vs Py={py_hz_75p6_am}: the stricter drainage rule cannot make it lighter"
                 );
             }
         }
@@ -1207,14 +1220,13 @@ mod v1_identity_tests {
         arch_bad_g.elites.get_mut(&nid).unwrap().genome.u[0] =
             (arch_bad_g.elites[&nid].genome.u[0] + 0.25).fract();
         assert!(arch_bad_g.verify_integrity().is_err());
+        // A descriptor tampered so that the design maps to another niche: move the mass to the far end of its
+        // descriptor range (25-105 g).
         let mut arch_bad_d = arch_chk.clone();
-        arch_bad_d
-            .elites
-            .get_mut(&nid)
-            .unwrap()
-            .record
-            .descriptors
-            .mass_g += 50.0;
+        let m0 = arch_bad_d.elites[&nid].record.descriptors.mass_g;
+        arch_bad_d.elites.get_mut(&nid).unwrap().record.descriptors.mass_g =
+            if m0 > 65.0 { 25.0 } else { 105.0 };
+        assert_ne!(arch_bad_d.niche_of(&arch_bad_d.elites[&nid].record.descriptors), nid);
         assert!(arch_bad_d.verify_integrity().is_err());
         let mut arch_bad_sha = arch_chk.clone();
         arch_bad_sha.decoder_sha256 = "0".repeat(64);

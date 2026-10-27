@@ -282,6 +282,8 @@ sheet_min_mm = 0.8
 port_d_min_mm = 3.0
 ports_per_cavity_min = 2
 closed_voids_allowed = false           # measured on the decoded geometry, never by formula
+drain_channel_min_mm = 1.0             # narrowest internal passage that counts as a drainage path: 1 mm channels print
+                                       # in L-PBF Ti-6Al-4V but keep residual powder, so this is a lower bound [carrozza2023]
 overhang_min_deg = 45.0                # down-skin faces steeper than this from horizontal need no support
 horizontal_hole_max_mm = 8.0           # larger horizontal holes need a teardrop or diamond shape
 ring_bore_machined = true              # the ring bore is printed with a support-free teardrop crown and machined round

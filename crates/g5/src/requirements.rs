@@ -268,6 +268,7 @@ strict!(Am {
     port_d_min_mm: f64,
     ports_per_cavity_min: u32,
     closed_voids_allowed: bool,
+    drain_channel_min_mm: f64,
     overhang_min_deg: f64,
     horizontal_hole_max_mm: f64,
     ring_bore_machined: bool,
@@ -501,6 +502,12 @@ impl RsV5 {
             return Err(format!(
                 "RS-karambit-v5: mass {ms:?} is not floor < goal < ceiling"
             ));
+        }
+        let am = &self.am;
+        if !(am.drain_channel_min_mm > 0.0 && am.drain_channel_min_mm <= am.port_d_min_mm) {
+            return Err(
+                "RS-karambit-v5: am.drain_channel_min_mm must be positive and at most port_d_min_mm".into(),
+            );
         }
         if self.material.tpms.strut_tpms_allowed {
             return Err("RS-karambit-v5: material.tpms.strut_tpms_allowed must be false".into());
