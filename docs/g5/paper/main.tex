@@ -1,0 +1,148 @@
+% G5 release paper (v5.0.0+). Every quantity comes from generated/*.tex, which `g5-release-tex` writes from the
+% committed release receipt evidence/g5/v<VERSION>/release.json; build with `make -C docs/g5/paper`.
+\documentclass[10pt,journal,letterpaper]{IEEEtran}
+\usepackage{amsmath,amssymb,graphicx,booktabs,array,xcolor}
+\usepackage[obeyspaces]{url} % keep spaces inside \code (command lines)
+\input{../../paper/ei-ieee-skin.tex}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\input{generated/numbers.tex}
+\hypersetup{
+  pdftitle={Evolving a One-Piece Titanium Karambit for Laser Powder-Bed Fusion under Sourced Structural, Ergonomic and Drainage Requirements (G5 v\gVersion)},
+  pdfauthor={Jepson Taylor},
+  pdflang={en-US},
+  pdfkeywords={evolutionary design, quality diversity, MAP-Elites, additive manufacturing, Ti-6Al-4V, finite elements, sheet TPMS, knife design}
+}
+\DeclareRobustCommand{\code}[1]{\texorpdfstring{{\nolinkurl{#1}}}{#1}}
+\newcommand{\src}[2]{\href{https://github.com/neverhuman/jarambit/blob/v\gVersion/#1}{#2}}
+\makeatletter
+\fancypagestyle{headings}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyhead[L]{\sffamily\fontsize{6.6}{8}\selectfont\color{slate}\addfontfeature{LetterSpace=8}JARAMBIT G5\enspace{\color{hair}|}\enspace\addfontfeature{LetterSpace=0}An evolved titanium karambit for L-PBF under RS-karambit-v5 (v\gVersion)}%
+  \fancyhead[R]{\sffamily\fontsize{6.6}{8}\selectfont\color{slate}\thepage}}
+\makeatother
+\pagestyle{headings}
+
+\begin{document}
+\title{Evolving a One-Piece Titanium Karambit for Laser Powder-Bed Fusion under Sourced Structural, Ergonomic and Drainage Requirements}
+\author{Jepson Taylor%
+\thanks{Release v\gVersion, decoder commit \gCommit{} (decoder hash \gDecoder). Every computed number and every figure of the design in this
+paper is generated from the release receipt \code{evidence/g5/v\gRecord/release.json}. Status: \gStatus.}}
+\maketitle
+
+\begin{abstract}
+We report the best individual of the G5 v\gRecord{} cohort of record (\gDesign), a one-piece Ti-6Al-4V karambit designed for laser
+powder-bed fusion (L-PBF) under the sourced requirement set \code{RS-karambit-v5} and the continuous objective
+\code{W\_ERGOLIGHT\_v2}. Following the diagnostic audit of the preceding G3 release, G5 rebuilds the representation,
+material model, structural load cases, powder-drainage measurement and quality-diversity search from literature-sourced
+first principles. The \code{G5.0} decoder maps \gGeneCount{} active phenotype genes directly in requirement units to a hollow grip and
+blade core filled with a sheet triply periodic minimal-surface (TPMS) lattice ($\ge 0.8$~mm wall), powder-removal ports ($\ge \gReqPortD$~mm)
+placed clear of the mid-plane rib, a point-angle module whose included angle at 3~mm is penalized above $\gReqPtThree^\circ$
+(\gPointAngleThree\textdegree{} on \gDesign), and dual-edge primary grinds
+($\gReqEdgeMin$--$\gReqEdgeMax^\circ$ per side) with rounded-gullet serrations ($r_g \ge \gReqGulletR$~mm). Material allowables use ASTM~F2924 minimum
+stress-relieved Ti-6Al-4V properties derated to $80\,^\circ\mathrm{C}$ service temperature, a single-application thin-wall knockdown
+law per face pair, and surface-class FKM high-cycle fatigue. Structural adequacy is evaluated across 16 load cases combining
+whole-blade sandwich-plate finite elements, a 12-direction ring sweep, Rayleigh--Ritz tip buckling, all-tooth
+serration checks (including end teeth), and a three-case quadratic tetrahedral (\code{TET10}) solid-tip submodel ($\gReqTipAxN$~N axial,
+$\gReqTipLatN$~N lateral, and $\gReqTipTwNm$~N$\cdot$m local tip twist). Across \gIslands{} independent MAP-Elites islands (\gEvalsIsland{} evaluations
+each, \gEvalsTotal{} total) compared against \gBaselineIslands{} scrambled-Sobol random-search baseline islands of equal budget,
+all \gBeatingBaseline{} evolving islands surpass the best random-search baseline island on the $h = \gH$~mm search grid
+(\gBaselineBest{} max; evolving cohort median \gCohortMed, range \gCohortMin--\gCohortMax). Re-evaluated at Tier~2 ($h = \gHRank$~mm),
+the winning design \gDesign{} scores \gScore{} under \code{W\_ERGOLIGHT\_v2} (ergonomic multiplier $E = \gE$, worst-margin
+multiplier $W = \gW$) at a finished partial-volume mass of \gMassFinishedG{}~g
+(\gMassG{}~g on the $h = \gHRank$~mm watertight mesh). We detail the literature provenance, decoder, load models, objective,
+search, verification studies, evolutionary trajectory, and every remaining limitation of the computational result.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Evolutionary design, quality diversity, MAP-Elites, additive manufacturing, Ti-6Al-4V, sheet TPMS, finite elements, knife design.
+\end{IEEEkeywords}
+
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-design-space}
+\input{sections/04-loads-and-models}
+\input{sections/05-objective}
+\input{sections/06-search}
+\input{sections/07-measurement}
+\input{sections/08-results}
+\input{sections/09-limits}
+\input{sections/10-reproducibility}
+\input{sections/11-conclusion}
+
+\begin{thebibliography}{75}
+\bibitem{mouret2015} J.-B. Mouret and J. Clune, ``Illuminating search spaces by mapping elites,'' \emph{arXiv:1504.04909}, 2015.
+\bibitem{vassiliades2018} V. Vassiliades, K. Chatzilygeroudis, and J.-B. Mouret, ``Using centroidal Voronoi tessellations to scale up the multidimensional archive of phenotypic elites algorithm,'' \emph{IEEE Trans. Evol. Comput.}, vol. 22, no. 4, pp. 623--630, 2018.
+\bibitem{vassiliades2018b} V. Vassiliades and J.-B. Mouret, ``Discovering the elite hypervolume by leveraging interspecies correlation,'' in \emph{Proc. GECCO}, 2018.
+\bibitem{lloyd1982} S. P. Lloyd, ``Least squares quantization in PCM,'' \emph{IEEE Trans. Inf. Theory}, vol. 28, no. 2, pp. 129--137, 1982, doi:10.1109/TIT.1982.1056489.
+\bibitem{joe2008} S. Joe and F. Y. Kuo, ``Constructing Sobol sequences with better two-dimensional projections,'' \emph{SIAM J. Sci. Comput.}, vol. 30, no. 5, pp. 2635--2654, 2008.
+\bibitem{matousek1998} J. Matou\v{s}ek, ``On the $L_2$-discrepancy for anchored boxes,'' \emph{J. Complexity}, vol. 14, no. 4, pp. 527--556, 1998.
+\bibitem{doi1991} A. Doi and A. Koide, ``An efficient method of triangulating equi-valued surfaces by using tetrahedral cells,'' \emph{IEICE Trans. Inf. Syst.}, vol. E74-D, no. 1, pp. 214--224, 1991.
+\bibitem{lorensen1987} W. E. Lorensen and H. E. Cline, ``Marching cubes: A high resolution 3D surface construction algorithm,'' \emph{Comput. Graph.}, vol. 21, no. 4, pp. 163--169, 1987.
+\bibitem{batoz1980} J.-L. Batoz, K.-J. Bathe, and L.-W. Ho, ``A study of three-node triangular plate bending elements,'' \emph{Int. J. Numer. Methods Eng.}, vol. 15, no. 12, pp. 1771--1812, 1980, doi:10.1002/nme.1620151205.
+\bibitem{roache1998} P. J. Roache, \emph{Verification and Validation in Computational Science and Engineering}. Albuquerque, NM: Hermosa Publishers, 1998.
+\bibitem{inglis1913} C. E. Inglis, ``Stresses in a plate due to the presence of cracks and sharp corners,'' \emph{Trans. Inst. Naval Archit.}, vol. 55, pp. 219--241, 1913.
+\bibitem{timoshenko1961} S. P. Timoshenko and J. M. Gere, \emph{Theory of Elastic Stability}, 2nd ed. New York: McGraw-Hill, 1961.
+\bibitem{f2924} ASTM F2924-14(2021), \emph{Standard Specification for Additive Manufacturing Titanium-6 Aluminum-4 Vanadium with Powder Bed Fusion}, ASTM International, 2021.
+\bibitem{hdbk5j} U.S. Department of Defense, \emph{MIL-HDBK-5J: Metallic Materials and Elements for Aerospace Vehicle Structures}, \S 5.4.1 (Ti-6Al-4V annealed: Table 5.4.1.0(b); Figs.~5.4.1.1.1 and 5.4.1.1.4), 2003.
+\bibitem{ncamp} NIAR/NCAMP, \emph{ND-ME 004: L-PBF Ti-6Al-4V Material Specification}, 2025.
+\bibitem{nasa6030} NASA, \emph{NASA-STD-6030: Additive Manufacturing Requirements for Spaceflight Systems}, 2021.
+\bibitem{eos} EOS GmbH, \emph{EOS Titanium Ti64 Grade 5 Material Data Sheet (M290)}.
+\bibitem{vrancken2012} B. Vrancken, L. Thijs, J.-P. Kruth, and J. Van Humbeeck, ``Heat treatment of Ti6Al4V produced by selective laser melting,'' \emph{J. Alloys Compd.}, vol. 541, p. 177, 2012, doi:10.1016/j.jallcom.2012.07.022.
+\bibitem{cain2015} V. Cain \emph{et al.}, ``Crack propagation and fracture toughness of Ti6Al4V alloy produced by selective laser melting,'' \emph{Addit. Manuf.}, vol. 5, p. 68, 2015, doi:10.1016/j.addma.2014.12.006.
+\bibitem{xie2026} Y. Xie \emph{et al.}, \emph{Materials}, vol. 19, art. 1945, 2026, doi:10.3390/ma19101945.
+\bibitem{murchio2024} S. Murchio \emph{et al.}, \emph{Int. J. Fatigue}, vol. 180, art. 108102, 2024, doi:10.1016/j.ijfatigue.2023.108102.
+\bibitem{benedetti2018} M. Benedetti \emph{et al.}, \emph{Int. J. Fatigue}, vol. 107, p. 96, 2018, doi:10.1016/j.ijfatigue.2017.10.021.
+\bibitem{nicoletto2018} G. Nicoletto, \emph{Int. J. Fatigue}, vol. 106, p. 124, 2018, doi:10.1016/j.ijfatigue.2017.10.004.
+\bibitem{wycisk2014} E. Wycisk \emph{et al.}, \emph{Phys. Procedia}, vol. 56, p. 371, 2014, doi:10.1016/j.phpro.2014.08.120.
+\bibitem{wycisk2015} E. Wycisk \emph{et al.}, \emph{Front. Mater.}, vol. 2, art. 72, 2015, doi:10.3389/fmats.2015.00072.
+\bibitem{pagliari2025} L. Pagliari \emph{et al.}, \emph{Eng. Fail. Anal.}, vol. 180, art. 109825, 2025, doi:10.1016/j.engfailanal.2025.109825.
+\bibitem{johnsen2024} J. Johnsen \emph{et al.}, \emph{Welding in the World}, vol. 68, p. 361, 2024, doi:10.1007/s40194-023-01604-5.
+\bibitem{kahlin2017} M. Kahlin, H. Ansell, and J. Moverare, \emph{Int. J. Fatigue}, vol. 101, p. 51, 2017, doi:10.1016/j.ijfatigue.2017.04.009.
+\bibitem{beretta2017} S. Beretta and S. Romano, \emph{Int. J. Fatigue}, vol. 94, p. 178, 2017, doi:10.1016/j.ijfatigue.2016.06.020.
+\bibitem{barricelli2022} L. Barricelli, L. Patriarca, A. du Plessis, and S. Beretta, \emph{Int. J. Fatigue}, art. 107401, 2022, doi:10.1016/j.ijfatigue.2022.107401.
+\bibitem{naghavi2022} S. A. Naghavi \emph{et al.}, \emph{Bioengineering}, vol. 9, art. 504, 2022, doi:10.3390/bioengineering9100504.
+\bibitem{timercan2021} A. Timercan, V. Sheremetyev, and V. Brailovski, \emph{Sci. Technol. Adv. Mater.}, vol. 22, p. 285, 2021, doi:10.1080/14686996.2021.1907222.
+\bibitem{kelly2019} C. N. Kelly \emph{et al.}, \emph{Acta Biomater.}, vol. 94, p. 610, 2019, doi:10.1016/j.actbio.2019.05.046.
+\bibitem{lietaert2018} K. Lietaert \emph{et al.}, \emph{Sci. Rep.}, vol. 8, art. 4957, 2018, doi:10.1038/s41598-018-23414-2.
+\bibitem{benedetti2021} M. Benedetti, A. du Plessis \emph{et al.}, \emph{Mater. Sci. Eng. R}, vol. 144, art. 100606, 2021, doi:10.1016/j.mser.2021.100606.
+\bibitem{alana2021} M. Ala\~{n}a \emph{et al.}, \emph{Sci. Rep.}, vol. 11, 2021, doi:10.1038/s41598-021-98631-3.
+\bibitem{renishaw2017} Renishaw, \emph{Design for Metal AM: A Beginner's Guide}, 2017.
+\bibitem{carrozza2023} A. Carrozza, B. Bircher, A. Aversa, and S. Biamino, ``Investigating complex geometrical features in LPBF-produced parts: a material-based comparison between different titanium alloys,'' \emph{Met. Mater. Int.}, 2023, doi:10.1007/s12540-023-01460-4.
+\bibitem{solukon} Xometry DMLS design guide; Materialise metal design guide; Solukon depowdering guidance (powder ports 2--5~mm, $\ge 3$~mm).
+\bibitem{dodds2014} R. M. Dodds \emph{et al.}, ``Grip strength across the life course,'' \emph{PLoS ONE}, vol. 9, art. e113637, 2014, doi:10.1371/journal.pone.0113637.
+\bibitem{hidh} NASA, \emph{Human Integration Design Handbook (HIDH)}, NASA/SP-2010-3407/REV1, \S 9.12.2 and App.~B Table~8, 2014.
+\bibitem{mil1472h} U.S. Department of Defense, \emph{MIL-STD-1472H: Human Engineering}, \S 5.7.6.3--4 and Fig.~23, 2020.
+\bibitem{niosh2004} Cal/OSHA--NIOSH, \emph{Easy Ergonomics: A Guide to Selecting Non-Powered Hand Tools}, Pub. 2004-164, 2004.
+\bibitem{kong2005} Y.-K. Kong and B. D. Lowe, ``Optimal cylindrical handle diameter for grip force tasks,'' \emph{Int. J. Ind. Ergon.}, vol. 35, p. 495, 2005, doi:10.1016/j.ergon.2004.11.003.
+\bibitem{seo2008hf} N. J. Seo and T. J. Armstrong, ``Investigation of grip force, normal force, contact area, hand size, and handle size for cylindrical handles,'' \emph{Human Factors}, vol. 50, no. 5, pp. 734--744, 2008, doi:10.1518/001872008X354192.
+\bibitem{seo2011} N. J. Seo and T. J. Armstrong, ``Effect of elliptic handle shape on \ldots{} twisting ability,'' \emph{Ergonomics}, vol. 54, p. 961, 2011, doi:10.1080/00140139.2011.606923.
+\bibitem{ansur2} C. C. Gordon \emph{et al.}, \emph{ANSUR II}, NATICK/TR-15/007, 2014.
+\bibitem{faa-hfds} Federal Aviation Administration, \emph{Human Factors Design Standard (HFDS)}, App.~B (Anthropometry).
+\bibitem{tirloni2021} S. F. Tirloni \emph{et al.}, ``Cutting force measurement \ldots: a systematic review,'' \emph{EXCLI J.}, vol. 20, p. 727, 2021, doi:10.17179/excli2021-3167.
+\bibitem{cochran1986} D. J. Cochran and M. W. Riley, ``An evaluation of knife handle guarding,'' \emph{Human Factors}, vol. 28, p. 295, 1986, doi:10.1177/001872088602800305.
+\bibitem{buchholz1988} B. Buchholz, L. J. Frederick, and T. J. Armstrong, \emph{Ergonomics}, vol. 31, p. 317, 1988, doi:10.1080/00140138808966676.
+\bibitem{fransson1993} C. Fransson-Hall and \AA. Kilbom, ``Sensitivity of the hand to surface pressure,'' \emph{Appl. Ergon.}, vol. 24, p. 181, 1993.
+\bibitem{johansson1999} L. Johansson \emph{et al.}, ``Perception of surface pressure applied to the hand,'' \emph{Ergonomics}, vol. 42, p. 1274, 1999, doi:10.1080/001401399184947.
+\bibitem{aldien2005} Y. Aldien \emph{et al.}, \emph{Int. J. Ind. Ergon.}, vol. 35, p. 267, 2005, doi:10.1016/j.ergon.2004.09.005.
+\bibitem{osullivan2002} L. W. O'Sullivan and T. J. Gallwey, \emph{J. Electromyogr. Kinesiol.}, vol. 12, p. 275, 2002, doi:10.1016/S1050-6411(02)00014-7.
+\bibitem{yoshii2015} Y. Yoshii \emph{et al.}, \emph{BioMed. Eng. OnLine}, vol. 14, art. 115, 2015.
+\bibitem{kong2007} Y.-K. Kong \emph{et al.}, \emph{Ergonomics}, 2007 (screwdriving torque).
+\bibitem{mcgorry2005} R. W. McGorry, P. C. Dowd, and P. G. Dempsey, \emph{Appl. Ergon.}, 2005 (moments in knife use).
+\bibitem{walilko2005} T. J. Walilko, D. C. Viano, and C. A. Bir, ``Biomechanics of the head for Olympic boxer punches to the face,'' \emph{Br. J. Sports Med.}, vol. 39, no. 10, pp. 710--719, 2005.
+\bibitem{en8442} EN/ISO 8442-1 and -2, handle twist tests (via CATRA).
+\bibitem{iso8442-5} ISO 8442-5:2004, \emph{Materials and Articles in Contact with Foodstuffs---Cutlery and Table Holloware---Part 5: Specification for Sharpness and Edge Retention Test of Cutlery}, 2004.
+\bibitem{gost51501} GOST R 51501-99, tourist knives, Clause 9.5.1, 1999.
+\bibitem{mil8662e} U.S. Department of Defense, \emph{MIL-K-8662E: Pilot Survival Knife}, 1974.
+\bibitem{mil810h} U.S. Department of Defense, \emph{MIL-STD-810H}, Method 516.8, Procedure IV.
+\bibitem{fl1} ANSI/PLATO FL1-2019 (drop $\ge 1$~m onto concrete).
+\bibitem{en388} EN 388 puncture levels (20 / 60 / 100 / 150~N).
+\bibitem{gilchrist2008} M. D. Gilchrist \emph{et al.}, \emph{Forensic Sci. Int.}, vol. 177, p. 52, 2008.
+\bibitem{nolan2013} G. Nolan, S. V. Hainsworth, and G. N. Rutty, \emph{J. Forensic Sci.}, vol. 58, p. 372, 2013.
+\bibitem{hainsworth2008} S. V. Hainsworth \emph{et al.}, \emph{Int. J. Legal Med.}, vol. 122, p. 281, 2008, doi:10.1007/s00414-007-0202-6.
+\bibitem{thomas2018} L. Thomas, \texttt{knifesteelnerds.com}, CATRA regression and edge-geometry articles, 2018.
+\bibitem{zhang2023} Y. Zhang \emph{et al.}, \emph{Materials}, vol. 16, art. 5375, 2023.
+\bibitem{landes2006} R. Landes, \emph{Messerklingen und Stahl}, 2006 (via Thomas).
+\bibitem{us4823467} U.S. Patent 4,823,467 (serrated knife).
+\end{thebibliography}
+\end{document}

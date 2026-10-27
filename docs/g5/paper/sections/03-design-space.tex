@@ -1,0 +1,45 @@
+\section{The G5.0 design space}\label{sec:design}
+\subsection{Genome and decoder construction}
+A \code{G5.0} genome is a vector of \gGeneCount{} active genes $\mathbf{u} \in [0,1]^{\gGeneCount}$
+(\src{crates/g5/src/g5_genome.rs}{\code{g5_genome.rs}}), down from 179 in G3.0 after retiring inactive genes, the neural
+texture network, cusped serration parameters, and blade fenestration windows. \code{G5Genome::decode} maps $\mathbf{u}$ to
+named physical parameters, and \src{crates/g5/src/g5_sdf.rs}{\code{g5_sdf.rs}} builds a signed distance field (SDF) of the
+finished knife:
+\begin{itemize}
+\item \textbf{Ring and grip in requirement units.} The pommel ring has a fixed $24.9$~mm bore and an $8.0$~mm lip width
+(\code{owner-ring}). Rather than emerging indirectly from independent width and thickness offsets, the grip cross-section at
+the palm swell is parameterized directly by its perimeter (\code{grip\_perim} $\in [84, 100]$~mm) and its height-to-thickness
+ratio (\code{grip\_hot} $\in [1.2, 1.5]$ before dorsal/belly profiling, targeting $1.5$--$1.8$ total section $H/T$), matching
+the decoded superellipse within $0.2\,\%$. The integral guard is hung from the scaled grip heel so that scaling the grip
+never buries the guard lobe.
+\item \textbf{Claw blade and sharp point wedge.} The curved claw blade has straight-line reach capped at $85.725$~mm
+($3.375$~in) and sharpened arc capped at $101.6$~mm ($4.0$~in) per edge (\code{owner-reach}). Over the last
+\code{point\_len} $\in [10, 18]$~mm before the tip, a dedicated planform point wedge caps the half-width to
+$r \tan(\theta_\mathrm{point}/2)$ with $\theta_\mathrm{point} \in [22^\circ, 35^\circ]$, preventing the spine thickness
+profile from blunting the point in plan view (\code{owner-point}). The tip reserve $\Delta L \in [6, 16]$~mm keeps the distal
+piercing zone free of serrations and internal hollows.
+\item \textbf{Sheet TPMS interior and rib-clear drainage ports.} Inside an outer skin of $0.8$--$1.2$~mm ($1.0$~mm minimum on
+load-bearing walls), the hollow grip and blade core are filled with a sheet-TPMS lattice $|\phi_\mathrm{TPMS}| - t_\mathrm{sheet}/2 \le 0$
+ blending Gyroid and Schwarz-D surfaces at sheet wall thickness $t_\mathrm{sheet} \in [0.8, 1.1]$~mm~\cite{naghavi2022,kelly2019}.
+Powder-evacuation ports of diameter \code{port\_d} $\in [\gReqPortD, 4.0]$~mm ($\ge 2$ per cavity) are placed at
+$z = \pm 0.25\,t_y$, clear of the $z = 0$ mid-plane stiffening rib, and cut one full unit cell deep ($t_\mathrm{skin} + L_\mathrm{cell}$)
+into every hollow zone so that no rib bisects a port into sub-millimetre slits.
+\end{itemize}
+
+The frozen decoder is identified by the SHA-256 digest \gDecoder{}, computed by \code{g5\_decoder\_sha256}
+(\src{crates/g5/src/g5_qd.rs}{\code{g5_qd.rs}}) over every decoder, material, load, objective, solid-tip and shared
+finite-element source file, \code{RS-karambit-v5.toml}, and \code{Cargo.lock}.
+
+\subsection{Edge and serration construction rules}
+Both the concave inner edge (edge~A) and the convex spine edge (edge~B) follow the five \code{EDGE-1..5} rules: a single
+full-height primary grind per edge (\code{EDGE-1}), measured normal to the actual serrated edge contour (\code{EDGE-2}),
+with per-side angle $\theta \in [20^\circ, 25^\circ]$ and finished apex flat $t_\mathrm{apex} \in [0.05, 0.12]$~mm
+(\code{EDGE-3}), carried unbroken to the point except for a $5$--$12\,\%$ plunge ramp by the guard (\code{EDGE-4}), and
+checked across all steady-grind stations at $0$, $0.4$ and $2.0$~mm behind the apex (\code{EDGE-5}). Because the decoder
+represents the finished knife, the L-PBF build adds a $0.5$~mm finishing allowance per ground face~\cite{beretta2017,barricelli2022}
+that is removed when the primary bevels and serrations are ground after stress relief.
+
+Both edges carry medium serrations (\code{owner-serration}) over a span starting $16$--$24\,\%$ along the blade and ending
+at least $\max(\Delta L + 3, 18)$~mm before the point: pitch $p \in [4.0, 6.0]$~mm, depth $d \in [0.8, 1.5]$~mm with
+$d \le 0.25\,p$, at least three full-depth scallops per edge, and a rounded gullet profile whose bottom radius of curvature
+satisfies $r_g \ge p/(2\pi) \ge 0.5$~mm by construction~\cite{us4823467}.

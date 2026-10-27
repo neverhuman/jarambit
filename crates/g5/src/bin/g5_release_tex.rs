@@ -1,5 +1,6 @@
 //! `g5-release-tex`: LaTeX macros for the G5 release paper, generated from the committed release receipt, so the
-//! paper states no number by hand (owner, 2026-10-26: README and paper "100 % up to date"). Deterministic.
+//! paper states no number by hand (owner, 2026-10-27: README and paper "100 % accurate with the best individual").
+//! Deterministic and fail-closed: any missing key exits non-zero.
 //!
 //!   g5-release-tex <release.json> <out_dir> [release_version]
 //!
@@ -8,27 +9,45 @@
 //!
 //! Writes `<out_dir>/numbers.tex` (one `\newcommand` per quantity), `<out_dir>/topeight.tex` (ranking rows),
 //! `<out_dir>/lineage.tex` (the lineage strip) and `<out_dir>/assets.tex` (CAD files). A missing field is an error.
+use jarambit_g5::g5_genome::G5_NUM_GENES;
+use jarambit_g5::loads::G5Loads;
+use jarambit_g5::requirements::rs_v5;
 use serde_json::Value;
 use std::fmt::Write as _;
 use std::{fs, path::Path, process::exit};
 
+fn fail(msg: impl std::fmt::Display) -> ! {
+    eprintln!("g5-release-tex: FAIL: {msg}");
+    exit(2)
+}
+
 fn get<'a>(r: &'a Value, ptr: &str) -> &'a Value {
-    r.pointer(ptr).unwrap_or_else(|| {
-        eprintln!("g5-release-tex: release.json lacks {ptr}");
-        exit(2)
-    })
+    match r.pointer(ptr) {
+        Some(v) if !v.is_null() => v,
+        _ => fail(format!("missing {ptr}")),
+    }
 }
 
 fn num(r: &Value, ptr: &str) -> f64 {
-    get(r, ptr).as_f64().unwrap_or_else(|| {
-        eprintln!("g5-release-tex: {ptr} is not a number");
-        exit(2)
-    })
+    get(r, ptr)
+        .as_f64()
+        .unwrap_or_else(|| fail(format!("{ptr} is not a finite number")))
+}
+
+fn str_val(r: &Value, ptr: &str) -> String {
+    get(r, ptr)
+        .as_str()
+        .unwrap_or_else(|| fail(format!("{ptr} is not a string")))
+        .to_string()
 }
 
 /// LaTeX-safe text (identifiers with underscores, hex digests)
 fn tex(s: &str) -> String {
-    s.replace('\\', "\\textbackslash{}").replace('_', "\\_").replace('%', "\\%").replace('&', "\\&").replace('#', "\\#")
+    s.replace('\\', "\\textbackslash{}")
+        .replace('_', "\\_")
+        .replace('%', "\\%")
+        .replace('&', "\\&")
+        .replace('#', "\\#")
 }
 
 /// Thousands separator for counts (12,345)
@@ -48,231 +67,543 @@ fn count(v: f64) -> String {
 fn main() {
     let a: Vec<String> = std::env::args().collect();
     if a.len() != 3 && a.len() != 4 {
-        eprintln!("usage: g5-release-tex <release.json> <out_dir> [release_version]");
-        exit(2);
+        fail("usage: g5-release-tex <release.json> <out_dir> [release_version]");
     }
-    let r: Value = serde_json::from_str(&fs::read_to_string(&a[1]).expect("release.json")).expect("release.json is JSON");
+    let receipt_path = Path::new(&a[1]);
+    let r: Value = serde_json::from_str(
+        &fs::read_to_string(receipt_path).unwrap_or_else(|e| fail(format!("{}: {e}", receipt_path.display()))),
+    )
+    .unwrap_or_else(|e| fail(format!("{}: {e}", receipt_path.display())));
     let out = Path::new(&a[2]);
-    fs::create_dir_all(out).expect("out_dir");
+    fs::create_dir_all(out).unwrap_or_else(|e| fail(format!("{}: {e}", out.display())));
 
-    let s = |p: &str| get(&r, p).as_str().unwrap_or_else(|| { eprintln!("g5-release-tex: {p} is not text"); exit(2) }).to_string();
-    let f = |p: &str, d: usize| format!("{:.*}", d, num(&r, p));
+    let rs = rs_v5();
+    let f = |ptr: &str, d: usize| format!("{:.*}", d, num(&r, ptr));
+
+    let loads: G5Loads = serde_json::from_value(get(&r, "/loads").clone())
+        .unwrap_or_else(|e| fail(format!("invalid /loads: {e}")));
+    let marg_obj = get(&r, "/margins")
+        .as_object()
+        .unwrap_or_else(|| fail("/margins is not an object"));
+    let (worst_name, _) = marg_obj
+        .iter()
+        .map(|(k, v)| {
+            (
+                k.as_str(),
+                v.as_f64().unwrap_or_else(|| fail(format!("/margins/{k} not a number"))),
+            )
+        })
+        .min_by(|a, b| a.1.total_cmp(&b.1))
+        .unwrap_or_else(|| fail("empty /margins"));
+    let worst_v = num(&r, "/worst_margin");
+    let w_mult = num(&r, "/score/worst_margin_W");
+
+    let e_geo = num(&r, "/score/E");
+    let e_pow = e_geo.powf(rs.objective.e_exponent);
+
+    let commit_label = str_val(&r, "/provenance/decoder_commit_label");
+    let dec_full = str_val(&r, "/provenance/decoder_sha256");
+    let gen_full = str_val(&r, "/provenance/genome_sha256");
+
+    let mass_rec = num(&r, "/mass/of_record_g");
+    let mass_mesh = num(&r, "/mass/print_mesh_g");
+    let env_mm3 = num(&r, "/mass/envelope_mesh_volume_mm3");
+    let density = num(&r, "/mass/density_g_mm3");
+
+    let win_island = str_val(&r, "/evolution/winner_island");
+    let evo_islands = get(&r, "/evolution/islands")
+        .as_array()
+        .unwrap_or_else(|| fail("/evolution/islands not array"));
+    let win_isl_obj = evo_islands
+        .iter()
+        .find(|i| str_val(i, "/island") == win_island)
+        .unwrap_or_else(|| fail(format!("winner_island {win_island} missing in /evolution/islands")));
+    let score_sobol = num(win_isl_obj, "/after_sobol_init/best_score_100");
+    let score_search = num(win_isl_obj, "/final/best_score_100");
+
+    let base_isl = num(&r, "/baseline/islands");
+    let base_evals_per = num(&r, "/baseline/evaluations_per_island");
+    let base_scores = get(&r, "/evolution/baseline_final_best_score_100")
+        .as_array()
+        .unwrap_or_else(|| fail("/evolution/baseline_final_best_score_100 not array"));
+    let base_best = base_scores
+        .iter()
+        .map(|v| v.as_f64().unwrap_or_else(|| fail("baseline score not number")))
+        .fold(f64::NEG_INFINITY, f64::max);
+
+    let port_n = num(&r, "/decoded/port_n").round();
+
     let mut m: Vec<(&str, String)> = vec![
-        ("gVersion", a.get(3).cloned().unwrap_or_else(|| s("/version"))),
-        ("gRecord", s("/version")),
-        ("gDesign", format!("\\texttt{{{}}}", tex(&s("/design_id")))),
-        ("gStatus", tex(&s("/status"))),
-        ("gCommit", format!("\\texttt{{{}}}", &s("/provenance/git_commit")[..12])),
-        ("gDecoder", format!("\\texttt{{{}}}", &s("/provenance/decoder_sha256")[..12])),
-        ("gGenomeSha", format!("\\texttt{{{}}}", &s("/provenance/genome_sha256")[..12])),
-        ("gMetric", tex(&s("/provenance/metric"))),
-        ("gPlatform", tex(&s("/provenance/platform_of_record"))),
+        ("gVersion", a.get(3).cloned().unwrap_or_else(|| str_val(&r, "/version"))),
+        ("gRecord", str_val(&r, "/version")),
+        ("gDesign", format!("\\texttt{{{}}}", tex(&str_val(&r, "/design_id")))),
+        ("gStatus", tex(&str_val(&r, "/status"))),
+        ("gCommit", format!("\\texttt{{{}}}", tex(&commit_label))),
+        ("gDecoder", format!("\\texttt{{{}}}", &dec_full[..dec_full.len().min(12)])),
+        ("gGenomeSha", format!("\\texttt{{{}}}", &gen_full[..gen_full.len().min(12)])),
+        ("gGeneCount", G5_NUM_GENES.to_string()),
         ("gScore", f("/score/score_100", 2)),
         ("gBase", f("/score/base", 3)),
-        ("gE", f("/score/E", 3)),
-        ("gScoreArm", f("/arm64_score_100", 2)),
-        ("gMassG", f("/mass/mesh_g", 1)),
-        ("gMassVoxelG", f("/mass/search_voxel_g", 1)),
-        ("gVolAM", count(num(&r, "/mass/mesh_volume_mm3"))),
-        ("gVolEnv", count(num(&r, "/mass/envelope_volume_mm3"))),
-        ("gDensity", f("/mass/density_g_mm3", 5)),
+        ("gE", format!("{e_geo:.3}")),
+        ("gEFive", format!("{e_pow:.3}")),
+        ("gW", format!("{w_mult:.3}")),
+        ("gWorstMarginRatio", format!("{worst_v:.2}")),
+        ("gWorstMarginCase", tex(worst_name)),
+        ("gMassFinishedG", format!("{mass_rec:.2}")),
+        ("gMassG", format!("{mass_mesh:.2}")),
+        ("gVolEnv", count(env_mm3)),
+        ("gMassEnvG", format!("{:.1}", env_mm3 * density)),
+        (
+            "gMassReading",
+            if mass_rec <= rs.mass.goal_g {
+                format!("meets the {:.0} g goal (frontier)", rs.mass.goal_g)
+            } else if mass_rec <= rs.mass.ceiling_g {
+                format!(
+                    "is above the {:.0} g goal (frontier) and under the {:.0} g ceiling",
+                    rs.mass.goal_g, rs.mass.ceiling_g
+                )
+            } else {
+                format!("exceeds the {:.0} g ceiling", rs.mass.ceiling_g)
+            },
+        ),
+        ("gHost", tex(&str_val(&r, "/provenance/platform_of_record"))),
         ("gIslands", count(num(&r, "/cohort/islands"))),
         ("gEvalsIsland", count(num(&r, "/cohort/evaluations_per_island"))),
-        ("gEvalsIslandRaw", f("/cohort/evaluations_per_island", 0)), // for command lines (no separators)
+        ("gEvalsIslandRaw", f("/cohort/evaluations_per_island", 0)),
         ("gEvalsTotal", count(num(&r, "/cohort/evaluations_total"))),
-        ("gElites", count(num(&r, "/cohort/elites"))),
-        ("gTierTwo", count(num(&r, "/cohort/tier2_elites"))),
-        ("gGateOne", f("/cohort/tier_gates/0", 0)),
-        ("gGateTwo", f("/cohort/tier_gates/1", 0)),
+        ("gCohortElites", count(num(&r, "/cohort/elites"))),
+        ("gTierOneReproduced", count(num(&r, "/cohort/tier1_rows_reproduced"))),
         ("gH", f("/cohort/h_mm", 1)),
-        ("gHRank", f("/cohort/ranking_h_mm", 1)),
-        ("gMassRankG", f("/mass/ranking_voxel_g", 1)),
-        ("gScoreSearch", f("/search_score_100", 2)),
-        ("gLeader", format!("\\texttt{{{}}}", tex(&s("/grid_check/search_leader/design_id")))),
-        ("gLeaderTierTwo", f("/grid_check/search_leader/tier2_score_100_h04", 2)),
-        ("gLeaderMassA", f("/grid_check/search_leader/mass_g_h04", 1)),
-        ("gLeaderMassB", f("/grid_check/search_leader/mass_g_h02", 1)),
-        ("gLeaderMassC", f("/grid_check/search_leader/mass_g_h015", 1)),
-        ("gGridAgree", f("/grid_check/h02_vs_h015_max_rel_pct", 1)),
-        ("gLeaderScoreA", f("/grid_check/search_leader/tier1_score_100_h04", 2)),
-        ("gLeaderScoreB", f("/grid_check/search_leader/tier1_score_100_h02", 2)),
-        ("gHost", tex(&s("/cohort/host"))),
-        ("gStarted", tex(&s("/cohort/started_utc"))),
-        ("gFinished", tex(&s("/cohort/finished_utc"))),
-        ("gWinIsland", tex(&s("/evolution/winner_island"))),
-        ("gScoreSobol", f("/evolution/winner_island_after_sobol/best_score_100", 2)),
-        ("gTipSF", f("/inputs/solid_tip_sf", 2)),
-        ("gGripSF", f("/inputs/grip_sf_min", 2)),
-        ("gLatN", f("/inputs/lat_rob_cert_n", 0)),
-        ("gHmTwist", f("/inputs/hm_twist_sf", 2)),
-        ("gHmSpine", f("/inputs/hm_spine_sf", 2)),
-        ("gFat", f("/inputs/fat_sf", 2)),
-        ("gSeq", f("/inputs/seq_ratio", 2)),
-        ("gBuck", f("/inputs/buckling_lambda", 1)),
-        ("gRingBear", count(num(&r, "/inputs/ring_bearing_cap_n"))),
-        ("gRingBack", count(num(&r, "/inputs/ring_back_cap_n"))),
-        ("gLg", f("/inputs/L_g_mm", 1)),
-        ("gSwellPerim", f("/inputs/swell_perimeter_mm", 1)),
-        ("gHoT", f("/inputs/swell_h_over_t", 2)),
-        ("gComIdx", f("/inputs/com_to_index_mm", 1)),
-        ("gGuardH", f("/inputs/guard_h_mm", 1)),
-        ("gApexMax", f("/blade/gate_s/max_apex_mm", 3)),
-        ("gHalfAngleMax", f("/blade/gate_s/max_half_angle_deg", 1)),
+        ("gHRank", f("/ranking/h_mm", 1)),
+        ("gShortlist", count(num(&r, "/ranking/shortlist"))),
+        ("gStarted", tex(&str_val(&r, "/cohort/started_utc"))),
+        ("gFinished", tex(&str_val(&r, "/cohort/finished_utc"))),
+        ("gArchiveNiches", count(num(&r, "/cohort/launch/archive_niches"))),
+        ("gLaunchInit", count(num(&r, "/cohort/launch/cohort/init"))),
+        ("gLaunchHost", f("/cohort/launch/cohort/host", 0)),
+        (
+            "gLaunchTierOneTopPct",
+            format!("{:.0}", 100.0 * num(&r, "/cohort/launch/cohort/tier1_top")),
+        ),
+        (
+            "gLaunchTierOneTop",
+            format!("{}", num(&r, "/cohort/launch/cohort/tier1_top")),
+        ),
+        (
+            "gLaunchTierTwoTop",
+            format!("{}", num(&r, "/cohort/launch/cohort/tier2_top")),
+        ),
+        ("gLaunchLogEvery", f("/cohort/launch/cohort/log_every", 0)),
+        ("gReproEvals", count(num(&r, "/cohort/reproduced/evaluations"))),
+        ("gReproEntries", count(num(&r, "/cohort/reproduced/history_entries_identical"))),
+        ("gBaselineIslands", count(base_isl)),
+        ("gBaselineEvals", count(base_isl * base_evals_per)),
+        ("gBaselineBest", format!("{base_best:.2}")),
+        ("gBeatingBaseline", count(num(&r, "/evolution/cohort_islands_beating_best_baseline"))),
+        ("gCohortSobolMed", f("/evolution/cohort_after_sobol_init_median_score_100", 2)),
+        ("gCohortMed", f("/evolution/cohort_final_best_score_100/median", 2)),
+        ("gCohortMin", f("/evolution/cohort_final_best_score_100/min", 2)),
+        ("gCohortMax", f("/evolution/cohort_final_best_score_100/max", 2)),
+        ("gWinIsland", tex(&win_island)),
+        ("gWinFoundEvals", count(num(&r, "/evolution/winner_first_island_best_at_evals"))),
+        ("gScoreSobol", format!("{score_sobol:.2}")),
+        ("gScoreSearch", format!("{score_search:.2}")),
+        ("gWinnerSearchScore", f("/search_score_100", 2)),
+        (
+            "gSearchLeaderId",
+            format!("\\texttt{{{}}}", tex(&str_val(&r, "/ranking/search_leader/design_id"))),
+        ),
+        ("gSearchLeaderTierOne", f("/ranking/search_leader/tier1_h04_score_100", 2)),
+        ("gSearchLeaderTierTwo", f("/ranking/search_leader/tier2_h02_score_100", 2)),
+        ("gSearchLeaderRank", count(num(&r, "/ranking/search_leader/tier2_rank"))),
+        ("gSearchLeaderMargin", f("/ranking/search_leader/tier2_worst_margin", 2)),
+        ("gSearchLeaderTipSecAx", f("/ranking/search_leader/tip_sf_sections_h04/axial", 2)),
+        ("gSearchLeaderTipSolAx", f("/ranking/search_leader/tip_sf_solid_h02/axial", 2)),
+        ("gSealedVoid", f("/am/sealed_void_mm3", 1)),
+        ("gCreviceVoid", f("/am/crevice_mm3", 1)),
+        ("gPortCount", format!("{port_n:.0}")),
+        ("gPortD", f("/decoded/port_d", 2)),
+        ("gLg", f("/ergonomics/grip_length_mm", 1)),
+        ("gSwellPerim", f("/ergonomics/grip_perimeter_mm", 1)),
+        ("gHoT", f("/ergonomics/grip_h_over_t", 2)),
+        ("gGuardH", f("/ergonomics/guard_height_mm", 1)),
+        ("gComIdx", f("/ergonomics/com_to_index_mm", 1)),
         ("gReach", f("/blade/reach_chord_mm", 1)),
-        ("gToothSnag", f("/blade/tooth_loads_n/snag_along_edge", 0)),
-        ("gToothPry", f("/blade/tooth_loads_n/pry_across_blade", 0)),
-        ("gFeAllow", f("/fe_certification/allow_mpa", 0)),
-        ("gFeH", f("/fe_certification/hex8_voxel_fe_h_mm", 1)),
-        ("gFeGripLat", f("/fe_certification/grip_sf/lat", 2)),
-        ("gFeGripTwist", f("/fe_certification/grip_sf/twist", 2)),
-        ("gFeGripSpine", f("/fe_certification/grip_sf/spine", 2)),
-        ("gFeRootLat", f("/fe_certification/root_sf/lat", 2)),
-        ("gFeRootTwist", f("/fe_certification/root_sf/twist", 2)),
-        ("gFeRootSpine", f("/fe_certification/root_sf/spine", 2)),
-        ("gFormLat", f("/fe_certification/formula_sf/sf_lat", 2)),
-        ("gFormTwist", f("/fe_certification/formula_sf/sf_twist", 2)),
-        ("gFormSpine", f("/fe_certification/formula_sf/sf_spine", 2)),
-        ("gTipConvA", f("/fe_certification/tip_tet10_sf_by_mesh_area_mm2/area_0p4", 3)),
-        ("gTipConvB", f("/fe_certification/tip_tet10_sf_by_mesh_area_mm2/area_0p15_production", 3)),
-        ("gTipConvC", f("/fe_certification/tip_tet10_sf_by_mesh_area_mm2/area_0p08", 3)),
+        ("gPointAngleOne", f("/point/angle_1mm_deg", 1)),
+        ("gPointAngleThree", f("/point/angle_3mm_deg", 1)),
+        ("gPointWidthTwo", f("/point/width_2mm", 2)),
+        ("gEdgeAAngle", f("/blade/edge_inner/per_side_angle_gene_deg", 1)),
+        ("gEdgeBAngle", f("/blade/edge_spine/per_side_angle_gene_deg", 1)),
+        ("gEdgeMaxAngle", f("/blade/max_half_angle_deg", 1)),
+        ("gEdgeMaxApex", f("/blade/max_apex_mm", 3)),
+        ("gEdgeADepth", f("/blade/edge_inner/serration_depth_mm", 2)),
+        ("gEdgeATeeth", f("/blade/edge_inner/teeth", 0)),
+        ("gEdgeBDepth", f("/blade/edge_spine/serration_depth_mm", 2)),
+        ("gEdgeBTeeth", f("/blade/edge_spine/teeth", 0)),
+        ("gTexAmp", f("/decoded/tex_amp", 2)),
+        ("gTexPitch", f("/decoded/tex_pitch", 2)),
+        ("gScopeBlade", f("/decoded/scope_blade", 2)),
+        ("gScopeBladeThree", f("/decoded/scope_blade", 3)),
+        ("gLinuxDesigns", count(num(&r, "/ranking/linux_check/designs"))),
+        ("gLinuxMaxRelDiff", format!("{:.2e}", num(&r, "/ranking/linux_check/max_rel_diff"))),
+        ("gLinuxMaxRelDiffPct", format!("{:.2}", 100.0 * num(&r, "/ranking/linux_check/max_rel_diff"))),
+        ("gLinuxWinRank", count(num(&r, "/ranking/linux_check/winner_rank_linux"))),
+        ("gLinuxEvoEvals", count(num(&r, "/ranking/linux_check/evolution/same_best_genome_through_evals"))),
+        (
+            "gLinuxEvoRelDiff",
+            format!(
+                "{:.2e}",
+                num(&r, "/ranking/linux_check/evolution/max_rel_diff_best_score_while_same_genome")
+            ),
+        ),
     ];
-    for (edge, tag) in [("edge_inner", "A"), ("edge_spine", "B")] {
-        let p = |k: &str| format!("/blade/{edge}/{k}");
-        let names = |k: &str| -> &'static str { Box::leak(format!("gEdge{tag}{k}").into_boxed_str()) };
-        m.push((names("ApexLo"), f(&p("per_side_angle_apex_deg/0"), 1)));
-        m.push((names("ApexHi"), f(&p("per_side_angle_apex_deg/1"), 1)));
-        m.push((names("BevelLo"), f(&p("per_side_angle_bevel_deg/0"), 1)));
-        m.push((names("BevelHi"), f(&p("per_side_angle_bevel_deg/1"), 1)));
-        m.push((names("Steep"), f(&p("steepest_within_2mm_deg"), 1)));
-        m.push((names("From"), f(&p("ground_from_mm_from_point"), 1)));
-        m.push((names("To"), f(&p("ground_to_mm_from_point"), 1)));
-        m.push((names("Plunge"), f(&p("unground_plunge_mm"), 1)));
-        m.push((names("Depth"), f(&p("serration_depth_mm"), 2)));
-        m.push((names("Teeth"), f(&p("teeth"), 0))); // scallops (gullets) cut to full depth
-        m.push((names("TeethChecked"), f(&p("teeth_checked"), 0))); // teeth between two scallops, strength-checked
-        m.push((names("ToothSF"), f(&p("tooth_root_sf_min"), 2)));
-        m.push((names("Flank"), f(&p("mean_flank_deg"), 0)));
-        m.push((names("Arc"), f(&p("edge_arc_mm"), 1)));
-        m.push((names("Sharpened"), f(&p("sharpened_arc_mm"), 1)));
-    }
-    // readings against the targets stated in the text, so prose never asserts an outcome by hand
-    let reading = |ok: bool| if ok { "meets the target".to_string() } else { "is below the target".to_string() };
-    let tooth = num(&r, "/blade/edge_inner/tooth_root_sf_min").min(num(&r, "/blade/edge_spine/tooth_root_sf_min"));
-    m.push(("gMassReading", if num(&r, "/mass/mesh_g") <= 50.0 { "meets the 50 g goal".into() } else { "is above the 50 g goal".into() }));
-    m.push(("gTipReading", reading(num(&r, "/inputs/solid_tip_sf") >= 1.0)));
-    m.push(("gGripReading", reading(num(&r, "/inputs/grip_sf_min").min(num(&r, "/fe_certification/grip_sf/spine")) >= 1.0)));
-    m.push(("gTwistReading", reading(num(&r, "/inputs/hm_twist_sf").min(num(&r, "/fe_certification/root_sf/twist")) >= 1.0)));
-    m.push(("gSpineReading", reading(num(&r, "/inputs/hm_spine_sf") >= 1.0)));
-    m.push(("gToothReading", reading(tooth >= 1.0)));
-    m.push(("gToothMin", format!("{tooth:.2}")));
-    m.push(("gFatReading", reading(num(&r, "/inputs/fat_sf") >= 1.0)));
-    m.push(("gSeqReading", reading(num(&r, "/inputs/seq_ratio") >= 1.2)));
-    m.push(("gLatReading", reading(num(&r, "/inputs/lat_rob_cert_n") >= 260.0)));
-    m.push(("gRingReading", reading(num(&r, "/inputs/ring_bearing_cap_n") >= 600.0 && num(&r, "/inputs/ring_back_cap_n") >= 60.0)));
-    m.push(("gBuckReading", reading(num(&r, "/inputs/buckling_lambda") >= 1.0)));
 
-    // v3.0.3 diagnostics next to the receipt (written by g5-diagnostics; none of them changes the receipt or the
-    // ranking). A missing file or field is an error, like a missing receipt field.
-    let diag_dir = Path::new(&a[1]).parent().expect("receipt directory").join("diagnostics");
-    let diag = |name: &str| -> Value {
-        let p = diag_dir.join(format!("{name}.json"));
-        serde_json::from_str(&fs::read_to_string(&p).unwrap_or_else(|e| { eprintln!("g5-release-tex: {}: {e}", p.display()); exit(2) }))
-            .unwrap_or_else(|e| { eprintln!("g5-release-tex: {}: {e}", p.display()); exit(2) })
-    };
-    let dn = |v: &Value, ptr: &str| -> f64 {
-        v.pointer(ptr).and_then(Value::as_f64).unwrap_or_else(|| { eprintln!("g5-release-tex: diagnostics lack {ptr}"); exit(2) })
-    };
-    let (seq, tipr, zone, plate) = (diag("seq_per_lc"), diag("tip_raster"), diag("zone_mass"), diag("plate_meshconv"));
-    let fe = "/per_load_case_sequence_ratio_voxel_fe";
-    m.push(("gSeqLat", format!("{:.2}", dn(&seq, &format!("{fe}/lateral_260n")))));
-    m.push(("gSeqTwist", format!("{:.2}", dn(&seq, &format!("{fe}/twist_16p2nm")))));
-    m.push(("gSeqSpine", format!("{:.2}", dn(&seq, &format!("{fe}/spine_3427n")))));
-    m.push(("gFatCorr", format!("{:.2}", dn(&seq, "/goodman_fatigue_180n_audit/corrected_fat_sf_from_true_plate_peak"))));
-    m.push(("gJointK", format!("{:.3}", dn(&seq, "/goodman_fatigue_180n_audit/joint_k_t_core"))));
-    m.push(("gScoreAtMesh", format!("{:.2}", dn(&seq, "/mass_of_record_score_audit/score_100_at_print_mesh_mass"))));
-    m.push(("gTipRaster", format!("{:.2}", dn(&tipr, "/half_cell_raster_shift_audit_at_0p15_mm2/sf_cell_center_aligned"))));
-    for (k, name) in ["One", "Two", "Three"].iter().enumerate() {
-        m.push((Box::leak(format!("gTipAngle{name}").into_boxed_str()),
-                format!("{:.0}", dn(&tipr, &format!("/planform_point_geometry/stations/{k}/included_angle_deg")))));
+    // 16 RS-karambit-v5 load cases and their margin ratios v = SF / SF_req directly from /margins
+    let load_macros: [(&str, &str, f64, &str); 16] = [
+        ("gLoadLatLim", "gMarginLatLim", loads.lateral_limit_sf.min(loads.grip_lateral_sf), "/margins/lateral_limit"),
+        ("gLoadLatUlt", "gMarginLatUlt", loads.lateral_ultimate_sf, "/margins/lateral_ultimate"),
+        ("gLoadTwistLim", "gMarginTwistLim", loads.twist_limit_sf.min(loads.grip_twist_sf), "/margins/twist_limit"),
+        ("gLoadTipAxial", "gMarginTipAxial", loads.tip_axial_sf, "/margins/tip_axial"),
+        ("gLoadTipLat", "gMarginTipLat", loads.tip_lateral_sf, "/margins/tip_lateral"),
+        ("gLoadTipTwist", "gMarginTipTwist", loads.tip_twist_sf, "/margins/tip_twist"),
+        ("gLoadGripSqueeze", "gMarginGripSqueeze", loads.grip_squeeze_sf, "/margins/grip_squeeze"),
+        ("gLoadGuardPush", "gMarginGuardPush", loads.guard_push_sf, "/margins/guard_push"),
+        ("gLoadRingBear", "gMarginRingBear", loads.ring_bearing_sf, "/margins/ring_bearing"),
+        ("gLoadRingBack", "gMarginRingBack", loads.ring_back_sf, "/margins/ring_back"),
+        ("gLoadRingAny", "gMarginRingAny", loads.ring_any_direction_sf, "/margins/ring_any_direction"),
+        ("gLoadPull", "gMarginPull", loads.pull_sf.min(loads.grip_pull_sf), "/margins/pull"),
+        ("gLoadTeeth", "gMarginTeeth", loads.teeth_sf, "/margins/teeth"),
+        ("gLoadFatigue", "gMarginFatigue", loads.fatigue_sf.min(loads.hand_fatigue_sf), "/margins/fatigue"),
+        ("gLoadSeqMin", "gMarginSeq", loads.seq_min(), "/margins/sequence"),
+        ("gLoadBuckling", "gMarginBuckling", loads.buckling_lambda, "/margins/buckling"),
+    ];
+    for (sf_k, m_k, sf_val, m_ptr) in load_macros {
+        m.push((sf_k, format!("{sf_val:.2}")));
+        m.push((m_k, f(m_ptr, 2)));
     }
-    m.push(("gTipWidthTwo", format!("{:.1}", dn(&tipr, "/planform_point_geometry/stations/1/planform_width_mm"))));
-    for (k, name) in ["A", "B", "C", "D"].iter().enumerate() {
-        m.push((Box::leak(format!("gPlateLat{name}").into_boxed_str()),
-                format!("{:.0}", dn(&plate, &format!("/subsampled_45_station_series/{k}/lateral_capacity_n")))));
-        m.push((Box::leak(format!("gPlateArea{name}").into_boxed_str()),
-                { let v = dn(&plate, &format!("/subsampled_45_station_series/{k}/max_area_mm2")); if v.fract() == 0.0 { format!("{v:.1}") } else { format!("{v}") } }));
-    }
-    m.push(("gMassUploadG", format!("{:.1}", dn(&zone, "/am_stl_total_mass_g"))));
-    let share = |pred: &dyn Fn(&str) -> bool| -> f64 {
-        get(&zone, "/zones").as_array().expect("zones").iter()
-            .filter(|z| pred(z["zone"].as_str().unwrap_or(""))).map(|z| z["am_share_pct"].as_f64().unwrap()).sum()
-    };
-    m.push(("gZoneGripPct", format!("{:.0}", share(&|z| z.starts_with("grip")))));
-    m.push(("gZoneRingPct", format!("{:.0}", share(&|z| z.starts_with("ring")))));
-    m.push(("gZoneBladePct", format!("{:.0}", share(&|z| z.starts_with("blade")))));
-    let top = get(&r, "/cohort/top8_linux").as_array().expect("top8");
-    m.push(("gTopLast", format!("{:.2}", top[top.len() - 1]["score_100"].as_f64().unwrap())));
-    // what 1 % of the ergonomic multiplier is worth in grams of mass credit (the mass term is linear between the
-    // RS-karambit-v3 ceiling and floor; its weight is ergolight::WEIGHTS["mass"])
-    let rs = fs::read_to_string(Path::new(env!("CARGO_MANIFEST_DIR")).join("../../requirements/RS-karambit-v3.toml")).expect("RS-karambit-v3.toml");
-    let rs_num = |key: &str| -> f64 {
-        rs.lines().find_map(|l| l.trim().strip_prefix(key).and_then(|t| t.trim_start().strip_prefix('=')).map(|v| v.trim().parse::<f64>().unwrap()))
-            .unwrap_or_else(|| { eprintln!("g5-release-tex: RS-karambit-v3.toml lacks {key}"); exit(2) })
-    };
-    let w_mass = jarambit_g5::ergolight::WEIGHTS.iter().find(|(k, _)| *k == "mass").expect("mass weight").1;
-    let pts_per_g = 100.0 * num(&r, "/score/E") * w_mass / (rs_num("mass_ceiling_g") - rs_num("mass_floor_g"));
+
+    // Mass-vs-ergonomics trade at the winning design under W_ERGOLIGHT_v2
+    let pts_per_g = 100.0 * e_pow * w_mult * rs.objective.mass_weight / (rs.mass.ceiling_g - rs.mass.floor_g);
+    let grams_per_pct_e = rs.objective.grams_per_percent_e(num(&r, "/score/base"), &rs.mass);
     m.push(("gPtsPerGram", format!("{pts_per_g:.3}")));
-    m.push(("gGramsPerPctE", format!("{:.1}", num(&r, "/score/score_100") * 0.01 / pts_per_g)));
-    let mut numbers = String::from("% generated by g5-release-tex from evidence/g5/v<VERSION>/release.json; do not edit\n");
-    for (k, v) in &m {
-        let _ = writeln!(numbers, "\\newcommand{{\\{k}}}{{{v}}}");
-    }
-    let _ = writeln!(numbers, "\\graphicspath{{{{../v{}/img/}}}}", s("/version"));
-    fs::write(out.join("numbers.tex"), numbers).unwrap();
+    m.push(("gGramsPerPctE", format!("{grams_per_pct_e:.1}")));
 
-    let mut top = String::from("% generated by g5-release-tex; rows: rank & design & Linux Tier-2 score & mass, both at the ranking grid\n");
-    for (k, t) in get(&r, "/cohort/top8_linux").as_array().expect("top8").iter().enumerate() {
-        let _ = writeln!(top, "{} & \\texttt{{{}}} & {:.2} & {:.1} \\\\", k + 1, tex(t["design_id"].as_str().unwrap()),
-                         t["score_100"].as_f64().unwrap(), t["mass_g"].as_f64().unwrap());
+    // Ranking & grid check tables
+    let top_arr = get(&r, "/ranking/rows")
+        .as_array()
+        .unwrap_or_else(|| fail("/ranking/rows not array"));
+    m.push(("gTopRanked", top_arr.len().to_string()));
+    let n_show = top_arr.len().min(8);
+    if n_show == 0 {
+        fail("empty /ranking/rows");
+    }
+    m.push((
+        "gTopLast",
+        format!("{:.2}", num(&top_arr[n_show - 1], "/score_100")),
+    ));
+
+    let mut top = String::from("% generated by g5-release-tex; rows: rank & design & Tier-2 score & W & mass\n");
+    for t in top_arr.iter().take(8) {
+        let _ = writeln!(
+            top,
+            "{:.0} & \\texttt{{{}}} & {:.2} & {:.3} & {:.1} \\\\",
+            num(t, "/rank"),
+            tex(&str_val(t, "/design_id")),
+            num(t, "/score_100"),
+            num(t, "/worst_margin_W"),
+            num(t, "/mass_g")
+        );
     }
     fs::write(out.join("topeight.tex"), &top).unwrap();
 
-    let mut grid = String::from("% generated by g5-release-tex: design & mass (g) at each grid h of /grid_check/h_mm\n");
-    for g in get(&r, "/grid_check/rows").as_array().expect("grid rows") {
-        let masses: Vec<String> = g["mass_g"].as_array().unwrap().iter().map(|v| format!("{:.1}", v.as_f64().unwrap())).collect();
-        let _ = writeln!(grid, "\\texttt{{{}}} & {} \\\\", tex(g["design_id"].as_str().unwrap()), masses.join(" & "));
+    let gc_rows = get(&r, "/grid_check/rows")
+        .as_array()
+        .unwrap_or_else(|| fail("/grid_check/rows not array"));
+    let mut max_h02_h015_pct = 0.0_f64;
+    let mut max_h04_h02_pct = 0.0_f64;
+    let mut grid = String::from("% generated by g5-release-tex: design & mass (g) at each grid h\n");
+    for g in gc_rows {
+        let masses: Vec<f64> = get(g, "/mass_g")
+            .as_array()
+            .unwrap_or_else(|| fail("grid_check row /mass_g not array"))
+            .iter()
+            .map(|v| v.as_f64().unwrap_or_else(|| fail("grid mass not number")))
+            .collect();
+        if masses.len() != 5 {
+            fail("grid_check row must have 5 masses");
+        }
+        let d_fine = num(g, "/mass_rel_h020_vs_h015") * 100.0;
+        let d_span = ((masses[0] - masses[3]).abs() / masses[3].max(1e-9)) * 100.0;
+        max_h02_h015_pct = max_h02_h015_pct.max(d_fine);
+        max_h04_h02_pct = max_h04_h02_pct.max(d_span);
+        let m_str: Vec<String> = masses.iter().map(|v| format!("{v:.1}")).collect();
+        let _ = writeln!(
+            grid,
+            "\\texttt{{{}}} & {} \\\\",
+            tex(&str_val(g, "/design_id")),
+            m_str.join(" & ")
+        );
     }
+    m.push(("gGridAgree", format!("{max_h02_h015_pct:.2}")));
+    m.push(("gGridSpanPct", format!("{max_h04_h02_pct:.2}")));
 
-    let lin = get(&r, "/evolution/lineage").as_array().expect("lineage");
+    // Verification & validation receipts (vv/*.json next to release.json)
+    let vv_dir = receipt_path.parent().expect("receipt dir").join("vv");
+    let read_vv = |name: &str| -> Value {
+        let p = vv_dir.join(format!("{name}.json"));
+        serde_json::from_str(&fs::read_to_string(&p).unwrap_or_else(|e| fail(format!("{}: {e}", p.display()))))
+            .unwrap_or_else(|e| fail(format!("{}: {e}", p.display())))
+    };
+    let plate_vv = read_vv("plate_mesh");
+    let tip_vv = read_vv("tip_mesh");
+    let checks_vv = read_vv("checks");
+    let targets_vv = read_vv("decoder_targets");
+    let p_rows = get(&plate_vv, "/rows").as_array().unwrap_or_else(|| fail("plate_mesh rows"));
+    let p_row = get(&p_rows[p_rows.len().min(3) - 1], "/plate")
+        .as_array()
+        .unwrap_or_else(|| fail("plate array"));
+    // plate_mesh.json has areas [1.2, 0.6, 0.3, 0.15] -> indices 0, 2, 3 are 1.2, 0.3, 0.15
+    m.push(("gVvPlateLatA", format!("{:.2}", num(&p_row[0], "/lateral_sf"))));
+    m.push(("gVvPlateLatB", format!("{:.2}", num(&p_row[2], "/lateral_sf"))));
+    m.push(("gVvPlateLatC", format!("{:.2}", num(&p_row[3], "/lateral_sf"))));
+    m.push(("gVvPlateTwistA", format!("{:.2}", num(&p_row[0], "/twist_sf"))));
+    m.push(("gVvPlateTwistB", format!("{:.2}", num(&p_row[2], "/twist_sf"))));
+    m.push(("gVvPlateTwistC", format!("{:.2}", num(&p_row[3], "/twist_sf"))));
+    m.push(("gVvPlateProdArea", format!("{:.1}", num(&plate_vv, "/production_max_area_mm2"))));
+    let mut max_lat_spread_pct = 0.0_f64;
+    let mut max_tw_spread_pct = 0.0_f64;
+    for r_pl in p_rows {
+        let pl = get(r_pl, "/plate").as_array().unwrap_or_else(|| fail("plate array"));
+        let lats: Vec<f64> = pl.iter().map(|x| num(x, "/lateral_sf")).collect();
+        let tws: Vec<f64> = pl.iter().map(|x| num(x, "/twist_sf")).collect();
+        let l_min = lats.iter().copied().fold(f64::INFINITY, f64::min);
+        let l_max = lats.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+        let t_min = tws.iter().copied().fold(f64::INFINITY, f64::min);
+        let t_max = tws.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+        max_lat_spread_pct = max_lat_spread_pct.max(100.0 * (l_max - l_min) / l_min);
+        max_tw_spread_pct = max_tw_spread_pct.max(100.0 * (t_max - t_min) / t_min);
+    }
+    m.push(("gVvPlateLatSpreadPct", format!("{max_lat_spread_pct:.1}")));
+    m.push(("gVvPlateTwistSpreadPct", format!("{max_tw_spread_pct:.1}")));
+
+    let t_rows = get(&tip_vv, "/rows").as_array().unwrap_or_else(|| fail("tip_mesh rows"));
+    let t_row = &t_rows[t_rows.len().min(3) - 1];
+    let t_sec = get(t_row, "/sections");
+    let t_sol = get(t_row, "/solid").as_array().unwrap_or_else(|| fail("tip solid array"));
+    m.push(("gVvTipAxA", format!("{:.2}", num(t_sec, "/axial_sf"))));
+    m.push(("gVvTipAxB", format!("{:.2}", num(&t_sol[0], "/axial_sf"))));
+    m.push(("gVvTipAxC", format!("{:.2}", num(&t_sol[1], "/axial_sf"))));
+    m.push(("gVvTipLatA", format!("{:.2}", num(t_sec, "/lateral_sf"))));
+    m.push(("gVvTipLatB", format!("{:.2}", num(&t_sol[0], "/lateral_sf"))));
+    m.push(("gVvTipLatC", format!("{:.2}", num(&t_sol[1], "/lateral_sf"))));
+    m.push(("gVvTipTwA", format!("{:.2}", num(t_sec, "/twist_sf"))));
+    m.push(("gVvTipTwB", format!("{:.2}", num(&t_sol[0], "/twist_sf"))));
+    m.push(("gVvTipTwC", format!("{:.2}", num(&t_sol[1], "/twist_sf"))));
+
+    let perim_err_pct = num(&targets_vv, "/max_perimeter_rel_err") * 100.0;
+    let lloyd_q = num(&checks_vv, "/cvt_1024/lloyd_quantisation_error");
+    let halton_q = num(&checks_vv, "/cvt_1024/halton_quantisation_error");
+    let grams_per_pct_e = num(&checks_vv, "/objective/grams_per_percent_e_at_base_0_6");
+    let ritz_err = num(&checks_vv, "/ritz_column/rel_err").abs();
+    m.push(("gVvPerimErrPct", format!("{perim_err_pct:.2}")));
+    m.push(("gVvLloydErr", format!("{lloyd_q:.3}")));
+    m.push(("gVvHaltonErr", format!("{halton_q:.3}")));
+    m.push(("gVvGramsPerPctE", format!("{grams_per_pct_e:.1}")));
+    m.push(("gVvRitzErr", format!("{ritz_err:.1e}")));
+
+    // RS-karambit-v5.toml requirement macros (from compiled-in strict loader)
+    let rs = jarambit_g5::requirements::rs_v5();
+    m.push(("gReqMassCeil", format!("{:.0}", rs.mass.ceiling_g)));
+    m.push(("gReqMassFloor", format!("{:.0}", rs.mass.floor_g)));
+    m.push(("gReqMassGoal", format!("{:.0}", rs.mass.goal_g)));
+    m.push(("gReqPortD", format!("{:.1}", rs.am.port_d_min_mm)));
+    m.push(("gReqLg", format!("{:.0}", rs.ergonomics.grip.length_min_mm)));
+    m.push(("gReqPerimMin", format!("{:.0}", rs.ergonomics.grip.perimeter_min_mm)));
+    m.push(("gReqPerimMax", format!("{:.0}", rs.ergonomics.grip.perimeter_max_mm)));
+    m.push(("gReqHoTMin", format!("{:.1}", rs.ergonomics.grip.height_over_thickness_min)));
+    m.push(("gReqHoTMax", format!("{:.1}", rs.ergonomics.grip.height_over_thickness_max)));
+    m.push(("gReqGuardH", format!("{:.0}", rs.ergonomics.guard.height_target_mm)));
+    m.push(("gReqComIdx", format!("{:.0}", rs.ergonomics.balance.com_to_index_max_mm)));
+    m.push(("gReqPtOne", format!("{:.0}", rs.point.angle_max_at_1mm_deg)));
+    m.push(("gReqPtThree", format!("{:.0}", rs.point.angle_max_at_3mm_deg)));
+    m.push(("gReqEdgeMin", format!("{:.0}", rs.edge.per_side_angle_min_deg)));
+    m.push(("gReqEdgeMax", format!("{:.0}", rs.edge.per_side_angle_max_deg)));
+    m.push(("gReqEdgeFinishMm", format!("{:.1}", rs.edge.finishing_allowance_mm)));
+    m.push(("gReqSerrMin", format!("{:.1}", rs.serration.depth_min_mm)));
+    m.push(("gReqSerrMax", format!("{:.1}", rs.serration.depth_max_mm)));
+    m.push(("gReqScallopsMin", format!("{}", rs.serration.full_depth_scallops_min)));
+    m.push(("gReqGulletR", format!("{:.1}", rs.serration.gullet_radius_min_mm)));
+    m.push(("gReqSfYield", format!("{:.2}", rs.margins.sf_yield)));
+    m.push(("gReqSfUlt", format!("{:.2}", rs.margins.sf_ultimate)));
+    m.push(("gReqSfRing", format!("{:.2}", rs.margins.sf_ring)));
+    m.push(("gReqSfFat", format!("{:.2}", rs.fatigue.sf_fatigue)));
+    m.push(("gReqSeqRatio", format!("{:.2}", rs.sequence.ratio_min)));
+    m.push(("gReqBuckling", format!("{:.2}", rs.buckling.lambda_min)));
+    m.push(("gReqLatLimNm", format!("{:.0}", rs.loads.lateral_bend.limit_root_moment_nm)));
+    m.push(("gReqLatUltNm", format!("{:.0}", rs.loads.lateral_bend.ultimate_root_moment_nm)));
+    m.push(("gReqTwistLimNm", format!("{:.1}", rs.loads.body_twist.limit_nm)));
+    m.push(("gReqTipAxN", format!("{:.0}", rs.loads.tip.axial_n)));
+    m.push(("gReqTipLatN", format!("{:.0}", rs.loads.tip.lateral_n)));
+    m.push(("gReqTipTwNm", format!("{:.2}", rs.loads.tip.twist_nm)));
+    m.push(("gTipAxFromMm", format!("{:.1}", rs.loads.tip.axial_no_yield_from_mm)));
+    let tip_lat_hi = rs
+        .loads
+        .tip
+        .lateral_check_stations_mm
+        .iter()
+        .copied()
+        .fold(0.0_f64, f64::max)
+        + 0.5;
+    m.push(("gTipLatHiMm", format!("{tip_lat_hi:.1}")));
+    m.push(("gTipTwApplyMm", format!("{:.1}", rs.loads.tip.twist_apply_mm_from_point)));
+    m.push(("gTipTwReadLoMm", format!("{:.1}", rs.loads.tip.twist_apply_mm_from_point + 1.5)));
+    m.push(("gReqGripSqN", format!("{:.0}", rs.loads.grip.limit_squeeze_n)));
+    m.push(("gReqGuardPushN", format!("{:.0}", rs.loads.guard.limit_push_n)));
+    m.push(("gReqRingBearN", format!("{:.0}", rs.loads.ring.bearing_n)));
+    m.push(("gReqRingArcDeg", format!("{:.0}", rs.loads.ring.bearing_arc_deg / 2.0)));
+    m.push(("gReqRingBackN", format!("{:.0}", rs.loads.ring.back_n)));
+    m.push(("gReqRingAnyN", format!("{:.0}", rs.loads.ring.any_direction_n)));
+    m.push(("gReqPullN", format!("{:.0}", rs.loads.pull.limit_n)));
+    m.push(("gReqSnagN", format!("{:.0}", rs.loads.teeth.snag_n)));
+    m.push(("gReqPryN", format!("{:.0}", rs.loads.teeth.pry_n)));
+    m.push(("gWMass", format!("{:.4}", rs.objective.mass_weight)));
+    m.push(("gWPoint", format!("{:.4}", rs.objective.weights.point)));
+    m.push(("gWAmBuild", format!("{:.4}", rs.objective.weights.am_build)));
+    m.push(("gWFatigue", format!("{:.4}", rs.objective.weights.fatigue)));
+    m.push(("gWSequence", format!("{:.4}", rs.objective.weights.sequence)));
+    m.push(("gWEdge", format!("{:.4}", rs.objective.weights.edge)));
+    m.push(("gWLatLim", format!("{:.4}", rs.objective.weights.lateral_limit)));
+    m.push(("gWLatUlt", format!("{:.4}", rs.objective.weights.lateral_ultimate)));
+    m.push(("gWTwistLim", format!("{:.4}", rs.objective.weights.twist_limit)));
+    m.push(("gWTipAx", format!("{:.4}", rs.objective.weights.tip_axial)));
+    m.push(("gWTipLat", format!("{:.4}", rs.objective.weights.tip_lateral)));
+    m.push(("gWTipTw", format!("{:.4}", rs.objective.weights.tip_twist)));
+    m.push(("gWGripSq", format!("{:.4}", rs.objective.weights.grip_squeeze)));
+    m.push(("gWGuardPush", format!("{:.4}", rs.objective.weights.guard_push)));
+    m.push(("gWRingBear", format!("{:.4}", rs.objective.weights.ring_bearing)));
+    m.push(("gWTeeth", format!("{:.4}", rs.objective.weights.teeth)));
+    m.push(("gWForm", format!("{:.4}", rs.objective.weights.form)));
+    m.push(("gWRingBack", format!("{:.4}", rs.objective.weights.ring_back)));
+    m.push(("gWRingAny", format!("{:.4}", rs.objective.weights.ring_any_direction)));
+    m.push(("gWPull", format!("{:.4}", rs.objective.weights.pull)));
+    m.push(("gWBuckling", format!("{:.4}", rs.objective.weights.buckling)));
+    m.push(("gWSerration", format!("{:.4}", rs.objective.weights.serration)));
+    m.push(("gBetaGripSec", format!("{:.2}", rs.objective.betas.grip_section)));
+    m.push(("gBetaRing", format!("{:.2}", rs.objective.betas.ring)));
+    m.push(("gBetaEdges", format!("{:.2}", rs.objective.betas.hand_edges)));
+    m.push(("gBetaPressure", format!("{:.2}", rs.objective.betas.contact_pressure)));
+    m.push(("gBetaGuard", format!("{:.2}", rs.objective.betas.guard)));
+    m.push(("gBetaGripLen", format!("{:.2}", rs.objective.betas.grip_length)));
+    m.push(("gBetaBalance", format!("{:.2}", rs.objective.betas.balance)));
+    m.push(("gBetaSurface", format!("{:.2}", rs.objective.betas.grip_surface)));
+    m.push(("gEExp", format!("{:.1}", rs.objective.e_exponent)));
+
+    // Lineage strip (from docs/g5/v<rv>/img/manifest.json + evidence/g5/v<rv>/history/<win_island>.jsonl)
+    let rv = str_val(&r, "/version");
+    let ev_dir = receipt_path.parent().expect("receipt dir");
+    let repo_root = ev_dir
+        .parent()
+        .and_then(Path::parent)
+        .and_then(Path::parent)
+        .unwrap_or_else(|| fail("cannot resolve repo root from receipt path"));
+    let manifest_path = repo_root.join(format!("docs/g5/v{rv}/img/manifest.json"));
+    let manifest: Value = serde_json::from_str(
+        &fs::read_to_string(&manifest_path)
+            .unwrap_or_else(|e| fail(format!("{}: {e}", manifest_path.display()))),
+    )
+    .unwrap_or_else(|e| fail(format!("{}: {e}", manifest_path.display())));
+    let hist_path = ev_dir.join("history").join(format!("{win_island}.jsonl"));
+    let hist_txt = fs::read_to_string(&hist_path)
+        .unwrap_or_else(|e| fail(format!("{}: {e}", hist_path.display())));
+    let mut hist_map = std::collections::BTreeMap::new();
+    for line in hist_txt.lines() {
+        if line.trim().is_empty() {
+            continue;
+        }
+        let h_val: Value = serde_json::from_str(line)
+            .unwrap_or_else(|e| fail(format!("{}: {e}", hist_path.display())));
+        let ev_n = num(&h_val, "/evals").round() as i64;
+        hist_map.insert(ev_n, (num(&h_val, "/best_score_100"), num(&h_val, "/best_mass_g")));
+    }
+    let lin = get(&manifest, "/lineage")
+        .as_array()
+        .unwrap_or_else(|| fail("manifest /lineage not array"));
     let w = 0.98 / lin.len().max(1) as f64;
     let mut l = String::from("% generated by g5-release-tex: best design of the winning island at each logged checkpoint\n");
     for c in lin {
-        let _ = writeln!(l, "\\begin{{minipage}}[t]{{{w:.3}\\textwidth}}\\centering\\includegraphics[width=\\linewidth]{{../../../{}}}\\\\[-1pt]\
-            {{\\EItablefont eval {}\\\\ {:.2}, {:.1} g{}}}\\end{{minipage}}\\hfill", c["image"].as_str().unwrap(),
-            count(c["evals"].as_f64().unwrap()), c["best_score_100"].as_f64().unwrap(), c["best_mass_g"].as_f64().unwrap(),
-            c["role"].as_str().map(|r| format!("\\\\ \\textbf{{{r}}}")).unwrap_or_default());
+        let ev_n = num(c, "/evals").round() as i64;
+        let &(sc_100, mg_g) = hist_map
+            .get(&ev_n)
+            .unwrap_or_else(|| fail(format!("eval {ev_n} missing in {}", hist_path.display())));
+        let role_str = match c.get("role").and_then(Value::as_str) {
+            Some(role) if !role.is_empty() => format!("\\\\ \\textbf{{{}}}", tex(role)),
+            _ => String::new(),
+        };
+        let _ = writeln!(
+            l,
+            "\\begin{{minipage}}[t]{{{w:.3}\\textwidth}}\\centering\\includegraphics[width=\\linewidth]{{../../../{}}}\\\\[-1pt]\
+            {{\\EItablefont eval {}\\\\ {:.2}, {:.1} g{role_str}}}\\end{{minipage}}\\hfill",
+            str_val(c, "/image"),
+            count(ev_n as f64),
+            sc_100,
+            mg_g,
+        );
     }
     fs::write(out.join("lineage.tex"), l).unwrap();
 
-    let in_git: Vec<&str> = get(&r, "/cad_in_git").as_array().unwrap().iter().filter_map(|v| v.as_str()).collect();
+    // CAD assets (from docs/g5/v<rv>/cad/<design_id>_print_spec.json + /release_assets)
+    let design_id = str_val(&r, "/design_id");
+    let spec_path = repo_root.join(format!("docs/g5/v{rv}/cad/{design_id}_print_spec.json"));
+    let spec: Value = serde_json::from_str(
+        &fs::read_to_string(&spec_path)
+            .unwrap_or_else(|e| fail(format!("{}: {e}", spec_path.display()))),
+    )
+    .unwrap_or_else(|e| fail(format!("{}: {e}", spec_path.display())));
     let mut asset = String::from("% generated by g5-release-tex: file & triangles & MiB & where\n");
-    for x in get(&r, "/release_assets").as_array().expect("assets") {
-        let file = x["file"].as_str().unwrap();
-        let git = in_git.iter().any(|p| p.ends_with(file));
-        let short = file.strip_prefix(&format!("{}_", s("/design_id"))).unwrap_or(file); // the caption names the design
-        let _ = writeln!(asset, "\\texttt{{{}}} & {} & {:.0} & {} \\\\", tex(short), count(x["triangles"].as_f64().unwrap()),
-                         x["bytes"].as_f64().unwrap() / 1_048_576.0, if git { "git and release" } else { "release" });
+    for ptr in ["/am_build_stl", "/outer_envelope_stl"] {
+        let st = get(&spec, ptr);
+        let file = str_val(st, "/file");
+        let short = file.strip_prefix(&format!("{design_id}_")).unwrap_or(&file);
+        let _ = writeln!(
+            asset,
+            "\\texttt{{{}}} & {} & {:.2} & git (\\code{{cad/}}) \\\\",
+            tex(short),
+            count(num(st, "/triangles")),
+            num(st, "/mib"),
+        );
+    }
+    let rel_assets = get(&r, "/release_assets")
+        .as_array()
+        .unwrap_or_else(|| fail("/release_assets not array"));
+    for x in rel_assets {
+        let file = str_val(x, "/file");
+        let _ = writeln!(
+            asset,
+            "\\texttt{{{}}} & --- & {:.2} & release \\\\",
+            tex(&file),
+            num(x, "/bytes") / 1_048_576.0,
+        );
     }
     fs::write(out.join("assets.tex"), &asset).unwrap();
-    // table rows also as macros: \input inside a tabular breaks \bottomrule ("Misplaced \noalign")
+
     let rows_macro = |name: &str, body: &str| {
         let rows: String = body.lines().filter(|l| !l.starts_with('%')).collect::<Vec<_>>().join("\n");
         format!("\\newcommand{{\\{name}}}{{%\n{rows}}}\n")
     };
-    let mut numbers = fs::read_to_string(out.join("numbers.tex")).unwrap();
+    let mut numbers = String::from("% generated by g5-release-tex from evidence/g5/v<VERSION>/release.json; do not edit\n");
+    for (k, v) in &m {
+        let _ = writeln!(numbers, "\\newcommand{{\\{k}}}{{{v}}}");
+    }
+    let _ = writeln!(numbers, "\\graphicspath{{{{../v{}/img/}}}}", str_val(&r, "/version"));
     numbers.push_str(&rows_macro("gTopEightRows", &top));
     numbers.push_str(&rows_macro("gAssetRows", &asset));
     numbers.push_str(&rows_macro("gGridRows", &grid));
     fs::write(out.join("numbers.tex"), numbers).unwrap();
-    println!("g5-release-tex: {} macros, {} ranking rows, {} lineage frames -> {}", m.len(), get(&r, "/cohort/top8_linux").as_array().unwrap().len(), lin.len(), out.display());
+    println!(
+        "g5-release-tex: {} macros, {} ranking rows, {} lineage frames -> {}",
+        m.len(),
+        n_show,
+        lin.len(),
+        out.display()
+    );
 }

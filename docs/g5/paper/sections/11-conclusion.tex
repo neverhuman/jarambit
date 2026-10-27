@@ -1,0 +1,13 @@
+\section{Conclusion}\label{sec:conclusion}
+Rebuilding the Jarambit pipeline around the literature-sourced requirement set \code{RS-karambit-v5} and the \code{G5.0}
+decoder resolved the representation, load-case, drainage, and objective flaws exposed by the G3 diagnostics. Expressing the
+grip perimeter, palm-swell aspect ratio, planform point wedge, rounded-gullet serrations, sheet-TPMS wall thickness, and
+rib-clear drainage ports directly in requirement units ensured that candidates in the search space have a sharp planform
+point, a full-sized ergonomic handle, and width-checked internal drainage. Coupling the 16-case multi-fidelity structural chain
+with the multiplicative worst-margin factor $W$ and fifth-power ergonomic multiplier $E^5$ in \code{W\_ERGOLIGHT\_v2}
+prevented the search from trading structural adequacy or hand comfort for grams. Across \gEvalsTotal{} evaluations on
+\gIslands{} islands, evolutionary search outperformed the equal-budget scrambled-Sobol baseline (\gScore{} vs.\
+\gBaselineBest) and produced the best individual \gDesign{} at \gMassFinishedG{}~g finished partial-volume mass (\gMassG{}~g
+print mesh) with worst structural margin ratio $\mu = \gWorstMarginRatio$ ($W = \gW$, every load case met) and ergonomic
+multiplier $E = \gE$. Physical L-PBF printing, stress relief, CNC bevel grinding, and mechanical testing under the ten open
+evidence gaps in Section~\ref{sec:limits} remain the necessary next step before any operational qualification.

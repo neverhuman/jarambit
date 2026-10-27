@@ -153,7 +153,7 @@ fn write_3mf_mm(mesh: &SurfaceMesh, design_id: &str, span: [f64; 3], out_3mf: &P
     writeln!(f, "  <metadata name=\"Designer\">Jarambit G5 Evolutionary Search</metadata>").unwrap();
     writeln!(
         f,
-        "  <metadata name=\"Description\">Units: mm | Overall dimensions: {:.2} x {:.2} x {:.2} mm | Material: Ti-6Al-4V (design assumption: yield 828 MPa) | Depowder via neutral-axis drainage ports</metadata>",
+        "  <metadata name=\"Description\">Units: mm | Overall dimensions: {:.2} x {:.2} x {:.2} mm | Material: Ti-6Al-4V, L-PBF, stress-relieved (ASTM F2924 min yield 825 MPa, 750.8 MPa at 80 C) | Remove powder through the ports in every hollow zone before stress relief</metadata>",
         span[0], span[1], span[2]
     )
     .unwrap();
@@ -161,7 +161,7 @@ fn write_3mf_mm(mesh: &SurfaceMesh, design_id: &str, span: [f64; 3], out_3mf: &P
     writeln!(f, "    <basematerials id=\"1\">").unwrap();
     writeln!(
         f,
-        "      <base name=\"Ti-6Al-4V (design assumption: yield 828 MPa)\" displaycolor=\"#8A929A\"/>"
+        "      <base name=\"Ti-6Al-4V, L-PBF, stress-relieved (ASTM F2924 min yield 825 MPa, 750.8 MPa at 80 C)\" displaycolor=\"#8A929A\"/>"
     )
     .unwrap();
     writeln!(f, "    </basematerials>").unwrap();
@@ -407,7 +407,7 @@ fn write_dxf_drawing_mm(
         bmin[0],
         bmax[1] + 4.5,
         2.5,
-        "MATERIAL: Ti-6Al-4V (design assumption: yield 828 MPa) | MID-PLANE Z=0 OUTLINE + 30 MM BLADE SECTION",
+        "MATERIAL: Ti-6Al-4V, L-PBF, stress-relieved (ASTM F2924 min yield 825 MPa, 750.8 MPa at 80 C) | MID-PLANE Z=0 OUTLINE + 30 MM BLADE SECTION",
     );
     add_text(
         &mut dxf,
@@ -472,6 +472,90 @@ fn load_first_genome(csv_path: &Path) -> Result<(String, G5Genome), String> {
     Err(format!("no valid G5 genome row found in {}", csv_path.display()))
 }
 
+fn write_print_spec_json(
+    am_mesh: &SurfaceMesh,
+    am_bytes: &[u8],
+    h_am: f64,
+    env_mesh: &SurfaceMesh,
+    env_bytes: &[u8],
+    h_env: f64,
+    design_id: &str,
+    genome: &G5Genome,
+    out_dir: &Path,
+) {
+    let (am_bnd, am_nm, am_dmax) = census(&am_mesh.tris);
+    let (env_bnd, env_nm, env_dmax) = census(&env_mesh.tris);
+    assert_eq!((am_bnd, am_nm), (0, 0), "AMbuild mesh must be watertight");
+    assert_eq!((env_bnd, env_nm), (0, 0), "envelope mesh must be watertight");
+
+    let am_vol = volume(am_mesh);
+    let env_vol = volume(env_mesh);
+    let am_mass_g = am_vol * RHO_TI64_G_MM3;
+    let env_mass_g = env_vol * RHO_TI64_G_MM3;
+    let (bmin, bmax, span) = mesh_bbox_mm(am_mesh);
+
+    let am_name = format!("{design_id}_AMbuild_mm.stl");
+    let env_name = format!("{design_id}_envelope_mm.stl");
+    let am_sha = sha256_hex(am_bytes);
+    let env_sha = sha256_hex(env_bytes);
+
+    let spec = json!({
+        "design_id": design_id,
+        "schema": genome.schema,
+        "genome_sha256": genome.sha256(),
+        "decoder_sha256": g5_decoder_sha256(),
+        "units": "mm",
+        "material": "Ti-6Al-4V, L-PBF, stress-relieved (ASTM F2924 min yield 825 MPa, 750.8 MPa at 80 C)",
+        "density_g_mm3": RHO_TI64_G_MM3,
+
+        "overall_dimensions_mm": {
+            "length_x_mm": (span[0] * 100.0).round() / 100.0,
+            "height_y_mm": (span[1] * 100.0).round() / 100.0,
+            "thickness_z_mm": (span[2] * 100.0).round() / 100.0,
+            "bbox_min_mm": bmin.map(|v| (v * 100.0).round() / 100.0),
+            "bbox_max_mm": bmax.map(|v| (v * 100.0).round() / 100.0),
+        },
+        "order_notes": format!(
+            "Units: mm | Overall dimensions: {:.2} x {:.2} x {:.2} mm | Material: Ti-6Al-4V LPBF | Remove powder through the ports in every hollow zone before stress relief",
+            span[0], span[1], span[2]
+        ),
+        "am_build_stl": {
+            "file": am_name,
+            "voxel_pitch_h_mm": (h_am * 1000.0).round() / 1000.0,
+            "bytes": am_bytes.len(),
+            "mib": ((am_bytes.len() as f64 / (1024.0 * 1024.0)) * 100.0).round() / 100.0,
+            "sha256": am_sha,
+            "triangles": am_mesh.tris.len(),
+            "vertices": am_mesh.verts.len(),
+            "volume_mm3": (am_vol * 10.0).round() / 10.0,
+            "mass_ti64_g": (am_mass_g * 100.0).round() / 100.0,
+            "watertight": am_bnd == 0 && am_nm == 0,
+            "boundary_edges": am_bnd,
+            "non_manifold_edges": am_nm,
+            "max_edge_degree": am_dmax,
+        },
+        "outer_envelope_stl": {
+            "file": env_name,
+            "voxel_pitch_h_mm": (h_env * 1000.0).round() / 1000.0,
+            "bytes": env_bytes.len(),
+            "mib": ((env_bytes.len() as f64 / (1024.0 * 1024.0)) * 100.0).round() / 100.0,
+            "sha256": env_sha,
+            "triangles": env_mesh.tris.len(),
+            "vertices": env_mesh.verts.len(),
+            "volume_mm3": (env_vol * 10.0).round() / 10.0,
+            "solid_mass_ti64_g": (env_mass_g * 100.0).round() / 100.0,
+            "watertight": env_bnd == 0 && env_nm == 0,
+            "boundary_edges": env_bnd,
+            "non_manifold_edges": env_nm,
+            "max_edge_degree": env_dmax,
+        }
+    });
+    let spec_path = out_dir.join(format!("{design_id}_print_spec.json"));
+    fs::write(&spec_path, serde_json::to_string_pretty(&spec).unwrap() + "\n")
+        .expect("write print_spec.json");
+    println!("{}", serde_json::to_string_pretty(&spec).unwrap());
+}
+
 fn emit_companions(
     am_mesh: &SurfaceMesh,
     env_mesh: &SurfaceMesh,
@@ -499,6 +583,7 @@ fn main() {
         let csv_path = PathBuf::from(args.get(2).expect("winner_genome.csv"));
         let stl_dir = PathBuf::from(args.get(3).expect("stl_dir"));
         let out_dir = PathBuf::from(args.get(4).expect("out_dir"));
+        let h_spec: f64 = args.get(5).and_then(|s| s.parse().ok()).unwrap_or(0.20);
         fs::create_dir_all(&out_dir).expect("create out_dir");
         let (design_id, genome) = load_first_genome(&csv_path).expect("load genome");
         let am_bytes = fs::read(stl_dir.join(format!("{design_id}_AMbuild_mm.stl")))
@@ -507,12 +592,18 @@ fn main() {
             .expect("read envelope_mm.stl");
         let am_mesh = read_binary_stl_mm(&am_bytes);
         let env_mesh = read_binary_stl_mm(&env_bytes);
+        let src_spec = stl_dir.join(format!("{design_id}_print_spec.json"));
+        if !src_spec.exists() {
+            write_print_spec_json(
+                &am_mesh, &am_bytes, h_spec, &env_mesh, &env_bytes, h_spec, &design_id, &genome, &stl_dir,
+            );
+        }
         emit_companions(&am_mesh, &env_mesh, &design_id, &genome, &out_dir);
         return;
     }
 
-    let mut csv_path = PathBuf::from("evidence/g5/v3.0.0/winner_genome.csv");
-    let mut out_dir = PathBuf::from("docs/g5/v3.0.0/cad");
+    let mut csv_path = PathBuf::from("evidence/g5/v5.0.0/winner_genome.csv");
+    let mut out_dir = PathBuf::from("docs/g5/v5.0.0/cad");
     let mut h_start = 0.25f64;
     let mut max_mb = 50.0f64;
 
@@ -572,82 +663,17 @@ fn main() {
     let (am_mesh, h_am) = fit(true, "AMbuild");
     let (env_mesh, h_env) = fit(false, "envelope");
 
-    let (am_bnd, am_nm, am_dmax) = census(&am_mesh.tris);
-    let (env_bnd, env_nm, env_dmax) = census(&env_mesh.tris);
-    assert_eq!((am_bnd, am_nm), (0, 0), "AMbuild mesh must be watertight");
-    assert_eq!((env_bnd, env_nm), (0, 0), "envelope mesh must be watertight");
-
-    let am_vol = volume(&am_mesh);
-    let env_vol = volume(&env_mesh);
-    let am_mass_g = am_vol * RHO_TI64_G_MM3;
-    let env_mass_g = env_vol * RHO_TI64_G_MM3;
-    let (bmin, bmax, span) = mesh_bbox_mm(&am_mesh);
-
     let am_name = format!("{design_id}_AMbuild_mm.stl");
     let env_name = format!("{design_id}_envelope_mm.stl");
     let am_bytes = write_binary_stl_mm(&am_mesh, &format!("{design_id}_AMbuild"));
     let env_bytes = write_binary_stl_mm(&env_mesh, &format!("{design_id}_envelope"));
-    let am_sha = sha256_hex(&am_bytes);
-    let env_sha = sha256_hex(&env_bytes);
 
     let am_path = out_dir.join(&am_name);
     let env_path = out_dir.join(&env_name);
     fs::write(&am_path, &am_bytes).expect("write AMbuild STL");
     fs::write(&env_path, &env_bytes).expect("write envelope STL");
 
-    let spec = json!({
-        "design_id": design_id,
-        "schema": genome.schema,
-        "genome_sha256": genome.sha256(),
-        "decoder_sha256": g5_decoder_sha256(),
-        "units": "mm",
-        "material": "Ti-6Al-4V (Grade 5 / ELI LPBF)",
-        "density_g_mm3": RHO_TI64_G_MM3,
-
-        "overall_dimensions_mm": {
-            "length_x_mm": (span[0] * 100.0).round() / 100.0,
-            "height_y_mm": (span[1] * 100.0).round() / 100.0,
-            "thickness_z_mm": (span[2] * 100.0).round() / 100.0,
-            "bbox_min_mm": bmin.map(|v| (v * 100.0).round() / 100.0),
-            "bbox_max_mm": bmax.map(|v| (v * 100.0).round() / 100.0),
-        },
-        "order_notes": format!(
-            "Units: mm | Overall dimensions: {:.2} x {:.2} x {:.2} mm | Material: Ti-6Al-4V LPBF | Depowder via neutral-axis drainage ports",
-            span[0], span[1], span[2]
-        ),
-        "am_build_stl": {
-            "file": am_name,
-            "voxel_pitch_h_mm": (h_am * 1000.0).round() / 1000.0,
-            "bytes": am_bytes.len(),
-            "mib": ((am_bytes.len() as f64 / (1024.0 * 1024.0)) * 100.0).round() / 100.0,
-            "sha256": am_sha,
-            "triangles": am_mesh.tris.len(),
-            "vertices": am_mesh.verts.len(),
-            "volume_mm3": (am_vol * 10.0).round() / 10.0,
-            "mass_ti64_g": (am_mass_g * 100.0).round() / 100.0,
-            "watertight": am_bnd == 0 && am_nm == 0,
-            "boundary_edges": am_bnd,
-            "non_manifold_edges": am_nm,
-            "max_edge_degree": am_dmax,
-        },
-        "outer_envelope_stl": {
-            "file": env_name,
-            "voxel_pitch_h_mm": (h_env * 1000.0).round() / 1000.0,
-            "bytes": env_bytes.len(),
-            "mib": ((env_bytes.len() as f64 / (1024.0 * 1024.0)) * 100.0).round() / 100.0,
-            "sha256": env_sha,
-            "triangles": env_mesh.tris.len(),
-            "vertices": env_mesh.verts.len(),
-            "volume_mm3": (env_vol * 10.0).round() / 10.0,
-            "solid_mass_ti64_g": (env_mass_g * 100.0).round() / 100.0,
-            "watertight": env_bnd == 0 && env_nm == 0,
-            "boundary_edges": env_bnd,
-            "non_manifold_edges": env_nm,
-            "max_edge_degree": env_dmax,
-        }
-    });
-    let spec_path = out_dir.join(format!("{design_id}_print_spec.json"));
-    fs::write(&spec_path, serde_json::to_string_pretty(&spec).unwrap() + "\n")
-        .expect("write print_spec.json");
-    println!("{}", serde_json::to_string_pretty(&spec).unwrap());
+    write_print_spec_json(
+        &am_mesh, &am_bytes, h_am, &env_mesh, &env_bytes, h_env, &design_id, &genome, &out_dir,
+    );
 }
