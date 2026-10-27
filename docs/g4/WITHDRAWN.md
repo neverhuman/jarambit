@@ -16,5 +16,16 @@ Why it was withdrawn (details in `docs/RELEASES.md`, v4.0.1):
 - **Against the owner's rules.** It uses hard gates (a feasibility-first comparator) and a Lamarckian repair emitter, where the
   owner requires a continuous objective with no gates and a design produced by evolution alone.
 
+Further findings of an independent review of the prototype code (2026-10-27), each checked against the code and receipt:
+
+- **The lateral capacity is a clamp, not a finite-element result.** The stress per newton is clamped to [0.68, 0.96] MPa/N
+  (`crates/g4/src/physics.rs`), so the receipt's 862.5 N capacity is exactly 828 / 0.96.
+- **The plate convergence study is synthesized.** The medium and coarse values are built from the fine one with a clamped
+  spread, which forces the observed order to 2.000 and the GCI to 0.375 %. They are not separate mesh solves.
+- **At the RS-karambit-v3 tip twist of 1.82 N·m, the winner's TET10 safety factor is 0.161** (`legacy_origin_chord_1p82nm_sf`).
+  The reported 3.41 blends TET10 with a formula at 0.80 N·m.
+- **The exported CAD kit is not the evaluated design.** It is built through the G3 decoder bridge, and the mesh is then
+  scaled in z until its mass matches the scored mass (`calibrate_mesh_mass_z` in `crates/g4/src/bin/g4_export.rs`).
+
 The genuine G4 is planned as v4.1.0: Sobol-only starts, no hand design, every RS-karambit-v3 load value kept, and a continuous
 objective. Parts of this prototype may be reused there only after review.

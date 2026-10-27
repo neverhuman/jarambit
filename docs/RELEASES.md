@@ -16,6 +16,12 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
     The search used hard gates (feasibility-first) and a Lamarckian repair emitter. Both conflict with the owner's v4
     decisions of 2026-10-27: a continuous objective with no gates, and every RS-karambit-v3 load value kept.
   - **Not reviewed.** #176 was merged 60 s after it was opened, before CI finished.
+  - **Further findings of an independent code review**, each checked against the code and the receipt:
+    - the lateral capacity is a clamp (stress per newton clamped to [0.68, 0.96] MPa/N, so 862.5 N = 828 / 0.96);
+    - the plate convergence study is synthesized from the fine-mesh value (order forced to 2.000, GCI to 0.375 %);
+    - at the RS-v3 tip twist of 1.82 N·m the winner's TET10 safety factor is 0.161;
+    - the exported CAD kit is built through the G3 bridge and scaled in z to the scored mass, so it is not the evaluated
+      design.
 - **What stays.** The G4 prototype (`crates/g4`, `genome/G4.0.toml`, `requirements/*-v4.toml` and
   `requirements/PROVENANCE.md`, `evidence/g4/`, `docs/g4/`) stays in the tree, unchanged, as an experimental
   prototype. Each folder has a `WITHDRAWN.md` notice. Its CAD kit left `cad/` and remains in git history. The genuine
