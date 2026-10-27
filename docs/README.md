@@ -10,8 +10,15 @@ The current generation is **G3**. Everything else here belongs to the earlier v1
 | [`g3/v3.0.0/img/`](g3/v3.0.0/img/) | every image of the best individual, listed in the receipt |
 | [`g3/v3.0.0/cad/`](g3/v3.0.0/cad/) | the print and envelope STL files of the cohort of record (the upload kit in [`../cad/`](../cad/) holds the same bytes) |
 | [`g3/RELEASE_3.0.0.md`](g3/RELEASE_3.0.0.md), [`g3/RENDERS.md`](g3/RENDERS.md) | what v3.0.0 changed, and how each image was made |
+| [`g3/provenance/`](g3/provenance/README.md) | the documents behind RS-karambit-v3 and the G3 decoder, with their SHA-256 |
 | [`g3/history/`](g3/history/) | the earlier G3 pilot design, superseded by v3.0.0 |
 | [`VERSION`](VERSION), [`RELEASES.md`](RELEASES.md) | the release number and the changelog of every release |
+
+## Withdrawn
+
+| path | what it is |
+|---|---|
+| [`g4/`](g4/WITHDRAWN.md) | the v4.0.0 G4 prototype paper and figures, withdrawn in v4.0.1 and kept unchanged; not a result |
 
 ## v1/v2 study (historical record)
 

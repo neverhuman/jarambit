@@ -39,43 +39,18 @@ def latest_release_section(rel):
     return ('(none)', [])
 
 
-def g4_status(version):
-    """The current design: the certified G4 v4.0.0 winner from its release receipt."""
-    rv = rd('evidence/g4/RECORD').strip()
-    r = json.loads(rd(f'evidence/g4/v{rv}/release.json'))
-    wr = r['winner_record']
-    obj = wr['objective']
-    m = wr['mass']
-    ser = wr['serration']
-    return [f'## Current release: G4 v{version}', '',
-            f'- **Best individual:** `{r["winner_id"]}`, certified winner of the v{rv} multi-seed cohort '
-            f'([`evidence/g4/v{rv}/release.json`](evidence/g4/v{rv}/release.json)); '
-            f'feasible across all 29 `RS-karambit-v4` hard gates (`V(x) = {obj["violation_sum_sq"]:.4f}`, min margin `+{obj["min_safety_margin"]:.4f}`, computational — not physically built).',
-            f'- **Score & mass:** `W_ERGOLIGHT_v2 = {obj["w_ergolight_v2"]:.2f}` (`W_ERGOLIGHT_v1 = {obj["w_ergolight_v1_legacy"]:.2f}`); '
-            f'mass **{m["as_finished_total_mass_g"]:.2f} g as-finished** / **{m["as_printed_total_mass_g"]:.2f} g as-printed** '
-            f'({100.0 * m["total_hollowness_fraction"]:.1f} % hollow vs {m["envelope_mass_g"]:.2f} g solid envelope).',
-            f'- **Blade & structural gates:** both edges ground and serrated ({ser["teeth_checked_in"]}/{ser["teeth_total_in"]} inner and '
-            f'{ser["teeth_checked_sp"]}/{ser["teeth_total_sp"]} spine teeth checked, min tooth SF {ser["min_tooth_sf_overall"]:.2f}); '
-            f'solid-tip torsion SF {wr["tip"]["tip_torsion_0p80nm_sf"]:.2f} (LCB {obj["sf_solid_tip_torsion_0p80nm_lcb"]:.2f}), '
-            f'HM-1 grip governing SF {wr["hm1"]["grip_sf_min_governing"]:.2f} (LCB {obj["sf_grip_squeeze_250n_lcb"]:.2f}), '
-            f'Goodman fatigue SF {wr["plate"]["goodman_fatigue_180n_sf"]:.2f} (LCB {obj["sf_goodman_fatigue_180n_lcb"]:.2f}), '
-            f'per-case yield sequence {obj["sequence_ledger"]["governing_blade_seq_ratio"]:.2f} lateral / {obj["sequence_ledger"]["spine_seq_ratio"]:.2f} spine (LCB {obj["sf_per_case_sequence_min_lcb"]:.2f} vs 1.20 floor).',
-            f'- **Full table, CAD kit and paper:** [`README.md`](README.md), [`cad/`](cad/) and [`docs/g4/paper/g4-v{version}.pdf`](docs/g4/paper/g4-v{version}.pdf).',
-            '']
-
-
-def g3_status():
-    """The G3 v3.0.0 cohort of record, preserved byte-for-byte."""
+def g3_status(version):
+    """The current design: the best individual of the G3 cohort of record, from its release receipt."""
     rv = rd('evidence/g3/RECORD').strip()
     r = json.loads(rd(f'evidence/g3/v{rv}/release.json'))
     a, b = r['blade']['edge_inner'], r['blade']['edge_spine']
-    return ['## Previous generation: G3 v3.0.2 (v3.0.0 cohort of record)', '',
+    return [f'## Current release: G3 v{version}', '',
             f'- **Best individual:** `{r["design_id"]}`, the best of the v{rv} cohort of record '
             f'([`evidence/g3/v{rv}/release.json`](evidence/g3/v{rv}/release.json)); status: {r["status"]}.',
             f'- **Score:** {r["provenance"]["metric"]} {r["score"]["score_100"]:.2f} '
-            f'({r["provenance"]["platform_of_record"]}); **mass** {r["mass"]["mesh_g"]:.1f} g as printed.',
+            f'({r["provenance"]["platform_of_record"]}); **mass** {r["mass"]["mesh_g"]:.1f} g (watertight 0.2 mm print mesh).',
             f'- **Blade:** both edges ground and serrated ({a["teeth"]} and {b["teeth"]} scallops).',
-            '- **Archive & paper:** [`cad/v3.0.0/`](cad/v3.0.0/) and [`docs/g3/paper/g3-v3.0.2.pdf`](docs/g3/paper/g3-v3.0.2.pdf).',
+            f'- **Full table, evolution and limits:** [`README.md`](README.md) and [`docs/g3/paper/g3-v{version}.pdf`](docs/g3/paper/g3-v{version}.pdf).',
             '']
 
 
@@ -120,17 +95,20 @@ def generate(context=None):
          '', '## Roadmap milestones (`docs/v1/jarambit_v1_roadmap.json`)', '',
          '| version | title | state | PRs |', '|---|---|---|---|']
     nxt = None
+    shipped = set(re.findall(r'^## (v\d+\.\d+\.\d+)\b', rd('docs/RELEASES.md'), re.M))
     for ms in road['milestones']:
         v = ms['version']
-        if vkey(v) <= vkey(version):
+        if v in shipped:
             state = 'released'
+        elif vkey(v) <= vkey(version):
+            state = 'not released (superseded by the G3 line)'
         elif nxt is None:
             nxt = v; state = 'next'
         else:
             state = 'planned'
         L.append(f"| {v} | {ms['title']} | {state} | {len(ms.get('work_items', []))} |")
     L += ['', 'History: `docs/history/` (archived root STATUS.md / GAPS.md snapshots). Release notes: `docs/RELEASES.md`.', '']
-    L[4:4] = g4_status(version) + g3_status() + ['## v1 study (historical record)', '', integrity_status(), '']
+    L[4:4] = g3_status(version) + ['## v1 study (historical record)', '', integrity_status(), '']
     output = '\n'.join(L)
     return rs_verdicts.replace_claim_block(output, context) if context is not None else output
 

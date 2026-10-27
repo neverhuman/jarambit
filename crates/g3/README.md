@@ -18,7 +18,7 @@ evolve together. It is kept apart from the published v1 pipeline by construction
 | `g3_sdf.rs` | Voxel signed-distance decoder: ring, grip with finger grooves, guard, blade with both edges, hollow TPMS interior and ports |
 | `g3_sandwich.rs` | Sandwich-plate FE, ring band T6 FE, fail-closed linear solves (relative residual or Oettli–Prager backward error at the f64 floor) |
 | `ergolight.rs` | `W_ERGOLIGHT_v1`: continuous multi-objective score with ergonomics as a multiplier; no hard gates |
-| `g3_qd.rs` | Three-tier evaluation (analytic, voxel + plate, solid tip) and CVT-MAP-Elites |
+| `g3_qd.rs` | Three-tier evaluation (analytic, voxel + plate, solid tip) and MAP-Elites with fixed Halton niche centres (`CvtMapElitesArchive`) |
 | `bin/g3_evolve.rs` | `g3-evolve --out <path containing evo_g3> --init N --evals N --seed S --host H --island I --commit SHA` |
 | `bin/g3_release_tex.rs` | `g3-release-tex <release.json> <out_dir>`: the LaTeX macros of the G3 paper, from the release receipt |
 
@@ -27,13 +27,14 @@ Release tools, in `src/bin/`; none of them changes the decoder or its hash. Buil
 
 | Binary | Role |
 |---|---|
-| `g3-evolve` | The G3 search: one CVT-MAP-Elites island per run |
+| `g3-evolve` | The G3 search: one MAP-Elites island per run |
 | `g3-release-tex` | Turns the release receipt into the paper's LaTeX macros |
 | `g3-pilot` | Re-evaluate archived designs at Tier 2, export the watertight envelope and AM build, grid convergence |
 | `g3-bladefacts` | Measured blade facts of one design (serrations as built, tooth-root SF, Gate S, sharpened arcs) as JSON |
 | `g3-edgeprofile` | True edge-normal cross-sections of both edges |
 | `g3-bladefield` | The exact blade thickness law on a fine grid, for re-meshing the blade at 0.05 mm |
-| `g3-tipconv` | Solid-tip TET10 mesh convergence (0.4 / 0.15 / 0.08 mm²) |
+| `g3-tipconv` | Solid-tip TET10 mesh study (0.4 / 0.15 / 0.08 mm²) |
+| `g3-diagnostics` | v3.0.3 diagnostics of the release winner: yield sequence per load case, fatigue with the knock-down applied once, mass by zone, plate mesh refinement, tip raster offset (writes `evidence/g3/v3.0.0/diagnostics/`) |
 | `g3-gripfe` | Hex8 voxel FE certification of the grip and blade root on the design's own AM voxels (vendored `voxel_fe`) |
 | `g3-export-stl` | Binary STL, 3MF and DXF (mm) of a genome row for printing; `ops/g3/export_best_stl.sh` runs it on the release winner |
 
