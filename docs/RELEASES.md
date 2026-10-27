@@ -44,6 +44,15 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
   - **Drainage.** Powder drains only through passages ≥ 1 mm wide (`[am] drain_channel_min_mm`, a lower bound from
     Carrozza et al. 2023). Undrainable cavities are measured, kept solid in the mass, and recorded. G3 drained a
     cavity through any one-voxel path, which is why the same design weighed 51.3 g at h 0.4 and 75.2 g at h 0.2.
+  - **Material** (`crates/g5/src/material.rs`):
+    - the RS-karambit-v5 values at 80 °C: E 106.7 GPa, G 41.4 GPa, ν 0.31, yield 750.8 MPa, ultimate 823.4 MPa;
+    - a thin-wall law on the nominal section, where each wall face adds its own rough-layer depth;
+    - fatigue by surface class with FKM mean stress.
+
+    These replace G3's 828 MPa, 113.8 GPa, ν 0.34 and the (t − 0.1)/t · 0.912 factor. The blade fatigue check no
+    longer divides the stress by that factor before applying Marin factors (audit F-M-2). RS-v5
+    `stiffness_uses_effective_thickness` is now `false`: Xie's law is fitted to nominal-section stress, so the rough
+    layer is counted once.
   - **Finding on G3.** Under this rule, the G3 v3.0.0 winner's lattice reaches its 2.8 mm powder ports only through
     two 0.85 mm slits beside the 1.1 mm mid-plane rib. Its cavity counts as undrainable (13,005 mm³). This is a G3
     decoder limitation: depowdering of the G3 design is unverified. The G5 decoder must place ports clear of ribs.

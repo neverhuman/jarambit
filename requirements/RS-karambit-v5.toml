@@ -54,7 +54,8 @@ ultimate_exponent = 2.1
 ts_up_skin_mm = 0.03         # vertical and up-skin faces [xie2026]
 ts_down_skin_mm = 0.10       # down-skin faces below 45 degrees, back-calculated from 0-degree struts [murchio2024]
 ts_ground_mm = 0.0           # ground faces
-stiffness_uses_effective_thickness = true   # t_eff = t - 2*Ts [xie2026]
+stiffness_uses_effective_thickness = false  # k_t is fitted to stress on the nominal section [xie2026], so stiffness and
+                                            # stress use the nominal thickness and the rough layer is counted once, in k_t
 
 [material.fatigue]
 # Fatigue strength amplitude at 1e6 cycles, R = -1, by surface class [benedetti2018, nicoletto2018, wycisk2014,

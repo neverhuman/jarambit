@@ -21,6 +21,7 @@ pub mod g5_namespace;
 pub mod g5_qd;
 pub mod g5_sandwich;
 pub mod g5_sdf;
+pub mod material;
 pub mod requirements;
 pub mod sobol_joe_kuo;
 
@@ -795,7 +796,15 @@ mod v1_identity_tests {
                 let gh_diff = (meas.guard_h_mm - py_gh).abs();
                 let com_diff = (meas.f075_union_com_to_index_mm - py_com_idx).abs();
                 let spin_rel = (meas.f075_union_spin_i_g_mm2 - py_spin_i).abs() / py_spin_i;
-                let grip_sf_rel = (meas.grip_sf_min - py_grip_sf).abs() / py_grip_sf;
+                // The reference used G3's allowable 828 · 0.912 · (t − 0.1)/t; G5 uses RS-karambit-v5
+                // (`material::yield_allowable`). Rescale by the allowable ratio so the check compares geometry and
+                // stress, not the intentional material change.
+                let skin_q = p_rust["skin_t"].max(0.4);
+                let g3_allow = 828.0 * 0.912 * (skin_q - 0.1) / skin_q;
+                let g5_allow =
+                    crate::material::yield_allowable(skin_q, crate::material::AS_BUILT_WALL);
+                let grip_sf_g3_material = meas.grip_sf_min * g3_allow / g5_allow;
+                let grip_sf_rel = (grip_sf_g3_material - py_grip_sf).abs() / py_grip_sf;
 
                 max_mass_rel_diff = max_mass_rel_diff.max(mass_rel);
                 max_hz_mass_rel_diff = max_hz_mass_rel_diff.max(hz_mass_rel);

@@ -20,8 +20,7 @@ use crate::g5_genome::{
     reproduce_iso_line_dd, sobol_unit_genome, G5Genome, G5Rng, FIXED_BORE_D_MM, FIXED_LIP_W_MM,
 };
 use crate::g5_sandwich::{
-    joint_k, solve_g5_solid_tet10_strict, solve_ring_band_t6, SandwichPlate, SandwichSection,
-    E_TI64_MPA, YIELD_TI64_MPA,
+    solve_g5_solid_tet10_strict, solve_ring_band_t6, SandwichPlate, SandwichSection,
 };
 use crate::g5_sdf::{
     blade_bevel_window_weights, build_blade_profile_2d, build_g5_sdf, effective_blade_rho,
@@ -29,7 +28,8 @@ use crate::g5_sdf::{
     solid_fraction, AmConnectivityStats, BladeProfile2D, VoxelGrid3D, GUARD_X_MM, RHO_TI64_G_MM3,
 };
 use jarambit_crescent::export;
-use jarambit_physics::fine::{mesh_domain, NU};
+use crate::material::{self, FatigueClass, Wall, AS_BUILT_WALL, GROUND_WALL, HOLLOW_BLADE_SKIN};
+use jarambit_physics::fine::mesh_domain;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
@@ -59,6 +59,7 @@ pub fn g5_decoder_sha256_uncached() -> String {
         include_str!("ergolight.rs"),
         include_str!("g5_qd.rs"),
         include_str!("requirements.rs"),
+        include_str!("material.rs"),
         include_str!("../../../requirements/RS-karambit-v5.toml"),
         include_str!("../../physics/src/fine.rs"),
         include_str!("../../physics/src/solid_tet10.rs"),
@@ -369,7 +370,7 @@ pub fn eval_hollow_grip_sf(
     let rho_e = rho_g.powf(1.8);
     let hollow = rho_g < 0.95;
     let skin_t = p["skin_t"];
-    let allow = YIELD_TI64_MPA * 0.912 * (skin_t - 0.1) / skin_t.max(0.2);
+    let allow = material::yield_allowable(skin_t, AS_BUILT_WALL);
     let mut worst_sf = 9.9_f64;
 
     for &s_frac in &[0.25, 0.50, 0.75] {
@@ -560,7 +561,8 @@ pub fn serration_tooth_strength(
     if depth < 0.2 {
         return (f64::INFINITY, 0, 0.0);
     }
-    let allow = YIELD_TI64_MPA * 0.912;
+    // Serrations are ground after printing (owner, 2026-10-27), so the teeth carry the bulk service allowable
+    let allow = material::yield_allowable(1.0, GROUND_WALL);
     let at = |x: f64, y: f64| eval_blade_thickness_and_sdf2(p, blade, x, y);
     let interp = |v: &[f64], x: f64| -> f64 {
         let i = xs.partition_point(|&q| q < x).clamp(1, n - 1);
@@ -635,6 +637,32 @@ pub const TIP_FE_MAX_AREA_MM2: f64 = 0.15;
 /// Fast Tier-0 analytic/1D-section evaluation (~2 ms per individual).
 /// Computes continuous `ErgolightInputs`, `ErgolightScore`, and `G5Descriptors` directly from the
 /// decoded geometry laws so weak individuals can be weeded out before 3D voxelization.
+/// The wall class and thickness that govern the blade's strength: the ground solid core, or the skin of a hollow blade.
+fn blade_wall(p: &BTreeMap<&'static str, f64>, rho_blade_eff: f64) -> (f64, Wall) {
+    if rho_blade_eff < 0.95 {
+        (p["skin_t"], HOLLOW_BLADE_SKIN)
+    } else {
+        (p["t_core"], GROUND_WALL)
+    }
+}
+
+/// Blade first-yield allowable at the service temperature (MPa).
+fn blade_yield_allowable(p: &BTreeMap<&'static str, f64>, rho_blade_eff: f64) -> f64 {
+    let (t, wall) = blade_wall(p, rho_blade_eff);
+    material::yield_allowable(t, wall)
+}
+
+/// Fatigue safety factor of the blade under a 0 → `sigma_peak` cycle (R = 0).
+fn blade_fatigue_sf(sigma_peak: f64, p: &BTreeMap<&'static str, f64>) -> f64 {
+    let (t, wall) = blade_wall(p, blade_rho(p));
+    let class: FatigueClass = material::fatigue_class(t, wall);
+    material::fatigue_sf(0.5 * sigma_peak, 0.5 * sigma_peak, class)
+}
+
+fn blade_rho(p: &BTreeMap<&'static str, f64>) -> f64 {
+    effective_blade_rho(p)
+}
+
 pub fn evaluate_tier0_analytic(genome: &G5Genome) -> G5EvalRecord {
     let p = genome.decode();
     let blade = build_blade_profile_2d(&p);
@@ -776,15 +804,13 @@ pub fn evaluate_tier0_analytic(genome: &G5Genome) -> G5EvalRecord {
         i_spin += dm * ((x - cx).powi(2) + y_mid.powi(2));
 
         if col_i_yy > 0.0 && col_j_open > 0.0 {
-            let g_ti = E_TI64_MPA / (2.0 * (1.0 + NU));
-            ltb_sum += (E_TI64_MPA * col_i_yy * g_ti * col_j_open).sqrt();
+            ltb_sum += (material::e_mpa() * col_i_yy * material::g_mpa() * col_j_open).sqrt();
             ltb_n += 1;
         }
         // Structural section checks along the blade using true Euclidean distance to tip_xy (`B3`, `S5-1`: 4.0 mm exclusion)
         let a_tip = (x - blade.tip_xy.0).hypot(y_mid - blade.tip_xy.1);
         if a_tip >= 4.0 {
-            let jk = joint_k(p["t_core"]);
-            let allow = YIELD_TI64_MPA * jk;
+            let allow = blade_yield_allowable(&p, rho_blade_eff);
             let z_eff = col_i_yy / (0.5 * t_max_slice).max(0.1);
             let cap_lat_n = allow * z_eff / a_tip.max(4.0);
             min_blade_lat_n = min_blade_lat_n.min(cap_lat_n);
@@ -823,13 +849,13 @@ pub fn evaluate_tier0_analytic(genome: &G5Genome) -> G5EvalRecord {
     };
 
     // Analytic ring bearing (+x on handle-side bore) and ring-back (+x on rear OD) calibrated against 1.5 mm band T6
-    let jk_ring = joint_k(p["web_t"]);
+    let ring_allow = material::yield_allowable(p["web_t"], AS_BUILT_WALL);
     let ring_bearing_cap_n =
-        YIELD_TI64_MPA * jk_ring * (1.55 * ring_wall * (0.45 * FIXED_LIP_W_MM + 0.55 * p["web_t"]))
+        ring_allow * (1.55 * ring_wall * (0.45 * FIXED_LIP_W_MM + 0.55 * p["web_t"]))
             / (1.0 + 0.12 * (r_b / ring_wall));
     let rear_wall = (ring_wall + p["od_tear"].max(-0.8) + p["od_h2"]).max(1.8);
     let ring_back_cap_n =
-        YIELD_TI64_MPA * jk_ring * (1.05 * rear_wall * (0.40 * FIXED_LIP_W_MM + 0.60 * p["web_t"]))
+        ring_allow * (1.05 * rear_wall * (0.40 * FIXED_LIP_W_MM + 0.60 * p["web_t"]))
             / (1.0 + 0.18 * (r_od / rear_wall));
 
     // Swell cross-section at s_sw * L_g
@@ -902,11 +928,10 @@ pub fn evaluate_tier0_analytic(genome: &G5Genome) -> G5EvalRecord {
         _ => (f64::INFINITY, f64::INFINITY, f64::INFINITY, false),
     };
 
+    // 180 N lateral duty (R = 0) on the blade: peak stress = allowable * 180 / capacity, by the surface-class model
+    // with FKM mean stress (G3 divided the stress by its joint factor and then applied Marin factors on top)
     let fat_sf = if lat_rob_n > 1.0 {
-        jarambit_crescent::fem::fatigue::goodman_sf(
-            YIELD_TI64_MPA * 180.0 / lat_rob_n,
-            p["t_core"],
-        )
+        blade_fatigue_sf(blade_yield_allowable(&p, blade_rho(&p)) * 180.0 / lat_rob_n, &p)
     } else {
         0.0
     };
@@ -1269,7 +1294,7 @@ fn evaluate_tier1_with_grid(genome: &G5Genome, h_vox: f64) -> (G5EvalRecord, Vox
                 SandwichSection::from_skin_and_lattice(th.max(0.3), skin_t, rho_blade_eff, 0.0)
             })
             .collect();
-        let s_plate = SandwichPlate::new(b_mesh.clone(), p["t_core"], E_TI64_MPA, NU)
+        let s_plate = SandwichPlate::new(b_mesh.clone(), p["t_core"], material::e_mpa(), material::nu())
             .with_sections(secs);
         let n = s_plate.n();
         let mut fixed = vec![false; n * 5];
@@ -1284,7 +1309,7 @@ fn evaluate_tier1_with_grid(genome: &G5Genome, h_vox: f64) -> (G5EvalRecord, Vox
         }
         if n_fix >= 3 {
             if let Some(sys) = s_plate.system(&fixed) {
-                let allow_plate = YIELD_TI64_MPA * joint_k(p["t_core"]);
+                let allow_plate = blade_yield_allowable(&p, rho_blade_eff);
 
                 // Load case 1: 1 N lateral tip load (`dof = 2` on tip patch `r <= 3.0 mm`)
                 let mut f_lat = vec![0.0; n * 5];
@@ -1326,10 +1351,7 @@ fn evaluate_tier1_with_grid(genome: &G5Genome, h_vox: f64) -> (G5EvalRecord, Vox
                             if cap_plate > 1.0 {
                                 rec.inputs.seq_ratio =
                                     ((rec.inputs.grip_sf_min * 260.0) / cap_plate).clamp(0.0, 2.5);
-                                rec.inputs.fat_sf = jarambit_crescent::fem::fatigue::goodman_sf(
-                                    YIELD_TI64_MPA * 180.0 / cap_plate,
-                                    p["t_core"],
-                                );
+                                rec.inputs.fat_sf = blade_fatigue_sf(180.0 * pk_sb_rob, &p);
                             }
                         }
                     }

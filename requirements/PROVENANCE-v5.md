@@ -143,6 +143,10 @@ of fitness for use.
   repeat the angle band or contradict it, so none is set.
 - **Ring bore.** The 24.9 mm bore is larger than the 8 mm horizontal-hole rule allows. It is printed with a
   support-free teardrop crown and machined round, inside the finishing allowance.
+- **Thin-wall law, nominal section.** Xie et al. fit k_t = (1 − 2Ts/t)^n to stress on the nominal section. G5
+  therefore uses the nominal thickness for stiffness and stress and applies k_t once, to the allowable. Reducing the
+  section as well would count the rough layer twice. A wall's two faces each contribute their own Ts (up-skin
+  0.03 mm, down-skin 0.10 mm, ground 0).
 - **Permanent set.** The computation is linear-elastic, so "no yield at the limit load with SF 1.2" stands in for
   "no permanent set". The GOST-style 1 mm set test is a physical test.
 - **Objective weights.** The weights and exponents of W_ERGOLIGHT_v2 are design choices made under the owner's rules
