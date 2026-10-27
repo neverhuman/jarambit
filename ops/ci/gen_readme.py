@@ -571,6 +571,150 @@ def g5_load_cases(rs, ld, mg):
     ]
 
 
+CASE_KEYS = ('lateral_limit', 'lateral_ultimate', 'twist_limit', 'tip_axial', 'tip_lateral', 'tip_twist', 'grip_squeeze', 'guard_push',
+             'ring_bearing', 'ring_back', 'ring_any_direction', 'pull', 'teeth', 'fatigue', 'sequence', 'buckling')
+
+
+def g5v6_fitness(r):
+    """v6 on: the 100-point budget of the winner's score (receipt fitness_budget, figures by g5-release)."""
+    fb, sc = r['fitness_budget'], r['score']
+    gr = fb['groups']
+    low = sorted(((k, x) for k, x in sc['hand_factors'].items() if x['e'] < 1), key=lambda kv: kv[1]['e'])
+    hand = f'; the lowest hand factor is {low[0][0].replace("_", " ")}, e = {low[0][1]["e"]:.3f}' if low else ''
+    img = r['evolution']['figure'].rsplit('/', 1)[0]
+    return ['## Where the score comes from', '',
+            f'The score is 100 · E · W · base: the weighted credit of {len(sc["terms"]) - 1} terms (base, at most 1), times the hand '
+            f'multiplier E and the worst-margin multiplier W. Of its 100 points the winner earns **{fb["earned"]:.1f}**: structural safety '
+            f'{gr["structural"]:.1f} (the {r["cases"]} load-case margins), mass {gr["mass"]:.1f}, cutting geometry {gr["cutting"]:.1f} (edge, point '
+            f'and serrations) and build and form {gr["build"]:.1f}. It loses {fb["lost_to_multipliers"]:.1f} to the multipliers '
+            f'(E = {fb["E"]:.3f}{hand}; W = {fb["worst_margin_W"]:.3f}), and {fb["unmet_credit"]:.1f} are unmet credit: terms short of full '
+            f'credit (base = {fb["base"]:.3f}).', '',
+            f'<img src="{img}/fitness_budget.svg" alt="The 100 points of the score: earned by group, lost to the multipliers, unmet credit" width="100%">', '',
+            f'<img src="{img}/fitness_terms.svg" alt="Points earned by each score term against the most it could earn" width="100%">', '']
+
+
+def g5v6_evolution(r, rk, gc, man):
+    """v6 on: the continuation (warm start, pool lineage, rounds per host) against the fresh-start control."""
+    co, bs, ws, ev, lin = r['cohort'], r['baseline'], r['warm_start'], r['evolution'], r['lineage']
+    rounds = co['rounds']
+    hosts = sorted({x['host'] for x in rounds})
+    per_host = {h: sum(1 for x in rounds if x['host'] == h) for h in hosts}
+    cbest = max(bs['final_best_score_100'])
+    sl = rk['search_leader']
+    L = ['## How evolution produced it', '',
+         f'v{r["version"]} continues the v5.0.0 cohort with the same frozen decoder (G5.0, `{r["provenance"]["decoder_sha256"][:12]}`) and objective, '
+         f'on one platform of record ({r["provenance"]["platform_of_record"]}). The {ws["v5_elites"]:,} final elites of v5.0.0 were re-evaluated on it '
+         f'and merged to the best record per niche: {ws["pool"]["niches"]} niches, best {ws["pool"]["best_raw_score_100"]:.1f} on the search grid '
+         f'(Tier 1, h {co["h_mm"]:g} mm).', '',
+         f'From that pool, {co["islands"]} warm-started islands ran {len(rounds)} rounds on {len(hosts)} hosts '
+         f'({", ".join(f"{h}: {per_host[h]}" for h in hosts)}), {int(co["evaluations_total"]):,} evaluations in all. Whenever a host finished a '
+         f'round, the hub merged its islands into the latest pool and the host\'s next round started from that pool; every merge is recorded with '
+         f'its sources and recomputed by the receipt. Beside them, {bs["islands"]} fresh-start control islands ran {int(bs["evaluations_per_island"]):,} '
+         'evaluations each from scrambled Sobol samples, with no pool and no migration.', '',
+         f'**The lineage\'s best rose from {lin[0]["best_raw_score_100"]:.1f} to {lin[-1]["best_raw_score_100"]:.1f}; the best control island reached '
+         f'{cbest:.1f}.**', '',
+         f'<img src="{ev["figure"]}" alt="Best score found against evaluations: the pool lineage and the fresh-start control" width="100%">', '']
+    pools = {x['pool']: x for x in lin}
+    if man['lineage']:
+        L += ['The best design of the pool at points of the lineage, same camera and light (scores on the search grid):', '',
+              '<table><tr>' + ''.join(
+                  f'<td align="center"><img src="{c["image"]}" alt="best of {c["pool"]}" width="100%"><br>`{c["pool"]}`<br>'
+                  f'{pools[c["pool"]]["best_raw_score_100"]:.1f}, {pools[c["pool"]]["best_mass_g"]:.0f} g'
+                  + (f'<br><b>{c["role"]}</b>' if c['role'] else '') + '</td>' for c in man['lineage']) + '</tr></table>', '']
+    L += ['| Host | Round | Islands × evaluations | Started from (best) | Merged into (best) |', '|---|---:|---:|---|---|']
+    for x in rounds:
+        L.append(f'| {x["host"]} | {x["round"]} | {x["islands"]} × {int(x["evaluations_per_island"]):,} | `{x["pool_in"]}` ({x["pool_in_best"]:.2f}) | '
+                 f'`{x["merged_into"]}` ({x["merged_best"]:.2f}) |')
+    lead = (f'**The search leader is the winner.** ' if sl['design_id'] == r['design_id'] else
+            f'**Why the search leader is not the winner.** The best design on the search grid, `{sl["design_id"]}` ({sl["tier1_h04_score_100"]:.1f}), '
+            f'{"ranks " + str(sl["tier2_rank"]) if sl["tier2_rank"] else "falls outside the shortlist"} once re-scored at Tier 2, h {rk["h_mm"]:g} mm. ')
+    L += ['', lead + f'Every finalist is judged at Tier 2 (solid tip at {rk["tip_mesh_max_area_mm2"]:g} mm²); the top {len(gc["rows"])} also on five grids '
+          f'(partial-volume mass in grams at h = {" / ".join(f"{h:g}" for h in gc["h_mm"])} mm; the h {rk["h_mm"]:g} and h {gc["h_mm"][-1]:g} mm masses '
+          f'must agree within {100 * gc["requirement_max_frac"]:g} %):', '',
+          '| Rank | Design | Score | E | W | Mass (g) | Mass at the five grids (g) | h 0.2 vs 0.15 |', '|---:|---|---:|---:|---:|---:|---|---:|']
+    grid = {x['design_id']: x for x in gc['rows']}
+    for t in rk['rows'][:len(gc['rows'])]:
+        x = grid[t['design_id']]
+        L.append(f'| {t["rank"]} | `{t["design_id"]}` | {t["score_100"]:.2f} | {t["E"]:.3f} | {t["worst_margin_W"]:.3f} | {t["mass_g"]:.1f} | '
+                 f'{" / ".join(f"{m:.1f}" for m in x["mass_g"])} | {100 * x["mass_rel_h020_vs_h015"]:.2f} % |')
+    return L + ['']
+
+
+def g5v6_vs_v5(r, rk):
+    """v6 on: the winner against the v5.0.0 winner, both on the v6 platform of record (same decoder and objective)."""
+    v5 = rk['v5_winner_same_platform']
+    sc, eg, ms, mgm = r['score'], r['ergonomics'], r['mass'], r['margins_min_over_plate_meshes']
+    rows = [('W_ERGOLIGHT_v2 (Tier 2, h 0.2 mm)', f'{v5["score"]["score_100"]:.2f}', f'{sc["score_100"]:.2f}', sc['score_100'] >= v5['score']['score_100']),
+            ('Worst margin (minimum over the plate meshes)', f'{v5["worst_margin"]:.3f}', f'{r["worst_margin"]:.3f}', r['worst_margin'] >= 1.0),
+            ('Load cases met', f'{v5["cases_met"]} of {v5["cases"]}', f'{r["cases_met"]} of {r["cases"]}', r['cases_met'] >= v5['cases_met']),
+            ('Mass of record', f'{v5["mass_g"]:.1f} g', f'{ms["of_record_g"]:.1f} g', ms['of_record_g'] <= v5['mass_g']),
+            ('Hand multiplier E', f'{v5["score"]["E"]:.3f}', f'{sc["E"]:.3f}', sc['E'] >= v5['score']['E']),
+            ('Grip length / perimeter', f'{v5["grip_length_mm"]:.1f} / {v5["grip_perimeter_mm"]:.1f} mm',
+             f'{eg["grip_length_mm"]:.1f} / {eg["grip_perimeter_mm"]:.1f} mm', None),
+            ('Genome (sha256)', f'`{v5["genome_sha256"][:12]}`', f'`{r["provenance"]["genome_sha256"][:12]}`', None)]
+    L = [f'## v{r["version"]} against v5.0.0', '',
+         f'Both winners on the v{r["version"]} platform of record, with the same decoder, requirement set and objective (the v5.0.0 winner '
+         f'`{v5["design_id"]}` re-evaluated here; its v5.0.0 record was made on arm64):', '',
+         '| Measure | v5.0.0 winner | v' + r['version'] + ' winner | Not worse |', '|---|---:|---:|:---:|']
+    for name, a, b, ok in rows:
+        L.append(f'| {name} | {a} | {b} | {"—" if ok is None else ("yes" if ok else "**no**")} |')
+    L += ['', '| Load case | v5.0.0 margin | v' + r['version'] + ' margin |', '|---|---:|---:|']
+    for k in CASE_KEYS:
+        L.append(f'| {k.replace("_", " ")} | {v5["margins_min_over_plate_meshes"][k]:.3f} | {mgm[k]:.3f} |')
+    return L + ['']
+
+
+def g5v6_verification(r, rv):
+    """v6 on: the first bullets of Verification and limits (platform, reproduction, lineage, GPU spike)."""
+    co, rp = r['cohort'], r['cohort']['reproduced']
+    sp = js(f'evidence/g5/v{rv}/spike/spike.json')
+    return [f'- **One platform of record.** {r["provenance"]["platform_of_record"]}. Every row of every archive re-scores bit for bit; '
+            f'every pool of the lineage is recomputed from its recorded sources byte for byte; re-evaluating all {co["elites"]:,} elites of the final '
+            f'pool reproduces every Tier-1 row ({co["tier1_rows_reproduced"]}); and `{rp["island"]}` re-run on {rp["rerun"]["rerun_host"]} reproduces its '
+            f'history bit for bit ({rp["history_entries_identical"]} entries over {rp["rerun"]["evaluations"]} evaluations).',
+            f'- **GPUs: renders, not search.** A profile of the Tier-1 evaluation ([`spike/spike.json`](evidence/g5/v{rv}/spike/spike.json)) puts '
+            f'{sp["profile"]["euclidean_distance_transform_pct"] + sp["profile"]["am_connectivity_pct"]:.0f} % of it in voxel kernels and '
+            f'{sp["profile"]["plate_skyline_solve_pct"]:.0f} % in the plate solve. Records must stay exact CPU arithmetic, so a GPU could only screen children '
+            f'before Tier 1: a perfect, free screen would give at most {sp["bounds"]["perfect_free_screen_top10_speedup"]:.1f}× more evaluations per hour, '
+            f'and the Tier-0 screen already keeps {sp["screen"]["tier1_top10_kept_by_tier0_top40"]} of the {sp["screen"]["tier1_top10"]} best children '
+            f'(rank correlation {sp["screen"]["spearman_tier0_tier1"]:.2f}). The 3× bar for adopting it is out of reach, so the search stays on the CPUs.']
+
+
+def g5v6_fem(rv):
+    """v6 on: the FEM renderings of every load case (g5-fem-fields), from their index in docs/g5/v<rv>/img/fem/."""
+    ix = js(f'docs/g5/v{rv}/img/fem/index.json')
+    L = ['## FEM renderings of every load case', '', ix['caption'], '', '<table>']
+    cases = ix['cases']
+    for k in range(0, len(cases), 2):
+        L.append('<tr>' + ''.join(f'<td width="50%"><img src="{c["svg"]}" alt="{c["title"]}" width="100%"><br>{c["title"]}: {c["reading"]}</td>'
+                                  for c in cases[k:k + 2]) + '</tr>')
+    L += ['</table>', '']
+    if ix.get('crosschecks'):
+        L += ['Independent hex8 voxel FE of the cases the score models analytically (a check, not used by the score):', '',
+              '| Case | Score model SF | Hex8 FE SF |', '|---|---:|---:|']
+        L += [f'| {c["title"]} | {c["model_sf"]:.2f} | {c["fe_sf"]:.2f} |' for c in ix['crosschecks']]
+        L.append('')
+    return L
+
+
+def g5v6_reproduce(r, rv, rk):
+    """v6 on: how to re-run an island, a merge, the certification and the receipt."""
+    bins = r['provenance']['binaries']
+    return ['', '## Reproduce', '', '```bash',
+            f'# static x86_64 binaries, as on the platform of record ({bins["build"]})',
+            f'RUSTFLAGS="-C target-feature=+crt-static" cargo build --release --locked --target x86_64-unknown-linux-gnu --manifest-path crates/g5/Cargo.toml --bins',
+            'B=crates/g5/target/x86_64-unknown-linux-gnu/release',
+            '# one island: the arguments of any evidence/g5/v' + rv + '/launch/<round>_<host>_<island>.json',
+            '$B/g5-continue run --out ~/jarambit_runs/evo_g5_v6/<round>/<host>/<island> --pool <pool> --evals <evals> --seed <raw_seed> \\',
+            '  --host <host> --island <island> --commit bf3e37fa --h 0.4 --tier1-top 0.4 --tier2-top 0 --log-every 25',
+            '# a pool of the lineage: the merge of its recorded sources, in order (evidence/g5/v' + rv + '/pools/*.json)',
+            '$B/g5-continue merge --out <pool> --from <previous pool>,<island>,<island>,...',
+            f'$B/g5-pilot eval <final_root> eval_h040.jsonl 0.4 4 && $B/g5-pilot tier2 <final_root> eval_h040.jsonl {rk["shortlist"]} tier2_h020.jsonl {rk["h_mm"]:g} 4',
+            '$B/g5-release receipt-v6 . <run_root> <cert_dir>', '```', '',
+            f'Every island\'s launch record and history, every pool\'s sources and the final pool are in [`evidence/g5/v{rv}/`](evidence/g5/v{rv}/); '
+            'the islands\' archives are a release asset.', '']
+
+
 def readme_g5():
     v, rv, r = receipt_g5()
     rs = toml('requirements/RS-karambit-v5.toml')
@@ -578,12 +722,14 @@ def readme_g5():
     img = man['images']
     sc, pv, co, bs, rk, gc = r['score'], r['provenance'], r['cohort'], r['baseline'], r['ranking'], r['grid_check']
     ld, mg, ms, am, bl, pt, eg, dc, ev = (r[k] for k in ('loads', 'margins', 'mass', 'am', 'blade', 'point', 'ergonomics', 'decoded', 'evolution'))
-    la, lc, sl = co['launch'], rk['linux_check'], rk['search_leader']
+    v6 = 'lineage' in r  # v6.0.0 on: a continuation with a pool lineage, on one platform of record
+    la, lc, sl = (None, None, rk['search_leader']) if v6 else (co['launch'], rk['linux_check'], rk['search_leader'])
+    vvd = r['provenance']['vv'] if v6 else f'evidence/g5/v{rv}/vv'
     wid = r['design_id']
     mat, am_rs, ed_rs, sr_rs, pt_rs, ms_rs = (rs[k] for k in ('material', 'am', 'edge', 'serration', 'point', 'mass'))
     eg_rs = rs['ergonomics']
     ein, esp = bl['edge_inner'], bl['edge_spine']
-    hist = {h['evals']: h for h in (json.loads(l) for l in rd(f'{ev["history_dir"]}/{ev["winner_island"]}.jsonl').splitlines() if l.strip())}
+    hist = {} if v6 else {h['evals']: h for h in (json.loads(l) for l in rd(f'{ev["history_dir"]}/{ev["winner_island"]}.jsonl').splitlines() if l.strip())}
     q = lambda s: s.replace('-', '--').replace('_', '__').replace(' ', '%20')
     mgm = r['margins_min_over_plate_meshes']  # B1: each case's margin of record is its minimum over the plate meshes
     pmc = r['plate_mesh_check']
@@ -661,9 +807,12 @@ def readme_g5():
           f'Edge sections at four stations per edge, true scale, from the exact decoder law (dashed: {ed_rs["per_side_angle_min_deg"]:g}° per side, '
           'the smallest angle the requirement allows):', '',
           picture(img['edge_sections_light'], img['edge_sections_dark'], 'Blade cross-sections of both edges'), '']
-    # ---- evolution
-    base_best = max(ev['baseline_final_best_score_100'])
-    L += ['## How evolution produced it', '',
+    # ---- v6: where the score comes from, the FEM renderings, the evolution, against v5.0.0
+    if v6:
+        L += g5v6_fitness(r) + g5v6_fem(rv) + g5v6_evolution(r, rk, gc, man) + g5v6_vs_v5(r, rk)
+    # ---- evolution (v5.0.0)
+    base_best = None if v6 else max(ev['baseline_final_best_score_100'])
+    L += [] if v6 else ['## How evolution produced it', '',
           f'{co["islands"]} independent islands each ran {int(co["evaluations_per_island"]):,} evaluations ({int(co["evaluations_total"]):,} in all) of a '
           f'MAP-Elites search over {la["archive_niches"]:,} Lloyd-relaxed niches, starting only from scrambled Sobol samples '
           f'({la["cohort"]["init"]} per island; no seeded or hand-made individuals). Alongside them, {bs["islands"]} control islands drew '
@@ -687,31 +836,31 @@ def readme_g5():
           f'masses must agree within {100 * gc["requirement_max_frac"]:g} %):', '',
           '| Rank | Design | Island | Score | E | W | Mass (g) | Mass at the five grids (g) | h 0.2 vs 0.15 |', '|---:|---|---|---:|---:|---:|---:|---|---:|']
     grid = {x['design_id']: x for x in gc['rows']}
-    for t in rk['rows'][:lc['designs']]:
+    for t in ([] if v6 else rk['rows'][:lc['designs']]):
         x = grid[t['design_id']]
         L.append(f'| {t["rank"]} | `{t["design_id"]}` | {t["island"]} | {t["score_100"]:.2f} | {t["E"]:.3f} | {t["worst_margin_W"]:.3f} | '
                  f'{t["mass_g"]:.1f} | {" / ".join(f"{m:.1f}" for m in x["mass_g"])} | {100 * x["mass_rel_h020_vs_h015"]:.2f} % |')
     # ---- verification and limits
-    vv = lambda n: js(f'evidence/g5/v{rv}/vv/{n}.json')
+    vv = lambda n: js(f'{vvd}/{n}.json')
     tg, ck, pm = vv('decoder_targets'), vv('checks'), vv('plate_mesh')
     spread = lambda key: max(100 * (max(x[key] for x in row['plate']) / min(x[key] for x in row['plate']) - 1) for row in pm['rows'])
     areas = ' / '.join(f'{x["max_area_mm2"]:g}' for x in pm['rows'][0]['plate'])
     rp = co['reproduced']
-    L += ['', '## Verification and limits', '',
+    L += ['', '## Verification and limits', ''] + (g5v6_verification(r, rv) if v6 else [
           f'- **Reproducible on the platform of record.** Re-evaluating all {co["elites"]:,} final elites reproduces every Tier-1 archive row bit for bit '
           f'({co["tier1_rows_reproduced"]} rows), and {rp["island"]} re-run from the launch record reproduces its history bit for bit '
           f'({rp["history_entries_identical"]} entries over {rp["evaluations"]} evaluations, {rp["platform"]}).',
           f'- **Not bit-identical across architectures.** On Linux x86_64 the platform maths library differs: the top {lc["designs"]} Tier-2 scores agree within '
           f'{100 * lc["max_rel_diff"]:.2f} % (bit-identical: {"yes" if lc["bit_identical"] else "no"}), the winner ranks {lc["winner_rank_linux"]} there as well, '
-          f'and {lc["evolution"]["island"]} keeps the same best design through all {lc["evolution"]["same_best_genome_through_evals"]} evaluations compared.',
-          f'- **Plate mesh sensitivity** ([`vv/plate_mesh.json`](evidence/g5/v{rv}/vv/plate_mesh.json)). Across plate meshes of {areas} mm² the '
+          f'and {lc["evolution"]["island"]} keeps the same best design through all {lc["evolution"]["same_best_genome_through_evals"]} evaluations compared.']) + [
+          f'- **Plate mesh sensitivity** ([`vv/plate_mesh.json`]({vvd}/plate_mesh.json)). Across plate meshes of {areas} mm² the '
           f'lateral safety factor of the study designs varies by up to {spread("lateral_sf"):.0f} % (not monotone) and the twist safety factor by up to '
           f'{spread("twist_sf"):.0f} %; the search and ranking use {pm["production_max_area_mm2"]:g} mm². So the winner was chosen on the minimum over '
           f'{" / ".join(f"{a:g}" for a in pmc["max_area_mm2"])} mm² ([`plate_meshes.jsonl`](evidence/g5/v{rv}/plate_meshes.jsonl), solved on the platform of '
           f'record, whose {pmc["production_max_area_mm2"]:g} mm² rows reproduce the ranking bit for bit): in rank order, the first design meeting every load case '
           f'on every mesh. {pick}; its lowest margin over the meshes is '
           f'{worst[0].replace("_", " ")} {worst[1]:.3f}.',
-          f'- **Numerical studies** ([`evidence/g5/v{rv}/vv/`](evidence/g5/v{rv}/vv/)): grid agreement of mass, blade-plate and solid-tip mesh studies, '
+          f'- **Numerical studies** ([`{vvd}/`]({vvd}/)): grid agreement of mass, blade-plate and solid-tip mesh studies, '
           f'the grip perimeter within {100 * tg["max_perimeter_rel_err"]:.2f} % of its gene, Rayleigh–Ritz against Euler within {abs(ck["ritz_column"]["rel_err"]):.0e}, '
           f'and Lloyd niches with {100 * (1 - ck["cvt_1024"]["lloyd_quantisation_error"] / ck["cvt_1024"]["halton_quantisation_error"]):.1f} % less quantisation error than Halton.',
           f'- **Texture on the blade.** The frozen G5.0 decoder lets the evolved surface texture reach the blade (here texture depth '
@@ -738,8 +887,10 @@ def readme_g5():
     for a in r['release_assets']:
         L.append(f'| `{a["file"]}` | {a["bytes"] / 1048576:.1f} MiB | `{a["sha256"][:16]}…` |')
     # ---- reproduce
-    lr = la['cohort']
-    L += ['', '## Reproduce', '', '```bash',
+    if v6:
+        L += g5v6_reproduce(r, rv, rk)
+    lr = None if v6 else la['cohort']
+    L += [] if v6 else ['', '## Reproduce', '', '```bash',
           'cargo build --release --locked --manifest-path crates/g5/Cargo.toml --bins',
           f'# one island of the cohort of record (decoder {pv["decoder_sha256"][:12]}, freeze label {lr["commit"]}); seed = host × 1000 + island',
           f'crates/g5/target/release/g5-evolve --out ~/jarambit_runs/evo_g5/<run>/island01/run --init {lr["init"]} --evals {lr["evals"]} \\',
@@ -749,8 +900,8 @@ def readme_g5():
           f'crates/g5/target/release/g5-pilot tier2 <cohort_root> eval_h040.jsonl {rk["shortlist"]} tier2_h020.jsonl {rk["h_mm"]:g} 4',
           f'crates/g5/target/release/g5-release receipt . <cohort_root> <control_root> <cert_dir> {rk["shortlist"]} {lc["designs"]}',
           f'crates/g5/target/release/g5-vv evidence/g5/v{rv}/vv 4', '```', '',
-          f'Every island\'s genomes and history are in [`evidence/g5/v{rv}/`](evidence/g5/v{rv}/), so any elite can be re-evaluated.', '',
-          '## Repository', '',
+          f'Every island\'s genomes and history are in [`evidence/g5/v{rv}/`](evidence/g5/v{rv}/), so any elite can be re-evaluated.', '']
+    L += ['## Repository', '',
           '- [`crates/g5/`](crates/g5/README.md): the G5 genome (G5.0), decoder, materials, load models, objective, search and release tools.',
           '- [`requirements/`](requirements/RS-karambit-v5.toml): RS-karambit-v5 and its [provenance](requirements/PROVENANCE-v5.md).',
           f'- [`evidence/g5/v{rv}/`](evidence/g5/v{rv}/): the receipt, the winner\'s genome, every island\'s history, the ranking, the grid check and `vv/`.',
@@ -796,7 +947,7 @@ def cad_readme_g5():
 
 if __name__ == '__main__':
     v_cur = rd('docs/VERSION').strip()
-    is_g5 = v_cur.startswith('5.') and os.path.isfile(os.path.join(ROOT, 'evidence/g5/RECORD'))
+    is_g5 = int(v_cur.split('.')[0]) >= 5 and os.path.isfile(os.path.join(ROOT, 'evidence/g5/RECORD'))
     new_readme = readme_g5() if is_g5 else readme()
     new_cad = cad_readme_g5() if is_g5 else cad_readme()
     if '--check' in sys.argv:

@@ -75,7 +75,7 @@ def g5_status(version):
 
 def current_status(version):
     """G5 from v5 on (when evidence/g5/RECORD exists), else G3; the same switch as gen_readme.py."""
-    if version.startswith('5.') and os.path.isfile(os.path.join(ROOT, 'evidence/g5/RECORD')):
+    if int(version.split('.')[0]) >= 5 and os.path.isfile(os.path.join(ROOT, 'evidence/g5/RECORD')):
         return g5_status(version)
     return g3_status(version)
 
