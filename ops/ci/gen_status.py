@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Generate STATUS.md from repo state (PR-0.28.5). Deterministic: no clock, no git calls.
-Sources: docs/VERSION, docs/RELEASES.md, the G3 release receipt named by evidence/g3/RECORD (the current design),
+Sources: docs/VERSION, docs/RELEASES.md, the release receipt of the current generation (G5 via evidence/g5/RECORD
+from v5.0.0, before that G3 via evidence/g3/RECORD),
 docs/v1/jarambit_v1_roadmap.json and the v1 provisional design's D1 index record (requirements verdict via
 ops/ci/rs_verdicts.py, G1 via metrics/global_metric.py).
 usage: gen_status.py          write STATUS.md
@@ -52,6 +53,31 @@ def g3_status(version):
             f'- **Blade:** both edges ground and serrated ({a["teeth"]} and {b["teeth"]} scallops).',
             f'- **Full table, evolution and limits:** [`README.md`](README.md) and [`docs/g3/paper/g3-v{version}.pdf`](docs/g3/paper/g3-v{version}.pdf).',
             '']
+
+
+def g5_status(version):
+    """The current design: the best individual of the G5 cohort of record, from its release receipt."""
+    rv = rd('evidence/g5/RECORD').strip()
+    r = json.loads(rd(f'evidence/g5/v{rv}/release.json'))
+    a, b, m = r['blade']['edge_inner'], r['blade']['edge_spine'], r['mass']
+    met = 'meets every RS-karambit-v5 load case' if r['meets_every_load_case'] else 'does not meet every RS-karambit-v5 load case'
+    return [f'## Current release: G5 v{version}', '',
+            f'- **Best individual:** `{r["design_id"]}`, the best of the v{rv} cohort of record '
+            f'([`evidence/g5/v{rv}/release.json`](evidence/g5/v{rv}/release.json)); status: {r["status"]}.',
+            f'- **Score:** {r["score"]["metric"]} {r["score"]["score_100"]:.2f} ({r["provenance"]["platform_of_record"]}); '
+            f'**mass** {m["of_record_g"]:.1f} g (partial volume at h 0.2 mm; watertight print mesh {m["print_mesh_g"]:.1f} g).',
+            f'- **Loads:** worst margin {r["worst_margin"]:.2f}; the design {met}.',
+            f'- **Blade:** both edges ground and serrated ({a["teeth"]} and {b["teeth"]} teeth).',
+            f'- **Full table, evolution and limits:** [`README.md`](README.md) and [`docs/g5/paper/g5-v{version}.pdf`](docs/g5/paper/g5-v{version}.pdf).',
+            '- **Earlier generations (history):** G3 v3.0.0 ([`evidence/g3/v3.0.0/release.json`](evidence/g3/v3.0.0/release.json)) '
+            'and the v1 study below.', '']
+
+
+def current_status(version):
+    """G5 from v5 on (when evidence/g5/RECORD exists), else G3; the same switch as gen_readme.py."""
+    if version.startswith('5.') and os.path.isfile(os.path.join(ROOT, 'evidence/g5/RECORD')):
+        return g5_status(version)
+    return g3_status(version)
 
 
 def generate(context=None):
@@ -108,7 +134,7 @@ def generate(context=None):
             state = 'planned'
         L.append(f"| {v} | {ms['title']} | {state} | {len(ms.get('work_items', []))} |")
     L += ['', 'History: `docs/history/` (archived root STATUS.md / GAPS.md snapshots). Release notes: `docs/RELEASES.md`.', '']
-    L[4:4] = g3_status(version) + ['## v1 study (historical record)', '', integrity_status(), '']
+    L[4:4] = current_status(version) + ['## v1 study (historical record)', '', integrity_status(), '']
     output = '\n'.join(L)
     return rs_verdicts.replace_claim_block(output, context) if context is not None else output
 

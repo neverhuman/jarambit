@@ -95,6 +95,18 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
       AM build traps no powder.
   - **Decoder freeze (G5.0, crate 5.0.0).** `G5_DECODER_FROZEN = true`, so record cohorts use `evo_g5`. The V&V
     receipts are in `evidence/g5/v5.0.0/vv/` (`g5-vv`, with SHA256SUMS).
+  - **Cohort of record and receipt.** 16 islands × 3,000 evaluations on xbabe4
+    (Sobol starts only), plus 2 random-search control islands with the same budget. The protocol
+    was fixed before any result. `g5-release` (fail-closed) wrote `evidence/g5/v5.0.0/release.json`.
+    - **Winner of record:** `kv4i012_g00009_dd6ffea5`, W_ERGOLIGHT_v2 59.34 at Tier 2, h 0.2 mm,
+      83.3 g. It meets every load case (worst margin 1.03).
+    - **Evolution against random search:** all 16 evolving islands beat the
+      best random-search island (42.9).
+    - **Search leader:** `kv4i012_g00204_19a0b6f0` (63.4 on the search grid) falls to rank
+      23 at Tier 2, because the solid tip carries the axial case at a margin of
+      0.96.
+    - **Cross-platform:** not bit-identical between arm64 and x86_64 (platform maths libraries). The top-8 scores
+      agree within 1.2 %, and the winner ranks 1 on both.
   - **Solid tip** (`crates/g5/src/tip_tet10.rs`):
     - the TET10 tip submodel with the RS-v5 tip loads, about the tip bisector (G3's axis ran from the coordinate
       origin), with RS-v5 material and the strict residual rule;

@@ -1,0 +1,3914 @@
+{
+  "am": {
+    "crevice_mm3": 306.14232761498823,
+    "floating_solid_mm3": 0.0,
+    "measured": true,
+    "sealed_void_mm3": 175.83847487473952
+  },
+  "baseline": {
+    "elites": 246,
+    "evaluations_per_island": 3000.0,
+    "finished_utc": "2026-10-27T12:23:08Z",
+    "islands": 2,
+    "islands_detail": [
+      {
+        "after_sobol_init": {
+          "best_mass_g": 161.85426131880433,
+          "best_score_100": 28.691848,
+          "evals": 3000
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "39cfb0b9b4dadfea5a80e9236746c34b0ed06cf4580ab9146debf0490dd70048",
+            "best_mass_g": 161.85426131880433,
+            "best_score_100": 28.691848,
+            "evals": 3000
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "39cfb0b9b4dadfea5a80e9236746c34b0ed06cf4580ab9146debf0490dd70048",
+          "best_mass_g": 161.85426131880433,
+          "best_score_100": 28.691848
+        },
+        "island": "island17",
+        "niches": 123,
+        "qd_score": 638.7383561847928,
+        "seed": 4017
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 122.74424647657686,
+          "best_score_100": 42.924094,
+          "evals": 3000
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "8f99d9d642ec1cb9533da57b8d40ecdddff428488e362d57cdeb93d82e4ed44e",
+            "best_mass_g": 122.74424647657686,
+            "best_score_100": 42.924094,
+            "evals": 3000
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "8f99d9d642ec1cb9533da57b8d40ecdddff428488e362d57cdeb93d82e4ed44e",
+          "best_mass_g": 122.74424647657686,
+          "best_score_100": 42.924094
+        },
+        "island": "island18",
+        "niches": 123,
+        "qd_score": 730.2655630916242,
+        "seed": 4018
+      }
+    ],
+    "root": "baseline-20261027",
+    "started_utc": "2026-10-27T10:49:56Z",
+    "tier1_rows_reproduced": 161,
+    "what": "Sobol random search with the cohort's budget, decoder, objective and promotion; not eligible to win"
+  },
+  "blade": {
+    "edge_inner": {
+      "edge_arc_mm": 80.76403662197495,
+      "mean_flank_deg": 37.241552445259636,
+      "per_side_angle_gene_deg": 21.45148144886327,
+      "serration_depth_mm": 1.227332576562027,
+      "sharpened_arc_mm": 75.47500586646598,
+      "teeth": 7,
+      "teeth_checked": 8,
+      "tooth_root_sf_min": 1.7134596300528635
+    },
+    "edge_spine": {
+      "edge_arc_mm": 91.22228618309867,
+      "mean_flank_deg": 31.065242839769912,
+      "per_side_angle_gene_deg": 23.062074331257595,
+      "serration_depth_mm": 1.3828017089040874,
+      "sharpened_arc_mm": 81.12770074985335,
+      "teeth": 5,
+      "teeth_checked": 6,
+      "tooth_root_sf_min": 2.7129340755942226
+    },
+    "max_apex_mm": 0.08785942539723413,
+    "max_half_angle_deg": 23.062022704640263,
+    "reach_chord_mm": 81.52872307590124,
+    "tip_xy_mm": [
+      150.807422708237,
+      -31.476598545134255
+    ],
+    "tooth_loads_n": {
+      "pry_across_blade_per_tooth": 20.0,
+      "snag_along_edge": 180.0
+    }
+  },
+  "cohort": {
+    "elites": 1508,
+    "evaluations_per_island": 3000.0,
+    "evaluations_total": 48000.0,
+    "finished_utc": "2026-10-27T12:29:08Z",
+    "h_mm": 0.4,
+    "init": "scrambled Sobol only (64 per island); no seeded or hand-made individuals",
+    "islands": 16,
+    "launch": {
+      "archive_niches": 1024,
+      "baseline": {
+        "binary": "g5-evolve-bf3e37fa (arm64 macOS)",
+        "binary_sha256": "55243328208fcf75880866073c9fc993f828113c0eba89cf1ed642ee607d7e74",
+        "command": "RECORD=1 BASELINE=1 ISLAND_OFFSET=16 H_VOX=0.4 T1_TOP=0.4 T2_TOP=0 LOG_EVERY=25 evo_g5_supervise.sh g5-evolve-bf3e37fa ~/jarambit_runs/evo_g5 baseline-20261027 2 3000 64 4 bf3e37fa 64 30",
+        "commit": "bf3e37fa",
+        "evals": 3000,
+        "h": 0.4,
+        "host": 4,
+        "init": 3000,
+        "islands": "17-18",
+        "log_every": 25,
+        "rayon_threads": 1,
+        "root": "baseline-20261027",
+        "seed": "host * 1000 + island",
+        "tier1_top": 0.4,
+        "tier2_top": 0.0
+      },
+      "cohort": {
+        "binary": "g5-evolve-bf3e37fa (arm64 macOS)",
+        "binary_sha256": "55243328208fcf75880866073c9fc993f828113c0eba89cf1ed642ee607d7e74",
+        "command": "RECORD=1 H_VOX=0.4 T1_TOP=0.4 T2_TOP=0 LOG_EVERY=25 evo_g5_supervise.sh g5-evolve-bf3e37fa ~/jarambit_runs/evo_g5 cohort-20261027 16 3000 64 4 bf3e37fa 64 30",
+        "commit": "bf3e37fa",
+        "evals": 3000,
+        "h": 0.4,
+        "host": 4,
+        "init": 64,
+        "islands": "01-16",
+        "log_every": 25,
+        "rayon_threads": 1,
+        "root": "cohort-20261027",
+        "seed": "host * 1000 + island",
+        "tier1_top": 0.4,
+        "tier2_top": 0.0
+      },
+      "recorded_by": "Claude-HZ, from the launch commands of 2026-10-27T10:49:54Z; g5-release checks it against the runs, and the re-run below reproduces island01",
+      "repro": {
+        "command": "g5-evolve --out <dir> --init 64 --evals 200 --seed 4001 --host 4 --island 1 --commit bf3e37fa --h 0.4 --tier1-top 0.4 --tier2-top 0 --log-every 25",
+        "island": "island01",
+        "platform": "arm64 macOS (xbabe4), the platform of record"
+      }
+    },
+    "reproduced": {
+      "evaluations": 200,
+      "history_entries_identical": 8,
+      "island": "island01",
+      "platform": "arm64 macOS (xbabe4), the platform of record"
+    },
+    "root": "cohort-20261027",
+    "started_utc": "2026-10-27T10:49:54Z",
+    "tier1_rows_reproduced": 706
+  },
+  "decoded": {
+    "L_g": 69.17574760258255,
+    "R_b": 12.45,
+    "R_od": 16.350686166551483,
+    "T0": 8.555026230622726,
+    "T_g": 11.173764125358387,
+    "T_sw": 16.93469079670092,
+    "angle_in": 21.45148144886327,
+    "angle_sp": 23.062074331257595,
+    "belly": -1.1451674875927793,
+    "blade_belly": 3.5457103797244365,
+    "blade_len": 71.207422708237,
+    "blade_reach_max_mm": 85.725,
+    "bore_d": 24.9,
+    "bore_round": 3.296533813745537,
+    "centre_idx": 51.45612548480858,
+    "centre_mid": 30.45612548480858,
+    "centre_ring": 9.97806274240429,
+    "crown": 0.2628803026485118,
+    "cx": -9.926433769134036,
+    "dL": 7.219622117773961,
+    "d_idx": 4.840499564103455,
+    "d_mid": 0.8554431980635571,
+    "d_ring": 2.689604916954632,
+    "edge_in_c1": -3.9437641968832837,
+    "edge_in_c2": 1.8877625042053188,
+    "edge_in_c3": -0.1912098609368038,
+    "edge_in_c4": 1.4453815052476053,
+    "edge_in_c5": -0.09140015828484538,
+    "edge_in_c6": -0.7339981019835414,
+    "edge_in_c7": 0.7841632079165717,
+    "edge_in_c8": -0.7334137616893093,
+    "edge_r": 3.7021176768942476,
+    "edge_sp_c1": -1.0383765490270758,
+    "edge_sp_c2": 0.11810203031460675,
+    "edge_sp_c3": -1.2472197468789084,
+    "edge_sp_c4": 1.3441730228947026,
+    "edge_sp_c5": 0.2684129733485072,
+    "edge_sp_c6": 0.6816004131391227,
+    "edge_sp_c7": 0.689243162735228,
+    "edge_sp_c8": 0.07217344103787138,
+    "edge_t_in": 0.07126079642649161,
+    "edge_t_sp": 0.08785857388920193,
+    "fuller_corrug_amp": 0.6220703120246155,
+    "fuller_depth": 1.3876530963168339,
+    "fuller_s0": 0.16326095548734534,
+    "fuller_s1": 0.6218440766874221,
+    "fuller_width": 7.867140142435138,
+    "grind_curv_in": -0.3124755035667137,
+    "grind_curv_sp": -0.00381209570924651,
+    "grip_hot": 1.6640990668211981,
+    "grip_perim": 84.12089316899059,
+    "guard_r": 8.895348057017221,
+    "h_exp": 1.1186750004442527,
+    "h_g": 17.718507151014414,
+    "h_root": 28.158044153240635,
+    "hand_scale": 1.0233910505030042,
+    "hook_drop": 31.476598545134255,
+    "jimp_d": 0.5309473694557196,
+    "jimp_n": 2.323436014927764,
+    "jimp_p": 2.4416969396740567,
+    "junction_deg": 30.98644490063406,
+    "lat_aniso_x": 1.3129989112339233,
+    "lat_cell": 11.746068534751828,
+    "lat_grade": 0.5329029667399783,
+    "lat_mix": 0.09041490426518484,
+    "lip_d": 1.6098724043024297,
+    "lip_w": 8.0,
+    "n0": 2.4140257484519623,
+    "n1": 2.6681104592369285,
+    "neck_in": 7.3729874856590385,
+    "neck_r": 7.669364957656365,
+    "od_h2": 0.5460921238933311,
+    "od_tear": 0.7497075250576435,
+    "off_idx": 1.7869197848337204,
+    "off_mid": -1.256777248742584,
+    "off_ring": -1.9827628605825198,
+    "pitch_idx": 21.0,
+    "pitch_mid": 21.0,
+    "pitch_ring": 19.95612548480858,
+    "point_angle": 72.97292981588942,
+    "point_len": 10.149570990771824,
+    "port_d": 3.762072706174629,
+    "port_n": 3.6006813649878158,
+    "ramp_h": 0.7791858269341423,
+    "rho_blade": 0.6974691988365533,
+    "rho_grad_wall": 0.11443442683274077,
+    "rho_grip": 0.10511063045271188,
+    "rho_guard": 0.11575969614040618,
+    "rho_ring": 0.6851756657032815,
+    "rib_w": 0.09412221006977799,
+    "ridge_amp": 1.2178753815995522,
+    "ridge_s0": 0.06684570953372736,
+    "ridge_s1": 0.6194056150353873,
+    "ridge_w": 6.599331102218299,
+    "ring_od": 32.70137233310297,
+    "s0_in": 0.06670261956774141,
+    "s0_sp": 0.11135193224693568,
+    "s_ps": 0.4183146149468521,
+    "s_sw": 0.40988079464091,
+    "scope_blade": 0.9936572111728825,
+    "scope_grip": 0.2221425174908707,
+    "scope_ring": 0.9530910967218262,
+    "ser_depth_in": 1.2279193344657031,
+    "ser_depth_sp": 1.3914254230365326,
+    "ser_duty_in": 0.46400580629656035,
+    "ser_duty_sp": 0.503983293552959,
+    "ser_pitch_in": 5.404471697531794,
+    "ser_pitch_sp": 5.974299648904412,
+    "ser_s0_in": 0.19532791195605564,
+    "ser_s0_sp": 0.18452597744982666,
+    "ser_s1_in": 0.7367539483021828,
+    "ser_s1_sp": 0.6303702521916991,
+    "sharpened_edge_cap_mm": 101.6,
+    "shear_web_amp": 0.020767487838454737,
+    "sigma_B": 0.029305566600881152,
+    "sigma_E": 0.08994590149181333,
+    "sigma_H": 0.03922869400227763,
+    "sigma_I": 0.079470779989264,
+    "sigma_S": 0.10654328093971066,
+    "skew": -0.003032905149359111,
+    "skin_t": 1.1946293271514845,
+    "spine_arch": -0.22879237599713864,
+    "sweep_deg": 0.9638918903035361,
+    "t_0p25_target": 0.24896388053936339,
+    "t_1p00_target": 0.4320699631803729,
+    "t_2p00_target": 0.9241818941014821,
+    "t_core": 4.046113974365516,
+    "t_guard": 7.774564234593571,
+    "t_tip": 3.3212685758939977,
+    "taper_deg": 52.75667532830802,
+    "taper_x0": 0.6986224646226571,
+    "tex_amp": 0.2016254757026977,
+    "tex_angle": 23.123583013480868,
+    "tex_pitch": 2.568254323595929,
+    "thumbpad": 2.5082198426362745,
+    "tip_angle": 36.77631429451087,
+    "tip_reserve": 11.526956159178901,
+    "w_idx": 8.37918417819637,
+    "w_knurl": 0.6020804731479306,
+    "w_mid": 11.914836675812913,
+    "w_ridge": 0.016408461646714476,
+    "w_ring": 9.561363519555176,
+    "web_t": 2.793948193497888,
+    "x_t": 6.4242523974174475,
+    "yb0": -10.671985709646528,
+    "yb_g": -12.362241903762524,
+    "yt0": 12.647337778723372,
+    "yt_land": 12.103998787871385,
+    "yt_sw": 13.691190130390256
+  },
+  "descriptors": {
+    "grip_roundness_h_over_t": 1.6625283818716095,
+    "groove_articulation_mm": 10.219856333272904,
+    "hook_drop_mm": 31.476598545134255,
+    "inner_turn_deg": 43.8891986168247,
+    "mass_g": 83.2579474970853,
+    "porosity_frac": 0.4889654034268546,
+    "silhouette_complexity": 5.714742131611499,
+    "surface_energy": 0.11256284913129394
+  },
+  "design_id": "kv4i012_g00009_dd6ffea5",
+  "ergonomics": {
+    "com_to_index_mm": 7.384467158392972,
+    "grip_h_over_t": 1.6625283818716095,
+    "grip_length_mm": 69.10747996092884,
+    "grip_perimeter_mm": 84.13500165738267,
+    "guard_height_mm": 16.000000000000004,
+    "hand_factors": {
+      "balance": {
+        "beta": 0.1,
+        "e": 1.0
+      },
+      "contact_pressure": {
+        "beta": 0.15,
+        "e": 0.6694329500821695
+      },
+      "grip_length": {
+        "beta": 0.1,
+        "e": 1.0
+      },
+      "grip_section": {
+        "beta": 0.2,
+        "e": 1.0
+      },
+      "grip_surface": {
+        "beta": 0.05,
+        "e": 1.0
+      },
+      "guard": {
+        "beta": 0.1,
+        "e": 1.0
+      },
+      "hand_edges": {
+        "beta": 0.15,
+        "e": 1.0
+      },
+      "ring": {
+        "beta": 0.15,
+        "e": 1.0
+      }
+    },
+    "spin_inertia_ratio": 0.7862178539592143
+  },
+  "evolution": {
+    "baseline_final_best_score_100": [
+      28.691848,
+      42.924094
+    ],
+    "cohort_after_sobol_init_median_score_100": 16.218197,
+    "cohort_final_best_score_100": {
+      "max": 63.357584,
+      "median": 53.97994799999999,
+      "min": 47.345255
+    },
+    "cohort_islands_beating_best_baseline": 16,
+    "figure": "docs/g5/v5.0.0/img/evolution.svg",
+    "history_dir": "evidence/g5/v5.0.0/history",
+    "islands": [
+      {
+        "after_sobol_init": {
+          "best_mass_g": 126.1335487894471,
+          "best_score_100": 39.677164,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "19653662b4ef943b59ddad0c4828fae4bd1414d6618ff19c730d65c4f8f84f0b",
+            "best_mass_g": 126.1335487894471,
+            "best_score_100": 39.677164,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "0d320319b4a8be6feb5ed2ababbfe22bbe5b86c14af05ed160b5bcce528cb190",
+            "best_mass_g": 125.59669685126157,
+            "best_score_100": 40.925344,
+            "evals": 275
+          },
+          {
+            "best_genome_sha256": "d4d8fd3ec114dd7b4f825406ca34f8975fc52db13f629c8aff58b7b05495ba2c",
+            "best_mass_g": 128.39020707980893,
+            "best_score_100": 42.18323,
+            "evals": 325
+          },
+          {
+            "best_genome_sha256": "e69468308e27c35829618b5cd214940b4f4be36dab0a1621167b141b7d0b80e3",
+            "best_mass_g": 127.50060255632307,
+            "best_score_100": 45.254785,
+            "evals": 350
+          },
+          {
+            "best_genome_sha256": "4d389e7eeb3483272047ae4fc7440c708f0788b18c008d9c5ac7a6503ffd7ce2",
+            "best_mass_g": 125.53509559539692,
+            "best_score_100": 45.49013,
+            "evals": 375
+          },
+          {
+            "best_genome_sha256": "20a2ffec74cab5d983e35dd56063bf56184d6d3cdca7480d6d4b45f6714c9935",
+            "best_mass_g": 126.24471003842642,
+            "best_score_100": 46.957543,
+            "evals": 475
+          },
+          {
+            "best_genome_sha256": "b7b3e99b3bb49aaddedb479a56fe789169b3f8eabd8f05367595fae646a4dd9a",
+            "best_mass_g": 102.98808591850705,
+            "best_score_100": 47.106686,
+            "evals": 700
+          },
+          {
+            "best_genome_sha256": "d3971d49187c4b52246e20a824eea6ce094afc3bbed3a8828278e453e675bf1a",
+            "best_mass_g": 107.21854393192707,
+            "best_score_100": 47.229689,
+            "evals": 775
+          },
+          {
+            "best_genome_sha256": "aa4b9085f693fb0bcb9dc1ab081211f548422abb74c3d63aece902e74abe5606",
+            "best_mass_g": 101.88871544169868,
+            "best_score_100": 47.688216,
+            "evals": 825
+          },
+          {
+            "best_genome_sha256": "65f1ffb436d5d2adad903415cf26af5cfb8ae2d5c64aad9b9a1a27a9ef47b714",
+            "best_mass_g": 110.89686663004211,
+            "best_score_100": 49.0454,
+            "evals": 850
+          },
+          {
+            "best_genome_sha256": "b8d691790d4e71b423e9d768999509b1dfb3e1d9dd10db64604796c66799d2c0",
+            "best_mass_g": 111.11612560043797,
+            "best_score_100": 49.201144,
+            "evals": 900
+          },
+          {
+            "best_genome_sha256": "bf41753f119d8784d4ef900dc44c3824cb56fba191e214dc41854274c5b7a69c",
+            "best_mass_g": 104.0070989125294,
+            "best_score_100": 50.069216,
+            "evals": 1200
+          },
+          {
+            "best_genome_sha256": "2c50de0df3e8ea6ad06b540c5beb5093cc6101b3335ad110b4db108b77cb17df",
+            "best_mass_g": 115.35107465888436,
+            "best_score_100": 53.031691,
+            "evals": 1425
+          },
+          {
+            "best_genome_sha256": "bf6b210960980324289987b2d67d631fb78c42c3cf73f5fecd454d94f50d6442",
+            "best_mass_g": 114.82023355616735,
+            "best_score_100": 53.457419,
+            "evals": 1675
+          },
+          {
+            "best_genome_sha256": "a4b9e89f8b19d742d65e750306d542fde4bfe18be872cc4e34a5fb720234e604",
+            "best_mass_g": 114.44072801446706,
+            "best_score_100": 53.618361,
+            "evals": 1850
+          },
+          {
+            "best_genome_sha256": "2fc4f20d8f9bf22f63e5c26b941c1fbcb51d1ffd297ab696a7faad80a1268936",
+            "best_mass_g": 104.91186778660806,
+            "best_score_100": 53.943037,
+            "evals": 2500
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "2fc4f20d8f9bf22f63e5c26b941c1fbcb51d1ffd297ab696a7faad80a1268936",
+          "best_mass_g": 104.91186778660806,
+          "best_score_100": 53.943037
+        },
+        "island": "island01",
+        "niches": 81,
+        "qd_score": 1725.9678561930489,
+        "seed": 4001
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 152.13507835855862,
+          "best_score_100": 22.817215,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "8b2ec158d9344390bd18a6ee5b9e43ed82e37edf4c4886dd9a5dda3975501954",
+            "best_mass_g": 152.13507835855862,
+            "best_score_100": 22.817215,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "efbf6b74a9bdd733dff9ce1d5638a8d0d1c63648fb103411f6943243dbf84656",
+            "best_mass_g": 129.11768336070207,
+            "best_score_100": 26.230497,
+            "evals": 300
+          },
+          {
+            "best_genome_sha256": "0faa4c059d68e029c07258204ab3a9475f1ee5f979f227176a3029b4d859c690",
+            "best_mass_g": 151.81139829412928,
+            "best_score_100": 26.92896,
+            "evals": 350
+          },
+          {
+            "best_genome_sha256": "1eef5df3ccf76f9e9e5d871f00d3d1d27efa1ad9ff6357761aacd5aa978e936b",
+            "best_mass_g": 122.29496734601518,
+            "best_score_100": 28.01272,
+            "evals": 375
+          },
+          {
+            "best_genome_sha256": "6d939e6b3569a8c794ca08294c9c0a9fdd4ed89c7a7d3b23882526e08e3f1c48",
+            "best_mass_g": 115.38193353225407,
+            "best_score_100": 39.932932,
+            "evals": 400
+          },
+          {
+            "best_genome_sha256": "e5c744b8d64b577ab5c5997fe26ce57013b75600164a58bd82f83816d773e9ad",
+            "best_mass_g": 112.90587863750325,
+            "best_score_100": 44.65004,
+            "evals": 475
+          },
+          {
+            "best_genome_sha256": "b6786a1104a3f2900a62d8b0f2f2ad41cb06e8b8504b3dd117493f291d14770a",
+            "best_mass_g": 112.87684863337591,
+            "best_score_100": 44.695547,
+            "evals": 850
+          },
+          {
+            "best_genome_sha256": "0b40cb08ef5f9205f8ee8b2bed39b4de99d127520621b622672dbe49ba99343f",
+            "best_mass_g": 113.45963709262233,
+            "best_score_100": 45.891039,
+            "evals": 900
+          },
+          {
+            "best_genome_sha256": "2c6fc2d1aa75586936210993824eb31c060b8c27802c701ce0eb41c8ed69b9d9",
+            "best_mass_g": 114.85087112144674,
+            "best_score_100": 45.916903,
+            "evals": 1300
+          },
+          {
+            "best_genome_sha256": "21375abc7cc2a80307b13ac477a6ede570fb48bd7d8e139d31badc9fc3483c28",
+            "best_mass_g": 122.93229131160291,
+            "best_score_100": 46.32919,
+            "evals": 1400
+          },
+          {
+            "best_genome_sha256": "4cb500953b67194d51a8c7ce6c512e4966971b5c22289877bab6a31525869969",
+            "best_mass_g": 120.33564108287558,
+            "best_score_100": 47.803719,
+            "evals": 1425
+          },
+          {
+            "best_genome_sha256": "dc281e05a0591df013540e5a67b8472ac7d86a0828c5b2dcd4d54650ca07219d",
+            "best_mass_g": 120.10290020142907,
+            "best_score_100": 49.562308,
+            "evals": 1800
+          },
+          {
+            "best_genome_sha256": "f46af9e09b16cdb6db727b5ba1094b4121231171648dac5c6b81a27fbdd21f5f",
+            "best_mass_g": 116.20583595159707,
+            "best_score_100": 50.850332,
+            "evals": 2048
+          },
+          {
+            "best_genome_sha256": "cc8e3a2a2870c40e292d9a0c5963b559b966333d5fce1289c09936ccb7c947d1",
+            "best_mass_g": 117.31331209242565,
+            "best_score_100": 52.273456,
+            "evals": 2100
+          },
+          {
+            "best_genome_sha256": "5e327e7c38c8ac61626a27cdb7f0decd743f2903ac46eeefe561d69098b6a25b",
+            "best_mass_g": 118.15588758595516,
+            "best_score_100": 52.740357,
+            "evals": 2125
+          },
+          {
+            "best_genome_sha256": "07c994dac978ff1a15d4d40a41454f46388950228178350e8c761cb08e253e3b",
+            "best_mass_g": 115.17623336383141,
+            "best_score_100": 52.816372,
+            "evals": 2850
+          },
+          {
+            "best_genome_sha256": "17eecb71028fc46713549371fc09530a484d32e59e114d9bfd6c04c0151919b8",
+            "best_mass_g": 115.2921092858352,
+            "best_score_100": 53.249989,
+            "evals": 2950
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "17eecb71028fc46713549371fc09530a484d32e59e114d9bfd6c04c0151919b8",
+          "best_mass_g": 115.2921092858352,
+          "best_score_100": 53.249989
+        },
+        "island": "island02",
+        "niches": 90,
+        "qd_score": 2867.1850584821987,
+        "seed": 4002
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 137.95446357679901,
+          "best_score_100": 27.625427,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "eca90f804965dbdcdf1b27cd6e3754b05148d05bff991ffc8deb6f62dd3e50c4",
+            "best_mass_g": 137.95446357679901,
+            "best_score_100": 27.625427,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "39eafe12a47cdf03088c0f96caf65967eab1b154e2b5708856cb324fb634594e",
+            "best_mass_g": 158.43900942002753,
+            "best_score_100": 32.832291,
+            "evals": 125
+          },
+          {
+            "best_genome_sha256": "d427bd0588cd9c6133f14b963144f1d2b63b501b09c94ed51742500d7893ea64",
+            "best_mass_g": 140.42627865845228,
+            "best_score_100": 34.892764,
+            "evals": 128
+          },
+          {
+            "best_genome_sha256": "d4d65e49014e6d4e74056a3cc5a649938c8079322db96ecf25ed11aa9d1267e7",
+            "best_mass_g": 134.7321957783653,
+            "best_score_100": 36.428581,
+            "evals": 150
+          },
+          {
+            "best_genome_sha256": "9b811265edfc437f4eaae2907dcd90eed8f5912797776ac9031bc5b1c7a44df1",
+            "best_mass_g": 151.23066475502034,
+            "best_score_100": 41.674554,
+            "evals": 200
+          },
+          {
+            "best_genome_sha256": "430c1b8b0db46685cdba62d7f818d0afe2c65110ebfe538b755e5ece88e0f412",
+            "best_mass_g": 151.67345143081246,
+            "best_score_100": 42.500008,
+            "evals": 250
+          },
+          {
+            "best_genome_sha256": "64b60358dc97a9d45de77058482524d4efb590dd7804d06fbe3cd2af83b9a0ac",
+            "best_mass_g": 151.6103746284668,
+            "best_score_100": 42.723117,
+            "evals": 500
+          },
+          {
+            "best_genome_sha256": "2e254436aefa88e32812a820a8c72ea72731d88a63881c613a4012b178d83c27",
+            "best_mass_g": 130.69743479262104,
+            "best_score_100": 43.008804,
+            "evals": 550
+          },
+          {
+            "best_genome_sha256": "16fb8d3f74ab00e686ab5c20bc514fd2aecd13da5e0b8f225f63bdc43eb830ea",
+            "best_mass_g": 151.59748212857727,
+            "best_score_100": 43.791762,
+            "evals": 575
+          },
+          {
+            "best_genome_sha256": "e6c5d5159a90942eec57a9a619276b33277cd54bb6507d5eb1695a777a4f2a5a",
+            "best_mass_g": 126.60329746691438,
+            "best_score_100": 46.155168,
+            "evals": 675
+          },
+          {
+            "best_genome_sha256": "5233acb1d021181aeeee8ccdc1c4018750feb61a7f06fda29d0490d474ef5296",
+            "best_mass_g": 123.1035143630017,
+            "best_score_100": 46.531961,
+            "evals": 950
+          },
+          {
+            "best_genome_sha256": "abf99e4f7144bdeecd192ddb2313491de633cc294220aff267f0c9a2c34f2b45",
+            "best_mass_g": 123.62876107514852,
+            "best_score_100": 47.182541,
+            "evals": 1100
+          },
+          {
+            "best_genome_sha256": "219f2561f4956ffd7f8f647dfee03aec64cab15df72f125dc47e5b9f02b1a2df",
+            "best_mass_g": 125.35266987503066,
+            "best_score_100": 47.216686,
+            "evals": 1125
+          },
+          {
+            "best_genome_sha256": "011ab5d73ebc0f5179f6271d883a9bb2b20b4625e730c34a94a051a5f583be73",
+            "best_mass_g": 126.21185287838212,
+            "best_score_100": 48.247797,
+            "evals": 1150
+          },
+          {
+            "best_genome_sha256": "8cce3dcbfdfd18b844b42865a8eb75a96f92f45af35e9c26b67794927e95c464",
+            "best_mass_g": 124.39056577128133,
+            "best_score_100": 48.751464,
+            "evals": 1200
+          },
+          {
+            "best_genome_sha256": "16c265a3cefb34f495771d305c7983730c3962d674ee0ead2597f6417db91ea0",
+            "best_mass_g": 112.71157347188216,
+            "best_score_100": 49.201312,
+            "evals": 1275
+          },
+          {
+            "best_genome_sha256": "b9d562ffba23013fe1311cc850b8204c9da5e1d405d7ce1a2d471094d5fcc7b0",
+            "best_mass_g": 111.36350427578535,
+            "best_score_100": 53.66747,
+            "evals": 1475
+          },
+          {
+            "best_genome_sha256": "af7932ffe305a156157bf90c0f2c76b5bc2dd690978852ff5de10f35be499915",
+            "best_mass_g": 111.62596676297034,
+            "best_score_100": 53.92966,
+            "evals": 2375
+          },
+          {
+            "best_genome_sha256": "1fe7b0b109fea9b8580edd513295ec7aeef081080557c3c1a0d510ac2ed5041f",
+            "best_mass_g": 110.74375386444979,
+            "best_score_100": 54.016859,
+            "evals": 2725
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "1fe7b0b109fea9b8580edd513295ec7aeef081080557c3c1a0d510ac2ed5041f",
+          "best_mass_g": 110.74375386444979,
+          "best_score_100": 54.016859
+        },
+        "island": "island03",
+        "niches": 103,
+        "qd_score": 1708.1463411635768,
+        "seed": 4003
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 123.72825686708022,
+          "best_score_100": 9.845937,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "3672560950c1f60a1a1aa60bb932c257ab8836263a79733519453c322bb37a61",
+            "best_mass_g": 123.72825686708022,
+            "best_score_100": 9.845937,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "3fd8fb2e39889ec6d1af94e7d62f1cd258f212243ea6260b732f07c62a362790",
+            "best_mass_g": 148.94884592341077,
+            "best_score_100": 16.196334,
+            "evals": 100
+          },
+          {
+            "best_genome_sha256": "84bba0ad91a0e6d3b5ee8e100236628fdbd8fb09c235f9594aee12a54401a0dc",
+            "best_mass_g": 160.68430919713012,
+            "best_score_100": 26.406797,
+            "evals": 125
+          },
+          {
+            "best_genome_sha256": "a64534df2025d9138395c55c396510ae750f874d36bba6c04fa006fa9cf86595",
+            "best_mass_g": 141.92138856697022,
+            "best_score_100": 35.410263,
+            "evals": 250
+          },
+          {
+            "best_genome_sha256": "03593c81195deca376aab961d7e2c5b1a3145bc54823965991c63260e8e36e67",
+            "best_mass_g": 151.35286687296994,
+            "best_score_100": 35.796899,
+            "evals": 275
+          },
+          {
+            "best_genome_sha256": "cf8a29beaaa85328174bc254d3985bbe529b256792cd6076e3c3476a0409305c",
+            "best_mass_g": 141.97796215406214,
+            "best_score_100": 40.836826,
+            "evals": 300
+          },
+          {
+            "best_genome_sha256": "26831b3cba6e546a1147ba58585bc95a6744b6fea5e88a8c3a3471991298969f",
+            "best_mass_g": 121.425142363556,
+            "best_score_100": 42.665541,
+            "evals": 400
+          },
+          {
+            "best_genome_sha256": "1d3a1d1a46f3ebab3e5f8260b494eaccd6b994576f93a462923c69f41bf67130",
+            "best_mass_g": 127.79764966127556,
+            "best_score_100": 43.508389,
+            "evals": 500
+          },
+          {
+            "best_genome_sha256": "c7a96c2d19ee19266433be50a9a252f6ea35932d246516362c91971c442b2183",
+            "best_mass_g": 126.62735500985877,
+            "best_score_100": 43.760872,
+            "evals": 650
+          },
+          {
+            "best_genome_sha256": "347f5ea059c5aa79ce33f790704bc67868db32b2f086747ac582970c1a98e05f",
+            "best_mass_g": 125.392071659937,
+            "best_score_100": 44.305264,
+            "evals": 750
+          },
+          {
+            "best_genome_sha256": "f5e59eace7f2c95ea346cbcfe4fb11ac3587fe65ab819aedb215ba1da0034318",
+            "best_mass_g": 135.5322417181607,
+            "best_score_100": 45.578247,
+            "evals": 850
+          },
+          {
+            "best_genome_sha256": "311c8bcd86eaf7011db56c35cd94607d62718d2bc50f6d21b53fa2b56a997018",
+            "best_mass_g": 134.91488522059788,
+            "best_score_100": 45.655987,
+            "evals": 875
+          },
+          {
+            "best_genome_sha256": "f01c6ca92fec0f2712049f645bf8e15b650ae480d3b1521876452b69547e6a07",
+            "best_mass_g": 133.16142789736662,
+            "best_score_100": 47.833183,
+            "evals": 925
+          },
+          {
+            "best_genome_sha256": "aaf6c6d22b1de6be0ea7a25231fa53b11b51b09ca5610312a58e3a3c118927c0",
+            "best_mass_g": 133.30243668268503,
+            "best_score_100": 47.97711,
+            "evals": 1000
+          },
+          {
+            "best_genome_sha256": "104d3ed6e8d507f6276b14e89a49336d7fb15f10e02b916aed468e18b95ceb20",
+            "best_mass_g": 135.42177636537724,
+            "best_score_100": 48.084476,
+            "evals": 1100
+          },
+          {
+            "best_genome_sha256": "55dd33ec41d75fb7af526da385fe3d59482bd44878c58fcbc1867505602a3985",
+            "best_mass_g": 132.37895047111004,
+            "best_score_100": 49.019824,
+            "evals": 1150
+          },
+          {
+            "best_genome_sha256": "e3cbe44a2d8ec345747128816e779409315452abf10964ce99641bb24ef7bd0e",
+            "best_mass_g": 127.09998295377676,
+            "best_score_100": 49.106212,
+            "evals": 1175
+          },
+          {
+            "best_genome_sha256": "cf58915bb1a66b77f25aab2771e84256ddb15be1842d48129948b4645c7b4303",
+            "best_mass_g": 135.43416743497173,
+            "best_score_100": 49.180833,
+            "evals": 1200
+          },
+          {
+            "best_genome_sha256": "0afcb03b6b4ee1de0a8dd0f0c5a4e44b6c6e60559e5227dafb06b63a50a74b98",
+            "best_mass_g": 133.17789357295476,
+            "best_score_100": 49.458263,
+            "evals": 1225
+          },
+          {
+            "best_genome_sha256": "a359d05cb88fbb95557bd56261a803af0cb73087c61fc47e6d6dae402e5c79db",
+            "best_mass_g": 136.1988848444843,
+            "best_score_100": 49.84324,
+            "evals": 1275
+          },
+          {
+            "best_genome_sha256": "d58e34105603839ac1efe39317fef653037d1e12a9b489a6b194be9ba5961b79",
+            "best_mass_g": 131.02483248833227,
+            "best_score_100": 49.969697,
+            "evals": 1325
+          },
+          {
+            "best_genome_sha256": "92c40c1533c2da850e85e589ad583cb7da3f924eea0d4614effa44c7b8ae12dd",
+            "best_mass_g": 120.53244819798375,
+            "best_score_100": 53.347785,
+            "evals": 1350
+          },
+          {
+            "best_genome_sha256": "e8ad2a1a1227be869d1b074f7e0b3ece572b7ddb384e3dec45c57285a40a5c35",
+            "best_mass_g": 120.45907549570944,
+            "best_score_100": 53.81337,
+            "evals": 1400
+          },
+          {
+            "best_genome_sha256": "ce51fe37c821657d9c0d4a7eec5ce6de47d5df35789f09aba2944ccaa2b2b6c5",
+            "best_mass_g": 118.92403811680097,
+            "best_score_100": 54.107465,
+            "evals": 1625
+          },
+          {
+            "best_genome_sha256": "6f47e4bfa7e938ac8dc8aae7843b5066008f9967aa3b1765fc47dd484a580a1a",
+            "best_mass_g": 117.21746397128955,
+            "best_score_100": 55.188116,
+            "evals": 2048
+          },
+          {
+            "best_genome_sha256": "f954645b1c7a248a099ef9d31b89a607fcf387d6236a0213718b0ead7b6cee30",
+            "best_mass_g": 109.14902376376142,
+            "best_score_100": 55.514604,
+            "evals": 2050
+          },
+          {
+            "best_genome_sha256": "b41d6744fa354bba6cdb22d55c67b69ac5fbcc768423949393c5af8a3024e157",
+            "best_mass_g": 106.59489152484073,
+            "best_score_100": 56.245691,
+            "evals": 2225
+          },
+          {
+            "best_genome_sha256": "51be018108e0818fb7560bc38f8dd897f72f1e884904a33f842acf99dd153982",
+            "best_mass_g": 104.18244165851543,
+            "best_score_100": 57.110665,
+            "evals": 2325
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "51be018108e0818fb7560bc38f8dd897f72f1e884904a33f842acf99dd153982",
+          "best_mass_g": 104.18244165851543,
+          "best_score_100": 57.110665
+        },
+        "island": "island04",
+        "niches": 91,
+        "qd_score": 2014.4213181061239,
+        "seed": 4004
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 132.1316498819371,
+          "best_score_100": 9.662112,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "8f1ad00317e40ee54ae7a9aa38a804dcb3214dc501d56949d7ae9a5db1be8f7c",
+            "best_mass_g": 132.1316498819371,
+            "best_score_100": 9.662112,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "41f8687d58781438c35e07b715bb5d27879f898b5127ff15d35f7f7c68dc7ec4",
+            "best_mass_g": 177.78505964635826,
+            "best_score_100": 10.740484,
+            "evals": 75
+          },
+          {
+            "best_genome_sha256": "1cbaf00646469a12a75ffcd0707770d37ce113216ecc9e24a6d091c2712f8bee",
+            "best_mass_g": 130.51554118129476,
+            "best_score_100": 19.169049,
+            "evals": 100
+          },
+          {
+            "best_genome_sha256": "6d21cc83fd79edac389e7059378dad22a60b58a348530a9c993cd28fcc3ef4a0",
+            "best_mass_g": 111.64104704173923,
+            "best_score_100": 33.767013,
+            "evals": 175
+          },
+          {
+            "best_genome_sha256": "6a393f2a40bea9c67ff76a0fe659f891cc816a238e4162a5c68b39bf7ed2b77d",
+            "best_mass_g": 121.46957952092814,
+            "best_score_100": 37.22835,
+            "evals": 200
+          },
+          {
+            "best_genome_sha256": "a934a8843983f2fb85f9f1a517054ade4cfeb39f69efc286fb74559b9c16425d",
+            "best_mass_g": 121.01798351809772,
+            "best_score_100": 39.936103,
+            "evals": 225
+          },
+          {
+            "best_genome_sha256": "2d33851bfea84a5470ee575e3bafdd643adae034d1601d7fa4baba0ea9d44392",
+            "best_mass_g": 128.23400089775132,
+            "best_score_100": 43.016659,
+            "evals": 250
+          },
+          {
+            "best_genome_sha256": "14b06ba7c207dada6546a32a8e76ecae8ec57d99a1c689976a0a7c33f0843e0c",
+            "best_mass_g": 115.64679161633954,
+            "best_score_100": 45.973164,
+            "evals": 325
+          },
+          {
+            "best_genome_sha256": "1d81ed86f2de96961a9184b93a5844025356f26bf07ad6dacf0e7f04eb152356",
+            "best_mass_g": 116.1755377301217,
+            "best_score_100": 46.053172,
+            "evals": 375
+          },
+          {
+            "best_genome_sha256": "b09da4e87147596ec86fd5ed4e4d0cd6fc38b946ccdf33a5b61c5c16a9b7362d",
+            "best_mass_g": 112.1421394844199,
+            "best_score_100": 46.692716,
+            "evals": 425
+          },
+          {
+            "best_genome_sha256": "aa81921cb2c12b613f90fa6b1b8319d4f03499988fb94c5538d710647d56c556",
+            "best_mass_g": 112.40328227698703,
+            "best_score_100": 47.243549,
+            "evals": 500
+          },
+          {
+            "best_genome_sha256": "1fb93a760638bae05e809060e7c37f37c8d6b36df554b6051faec297e6811bb7",
+            "best_mass_g": 110.98505072832342,
+            "best_score_100": 48.985782,
+            "evals": 700
+          },
+          {
+            "best_genome_sha256": "befba02754ed2bfd5d7d15f18190f7fddcd8fbc2b9b97750006bd8af9f13fbc8",
+            "best_mass_g": 110.97770388038136,
+            "best_score_100": 49.012258,
+            "evals": 1175
+          },
+          {
+            "best_genome_sha256": "f20c53d0e7e5ed8ebd8ebb000219bf670aa0300a0e6c8ffacf368a61528cac94",
+            "best_mass_g": 117.60464735140962,
+            "best_score_100": 49.228041,
+            "evals": 1750
+          },
+          {
+            "best_genome_sha256": "06241b857cb66b2f78522500e5f3d057693886c42ebd7f1b785cb79550785819",
+            "best_mass_g": 113.60932189349259,
+            "best_score_100": 49.458303,
+            "evals": 1775
+          },
+          {
+            "best_genome_sha256": "1d5b58a6c80fb114df0ecfdf0dd14f1c5f7963c14cd6704bac9daeb8281aa013",
+            "best_mass_g": 110.6615021683491,
+            "best_score_100": 51.015163,
+            "evals": 1850
+          },
+          {
+            "best_genome_sha256": "b22ddbc4bf2c8ce44534d2a77b18a39c11aa641f24bbaa2cf930750b1febddc9",
+            "best_mass_g": 108.14070867320912,
+            "best_score_100": 51.072611,
+            "evals": 2175
+          },
+          {
+            "best_genome_sha256": "b2dcbbd4da34bd0081da91c3488d2992ad9a54e0b7cf9afafc2483f029f6b7a1",
+            "best_mass_g": 109.18206414446406,
+            "best_score_100": 51.526159,
+            "evals": 2200
+          },
+          {
+            "best_genome_sha256": "bbc4363f8d012b53bc6881c39a7430db283af647e6010a49d3ced65c61545972",
+            "best_mass_g": 110.39378711715753,
+            "best_score_100": 52.047918,
+            "evals": 2500
+          },
+          {
+            "best_genome_sha256": "3dd1763fc29ffbe3ec1a51badf19c6148ee84140c1901c439acabd03f4d2b3a2",
+            "best_mass_g": 107.78658287199721,
+            "best_score_100": 52.33268,
+            "evals": 2625
+          },
+          {
+            "best_genome_sha256": "8870d9df5205b5ea10c7f415e8155cc6d36ae4594d3456ecb984539cf307ccb0",
+            "best_mass_g": 110.92041595748195,
+            "best_score_100": 52.732231,
+            "evals": 2875
+          },
+          {
+            "best_genome_sha256": "64458653e8331f47a3e39f3e5896f20345c4273f6ecee421eaef7ae62f614b7e",
+            "best_mass_g": 105.5606813559943,
+            "best_score_100": 54.248859,
+            "evals": 2925
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "64458653e8331f47a3e39f3e5896f20345c4273f6ecee421eaef7ae62f614b7e",
+          "best_mass_g": 105.5606813559943,
+          "best_score_100": 54.248859
+        },
+        "island": "island05",
+        "niches": 103,
+        "qd_score": 1826.814898034602,
+        "seed": 4005
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 118.256015810716,
+          "best_score_100": 6.045874,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "8c50eaa1362f8297e86d4311ddb580d1bc8b54ca6d3467f96abd1908aa604c8b",
+            "best_mass_g": 118.256015810716,
+            "best_score_100": 6.045874,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "91d1de73aaf82eaec7bb9ec0b5cbcd5feb4b7ddbe504e09cb1f211187c124740",
+            "best_mass_g": 134.14123164591408,
+            "best_score_100": 7.086441,
+            "evals": 100
+          },
+          {
+            "best_genome_sha256": "8b62d92f1d4f35fe6a98ceefb7d0bb7d5f8411d16dcd8c58a6a29528a419b7fe",
+            "best_mass_g": 131.99573617049884,
+            "best_score_100": 11.996994,
+            "evals": 125
+          },
+          {
+            "best_genome_sha256": "6b16de2406e431bc8e614b3bf717dd89be6d495f9460cca988676e20a335bb59",
+            "best_mass_g": 120.46204742986232,
+            "best_score_100": 27.105768,
+            "evals": 150
+          },
+          {
+            "best_genome_sha256": "d5f4264623b6bf920523e7611a9ae2e48325022a3c7a9fa644123c494bb28f60",
+            "best_mass_g": 119.3203656682818,
+            "best_score_100": 31.406234,
+            "evals": 250
+          },
+          {
+            "best_genome_sha256": "a4e4afbcda781deeb886a811b33eca21ce0d1df2eae776406b8f4e5bef41a6f7",
+            "best_mass_g": 122.29516960747466,
+            "best_score_100": 31.497771,
+            "evals": 325
+          },
+          {
+            "best_genome_sha256": "8c22276255b0cb94be366bfd06dabd9f5385d492384520ac310b8f25edbe3907",
+            "best_mass_g": 126.05251768794167,
+            "best_score_100": 31.56788,
+            "evals": 450
+          },
+          {
+            "best_genome_sha256": "bd9b15f00f214652c681ce93c75132bc0961399e269450621ab757beb470de2f",
+            "best_mass_g": 120.63148031412157,
+            "best_score_100": 32.930868,
+            "evals": 475
+          },
+          {
+            "best_genome_sha256": "7957d3906e32c2d4a3646d3723cda105d9758e6e38a069880fee45b776c5fb46",
+            "best_mass_g": 115.4908475399842,
+            "best_score_100": 37.532981,
+            "evals": 500
+          },
+          {
+            "best_genome_sha256": "d9f41473eaf8d43db2a526755892eda1728b459f838b691356f262eaeb874703",
+            "best_mass_g": 145.1649098824346,
+            "best_score_100": 38.1462,
+            "evals": 550
+          },
+          {
+            "best_genome_sha256": "5c0f4c26fb92374d3355e5ae42cf3196d39f0d7acb79bc1d60ebe5ac684f7b29",
+            "best_mass_g": 114.62881966583018,
+            "best_score_100": 42.205776,
+            "evals": 650
+          },
+          {
+            "best_genome_sha256": "84d4d850556e5ab91450bebe0d59273dfcdea91823e08f287508d4c21bec3447",
+            "best_mass_g": 113.47784276322709,
+            "best_score_100": 42.612232,
+            "evals": 850
+          },
+          {
+            "best_genome_sha256": "5ccda841c971f285ce850c0f2b90fa901cacf62177d8f661ccc28e1cf846afd4",
+            "best_mass_g": 112.70452459983038,
+            "best_score_100": 43.811925,
+            "evals": 925
+          },
+          {
+            "best_genome_sha256": "f3c82ba1b2d85aa8938ff90a30de33dc98457622dab4cb9b7e31c188b41527d3",
+            "best_mass_g": 112.63808308110714,
+            "best_score_100": 44.356035,
+            "evals": 975
+          },
+          {
+            "best_genome_sha256": "c71ae40f81e5c418b469cf7173fe8798cb40c1256cf8eed8541265f222be620e",
+            "best_mass_g": 112.83673365249851,
+            "best_score_100": 44.363963,
+            "evals": 1024
+          },
+          {
+            "best_genome_sha256": "445231474a4cca455abe9cec3d211d9be98520403746a748fe259ebf915cb732",
+            "best_mass_g": 112.68514556529969,
+            "best_score_100": 45.680201,
+            "evals": 1075
+          },
+          {
+            "best_genome_sha256": "6bca6e8f51019099c2dff043c58c7369f9afd7475f1a98cbcfd2b32940e2dc8c",
+            "best_mass_g": 108.30976904147084,
+            "best_score_100": 46.992075,
+            "evals": 1425
+          },
+          {
+            "best_genome_sha256": "84d2471c6bda1a0c100fb036a716648e4c9b4e613fb74b50ca44214eac6360cd",
+            "best_mass_g": 108.41655967857818,
+            "best_score_100": 48.111847,
+            "evals": 1450
+          },
+          {
+            "best_genome_sha256": "718a8c898c83750ab3005ff7b66881d8d5fd751f214e6ae29633ca025091e088",
+            "best_mass_g": 107.63679651510897,
+            "best_score_100": 49.271346,
+            "evals": 1550
+          },
+          {
+            "best_genome_sha256": "4f426af4383aaab3f753c18714184759f63fcece87c111c45cbf05b094063dda",
+            "best_mass_g": 110.00628812324962,
+            "best_score_100": 51.794728,
+            "evals": 1625
+          },
+          {
+            "best_genome_sha256": "9a1c291da0e9c19e51d24f11110fe3f1a171ac80fa4cb5b9525be0c4e4a16371",
+            "best_mass_g": 110.51022918261758,
+            "best_score_100": 51.920778,
+            "evals": 1700
+          },
+          {
+            "best_genome_sha256": "45fbbb4ab53754a8aa1b7ca04eed23adfd3742554f19dfae3e40cb7c35fc39ac",
+            "best_mass_g": 110.57124836932003,
+            "best_score_100": 51.932828,
+            "evals": 2000
+          },
+          {
+            "best_genome_sha256": "1c569b773d6f493ed499d16838c41a9835ed2e3c4703a411750c44de9fcb5f3d",
+            "best_mass_g": 108.65731741952021,
+            "best_score_100": 52.84902,
+            "evals": 2275
+          },
+          {
+            "best_genome_sha256": "1e14ddd2b1d18ffd4a746ead02b3407e614c8013692fa61282e30d2fa08fec9e",
+            "best_mass_g": 108.20190044243854,
+            "best_score_100": 53.169227,
+            "evals": 2400
+          },
+          {
+            "best_genome_sha256": "7ef8a8b6b3e880623ca5fcd5899f697399e405a4adde7ad92526ebd8dc2c107b",
+            "best_mass_g": 108.08680988060009,
+            "best_score_100": 53.73469,
+            "evals": 2700
+          },
+          {
+            "best_genome_sha256": "61907f75d2c84324187c3a231c2ce95df052020d6564ed0dbf80dc950742117a",
+            "best_mass_g": 106.9134636227738,
+            "best_score_100": 53.820547,
+            "evals": 2925
+          },
+          {
+            "best_genome_sha256": "c138747ebe6bc826e27735962a90268de6cd99ce72ea0454a21b26a9950732f6",
+            "best_mass_g": 109.93532561062162,
+            "best_score_100": 54.128581,
+            "evals": 3000
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "c138747ebe6bc826e27735962a90268de6cd99ce72ea0454a21b26a9950732f6",
+          "best_mass_g": 109.93532561062162,
+          "best_score_100": 54.128581
+        },
+        "island": "island06",
+        "niches": 109,
+        "qd_score": 2108.317930981032,
+        "seed": 4006
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 173.45942934519485,
+          "best_score_100": 24.362963,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "8d77acfb4b4417c1db4685d4319a46602200c1cdd25728122d37a710b6655187",
+            "best_mass_g": 173.45942934519485,
+            "best_score_100": 24.362963,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "2bd89838c7ceafc86f2d4381109fa0e13af9e144369f84aa12896ad50d097e25",
+            "best_mass_g": 179.99433190653835,
+            "best_score_100": 28.724783,
+            "evals": 225
+          },
+          {
+            "best_genome_sha256": "0d5d9d34e168b8ee58c66fbd4906181b27326d0a8131fa5b31ada88e242dce41",
+            "best_mass_g": 117.07340028672473,
+            "best_score_100": 39.59818,
+            "evals": 250
+          },
+          {
+            "best_genome_sha256": "4310c5fa2ff2a9a7fe1921bb914a37eab370f1f33709ce40736ccffb2cf0f84b",
+            "best_mass_g": 118.49632730074153,
+            "best_score_100": 39.807535,
+            "evals": 275
+          },
+          {
+            "best_genome_sha256": "079cc045abfddeb74c2f8196ac9293fbbf65880c9a8a678f6bb454992cd6d9ae",
+            "best_mass_g": 118.2618162073235,
+            "best_score_100": 40.210248,
+            "evals": 300
+          },
+          {
+            "best_genome_sha256": "48d450d8cd6c7e2592bc9af9da8d3ca8851da8fce95670f44417856d05393564",
+            "best_mass_g": 116.70019258955864,
+            "best_score_100": 40.886431,
+            "evals": 500
+          },
+          {
+            "best_genome_sha256": "b10c154fb834bb1164f53e0dd00a1c774a1e5cf48ebd214004e48398d99ac7e7",
+            "best_mass_g": 112.12239484116944,
+            "best_score_100": 42.401452,
+            "evals": 650
+          },
+          {
+            "best_genome_sha256": "f1164e19bbed2a19a93b0ee7000dd777c29417b9ea8b7b6ec8fce8fdda0b49ff",
+            "best_mass_g": 109.7851363040546,
+            "best_score_100": 45.445913,
+            "evals": 675
+          },
+          {
+            "best_genome_sha256": "a862303d9971e58543b182ba91b845254bb8834081890a4fe6aa1d785b65e637",
+            "best_mass_g": 113.51839388832609,
+            "best_score_100": 45.780997,
+            "evals": 1024
+          },
+          {
+            "best_genome_sha256": "828b647871299f33e03604c5da7232c1f58e09055a4cc738b2347cbf37739c89",
+            "best_mass_g": 107.37627855313146,
+            "best_score_100": 45.967044,
+            "evals": 1175
+          },
+          {
+            "best_genome_sha256": "1391770f76fcc7ab87febc9aad8bcb73a32328642d06f7df6c172ff89744fb54",
+            "best_mass_g": 113.1226634204935,
+            "best_score_100": 46.985501,
+            "evals": 1225
+          },
+          {
+            "best_genome_sha256": "4eede3de13f066cb5cd80c7def67d7dc52b170189108e01098884086bcc216ff",
+            "best_mass_g": 112.06825153271453,
+            "best_score_100": 47.240312,
+            "evals": 1325
+          },
+          {
+            "best_genome_sha256": "8f9df66bd6946baae20e56778cdc9f65d971dd02f1d7c563cbac8b89b8e2cece",
+            "best_mass_g": 106.45222209571784,
+            "best_score_100": 47.35984,
+            "evals": 1525
+          },
+          {
+            "best_genome_sha256": "d0993ca64c80c49144b7dce9222ded0c02c2b8c25f937ee58dfd08b0cbf51d3a",
+            "best_mass_g": 113.76639139855031,
+            "best_score_100": 49.558058,
+            "evals": 1675
+          },
+          {
+            "best_genome_sha256": "a93871933843a6436e94ce2282994d4b0e5163bc342f205b24e35fc41141f559",
+            "best_mass_g": 119.06012894876963,
+            "best_score_100": 49.614118,
+            "evals": 1800
+          },
+          {
+            "best_genome_sha256": "c2496b635a2a11ab1c5066b76c70e995b7e843f1eb0cf0dbde4c08fc72912521",
+            "best_mass_g": 118.16606570962723,
+            "best_score_100": 50.13131,
+            "evals": 1825
+          },
+          {
+            "best_genome_sha256": "cefcd13c1c897303295d19abadb1cc33e4d535d4426efc4f2b798a6220c51e9f",
+            "best_mass_g": 111.20114243111937,
+            "best_score_100": 50.389042,
+            "evals": 1850
+          },
+          {
+            "best_genome_sha256": "74fafceaf9a696fd0921aed27a587a116e81f8f4c0b1a1f10a0185965511cc8d",
+            "best_mass_g": 112.3470597162845,
+            "best_score_100": 50.936935,
+            "evals": 1950
+          },
+          {
+            "best_genome_sha256": "21c18da566ee17179a3eac2bda8d32d33d0cb888d16e6119f4a720a6b332e867",
+            "best_mass_g": 108.80068550717048,
+            "best_score_100": 52.247796,
+            "evals": 1975
+          },
+          {
+            "best_genome_sha256": "e0e6c57911cb2216232b6418a04639ecbea996152ab8f4bc91d518073ce67391",
+            "best_mass_g": 97.00841708319969,
+            "best_score_100": 53.450596,
+            "evals": 2000
+          },
+          {
+            "best_genome_sha256": "77125631428152a7f9c1c631ebb9d605a7095458ea07e6f371703da173e197a3",
+            "best_mass_g": 97.04856220942496,
+            "best_score_100": 53.581067,
+            "evals": 2075
+          },
+          {
+            "best_genome_sha256": "f4c1c259593cae2f9cbc546647fb700f7b8b7c77b8ee175486155ff6dfa5f89c",
+            "best_mass_g": 99.95462605027086,
+            "best_score_100": 54.752796,
+            "evals": 2325
+          },
+          {
+            "best_genome_sha256": "69c8463027eb76f35996a6183222f5514cb0d04398f6cb3e9a398c653b2eb627",
+            "best_mass_g": 104.41882476936405,
+            "best_score_100": 56.216646,
+            "evals": 2350
+          },
+          {
+            "best_genome_sha256": "4d071e0ac2378f7b2e8b7cbe9b819ea023c0a7cc0c2be94320a16b30c533ab3c",
+            "best_mass_g": 102.9602403230561,
+            "best_score_100": 56.836528,
+            "evals": 2450
+          },
+          {
+            "best_genome_sha256": "73c20043534a16b3650547909bc576059d68dfff61bbe19d2dfe3af068b92a2c",
+            "best_mass_g": 101.95637479726076,
+            "best_score_100": 57.645401,
+            "evals": 2650
+          },
+          {
+            "best_genome_sha256": "a54faf93185956741752bd4619837aa989f7d7b4dc139a94b3cba1376c037419",
+            "best_mass_g": 102.06831150457384,
+            "best_score_100": 57.805304,
+            "evals": 2700
+          },
+          {
+            "best_genome_sha256": "5e62ba21ff42cf50ced1e5820f85805b99d2df2da7cc9b9c0cbbb026815e5167",
+            "best_mass_g": 103.16607595658687,
+            "best_score_100": 57.968168,
+            "evals": 2800
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "5e62ba21ff42cf50ced1e5820f85805b99d2df2da7cc9b9c0cbbb026815e5167",
+          "best_mass_g": 103.16607595658687,
+          "best_score_100": 57.968168
+        },
+        "island": "island07",
+        "niches": 97,
+        "qd_score": 2016.2878075787,
+        "seed": 4007
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 138.3955703216237,
+          "best_score_100": 17.724858,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "5e4e1000b3e4ddb0d23026d38c2a179d125b9ee390a3b729be1915ef82cf8265",
+            "best_mass_g": 138.3955703216237,
+            "best_score_100": 17.724858,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "38b362fb3574602880b0775748ab070579e8e708773dfa099f01aec338acda43",
+            "best_mass_g": 147.1992818895227,
+            "best_score_100": 18.563787,
+            "evals": 125
+          },
+          {
+            "best_genome_sha256": "21006b2362598037b982db510db795065c6762f2de8e8ccdf7f31db9932f3769",
+            "best_mass_g": 190.54305220729276,
+            "best_score_100": 21.957801,
+            "evals": 150
+          },
+          {
+            "best_genome_sha256": "cadce55dd021c472eb4857b32f5fa095218edc5a2f67a0a64dbb99f876a5193d",
+            "best_mass_g": 179.46824332835914,
+            "best_score_100": 22.799657,
+            "evals": 175
+          },
+          {
+            "best_genome_sha256": "7154c0f592125e2165ff4deb0033a1e04f63eb0fa9714739ce00166117a96eac",
+            "best_mass_g": 169.59602399495438,
+            "best_score_100": 22.960487,
+            "evals": 200
+          },
+          {
+            "best_genome_sha256": "4fef454fe5cca7c5c8a17b86ca14e541fc0fd7a78cc8405ea3a8322a6fe85a49",
+            "best_mass_g": 130.12074196057614,
+            "best_score_100": 39.125484,
+            "evals": 250
+          },
+          {
+            "best_genome_sha256": "1a4cadbe6d80316bade29e647d7f47723dcd88c75608b88614d9b7bf4d1b9f04",
+            "best_mass_g": 137.27165027658097,
+            "best_score_100": 41.1119,
+            "evals": 550
+          },
+          {
+            "best_genome_sha256": "cde770f4eddaed5641be1552ecf4c4697ad14d5b88d04ca1651ea07cd87cd76a",
+            "best_mass_g": 128.02558410785613,
+            "best_score_100": 45.67904,
+            "evals": 625
+          },
+          {
+            "best_genome_sha256": "e78ea42ee6df065e35cdafe2e2e86511f18fe554ce14eb1b467fb26478e9be21",
+            "best_mass_g": 128.43973584842954,
+            "best_score_100": 47.163902,
+            "evals": 725
+          },
+          {
+            "best_genome_sha256": "4d6f934f63bd1ed4822d458708d776d2f4610178be18be099780f437e3eaf033",
+            "best_mass_g": 124.70543106639829,
+            "best_score_100": 48.934963,
+            "evals": 800
+          },
+          {
+            "best_genome_sha256": "7a91936aac873cea497feb109689a783846731e3b7e8d9c6c24eb676499e0dbe",
+            "best_mass_g": 123.19571935786097,
+            "best_score_100": 49.444241,
+            "evals": 925
+          },
+          {
+            "best_genome_sha256": "0ddc8dc7d87641f262d33912929ef79b1610772c394393b013c96bd826893c13",
+            "best_mass_g": 120.72489646939557,
+            "best_score_100": 50.504781,
+            "evals": 1024
+          },
+          {
+            "best_genome_sha256": "d8edc2d1bd9cc86ec66e0ac008390008b107b1682124c027c9dc948988f0c06f",
+            "best_mass_g": 118.70571599107382,
+            "best_score_100": 51.009441,
+            "evals": 1125
+          },
+          {
+            "best_genome_sha256": "2eff4a1eccd057af31a8a7a072b3f83efed8f782edde5fbd31dfa04ca3a28ae5",
+            "best_mass_g": 119.69640428161887,
+            "best_score_100": 51.224131,
+            "evals": 1325
+          },
+          {
+            "best_genome_sha256": "24f31cc5debcc387ec0bc4cb6eca5b612881c3dcce8697e6a409007bcd270136",
+            "best_mass_g": 116.9190200112559,
+            "best_score_100": 53.40432,
+            "evals": 1375
+          },
+          {
+            "best_genome_sha256": "de09733907f0937fd3b9c754a9275acaf44361ba7287a0c856efc56a648b9d59",
+            "best_mass_g": 114.10572614428271,
+            "best_score_100": 53.406372,
+            "evals": 1850
+          },
+          {
+            "best_genome_sha256": "a61a653978ac29cd21a57854a6b1b98c1dbc2c2daf70f3761b3ca45b29de1df4",
+            "best_mass_g": 113.86735363090875,
+            "best_score_100": 53.727422,
+            "evals": 2425
+          },
+          {
+            "best_genome_sha256": "359b7c58e04d452dff694e941d7ec8dd0f11feb38682f99e9077c3337f647c49",
+            "best_mass_g": 114.05157707448906,
+            "best_score_100": 53.782726,
+            "evals": 2525
+          },
+          {
+            "best_genome_sha256": "60569fa41dd7ac5b5b3664ed572897fc18b06884b2eca28b9563852ccbdfa7d4",
+            "best_mass_g": 115.61566333005783,
+            "best_score_100": 53.884075,
+            "evals": 2825
+          },
+          {
+            "best_genome_sha256": "b6ee1ae1b81e9cad01d79c1a32645e39320d37fe0123336638a53631e9125c2c",
+            "best_mass_g": 114.3094081209177,
+            "best_score_100": 53.950633,
+            "evals": 2900
+          },
+          {
+            "best_genome_sha256": "ebfd38e742d01d64329fe9e4b389304c41f28723b4ce24724dd0a26f065bc466",
+            "best_mass_g": 114.36582422334816,
+            "best_score_100": 54.060768,
+            "evals": 2925
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "ebfd38e742d01d64329fe9e4b389304c41f28723b4ce24724dd0a26f065bc466",
+          "best_mass_g": 114.36582422334816,
+          "best_score_100": 54.060768
+        },
+        "island": "island08",
+        "niches": 86,
+        "qd_score": 2647.6667717798778,
+        "seed": 4008
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 163.64796535846676,
+          "best_score_100": 34.192334,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "e84871a54e1dab2cc21b7628552ec35fa13efe7a5b9fa057dec70e79265f7171",
+            "best_mass_g": 163.64796535846676,
+            "best_score_100": 34.192334,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "48f64f2801d1e86e31bf20967492cfdebe7d14571ff9da24d4468db0f5a0ab59",
+            "best_mass_g": 153.1887882796915,
+            "best_score_100": 36.008129,
+            "evals": 256
+          },
+          {
+            "best_genome_sha256": "820d57b0cf64b247d1b49bb6e75c7204607c037500b6d79512a966e1422f13d6",
+            "best_mass_g": 146.6145476327195,
+            "best_score_100": 37.723696,
+            "evals": 350
+          },
+          {
+            "best_genome_sha256": "db3a3ecb5c17b92922c79b10ceab006e31a4874520571ae1e4be22566558b61d",
+            "best_mass_g": 139.1677523164037,
+            "best_score_100": 40.594069,
+            "evals": 375
+          },
+          {
+            "best_genome_sha256": "b15a702a0e739ed0d6cccea19c81eb2f8b03d4681cec5631640bac604cdd5f12",
+            "best_mass_g": 116.57109625935796,
+            "best_score_100": 41.924259,
+            "evals": 475
+          },
+          {
+            "best_genome_sha256": "c3c339fe13f8b080f1b12b7362709dafe0779a43dc773203bc33cfb04853e3b7",
+            "best_mass_g": 122.9917979787352,
+            "best_score_100": 42.324973,
+            "evals": 725
+          },
+          {
+            "best_genome_sha256": "f093bfd49fc4d6c14caa2a4e292953569bc5eea74d975176b593c060dabdccbc",
+            "best_mass_g": 129.75199600870295,
+            "best_score_100": 44.879651,
+            "evals": 750
+          },
+          {
+            "best_genome_sha256": "b7c8a47f0f2d0158983eead454285838c642631523e433561354dbf3b8fd2ab6",
+            "best_mass_g": 129.9995415237908,
+            "best_score_100": 45.934781,
+            "evals": 850
+          },
+          {
+            "best_genome_sha256": "f9010c62569b0f778c4254174b5fda3b0b7e2c3cfb745cc605d4227d2725e9d0",
+            "best_mass_g": 130.43884957539686,
+            "best_score_100": 46.236232,
+            "evals": 925
+          },
+          {
+            "best_genome_sha256": "e5b1bb81cc6c420489fd40a25e48c77f2ba4468c95e184444a476f78b8b0e813",
+            "best_mass_g": 126.65523142505012,
+            "best_score_100": 47.415065,
+            "evals": 1075
+          },
+          {
+            "best_genome_sha256": "aaca9cdfcdb1d6985a0d4c6e18396ec42e63bcacde0b5f704c7ceff32ba3dccb",
+            "best_mass_g": 128.49257485363947,
+            "best_score_100": 48.039271,
+            "evals": 1175
+          },
+          {
+            "best_genome_sha256": "7d191bb1b89bdac7b1cbcdb18c4e870d306631badfa9d6586dd62ee2379a3ce9",
+            "best_mass_g": 118.95855350863312,
+            "best_score_100": 50.093358,
+            "evals": 1200
+          },
+          {
+            "best_genome_sha256": "c259806e244941a0e0ce616eef9d5b7f1a866a817299dbdcfa16529aeff072eb",
+            "best_mass_g": 128.19103183306305,
+            "best_score_100": 50.790656,
+            "evals": 1825
+          },
+          {
+            "best_genome_sha256": "e0f9eea7c66c03769da0ac01de9d11437c40207dd3362f562103731a6df1e7f0",
+            "best_mass_g": 122.16033712431278,
+            "best_score_100": 51.085264,
+            "evals": 2350
+          },
+          {
+            "best_genome_sha256": "be1eecfda94c9f5ac9674aa879191a836c1911917a57c5c2f4734f23c7c599fc",
+            "best_mass_g": 116.1686744150743,
+            "best_score_100": 51.216878,
+            "evals": 2500
+          },
+          {
+            "best_genome_sha256": "7c27be643468bef22e0e7b6035eb161c821e0ab3115f8ff9a1add91591bc0d34",
+            "best_mass_g": 117.86778656432394,
+            "best_score_100": 51.267374,
+            "evals": 2575
+          },
+          {
+            "best_genome_sha256": "363f531ad232b4bb78a977e1a68e5a43bb6fb472e2633fb9def0b5c9c43a1ecf",
+            "best_mass_g": 118.74012852591528,
+            "best_score_100": 51.997305,
+            "evals": 2600
+          },
+          {
+            "best_genome_sha256": "bceed37e1212dd03575b8ff95831751f7f7fa1652b9702f2e52111b343a871a2",
+            "best_mass_g": 120.59341541847577,
+            "best_score_100": 52.003349,
+            "evals": 2825
+          },
+          {
+            "best_genome_sha256": "fdc5f8cef2384763dae99c6511da7cb205d5f68e4ffc9b421a4913a2afaabc0c",
+            "best_mass_g": 114.8341876349576,
+            "best_score_100": 52.848257,
+            "evals": 2925
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "fdc5f8cef2384763dae99c6511da7cb205d5f68e4ffc9b421a4913a2afaabc0c",
+          "best_mass_g": 114.8341876349576,
+          "best_score_100": 52.848257
+        },
+        "island": "island09",
+        "niches": 96,
+        "qd_score": 2520.2076573671716,
+        "seed": 4009
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 158.23366321155277,
+          "best_score_100": 10.070593,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "d5441782d1c3355a99598eb1662017fa25023c5779196ec8f631488faa4c928f",
+            "best_mass_g": 158.23366321155277,
+            "best_score_100": 10.070593,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "2002f89f2c9ad748d626522af613ed4789fd93621e4523e4cae47a62bff17f0e",
+            "best_mass_g": 149.47640105791632,
+            "best_score_100": 14.320865,
+            "evals": 100
+          },
+          {
+            "best_genome_sha256": "3b26e5cf36d394fc1783c2dd823563309c8464bb687de38c560eb32560945798",
+            "best_mass_g": 151.62625897760705,
+            "best_score_100": 19.74801,
+            "evals": 150
+          },
+          {
+            "best_genome_sha256": "a563c4eadee00db8ea369d27dd86727348f0cb5102fe86950e20f8370f98db23",
+            "best_mass_g": 159.6439163036383,
+            "best_score_100": 19.972278,
+            "evals": 250
+          },
+          {
+            "best_genome_sha256": "60c1e98ff8deee49191fbe3afc493d4dee22a02f2e3a54dfa5f8807eaf9d1851",
+            "best_mass_g": 138.58126645700727,
+            "best_score_100": 21.671133,
+            "evals": 325
+          },
+          {
+            "best_genome_sha256": "74fd0444a81c644de173d99d6198ab86b3648b324adf6033726b69611f7ec004",
+            "best_mass_g": 211.44430958808863,
+            "best_score_100": 27.536639,
+            "evals": 400
+          },
+          {
+            "best_genome_sha256": "2501282890feb9075f155261b2365ec3716fa3e56200c3ff510cf70d8395188b",
+            "best_mass_g": 126.16465126341872,
+            "best_score_100": 38.563279,
+            "evals": 475
+          },
+          {
+            "best_genome_sha256": "b5ae4089d8adfd5fa3d20214be57d46a2cba21f6eb249b1b0b722514a1b134a0",
+            "best_mass_g": 125.99591924436127,
+            "best_score_100": 40.038211,
+            "evals": 500
+          },
+          {
+            "best_genome_sha256": "dfd04dea770b9cde12579b20d6092b13d76375ab4f71c473491cb573587e1c5e",
+            "best_mass_g": 126.03078195033564,
+            "best_score_100": 40.099305,
+            "evals": 600
+          },
+          {
+            "best_genome_sha256": "71036ea3cbd3599aa7157af60977f0af8efae34b690802969f90cd304b1b8e85",
+            "best_mass_g": 124.70734506794594,
+            "best_score_100": 40.443041,
+            "evals": 800
+          },
+          {
+            "best_genome_sha256": "ea8c931debb1c9ccd44765cc7a57deafca57d17d0468441f9e5a3d4e4db6aa7e",
+            "best_mass_g": 123.56646696277137,
+            "best_score_100": 40.898582,
+            "evals": 825
+          },
+          {
+            "best_genome_sha256": "5bef7e4e36b03f62a807320d46b9b3b1613c9d5044f3c9901b087df1c799e620",
+            "best_mass_g": 123.59768973000241,
+            "best_score_100": 41.285195,
+            "evals": 850
+          },
+          {
+            "best_genome_sha256": "fcbff65e89642ea793873942c384a9f6910d353007bb7cc949ea0a6f9b4905e8",
+            "best_mass_g": 125.24790100814289,
+            "best_score_100": 42.446476,
+            "evals": 950
+          },
+          {
+            "best_genome_sha256": "d80f17efa56f21a8d5e830c94c68d984ecbdc9484af47cd860edc9948f3876bf",
+            "best_mass_g": 120.94681400856665,
+            "best_score_100": 45.396632,
+            "evals": 1000
+          },
+          {
+            "best_genome_sha256": "c64703f786876731049b98974dadef3bc5dddba1b094e9d74a0751eb5f5c8512",
+            "best_mass_g": 115.58392037576232,
+            "best_score_100": 46.697687,
+            "evals": 1075
+          },
+          {
+            "best_genome_sha256": "35e046aec5c90595a96fcdbb82ff8461599e73b5663c5ca1f154832cbbf5d782",
+            "best_mass_g": 116.76354490510239,
+            "best_score_100": 47.295277,
+            "evals": 1350
+          },
+          {
+            "best_genome_sha256": "910677726ed823f2f9d3affa99af1cbc1a34e37914c2535646a65ca8610f4472",
+            "best_mass_g": 117.09025794049491,
+            "best_score_100": 47.338545,
+            "evals": 1400
+          },
+          {
+            "best_genome_sha256": "668e55b34d8f6a9494a32e857b260a4a00c2da148a458f9aa7fa159165a486ce",
+            "best_mass_g": 116.44688530081243,
+            "best_score_100": 48.382277,
+            "evals": 1550
+          },
+          {
+            "best_genome_sha256": "1d50cd68ee5254ae6e4ad861efc85f0a5b771f3591acde06773ca3a17e0978e0",
+            "best_mass_g": 115.94404001166117,
+            "best_score_100": 48.652529,
+            "evals": 1675
+          },
+          {
+            "best_genome_sha256": "f49b8ef2dc0c93dbdeec9a1bf4585f22c34061c5b0d71de11e901b4e2a304df8",
+            "best_mass_g": 115.34374577758804,
+            "best_score_100": 48.737972,
+            "evals": 1725
+          },
+          {
+            "best_genome_sha256": "bd79cf79b2d628d7888bdc763570aa021501e645771e1256025736ce05424518",
+            "best_mass_g": 116.88842396243426,
+            "best_score_100": 49.267089,
+            "evals": 1850
+          },
+          {
+            "best_genome_sha256": "61d491f98916abd494ad557ab903ca6330543414386a8ea6285da7212c544a64",
+            "best_mass_g": 116.7726344141876,
+            "best_score_100": 49.341128,
+            "evals": 1875
+          },
+          {
+            "best_genome_sha256": "81538adcbe31d2805d0cf556a1bd6fa727332591204bb9cfc9770a7706c5d4b2",
+            "best_mass_g": 111.16823349644065,
+            "best_score_100": 50.482136,
+            "evals": 2400
+          },
+          {
+            "best_genome_sha256": "f5e6d42d79af0ca45381bb76b03f303fb91cf3dc80a2ad3f7976cb5ddb1f275e",
+            "best_mass_g": 111.23831917774154,
+            "best_score_100": 50.783014,
+            "evals": 2600
+          },
+          {
+            "best_genome_sha256": "49f1bc1ef90eae2bb29dc47e1446c0c47d427924a52684633b5fe1463bbff4c0",
+            "best_mass_g": 110.61040181416197,
+            "best_score_100": 50.907543,
+            "evals": 2825
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "49f1bc1ef90eae2bb29dc47e1446c0c47d427924a52684633b5fe1463bbff4c0",
+          "best_mass_g": 110.61040181416197,
+          "best_score_100": 50.907543
+        },
+        "island": "island10",
+        "niches": 83,
+        "qd_score": 1658.7438095375771,
+        "seed": 4010
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 276.68347108884103,
+          "best_score_100": 32.211682,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "4b259e85a88cc6eb1c3cb40d3617adfd8780d2c6ed8113b23924262aa7881799",
+            "best_mass_g": 276.68347108884103,
+            "best_score_100": 32.211682,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "f495ff981bf5ae802eddcf745c9cb1c7d3ce41604f236b29aa6fece46c1d6999",
+            "best_mass_g": 272.93638070196687,
+            "best_score_100": 32.769594,
+            "evals": 175
+          },
+          {
+            "best_genome_sha256": "204faaca220659e36643463d72df56d4c4dac5f4278e8de04ba8b27164987787",
+            "best_mass_g": 239.64322858795745,
+            "best_score_100": 33.985952,
+            "evals": 350
+          },
+          {
+            "best_genome_sha256": "ec0266a02968aded78d82dc2c08e7b819c8467cadad5b55761b62b2f45335832",
+            "best_mass_g": 241.90247097561195,
+            "best_score_100": 38.619709,
+            "evals": 375
+          },
+          {
+            "best_genome_sha256": "c0710ccf833c39b38fc3b824cbee96fd3dee20fb04d3c51f289d0a96fa902acb",
+            "best_mass_g": 248.34715483353204,
+            "best_score_100": 40.070849,
+            "evals": 575
+          },
+          {
+            "best_genome_sha256": "567c586a04cfb97ae9dd0d2db57fa4080a51b820a93543c9cb47a701457b7c7b",
+            "best_mass_g": 231.86560208288347,
+            "best_score_100": 40.16943,
+            "evals": 625
+          },
+          {
+            "best_genome_sha256": "13daf0de5e7d7644bba819d0cd247b4b3cd4ac6b8e5a65c562e10e7aaf4959ff",
+            "best_mass_g": 144.59954409359707,
+            "best_score_100": 40.973563,
+            "evals": 725
+          },
+          {
+            "best_genome_sha256": "1b8310bcd7b94731cb59798226d13c55c466f477b3df0a0f9ac795a8b1201ef8",
+            "best_mass_g": 200.74695285075043,
+            "best_score_100": 42.032275,
+            "evals": 800
+          },
+          {
+            "best_genome_sha256": "dd547f2581d46cfafe1ff0cebac1b61d3d72fe946abd6bbf6f08afb6b3b12ca4",
+            "best_mass_g": 133.16683964335041,
+            "best_score_100": 44.692734,
+            "evals": 850
+          },
+          {
+            "best_genome_sha256": "a175bd5302e2e05c831f84a4a3d15994e6640a810c503f73e82803d05bda858a",
+            "best_mass_g": 132.42669755692575,
+            "best_score_100": 46.124624,
+            "evals": 1325
+          },
+          {
+            "best_genome_sha256": "0935ccc07e5d01136484f4f2aee247c9b394e78cc76275c17b9fe20eab9f0976",
+            "best_mass_g": 125.35135778308255,
+            "best_score_100": 46.917442,
+            "evals": 1475
+          },
+          {
+            "best_genome_sha256": "cdefda4a20a91277a51621be48c7758271f0932d6e695ebbab56bc95f7fb197e",
+            "best_mass_g": 125.29176095383079,
+            "best_score_100": 46.962532,
+            "evals": 1925
+          },
+          {
+            "best_genome_sha256": "d0592a7b69cfa91fe1e869f0cda42d8f490250e9cd249d2c536003ee4e0d72ff",
+            "best_mass_g": 125.10719439423843,
+            "best_score_100": 47.018137,
+            "evals": 2000
+          },
+          {
+            "best_genome_sha256": "0476d1baac56ac9bb91636e3edceb9b020c95ecf1a92a18dcbff5b2ad8cbca96",
+            "best_mass_g": 125.29774079240211,
+            "best_score_100": 47.125633,
+            "evals": 2075
+          },
+          {
+            "best_genome_sha256": "671b338246ddaab260a9eca9b309bf21d5b5ce7dec1b53bb94155f2ce3501315",
+            "best_mass_g": 125.07636554726261,
+            "best_score_100": 47.359962,
+            "evals": 2100
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "671b338246ddaab260a9eca9b309bf21d5b5ce7dec1b53bb94155f2ce3501315",
+          "best_mass_g": 125.07636554726261,
+          "best_score_100": 47.359962
+        },
+        "island": "island11",
+        "niches": 88,
+        "qd_score": 1893.8286949683975,
+        "seed": 4011
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 104.55881223128048,
+          "best_score_100": 16.713307,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "4cb0c917c6e3f62b69b628ad50b3a9e917aaa58609c7dc72cf702b4b1bc85658",
+            "best_mass_g": 104.55881223128048,
+            "best_score_100": 16.713307,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "e6911c6ba89073b64bab892e1021b68273ba8b248ba80731d9d552910c43dda8",
+            "best_mass_g": 125.7343344816158,
+            "best_score_100": 22.467399,
+            "evals": 100
+          },
+          {
+            "best_genome_sha256": "9ba8db5a14697cbfd3763d012010eadafe81ae1d8ac709b1a809caaf1d242786",
+            "best_mass_g": 132.72460599179104,
+            "best_score_100": 38.758051,
+            "evals": 125
+          },
+          {
+            "best_genome_sha256": "1189cc6e6e36d64e6a300f44638d61c8b1bc60fb4bff79ad1d4a456b13931f35",
+            "best_mass_g": 138.72561527746237,
+            "best_score_100": 39.961379,
+            "evals": 250
+          },
+          {
+            "best_genome_sha256": "9a726047eec79b0a04b82d182d5e663ad4080e78c67eef14b9f7e6c25d3d64b6",
+            "best_mass_g": 138.64068126463127,
+            "best_score_100": 40.916862,
+            "evals": 300
+          },
+          {
+            "best_genome_sha256": "da751f5842f1c4a9ba0d1eab87427cba6733de73aa71a6fe469ab724b3f71b49",
+            "best_mass_g": 133.82625716656636,
+            "best_score_100": 41.552102,
+            "evals": 325
+          },
+          {
+            "best_genome_sha256": "790267d555f5f2f7a1ab5dd8db9b482ebb31a5c1c2b4230e0eb76a3b111bf442",
+            "best_mass_g": 120.78976534552554,
+            "best_score_100": 41.862703,
+            "evals": 400
+          },
+          {
+            "best_genome_sha256": "2fd85e216ebeab6307f81ec325d94af5e1defd2973ba913c62be6d9699dcbe1e",
+            "best_mass_g": 123.06715546639235,
+            "best_score_100": 44.047816,
+            "evals": 425
+          },
+          {
+            "best_genome_sha256": "b71b5b03a5d6bfa642b28464d0af915a699857fe31b50699a77e0521c9ac2952",
+            "best_mass_g": 120.01453949594602,
+            "best_score_100": 45.295516,
+            "evals": 500
+          },
+          {
+            "best_genome_sha256": "ae950f480c00a52d910bb237c0991684c709dcbe233b66365f3323855dd1a81b",
+            "best_mass_g": 109.54500215866437,
+            "best_score_100": 45.482289,
+            "evals": 512
+          },
+          {
+            "best_genome_sha256": "363504d5d6ce69dc7f6bd74d39bb1b86509447b540dde4d50555f60075a34e42",
+            "best_mass_g": 120.33159913473831,
+            "best_score_100": 46.581393,
+            "evals": 575
+          },
+          {
+            "best_genome_sha256": "eb524b766092e76b1224f0f3ed29d3b9dd3f364e5aa6fb088ed2a982eca7eff3",
+            "best_mass_g": 103.5097184540332,
+            "best_score_100": 48.097953,
+            "evals": 600
+          },
+          {
+            "best_genome_sha256": "3d41a9f53d824e345581f69a3b8ef3388a9194976f4e8acb47ca1c653851d061",
+            "best_mass_g": 103.19332017464835,
+            "best_score_100": 48.601018,
+            "evals": 725
+          },
+          {
+            "best_genome_sha256": "7e3981f86dde92f10bc2fe1d8f5695fca8cebf14d08e59f5145c614b225687cd",
+            "best_mass_g": 114.19972470746382,
+            "best_score_100": 49.951694,
+            "evals": 900
+          },
+          {
+            "best_genome_sha256": "c12a1dbde968b965b6a548087dbc83e8dd9a31f55b30c57b2761fc92eadda53c",
+            "best_mass_g": 101.95211469026167,
+            "best_score_100": 52.223577,
+            "evals": 950
+          },
+          {
+            "best_genome_sha256": "23656f4b503a77b294d5308ac6b245cb3379f244da408208d095fca8fcf74c89",
+            "best_mass_g": 101.54130522976183,
+            "best_score_100": 52.681572,
+            "evals": 1125
+          },
+          {
+            "best_genome_sha256": "e5aa41ad5a4e0435ee8187e5f2af02ce33f206daa4d92acce8ee66ce4d42e83b",
+            "best_mass_g": 92.65818244872565,
+            "best_score_100": 56.130298,
+            "evals": 1300
+          },
+          {
+            "best_genome_sha256": "ecf536caa8eb1950480f02ad2ae3f5f966282f40d12cc5451488ec1695cc81ee",
+            "best_mass_g": 89.98576517712472,
+            "best_score_100": 56.662315,
+            "evals": 1325
+          },
+          {
+            "best_genome_sha256": "3ae64e4f8835f9029496354073fdd80f26858b6b239bb098f2f46a637646fc9e",
+            "best_mass_g": 89.4967169993124,
+            "best_score_100": 57.113187,
+            "evals": 1450
+          },
+          {
+            "best_genome_sha256": "870d8e8fd605af8fbe864f38a0ff35a7dfdd06de0bb83c2ec627be9cf9348e19",
+            "best_mass_g": 86.65165709048641,
+            "best_score_100": 57.196868,
+            "evals": 1525
+          },
+          {
+            "best_genome_sha256": "d2333976777dea8acf9002266019a7c29df8753dcaa1eab655e17803474b55f1",
+            "best_mass_g": 84.90224400295905,
+            "best_score_100": 57.225012,
+            "evals": 1700
+          },
+          {
+            "best_genome_sha256": "d4c0ed37925fa035131a163d4e098ad31a3d866942debc26fa13ba4c1d451e91",
+            "best_mass_g": 89.36050386773822,
+            "best_score_100": 57.341037,
+            "evals": 1775
+          },
+          {
+            "best_genome_sha256": "b6354f4dd9ac25186ea9987bf7f48cc20172b512e1fb2e1b159832f781f47916",
+            "best_mass_g": 86.8649372288633,
+            "best_score_100": 58.503117,
+            "evals": 1900
+          },
+          {
+            "best_genome_sha256": "e7391718102afeb0524c9de6c658a9a01920274073a8bb3ed780f396aae787a8",
+            "best_mass_g": 86.91222005155312,
+            "best_score_100": 58.578065,
+            "evals": 2025
+          },
+          {
+            "best_genome_sha256": "e4f5257a965228c6343212984080844ea6ef288ab4513a06940373e67d69f50a",
+            "best_mass_g": 82.3908760351239,
+            "best_score_100": 59.262416,
+            "evals": 2225
+          },
+          {
+            "best_genome_sha256": "dd6ffea58ee06a7f15dcb648b5b934e9e1a1aafa8e7a343742e8443f20f636e1",
+            "best_mass_g": 83.33955845004225,
+            "best_score_100": 59.540099,
+            "evals": 2425
+          },
+          {
+            "best_genome_sha256": "75225d13cdfcf91a689e2af14f9db80d0c7cf68eb24106898136202e8a0c9633",
+            "best_mass_g": 110.81880726418632,
+            "best_score_100": 59.679045,
+            "evals": 2625
+          },
+          {
+            "best_genome_sha256": "a5999d42452e39f7a5649cf5bfdd3e0230d4acd0fa1a44ca268c4d3633d22436",
+            "best_mass_g": 111.2582637689228,
+            "best_score_100": 59.73899,
+            "evals": 2675
+          },
+          {
+            "best_genome_sha256": "6aff489b6e043d6a385cfa7252c502556eb3d1fc9f82cac93cd9abd471bac840",
+            "best_mass_g": 107.20001655392987,
+            "best_score_100": 61.008875,
+            "evals": 2725
+          },
+          {
+            "best_genome_sha256": "19a0b6f0d47aeaa222cdd8a3fbc164daa38ee317190910f254707d33e5633019",
+            "best_mass_g": 103.57243589930627,
+            "best_score_100": 63.357584,
+            "evals": 2850
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "19a0b6f0d47aeaa222cdd8a3fbc164daa38ee317190910f254707d33e5633019",
+          "best_mass_g": 103.57243589930627,
+          "best_score_100": 63.357584
+        },
+        "island": "island12",
+        "niches": 85,
+        "qd_score": 2286.8760483646297,
+        "seed": 4012
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 145.15393918765108,
+          "best_score_100": 10.115021,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "3ce405b18f42b61ee6fab8099869ca5367274e76bc4cd0728811ff4a7f298299",
+            "best_mass_g": 145.15393918765108,
+            "best_score_100": 10.115021,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "c57a0283b804e2c55f4e5c14b0c98f6a1e022def6782162d225b77bc5bb2a698",
+            "best_mass_g": 144.1730224325246,
+            "best_score_100": 17.651983,
+            "evals": 125
+          },
+          {
+            "best_genome_sha256": "3a4315dc57dde8d95c5bca112d59ec31115cd37f08d9401aed4878ee459e8549",
+            "best_mass_g": 147.84349889860127,
+            "best_score_100": 30.540915,
+            "evals": 200
+          },
+          {
+            "best_genome_sha256": "0a80de5d0815060b6d25ef650ff0ee4fc30c7d9b0e2de5181e027ee0918e62b0",
+            "best_mass_g": 148.01852203736428,
+            "best_score_100": 34.43596,
+            "evals": 275
+          },
+          {
+            "best_genome_sha256": "44902ff8b908113ceecd2a44c8f78743ea59abe5d15a82ad7ac4292f445134e5",
+            "best_mass_g": 144.4836460015461,
+            "best_score_100": 35.2195,
+            "evals": 300
+          },
+          {
+            "best_genome_sha256": "91281abb972c95b80d2c3cb449b789b9c552e15895f7254083ab32bfc212e320",
+            "best_mass_g": 142.67301190377577,
+            "best_score_100": 37.611969,
+            "evals": 400
+          },
+          {
+            "best_genome_sha256": "629bf5d3f113088bcf362bf9fb90247d663bfa7000982672a2b0a78e6e025ec5",
+            "best_mass_g": 127.61972563861326,
+            "best_score_100": 38.6285,
+            "evals": 500
+          },
+          {
+            "best_genome_sha256": "a6b67ece2a159842a9507b101f2da7e28ee10c2163409562792818d0494460d8",
+            "best_mass_g": 125.26973553495273,
+            "best_score_100": 39.622956,
+            "evals": 575
+          },
+          {
+            "best_genome_sha256": "30afea39b0610422aad06fcc47a49e8fd373170a3ee920d1fc89f28fa1992ed9",
+            "best_mass_g": 118.54312220779742,
+            "best_score_100": 42.545606,
+            "evals": 650
+          },
+          {
+            "best_genome_sha256": "dce502511508ecd33c02c5454f7ff6979f10ea1d6fa0a8958cd69ae989f0dd1c",
+            "best_mass_g": 118.04442686187694,
+            "best_score_100": 42.673182,
+            "evals": 800
+          },
+          {
+            "best_genome_sha256": "65a0cb7bf3fce9c338f70791314b41ce629d35c82ddfca4023549b5346d510e6",
+            "best_mass_g": 118.53157680468082,
+            "best_score_100": 44.459114,
+            "evals": 825
+          },
+          {
+            "best_genome_sha256": "83d9fea451c0e8455d24659c1fcc706b5f66a057791e8df6d0cfae0a266ee1a7",
+            "best_mass_g": 115.51360025016511,
+            "best_score_100": 45.316764,
+            "evals": 925
+          },
+          {
+            "best_genome_sha256": "493307f48f5ecd2c0f5f687760e7de318db0b139ce7171d37ae3b0d7e51a0b9f",
+            "best_mass_g": 116.68555981133143,
+            "best_score_100": 46.6437,
+            "evals": 1250
+          },
+          {
+            "best_genome_sha256": "14bb2f4703781a1d82b76a0f541da168144a7aae7fd90f6bdf2a55333d456ccb",
+            "best_mass_g": 116.8643874877888,
+            "best_score_100": 47.898909,
+            "evals": 1425
+          },
+          {
+            "best_genome_sha256": "5b5552280a571dc93d0bcd23a055e7e9cc6a73ac143fd1707088c75f7b5a905a",
+            "best_mass_g": 118.35793047165929,
+            "best_score_100": 50.436473,
+            "evals": 1850
+          },
+          {
+            "best_genome_sha256": "22113f756503af709060ea25a45310e497296c2df2f8f45b1b3011b5fe1a1d40",
+            "best_mass_g": 117.81779602529569,
+            "best_score_100": 50.770334,
+            "evals": 2250
+          },
+          {
+            "best_genome_sha256": "a7af49043dcbf28b9046c259ad6c024e779a4c901efb5bea175b487f3c26458b",
+            "best_mass_g": 116.39066964478587,
+            "best_score_100": 51.679787,
+            "evals": 2325
+          },
+          {
+            "best_genome_sha256": "584693291ace89aa567fe1d43b3568200eef976e4433b90c02e0bace4621bc26",
+            "best_mass_g": 112.30081420355343,
+            "best_score_100": 51.88805,
+            "evals": 2500
+          },
+          {
+            "best_genome_sha256": "c397ab97a9f8d0731e1cc9d80580966435b31d731cc06123d4af3b7f6bc20e75",
+            "best_mass_g": 112.41559675905708,
+            "best_score_100": 52.423795,
+            "evals": 2550
+          },
+          {
+            "best_genome_sha256": "950a81033e9d0a9320c6c630e4ae73ccc3c6210698f19ef0c8ce50884304a6d2",
+            "best_mass_g": 112.60032282460016,
+            "best_score_100": 52.541848,
+            "evals": 2600
+          },
+          {
+            "best_genome_sha256": "9602ae73963e0f71174a60362565d1a5e37deda614fc0a3494807d57b0667a7c",
+            "best_mass_g": 112.28877645216366,
+            "best_score_100": 52.819014,
+            "evals": 2675
+          },
+          {
+            "best_genome_sha256": "828621f9a601da66952591f2b2708037e95da27bc5fbcc0e4eba05ec98139959",
+            "best_mass_g": 111.85914998454264,
+            "best_score_100": 52.833071,
+            "evals": 2975
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "828621f9a601da66952591f2b2708037e95da27bc5fbcc0e4eba05ec98139959",
+          "best_mass_g": 111.85914998454264,
+          "best_score_100": 52.833071
+        },
+        "island": "island13",
+        "niches": 105,
+        "qd_score": 1835.0452451318974,
+        "seed": 4013
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 149.0869221397162,
+          "best_score_100": 10.32101,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "d8bd032219b91a5debf2082cd33a1576c991ad762edeef6472db27d28a504868",
+            "best_mass_g": 149.0869221397162,
+            "best_score_100": 10.32101,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "c2e0d74b5dfa623e242ae3f7bbdb667aa2c537883e0255aa5849759cb6dabff0",
+            "best_mass_g": 137.51312725397926,
+            "best_score_100": 15.196399,
+            "evals": 75
+          },
+          {
+            "best_genome_sha256": "96bcd8c2b5f5e2d3a3670c6dd7b8d4ae25a79fb7d992e19fcbd5eeb95c59a4b1",
+            "best_mass_g": 146.95607599344467,
+            "best_score_100": 18.622403,
+            "evals": 100
+          },
+          {
+            "best_genome_sha256": "216909829156b0648b683a2da393aa3a2fa1f3cffabdc6303f8adbcc8e7cb321",
+            "best_mass_g": 144.24686459709187,
+            "best_score_100": 33.553013,
+            "evals": 128
+          },
+          {
+            "best_genome_sha256": "7bb6ccfb725ce892950534e270d43bb33dd0fcbab8ade0e2246f4f2d3c25ed12",
+            "best_mass_g": 146.40062101886082,
+            "best_score_100": 34.070801,
+            "evals": 250
+          },
+          {
+            "best_genome_sha256": "43f5f0973830b0081df3b20a9069d9648c12a73e3e52034b724d70ed809bda53",
+            "best_mass_g": 144.754286833293,
+            "best_score_100": 35.855729,
+            "evals": 375
+          },
+          {
+            "best_genome_sha256": "441f841067bedaf248f10e9c3e48aa474a7e15091b293eea58a7ec4baadd7912",
+            "best_mass_g": 143.00441317642853,
+            "best_score_100": 36.110954,
+            "evals": 475
+          },
+          {
+            "best_genome_sha256": "23b9434cdfd5678ced0e5b4802f4ce9f44c514e94106b9465097a1f4e50579b0",
+            "best_mass_g": 128.76074840757835,
+            "best_score_100": 37.785867,
+            "evals": 500
+          },
+          {
+            "best_genome_sha256": "2f46e81cfb10f7fd3cf1a07340f0845197704df5cebc9a7e3442cbc276d2da1c",
+            "best_mass_g": 126.72549733522028,
+            "best_score_100": 40.415551,
+            "evals": 925
+          },
+          {
+            "best_genome_sha256": "8bb2ab0fe99b261ac709fcc375778a568593f7d6950bfb9ddbd91baf36a8ac1c",
+            "best_mass_g": 126.23942553167211,
+            "best_score_100": 40.464084,
+            "evals": 1125
+          },
+          {
+            "best_genome_sha256": "cb2cc84e80799570a165b123a0ae03a609636b99931036457cab867e273a840a",
+            "best_mass_g": 120.38035938435556,
+            "best_score_100": 42.512653,
+            "evals": 1175
+          },
+          {
+            "best_genome_sha256": "b3edeb5f670eef92a227dd974f959d89ab64a4c75c5782a687a8af0dad4892a5",
+            "best_mass_g": 118.0831707966981,
+            "best_score_100": 42.65422,
+            "evals": 1225
+          },
+          {
+            "best_genome_sha256": "f1043f9534ca2c6a5184cd87e106f25f77d9b90a985bd4b655461344f17ade49",
+            "best_mass_g": 128.84192136437952,
+            "best_score_100": 42.937024,
+            "evals": 1300
+          },
+          {
+            "best_genome_sha256": "f0faf588f5ebba7b0b8872184ea86cd651f0882f19fa3a63cd40763b18516098",
+            "best_mass_g": 133.66195530883587,
+            "best_score_100": 43.665001,
+            "evals": 1450
+          },
+          {
+            "best_genome_sha256": "7083250031c463e1da45dfe8435a47761f3d1b4cd908bfc9d511ca440fcb7825",
+            "best_mass_g": 154.30081001022864,
+            "best_score_100": 44.528113,
+            "evals": 1525
+          },
+          {
+            "best_genome_sha256": "1135dc0d43ef2c922bc4b2711683d18e1bf0009ffcb48d4fe94e1733aba91d07",
+            "best_mass_g": 153.08790285666882,
+            "best_score_100": 46.688661,
+            "evals": 1600
+          },
+          {
+            "best_genome_sha256": "36cc7fdea68894a39aa49cd86e7e9b5026c1d485529bde89b8e901058a60ea93",
+            "best_mass_g": 125.25549040220946,
+            "best_score_100": 47.91998,
+            "evals": 1700
+          },
+          {
+            "best_genome_sha256": "0ea52a11d21efe7e21652960a9a06c16f8df8846e451805c2913cecca7254b75",
+            "best_mass_g": 122.2988177997584,
+            "best_score_100": 48.313173,
+            "evals": 2175
+          },
+          {
+            "best_genome_sha256": "22ba3c945d6c8a0c24d8a2fedb316793577e913ccb7d90541a1b009108dc4c37",
+            "best_mass_g": 118.93681265865628,
+            "best_score_100": 49.46852,
+            "evals": 2200
+          },
+          {
+            "best_genome_sha256": "98b76333d7b62a56029845b31a6fe96b4b361f8f1e8ef12843fab719ccb8dc09",
+            "best_mass_g": 119.19125841629985,
+            "best_score_100": 49.475264,
+            "evals": 2400
+          },
+          {
+            "best_genome_sha256": "5559e67a3c1a490f18193f9fc433ff175df79dac1bb0c5f4a57d925466dbfb6f",
+            "best_mass_g": 120.25110971008242,
+            "best_score_100": 49.813978,
+            "evals": 2475
+          },
+          {
+            "best_genome_sha256": "d4af20cd74f282c24d71f8902893bb65a3da1c71607242ae95f24d6d0f6f33b7",
+            "best_mass_g": 119.74907384800775,
+            "best_score_100": 49.884603,
+            "evals": 2525
+          },
+          {
+            "best_genome_sha256": "45462fa9eafadf7fe8640a891c87a22f2a703713a7a1e5035edf5c2fcb8807b3",
+            "best_mass_g": 119.96162603930117,
+            "best_score_100": 50.514442,
+            "evals": 2550
+          },
+          {
+            "best_genome_sha256": "3c369cd2e00a54949f06a3fb7b9d2e275e233042428ec0f71ccae7bed07db910",
+            "best_mass_g": 117.20267529605363,
+            "best_score_100": 51.314645,
+            "evals": 2650
+          },
+          {
+            "best_genome_sha256": "9b9b8dd588d51fb6cc8d5671a1cbe0ae63cfd487c0402b2cdc9e3d48bf606735",
+            "best_mass_g": 122.14614088309648,
+            "best_score_100": 52.195919,
+            "evals": 2875
+          },
+          {
+            "best_genome_sha256": "07b229297917b2d9a7fd76b2cfa48de560753816c3424aafedb18b700d3b5809",
+            "best_mass_g": 120.68073586931935,
+            "best_score_100": 52.487091,
+            "evals": 2925
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "07b229297917b2d9a7fd76b2cfa48de560753816c3424aafedb18b700d3b5809",
+          "best_mass_g": 120.68073586931935,
+          "best_score_100": 52.487091
+        },
+        "island": "island14",
+        "niches": 111,
+        "qd_score": 1577.1273647061573,
+        "seed": 4014
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 198.50798581261122,
+          "best_score_100": 15.723087,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "c3b44518176865fe9f18211cb00ea483bbdfc7ecebdebef6086cc63cc06eb482",
+            "best_mass_g": 198.50798581261122,
+            "best_score_100": 15.723087,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "46b13acc1fe94b2f5fe2e81bfe719bbe8e8e8e195df886002faaac8199926c8c",
+            "best_mass_g": 189.71265262338153,
+            "best_score_100": 19.954406,
+            "evals": 175
+          },
+          {
+            "best_genome_sha256": "8358dab025eb8542104eba6b86cf97459fbeee08bb99ca5cb86d40d77939d730",
+            "best_mass_g": 146.9958559103322,
+            "best_score_100": 19.95719,
+            "evals": 200
+          },
+          {
+            "best_genome_sha256": "915e4ed2a49f3cc0b59be2ad6918c9696fa115a79d7a045cf3fb49eb3e79900f",
+            "best_mass_g": 147.13059101055651,
+            "best_score_100": 22.536955,
+            "evals": 225
+          },
+          {
+            "best_genome_sha256": "b8bab96fc1aa5f3a1095d288ad915b8e14e20521eb5fde72cd7dd58364a4c194",
+            "best_mass_g": 183.45673285465122,
+            "best_score_100": 24.192622,
+            "evals": 275
+          },
+          {
+            "best_genome_sha256": "e31e03b693563121da39c9cf65f061905de6912a63c9a31e9b0677eaaa81598e",
+            "best_mass_g": 150.02626668941994,
+            "best_score_100": 30.765704,
+            "evals": 350
+          },
+          {
+            "best_genome_sha256": "9327eb0a0f4a1996aa037fa9eb47695d07be204f4d3524f6ac91faeb81fce90d",
+            "best_mass_g": 148.92474553584316,
+            "best_score_100": 30.975388,
+            "evals": 375
+          },
+          {
+            "best_genome_sha256": "86e3cc391269fd140595c7867b6906ab4750c5a5780ad1536b2199ae1213a647",
+            "best_mass_g": 139.53241077765753,
+            "best_score_100": 31.918264,
+            "evals": 475
+          },
+          {
+            "best_genome_sha256": "a3cdb38b044c7bc46b80cbf68284d4b02133951a45f32637c731da840ed18fa6",
+            "best_mass_g": 145.200484668653,
+            "best_score_100": 33.248654,
+            "evals": 512
+          },
+          {
+            "best_genome_sha256": "c5c3df0f153a3405ef1921ddd398cdf69517aead1e0a1a121aa43c4ab519747a",
+            "best_mass_g": 115.66839747551435,
+            "best_score_100": 35.33345,
+            "evals": 650
+          },
+          {
+            "best_genome_sha256": "337c63d7af1a861914a81450d5c2d87810fd08bcf77aaf47bba9e667bc32abf6",
+            "best_mass_g": 114.87320177072031,
+            "best_score_100": 37.97609,
+            "evals": 700
+          },
+          {
+            "best_genome_sha256": "a62ec7ac460526eca3d71845b7506bfb559c881e5b63e49b9a2b6f7ca2975a11",
+            "best_mass_g": 112.24088363834342,
+            "best_score_100": 38.103552,
+            "evals": 775
+          },
+          {
+            "best_genome_sha256": "4bbca7586c34f2a2625041c35d70f1babdd850d7b6f9f16f46d29332956dbeb7",
+            "best_mass_g": 117.63353090279753,
+            "best_score_100": 39.203158,
+            "evals": 825
+          },
+          {
+            "best_genome_sha256": "8d7bce0ef4dc1a614c10266fffcfbed8088269728351079cb2ad52bfa11d6650",
+            "best_mass_g": 117.60918643525062,
+            "best_score_100": 39.461911,
+            "evals": 950
+          },
+          {
+            "best_genome_sha256": "f3901ea106db2376afd1bc53c9297ccb8a61493b59db4ed203c1b99d22b538d0",
+            "best_mass_g": 116.1387072837891,
+            "best_score_100": 39.612701,
+            "evals": 1000
+          },
+          {
+            "best_genome_sha256": "310c96397b6613c87dd788b115e0f68b83186e36e120461a06590511c36d22a2",
+            "best_mass_g": 117.77032116959377,
+            "best_score_100": 39.6449,
+            "evals": 1075
+          },
+          {
+            "best_genome_sha256": "c4c4518dc8f97cdda0a87c1283094c8f164b3d05694726742606d2b70cdd9c42",
+            "best_mass_g": 116.7610622106356,
+            "best_score_100": 39.712531,
+            "evals": 1100
+          },
+          {
+            "best_genome_sha256": "7bde6738ccf495675105acfb56739cc1115f1483e1d8dbe8fa885ee0f992eaf4",
+            "best_mass_g": 123.82595349352087,
+            "best_score_100": 40.467807,
+            "evals": 1150
+          },
+          {
+            "best_genome_sha256": "1425fc1e23371886c114787be8fa588b8cd8f1c752baac84f420113fcf2af4f2",
+            "best_mass_g": 117.49583126580757,
+            "best_score_100": 40.922682,
+            "evals": 1500
+          },
+          {
+            "best_genome_sha256": "d42ac89c64ef23c0b286af8e941c8438f0b6b3f595b50986aacdc2d6360a7dd6",
+            "best_mass_g": 154.15009257675115,
+            "best_score_100": 41.154682,
+            "evals": 1700
+          },
+          {
+            "best_genome_sha256": "393ac09542e3816947a9ac86104054cab35c5c8ac892ab515a49e343f1608c4b",
+            "best_mass_g": 152.98323577867708,
+            "best_score_100": 41.487311,
+            "evals": 1825
+          },
+          {
+            "best_genome_sha256": "c7ce8e7fade510b3b4842e67af6ae55349f79c37194b994945b22cdf924894b1",
+            "best_mass_g": 158.6392693837602,
+            "best_score_100": 41.898695,
+            "evals": 2025
+          },
+          {
+            "best_genome_sha256": "2e574613cfe6208ded74b0f2c1d430063f4097c3013c0e414c253f574eca4a97",
+            "best_mass_g": 112.00995728326886,
+            "best_score_100": 41.921054,
+            "evals": 2075
+          },
+          {
+            "best_genome_sha256": "70780ab6a5d67522f775187341f3863a5a2b9b708d8bbb52ae3f8cf4199683bb",
+            "best_mass_g": 113.16405566262803,
+            "best_score_100": 43.43935,
+            "evals": 2100
+          },
+          {
+            "best_genome_sha256": "e040e633ed255c3ec51348bfac52972917a955d494c37e834425d7a31578c5c6",
+            "best_mass_g": 116.91279183974204,
+            "best_score_100": 44.514546,
+            "evals": 2150
+          },
+          {
+            "best_genome_sha256": "a9688e0427b9f046d7abfadd4329d4b5fd285d8af65631af8953d33af6d67026",
+            "best_mass_g": 116.88197700890365,
+            "best_score_100": 44.727138,
+            "evals": 2175
+          },
+          {
+            "best_genome_sha256": "4943b782377532874d1b588c1d6eb16a734f0a7db2ebdf8e8a00155c1b1fd75e",
+            "best_mass_g": 115.5717230291087,
+            "best_score_100": 45.359513,
+            "evals": 2200
+          },
+          {
+            "best_genome_sha256": "460e261b0b618f422a6d0701a88e549f0863935e3e35ee906529cc175aaeec46",
+            "best_mass_g": 115.95824869353537,
+            "best_score_100": 45.503933,
+            "evals": 2425
+          },
+          {
+            "best_genome_sha256": "59b3492033e54478cf5e4d1e3c0d9556e352830d5af26886c64b9dbcf34fb870",
+            "best_mass_g": 116.27488652851845,
+            "best_score_100": 46.721709,
+            "evals": 2450
+          },
+          {
+            "best_genome_sha256": "0ec687da9bc98476c3744127d69ff2e7ea66b169a0d3dd6d59b9027ce562d044",
+            "best_mass_g": 115.20395960008598,
+            "best_score_100": 47.206492,
+            "evals": 2500
+          },
+          {
+            "best_genome_sha256": "077e25a60f7596b944177346eaee405c3e5c1f42f73fe3bd7eb7cc05f71646f6",
+            "best_mass_g": 119.6629808992947,
+            "best_score_100": 47.345255,
+            "evals": 3000
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "077e25a60f7596b944177346eaee405c3e5c1f42f73fe3bd7eb7cc05f71646f6",
+          "best_mass_g": 119.6629808992947,
+          "best_score_100": 47.345255
+        },
+        "island": "island15",
+        "niches": 81,
+        "qd_score": 1985.149943784051,
+        "seed": 4015
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 109.34320209244315,
+          "best_score_100": 15.286503,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "a41573d80b37bbb6b76e4e3112f3b76e9b19ff7ea64545ab022e572f5dcdffd5",
+            "best_mass_g": 109.34320209244315,
+            "best_score_100": 15.286503,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "158c7fec74819850de01d37625fdc19dde1e8f0b74c390e2f9c10f45c0364c5e",
+            "best_mass_g": 113.27436229789606,
+            "best_score_100": 16.151435,
+            "evals": 75
+          },
+          {
+            "best_genome_sha256": "280cc1eda2f01835728756829bc05a39ac84b1771463aef984a106f6f8f8f76d",
+            "best_mass_g": 155.46268121443015,
+            "best_score_100": 25.84162,
+            "evals": 125
+          },
+          {
+            "best_genome_sha256": "e7bc354f2a892bee7e10dc462018b78dac322a7b43fc474885d77916815b5936",
+            "best_mass_g": 140.48021156702148,
+            "best_score_100": 34.871131,
+            "evals": 150
+          },
+          {
+            "best_genome_sha256": "e125e81d8b85f9e8ff41c7cd94902642b0ccc0c51a70c83725853ee28ae3e667",
+            "best_mass_g": 140.29426253144132,
+            "best_score_100": 35.585776,
+            "evals": 256
+          },
+          {
+            "best_genome_sha256": "096cc8985df7c6dcd2ec01bf6dd21456b98cc443410a586bdb37e38bf33a2d84",
+            "best_mass_g": 139.84478714993693,
+            "best_score_100": 35.896637,
+            "evals": 300
+          },
+          {
+            "best_genome_sha256": "1ac36ae495d944a2338ea8ae358227d96712e96762246998b4b4f7e22c41f290",
+            "best_mass_g": 140.0677424145826,
+            "best_score_100": 38.156969,
+            "evals": 400
+          },
+          {
+            "best_genome_sha256": "77e8e6cc0d86a22f7f845cb92b402a1e5b88f649d5e1547015c686737a00e8ac",
+            "best_mass_g": 117.8348495643293,
+            "best_score_100": 39.436185,
+            "evals": 475
+          },
+          {
+            "best_genome_sha256": "9cb2a38f11a9b9e36b2edd60316bfcd4ddd2dc997cf78fa142e3a77711632035",
+            "best_mass_g": 131.10687980627523,
+            "best_score_100": 40.396469,
+            "evals": 575
+          },
+          {
+            "best_genome_sha256": "04de42db37b2f3d44bf895b42bef8fd075d053b76faae4c35370c6f8b74ece37",
+            "best_mass_g": 142.54674493059468,
+            "best_score_100": 41.560238,
+            "evals": 625
+          },
+          {
+            "best_genome_sha256": "39e98c9b378148f4fa381f632aaa5b4e8c42c813608c030d34f95e576e0fa4ea",
+            "best_mass_g": 160.13345703191018,
+            "best_score_100": 43.024485,
+            "evals": 700
+          },
+          {
+            "best_genome_sha256": "3b1e176a8698ab9fe92265340ab5b1ce428399b9e6444998863c49cbed4ce801",
+            "best_mass_g": 169.82995394496658,
+            "best_score_100": 43.267714,
+            "evals": 750
+          },
+          {
+            "best_genome_sha256": "d17d6db8169140c76fa7bd90b871fdeedbe006079a21cfaba56fcca847de9dc5",
+            "best_mass_g": 153.79003125925468,
+            "best_score_100": 45.39676,
+            "evals": 1050
+          },
+          {
+            "best_genome_sha256": "2da48c3bcbc81ee3322bc4c8bc39577948d914e02d3881b4aeb452d3268be8f3",
+            "best_mass_g": 129.42707745524305,
+            "best_score_100": 46.118866,
+            "evals": 1075
+          },
+          {
+            "best_genome_sha256": "9c11d47c233792548abb9dbb742c2c4056fbacf2d5d1208d769acb4d30af1443",
+            "best_mass_g": 148.43596773843709,
+            "best_score_100": 48.322663,
+            "evals": 1175
+          },
+          {
+            "best_genome_sha256": "527b96afd7e8a86311e36ebfda4b5b8fad7b90d7e92bd0effc7717223e7c10d7",
+            "best_mass_g": 144.17661941224358,
+            "best_score_100": 48.715435,
+            "evals": 1275
+          },
+          {
+            "best_genome_sha256": "7275216cf4449ea4a5a3576629913d6d7f39d08e72769cec710cad298972fd3b",
+            "best_mass_g": 121.14061251683088,
+            "best_score_100": 50.165472,
+            "evals": 1400
+          },
+          {
+            "best_genome_sha256": "0089f2eb46b608e976c9b02b18afc755d21475693f66ee80692d1dd02f723ce8",
+            "best_mass_g": 131.40563417590914,
+            "best_score_100": 50.612901,
+            "evals": 1525
+          },
+          {
+            "best_genome_sha256": "d506774dacea02980166d8798bb30540a417ba6782657af74a00c79793f6ea74",
+            "best_mass_g": 124.18641812953761,
+            "best_score_100": 50.645153,
+            "evals": 1650
+          },
+          {
+            "best_genome_sha256": "223f25865d23413ae3efb076dc2fa6c6bee3436ab46e49113ccf3ba617dc7c04",
+            "best_mass_g": 130.0474052755624,
+            "best_score_100": 50.767822,
+            "evals": 2000
+          },
+          {
+            "best_genome_sha256": "3fe74eb908844a3fd27ae8c3fef3f16e09df99404d7cefdc393974b002443958",
+            "best_mass_g": 111.54312507149541,
+            "best_score_100": 51.056574,
+            "evals": 2025
+          },
+          {
+            "best_genome_sha256": "92d253faf9a14ff6f7d019a5b1e4b6ad98da9879b97724016f3946c4b9a79b1b",
+            "best_mass_g": 117.1507944747672,
+            "best_score_100": 52.14098,
+            "evals": 2048
+          },
+          {
+            "best_genome_sha256": "75ca29dee4c87340409e0d75c8b4f91d6e872adcdb465e1a9386df4cb857b95c",
+            "best_mass_g": 116.27296869663367,
+            "best_score_100": 54.068695,
+            "evals": 2100
+          },
+          {
+            "best_genome_sha256": "ccc5ee03b9adc3ac9026178a60c0062bde4cba983f3bf1ff8994b1950cbbe9b1",
+            "best_mass_g": 117.38944467514405,
+            "best_score_100": 54.187557,
+            "evals": 2125
+          },
+          {
+            "best_genome_sha256": "7e1c4a7c22bd68862afebad41890fb47ff910f04868236f5d0d2a20b0fa43ccb",
+            "best_mass_g": 118.4770247841297,
+            "best_score_100": 54.849914,
+            "evals": 2300
+          },
+          {
+            "best_genome_sha256": "b712dc582427537513dda7944ff19b344e61aad8f1a51409193dae75f73736dc",
+            "best_mass_g": 115.42332084024441,
+            "best_score_100": 54.991275,
+            "evals": 2375
+          },
+          {
+            "best_genome_sha256": "b7ecc83a2e295a059bbba7542edbbe773c62643eb4521980336d3203e0e38079",
+            "best_mass_g": 118.01805050485896,
+            "best_score_100": 55.597694,
+            "evals": 2425
+          },
+          {
+            "best_genome_sha256": "0106698a273e8b4428a5149a972d4dfa63777a32ac17cb86672b07a862491529",
+            "best_mass_g": 117.4794630660953,
+            "best_score_100": 56.004723,
+            "evals": 2475
+          },
+          {
+            "best_genome_sha256": "25fd009170c5a1554eeb3e95513428184fbf8c4d0743b4bcf8e8370ac935bee2",
+            "best_mass_g": 116.99506277405126,
+            "best_score_100": 56.329007,
+            "evals": 2750
+          },
+          {
+            "best_genome_sha256": "3e54c7d46cf83323c29d3c694f3ccd529f0e9458c306ad5d7fa4031d149be5d0",
+            "best_mass_g": 113.0261491633778,
+            "best_score_100": 56.612763,
+            "evals": 2775
+          },
+          {
+            "best_genome_sha256": "dc3a625c1362a3688b905fb7f34b021d7505c303307918ea74a1aa0544695aa8",
+            "best_mass_g": 117.51882585928756,
+            "best_score_100": 57.005264,
+            "evals": 2800
+          },
+          {
+            "best_genome_sha256": "3d756d1e3e42ca62df4141ceb48bfccf1abedc4f25b266f98823a061ba0832e4",
+            "best_mass_g": 109.92966452939079,
+            "best_score_100": 57.998118,
+            "evals": 3000
+          }
+        ],
+        "evaluations": 3000,
+        "final": {
+          "best_genome_sha256": "3d756d1e3e42ca62df4141ceb48bfccf1abedc4f25b266f98823a061ba0832e4",
+          "best_mass_g": 109.92966452939079,
+          "best_score_100": 57.998118
+        },
+        "island": "island16",
+        "niches": 99,
+        "qd_score": 2727.8054605308944,
+        "seed": 4016
+      }
+    ],
+    "winner_first_island_best_at_evals": 2425,
+    "winner_island": "island12"
+  },
+  "generation": "G5",
+  "grid_check": {
+    "evaluation": "Tier 1 of the ranking's top 8",
+    "h_mm": [
+      0.4,
+      0.3,
+      0.25,
+      0.2,
+      0.15
+    ],
+    "requirement_max_frac": 0.02,
+    "rows": [
+      {
+        "design_id": "kv4i012_g00009_dd6ffea5",
+        "mass_g": [
+          83.33955845004225,
+          83.28248904450504,
+          83.17486068430163,
+          83.2579474970853,
+          82.98794114446885
+        ],
+        "mass_rel_h020_vs_h015": 0.0032535612872526265,
+        "pass": true,
+        "sealed_void_mm3": [
+          154.90945824578546,
+          147.6282248784829,
+          168.13788585993416,
+          175.83847487473952,
+          170.75189078797894
+        ],
+        "tier1_score_100": [
+          59.540099,
+          59.22066,
+          59.458198,
+          59.373418,
+          59.083416
+        ]
+      },
+      {
+        "design_id": "kv4i012_g00239_68594d05",
+        "mass_g": [
+          81.93598274998251,
+          82.37440655051182,
+          82.2032525286815,
+          81.85432385572103,
+          81.87982614307894
+        ],
+        "mass_rel_h020_vs_h015": 0.0003114599597872081,
+        "pass": true,
+        "sealed_void_mm3": [
+          194.89591897229366,
+          205.17665577714482,
+          226.84389567886956,
+          204.0134542440343,
+          229.23156526592146
+        ],
+        "tier1_score_100": [
+          59.339372,
+          59.194757,
+          59.092405,
+          59.311203,
+          58.936727
+        ]
+      },
+      {
+        "design_id": "kv4i012_g00449_317fdf8f",
+        "mass_g": [
+          84.0447537172251,
+          84.93984736238853,
+          84.75760124018976,
+          84.22211626749895,
+          84.44541860042825
+        ],
+        "mass_rel_h020_vs_h015": 0.002644339226807735,
+        "pass": true,
+        "sealed_void_mm3": [
+          121.761515883625,
+          160.93357126192367,
+          199.97328396827402,
+          176.0418065447075,
+          193.6898247902254
+        ],
+        "tier1_score_100": [
+          59.045354,
+          58.087091,
+          57.608706,
+          58.534085,
+          57.928459
+        ]
+      },
+      {
+        "design_id": "kv4i012_g01004_24f201c1",
+        "mass_g": [
+          100.66490384702358,
+          100.93603282704895,
+          100.98881975616884,
+          100.7271531552755,
+          100.80355953258494
+        ],
+        "mass_rel_h020_vs_h015": 0.0007579730087283743,
+        "pass": true,
+        "sealed_void_mm3": [
+          138.51240859268273,
+          185.15927633176682,
+          223.51742372419903,
+          167.74053762541035,
+          229.5623515511382
+        ],
+        "tier1_score_100": [
+          57.704075,
+          56.978538,
+          57.697514,
+          58.166808,
+          57.52102
+        ]
+      },
+      {
+        "design_id": "kv4i007_g00335_5e62ba21",
+        "mass_g": [
+          103.16607595658687,
+          104.27849643746781,
+          103.75909904766554,
+          103.17876630481783,
+          102.93425587932407
+        ],
+        "mass_rel_h020_vs_h015": 0.0023754038284438117,
+        "pass": true,
+        "sealed_void_mm3": [
+          429.3023336596348,
+          520.0989602123536,
+          544.5522925488558,
+          443.92391761579177,
+          447.481158598727
+        ],
+        "tier1_score_100": [
+          57.968168,
+          56.90407,
+          57.201549,
+          57.636369,
+          57.753467
+        ]
+      },
+      {
+        "design_id": "kv4i016_g00279_3d756d1e",
+        "mass_g": [
+          109.92966452939079,
+          111.13945424044947,
+          110.49895553876273,
+          110.23843948198318,
+          110.24320902204373
+        ],
+        "mass_rel_h020_vs_h015": 0.00004326379922048318,
+        "pass": true,
+        "sealed_void_mm3": [
+          274.27380320905615,
+          375.15816058765137,
+          446.0844606397068,
+          399.20569401199896,
+          442.78678898007524
+        ],
+        "tier1_score_100": [
+          57.998118,
+          56.664916,
+          56.77585,
+          57.062075,
+          56.737286
+        ]
+      },
+      {
+        "design_id": "kv4i004_g00009_7eed028c",
+        "mass_g": [
+          103.40714821270043,
+          103.8425622423181,
+          103.1438002870111,
+          103.37810717837748,
+          103.28167076733733
+        ],
+        "mass_rel_h020_vs_h015": 0.0009337224148646683,
+        "pass": true,
+        "sealed_void_mm3": [
+          667.3252797153617,
+          673.6095410150782,
+          653.273553461534,
+          681.0265866784174,
+          698.6522086718353
+        ],
+        "tier1_score_100": [
+          56.115232,
+          55.588636,
+          57.128981,
+          56.907293,
+          56.92501
+        ]
+      },
+      {
+        "design_id": "kv4i016_g00281_a663ab0e",
+        "mass_g": [
+          116.39948351248898,
+          116.60612168895292,
+          115.8967012187062,
+          116.11050867233155,
+          116.35816575457427
+        ],
+        "mass_rel_h020_vs_h015": 0.002128403113238253,
+        "pass": true,
+        "sealed_void_mm3": [
+          34.14818938190308,
+          38.41148573452044,
+          35.0604975291574,
+          39.27484437349801,
+          42.68119706917202
+        ],
+        "tier1_score_100": [
+          56.70026,
+          56.459519,
+          56.981102,
+          56.807372,
+          56.554185
+        ]
+      }
+    ],
+    "rule": "the winner is the highest-ranked design whose h 0.2 mass agrees with h 0.15; others are reported, never ranked"
+  },
+  "inputs": {
+    "L_g_mm": 69.10747996092884,
+    "am_build": 1.0,
+    "bore_round": 3.296533813745537,
+    "buckling_lambda": 6.4886475023743335,
+    "choil_depth_mm": 4.900658996865455,
+    "com_to_index_mm": 7.384467158392972,
+    "crest_r_min_mm": 1.8876327596025915,
+    "crown": 0.2628803026485118,
+    "dolfinx_rel_err": 1.0,
+    "edge_r_min_mm": 3.0,
+    "fairness": 0.9925847388838585,
+    "fat_sf": 0.13752894165060078,
+    "gci_admitted": false,
+    "grip_sf_min": 1.3134762447856652,
+    "groove_r_min_mm": 3.6476074530672813,
+    "guard_h_mm": 16.000000000000004,
+    "hm_spine_sf": 0.9224643568553096,
+    "hm_twist_sf": 0.525581516097583,
+    "junction_step_mm": 0.0,
+    "karambit_ok": true,
+    "lat_rob_cert_n": 211.71991785794577,
+    "lip_w": 8.0,
+    "mass_g": 83.2579474970853,
+    "max_apex_mm": 0.08785942539723413,
+    "max_half_angle_deg": 23.062022704640267,
+    "mid_depth_mm": 1.9347845312995169,
+    "point_monotonic": true,
+    "ring_back_cap_n": 2212.825454996647,
+    "ring_bearing_cap_n": 9752.706866491091,
+    "saddle_depth_mm": 3.3844128051079334,
+    "section_corner_r_min_mm": 3.6716145968377027,
+    "seq_ratio": 1.612998092477091,
+    "solid_tip_sf": 0.0,
+    "spin_I_g_mm2": 450475.60268255055,
+    "spin_I_ref_g_mm2": 572965.3688402749,
+    "station_err_mm": 15.7,
+    "strict_lat_n": 211.71991785794577,
+    "swell_h_over_t": 1.6625283818716095,
+    "swell_perimeter_mm": 84.13500165738267,
+    "t_0p25_mm": 0.1959333855977178,
+    "t_1p00_mm": 0.4320699631803717,
+    "t_2p00_mm": 0.7791192157608547,
+    "tex_amp_mm": 0.2016254757026977,
+    "tex_crest_r_mm": 0.8286495790243847,
+    "twist_body_sf": 4.0,
+    "twist_tip_sf": 3.0,
+    "twist_tipzone_strict_sf": 3.0,
+    "watertight": true
+  },
+  "loads": {
+    "blade_model": "plate",
+    "buckling_lambda": 14.322654967491502,
+    "fatigue_sf": 1.0322118378479734,
+    "grip_lateral_sf": 11.439362322032222,
+    "grip_pull_sf": 11.794606347370065,
+    "grip_squeeze_sf": 3.1474257084925283,
+    "grip_twist_sf": 16.19651884997774,
+    "guard_push_sf": 28.183841199270475,
+    "hand_fatigue_sf": 2.8721271171005633,
+    "lateral_arm_mm": 72.89349250029521,
+    "lateral_force_n": 164.62374882025856,
+    "lateral_limit_sf": 2.3882580023747866,
+    "lateral_peak_at": [
+      68.0,
+      9.383510373976417
+    ],
+    "lateral_ultimate_sf": 1.7010445058670771,
+    "pull_sf": 2.3430005145777417,
+    "ring_any_direction_sf": 3.852613378131726,
+    "ring_back_sf": 73.76084849988823,
+    "ring_bearing_sf": 32.50902288830364,
+    "seq_lateral": 4.789835231644733,
+    "seq_pull": 1.644307525398068,
+    "seq_twist": 8.372282102663375,
+    "teeth_sf": 1.7134596300528655,
+    "tip_axial_sf": 1.28421142661649,
+    "tip_lateral_sf": 1.9647997906307249,
+    "tip_model": "solid",
+    "tip_twist_sf": 2.778497409326425,
+    "twist_limit_sf": 1.9345405053689404,
+    "twist_peak_at": [
+      56.75,
+      7.262025341599363
+    ]
+  },
+  "margins": {
+    "buckling": 9.548436644994334,
+    "fatigue": 1.0322118378479734,
+    "grip_squeeze": 2.622854757077107,
+    "guard_push": 23.486534332725398,
+    "lateral_limit": 1.9902150019789888,
+    "lateral_ultimate": 1.3084957737439054,
+    "pull": 1.952500428814785,
+    "ring_any_direction": 3.2105111484431053,
+    "ring_back": 36.88042424994411,
+    "ring_bearing": 16.25451144415182,
+    "sequence": 1.3702562711650565,
+    "teeth": 1.4278830250440546,
+    "tip_axial": 1.0701761888470749,
+    "tip_lateral": 1.6373331588589375,
+    "tip_twist": 2.315414507772021,
+    "twist_limit": 1.6121170878074504
+  },
+  "mass": {
+    "density_g_mm3": 0.00443,
+    "envelope_census": {
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "triangles": 2372660
+    },
+    "envelope_mesh_volume_mm3": 36783.97623716454,
+    "of_record": "partial-volume integral of the decoded AM field at h 0.2 mm",
+    "of_record_g": 83.2579474970853,
+    "print_mesh_census": {
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "triangles": 6078904
+    },
+    "print_mesh_g": 84.53542835544008,
+    "print_mesh_volume_mm3": 19082.489470753968,
+    "search_h04_g": 83.33955845004225
+  },
+  "meets_every_load_case": true,
+  "point": {
+    "angle_1mm_deg": 69.19434057630015,
+    "angle_3mm_deg": 63.98089295725417,
+    "width_2mm": 2.1563961354105663
+  },
+  "provenance": {
+    "decoder_commit_label": "bf3e37fa",
+    "decoder_sha256": "c63629d4b31058f54470c3ed0fd5f2a7f4f492dfdb11ebb04c4a4588e50ffa9b",
+    "genome_csv": "evidence/g5/v5.0.0/winner_genome.csv",
+    "genome_sha256": "dd6ffea58ee06a7f15dcb648b5b934e9e1a1aafa8e7a343742e8443f20f636e1",
+    "metric": "W_ERGOLIGHT_v2",
+    "metric_draft": "rs-v5",
+    "platform_of_record": "arm64 macOS (xbabe4), Tier 2 at h 0.2 mm; checked on Linux x86_64 (xbabe2)",
+    "requirements": "requirements/RS-karambit-v5.toml",
+    "vv": "evidence/g5/v5.0.0/vv"
+  },
+  "rank_of_record": 1,
+  "ranking": {
+    "h_mm": 0.2,
+    "how": "every final elite re-evaluated at Tier 1, h 0.4; the top 32 at Tier 2, h 0.2",
+    "linux_check": {
+      "bit_identical": false,
+      "designs": 8,
+      "evolution": {
+        "best_score_bit_identical_entries": 0,
+        "history_entries_compared": 8,
+        "island": "island01",
+        "max_rel_diff_best_score_while_same_genome": 1.5787268094340542e-6,
+        "platform": "Linux x86_64 (xbabe2)",
+        "same_best_genome_through_evals": 200
+      },
+      "max_rel_diff": 0.012352691810881215,
+      "rows": [
+        {
+          "design_id": "kv4i012_g00009_dd6ffea5",
+          "mass_rel_diff": -8.022179163591277e-15,
+          "score_100_linux": 59.340732,
+          "score_rel_diff": 0.00009153045822117352
+        },
+        {
+          "design_id": "kv4i012_g00239_68594d05",
+          "mass_rel_diff": 0.0,
+          "score_100_linux": 59.240633,
+          "score_rel_diff": 0.012352691810881215
+        },
+        {
+          "design_id": "kv4i012_g00449_317fdf8f",
+          "mass_rel_diff": 0.0,
+          "score_100_linux": 58.48213,
+          "score_rel_diff": 2.6163252358671e-12
+        },
+        {
+          "design_id": "kv4i012_g01004_24f201c1",
+          "mass_rel_diff": 0.0,
+          "score_100_linux": 58.179368,
+          "score_rel_diff": -0.00031512998136234315
+        },
+        {
+          "design_id": "kv4i007_g00335_5e62ba21",
+          "mass_rel_diff": 0.0,
+          "score_100_linux": 57.52171,
+          "score_rel_diff": -3.420050232992181e-7
+        },
+        {
+          "design_id": "kv4i016_g00279_3d756d1e",
+          "mass_rel_diff": 0.0,
+          "score_100_linux": 56.954925,
+          "score_rel_diff": -0.0007895829470227915
+        },
+        {
+          "design_id": "kv4i004_g00009_7eed028c",
+          "mass_rel_diff": 0.0,
+          "score_100_linux": 56.798882,
+          "score_rel_diff": -4.0694383807302783e-13
+        },
+        {
+          "design_id": "kv4i016_g00281_a663ab0e",
+          "mass_rel_diff": 0.0,
+          "score_100_linux": 56.792685,
+          "score_rel_diff": 1.2836456709504263e-13
+        }
+      ],
+      "winner_rank_linux": 1
+    },
+    "rows": [
+      {
+        "E": 0.7400828044922853,
+        "design_id": "kv4i012_g00009_dd6ffea5",
+        "grid_pass": true,
+        "island": "island12",
+        "mass_g": 83.2579474970853,
+        "rank": 1,
+        "score_100": 59.335301,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7385881799137612,
+        "design_id": "kv4i012_g00239_68594d05",
+        "grid_pass": true,
+        "island": "island12",
+        "mass_g": 81.85432385572103,
+        "rank": 2,
+        "score_100": 58.517781,
+        "worst_margin_W": 0.9887313890840999
+      },
+      {
+        "E": 0.7318843534666116,
+        "design_id": "kv4i012_g00449_317fdf8f",
+        "grid_pass": true,
+        "island": "island12",
+        "mass_g": 84.22211626749895,
+        "rank": 3,
+        "score_100": 58.48213,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7711007565793958,
+        "design_id": "kv4i012_g01004_24f201c1",
+        "grid_pass": true,
+        "island": "island12",
+        "mass_g": 100.7271531552755,
+        "rank": 4,
+        "score_100": 58.197708,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7941357936693001,
+        "design_id": "kv4i007_g00335_5e62ba21",
+        "grid_pass": true,
+        "island": "island07",
+        "mass_g": 103.17876630481783,
+        "rank": 5,
+        "score_100": 57.52173,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8062251009560775,
+        "design_id": "kv4i016_g00279_3d756d1e",
+        "grid_pass": true,
+        "island": "island16",
+        "mass_g": 110.23843948198318,
+        "rank": 6,
+        "score_100": 56.999931,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7933645711601437,
+        "design_id": "kv4i004_g00009_7eed028c",
+        "grid_pass": true,
+        "island": "island04",
+        "mass_g": 103.37810717837748,
+        "rank": 7,
+        "score_100": 56.798882,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7799890367752429,
+        "design_id": "kv4i016_g00281_a663ab0e",
+        "grid_pass": true,
+        "island": "island16",
+        "mass_g": 116.11050867233155,
+        "rank": 8,
+        "score_100": 56.792685,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7351127265718909,
+        "design_id": "kv4i012_g00281_176d41fb",
+        "grid_pass": null,
+        "island": "island12",
+        "mass_g": 89.21541098260745,
+        "rank": 9,
+        "score_100": 56.756387,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7836621384835866,
+        "design_id": "kv4i016_g00449_dc3a625c",
+        "grid_pass": null,
+        "island": "island16",
+        "mass_g": 117.4885056727351,
+        "rank": 10,
+        "score_100": 56.632056,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7776975616096908,
+        "design_id": "kv4i016_g00435_c88aa246",
+        "grid_pass": null,
+        "island": "island16",
+        "mass_g": 116.2993983465871,
+        "rank": 11,
+        "score_100": 56.586227,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7896078326560299,
+        "design_id": "kv4i004_g00581_3e712576",
+        "grid_pass": null,
+        "island": "island04",
+        "mass_g": 105.30396616102198,
+        "rank": 12,
+        "score_100": 56.281767,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7990093552048982,
+        "design_id": "kv4i016_g00695_c5a6ac0e",
+        "grid_pass": null,
+        "island": "island16",
+        "mass_g": 112.53334806783367,
+        "rank": 13,
+        "score_100": 56.174602,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7791591670456085,
+        "design_id": "kv4i016_g00335_8db998ae",
+        "grid_pass": null,
+        "island": "island16",
+        "mass_g": 116.14318591798043,
+        "rank": 14,
+        "score_100": 56.146913,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7857605245643066,
+        "design_id": "kv4i004_g00720_36848c13",
+        "grid_pass": null,
+        "island": "island04",
+        "mass_g": 106.95288693077087,
+        "rank": 15,
+        "score_100": 55.92748,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.79632719945054,
+        "design_id": "kv4i004_g00149_768a9f9e",
+        "grid_pass": null,
+        "island": "island04",
+        "mass_g": 108.16646686799774,
+        "rank": 16,
+        "score_100": 55.886697,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7253117323975654,
+        "design_id": "kv4i012_g00855_31844469",
+        "grid_pass": null,
+        "island": "island12",
+        "mass_g": 81.34598855519702,
+        "rank": 17,
+        "score_100": 55.712849,
+        "worst_margin_W": 0.9596507741453397
+      },
+      {
+        "E": 0.7808471826621428,
+        "design_id": "kv4i004_g00336_5eba9c14",
+        "grid_pass": null,
+        "island": "island04",
+        "mass_g": 107.0338073344931,
+        "rank": 18,
+        "score_100": 55.468275,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7939496837925869,
+        "design_id": "kv4i016_g00605_53ae2d23",
+        "grid_pass": null,
+        "island": "island16",
+        "mass_g": 113.83173295386695,
+        "rank": 19,
+        "score_100": 55.377348,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7852118535723939,
+        "design_id": "kv4i004_g00435_26ac168f",
+        "grid_pass": null,
+        "island": "island04",
+        "mass_g": 101.72475284171077,
+        "rank": 20,
+        "score_100": 55.325269,
+        "worst_margin_W": 0.9824527527020286
+      },
+      {
+        "E": 0.709801711554583,
+        "design_id": "kv4i012_g00635_910f9a17",
+        "grid_pass": null,
+        "island": "island12",
+        "mass_g": 82.69830898071197,
+        "rank": 21,
+        "score_100": 54.49846,
+        "worst_margin_W": 0.9780873421569516
+      },
+      {
+        "E": 0.8214039609411115,
+        "design_id": "kv4i012_g00359_25833e44",
+        "grid_pass": null,
+        "island": "island12",
+        "mass_g": 101.43367272705444,
+        "rank": 22,
+        "score_100": 52.755498,
+        "worst_margin_W": 0.8582285400390626
+      },
+      {
+        "E": 0.8334699802445055,
+        "design_id": "kv4i012_g00204_19a0b6f0",
+        "grid_pass": null,
+        "island": "island12",
+        "mass_g": 103.3279469112422,
+        "rank": 23,
+        "score_100": 52.484343,
+        "worst_margin_W": 0.8353783517606966
+      },
+      {
+        "E": 0.8144490471369764,
+        "design_id": "kv4i012_g00435_70de5701",
+        "grid_pass": null,
+        "island": "island12",
+        "mass_g": 101.1427618332054,
+        "rank": 24,
+        "score_100": 47.441763,
+        "worst_margin_W": 0.7763467947352799
+      },
+      {
+        "E": 0.7529968968816135,
+        "design_id": "kv4i007_g00581_e1616148",
+        "grid_pass": null,
+        "island": "island07",
+        "mass_g": 98.46239210526454,
+        "rank": 25,
+        "score_100": 45.17215,
+        "worst_margin_W": 0.8282677085369827
+      },
+      {
+        "E": 0.7869501897765305,
+        "design_id": "kv4i007_g00435_9ced102a",
+        "grid_pass": null,
+        "island": "island07",
+        "mass_g": 104.53347649144298,
+        "rank": 26,
+        "score_100": 45.150636,
+        "worst_margin_W": 0.8025101636058121
+      },
+      {
+        "E": 0.8237551896212703,
+        "design_id": "kv4i012_g00414_c440ceab",
+        "grid_pass": null,
+        "island": "island12",
+        "mass_g": 101.58452806599959,
+        "rank": 27,
+        "score_100": 43.145329,
+        "worst_margin_W": 0.6917671208095793
+      },
+      {
+        "E": 0.791163006055619,
+        "design_id": "kv4i004_g00279_51be0181",
+        "grid_pass": null,
+        "island": "island04",
+        "mass_g": 104.36071612386701,
+        "rank": 28,
+        "score_100": 40.089136,
+        "worst_margin_W": 0.7177733005877344
+      },
+      {
+        "E": 0.7840296551820245,
+        "design_id": "kv4i007_g00525_a6e34778",
+        "grid_pass": null,
+        "island": "island07",
+        "mass_g": 104.36523784971745,
+        "rank": 29,
+        "score_100": 38.790791,
+        "worst_margin_W": 0.7096988330300488
+      },
+      {
+        "E": 0.7398220175828184,
+        "design_id": "kv4i012_g00581_fd3f9bc0",
+        "grid_pass": null,
+        "island": "island12",
+        "mass_g": 83.05328680868911,
+        "rank": 30,
+        "score_100": 38.331472,
+        "worst_margin_W": 0.6577595825298375
+      },
+      {
+        "E": 0.7889751336460846,
+        "design_id": "kv4i007_g00279_4d071e0a",
+        "grid_pass": null,
+        "island": "island07",
+        "mass_g": 102.59872445108377,
+        "rank": 31,
+        "score_100": 36.563637,
+        "worst_margin_W": 0.653234379317488
+      },
+      {
+        "E": 0.7922330434996785,
+        "design_id": "kv4i004_g00449_b35c1be5",
+        "grid_pass": null,
+        "island": "island04",
+        "mass_g": 108.40835900920797,
+        "rank": 32,
+        "score_100": 33.973908,
+        "worst_margin_W": 0.6187490682679998
+      }
+    ],
+    "search_leader": {
+      "design_id": "kv4i012_g00204_19a0b6f0",
+      "tier1_h04_score_100": 63.357584,
+      "tier2_cases_below_requirement": [
+        {
+          "case": "tip_axial",
+          "margin": 0.9560284229828852
+        }
+      ],
+      "tier2_h02_score_100": 52.484343,
+      "tier2_rank": 23,
+      "tier2_worst_margin": 0.9560284229828852,
+      "tip_sf_sections_h04": {
+        "axial": 1.3834203977558794,
+        "lateral": 1.4219609725572264,
+        "twist": 1.3754594447346868
+      },
+      "tip_sf_solid_h02": {
+        "axial": 1.147234107579462,
+        "lateral": 1.9142019377868436,
+        "twist": 2.110033726812816
+      }
+    },
+    "shortlist": 32,
+    "tip_mesh_max_area_mm2": 0.08
+  },
+  "release_assets": [
+    {
+      "bytes": 2443454,
+      "file": "g5-v5.0.0-archives.tar.gz",
+      "sha256": "5f86e3f118ba02c7524b1a1735d7e1e1947f593f358a959f194a099d7f34cdc5"
+    },
+    {
+      "bytes": 1198768,
+      "file": "g5-v5.0.0-baseline_eval_h040.jsonl",
+      "sha256": "63fdba928159619aeca33c78cfe27a0ccef65dc0106cf2fdb46dc6b796a747f2"
+    },
+    {
+      "bytes": 7278947,
+      "file": "g5-v5.0.0-eval_h040.jsonl",
+      "sha256": "66055f05d8b03a2f2b15ea3ee959eb861bac3e2a4505e4d75621ca512f15ef55"
+    }
+  ],
+  "schema": "G5.0",
+  "score": {
+    "E": 0.7400828044922853,
+    "base": 0.8017386741844272,
+    "draft": "rs-v5",
+    "hand_factors": {
+      "balance": {
+        "beta": 0.1,
+        "e": 1.0
+      },
+      "contact_pressure": {
+        "beta": 0.15,
+        "e": 0.6694329500821695
+      },
+      "grip_length": {
+        "beta": 0.1,
+        "e": 1.0
+      },
+      "grip_section": {
+        "beta": 0.2,
+        "e": 1.0
+      },
+      "grip_surface": {
+        "beta": 0.05,
+        "e": 1.0
+      },
+      "guard": {
+        "beta": 0.1,
+        "e": 1.0
+      },
+      "hand_edges": {
+        "beta": 0.15,
+        "e": 1.0
+      },
+      "ring": {
+        "beta": 0.15,
+        "e": 1.0
+      }
+    },
+    "metric": "W_ERGOLIGHT_v2",
+    "raw_score_100": 59.335300646033744,
+    "score_100": 59.335301,
+    "terms": {
+      "am_build": {
+        "points": 2.471037291520304,
+        "s": 0.5564776618060316,
+        "weight": 0.06
+      },
+      "buckling": {
+        "points": 1.4801656089845705,
+        "s": 1.0,
+        "weight": 0.02
+      },
+      "edge": {
+        "points": 2.960331217969141,
+        "s": 1.0,
+        "weight": 0.04
+      },
+      "fatigue": {
+        "points": 2.81703697825926,
+        "s": 0.9515952002802632,
+        "weight": 0.04
+      },
+      "form": {
+        "points": 1.8433471271771174,
+        "s": 0.9962923694419292,
+        "weight": 0.025
+      },
+      "grip_squeeze": {
+        "points": 2.5902867050537517,
+        "s": 0.9999987991037808,
+        "weight": 0.035
+      },
+      "guard_push": {
+        "points": 2.2202484134768556,
+        "s": 1.0,
+        "weight": 0.03
+      },
+      "lateral_limit": {
+        "points": 2.590078693702592,
+        "s": 0.9999184948266696,
+        "weight": 0.035
+      },
+      "lateral_ultimate": {
+        "points": 2.5704145538190653,
+        "s": 0.9923270122967358,
+        "weight": 0.035
+      },
+      "mass": {
+        "points": 9.88371122973793,
+        "s": 0.44516240478966385,
+        "weight": 0.3
+      },
+      "point": {
+        "points": 4.351098037574362,
+        "s": 0.9798673903251769,
+        "weight": 0.06
+      },
+      "pull": {
+        "points": 1.4800104809257246,
+        "s": 0.9998951954714362,
+        "weight": 0.02
+      },
+      "ring_any_direction": {
+        "points": 1.480165573635641,
+        "s": 0.9999999761182604,
+        "weight": 0.02
+      },
+      "ring_back": {
+        "points": 1.4801656089845705,
+        "s": 1.0,
+        "weight": 0.02
+      },
+      "ring_bearing": {
+        "points": 2.2202484134768556,
+        "s": 1.0,
+        "weight": 0.03
+      },
+      "sequence": {
+        "points": 2.945282834403352,
+        "s": 0.9949166554490775,
+        "weight": 0.04
+      },
+      "serration": {
+        "points": 1.4801656089845705,
+        "s": 1.0,
+        "weight": 0.02
+      },
+      "teeth": {
+        "points": 2.2125623392499327,
+        "s": 0.9965381917715745,
+        "weight": 0.03
+      },
+      "tip_axial": {
+        "points": 2.4929436766606243,
+        "s": 0.9624188233797294,
+        "weight": 0.035
+      },
+      "tip_lateral": {
+        "points": 2.5880704385497975,
+        "s": 0.9991431934914273,
+        "weight": 0.035
+      },
+      "tip_twist": {
+        "points": 2.59026566197519,
+        "s": 0.9999906752720634,
+        "weight": 0.035
+      },
+      "twist_limit": {
+        "points": 2.5876641519125303,
+        "s": 0.9989863436150928,
+        "weight": 0.035
+      },
+      "worst_margin": {
+        "points": 0.0,
+        "s": 1.0,
+        "weight": 0.0
+      }
+    },
+    "worst_margin_W": 1.0
+  },
+  "search_score_100": 59.540099,
+  "status": "computational design; not built, printed or physically tested",
+  "version": "5.0.0",
+  "worst_margin": 1.0322118378479734
+}

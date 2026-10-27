@@ -11,19 +11,23 @@
 //! - `<cert_dir>/tier2_h020.jsonl`: the shortlist at Tier 2, h 0.2 (`g5-pilot tier2`), the ranking of record;
 //! - `<cert_dir>/hconv.jsonl`: the ranking's top designs at Tier 1 on five grids (`g5-pilot hconv`);
 //! - `<cert_dir>/tier2_linux_h020.jsonl`: the same top designs at Tier 2 on Linux x86_64 (cross-platform check);
-//! - `<cert_dir>/assets/` (optional): release assets too large for git, listed with their sha256.
+//! - `<cert_dir>/launch.json`: the `g5-evolve` arguments of the cohort and the control, and `<cert_dir>/repro/`: one
+//!   island re-run from them for its first evaluations on another platform;
+//! - `<cert_dir>/assets/` (optional): release assets too large for git (the full Tier-1 re-evaluation records), listed
+//!   with their sha256; `elites_h040.csv` and every island's genomes are in git, so any elite can be re-evaluated.
 //!
 //! Checks:
 //! 1. every record and archive row carries this binary's decoder hash, and every genome row re-hashes to its id;
 //! 2. `eval_h040` covers every final elite and reproduces every Tier-1 archive row bit for bit;
 //! 3. the shortlist is the top `shortlist` of `eval_h040`; the grid check and the Linux run cover the ranking's top
 //!    `grid_top`;
-//! 4. the winner is the highest-ranked design whose h 0.2 mass agrees with h 0.15 within RS-karambit-v5 `[mass]
+//! 4. the launch record is consistent with the runs (Sobol start = the first history entry, budget = the last, seeds
+//!    by the seed rule, archive niches in range), and the re-run island reproduces the cohort's history bit for bit;
+//! 5. the winner is the highest-ranked design whose h 0.2 mass agrees with h 0.15 within RS-karambit-v5 `[mass]
 //!    grid_agreement_max_frac` (designs that do not are reported, never ranked), and its meshes are watertight.
 //!
-//! Outputs: `evidence/g5/v<version>/{release.json, winner_genome.csv, elites_h040.csv, eval_h040.jsonl,
-//! baseline_eval_h040.jsonl, ranking_tier2_h020.jsonl, grid_check.jsonl, tier2_linux_h020.jsonl,
-//! history/islandNN.jsonl, genomes/islandNN.csv, SHA256SUMS}` (`vv/`
+//! Outputs: `evidence/g5/v<version>/{release.json, winner_genome.csv, elites_h040.csv, ranking_tier2_h020.jsonl,
+//! grid_check.jsonl, tier2_linux_h020.jsonl, history/islandNN.jsonl, genomes/islandNN.csv, repro/, SHA256SUMS}` (`vv/`
 //! keeps its own sums), the evolution figure `docs/g5/v<version>/img/evolution.svg`, and `evidence/g5/RECORD`.
 use jarambit_crescent::export::{census, volume};
 use jarambit_g5::g5_genome::G5Genome;
@@ -179,6 +183,74 @@ fn verify_eval(isl: &[Island], eval: &[Value], hash: &str) -> usize {
     reproduced
 }
 
+/// Check 4: the launch record against the runs, and the re-run island against the cohort's history.
+fn verify_launch(launch: &Value, cohort: &[Island], baseline: &[Island], repro: &Path) -> Value {
+    for (key, isl, init_is_budget) in [("cohort", cohort, false), ("baseline", baseline, true)] {
+        let a = &launch[key];
+        let (init, evals) = (f(a, "/init"), f(a, "/evals"));
+        if init_is_budget != (init == evals) {
+            fail(format!("launch.{key}: init {init} vs evals {evals}"));
+        }
+        for i in isl {
+            let (first, last) = (i.history.first().unwrap(), i.history.last().unwrap());
+            if f(first, "/evals") != init.min(evals) || f(last, "/evals") != evals {
+                fail(format!("{}: history spans {}..{}, launch says init {init}, evals {evals}", i.name, first["evals"], last["evals"]));
+            }
+            for r in &i.archive {
+                if f(r, "/niche_id") >= f(launch, "/archive_niches") {
+                    fail(format!("{}: niche {} out of range", i.name, r["niche_id"]));
+                }
+            }
+        }
+    }
+    let island = s(launch, "/repro/island");
+    let mine = &cohort.iter().find(|i| i.name == island).unwrap_or_else(|| fail(format!("repro island {island}"))).history;
+    let re = jsonl(&repro.join(format!("{island}_history.jsonl")));
+    let keys = ["/evals", "/niches", "/n_tier2", "/qd_score", "/best_raw_score_100", "/best_mass_g"];
+    let mut matched = 0;
+    for e in &re {
+        let Some(m) = mine.iter().find(|m| m["evals"] == e["evals"]) else { continue };
+        for k in keys {
+            if f(e, k).to_bits() != f(m, k).to_bits() {
+                fail(format!("repro {island} at {} evals: {k} {} != {}", e["evals"], f(e, k), f(m, k)));
+            }
+        }
+        if s(e, "/best_genome_sha256") != s(m, "/best_genome_sha256") {
+            fail(format!("repro {island} at {} evals: best genome differs", e["evals"]));
+        }
+        matched += 1;
+    }
+    if matched < 2 {
+        fail(format!("repro {island}: only {matched} history entries to compare"));
+    }
+    json!({"island": island, "platform": launch["repro"]["platform"], "evaluations": re.last().unwrap()["evals"],
+           "history_entries_identical": matched})
+}
+
+/// The same island re-run on Linux x86_64 (`<island>_linux_history.jsonl`), compared with the record: maths-library
+/// differences between platforms (`sin`, `exp`, `powf`) make the runs agree closely rather than bit for bit.
+fn cross_platform_history(launch: &Value, cohort: &[Island], repro: &Path) -> Value {
+    let island = s(launch, "/repro/island");
+    let mine = &cohort.iter().find(|i| i.name == island).unwrap().history;
+    let re = jsonl(&repro.join(format!("{island}_linux_history.jsonl")));
+    let (mut n, mut same_genome_through, mut max_rel, mut identical) = (0, Value::Null, 0.0_f64, 0);
+    for e in &re {
+        let Some(m) = mine.iter().find(|m| m["evals"] == e["evals"]) else { continue };
+        n += 1;
+        let (x, y) = (f(e, "/best_raw_score_100"), f(m, "/best_raw_score_100"));
+        identical += usize::from(x.to_bits() == y.to_bits());
+        if s(e, "/best_genome_sha256") == s(m, "/best_genome_sha256") {
+            same_genome_through = e["evals"].clone();
+            max_rel = max_rel.max(((x - y) / y).abs());
+        } else {
+            break;
+        }
+    }
+    json!({"island": island, "platform": "Linux x86_64 (xbabe2)", "history_entries_compared": n,
+           "best_score_bit_identical_entries": identical, "same_best_genome_through_evals": same_genome_through,
+           "max_rel_diff_best_score_while_same_genome": max_rel})
+}
+
 /// The score breakdown with named fields (terms and hand factors as objects, not tuples).
 fn score_json(sc: &Value) -> Value {
     let mut terms = Map::new();
@@ -319,6 +391,7 @@ fn receipt(a: &[String]) {
     let eval = jsonl(&cert.join("eval_h040.jsonl"));
     let base_eval = jsonl(&cert.join("baseline_eval_h040.jsonl"));
     let reproduced = verify_eval(&cohort, &eval, &hash);
+    let launch = serde_json::from_str::<Value>(&read(&cert.join("launch.json"))).unwrap_or_else(|e| fail(format!("launch.json: {e}")));
     let base_reproduced = verify_eval(&baseline, &base_eval, &hash);
 
     // --- check 3: the shortlist (the same stable sort as `g5-pilot tier2`) and the ranking of record
@@ -337,6 +410,22 @@ fn receipt(a: &[String]) {
     }
     let ranking = rank(&t2);
     let top: Vec<&str> = ranking.iter().take(grid_top).map(|l| s(l, "/design_id")).collect();
+    let rank_of = |id: &str| ranking.iter().position(|l| s(l, "/design_id") == id).unwrap() + 1;
+
+    // the search leader (best Tier-1 score at h 0.4) and what Tier 2 found
+    let leader_id = ev[0].1;
+    let leader_t1 = &eval.iter().find(|l| s(l, "/design_id") == leader_id).unwrap()["record"];
+    let leader_t2 = &ranking[rank_of(leader_id) - 1]["record"];
+    let (lm, lmu) = margins_json(leader_t2);
+    let binding = lm.as_object().unwrap().iter().filter(|(_, v)| v.as_f64().is_some_and(|x| x < 1.0))
+        .map(|(k, v)| json!({"case": k, "margin": v})).collect::<Vec<_>>();
+    let search_leader = json!({"design_id": leader_id, "tier1_h04_score_100": leader_t1["score"]["score_100"],
+        "tier2_h02_score_100": leader_t2["score"]["score_100"], "tier2_rank": rank_of(leader_id),
+        "tier2_worst_margin": num(lmu), "tier2_cases_below_requirement": binding,
+        "tip_sf_sections_h04": {"axial": leader_t1["loads"]["tip_axial_sf"], "lateral": leader_t1["loads"]["tip_lateral_sf"],
+                                "twist": leader_t1["loads"]["tip_twist_sf"]},
+        "tip_sf_solid_h02": {"axial": leader_t2["loads"]["tip_axial_sf"], "lateral": leader_t2["loads"]["tip_lateral_sf"],
+                             "twist": leader_t2["loads"]["tip_twist_sf"]}});
 
     // --- check 4: the grid check, then the winner
     let hc = jsonl(&cert.join("hconv.jsonl"));
@@ -364,7 +453,6 @@ fn receipt(a: &[String]) {
                    "mass_rel_h020_vs_h015": rel, "pass": rel <= max_frac})
         })
         .collect();
-    let rank_of = |id: &str| ranking.iter().position(|l| s(l, "/design_id") == id).unwrap() + 1;
     let win_row = grid_rows
         .iter()
         .find(|r| r["pass"] == json!(true))
@@ -382,18 +470,24 @@ fn receipt(a: &[String]) {
     }
     let mut lin_max_rel = 0.0_f64;
     let mut lin_identical = true;
+    let mut lin_rows = Vec::new();
     for l in &lin {
         let id = s(l, "/design_id");
         let arm = &ranking[rank_of(id) - 1]["record"];
         if s(l, "/record/decoder_sha256") != hash || f(l, "/h") != H_RECORD {
             fail(format!("{id}: Linux record has another decoder or grid"));
         }
-        for p in ["/score/raw_score_100", "/inputs/mass_g"] {
+        let mut rel = [0.0; 2];
+        for (k, p) in ["/score/raw_score_100", "/inputs/mass_g"].iter().enumerate() {
             let (x, y) = (f(&l["record"], p), f(arm, p));
             lin_identical &= x.to_bits() == y.to_bits();
-            lin_max_rel = lin_max_rel.max(((x - y) / y).abs());
+            rel[k] = (x - y) / y;
+            lin_max_rel = lin_max_rel.max(rel[k].abs());
         }
+        lin_rows.push(json!({"design_id": id, "score_100_linux": l["record"]["score"]["score_100"], "score_rel_diff": rel[0],
+                             "mass_rel_diff": rel[1]}));
     }
+    lin_rows.sort_by(|x, y| f(y, "/score_100_linux").total_cmp(&f(x, "/score_100_linux")));
 
     // --- the winner: meshes, point, margins, its search record
     let am = extract_watertight_mesh_fail_closed(g, H_RECORD, true).unwrap_or_else(|| fail("winner AM build not watertight"));
@@ -428,6 +522,15 @@ fn receipt(a: &[String]) {
     // --- evolution
     let (seeds, started, finished) = supervisor(cohort_root);
     let (base_seeds, base_started, base_finished) = supervisor(base_root);
+    let host = f(&launch, "/cohort/host");
+    for (name, seed) in seeds.iter().chain(base_seeds.iter()) {
+        let n: f64 = name.trim_start_matches("island").parse().unwrap_or_else(|_| fail(name));
+        if *seed as f64 != host * 1000.0 + n {
+            fail(format!("{name}: seed {seed} is not host*1000+island"));
+        }
+    }
+    let repro = verify_launch(&launch, &cohort, &baseline, &cert.join("repro"));
+    let cross_evolution = cross_platform_history(&launch, &cohort, &cert.join("repro"));
     let evo: Vec<Value> = cohort.iter().map(|i| island_evolution(i, &seeds)).collect();
     let base_evo: Vec<Value> = baseline.iter().map(|i| island_evolution(i, &base_seeds)).collect();
     let finals = |v: &[Value]| v.iter().map(|e| f(e, "/final/best_score_100")).collect::<Vec<f64>>();
@@ -453,7 +556,7 @@ fn receipt(a: &[String]) {
     // --- write (nothing above wrote a file)
     let ev_dir = repo.join(format!("evidence/g5/v{VERSION}"));
     let img_dir = repo.join(format!("docs/g5/v{VERSION}/img"));
-    for d in [ev_dir.join("history"), ev_dir.join("genomes"), img_dir.clone()] {
+    for d in [ev_dir.join("history"), ev_dir.join("genomes"), ev_dir.join("repro"), img_dir.clone()] {
         fs::create_dir_all(&d).unwrap();
     }
     let row = cohort.iter().flat_map(|i| i.genomes.iter()).find(|(id, _)| *id == w).unwrap();
@@ -475,9 +578,13 @@ fn receipt(a: &[String]) {
     let ranked: String = ranking.iter().map(|l| l.to_string() + "\n").collect();
     fs::write(ev_dir.join("ranking_tier2_h020.jsonl"), ranked).unwrap();
     fs::copy(cert.join("hconv.jsonl"), ev_dir.join("grid_check.jsonl")).unwrap();
-    fs::copy(cert.join("eval_h040.jsonl"), ev_dir.join("eval_h040.jsonl")).unwrap();
-    fs::copy(cert.join("baseline_eval_h040.jsonl"), ev_dir.join("baseline_eval_h040.jsonl")).unwrap();
     fs::copy(cert.join("tier2_linux_h020.jsonl"), ev_dir.join("tier2_linux_h020.jsonl")).unwrap();
+    let ri = s(&launch, "/repro/island");
+    fs::copy(cert.join("launch.json"), ev_dir.join("repro/launch.json")).unwrap();
+    for suffix in ["history", "linux_history"] {
+        let name = format!("repro/{ri}_{suffix}.jsonl");
+        fs::copy(cert.join(&name), ev_dir.join(&name)).unwrap();
+    }
     for i in cohort.iter().chain(baseline.iter()) {
         fs::copy(i.dir.join("run/history.jsonl"), ev_dir.join(format!("history/{}.jsonl", i.name))).unwrap();
         fs::copy(i.dir.join("run/genomes_g5.csv"), ev_dir.join(format!("genomes/{}.csv", i.name))).unwrap();
@@ -492,7 +599,7 @@ fn receipt(a: &[String]) {
             .collect()
     };
     let figure = format!("docs/g5/v{VERSION}/img/evolution.svg");
-    fs::write(repo.join(&figure), evolution_svg(&cohort, &baseline, island, n_evals)).unwrap();
+    fs::write(repo.join(&figure), evolution_svg(&cohort, &baseline, island, &win_sha, n_evals)).unwrap();
 
     let ranking_rows: Vec<Value> = ranking
         .iter()
@@ -522,7 +629,7 @@ fn receipt(a: &[String]) {
             "root": cohort_root.file_name().unwrap().to_string_lossy(), "islands": cohort.len(),
             "evaluations_per_island": n_evals, "evaluations_total": n_evals * cohort.len() as f64,
             "init": format!("scrambled Sobol only ({init} per island); no seeded or hand-made individuals"),
-            "h_mm": H_SEARCH, "promotion": "rank promotion: the top 40 % of each island's recent scores go on to Tier 1",
+            "h_mm": H_SEARCH, "launch": launch, "reproduced": repro,
             "elites": genomes.len(), "tier1_rows_reproduced": reproduced, "started_utc": started, "finished_utc": finished,
         },
         "baseline": {
@@ -536,7 +643,10 @@ fn receipt(a: &[String]) {
             "h_mm": H_RECORD, "tip_mesh_max_area_mm2": TIP_FE_MAX_AREA_MM2, "shortlist": shortlist,
             "how": format!("every final elite re-evaluated at Tier 1, h {H_SEARCH}; the top {shortlist} at Tier 2, h {H_RECORD}"),
             "rows": ranking_rows,
-            "linux_check": {"designs": grid_top, "bit_identical": lin_identical, "max_rel_diff": lin_max_rel},
+            "linux_check": {"designs": grid_top, "bit_identical": lin_identical, "max_rel_diff": lin_max_rel,
+                            "winner_rank_linux": lin_rows.iter().position(|r| r["design_id"] == json!(w)).map(|k| k + 1),
+                            "rows": lin_rows, "evolution": cross_evolution},
+            "search_leader": search_leader,
         },
         "grid_check": {
             "h_mm": GRID_H, "requirement_max_frac": max_frac, "evaluation": format!("Tier 1 of the ranking's top {grid_top}"),
@@ -587,9 +697,10 @@ fn receipt(a: &[String]) {
 /// The evolution figure: each evolving island's best score against evaluations, as steps (the best never falls).
 /// The winner's island is series 1 (blue) and the other cohort islands thin neutral context. A random-search island
 /// logs once, at the end of its samples, so the control is drawn as a reference level: its best score after the full
-/// budget (series 2, orange, dashed). Colours are per-class CSS with a dark-mode set, both validated for colour-vision deficiency
+/// budget (series 2, orange, dashed). A ring marks where the winner of record first became its island's best: the
+/// line's end is the island's best on the search grid, which Tier 2 can re-rank. Colours are per-class CSS with a dark-mode set, both validated for colour-vision deficiency
 /// (adjacent CVD dE 24.7 light / 26.8 dark); identity is never colour alone (legend, direct labels, dash).
-fn evolution_svg(cohort: &[Island], baseline: &[Island], winner_island: &str, n_evals: f64) -> String {
+fn evolution_svg(cohort: &[Island], baseline: &[Island], winner_island: &str, winner_sha: &str, n_evals: f64) -> String {
     let pts = |i: &Island| -> Vec<(f64, f64)> { i.history.iter().map(|e| (f(e, "/evals"), f(e, "/best_score_100"))).collect() };
     let vals: Vec<f64> = cohort.iter().chain(baseline).flat_map(|i| pts(i)).map(|p| p.1).collect();
     let step = if vals.iter().copied().fold(f64::NEG_INFINITY, f64::max) - vals.iter().copied().fold(f64::INFINITY, f64::min) > 30.0 {
@@ -618,7 +729,7 @@ fn evolution_svg(cohort: &[Island], baseline: &[Island], winner_island: &str, n_
     let theme = |bg: &str, ink: &str, ink2: &str, muted: &str, grid: &str, axis: &str, s1: &str, s2: &str| {
         format!(
             ".bg{{fill:{bg}}}.t1{{fill:{ink}}}.t2,.lb{{fill:{ink2}}}.tk{{fill:{muted}}}.grid{{stroke:{grid}}}\
-             .axis{{stroke:{axis}}}.ctx{{stroke:{muted}}}.win{{stroke:{s1}}}.dot{{fill:{s1};stroke:{bg}}}.base{{stroke:{s2}}}"
+             .axis{{stroke:{axis}}}.ctx{{stroke:{muted}}}.win{{stroke:{s1}}}.ring{{fill:{bg};stroke:{s1}}}.base{{stroke:{s2}}}"
         )
     };
     o += &format!(
@@ -626,7 +737,7 @@ fn evolution_svg(cohort: &[Island], baseline: &[Island], winner_island: &str, n_
          .t1{{font-size:15px;font-weight:600}}.t2,.lb{{font-size:12px}}.tk{{font-size:11px}}\
          .grid,.axis{{stroke-width:1}}.ctx{{fill:none;stroke-width:1;stroke-opacity:.55}}\
          .win{{fill:none;stroke-width:2;stroke-linejoin:round}}.base{{fill:none;stroke-width:2;stroke-dasharray:6 4}}\
-         .dot{{stroke-width:2}}\n</style>\n",
+         .ring{{stroke-width:2.5}}\n</style>\n",
         theme("#fcfcfb", "#0b0b0b", "#52514e", "#898781", "#e1e0d9", "#c3c2b7", "#2a78d6", "#eb6834"),
         theme("#1a1a19", "#f0efec", "#c3c2b7", "#898781", "#2c2c2a", "#383835", "#3987e5", "#d95926")
     );
@@ -692,16 +803,18 @@ fn evolution_svg(cohort: &[Island], baseline: &[Island], winner_island: &str, n_
         );
     }
     o += &format!("<path class=\"win\" d=\"{}\"><title>{winner_island}: {wbest:.1}</title></path>\n", path(&pts(wi)));
-    o += &format!(
-        "<circle class=\"dot\" cx=\"{:.1}\" cy=\"{:.1}\" r=\"4.5\"/>\n",
-        x(n_evals),
-        y(wbest)
-    );
+    let found = wi.history.iter().find(|e| s(e, "/best_genome_sha256") == winner_sha).map(|e| (f(e, "/evals"), f(e, "/best_score_100")));
+    if let Some((fe, fs)) = found {
+        o += &format!("<circle class=\"ring\" cx=\"{:.1}\" cy=\"{:.1}\" r=\"5.5\"><title>winner of record first \
+                       found at {fe:.0} evaluations ({fs:.1} on the search grid)</title></circle>\n", x(fe), y(fs));
+        o += &format!("<text class=\"lb\" x=\"{:.1}\" y=\"{:.1}\" text-anchor=\"end\">winner of record found ({fe:.0})</text>\n",
+                      x(fe) - 10.0, y(fs) - 10.0);
+    }
     // direct labels at the line ends, pushed apart so they never overlap
     let mut ctx_end: Vec<f64> = cohort.iter().filter(|i| i.name != winner_island).map(|i| pts(i).last().unwrap().1).collect();
     let ctx_med = median(&mut ctx_end);
     let mut labels = vec![
-        (y(wbest), format!("{winner_island} · {wbest:.1}")),
+        (y(wbest), format!("{winner_island} (winner's) · {wbest:.1}")),
         (y(ctx_med), format!("other islands · median {ctx_med:.1}")),
         (y(bbest), format!("random search · best {bbest:.1}")),
     ];
