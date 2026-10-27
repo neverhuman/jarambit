@@ -15,8 +15,8 @@ notched. The edge cross-sections (Fig.~\ref{fig:edges}) and edge measurements ev
 grinding restores because the \code{RS-karambit-v5} finishing allowance ($\gReqEdgeFinishMm$~mm per ground face) exceeds the
 $\gTexAmp$~mm texture depth. Restricting surface texture outside the bevels is deferred to a later decoder generation.
 \item \textbf{One platform of record.} v5.0.0's \code{arm64} records agreed closely with, but were not bit-identical to,
-\code{x86\_64} re-evaluations, because the platforms' maths libraries differ in the last bits. v\gRecord{} runs every search and
-certification step on one platform (static \code{x86\_64} binaries, natively or in a \code{linux/amd64} container): every archive
+\code{x86\_64} re-evaluations, because the platforms' maths libraries differ in the last bits. v\gRecord{} runs the search, every
+re-evaluation and the ranking on one platform (static \code{x86\_64} binaries, natively or in a \code{linux/amd64} container): every archive
 row re-scores bit for bit, every pool is recomputed from its sources, \gReproIsland{} re-run on \gReproHost{} reproduced all
 \gReproEntries{} logged history entries over \gReproEvals{} evaluations, and re-evaluating all \gCohortElites{} elites of the final
 pool reproduced all \gTierOneReproduced{} Tier-1 rows. A different libm (another platform) would again agree closely rather than
