@@ -70,6 +70,11 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
       teeth, per-case sequence, surface-class fatigue and tip buckling.
     - **What it shows on Sobol designs:** the binding cases are the ultimate lateral, the tip side load and tip
       twist, and fatigue of a hollow blade's as-built cavity faces.
+  - **Objective `W_ERGOLIGHT_v2`** (`crates/g5/src/objective.rs`):
+    - **Terms:** continuous and with no gates. Structural credit is 0.94·v⁴ below the requirement, plus a
+      worst-margin term (0.25), linear mass (0.30), geometry terms (edge, point, serration, AM drainage, form) and E⁵.
+    - **What binds on random Sobol designs:** tip twist, fatigue and the ultimate lateral case. This drives the search
+      toward a stout, sharp point and a solid or finished blade.
   - **Finding on G3.** Under this rule, the G3 v3.0.0 winner's lattice reaches its 2.8 mm powder ports only through
     two 0.85 mm slits beside the 1.1 mm mid-plane rib. Its cavity counts as undrainable (13,005 mm³). This is a G3
     decoder limitation: depowdering of the G3 design is unverified. The G5 decoder must place ports clear of ribs.

@@ -15,7 +15,7 @@
 //!   - **Tier 2 (~1.5 s)**: Watertight Marching-Tetrahedra 3D mesh (`extract_watertight_mesh`) +
 //!     topology census + fail-closed 3D `TET10` solid tip solver (`solve_g5_solid_tet10_strict`).
 
-use crate::ergolight::{score_ergolight, ErgolightInputs, ErgolightScore};
+use crate::ergolight::{ErgolightInputs, ErgolightScore};
 use crate::g5_genome::{
     reproduce_iso_line_dd, sobol_unit_genome, G5Genome, G5Rng, FIXED_BORE_D_MM, FIXED_LIP_W_MM,
 };
@@ -61,6 +61,7 @@ pub fn g5_decoder_sha256_uncached() -> String {
         include_str!("requirements.rs"),
         include_str!("material.rs"),
         include_str!("loads.rs"),
+        include_str!("objective.rs"),
         include_str!("../../../requirements/RS-karambit-v5.toml"),
         include_str!("../../physics/src/fine.rs"),
         include_str!("../../physics/src/solid_tet10.rs"),
@@ -1044,7 +1045,6 @@ pub fn evaluate_tier0_analytic(genome: &G5Genome) -> G5EvalRecord {
         spin_i_ref_g_mm2: F075_SPIN_I_REF_G_MM2,
     };
 
-    let score = score_ergolight(&inputs);
     let outline_len = 2.0 * (p["L_g"] + blade.x_tip - blade.x_heel) + 2.0 * std::f64::consts::PI * r_od;
     let total_area = (p["L_g"] * swell_h + blade_area_2d + std::f64::consts::PI * r_od * r_od).max(100.0);
     let inner_turn_deg = (p["hook_drop"] / (blade.x_tip - blade.x_heel).max(1.0))
@@ -1070,6 +1070,8 @@ pub fn evaluate_tier0_analytic(genome: &G5Genome) -> G5EvalRecord {
         .iter()
         .map(|&inner| serration_tooth_strength(&p, &blade, inner).0)
         .fold(f64::INFINITY, f64::min);
+    let am_connectivity = AmConnectivityStats::default();
+    let score = score_record(&inputs, &loads, &am_connectivity, &blade);
     G5EvalRecord {
         schema: genome.schema.clone(),
         decoder_sha256: g5_decoder_sha256(),
@@ -1078,9 +1080,20 @@ pub fn evaluate_tier0_analytic(genome: &G5Genome) -> G5EvalRecord {
         inputs,
         score,
         descriptors,
-        am_connectivity: AmConnectivityStats::default(),
+        am_connectivity,
         loads,
     }
+}
+
+/// `W_ERGOLIGHT_v2` of a record's measurements (`objective::score_v2`).
+fn score_record(
+    inputs: &ErgolightInputs,
+    loads: &crate::loads::G5Loads,
+    am: &AmConnectivityStats,
+    blade: &BladeProfile2D,
+) -> ErgolightScore {
+    let point = measure_point_planform(blade);
+    crate::objective::score_v2(&crate::objective::ObjectiveInputs { inputs, loads, point: &point, am, blade })
 }
 
 /// Planform point of the blade (RS-karambit-v5 `[point]`): the included angle between the two edges seen from the
@@ -1524,7 +1537,7 @@ fn evaluate_tier1_with_grid(genome: &G5Genome, h_vox: f64) -> (G5EvalRecord, Vox
     }
 
     rec.tier = EvalTier::Tier1SdfAndPlate;
-    rec.score = score_ergolight(&rec.inputs);
+    rec.score = score_record(&rec.inputs, &rec.loads, &rec.am_connectivity, &blade);
     (rec, grid)
 }
 
@@ -1650,7 +1663,7 @@ fn evaluate_tier2_from_tier1(
     }
 
     rec.tier = EvalTier::Tier2Full3D;
-    rec.score = score_ergolight(&rec.inputs);
+    rec.score = score_record(&rec.inputs, &rec.loads, &rec.am_connectivity, &build_blade_profile_2d(&p));
     rec
 }
 
@@ -2136,7 +2149,7 @@ mod tests {
             let g = sobol_unit_genome(i, 0, "22bb8696");
             let rec = evaluate_tier0_analytic(&g);
             assert!(
-                rec.score.score_100.is_finite() && rec.score.score_100 > 10.0,
+                rec.score.score_100.is_finite() && rec.score.score_100 > 0.0 && rec.score.score_100 <= 100.0,
                 "Sobol genome {i} produced invalid score {}",
                 rec.score.score_100
             );
@@ -2175,7 +2188,7 @@ mod tests {
         let elite = arch.best_elite().expect("best elite");
         let r1 = evaluate_tier1_sdf_and_plate(&elite.genome, 1.2);
         assert_eq!(r1.tier, EvalTier::Tier1SdfAndPlate);
-        assert!(r1.score.score_100 > 20.0);
+        assert!(r1.score.score_100 > 0.0 && r1.score.metric == "W_ERGOLIGHT_v2");
         assert!(r1.inputs.ring_bearing_cap_n > 200.0);
         assert!(r1.inputs.ring_back_cap_n > 100.0);
     }
@@ -2272,9 +2285,9 @@ mod tests {
                 .map(|&(_, _, s, _)| s)
                 .unwrap()
         };
-        assert_eq!(term_s("solid_tip_3d"), 0.0);
-        assert_eq!(term_s("plate_gci_3level"), 0.5);
-        assert_eq!(term_s("cad_watertight"), 0.0);
+        // W_ERGOLIGHT_v2 has no credit for unmeasured solvers: every term is a measured margin or geometry
+        assert!(r0.score.terms.iter().all(|&(k, _, _, _)| !matches!(k, "solid_tip_3d" | "plate_gci_3level" | "cad_watertight")));
+        assert!((0.0..=1.0).contains(&term_s("worst_margin")));
 
         // I8: rib_w and shear_web_amp must affect mass and structural safety factor
         let idx_rib = G5_GENES.iter().position(|g| g.name == "rib_w").unwrap();

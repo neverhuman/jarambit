@@ -23,6 +23,7 @@ pub mod g5_sandwich;
 pub mod g5_sdf;
 pub mod loads;
 pub mod material;
+pub mod objective;
 pub mod requirements;
 pub mod sobol_joe_kuo;
 
@@ -574,18 +575,18 @@ mod v1_identity_tests {
         assert!(inp_val.get("L_g_mm").is_some());
         assert!(inp_val.get("spin_I_g_mm2").is_some());
         assert!(inp_val.get("spin_I_ref_g_mm2").is_some());
-        let rescored_inf =
-            crate::ergolight::score_ergolight_map(inp_val.as_object().unwrap()).expect("rescore inf map");
-        assert_eq!(
-            rescored_inf["terms"]["gate_s_sharpness"]["s"].as_f64(),
-            Some(0.0)
-        );
-        let inp_solid_val = serde_json::to_value(&r_solid.inputs).unwrap();
-        let rescored_solid =
-            crate::ergolight::score_ergolight_map(inp_solid_val.as_object().unwrap()).expect("rescore solid map");
-        assert!(
-            (rescored_solid["score_100"].as_f64().unwrap() - r_solid.score.score_100).abs() < 1e-12
-        );
+        // G5 scores with W_ERGOLIGHT_v2 (`objective`); a record is re-scored from its own measurements bit-for-bit
+        let bp = crate::g5_sdf::build_blade_profile_2d(&g_solid.decode());
+        let pt = crate::g5_qd::measure_point_planform(&bp);
+        let rescored = crate::objective::score_v2(&crate::objective::ObjectiveInputs {
+            inputs: &r_solid.inputs,
+            loads: &r_solid.loads,
+            point: &pt,
+            am: &r_solid.am_connectivity,
+            blade: &bp,
+        });
+        assert_eq!(rescored.metric, "W_ERGOLIGHT_v2");
+        assert!((rescored.score_100 - r_solid.score.score_100).abs() < 1e-12);
         assert!(r_solid.tier.input_provenance()["measured"].is_array());
 
         let mut arch_chk = crate::g5_qd::CvtMapElitesArchive::new(1024);

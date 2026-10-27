@@ -90,11 +90,23 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
      region. Lateral and twist agree within 10 % between 0.3 and 0.15 mm²; G3's plate did not converge.
 
    Still to do: the solid-tip TET10 (Tier 2) with the RS-v5 tip loads, and the ergonomic contact pressures.
-5. **`W_ERGOLIGHT_v2`**, continuous and with no hard gates:
-   - safety-factor credit `0.94·v⁴` below the requirement, plus a worst-margin term;
-   - the blunt-point penalty;
-   - mass weight 0.30;
-   - E⁵, so that 1 % of E costs at least 10 g.
+5. **`W_ERGOLIGHT_v2`.** Done, in `objective.rs`; scores every tier.
+   - **Structural terms:** one per load case, v = SF/SF_req, scored 0.94·v⁴ below 1 with a knee above.
+   - **Worst margin:** weight 0.25.
+   - **Mass:** linear, weight 0.30.
+   - **Geometry terms:**
+     - edge angle and apex;
+     - the point: the owner's blunt-point penalty plus the tip thickness caps;
+     - serrations;
+     - AM sealed volume (unmeasured at Tier 0, so no credit);
+     - form.
+   - **Ergonomics:** E⁵ over the RS-v5 betas, with a first-order contact-pressure model.
+   - **Tests:**
+     - a single failing SF raised to its requirement buys more than 10 g of mass credit;
+     - 1 % of E costs ≥ 10 g;
+     - a record re-scores bit-for-bit from its measurements.
+   - **Decoder change:** the point wedge now sets the point directly (sharper or stouter), and `tip_reserve` (4–12 mm)
+     and `t_tip` (1.5–5 mm) allow the stout, quickly thickening point the tip loads need.
 6. **V&V, then the decoder freeze.** Followed by cohorts started only from Sobol samples (no hand-set genomes), with
    at least 5 seeds plus baselines.
 
