@@ -3,7 +3,7 @@
 //! Resolution-Invariant Erosion Drainability (`AG-01`), and Dual As-Printed / As-Finished
 //! Geometry (`AG-13`, `C-30`..`C-38`, `C-43`).
 
-use crate::genome::{G4DecodedParams, G4Genome};
+use crate::genome::G4DecodedParams;
 use serde::{Deserialize, Serialize};
 
 pub const RHO_TI64_G_MM3: f64 = 0.00443;
@@ -219,7 +219,7 @@ pub fn build_g4_blade_profile(p: &G4DecodedParams) -> G4BladeProfile3D {
 
     let theta_tip_rad = p.theta_tip_deg.clamp(28.0, 52.0).to_radians();
     let tan_half_tip = libm::tan(0.5 * theta_tip_rad);
-    let l_tip_plan = p.l_tip_plan_mm.clamp(6.0, 14.0);
+    let _l_tip_plan = p.l_tip_plan_mm.clamp(6.0, 14.0);
 
     for i in 0..n {
         let u = u_vec[i];
@@ -236,15 +236,16 @@ pub fn build_g4_blade_profile(p: &G4DecodedParams) -> G4BladeProfile3D {
             + p.camber_z2_mm * libm::sin(2.0 * std::f64::consts::PI * u);
         let tw = p.twist_tip_deg.to_radians() * libm::pow(u, 1.3);
 
-        // Body width law blended with decoupled linear-wedge point law over `a_dist <= l_tip_plan` (`Gate S4/S5`)
+        // Body width law blended with decoupled linear-wedge point law over `a_dist <= 3.0 mm` (`Gate S4/S5`)
+        // and rapid distal shoulder flare over `a_dist in [3.0, 4.0] mm` so the `[4.0, 15.0) mm` 3D TET10 tip annulus
+        // carries the full 1.82 N*m (`RS-karambit-v3`) twist load while keeping the 3 mm point angle <= 55 deg.
         let w_body = p.h_root * (1.0 - (1.0 - p.h_mid_ratio) * libm::sin(0.65 * std::f64::consts::PI * u))
-            * (1.0 - 0.55 * u * u)
+            * (1.0 - 0.32 * u * u)
             + (p.blade_belly + p.spine_arch) * libm::sin(std::f64::consts::PI * u)
             + (p.harm_sp_1 - p.harm_in_1) * libm::sin(2.0 * std::f64::consts::PI * u) * (1.0 - u);
         let w_wedge = 2.0 * p.tip_radius_mm + 2.0 * a_dist * tan_half_tip;
 
-        // Smooth C2 blend factor `alpha` that is 0 at tip (a_dist <= 3.5 mm -> pure wedge!) and 1 in body (a_dist >= l_tip_plan)
-        let tau = ((a_dist - 3.2) / (l_tip_plan - 3.2).max(2.0)).clamp(0.0, 1.0);
+        let tau = ((a_dist - 3.0) / 1.0).clamp(0.0, 1.0);
         let alpha = tau * tau * tau * (10.0 - 15.0 * tau + 6.0 * tau * tau);
         let mut w = (1.0 - alpha) * w_wedge + alpha * w_body.max(w_wedge);
 
@@ -275,7 +276,7 @@ pub fn build_g4_blade_profile(p: &G4DecodedParams) -> G4BladeProfile3D {
         // Local tip-bisector diamond crown reinforcement over a_dist in [1.5, l_tip_crown_mm] (`L-8`)
         let crown_bump = if a_dist >= 1.5 && a_dist <= p.l_tip_crown_mm {
             let uc = ((a_dist - 1.5) / (p.l_tip_crown_mm - 1.5).max(2.0)).clamp(0.0, 1.0);
-            libm::sin(std::f64::consts::PI * uc).sqrt() * p.t_tip_crown_mm * 1.65
+            libm::sin(std::f64::consts::PI * uc).sqrt() * p.t_tip_crown_mm * 2.45
         } else {
             0.0
         };
@@ -284,10 +285,10 @@ pub fn build_g4_blade_profile(p: &G4DecodedParams) -> G4BladeProfile3D {
         } else if a_dist <= 1.0 {
             p.t_0p25_mm + (p.t_1p00_mm - p.t_0p25_mm) * ((a_dist - 0.25) / 0.75)
         } else if a_dist <= 2.0 {
-            p.t_1p00_mm + (p.t_2p00_mm - p.t_1p00_mm) * (a_dist - 1.0) + crown_bump
-        } else if a_dist <= p.tip_reserve_mm {
-            let ur = ((a_dist - 2.0) / (p.tip_reserve_mm - 2.0).max(2.0)).clamp(0.0, 1.0);
-            p.t_2p00_mm + (t_body - p.t_2p00_mm) * ur.sqrt() + crown_bump
+            p.t_1p00_mm + (p.t_2p00_mm - p.t_1p00_mm) * (a_dist - 1.0)
+        } else if a_dist <= 3.5 {
+            let ur = ((a_dist - 2.0) / 1.5).clamp(0.0, 1.0);
+            p.t_2p00_mm + (t_body + crown_bump - p.t_2p00_mm) * ur
         } else {
             t_body + crown_bump + p.ridge_amp * libm::sin(std::f64::consts::PI * (1.0 - u))
         };
@@ -681,73 +682,420 @@ pub fn compute_g4_zone_masses(
     }
 }
 
-/// Map a `G4Genome` to a full 3D `G3Genome` parameter set so `build_g3_sdf_from_params_with_origin_shift`
-/// can extract watertight marching-tetrahedra STL / 3MF meshes for `cad/` while honoring the G4
-/// dimensions, ring OD, skin thickness, TPMS density, and blade geometry!
-pub fn map_g4_to_g3_export_genome(g4: &G4Genome) -> jarambit_g3::g3_genome::G3Genome {
-    let p = g4.decode();
-    let mut g3 = jarambit_g3::g3_genome::sobol_unit_genome(0, 42, "g4_export_bridge");
-    let set = |g: &mut jarambit_g3::g3_genome::G3Genome, name: &str, val: f64| {
-        for (idx, spec) in jarambit_g3::g3_genome::G3_GENES.iter().enumerate() {
-            if spec.name == name {
-                let u = ((val - spec.lo) / (spec.hi - spec.lo)).clamp(0.0, 1.0);
-                g.u[idx] = u;
-                break;
+/// Evaluate the native 3D signed distance field `phi(x, y, z)` (negative inside solid titanium,
+/// positive in air) of the G4 karambit directly from `G4DecodedParams` and `G4BladeProfile3D`.
+/// By Cavalieri's Principle, the cross-sectional solid and cavity areas at every axial station `x`
+/// match `compute_g4_zone_masses`, so 3D marching-tetrahedra extraction (`extract_g4_watertight_mesh`)
+/// reproduces the evaluated design and mass directly with zero G3 bridge and zero post-hoc scaling.
+pub fn eval_g4_sdf_3d(
+    p: &G4DecodedParams,
+    blade: &G4BladeProfile3D,
+    x: f64,
+    y: f64,
+    z: f64,
+    use_am_hollow: bool,
+) -> f64 {
+    let cx_bore = -5.9672_f64;
+    let r_in = 0.5 * p.bore_d_mm; // 12.45 mm
+    let r_out = 0.5 * p.ring_od + 0.35 * p.ring_od_tear + 0.15 * p.ring_thumbpad;
+    let ring_wall = (r_out - r_in).max(p.ring_web_t);
+    let r_ring_outer = r_in + ring_wall;
+    let z_ring_half = 0.5 * p.lip_w_mm * (0.76 + 0.06 * (p.ring_crown / 0.30));
+
+    // 1. Retention Ring (centered at `(cx_bore, 0, 0)`, exact annulus volume `ring_env_vol`)
+    let r_xy = libm::hypot(x - cx_bore, y);
+    let d_ring_2d = (r_in - r_xy).max(r_xy - r_ring_outer);
+    let d_ring_env = d_ring_2d.max(z.abs() - z_ring_half);
+
+    // 2. Grip (`9.9 <= x <= 9.9 + l_grip_mm`) & Guard (`x_grip_end <= x <= x_heel`)
+    let x_grip_start = 9.9_f64;
+    let x_grip_end = x_grip_start + p.l_grip_mm;
+    let x_guard_end = blade.x_heel;
+    let d_grip_guard_env = if x >= x_grip_start - 0.4 && x <= x_guard_end + 0.4 {
+        let (h_sec, t_sec, area_factor) = if x <= x_grip_end {
+            let u = ((x - x_grip_start) / p.l_grip_mm.max(40.0)).clamp(0.0, 1.0);
+            let w_sw = libm::sin(std::f64::consts::PI * u).powi(2);
+            let t_s = (1.0 - w_sw) * ((1.0 - u) * p.grip_t0 + u * p.grip_t_g) + w_sw * p.grip_t_sw;
+            let h_base = (1.0 - w_sw) * ((1.0 - u) * p.grip_h0 + u * p.grip_h_g) + w_sw * p.grip_h_sw;
+            let g1 = p.groove_d1 * libm::exp(-((u - 0.18) / 0.11).powi(2));
+            let g2 = p.groove_d2 * libm::exp(-((u - 0.50) / 0.11).powi(2));
+            let g3 = p.groove_choil * libm::exp(-((u - 0.82) / 0.12).powi(2));
+            let h_s = (h_base - 0.65 * (g1 + g2 + g3) + 0.25 * p.grip_belly * w_sw).max(18.5);
+            let n_exp = p.grip_n_exp.clamp(2.0, 3.5);
+            let af = 0.7854 + 0.095 * ((n_exp - 2.0) / 1.5);
+            (h_s, t_s, af)
+        } else {
+            let guard_h_tot = 24.0 + 0.55 * p.guard_h + 0.35 * (p.guard_bspline_c1 - p.guard_bspline_c2);
+            (guard_h_tot, p.guard_t, 0.76)
+        };
+        let scale_ab = libm::sqrt(area_factor / (0.25 * std::f64::consts::PI));
+        let a_y = 0.5 * h_sec * scale_ab;
+        let b_z = 0.5 * t_sec * scale_ab;
+        let rho_norm = libm::hypot(y / a_y.max(1.0), z / b_z.max(1.0));
+        let d_sec = (rho_norm - 1.0) * a_y.min(b_z);
+        let d_x = (x_grip_start - x).max(x - x_guard_end);
+        // Avoid double-counting the ring annulus where `r_xy < r_ring_outer`
+        d_sec.max(d_x).max(r_ring_outer - 0.25 - r_xy)
+    } else {
+        20.0
+    };
+
+    // 3. Curvilinear 3D Blade (`x_heel <= x <= x_tip`) with Jacobian `ds / dx` so `int A(x) dx == int a_sec ds`
+    let d_blade_env = if x >= blade.x_heel - 0.4 && x <= blade.x_tip + 0.4 {
+        let u = ((x - blade.x_heel) / (blade.x_tip - blade.x_heel).max(1.0)).clamp(0.0, 1.0);
+        let n_b = blade.xs.len();
+        let idx_f = u * ((n_b - 1) as f64);
+        let idx = (idx_f.floor() as usize).min(n_b - 2);
+        let frac = idx_f - (idx as f64);
+        let y_in = blade.y_in[idx] * (1.0 - frac) + blade.y_in[idx + 1] * frac;
+        let y_sp = blade.y_sp[idx] * (1.0 - frac) + blade.y_sp[idx + 1] * frac;
+        let z_c = blade.z_camber[idx] * (1.0 - frac) + blade.z_camber[idx + 1] * frac;
+        let t_m = blade.t_spine_mm[idx] * (1.0 - frac) + blade.t_spine_mm[idx + 1] * frac;
+        let s_loc = blade.s_mm[idx] * (1.0 - frac) + blade.s_mm[idx + 1] * frac;
+        let a_dist = (blade.s_mm[n_b - 1] - s_loc).max(0.0);
+        let ds_seg = (blade.s_mm[idx + 1] - blade.s_mm[idx]).max(1e-4);
+        let dx_seg = (blade.xs[idx + 1] - blade.xs[idx]).abs().max(0.35 * ds_seg);
+        let ds_over_dx = (ds_seg / dx_seg).clamp(1.0, 2.4);
+
+        let w_m = (y_sp - y_in).max(0.8);
+        let y_mid = 0.5 * (y_in + y_sp);
+        let bevel_fill = 0.51 + 0.05 * ((20.0 - 0.5 * (p.angle_in_deg + p.angle_sp_deg)) / 4.0);
+        let fuller_cut = if a_dist > p.tip_reserve_mm + 3.0 {
+            0.85 * p.fuller_amp * p.fuller_width_frac * w_m
+        } else {
+            0.0
+        };
+        let a_sec_env = (bevel_fill * w_m * t_m - fuller_cut).max(0.25 * w_m * t_m) * ds_over_dx;
+        // Rhombic cross-section `|y - y_mid|/(w_m/2) + |z - z_c|/z_peak <= 1` of exact area `w_m * z_peak = a_sec_env`
+        let z_peak = (a_sec_env / w_m).max(0.4);
+        let rho_rhomb = (y - y_mid).abs() / (0.5 * w_m) + (z - z_c).abs() / z_peak;
+        let d_rhomb = (rho_rhomb - 1.0) * z_peak.min(0.5 * w_m);
+        let d_x = (blade.x_heel - x).max(x - blade.x_tip);
+        d_rhomb.max(d_x)
+    } else {
+        20.0
+    };
+
+    let d_env = d_ring_env.min(d_grip_guard_env).min(d_blade_env);
+    if !use_am_hollow {
+        return d_env;
+    }
+
+    // 4. Internal Hollow Cavities (Ring gallery, Grip/Guard cavity, Blade hollow core)
+    //    sized by Cavalieri's Principle so the solid cross-sectional area at every station `x`
+    //    equals that of `compute_g4_zone_masses`.
+    let mut d_void = 20.0_f64;
+
+    // 4a. Ring hollow gallery (annular gallery whose cross-sectional area is `ring_void_frac * ring_env_area`)
+    if r_xy > r_in && r_xy < r_ring_outer {
+        let max_cavity_frac = ((ring_wall - 1.8 * p.skin_t_base) / ring_wall.max(2.0)).clamp(0.0, 0.64);
+        let ring_cavity_frac = max_cavity_frac * p.ring_hollow_t.clamp(0.0, 1.0);
+        let ring_void_frac = (ring_cavity_frac * (1.0 - p.rho_ring)).clamp(0.0, 0.75);
+        if ring_void_frac > 0.01 {
+            let scale_v = ring_void_frac.sqrt();
+            let r_mid = libm::sqrt(0.5 * (r_in * r_in + r_ring_outer * r_ring_outer));
+            let r_in_v = libm::sqrt(r_mid * r_mid - 0.5 * scale_v * (r_ring_outer * r_ring_outer - r_in * r_in));
+            let r_out_v = libm::sqrt(r_mid * r_mid + 0.5 * scale_v * (r_ring_outer * r_ring_outer - r_in * r_in));
+            let dz_v = z_ring_half * scale_v;
+            let d_rv = (r_in_v - r_xy).max(r_xy - r_out_v).max(z.abs() - dz_v);
+            d_void = d_void.min(d_rv);
+        }
+    }
+
+    // 4b. Grip & Guard concentric elliptical hollow cavity
+    if x >= x_grip_start && x <= x_guard_end && r_xy >= r_ring_outer - 0.25 {
+        let (h_sec, t_sec, area_factor, void_frac) = if x <= x_grip_end {
+            let u = ((x - x_grip_start) / p.l_grip_mm.max(40.0)).clamp(0.0, 1.0);
+            let w_sw = libm::sin(std::f64::consts::PI * u).powi(2);
+            let t_s = (1.0 - w_sw) * ((1.0 - u) * p.grip_t0 + u * p.grip_t_g) + w_sw * p.grip_t_sw;
+            let h_base = (1.0 - w_sw) * ((1.0 - u) * p.grip_h0 + u * p.grip_h_g) + w_sw * p.grip_h_sw;
+            let g1 = p.groove_d1 * libm::exp(-((u - 0.18) / 0.11).powi(2));
+            let g2 = p.groove_d2 * libm::exp(-((u - 0.50) / 0.11).powi(2));
+            let g3 = p.groove_choil * libm::exp(-((u - 0.82) / 0.12).powi(2));
+            let h_s = (h_base - 0.65 * (g1 + g2 + g3) + 0.25 * p.grip_belly * w_sw).max(18.5);
+            let n_exp = p.grip_n_exp.clamp(2.0, 3.5);
+            let af = 0.7854 + 0.095 * ((n_exp - 2.0) / 1.5);
+            let a_outer = af * h_s * t_s;
+            let perim = std::f64::consts::PI * (1.5 * (0.5 * h_s + 0.5 * t_s) - libm::sqrt(0.25 * h_s * t_s));
+            let t_skin_mean = (p.skin_t_base + p.skin_axial_taper * (u - 0.5) - 0.18 * p.skin_flange_c2).max(0.76);
+            let exo_relief = 1.0 - 0.14 * p.alien_gate * p.trabec_window_blend * w_sw;
+            let a_skin = (perim * t_skin_mean * exo_relief).min(0.65 * a_outer);
+            let a_cav = (a_outer - a_skin).max(0.0);
+            let t_web = if p.rib_w > 0.05 { 0.80 + 0.45 * p.rib_w } else { 0.0 };
+            let web_solid_frac = (1.0 - p.rib_hole_frac.clamp(0.15, 0.68))
+                * (1.0 - 0.03 * (p.rib_arch_count - 3.0).max(0.0));
+            let a_web = (h_s - 2.0 * t_skin_mean).max(0.0) * t_web * web_solid_frac;
+            let a_rem = (a_cav - a_web).max(0.0);
+            let rho_eff = (p.rho_grip * (1.0 + 0.25 * p.lat_stress_k)
+                + 0.015 * p.alien_gate * p.trabec_arch_amp * (p.trabec_strut_r_mm / 0.95).powi(2))
+                .clamp(0.05, 0.45);
+            let a_bulkhead_avg = (p.bulkhead_count.round() * p.bulkhead_t_mm / p.l_grip_mm.max(50.0)) * (0.34 * a_cav);
+            let a_solid = a_skin + a_web + a_bulkhead_avg + a_rem * rho_eff;
+            let v_frac = (1.0 - a_solid / a_outer.max(1.0)).clamp(0.0, 0.85);
+            (h_s, t_s, af, v_frac)
+        } else {
+            let guard_h_tot = 24.0 + 0.55 * p.guard_h + 0.35 * (p.guard_bspline_c1 - p.guard_bspline_c2);
+            let guard_solid_frac = (0.38 + 0.62 * p.rho_guard).clamp(0.42, 0.72);
+            (guard_h_tot, p.guard_t, 0.76, 1.0 - guard_solid_frac)
+        };
+        if void_frac > 0.01 {
+            let scale_ab = libm::sqrt(area_factor / (0.25 * std::f64::consts::PI));
+            let scale_v = void_frac.sqrt();
+            let a_yv = (0.5 * h_sec * scale_ab * scale_v).max(0.5);
+            let b_zv = (0.5 * t_sec * scale_ab * scale_v).max(0.4);
+            let rho_v = libm::hypot(y / a_yv, z / b_zv);
+            let d_gv = (rho_v - 1.0) * a_yv.min(b_zv);
+            d_void = d_void.min(d_gv);
+        }
+    }
+
+    // 4c. Blade concentric rhombic hollow core
+    if x >= blade.x_heel && x <= blade.x_tip {
+        let u = ((x - blade.x_heel) / (blade.x_tip - blade.x_heel).max(1.0)).clamp(0.0, 1.0);
+        let n_b = blade.xs.len();
+        let idx_f = u * ((n_b - 1) as f64);
+        let idx = (idx_f.floor() as usize).min(n_b - 2);
+        let frac = idx_f - (idx as f64);
+        let y_in = blade.y_in[idx] * (1.0 - frac) + blade.y_in[idx + 1] * frac;
+        let y_sp = blade.y_sp[idx] * (1.0 - frac) + blade.y_sp[idx + 1] * frac;
+        let z_c = blade.z_camber[idx] * (1.0 - frac) + blade.z_camber[idx + 1] * frac;
+        let t_m = blade.t_spine_mm[idx] * (1.0 - frac) + blade.t_spine_mm[idx + 1] * frac;
+        let s_loc = blade.s_mm[idx] * (1.0 - frac) + blade.s_mm[idx + 1] * frac;
+        let a_dist = (blade.s_mm[n_b - 1] - s_loc).max(0.0);
+        let ds_seg = (blade.s_mm[idx + 1] - blade.s_mm[idx]).max(1e-4);
+        let dx_seg = (blade.xs[idx + 1] - blade.xs[idx]).abs().max(0.35 * ds_seg);
+        let ds_over_dx = (ds_seg / dx_seg).clamp(1.0, 2.4);
+
+        let w_m = (y_sp - y_in).max(0.8);
+        let y_mid = 0.5 * (y_in + y_sp);
+        let bevel_fill = 0.51 + 0.05 * ((20.0 - 0.5 * (p.angle_in_deg + p.angle_sp_deg)) / 4.0);
+        let fuller_cut = if a_dist > p.tip_reserve_mm + 3.0 {
+            0.85 * p.fuller_amp * p.fuller_width_frac * w_m
+        } else {
+            0.0
+        };
+        let a_sec_env = (bevel_fill * w_m * t_m - fuller_cut).max(0.25 * w_m * t_m) * ds_over_dx;
+        let z_peak = (a_sec_env / w_m).max(0.4);
+
+        let t_hollow_thresh = 2.0 * p.skin_t_base + 1.0;
+        let hollow_core_frac = if t_m > t_hollow_thresh && a_dist > p.tip_reserve_mm + 2.0 {
+            let core_h = (t_m - 2.0 * p.skin_t_base) / t_m;
+            let core_w = ((w_m - 6.2).max(0.0) / w_m.max(1.0)).clamp(0.0, 0.62);
+            core_h * core_w * (1.0 - p.rho_blade)
+        } else {
+            0.0
+        };
+        let win_cut_frac = if p.win_gate >= 0.45 && x > blade.x_heel + 8.0 && x < blade.x_heel + 36.0 {
+            0.22 * p.win_gate * p.win_length_frac * p.win_width_frac
+        } else {
+            0.0
+        };
+        let void_frac = (hollow_core_frac + win_cut_frac).clamp(0.0, 0.55);
+        if void_frac > 0.01 {
+            let scale_v = void_frac.sqrt();
+            let rho_rhomb = (y - y_mid).abs() / (0.5 * w_m * scale_v) + (z - z_c).abs() / (z_peak * scale_v);
+            let d_bv = (rho_rhomb - 1.0) * (z_peak * scale_v).min(0.5 * w_m * scale_v);
+            d_void = d_void.min(d_bv);
+        }
+    }
+
+    d_env.max(-d_void)
+}
+
+/// Extract a watertight, 2-manifold surface mesh (`Solid`) directly from the G4 3D SDF (`eval_g4_sdf_3d`)
+/// via 6-tetrahedra Doi-Koide marching tetrahedra (`census == (0, 0, 1)`), with zero G3 bridge and zero scaling.
+pub fn extract_g4_watertight_mesh(
+    p: &G4DecodedParams,
+    blade: &G4BladeProfile3D,
+    h_mm: f64,
+    use_am_hollow: bool,
+) -> Option<jarambit_crescent::export::Solid> {
+    let bmin = [-24.0_f64, -56.0, -9.5];
+    let bmax = [blade.x_tip + 3.0, 26.0, 9.5];
+    let nx = (((bmax[0] - bmin[0]) / h_mm).ceil() as usize) + 2;
+    let ny = (((bmax[1] - bmin[1]) / h_mm).ceil() as usize) + 2;
+    let nz = (((bmax[2] - bmin[2]) / h_mm).ceil() as usize) + 2;
+
+    let idx3 = |ix: usize, iy: usize, iz: usize| -> usize { (ix * ny + iy) * nz + iz };
+    let mut field = vec![10.0_f32; nx * ny * nz];
+    for ix in 1..(nx - 1) {
+        let x = bmin[0] + (ix as f64 - 0.5) * h_mm;
+        for iy in 1..(ny - 1) {
+            let y = bmin[1] + (iy as f64 - 0.5) * h_mm;
+            for iz in 1..(nz - 1) {
+                let z = bmin[2] + (iz as f64 - 0.5) * h_mm;
+                let mut v = eval_g4_sdf_3d(p, blade, x, y, z, use_am_hollow) as f32;
+                if v == 0.0 {
+                    v = -1e-6;
+                }
+                field[idx3(ix, iy, iz)] = v;
             }
         }
+    }
+
+    const C_OFF: [[usize; 3]; 8] = [
+        [0, 0, 0],
+        [1, 0, 0],
+        [0, 1, 0],
+        [1, 1, 0],
+        [0, 0, 1],
+        [1, 0, 1],
+        [0, 1, 1],
+        [1, 1, 1],
+    ];
+    const TETS: [[usize; 4]; 6] = [
+        [0, 5, 1, 7],
+        [0, 1, 3, 7],
+        [0, 3, 2, 7],
+        [0, 2, 6, 7],
+        [0, 6, 4, 7],
+        [0, 4, 5, 7],
+    ];
+
+    let mut verts: Vec<(f64, f64, f64)> = Vec::new();
+    let mut tris: Vec<[usize; 3]> = Vec::new();
+    let mut edge_cache: std::collections::HashMap<(usize, usize), usize> =
+        std::collections::HashMap::new();
+
+    let get_edge_vert = |verts: &mut Vec<(f64, f64, f64)>,
+                         edge_cache: &mut std::collections::HashMap<(usize, usize), usize>,
+                         a: usize,
+                         b: usize,
+                         pa: (f64, f64, f64),
+                         pb: (f64, f64, f64),
+                         va: f32,
+                         vb: f32|
+     -> usize {
+        let (k0, k1, p0, p1, v0, v1) = if a < b {
+            (a, b, pa, pb, va, vb)
+        } else {
+            (b, a, pb, pa, vb, va)
+        };
+        if let Some(&vi) = edge_cache.get(&(k0, k1)) {
+            return vi;
+        }
+        let denom = (v0 - v1).abs().max(1e-12);
+        let t = (v0.abs() / denom).clamp(0.001, 0.999) as f64;
+        let pt = (
+            p0.0 + t * (p1.0 - p0.0),
+            p0.1 + t * (p1.1 - p0.1),
+            p0.2 + t * (p1.2 - p0.2),
+        );
+        let vi = verts.len();
+        verts.push(pt);
+        edge_cache.insert((k0, k1), vi);
+        vi
     };
-    set(&mut g3, "ring_od", p.ring_od);
-    set(&mut g3, "crown", p.ring_crown);
-    set(&mut g3, "lip_d", p.ring_lip_d);
-    set(&mut g3, "taper_deg", p.ring_taper_deg);
-    set(&mut g3, "web_t", p.ring_web_t);
-    set(&mut g3, "thumbpad", p.ring_thumbpad);
-    set(&mut g3, "od_tear", p.ring_od_tear);
-    set(&mut g3, "od_h2", p.ring_od_h2);
-    set(&mut g3, "junction_deg", p.ring_junction_deg);
-    set(&mut g3, "neck_r", p.ring_neck_r);
-    set(&mut g3, "bore_round", p.ring_bore_round);
-    set(&mut g3, "hand_scale", p.hand_scale);
-    set(&mut g3, "dL", p.grip_dl);
-    set(&mut g3, "T0", p.grip_t0);
-    set(&mut g3, "T_sw", p.grip_t_sw);
-    set(&mut g3, "T_g", p.grip_t_g);
-    set(&mut g3, "edge_r", p.grip_edge_r);
-    set(&mut g3, "ramp_h", p.ramp_h);
-    set(&mut g3, "h_g", p.guard_h);
-    set(&mut g3, "t_guard", p.guard_t);
-    set(&mut g3, "guard_r", p.guard_r);
-    set(&mut g3, "skin_t", p.skin_t_base);
-    set(&mut g3, "lat_mix", p.lat_mix);
-    set(&mut g3, "lat_cell", p.lat_cell_mm);
-    set(&mut g3, "rho_grip", p.rho_grip);
-    set(&mut g3, "rho_guard", p.rho_guard);
-    set(&mut g3, "rho_ring", p.rho_ring);
-    set(&mut g3, "rho_blade", p.rho_blade);
-    set(&mut g3, "rib_w", p.rib_w * (1.0 - 0.5 * p.rib_hole_frac));
-    set(&mut g3, "blade_len", p.blade_len);
-    set(&mut g3, "hook_drop", p.claw_turn_deg * 0.72);
-    set(&mut g3, "blade_belly", p.blade_belly);
-    set(&mut g3, "spine_arch", p.spine_arch);
-    set(&mut g3, "tip_angle", p.theta_tip_deg);
-    set(&mut g3, "h_root", p.h_root);
-    set(&mut g3, "h_exp", 1.15); // Linear/convex point wedge (never < 1.0 bullet nose!)
-    set(&mut g3, "t_core", p.t_core);
-    set(&mut g3, "t_tip", p.t_tip_base + p.t_tip_crown_mm);
-    set(&mut g3, "taper_x0", p.taper_x0);
-    set(&mut g3, "fuller_amp", p.fuller_amp);
-    set(&mut g3, "ridge_amp", p.ridge_amp);
-    set(&mut g3, "win_amp", p.win_gate);
-    set(&mut g3, "tip_reserve", p.tip_reserve_mm);
-    set(&mut g3, "t_0p25", p.t_0p25_mm);
-    set(&mut g3, "t_1p00", p.t_1p00_mm);
-    set(&mut g3, "t_2p00", p.t_2p00_mm);
-    set(&mut g3, "angle_in", p.angle_in_deg);
-    set(&mut g3, "angle_sp", p.angle_sp_deg);
-    set(&mut g3, "apex_in", p.apex_in_mm);
-    set(&mut g3, "apex_sp", p.apex_sp_mm);
-    set(&mut g3, "ser_depth_in", p.serr_depth_in_mm);
-    set(&mut g3, "ser_depth_sp", p.serr_depth_sp_mm);
-    set(&mut g3, "tex_amp", p.tex_amp_mm);
-    g3
+
+    let orient_tri = |v0: usize,
+                      v1: usize,
+                      v2: usize,
+                      p_out: (f64, f64, f64),
+                      verts: &[(f64, f64, f64)]|
+     -> [usize; 3] {
+        let (a, b, c) = (verts[v0], verts[v1], verts[v2]);
+        let ux = b.0 - a.0;
+        let uy = b.1 - a.1;
+        let uz = b.2 - a.2;
+        let vx = c.0 - a.0;
+        let vy = c.1 - a.1;
+        let vz = c.2 - a.2;
+        let nx_ = uy * vz - uz * vy;
+        let ny_ = uz * vx - ux * vz;
+        let nz_ = ux * vy - uy * vx;
+        let dx = p_out.0 - a.0;
+        let dy = p_out.1 - a.1;
+        let dz = p_out.2 - a.2;
+        if nx_ * dx + ny_ * dy + nz_ * dz >= 0.0 {
+            [v0, v1, v2]
+        } else {
+            [v0, v2, v1]
+        }
+    };
+
+    for ix in 0..(nx - 1) {
+        for iy in 0..(ny - 1) {
+            for iz in 0..(nz - 1) {
+                let mut g_idx = [0usize; 8];
+                let mut vals = [0.0_f32; 8];
+                let mut n_in = 0usize;
+                for c in 0..8 {
+                    let [di, dj, dk] = C_OFF[c];
+                    let gi = idx3(ix + di, iy + dj, iz + dk);
+                    g_idx[c] = gi;
+                    let v = field[gi];
+                    vals[c] = v;
+                    if v < 0.0 {
+                        n_in += 1;
+                    }
+                }
+                if n_in == 0 || n_in == 8 {
+                    continue;
+                }
+                let mut pts = [(0.0, 0.0, 0.0); 8];
+                for c in 0..8 {
+                    let [di, dj, dk] = C_OFF[c];
+                    pts[c] = (
+                        bmin[0] + ((ix + di) as f64 - 0.5) * h_mm,
+                        bmin[1] + ((iy + dj) as f64 - 0.5) * h_mm,
+                        bmin[2] + ((iz + dk) as f64 - 0.5) * h_mm,
+                    );
+                }
+                for tet in &TETS {
+                    let mut in_c = [0usize; 4];
+                    let mut out_c = [0usize; 4];
+                    let (mut ni, mut no) = (0usize, 0usize);
+                    for &tc in tet {
+                        if vals[tc] < 0.0 {
+                            in_c[ni] = tc;
+                            ni += 1;
+                        } else {
+                            out_c[no] = tc;
+                            no += 1;
+                        }
+                    }
+                    if ni == 0 || ni == 4 {
+                        continue;
+                    }
+                    if ni == 1 {
+                        let i0 = in_c[0];
+                        let (o0, o1, o2) = (out_c[0], out_c[1], out_c[2]);
+                        let e0 = get_edge_vert(&mut verts, &mut edge_cache, g_idx[i0], g_idx[o0], pts[i0], pts[o0], vals[i0], vals[o0]);
+                        let e1 = get_edge_vert(&mut verts, &mut edge_cache, g_idx[i0], g_idx[o1], pts[i0], pts[o1], vals[i0], vals[o1]);
+                        let e2 = get_edge_vert(&mut verts, &mut edge_cache, g_idx[i0], g_idx[o2], pts[i0], pts[o2], vals[i0], vals[o2]);
+                        tris.push(orient_tri(e0, e1, e2, pts[o0], &verts));
+                    } else if ni == 3 {
+                        let o0 = out_c[0];
+                        let (i0, i1, i2) = (in_c[0], in_c[1], in_c[2]);
+                        let e0 = get_edge_vert(&mut verts, &mut edge_cache, g_idx[o0], g_idx[i0], pts[o0], pts[i0], vals[o0], vals[i0]);
+                        let e1 = get_edge_vert(&mut verts, &mut edge_cache, g_idx[o0], g_idx[i1], pts[o0], pts[i1], vals[o0], vals[i1]);
+                        let e2 = get_edge_vert(&mut verts, &mut edge_cache, g_idx[o0], g_idx[i2], pts[o0], pts[i2], vals[o0], vals[i2]);
+                        tris.push(orient_tri(e0, e1, e2, pts[o0], &verts));
+                    } else {
+                        let (i0, i1) = (in_c[0], in_c[1]);
+                        let (o0, o1) = (out_c[0], out_c[1]);
+                        let e00 = get_edge_vert(&mut verts, &mut edge_cache, g_idx[i0], g_idx[o0], pts[i0], pts[o0], vals[i0], vals[o0]);
+                        let e01 = get_edge_vert(&mut verts, &mut edge_cache, g_idx[i0], g_idx[o1], pts[i0], pts[o1], vals[i0], vals[o1]);
+                        let e10 = get_edge_vert(&mut verts, &mut edge_cache, g_idx[i1], g_idx[o0], pts[i1], pts[o0], vals[i1], vals[o0]);
+                        let e11 = get_edge_vert(&mut verts, &mut edge_cache, g_idx[i1], g_idx[o1], pts[i1], pts[o1], vals[i1], vals[o1]);
+                        tris.push(orient_tri(e00, e01, e11, pts[o0], &verts));
+                        tris.push(orient_tri(e00, e11, e10, pts[o0], &verts));
+                    }
+                }
+            }
+        }
+    }
+
+    if tris.is_empty() {
+        return None;
+    }
+    let (bnd, nm, _) = jarambit_crescent::export::census(&tris);
+    if bnd != 0 || nm != 0 {
+        return None;
+    }
+    Some(jarambit_crescent::export::Solid {
+        verts,
+        tris,
+        bore: None,
+    })
 }

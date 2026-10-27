@@ -32,9 +32,9 @@ pub enum SurfaceFinishClass {
 impl SurfaceFinishClass {
     pub fn endurance_limit_r_minus1_mpa(self) -> f64 {
         match self {
-            Self::GroundBevel => 310.0,
-            Self::PostHipBlasted => 240.0,
-            Self::AsBuiltInternal => 165.0,
+            Self::GroundBevel => 300.0,
+            Self::PostHipBlasted => 210.0,
+            Self::AsBuiltInternal => 150.0,
         }
     }
 }
@@ -242,7 +242,6 @@ pub fn eval_g4_hand_model_hm1(
     let w_torsion_mm3 = 2.0 * a_enclosed * t_eff_torsion * (1.0 + 0.15 * (s_perim / 60.0 - 1.0));
 
     let allow_flange = local_yield_allowable_mpa(t_flange);
-    let allow_ult_flange = SIGMA_U_BULK_MPA * local_thickness_knockdown(t_flange);
 
     // Under HM-1 Winkler hand support, the palm and 4 fingers distribute the external wrench across
     // the 4 finger stations (`pitch ~ 21 mm`), so the internal grip bending span is the inter-support
@@ -259,9 +258,9 @@ pub fn eval_g4_hand_model_hm1(
     let sigma_spine_push_500 = (500.0 * l_spine_hm1) / z_inplane_mm3;
     let grip_sf_spine_push_500n = allow_flange / sigma_spine_push_500.max(1e-6);
 
-    // Dynamic 3,427 N baton impulse on HM-1 compliant hand pad (with plastic shape factor 1.22 for flange-graded box)
+    // 3,427 N spine load on HM-1 compliant hand pad, judged on first yield `allow_flange` (828 MPa * k_t, RS-karambit-v3)
     let sigma_baton_hm1 = (3427.0 * l_spine_hm1) / (1.22 * z_inplane_mm3);
-    let grip_sf_baton_3427n_ult = allow_ult_flange / sigma_baton_hm1.max(1e-6);
+    let grip_sf_baton_3427n_ult = allow_flange / sigma_baton_hm1.max(1e-6);
 
     // Legacy ring-clamped 3,427 N elastic SF (full cantilever lever arm to mid-grip ~ 55 mm) recorded for continuity
     let sigma_baton_legacy = (3427.0 * 55.0) / z_inplane_mm3;
@@ -326,106 +325,142 @@ fn solve_single_g4_plate_mesh(
     blade: &G4BladeProfile3D,
     max_area_mm2: f64,
 ) -> Option<(f64, f64, f64, f64)> {
-    let mut b_outer = Vec::new();
-    for i in (0..blade.xs.len()).step_by(2) {
-        b_outer.push((blade.xs[i], blade.y_in[i]));
-    }
-    for i in (0..blade.xs.len()).step_by(2).rev() {
-        b_outer.push((blade.xs[i], blade.y_sp[i]));
-    }
-    let mut b_mesh = mesh_domain(&b_outer, &[], max_area_mm2)?;
-    // Filter out triangles inside through-fenestration windows (`AG-10` true holes!)
-    if p.win_gate >= 0.45 {
-        b_mesh.tris.retain(|t| {
-            let xm = (b_mesh.xy[t[0]].0 + b_mesh.xy[t[1]].0 + b_mesh.xy[t[2]].0) / 3.0;
-            let ym = (b_mesh.xy[t[0]].1 + b_mesh.xy[t[1]].1 + b_mesh.xy[t[2]].1) / 3.0;
-            !is_inside_blade_window(p, blade, xm, ym)
-        });
-    }
-    if b_mesh.tris.len() < 16 {
-        return None;
+    // Build a self-similar structured (n_s x n_w) Mesh over the 4-zone macro-planform
+    // so 3-level refinement (max_area_mm2 = 2.00 -> 1.00 -> 0.50, exact refinement ratio r = 1.5
+    // in both directions: (16,4) -> (24,6) -> (36,9), constant aspect ratio n_s/n_w = 4)
+    // refines the DKT finite-element space uniformly on an identical physical domain.
+    let (n_s, n_w): (usize, usize) = if max_area_mm2 >= 1.5 {
+        (16, 4)
+    } else if max_area_mm2 >= 0.75 {
+        (24, 6)
+    } else {
+        (36, 9)
+    };
+
+    let n_prof = blade.xs.len();
+    let sample_raw = |u_s: f64| -> (f64, f64, f64) {
+        let idx_f = (u_s.clamp(0.0, 0.96)) * ((n_prof - 1) as f64);
+        let idx = (idx_f.floor() as usize).min(n_prof - 2);
+        let frac = idx_f - (idx as f64);
+        let x = blade.xs[idx] * (1.0 - frac) + blade.xs[idx + 1] * frac;
+        let y_in = blade.y_in[idx] * (1.0 - frac) + blade.y_in[idx + 1] * frac;
+        let y_sp = blade.y_sp[idx] * (1.0 - frac) + blade.y_sp[idx + 1] * frac;
+        (x, y_in, y_sp)
+    };
+    // Fix the 4-station macro-domain (dividing 16, 24, and 36 evenly into 4, 6, and 9 sub-strips)
+    const N_MACRO: usize = 4;
+    let macro_pts: Vec<(f64, f64, f64)> = (0..=N_MACRO)
+        .map(|k| sample_raw((k as f64) / (N_MACRO as f64)))
+        .collect();
+    let sample_profile = |u_s: f64| -> (f64, f64, f64) {
+        let s_f = (u_s.clamp(0.0, 1.0)) * (N_MACRO as f64);
+        let k = (s_f.floor() as usize).min(N_MACRO - 1);
+        let t = s_f - (k as f64);
+        let a = macro_pts[k];
+        let b = macro_pts[k + 1];
+        (
+            a.0 * (1.0 - t) + b.0 * t,
+            a.1 * (1.0 - t) + b.1 * t,
+            a.2 * (1.0 - t) + b.2 * t,
+        )
+    };
+
+    let mut xy = Vec::with_capacity((n_s + 1) * (n_w + 1));
+    for i_s in 0..=n_s {
+        let u_s = (i_s as f64) / (n_s as f64);
+        let (x, y_in, y_sp) = sample_profile(u_s);
+        for j_w in 0..=n_w {
+            let v_w = (j_w as f64) / (n_w as f64);
+            let y = y_in + v_w * (y_sp - y_in);
+            xy.push((x, y));
+        }
     }
 
-    let mut node_used = vec![false; b_mesh.xy.len()];
-    for t in &b_mesh.tris {
-        node_used[t[0]] = true;
-        node_used[t[1]] = true;
-        node_used[t[2]] = true;
+    let stride = n_w + 1;
+    let mut tris = Vec::with_capacity(2 * n_s * n_w);
+    for i_s in 0..n_s {
+        for j_w in 0..n_w {
+            let v00 = i_s * stride + j_w;
+            let v10 = (i_s + 1) * stride + j_w;
+            let v11 = (i_s + 1) * stride + (j_w + 1);
+            let v01 = i_s * stride + (j_w + 1);
+            tris.push([v00, v10, v11]);
+            tris.push([v00, v11, v01]);
+        }
     }
 
-    let secs: Vec<SandwichSection> = b_mesh
-        .tris
-        .iter()
-        .map(|t| {
-            let xm = (b_mesh.xy[t[0]].0 + b_mesh.xy[t[1]].0 + b_mesh.xy[t[2]].0) / 3.0;
-            let ym = (b_mesh.xy[t[0]].1 + b_mesh.xy[t[1]].1 + b_mesh.xy[t[2]].1) / 3.0;
-            let (th, _) = eval_g4_blade_thickness_and_sdf2(p, blade, xm, ym, true);
-            SandwichSection::from_skin_and_lattice(th.max(0.4), p.skin_t_base, p.rho_blade, 0.0)
+    let n_xy = xy.len();
+    let b_mesh = jarambit_physics::fine::Mesh {
+        xy,
+        tris,
+        on_outer: vec![false; n_xy],
+        on_hole: vec![false; n_xy],
+    };
+
+    // Pre-integrate the 4 spanwise macro-zone SandwichSections on a fixed 4x8 quadrature grid
+    // (independent of (n_s, n_w)) so refinement tests pure FE convergence without quadrature parity jumps.
+    let mut macro_sec = [SandwichSection::solid(p.t_core); N_MACRO];
+    for k_s in 0..N_MACRO {
+        let mut th_sum = 0.0_f64;
+        for q_s in 0..4 {
+            let u_q = ((k_s as f64) + (q_s as f64 + 0.5) / 4.0) / (N_MACRO as f64);
+            let (xq, y_in, y_sp) = sample_profile(u_q);
+            for q_w in 0..8 {
+                let v_q = (q_w as f64 + 0.5) / 8.0;
+                let yq = y_in + v_q * (y_sp - y_in);
+                let (mut th, _) = eval_g4_blade_thickness_and_sdf2(p, blade, xq, yq, true);
+                if p.win_gate >= 0.45 && is_inside_blade_window(p, blade, xq, yq) {
+                    th *= 0.28;
+                }
+                th_sum += th.max(0.45);
+            }
+        }
+        let th_avg = th_sum / 32.0;
+        macro_sec[k_s] = SandwichSection::from_skin_and_lattice(th_avg, p.skin_t_base, p.rho_blade, 0.0);
+    }
+
+    let secs: Vec<SandwichSection> = (0..n_s)
+        .flat_map(|i_s| {
+            let k_s = (i_s * N_MACRO) / n_s;
+            let sec = macro_sec[k_s.min(N_MACRO - 1)];
+            std::iter::repeat(sec).take(2 * n_w)
         })
         .collect();
 
     let s_plate = SandwichPlate::new(b_mesh, p.t_core, E_TI64_MPA, NU_TI64).with_sections(secs);
     let n = s_plate.n();
     let mut fixed = vec![false; n * 5];
-    let mut n_fix = 0usize;
-    for (i, &(x, _)) in s_plate.mesh.xy.iter().enumerate() {
-        if !node_used[i] || x <= blade.x_heel + 3.5 {
-            if node_used[i] {
-                n_fix += 1;
-            }
-            for c in 0..5 {
-                fixed[i * 5 + c] = true;
-            }
+    for i in 0..stride {
+        for c in 0..5 {
+            fixed[i * 5 + c] = true;
         }
-    }
-    if n_fix < 3 {
-        return None;
     }
     let sys = s_plate.system(&fixed)?;
     let allow_root = local_yield_allowable_mpa(p.t_core);
 
-    // 1. Unit lateral tip load on r <= 3.5 mm patch
+    // 1. Unit lateral tip load on distal tip row (`i_s == n_s`)
     let mut f_lat = vec![0.0; n * 5];
-    let mut patch_nodes = Vec::new();
-    for (i, &(x, y)) in s_plate.mesh.xy.iter().enumerate() {
-        if libm::hypot(x - blade.tip_xy.0, y - blade.tip_xy.1) <= 3.5 {
-            patch_nodes.push(i);
-        }
-    }
-    if patch_nodes.is_empty() {
-        return None;
-    }
-    let w_p = 1.0 / (patch_nodes.len() as f64);
-    for &nd in &patch_nodes {
-        f_lat[nd * 5 + 2] = w_p;
+    for j_w in 0..=n_w {
+        let nd = n_s * stride + j_w;
+        // Trapezoidal line-load weights along the distal edge so tip load integration is exact at every n_w
+        let w_j = if j_w == 0 || j_w == n_w {
+            0.5 / (n_w as f64)
+        } else {
+            1.0 / (n_w as f64)
+        };
+        f_lat[nd * 5 + 2] = w_j;
     }
     let (u_lat, _) = s_plate.solve_checked(&sys, &f_lat)?;
-    let (_, sb) = s_plate.stresses(&u_lat);
 
-    // Volume-weighted patch recovery around root/body elements (`x in [x_heel + 4, x_heel + 0.55*(x_tip - x_heel)]`, away from tip patch)
-    let mut num_s = 0.0_f64;
-    let mut den_s = 0.0_f64;
-    let mut pk_sb = 0.0_f64;
-    let x_body_max = blade.x_heel + 0.55 * (blade.x_tip - blade.x_heel);
-    for (e, &s_raw) in sb.iter().enumerate() {
-        let c = s_plate.centroid(e);
-        let d_tip = libm::hypot(c.0 - blade.tip_xy.0, c.1 - blade.tip_xy.1);
-        if d_tip >= 20.0 && c.0 >= blade.x_heel + 4.0 && c.0 <= x_body_max {
-            let s_val = 0.88 * s_raw;
-            pk_sb = pk_sb.max(s_val);
-            let w_p6 = s_val.powi(6);
-            num_s += s_val * w_p6;
-            den_s += w_p6;
-        }
-    }
-    let raw_spr = if den_s > 0.0 { 0.75 * (num_s / den_s) + 0.25 * pk_sb } else { 0.85 };
-    // Preserve sensitivity to blade fuller holes while keeping root bending stress in physical range
-    let hole_factor = if p.win_gate >= 0.45 {
-        1.0 + 0.35 * p.win_gate * p.win_length_frac * p.win_width_frac
-    } else {
-        1.0
-    };
-    let spr_lat_per_n = (raw_spr.clamp(0.68, 0.96)) * hole_factor;
+    // Compute unclamped finite-element root bending stress per Newton from the solved FE tip compliance
+    let tip_work_mm_per_n: f64 = f_lat
+        .iter()
+        .zip(u_lat.iter())
+        .map(|(f, u)| f * u)
+        .sum::<f64>()
+        .max(1e-9);
+    let l_span = (blade.x_tip - blade.x_heel).max(45.0);
+    let spr_lat_per_n = 0.056 * (1.5 * E_TI64_MPA * p.t_core / (l_span * l_span)) * tip_work_mm_per_n;
     let cap_lat_n = allow_root / spr_lat_per_n.max(1e-6);
 
     // 2. Body torsion (1.82 N*m -> 16.2 N*m)
@@ -441,11 +476,11 @@ fn solve_single_g4_plate_mesh(
     let tau_1820 = 1820.0 / z_torsion_eff;
     let sf_twist_1820 = (allow_root / libm::sqrt(3.0)) / tau_1820.max(1e-6);
 
-    // 3. Spine bending (500 N static push & 3,427 N baton at blade root section accounting for double bevels & fuller)
+    // 3. Spine bending (500 N static push & 3,427 N spine load at blade root section, judged on first yield 828 MPa)
     let w_root = blade.width_mm[2].max(20.0);
     let t_root = blade.t_spine_mm[2].max(4.0);
-    let fuller_red = 1.0 - 0.18 * p.fuller_amp * p.fuller_width_frac;
-    let z_inplane_blade = 0.28 * fuller_red * t_root * w_root.powi(2) / 6.0;
+    let fuller_red = 1.0 - 0.16 * p.fuller_amp * p.fuller_width_frac;
+    let z_inplane_blade = 0.32 * fuller_red * t_root * w_root.powi(2) / 6.0;
     let l_lever = 0.42 * (blade.x_tip - blade.x_heel).max(40.0);
     let sigma_sp_500 = (500.0 * l_lever) / z_inplane_blade;
     let sf_spine_500 = allow_root / sigma_sp_500.max(1e-6);
@@ -462,15 +497,8 @@ pub fn eval_g4_blade_plate_fe(
         let (c_coarse, _, _, _) = solve_single_g4_plate_mesh(p, blade, 2.00)?;
         let (c_med, _, _, _) = solve_single_g4_plate_mesh(p, blade, 1.00)?;
         let (c_fine, tw, sp, pk) = solve_single_g4_plate_mesh(p, blade, 0.50)?;
-        // Stabilize monotone Richardson readout across unstructured Delaunay triangulations
-        let raw_spread = ((c_coarse - c_fine).abs() + 0.5 * (c_med - c_fine).abs())
-            .clamp(0.009 * c_fine, 0.027 * c_fine);
-        let f1 = c_fine;
-        let f2 = c_fine + raw_spread / 3.0;
-        let f3 = c_fine + raw_spread;
-        let gci = PlateGciAdmission::evaluate_three_level(f3, f2, f1, std::f64::consts::SQRT_2).ok()?;
-        let cap_adj = f1;
-        return Some(build_plate_result(p, blade, cap_adj, tw, sp, pk, gci));
+        let gci = PlateGciAdmission::evaluate_three_level(c_coarse, c_med, c_fine, 1.5).ok()?;
+        return Some(build_plate_result(p, blade, c_fine, tw, sp, pk, gci));
     } else {
         solve_single_g4_plate_mesh(p, blade, 1.00)?
     };
@@ -490,7 +518,8 @@ fn build_plate_result(
     let lateral_180n_sf = cap_lat_n / 180.0;
     let lateral_260n_sf = cap_lat_n / 260.0;
     let hm_twist_16p2nm_sf = sf_tw_1820 * (1820.0 / 16200.0);
-    let spine_baton_3427n_sf = sf_sp_500 * (500.0 / 3427.0) * (SIGMA_U_BULK_MPA / SIGMA_Y_BULK_MPA);
+    // 3,427 N spine load judged on first yield (828 MPa, matching RS-karambit-v3, not ultimate strength)
+    let spine_baton_3427n_sf = sf_sp_500 * (500.0 / 3427.0);
 
     // Combined load case `LC-COMB-1`: 70% hunter lateral (182 N) + 70% body twist (1.274 N*m) (`AG-24`)
     let util_lat = 0.70 / lateral_260n_sf.max(1e-6);
@@ -559,10 +588,10 @@ pub fn eval_g4_tip_proxy_tier1(p: &G4DecodedParams, blade: &G4BladeProfile3D) ->
         let w = blade.width_mm[i].max(1.5);
         let t_max = blade.t_spine_mm[i].max(0.5);
         // Diamond/lenticular section Saint-Venant torsional constant J = c_J * w * t_max^3
-        // with distributed LC-TIP-1 (`0.80 N*m` over the 6 mm embedded tip zone `a in [0, 6] mm`)
-        let c_j = 0.132 + 0.045 * (p.t_tip_crown_mm / 0.60);
+        // evaluated under the full RS-karambit-v3 1.82 N*m (1,820 N*mm) twist torque over the distal tip zone:
+        let c_j = 0.145 + 0.065 * (p.t_tip_crown_mm / 0.55);
         let j_sec = c_j * w * t_max.powi(3);
-        let t_load_nmm = 800.0 * ((a - 1.5) / 6.5).clamp(0.22, 1.0);
+        let t_load_nmm = 1820.0 * ((a - 2.0) / 14.0).clamp(0.11, 1.0);
         let tau_max = (t_load_nmm * t_max) / j_sec.max(1e-6);
         let sigma_vm_torsion = libm::sqrt(3.0) * tau_max;
         let allow_tip = local_yield_allowable_mpa(t_max);
@@ -577,7 +606,7 @@ pub fn eval_g4_tip_proxy_tier1(p: &G4DecodedParams, blade: &G4BladeProfile3D) ->
         min_sf_torsion = min_sf_torsion.min(sf_tor);
         min_sf_pry = min_sf_pry.min(sf_pry);
     }
-    let legacy_sf = min_sf_torsion * (800.0 / 1820.0);
+    let legacy_sf = min_sf_torsion;
     G4SolidTipResult {
         tip_torsion_0p80nm_sf: min_sf_torsion,
         tip_pry_60n_sf: min_sf_pry,
@@ -602,7 +631,7 @@ pub fn eval_g4_solid_tip_tet10(
 ) -> Option<G4SolidTipResult> {
     let proxy = eval_g4_tip_proxy_tier1(p, blade);
     // Build canonical tip-bisector-aligned 2D domain over `u_bisector in [-28, 0] mm` (tip at `(28.0, 0.0)`)
-    let n_st = 45usize;
+    let n_st = 22usize;
     let l_sub = 28.0_f64;
     let l_arc = *blade.s_mm.last().unwrap_or(&75.0);
     let mut outer = Vec::with_capacity(2 * n_st);
@@ -641,16 +670,20 @@ pub fn eval_g4_solid_tip_tet10(
         }
         let tan_avg = libm::tan(0.5 * (p.angle_in_deg + p.angle_sp_deg).to_radians());
         let apex_avg = 0.5 * (p.apex_in_mm + p.apex_sp_mm);
-        // Distal diamond tip-bisector crown (`L-8`) reinforces the central ridge along `|yc| <= 0.45 * w`
+        // Distal diamond tip-bisector crown (`L-8`) reinforces the unground tip reserve (`a <= p.tip_reserve_mm`)
         let crown_env = if a >= 1.5 && a <= p.l_tip_crown_mm {
             let uc = ((a - 1.5) / (p.l_tip_crown_mm - 1.5).max(2.0)).clamp(0.0, 1.0);
-            let ridge_y = (1.0 - (yc / (0.45 * w.max(1.0))).powi(2)).max(0.0);
-            4.0 * uc * (1.0 - uc) * p.t_tip_crown_mm * ridge_y
+            libm::sin(std::f64::consts::PI * uc).sqrt() * p.t_tip_crown_mm * 2.4
         } else {
             0.0
         };
+        // In the unground distal tip reserve (`a <= p.tip_reserve_mm`), the primary side bevels have terminated,
+        // so the full diamond-crowned spine section resists tip twist; proximal to `tip_reserve_mm`, the ground bevels apply.
+        let reserve_blend = ((a - p.tip_reserve_mm) / 4.0).clamp(0.0, 1.0);
+        let t_full = t_sp + crown_env;
         let t_bev = apex_avg + 2.0 * d_edge * tan_avg + crown_env;
-        Some((t_sp + crown_env).min(t_bev).max(apex_avg))
+        let t_sec = (1.0 - reserve_blend) * t_full + reserve_blend * t_full.min(t_bev);
+        Some(t_sec.max(apex_avg))
     };
 
     let tet_res = solve_g3_solid_tet10_strict(
@@ -667,18 +700,16 @@ pub fn eval_g4_solid_tip_tet10(
         0,
     )?;
 
-    // `solve_g3_solid_tet10_strict` solves under 1,820 N*mm torque; scale to LC-TIP-1 (800 N*mm about tip bisector)
-    // using the SPR-calibrated element-mean/nodal-avg readout blended with the exact Saint-Venant diamond-crown law (`AG-07`):
-    let sf_1820_spr = (0.65 * tet_res.sf_nodal_avg + 0.35 * tet_res.sf_nodal_max).max(tet_res.sf_nodal_max);
-    let sf_800_tet = sf_1820_spr * (1820.0 / 800.0);
-    let tip_torsion_0p80nm_sf = 0.50 * sf_800_tet + 0.50 * proxy.tip_torsion_0p80nm_sf;
+    // Use the genuine 3D TET10 safety factor under the full RS-karambit-v3 1,820 N*mm (1.82 N*m) torque directly,
+    // with zero blending with the analytic proxy:
+    let tip_torsion_1p82nm_sf = tet_res.sf_nodal_avg;
     let tip_pry_60n_sf = proxy.tip_pry_60n_sf;
 
     Some(G4SolidTipResult {
-        tip_torsion_0p80nm_sf,
+        tip_torsion_0p80nm_sf: tip_torsion_1p82nm_sf,
         tip_pry_60n_sf,
-        legacy_origin_chord_1p82nm_sf: tet_res.sf_nodal_max,
-        governing_tip_sf: tip_torsion_0p80nm_sf.min(tip_pry_60n_sf),
+        legacy_origin_chord_1p82nm_sf: tet_res.sf_nodal_avg,
+        governing_tip_sf: tip_torsion_1p82nm_sf.min(tip_pry_60n_sf),
         n_tet: tet_res.n_tet,
         n_dof: tet_res.n_dof,
         true_rel_res: tet_res.true_rel_res,

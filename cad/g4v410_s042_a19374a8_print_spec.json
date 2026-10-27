@@ -1,0 +1,63 @@
+{
+  "am_build_stl": {
+    "boundary_edges": 0,
+    "bytes": 32214484,
+    "file": "g4v410_s042_a19374a8_AMbuild_mm.stl",
+    "mass_ti64_g": 37.49,
+    "max_edge_degree": 1,
+    "mib": 30.72,
+    "non_manifold_edges": 0,
+    "sha256": "5201c3fc77017f6b56ebde5a277ffb2fdf72284032a3223b6eb66975cc57d556",
+    "triangles": 644288,
+    "vertices": 322132,
+    "volume_mm3": 8462.0,
+    "voxel_pitch_h_mm": 0.45,
+    "watertight": true
+  },
+  "as_finished_mass_g": 37.87,
+  "as_printed_mass_g": 38.15,
+  "decoder_sha256": "8300db0c518bcb76a78c4bfd283e5bbaa78034968bffc6c05a94d44ab6049eef",
+  "density_g_mm3": 0.00443,
+  "design_id": "g4v410_s042_a19374a8",
+  "feasible_all_targets": true,
+  "genome_sha256": "a19374a8af4d01749c2533a122f2d9c288da4abe1a138d2164ee461cef053686",
+  "material": "Ti-6Al-4V (L-PBF stress-relieved, yield 828 MPa)",
+  "order_notes": "Units: mm | Overall dimensions: 163.25 x 63.04 x 14.26 mm | Mass: 37.49 g (finished) / 38.15 g (with grind stock) | Material: Ti-6Al-4V (L-PBF stress-relieved, yield 828 MPa) | Depowder via neutral-axis drainage ports | All 17 structural LCB targets met (SF_LCB >= 1.00)",
+  "outer_envelope_stl": {
+    "boundary_edges": 0,
+    "bytes": 25527484,
+    "file": "g4v410_s042_a19374a8_envelope_mm.stl",
+    "max_edge_degree": 1,
+    "mib": 24.34,
+    "non_manifold_edges": 0,
+    "sha256": "ff3fcada4447314ed03b8ca9d258c04887c1bb811dbe115a748845abf5bcb137",
+    "solid_mass_ti64_g": 103.69,
+    "triangles": 510548,
+    "vertices": 255280,
+    "volume_mm3": 23407.3,
+    "voxel_pitch_h_mm": 0.4,
+    "watertight": true
+  },
+  "overall_dimensions_mm": {
+    "bbox_max_mm": [
+      142.55,
+      19.43,
+      7.13
+    ],
+    "bbox_min_mm": [
+      -20.7,
+      -43.62,
+      -7.13
+    ],
+    "height_y_mm": 63.04,
+    "length_x_mm": 163.25,
+    "thickness_z_mm": 14.26
+  },
+  "requirement_set": "RS-karambit-v4",
+  "schema": "G4.0",
+  "schema_sha256": "cfbe4e9348fced6bbccb74a89bed790ffcc798e5c98f30debda4cc3c753c5539",
+  "units": "mm",
+  "version": "4.1.0",
+  "w_ergolight_v1_legacy": 98.15,
+  "w_ergolight_v2": 94.49
+}

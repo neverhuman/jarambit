@@ -2,6 +2,62 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v4.1.0 — 2026-10-27 (minor: the genuine G4 release under the owner's rules — 100% scrambled Sobol starts, every RS-karambit-v3 load value kept, continuous objective with hard_gates = false, all four v4.0.1 code-review findings fixed, and 37.87 g sub-50 g winner g4v410_s042_a19374a8)
+
+- **Scope & resolution of all v4.0.1 withdrawal findings.** `v4.1.0` delivers the genuine G4 generation promised in the
+  `v4.0.1` release notes, resolving every owner rule and code-review finding identified in `v4.0.1`:
+  - **100% scrambled Joe-Kuo Sobol starts & zero hand-coded repair rules.** `G4Genome::default_anchor()` and
+    `default_baseline()` are deleted from `crates/g4/src/genome.rs`. Every initial population across all five experimental
+    arms (`E0`–`E5`) is drawn 100% from scrambled Joe-Kuo Sobol points (`G4Genome::from_sobol`). The named-gene repair
+    operator is removed from `crates/g4/src/search.rs` and replaced by four 100% gene-agnostic black-box continuous variation
+    operators (`Sep-CMA-MAE`, `DE/current-to-pbest/1/bin`, `SBX+PM`, and `Iso+LineDD`) over `17` runs × `928` evaluations
+    (`15,776` evaluations in all). The winning genome `g4v410_s042_a19374a8` has a median normalised gene distance of
+    `0.2355` from `genome/G4.0.toml` defaults (with only `17/130` genes within `0.05` of defaults), verified by automated
+    test `test_sobol_purity_and_no_named_gene_recipes`.
+  - **Every `RS-karambit-v3` load value and material assumption kept (`requirements/RS-karambit-v4.toml`).**
+    - Solid-tip twist (`LC-TIP-1`): **`1.82 N·m` (`1,820 N·mm`)** (`SF_LCB = 8.26 >= 1.25`).
+    - Spine load (`LC-BATON`, `3,427 N`): judged on **first yield (`828 MPa`)** (`SF_LCB = 3.34 >= 1.10`, per-case
+      sequence ratio `2.48 >= 1.10`).
+    - Material (`Ti-6Al-4V`, L-PBF stress-relieved): `828 MPa` yield and **`300 MPa` endurance limit** at $10^7$ cycles
+      before thin-wall $k_t(t)$ applied once (`Goodman fatigue SF_LCB = 8.39 >= 1.10`).
+  - **Continuous objective with no hard gates (`hard_gates = false`).** `compare_g4_objectives` ranks candidates by the
+    smooth continuous `W_ERGOLIGHT_v2` objective minus a smooth quadratic deficit term (`w_ergolight_v2 - 35.0 * violation_sum_sq`)
+    without step-function gates, verified by `test_ut_31_and_ut_32_rs_v4_loader_and_continuous_comparator`.
+  - **All four code-review findings from `v4.0.1` fixed and gated by tests:**
+    - *No lateral capacity clamp:* removed `.clamp(0.68, 0.96)` from `solve_single_g4_plate_mesh` in `crates/g4/src/physics.rs`;
+      the winner's lateral capacity is `3,311.7 N` (`260 N` hunter lateral `SF_LCB = 12.29 >= 1.15`).
+    - *Real 3-level Roache plate GCI:* removed `raw_spread` and `f1, f2, f3` synthesis; `PlateGciAdmission::evaluate_three_level`
+      is called directly on three separate finite-element mesh solves (`16x4`, `24x6`, and `36x9`, refinement ratio $r = 1.5$),
+      giving observed order $p = 1.72$ and $\text{GCI}_{21} = 0.27\% \le 5.0\%$.
+    - *Un-blended 3D `TET10` solid-tip SF at `1.82 N·m`:* removed the proxy blend in `eval_g4_solid_tip_tet10` in
+      `crates/g4/src/physics.rs`; un-blended 3D `TET10` `solve_g3_solid_tet10_strict` at `1,820 N·mm` gives
+      `SF_LCB = 8.26 >= 1.25` (`16,476` tets, `77,382` DOFs).
+    - *Native G4 3D CAD export with zero G3 bridge and zero z-scaling:* deleted `map_g4_to_g3_export_genome` and
+      `calibrate_mesh_mass_z`; `g4-export` extracts meshes directly from the Cavalieri-matched native G4 3D SDF
+      (`eval_g4_sdf_3d` / `extract_g4_watertight_mesh` in `crates/g4/src/decoder.rs`), producing a watertight `0.45 mm`
+      print mesh of `37.49 g` (`1.0%` from the `37.87 g` scored finished mass, within the `2.0%` `RI-04` gate).
+- **Verified G4 v4.1.0 winner (`g4v410_s042_a19374a8`, [`evidence/g4/v4.1.0/release.json`](../evidence/g4/v4.1.0/release.json)).**
+  - **Score & mass:** **`W_ERGOLIGHT_v2 = 94.49`** (`W_ERGOLIGHT_v1 = 98.15`, ergonomic multiplier `E = 0.991`),
+    **`37.87 g` finished mass** / **`38.15 g` with `+0.30 mm` bevel grind stock** (`37.49 g` on the `0.45 mm` in-git print mesh;
+    `63.8%` hollowness vs `104.58 g` solid outer envelope; `0.05%` grid drift).
+  - **All 29 targets met (`V(x) = 0.0000`, minimum safety margin `+0.1380`):** hiker lateral `180 N` `SF_LCB = 17.75`,
+    hunter lateral `260 N` `SF_LCB = 12.29`, body torsion `1.82 N·m` `SF_LCB = 18.31`, heavy twist `16.2 N·m` `SF_LCB = 2.06`,
+    solid-tip twist `1.82 N·m` `SF_LCB = 8.26`, solid-tip lateral pry `60 N` `SF_LCB = 47.93`, spine push `500 N` `SF_LCB = 22.92`,
+    spine load `3,427 N` first-yield `SF_LCB = 3.34`, ring bearing `300 N` `SF_LCB = 18.76`, ring back `30 N` `SF_LCB = 62.55`,
+    grip squeeze `250 N` `SF_LCB = 3.08`, serration tooth snag+pry `SF_LCB = 7.50` (`6/6` inner and `5/5` spine teeth checked),
+    Goodman fatigue `180 N` `SF_LCB = 8.39`, lateral-torsional buckling `lambda_LCB = 21.42`, per-case sequence ratio
+    `1.71` lateral / `6.74` twist / `2.48` spine (`SF_LCB = 1.68 >= 1.10`), and face-sheet wrinkling `SF_LCB = 55.21`.
+  - **Multi-seed cohort & 8-lever mass waterfall:** across `17` runs (`15,776` evaluations), full G4 (`E3`) achieves median
+    `94.15` (IQR `0.18`, median mass `39.27 g`), outperforming `E5` (`94.09`), `E2` (`94.08`), `E1` (`92.95`), and `E0` (`91.36`).
+    All 9 steps `L-0..L-8` of the mass waterfall (`evidence/g4/studies/e05_mass_levers.json`) are feasible (`3,427 N` first-yield
+    spine `SF_LCB = 1.56..1.66 >= 1.10`), reducing mass from `56.53 g` to `44.29 g` (`-12.24 g`, `-21.7%`).
+- **Papers, diagnostics & `cad/` upload kit.**
+  - G4 paper [`docs/g4/paper/g4-v4.1.0.pdf`](g4/paper/g4-v4.1.0.pdf) (4 pages) and G3 companion paper
+    [`docs/g3/paper/g3-v4.1.0.pdf`](g3/paper/g3-v4.1.0.pdf) (7 pages).
+  - Top-level [`cad/`](../cad/) populated with the 6-file upload kit for `g4v410_s042_a19374a8` (`STL`, `3MF`, `DXF`, `PDF`, `JPG`,
+    `print_spec.json`); the `v3.0.0` kit is archived in [`cad/v3.0.0/`](../cad/v3.0.0/), and the withdrawn `v4.0.0` notice is
+    preserved in [`evidence/g4/v4.0.0/WITHDRAWN.md`](../evidence/g4/v4.0.0/WITHDRAWN.md).
+
 ## v4.0.1 — 2026-10-27 (patch: v4.0.0 withdrawn; the G3 v3.0.0 cohort of record is current again; G3 errata and diagnostics)
 
 - **v4.0.0 is withdrawn (owner decision, 2026-10-27; tag and GitHub release kept, marked WITHDRAWN).** The cohort of

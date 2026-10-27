@@ -190,31 +190,8 @@ pub struct G4Genome {
 }
 
 impl G4Genome {
-    /// Construct the default baseline `G4.0` genome from the `default` values in `genome/G4.0.toml`.
-    pub fn default_baseline() -> Self {
-        let mut u = Vec::with_capacity(G4_GENE_COUNT);
-        for spec in &G4_GENES {
-            let u_val = match spec.scale {
-                G4GeneScale::Lin => ((spec.default - spec.lo) / (spec.hi - spec.lo)).clamp(0.0, 1.0),
-                G4GeneScale::Log => {
-                    (libm::log(spec.default / spec.lo) / libm::log(spec.hi / spec.lo)).clamp(0.0, 1.0)
-                }
-            };
-            u.push(u_val);
-        }
-        Self {
-            schema: G4_GENOME_SCHEMA.to_string(),
-            u,
-            strategy: G4EmitterStrategy::default(),
-        }
-    }
-
-    /// Alias for `default_baseline()`.
-    pub fn default_anchor() -> Self {
-        Self::default_baseline()
-    }
-
-    /// Alias for `sobol_unit_genome(index as u32, seed)`.
+    /// Construct a scrambled Joe-Kuo Sobol genome in `[0, 1]^130` (`index`, `island_seed`).
+    /// All initial populations in G4 start exclusively from scrambled Sobol samples (`from_sobol`).
     pub fn from_sobol(index: usize, island_seed: u64) -> Self {
         Self::sobol_unit_genome(index as u32, island_seed)
     }

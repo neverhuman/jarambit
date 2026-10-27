@@ -1,8 +1,8 @@
-# materials-v4.toml — Unified L-PBF Ti-6Al-4V ELI (HIP) allowables and TPMS RVE scaling laws.
+# materials-v4.toml — Unified L-PBF Ti-6Al-4V (stress-relieved, no HIP assumed) allowables and TPMS RVE scaling laws.
 
 schema = "jarambit.materials.v4"
-material_id = "Ti-6Al-4V-ELI-LPBF-HIP"
-standards = ["ASTM F2924", "ASTM F3302", "ISO 13314"]
+material_id = "Ti-6Al-4V-LPBF-StressRelieved"
+standards = ["ASTM F2924", "ISO 13314"]
 
 [bulk]
 density_g_per_cm3 = 4.43
@@ -21,9 +21,9 @@ intercept = 0.82
 slope_per_mm = 0.09
 
 [surface_fatigue]
-se_ground_bevel_mpa = 310.0
-se_post_hip_blasted_mpa = 240.0
-se_as_built_internal_mpa = 165.0
+se_ground_bevel_mpa = 300.0
+se_post_hip_blasted_mpa = 210.0
+se_as_built_internal_mpa = 150.0
 peterson_a_mm = 0.12
 walker_gamma = 0.65
 

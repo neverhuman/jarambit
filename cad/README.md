@@ -1,56 +1,30 @@
-# 3D Printing & CAD Upload Kit — Winner `hz4i013_g00995_d206e3c9` (release v4.0.1, cohort of record v3.0.0)
+# 3D Printing & CAD Upload Kit — G4 Winner `g4v410_s042_a19374a8` (release v4.1.0)
 
-This folder contains the ready-to-upload **6-file 3D-printing and manufacturing bundle** (**Units: millimetres**, every file under 50 MiB) for **`hz4i013_g00995_d206e3c9`**, the winning individual of the v3.0.0 cohort of record ([`evidence/g3/v3.0.0/release.json`](../evidence/g3/v3.0.0/release.json)). It is populated automatically from [`evidence/g3/v3.0.0/winner_genome.csv`](../evidence/g3/v3.0.0/winner_genome.csv) by [`ops/g3/export_best_stl.sh`](../ops/g3/export_best_stl.sh) and [`ops/ci/gen_readme.py`](../ops/ci/gen_readme.py).
+This folder contains the ready-to-upload **6-file 3D-printing and manufacturing bundle** (**Units: millimetres**, every file under 50 MiB) for **`g4v410_s042_a19374a8`**, the winning individual of the **G4 (`v4.1.0`)** cohort of record ([`evidence/g4/v4.1.0/release.json`](../evidence/g4/v4.1.0/release.json)). It is populated automatically from [`evidence/g4/v4.1.0/winner_genome.csv`](../evidence/g4/v4.1.0/winner_genome.csv) by `g4-export`.
 
-**Status & limits (computational design; not built, printed or physically tested):** this design is **not qualified for use as a knife**. Its 0.20 mm print-mesh mass is **59.3 g** (above the 50 g goal; `59.72 g` on the `0.45 mm` in-git mesh), and several structural safety factors are below target: solid-tip SF **0.64** (< 1), grip SF **0.73** (beam formula) / **0.74** (hex8 voxel FE spine, < 1), fatigue SF **0.94** (< 1), and blade-before-hand yield-sequence ratio **0.56** (< 1.2 target). Because the in-git print mesh (`hz4i013_g00995_d206e3c9_AMbuild_mm.stl` / `hz4i013_g00995_d206e3c9_AMbuild_mm.3mf`) is extracted on a **0.45 mm** voxel grid (the finest pitch under 50 MiB), it cannot represent the `0.05–0.12 mm` apex flat or the `20°` primary bevel at the cutting edge; cutting edges would be finished by grinding after printing to the `EDGE-3` angle (`17.5–22.5°` per side), or you can download the `0.2 mm` print mesh (`hz4i013_g00995_d206e3c9_AMbuild_h0.2_mm.stl`) and `0.05 mm` fine-blade mesh (`hz4i013_g00995_d206e3c9_envelope_fineblade_mm.stl`) from [release v3.0.0](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0).
+- **Status:** computational design; not built, printed or physically tested; not qualified for use as a knife.
+> **Looking for the archived `v3.0.0` (`hz4i013_g00995_d206e3c9`) bundle?** All `v3.0.0` CAD files are preserved byte-for-byte in [`cad/v3.0.0/`](v3.0.0/).
+
+**Engineering summary (`RS-karambit-v4`, `W_ERGOLIGHT_v2 = 94.49` / `W_ERGOLIGHT_v1 = 98.15`):**
+- **Mass:** **`37.49 g`** finished (`38.15 g` with `+0.30 mm` bevel grind stock; `103.7 g` solid outer envelope; **`63.8%` hollowness**).
+- **All 17 structural LCB safety factors meet targets (`V(x) = 0`, all `SF_LCB >= 1.00`):** lateral hiker `180 N` SF **`17.75`**, lateral hunter `260 N` SF **`12.29`**, body torsion `1.82 N·m` SF **`18.31`**, heavy twist `16.2 N·m` SF **`2.06`**, solid-tip bisector torsion `1.82 N·m` SF **`8.26`**, solid-tip lateral pry `60 N` SF **`47.93`**, spine load `3,427 N` (`HM-1`, first yield `828 MPa`) SF **`3.34`**, Goodman fatigue SF **`8.39`**, serration tooth SF **`7.50`**, and per-load-case blade-before-grip sequence ratio **`1.68`** (`>= 1.10`).
+- **Point geometry & mesh convergence:** point planform angle at `3 mm` **`37.90°`** (`<= 55°` `Gate S4`), 3-level Roache plate `GCI_21` **`0.27%`** (`<= 5%`), and zero sealed internal voids (`Betti_2 = 0`, `r_esc = 0.50 mm`).
 
 ## 1. Ready-to-upload 6-file kit (for forms accepting up to 6 files, 100 MB each)
 
-If your printing or manufacturing quote form asks for **"Drawings and related files (STL, OBJ, 3MF, STEP, PDF, images, DXF/DWG, Word, or a zip — up to 6 files, 100 MB each)"**, you can upload all **6 files** below (or just File #1 / File #2 if you only want a single 3D print file):
-
 | # | File | Format | Size | What it is & why to upload it |
 |---:|---|---|---:|---|
-| **1** | **[`hz4i013_g00995_d206e3c9_AMbuild_mm.stl`](hz4i013_g00995_d206e3c9_AMbuild_mm.stl)** | **Binary STL (`mm`)** | **47.75 MiB** | **PRIMARY 3D PRINT FILE IN GIT (upload this first):** complete additive-manufacturing build at `0.45 mm` voxel pitch (finest under 50 MiB; `59.72 g`, 1,001,372 triangles) with outer skin, internal TPMS lattice, and powder-removal ports; cutting edges require post-print grinding. |
-| **2** | **[`hz4i013_g00995_d206e3c9_AMbuild_mm.3mf`](hz4i013_g00995_d206e3c9_AMbuild_mm.3mf)** | **3MF (`unit="millimeter"`)** | **9.10 MiB** | **Modern 3D print package:** identical `0.45 mm` AM build mesh in compressed 3MF 1.2.3 format with `unit="millimeter"` and `Ti-6Al-4V (design assumption: yield 828 MPa)` material metadata embedded in the header. |
-| **3** | **[`hz4i013_g00995_d206e3c9_envelope_mm.stl`](hz4i013_g00995_d206e3c9_envelope_mm.stl)** | **Binary STL (`mm`)** | **43.45 MiB** | **Solid outer envelope companion:** the unhollowed exterior surface at `0.3 mm` voxel pitch with all internal cavities and ports closed (119.4 g if printed solid; 911,132 triangles). |
-| **4** | **[`hz4i013_g00995_d206e3c9_drawing_mm.dxf`](hz4i013_g00995_d206e3c9_drawing_mm.dxf)** | **AutoCAD R12 DXF (`mm`)** | **769 KiB** | **1:1 2D engineering drawing (`UNITS: MILLIMETERS`, `1 drawing unit = 1 mm`):** exact `z = 0` mid-plane outline, 24.9 mm ring bore at decoded `x = -5.97 mm`, `z`-extent thickness envelope (not a section), 30 mm blade cross-section, and overall dimension callouts. |
-| **5** | **[`hz4i013_g00995_d206e3c9_spec_paper.pdf`](hz4i013_g00995_d206e3c9_spec_paper.pdf)** | **PDF** | **479 KiB** | **7-page engineering specification & FE paper (`g3-v4.0.1.pdf`):** complete geometry, bevel angles, CAD verification tables, and measured structural safety factors (including below-1 values: solid tip 0.64, grip 0.73 / 0.74, fatigue 0.94, yield-sequence 0.56 vs 1.2). |
-| **6** | **[`hz4i013_g00995_d206e3c9_xray_cutaway.jpg`](hz4i013_g00995_d206e3c9_xray_cutaway.jpg)** | **JPG image** | **47 KiB** | **Lengthwise cutaway reference image:** visual guide for the print technician showing the outer skin, internal TPMS lattice, and powder-evacuation ports. |
+| **1** | **[`g4v410_s042_a19374a8_AMbuild_mm.stl`](g4v410_s042_a19374a8_AMbuild_mm.stl)** | **Binary STL (`mm`)** | **30.72 MiB** | **PRIMARY 3D PRINT FILE IN GIT (upload this first):** complete additive-manufacturing build (`37.49 g`, `644288` triangles) with flange-graded skin, perforated Warren web, Sheet-TPMS core, drained hollow ring, and powder-removal ports. |
+| **2** | **[`g4v410_s042_a19374a8_AMbuild_mm.3mf`](g4v410_s042_a19374a8_AMbuild_mm.3mf)** | **3MF (`unit="millimeter"`)** | **5.90 MiB** | **Modern 3D print package:** identical AM build mesh in compressed 3MF 1.2.3 format with `unit="millimeter"` and `Ti-6Al-4V (L-PBF stress-relieved, yield 828 MPa)` metadata. |
+| **3** | **[`g4v410_s042_a19374a8_envelope_mm.stl`](g4v410_s042_a19374a8_envelope_mm.stl)** | **Binary STL (`mm`)** | **24.34 MiB** | **Solid outer envelope companion:** unhollowed exterior surface with all internal cavities and ports closed (`103.7 g` if printed solid; `510548` triangles). |
+| **4** | **[`g4v410_s042_a19374a8_drawing_mm.dxf`](g4v410_s042_a19374a8_drawing_mm.dxf)** | **AutoCAD R12 DXF (`mm`)** | **605 KiB** | **1:1 2D engineering drawing (`UNITS: MILLIMETERS`, `1 drawing unit = 1 mm`):** exact `z = 0` mid-plane outline, `24.9 mm` ring bore, `z`-extent thickness envelope, and `30 mm` blade cross-section. |
+| **5** | **[`g4v410_s042_a19374a8_spec_paper.pdf`](g4v410_s042_a19374a8_spec_paper.pdf)** | **PDF** | **Spec Paper** | **Engineering specification & FE paper (`g4-v4.1.0.pdf`):** complete `G4.0` genome, `HM-1` hand mechanics, 3-level Roache GCI, and multi-seed QD ablation tables. |
+| **6** | **[`g4v410_s042_a19374a8_xray_cutaway.jpg`](g4v410_s042_a19374a8_xray_cutaway.jpg)** | **JPG image** | **Cutaway** | **Lengthwise cutaway reference image:** visual guide rendered from `g4v410_s042_a19374a8` showing outer skin, internal lattice, and powder-evacuation ports. |
 
-*(Also included in this folder: [`hz4i013_g00995_d206e3c9_print_spec.json`](hz4i013_g00995_d206e3c9_print_spec.json), the machine-readable JSON receipt of dimensions, volumes, masses and SHA-256 digests.)*
+*(Also included: [`g4v410_s042_a19374a8_print_spec.json`](g4v410_s042_a19374a8_print_spec.json), the machine-readable JSON receipt of dimensions, volumes, masses, and SHA-256 digests.)*
 
 ## 2. Copy-paste order notes for the printing form
 
-STL files store raw triangle coordinates without a unit header. When uploading to a printing bureau (Protolabs, PCBWay, Craftcloud, Shapeways, Xometry, JLC3DP, or a local L-PBF shop), select **Millimetres (`mm`)** and paste:
-
 ```text
-Units: mm | Overall dimensions: 161.56 x 45.20 x 15.43 mm | Material: Ti-6Al-4V (design assumption: yield 828 MPa) | Depowder via neutral-axis drainage ports | Status: computational design; not built, printed or physically tested — below-target safety factors (solid-tip SF 0.64, grip SF 0.73 formula / 0.74 FE spine, fatigue SF 0.94, yield-sequence ratio 0.56 vs 1.2 target; mass 59.3 g vs 50 g goal); not qualified for use as a knife
+Units: mm | Overall dimensions: 163.25 x 63.04 x 14.26 mm | Mass: 37.49 g (finished) / 38.15 g (with grind stock) | Material: Ti-6Al-4V (L-PBF stress-relieved, yield 828 MPa) | Status: computational design; not built, printed or physically tested; not qualified for use as a knife | Depowder via neutral-axis drainage ports | Post-build grind primary bevels to 19.5 deg per side (0.08 mm apex)
 ```
-
-| Specification | Value |
-|---|---|
-| Winning design ID | `hz4i013_g00995_d206e3c9` (genome `d206e3c9f4c3…`, decoder `a203278d80d2…`) |
-| Units | `mm` (millimetres) |
-| Overall bounding box ($L_x \times H_y \times T_z$) | `161.56 × 45.20 × 15.43 mm` |
-| Material | Ti-6Al-4V (design assumption: yield 828 MPa, `0.00443 g/mm³`) |
-| Mass (0.20 mm print mesh / 0.45 mm git mesh) | `59.3 g` / `59.72 g` (`13,481.5 mm³`) |
-| Solid outer envelope mass (if unhollowed) | `119.4 g` (`26,953.1 mm³`) |
-| Watertight manifold check (`AMbuild` / `envelope`) | `watertight = true` (`0` boundary edges, `0` non-manifold edges) |
-
-## 3. High-resolution release assets (> 50 MiB)
-
-| File | Triangles | Size | SHA-256 | Contents | Where |
-|---|---:|---:|---|---|---|
-| `hz4i013_g00995_d206e3c9_AMbuild_mm.stl` | 1,001,372 | 48 MB | `782fc9c3453a22ad…` | print file: skin + TPMS lattice + powder ports, 0.450 mm voxels (finest that fits 50 MiB) | [in `cad/`](hz4i013_g00995_d206e3c9_AMbuild_mm.stl) · [archive](../docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_AMbuild_mm.stl) |
-| `hz4i013_g00995_d206e3c9_envelope_mm.stl` | 911,132 | 43 MB | `6c939b5fa82940e9…` | outer envelope, 0.300 mm voxels (finest that fits 50 MiB) | [in `cad/`](hz4i013_g00995_d206e3c9_envelope_mm.stl) · [archive](../docs/g3/v3.0.0/cad/hz4i013_g00995_d206e3c9_envelope_mm.stl) |
-| `hz4i013_g00995_d206e3c9_AMbuild_h0.2_mm.stl` | 5,373,548 | 256 MB | `48bbd9db5a48139c…` | print file: skin + TPMS lattice + powder ports, 0.2 mm voxels | [release v3.0.0](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0) |
-| `hz4i013_g00995_d206e3c9_envelope_h0.2_mm.stl` | 2,063,960 | 98 MB | `0e0654b07d78ec33…` | outer envelope, 0.2 mm voxels | [release v3.0.0](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0) |
-| `hz4i013_g00995_d206e3c9_envelope_fineblade_mm.stl` | 3,843,106 | 183 MB | `680e0df5fdfccc03…` | outer envelope; blade (x >= 92 mm) re-meshed at 0.05 mm from the exact decoder law | [release v3.0.0](https://github.com/neverhuman/jarambit/releases/tag/v3.0.0) |
-
-## 4. How to regenerate this folder automatically from the winner
-
-```bash
-./ops/g3/export_best_stl.sh
-```
-
-This reads [`evidence/g3/RECORD`](../evidence/g3/RECORD), decodes the winning genome row [`evidence/g3/v3.0.0/winner_genome.csv`](../evidence/g3/v3.0.0/winner_genome.csv), writes the watertight binary STL files and print spec to `docs/g3/v3.0.0/cad/`, generates the 6-file upload kit (`STL`, `3MF`, `DXF`, `PDF`, `JPG`) in `cad/`, and runs `python3 ops/ci/gen_readme.py` to update this guide and the root [`README.md`](../README.md).

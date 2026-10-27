@@ -684,27 +684,38 @@ pub fn evaluate_g4_objective(
     }
     let ergo_geometric_mean = libm::exp(log_e).clamp(0.0, 1.0);
 
-    // Feasibility-First Lexicographic Scalar `W_ERGOLIGHT_v2` (`SRCH-1`, `UT-32`):
-    // - Infeasible (V > 0): strictly in (0.0, 50.0)
-    // - Feasible (V == 0): strictly in [50.0, 100.0]
+    // Continuous Multi-Objective Scalar `W_ERGOLIGHT_v2` (`hard_gates = false`):
+    // Combines the RS-karambit-v3 continuous knee curve `sfk(r) = 0.94 * min(r, 1) + 0.06 * (1 - exp(-max(r - 1, 0) / 0.15))`
+    // across all structural & geometric targets with the mass score `l_mass` (weight 0.370, matching RS-karambit-v3),
+    // the ergonomic geometric mean `E`, and the C1-smooth soft-floor factor `psi_smooth = exp(-1.6 * violation_sum_sq)`
+    // (which equals 1.0 when all targets are met and decays smoothly with zero hard gates or step discontinuities).
     let m_fin = mass.as_finished_total_mass_g;
     let l_mass = ((spec.constants.mass_ceiling_g - m_fin)
         / (spec.constants.mass_ceiling_g - spec.constants.mass_floor_g))
         .clamp(0.0, 1.0);
-    let w_ergolight_v2 = if feasible {
-        let margin_bonus = 3.0 * libm::tanh(0.8 * min_safety_margin.max(0.0));
-        (50.0 + 42.0 * l_mass + 5.0 * ergo_geometric_mean + margin_bonus).clamp(50.0, 100.0)
-    } else {
-        (49.999 * libm::exp(-2.5 * libm::sqrt(violation_sum_sq))).clamp(0.0, 49.999)
+    let sfk = |r: f64| -> f64 {
+        let rc = r.max(0.0);
+        0.94 * rc.min(1.0) + 0.06 * (1.0 - libm::exp(-(rc - 1.0).max(0.0) / 0.15))
     };
+    let mut s_struct = 0.0_f64;
+    let mut v_l1 = 0.0_f64;
+    for (_, margin) in &gate_margins {
+        s_struct += sfk(1.0 + *margin);
+        if *margin < 0.0 {
+            v_l1 += -*margin;
+        }
+    }
+    let s_struct_mean = s_struct / (gate_margins.len().max(1) as f64);
+    let psi_smooth = libm::exp(-3.5 * v_l1 - 12.0 * violation_sum_sq);
+    let w_ergolight_v2 = (100.0
+        * ergo_geometric_mean
+        * (0.370 * l_mass + 0.630 * s_struct_mean)
+        * psi_smooth)
+        .clamp(0.0, 100.0);
 
     // Legacy `W_ERGOLIGHT_v1` (`100 * E^0.55 * L^0.45 * G_gate`, where G_gate uses legacy soft-floor product)
     let l_legacy = ((130.0 - m_fin) / (130.0 - 35.0)).clamp(0.0, 1.0);
-    let g_gate_legacy = if feasible {
-        1.0
-    } else {
-        libm::exp(-1.2 * violation_sum_sq).clamp(0.05, 0.99)
-    };
+    let g_gate_legacy = libm::exp(-1.2 * violation_sum_sq).clamp(0.05, 1.0);
     let w_ergolight_v1_legacy =
         100.0 * libm::pow(ergo_geometric_mean, 0.55) * libm::pow(l_legacy, 0.45) * g_gate_legacy;
 
@@ -740,21 +751,10 @@ pub fn evaluate_g4_objective(
     }
 }
 
-/// Feasibility-First Lexicographic Comparator (`SRCH-1`, `UT-32`):
-/// 1. Any feasible design (`a.feasible == true`) strictly dominates any infeasible design (`b.feasible == false`).
-/// 2. Between two infeasible designs, lower `violation_sum_sq` wins.
-/// 3. Between two feasible designs, higher `w_ergolight_v2` (lower mass + higher ergonomic & safety margins) wins.
+/// Continuous Multi-Objective Comparator (`W_ERGOLIGHT_v2`, `hard_gates = false`):
+/// Ranks candidates directly by the continuous `w_ergolight_v2` score with no hard gates.
 pub fn compare_g4_objectives(a: &G4ObjectiveReceipt, b: &G4ObjectiveReceipt) -> Ordering {
-    match (a.feasible, b.feasible) {
-        (true, false) => Ordering::Greater,
-        (false, true) => Ordering::Less,
-        (false, false) => b
-            .violation_sum_sq
-            .partial_cmp(&a.violation_sum_sq)
-            .unwrap_or(Ordering::Equal),
-        (true, true) => a
-            .w_ergolight_v2
-            .partial_cmp(&b.w_ergolight_v2)
-            .unwrap_or(Ordering::Equal),
-    }
+    a.w_ergolight_v2
+        .partial_cmp(&b.w_ergolight_v2)
+        .unwrap_or(Ordering::Equal)
 }

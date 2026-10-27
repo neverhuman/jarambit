@@ -9,6 +9,7 @@ use jarambit_g4::genome::{G4Genome, G4_GENES};
 use jarambit_g4::objective::RsKarambitV4Spec;
 use jarambit_g4::physics::{eval_g4_tip_proxy_tier1, eval_g4_solid_tip_tet10};
 use jarambit_g4::search::{evaluate_g4_genome, G4EvalTier};
+use rayon::prelude::*;
 use serde::Serialize;
 use std::fs;
 use std::path::PathBuf;
@@ -227,24 +228,30 @@ fn main() {
     let mut drifts = Vec::new();
     let mut fn_count = 0usize;
     let n_cal = 24usize;
-    for i in 0..n_cal {
-        let g = if i == 0 {
-            G4Genome::default_anchor()
-        } else {
-            G4Genome::from_sobol(i, 2026)
-        };
-        if let (Some(r0), Some(r1), Some(r2)) = (
-            evaluate_g4_genome(&spec, &g, G4EvalTier::Tier0Analytic),
-            evaluate_g4_genome(&spec, &g, G4EvalTier::Tier1SdfAndPlate),
-            evaluate_g4_genome(&spec, &g, G4EvalTier::Tier2Full3DCert),
-        ) {
-            scores_t0.push(r0.objective.w_ergolight_v2);
-            scores_t1.push(r1.objective.w_ergolight_v2);
-            scores_t2.push(r2.objective.w_ergolight_v2);
-            drifts.push(r2.grid_mass_drift_frac * 100.0);
-            if r2.objective.feasible && !(r0.objective.feasible || r0.objective.violation_sum_sq < 0.35) {
-                fn_count += 1;
-            }
+    let cal_rows: Vec<(f64, f64, f64, f64, bool)> = (0..n_cal)
+        .into_par_iter()
+        .filter_map(|i| {
+            let g = G4Genome::from_sobol(i, 2026);
+            let r0 = evaluate_g4_genome(&spec, &g, G4EvalTier::Tier0Analytic)?;
+            let r1 = evaluate_g4_genome(&spec, &g, G4EvalTier::Tier1SdfAndPlate)?;
+            let r2 = evaluate_g4_genome(&spec, &g, G4EvalTier::Tier2Full3DCert)?;
+            let is_fn = r2.objective.feasible && !(r0.objective.feasible || r0.objective.violation_sum_sq < 0.35);
+            Some((
+                r0.objective.w_ergolight_v2,
+                r1.objective.w_ergolight_v2,
+                r2.objective.w_ergolight_v2,
+                r2.grid_mass_drift_frac * 100.0,
+                is_fn,
+            ))
+        })
+        .collect();
+    for (s0, s1, s2, dr, is_fn) in cal_rows {
+        scores_t0.push(s0);
+        scores_t1.push(s1);
+        scores_t2.push(s2);
+        drifts.push(dr);
+        if is_fn {
+            fn_count += 1;
         }
     }
     let e04 = E04TierCalibrationReceipt {
@@ -260,8 +267,17 @@ fn main() {
     )
     .unwrap();
 
+    // Find first feasible scrambled Sobol genome for the E-05 and E-06 parametric sweeps
+    let g_sobol_feas = (0..64)
+        .map(|i| G4Genome::from_sobol(i, 42))
+        .find(|g| {
+            evaluate_g4_genome(&spec, g, G4EvalTier::Tier1SdfAndPlate)
+                .is_some_and(|r| r.objective.feasible)
+        })
+        .expect("Scrambled Sobol sequence must contain feasible starting design");
+
     // Study E-05: 8-Lever Mass Waterfall (`59.30 g` v3 mesh baseline -> `< 45 g` G4 feasible design)
-    let mut g_wf = G4Genome::default_anchor();
+    let mut g_wf = g_sobol_feas.clone();
     // Start from heavy v3-like parameters (~58.2 g)
     set_gene_val(&mut g_wf, "skin_t_base", 1.12);
     set_gene_val(&mut g_wf, "skin_flange_c2", 0.0);
@@ -338,7 +354,7 @@ fn main() {
         &mut g_wf,
         &mut prev_m,
         "L-3",
-        "Lamarckian stress-graded Sheet-TPMS core",
+        "Spatially stress-graded Sheet-TPMS core",
         &[("rho_grip", 0.085), ("rho_guard", 0.14), ("lat_stress_k", 0.48)],
     );
     apply_and_record(
@@ -372,8 +388,8 @@ fn main() {
         "L-7",
         "Lean anthropometric grip envelope + zero-mean texture + Module T windows",
         &[
-            ("grip_dl", -2.2),
-            ("hand_scale", 0.96),
+            ("grip_dl", -0.5),
+            ("hand_scale", 1.00),
             ("alien_gate", 1.0),
             ("trabec_window_blend", 0.55),
         ],
@@ -383,8 +399,8 @@ fn main() {
         &mut g_wf,
         &mut prev_m,
         "L-8",
-        "Distal tip-bisector diamond crown (+0.38 mm over a in [2, 12] mm)",
-        &[("t_tip_crown_mm", 0.38), ("l_tip_crown_mm", 12.0)],
+        "Distal tip-bisector diamond crown (+0.52 mm over a in [1.5, 13.5] mm)",
+        &[("t_tip_crown_mm", 0.52), ("l_tip_crown_mm", 13.5)],
     );
 
     let start_m = waterfall.first().unwrap().as_finished_mass_g;
@@ -403,29 +419,31 @@ fn main() {
     .unwrap();
 
     // Study E-06: Tip-Bisector Crown Sweep
-    let mut sweep = Vec::new();
-    let mut base_tip_mass = 0.0;
-    for k in 0..=7 {
-        let crown = (k as f64) * 0.10;
-        let mut g_tip = G4Genome::default_anchor();
-        set_gene_val(&mut g_tip, "theta_tip_deg", 39.5);
-        set_gene_val(&mut g_tip, "t_tip_crown_mm", crown);
-        let p = g_tip.decode();
-        let blade = build_g4_blade_profile(&p);
-        let mass = compute_g4_zone_masses(&p, &blade, 0.20);
-        let tip = eval_g4_solid_tip_tet10(&p, &blade, 0.25)
-            .unwrap_or_else(|| eval_g4_tip_proxy_tier1(&p, &blade));
-        if k == 0 {
-            base_tip_mass = mass.blade_tip_mass_g;
-        }
-        sweep.push(TipCrownPoint {
-            t_tip_crown_mm: crown,
-            point_angle_3mm_deg: blade.point_angle_3mm_deg,
-            tip_torsion_0p80nm_sf: tip.tip_torsion_0p80nm_sf,
-            tip_pry_60n_sf: tip.tip_pry_60n_sf,
-            blade_tip_mass_g: mass.blade_tip_mass_g,
-            delta_tip_mass_g: mass.blade_tip_mass_g - base_tip_mass,
-        });
+    let mut sweep: Vec<TipCrownPoint> = (0..=7)
+        .into_par_iter()
+        .map(|k| {
+            let crown = 0.42 + (k as f64) * 0.06;
+            let mut g_tip = g_sobol_feas.clone();
+            set_gene_val(&mut g_tip, "theta_tip_deg", 39.5);
+            set_gene_val(&mut g_tip, "t_tip_crown_mm", crown);
+            let p = g_tip.decode();
+            let blade = build_g4_blade_profile(&p);
+            let mass = compute_g4_zone_masses(&p, &blade, 0.20);
+            let tip = eval_g4_solid_tip_tet10(&p, &blade, 0.42)
+                .unwrap_or_else(|| eval_g4_tip_proxy_tier1(&p, &blade));
+            TipCrownPoint {
+                t_tip_crown_mm: crown,
+                point_angle_3mm_deg: blade.point_angle_3mm_deg,
+                tip_torsion_0p80nm_sf: tip.tip_torsion_0p80nm_sf,
+                tip_pry_60n_sf: tip.tip_pry_60n_sf,
+                blade_tip_mass_g: mass.blade_tip_mass_g,
+                delta_tip_mass_g: 0.0,
+            }
+        })
+        .collect();
+    let base_tip_mass = sweep.first().map(|pt| pt.blade_tip_mass_g).unwrap_or(0.0);
+    for pt in &mut sweep {
+        pt.delta_tip_mass_g = pt.blade_tip_mass_g - base_tip_mass;
     }
     let e06 = E06TipCrownReceipt {
         theta_tip_deg: 39.5,

@@ -13,8 +13,11 @@ def cad_readme():
 
 
 def release():
-    """(release version, receipt of the cohort of record named by evidence/g3/RECORD)"""
+    """(release version, receipt of the current release in evidence/g4/v<VERSION>/release.json or evidence/g3/v<RECORD>/release.json)"""
     v = open(os.path.join(ROOT, 'docs/VERSION')).read().strip()
+    g4_path = os.path.join(ROOT, f'evidence/g4/v{v}/release.json')
+    if os.path.isfile(g4_path):
+        return v, json.load(open(g4_path))
     rv = open(os.path.join(ROOT, 'evidence/g3/RECORD')).read().strip()
     return v, json.load(open(os.path.join(ROOT, f'evidence/g3/v{rv}/release.json')))
 
@@ -27,21 +30,29 @@ class GenReadme(unittest.TestCase):
     def test_release_link_matches_docs_version(self):
         v, rec = release()
         t = readme()
-        # a release keeps its line's cohort of record unless its RELEASES.md entry names another one
         from ops.ci.gen_readme import record_declared
         self.assertTrue(record_declared(v, rec['version']))
         self.assertIn(f'releases/tag/v{v}', t)
         self.assertNotIn('jepsontaylor/jarambit/releases', t)
 
     def test_readme_links_the_paper_of_this_release(self):
-        v, _ = release()
-        pdf = f'docs/g3/paper/g3-v{v}.pdf'
+        v, rec = release()
+        pdf = f'docs/g4/paper/g4-v{v}.pdf' if 'winner_id' in rec else f'docs/g3/paper/g3-v{v}.pdf'
         self.assertTrue(os.path.isfile(os.path.join(ROOT, pdf)), pdf)
         self.assertIn(f']({pdf})', readme())
 
     def test_headline_numbers_come_from_the_release_receipt(self):
         _, rec = release()
         t = readme()
+        if 'winner_id' in rec:
+            w = rec['winner_record']
+            self.assertIn(rec['winner_id'], t)
+            self.assertIn(f"{w['objective']['w_ergolight_v2']:.2f}", t)
+            self.assertIn(f"{w['mass']['as_finished_total_mass_g']:.2f} g", t)
+            self.assertIn(rec['decoder_sha256'][:12], t)
+            self.assertGreaterEqual(w['serration']['teeth_total_in'], 3)
+            self.assertGreaterEqual(w['serration']['teeth_total_sp'], 3)
+            return
         self.assertIn(rec['design_id'], t)
         self.assertIn(f"| {rec['score']['score_100']:.2f} |", t)
         self.assertIn(f"{rec['mass']['mesh_g']:.1f} g", t)
@@ -50,11 +61,37 @@ class GenReadme(unittest.TestCase):
             self.assertGreaterEqual(rec['blade'][edge]['teeth'], 3)  # both edges serrated (SERR-1..4)
 
     def test_every_image_and_cad_file_is_committed(self):
-        _, rec = release()
-        paths = list(rec['images'].values()) + list(rec['evolution']['figures'].values()) + \
-            [c['image'] for c in rec['evolution']['lineage']] + rec['cad_in_git']
+        v, rec = release()
         t = readme()
         ct = cad_readme()
+        if 'winner_id' in rec:
+            wid = rec['winner_id']
+            for ext in ('AMbuild_mm.stl', 'AMbuild_mm.3mf', 'envelope_mm.stl', 'drawing_mm.dxf', 'spec_paper.pdf', 'xray_cutaway.jpg'):
+                rel = f'cad/{wid}_{ext}'
+                arch = f'docs/g4/v{v}/cad/{wid}_{ext}'
+                fp = os.path.join(ROOT, rel)
+                ap = os.path.join(ROOT, arch)
+                self.assertTrue(os.path.isfile(fp), rel)
+                self.assertTrue(os.path.isfile(ap), arch)
+                self.assertLess(os.path.getsize(fp), 100 * 1024 * 1024, f'{rel} exceeds 100 MiB quote form limit')
+                self.assertIn(rel, t)
+                self.assertIn(f'{wid}_{ext}', ct)
+                h1 = hashlib.sha256(open(fp, 'rb').read()).hexdigest()
+                h2 = hashlib.sha256(open(ap, 'rb').read()).hexdigest()
+                self.assertEqual(h1, h2, f'{rel} differs from {arch}')
+            with zipfile.ZipFile(os.path.join(ROOT, f'cad/{wid}_AMbuild_mm.3mf')) as zf:
+                model_head = zf.open('3D/3dmodel.model').read(1024).decode('utf-8')
+                self.assertIn('unit="millimeter"', model_head)
+                self.assertIn('Ti-6Al-4V (design assumption: yield 828 MPa)', model_head)
+            dxf_txt = open(os.path.join(ROOT, f'cad/{wid}_drawing_mm.dxf'), encoding='utf-8').read()
+            self.assertIn('UNITS: MILLIMETERS, 1 DRAWING UNIT = 1 MM', dxf_txt)
+            self.assertIn('0\nCIRCLE\n8\nRING_BORE\n10\n-5.9672\n20\n0.0000\n30\n0.0000\n40\n12.4500\n', dxf_txt)
+            self.assertIn('MIDPLANE_Z0_OUTLINE', dxf_txt)
+            self.assertIn('Z_EXTENT_ENVELOPE', dxf_txt)
+            self.assertTrue(dxf_txt.endswith('0\nEOF\n'))
+            return
+        paths = list(rec['images'].values()) + list(rec['evolution']['figures'].values()) + \
+            [c['image'] for c in rec['evolution']['lineage']] + rec['cad_in_git']
         for p in paths:
             self.assertTrue(os.path.isfile(os.path.join(ROOT, p)), p)
             self.assertIn(p, t)
@@ -88,6 +125,16 @@ class GenReadme(unittest.TestCase):
     def test_cad_readme_discloses_status_and_below_target_safety_factors(self):
         _, rec = release()
         ct = cad_readme()
+        if 'winner_id' in rec:
+            obj = rec['winner_record']['objective']
+            self.assertIn('computational design; not built, printed or physically tested; not qualified for use as a knife', ct)
+            for sf_str in (f'{obj["sf_solid_tip_torsion_0p80nm_lcb"]:.2f}', f'{obj["sf_spine_baton_3427n_ult_lcb"]:.2f}',
+                           f'{obj["sf_goodman_fatigue_180n_lcb"]:.2f}', f'{obj["sf_per_case_sequence_min_lcb"]:.2f}'):
+                self.assertIn(sf_str, ct)
+            m = re.search(r'```text\n(.*?)\n```', ct, re.S)
+            self.assertIsNotNone(m, 'missing copy-paste order notes block in cad/README.md')
+            self.assertIn('not qualified for use as a knife', m.group(1))
+            return
         i = rec['inputs']
         fe = rec['fe_certification']
         self.assertIn(rec['status'], ct)
@@ -109,14 +156,14 @@ class GenReadme(unittest.TestCase):
         # docs/RELEASES.md and docs/WHITEPAPER.md.
         for doc in (readme(), cad_readme()):
             for old in ('w282', 'w283', 'ec3i042', 'Individual 2000', 'hz4i012_g00085_4cdfea55', 'hz2i012_g00609_d55af923',
-                        'hz4i005_g00310_966138c2', 'hz4i007_g00855_4797529d',
+                        'hz4i005_g00310_966138c2', 'hz4i007_g00855_4797529d', 'g4v400_s042_62763aa2',
                         'cohort-d', 'edge-pilot', '41.77', 'G16-', 'Wave 27'):
                 self.assertNotIn(old, doc, old)
             self.assertIsNone(re.search(r'\bPASS\b', doc))
 
 
 class PublicWording(unittest.TestCase):
-    # v3.0.3 errata (research-integrity and G4 audits): overclaims that must not return to the public G3 text. A
+    # v3.0.3 errata (research-integrity and G4 audits): overclaims that must not return to the public G3/G4 text. A
     # simulation is not a certification, the tip mesh series is not monotone, and the ergonomic multiplier allows trades.
     BANNED = ('as printed', 'until it converged', 'no person designed', 'cannot trade comfort', '3d-printable',
               'printable titanium', 'certified', 'certification', 'cvt-map-elites', '1.82 n·m pry', '1.82~n$\\cdot$m pry',
@@ -124,7 +171,7 @@ class PublicWording(unittest.TestCase):
 
     def test_public_g3_text_has_no_overclaims(self):
         paper = os.path.join(ROOT, 'docs/g3/paper')
-        files = ['README.md', 'cad/README.md', 'docs/g3/paper/main.tex'] + sorted(
+        files = ['README.md', 'cad/README.md', 'docs/g3/paper/main.tex', 'docs/g4/paper/main.tex'] + sorted(
             f'docs/g3/paper/sections/{f}' for f in os.listdir(os.path.join(paper, 'sections')) if f.endswith('.tex'))
         for rel in files:
             text = open(os.path.join(ROOT, rel), encoding='utf-8').read().lower()
@@ -132,8 +179,9 @@ class PublicWording(unittest.TestCase):
                 self.assertNotIn(phrase, text, f'{rel}: "{phrase}"')
 
     def test_diagnostics_are_listed_and_hashed(self):
-        _, rec = release()
-        d = os.path.join(ROOT, f'evidence/g3/v{rec["version"]}/diagnostics')
+        rv = open(os.path.join(ROOT, 'evidence/g3/RECORD')).read().strip()
+        rec = json.load(open(os.path.join(ROOT, f'evidence/g3/v{rv}/release.json')))
+        d = os.path.join(ROOT, f'evidence/g3/v{rv}/diagnostics')
         sums = dict(reversed(l.split()) for l in open(os.path.join(d, 'SHA256SUMS')) if l.strip())
         for name in ('seq_per_lc', 'tip_raster', 'zone_mass', 'plate_meshconv'):
             body = open(os.path.join(d, f'{name}.json'), 'rb').read()

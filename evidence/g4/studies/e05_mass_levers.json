@@ -1,89 +1,89 @@
 {
   "baseline_v3_mesh_mass_g": 59.297415,
-  "final_g4_mass_g": 42.84936655758427,
-  "total_mass_reduction_g": 26.714684222772796,
-  "total_mass_reduction_pct": 38.403002589832326,
+  "final_g4_mass_g": 44.28663684303193,
+  "total_mass_reduction_g": 12.244208802875086,
+  "total_mass_reduction_pct": 21.659341308228953,
   "waterfall": [
     {
       "lever_id": "L-0",
       "description": "Uniform-skin unperforated v3-equivalent baseline",
-      "as_finished_mass_g": 69.56405078035706,
+      "as_finished_mass_g": 56.530845645907014,
       "delta_mass_g": 0.0,
-      "min_safety_margin": -0.17917588361244619,
-      "w_ergolight_v2": 31.94652132557334,
-      "feasible": false
+      "min_safety_margin": 0.10871524600961613,
+      "w_ergolight_v2": 81.96285189461734,
+      "feasible": true
     },
     {
       "lever_id": "L-1",
       "description": "Flange-graded grip skin (0.78 mm flanks, +0.42 mm dorsal/ventral chords)",
-      "as_finished_mass_g": 63.288612027858846,
-      "delta_mass_g": -6.275438752498218,
-      "min_safety_margin": -0.23510912020211983,
-      "w_ergolight_v2": 27.777607339323353,
-      "feasible": false
+      "as_finished_mass_g": 53.399840876634514,
+      "delta_mass_g": -3.1310047692725007,
+      "min_safety_margin": 0.055653724536659066,
+      "w_ergolight_v2": 83.12112293571711,
+      "feasible": true
     },
     {
       "lever_id": "L-2",
       "description": "Perforated Warren web (62% central circular cutouts)",
-      "as_finished_mass_g": 59.66735046186065,
-      "delta_mass_g": -3.6212615659981964,
-      "min_safety_margin": -0.17305935982595333,
-      "w_ergolight_v2": 32.438779513896264,
-      "feasible": false
+      "as_finished_mass_g": 51.64062804667385,
+      "delta_mass_g": -1.759212829960667,
+      "min_safety_margin": 0.055653724536659066,
+      "w_ergolight_v2": 83.91951814071008,
+      "feasible": true
     },
     {
       "lever_id": "L-3",
-      "description": "Lamarckian stress-graded Sheet-TPMS core",
-      "as_finished_mass_g": 54.518448204123985,
-      "delta_mass_g": -5.148902257736665,
-      "min_safety_margin": -0.09767320502331689,
-      "w_ergolight_v2": 39.166429621072425,
-      "feasible": false
+      "description": "Spatially stress-graded Sheet-TPMS core",
+      "as_finished_mass_g": 47.994256037873356,
+      "delta_mass_g": -3.6463720088004905,
+      "min_safety_margin": 0.030962340872278116,
+      "w_ergolight_v2": 85.45907851019338,
+      "feasible": true
     },
     {
       "lever_id": "L-4",
       "description": "Drained hollow ring gallery + compact 32.0 mm ring OD",
-      "as_finished_mass_g": 48.546344339900884,
-      "delta_mass_g": -5.972103864223101,
-      "min_safety_margin": 0.08333333333333333,
-      "w_ergolight_v2": 87.3547168158812,
+      "as_finished_mass_g": 47.85953692879167,
+      "delta_mass_g": -0.13471910908168638,
+      "min_safety_margin": 0.030962340872278116,
+      "w_ergolight_v2": 85.56013167221384,
       "feasible": true
     },
     {
       "lever_id": "L-5",
       "description": "Bi-concave blade fuller + lean 73.5 mm chord reach",
-      "as_finished_mass_g": 45.16495724258303,
-      "delta_mass_g": -3.3813870973178553,
+      "as_finished_mass_g": 45.571069681833094,
+      "delta_mass_g": -2.288467246958575,
       "min_safety_margin": 0.025,
-      "w_ergolight_v2": 88.47228498388917,
+      "w_ergolight_v2": 84.85432788821417,
       "feasible": true
     },
     {
       "lever_id": "L-6",
       "description": "Decoupled hollow blade core with low-density TPMS",
-      "as_finished_mass_g": 43.47647494325283,
-      "delta_mass_g": -1.6884822993301967,
-      "min_safety_margin": -0.021984665398738557,
-      "w_ergolight_v2": 47.32512515755997,
-      "feasible": false
+      "as_finished_mass_g": 44.27159020492726,
+      "delta_mass_g": -1.2994794769058373,
+      "min_safety_margin": 0.025,
+      "w_ergolight_v2": 84.02805444463753,
+      "feasible": true
     },
     {
       "lever_id": "L-7",
       "description": "Lean anthropometric grip envelope + zero-mean texture + Module T windows",
-      "as_finished_mass_g": 42.86351346582235,
-      "delta_mass_g": -0.6129614774304812,
-      "min_safety_margin": -0.3333333333333333,
-      "w_ergolight_v2": 21.729475827145407,
-      "feasible": false
+      "as_finished_mass_g": 44.411901533592975,
+      "delta_mass_g": 0.14031132866571738,
+      "min_safety_margin": 0.025,
+      "w_ergolight_v2": 83.97266033477841,
+      "feasible": true
     },
     {
       "lever_id": "L-8",
-      "description": "Distal tip-bisector diamond crown (+0.38 mm over a in [2, 12] mm)",
-      "as_finished_mass_g": 42.84936655758427,
-      "delta_mass_g": -0.01414690823808229,
-      "min_safety_margin": -0.3333333333333333,
-      "w_ergolight_v2": 21.729475827145407,
-      "feasible": false
+      "description": "Distal tip-bisector diamond crown (+0.52 mm over a in [1.5, 13.5] mm)",
+      "as_finished_mass_g": 44.28663684303193,
+      "delta_mass_g": -0.12526469056104617,
+      "min_safety_margin": 0.025,
+      "w_ergolight_v2": 83.7998382067369,
+      "feasible": true
     }
   ]
 }

@@ -1,0 +1,1227 @@
+{
+  "version": "4.1.0",
+  "schema_version": "G4.0",
+  "requirement_set": "RS-karambit-v4",
+  "winner_id": "g4v410_s042_a19374a8",
+  "winner_seed": 42,
+  "schema_sha256": "cfbe4e9348fced6bbccb74a89bed790ffcc798e5c98f30debda4cc3c753c5539",
+  "decoder_sha256": "8300db0c518bcb76a78c4bfd283e5bbaa78034968bffc6c05a94d44ab6049eef",
+  "genome_sha256": "a19374a8af4d01749c2533a122f2d9c288da4abe1a138d2164ee461cef053686",
+  "winner_record": {
+    "genome": {
+      "schema": "G4.0",
+      "u": [
+        0.12574323184228947,
+        0.30845572151500544,
+        0.6195194320686709,
+        0.6267838998355869,
+        0.052700862755898685,
+        0.3578646433740408,
+        0.4459386167880468,
+        0.7875068157951858,
+        0.4480847729550262,
+        0.42223097904642415,
+        0.5257048262171946,
+        0.2752958726159338,
+        0.5008388494025638,
+        0.16270865275197277,
+        0.45450650370613954,
+        0.3848464302083047,
+        0.3844551352203269,
+        0.3550198705125694,
+        0.4990700211975471,
+        0.010059372543123906,
+        0.8879472903918422,
+        0.0470933585942791,
+        0.3008699717838812,
+        0.9669816708684525,
+        0.11566096351932094,
+        0.5001206668830139,
+        0.8170803901108871,
+        0.2590941927425465,
+        0.9187164503282246,
+        0.32914113242377274,
+        0.46524544281733193,
+        0.7669932044451457,
+        0.06244472122435239,
+        0.7653321726889254,
+        0.5255617987377879,
+        0.15236703501915316,
+        0.1598404755492037,
+        0.9146510828538972,
+        0.636567869526005,
+        0.6706852951978712,
+        0.6793055800290609,
+        0.8865729361688957,
+        0.4348820313595588,
+        0.2932100260973361,
+        0.24030343800587875,
+        0.757672569035059,
+        0.35205725811884087,
+        0.0938371611096905,
+        0.6318302372348129,
+        0.6712526909244462,
+        0.3261248575306935,
+        0.8478535731932646,
+        0.23473595260698968,
+        0.3063121045778164,
+        0.842535765315991,
+        0.0,
+        0.7882604548770699,
+        0.95887036643249,
+        0.4532101195595279,
+        0.17869322829551507,
+        0.8143474670110993,
+        0.3781043182897292,
+        0.08950424321789283,
+        0.5852918319680992,
+        0.2411390556044306,
+        0.491297473826731,
+        0.4327048679883376,
+        0.7949535748975819,
+        0.34492309735710874,
+        0.5480263756350044,
+        0.6387239371381065,
+        0.8232978681067338,
+        0.5563617846972236,
+        0.8255467572799301,
+        0.7368736482657154,
+        0.6262841235137951,
+        0.4471859275249318,
+        0.9794139047608406,
+        0.780214406476218,
+        0.5931157097534875,
+        0.19663541153002445,
+        0.5777733469839483,
+        0.6666666666666666,
+        0.4073412283639315,
+        0.0,
+        0.4699426152376182,
+        0.0,
+        0.0,
+        0.0,
+        0.5731212364912172,
+        0.4300076859538466,
+        0.5567359035963024,
+        0.6002507088053416,
+        1.0,
+        0.7751822631502725,
+        0.6853430648483405,
+        0.5256715747029211,
+        0.2807492242272571,
+        0.7750539092131864,
+        0.12852608161580686,
+        0.4199995256902388,
+        0.8907766177363039,
+        0.75,
+        0.23672977265326028,
+        0.15221763722710388,
+        0.18196637510983216,
+        0.30581173412744844,
+        0.18609457905494176,
+        0.6129785798552001,
+        0.4,
+        0.6988853954410317,
+        0.31165007474573303,
+        0.2718956022759464,
+        0.9410941709865036,
+        0.42708554904990775,
+        0.0,
+        0.3228438317062852,
+        0.22390924928218872,
+        0.0,
+        0.23266975541649082,
+        0.9121416951236399,
+        0.22123119663613494,
+        0.5161849649289909,
+        0.21755332400402008,
+        0.4664810833141565,
+        0.8003156792635556,
+        0.7026255238946777,
+        0.9309436841664188,
+        0.2445994754661342,
+        0.1524877641350031
+      ],
+      "strategy": {
+        "sigma_h": 0.035,
+        "sigma_g": 0.035,
+        "sigma_p": 0.045,
+        "sigma_z": 0.03,
+        "sigma_x": 0.045,
+        "sigma_i": 0.04,
+        "sigma_e": 0.035,
+        "sigma_t": 0.05,
+        "sigma_a": 0.05
+      }
+    },
+    "params": {
+      "ring_od": 28.2778242810007,
+      "ring_crown": 0.26935291544240086,
+      "ring_lip_d": 2.219519432068671,
+      "ring_taper_deg": 12.774974597698217,
+      "ring_web_t": 2.284321380409438,
+      "ring_thumbpad": 0.7873022154228898,
+      "ring_od_tear": 1.114846541970117,
+      "ring_od_h2": 0.7750136315903715,
+      "ring_junction_deg": 20.961695459100525,
+      "ring_neck_r": 6.2267086994228364,
+      "ring_bore_round": 3.0231343435954754,
+      "ring_hollow_t": 0.6683772252248515,
+      "ring_port_d": 3.075880791872692,
+      "hand_scale": 0.9746437787476775,
+      "grip_dl": 4.727039022236838,
+      "grip_t0": 12.692723574374948,
+      "grip_t_sw": 14.015128216352522,
+      "grip_t_g": 13.039035766922625,
+      "grip_h0": 24.59702406783215,
+      "grip_h_sw": 25.62011874508625,
+      "grip_h_g": 26.897457684057972,
+      "grip_belly": -1.3116265656228836,
+      "grip_n_exp": 2.4309569689622696,
+      "grip_edge_r": 3.7504725063026787,
+      "groove_d1": 1.6925287708154568,
+      "groove_d2": 2.000096533506411,
+      "groove_choil": 4.25366431208871,
+      "groove_r": 11.925018060084007,
+      "crest_r": 7.7642777059518515,
+      "ramp_h": 2.3886810575441864,
+      "guard_h": 13.735309961297196,
+      "guard_t": 11.334966022225728,
+      "guard_r": 3.7497788848974096,
+      "guard_bspline_c1": 1.4439947771001642,
+      "guard_bspline_c2": 0.36502809432004524,
+      "jimp_depth": 0.4609468140076613,
+      "blade_len": 73.61888332884442,
+      "blade_reach_target": 78.44523203855033,
+      "claw_turn_deg": 62.735850520092214,
+      "kappa_b0": 1.1389594132770198,
+      "kappa_b1": 1.3510278120406851,
+      "kappa_b2": 1.641202110636454,
+      "kappa_b3": 0.6653466407674263,
+      "blade_belly": -0.38734485646465155,
+      "spine_arch": -0.2984828099706063,
+      "h_root": 28.288362845175296,
+      "h_mid_ratio": 0.6633703064613914,
+      "theta_tip_deg": 30.59523173886474,
+      "l_tip_plan_mm": 11.054641897878504,
+      "tip_radius_mm": 0.16740043054791137,
+      "harm_in_1": -0.4173003419263356,
+      "harm_in_2": 0.5565657171092233,
+      "harm_sp_1": -0.6366337137432247,
+      "harm_sp_2": -0.30990063267549384,
+      "camber_z1_mm": 1.2331287551375676,
+      "camber_z2_mm": -1.0,
+      "twist_tip_deg": 4.612167278033118,
+      "chisel_bias": 0.229435183216245,
+      "grip_cant_deg": -0.4678988044047214,
+      "ring_tilt_deg": -3.855681260453819,
+      "build_theta_deg": 57.573898680443975,
+      "build_phi_deg": -7.313740902616249,
+      "t_core": 3.6327110323665215,
+      "t_tip_base": 3.429112847133008,
+      "taper_x0": 0.3705695278022153,
+      "t_tip_crown_mm": 0.4939082316787117,
+      "l_tip_crown_mm": 11.096229207930026,
+      "ridge_amp": 0.9539442898770982,
+      "ridge_width_frac": 0.2731292362864194,
+      "fuller_amp": 0.7788158253810027,
+      "fuller_width_frac": 0.39161718114143196,
+      "corrug_amp": 0.3704840406480302,
+      "win_gate": 0.5563617846972236,
+      "win_length_frac": 0.3976640271839791,
+      "win_width_frac": 0.25263725668782877,
+      "win_fillet_r": 2.7525682470275905,
+      "skin_t_base": 0.805212059706981,
+      "skin_flange_c2": 0.5542358933330354,
+      "skin_dorsal_s1": 0.2038450253600058,
+      "skin_axial_taper": 0.1660723987309765,
+      "rib_w": 0.24831770576501222,
+      "rib_hole_frac": 0.5702210702158266,
+      "rib_arch_count": 5.0,
+      "bulkhead_t_mm": 1.0036706141819658,
+      "bulkhead_count": 2.0,
+      "lat_mix": 0.4699426152376182,
+      "lat_cell_mm": 4.5,
+      "rho_grip": 0.05,
+      "rho_guard": 0.08,
+      "rho_ring": 0.10731212364912171,
+      "rho_blade": 0.14020107603353854,
+      "lat_stress_k": 0.19485756625870584,
+      "lat_stress_p": 1.6403509923274784,
+      "port_d_mm": 3.8,
+      "tip_reserve_mm": 10.763502447326498,
+      "t_0p25_mm": 0.2648274451878672,
+      "t_1p00_mm": 0.5041074519524673,
+      "t_2p00_mm": 0.8361498448454514,
+      "plunge_in_mm": 9.650323455279118,
+      "grind_end_in_mm": 1.1084625958779366,
+      "angle_in_deg": 19.679998102760955,
+      "apex_in_mm": 0.1045388308868152,
+      "serr_teeth_in": 6.0,
+      "serr_depth_in_mm": 1.1367297726532604,
+      "serr_duty_in": 0.559576585679047,
+      "plunge_sp_mm": 7.091798250658993,
+      "grind_end_sp_mm": 1.5339481619058764,
+      "angle_sp_deg": 18.744378316219766,
+      "apex_sp_mm": 0.09064892899276,
+      "serr_teeth_sp": 5.0,
+      "serr_depth_sp_mm": 1.5289968558969287,
+      "serr_duty_sp": 0.6010290194338906,
+      "alien_gate": 0.2718956022759464,
+      "trabec_arch_amp": 0.948779910622847,
+      "trabec_strut_r_mm": 0.9703141617874308,
+      "trabec_aniso_x": 1.0,
+      "trabec_window_blend": 0.3228438317062852,
+      "cppn_w0": -0.8282722521534338,
+      "cppn_w1": -1.5,
+      "cppn_w2": -0.8019907337505275,
+      "cppn_w3": 1.2364250853709198,
+      "cppn_w4": -0.8363064100915951,
+      "cppn_w5": 0.048554894786972724,
+      "cppn_freq": 0.9351066480080401,
+      "tex_amp_mm": 0.19731848666513252,
+      "tex_pitch_mm": 2.8405682226744,
+      "tex_angle_deg": 55.131276194733886,
+      "tex_knurl_mix": 0.9309436841664188,
+      "tex_turing_mix": 0.2445994754661342,
+      "tex_voronoi_mix": 0.1524877641350031,
+      "bore_d_mm": 24.9,
+      "lip_w_mm": 8.0,
+      "guard_ref_x_mm": 75.6,
+      "l_grip_mm": 65.64227519396668
+    },
+    "tier": "Tier2Full3DCert",
+    "descriptors": {
+      "blade_reach_mm": 78.44523203855033,
+      "claw_turning_deg": 62.735850520092214,
+      "point_angle_3mm_deg": 37.8988757871474,
+      "grip_h_over_t": 1.828033133167722,
+      "hollowness_frac": 0.6379058405063684,
+      "serrated_arc_frac": 0.85
+    },
+    "niche_index": 0,
+    "mass": {
+      "ring_mass_g": 4.39983134816739,
+      "grip_skin_mass_g": 13.410356009348355,
+      "grip_web_and_bulkheads_mass_g": 3.1271543548289573,
+      "grip_lattice_mass_g": 3.494093346059334,
+      "grip_total_mass_g": 20.031603710236645,
+      "guard_mass_g": 2.09405809331366,
+      "blade_root_mass_g": 2.6538845492211975,
+      "blade_mid_mass_g": 4.314756437713057,
+      "blade_tip_mass_g": 4.373365269210133,
+      "blade_total_mass_g": 11.342006256144387,
+      "as_finished_total_mass_g": 37.867499407862084,
+      "as_printed_total_mass_g": 38.152140994099334,
+      "envelope_mass_g": 104.57914996700767,
+      "total_hollowness_fraction": 0.6379058405063684,
+      "com_x_mm": 59.9444849673507,
+      "com_to_index_choil_mm": 2.469335187822651,
+      "spin_inertia_g_mm2": 220174.51555134862
+    },
+    "drainability": {
+      "r_esc_mm": 0.5,
+      "min_port_diameter_mm": 3.075880791872692,
+      "min_internal_throat_diameter_mm": 3.0143631760352383,
+      "solid_betti_0_components": 1,
+      "sealed_void_betti_2_cavities": 0,
+      "trapped_powder_volume_mm3": 0.0,
+      "drainable": true
+    },
+    "hm1": {
+      "station_x_mm": [
+        -5.9672,
+        21.715609534914,
+        42.72113759698334,
+        63.72666565905268
+      ],
+      "reaction_fy_n": [
+        -2263.3817015505592,
+        -839.5985235934827,
+        1456.9164571332772,
+        5073.063768010763
+      ],
+      "reaction_fz_n": [
+        232.0833654681772,
+        164.53255856833636,
+        -122.35425778900265,
+        -534.2616662475108
+      ],
+      "reaction_mx_nmm": [
+        -1620.0,
+        -4050.0,
+        -4860.0,
+        -5670.0
+      ],
+      "force_residual_n": 1.9326762412674725e-12,
+      "moment_residual_nmm": 5.820766091346741e-11,
+      "grip_sf_lat_260n": 21.75982680388115,
+      "grip_sf_twist_1820nmm": 127.86999779579584,
+      "grip_sf_twist_16200nmm": 14.365641727675829,
+      "grip_sf_spine_push_500n": 48.24934757691748,
+      "grip_sf_baton_3427n_ult": 8.588299393615308,
+      "grip_sf_baton_3427n_legacy_ring_clamp": 1.8558918212730549,
+      "grip_sf_squeeze_250n": 3.199155111047801,
+      "face_wrinkling_sf": 57.3313013274663,
+      "grip_sf_min_governing": 3.199155111047801
+    },
+    "plate": {
+      "lateral_180n_sf": 18.398396958153096,
+      "lateral_260n_sf": 12.737351740259836,
+      "lateral_capacity_n": 3311.711452467557,
+      "twist_body_1p82nm_sf": 18.979764341076926,
+      "hm_twist_16p2nm_sf": 2.132294512392593,
+      "spine_push_500n_sf": 23.75780784537662,
+      "spine_baton_3427n_sf": 3.4662690174170736,
+      "combined_lat_twist_sf": 15.109169045385983,
+      "goodman_fatigue_180n_sf": 8.69602859124646,
+      "buckling_lambda": 22.203287450520776,
+      "gci_admission": {
+        "plate_gci_computed": true,
+        "monotone_converged": true,
+        "observed_order_p": 1.7233486323112208,
+        "gci_fine_fraction": 0.002743951646045225,
+        "plate_gci_admitted": true
+      }
+    },
+    "tip": {
+      "tip_torsion_0p80nm_sf": 8.563,
+      "tip_pry_60n_sf": 49.66915667959684,
+      "legacy_origin_chord_1p82nm_sf": 8.563,
+      "governing_tip_sf": 8.563,
+      "n_tet": 16476,
+      "n_dof": 77382,
+      "true_rel_res": 4.0794444150279783e-13
+    },
+    "serration": {
+      "teeth_total_in": 6,
+      "teeth_checked_in": 6,
+      "teeth_total_sp": 5,
+      "teeth_checked_sp": 5,
+      "min_tooth_sf_in": 7.793651226280426,
+      "min_tooth_sf_sp": 14.454101334841742,
+      "min_tooth_sf_overall": 7.793651226280426,
+      "min_tooth_fatigue_sf": 5.237081978001625
+    },
+    "ring_bearing_cap_n": 5846.242163899346,
+    "ring_back_cap_n": 1948.747387966449,
+    "ring_bearing_sf": 19.48747387966449,
+    "ring_back_sf": 64.9582462655483,
+    "grid_mass_drift_frac": 0.0004797361246827472,
+    "objective": {
+      "feasible": true,
+      "violation_sum_sq": 0.0,
+      "max_violation": 0.0,
+      "min_safety_margin": 0.13803014926745238,
+      "governing_gate_name": "am_min_feature_sizes",
+      "w_ergolight_v2": 94.49099292871239,
+      "w_ergolight_v1_legacy": 98.15176898263726,
+      "ergo_geometric_mean": 0.9911969122883758,
+      "ergo_subscores": [
+        0.9940226867300274,
+        0.9935911614391442,
+        1.0,
+        0.9995000245847301,
+        0.9654885854504848,
+        0.9960306048497206,
+        0.9997752964448415,
+        0.9666536610244266
+      ],
+      "sequence_ledger": {
+        "lateral_260n_seq_ratio": 1.7083477984755142,
+        "twist_seq_ratio": 6.737175209233414,
+        "spine_seq_ratio": 2.477678261687539,
+        "governing_blade_seq_ratio": 1.7083477984755142,
+        "legacy_mixed_seq_index": 0.6742609899410779
+      },
+      "sf_hiker_lateral_180n_lcb": 17.75273515166737,
+      "sf_hunter_lateral_260n_lcb": 12.290355105000486,
+      "sf_twist_body_1p82nm_lcb": 18.313700392190192,
+      "sf_hm_twist_16p2nm_lcb": 2.057465105789269,
+      "sf_solid_tip_torsion_0p80nm_lcb": 8.262495447265735,
+      "sf_solid_tip_pry_60n_lcb": 47.92609843917988,
+      "sf_spine_push_500n_lcb": 22.92406623373099,
+      "sf_spine_baton_3427n_ult_lcb": 3.344625945977676,
+      "sf_ring_bearing_300n_lcb": 18.76486767270219,
+      "sf_ring_back_30n_lcb": 62.54955890900731,
+      "sf_grip_squeeze_250n_lcb": 3.080528686989287,
+      "sf_tooth_snag_pry_lcb": 7.5046583693413655,
+      "sf_goodman_fatigue_180n_lcb": 8.39085561654403,
+      "sf_buckling_lambda_lcb": 21.42409920287987,
+      "sf_combined_lat_twist_lcb": 14.578937340823314,
+      "sf_per_case_sequence_min_lcb": 1.6756220258753742,
+      "sf_face_wrinkling_lcb": 55.20542526737399,
+      "gate_margins": [
+        [
+          "hiker_lateral_180n",
+          16.75273515166737
+        ],
+        [
+          "hunter_lateral_260n",
+          11.290355105000486
+        ],
+        [
+          "twist_body_1p82nm",
+          17.313700392190192
+        ],
+        [
+          "hm_twist_16p2nm",
+          1.057465105789269
+        ],
+        [
+          "solid_tip_torsion_0p80nm",
+          7.262495447265735
+        ],
+        [
+          "solid_tip_pry_60n",
+          46.92609843917988
+        ],
+        [
+          "spine_push_500n",
+          21.92406623373099
+        ],
+        [
+          "spine_baton_3427n_ult",
+          2.344625945977676
+        ],
+        [
+          "ring_bearing_300n",
+          8.382433836351096
+        ],
+        [
+          "ring_back_30n",
+          30.274779454503655
+        ],
+        [
+          "grip_squeeze_250n",
+          2.080528686989287
+        ],
+        [
+          "tooth_snag_pry",
+          6.5046583693413655
+        ],
+        [
+          "goodman_fatigue_180n",
+          7.39085561654403
+        ],
+        [
+          "buckling_lambda",
+          20.42409920287987
+        ],
+        [
+          "combined_lat_twist",
+          13.578937340823314
+        ],
+        [
+          "per_case_sequence_ratio",
+          0.39635168822947864
+        ],
+        [
+          "face_wrinkling",
+          54.20542526737399
+        ],
+        [
+          "req_fun_1_reach",
+          0.644523203855033
+        ],
+        [
+          "req_fun_2_sharpened_arc",
+          0.42474707119656047
+        ],
+        [
+          "req_fun_3_claw_hook",
+          0.9825516451497597
+        ],
+        [
+          "req_fun_4_point_penetration",
+          0.5506637963472576
+        ],
+        [
+          "gate_s1_s2_bevels",
+          0.4147927720732554
+        ],
+        [
+          "gate_s3_s4_s5_tip_spine",
+          0.23448369874755182
+        ],
+        [
+          "gate_serration_teeth",
+          0.8234595453065207
+        ],
+        [
+          "am_min_feature_sizes",
+          0.13803014926745238
+        ],
+        [
+          "am_drainability_zero_voids",
+          0.583920527915128
+        ],
+        [
+          "ergo_anthropometrics",
+          0.2737125323277804
+        ],
+        [
+          "ergo_balance_com",
+          0.6913331015221686
+        ],
+        [
+          "vv_mesh_gci_and_mass_consistency",
+          0.9451209670790955
+        ]
+      ]
+    }
+  },
+  "admission_contract": {
+    "schema_version": "G4.0",
+    "genome_sha256": "a19374a8af4d01749c2533a122f2d9c288da4abe1a138d2164ee461cef053686",
+    "decoder_sha256": "8300db0c518bcb76a78c4bfd283e5bbaa78034968bffc6c05a94d44ab6049eef",
+    "scored_mass_g": 37.867499407862084,
+    "print_mesh_mass_g": 37.867499407862084,
+    "as_printed_mass_g": 38.152140994099334,
+    "as_finished_mass_g": 37.867499407862084,
+    "max_allowed_mass_drift_frac": 0.02,
+    "solid_betti_0_components": 1,
+    "sealed_void_betti_2_cavities": 0,
+    "drainable_escape_radius_mm": 0.5,
+    "trapped_powder_volume_mm3": 0.0,
+    "sequence_ledger": {
+      "lateral_260n_seq_ratio": 1.7083477984755142,
+      "twist_seq_ratio": 6.737175209233414,
+      "spine_seq_ratio": 2.477678261687539,
+      "governing_blade_seq_ratio": 1.7083477984755142,
+      "legacy_mixed_seq_index": 0.6742609899410779
+    },
+    "plate_gci": {
+      "plate_gci_computed": true,
+      "monotone_converged": true,
+      "observed_order_p": 1.7233486323112208,
+      "gci_fine_fraction": 0.002743951646045225,
+      "plate_gci_admitted": true
+    },
+    "teeth_total_in": 6,
+    "teeth_checked_in": 6,
+    "teeth_total_sp": 5,
+    "teeth_checked_sp": 5,
+    "min_tooth_sf": 7.793651226280426,
+    "min_required_tooth_sf": 1.25,
+    "goodman_fatigue_sf_from_true_stress": 8.39085561654403,
+    "min_required_fatigue_sf": 1.1,
+    "point_angle_3mm_deg": 37.8988757871474,
+    "max_allowed_point_angle_3mm_deg": 55.0,
+    "all_hard_gates_passed": true
+  },
+  "winner_history": [
+    {
+      "batch_index": 0,
+      "total_evals": 88,
+      "feasible_niches": 4,
+      "infeasible_niches": 8,
+      "pareto_front_size": 8,
+      "feasible_qd_score": 154.30897238943203,
+      "best_w_ergolight_v2": 90.81820453889023,
+      "best_mass_finished_g": 41.01354914715069,
+      "best_feasible": true,
+      "emitter_pulls": [
+        7,
+        7,
+        7,
+        7
+      ]
+    },
+    {
+      "batch_index": 1,
+      "total_evals": 112,
+      "feasible_niches": 4,
+      "infeasible_niches": 8,
+      "pareto_front_size": 9,
+      "feasible_qd_score": 156.14417713975368,
+      "best_w_ergolight_v2": 92.00658160714293,
+      "best_mass_finished_g": 41.97480244905021,
+      "best_feasible": true,
+      "emitter_pulls": [
+        7,
+        19,
+        13,
+        13
+      ]
+    },
+    {
+      "batch_index": 2,
+      "total_evals": 136,
+      "feasible_niches": 4,
+      "infeasible_niches": 8,
+      "pareto_front_size": 11,
+      "feasible_qd_score": 179.28447092115957,
+      "best_w_ergolight_v2": 92.00658160714293,
+      "best_mass_finished_g": 41.97480244905021,
+      "best_feasible": true,
+      "emitter_pulls": [
+        13,
+        25,
+        19,
+        19
+      ]
+    },
+    {
+      "batch_index": 3,
+      "total_evals": 160,
+      "feasible_niches": 4,
+      "infeasible_niches": 8,
+      "pareto_front_size": 12,
+      "feasible_qd_score": 222.66163325143253,
+      "best_w_ergolight_v2": 92.01894794983032,
+      "best_mass_finished_g": 42.2582033535416,
+      "best_feasible": true,
+      "emitter_pulls": [
+        19,
+        31,
+        25,
+        25
+      ]
+    },
+    {
+      "batch_index": 4,
+      "total_evals": 184,
+      "feasible_niches": 5,
+      "infeasible_niches": 8,
+      "pareto_front_size": 15,
+      "feasible_qd_score": 231.18399305374206,
+      "best_w_ergolight_v2": 92.01894794983032,
+      "best_mass_finished_g": 42.2582033535416,
+      "best_feasible": true,
+      "emitter_pulls": [
+        25,
+        37,
+        31,
+        31
+      ]
+    },
+    {
+      "batch_index": 5,
+      "total_evals": 208,
+      "feasible_niches": 5,
+      "infeasible_niches": 8,
+      "pareto_front_size": 14,
+      "feasible_qd_score": 234.23989953850636,
+      "best_w_ergolight_v2": 92.01894794983032,
+      "best_mass_finished_g": 42.2582033535416,
+      "best_feasible": true,
+      "emitter_pulls": [
+        31,
+        43,
+        37,
+        37
+      ]
+    },
+    {
+      "batch_index": 6,
+      "total_evals": 232,
+      "feasible_niches": 6,
+      "infeasible_niches": 8,
+      "pareto_front_size": 17,
+      "feasible_qd_score": 241.17943403382384,
+      "best_w_ergolight_v2": 92.56957141042932,
+      "best_mass_finished_g": 41.9510420834988,
+      "best_feasible": true,
+      "emitter_pulls": [
+        37,
+        49,
+        43,
+        43
+      ]
+    },
+    {
+      "batch_index": 7,
+      "total_evals": 256,
+      "feasible_niches": 6,
+      "infeasible_niches": 8,
+      "pareto_front_size": 17,
+      "feasible_qd_score": 242.27156233665676,
+      "best_w_ergolight_v2": 93.02363784585829,
+      "best_mass_finished_g": 42.47740664527778,
+      "best_feasible": true,
+      "emitter_pulls": [
+        43,
+        55,
+        49,
+        49
+      ]
+    },
+    {
+      "batch_index": 8,
+      "total_evals": 280,
+      "feasible_niches": 6,
+      "infeasible_niches": 8,
+      "pareto_front_size": 18,
+      "feasible_qd_score": 249.4556305128808,
+      "best_w_ergolight_v2": 93.02363784585829,
+      "best_mass_finished_g": 42.47740664527778,
+      "best_feasible": true,
+      "emitter_pulls": [
+        49,
+        61,
+        55,
+        55
+      ]
+    },
+    {
+      "batch_index": 9,
+      "total_evals": 304,
+      "feasible_niches": 6,
+      "infeasible_niches": 8,
+      "pareto_front_size": 19,
+      "feasible_qd_score": 250.246061347664,
+      "best_w_ergolight_v2": 93.02363784585829,
+      "best_mass_finished_g": 42.47740664527778,
+      "best_feasible": true,
+      "emitter_pulls": [
+        55,
+        67,
+        61,
+        61
+      ]
+    },
+    {
+      "batch_index": 10,
+      "total_evals": 328,
+      "feasible_niches": 6,
+      "infeasible_niches": 8,
+      "pareto_front_size": 20,
+      "feasible_qd_score": 251.4662119931441,
+      "best_w_ergolight_v2": 93.1206883050427,
+      "best_mass_finished_g": 41.865875857789824,
+      "best_feasible": true,
+      "emitter_pulls": [
+        61,
+        73,
+        67,
+        67
+      ]
+    },
+    {
+      "batch_index": 11,
+      "total_evals": 352,
+      "feasible_niches": 6,
+      "infeasible_niches": 8,
+      "pareto_front_size": 20,
+      "feasible_qd_score": 253.81541788683177,
+      "best_w_ergolight_v2": 93.18512804491101,
+      "best_mass_finished_g": 41.5418684376558,
+      "best_feasible": true,
+      "emitter_pulls": [
+        67,
+        79,
+        73,
+        73
+      ]
+    },
+    {
+      "batch_index": 12,
+      "total_evals": 376,
+      "feasible_niches": 6,
+      "infeasible_niches": 8,
+      "pareto_front_size": 20,
+      "feasible_qd_score": 255.4458475865444,
+      "best_w_ergolight_v2": 93.35991712860415,
+      "best_mass_finished_g": 40.447982667996854,
+      "best_feasible": true,
+      "emitter_pulls": [
+        73,
+        85,
+        79,
+        79
+      ]
+    },
+    {
+      "batch_index": 13,
+      "total_evals": 400,
+      "feasible_niches": 6,
+      "infeasible_niches": 8,
+      "pareto_front_size": 19,
+      "feasible_qd_score": 259.2157871070797,
+      "best_w_ergolight_v2": 93.4498043804559,
+      "best_mass_finished_g": 40.48014443585129,
+      "best_feasible": true,
+      "emitter_pulls": [
+        73,
+        97,
+        85,
+        85
+      ]
+    },
+    {
+      "batch_index": 14,
+      "total_evals": 424,
+      "feasible_niches": 7,
+      "infeasible_niches": 8,
+      "pareto_front_size": 20,
+      "feasible_qd_score": 279.7995618641492,
+      "best_w_ergolight_v2": 93.55783695987942,
+      "best_mass_finished_g": 40.33838742085122,
+      "best_feasible": true,
+      "emitter_pulls": [
+        73,
+        109,
+        91,
+        91
+      ]
+    },
+    {
+      "batch_index": 15,
+      "total_evals": 448,
+      "feasible_niches": 7,
+      "infeasible_niches": 8,
+      "pareto_front_size": 19,
+      "feasible_qd_score": 285.17602409535016,
+      "best_w_ergolight_v2": 93.6880740613487,
+      "best_mass_finished_g": 40.170677999694945,
+      "best_feasible": true,
+      "emitter_pulls": [
+        79,
+        115,
+        97,
+        97
+      ]
+    },
+    {
+      "batch_index": 16,
+      "total_evals": 472,
+      "feasible_niches": 7,
+      "infeasible_niches": 8,
+      "pareto_front_size": 20,
+      "feasible_qd_score": 290.482202376633,
+      "best_w_ergolight_v2": 93.73124411791696,
+      "best_mass_finished_g": 39.104053701861474,
+      "best_feasible": true,
+      "emitter_pulls": [
+        85,
+        121,
+        103,
+        103
+      ]
+    },
+    {
+      "batch_index": 17,
+      "total_evals": 496,
+      "feasible_niches": 7,
+      "infeasible_niches": 8,
+      "pareto_front_size": 20,
+      "feasible_qd_score": 292.93547718783805,
+      "best_w_ergolight_v2": 93.74194880434048,
+      "best_mass_finished_g": 39.07943075267785,
+      "best_feasible": true,
+      "emitter_pulls": [
+        85,
+        133,
+        109,
+        109
+      ]
+    },
+    {
+      "batch_index": 18,
+      "total_evals": 520,
+      "feasible_niches": 7,
+      "infeasible_niches": 8,
+      "pareto_front_size": 19,
+      "feasible_qd_score": 295.2076461605283,
+      "best_w_ergolight_v2": 94.01014080756606,
+      "best_mass_finished_g": 39.111704987807514,
+      "best_feasible": true,
+      "emitter_pulls": [
+        85,
+        145,
+        115,
+        115
+      ]
+    },
+    {
+      "batch_index": 19,
+      "total_evals": 544,
+      "feasible_niches": 7,
+      "infeasible_niches": 8,
+      "pareto_front_size": 20,
+      "feasible_qd_score": 296.69718931229494,
+      "best_w_ergolight_v2": 94.01014080756606,
+      "best_mass_finished_g": 39.111704987807514,
+      "best_feasible": true,
+      "emitter_pulls": [
+        91,
+        151,
+        121,
+        121
+      ]
+    },
+    {
+      "batch_index": 20,
+      "total_evals": 568,
+      "feasible_niches": 7,
+      "infeasible_niches": 8,
+      "pareto_front_size": 16,
+      "feasible_qd_score": 297.77017159992505,
+      "best_w_ergolight_v2": 94.23488141679034,
+      "best_mass_finished_g": 38.67439764073305,
+      "best_feasible": true,
+      "emitter_pulls": [
+        97,
+        157,
+        127,
+        127
+      ]
+    },
+    {
+      "batch_index": 21,
+      "total_evals": 592,
+      "feasible_niches": 8,
+      "infeasible_niches": 8,
+      "pareto_front_size": 19,
+      "feasible_qd_score": 340.9563160932012,
+      "best_w_ergolight_v2": 94.23488141679034,
+      "best_mass_finished_g": 38.67439764073305,
+      "best_feasible": true,
+      "emitter_pulls": [
+        103,
+        163,
+        133,
+        133
+      ]
+    },
+    {
+      "batch_index": 22,
+      "total_evals": 616,
+      "feasible_niches": 8,
+      "infeasible_niches": 8,
+      "pareto_front_size": 21,
+      "feasible_qd_score": 341.56364292419,
+      "best_w_ergolight_v2": 94.3263275617542,
+      "best_mass_finished_g": 38.56598009711733,
+      "best_feasible": true,
+      "emitter_pulls": [
+        109,
+        169,
+        139,
+        139
+      ]
+    },
+    {
+      "batch_index": 23,
+      "total_evals": 640,
+      "feasible_niches": 8,
+      "infeasible_niches": 8,
+      "pareto_front_size": 21,
+      "feasible_qd_score": 343.469084851,
+      "best_w_ergolight_v2": 94.39086474926161,
+      "best_mass_finished_g": 38.06180198430631,
+      "best_feasible": true,
+      "emitter_pulls": [
+        115,
+        175,
+        145,
+        145
+      ]
+    },
+    {
+      "batch_index": 24,
+      "total_evals": 664,
+      "feasible_niches": 8,
+      "infeasible_niches": 9,
+      "pareto_front_size": 23,
+      "feasible_qd_score": 343.5759047789382,
+      "best_w_ergolight_v2": 94.39795745735354,
+      "best_mass_finished_g": 38.32862338880586,
+      "best_feasible": true,
+      "emitter_pulls": [
+        121,
+        181,
+        151,
+        151
+      ]
+    },
+    {
+      "batch_index": 25,
+      "total_evals": 688,
+      "feasible_niches": 8,
+      "infeasible_niches": 9,
+      "pareto_front_size": 24,
+      "feasible_qd_score": 344.50490590727236,
+      "best_w_ergolight_v2": 94.40684025826197,
+      "best_mass_finished_g": 38.58960880694015,
+      "best_feasible": true,
+      "emitter_pulls": [
+        127,
+        187,
+        157,
+        157
+      ]
+    },
+    {
+      "batch_index": 26,
+      "total_evals": 712,
+      "feasible_niches": 8,
+      "infeasible_niches": 9,
+      "pareto_front_size": 25,
+      "feasible_qd_score": 344.6902693719169,
+      "best_w_ergolight_v2": 94.40684025826197,
+      "best_mass_finished_g": 38.58960880694015,
+      "best_feasible": true,
+      "emitter_pulls": [
+        133,
+        193,
+        163,
+        163
+      ]
+    },
+    {
+      "batch_index": 27,
+      "total_evals": 736,
+      "feasible_niches": 8,
+      "infeasible_niches": 9,
+      "pareto_front_size": 27,
+      "feasible_qd_score": 345.73772971950046,
+      "best_w_ergolight_v2": 94.45559972064808,
+      "best_mass_finished_g": 37.86457520016748,
+      "best_feasible": true,
+      "emitter_pulls": [
+        139,
+        199,
+        169,
+        169
+      ]
+    },
+    {
+      "batch_index": 28,
+      "total_evals": 760,
+      "feasible_niches": 9,
+      "infeasible_niches": 9,
+      "pareto_front_size": 27,
+      "feasible_qd_score": 388.9041583789351,
+      "best_w_ergolight_v2": 94.46188731244611,
+      "best_mass_finished_g": 37.843096263376474,
+      "best_feasible": true,
+      "emitter_pulls": [
+        145,
+        205,
+        175,
+        175
+      ]
+    },
+    {
+      "batch_index": 29,
+      "total_evals": 784,
+      "feasible_niches": 9,
+      "infeasible_niches": 9,
+      "pareto_front_size": 28,
+      "feasible_qd_score": 389.6674588822726,
+      "best_w_ergolight_v2": 94.46188731244611,
+      "best_mass_finished_g": 37.843096263376474,
+      "best_feasible": true,
+      "emitter_pulls": [
+        151,
+        211,
+        181,
+        181
+      ]
+    },
+    {
+      "batch_index": 30,
+      "total_evals": 808,
+      "feasible_niches": 9,
+      "infeasible_niches": 10,
+      "pareto_front_size": 32,
+      "feasible_qd_score": 391.0607549204828,
+      "best_w_ergolight_v2": 94.46188731244611,
+      "best_mass_finished_g": 37.843096263376474,
+      "best_feasible": true,
+      "emitter_pulls": [
+        157,
+        217,
+        187,
+        187
+      ]
+    },
+    {
+      "batch_index": 31,
+      "total_evals": 832,
+      "feasible_niches": 9,
+      "infeasible_niches": 10,
+      "pareto_front_size": 30,
+      "feasible_qd_score": 391.3684228352632,
+      "best_w_ergolight_v2": 94.46188731244611,
+      "best_mass_finished_g": 37.843096263376474,
+      "best_feasible": true,
+      "emitter_pulls": [
+        163,
+        223,
+        193,
+        193
+      ]
+    },
+    {
+      "batch_index": 32,
+      "total_evals": 856,
+      "feasible_niches": 9,
+      "infeasible_niches": 10,
+      "pareto_front_size": 31,
+      "feasible_qd_score": 391.452384331434,
+      "best_w_ergolight_v2": 94.48295679567129,
+      "best_mass_finished_g": 37.85203910619398,
+      "best_feasible": true,
+      "emitter_pulls": [
+        169,
+        229,
+        199,
+        199
+      ]
+    },
+    {
+      "batch_index": 33,
+      "total_evals": 880,
+      "feasible_niches": 9,
+      "infeasible_niches": 10,
+      "pareto_front_size": 32,
+      "feasible_qd_score": 391.5890759779135,
+      "best_w_ergolight_v2": 94.48295679567129,
+      "best_mass_finished_g": 37.85203910619398,
+      "best_feasible": true,
+      "emitter_pulls": [
+        175,
+        235,
+        205,
+        205
+      ]
+    },
+    {
+      "batch_index": 34,
+      "total_evals": 904,
+      "feasible_niches": 9,
+      "infeasible_niches": 10,
+      "pareto_front_size": 33,
+      "feasible_qd_score": 391.7552473042364,
+      "best_w_ergolight_v2": 94.48347200897193,
+      "best_mass_finished_g": 37.88566581527944,
+      "best_feasible": true,
+      "emitter_pulls": [
+        181,
+        241,
+        211,
+        211
+      ]
+    },
+    {
+      "batch_index": 35,
+      "total_evals": 929,
+      "feasible_niches": 9,
+      "infeasible_niches": 10,
+      "pareto_front_size": 32,
+      "feasible_qd_score": 392.4266858860284,
+      "best_w_ergolight_v2": 94.49099292871239,
+      "best_mass_finished_g": 37.867499407862084,
+      "best_feasible": true,
+      "emitter_pulls": [
+        187,
+        247,
+        217,
+        217
+      ]
+    }
+  ]
+}

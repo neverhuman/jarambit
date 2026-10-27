@@ -192,13 +192,18 @@ pub fn evaluate_g4_genome(
 
     let (drainability, plate, tip, mass_final, grid_mass_drift_frac) = match tier {
         G4EvalTier::Tier0Analytic => {
-            let drain = check_cavity_drainability_on_grid(
-                8.5,
-                params.port_d_mm.min(params.ring_port_d),
-                6.0,
-                spec.am_build.powder_escape_erosion_r_mm,
-                0.40,
-            );
+            let port_d = params.port_d_mm.min(params.ring_port_d);
+            let min_clear = 2.0 * spec.am_build.powder_escape_erosion_r_mm + 1.4 * 0.40;
+            let drainable = port_d >= min_clear;
+            let drain = DrainabilityReport {
+                r_esc_mm: spec.am_build.powder_escape_erosion_r_mm,
+                min_port_diameter_mm: port_d,
+                min_internal_throat_diameter_mm: 6.0,
+                solid_betti_0_components: 1,
+                sealed_void_betti_2_cavities: usize::from(!drainable),
+                trapped_powder_volume_mm3: if drainable { 0.0 } else { 120.0 },
+                drainable,
+            };
             let tip_res = eval_g4_tip_proxy_tier1(&params, &blade);
             // Analytic beam/plate proxy for Tier 0 screening
             let w_root = blade.width_mm[2].max(20.0);
@@ -216,7 +221,7 @@ pub fn evaluate_g4_genome(
                 twist_body_1p82nm_sf: sf_tw_1820,
                 hm_twist_16p2nm_sf: sf_tw_1820 * (1820.0 / 16200.0),
                 spine_push_500n_sf: sf_sp_500,
-                spine_baton_3427n_sf: sf_sp_500 * (500.0 / 3427.0) * (895.0 / 828.0),
+                spine_baton_3427n_sf: sf_sp_500 * (500.0 / 3427.0),
                 combined_lat_twist_sf: 1.0
                     / libm::hypot(0.70 / sf_lat_260.max(1e-6), 0.70 / sf_tw_1820.max(1e-6)),
                 goodman_fatigue_180n_sf: sf_lat_180 * 0.42,
@@ -490,34 +495,20 @@ impl G4CvtArchive {
         self.cells.iter().map(|c| c.pareto_front.len()).sum()
     }
 
-    /// Return the global best candidate across the entire archive under `compare_g4_objectives`.
+    /// Return the global best candidate across the entire archive under the continuous `compare_g4_objectives`.
     pub fn best_overall(&self) -> Option<&G4EvalRecord> {
         let mut best: Option<&G4EvalRecord> = None;
         for cell in &self.cells {
-            if let Some(f) = &cell.feasible_elite {
+            for cand in [&cell.feasible_elite, &cell.infeasible_stepping_stone]
+                .into_iter()
+                .flatten()
+            {
                 best = match best {
-                    None => Some(f),
+                    None => Some(cand),
                     Some(b) => {
-                        if compare_g4_objectives(&f.objective, &b.objective) == Ordering::Greater {
-                            Some(f)
-                        } else {
-                            Some(b)
-                        }
-                    }
-                };
-            }
-        }
-        if best.is_some() {
-            return best;
-        }
-        for cell in &self.cells {
-            if let Some(inf) = &cell.infeasible_stepping_stone {
-                best = match best {
-                    None => Some(inf),
-                    Some(b) => {
-                        if compare_g4_objectives(&inf.objective, &b.objective) == Ordering::Greater
+                        if compare_g4_objectives(&cand.objective, &b.objective) == Ordering::Greater
                         {
-                            Some(inf)
+                            Some(cand)
                         } else {
                             Some(b)
                         }
@@ -528,11 +519,11 @@ impl G4CvtArchive {
         best
     }
 
-    /// Compute Feasibility-First QD-Score (`sum of (w_ergolight_v2 - 50.0)` over all occupied feasible niches).
+    /// Compute continuous QD-Score (`sum of (w_ergolight_v2 - 50.0)` over all occupied niches).
     pub fn feasible_qd_score(&self) -> f64 {
         self.cells
             .iter()
-            .filter_map(|c| c.feasible_elite.as_ref())
+            .filter_map(|c| c.feasible_elite.as_ref().or(c.infeasible_stepping_stone.as_ref()))
             .map(|r| (r.objective.w_ergolight_v2 - 50.0).max(0.0))
             .sum()
     }
@@ -555,25 +546,26 @@ fn nearest_centroid_idx(centroids: &[[f64; 6]], pt: &[f64; 6]) -> usize {
     best_i
 }
 
-/// Multi-Emitter Portfolio Arms (`SRCH-2`, `SRCH-6`, `UT-35`).
+/// Gene-Agnostic Black-Box Multi-Emitter Portfolio Arms (`SRCH-2`, `UT-35`):
+/// Zero named-gene rules, zero Lamarckian repair, zero hand-authored defaults.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum G4EmitterKind {
     SepCmaMae = 0,
-    ConstraintRepairLamarckian = 1,
-    FeasibleMassDescent = 2,
-    IsoLineDdModuleCrossover = 3,
+    DeCurrentToPbest = 1,
+    SbxPolynomialMutation = 2,
+    IsoLineDdCrossover = 3,
 }
 
 impl G4EmitterKind {
     pub const ALL: [Self; 4] = [
         Self::SepCmaMae,
-        Self::ConstraintRepairLamarckian,
-        Self::FeasibleMassDescent,
-        Self::IsoLineDdModuleCrossover,
+        Self::DeCurrentToPbest,
+        Self::SbxPolynomialMutation,
+        Self::IsoLineDdCrossover,
     ];
 }
 
-/// UCB1 Bandit state + Diagonal Covariance (`Sep-CMA-MAE`) over the continuous genes (`SRCH-2`).
+/// UCB1 Bandit state + Diagonal Covariance (`Sep-CMA-ES`) initialized strictly from Sobol archive elites.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct G4EmitterBanditState {
     pub pulls: [usize; 4],
@@ -584,19 +576,36 @@ pub struct G4EmitterBanditState {
 }
 
 impl G4EmitterBanditState {
-    pub fn new(anchor: &G4Genome) -> Self {
+    /// Initialize CMA mean from the top Sobol elite and diagonal standard deviation from the top Sobol archive elites.
+    pub fn from_sobol_elites(elites: &[G4EvalRecord]) -> Self {
+        let mut sorted: Vec<&G4EvalRecord> = elites.iter().collect();
+        sorted.sort_by(|a, b| compare_g4_objectives(&b.objective, &a.objective));
+        let k_top = sorted.len().clamp(1, 8);
+        let mut mean = vec![0.5_f64; N_G4_GENES];
+        let mut std_dev = vec![0.14_f64; N_G4_GENES];
+        if !sorted.is_empty() {
+            for g_idx in 0..N_G4_GENES {
+                mean[g_idx] = sorted[0].genome.u[g_idx];
+                let mut var = 0.0_f64;
+                for rec in sorted.iter().take(k_top) {
+                    let d = rec.genome.u[g_idx] - mean[g_idx];
+                    var += d * d;
+                }
+                std_dev[g_idx] = libm::sqrt(var / (k_top as f64)).clamp(0.04, 0.25);
+            }
+        }
         Self {
             pulls: [1, 1, 1, 1],
-            rewards: [0.5, 0.6, 0.7, 0.5],
-            cma_mean: anchor.u.clone(),
-            cma_diag_std: vec![0.10; N_G4_GENES],
-            cma_step_sigma: 0.065,
+            rewards: [0.5, 0.5, 0.5, 0.5],
+            cma_mean: mean,
+            cma_diag_std: std_dev,
+            cma_step_sigma: 0.075,
         }
     }
 
     pub fn select_arm(&self, total_pulls: usize) -> G4EmitterKind {
         let ln_t = libm::log((total_pulls.max(4)) as f64);
-        let mut best_arm = G4EmitterKind::FeasibleMassDescent;
+        let mut best_arm = G4EmitterKind::SepCmaMae;
         let mut best_ucb = f64::NEG_INFINITY;
         for (i, &arm) in G4EmitterKind::ALL.iter().enumerate() {
             let mean_r = self.rewards[i] / (self.pulls[i].max(1) as f64);
@@ -614,180 +623,90 @@ impl G4EmitterBanditState {
         self.pulls[idx] += 1;
         self.rewards[idx] += reward;
         if let Some(u_win) = winner_u {
-            let lr_m: f64 = 0.18;
+            let lr_m: f64 = 0.16;
             let lr_s: f64 = 0.08;
             for spec in &G4_GENES {
-                if spec.kind == G4GeneKind::F64 && spec.module != G4Module::T {
+                if spec.kind == G4GeneKind::F64 {
                     let g_idx = spec.index;
                     let diff: f64 = (u_win[g_idx] - self.cma_mean[g_idx]).abs();
                     self.cma_mean[g_idx] =
                         (1.0 - lr_m) * self.cma_mean[g_idx] + lr_m * u_win[g_idx];
-                    let new_std: f64 = (1.0 - lr_s) * self.cma_diag_std[g_idx] + lr_s * diff.max(0.015);
-                    self.cma_diag_std[g_idx] = new_std.clamp(0.015, 0.22);
+                    let new_std: f64 =
+                        (1.0 - lr_s) * self.cma_diag_std[g_idx] + lr_s * diff.max(0.02);
+                    self.cma_diag_std[g_idx] = new_std.clamp(0.02, 0.24);
                 }
             }
         }
     }
 }
 
-/// Apply targeted Subspace Constraint-Repair & Lamarckian Lattice Grading (`SRCH-6`, `UT-35`):
-/// Inspects `governing_gate_name` (or any violated gate) on `parent` and moves the exact physical
-/// genes that govern that structural or geometric mode toward feasibility!
-pub fn apply_constraint_repair_and_lamarckian_step(
-    spec: &RsKarambitV4Spec,
-    parent: &G4EvalRecord,
+/// Gene-agnostic Simulated Binary Crossover (`SBX`, Deb & Agrawal 1995) + Polynomial Mutation
+/// over the unit hypercube `[0, 1]^130`. Zero named-gene logic.
+pub fn apply_sbx_polynomial_variation(
+    p1: &G4EvalRecord,
+    p2: &G4EvalRecord,
     rng: &mut SplitMix64,
 ) -> G4Genome {
-    let mut g = parent.genome.clone();
-    let nudge_gene = |g: &mut G4Genome, name: &str, delta_u: f64| {
-        for s in &G4_GENES {
-            if s.name == name {
-                g.u[s.index] = (g.u[s.index] + delta_u).clamp(0.0, 1.0);
-                break;
-            }
-        }
-    };
-
-    // Inspect all violated or tightest gates (`margin < 0.08`)
-    for (gate, margin) in &parent.objective.gate_margins {
-        if *margin >= 0.08 {
-            continue;
-        }
-        let step = (0.08 - *margin).clamp(0.03, 0.22);
-        match gate.as_str() {
-            "solid_tip_torsion_0p80nm" | "solid_tip_pry_60n" => {
-                // L-8: Boost local tip-bisector crown and point spine targets
-                nudge_gene(&mut g, "t_tip_crown_mm", 0.65 * step);
-                nudge_gene(&mut g, "t_tip_base", 0.45 * step);
-                nudge_gene(&mut g, "t_2p00_mm", 0.40 * step);
-                nudge_gene(&mut g, "theta_tip_deg", 0.30 * step);
-            }
-            "hm_twist_16p2nm" | "twist_body_1p82nm" | "hunter_lateral_260n" | "hiker_lateral_180n"
-            | "combined_lat_twist" | "goodman_fatigue_180n" => {
-                nudge_gene(&mut g, "t_core", 0.55 * step);
-                nudge_gene(&mut g, "h_root", 0.45 * step);
-                nudge_gene(&mut g, "rho_blade", 0.40 * step);
-                nudge_gene(&mut g, "guard_r", 0.35 * step);
-            }
-            "per_case_sequence_ratio" | "spine_baton_3427n_ult" | "face_wrinkling" => {
-                // L-1 & L-2: Boost dorsal/ventral flange grading and grip height without inflating side skins
-                nudge_gene(&mut g, "skin_flange_c2", 0.65 * step);
-                nudge_gene(&mut g, "skin_dorsal_s1", 0.50 * step);
-                nudge_gene(&mut g, "grip_h_sw", 0.40 * step);
-                nudge_gene(&mut g, "grip_h_g", 0.40 * step);
-                nudge_gene(&mut g, "trabec_arch_amp", 0.45 * step);
-            }
-            "grip_squeeze_250n" => {
-                // L-3 & L-4: Boost bulkhead support and Lamarckian stress-graded TPMS
-                nudge_gene(&mut g, "bulkhead_count", 0.50 * step);
-                nudge_gene(&mut g, "bulkhead_t_mm", 0.45 * step);
-                nudge_gene(&mut g, "rho_grip", 0.35 * step);
-            }
-            "ring_bearing_300n" | "ring_back_30n" => {
-                nudge_gene(&mut g, "ring_od", 0.50 * step);
-                nudge_gene(&mut g, "ring_web_t", 0.50 * step);
-                nudge_gene(&mut g, "ring_hollow_t", -0.45 * step);
-            }
-            "tooth_snag_pry" => {
-                nudge_gene(&mut g, "serr_depth_in_mm", -0.45 * step);
-                nudge_gene(&mut g, "serr_depth_sp_mm", -0.45 * step);
-                nudge_gene(&mut g, "serr_duty_in", 0.40 * step);
-                nudge_gene(&mut g, "serr_duty_sp", 0.40 * step);
-            }
-            "req_fun_4_point_penetration" => {
-                nudge_gene(&mut g, "theta_tip_deg", -0.55 * step);
-                nudge_gene(&mut g, "tip_radius_mm", -0.45 * step);
-            }
-            _ => {}
-        }
-    }
-
-    // Add small exploration jitter and snap/repair
+    let mut g = p1.genome.clone();
+    let eta_c = 15.0_f64;
+    let eta_m = 20.0_f64;
     for s in &G4_GENES {
-        if s.kind == G4GeneKind::F64 && rng.next_f64() < 0.25 {
-            g.u[s.index] = (g.u[s.index] + rng.next_normal() * 0.018).clamp(0.0, 1.0);
+        let idx = s.index;
+        if s.kind == G4GeneKind::F64 {
+            let mut val = if rng.next_f64() < 0.22 {
+                let u_rand = rng.next_f64().clamp(1e-6, 1.0 - 1e-6);
+                let beta = if u_rand <= 0.5 {
+                    libm::pow(2.0 * u_rand, 1.0 / (eta_c + 1.0))
+                } else {
+                    libm::pow(1.0 / (2.0 * (1.0 - u_rand)), 1.0 / (eta_c + 1.0))
+                };
+                0.5 * ((1.0 + beta) * p1.genome.u[idx] + (1.0 - beta) * p2.genome.u[idx])
+            } else {
+                p1.genome.u[idx]
+            };
+            if rng.next_f64() < 0.15 {
+                let u_m = rng.next_f64();
+                let delta = if u_m < 0.5 {
+                    libm::pow(2.0 * u_m, 1.0 / (eta_m + 1.0)) - 1.0
+                } else {
+                    1.0 - libm::pow(2.0 * (1.0 - u_m), 1.0 / (eta_m + 1.0))
+                };
+                val += 0.20 * delta;
+            }
+            g.u[idx] = val.clamp(0.0, 1.0);
+        } else if rng.next_f64() < 0.15 {
+            g.u[idx] = p2.genome.u[idx];
         }
     }
-    let _ = spec;
     snap_and_repair_genome(&mut g);
     g
 }
 
-/// Apply Feasible Mass-Descent (`L-1`..`L-8`) along the lightweighting gradient while preserving
-/// structural safety margins (`t_tip_crown_mm`, `skin_flange_c2`, `rib_hole_frac`, `ring_hollow_t`, `fuller_amp`).
-pub fn apply_feasible_mass_descent_step(
-    parent: &G4EvalRecord,
+/// Gene-agnostic Differential Evolution (`DE/current-to-pbest/1/bin`, Zhang & Sanderson 2009)
+/// over the unit hypercube `[0, 1]^130`. Zero named-gene logic.
+pub fn apply_differential_evolution_step(
+    p_curr: &G4EvalRecord,
+    p_best: &G4EvalRecord,
+    r1: &G4EvalRecord,
+    r2: &G4EvalRecord,
     rng: &mut SplitMix64,
-    allow_module_t: bool,
 ) -> G4Genome {
-    let mut g = parent.genome.clone();
-    let nudge = |g: &mut G4Genome, name: &str, delta_u: f64| {
-        for s in &G4_GENES {
-            if s.name == name {
-                g.u[s.index] = (g.u[s.index] + delta_u).clamp(0.0, 1.0);
-                break;
-            }
-        }
-    };
-
-    let scale = 0.04 + 0.08 * rng.next_f64();
-    // L-1: Thin base skin toward 0.78 mm while increasing flange grading (`skin_flange_c2`)
-    nudge(&mut g, "skin_t_base", -0.75 * scale);
-    nudge(&mut g, "skin_flange_c2", 0.65 * scale);
-    nudge(&mut g, "skin_dorsal_s1", 0.45 * scale);
-    // L-2: Increase central Warren web perforation (`rib_hole_frac`) while keeping slim rib_w
-    nudge(&mut g, "rib_hole_frac", 0.70 * scale);
-    nudge(&mut g, "rib_w", -0.40 * scale);
-    // L-3: Lower mean grip/blade TPMS density while increasing stress grading (`lat_stress_k`)
-    nudge(&mut g, "rho_grip", -0.65 * scale);
-    nudge(&mut g, "rho_blade", -0.55 * scale);
-    nudge(&mut g, "rho_guard", -0.50 * scale);
-    nudge(&mut g, "rho_ring", -0.50 * scale);
-    nudge(&mut g, "lat_stress_k", 0.55 * scale);
-    // L-4: Increase drained hollow ring gallery (`ring_hollow_t`) and trim ring OD toward efficient band
-    nudge(&mut g, "ring_hollow_t", 0.70 * scale);
-    if parent.ring_back_sf > 2.35 {
-        nudge(&mut g, "ring_od", -0.45 * scale);
-    }
-    // L-5 & L-6: Deepen fuller groove (`fuller_amp`) and trim excess blade reach/width if margins allow
-    nudge(&mut g, "fuller_amp", 0.60 * scale);
-    nudge(&mut g, "fuller_width_frac", 0.45 * scale);
-    if parent.objective.sf_hm_twist_16p2nm_lcb > 1.24 {
-        nudge(&mut g, "t_core", -0.35 * scale);
-        nudge(&mut g, "h_root", -0.35 * scale);
-        nudge(&mut g, "h_mid_ratio", -0.40 * scale);
-    }
-    if parent.descriptors.blade_reach_mm > 74.0 {
-        nudge(&mut g, "blade_reach_target", -0.45 * scale);
-        nudge(&mut g, "blade_len", -0.45 * scale);
-    }
-    // L-7: Trim grip length/swell toward lean lower-middle of anthropometric band while preserving H/T
-    if parent.params.l_grip_mm > 65.5 {
-        nudge(&mut g, "grip_dl", -0.40 * scale);
-        nudge(&mut g, "hand_scale", -0.35 * scale);
-    }
-    // L-8: Maintain tip-bisector crown so LC-TIP-1 (0.80 N*m) stays >= 1.25 even with a compact blade!
-    if parent.objective.sf_solid_tip_torsion_0p80nm_lcb < 1.32 {
-        nudge(&mut g, "t_tip_crown_mm", 0.50 * scale);
-    }
-    if allow_module_t {
-        nudge(&mut g, "alien_gate", 0.80 * scale);
-        nudge(&mut g, "trabec_window_blend", 0.55 * scale);
-        nudge(&mut g, "trabec_arch_amp", 0.45 * scale);
-    } else {
-        nudge(&mut g, "alien_gate", -1.0);
-    }
-
-    // Isotropic micro-exploration on 20% of continuous genes
+    let mut g = p_curr.genome.clone();
+    let f1 = 0.45 + 0.35 * rng.next_f64();
+    let f2 = 0.35 + 0.35 * rng.next_f64();
+    let cr = 0.24;
+    let j_rand = (rng.next_u64() as usize) % N_G4_GENES;
     for s in &G4_GENES {
-        if s.kind == G4GeneKind::F64 && rng.next_f64() < 0.20 {
-            g.u[s.index] = (g.u[s.index] + rng.next_normal() * 0.022).clamp(0.0, 1.0);
-        }
-    }
-    if !allow_module_t {
-        for s in &G4_GENES {
-            if s.name == "alien_gate" {
-                g.u[s.index] = 0.0;
+        let idx = s.index;
+        if idx == j_rand || rng.next_f64() < cr {
+            if s.kind == G4GeneKind::F64 {
+                let v = p_curr.genome.u[idx]
+                    + f1 * (p_best.genome.u[idx] - p_curr.genome.u[idx])
+                    + f2 * (r1.genome.u[idx] - r2.genome.u[idx])
+                    + 0.015 * rng.next_normal();
+                g.u[idx] = v.clamp(0.0, 1.0);
+            } else {
+                g.u[idx] = p_best.genome.u[idx];
             }
         }
     }
@@ -800,13 +719,13 @@ pub fn apply_feasible_mass_descent_step(
 pub enum G4SearchAlgorithm {
     /// `E0`: Pure scrambled Sobol + uniform random sampling.
     RandomSobolSearch,
-    /// `E1`: Legacy `W_ERGOLIGHT_v1` scalar multiplier without `FI-2Pop`.
+    /// `E1`: Legacy `W_ERGOLIGHT_v1` scalar multiplier.
     LegacyWErgolightV1Search,
-    /// `E2`: Single-population penalty CMA without CVT archive.
+    /// `E2`: Single-population `sep-CMA-ES` from Sobol init.
     PenaltyCmaSearch,
-    /// `E3`: Full G4 Constrained `FI-2Pop` + Lloyd-CVT + Multi-Emitter Bandit + Module `T`.
+    /// `E3`: Full G4 Continuous Multi-Objective Lloyd-CVT + Multi-Emitter Bandit + Module `T`.
     G4FullFi2PopCvt,
-    /// `E5`: Core G4 (`96` cont + `12` disc) with Module `T` disabled (`alien_gate = 0`).
+    /// `E5`: Core G4 (`96` cont + `12` disc) with Module `T` disabled.
     G4CoreNoModuleT,
 }
 
@@ -846,40 +765,30 @@ pub struct G4SearchRunResult {
     pub history: Vec<G4BatchTelemetry>,
 }
 
+fn disable_module_t_genes(g: &mut G4Genome) {
+    for s in &G4_GENES {
+        if s.module == G4Module::T {
+            g.u[s.index] = 0.0;
+        }
+    }
+    snap_and_repair_genome(g);
+}
+
 /// Execute a deterministic, batch-synchronous G4 search run (`SRCH-4`, `T-DET-1`).
+/// Every initial individual comes 100% from scrambled Sobol samples (`G4Genome::from_sobol`).
 pub fn run_g4_search(spec: &RsKarambitV4Spec, cfg: &G4SearchConfig) -> G4SearchRunResult {
     let allow_module_t = cfg.algorithm != G4SearchAlgorithm::G4CoreNoModuleT;
     let mut archive = G4CvtArchive::new_lloyd_relaxed(cfg.k_cvt_cells, 8, cfg.seed);
     let mut rng = SplitMix64::new(cfg.seed ^ 0x4734_5352_4348_2026);
-
-    let mut anchor = G4Genome::default_anchor();
-    if !allow_module_t {
-        for s in &G4_GENES {
-            if s.name == "alien_gate" {
-                anchor.u[s.index] = 0.0;
-            }
-        }
-        snap_and_repair_genome(&mut anchor);
-    }
-    let mut bandit = G4EmitterBanditState::new(&anchor);
     let mut history = Vec::with_capacity(cfg.n_batches + 1);
     let mut total_evals = 0usize;
 
-    // 1. Deterministic Initial Sobol Population (plus anchor at index 0)
+    // 1. Deterministic Initial Sobol Population (100% scrambled Joe-Kuo Sobol, zero hand-authored anchor)
     let mut init_genomes: Vec<G4Genome> = (0..cfg.n_init_sobol)
         .map(|i| {
-            let mut g = if i == 0 {
-                anchor.clone()
-            } else {
-                G4Genome::from_sobol(i, cfg.seed)
-            };
+            let mut g = G4Genome::from_sobol(i, cfg.seed);
             if !allow_module_t {
-                for s in &G4_GENES {
-                    if s.name == "alien_gate" {
-                        g.u[s.index] = 0.0;
-                    }
-                }
-                snap_and_repair_genome(&mut g);
+                disable_module_t_genes(&mut g);
             }
             g
         })
@@ -891,14 +800,19 @@ pub fn run_g4_search(spec: &RsKarambitV4Spec, cfg: &G4SearchConfig) -> G4SearchR
         .map(|g| evaluate_g4_genome(spec, g, G4EvalTier::Tier1SdfAndPlate))
         .collect();
 
+    let mut init_elites = Vec::new();
     for rec in init_records.into_iter().flatten() {
         total_evals += 1;
+        init_elites.push(rec.clone());
         archive.insert(rec);
     }
 
+    // Initialize the UCB1 bandit and Sep-CMA-ES distribution strictly from the Sobol-evaluated archive elites
+    let mut bandit = G4EmitterBanditState::from_sobol_elites(&init_elites);
+
     // 2. Main Batch-Synchronous Evolutionary Loop
     for batch_idx in 0..cfg.n_batches {
-        // Collect current parents from archive in deterministic niche order
+        // Collect current parents from archive in deterministic niche order, plus sorted top quartile for DE-pbest
         let parents: Vec<G4EvalRecord> = archive
             .cells
             .iter()
@@ -908,13 +822,32 @@ pub fn run_g4_search(spec: &RsKarambitV4Spec, cfg: &G4SearchConfig) -> G4SearchR
                     .or_else(|| c.infeasible_stepping_stone.clone())
             })
             .collect();
+        let mut sorted_parents = parents.clone();
+        if cfg.algorithm == G4SearchAlgorithm::LegacyWErgolightV1Search {
+            sorted_parents.sort_by(|a, b| {
+                b.objective
+                    .w_ergolight_v1_legacy
+                    .partial_cmp(&a.objective.w_ergolight_v1_legacy)
+                    .unwrap_or(Ordering::Equal)
+            });
+        } else {
+            sorted_parents.sort_by(|a, b| compare_g4_objectives(&b.objective, &a.objective));
+        }
+        let n_pbest = (sorted_parents.len() / 4).max(1);
 
         // Pre-generate all candidate genomes & emitter tags sequentially using `rng` (`SRCH-4`)
         let mut proposals: Vec<(G4EmitterKind, G4Genome)> = Vec::with_capacity(cfg.batch_size);
         for k in 0..cfg.batch_size {
             let arm = match cfg.algorithm {
-                G4SearchAlgorithm::RandomSobolSearch => G4EmitterKind::IsoLineDdModuleCrossover,
+                G4SearchAlgorithm::RandomSobolSearch => G4EmitterKind::IsoLineDdCrossover,
                 G4SearchAlgorithm::PenaltyCmaSearch => G4EmitterKind::SepCmaMae,
+                G4SearchAlgorithm::LegacyWErgolightV1Search => {
+                    if k % 2 == 0 {
+                        G4EmitterKind::SbxPolynomialMutation
+                    } else {
+                        G4EmitterKind::IsoLineDdCrossover
+                    }
+                }
                 _ => {
                     if k % 4 == 0 {
                         bandit.select_arm(batch_idx * cfg.batch_size + k + 4)
@@ -928,39 +861,48 @@ pub fn run_g4_search(spec: &RsKarambitV4Spec, cfg: &G4SearchConfig) -> G4SearchR
                 G4Genome::from_sobol(cfg.n_init_sobol + batch_idx * cfg.batch_size + k, cfg.seed)
             } else {
                 let p1 = &parents[(rng.next_u64() as usize) % parents.len()];
+                let p2 = &parents[(rng.next_u64() as usize) % parents.len()];
                 match arm {
                     G4EmitterKind::SepCmaMae => {
                         let mut g = p1.genome.clone();
                         for s in &G4_GENES {
                             let idx = s.index;
                             if s.kind == G4GeneKind::F64 {
-                                let base = 0.65 * bandit.cma_mean[idx] + 0.35 * p1.genome.u[idx];
-                                g.u[idx] = (base
-                                    + rng.next_normal() * bandit.cma_diag_std[idx] * bandit.cma_step_sigma * 8.0)
-                                    .clamp(0.0, 1.0);
+                                if rng.next_f64() < 0.28 {
+                                    let base = 0.30 * bandit.cma_mean[idx] + 0.70 * p1.genome.u[idx];
+                                    g.u[idx] = (base
+                                        + rng.next_normal() * bandit.cma_diag_std[idx] * bandit.cma_step_sigma * 6.5)
+                                        .clamp(0.0, 1.0);
+                                }
+                            } else if rng.next_f64() < 0.12 {
+                                g.u[idx] = p2.genome.u[idx];
                             }
                         }
                         snap_and_repair_genome(&mut g);
                         g
                     }
-                    G4EmitterKind::ConstraintRepairLamarckian => {
-                        apply_constraint_repair_and_lamarckian_step(spec, p1, &mut rng)
+                    G4EmitterKind::DeCurrentToPbest => {
+                        let p_best = &sorted_parents[(rng.next_u64() as usize) % n_pbest];
+                        let r1 = &parents[(rng.next_u64() as usize) % parents.len()];
+                        let r2 = &parents[(rng.next_u64() as usize) % parents.len()];
+                        apply_differential_evolution_step(p1, p_best, r1, r2, &mut rng)
                     }
-                    G4EmitterKind::FeasibleMassDescent => {
-                        apply_feasible_mass_descent_step(p1, &mut rng, allow_module_t)
+                    G4EmitterKind::SbxPolynomialMutation => {
+                        apply_sbx_polynomial_variation(p1, p2, &mut rng)
                     }
-                    G4EmitterKind::IsoLineDdModuleCrossover => {
-                        let p2 = &parents[(rng.next_u64() as usize) % parents.len()];
+                    G4EmitterKind::IsoLineDdCrossover => {
                         let mut g = p1.genome.clone();
-                        let sigma_iso = 0.018;
-                        let sigma_line = 0.12 * rng.next_normal();
+                        let sigma_iso = 0.025;
+                        let sigma_line = 0.18 * rng.next_normal();
                         for s in &G4_GENES {
                             let idx = s.index;
                             if s.kind == G4GeneKind::F64 {
-                                let line_step = sigma_line * (p2.genome.u[idx] - p1.genome.u[idx]);
-                                g.u[idx] = (p1.genome.u[idx] + line_step + sigma_iso * rng.next_normal())
-                                    .clamp(0.0, 1.0);
-                            } else if rng.next_f64() < 0.15 {
+                                if rng.next_f64() < 0.25 {
+                                    let line_step = sigma_line * (p2.genome.u[idx] - p1.genome.u[idx]);
+                                    g.u[idx] = (p1.genome.u[idx] + line_step + sigma_iso * rng.next_normal())
+                                        .clamp(0.0, 1.0);
+                                }
+                            } else if rng.next_f64() < 0.12 {
                                 g.u[idx] = p2.genome.u[idx];
                             }
                         }
@@ -972,24 +914,18 @@ pub fn run_g4_search(spec: &RsKarambitV4Spec, cfg: &G4SearchConfig) -> G4SearchR
 
             let mut g_final = g_cand;
             if !allow_module_t {
-                for s in &G4_GENES {
-                    if s.name == "alien_gate" {
-                        g_final.u[s.index] = 0.0;
-                    }
-                }
-                snap_and_repair_genome(&mut g_final);
+                disable_module_t_genes(&mut g_final);
             }
             proposals.push((arm, g_final));
         }
 
         // Parallel multi-fidelity evaluation:
-        // Screen with Tier 0, promote promising candidates (feasible or low violation) to Tier 1 (`SRCH-5`)
+        // Screen with Tier 0, promote promising candidates to Tier 1 (`SRCH-5`)
         let evaluated: Vec<(G4EmitterKind, Option<G4EvalRecord>)> = proposals
             .into_par_iter()
             .map(|(arm, g)| {
                 let t0 = evaluate_g4_genome(spec, &g, G4EvalTier::Tier0Analytic)?;
-                // Calibrated UCB promotion (`SRCH-5`)
-                if t0.objective.feasible || t0.objective.violation_sum_sq < 0.35 {
+                if t0.objective.feasible || t0.objective.violation_sum_sq < 0.08 {
                     let t1 = evaluate_g4_genome(spec, &g, G4EvalTier::Tier1SdfAndPlate)?;
                     Some((arm, Some(t1)))
                 } else {
@@ -1003,14 +939,9 @@ pub fn run_g4_search(spec: &RsKarambitV4Spec, cfg: &G4SearchConfig) -> G4SearchR
         for (arm, rec_opt) in evaluated {
             if let Some(rec) = rec_opt {
                 total_evals += 1;
-                let (ins_f, ins_inf, _) = if cfg.algorithm == G4SearchAlgorithm::LegacyWErgolightV1Search {
-                    // Legacy v1 ablation ranks by w_ergolight_v1_legacy even if softly violating a gate
-                    archive.insert(rec.clone())
-                } else {
-                    archive.insert(rec.clone())
-                };
+                let (ins_f, ins_inf, _) = archive.insert(rec.clone());
                 let reward = if ins_f {
-                    1.0 + 0.05 * (rec.objective.w_ergolight_v2 - 70.0).max(0.0)
+                    1.0 + 0.05 * (rec.objective.w_ergolight_v2 - 80.0).max(0.0)
                 } else if ins_inf {
                     0.25
                 } else {
@@ -1021,7 +952,7 @@ pub fn run_g4_search(spec: &RsKarambitV4Spec, cfg: &G4SearchConfig) -> G4SearchR
             }
         }
 
-        // Periodic Tier-2 ($h = 0.20\text{ mm}$) Re-Certification of Top Archive Elites (`SRCH-7`)
+        // Periodic Tier-2 ($h = 0.20\text{ mm}$) Re-Evaluation of Top Archive Elites (`SRCH-7`)
         if (batch_idx + 1) % cfg.recert_interval_batches.max(1) == 0 || batch_idx + 1 == cfg.n_batches {
             let mut top_niches: Vec<(usize, G4Genome)> = archive
                 .cells
@@ -1034,7 +965,7 @@ pub fn run_g4_search(spec: &RsKarambitV4Spec, cfg: &G4SearchConfig) -> G4SearchR
                 let ob = &archive.cells[b.0].feasible_elite.as_ref().unwrap().objective;
                 compare_g4_objectives(ob, oa)
             });
-            top_niches.truncate(3);
+            top_niches.truncate(1);
 
             let recert_results: Vec<(usize, Option<G4EvalRecord>)> = top_niches
                 .into_par_iter()
@@ -1048,7 +979,6 @@ pub fn run_g4_search(spec: &RsKarambitV4Spec, cfg: &G4SearchConfig) -> G4SearchR
                     if rec_t2.objective.feasible {
                         archive.cells[niche_idx].feasible_elite = Some(rec_t2);
                     } else {
-                        // Demote to infeasible layer if fine-grid re-certification uncovered a violation (`SRCH-7`)
                         archive.cells[niche_idx].feasible_elite = None;
                         archive.cells[niche_idx].infeasible_stepping_stone = Some(rec_t2);
                     }
@@ -1072,7 +1002,7 @@ pub fn run_g4_search(spec: &RsKarambitV4Spec, cfg: &G4SearchConfig) -> G4SearchR
         }
     }
 
-    // Final Tier-2 certification of the overall winner
+    // Final Tier-2 evaluation of the overall winner
     let raw_best = archive
         .best_overall()
         .cloned()

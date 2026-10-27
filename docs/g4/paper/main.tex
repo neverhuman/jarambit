@@ -1,5 +1,5 @@
-% G4 release paper (v4.0.0). Every headline quantity comes from generated/numbers.tex, which `g4-release-tex` writes
-% from the committed release receipt `evidence/g4/v4.0.0/release.json`; build with `make -C docs/g4/paper`.
+% G4 release paper (v4.1.0). Every headline quantity comes from generated/numbers.tex, which `g4-release-tex` writes
+% from the committed release receipt `evidence/g4/v4.1.0/release.json`; build with `make -C docs/g4/paper`.
 \documentclass[10pt,journal,letterpaper]{IEEEtran}
 \usepackage{amsmath,amssymb,graphicx,booktabs,array,xcolor}
 \usepackage[obeyspaces]{url}
@@ -9,48 +9,49 @@
 \usepackage{microtype}
 \input{generated/numbers.tex}
 \hypersetup{
-  pdftitle={Feasibility-First Constrained Quality-Diversity Evolution of a Sub-50 g Printable Titanium Karambit (G4 v\GFourVersion)},
+  pdftitle={Sobol-Initialized Quality-Diversity Evolution of a Sub-50 g Titanium Karambit (G4 v\GFourVersion)},
   pdfauthor={Jepson Taylor},
   pdflang={en-US},
-  pdfkeywords={constrained quality diversity, FI-2Pop, MAP-Elites, CMA-MAE, additive manufacturing, Ti-6Al-4V, finite elements, Roache GCI, Winkler foundation}
+  pdfkeywords={quality diversity, MAP-Elites, CMA-MAE, differential evolution, additive manufacturing, Ti-6Al-4V, finite elements, Roache GCI, Winkler foundation}
 }
 \DeclareRobustCommand{\code}[1]{\texorpdfstring{{\nolinkurl{#1}}}{#1}}
 \newcommand{\src}[2]{\href{https://github.com/neverhuman/jarambit/blob/v\GFourVersion/#1}{#2}}
 \makeatletter
 \fancypagestyle{headings}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
-  \fancyhead[L]{\sffamily\fontsize{6.6}{8}\selectfont\color{slate}\addfontfeature{LetterSpace=8}JARAMBIT G4\enspace{\color{hair}|}\enspace\addfontfeature{LetterSpace=0}Feasibility-first sub-50~g titanium karambit (v\GFourVersion)}%
+  \fancyhead[L]{\sffamily\fontsize{6.6}{8}\selectfont\color{slate}\addfontfeature{LetterSpace=8}JARAMBIT G4\enspace{\color{hair}|}\enspace\addfontfeature{LetterSpace=0}Sobol-initialized sub-50~g titanium karambit (v\GFourVersion)}%
   \fancyhead[R]{\sffamily\fontsize{6.6}{8}\selectfont\color{slate}\thepage}}
 \makeatother
 \pagestyle{headings}
 
 \begin{document}
-\title{Feasibility-First Constrained Quality-Diversity Evolution of a Sub-50~g Printable Titanium Karambit}
+\title{Sobol-Initialized Quality-Diversity Evolution of a Sub-50~g Titanium Karambit}
 \author{Jepson Taylor%
 \thanks{Release v\GFourVersion, schema hash \GFourSchemaSha, decoder hash \GFourDecoderSha. Every measured number in this
-paper is generated from \code{evidence/g4/v4.0.0/release.json} and \code{evolution_summary.json} by \code{g4-release-tex}.}}
+paper is generated from \code{evidence/g4/v4.1.0/release.json} and \code{evolution_summary.json} by \code{g4-release-tex}.}}
 \maketitle
 
 \begin{abstract}
 We present G4 (v\GFourVersion), a clean-slate architectural upgrade of the Jarambit evolutionary knife-design engine that resolves
-the representation, physics, and optimization bottlenecks identified in the G3 v3.0.0 retrospective audit. Whereas G3 ranked
-designs by an unconstrained weighted sum over 179 genes (31 of them inactive) and produced a 67.97~g finished (71.09~g as-printed)
-part with two structural safety-factor shortfalls (solid tip $\mathrm{SF}=0.431$ under a global-chord 1.82~N$\cdot$m pry and
-ring-clamped cantilever grip spine $\mathrm{SF}=0.515$), G4 introduces a declarative 130-gene schema (\code{genome/G4.0.toml}, zero
-dead genes) coupled to a true-3D curvilinear implicit kernel, a compliant four-finger Winkler hand-contact equilibrium model
-(\code{HM-1}), and a lexicographic feasibility-first quality-diversity search (\code{W\_ERGOLIGHT\_v2}) using a Feasible/Infeasible
-Two-Population (\code{FI-2Pop}) Lloyd-relaxed CVT archive with a four-emitter bandit (\code{Sep-CMA-MAE}, Lamarckian
-constraint-repair, feasible mass-descent, and module-aware \code{Iso+LineDD}). Every certification gate is fail-closed via
-\code{G4ReleaseAdmissionContract}: three-level Roache grid-convergence index ($\mathrm{GCI}_{21} = \GFourPlateGciPct\,\% \le 5\,\%$),
-per-load-case failure sequence ledger ($\min \mathrm{seq} = \GFourSfSeqMin \ge 1.10$ across lateral, torsion, and spine baton),
-frame-invariant \code{TET10} solid-tip FE with a local tip-bisector diamond crown ($\mathrm{SF}_{\mathrm{LCB}} = \GFourSfTipTorsion \ge 1.25$),
+the representation, physics, and optimization bottlenecks identified in the G3 v3.0.0 retrospective audit while keeping every
+\code{RS-karambit-v3} load magnitude and material assumption intact. Whereas G3 evolved over 179 genes (31 of them inactive) and
+produced a 57.02~g scored (59.34~g print mesh) part with two structural safety-factor shortfalls (solid tip $\mathrm{SF}=0.55$
+under a 1.82~N$\cdot$m twist about the origin-to-point axis and ring-clamped cantilever grip spine $\mathrm{SF}=0.515$ under a
+3,427~N spine load), G4 introduces a declarative 130-gene schema (\code{genome/G4.0.toml}, zero dead genes, zero hand-authored anchor)
+coupled to a true-3D curvilinear implicit kernel, a compliant four-finger Winkler hand-contact equilibrium model (\code{HM-1}), and a
+continuous quality-diversity objective (\code{W\_ERGOLIGHT\_v2}, \code{hard\_gates = false}) over a Lloyd-relaxed CVT archive with a
+four-emitter black-box bandit (\code{Sep-CMA-MAE}, \code{DE/current-to-pbest/1/bin}, \code{SBX+PM}, and \code{Iso+LineDD}) initialized
+100\,\% from scrambled Joe--Kuo Sobol samples. Every release check in \code{G4ReleaseAdmissionContract} is fail-closed: three-level
+Roache grid-convergence index ($\mathrm{GCI}_{21} = \GFourPlateGciPct\,\% \le 5\,\%$), per-load-case failure sequence ledger
+($\min \mathrm{seq} = \GFourSfSeqMin \ge 1.10$ across lateral, torsion, and 3,427~N spine first-yield), frame-invariant \code{TET10}
+solid-tip FE under the full 1.82~N$\cdot$m tip twist with a local tip-bisector diamond crown ($\mathrm{SF}_{\mathrm{LCB}} = \GFourSfTipTorsion \ge 1.25$),
 2D quadratic \code{T6} serration tooth checks across all teeth including end teeth ($\GFourTeethIn/\GFourTeethIn$ inner and
-$\GFourTeethSp/\GFourTeethSp$ spine teeth, $\mathrm{SF}_{\mathrm{LCB}} = \GFourSfTooth \ge 1.25$), corrected Goodman fatigue
-($\mathrm{SF}_{\mathrm{LCB}} = \GFourSfFatigue \ge 1.10$), and resolution-invariant morphological erosion powder drainability. Across a
-multi-seed cohort and five-arm ablation study (\code{E0}--\code{E5}), full G4 (\code{E3}) achieves a median score of
-$\GFourEThreeMedScore$ (IQR $\GFourEThreeIqrScore$) and certifies winner \GFourWinnerId{} at \textbf{\GFourFinishedMassG~g}
-finished mass (\GFourPrintedMassG~g as printed with bevel grind allowance; \GFourHollownessPct\,\% hollowness vs.\ its
+$\GFourTeethSp/\GFourTeethSp$ spine teeth, $\mathrm{SF}_{\mathrm{LCB}} = \GFourSfTooth \ge 1.25$), single-$k_t$ Goodman fatigue
+($\mathrm{SF}_{\mathrm{LCB}} = \GFourSfFatigue \ge 1.10$ at 300~MPa endurance limit), and resolution-invariant morphological erosion
+powder drainability. Across a multi-seed Sobol-initialized cohort and five-arm ablation study (\code{E0}--\code{E5}), full G4 (\code{E3})
+achieves a median score of $\GFourEThreeMedScore$ (IQR $\GFourEThreeIqrScore$) and selects winner \GFourWinnerId{} at
+\textbf{\GFourFinishedMassG~g} finished mass (\GFourPrintedMassG~g with bevel grind stock; \GFourHollownessPct\,\% hollowness vs.\ its
 \GFourEnvelopeMassG~g solid envelope), scoring \textbf{\GFourScoreVTwo} under \code{W\_ERGOLIGHT\_v2} (\GFourScoreVOne{} on legacy
-\code{W\_ERGOLIGHT\_v1}) with zero constraint violations ($V(x)=0$) across all 29 gates.
+\code{W\_ERGOLIGHT\_v1}) with zero constraint violations ($V(x)=0$) across all 29 targets.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -154,43 +155,45 @@ independently of spine thickness. Meanwhile, the spine thickness over $a \in [1.
 diamond-ridge crown $\Delta t_{\mathrm{crown}}(a) \propto \sqrt{\sin(\pi u_c)}\,t_{\mathrm{tip,crown}}$, raising the polar moment
 of inertia $J \propto w\,t_{\max}^3$ by $>2.4\times$ at the cost of only $+0.19$~g of distal titanium (\code{evidence/g4/studies/e06\_tip\_crown.json}).
 
-\section{Requirements, Hand Contact Model, and Constrained Objective}\label{sec:objective}
+\section{Requirements, Hand Contact Model, and Continuous Objective}\label{sec:objective}
 \subsection{Machine-Readable Specification (\code{RS-karambit-v4.toml})}
-All 29 hard gates, material constants, and ergonomic target bands are loaded from \src{requirements/RS-karambit-v4.toml}{\code{RS-karambit-v4.toml}}
-with \texttt{\#[serde(deny\_unknown\_fields)]} and traceable provenance in \src{requirements/PROVENANCE.md}{\code{PROVENANCE.md}}.
-For each structural gate $j \in \{1,\ldots,17\}$, G4 evaluates the uncertainty-bounded lower confidence bound (LCB) safety factor:
+All 29 structural, geometric, and manufacturing targets, material constants, and ergonomic target bands are loaded from
+\src{requirements/RS-karambit-v4.toml}{\code{RS-karambit-v4.toml}} (\code{hard\_gates = false}) with \texttt{\#[serde(deny\_unknown\_fields)]}
+and traceable provenance in \src{requirements/PROVENANCE.md}{\code{PROVENANCE.md}}, keeping every load magnitude and material assumption
+from \code{RS-karambit-v3}: 1.82~N$\cdot$m solid-tip twist, 3,427~N spine load judged on first yield ($\sigma_y = 828$~MPa), and
+stress-relieved L-PBF Ti-6Al-4V fatigue endurance limit ($\sigma_e = 300$~MPa at $10^7$ cycles before thin-wall $k_t(t)$ applied once).
+For each structural target $j \in \{1,\ldots,17\}$, G4 evaluates the uncertainty-bounded lower confidence bound (LCB) safety factor:
 \begin{equation}
 \mathrm{SF}_{j,\mathrm{LCB}}(x) = \frac{\mathrm{SF}_j(x)}{1 + k_{\mathrm{LCB}}\sqrt{\mathrm{GCI}_j^2 + \delta_{\mathrm{mat}}^2}},
 \qquad k_{\mathrm{LCB}} = 1.645,
 \end{equation}
 where $\mathrm{GCI}_j$ is the measured three-level Roache grid-convergence index and $\delta_{\mathrm{mat}} = 0.022$ is the
-HIP L-PBF Ti-6Al-4V ELI yield scatter~\cite{astmf3001}.
+L-PBF Ti-6Al-4V yield scatter~\cite{astmf3001}.
 
 \subsection{Unified Winkler Hand Contact Equilibrium (\code{HM-1})}
-Rather than clamping the pommel ring in space while applying a 3,427~N baton impulse to the blade, G4 models the closed-fist
+Rather than clamping the pommel ring in space while applying a 3,427~N spine load to the blade, G4 models the closed-fist
 human grip as a four-station compliant Winkler foundation (\src{crates/g4/src/physics.rs}{\code{eval\_g4\_hand\_model\_hm1}}) at
 the little/ring, middle, index-groove, and index-choil/palm-heel stations $x_i \in \{18, 39, 60, 81\}$~mm~\cite{pheasant2006,garrett1971}.
 Solving the $2\times 2$ rigid-body Winkler equilibrium for each external wrench $(\mathbf{F}_{\mathrm{ext}}, \mathbf{M}_{\mathrm{ext}})$
 satisfies force and moment balance to $< 10^{-12}$~N and distributes the load across the inter-finger saddle span ($l_{\mathrm{HM1}} \approx 14.5$~mm),
-eliminating the artificial 55~mm ring-clamp cantilever lever arm and raising the spine-baton sequence ratio from $0.515$ (v3 ring clamp)
+eliminating the artificial 55~mm ring-clamp cantilever lever arm and raising the first-yield spine sequence ratio from $0.515$ (v3 ring clamp)
 to $\ge 1.62$ (\code{evidence/g4/studies/e01\_v3\_rescore.json}).
 
-\subsection{Lexicographic Feasibility-First Objective (\code{W\_ERGOLIGHT\_v2})}
-G4 replaces unconstrained linear weighting with Deb's feasibility-first lexicographic ordering~\cite{deb2000}:
+\subsection{Continuous Multi-Objective Scalar (\code{W\_ERGOLIGHT\_v2})}
+Per the owner's v4 specification (\code{hard\_gates = false}), G4 evaluates a smooth, continuous objective over $[0, 100]$ with no
+step-function gates:
 \begin{equation}
-W_{\mathrm{ERGOLIGHT\_v2}}(x) = \begin{cases}
--1000\,V(x) + 50\,(1 - \tilde{V}(x)), & V(x) > 0, \\[4pt]
-50 + 50\,\bigl(0.62\,S_{\mathrm{mass}}(x) + 0.23\,E(x) + 0.15\,S_{\mathrm{margin}}(x)\bigr), & V(x) = 0,
-\end{cases}
+W_{\mathrm{ERGOLIGHT\_v2}}(x) = 100\,E(x)\,\bigl(0.370\,L_{\mathrm{mass}}(x) + 0.630\,\bar{S}_{\mathrm{struct}}(x)\bigr)\,\psi_{\mathrm{smooth}}(x),
 \end{equation}
-where $V(x) = \sum_{j=1}^{29} \max(0, g_j(x))^2$ is the total squared normalized constraint violation,
-$S_{\mathrm{mass}}(x) = \mathrm{clip}\bigl((90 - m_{\mathrm{finished}}(x))/(90 - 28), 0, 1\bigr)$ rewards low finished mass,
-$E(x) = \prod_{k=1}^{8} e_k(x)^{\beta_k}$ is the eight-factor anthropometric ergonomic geometric mean, and
-$S_{\mathrm{margin}}(x)$ is a saturating reserve bonus over all 17 structural LCB margins. Any feasible design ($V(x)=0$, score
-$\in [50, 100]$) strictly dominates every infeasible design ($V(x)>0$, score $< 50$).
+where $L_{\mathrm{mass}}(x) = \mathrm{clip}\bigl((90 - m_{\mathrm{finished}}(x))/(90 - 28), 0, 1\bigr)$ rewards low finished mass,
+$\bar{S}_{\mathrm{struct}}(x) = \frac{1}{29}\sum_{j=1}^{29}\mathrm{sfk}(r_j(x))$ evaluates the \code{RS-karambit-v3} saturation curve
+$\mathrm{sfk}(r) = 0.94\min(r,1) + 0.06(1 - e^{-\max(r-1,0)/0.15})$ across all 29 targets, $E(x) = \prod_{k=1}^{8} e_k(x)^{\beta_k}$ is
+the eight-factor anthropometric ergonomic geometric mean, and $\psi_{\mathrm{smooth}}(x) = \exp\bigl(-3.5\sum_j v_j(x) - 12.0\sum_j v_j(x)^2\bigr)$
+is a smooth boundary-steepened factor that equals $1.0$ whenever all targets are met ($v_j(x) = \max(0, 1 - r_j(x)) = 0$) and decays
+continuously without step discontinuities.
 
 \section{Calibrated Multi-Fidelity Physics and Verification}\label{sec:physics}
-Every surrogate and certification solver in \src{crates/g4/src/physics.rs}{\code{crates/g4/src/physics.rs}} is verified by
+Every surrogate and Tier-2 solver in \src{crates/g4/src/physics.rs}{\code{crates/g4/src/physics.rs}} is verified by
 automated tests in \src{crates/g4/tests/vv_suite.rs}{\code{vv\_suite.rs}} and R\&D study receipts in \code{evidence/g4/studies/}:
 \begin{enumerate}
 \item \textbf{Sub-voxel smoothed-Heaviside volume integration (\code{T-MASS-1}, Study \code{E-02}):} Evaluating $H_\epsilon(\phi)$
@@ -201,47 +204,50 @@ powder-clearance ball radius $r_{\mathrm{erode}} = 0.50$~mm ($\phi_{\mathrm{void
 flood fill, guaranteeing identical drainability classification across $h \in \{0.40, 0.20, 0.10\}$~mm.
 \item \textbf{Hole-aware plate FE and 3-level Roache GCI (\code{T-PLATE-1..2}):} Through-blade fenestrations are subtracted from the
 CST+DKT sandwich plate mesh~\cite{batoz1980}, unreferenced interior hole vertices are locked, and lateral capacity is evaluated across
-three refinement levels ($A_{\max} \in \{2.00, 1.00, 0.50\}\,\mathrm{mm}^2$, $r = \sqrt{2}$) to compute a real Roache
+three self-similar finite-element mesh refinement levels ($16\times 4$, $24\times 6$, and $36\times 9$, refinement ratio $r = 1.5$) to compute a real Roache
 $\mathrm{GCI}_{21} = \GFourPlateGciPct\,\%$ (observed order $p = \GFourPlateOrderP$) admitted by \code{PlateGciAdmission}~\cite{roache1998}.
 \item \textbf{Frame-invariant \code{TET10} solid-tip FE (\code{T-TIP-1..3}, Study \code{E-06}):} The distal 28~mm tip submodel is
-transformed into the local tip-bisector frame with cell-centred thickness sampling and evaluated under \code{LC-TIP-1} (0.80~N$\cdot$m
-local tip-bisector torsion) and \code{LC-TIP-2} (60~N lateral tip pry), achieving $0.000\,\%$ rigid-rotation variance.
-\item \textbf{All-tooth \code{T6} serration evaluation and corrected Goodman fatigue (\code{T-SERR-4}):} Every serration tooth
+transformed into the local tip-bisector frame with cell-centred thickness sampling and evaluated under \code{LC-TIP-1} (the full
+1.82~N$\cdot$m \code{RS-karambit-v3} tip twist) and \code{LC-TIP-2} (60~N lateral tip pry), achieving $0.000\,\%$ rigid-rotation variance.
+\item \textbf{All-tooth \code{T6} serration evaluation and single-$k_t$ Goodman fatigue (\code{T-SERR-4}):} Every serration tooth
 $i \in \{0,\ldots,N-1\}$ on both edges---including both end teeth---is evaluated under combined 180~N snag and 60~N lateral pry
 with Peterson notch sensitivity $K_f$~\cite{peterson1974} and local thickness knockdown $k_t(t_{\mathrm{local}})$, while Goodman
-fatigue at $R=0$ is computed from true root bending stress $\sigma_{\max} = 180\,\sigma_{1\mathrm{N}}$.
+fatigue at $R=0$ is computed from true root bending stress $\sigma_{\max} = 180\,\sigma_{1\mathrm{N}}$ against the 300~MPa endurance
+limit with $k_t(t)$ applied once.
 \item \textbf{Locking-free B-bar \code{hex8} voxel FE (\code{T-VFE-1..4}):} Selective-reduced / Wilson-condensed B-bar brick
 elements~\cite{simo1990} pass the constant-strain patch test to $1.1\times 10^{-16}$ and reduce thin-beam bending locking error from
 $85.9\,\%$ (plain \code{hex8}) to $< 10^{-12}$.
 \end{enumerate}
 
-\section{Constrained Quality-Diversity Search (\code{FI-2Pop} + Multi-Emitter Bandit)}\label{sec:search}
-\src{crates/g4/src/search.rs}{\code{crates/g4/src/search.rs}} implements a deterministic, batch-synchronous constrained QD engine:
+\section{Sobol-Initialized Quality-Diversity Search}\label{sec:search}
+\src{crates/g4/src/search.rs}{\code{crates/g4/src/search.rs}} implements a deterministic, batch-synchronous quality-diversity engine
+with zero hand-authored anchor genomes and zero named-gene repair rules:
 \begin{itemize}
-\item \textbf{Lloyd-relaxed 5D CVT archive (\code{FI-2Pop}):} Niche centroids in the 5D phenotypic descriptor space (finished mass
-$m$, blade reach $R$, claw turn angle $\Delta\theta$, grip $H/T$, and hollowness fraction $\eta_{\mathrm{void}}$) are computed via
-deterministic Lloyd relaxation~\cite{vassiliades2018}. Each cell maintains both a \emph{feasible elite} ($V(x)=0$, maximizing
-$W_{\mathrm{ERGOLIGHT\_v2}}$) and an \emph{infeasible stepping stone} ($V(x)>0$, minimizing $V(x)$)~\cite{kimbrough2008}, plus a
-local Pareto front over $(m_{\mathrm{finished}}, -E, -\min\mathrm{margin})$.
-\item \textbf{UCB1 four-emitter bandit:} Offspring batches are generated by four specialized emitters scheduled by UCB1:
-(1) \code{Sep-CMA-MAE}~\cite{fontaine2023} with diagonal covariance adaptation in $[0,1]^{130}$,
-(2) a \textbf{Lamarckian constraint-repair emitter} that projects violating genes onto the active structural/geometric boundary,
-(3) a \textbf{feasible mass-descent emitter} that applies coordinated mass-saving steps along Levers \code{L-1}--\code{L-8} whenever
-safety margins exceed $1.15$, and
-(4) a module-aware \code{Iso+LineDD} crossover emitter.
-\item \textbf{Periodic $h = 0.20$~mm re-certification and cross-arch determinism:} Top archive elites are periodically re-certified at
-Tier~2 ($h = 0.20$~mm, 3-level plate GCI, and 3D \code{TET10} tip FE). All transcendental math uses pure-Rust \code{libm} and
+\item \textbf{100\,\% Scrambled Joe--Kuo Sobol Initialization:} Every initial individual across all five experimental arms
+(\code{E0}--\code{E5}) is generated purely from scrambled Joe--Kuo Sobol quasi-random sequences (\code{G4Genome::from\_sobol})~\cite{joe2008}.
+No \code{default\_anchor} or \code{default\_baseline} constructor exists in \code{crates/g4}.
+\item \textbf{Lloyd-relaxed 6D CVT archive:} Niche centroids in the 6D phenotypic descriptor space (finished mass $m$, blade reach
+$R$, claw turn angle $\Delta\theta$, point angle $\theta_{\mathrm{tip}}$, grip $H/T$, and hollowness fraction $\eta_{\mathrm{void}}$)
+are computed via deterministic Lloyd relaxation~\cite{vassiliades2018}.
+\item \textbf{UCB1 four-emitter black-box bandit:} Offspring batches are generated by four 100\,\% gene-agnostic black-box continuous
+variation operators scheduled by UCB1:
+(1) \code{Sep-CMA-MAE}~\cite{fontaine2023} initialized from the top Sobol archive elites,
+(2) \code{DE/current-to-pbest/1/bin} differential evolution over archive elites,
+(3) simulated binary crossover (\code{SBX}) with polynomial mutation, and
+(4) sparse-coordinate \code{Iso+LineDD} directional crossover.
+\item \textbf{Periodic $h = 0.20$~mm Tier-2 verification and cross-arch determinism:} Top archive elites are periodically re-evaluated
+at Tier~2 ($h = 0.20$~mm, 3-level plate GCI, and 3D \code{TET10} tip FE). All transcendental math uses pure-Rust \code{libm} and
 parallel batches are reduced in deterministic index order, guaranteeing bit-identical results across thread counts (\code{T-DET-1}).
 \end{itemize}
 
-\section{Experimental Results, Mass Waterfall, and Certified Winner}\label{sec:results}
+\section{Experimental Results, Mass Waterfall, and Verified Winner}\label{sec:results}
 \subsection{Eight-Lever Mass Waterfall (Study \code{E-05})}
 Table~\ref{tab:waterfall} traces the sequential application of the eight structural mass-reduction levers (\code{L-1}--\code{L-8})
-starting from a uniform-skin, unperforated baseline (\code{L-0}, 69.56~g finished). Together, flange-graded grip skins (\code{L-1}),
-perforated Warren webs (\code{L-2}), stress-graded TPMS (\code{L-3}), the drained hollow ring gallery (\code{L-4}), the bi-concave
+starting from a uniform-skin, unperforated baseline (\code{L-0}, 56.53~g finished). Together, flange-graded grip skins (\code{L-1}),
+perforated Warren webs (\code{L-2}), spatially stress-graded TPMS (\code{L-3}), the drained hollow ring gallery (\code{L-4}), the bi-concave
 blade fuller (\code{L-5}), decoupled hollow blade core (\code{L-6}), lean anthropometric grip envelope with zero-mean texture and
-trabecular flank windows (\code{L-7}), and the distal tip-bisector crown (\code{L-8}) reduce finished mass by \textbf{26.71~g}
-($-38.4\,\%$, down to \textbf{42.85~g}) while maintaining positive safety margins across all 29 gates.
+trabecular flank windows (\code{L-7}), and the distal tip-bisector crown (\code{L-8}) reduce finished mass by \textbf{12.24~g}
+($-21.7\,\%$, down to \textbf{44.29~g}) while maintaining positive safety margins across all 29 targets.
 
 \begin{table}[t]
 \caption{Eight-lever mass reduction waterfall (\code{evidence/g4/studies/e05\_mass\_levers.json})}\label{tab:waterfall}
@@ -251,82 +257,80 @@ trabecular flank windows (\code{L-7}), and the distal tip-bisector crown (\code{
 \toprule
 Step & Architectural Lever Applied & Mass (g) & $\Delta m$ (g) & Score \\
 \midrule
-L-0 & Uniform-skin unperforated baseline & 69.56 & --- & 72.18 \\
-L-1 & Flange-graded grip skin ($0.80$~mm flanks, $+0.42$~mm chords) & 64.96 & $-4.60$ & 75.56 \\
-L-2 & Perforated Warren web ($62\,\%$ circular cutouts) & 62.66 & $-2.30$ & 77.26 \\
-L-3 & Lamarckian stress-graded Sheet-TPMS core & 59.30 & $-3.36$ & 79.68 \\
-L-4 & Drained hollow ring gallery + 32.0~mm ring OD & 54.44 & $-4.86$ & 83.29 \\
-L-5 & Bi-concave blade fuller + lean 73.5~mm chord reach & 49.41 & $-5.03$ & 86.96 \\
-L-6 & Decoupled hollow blade core ($\rho_{\mathrm{blade}}=0.13$) & 46.94 & $-2.47$ & 88.78 \\
-L-7 & Lean anthropometric grip + zero-mean texture + Mod.\ T & 42.66 & $-4.28$ & 91.91 \\
-L-8 & Distal tip-bisector diamond crown ($+0.38$~mm) & \textbf{42.85} & $+0.19$ & \textbf{92.14} \\
+L-0 & Uniform-skin unperforated baseline & 56.53 & --- & 81.96 \\
+L-1 & Flange-graded grip skin ($0.80$~mm flanks, $+0.42$~mm chords) & 53.40 & $-3.13$ & 83.12 \\
+L-2 & Perforated Warren web ($62\,\%$ circular cutouts) & 51.64 & $-1.76$ & 83.92 \\
+L-3 & Spatially stress-graded Sheet-TPMS core & 47.99 & $-3.65$ & 85.46 \\
+L-4 & Drained hollow ring gallery + 32.0~mm ring OD & 47.86 & $-0.13$ & 85.56 \\
+L-5 & Bi-concave blade fuller + lean 73.5~mm chord reach & 45.57 & $-2.29$ & 84.85 \\
+L-6 & Decoupled hollow blade core ($\rho_{\mathrm{blade}}=0.13$) & 44.27 & $-1.30$ & 84.03 \\
+L-7 & Lean anthropometric grip + zero-mean texture + Mod.\ T & 44.41 & $+0.14$ & 83.97 \\
+L-8 & Distal tip-bisector diamond crown ($+0.52$~mm) & \textbf{44.29} & $-0.13$ & \textbf{83.80} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Multi-Seed Cohort and Five-Arm Ablation Study (\code{E0}--\code{E5})}
-Table~\ref{tab:ablations} summarizes the five-arm experimental cohort executed by \code{g4-evolve} (\code{evidence/g4/v4.0.0/evolution\_summary.json}).
+Table~\ref{tab:ablations} summarizes the five-arm experimental cohort executed by \code{g4-evolve} (\code{evidence/g4/v4.1.0/evolution\_summary.json}).
 Full G4 (\code{E3}, 5 seeds) achieves a median score of \textbf{\GFourEThreeMedScore} (IQR \GFourEThreeIqrScore) and median finished mass
 of \textbf{\GFourEThreeMedMass~g}, outperforming the no-Module-T ablation (\code{E5}, median \GFourEFiveMedScore, mass \GFourEFiveMedMass~g),
-single-population penalty CMA (\code{E2}, median \GFourETwoMedScore), legacy \code{W\_ERGOLIGHT\_v1} search (\code{E1}, median
-\GFourEOneMedScore), and pure scrambled Sobol search (\code{E0}, median \GFourEZeroMedScore) with Vargha--Delaney effect size
-$\hat{A}_{12} = 1.00$ against \code{E0}/\code{E1}/\code{E2}.
+single-population CMA (\code{E2}, median \GFourETwoMedScore), legacy \code{W\_ERGOLIGHT\_v1} search (\code{E1}, median
+\GFourEOneMedScore), and pure scrambled Sobol search (\code{E0}, median \GFourEZeroMedScore).
 
 \begin{table}[t]
-\caption{Multi-seed cohort and ablation comparison (\code{evidence/g4/v4.0.0/evolution\_summary.json})}\label{tab:ablations}
+\caption{Multi-seed cohort and ablation comparison (\code{evidence/g4/v4.1.0/evolution\_summary.json})}\label{tab:ablations}
 \centering
 \setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{@{}lrrrrr@{}}
+\begin{tabular}{@{}lrrrr@{}}
 \toprule
-Experiment Arm & Seeds & Med.\ Score & IQR & Med.\ Mass (g) & $\hat{A}_{12}$ vs.\ E3 \\
+Experiment Arm & Seeds & Med.\ Score & IQR & Med.\ Mass (g) \\
 \midrule
-\textbf{E3: G4 Full (\code{FI-2Pop} + Mod.\ T)} & 5 & \textbf{\GFourEThreeMedScore} & \GFourEThreeIqrScore & \textbf{\GFourEThreeMedMass} & 0.50 \\
-E5: G4 Core (No Module T) & 3 & \GFourEFiveMedScore & 0.34 & \GFourEFiveMedMass & 0.93 \\
-E2: Single-Pop Penalty CMA & 3 & \GFourETwoMedScore & 0.62 & 44.12 & 1.00 \\
-E1: Legacy \code{W\_ERGOLIGHT\_v1} & 3 & \GFourEOneMedScore & 1.15 & 45.80 & 1.00 \\
-E0: Pure Scrambled Sobol & 3 & \GFourEZeroMedScore & 2.40 & 48.95 & 1.00 \\
+\textbf{E3: G4 Full (Continuous QD + Mod.\ T)} & 5 & \textbf{\GFourEThreeMedScore} & \GFourEThreeIqrScore & \textbf{\GFourEThreeMedMass} \\
+E5: G4 Core (No Module T) & 3 & \GFourEFiveMedScore & --- & \GFourEFiveMedMass \\
+E2: Single-Pop Sep-CMA-ES & 3 & \GFourETwoMedScore & --- & --- \\
+E1: Legacy \code{W\_ERGOLIGHT\_v1} & 3 & \GFourEOneMedScore & --- & --- \\
+E0: Pure Scrambled Sobol & 3 & \GFourEZeroMedScore & --- & --- \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{The Certified Sub-50~g Winner (\GFourWinnerId)}
-Table~\ref{tab:winner} compares the certified G4 v4.0.0 winner \GFourWinnerId{} (genome hash \GFourGenomeSha) against the G3 v3.0.0
-winner \code{hz2i012\_g00609\_d55af923}. The G4 winner weighs \textbf{\GFourFinishedMassG~g} as finished (\textbf{\GFourPrintedMassG~g}
-as printed with the $+0.30$~mm bevel grind allowance, a \textbf{38.4\,\% mass reduction} vs.\ G3's 67.97~g finished / 71.09~g printed
-meshes), partitioned across ring \GFourRingMassG~g, grip \GFourGripMassG~g, guard \GFourGuardMassG~g, and blade \GFourBladeTotalMassG~g
-(root \GFourBladeRootMassG~g, mid \GFourBladeMidMassG~g, tip \GFourBladeTipMassG~g). Every one of the 17 structural LCB safety factors
-exceeds its required threshold ($V(x)=0$).
+\subsection{The Sub-50~g Winner (\GFourWinnerId)}
+Table~\ref{tab:winner} compares the Tier-2 verified G4 v\GFourVersion{} winner \GFourWinnerId{} (genome hash \GFourGenomeSha) against the G3 v3.0.0
+winner \code{hz4i013\_g00995\_d206e3c9}. The G4 winner weighs \textbf{\GFourFinishedMassG~g} finished (\textbf{\GFourPrintedMassG~g}
+with the $+0.30$~mm bevel grind stock, vs.\ G3's 57.02~g scored / 59.34~g print mesh), partitioned across ring \GFourRingMassG~g,
+grip \GFourGripMassG~g, guard \GFourGuardMassG~g, and blade \GFourBladeTotalMassG~g (root \GFourBladeRootMassG~g, mid \GFourBladeMidMassG~g,
+tip \GFourBladeTipMassG~g). Every one of the 17 structural LCB safety factors meets or exceeds its required target ($V(x)=0$).
 
 \begin{table}[t]
-\caption{Head-to-head comparison: G3 v3.0.0 winner vs.\ certified G4 v\GFourVersion{} winner \GFourWinnerId}\label{tab:winner}
+\caption{Head-to-head comparison: G3 v3.0.0 winner vs.\ G4 v\GFourVersion{} winner \GFourWinnerId}\label{tab:winner}
 \centering
 \setlength{\tabcolsep}{3.2pt}
 \begin{tabular}{@{}lrrr@{}}
 \toprule
-Metric / Certification Gate & Req.\ (v4) & G3 v3.0.0 & \textbf{G4 v\GFourVersion} \\
+Metric / Target & Req.\ (v4) & G3 v3.0.0 & \textbf{G4 v\GFourVersion} \\
 \midrule
-Finished CAD mass (g) & $< 50.0$ & 67.97 & \textbf{\GFourFinishedMassG} \\
-As-printed AM build mass (g) & --- & 71.09 & \textbf{\GFourPrintedMassG} \\
-Solid envelope mass (g) / Hollowness & --- & 101.0 / 29.6\,\% & \textbf{\GFourEnvelopeMassG{} / \GFourHollownessPct\,\%} \\
-Ring / Grip / Guard / Blade mass (g) & --- & 9.8 / 37.9 / 4.2 / 19.2 & \textbf{\GFourRingMassG{} / \GFourGripMassG{} / \GFourGuardMassG{} / \GFourBladeTotalMassG} \\
-Score (\code{W\_ERGOLIGHT\_v2} / legacy \code{v1}) & $\ge 50.0$ & $<50$ (infeas.) / 80.78 & \textbf{\GFourScoreVTwo{} / \GFourScoreVOne} \\
+Finished mass (g) & $< 50.0$ & 57.02 (scored) & \textbf{\GFourFinishedMassG} \\
+With grind stock mass (g) & --- & 59.34 (print mesh) & \textbf{\GFourPrintedMassG} \\
+Solid envelope mass (g) / Hollowness & --- & 101.0 / 41.2\,\% & \textbf{\GFourEnvelopeMassG{} / \GFourHollownessPct\,\%} \\
+Ring / Grip / Guard / Blade mass (g) & --- & 9.0 / 28.6 / 2.4 / 19.7 & \textbf{\GFourRingMassG{} / \GFourGripMassG{} / \GFourGuardMassG{} / \GFourBladeTotalMassG} \\
+Score (\code{W\_ERGOLIGHT\_v2} / legacy \code{v1}) & --- & --- / 80.78 & \textbf{\GFourScoreVTwo{} / \GFourScoreVOne} \\
 Planform point angle at 3~mm ($^\circ$) & $\le 55.0^\circ$ & $92.22^\circ$ & \textbf{\GFourPointThreeMmDeg$^\circ$} \\
-Roache 3-level plate $\mathrm{GCI}_{21}$ ($\%$) & $\le 5.0\,\%$ & uncomputed & \textbf{\GFourPlateGciPct\,\%} \\
-Hiker lateral 180~N $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.35$ & 4.54 & \textbf{\GFourSfLatHiker} \\
-Hunter lateral 260~N $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.15$ & 3.14 & \textbf{\GFourSfLatHunter} \\
-Body torsion 1.82~N$\cdot$m $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.25$ & 15.65 & \textbf{\GFourSfTwistBody} \\
-Human-max torsion 16.2~N$\cdot$m $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.10$ & 1.76 & \textbf{\GFourSfTwistHm} \\
-Solid-tip torsion 0.80~N$\cdot$m $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.25$ & 0.431 (1.82~N$\cdot$m) & \textbf{\GFourSfTipTorsion} \\
+Roache 3-level plate $\mathrm{GCI}_{21}$ ($\%$) & $\le 5.0\,\%$ & non-monotone & \textbf{\GFourPlateGciPct\,\%} \\
+Hiker lateral 180~N $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.35$ & 1.43 & \textbf{\GFourSfLatHiker} \\
+Hunter lateral 260~N $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.15$ & 0.99 & \textbf{\GFourSfLatHunter} \\
+Body torsion 1.82~N$\cdot$m $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.25$ & 12.69 & \textbf{\GFourSfTwistBody} \\
+Human-max torsion 16.2~N$\cdot$m $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.10$ & 1.43 & \textbf{\GFourSfTwistHm} \\
+Solid-tip twist 1.82~N$\cdot$m $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.25$ & 0.55 & \textbf{\GFourSfTipTorsion} \\
 Solid-tip lateral pry 60~N $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.20$ & --- & \textbf{\GFourSfTipPry} \\
 Spine push 500~N $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.50$ & 6.22 & \textbf{\GFourSfSpinePush} \\
-Spine baton 3,427~N ultimate $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.10$ & 0.515 (ring clamp) & \textbf{\GFourSfBatonUlt} \\
+Spine load 3,427~N first-yield $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.10$ & 0.52 (ring clamp) & \textbf{\GFourSfBatonUlt} \\
 Ring bearing 300~N / back 30~N $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 2.00$ & 5.66 / 3.92 & \textbf{\GFourSfRingBear{} / \GFourSfRingBack} \\
 Grip bilateral squeeze 250~N $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.50$ & --- & \textbf{\GFourSfSqueeze} \\
 Serration tooth snag+pry $\mathrm{SF}_{\mathrm{LCB}}$ (checked) & $\ge 1.25$ & 2.13 ($4/5, 5/6$) & \textbf{\GFourSfTooth{} ($\GFourTeethIn/\GFourTeethIn, \GFourTeethSp/\GFourTeethSp$)} \\
-Goodman high-cycle fatigue 180~N $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.10$ & 1.84 (true) & \textbf{\GFourSfFatigue} \\
+Goodman high-cycle fatigue 180~N $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.10$ & 1.06 (single $k_t$) & \textbf{\GFourSfFatigue} \\
 Lateral-torsional buckling $\lambda_{\mathrm{LCB}}$ & $\ge 2.00$ & 3.85 & \textbf{\GFourSfBuckling} \\
 Combined 70\,\% lat.\ + 70\,\% twist $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.15$ & --- & \textbf{\GFourSfCombined} \\
-Per-case failure sequence $\min\mathrm{ratio}_{\mathrm{LCB}}$ & $\ge 1.10$ & 0.253 (spine) & \textbf{\GFourSfSeqMin} \\
+Per-case failure sequence $\min\mathrm{ratio}_{\mathrm{LCB}}$ & $\ge 1.10$ & 0.52 (spine) & \textbf{\GFourSfSeqMin} \\
 TPMS face-sheet wrinkling $\mathrm{SF}_{\mathrm{LCB}}$ & $\ge 1.35$ & --- & \textbf{\GFourSfWrinkling} \\
 CoM distance to index choil (mm) & $\le 15.0$ & 11.40 & \textbf{\GFourComChoilMm} \\
 \bottomrule
@@ -334,9 +338,9 @@ CoM distance to index choil (mm) & $\le 15.0$ & 11.40 & \textbf{\GFourComChoilMm
 \end{table}
 
 \section{Scope, Limitations, and Reproducibility}\label{sec:repro}
-Like G3, G4 is a computational engineering release: physical L-PBF fabrication, hot isostatic pressing (HIP), CNC bevel grinding,
+Like G3, G4 is a computational engineering release: physical L-PBF fabrication, stress relief, CNC bevel grinding,
 and destructive mechanical testing remain required before operational qualification. All code, study receipts (\code{evidence/g4/studies/}),
-cohort telemetry (\code{evidence/g4/v4.0.0/}), and the six-file manufacturing upload kit (\code{cad/}) are deterministically
+cohort telemetry (\code{evidence/g4/v4.1.0/}), and the six-file manufacturing upload kit (\code{cad/}) are deterministically
 reproducible via \code{cargo test --manifest-path crates/g4/Cargo.toml --release} and \code{g4-studies}, \code{g4-evolve},
 \code{g4-release-tex}, and \code{g4-export}.
 

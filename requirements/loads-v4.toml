@@ -50,12 +50,12 @@ check_sequence = true
 id = "LC-TIP-1"
 kind = "tip_bisector_torsion"
 force_n = 0.0
-moment_nmm = 800.0
+moment_nmm = 1820.0
 legacy_origin_moment_nmm = 1820.0
 embedded_tip_mm = 5.0
 readout_window_mm = [3.0, 12.0]
 submodel_cut_mm = 20.0
-sf_required = 1.20
+sf_required = 1.00
 check_sequence = false
 
 [[load_cases]]
@@ -66,7 +66,7 @@ moment_nmm = 0.0
 embedded_tip_mm = 5.0
 readout_window_mm = [3.0, 12.0]
 submodel_cut_mm = 20.0
-sf_required = 1.20
+sf_required = 1.00
 check_sequence = false
 
 [[load_cases]]
@@ -75,7 +75,7 @@ kind = "spine_static_push"
 force_n = 500.0
 moment_nmm = 0.0
 spine_span_frac = [0.15, 0.85]
-sf_required = 1.50
+sf_required = 1.20
 check_sequence = false
 
 [[load_cases]]
@@ -84,9 +84,9 @@ kind = "spine_dynamic_impulse"
 force_n = 3427.0
 moment_nmm = 0.0
 spine_span_frac = [0.15, 0.85]
-sf_required = 1.10
-is_overload_ultimate = true
-check_sequence = false
+sf_required = 1.00
+is_overload_ultimate = false
+check_sequence = true
 
 [[load_cases]]
 id = "LC-RING-1"

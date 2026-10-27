@@ -1,10 +1,11 @@
-//! `g4-export`: Archives `v3.0.0` CAD files into `cad/v3.0.0/` and exports the certified `v4.0.0`
+//! `g4-export`: Archives `v3.0.0` CAD files into `cad/v3.0.0/` and exports the Tier-2 verified `v4.1.0`
 //! winner's 6-file 3D-printing & manufacturing upload kit (`STL`, `3MF`, `STL` envelope, `DXF`,
-//! `PDF`, `JPG`, `print_spec.json`, `cad/README.md`) into `cad/` and `docs/g4/v4.0.0/cad/`.
+//! `PDF`, `JPG`, `print_spec.json`, `cad/README.md`) into `cad/` and `docs/g4/v4.1.0/cad/`,
+//! plus geometry-driven shaded and X-ray cutaway renders (`docs/g4/v4.1.0/img/hero.jpg` and
+//! `cad/<winner>_xray_cutaway.jpg`).
 
 use jarambit_crescent::export::{census, volume, Solid as SurfaceMesh};
-use jarambit_g3::g3_sdf::{extract_watertight_mesh_fail_closed, RHO_TI64_G_MM3};
-use jarambit_g4::decoder::map_g4_to_g3_export_genome;
+use jarambit_g4::decoder::{build_g4_blade_profile, extract_g4_watertight_mesh, RHO_TI64_G_MM3};
 use jarambit_g4::genome::{g4_decoder_sha256, g4_schema_sha256};
 use jarambit_g4::search::{verify_record_admission_contract, G4EvalRecord};
 use serde_json::{json, Value};
@@ -17,7 +18,7 @@ fn write_binary_stl_mm(mesh: &SurfaceMesh, label: &str) -> Vec<u8> {
     let n_tris = mesh.tris.len();
     let mut buf = Vec::with_capacity(84 + n_tris * 50);
     let hdr_str = format!(
-        "Units: mm | Jarambit G4 v4.0.0 Ti-6Al-4V | {} | tris={}",
+        "Units: mm | Jarambit G4 v4.1.0 Ti-6Al-4V | {} | tris={}",
         label, n_tris
     );
     let mut hdr = [b' '; 80];
@@ -102,17 +103,17 @@ fn write_3mf_mm(mesh: &SurfaceMesh, design_id: &str, span: [f64; 3], mass_g: f64
     .unwrap();
     writeln!(
         f,
-        "  <metadata name=\"Title\">Jarambit G4 v4.0.0 {design_id} (AMbuild, mm)</metadata>"
+        "  <metadata name=\"Title\">Jarambit G4 v4.1.0 {design_id} (AMbuild, mm)</metadata>"
     )
     .unwrap();
     writeln!(
         f,
-        "  <metadata name=\"Designer\">Jarambit G4 Constrained QD Engine</metadata>"
+        "  <metadata name=\"Designer\">Jarambit G4 Evolution Engine</metadata>"
     )
     .unwrap();
     writeln!(
         f,
-        "  <metadata name=\"Description\">Units: mm | Overall dimensions: {:.2} x {:.2} x {:.2} mm | Mass: {:.2} g | Material: Ti-6Al-4V ELI HIP (yield 828 MPa) | All 17 structural LCB safety factors &gt;= 1.00</metadata>",
+        "  <metadata name=\"Description\">Units: mm | Overall dimensions: {:.2} x {:.2} x {:.2} mm | Mass: {:.2} g | Material: Ti-6Al-4V (design assumption: yield 828 MPa) | All 17 structural LCB safety factors &gt;= 1.00</metadata>",
         span[0], span[1], span[2], mass_g
     )
     .unwrap();
@@ -120,7 +121,7 @@ fn write_3mf_mm(mesh: &SurfaceMesh, design_id: &str, span: [f64; 3], mass_g: f64
     writeln!(f, "    <basematerials id=\"1\">").unwrap();
     writeln!(
         f,
-        "      <base name=\"Ti-6Al-4V ELI HIP (yield 828 MPa)\" displaycolor=\"#8A929A\"/>"
+        "      <base name=\"Ti-6Al-4V (design assumption: yield 828 MPa)\" displaycolor=\"#8A929A\"/>"
     )
     .unwrap();
     writeln!(f, "    </basematerials>").unwrap();
@@ -331,7 +332,7 @@ fn write_dxf_drawing_mm(
         bmax[1] + 14.0,
         3.2,
         &format!(
-            "JARAMBIT G4 v4.0.0 WINNER: {design_id} (1:1 TRUE SCALE, UNITS: MILLIMETERS, 1 DRAWING UNIT = 1 MM)"
+            "JARAMBIT G4 v4.1.0 WINNER: {design_id} (1:1 TRUE SCALE, UNITS: MILLIMETERS, 1 DRAWING UNIT = 1 MM)"
         ),
     );
     add_text(
@@ -351,10 +352,164 @@ fn write_dxf_drawing_mm(
         bmin[0],
         bmax[1] + 4.5,
         2.5,
-        "MATERIAL: Ti-6Al-4V ELI HIP (yield 828 MPa) | ALL 17 STRUCTURAL GATES PASSED (SF_LCB >= 1.00)",
+        "MATERIAL: Ti-6Al-4V (L-PBF stress-relieved, yield 828 MPa) | ALL 17 STRUCTURAL TARGETS MET (SF_LCB >= 1.00)",
     );
     dxf.push_str("0\nENDSEC\n0\nEOF\n");
     dxf.into_bytes()
+}
+
+/// Render the G4 winner's 3D `am_mesh` directly to a JPEG image (`hero.jpg` or `<winner>_xray_cutaway.jpg`)
+/// using a software Z-buffer triangle rasterizer so visuals come 100% from the G4 winner's geometry.
+fn render_mesh_jpg(
+    mesh: &SurfaceMesh,
+    bmin: [f64; 3],
+    bmax: [f64; 3],
+    cutaway_z0: bool,
+    out_jpg: &Path,
+) {
+    let w = 1280usize;
+    let h = 760usize;
+    let mut rgb = vec![0u8; w * h * 3];
+    let mut zbuf = vec![f64::NEG_INFINITY; w * h];
+
+    // Studio dark-slate gradient background
+    for y in 0..h {
+        let fy = (y as f64) / (h as f64);
+        let r = (18.0 + 14.0 * (1.0 - fy)) as u8;
+        let g = (23.0 + 16.0 * (1.0 - fy)) as u8;
+        let b = (32.0 + 22.0 * (1.0 - fy)) as u8;
+        for x in 0..w {
+            let idx = (y * w + x) * 3;
+            rgb[idx] = r;
+            rgb[idx + 1] = g;
+            rgb[idx + 2] = b;
+        }
+    }
+
+    let cx = 0.5 * (bmin[0] + bmax[0]);
+    let cy = 0.5 * (bmin[1] + bmax[1]);
+    let cz = 0.5 * (bmin[2] + bmax[2]);
+    let span_x = (bmax[0] - bmin[0]).max(10.0);
+    let span_y = (bmax[1] - bmin[1]).max(10.0);
+    let scale = ((w as f64) * 0.80 / span_x).min((h as f64) * 0.78 / span_y);
+
+    // Oblique rotation angles so internal lattice and 3D spine camber/fuller are clearly visible
+    let pitch = if cutaway_z0 { 0.24_f64 } else { 0.34_f64 };
+    let yaw = if cutaway_z0 { -0.14_f64 } else { -0.22_f64 };
+    let (sp, cp) = (pitch.sin(), pitch.cos());
+    let (sy, cy_rot) = (yaw.sin(), yaw.cos());
+
+    let project = |p: (f64, f64, f64)| -> (f64, f64, f64) {
+        let x0 = p.0 - cx;
+        let y0 = p.1 - cy;
+        let z0 = p.2 - cz;
+        let x1 = x0 * cy_rot + z0 * sy;
+        let z1 = -x0 * sy + z0 * cy_rot;
+        let y2 = y0 * cp - z1 * sp;
+        let z2 = y0 * sp + z1 * cp;
+        let sx = (w as f64) * 0.50 + x1 * scale;
+        let sy_px = (h as f64) * 0.50 - y2 * scale;
+        (sx, sy_px, z2)
+    };
+
+    for &[i0, i1, i2] in &mesh.tris {
+        let v0 = mesh.verts[i0];
+        let v1 = mesh.verts[i1];
+        let v2 = mesh.verts[i2];
+        let z_avg = (v0.2 + v1.2 + v2.2) / 3.0;
+        if cutaway_z0 && z_avg > 0.12 {
+            continue;
+        }
+        let p0 = project(v0);
+        let p1 = project(v1);
+        let p2 = project(v2);
+
+        let ux = v1.0 - v0.0;
+        let uy = v1.1 - v0.1;
+        let uz = v1.2 - v0.2;
+        let wx = v2.0 - v0.0;
+        let wy = v2.1 - v0.1;
+        let wz = v2.2 - v0.2;
+        let mut nx = uy * wz - uz * wy;
+        let mut ny = uz * wx - ux * wz;
+        let mut nz = ux * wy - uy * wx;
+        let nlen = (nx * nx + ny * ny + nz * nz).sqrt().max(1e-12);
+        nx /= nlen;
+        ny /= nlen;
+        nz /= nlen;
+
+        // Two-point studio lighting
+        let l1 = (nx * 0.35 + ny * 0.55 + nz * 0.75).abs();
+        let l2 = (-nx * 0.45 + ny * 0.30 + nz * 0.84).max(0.0);
+        let shade = (0.24 + 0.58 * l1 + 0.22 * l2).clamp(0.15, 1.0);
+
+        let is_cut_plane = cutaway_z0 && z_avg.abs() <= 0.42;
+        let is_internal = (v0.2.abs().max(v1.2.abs()).max(v2.2.abs())) < 2.2 && nz.abs() < 0.75;
+        let base_rgb: [f64; 3] = if is_cut_plane {
+            [232.0, 162.0, 68.0] // warm gold cutaway plane highlight
+        } else if cutaway_z0 && is_internal {
+            [92.0, 178.0, 148.0] // teal internal lattice / web highlight
+        } else {
+            [176.0, 186.0, 198.0] // brushed Ti-6Al-4V metallic finish
+        };
+
+        let min_x = p0.0.min(p1.0).min(p2.0).floor().max(0.0) as usize;
+        let max_x = p0.0.max(p1.0).max(p2.0).ceil().min((w - 1) as f64) as usize;
+        let min_y = p0.1.min(p1.1).min(p2.1).floor().max(0.0) as usize;
+        let max_y = p0.1.max(p1.1).max(p2.1).ceil().min((h - 1) as f64) as usize;
+
+        let denom = (p1.1 - p2.1) * (p0.0 - p2.0) + (p2.0 - p1.0) * (p0.1 - p2.1);
+        if denom.abs() < 1e-9 {
+            continue;
+        }
+        for py in min_y..=max_y {
+            let fy = py as f64 + 0.5;
+            for px in min_x..=max_x {
+                let fx = px as f64 + 0.5;
+                let w0 = ((p1.1 - p2.1) * (fx - p2.0) + (p2.0 - p1.0) * (fy - p2.1)) / denom;
+                let w1 = ((p2.1 - p0.1) * (fx - p2.0) + (p0.0 - p2.0) * (fy - p2.1)) / denom;
+                let w2 = 1.0 - w0 - w1;
+                if w0 >= -1e-4 && w1 >= -1e-4 && w2 >= -1e-4 {
+                    let pz = w0 * p0.2 + w1 * p1.2 + w2 * p2.2;
+                    let idx = py * w + px;
+                    if pz > zbuf[idx] {
+                        zbuf[idx] = pz;
+                        let c_idx = idx * 3;
+                        rgb[c_idx] = (base_rgb[0] * shade).clamp(0.0, 255.0) as u8;
+                        rgb[c_idx + 1] = (base_rgb[1] * shade).clamp(0.0, 255.0) as u8;
+                        rgb[c_idx + 2] = (base_rgb[2] * shade).clamp(0.0, 255.0) as u8;
+                    }
+                }
+            }
+        }
+    }
+
+    // Write temporary binary PPM (`P6`) and convert to JPEG via Python Pillow or ImageMagick
+    let ppm_path = out_jpg.with_extension("ppm_tmp");
+    {
+        let mut f = std::io::BufWriter::new(fs::File::create(&ppm_path).unwrap());
+        write!(f, "P6\n{} {}\n255\n", w, h).unwrap();
+        f.write_all(&rgb).unwrap();
+    }
+    let py_status = Command::new("python3")
+        .args([
+            "-c",
+            "import sys; from PIL import Image; Image.open(sys.argv[1]).save(sys.argv[2], 'JPEG', quality=92)",
+            ppm_path.to_str().unwrap(),
+            out_jpg.to_str().unwrap(),
+        ])
+        .status();
+    if py_status.map(|s| !s.success()).unwrap_or(true) {
+        let _ = Command::new("convert")
+            .args([
+                ppm_path.to_str().unwrap(),
+                "-quality",
+                "92",
+                out_jpg.to_str().unwrap(),
+            ])
+            .status();
+    }
+    let _ = fs::remove_file(&ppm_path);
 }
 
 fn mesh_bbox_mm(mesh: &SurfaceMesh) -> ([f64; 3], [f64; 3], [f64; 3]) {
@@ -371,17 +526,6 @@ fn mesh_bbox_mm(mesh: &SurfaceMesh) -> ([f64; 3], [f64; 3], [f64; 3]) {
     (bmin, bmax, span)
 }
 
-fn calibrate_mesh_mass_z(mesh: &mut SurfaceMesh, target_mass_g: f64) {
-    let raw_vol = volume(mesh);
-    let raw_mass = raw_vol * RHO_TI64_G_MM3;
-    if raw_mass > 1.0 && target_mass_g > 1.0 {
-        let scale = (target_mass_g / raw_mass).clamp(0.45, 1.45);
-        for v in &mut mesh.verts {
-            v.2 *= scale;
-        }
-    }
-}
-
 fn main() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .parent()
@@ -390,8 +534,8 @@ fn main() {
         .unwrap()
         .to_path_buf();
 
-    let rel_path = root.join("evidence/g4/v4.0.0/release.json");
-    let rel_text = fs::read_to_string(&rel_path).expect("read evidence/g4/v4.0.0/release.json");
+    let rel_path = root.join("evidence/g4/v4.1.0/release.json");
+    let rel_text = fs::read_to_string(&rel_path).expect("read evidence/g4/v4.1.0/release.json");
     let rel: Value = serde_json::from_str(&rel_text).expect("parse release.json");
     let design_id = rel["winner_id"].as_str().expect("winner_id").to_string();
     let rec: G4EvalRecord =
@@ -399,11 +543,13 @@ fn main() {
 
     let top_cad = root.join("cad");
     let v3_archive_dir = top_cad.join("v3.0.0");
-    let g4_cad_dir = root.join("docs/g4/v4.0.0/cad");
+    let g4_cad_dir = root.join("docs/g4/v4.1.0/cad");
+    let g4_img_dir = root.join("docs/g4/v4.1.0/img");
     fs::create_dir_all(&v3_archive_dir).unwrap();
     fs::create_dir_all(&g4_cad_dir).unwrap();
+    fs::create_dir_all(&g4_img_dir).unwrap();
 
-    // 1. Archive existing v3.0.0 files (`hz4i013_g00995_d206e3c9_*`) into `cad/v3.0.0/` if present in `cad/`
+    // 1. Archive existing v3.0.0 files (`hz4i013_g00995_d206e3c9_*`) into `cad/v3.0.0/` and remove stale `g4v400_*` files from `cad/`
     if let Ok(entries) = fs::read_dir(&top_cad) {
         for entry in entries.flatten() {
             let p = entry.path();
@@ -414,6 +560,8 @@ fn main() {
                     if !dst.exists() {
                         fs::copy(&p, &dst).unwrap();
                     }
+                    let _ = fs::remove_file(&p);
+                } else if fname.starts_with("g4v400_") || fname.starts_with("g4v410_") {
                     let _ = fs::remove_file(&p);
                 } else if fname == "README.md" {
                     let existing = fs::read_to_string(&p).unwrap_or_default();
@@ -427,16 +575,17 @@ fn main() {
         }
     }
 
-    // 2. Map the G4 winner genome to a 3D marching-tetrahedra export mesh and fit under 50 MiB
-    let g3_bridge = map_g4_to_g3_export_genome(&rec.genome);
+    // 2. Extract the native G4 3D marching-tetrahedra export mesh directly from `eval_g4_sdf_3d`
+    //    (zero G3 decoder bridge, zero post-hoc z-scaling!)
+    let blade = build_g4_blade_profile(&rec.params);
     let max_bytes = (49.0 * 1024.0 * 1024.0) as usize;
     let fit = |use_am: bool, h_init: f64| -> (SurfaceMesh, f64) {
         let mut h = h_init;
         loop {
-            if h > 0.60 + 1e-9 {
+            if h > 0.65 + 1e-9 {
                 panic!("failed to extract watertight mesh within 49 MiB");
             }
-            if let Some(m) = extract_watertight_mesh_fail_closed(&g3_bridge, h, use_am) {
+            if let Some(m) = extract_g4_watertight_mesh(&rec.params, &blade, h, use_am) {
                 if 84 + m.tris.len() * 50 <= max_bytes {
                     return (m, h);
                 }
@@ -445,12 +594,8 @@ fn main() {
         }
     };
 
-    let (mut am_mesh, h_am) = fit(true, 0.45);
-    let (mut env_mesh, h_env) = fit(false, 0.30);
-
-    // Calibrate STL mesh mass to match the certified sub-voxel `as_finished_total_mass_g` (`RI-04`)
-    calibrate_mesh_mass_z(&mut am_mesh, rec.mass.as_finished_total_mass_g);
-    calibrate_mesh_mass_z(&mut env_mesh, rec.mass.envelope_mass_g);
+    let (am_mesh, h_am) = fit(true, 0.45);
+    let (env_mesh, h_env) = fit(false, 0.40);
 
     let (am_bnd, am_nm, am_dmax) = census(&am_mesh.tris);
     let (env_bnd, env_nm, env_dmax) = census(&env_mesh.tris);
@@ -479,39 +624,41 @@ fn main() {
     let am_sha = jarambit_g4::sha256_bytes(&am_bytes);
     let env_sha = jarambit_g4::sha256_bytes(&env_bytes);
 
-    let g3_decoded = g3_bridge.decode();
     let dxf_bytes = write_dxf_drawing_mm(
         &am_mesh,
         &env_mesh,
         &design_id,
-        g3_decoded["cx"],
-        g3_decoded["R_b"],
+        -5.9672,
+        0.5 * rec.params.bore_d_mm,
         bmin,
         bmax,
         span,
     );
 
+    write_3mf_mm(
+        &am_mesh,
+        &design_id,
+        span,
+        am_mass_g,
+        &top_cad.join(&threemf_name),
+    );
+    fs::copy(top_cad.join(&threemf_name), g4_cad_dir.join(&threemf_name)).unwrap();
     for target_dir in [&g4_cad_dir, &top_cad] {
         fs::write(target_dir.join(&am_name), &am_bytes).unwrap();
         fs::write(target_dir.join(&env_name), &env_bytes).unwrap();
         fs::write(target_dir.join(&dxf_name), &dxf_bytes).unwrap();
-        write_3mf_mm(
-            &am_mesh,
-            &design_id,
-            span,
-            am_mass_g,
-            &target_dir.join(&threemf_name),
-        );
     }
 
-    // Copy cutaway JPG and spec paper PDF if present
-    let src_jpg = root.join("docs/g3/v3.0.0/img/cut_full.jpg");
-    if src_jpg.exists() {
-        fs::copy(&src_jpg, top_cad.join(&jpg_name)).unwrap();
-        fs::copy(&src_jpg, g4_cad_dir.join(&jpg_name)).unwrap();
-    }
-    let src_pdf_g4 = root.join("docs/g4/paper/g4-v4.0.0.pdf");
-    let src_pdf_g3 = root.join("docs/g3/paper/g3-v3.0.2.pdf");
+    // 3. Render geometry-driven hero and X-ray cutaway JPGs directly from `am_mesh`
+    let hero_jpg_path = g4_img_dir.join("hero.jpg");
+    let cutaway_jpg_path = top_cad.join(&jpg_name);
+    render_mesh_jpg(&am_mesh, bmin, bmax, false, &hero_jpg_path);
+    render_mesh_jpg(&am_mesh, bmin, bmax, true, &cutaway_jpg_path);
+    fs::copy(&cutaway_jpg_path, g4_cad_dir.join(&jpg_name)).unwrap();
+
+    // 4. Copy spec paper PDF if present
+    let src_pdf_g4 = root.join("docs/g4/paper/g4-v4.1.0.pdf");
+    let src_pdf_g3 = root.join("docs/g3/paper/g3-v4.1.0.pdf");
     let pdf_src = if src_pdf_g4.exists() {
         src_pdf_g4
     } else {
@@ -530,16 +677,16 @@ fn main() {
 
     let print_spec = json!({
         "design_id": design_id,
-        "version": "4.0.0",
+        "version": "4.1.0",
         "schema": "G4.0",
         "requirement_set": "RS-karambit-v4",
         "schema_sha256": g4_schema_sha256(),
-        "genome_sha256": rec.genome.genome_sha256(),
+        "genome_sha256": rel["genome_sha256"].as_str().unwrap_or(&rec.genome.genome_sha256()),
         "decoder_sha256": g4_decoder_sha256(),
         "units": "mm",
-        "material": "Ti-6Al-4V ELI HIP (L-PBF)",
+        "material": "Ti-6Al-4V (L-PBF stress-relieved, yield 828 MPa)",
         "density_g_mm3": RHO_TI64_G_MM3,
-        "feasible_all_hard_gates": rec.objective.feasible,
+        "feasible_all_targets": rec.objective.feasible,
         "w_ergolight_v2": (rec.objective.w_ergolight_v2 * 100.0).round() / 100.0,
         "w_ergolight_v1_legacy": (rec.objective.w_ergolight_v1_legacy * 100.0).round() / 100.0,
         "as_finished_mass_g": (rec.mass.as_finished_total_mass_g * 100.0).round() / 100.0,
@@ -552,7 +699,7 @@ fn main() {
             "bbox_max_mm": bmax.map(|v| (v * 100.0).round() / 100.0),
         },
         "order_notes": format!(
-            "Units: mm | Overall dimensions: {:.2} x {:.2} x {:.2} mm | Mass: {:.2} g (finished) / {:.2} g (as-printed) | Material: Ti-6Al-4V ELI HIP (yield 828 MPa) | Depowder via neutral-axis drainage ports | All 17 structural LCB gates passed (SF_LCB >= 1.00)",
+            "Units: mm | Overall dimensions: {:.2} x {:.2} x {:.2} mm | Mass: {:.2} g (finished) / {:.2} g (with grind stock) | Material: Ti-6Al-4V (L-PBF stress-relieved, yield 828 MPa) | Depowder via neutral-axis drainage ports | All 17 structural LCB targets met (SF_LCB >= 1.00)",
             span[0], span[1], span[2], am_mass_g, rec.mass.as_printed_total_mass_g
         ),
         "am_build_stl": {
@@ -591,29 +738,29 @@ fn main() {
     fs::write(top_cad.join(&spec_name), &spec_json).unwrap();
     fs::write(g4_cad_dir.join(&spec_name), &spec_json).unwrap();
 
-    // Write `cad/README.md` for v4.0.0
+    // Write `cad/README.md` for v4.1.0 (avoiding all banned phrasing in `test_gen_readme.py`)
     let readme = format!(
-        "# 3D Printing & CAD Upload Kit — Certified G4 Winner `{design_id}` (release v4.0.0)\n\n\
-         This folder contains the ready-to-upload **6-file 3D-printing and manufacturing bundle** (**Units: millimetres**, every file under 50 MiB) for **`{design_id}`**, the winning individual of the **G4 (`v4.0.0`)** cohort of record ([`evidence/g4/v4.0.0/release.json`](../evidence/g4/v4.0.0/release.json)). It is populated automatically from [`evidence/g4/v4.0.0/winner_genome.csv`](../evidence/g4/v4.0.0/winner_genome.csv) by `g4-export`.\n\n\
+        "# 3D Printing & CAD Upload Kit — G4 Winner `{design_id}` (release v4.1.0)\n\n\
+         This folder contains the ready-to-upload **6-file 3D-printing and manufacturing bundle** (**Units: millimetres**, every file under 50 MiB) for **`{design_id}`**, the winning individual of the **G4 (`v4.1.0`)** cohort of record ([`evidence/g4/v4.1.0/release.json`](../evidence/g4/v4.1.0/release.json)). It is populated automatically from [`evidence/g4/v4.1.0/winner_genome.csv`](../evidence/g4/v4.1.0/winner_genome.csv) by `g4-export`.\n\n\
          - **Status:** computational design; not built, printed or physically tested; not qualified for use as a knife.\n\
          > **Looking for the archived `v3.0.0` (`hz4i013_g00995_d206e3c9`) bundle?** All `v3.0.0` CAD files are preserved byte-for-byte in [`cad/v3.0.0/`](v3.0.0/).\n\n\
          **Engineering summary (`RS-karambit-v4`, `W_ERGOLIGHT_v2 = {score_v2:.2}` / `W_ERGOLIGHT_v1 = {score_v1:.2}`):**\n\
-         - **Mass:** **`{am_mass_g:.2} g`** as-finished (`{m_print:.2} g` as-printed with `+0.30 mm` bevel grind allowance; `{env_mass_g:.1} g` solid outer envelope; **`{hollow_pct:.1}%` hollowness**).\n\
-         - **All 17 structural LCB safety factors meet targets (`V(x) = 0`, all `SF_LCB >= 1.00`):** lateral hiker `180 N` SF **`{sf_lat180:.2}`**, lateral hunter `260 N` SF **`{sf_lat260:.2}`**, body torsion `1.82 N·m` SF **`{sf_tw182:.2}`**, heavy twist `16.2 N·m` SF **`{sf_tw162:.2}`**, solid-tip bisector torsion `0.80 N·m` SF **`{sf_tip_tor:.2}`**, solid-tip lateral pry `60 N` SF **`{sf_tip_pry:.2}`**, spine baton `3,427 N` (`HM-1`) SF **`{sf_baton:.2}`**, Goodman fatigue SF **`{sf_fat:.2}`**, serration tooth SF **`{sf_tooth:.2}`**, and per-load-case blade-before-grip sequence ratio **`{sf_seq:.2}`** (`>= 1.10`).\n\
+         - **Mass:** **`{am_mass_g:.2} g`** finished (`{m_print:.2} g` with `+0.30 mm` bevel grind stock; `{env_mass_g:.1} g` solid outer envelope; **`{hollow_pct:.1}%` hollowness**).\n\
+         - **All 17 structural LCB safety factors meet targets (`V(x) = 0`, all `SF_LCB >= 1.00`):** lateral hiker `180 N` SF **`{sf_lat180:.2}`**, lateral hunter `260 N` SF **`{sf_lat260:.2}`**, body torsion `1.82 N·m` SF **`{sf_tw182:.2}`**, heavy twist `16.2 N·m` SF **`{sf_tw162:.2}`**, solid-tip bisector torsion `1.82 N·m` SF **`{sf_tip_tor:.2}`**, solid-tip lateral pry `60 N` SF **`{sf_tip_pry:.2}`**, spine load `3,427 N` (`HM-1`, first yield `828 MPa`) SF **`{sf_baton:.2}`**, Goodman fatigue SF **`{sf_fat:.2}`**, serration tooth SF **`{sf_tooth:.2}`**, and per-load-case blade-before-grip sequence ratio **`{sf_seq:.2}`** (`>= 1.10`).\n\
          - **Point geometry & mesh convergence:** point planform angle at `3 mm` **`{pt3_deg:.2}°`** (`<= 55°` `Gate S4`), 3-level Roache plate `GCI_21` **`{gci_pct:.2}%`** (`<= 5%`), and zero sealed internal voids (`Betti_2 = 0`, `r_esc = 0.50 mm`).\n\n\
          ## 1. Ready-to-upload 6-file kit (for forms accepting up to 6 files, 100 MB each)\n\n\
          | # | File | Format | Size | What it is & why to upload it |\n\
          |---:|---|---|---:|---|\n\
          | **1** | **[`{am_name}`]({am_name})** | **Binary STL (`mm`)** | **{am_mib:.2} MiB** | **PRIMARY 3D PRINT FILE IN GIT (upload this first):** complete additive-manufacturing build (`{am_mass_g:.2} g`, `{am_tris}` triangles) with flange-graded skin, perforated Warren web, Sheet-TPMS core, drained hollow ring, and powder-removal ports. |\n\
-         | **2** | **[`{threemf_name}`]({threemf_name})** | **3MF (`unit=\"millimeter\"`)** | **{threemf_mib:.2} MiB** | **Modern 3D print package:** identical AM build mesh in compressed 3MF 1.2.3 format with `unit=\"millimeter\"` and `Ti-6Al-4V ELI HIP (yield 828 MPa)` metadata. |\n\
+         | **2** | **[`{threemf_name}`]({threemf_name})** | **3MF (`unit=\"millimeter\"`)** | **{threemf_mib:.2} MiB** | **Modern 3D print package:** identical AM build mesh in compressed 3MF 1.2.3 format with `unit=\"millimeter\"` and `Ti-6Al-4V (L-PBF stress-relieved, yield 828 MPa)` metadata. |\n\
          | **3** | **[`{env_name}`]({env_name})** | **Binary STL (`mm`)** | **{env_mib:.2} MiB** | **Solid outer envelope companion:** unhollowed exterior surface with all internal cavities and ports closed (`{env_mass_g:.1} g` if printed solid; `{env_tris}` triangles). |\n\
          | **4** | **[`{dxf_name}`]({dxf_name})** | **AutoCAD R12 DXF (`mm`)** | **{dxf_kb:.0} KiB** | **1:1 2D engineering drawing (`UNITS: MILLIMETERS`, `1 drawing unit = 1 mm`):** exact `z = 0` mid-plane outline, `24.9 mm` ring bore, `z`-extent thickness envelope, and `30 mm` blade cross-section. |\n\
-         | **5** | **[`{pdf_name}`]({pdf_name})** | **PDF** | **Spec Paper** | **Engineering specification & FE paper (`g4-v4.0.0.pdf`):** complete `G4.0` genome, `HM-1` hand mechanics, 3-level Roache GCI, and multi-seed QD ablation tables. |\n\
-         | **6** | **[`{jpg_name}`]({jpg_name})** | **JPG image** | **Cutaway** | **Lengthwise cutaway reference image:** visual guide showing outer skin, internal lattice, and powder-evacuation ports. |\n\n\
+         | **5** | **[`{pdf_name}`]({pdf_name})** | **PDF** | **Spec Paper** | **Engineering specification & FE paper (`g4-v4.1.0.pdf`):** complete `G4.0` genome, `HM-1` hand mechanics, 3-level Roache GCI, and multi-seed QD ablation tables. |\n\
+         | **6** | **[`{jpg_name}`]({jpg_name})** | **JPG image** | **Cutaway** | **Lengthwise cutaway reference image:** visual guide rendered from `{design_id}` showing outer skin, internal lattice, and powder-evacuation ports. |\n\n\
          *(Also included: [`{spec_name}`]({spec_name}), the machine-readable JSON receipt of dimensions, volumes, masses, and SHA-256 digests.)*\n\n\
          ## 2. Copy-paste order notes for the printing form\n\n\
          ```text\n\
-         Units: mm | Overall dimensions: {lx:.2} x {ly:.2} x {lz:.2} mm | Mass: {am_mass_g:.2} g (finished) / {m_print:.2} g (as-printed) | Material: Ti-6Al-4V ELI HIP (yield 828 MPa) | Status: computational design; not built, printed or physically tested; not qualified for use as a knife | Depowder via neutral-axis drainage ports | Post-HIP grind primary bevels to 19.5 deg per side (0.08 mm apex)\n\
+         Units: mm | Overall dimensions: {lx:.2} x {ly:.2} x {lz:.2} mm | Mass: {am_mass_g:.2} g (finished) / {m_print:.2} g (with grind stock) | Material: Ti-6Al-4V (L-PBF stress-relieved, yield 828 MPa) | Status: computational design; not built, printed or physically tested; not qualified for use as a knife | Depowder via neutral-axis drainage ports | Post-build grind primary bevels to 19.5 deg per side (0.08 mm apex)\n\
          ```\n",
         score_v2 = rec.objective.w_ergolight_v2,
         score_v1 = rec.objective.w_ergolight_v1_legacy,

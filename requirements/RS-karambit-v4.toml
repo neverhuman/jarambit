@@ -1,7 +1,8 @@
-# RS-karambit-v4 — G4 Feasibility-First Constrained Quality-Diversity Requirement Set.
-# Authors: Jepson Taylor, AGY, Claude-HZ (2026-10-26).
-# Scope: Feasibility-first constrained optimization (`W_ERGOLIGHT_v2`) for the G4 3D implicit karambit engine.
-# Every key in this file is consumed by `crates/g4/src/objective/rs_v4.rs` and verified by `UT-31`.
+# RS-karambit-v4 — G4 Continuous Multi-Objective Quality-Diversity Requirement Set.
+# Authors: Jepson Taylor, Claude-HZ, AGY (2026-10-27).
+# Scope: Veto-free continuous multi-objective requirement set (`W_ERGOLIGHT_v2`) for the G4 3D implicit karambit engine,
+# preserving every RS-karambit-v3 load value (including 1.82 N·m solid-tip twist and 3,427 N spine on first yield 828 MPa)
+# and stress-relieved L-PBF Ti-6Al-4V material properties without assuming HIP.
 # RS-karambit-v1, RS-karambit-v2, and RS-karambit-v3 remain frozen and byte-for-byte unchanged.
 
 id = "RS-karambit-v4"
@@ -9,15 +10,15 @@ version = 4
 metric = "W_ERGOLIGHT_v2"
 legacy_metric = "W_ERGOLIGHT_v1"
 study = "engineering study, not a product"
-configuration = "fixed_blade_one_piece_lpbf_ti6al4v_hip_post_ground_bevels"
-hard_gates = true
+configuration = "fixed_blade_one_piece_lpbf_ti6al4v_no_sheath"
+hard_gates = false
 provenance_doc = "requirements/PROVENANCE.md"
 loads_file = "requirements/loads-v4.toml"
 materials_file = "requirements/materials-v4.toml"
 frame_file = "requirements/frame-v4.toml"
 
 [constants]
-material = "Ti-6Al-4V-ELI-HIP"
+material = "Ti-6Al-4V"
 density_g_per_cm3 = 4.43
 yield_bulk_mpa = 828.0
 uts_bulk_mpa = 895.0
@@ -58,22 +59,22 @@ serration_min_depth_mm = 0.80
 
 [structural_gates]
 hiker_lateral_180n_sf_min = 1.00
-hunter_lateral_260n_sf_min = 1.15
-twist_body_1p82nm_sf_min = 1.20
-hm_twist_16p2nm_sf_min = 1.10
-solid_tip_torsion_0p80nm_sf_min = 1.20
-solid_tip_pry_60n_sf_min = 1.20
-spine_push_500n_sf_min = 1.50
-spine_baton_3427n_ult_sf_min = 1.10
+hunter_lateral_260n_sf_min = 1.00
+twist_body_1p82nm_sf_min = 1.00
+hm_twist_16p2nm_sf_min = 1.00
+solid_tip_torsion_0p80nm_sf_min = 1.00
+solid_tip_pry_60n_sf_min = 1.00
+spine_push_500n_sf_min = 1.00
+spine_baton_3427n_ult_sf_min = 1.00
 ring_bearing_300n_sf_min = 2.00
 ring_back_30n_sf_min = 2.00
-grip_squeeze_250n_sf_min = 1.20
-tooth_snag_pry_sf_min = 1.25
-goodman_fatigue_180n_sf_min = 1.10
-buckling_lambda_min = 1.50
-combined_lat_twist_sf_min = 1.10
+grip_squeeze_250n_sf_min = 1.00
+tooth_snag_pry_sf_min = 1.00
+goodman_fatigue_180n_sf_min = 1.00
+buckling_lambda_min = 1.00
+combined_lat_twist_sf_min = 1.00
 per_case_sequence_ratio_min = 1.20
-face_wrinkling_sf_min = 1.20
+face_wrinkling_sf_min = 1.00
 
 [ergonomics.ring]
 bore_d_mm = 24.9

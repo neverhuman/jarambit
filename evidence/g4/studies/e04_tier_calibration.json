@@ -1,7 +1,7 @@
 {
   "n_samples": 24,
-  "spearman_rho_t0_vs_t1": 0.7913043478260869,
+  "spearman_rho_t0_vs_t1": 0.5834782608695652,
   "spearman_rho_t1_vs_t2": 1.0,
   "ucb_false_negative_rate": 0.0,
-  "mean_abs_mass_drift_h04_vs_h02_pct": 0.047979305669076905
+  "mean_abs_mass_drift_h04_vs_h02_pct": 0.04797596241884106
 }

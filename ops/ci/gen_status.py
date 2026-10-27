@@ -39,12 +39,31 @@ def latest_release_section(rel):
     return ('(none)', [])
 
 
+def g4_status(version):
+    """The current G4 design (v4.1.0+), from evidence/g4/v<version>/release.json."""
+    rel_path = f'evidence/g4/v{version}/release.json'
+    if not os.path.exists(os.path.join(ROOT, rel_path)):
+        return []
+    r = json.loads(rd(rel_path))
+    w = r['winner_record']
+    m = w['mass']
+    obj = w['objective']
+    s = w['serration']
+    return [f'## Current release: G4 v{version}', '',
+            f'- **Best individual:** `{r["winner_id"]}` ([`{rel_path}`]({rel_path}), schema `{r["schema_version"]}`, requirement set `{r["requirement_set"]}`); status: computational design, not built or physically tested.',
+            f'- **Score:** `W_ERGOLIGHT_v2` {obj["w_ergolight_v2"]:.2f} (`W_ERGOLIGHT_v1` {obj["w_ergolight_v1_legacy"]:.2f}, ergonomic multiplier `E` {obj["ergo_geometric_mean"]:.3f}); **mass** {m["as_finished_total_mass_g"]:.2f} g finished / {m["as_printed_total_mass_g"]:.2f} g with grind stock ({100.0 * m["total_hollowness_fraction"]:.1f} % hollowness vs {m["envelope_mass_g"]:.2f} g solid outer envelope).',
+            f'- **Structural verification:** all 29 targets met (`V(x) = {obj["violation_sum_sq"]:.4f}`, minimum margin `+{obj["min_safety_margin"]:.4f}`); solid-tip 1.82 N·m twist `SF_LCB = {obj["sf_solid_tip_torsion_0p80nm_lcb"]:.2f}`, 3,427 N spine first-yield `SF_LCB = {obj["sf_spine_baton_3427n_ult_lcb"]:.2f}`, Goodman fatigue `SF_LCB = {obj["sf_goodman_fatigue_180n_lcb"]:.2f}`, per-case sequence ratio `{obj["sf_per_case_sequence_min_lcb"]:.2f}`, and `{s["teeth_checked_in"]}/{s["teeth_total_in"]}` inner + `{s["teeth_checked_sp"]}/{s["teeth_total_sp"]}` spine serration teeth checked (`SF_LCB = {obj["sf_tooth_snag_pry_lcb"]:.2f}`).',
+            f'- **Full table, evolution and limits:** [`README.md`](README.md) and [`docs/g4/paper/g4-v{version}.pdf`](docs/g4/paper/g4-v{version}.pdf).',
+            '']
+
+
 def g3_status(version):
-    """The current design: the best individual of the G3 cohort of record, from its release receipt."""
+    """The G3 v3.0.0 cohort of record, from its release receipt."""
     rv = rd('evidence/g3/RECORD').strip()
     r = json.loads(rd(f'evidence/g3/v{rv}/release.json'))
     a, b = r['blade']['edge_inner'], r['blade']['edge_spine']
-    return [f'## Current release: G3 v{version}', '',
+    hdr = f'## Current release: G3 v{version}' if not os.path.exists(os.path.join(ROOT, f'evidence/g4/v{version}/release.json')) else f'## Preceding G3 cohort of record (v{rv})'
+    return [hdr, '',
             f'- **Best individual:** `{r["design_id"]}`, the best of the v{rv} cohort of record '
             f'([`evidence/g3/v{rv}/release.json`](evidence/g3/v{rv}/release.json)); status: {r["status"]}.',
             f'- **Score:** {r["provenance"]["metric"]} {r["score"]["score_100"]:.2f} '
@@ -108,7 +127,7 @@ def generate(context=None):
             state = 'planned'
         L.append(f"| {v} | {ms['title']} | {state} | {len(ms.get('work_items', []))} |")
     L += ['', 'History: `docs/history/` (archived root STATUS.md / GAPS.md snapshots). Release notes: `docs/RELEASES.md`.', '']
-    L[4:4] = g3_status(version) + ['## v1 study (historical record)', '', integrity_status(), '']
+    L[4:4] = g4_status(version) + g3_status(version) + ['## v1 study (historical record)', '', integrity_status(), '']
     output = '\n'.join(L)
     return rs_verdicts.replace_claim_block(output, context) if context is not None else output
 

@@ -1,7 +1,7 @@
-# G4 release paper (v4.0.0). Every headline number comes from evidence/g4/v4.0.0/release.json via g4-release-tex.
-VERSION := 4.0.0
+# G4 release paper (v4.1.0). Every headline number comes from evidence/g4/v4.1.0/release.json via g4-release-tex.
+VERSION := $(shell tr -d ' \n' < ../../VERSION)
 ROOT    := ../../..
-RECEIPT := $(ROOT)/evidence/g4/v4.0.0/release.json
+RECEIPT := $(ROOT)/evidence/g4/v4.1.0/release.json
 PDF     := g4-v$(VERSION).pdf
 
 all: $(PDF)

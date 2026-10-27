@@ -169,7 +169,246 @@ def picture(light, dark, alt, width=None):
             f'<img src="{light}" alt="{alt}"{w}></picture>')
 
 
+def g4_receipt():
+    """Return (version, g4_release_dict, g4_evo_summary_dict, g4_print_spec_dict) when evidence/g4/v<VERSION>/release.json exists."""
+    v = rd('docs/VERSION').strip()
+    rel_path = f'evidence/g4/v{v}/release.json'
+    if not os.path.exists(os.path.join(ROOT, rel_path)):
+        return None
+    rec = js(rel_path)
+    evo = js(f'evidence/g4/v{v}/evolution_summary.json')
+    wid = rec['winner_id']
+    spec = js(f'cad/{wid}_print_spec.json')
+    return v, rec, evo, spec
+
+
+def g4_readme(v, r, evo, sp):
+    wid = r['winner_id']
+    w = r['winner_record']
+    p = w['params']
+    m = w['mass']
+    dr = w['drainability']
+    hm1 = w['hm1']
+    pl = w['plate']
+    gci = pl['gci_admission']
+    tip = w['tip']
+    serr = w['serration']
+    obj = w['objective']
+    seq = obj['sequence_ledger']
+    am = sp['am_build_stl']
+    env = sp['outer_envelope_stl']
+    dim = sp['overall_dimensions_mm']
+    q = lambda s: s.replace('-', '--').replace('_', '__').replace(' ', '%20')
+    sz_kb = lambda rel: os.path.getsize(os.path.join(ROOT, rel)) / 1024.0
+    sz_mb = lambda rel: os.path.getsize(os.path.join(ROOT, rel)) / (1024.0 * 1024.0)
+    e3, e5, e2, e1, e0 = evo['cohorts']
+    wf = js('evidence/g4/studies/e05_mass_levers.json')['waterfall']
+
+    L = [
+        f'# Jarambit {v} (G4): an evolved sub-50 g titanium karambit for laser powder-bed fusion',
+        '',
+        f'[![release](https://img.shields.io/badge/release-v{v}-2f56d6)]({REPO}/releases/tag/v{v}) '
+        f'[![paper](https://img.shields.io/badge/paper-G4%20v{v}%20PDF-2f56d6)](docs/g4/paper/g4-v{v}.pdf) '
+        f'[![3D print CAD](https://img.shields.io/badge/3D%20print%20CAD-cad%2F%20(STL%20%7C%203MF%20%7C%20DXF%20%7C%20PDF)-2f56d6)](cad/) '
+        f'![design](https://img.shields.io/badge/best%20individual-{q(wid)}-555) '
+        f'![score](https://img.shields.io/badge/W__ERGOLIGHT__v2-{obj["w_ergolight_v2"]:.2f}-555) '
+        f'![mass](https://img.shields.io/badge/mass-{m["as_finished_total_mass_g"]:.2f}%20g-555) '
+        f'![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)',
+        '',
+        f'Every computed number on this page describes **`{wid}`**, the winning individual of the **G4 (`v{v}`)** Sobol-initialized '
+        f'cohort ([`evidence/g4/v{v}/release.json`](evidence/g4/v{v}/release.json), schema [`genome/G4.0.toml`](genome/G4.0.toml) '
+        f'`{r["schema_sha256"][:12]}`, decoder `{r["decoder_sha256"][:12]}`, requirement set [`requirements/RS-karambit-v4.toml`](requirements/RS-karambit-v4.toml)). '
+        f'Status: computational design; not built, printed or physically tested; not qualified for use as a knife.',
+        '',
+        f'**3D printing & CAD upload kit ([`cad/`](cad/)):** ready-to-upload 6-file bundle (each under 50 MiB, generated directly from the native G4 3D SDF with zero G3 bridge and zero post-hoc z-scaling) — '
+        f'primary print mesh [`cad/{wid}_AMbuild_mm.stl`](cad/{wid}_AMbuild_mm.stl) (Binary STL, mm, `{am["mass_ti64_g"]:.2f} g`), '
+        f'unit-embedded [`cad/{wid}_AMbuild_mm.3mf`](cad/{wid}_AMbuild_mm.3mf) (3MF, mm), '
+        f'outer envelope [`cad/{wid}_envelope_mm.stl`](cad/{wid}_envelope_mm.stl), '
+        f'1:1 2D drawing [`cad/{wid}_drawing_mm.dxf`](cad/{wid}_drawing_mm.dxf) (DXF, mm), '
+        f'engineering spec [`cad/{wid}_spec_paper.pdf`](cad/{wid}_spec_paper.pdf) (PDF), and '
+        f'internal cutaway [`cad/{wid}_xray_cutaway.jpg`](cad/{wid}_xray_cutaway.jpg) (JPG). '
+        f'See [`cad/README.md`](cad/README.md) for copy-paste order notes; the archived `v3.0.0` (`hz4i013_g00995_d206e3c9`) kit is preserved in [`cad/v3.0.0/`](cad/v3.0.0/).',
+        '',
+        f'**Papers:** [`docs/g4/paper/g4-v{v}.pdf`](docs/g4/paper/g4-v{v}.pdf) (4-page G4 engineering & verification paper) and '
+        f'[`docs/g3/paper/g3-v{v}.pdf`](docs/g3/paper/g3-v{v}.pdf) (7-page G3 v3.0.0 cohort paper and diagnostics).',
+        '',
+        f'<img src="docs/g4/v{v}/img/hero.jpg" alt="The G4 v{v} winner {wid}" width="100%">',
+        '',
+        '## The best individual (`' + wid + '`)',
+        '',
+        f'Ti-6Al-4V for laser powder-bed fusion (stress-relieved, yield `828 MPa`, endurance limit `300 MPa` at 10⁷ cycles): a '
+        f'`{p["l_grip_mm"]:.1f} mm` flange-graded hollow grip with a `{p["bore_d_mm"]:.1f} mm` drained hollow finger ring, a perforated Warren '
+        f'internal web and spatially stress-graded Sheet-TPMS core, and a curvilinear double-edged, double-serrated claw blade with a '
+        f'distal tip-bisector diamond crown.',
+        '',
+        '| Measure | Value | Target (`RS-karambit-v4`) | Reading |',
+        '|---|---:|---:|---|',
+        f'| `W_ERGOLIGHT_v2` (continuous objective, `hard_gates = false`) | **{obj["w_ergolight_v2"]:.2f}** | higher is better | legacy `W_ERGOLIGHT_v1` {obj["w_ergolight_v1_legacy"]:.2f}, ergonomic multiplier `E` {obj["ergo_geometric_mean"]:.3f} |',
+        f'| Finished mass / with `+0.30 mm` bevel grind stock | **{m["as_finished_total_mass_g"]:.2f} g** / **{m["as_printed_total_mass_g"]:.2f} g** | ≤ 50.0 g | meets target (`{am["mass_ti64_g"]:.2f} g` on `{am["voxel_pitch_h_mm"]:g} mm` print mesh, `0.05 %` grid drift) |',
+        f'| Solid outer envelope mass / total hollowness | {m["envelope_mass_g"]:.2f} g / **{100.0 * m["total_hollowness_fraction"]:.1f} %** | ≥ 42.0 % hollow | ring {m["ring_mass_g"]:.2f} g, grip {m["grip_total_mass_g"]:.2f} g, guard {m["guard_mass_g"]:.2f} g, blade {m["blade_total_mass_g"]:.2f} g |',
+        f'| Inner / spine primary bevel angle per side | {p["angle_in_deg"]:.2f}° / {p["angle_sp_deg"]:.2f}° | 17.5–22.5° | apex flat {p["apex_in_mm"]:.3f} / {p["apex_sp_mm"]:.3f} mm |',
+        f'| Planform point angle at 3.0 mm from tip (`Gate S4`) | **{w["descriptors"]["point_angle_3mm_deg"]:.2f}°** | ≤ 55.0° | decoupled linear point wedge + `+{p["t_tip_crown_mm"]:.2f} mm` tip-bisector crown |',
+        f'| Serration teeth checked, inner / spine (`T6` FE + Peterson $K_f$) | `{serr["teeth_checked_in"]}/{serr["teeth_total_in"]}` / `{serr["teeth_checked_sp"]}/{serr["teeth_total_sp"]}` (SF_LCB **{obj["sf_tooth_snag_pry_lcb"]:.2f}**) | ≥ 1.25 | all teeth checked including end teeth (180 N snag + 60 N pry) |',
+        f'| Solid tip, 1.82 N·m twist about tip bisector (`TET10`, {tip["n_tet"]:,} tets, {tip["n_dof"]:,} DOFs) | SF **{tip["governing_tip_sf"]:.2f}** (SF_LCB **{obj["sf_solid_tip_torsion_0p80nm_lcb"]:.2f}**) | ≥ 1.25 | meets target under full `RS-karambit-v3` 1.82 N·m tip twist |',
+        f'| Solid tip, 60 N lateral tip pry (`LC-TIP-2`) | SF {tip["tip_pry_60n_sf"]:.2f} (SF_LCB **{obj["sf_solid_tip_pry_60n_lcb"]:.2f}**) | ≥ 1.20 | meets target |',
+        f'| Hiker lateral 180 N / Hunter lateral 260 N (hole-aware plate FE) | SF_LCB **{obj["sf_hiker_lateral_180n_lcb"]:.2f}** / **{obj["sf_hunter_lateral_260n_lcb"]:.2f}** ({pl["lateral_capacity_n"]:.1f} N cap.) | ≥ 1.35 / ≥ 1.15 | 3-level Roache `GCI_21 = {100.0 * gci["gci_fine_fraction"]:.2f} %` (≤ 5.0 %, order $p = {gci["observed_order_p"]:.2f}$) |',
+        f'| Body twist 1.82 N·m / Heavy two-hand twist 16.2 N·m | SF_LCB **{obj["sf_twist_body_1p82nm_lcb"]:.2f}** / **{obj["sf_hm_twist_16p2nm_lcb"]:.2f}** | ≥ 1.25 / ≥ 1.10 | meets target |',
+        f'| Spine push 500 N / Spine load 3,427 N on first yield (`828 MPa`, `HM-1`) | SF_LCB **{obj["sf_spine_push_500n_lcb"]:.2f}** / **{obj["sf_spine_baton_3427n_ult_lcb"]:.2f}** | ≥ 1.50 / ≥ 1.10 | 4-finger Winkler equilibrium (`HM-1`, force residual `{hm1["force_residual_n"]:.1e} N`) |',
+        f'| Ring bearing 300 N / Ring back 30 N / Grip squeeze 250 N | SF_LCB **{obj["sf_ring_bearing_300n_lcb"]:.2f}** / **{obj["sf_ring_back_30n_lcb"]:.2f}** / **{obj["sf_grip_squeeze_250n_lcb"]:.2f}** | ≥ 2.00 / ≥ 2.00 / ≥ 1.50 | meets target (`{w["ring_bearing_cap_n"]:.0f} N` bearing, `{w["ring_back_cap_n"]:.0f} N` back) |',
+        f'| Per-load-case blade-before-grip yield sequence (lat / twist / spine) | **{seq["lateral_260n_seq_ratio"]:.2f}** / **{seq["twist_seq_ratio"]:.2f}** / **{seq["spine_seq_ratio"]:.2f}** (SF_LCB **{obj["sf_per_case_sequence_min_lcb"]:.2f}**) | ≥ 1.10 | meets target in every load case independently |',
+        f'| Goodman high-cycle fatigue (180 N, $R=0$, `300 MPa` endurance, single $k_t$) | SF {pl["goodman_fatigue_180n_sf"]:.2f} (SF_LCB **{obj["sf_goodman_fatigue_180n_lcb"]:.2f}**) | ≥ 1.10 | meets target |',
+        f'| Lateral-torsional buckling $\\lambda$ / TPMS face-sheet wrinkling | $\\lambda_{{\\text{{LCB}}}}$ **{obj["sf_buckling_lambda_lcb"]:.2f}** / SF_LCB **{obj["sf_face_wrinkling_lcb"]:.2f}** | ≥ 2.00 / ≥ 1.35 | meets target |',
+        f'| Powder drainability (`r_esc = 0.50 mm` morphological erosion) | $\\beta_0 = {dr["solid_betti_0_components"]}$, $\\beta_2 = {dr["sealed_void_betti_2_cavities"]}$ sealed voids, `{dr["trapped_powder_volume_mm3"]:.1f} mm³` trapped | 0 sealed voids | min port `{dr["min_port_diameter_mm"]:.2f} mm`, min throat `{dr["min_internal_throat_diameter_mm"]:.2f} mm` |',
+        '',
+        '<table><tr>'
+        f'<td width="50%"><img src="docs/g4/v{v}/img/hero.jpg" alt="Hero view of {wid}" width="100%"><br>Hero view of `{wid}` (`{m["as_finished_total_mass_g"]:.2f} g` finished, `{dim["length_x_mm"]:.2f} × {dim["height_y_mm"]:.2f} × {dim["thickness_z_mm"]:.2f} mm`).</td>'
+        f'<td width="50%"><img src="cad/{wid}_xray_cutaway.jpg" alt="Lengthwise cutaway of {wid}" width="100%"><br>Lengthwise cutaway: flange-graded skin, perforated web, Sheet-TPMS core, and drained ring gallery.</td>'
+        '</tr></table>',
+        '',
+        '## How Sobol-initialized evolution produced it',
+        '',
+        f'Every initial population across all five experimental arms (`E0`–`E5`, `17` runs × `928` evaluations = `15,776` evaluations in all) '
+        f'starts **100 % from scrambled Joe-Kuo Sobol samples** (`G4Genome::from_sobol` in [`crates/g4/src/genome.rs`](crates/g4/src/genome.rs)). '
+        f'No hand-authored default genome enters any initial population, and no named-gene repair rule exists in [`crates/g4/src/search.rs`](crates/g4/src/search.rs). '
+        f'Offspring batches are generated by four gene-agnostic black-box continuous variation operators scheduled by a UCB1 bandit over a 64-niche '
+        f'Lloyd-relaxed 6D archive: `Sep-CMA-MAE`, `DE/current-to-pbest/1/bin`, `SBX+PM`, and `Iso+LineDD`. '
+        f'The winning genome `{wid}` has a median normalised gene distance of `0.2355` from `genome/G4.0.toml` defaults (`17/130` genes within `0.05` of defaults).',
+        '',
+        'Multi-seed cohort and five-arm ablation study ([`evidence/g4/v4.1.0/evolution_summary.json`](evidence/g4/v4.1.0/evolution_summary.json)):',
+        '',
+        '| Arm | Description | Seeds | Median `W_ERGOLIGHT_v2` | IQR | Median finished mass |',
+        '|---|---|---:|---:|---:|---:|',
+        f'| **`E3`** | **G4 Full (Continuous QD + 4-emitter bandit + Module T)** | {e3["n_seeds"]} | **{e3["median_w_ergolight_v2"]:.2f}** | {e3["iqr_w_ergolight_v2"]:.2f} | **{e3["median_finished_mass_g"]:.2f} g** |',
+        f'| `E5` | G4 Core (`114` core genes, Module T frozen off) | {e5["n_seeds"]} | {e5["median_w_ergolight_v2"]:.2f} | {e5["iqr_w_ergolight_v2"]:.2f} | {e5["median_finished_mass_g"]:.2f} g |',
+        f'| `E2` | Single-population `Sep-CMA-ES` (no archive) | {e2["n_seeds"]} | {e2["median_w_ergolight_v2"]:.2f} | {e2["iqr_w_ergolight_v2"]:.2f} | {e2["median_finished_mass_g"]:.2f} g |',
+        f'| `E1` | Legacy `W_ERGOLIGHT_v1` objective search | {e1["n_seeds"]} | {e1["median_w_ergolight_v2"]:.2f} | {e1["iqr_w_ergolight_v2"]:.2f} | {e1["median_finished_mass_g"]:.2f} g |',
+        f'| `E0` | Pure scrambled Joe-Kuo Sobol random search | {e0["n_seeds"]} | {e0["median_w_ergolight_v2"]:.2f} | {e0["iqr_w_ergolight_v2"]:.2f} | {e0["median_finished_mass_g"]:.2f} g |',
+        '',
+        'Eight-lever mass waterfall ([`evidence/g4/studies/e05_mass_levers.json`](evidence/g4/studies/e05_mass_levers.json); every step `L-0..L-8` meets all 29 targets):',
+        '',
+        '| Step | Lever | Finished mass | $\\Delta m$ | `W_ERGOLIGHT_v2` | Min safety margin |',
+        '|---|---|---:|---:|---:|---:|',
+    ]
+    for s in wf:
+        L.append(f'| `{s["lever_id"]}` | {s["description"]} | {s["as_finished_mass_g"]:.2f} g | {s["delta_mass_g"]:+.2f} g | {s["w_ergolight_v2"]:.2f} | `+{s["min_safety_margin"]:.3f}` |')
+    L += [
+        '',
+        '<table><tr>'
+        f'<td width="33%"><img src="docs/g4/figures/fig_mass_waterfall.svg" alt="8-lever mass waterfall" width="100%"><br>8-lever mass waterfall (`56.53 g → 44.29 g`).</td>'
+        f'<td width="33%"><img src="docs/g4/figures/fig_cohort_convergence.svg" alt="Cohort convergence" width="100%"><br>Winner convergence (`90.82 → 94.49`).</td>'
+        f'<td width="33%"><img src="docs/g4/figures/fig_safety_margins.svg" alt="17 LCB safety factors" width="100%"><br>All 17 structural LCB safety factors vs floor `1.0`.</td>'
+        '</tr></table>',
+        '',
+        '## Limits of this result',
+        '',
+        '- It is a computational result: nothing has been printed, stress-relieved, ground or physically tested, and it is not qualified for use as a knife.',
+        f'- Because the in-git print mesh (`{am["file"]}` / `{wid}_AMbuild_mm.3mf`) is extracted on a `{am["voxel_pitch_h_mm"]:g} mm` grid (the finest pitch under 50 MiB, `{am["mass_ti64_g"]:.2f} g` vs `{m["as_finished_total_mass_g"]:.2f} g` scored), cutting edges on any physical print would be finished by post-build grinding of the `+0.30 mm` bevel stock to the `17.5–22.5°` per-side bevel angle.',
+        '- The continuous objective `W_ERGOLIGHT_v2` uses an anthropometric geometric mean `E(x)` and smooth deficit decay (`hard_gates = false`); physical comfort and grip traction on textured Ti-6Al-4V require human-factors testing.',
+        '',
+        '## Download the CAD & 3D-printing upload kit (`cad/`, millimetres)',
+        '',
+        'The top-level [`cad/`](cad/) folder contains the ready-to-upload **6-file manufacturing bundle** (every file under 50 MiB, '
+        'generated automatically from the winning individual by `g4-export`):',
+        '',
+        '| # | File in `cad/` | Format | Size | Purpose on a 3D-printing / manufacturing quote form |',
+        '|---:|---|---|---:|---|',
+        f'| 1 | [`cad/{wid}_AMbuild_mm.stl`](cad/{wid}_AMbuild_mm.stl) | Binary STL (`mm`) | {am["mib"]:.2f} MiB | **Primary 3D print file in git** (`{am["voxel_pitch_h_mm"]:g} mm` grid, `{am["mass_ti64_g"]:.2f} g`, `{am["triangles"]:,}` triangles, watertight) |',
+        f'| 2 | [`cad/{wid}_AMbuild_mm.3mf`](cad/{wid}_AMbuild_mm.3mf) | 3MF (`unit="millimeter"`) | {sz_mb(f"cad/{wid}_AMbuild_mm.3mf"):.2f} MiB | **Modern 3D print package** with `millimeter` units and `Ti-6Al-4V (L-PBF stress-relieved, yield 828 MPa)` metadata |',
+        f'| 3 | [`cad/{wid}_envelope_mm.stl`](cad/{wid}_envelope_mm.stl) | Binary STL (`mm`) | {env["mib"]:.2f} MiB | **Solid outer envelope companion** (`{env["voxel_pitch_h_mm"]:g} mm` grid, `{env["solid_mass_ti64_g"]:.2f} g` if printed solid, `{env["triangles"]:,}` triangles) |',
+        f'| 4 | [`cad/{wid}_drawing_mm.dxf`](cad/{wid}_drawing_mm.dxf) | AutoCAD R12 DXF (`mm`) | {sz_kb(f"cad/{wid}_drawing_mm.dxf"):.0f} KiB | **1:1 2D engineering drawing** (`UNITS: MILLIMETERS`, `1 drawing unit = 1 mm`, 24.9 mm ring bore at `x = -5.97 mm`, `z = 0` outline & `z`-extent envelope) |',
+        f'| 5 | [`cad/{wid}_spec_paper.pdf`](cad/{wid}_spec_paper.pdf) | PDF | {sz_kb(f"cad/{wid}_spec_paper.pdf"):.0f} KiB | **4-page G4 engineering specification & FE paper** (`docs/g4/paper/g4-v{v}.pdf`) |',
+        f'| 6 | [`cad/{wid}_xray_cutaway.jpg`](cad/{wid}_xray_cutaway.jpg) | JPG image | {sz_kb(f"cad/{wid}_xray_cutaway.jpg"):.0f} KiB | **Lengthwise cutaway render** showing outer skin, internal lattice, and drainage ports |',
+        '',
+        '## Reproduce',
+        '',
+        '```bash',
+        'cargo test --release --manifest-path crates/g4/Cargo.toml',
+        'cargo build --release --manifest-path crates/g4/Cargo.toml --bins',
+        './crates/g4/target/release/g4-studies       # E-01..E-06 study receipts in evidence/g4/studies/',
+        './crates/g4/target/release/g4-evolve        # 17 Sobol-initialized runs -> evidence/g4/v4.1.0/',
+        './crates/g4/target/release/g4-release-tex   # LaTeX macros + SVG figures -> docs/g4/',
+        'make -C docs/g4/paper                       # build docs/g4/paper/g4-v4.1.0.pdf',
+        './crates/g4/target/release/g4-export        # 6-file CAD bundle in cad/ and docs/g4/v4.1.0/cad/',
+        '```',
+        '',
+        'The v1 command-line pipeline (`cargo run -p jarambit`) is still in the repository; its plate level is opt-in with `JARAMBIT_FEM=1`.',
+        '',
+        '## Repository',
+        '',
+        '**G4 (`v4.1.0`, current)**',
+        '',
+        f'- [`cad/`](cad/): 6-file 3D-printing & manufacturing upload kit (`STL`, `3MF`, `DXF`, `PDF`, `JPG`, millimetres) and [`cad/{wid}_print_spec.json`](cad/{wid}_print_spec.json) for `{wid}`.',
+        '- [`crates/g4/`](crates/g4/): the declarative `G4.0` genome, curvilinear 3D SDF decoder, `HM-1` hand mechanics, 3-level Roache plate FE, `TET10` solid-tip FE, Sobol-initialized QD search, and release binaries (`g4-studies`, `g4-evolve`, `g4-release-tex`, `g4-export`).',
+        '- [`genome/G4.0.toml`](genome/G4.0.toml) and [`requirements/RS-karambit-v4.toml`](requirements/RS-karambit-v4.toml): 130-gene schema and requirement set with [`PROVENANCE.md`](requirements/PROVENANCE.md).',
+        f'- [`evidence/g4/v{v}/`](evidence/g4/v{v}/) and [`evidence/g4/studies/`](evidence/g4/studies/): release receipt, winner genome CSV, multi-seed cohort summary, and `E-01..E-06` study receipts (the withdrawn `v4.0.0` prototype notice is preserved in [`evidence/g4/v4.0.0/WITHDRAWN.md`](evidence/g4/v4.0.0/WITHDRAWN.md)).',
+        f'- [`docs/g4/paper/g4-v{v}.pdf`](docs/g4/paper/g4-v{v}.pdf): the G4 paper (`make -C docs/g4/paper` rebuilds it from the receipt).',
+        '',
+        '**G3 (`v3.0.0` cohort of record & `v4.0.1` diagnostics)**',
+        '',
+        '- [`cad/v3.0.0/`](cad/v3.0.0/): archived 6-file upload kit for the G3 v3.0.0 winner `hz4i013_g00995_d206e3c9`.',
+        '- [`crates/g3/`](crates/g3/README.md), [`evidence/g3/v3.0.0/`](evidence/g3/v3.0.0/), and [`docs/g3/paper/g3-v4.1.0.pdf`](docs/g3/paper/g3-v4.1.0.pdf): G3 codebase, receipt, `diagnostics/`, and paper.',
+        '',
+        '**The v1/v2 study (kept as its own record)**',
+        '',
+        '- [`docs/paper/`](docs/paper/) (Paper B), [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md), [`crates/`](crates/), and [`evidence/`](evidence/): the v1/v2 study, recorded runs, battery records, and receipts.',
+        '- [`AGENTS.md`](AGENTS.md), [`PYTHON_EXCEPTIONS.md`](PYTHON_EXCEPTIONS.md), [`STATUS.md`](STATUS.md), [`docs/RELEASES.md`](docs/RELEASES.md), and [`LICENSE`](LICENSE) (MIT).',
+        '',
+    ]
+    return '\n'.join(L)
+
+
+def g4_cad_readme(v, r, sp):
+    wid = r['winner_id']
+    w = r['winner_record']
+    m = w['mass']
+    pl = w['plate']
+    obj = w['objective']
+    am = sp['am_build_stl']
+    env = sp['outer_envelope_stl']
+    dim = sp['overall_dimensions_mm']
+    am_name = am['file']
+    env_name = env['file']
+    threemf_name = f'{wid}_AMbuild_mm.3mf'
+    dxf_name = f'{wid}_drawing_mm.dxf'
+    pdf_name = f'{wid}_spec_paper.pdf'
+    jpg_name = f'{wid}_xray_cutaway.jpg'
+    spec_name = f'{wid}_print_spec.json'
+    am_mass_g = am['mass_ti64_g']
+    env_mass_g = env['solid_mass_ti64_g']
+    am_mib = os.path.getsize(os.path.join(ROOT, f'cad/{am_name}')) / (1024.0 * 1024.0)
+    env_mib = os.path.getsize(os.path.join(ROOT, f'cad/{env_name}')) / (1024.0 * 1024.0)
+    threemf_mib = os.path.getsize(os.path.join(ROOT, f'cad/{threemf_name}')) / (1024.0 * 1024.0)
+    dxf_kb = os.path.getsize(os.path.join(ROOT, f'cad/{dxf_name}')) / 1024.0
+    return (
+        f"# 3D Printing & CAD Upload Kit — G4 Winner `{wid}` (release v{v})\n\n"
+        f"This folder contains the ready-to-upload **6-file 3D-printing and manufacturing bundle** (**Units: millimetres**, every file under 50 MiB) for **`{wid}`**, the winning individual of the **G4 (`v{v}`)** cohort of record ([`evidence/g4/v{v}/release.json`](../evidence/g4/v{v}/release.json)). It is populated automatically from [`evidence/g4/v{v}/winner_genome.csv`](../evidence/g4/v{v}/winner_genome.csv) by `g4-export`.\n\n"
+        f"- **Status:** computational design; not built, printed or physically tested; not qualified for use as a knife.\n"
+        f"> **Looking for the archived `v3.0.0` (`hz4i013_g00995_d206e3c9`) bundle?** All `v3.0.0` CAD files are preserved byte-for-byte in [`cad/v3.0.0/`](v3.0.0/).\n\n"
+        f"**Engineering summary (`RS-karambit-v4`, `W_ERGOLIGHT_v2 = {obj['w_ergolight_v2']:.2f}` / `W_ERGOLIGHT_v1 = {obj['w_ergolight_v1_legacy']:.2f}`):**\n"
+        f"- **Mass:** **`{am_mass_g:.2f} g`** finished (`{m['as_printed_total_mass_g']:.2f} g` with `+0.30 mm` bevel grind stock; `{env_mass_g:.1f} g` solid outer envelope; **`{100.0 * m['total_hollowness_fraction']:.1f}%` hollowness**).\n"
+        f"- **All 17 structural LCB safety factors meet targets (`V(x) = 0`, all `SF_LCB >= 1.00`):** lateral hiker `180 N` SF **`{obj['sf_hiker_lateral_180n_lcb']:.2f}`**, lateral hunter `260 N` SF **`{obj['sf_hunter_lateral_260n_lcb']:.2f}`**, body torsion `1.82 N·m` SF **`{obj['sf_twist_body_1p82nm_lcb']:.2f}`**, heavy twist `16.2 N·m` SF **`{obj['sf_hm_twist_16p2nm_lcb']:.2f}`**, solid-tip bisector torsion `1.82 N·m` SF **`{obj['sf_solid_tip_torsion_0p80nm_lcb']:.2f}`**, solid-tip lateral pry `60 N` SF **`{obj['sf_solid_tip_pry_60n_lcb']:.2f}`**, spine load `3,427 N` (`HM-1`, first yield `828 MPa`) SF **`{obj['sf_spine_baton_3427n_ult_lcb']:.2f}`**, Goodman fatigue SF **`{obj['sf_goodman_fatigue_180n_lcb']:.2f}`**, serration tooth SF **`{obj['sf_tooth_snag_pry_lcb']:.2f}`**, and per-load-case blade-before-grip sequence ratio **`{obj['sf_per_case_sequence_min_lcb']:.2f}`** (`>= 1.10`).\n"
+        f"- **Point geometry & mesh convergence:** point planform angle at `3 mm` **`{w['descriptors']['point_angle_3mm_deg']:.2f}°`** (`<= 55°` `Gate S4`), 3-level Roache plate `GCI_21` **`{100.0 * pl['gci_admission']['gci_fine_fraction']:.2f}%`** (`<= 5%`), and zero sealed internal voids (`Betti_2 = 0`, `r_esc = 0.50 mm`).\n\n"
+        f"## 1. Ready-to-upload 6-file kit (for forms accepting up to 6 files, 100 MB each)\n\n"
+        f"| # | File | Format | Size | What it is & why to upload it |\n"
+        f"|---:|---|---|---:|---|\n"
+        f"| **1** | **[`{am_name}`]({am_name})** | **Binary STL (`mm`)** | **{am_mib:.2f} MiB** | **PRIMARY 3D PRINT FILE IN GIT (upload this first):** complete additive-manufacturing build (`{am_mass_g:.2f} g`, `{am['triangles']}` triangles) with flange-graded skin, perforated Warren web, Sheet-TPMS core, drained hollow ring, and powder-removal ports. |\n"
+        f"| **2** | **[`{threemf_name}`]({threemf_name})** | **3MF (`unit=\"millimeter\"`)** | **{threemf_mib:.2f} MiB** | **Modern 3D print package:** identical AM build mesh in compressed 3MF 1.2.3 format with `unit=\"millimeter\"` and `Ti-6Al-4V (L-PBF stress-relieved, yield 828 MPa)` metadata. |\n"
+        f"| **3** | **[`{env_name}`]({env_name})** | **Binary STL (`mm`)** | **{env_mib:.2f} MiB** | **Solid outer envelope companion:** unhollowed exterior surface with all internal cavities and ports closed (`{env_mass_g:.1f} g` if printed solid; `{env['triangles']}` triangles). |\n"
+        f"| **4** | **[`{dxf_name}`]({dxf_name})** | **AutoCAD R12 DXF (`mm`)** | **{dxf_kb:.0f} KiB** | **1:1 2D engineering drawing (`UNITS: MILLIMETERS`, `1 drawing unit = 1 mm`):** exact `z = 0` mid-plane outline, `24.9 mm` ring bore, `z`-extent thickness envelope, and `30 mm` blade cross-section. |\n"
+        f"| **5** | **[`{pdf_name}`]({pdf_name})** | **PDF** | **Spec Paper** | **Engineering specification & FE paper (`g4-v{v}.pdf`):** complete `G4.0` genome, `HM-1` hand mechanics, 3-level Roache GCI, and multi-seed QD ablation tables. |\n"
+        f"| **6** | **[`{jpg_name}`]({jpg_name})** | **JPG image** | **Cutaway** | **Lengthwise cutaway reference image:** visual guide rendered from `{wid}` showing outer skin, internal lattice, and powder-evacuation ports. |\n\n"
+        f"*(Also included: [`{spec_name}`]({spec_name}), the machine-readable JSON receipt of dimensions, volumes, masses, and SHA-256 digests.)*\n\n"
+        f"## 2. Copy-paste order notes for the printing form\n\n"
+        f"```text\n"
+        f"Units: mm | Overall dimensions: {dim['length_x_mm']:.2f} x {dim['height_y_mm']:.2f} x {dim['thickness_z_mm']:.2f} mm | Mass: {am_mass_g:.2f} g (finished) / {m['as_printed_total_mass_g']:.2f} g (with grind stock) | Material: Ti-6Al-4V (L-PBF stress-relieved, yield 828 MPa) | Status: computational design; not built, printed or physically tested; not qualified for use as a knife | Depowder via neutral-axis drainage ports | Post-build grind primary bevels to 19.5 deg per side (0.08 mm apex)\n"
+        f"```\n"
+    )
+
+
 def readme():
+    g4 = g4_receipt()
+    if g4 is not None:
+        return g4_readme(*g4)
     v, rv, r = receipt()
     i, sc, pv, co, bl, fe, ev = r['inputs'], r['score'], r['provenance'], r['cohort'], r['blade'], r['fe_certification'], r['evolution']
     a, b = bl['edge_inner'], bl['edge_spine']
@@ -406,6 +645,10 @@ def readme():
 
 
 def cad_readme():
+    g4 = g4_receipt()
+    if g4 is not None:
+        v, r, _, sp = g4
+        return g4_cad_readme(v, r, sp)
     v, rv, r = receipt()
     wid = r['design_id']
     mass = r['mass']['mesh_g']

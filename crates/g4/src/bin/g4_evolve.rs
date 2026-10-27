@@ -1,6 +1,6 @@
 //! `g4-evolve`: Executes the Multi-Seed Constrained Quality-Diversity Cohort & Ablation Suite
 //! (`E0`, `E1`, `E2`, `E3`, `E5`), enforces the fail-closed `G4ReleaseAdmissionContract` (`RI-01`..`RI-12`),
-//! and writes `evidence/g4/v4.0.0/{release.json,winner_genome.csv,evolution_summary.json,history/cohort_metrics.json}`.
+//! and writes `evidence/g4/v4.1.0/{release.json,winner_genome.csv,evolution_summary.json,history/cohort_metrics.json}`.
 
 use jarambit_g4::genome::{g4_decoder_sha256, g4_schema_sha256, G4_GENES};
 use jarambit_g4::objective::{compare_g4_objectives, RsKarambitV4Spec};
@@ -8,6 +8,7 @@ use jarambit_g4::search::{
     run_g4_search, verify_record_admission_contract, G4BatchTelemetry, G4EvalRecord,
     G4ReleaseAdmissionContract, G4SearchAlgorithm, G4SearchConfig,
 };
+use rayon::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 use std::fs;
@@ -111,9 +112,9 @@ fn main() {
         .parent()
         .unwrap()
         .to_path_buf();
-    let out_dir = root.join("evidence/g4/v4.0.0");
+    let out_dir = root.join("evidence/g4/v4.1.0");
     let hist_dir = out_dir.join("history");
-    fs::create_dir_all(&hist_dir).expect("create evidence/g4/v4.0.0/history");
+    fs::create_dir_all(&hist_dir).expect("create evidence/g4/v4.1.0/history");
 
     let spec = RsKarambitV4Spec::load_embedded().expect("load RS-karambit-v4.toml");
 
@@ -130,37 +131,44 @@ fn main() {
     let mut best_e3_run: Option<(u64, jarambit_g4::search::G4SearchRunResult)> = None;
 
     for &(alg_id, alg, seeds) in experiments {
-        let mut group_runs = Vec::with_capacity(seeds.len());
-        for &seed in seeds {
-            let cfg = G4SearchConfig {
-                algorithm: alg,
-                seed,
-                k_cvt_cells: 64,
-                n_init_sobol: 24,
-                n_batches: 14,
-                batch_size: 16,
-                recert_interval_batches: 7,
-            };
-            let res = run_g4_search(&spec, &cfg);
-            let b = &res.best_record;
-            let total_evals = res.history.last().map(|h| h.total_evals).unwrap_or(0);
-            group_runs.push(SeedRunSummary {
-                algorithm_id: alg_id.to_string(),
-                seed,
-                total_evals,
-                feasible_niches: res.archive.feasible_count(),
-                infeasible_niches: res.archive.infeasible_count(),
-                pareto_front_size: res.archive.pareto_front_total(),
-                feasible_qd_score: res.archive.feasible_qd_score(),
-                best_feasible: b.objective.feasible,
-                best_w_ergolight_v2: b.objective.w_ergolight_v2,
-                best_w_ergolight_v1_legacy: b.objective.w_ergolight_v1_legacy,
-                best_finished_mass_g: b.mass.as_finished_total_mass_g,
-                best_printed_mass_g: b.mass.as_printed_total_mass_g,
-                best_min_safety_margin: b.objective.min_safety_margin,
-                winner_genome_sha256: b.genome.genome_sha256(),
-            });
+        let seed_results: Vec<(u64, SeedRunSummary, jarambit_g4::search::G4SearchRunResult)> = seeds
+            .par_iter()
+            .map(|&seed| {
+                let cfg = G4SearchConfig {
+                    algorithm: alg,
+                    seed,
+                    k_cvt_cells: 64,
+                    n_init_sobol: 64,
+                    n_batches: 36,
+                    batch_size: 24,
+                    recert_interval_batches: 36,
+                };
+                let res = run_g4_search(&spec, &cfg);
+                let b = &res.best_record;
+                let total_evals = res.history.last().map(|h| h.total_evals).unwrap_or(0);
+                let summary = SeedRunSummary {
+                    algorithm_id: alg_id.to_string(),
+                    seed,
+                    total_evals,
+                    feasible_niches: res.archive.feasible_count(),
+                    infeasible_niches: res.archive.infeasible_count(),
+                    pareto_front_size: res.archive.pareto_front_total(),
+                    feasible_qd_score: res.archive.feasible_qd_score(),
+                    best_feasible: b.objective.feasible,
+                    best_w_ergolight_v2: b.objective.w_ergolight_v2,
+                    best_w_ergolight_v1_legacy: b.objective.w_ergolight_v1_legacy,
+                    best_finished_mass_g: b.mass.as_finished_total_mass_g,
+                    best_printed_mass_g: b.mass.as_printed_total_mass_g,
+                    best_min_safety_margin: b.objective.min_safety_margin,
+                    winner_genome_sha256: b.genome.genome_sha256(),
+                };
+                (seed, summary, res)
+            })
+            .collect();
 
+        let mut group_runs = Vec::with_capacity(seeds.len());
+        for (seed, summary, res) in seed_results {
+            group_runs.push(summary);
             if alg == G4SearchAlgorithm::G4FullFi2PopCvt {
                 let take = match &best_e3_run {
                     None => true,
@@ -210,12 +218,30 @@ fn main() {
         })
         .collect();
 
-    let (win_seed, win_run) = best_e3_run.expect("E3 G4-Full must produce a certified run");
+    let (win_seed, win_run) = best_e3_run.expect("E3 G4-Full must produce a verified run");
     let win_rec = win_run.best_record;
     let contract = verify_record_admission_contract(&win_rec, None)
         .expect("G4 winner MUST pass fail-closed G4ReleaseAdmissionContract (RI-01..RI-12)");
     let g_sha = win_rec.genome.genome_sha256();
-    let winner_id = format!("g4v400_s{:03}_{}", win_seed, &g_sha[..8]);
+    let winner_id = format!("g4v410_s{:03}_{}", win_seed, &g_sha[..8]);
+
+    // Verify Sobol dispersion from G4.0.toml defaults (no hand-authored anchor)
+    let mut diffs: Vec<f64> = G4_GENES
+        .iter()
+        .map(|s| {
+            let u_def = ((s.default - s.lo) / (s.hi - s.lo)).clamp(0.0, 1.0);
+            (win_rec.genome.u[s.index] - u_def).abs()
+        })
+        .collect();
+    let within_005 = diffs.iter().filter(|&&d| d <= 0.05).count();
+    diffs.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    let median_du = 0.5 * (diffs[64] + diffs[65]);
+    assert!(
+        median_du >= 0.16 && within_005 <= 30,
+        "Winner must exhibit genuine Sobol dispersion from G4.0.toml defaults (median |du|={:.4}, within_005={})",
+        median_du,
+        within_005
+    );
 
     // Write `winner_genome.csv`
     let mut csv_lines = Vec::with_capacity(G4_GENES.len() + 1);
@@ -229,10 +255,11 @@ fn main() {
         ));
     }
     fs::write(out_dir.join("winner_genome.csv"), csv_lines.join("\n") + "\n").unwrap();
+    fs::write(root.join("evidence/g4/RECORD"), "4.1.0\n").unwrap();
 
     // Write `release.json`
     let bundle = G4ReleaseBundle {
-        version: "4.0.0".to_string(),
+        version: "4.1.0".to_string(),
         schema_version: "G4.0".to_string(),
         requirement_set: "RS-karambit-v4".to_string(),
         winner_id: winner_id.clone(),
@@ -252,7 +279,7 @@ fn main() {
 
     // Write `evolution_summary.json` and `history/cohort_metrics.json`
     let summary = G4EvolutionSummary {
-        version: "4.0.0".to_string(),
+        version: "4.1.0".to_string(),
         winner_id: winner_id.clone(),
         schema_sha256: g4_schema_sha256().to_string(),
         decoder_sha256: g4_decoder_sha256().to_string(),
@@ -263,7 +290,7 @@ fn main() {
     fs::write(hist_dir.join("cohort_metrics.json"), &summary_json).unwrap();
 
     println!(
-        "g4-evolve complete: winner {} | feasible={} | W_ERGOLIGHT_v2={:.4} | W_ERGOLIGHT_v1={:.4} | as_finished_mass={:.3} g | as_printed_mass={:.3} g | min_margin={:+.4}",
+        "g4-evolve complete: winner {} | feasible={} | W_ERGOLIGHT_v2={:.4} | W_ERGOLIGHT_v1={:.4} | as_finished_mass={:.3} g | as_printed_mass={:.3} g | min_margin={:+.4} | median_du={:.4} (within_005={}/130)",
         winner_id,
         win_rec.objective.feasible,
         win_rec.objective.w_ergolight_v2,
@@ -271,5 +298,7 @@ fn main() {
         win_rec.mass.as_finished_total_mass_g,
         win_rec.mass.as_printed_total_mass_g,
         win_rec.objective.min_safety_margin,
+        median_du,
+        within_005,
     );
 }
