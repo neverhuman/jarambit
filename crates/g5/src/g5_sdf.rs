@@ -61,12 +61,19 @@ pub fn solid_fraction(d: f32, h: f64) -> f64 {
 /// Blur radius of the hand-zone SDF hand-over, in millimetres (G3 used one voxel, so the geometry changed with h).
 pub const HANDZONE_SDF_BLUR_SIGMA_MM: f64 = 0.4;
 
-/// What `enforce_am_connectivity` changed in the AM field (mm³). Sealed air pockets cannot drain their powder: they
-/// are kept solid in `d_am` (so the mass of record counts trapped powder at full density, an over-estimate) and their
-/// volume is reported so the objective can penalise it. G3 filled them silently (audit F-M-3).
+/// What `enforce_am_connectivity` changed in the AM field (mm³). Every region the drainage rule finds undrainable is
+/// printed solid (`d_am` = -h there), so the exported AM build traps no powder and the mass of record counts the
+/// material. Pockets wide enough to hold loose powder are reported as `sealed_void_mm3` (the objective penalises them
+/// as wasted hollowing); thin crevices are reported as `crevice_mm3`. G3 filled them silently, under a grid-dependent
+/// rule (audit F-M-3).
 #[derive(Debug, Clone, Copy, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct AmConnectivityStats {
+    /// Undrained air pockets wide enough to hold loose powder (some point with clearance >= half the drainage width)
     pub sealed_void_mm3: f64,
+    /// Undrained crevices narrower than a drainage passage everywhere (sheet against skin): printed solid by
+    /// construction, so they hold no loose powder; counted in the mass, not penalised
+    #[serde(default)]
+    pub crevice_mm3: f64,
     pub floating_solid_mm3: f64,
     /// False until the AM field has been built and checked (Tier 0 does not build it)
     pub measured: bool,
@@ -551,8 +558,13 @@ impl VoxelGrid3D {
                 min_yb_gz = min_yb_gz.min(yb_slice[i]);
             }
         }
-        let guard_h_meas = if line.is_finite() && min_yb_gz.is_finite() {
-            (line - min_yb_gz).max(0.0)
+        // G5.0: the guard height is measured from the grip bottom at the index-finger station, the surface the guard
+        // protects (G3 measured from the deepest grip bottom anywhere along the grip)
+        let x_idx = x_t + p["centre_idx"] + p["off_idx"];
+        let i_idx = (((x_idx - self.x[0]) / h).round() as isize).clamp(0, nx as isize - 1) as usize;
+        let line_idx = yb_slice[i_idx];
+        let guard_h_meas = if line_idx.is_finite() && min_yb_gz.is_finite() {
+            (line_idx - min_yb_gz).max(0.0)
         } else {
             0.0
         };
@@ -1153,11 +1165,45 @@ pub fn enforce_am_connectivity(
         }
         front = next;
     }
-    // Any envelope air voxel not drained is a sealed pocket: measured, then kept solid (-h)
-    for idx in 0..total {
-        if d_am[idx] > 0.0 && !ext_air[idx] && !exterior(idx) {
-            stats.sealed_void_mm3 += (1.0 - solid_fraction(d_am[idx], hv)) * dv;
-            d_am[idx] = -h;
+    // Every undrained envelope air region is kept solid (-h). A region that is narrower than a drainage passage
+    // everywhere is a crevice (printed solid by construction); one with wider air is a sealed cavity
+    let mut seen = vec![false; total];
+    let mut comp = Vec::new();
+    for i in 0..nx {
+        for j in 0..ny {
+            for k in 0..nz {
+                let start = (i * ny + j) * nz + k;
+                if seen[start] || !(d_am[start] > 0.0 && !ext_air[start] && !exterior(start)) {
+                    continue;
+                }
+                comp.clear();
+                seen[start] = true;
+                q.push_back((i, j, k));
+                let mut widest = 0.0f32;
+                while let Some((ci, cj, ck)) = q.pop_front() {
+                    let idx = (ci * ny + cj) * nz + ck;
+                    comp.push(idx);
+                    widest = widest.max(d_am[idx]);
+                    for (ni, nj, nk) in nbrs6(ci, cj, ck) {
+                        if ni < nx && nj < ny && nk < nz {
+                            let nidx = (ni * ny + nj) * nz + nk;
+                            if !seen[nidx] && d_am[nidx] > 0.0 && !ext_air[nidx] && !exterior(nidx) {
+                                seen[nidx] = true;
+                                q.push_back((ni, nj, nk));
+                            }
+                        }
+                    }
+                }
+                let vol: f64 = comp.iter().map(|&idx| (1.0 - solid_fraction(d_am[idx], hv)) * dv).sum();
+                if widest >= r_clear {
+                    stats.sealed_void_mm3 += vol;
+                } else {
+                    stats.crevice_mm3 += vol;
+                }
+                for &idx in &comp {
+                    d_am[idx] = -h;
+                }
+            }
         }
     }
 
@@ -1457,7 +1503,10 @@ pub fn eval_guard_lobe_y(p: &BTreeMap<&'static str, f64>, x: f64) -> (f64, f64) 
     let frac = u - (i0 as f64);
     let yt = F075_GUARD_YT[i0] * (1.0 - frac) + F075_GUARD_YT[i0 + 1] * frac;
     let lobe = F075_GUARD_LOBE[i0] * (1.0 - frac) + F075_GUARD_LOBE[i0 + 1] * frac;
-    let yb = p["yb_g"] - p["h_g"] * lobe;
+    // G5.0: the lobe hangs `h_g` below the grip bottom where it joins the grip (the grip is scaled to its perimeter
+    // and H/T genes; G3 hung it below the unscaled `yb_g` gene, so a larger grip swallowed the guard)
+    let base = eval_grip_slice(p, GUARD_X_MM - 1.0).yb;
+    let yb = base - p["h_g"] * lobe;
     (yb, yt)
 }
 
@@ -3348,6 +3397,18 @@ mod tests {
         // The pocket voxel (d = 1.0 at h = 0.5: fraction 0) is reported as 0.125 mm³ of sealed void, and the
         // fragment (d = -1.0: fraction 1) as 0.125 mm³ of removed floating solid.
         assert!((stats.sealed_void_mm3 - 0.125).abs() < 1e-12, "{stats:?}");
+        // A thin enclosed film (clearance 0.2 mm everywhere, under half the 1 mm drainage width) is a crevice
+        let mut film = vec![1.0_f32; nx * ny * nz];
+        for i in 4..=16 {
+            for j in 4..=16 {
+                for k in 4..=16 {
+                    film[(i * ny + j) * nz + k] = if k == 10 && (6..=14).contains(&i) && (6..=14).contains(&j) { 0.2 } else { -1.0 };
+                }
+            }
+        }
+        let fs = enforce_am_connectivity(&mut film, None, nx, ny, nz, 0.5, 1.0);
+        assert!(fs.sealed_void_mm3 == 0.0 && fs.crevice_mm3 > 0.0, "{fs:?}");
+        assert!(film[(10 * ny + 10) * nz + 10] < 0.0, "a crevice is printed solid");
         assert!((stats.floating_solid_mm3 - 0.125).abs() < 1e-12, "{stats:?}");
         assert!(
             d_am[(19 * ny + 19) * nz + 19] > 0.0,

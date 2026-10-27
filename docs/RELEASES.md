@@ -84,6 +84,15 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
     - a 90 g design already meets every RS-v5 load case;
     - but designs failing several cases scored within 12 % of it, because E⁵ multiplied their comfort lead over an
       additive worst-margin term. The worst margin now multiplies the score.
+  - **Pilot 2** (12 islands × 1,500 evaluations, with the worst margin multiplied):
+    - 314 of 518 Tier-1 elites meet every load case, and all of the top 8 do. The lightest feasible design weighs
+      91 g.
+    - **Guard fix.** Every top design sat at the guard factor's floor, because the guard lobe hung below G3's
+      unscaled grip-bottom gene and the larger G5 grip swallowed it. The lobe now hangs from the scaled grip, and the
+      guard height is measured from the grip bottom at the index-finger station.
+    - **Undrained regions** are now split into crevices narrower than a drainage passage (printed solid, not
+      penalised) and pockets wide enough to hold powder (printed solid, penalised as wasted hollowing). The exported
+      AM build traps no powder.
   - **Solid tip** (`crates/g5/src/tip_tet10.rs`):
     - the TET10 tip submodel with the RS-v5 tip loads, about the tip bisector (G3's axis ran from the coordinate
       origin), with RS-v5 material and the strict residual rule;

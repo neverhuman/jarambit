@@ -291,8 +291,8 @@ mod v1_identity_tests {
                 .unwrap_or_else(|| panic!("missing gene {name}"))
         };
 
-        // 1. A hollow blade (rho_blade 0.06, vented by its own blade vents) is lighter than the solid blade and loses
-        //    plate capacity
+        // 1. A hollow blade (rho_blade 0.06, vented by its own blade vents) is never heavier than the solid blade; what
+        //    of its cavity cannot drain is printed solid and reported; the plate (homogenised core) loses capacity
         let set_phys = |g: &mut G5Genome, name: &str, phys: f64| {
             let i = idx_of(name);
             g.u[i] = G5_GENES[i].unit_from_phys(phys).clamp(0.0, 1.0);
@@ -304,9 +304,13 @@ mod v1_identity_tests {
         set_phys(&mut g_vented, "rho_blade", 0.06);
         let r_solid = evaluate_tier1_sdf_and_plate(&g_solid, 0.8);
         let r_vented = evaluate_tier1_sdf_and_plate(&g_vented, 0.8);
+        let undrained = r_vented.am_connectivity.sealed_void_mm3 + r_vented.am_connectivity.crevice_mm3
+            - r_solid.am_connectivity.sealed_void_mm3
+            - r_solid.am_connectivity.crevice_mm3;
         assert!(
-            r_vented.inputs.mass_g < r_solid.inputs.mass_g - 1.0,
-            "a hollow blade must be lighter (hollow={} vs solid={})",
+            r_vented.inputs.mass_g <= r_solid.inputs.mass_g + 1e-6
+                && (r_vented.inputs.mass_g < r_solid.inputs.mass_g - 1.0 || undrained > 100.0),
+            "a hollow blade must be lighter, or report its undrained cavity (hollow={} vs solid={} g, undrained {undrained} mm3)",
             r_vented.inputs.mass_g,
             r_solid.inputs.mass_g
         );

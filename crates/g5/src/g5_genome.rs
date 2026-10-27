@@ -126,7 +126,7 @@ pub static G5_GENES: [GeneSpec; G5_NUM_GENES] = [
     lin_gene!("bore_round", H, 2.0, 3.5, 2.8),
     // ---- Module H: Grip (29 genes, 11..40) ----
     lin_gene!("hand_scale", H, 0.90, 1.10, 1.0),
-    lin_gene!("dL", H, 4.0, 14.0, 9.0), // G5.0: grip length >= 69 mm with 19-21 mm finger pitches
+    lin_gene!("dL", H, 6.0, 16.0, 10.0), // G5.0: grip length >= 69 mm with 19-21 mm finger pitches (measured to the guard drop)
     lin_gene!("T0", H, 8.0, 12.0, 10.0),
     lin_gene!("T_sw", H, 13.0, 17.0, 15.0),
     lin_gene!("T_g", H, 11.0, 15.0, 13.0),
