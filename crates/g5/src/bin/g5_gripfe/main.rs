@@ -16,13 +16,17 @@
 mod voxel_fe;
 
 use jarambit_g5::g5_genome::G5Genome;
-use jarambit_g5::g5_sandwich::{SandwichSection, YIELD_TI64_MPA};
+use jarambit_g5::g5_sandwich::SandwichSection;
+use jarambit_g5::material::{self as mat, AS_BUILT_WALL};
 use jarambit_g5::g5_sdf::{build_blade_profile_2d, build_g5_sdf, eval_grip_slice, GUARD_X_MM};
 use std::collections::BTreeMap;
 use std::{fs, io::Write, path::Path, time::Instant};
 use voxel_fe::*;
 
-const TI: Material = Material { youngs_mpa: 113_800.0, poisson: 0.342 };
+/// RS-karambit-v5 Ti-6Al-4V at the service temperature.
+fn ti() -> Material {
+    Material { youngs_mpa: mat::e_mpa(), poisson: mat::nu() }
+}
 
 fn find(roots: &str, id: &str) -> G5Genome {
     for root in roots.split(',') {
@@ -93,7 +97,7 @@ fn control(h: f64, out: &str, threads: usize, kinds: &str) {
                 })
             })
             .collect();
-        let model = Model { grid: grid.clone(), phase, materials: vec![TI] };
+        let model = Model { grid: grid.clone(), phase, materials: vec![ti()] };
         let (sol, _, secs) = solve(&model, threads);
         let mid = |q: P3| (15.0..45.0).contains(&q[0]);
         // Saint-Venant a/b = 1.5: tau_max = T / (0.231 a b^2); Bredt: T / (2 A_m t); open: 3 T / (sum s t^2)
@@ -123,7 +127,7 @@ fn formula_cases(p: &BTreeMap<&'static str, f64>, tip_xy: (f64, f64), xc: f64) -
     let hollow = rho_g < 0.95;
     let skin_t = p["skin_t"];
     let skin_tq = skin_t + 0.40 * flange;
-    let allow = YIELD_TI64_MPA * 0.912 * (skin_tq - 0.1) / skin_tq.max(0.2);
+    let allow = mat::yield_allowable(skin_tq, AS_BUILT_WALL);
     let (mut lat, mut tw, mut sp) = (0.0_f64, 0.0_f64, 0.0_f64);
     for s in [0.25, 0.50, 0.75] {
         let x = p["x_t"] + s * p["L_g"];
@@ -182,7 +186,7 @@ fn crop(grid: &jarambit_g5::g5_sdf::VoxelGrid3D, x0: f64, x1: f64) -> Model {
             u8::from(inside(i0 + a, j0 + b, k0 + c))
         })
         .collect();
-    Model { grid: g, phase, materials: vec![TI] }
+    Model { grid: g, phase, materials: vec![ti()] }
 }
 
 fn run(roots: &str, ids: &str, h: f64, out: &str, threads: usize) {
@@ -196,7 +200,7 @@ fn run(roots: &str, ids: &str, h: f64, out: &str, threads: usize) {
         let grid = build_g5_sdf(&g, h, true);
         let (xt, lg) = (p["x_t"], p["L_g"]);
         let skin = p["skin_t"];
-        let allow = YIELD_TI64_MPA * 0.912 * (skin - 0.1) / skin.max(0.2);
+        let allow = mat::yield_allowable(skin, AS_BUILT_WALL);
         let mut rec = serde_json::json!({"design_id": id, "h": h, "schema": g.schema, "skin_t": skin,
             "allow_fe_mpa": allow, "formula": formula_cases(&p, blade.tip_xy, xc)});
         for (name, x0, x1, s0, s1) in [

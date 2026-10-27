@@ -35,8 +35,16 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
    - Lloyd CVT niche centres;
    - promotion by rank;
    - sparse mutation.
-2. **Material:** stress-relieved L-PBF Ti-6Al-4V at 825/895 MPa, the 80 °C derate, the thin-wall law, fatigue by
-   surface class with FKM mean stress, and sheet-TPMS laws.
+2. **Material.** Done, in `material.rs`:
+   - stress-relieved L-PBF Ti-6Al-4V at 825/895 MPa, with the 80 °C derate (×0.91 on yield, ×0.92 on ultimate,
+     ×0.97 on E and G);
+   - ν 0.31;
+   - the thin-wall law per pair of wall faces, on the nominal section;
+   - fatigue by surface class with FKM mean stress.
+
+   Every evaluator takes E, ν, G and its allowables from this module. Still to do:
+   - the sheet-TPMS laws (with the decoder);
+   - the solid-tip TET10 still uses the physics crate's hard-coded G3 material until the load-case PR copies it.
 3. **Decoder G5.0:**
    - the 20–25° edge on the finished blade, with a finishing allowance;
    - 4–6 mm serrations with gullet radius ≥ 0.5 mm;

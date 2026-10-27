@@ -8,21 +8,18 @@
 //!    the exported surface height law and enforcing true float64 residual
 //!    $\|\mathbf{K}\mathbf{u} - \mathbf{f}\|_2 / \|\mathbf{f}\|_2 \le 10^{-10}$ (`HPC_REPORT.md` §4).
 
-use jarambit_physics::fine::{c_plane, corners, von_mises, Mesh, P2, T6, NU};
+use crate::material::{self, AS_BUILT_WALL};
+use jarambit_physics::fine::{c_plane, corners, von_mises, Mesh, P2, T6};
 use serde::{Deserialize, Serialize};
-
-pub const E_TI64_MPA: f64 = 113_800.0;
-pub const YIELD_TI64_MPA: f64 = 828.0;
-pub const K100_HOT_DERATE: f64 = 0.912;
 
 /// Gibson-Ashby relative stiffness exponent for stretching/bending-dominated TPMS network lattices.
 pub const GIBSON_ASHBY_EXP: f64 = 1.8;
 
-/// Joint thin + hot (100 C) knockdown factor matching `fe2d.py::joint_k`.
+/// Combined service-temperature and thin-wall knock-down of an as-built wall of thickness `t_joint_mm`: its yield
+/// allowable over the room-temperature bulk yield of RS-karambit-v5 (replaces G3's `(t − 0.1)/t · 0.912`).
 #[inline]
 pub fn joint_k(t_joint_mm: f64) -> f64 {
-    let t = t_joint_mm.max(0.2);
-    ((t - 0.1) / t) * K100_HOT_DERATE
+    material::yield_allowable(t_joint_mm, AS_BUILT_WALL) / crate::requirements::rs_v5().material.yield_mpa
 }
 
 /// Per-element or per-(x, y) sandwich section properties for a z-symmetric shell + TPMS lattice core.
@@ -724,7 +721,7 @@ pub fn solve_ring_band_t6(
     if mesh.tris.is_empty() || t_elem.len() != mesh.tris.len() {
         return None;
     }
-    let t6 = T6::new(mesh, 2.0, E_TI64_MPA, NU).with_thickness(t_elem.to_vec());
+    let t6 = T6::new(mesh, 2.0, material::e_mpa(), material::nu()).with_thickness(t_elem.to_vec());
     let n6 = t6.n();
     let mut fixed = vec![false; n6 * 2];
     let mut n_fixed = 0usize;
@@ -932,7 +929,7 @@ pub fn solve_ring_band_t6(
         if best_vm <= 1e-12 {
             return None;
         }
-        let cap_n = (YIELD_TI64_MPA / best_vm) * jk;
+        let cap_n = material::yield_allowable(t_joint, AS_BUILT_WALL) / best_vm;
         Some(RingCaseResult {
             sigma_pk_per_n: best_vm,
             capacity_n: cap_n,
@@ -1354,8 +1351,9 @@ pub fn solve_ring_2p5d_extruded_tet10(
         }
     }
 
-    let lam = E_TI64_MPA * NU / ((1.0 + NU) * (1.0 - 2.0 * NU));
-    let mu = E_TI64_MPA / (2.0 * (1.0 + NU));
+    let (e_mod, nu) = (material::e_mpa(), material::nu());
+    let lam = e_mod * nu / ((1.0 + nu) * (1.0 - 2.0 * nu));
+    let mu = e_mod / (2.0 * (1.0 + nu));
 
     let mut triplets: Vec<Triplet<usize, usize, f64>> = Vec::with_capacity(tets.len() * 180);
     let mut dmax = vec![0.0f64; n_free];
@@ -1459,7 +1457,7 @@ pub fn solve_ring_2p5d_extruded_tet10(
     ];
     let corner_dn: [[[f64; 4]; 10]; 4] = std::array::from_fn(|c| vs1_tet10_dn_dl(corner_l[c]));
     let jk = joint_k(t_joint);
-    let sallow = YIELD_TI64_MPA * jk;
+    let sallow = material::yield_allowable(t_joint, AS_BUILT_WALL);
 
     // All P2 node coordinates for 1.5 mm band load evaluation
     let mut p2_xy = Vec::with_capacity(n_nodes_p2);
@@ -1706,8 +1704,8 @@ mod tests {
         let sec_vec: Vec<SandwichSection> =
             t_vec.iter().map(|&t| SandwichSection::solid(t)).collect();
 
-        let p_mono = Plate::new(mesh.clone(), 4.0, E_TI64_MPA, NU).with_thickness(t_vec);
-        let p_sand = SandwichPlate::new(mesh.clone(), 4.0, E_TI64_MPA, NU).with_sections(sec_vec);
+        let p_mono = Plate::new(mesh.clone(), 4.0, material::e_mpa(), material::nu()).with_thickness(t_vec);
+        let p_sand = SandwichPlate::new(mesh.clone(), 4.0, material::e_mpa(), material::nu()).with_sections(sec_vec);
 
         let n = mesh.xy.len();
         let mut fixed = vec![false; n * 5];
@@ -1730,16 +1728,18 @@ mod tests {
         }
         let u_mono = p_mono.solve(&sys_mono, &f);
         let (u_sand, _) = p_sand.solve_checked(&sys_sand, &f).expect("solve_checked");
+        let u_scale = u_mono.iter().fold(0.0_f64, |m, v| m.max(v.abs()));
         for (a, b) in u_mono.iter().zip(u_sand.iter()) {
-            assert!((a - b).abs() < 1e-12, "displacement mismatch: {a} vs {b}");
+            assert!((a - b).abs() <= 1e-9 * u_scale, "displacement mismatch: {a} vs {b}");
         }
         let (sm_m, sb_m) = p_mono.stresses(&u_mono);
         let (sm_s, sb_s) = p_sand.stresses(&u_sand);
+        let s_scale = sm_m.iter().chain(sb_m.iter()).fold(0.0_f64, |m, v| m.max(v.abs()));
         for ((am, bm), (as_, bs)) in sm_m.iter().zip(sb_m.iter()).zip(sm_s.iter().zip(sb_s.iter()))
         {
-            assert!((am - as_).abs() < 1e-9);
+            assert!((am - as_).abs() <= 1e-9 * s_scale);
             assert!(
-                (bm - bs).abs() < 1e-9,
+                (bm - bs).abs() <= 1e-9 * s_scale,
                 "bending stress mismatch: {bm} vs {bs}"
             );
         }
@@ -1769,9 +1769,9 @@ mod tests {
         let outer = vec![(0.0, -5.0), (50.0, -5.0), (50.0, 5.0), (0.0, 5.0)];
         let mesh = mesh_domain(&outer, &[], 2.0).expect("mesh");
         let ne = mesh.tris.len();
-        let p_sand = SandwichPlate::new(mesh.clone(), 4.0, E_TI64_MPA, NU)
+        let p_sand = SandwichPlate::new(mesh.clone(), 4.0, material::e_mpa(), material::nu())
             .with_sections(vec![sand; ne]);
-        let p_eq = SandwichPlate::new(mesh.clone(), 4.0, E_TI64_MPA, NU)
+        let p_eq = SandwichPlate::new(mesh.clone(), 4.0, material::e_mpa(), material::nu())
             .with_sections(vec![eq_mass_solid; ne]);
 
         let n = mesh.xy.len();

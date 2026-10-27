@@ -20,6 +20,7 @@ use jarambit_crescent::export::Solid;
 use rayon::prelude::*;
 use std::collections::{BTreeMap, VecDeque};
 
+/// Density of the mass of record, g/mm³ (RS-karambit-v5 `[material] density_g_per_cm3`; a test checks it).
 pub const RHO_TI64_G_MM3: f64 = 0.00443;
 pub const GUARD_X_MM: f64 = 75.6;
 /// Fixed-blade union plane $x = 99.0\text{ mm}$ (`ref_f075/f075_reference.json`).
@@ -414,7 +415,7 @@ impl VoxelGrid3D {
         let rho_e = p["rho_grip"].powf(1.8);
         let hollow = p["rho_grip"] < 0.95;
         let skin_t_f64 = p["skin_t"].max(0.4);
-        let allow = 828.0 * 0.912 * (skin_t_f64 - 0.1) / skin_t_f64;
+        let allow = crate::material::yield_allowable(skin_t_f64, crate::material::AS_BUILT_WALL);
         let (tip_ref, spine_x_ref) = if self.include_blade {
             let bp = build_blade_profile_2d(p);
             ([bp.tip_xy.0, bp.tip_xy.1], bp.centroid_x_mm)
