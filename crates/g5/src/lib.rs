@@ -192,7 +192,7 @@ mod record_guards {
         let g = crate::g5_genome::sobol_unit_genome(2, 3, "tier1-loads");
         let rec = crate::g5_qd::evaluate_tier1_sdf_and_plate(&g, 0.5);
         let l = rec.loads;
-        assert_eq!(l.blade_model, "plate", "{l:?}");
+        assert_eq!(l.blade_model, crate::loads::BladeModel::Plate, "{l:?}");
         assert!(l.ring_any_direction_sf <= l.ring_bearing_sf * 300.0 / 300.0 + 1e-12, "{l:?}");
         assert!(l.teeth_sf.is_finite() && l.teeth_sf > 0.0, "{l:?}");
         assert!(l.seq_min().is_finite() && l.seq_min() > 0.0, "{l:?}");

@@ -209,37 +209,136 @@ pub fn section_forces(sec: &BladeSection, q: (f64, f64), f: (f64, f64, f64)) -> 
     (n, bend, m_ip, torsion)
 }
 
+/// Exact JSON for f64 values that may be non-finite: numbers, or "inf" / "-inf" / "nan" (JSON has no non-finite
+/// numbers, and an archive row must re-score bit for bit).
+mod f64x {
+    use serde::{Deserialize, Deserializer, Serializer};
+
+    pub fn serialize<S: Serializer>(v: &f64, s: S) -> Result<S::Ok, S::Error> {
+        if v.is_finite() {
+            s.serialize_f64(*v)
+        } else if v.is_nan() {
+            s.serialize_str("nan")
+        } else if *v > 0.0 {
+            s.serialize_str("inf")
+        } else {
+            s.serialize_str("-inf")
+        }
+    }
+
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum Repr {
+        N(f64),
+        S(String),
+    }
+
+    pub fn deserialize<'de, D: Deserializer<'de>>(d: D) -> Result<f64, D::Error> {
+        match Repr::deserialize(d)? {
+            Repr::N(v) => Ok(v),
+            Repr::S(t) => match t.as_str() {
+                "inf" => Ok(f64::INFINITY),
+                "-inf" => Ok(f64::NEG_INFINITY),
+                "nan" => Ok(f64::NAN),
+                other => Err(serde::de::Error::custom(format!("not an f64: {other}"))),
+            },
+        }
+    }
+}
+
+/// `f64x` for a pair.
+mod f64x2 {
+    use serde::{Deserializer, Serializer};
+
+    pub fn serialize<S: Serializer>(v: &(f64, f64), s: S) -> Result<S::Ok, S::Error> {
+        use serde::ser::SerializeTuple;
+        struct W(f64);
+        impl serde::Serialize for W {
+            fn serialize<S2: Serializer>(&self, s: S2) -> Result<S2::Ok, S2::Error> {
+                super::f64x::serialize(&self.0, s)
+            }
+        }
+        let mut t = s.serialize_tuple(2)?;
+        t.serialize_element(&W(v.0))?;
+        t.serialize_element(&W(v.1))?;
+        t.end()
+    }
+
+    pub fn deserialize<'de, D: Deserializer<'de>>(d: D) -> Result<(f64, f64), D::Error> {
+        #[derive(serde::Deserialize)]
+        struct W(#[serde(with = "super::f64x")] f64);
+        let (a, b): (W, W) = serde::Deserialize::deserialize(d)?;
+        Ok((a.0, b.0))
+    }
+}
+
+/// Model of the blade lateral, twist and pull cases.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum BladeModel {
+    /// Integrated sections (Tier 0)
+    #[default]
+    Analytic,
+    /// Whole-blade sandwich plate (Tier 1)
+    Plate,
+}
+
 /// Every RS-karambit-v5 safety factor of one design, with the governing quantities.
 #[derive(Debug, Clone, Copy, PartialEq, Default, Serialize, Deserialize)]
 pub struct G5Loads {
-    /// "analytic" (Tier 0) or "plate" (Tier 1) for the blade lateral, twist and pull cases
-    pub blade_model: &'static str,
+    pub blade_model: BladeModel,
+    #[serde(with = "f64x")]
     pub lateral_force_n: f64,
+    #[serde(with = "f64x")]
     pub lateral_arm_mm: f64,
+    #[serde(with = "f64x")]
     pub lateral_limit_sf: f64,
+    #[serde(with = "f64x")]
     pub lateral_ultimate_sf: f64,
+    #[serde(with = "f64x")]
     pub twist_limit_sf: f64,
+    #[serde(with = "f64x")]
     pub tip_axial_sf: f64,
+    #[serde(with = "f64x")]
     pub tip_lateral_sf: f64,
+    #[serde(with = "f64x")]
     pub tip_twist_sf: f64,
+    #[serde(with = "f64x")]
     pub pull_sf: f64,
+    #[serde(with = "f64x")]
     pub buckling_lambda: f64,
+    #[serde(with = "f64x")]
     pub teeth_sf: f64,
+    #[serde(with = "f64x")]
     pub fatigue_sf: f64,
+    #[serde(with = "f64x")]
     pub grip_lateral_sf: f64,
+    #[serde(with = "f64x")]
     pub grip_twist_sf: f64,
+    #[serde(with = "f64x")]
     pub grip_pull_sf: f64,
+    #[serde(with = "f64x")]
     pub grip_squeeze_sf: f64,
+    #[serde(with = "f64x")]
     pub guard_push_sf: f64,
+    #[serde(with = "f64x")]
     pub ring_bearing_sf: f64,
+    #[serde(with = "f64x")]
     pub ring_back_sf: f64,
+    #[serde(with = "f64x")]
     pub ring_any_direction_sf: f64,
+    #[serde(with = "f64x")]
     pub hand_fatigue_sf: f64,
+    #[serde(with = "f64x")]
     pub seq_lateral: f64,
+    #[serde(with = "f64x")]
     pub seq_twist: f64,
+    #[serde(with = "f64x")]
     pub seq_pull: f64,
     /// Where the Tier-1 lateral and twist peaks sit: (midline arc from the point, offset across the blade), mm
+    #[serde(with = "f64x2")]
     pub lateral_peak_at: (f64, f64),
+    #[serde(with = "f64x2")]
     pub twist_peak_at: (f64, f64),
 }
 
@@ -578,7 +677,7 @@ pub fn analytic_loads(p: &Params, b: &BladeProfile2D, ring_bearing_cap_n: f64, r
     let hand_twist = grip_twist_sf;
     let hand_pull = grip_pull_sf.min(ring_any_direction_sf);
     G5Loads {
-        blade_model: "analytic",
+        blade_model: BladeModel::Analytic,
         lateral_force_n: f_lat,
         lateral_arm_mm: arm,
         lateral_limit_sf,
@@ -901,7 +1000,7 @@ pub fn plate_blade_cases_at(p: &Params, b: &BladeProfile2D, loads: &mut G5Loads,
         fat_sf = fat_sf.min(sf / fat.sf_fatigue);
     }
     loads.fatigue_sf = fat_sf;
-    loads.blade_model = "plate";
+    loads.blade_model = BladeModel::Plate;
     loads.seq_lateral = loads.grip_lateral_sf / loads.lateral_limit_sf.max(1e-9);
     loads.seq_twist = loads.grip_twist_sf / loads.twist_limit_sf.max(1e-9);
     loads.seq_pull = loads.grip_pull_sf.min(loads.ring_any_direction_sf) / loads.pull_sf.max(1e-9);
@@ -1024,12 +1123,18 @@ mod tests {
         // Ring loads use the owner's values
         assert!((l.ring_bearing_sf - 3.0).abs() < 1e-12 && (l.ring_back_sf - 4.0).abs() < 1e-12);
         println!("{l:?}");
+        // JSON round trip is exact, non-finite values included
+        let mut lnf = l;
+        lnf.teeth_sf = f64::INFINITY;
+        let back: G5Loads = serde_json::from_str(&serde_json::to_string(&lnf).unwrap()).unwrap();
+        assert_eq!(serde_json::to_string(&back).unwrap(), serde_json::to_string(&lnf).unwrap());
+        assert!(back.teeth_sf.is_infinite() && back.lateral_peak_at.0.is_nan());
         // Tier 1: the plate replaces the blade cases and keeps them finite
         let mut l1 = l;
         let t0 = std::time::Instant::now();
         assert!(plate_blade_cases(&p, &b, &mut l1), "plate solve failed");
         println!("plate {:.2} s: {l1:?}", t0.elapsed().as_secs_f64());
-        assert_eq!(l1.blade_model, "plate");
+        assert_eq!(l1.blade_model, BladeModel::Plate);
         for v in [l1.lateral_limit_sf, l1.lateral_ultimate_sf, l1.twist_limit_sf, l1.pull_sf, l1.fatigue_sf] {
             assert!(v.is_finite() && v > 0.0);
         }

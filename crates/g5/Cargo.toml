@@ -48,5 +48,5 @@ jarambit-physics = { path = "../physics" }
 faer = { version = "0.24", default-features = false, features = ["std", "linalg", "sparse", "sparse-linalg"] }
 rayon = "1.10"
 serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+serde_json = { version = "1", features = ["float_roundtrip"] }
 toml = { version = "1.1", default-features = false, features = ["parse", "serde", "std"] }

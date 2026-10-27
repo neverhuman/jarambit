@@ -2089,17 +2089,19 @@ impl CvtMapElitesArchive {
             if !doc["tier_provenance"].is_object() {
                 return Err(format!("row {idx} missing tier_provenance object"));
             }
-            let inputs_map = doc["inputs"]
-                .as_object()
-                .ok_or_else(|| format!("row {idx} inputs is not a JSON object"))?;
-            let rescored = crate::ergolight::score_ergolight_map(inputs_map)
-                .map_err(|e| format!("row {idx} score_ergolight_map failed: {e}"))?;
+            // Re-score with W_ERGOLIGHT_v2 from the row's own measurements and the decoded blade
+            let inputs: ErgolightInputs = serde_json::from_value(doc["inputs"].clone())
+                .map_err(|e| format!("row {idx} invalid inputs: {e}"))?;
+            let loads: crate::loads::G5Loads = serde_json::from_value(doc["loads"].clone())
+                .map_err(|e| format!("row {idx} invalid loads: {e}"))?;
+            let am: AmConnectivityStats = serde_json::from_value(doc["am_connectivity"].clone())
+                .map_err(|e| format!("row {idx} invalid am_connectivity: {e}"))?;
+            let blade = build_blade_profile_2d(&genome.decode());
+            let rescored = score_record(&inputs, &loads, &am, &blade);
             let s_row = doc["score_100"]
                 .as_f64()
                 .ok_or_else(|| format!("row {idx} missing score_100"))?;
-            let s_re = rescored["score_100"]
-                .as_f64()
-                .ok_or_else(|| format!("row {idx} rescored missing score_100"))?;
+            let s_re = rescored.score_100;
             if (s_row - s_re).abs() > 1e-9 {
                 return Err(format!(
                     "row {idx} re-score mismatch: stored {s_row} vs rescored {s_re}"

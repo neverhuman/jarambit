@@ -143,6 +143,9 @@ fn main() {
             "ergo_multiplier": e.record.score.ergo_multiplier,
             "descriptors": e.record.descriptors,
             "inputs": e.record.inputs,
+            "loads": e.record.loads,
+            "am_connectivity": e.record.am_connectivity,
+            "metric": e.record.score.metric,
             "terms": score_json["terms"],
             "ergo": score_json["ergo"],
         });
