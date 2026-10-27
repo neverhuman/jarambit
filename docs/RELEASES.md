@@ -93,6 +93,8 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
     - **Undrained regions** are now split into crevices narrower than a drainage passage (printed solid, not
       penalised) and pockets wide enough to hold powder (printed solid, penalised as wasted hollowing). The exported
       AM build traps no powder.
+  - **Decoder freeze (G5.0, crate 5.0.0).** `G5_DECODER_FROZEN = true`, so record cohorts use `evo_g5`. The V&V
+    receipts are in `evidence/g5/v5.0.0/vv/` (`g5-vv`, with SHA256SUMS).
   - **Solid tip** (`crates/g5/src/tip_tet10.rs`):
     - the TET10 tip submodel with the RS-v5 tip loads, about the tip bisector (G3's axis ran from the coordinate
       origin), with RS-v5 material and the strict residual rule;

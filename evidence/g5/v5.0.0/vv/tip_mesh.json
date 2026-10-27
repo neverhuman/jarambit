@@ -1,0 +1,82 @@
+{
+  "certification_max_area_mm2": 0.08,
+  "rows": [
+    {
+      "design": 0,
+      "point_angle_deg": 30.50098281353712,
+      "sections": {
+        "axial_sf": 0.3724641976831429,
+        "lateral_sf": 0.13175675081874183,
+        "twist_sf": 0.04881569487690738
+      },
+      "solid": [
+        {
+          "axial_sf": 0.38650638385502467,
+          "lateral_sf": 0.19096250699496362,
+          "max_area_mm2": 0.15,
+          "n_dof": 194157,
+          "twist_sf": 0.07820068122871161
+        },
+        {
+          "axial_sf": 0.3619816779170685,
+          "lateral_sf": 0.17148241206030151,
+          "max_area_mm2": 0.08,
+          "n_dof": 340092,
+          "twist_sf": 0.09065496172144807
+        }
+      ]
+    },
+    {
+      "design": 1,
+      "point_angle_deg": 46.37507448904216,
+      "sections": {
+        "axial_sf": 0.40553299372817975,
+        "lateral_sf": 0.18280541687666063,
+        "twist_sf": 0.08704742281750492
+      },
+      "solid": [
+        {
+          "axial_sf": 0.4132492981780151,
+          "lateral_sf": 0.22531512605042017,
+          "max_area_mm2": 0.15,
+          "n_dof": 129276,
+          "twist_sf": 0.1795322476504771
+        },
+        {
+          "axial_sf": 0.3870843000773395,
+          "lateral_sf": 0.21610535405872194,
+          "max_area_mm2": 0.08,
+          "n_dof": 221670,
+          "twist_sf": 0.17257033835969107
+        }
+      ]
+    },
+    {
+      "design": 2,
+      "point_angle_deg": 58.867080714553595,
+      "sections": {
+        "axial_sf": 1.3714800624670769,
+        "lateral_sf": 1.0158591789848204,
+        "twist_sf": 0.7255312011004448
+      },
+      "solid": [
+        {
+          "axial_sf": 1.2110824326504275,
+          "lateral_sf": 1.4194554736245037,
+          "max_area_mm2": 0.15,
+          "n_dof": 201744,
+          "twist_sf": 1.3233738762559493
+        },
+        {
+          "axial_sf": 1.265593391773432,
+          "lateral_sf": 1.256695681285571,
+          "max_area_mm2": 0.08,
+          "n_dof": 352620,
+          "twist_sf": 1.540948275862069
+        }
+      ]
+    }
+  ],
+  "seed_offset": 9,
+  "study": "solid-tip TET10 mesh convergence and section model"
+}

@@ -1,25 +1,25 @@
-# jarambit-g5: the G5 generation (in development, not frozen)
+# jarambit-g5: the G5 generation (decoder G5.0, frozen for v5.0.0)
 
 `jarambit-g5` is the G5 genome, decoder, evaluator and search. G5 targets the requirement set
 [`requirements/RS-karambit-v5.toml`](../../requirements/RS-karambit-v5.toml) (sources:
-[`PROVENANCE-v5.md`](../../requirements/PROVENANCE-v5.md)) and the objective `W_ERGOLIGHT_v2`. It is planned for
+[`PROVENANCE-v5.md`](../../requirements/PROVENANCE-v5.md)) and the objective `W_ERGOLIGHT_v2`. It is the generation of
 release v5.0.0.
 
 ## Status
 
-**This crate has no results.** It starts as a copy of the validated G3 crate ([`crates/g3`](../g3/README.md), the
-v3.0.0 cohort of record), renamed to the G5 namespace. Reviewed pull requests then change it to RS-karambit-v5.
-Until that work is complete:
+**The decoder is frozen (crate version 5.0.0).**
+- `G5_DECODER_FROZEN` is `true`, so record cohorts run under an `evo_g5` root. The development pilots ran under
+  `evo_g5_dev` and none of their numbers are records.
+- The freeze V&V receipts are in [`evidence/g5/v5.0.0/vv/`](../../evidence/g5/v5.0.0/vv/), written by `g5-vv`.
+- The cohort of record and its winner arrive with the v5.0.0 release receipt.
 
-- the decoder, the physics and the objective are still the G3 ones;
-- `G5_DECODER_FROZEN` is `false`, so `g5-evolve` accepts only development run roots (`evo_g5_dev`);
-- no run of this crate can become a cohort of record, and no number from it may appear in the README or a paper.
+G5 started as a copy of the validated G3 crate ([`crates/g3`](../g3/README.md), the v3.0.0 cohort of record).
+Reviewed pull requests then changed it to RS-karambit-v5. `crates/g4` is the withdrawn v4.0.0 prototype (see its
+`WITHDRAWN.md`); G5 does not use it.
 
-`crates/g4` is the withdrawn v4.0.0 prototype (see its `WITHDRAWN.md`). G5 does not use it.
+## What G5 changed from G3
 
-## What G5 will change
-
-The planned changes, in order (`docs/RELEASES.md`, Unreleased):
+In order (`docs/RELEASES.md`):
 
 1. **Measurement fixes from the G3 audit.** Done (first four items):
    - partial-volume mass (`g5_sdf::solid_fraction`), with the 2 % grid agreement check
@@ -123,7 +123,16 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
      to Tier 1, replacing G3's fixed 62/71 gates, which left 8 of 24 G3 islands without a Tier-2 evaluation. Tier 2
      stays off (`--tier2-top 0`) until the solid tip carries the RS-v5 tip loads.
    - **Mutation:** each gene moves with probability 3/n_module, about 15 genes per child where G3 moved all 179.
-7. **V&V, then the decoder freeze.** Followed by cohorts started only from Sobol samples (no hand-set genomes), with
+7. **V&V, then the decoder freeze.** Done. Three development pilots on xbabe4 (12 islands × 600 / 1,500 / 600
+   evaluations) found the objective and decoder issues fixed above. `g5-vv` writes the freeze receipts:
+   - grid agreement;
+   - plate and solid-tip mesh studies;
+   - decoder construction targets;
+   - sheet-TPMS density;
+   - Ritz/Euler and Lloyd/Halton checks;
+   - the objective properties.
+
+   Followed by cohorts started only from Sobol samples (no hand-set genomes), with
    at least 5 seeds plus baselines.
 
 ## Guards that already apply

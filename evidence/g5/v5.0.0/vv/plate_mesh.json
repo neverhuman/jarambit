@@ -1,0 +1,175 @@
+{
+  "production_max_area_mm2": 0.3,
+  "rows": [
+    {
+      "design": 0,
+      "plate": [
+        {
+          "fatigue_sf": 0.170362142642917,
+          "lateral_sf": 0.2504696164037911,
+          "max_area_mm2": 1.2,
+          "pull_sf": 4.082978841870798,
+          "solved": true,
+          "twist_sf": 3.0801914964819685
+        },
+        {
+          "fatigue_sf": 0.14165563089999764,
+          "lateral_sf": 0.20826476459225587,
+          "max_area_mm2": 0.6,
+          "pull_sf": 3.589183492870505,
+          "solved": true,
+          "twist_sf": 3.091146173102459
+        },
+        {
+          "fatigue_sf": 0.1494764362715158,
+          "lateral_sf": 0.2197630592895626,
+          "max_area_mm2": 0.3,
+          "pull_sf": 3.6100068680650295,
+          "solved": true,
+          "twist_sf": 3.028480068076074
+        },
+        {
+          "fatigue_sf": 0.15699448041295005,
+          "lateral_sf": 0.23081622874962693,
+          "max_area_mm2": 0.15,
+          "pull_sf": 3.173618432557889,
+          "solved": true,
+          "twist_sf": 3.0702725355045843
+        }
+      ],
+      "sections": {
+        "lateral_sf": 0.21339626502068826,
+        "pull_sf": 7.042868279201914,
+        "twist_sf": 3.1738846730038954
+      }
+    },
+    {
+      "design": 1,
+      "plate": [
+        {
+          "fatigue_sf": 0.2958797958862398,
+          "lateral_sf": 0.4350080236581226,
+          "max_area_mm2": 1.2,
+          "pull_sf": 0.9595232260258322,
+          "solved": true,
+          "twist_sf": 1.7550603280554633
+        },
+        {
+          "fatigue_sf": 0.24960774617595716,
+          "lateral_sf": 0.366977988573133,
+          "max_area_mm2": 0.6,
+          "pull_sf": 0.8442675129689261,
+          "solved": true,
+          "twist_sf": 1.7983935169374856
+        },
+        {
+          "fatigue_sf": 0.2652105948014693,
+          "lateral_sf": 0.3899175891757727,
+          "max_area_mm2": 0.3,
+          "pull_sf": 0.8640840075289613,
+          "solved": true,
+          "twist_sf": 1.8304745985842297
+        },
+        {
+          "fatigue_sf": 0.2572498875893611,
+          "lateral_sf": 0.378213608169271,
+          "max_area_mm2": 0.15,
+          "pull_sf": 0.8199612755484627,
+          "solved": true,
+          "twist_sf": 1.854062881429571
+        }
+      ],
+      "sections": {
+        "lateral_sf": 0.3619731861880381,
+        "pull_sf": 1.3676345484500108,
+        "twist_sf": 1.488736657174969
+      }
+    },
+    {
+      "design": 2,
+      "plate": [
+        {
+          "fatigue_sf": 0.588900461292822,
+          "lateral_sf": 1.6938713382716777,
+          "max_area_mm2": 1.2,
+          "pull_sf": 2.600535748473577,
+          "solved": true,
+          "twist_sf": 1.527788140221497
+        },
+        {
+          "fatigue_sf": 0.5898948168641748,
+          "lateral_sf": 1.7660170087030533,
+          "max_area_mm2": 0.6,
+          "pull_sf": 2.3110672650120896,
+          "solved": true,
+          "twist_sf": 1.5313769083987354
+        },
+        {
+          "fatigue_sf": 0.5883629941182237,
+          "lateral_sf": 1.6788429671897884,
+          "max_area_mm2": 0.3,
+          "pull_sf": 2.3437337350175707,
+          "solved": true,
+          "twist_sf": 1.5274002706764722
+        },
+        {
+          "fatigue_sf": 0.5945385789740077,
+          "lateral_sf": 1.8394569325512042,
+          "max_area_mm2": 0.15,
+          "pull_sf": 2.155453272409633,
+          "solved": true,
+          "twist_sf": 1.5379047452232424
+        }
+      ],
+      "sections": {
+        "lateral_sf": 2.2175060551390344,
+        "pull_sf": 4.66068404312072,
+        "twist_sf": 1.437025136357079
+      }
+    },
+    {
+      "design": 3,
+      "plate": [
+        {
+          "fatigue_sf": 0.49611560807375943,
+          "lateral_sf": 0.9925535525136855,
+          "max_area_mm2": 1.2,
+          "pull_sf": 1.000652633690648,
+          "solved": true,
+          "twist_sf": 2.4021097609939313
+        },
+        {
+          "fatigue_sf": 0.46251258798975997,
+          "lateral_sf": 0.9925143885769834,
+          "max_area_mm2": 0.6,
+          "pull_sf": 0.9020227629012117,
+          "solved": true,
+          "twist_sf": 2.379726120890616
+        },
+        {
+          "fatigue_sf": 0.4789983955835533,
+          "lateral_sf": 0.9775862861372268,
+          "max_area_mm2": 0.3,
+          "pull_sf": 0.9168616091273363,
+          "solved": true,
+          "twist_sf": 2.4356180799670453
+        },
+        {
+          "fatigue_sf": 0.4903530987583114,
+          "lateral_sf": 1.012437081403465,
+          "max_area_mm2": 0.15,
+          "pull_sf": 0.8021740898457599,
+          "solved": true,
+          "twist_sf": 2.4072677704360372
+        }
+      ],
+      "sections": {
+        "lateral_sf": 1.0577600046642033,
+        "pull_sf": 1.4239152745969286,
+        "twist_sf": 1.5245340591596066
+      }
+    }
+  ],
+  "seed_offset": 9,
+  "study": "Tier-1 whole-blade plate mesh convergence"
+}

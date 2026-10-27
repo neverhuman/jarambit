@@ -503,7 +503,7 @@ dependencies = [
 
 [[package]]
 name = "jarambit-g5"
-version = "5.0.0-dev"
+version = "5.0.0"
 dependencies = [
  "faer",
  "jarambit-crescent",

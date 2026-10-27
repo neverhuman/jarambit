@@ -20,7 +20,7 @@ use crate::g5_genome::{
     reproduce_iso_line_dd, sobol_unit_genome, G5Genome, G5Rng, FIXED_BORE_D_MM, FIXED_LIP_W_MM,
 };
 use crate::g5_sandwich::{
-    solve_g5_solid_tet10_strict, solve_ring_band_t6, SandwichPlate, SandwichSection,
+    solve_ring_band_t6, SandwichPlate, SandwichSection,
 };
 use crate::g5_sdf::{
     blade_bevel_window_weights, build_blade_profile_2d, build_g5_sdf, effective_blade_rho,
@@ -1337,9 +1337,19 @@ fn evaluate_tier1_with_grid(genome: &G5Genome, h_vox: f64) -> (G5EvalRecord, Vox
         }
     }
 
-    // RS-karambit-v5 blade cases on the fine whole-blade plate (`loads::plate_blade_cases`). If the mesh or a checked
-    // solve fails, the Tier-0 analytic values stay and the record keeps `blade_model = "analytic"`.
-    let _ = crate::loads::plate_blade_cases(&p, &blade, &mut rec.loads);
+    // RS-karambit-v5 blade cases on the fine whole-blade plate (`loads::plate_blade_cases`). Fail closed: if the mesh
+    // or a checked solve fails, the blade cases score zero (the analytic values can be more optimistic than the plate)
+    if !crate::loads::plate_blade_cases(&p, &blade, &mut rec.loads) {
+        let l = &mut rec.loads;
+        l.lateral_limit_sf = 0.0;
+        l.lateral_ultimate_sf = 0.0;
+        l.twist_limit_sf = 0.0;
+        l.pull_sf = 0.0;
+        l.fatigue_sf = 0.0;
+        l.seq_lateral = 0.0;
+        l.seq_twist = 0.0;
+        l.seq_pull = 0.0;
+    }
 
     // Solve SandwichPlate on the blade domain for all plate structural terms (`B2`, `B3`, `I6`, `N1`).
     // Fail-closed: zero out all Tier-0 analytic blade estimates before running the checked plate solver.
@@ -1632,41 +1642,21 @@ fn evaluate_tier2_from_tier1(
     for i in (0..blade.xs.len()).rev() {
         b_outer.push((blade.xs[i], blade.y_sp[i]));
     }
-    // RS-karambit-v5 tip cases on the TET10 solid (`loads::tip_solid_cases`); the section values stay if it fails
-    if let Some(ts) = crate::loads::tip_solid_cases(&p, &blade) {
-        rec.loads.tip_axial_sf = ts.axial_sf;
-        rec.loads.tip_lateral_sf = ts.lateral_sf;
-        rec.loads.tip_twist_sf = ts.twist_sf;
-        rec.loads.tip_model = crate::loads::TipModel::Solid;
-    }
-    if let Some(b_mesh) = mesh_domain(&b_outer, &[], TIP_FE_MAX_AREA_MM2) {
-        let x0 = blade.x_tip - 32.0;
-        let y0 = blade.tip_xy.1 - 32.0;
-        let g = 0.5;
-        let nx = 130usize;
-        let ny = 130usize;
-        let th_fn = |x: f64, y: f64| -> Option<f64> {
-            let (t, d2) = eval_blade_thickness_and_sdf2(&p, &blade, x, y);
-            if d2 <= 0.0 && t > 0.05 {
-                Some(t)
-            } else {
-                None
-            }
-        };
-        if let Some(tip_res) = solve_g5_solid_tet10_strict(
-            b_mesh.xy,
-            b_mesh.tris,
-            blade.tip_xy,
-            p["t_core"],
-            x0,
-            y0,
-            g,
-            nx,
-            ny,
-            &th_fn,
-            0,
-        ) {
-            rec.inputs.solid_tip_sf = tip_res.sf_nodal_max;
+    // RS-karambit-v5 tip cases on the TET10 solid (`loads::tip_solid_cases`). Fail closed: a finalist's tip is
+    // judged on the solid, so a failed mesh or solve scores the tip cases zero. (G3's own TET10 solve, a 1.82 N m
+    // twist with G3 material whose result W_ERGOLIGHT_v2 does not read, no longer runs.)
+    match crate::loads::tip_solid_cases(&p, &blade) {
+        Some(ts) => {
+            rec.loads.tip_axial_sf = ts.axial_sf;
+            rec.loads.tip_lateral_sf = ts.lateral_sf;
+            rec.loads.tip_twist_sf = ts.twist_sf;
+            rec.loads.tip_model = crate::loads::TipModel::Solid;
+        }
+        None => {
+            rec.loads.tip_axial_sf = 0.0;
+            rec.loads.tip_lateral_sf = 0.0;
+            rec.loads.tip_twist_sf = 0.0;
+            rec.loads.tip_model = crate::loads::TipModel::Solid;
         }
     }
 

@@ -1,0 +1,70 @@
+{
+  "cvt_1024": {
+    "halton_quantisation_error": 0.14253905119421575,
+    "lloyd_quantisation_error": 0.12473922622159743
+  },
+  "objective": {
+    "grams_per_percent_e_at_base_0_6": 10.5,
+    "min_grams_per_percent_e": 10.0,
+    "s_margin_at_0_64": 0.1577058304,
+    "worst_margin_multiplier": [
+      [
+        0.5,
+        0.0625
+      ],
+      [
+        0.7,
+        0.24009999999999995
+      ],
+      [
+        0.85,
+        0.5220062499999999
+      ],
+      [
+        0.95,
+        0.8145062499999999
+      ],
+      [
+        1.0,
+        1.0
+      ]
+    ]
+  },
+  "ritz_column": {
+    "ei_n_mm2": 2000000.0,
+    "euler_n": 7895.683520871486,
+    "length_mm": 25.0,
+    "rel_err": -4.968497724355814e-9,
+    "ritz_n": 7895.6834816418
+  },
+  "sheet_tpms": [
+    {
+      "built_rho": 0.30936,
+      "lat_mix": 0.0,
+      "measured_rho": 0.29108796296296297,
+      "sheet_mm": 0.8,
+      "target_rho": 0.25
+    },
+    {
+      "built_rho": 0.4,
+      "lat_mix": 0.0,
+      "measured_rho": 0.36689814814814814,
+      "sheet_mm": 1.0343935867597622,
+      "target_rho": 0.4
+    },
+    {
+      "built_rho": 0.38377,
+      "lat_mix": 1.0,
+      "measured_rho": 0.35648148148148145,
+      "sheet_mm": 0.8,
+      "target_rho": 0.25
+    },
+    {
+      "built_rho": 0.4,
+      "lat_mix": 1.0,
+      "measured_rho": 0.36689814814814814,
+      "sheet_mm": 0.8338327644161868,
+      "target_rho": 0.4
+    }
+  ]
+}
