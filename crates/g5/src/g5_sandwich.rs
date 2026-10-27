@@ -1048,11 +1048,13 @@ pub fn solve_g5_solid_tet10_strict(
     thickness_fn: &dyn Fn(f64, f64) -> Option<f64>,
     nsub: usize,
 ) -> Option<StrictSolidTipResult> {
+    // `FilledThicknessField::sample` reads cell (i, j) at its centre, x0 + (i + 1/2) g, so the thickness is sampled
+    // there too. G3 sampled the cell corner, which shifted the tip thickness half a cell (audit AG-10).
     let mut th = Vec::with_capacity(nx * ny);
     for j in 0..ny {
-        let y = y0 + (j as f64) * g;
+        let y = y0 + (j as f64 + 0.5) * g;
         for i in 0..nx {
-            let x = x0 + (i as f64) * g;
+            let x = x0 + (i as f64 + 0.5) * g;
             th.push(thickness_fn(x, y));
         }
     }

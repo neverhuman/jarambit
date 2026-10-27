@@ -36,6 +36,17 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
     - G5 design IDs (`kv…`) refuse v1 (`ec…`) and G3 (`hz…`) IDs.
     - Until `G5_DECODER_FROZEN`, `g5-evolve` writes only to development roots (`evo_g5_dev`).
   - **CI.** `d1-gates` runs the crate's tests.
+- **G5 measurement fixes** (from the G3 audit):
+  - **Mass.** Partial-volume mass, with a check that h and h/2 agree within 2 %. On the G3 winner at h 0.4 it gives
+    59.29 g, where the watertight print mesh gives 59.30 g and whole-voxel counting gave 55.97 g.
+  - **Blur.** The hand-zone blur radius is set in millimetres.
+  - **Tip raster.** The tip thickness is sampled at cell centres.
+  - **Drainage.** Powder drains only through passages ≥ 1 mm wide (`[am] drain_channel_min_mm`, a lower bound from
+    Carrozza et al. 2023). Undrainable cavities are measured, kept solid in the mass, and recorded. G3 drained a
+    cavity through any one-voxel path, which is why the same design weighed 51.3 g at h 0.4 and 75.2 g at h 0.2.
+  - **Finding on G3.** Under this rule, the G3 v3.0.0 winner's lattice reaches its 2.8 mm powder ports only through
+    two 0.85 mm slits beside the 1.1 mm mid-plane rib. Its cavity counts as undrainable (13,005 mm³). This is a G3
+    decoder limitation: depowdering of the G3 design is unverified. The G5 decoder must place ports clear of ribs.
 
 ## v4.0.1 — 2026-10-27 (patch: v4.0.0 withdrawn; the G3 v3.0.0 cohort of record is current again; G3 errata and diagnostics)
 

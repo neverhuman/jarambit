@@ -48,6 +48,27 @@ pub fn effective_blade_rho(p: &BTreeMap<&'static str, f64>) -> f64 {
     }
 }
 
+/// Solid volume fraction of a voxel whose centre has signed distance `d` (mm, negative inside): the linear ramp
+/// `clamp(0.5 − d/h, 0, 1)`. Exact for a plane parallel to a voxel face and second-order accurate on average for a
+/// smooth surface, so the mass converges with h. G3 counted whole voxels (`d < 0`), which made mass depend on the
+/// grid (audit F-M-1).
+#[inline]
+pub fn solid_fraction(d: f32, h: f64) -> f64 {
+    (0.5 - d as f64 / h).clamp(0.0, 1.0)
+}
+
+/// Blur radius of the hand-zone SDF hand-over, in millimetres (G3 used one voxel, so the geometry changed with h).
+pub const HANDZONE_SDF_BLUR_SIGMA_MM: f64 = 0.4;
+
+/// What `enforce_am_connectivity` changed in the AM field (mm³). Sealed air pockets cannot drain their powder: they
+/// are kept solid in `d_am` (so the mass of record counts trapped powder at full density, an over-estimate) and their
+/// volume is reported so the objective can penalise it. G3 filled them silently (audit F-M-3).
+#[derive(Debug, Clone, Copy, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct AmConnectivityStats {
+    pub sealed_void_mm3: f64,
+    pub floating_solid_mm3: f64,
+}
+
 /// 3D regular voxel grid dimensions and origin.
 #[derive(Debug, Clone)]
 pub struct VoxelGrid3D {
@@ -69,6 +90,8 @@ pub struct VoxelGrid3D {
     pub d_am: Option<Vec<f32>>,
     /// Whether this voxel grid includes the evolved G5 blade (`true` in production, `false` in `f075` parity helper).
     pub include_blade: bool,
+    /// Sealed (undrainable) cavity volume and removed floating solid of `d_am`.
+    pub am_connectivity: AmConnectivityStats,
 }
 
 impl VoxelGrid3D {
@@ -90,14 +113,9 @@ impl VoxelGrid3D {
             }
             for j in 0..self.ny {
                 let base = (i * self.ny + j) * self.nz;
-                let mut n_col = 0usize;
-                for k in 0..self.nz {
-                    if field[base + k] < 0.0 {
-                        n_col += 1;
-                    }
-                }
-                if n_col > 0 {
-                    let m_col = (n_col as f64) * dm;
+                let f_col: f64 = (0..self.nz).map(|k| solid_fraction(field[base + k], self.h)).sum();
+                if f_col > 0.0 {
+                    let m_col = f_col * dm;
                     if x < x_t {
                         ring_g += m_col;
                     } else {
@@ -109,9 +127,9 @@ impl VoxelGrid3D {
         (ring_g, grip_g, ring_g + grip_g)
     }
 
-    /// Integrate exact AM-printed mass (g), centre of mass `(com_x, com_y)`, and spin inertia
-    /// `spin_i_g_mm2` about `(cx, 0)` directly from `d_am` (after `enforce_am_connectivity` has
-    /// filled any unported/sealed cavities solid).
+    /// Integrate the AM-printed mass (g), centre of mass `(com_x, com_y)` and spin inertia `spin_i_g_mm2` about
+    /// `(cx, 0)` from `d_am` by partial volume (`solid_fraction`). Sealed cavities are solid in `d_am`
+    /// (`AmConnectivityStats`).
     pub fn am_mass_com_inertia(&self, cx: f64) -> (f64, f64, f64, f64) {
         let field = self.d_am.as_deref().unwrap_or(&self.d);
         let dm = self.h.powi(3) * RHO_TI64_G_MM3;
@@ -124,14 +142,9 @@ impl VoxelGrid3D {
             for (j, &y) in self.y.iter().enumerate() {
                 let r2 = dx * dx + y * y;
                 let base = (i * self.ny + j) * self.nz;
-                let mut n_col = 0usize;
-                for k in 0..self.nz {
-                    if field[base + k] < 0.0 {
-                        n_col += 1;
-                    }
-                }
-                if n_col > 0 {
-                    let m_col = (n_col as f64) * dm;
+                let f_col: f64 = (0..self.nz).map(|k| solid_fraction(field[base + k], self.h)).sum();
+                if f_col > 0.0 {
+                    let m_col = f_col * dm;
                     m_tot += m_col;
                     mx += m_col * x;
                     my += m_col * y;
@@ -144,8 +157,8 @@ impl VoxelGrid3D {
         (m_tot, com_x, com_y, i_zz)
     }
 
-    /// Return the exact AM-printed solid thickness $\int_{d_{\text{am}}(x,y,z) < 0} dz$ (mm) at
-    /// `(x, y)` after `enforce_am_connectivity` has filled any unported cavities solid.
+    /// Return the AM-printed solid thickness $\int_{d_{\text{am}}(x,y,z) < 0} dz$ (mm) at `(x, y)`, by partial
+    /// volume along the voxel column.
     pub fn am_z_thickness_at(&self, x: f64, y: f64) -> f64 {
         if self.x.is_empty() || self.y.is_empty() {
             return 0.0;
@@ -154,8 +167,8 @@ impl VoxelGrid3D {
         let j = (((y - self.y[0]) / self.h).round() as isize).clamp(0, self.ny as isize - 1) as usize;
         let field = self.d_am.as_deref().unwrap_or(&self.d);
         let base = (i * self.ny + j) * self.nz;
-        let n_solid = (0..self.nz).filter(|&k| field[base + k] < 0.0).count();
-        (n_solid as f64) * self.h
+        let f_solid: f64 = (0..self.nz).map(|k| solid_fraction(field[base + k], self.h)).sum();
+        f_solid * self.h
     }
 
     /// Bilinearly interpolate the 2D homogenized effective membrane thickness `tmap_eff_2d`
@@ -1003,16 +1016,50 @@ pub fn tpms_level_for_rho(lat_cell: f64, lat_mix: f64, lat_aniso_x: f64, target_
     vals[idx]
 }
 
-/// Apply `G3_GENOME_SPEC.md` v1.1 §7 Rule 4 to an AM signed distance field `d_am`:
+/// Apply `G3_GENOME_SPEC.md` v1.1 §7 Rule 4, with G5's drainage rule, to an AM signed distance field `d_am`.
+///
+/// Powder drains only through passages at least `drain_channel_min_mm` wide (RS-karambit-v5 `[am]`). An air voxel
+/// inside the envelope (`d_env < 0`) is drained when it lies on, or within that half-width of, a path from the
+/// outside whose voxels all have clearance `d_am >= drain_channel_min_mm / 2`. Air outside the envelope always
+/// counts as open, so exterior slots are never filled. G3 drained a cavity through any one-voxel gap, so the
+/// same design was hollow on one grid and filled on another (audit F-M-3).
+///
 /// 1. Fill any sealed internal air pockets (`d_am > 0`) that are not 6-connected to the outer grid
 ///    boundary (no trapped un-sintered powder).
 /// 2. Keep only the largest 6-connected solid component (`d_am < 0`, which includes the outer skin),
 ///    removing any disconnected floating lattice struts.
-pub fn enforce_am_connectivity(d_am: &mut [f32], nx: usize, ny: usize, nz: usize, h: f32) {
+pub fn enforce_am_connectivity(
+    d_am: &mut [f32],
+    d_env: Option<&[f32]>,
+    nx: usize,
+    ny: usize,
+    nz: usize,
+    h: f32,
+    drain_channel_min_mm: f64,
+) -> AmConnectivityStats {
     let total = nx * ny * nz;
     assert_eq!(d_am.len(), total);
+    if let Some(env) = d_env {
+        assert_eq!(env.len(), total);
+    }
+    let hv = h as f64;
+    let dv = hv * hv * hv;
+    let r_clear = (0.5 * drain_channel_min_mm) as f32;
+    let mut stats = AmConnectivityStats::default();
+    let exterior = |idx: usize| d_env.is_some_and(|env| env[idx] >= 0.0);
+    let wide = |idx: usize| d_am[idx] > 0.0 && (exterior(idx) || d_am[idx] >= r_clear);
+    let nbrs6 = |i: usize, j: usize, k: usize| {
+        [
+            (i.wrapping_sub(1), j, k),
+            (i + 1, j, k),
+            (i, j.wrapping_sub(1), k),
+            (i, j + 1, k),
+            (i, j, k.wrapping_sub(1)),
+            (i, j, k + 1),
+        ]
+    };
 
-    // 1. Exterior-connected air flood fill from the 6 boundary faces of the grid
+    // 1. Flood the wide air (exterior, or clearance >= r_clear) from the 6 boundary faces of the grid
     let mut ext_air = vec![false; total];
     let mut q = VecDeque::new();
     for i in 0..nx {
@@ -1020,7 +1067,7 @@ pub fn enforce_am_connectivity(d_am: &mut [f32], nx: usize, ny: usize, nz: usize
             for k in 0..nz {
                 if i == 0 || i + 1 == nx || j == 0 || j + 1 == ny || k == 0 || k + 1 == nz {
                     let idx = (i * ny + j) * nz + k;
-                    if d_am[idx] > 0.0 && !ext_air[idx] {
+                    if wide(idx) && !ext_air[idx] {
                         ext_air[idx] = true;
                         q.push_back((i, j, k));
                     }
@@ -1028,28 +1075,55 @@ pub fn enforce_am_connectivity(d_am: &mut [f32], nx: usize, ny: usize, nz: usize
             }
         }
     }
+    let mut reached = Vec::new();
     while let Some((i, j, k)) = q.pop_front() {
-        let nbrs = [
-            (i.wrapping_sub(1), j, k),
-            (i + 1, j, k),
-            (i, j.wrapping_sub(1), k),
-            (i, j + 1, k),
-            (i, j, k.wrapping_sub(1)),
-            (i, j, k + 1),
-        ];
-        for (ni, nj, nk) in nbrs {
+        reached.push((i, j, k));
+        for (ni, nj, nk) in nbrs6(i, j, k) {
             if ni < nx && nj < ny && nk < nz {
                 let nidx = (ni * ny + nj) * nz + nk;
-                if d_am[nidx] > 0.0 && !ext_air[nidx] {
+                if wide(nidx) && !ext_air[nidx] {
                     ext_air[nidx] = true;
                     q.push_back((ni, nj, nk));
                 }
             }
         }
     }
-    // Any air voxel not reached from the exterior is a sealed pocket -> fill solid (-h)
+    // 2. The air along the walls of a drained passage drains with it: grow the wide set through any air by at
+    //    most the passage half-width, in 26-connected steps (each covers one voxel of Chebyshev distance, so
+    //    corners are reached), so a thinner gap leading further stays sealed
+    let max_steps = ((r_clear as f64) / hv).ceil() as usize + 1;
+    let mut front = reached;
+    for _ in 0..max_steps {
+        let mut next = Vec::new();
+        for &(i, j, k) in &front {
+            for di in -1_isize..=1 {
+                for dj in -1_isize..=1 {
+                    for dk in -1_isize..=1 {
+                        let (ni, nj, nk) = (
+                            i.wrapping_add_signed(di),
+                            j.wrapping_add_signed(dj),
+                            k.wrapping_add_signed(dk),
+                        );
+                        if ni < nx && nj < ny && nk < nz {
+                            let nidx = (ni * ny + nj) * nz + nk;
+                            if d_am[nidx] > 0.0 && !ext_air[nidx] {
+                                ext_air[nidx] = true;
+                                next.push((ni, nj, nk));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if next.is_empty() {
+            break;
+        }
+        front = next;
+    }
+    // Any envelope air voxel not drained is a sealed pocket: measured, then kept solid (-h)
     for idx in 0..total {
-        if d_am[idx] > 0.0 && !ext_air[idx] {
+        if d_am[idx] > 0.0 && !ext_air[idx] && !exterior(idx) {
+            stats.sealed_void_mm3 += (1.0 - solid_fraction(d_am[idx], hv)) * dv;
             d_am[idx] = -h;
         }
     }
@@ -1102,10 +1176,12 @@ pub fn enforce_am_connectivity(d_am: &mut [f32], nx: usize, ny: usize, nz: usize
             .unwrap_or(1);
         for idx in 0..total {
             if d_am[idx] < 0.0 && comp_id[idx] != best_id {
+                stats.floating_solid_mm3 += solid_fraction(d_am[idx], hv) * dv;
                 d_am[idx] = h;
             }
         }
     }
+    stats
 }
 
 // ---------------- 4. Hand Zone + Un-Anchored 3D Blade Builder (Rules 5 & 6) ----------------
@@ -2274,7 +2350,7 @@ pub fn build_g5_sdf_from_params_with_origin_shift(
             wa * a + (1.0 - wa) * e
         })
         .collect();
-    d_hz = gaussian_filter_3d(&d_hz, nx_hz, ny, nz, 1.0);
+    d_hz = gaussian_filter_3d(&d_hz, nx_hz, ny, nz, HANDZONE_SDF_BLUR_SIGMA_MM / h);
 
     // Assemble full-knife 3D SDF `d` (hand zone + full 3D blade smoothly blended across `x in [86.0, 92.0]`, `S5-5`)
     let mut d = vec![cl; total];
@@ -2511,6 +2587,7 @@ pub fn build_g5_sdf_from_params_with_origin_shift(
     }
 
     // 7. Optional AM interior architecture (`hzm.py::cavity_mask` + `am_build` parity + Rule 4 connectivity)
+    let mut am_connectivity = AmConnectivityStats::default();
     let d_am = if with_am {
         let lat_cell = p["lat_cell"];
         let lat_mix = p["lat_mix"];
@@ -2698,7 +2775,15 @@ pub fn build_g5_sdf_from_params_with_origin_shift(
                 }
             }
         }
-        enforce_am_connectivity(&mut am, nx, ny, nz, h as f32);
+        am_connectivity = enforce_am_connectivity(
+            &mut am,
+            Some(&d),
+            nx,
+            ny,
+            nz,
+            h as f32,
+            crate::requirements::rs_v5().am.drain_channel_min_mm,
+        );
         if include_blade {
             // Preserve the solid 3.5 mm edge bevel bands and tip apex 100% unmodified in `d_am` (`S5-2`, `P4`)
             for (i, &x) in xs.iter().enumerate() {
@@ -2741,6 +2826,7 @@ pub fn build_g5_sdf_from_params_with_origin_shift(
         tmap_eff_2d,
         d_am,
         include_blade,
+        am_connectivity,
     }
 }
 
@@ -3111,15 +3197,68 @@ mod tests {
         d_am[(10 * ny + 10) * nz + 10] = 1.0;
         d_am[(19 * ny + 19) * nz + 19] = -1.0;
 
-        enforce_am_connectivity(&mut d_am, nx, ny, nz, 0.5);
+        let stats = enforce_am_connectivity(&mut d_am, None, nx, ny, nz, 0.5, 1.0);
         assert!(
             d_am[(10 * ny + 10) * nz + 10] < 0.0,
-            "sealed air pocket must be filled solid"
+            "sealed air pocket must be kept solid (its powder cannot drain)"
         );
+        // The pocket voxel (d = 1.0 at h = 0.5: fraction 0) is reported as 0.125 mm³ of sealed void, and the
+        // fragment (d = -1.0: fraction 1) as 0.125 mm³ of removed floating solid.
+        assert!((stats.sealed_void_mm3 - 0.125).abs() < 1e-12, "{stats:?}");
+        assert!((stats.floating_solid_mm3 - 0.125).abs() < 1e-12, "{stats:?}");
         assert!(
             d_am[(19 * ny + 19) * nz + 19] > 0.0,
             "disconnected floating solid fragment must be removed"
         );
+    }
+
+    /// A box (outer half-size 6 mm, skin 1 mm) with a cubic cavity, joined to the outside by a straight channel along
+    /// +x of square half-width `w`, on a 0.25 mm grid. Returns the sealed volume found by the drainage rule.
+    fn sealed_volume_of_channel_box(w: f64, with_exterior_slot: bool) -> (f64, Vec<f32>, usize) {
+        let h = 0.25_f64;
+        let n = 64usize;
+        let c = |i: usize| (i as f64 + 0.5) * h - 8.0;
+        let mut d_env = vec![0.0_f32; n * n * n];
+        let mut d_am = vec![0.0_f32; n * n * n];
+        for i in 0..n {
+            for j in 0..n {
+                for k in 0..n {
+                    let (x, y, z) = (c(i), c(j), c(k));
+                    let box_out = x.abs().max(y.abs()).max(z.abs()) - 6.0;
+                    let mut env = box_out;
+                    if with_exterior_slot {
+                        // a 0.5 mm wide, 0.6 mm deep exterior slot cut into the -y face (inside the 1 mm skin)
+                        let slot = (x.abs() - 0.25).max(z.abs() - 3.0).max(y + 5.4);
+                        env = env.max(-slot);
+                    }
+                    let cavity = 5.0 - x.abs().max(y.abs()).max(z.abs());
+                    let channel = (w - y.abs().max(z.abs())).min(8.0 - x).min(x);
+                    let air_inside = cavity.min(4.0).max(channel);
+                    let idx = (i * n + j) * n + k;
+                    d_env[idx] = env as f32;
+                    d_am[idx] = env.max(air_inside) as f32;
+                }
+            }
+        }
+        let stats = enforce_am_connectivity(&mut d_am, Some(&d_env), n, n, n, h as f32, 1.0);
+        (stats.sealed_void_mm3, d_am, n)
+    }
+
+    #[test]
+    fn drainage_needs_a_passage_at_least_drain_channel_min_wide() {
+        // The cavity is 8 mm wide: 512 mm³ of air (plus the channel).
+        let (sealed_narrow, ..) = sealed_volume_of_channel_box(0.2, false); // 0.4 mm channel: sealed
+        let (sealed_wide, ..) = sealed_volume_of_channel_box(0.75, false); // 1.5 mm channel: drains
+        assert!(sealed_narrow > 500.0, "a 0.4 mm passage must not drain the cavity: {sealed_narrow} mm³");
+        assert!(sealed_wide < 1.0, "a 1.5 mm passage must drain the cavity: {sealed_wide} mm³");
+        // An exterior slot narrower than the drainage width is outside the envelope and is never filled.
+        let (_, d_am, n) = sealed_volume_of_channel_box(0.75, true);
+        let h = 0.25_f64;
+        let idx = |x: f64, y: f64, z: f64| {
+            let f = |v: f64| ((v + 8.0) / h - 0.5).round() as usize;
+            (f(x) * n + f(y)) * n + f(z)
+        };
+        assert!(d_am[idx(0.125, -5.875, 0.125)] > 0.0, "the exterior slot must stay open");
     }
 
     #[test]

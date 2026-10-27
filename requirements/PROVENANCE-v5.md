@@ -42,6 +42,7 @@ v4.0.0 prototype and is not used.
 | Point | thickness only | angle at 1 / 3 mm, width at 2 mm, tip radius | Owner decision; tip radius controls piercing [hainsworth2008] |
 | Grip | perimeter 65–75 mm, H/T 1.5–2.0 | 84–100 mm (floor 78.5), H/T 1.5–1.8, length ≥ 69 mm | Owner decision [kong2005, seo2011, faa-hfds] |
 | Ports | ≥ 2.5 mm | ≥ 3.0 mm, two per cavity, no closed voids measured on the geometry | [nasa6030, xometry, materialise, solukon] |
+| Drainage | a cavity drained if any voxel path reached the outside | only passages ≥ 1 mm wide drain powder | A one-voxel gap drained a cavity on one grid and sealed it on another (G3 `g00840`: 51.3 g at h 0.4, 75.2 g at h 0.2) [carrozza2023] |
 | Margins | SF 1 | SF 1.2 on yield, 1.3 on ultimate; ring SF 2 kept | NASA-STD-6030 low-demand class [nasa6030]; owner ring |
 
 ## Sources
@@ -73,7 +74,7 @@ v4.0.0 prototype and is not used.
 | `benedetti2021` | P | Benedetti M, du Plessis A et al. (2021), *Mater Sci Eng R* 144:100606, doi:10.1016/j.mser.2021.100606 | Lattice fatigue well below 0.4 σy* at 1e6 |
 | `alana2021` | P | Alaña M et al. (2021), *Sci Rep* 11, doi:10.1038/s41598-021-98631-3 | Lattice fatigue 0.15–0.31 σy* |
 | `renishaw2017` | V | Renishaw (2017), *Design for metal AM: a beginner's guide* | Overhang 45°, holes, ledges |
-| `carrozza2023` | p | Carrozza A et al. (2023), *Met Mater Int*, doi:10.1007/s12540-023-01460-4 | Minimum walls, channels, holes |
+| `carrozza2023` | p | Carrozza A, Bircher B, Aversa A, Biamino S (2023), "Investigating complex geometrical features in LPBF-produced parts: a material-based comparison between different titanium alloys", *Met Mater Int*, doi:10.1007/s12540-023-01460-4 | Minimum walls, channels, holes. 300 µm walls and 1 mm channels print in Ti-6Al-4V, but residual powder sticks in the channels: 1 mm is the lower bound for a drainage passage |
 | `xometry`, `materialise`, `solukon` | V | Xometry DMLS design guide; Materialise metal design guide; Solukon depowdering guidance | Powder ports 2–5 mm, ≥ 3 mm; length/diameter about 4 |
 | `dodds2014` | P | Dodds RM et al. (2014), "Grip strength across the life course", *PLoS ONE* 9:e113637, doi:10.1371/journal.pone.0113637 | Grip strength percentiles; P95 male 661 N (D) |
 | `hidh` | S | NASA Human Integration Design Handbook, NASA/SP-2010-3407/REV1 (2014), §9.12.2, App. B Table 8 | Maximum crew grip 783 N; edge radii; pull 449–587 N; finger entrapment |

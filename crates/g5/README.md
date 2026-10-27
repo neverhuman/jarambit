@@ -21,11 +21,15 @@ Until that work is complete:
 
 The planned changes, in order (`docs/RELEASES.md`, Unreleased):
 
-1. **Measurement fixes from the G3 audit:**
-   - partial-volume mass on the finished geometry, with a 2 % grid agreement check;
+1. **Measurement fixes from the G3 audit.** Done (first four items):
+   - partial-volume mass (`g5_sdf::solid_fraction`), with the 2 % grid agreement check
+     (`g5_qd::mass_grid_agreement`);
    - blur radii in millimetres;
-   - closed voids measured, never filled;
-   - the tip thickness raster sampled at cell centres;
+   - sealed voids measured. Powder drains only through passages at least `[am] drain_channel_min_mm` (1 mm) wide.
+     Undrainable cavities stay solid in the mass, and their volume is recorded (`AmConnectivityStats`);
+   - the tip thickness raster sampled at cell centres.
+
+   Still to do:
    - the yield sequence per load case;
    - the fatigue knock-down applied once;
    - Lloyd CVT niche centres;
@@ -64,6 +68,8 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
 | `g5_namespace::tests` | v1 (`ec`) or G3 (`hz`) design IDs, v1 metric or roots, `/tmp` roots, or a record root before the freeze |
 | `record_guards::g3_decoder_of_record_is_unchanged` | Any change to the G3 decoder of record, `a203278d…` in `evidence/g3/v3.0.0/release.json` |
 | `record_guards::cached_g5_decoder_hash_equals_a_fresh_recompute` | The cached decoder hash differing from a fresh recompute |
+| `record_guards::partial_volume_mass_agrees_between_h_and_half_h` | Partial-volume mass of a Sobol design moving by more than 2 % between h 0.4 and h 0.2 |
+| `g5_sdf::tests::drainage_needs_a_passage_at_least_drain_channel_min_wide` | A 0.4 mm passage draining a cavity, a 1.5 mm passage failing to, or an exterior slot being filled |
 | `v1_identity_tests` | Any change to the v1 certification identity |
 
 The G5 decoder hash (`g5_qd::g5_decoder_sha256`) covers:
