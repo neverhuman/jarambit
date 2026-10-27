@@ -29,12 +29,10 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
      Undrainable cavities stay solid in the mass, and their volume is recorded (`AmConnectivityStats`);
    - the tip thickness raster sampled at cell centres.
 
-   Still to do:
-   - the yield sequence per load case;
-   - the fatigue knock-down applied once;
-   - Lloyd CVT niche centres;
-   - promotion by rank;
-   - sparse mutation.
+   Later PRs fixed the remaining audit items:
+   - the yield sequence per load case (`loads.rs`);
+   - the fatigue knock-down applied once (`material.rs`);
+   - Lloyd CVT niche centres, promotion by rank and sparse mutation (search, `g5_qd.rs` and `g5_genome.rs`).
 2. **Material.** Done, in `material.rs`:
    - stress-relieved L-PBF Ti-6Al-4V at 825/895 MPa, with the 80 °C derate (×0.91 on yield, ×0.92 on ultimate,
      ×0.97 on E and G);
@@ -107,7 +105,14 @@ The planned changes, in order (`docs/RELEASES.md`, Unreleased):
      - a record re-scores bit-for-bit from its measurements.
    - **Decoder change:** the point wedge now sets the point directly (sharper or stouter), and `tip_reserve` (4–12 mm)
      and `t_tip` (1.5–5 mm) allow the stout, quickly thickening point the tip loads need.
-6. **V&V, then the decoder freeze.** Followed by cohorts started only from Sobol samples (no hand-set genomes), with
+6. **Search.** Done:
+   - **CVT centres:** the 1024 niche centres are a Lloyd CVT (20 iterations over 16 Sobol samples per centre,
+     computed once per process), replacing G3's Halton points.
+   - **Promotion** (`RankPromotion`): the top `--tier1-top` (default 0.4) of an island's last 256 Tier-0 scores go
+     to Tier 1, replacing G3's fixed 62/71 gates, which left 8 of 24 G3 islands without a Tier-2 evaluation. Tier 2
+     stays off (`--tier2-top 0`) until the solid tip carries the RS-v5 tip loads.
+   - **Mutation:** each gene moves with probability 3/n_module, about 15 genes per child where G3 moved all 179.
+7. **V&V, then the decoder freeze.** Followed by cohorts started only from Sobol samples (no hand-set genomes), with
    at least 5 seeds plus baselines.
 
 ## Guards that already apply

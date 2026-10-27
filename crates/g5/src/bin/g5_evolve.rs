@@ -80,8 +80,10 @@ fn main() {
     let host_island_key = splitmix64(((host_num as u64) << 32) | (island as u64));
     let raw_seed = u64arg_opt("--seed").unwrap_or(0);
     let seed = splitmix64(raw_seed ^ host_island_key).max(1);
-    let t1_gate = farg("--tier1-gate", 62.0);
-    let t2_gate = farg("--tier2-gate", 72.0);
+    // Rank promotion (`RankPromotion`): the top fraction of the island's recent scores at each tier goes on. Tier 2
+    // is off by default until the solid-tip submodel carries the RS-karambit-v5 tip loads.
+    let t1_top = farg("--tier1-top", 0.4);
+    let t2_top = farg("--tier2-top", 0.0);
     let h_vox = farg("--h", 0.5);
     let default_commit = &g5_decoder_sha256()[..12];
     let commit = sarg("--commit", default_commit);
@@ -105,7 +107,7 @@ fn main() {
     let log_every = narg("--log-every", 100);
     let mut history = Vec::new();
     let arch = run_g5_cvt_map_elites_logged(
-        n_init, n_evals, seed, t1_gate, t2_gate, h_vox, &commit, log_every, &mut history,
+        n_init, n_evals, seed, t1_top, t2_top, h_vox, &commit, log_every, &mut history,
     );
     if arch.elites.is_empty() {
         eprintln!("g5-evolve error: archive produced zero elites");

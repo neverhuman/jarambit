@@ -589,10 +589,14 @@ pub fn reproduce_iso_line_dd(
     let sigma_s = G5_GENES[m_start + 3].phys_from_unit(child_u[m_start + 3]);
     let sigma_i = G5_GENES[m_start + 4].phys_from_unit(child_u[m_start + 4]);
 
-    // 3. Iso + Line-DD variation with reflective bounds in [0, 1]
+    // 3. Iso + Line-DD variation with reflective bounds in [0, 1]. The isotropic step is sparse: each gene of a
+    //    module moves with probability min(1, 3 / n_module), about three genes per module (G3 moved all 179, so a
+    //    child was far from its parent in every coordinate). The line step follows the parent-parent direction.
+    let n_of = |m: G5Module| G5_GENES[..m_start].iter().filter(|g| g.module == m).count().max(1);
     let line_zeta = 0.25 * rng.normal();
     for i in 0..m_start {
-        let sigma_m = match G5_GENES[i].module {
+        let module = G5_GENES[i].module;
+        let sigma_m = match module {
             G5Module::B => sigma_b,
             G5Module::E => sigma_e,
             G5Module::H => sigma_h,
@@ -600,7 +604,9 @@ pub fn reproduce_iso_line_dd(
             G5Module::I => sigma_i,
             G5Module::M => 0.0,
         };
-        let step = sigma_m * rng.normal() + line_zeta * (parent_b.u[i] - parent_a.u[i]);
+        let p_mut = (3.0 / n_of(module) as f64).min(1.0);
+        let iso = if rng.next_f64() < p_mut { sigma_m * rng.normal() } else { 0.0 };
+        let step = iso + line_zeta * (parent_b.u[i] - parent_a.u[i]);
         child_u[i] = reflect_unit(child_u[i] + step);
     }
 

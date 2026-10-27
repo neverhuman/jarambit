@@ -1667,28 +1667,136 @@ fn evaluate_tier2_from_tier1(
     rec
 }
 
-/// Evaluate a candidate through the 3-tier multi-fidelity cascade:
-/// - Always runs `Tier 0` (~2 ms).
-/// - Promotes to `Tier 1` if `score_100 >= tier1_gate_score`.
-/// - Promotes to `Tier 2` if `score_100 >= tier2_gate_score` (reusing the Tier-1 `VoxelGrid3D`, `N12`).
-pub fn evaluate_g5_cascade(
-    genome: &G5Genome,
-    tier1_gate_score: f64,
-    tier2_gate_score: f64,
-    h_vox: f64,
-) -> G5EvalRecord {
-    let r0 = evaluate_tier0_analytic(genome);
-    if r0.score.score_100 < tier1_gate_score {
-        return r0;
-    }
-    let (r1, grid) = evaluate_tier1_with_grid(genome, h_vox);
-    if r1.score.score_100 < tier2_gate_score {
-        return r1;
-    }
-    evaluate_tier2_from_tier1(genome, r1, &grid)
+// ---------------- 1024-Niche CVT-MAP-Elites Archive ----------------
+
+/// Halton points in [0, 1]^8 (bases 2..19), the Lloyd starting set.
+fn halton8(n: usize) -> Vec<[f64; 8]> {
+    const BASES: [usize; 8] = [2, 3, 5, 7, 11, 13, 17, 19];
+    (0..n)
+        .map(|idx| {
+            let mut c = [0.0_f64; 8];
+            for (d, &b) in BASES.iter().enumerate() {
+                let mut n = idx + 1;
+                let mut f = 1.0 / (b as f64);
+                let mut v = 0.0;
+                while n > 0 {
+                    v += (n % b) as f64 * f;
+                    n /= b;
+                    f /= b as f64;
+                }
+                c[d] = v;
+            }
+            c
+        })
+        .collect()
 }
 
-// ---------------- 1024-Niche CVT-MAP-Elites Archive ----------------
+/// Lloyd iterations: 16 fixed scrambled-Sobol samples of [0, 1]^8 per centre are assigned to their nearest centre and
+/// each centre moves to the mean of its samples, 20 times from Halton starts. Deterministic, and computed once per
+/// process for each archive size (callers wait on the cache lock instead of recomputing).
+pub fn lloyd_cvt_centroids(n: usize) -> Vec<[f64; 8]> {
+    use rayon::prelude::*;
+    use std::sync::{Mutex, OnceLock};
+    static CACHE: OnceLock<Mutex<BTreeMap<usize, Vec<[f64; 8]>>>> = OnceLock::new();
+    let cache = CACHE.get_or_init(|| Mutex::new(BTreeMap::new()));
+    let mut guard = cache.lock().expect("cvt cache");
+    if let Some(c) = guard.get(&n) {
+        return c.clone();
+    }
+    let n_samples = 16 * n;
+    let tbl = crate::sobol_joe_kuo::Sobol179Table::scrambled(0x5eed_c47);
+    let samples: Vec<[f64; 8]> = (0..n_samples)
+        .map(|i| {
+            let p = tbl.point(i + 1);
+            std::array::from_fn(|d| p[d])
+        })
+        .collect();
+    let mut centres = halton8(n);
+    for _ in 0..20 {
+        let owner: Vec<usize> = samples
+            .par_iter()
+            .map(|s| {
+                let mut best = (f64::INFINITY, 0usize);
+                for (k, c) in centres.iter().enumerate() {
+                    let d2: f64 = (0..8).map(|d| (s[d] - c[d]) * (s[d] - c[d])).sum();
+                    if d2 < best.0 {
+                        best = (d2, k);
+                    }
+                }
+                best.1
+            })
+            .collect();
+        let mut sum = vec![[0.0_f64; 8]; n];
+        let mut cnt = vec![0usize; n];
+        for (s, &k) in samples.iter().zip(owner.iter()) {
+            for d in 0..8 {
+                sum[k][d] += s[d];
+            }
+            cnt[k] += 1;
+        }
+        for k in 0..n {
+            if cnt[k] > 0 {
+                for d in 0..8 {
+                    centres[k][d] = sum[k][d] / cnt[k] as f64;
+                }
+            }
+        }
+    }
+    guard.insert(n, centres.clone());
+    centres
+}
+
+/// Promotion between evaluation tiers by rank within the island: a design goes to the next tier when its score is
+/// in the top `top_frac` of the island's last `WINDOW` scores at its tier (all are promoted during the first
+/// `WARMUP`). G3 promoted on fixed scores (62 / 71), which left 8 of its 24 islands without a single Tier-2
+/// evaluation.
+#[derive(Debug, Clone)]
+pub struct RankPromotion {
+    pub tier1_top_frac: f64,
+    pub tier2_top_frac: f64,
+    t0: std::collections::VecDeque<f64>,
+    t1: std::collections::VecDeque<f64>,
+}
+
+impl RankPromotion {
+    pub const WINDOW: usize = 256;
+    pub const WARMUP: usize = 16;
+
+    pub fn new(tier1_top_frac: f64, tier2_top_frac: f64) -> Self {
+        Self { tier1_top_frac, tier2_top_frac, t0: Default::default(), t1: Default::default() }
+    }
+
+    fn decide(window: &mut std::collections::VecDeque<f64>, frac: f64, score: f64) -> bool {
+        let promote = if frac <= 0.0 {
+            false
+        } else if window.len() < Self::WARMUP || frac >= 1.0 {
+            true
+        } else {
+            let mut v: Vec<f64> = window.iter().copied().collect();
+            v.sort_by(f64::total_cmp);
+            let k = (((1.0 - frac) * v.len() as f64).floor() as usize).min(v.len() - 1);
+            score >= v[k]
+        };
+        window.push_back(score);
+        if window.len() > Self::WINDOW {
+            window.pop_front();
+        }
+        promote
+    }
+
+    /// Evaluate one design through the tiers its ranks earn.
+    pub fn evaluate(&mut self, genome: &G5Genome, h_vox: f64) -> G5EvalRecord {
+        let r0 = evaluate_tier0_analytic(genome);
+        if !Self::decide(&mut self.t0, self.tier1_top_frac, r0.score.raw_score_100) {
+            return r0;
+        }
+        let (r1, grid) = evaluate_tier1_with_grid(genome, h_vox);
+        if !Self::decide(&mut self.t1, self.tier2_top_frac, r1.score.raw_score_100) {
+            return r1;
+        }
+        evaluate_tier2_from_tier1(genome, r1, &grid)
+    }
+}
 
 #[derive(Debug, Clone, Serialize)]
 pub struct NicheElite {
@@ -1707,29 +1815,13 @@ pub struct CvtMapElitesArchive {
 }
 
 impl CvtMapElitesArchive {
-    /// Construct a deterministic `n_niches` (default 1024) CVT-MAP-Elites archive in $[0, 1]^8$.
+    /// Construct a deterministic `n_niches` (default 1024) CVT-MAP-Elites archive in $[0, 1]^8$ whose niche centres
+    /// are a centroidal Voronoi tessellation (`lloyd_cvt_centroids`). G3 used Halton points as "CVT" centres.
     pub fn new(n_niches: usize) -> Self {
-        const BASES: [usize; 8] = [2, 3, 5, 7, 11, 13, 17, 19];
-        let mut centroids = Vec::with_capacity(n_niches);
-        for idx in 0..n_niches {
-            let mut c = [0.0_f64; 8];
-            for (d, &b) in BASES.iter().enumerate() {
-                let mut n = idx + 1;
-                let mut f = 1.0 / (b as f64);
-                let mut v = 0.0;
-                while n > 0 {
-                    v += (n % b) as f64 * f;
-                    n /= b;
-                    f /= b as f64;
-                }
-                c[d] = v;
-            }
-            centroids.push(c);
-        }
         Self {
             schema: "G5.0".to_string(),
             decoder_sha256: g5_decoder_sha256(),
-            centroids,
+            centroids: lloyd_cvt_centroids(n_niches),
             elites: BTreeMap::new(),
         }
     }
@@ -2034,8 +2126,8 @@ pub fn run_g5_cvt_map_elites(
     n_init_sobol: usize,
     n_evals: usize,
     seed: u64,
-    tier1_gate_score: f64,
-    tier2_gate_score: f64,
+    tier1_top_frac: f64,
+    tier2_top_frac: f64,
     h_vox: f64,
     decoder_commit: &str,
 ) -> CvtMapElitesArchive {
@@ -2043,8 +2135,8 @@ pub fn run_g5_cvt_map_elites(
         n_init_sobol,
         n_evals,
         seed,
-        tier1_gate_score,
-        tier2_gate_score,
+        tier1_top_frac,
+        tier2_top_frac,
         h_vox,
         decoder_commit,
         0,
@@ -2094,14 +2186,15 @@ pub fn run_g5_cvt_map_elites_logged(
     n_init_sobol: usize,
     n_evals: usize,
     seed: u64,
-    tier1_gate_score: f64,
-    tier2_gate_score: f64,
+    tier1_top_frac: f64,
+    tier2_top_frac: f64,
     h_vox: f64,
     decoder_commit: &str,
     log_every: usize,
     history: &mut Vec<G5HistoryPoint>,
 ) -> CvtMapElitesArchive {
     let mut archive = CvtMapElitesArchive::new(1024);
+    let mut promotion = RankPromotion::new(tier1_top_frac, tier2_top_frac);
     let mut rng = G5Rng(seed.max(1));
     let mixed_seed = splitmix64(seed);
     let scramble_seed = (mixed_seed as usize).max(1);
@@ -2116,7 +2209,7 @@ pub fn run_g5_cvt_map_elites_logged(
     let init_count = n_init_sobol.min(n_evals).max(1);
     for i in 0..init_count {
         let g = sobol_unit_genome(i, scramble_seed, decoder_commit);
-        let rec = evaluate_g5_cascade(&g, tier1_gate_score, tier2_gate_score, h_vox);
+        let rec = promotion.evaluate(&g, h_vox);
         archive.insert(g, rec);
     }
     let mut evals = init_count;
@@ -2126,7 +2219,7 @@ pub fn run_g5_cvt_map_elites_logged(
         let Some((child, parent_nid)) = archive.sample_offspring(&mut rng) else {
             break;
         };
-        let rec = evaluate_g5_cascade(&child, tier1_gate_score, tier2_gate_score, h_vox);
+        let rec = promotion.evaluate(&child, h_vox);
         let improved = archive.insert(child, rec);
         archive.update_curiosity(parent_nid, improved);
         evals += 1;
@@ -2160,8 +2253,8 @@ mod tests {
         }
 
         // 2. Pure Sobol-seeded CVT-MAP-Elites evolution improves best score and QD score
-        let arch_init = run_g5_cvt_map_elites(24, 24, 7, 999.0, 999.0, 1.0, "22bb8696");
-        let arch_evol = run_g5_cvt_map_elites(24, 160, 7, 999.0, 999.0, 1.0, "22bb8696");
+        let arch_init = run_g5_cvt_map_elites(24, 24, 7, 0.0, 0.0, 1.0, "22bb8696");
+        let arch_evol = run_g5_cvt_map_elites(24, 160, 7, 0.0, 0.0, 1.0, "22bb8696");
         assert!(
             arch_evol.elites.len() > arch_init.elites.len(),
             "niches must grow: {} -> {}",
@@ -2183,8 +2276,48 @@ mod tests {
     }
 
     #[test]
+    fn lloyd_cvt_rank_promotion_and_sparse_mutation() {
+        // CVT: Lloyd lowers the quantisation error of the Halton start, deterministically
+        let q_err = |c: &[[f64; 8]]| {
+            let tbl = crate::sobol_joe_kuo::Sobol179Table::scrambled(99);
+            (0..4000)
+                .map(|i| {
+                    let p = tbl.point(i + 1);
+                    c.iter()
+                        .map(|cc| (0..8).map(|d| (p[d] - cc[d]).powi(2)).sum::<f64>())
+                        .fold(f64::INFINITY, f64::min)
+                })
+                .sum::<f64>()
+                / 4000.0
+        };
+        let cvt = lloyd_cvt_centroids(256);
+        assert_eq!(cvt, lloyd_cvt_centroids(256));
+        assert!(q_err(&cvt) < 0.97 * q_err(&halton8(256)), "{} vs {}", q_err(&cvt), q_err(&halton8(256)));
+        // Promotion: all during warm-up, then about the top fraction; a zero fraction never promotes
+        let mut pr = RankPromotion::new(0.25, 0.0);
+        let mut win = std::collections::VecDeque::new();
+        let promoted: Vec<bool> = (0..400)
+            .map(|i| RankPromotion::decide(&mut win, pr.tier1_top_frac, ((i * 7919) % 1000) as f64))
+            .collect();
+        assert!(promoted[..RankPromotion::WARMUP].iter().all(|&b| b));
+        let frac = promoted[64..].iter().filter(|&&b| b).count() as f64 / (400 - 64) as f64;
+        assert!((0.15..0.35).contains(&frac), "promoted fraction {frac}");
+        assert!(!RankPromotion::decide(&mut pr.t1, 0.0, 1e9));
+        // Sparse mutation: with identical parents (no line step) a child moves about 3 genes per module
+        let a = sobol_unit_genome(5, 0, "mut");
+        let mut rng = G5Rng(17);
+        let mut moved = 0usize;
+        for _ in 0..200 {
+            let c = crate::g5_genome::reproduce_iso_line_dd(&a, &a, &mut rng);
+            moved += (0..crate::g5_genome::G5_NUM_GENES - 5).filter(|&i| (c.u[i] - a.u[i]).abs() > 1e-15).count();
+        }
+        let per_child = moved as f64 / 200.0;
+        assert!((10.0..=20.0).contains(&per_child), "{per_child} genes per child (5 modules x ~3)");
+    }
+
+    #[test]
     fn tier1_and_tier2_cascade_execute_cleanly_on_evolved_elite() {
-        let arch = run_g5_cvt_map_elites(16, 48, 19, 999.0, 999.0, 1.2, "22bb8696");
+        let arch = run_g5_cvt_map_elites(16, 48, 19, 0.0, 0.0, 1.2, "22bb8696");
         let elite = arch.best_elite().expect("best elite");
         let r1 = evaluate_tier1_sdf_and_plate(&elite.genome, 1.2);
         assert_eq!(r1.tier, EvalTier::Tier1SdfAndPlate);
@@ -2220,9 +2353,9 @@ mod tests {
         assert!(hm.iter().filter(|&&v| v > 0.34).count() > hm.len() / 2, "hm_twist still capped: {hm:?}");
 
         // Evolution history: logging draws no random numbers, so the archive is identical, and best-so-far never drops
-        let plain = run_g5_cvt_map_elites(16, 64, 3, 999.0, 999.0, 1.0, "22bb8696");
+        let plain = run_g5_cvt_map_elites(16, 64, 3, 0.0, 0.0, 1.0, "22bb8696");
         let mut hist = Vec::new();
-        let logged = run_g5_cvt_map_elites_logged(16, 64, 3, 999.0, 999.0, 1.0, "22bb8696", 8, &mut hist);
+        let logged = run_g5_cvt_map_elites_logged(16, 64, 3, 0.0, 0.0, 1.0, "22bb8696", 8, &mut hist);
         assert_eq!(plain.elites.len(), logged.elites.len());
         for (k, e) in &plain.elites {
             let f = &logged.elites[k];

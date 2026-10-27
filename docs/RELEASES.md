@@ -75,6 +75,10 @@ Policy: semver. Since v1.0.0, a major version is cut for a scope change the owne
       worst-margin term (0.25), linear mass (0.30), geometry terms (edge, point, serration, AM drainage, form) and E⁵.
     - **What binds on random Sobol designs:** tip twist, fatigue and the ultimate lateral case. This drives the search
       toward a stout, sharp point and a solid or finished blade.
+  - **Search:**
+    - Lloyd CVT niche centres;
+    - promotion by rank within the island, in place of fixed score gates;
+    - sparse mutation, about 3 genes per module.
   - **Finding on G3.** Under this rule, the G3 v3.0.0 winner's lattice reaches its 2.8 mm powder ports only through
     two 0.85 mm slits beside the 1.1 mm mid-plane rib. Its cavity counts as undrainable (13,005 mm³). This is a G3
     decoder limitation: depowdering of the G3 design is unverified. The G5 decoder must place ports clear of ribs.
