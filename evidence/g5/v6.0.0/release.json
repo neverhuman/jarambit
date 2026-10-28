@@ -1,0 +1,4263 @@
+{
+  "am": {
+    "crevice_mm3": 199.70497902739203,
+    "floating_solid_mm3": 0.0,
+    "measured": true,
+    "sealed_void_mm3": 44.89028235350714
+  },
+  "baseline": {
+    "evaluations_per_island": 4800.0,
+    "final_best_score_100": [
+      58.452342,
+      59.54614,
+      58.951316,
+      59.558267
+    ],
+    "islands": 4,
+    "islands_detail": [
+      {
+        "after_sobol_init": {
+          "best_mass_g": 112.69170502300337,
+          "best_score_100": 11.353844,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "0c2ba0f9620b9f2eeb0b6722d285bd0b612be254ae06a20312130b9adeac14ca",
+            "best_mass_g": 112.69170502300337,
+            "best_score_100": 11.353844,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "ca3cbfde679a6bca018a07cf66d9d23622797d703e5cbdacdcc89b5efde75d8f",
+            "best_mass_g": 175.1018083290445,
+            "best_score_100": 28.256735,
+            "evals": 100
+          },
+          {
+            "best_genome_sha256": "40757f96ceb522c9ae10f4eed46b668db378b184be50f164d6072bc6eab70ce3",
+            "best_mass_g": 114.70476788104432,
+            "best_score_100": 37.95963,
+            "evals": 150
+          },
+          {
+            "best_genome_sha256": "283493a1d49eca601c0a6d589476fca89e82ed8257646df964020623d3123341",
+            "best_mass_g": 117.80962933789303,
+            "best_score_100": 38.310652,
+            "evals": 250
+          },
+          {
+            "best_genome_sha256": "4cd5cb775309ae56853552f47454e7119c3a82e092e1f21743d790f7ba942f31",
+            "best_mass_g": 114.28294885313673,
+            "best_score_100": 39.127519,
+            "evals": 375
+          },
+          {
+            "best_genome_sha256": "a9e46c138fa0cb755990ce5814a6d4801b01bd7ea3a39f706f6b760936c102e0",
+            "best_mass_g": 115.3252446383922,
+            "best_score_100": 40.24198,
+            "evals": 450
+          },
+          {
+            "best_genome_sha256": "79f815de7cfe13a3a4f16f041f88052eece8d755b1d9cbdca8f0f2e35cba71bd",
+            "best_mass_g": 117.29371619599081,
+            "best_score_100": 45.239159,
+            "evals": 475
+          },
+          {
+            "best_genome_sha256": "7340ea48d2d96cf89a529ffe7b05e039f10f85af1e83aa281262df0ea24f64d0",
+            "best_mass_g": 116.7211808771854,
+            "best_score_100": 46.076302,
+            "evals": 500
+          },
+          {
+            "best_genome_sha256": "755a1638b1ddb66dc0af04effe71d83b73fe06fc06c51752bfcb39af4e23c00a",
+            "best_mass_g": 112.74897988144764,
+            "best_score_100": 46.097202,
+            "evals": 625
+          },
+          {
+            "best_genome_sha256": "7f80f3c042c42d42057542158bdf5b83990f462d7021ee41dfcf2b5ec3a62eae",
+            "best_mass_g": 116.33038648985062,
+            "best_score_100": 46.89151,
+            "evals": 650
+          },
+          {
+            "best_genome_sha256": "56e6f9ae27e962bee9886fd9bd95c7420f2160bcdcc9b6a67253092f61d60778",
+            "best_mass_g": 115.64644680474088,
+            "best_score_100": 48.749388,
+            "evals": 725
+          },
+          {
+            "best_genome_sha256": "956b81297099ad9e059a3f1347945c7819d474c7c0eaa1325c389efa1a731710",
+            "best_mass_g": 114.38061304355199,
+            "best_score_100": 50.281324,
+            "evals": 800
+          },
+          {
+            "best_genome_sha256": "ca7cfa8ff56a6be76e207536ea31f6abe1e5c2cd0ba25a9713b58bc304178178",
+            "best_mass_g": 114.80849744230515,
+            "best_score_100": 50.462169,
+            "evals": 850
+          },
+          {
+            "best_genome_sha256": "089758247ecebd22d74c37e9d37b685a48e02174f0d537f492f1ff4da8c5e05b",
+            "best_mass_g": 120.18367337473788,
+            "best_score_100": 52.262768,
+            "evals": 1000
+          },
+          {
+            "best_genome_sha256": "98413cd3a3a697a4a6945ab9966b72dfc1c81e05bc160c81f4c5035b84531b27",
+            "best_mass_g": 116.76889853548205,
+            "best_score_100": 52.759317,
+            "evals": 1775
+          },
+          {
+            "best_genome_sha256": "f4839d0cfc404a32605d016e1d7710256e79f21c3ded933a4e51d65ff7df631d",
+            "best_mass_g": 118.36051947490182,
+            "best_score_100": 53.530849,
+            "evals": 2175
+          },
+          {
+            "best_genome_sha256": "e8c8c67c6b83b6f71cc1aeee0bbbc0eb70b5b568dad09ad2ecafbd2ca4ad78f0",
+            "best_mass_g": 120.86808902347025,
+            "best_score_100": 53.828274,
+            "evals": 2350
+          },
+          {
+            "best_genome_sha256": "2881c68d05a8a5d8aa2069177129ecc7b06928b874eb42891aa64ab340e7efff",
+            "best_mass_g": 122.55666677704556,
+            "best_score_100": 54.288097,
+            "evals": 2375
+          },
+          {
+            "best_genome_sha256": "f75b9b35a4e022f053f38dee6bebda942ecbbdb77623c686cd9e38bbe7e4f6fa",
+            "best_mass_g": 125.29828883228069,
+            "best_score_100": 54.941139,
+            "evals": 2550
+          },
+          {
+            "best_genome_sha256": "02884f7ffb2ea1561060d4c25677d51be88ab7d6ba5d0f499adb4e1d45c98a07",
+            "best_mass_g": 125.15326661440281,
+            "best_score_100": 55.196543,
+            "evals": 3625
+          },
+          {
+            "best_genome_sha256": "60a8be60a8d762ee6735a62f1d95b1094f20ce008f1410564c60824f050d1c34",
+            "best_mass_g": 118.27379838150202,
+            "best_score_100": 55.655693,
+            "evals": 3800
+          },
+          {
+            "best_genome_sha256": "efc248a5e84c611a48339c16087793acaa6be39fd2b0974a62d48f9b7a3ce2f8",
+            "best_mass_g": 114.37518638456956,
+            "best_score_100": 56.050255,
+            "evals": 3950
+          },
+          {
+            "best_genome_sha256": "39eb877e0746c1a601039a2fe7004202f65cc42b4335a852b123c3628165e609",
+            "best_mass_g": 114.55275042633754,
+            "best_score_100": 56.876436,
+            "evals": 4025
+          },
+          {
+            "best_genome_sha256": "025e9640ab67ef76b6b730923a72e3dbd84e492209560e8ebb0f2d73c23a01b9",
+            "best_mass_g": 114.62018363696083,
+            "best_score_100": 57.090861,
+            "evals": 4300
+          },
+          {
+            "best_genome_sha256": "6884720828bb402eb82a640ac7486be008897b147ae25286a569297e467e1529",
+            "best_mass_g": 114.66775534113178,
+            "best_score_100": 57.424129,
+            "evals": 4475
+          },
+          {
+            "best_genome_sha256": "0dd0b9c1f43c3918f0d10f30f31ec6fee39d88186fed431a80bf413fbce14cb5",
+            "best_mass_g": 111.47726726430339,
+            "best_score_100": 57.811782,
+            "evals": 4500
+          },
+          {
+            "best_genome_sha256": "bb7e7d2a8d5c344752f579720dbeea2eb0b9d72467e98d284a1d882f6633d727",
+            "best_mass_g": 113.53717619983318,
+            "best_score_100": 58.35991,
+            "evals": 4600
+          },
+          {
+            "best_genome_sha256": "25ccb8bfd9f45499b5a9edda61f4c394501641cf503f3b686382d3edbf8a3c39",
+            "best_mass_g": 113.0555871663201,
+            "best_score_100": 58.452342,
+            "evals": 4725
+          }
+        ],
+        "evaluations": 4800,
+        "final": {
+          "best_genome_sha256": "25ccb8bfd9f45499b5a9edda61f4c394501641cf503f3b686382d3edbf8a3c39",
+          "best_mass_g": 113.0555871663201,
+          "best_score_100": 58.452342
+        },
+        "island": "control/epoch09/xbabe3/island901",
+        "niches": 127,
+        "qd_score": 2778.182873051325,
+        "seed": 3009001
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 122.48870764080065,
+          "best_score_100": 11.007668,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "1b7d1be8f4cfcf84e8473fd609e08de12e634ee06b193665506aa7f6424b57fa",
+            "best_mass_g": 122.48870764080065,
+            "best_score_100": 11.007668,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "590fdacb929e89e18aa7583a9b147fb7ffd52a553214cad2116902cda67e34af",
+            "best_mass_g": 118.58152584931634,
+            "best_score_100": 11.555331,
+            "evals": 75
+          },
+          {
+            "best_genome_sha256": "68e3cc485565a9a17c5159f66cb68d23d3e67bd81f0f52f320cf9cc5e4dad941",
+            "best_mass_g": 133.51453040849702,
+            "best_score_100": 12.102474,
+            "evals": 100
+          },
+          {
+            "best_genome_sha256": "b715efd017850b8daf1fc87642188b0b6e5cfb79f79956f392f2702fc6f1a9a7",
+            "best_mass_g": 143.64057029385756,
+            "best_score_100": 14.327839,
+            "evals": 150
+          },
+          {
+            "best_genome_sha256": "afef0f7df88c2f0709f17d6fb8e9fe65c3dd0355979bbb170b926d80b3bcdcb5",
+            "best_mass_g": 124.75914388672842,
+            "best_score_100": 17.750536,
+            "evals": 200
+          },
+          {
+            "best_genome_sha256": "daccdb66c06dfafd8be61a107c12d2706978208c1278de1e00fa9414fce290e2",
+            "best_mass_g": 121.22853533438611,
+            "best_score_100": 18.341838,
+            "evals": 525
+          },
+          {
+            "best_genome_sha256": "63ee2491551113cc5171b76816738fa3456d323e8b500072ffcdb795db4b106d",
+            "best_mass_g": 158.1781272772813,
+            "best_score_100": 25.711939,
+            "evals": 575
+          },
+          {
+            "best_genome_sha256": "011349cf009940cbfb5a6463a5ec41282aa25e750a4d65bde55e7874025b5bf3",
+            "best_mass_g": 151.67697284713114,
+            "best_score_100": 29.760962,
+            "evals": 625
+          },
+          {
+            "best_genome_sha256": "4d5b91a89aeff29ec154f9246ae6e22c363084751538a29c2fd60f437d20dd03",
+            "best_mass_g": 152.31598490813053,
+            "best_score_100": 33.237683,
+            "evals": 675
+          },
+          {
+            "best_genome_sha256": "9a3f9965c253285ec9d3cd7209dcb5ea473427079dc30f52c2dd3d2a80630784",
+            "best_mass_g": 164.3992796499669,
+            "best_score_100": 34.556475,
+            "evals": 775
+          },
+          {
+            "best_genome_sha256": "366330c9738516645892bf7474d6b639546d308c82ae074c9975c1fe9c144002",
+            "best_mass_g": 160.36606140022715,
+            "best_score_100": 36.545955,
+            "evals": 850
+          },
+          {
+            "best_genome_sha256": "c74f3f78845be0c687149af6e9f9ee9ea324bc0ef18d89d0d544257962a922ad",
+            "best_mass_g": 127.65019978677763,
+            "best_score_100": 43.969598,
+            "evals": 875
+          },
+          {
+            "best_genome_sha256": "28c2bf4677bfb45bb2e05d2ed31e522c01e1e6e5590408453879b5836aaf744e",
+            "best_mass_g": 125.85926438417634,
+            "best_score_100": 44.03908,
+            "evals": 1200
+          },
+          {
+            "best_genome_sha256": "9aab1cb52b2d5ca3dc46b1673ab60c09ce63ffe0da12517d6c2c7d73282d0746",
+            "best_mass_g": 124.08923373881179,
+            "best_score_100": 45.829714,
+            "evals": 1400
+          },
+          {
+            "best_genome_sha256": "dcc661523bda8b7d42d8c659c7c576c2a10d20af8e7557722cc0abd3fac47ede",
+            "best_mass_g": 123.56705188931133,
+            "best_score_100": 46.060207,
+            "evals": 1525
+          },
+          {
+            "best_genome_sha256": "9efbc34d1335de934aafe6069317064858589c1a096b58d887f26b56d1dda483",
+            "best_mass_g": 122.17692308909359,
+            "best_score_100": 47.251721,
+            "evals": 1775
+          },
+          {
+            "best_genome_sha256": "3bae79471673d24ed7122f09450bc1d67737bba8e6ce068226dc0a7b7581ee0e",
+            "best_mass_g": 123.26684919596636,
+            "best_score_100": 49.367571,
+            "evals": 1975
+          },
+          {
+            "best_genome_sha256": "9eb86d38774a32321afced4326e02e9a05454680496bf052ff3fb9a91d306e6d",
+            "best_mass_g": 121.29448494313105,
+            "best_score_100": 49.555111,
+            "evals": 2400
+          },
+          {
+            "best_genome_sha256": "61e34540f7b2e0abe24f6c87e9647c06bb1bbdf373a1e17a6deccefae09a8dd5",
+            "best_mass_g": 121.1268368849569,
+            "best_score_100": 49.60915,
+            "evals": 2450
+          },
+          {
+            "best_genome_sha256": "24900eec9c96982d48b24e82fcbdbfb53861075e1648cbbdf5021e62dd9e992a",
+            "best_mass_g": 124.11722852804955,
+            "best_score_100": 49.680102,
+            "evals": 2500
+          },
+          {
+            "best_genome_sha256": "d7f9f17527679b41505d360cabb7af2ec2f60535f1ee3e80aa6fa0a765b6126c",
+            "best_mass_g": 121.20388470303317,
+            "best_score_100": 49.685473,
+            "evals": 2550
+          },
+          {
+            "best_genome_sha256": "ecc40d2d9ac6b4340829e8587435eb76eacd4e4ec49465109c1813ccfe5f38cb",
+            "best_mass_g": 115.1705760397171,
+            "best_score_100": 51.707272,
+            "evals": 2625
+          },
+          {
+            "best_genome_sha256": "1d9e9e26e0cdf861aa2afe87809de87f20c0fd01b42f2b63b5658100098ceace",
+            "best_mass_g": 120.09790139589082,
+            "best_score_100": 52.415223,
+            "evals": 2875
+          },
+          {
+            "best_genome_sha256": "5142da52a7718f6559fab667658efd6b7ae0a57ee73a331b3f01ef401639f62f",
+            "best_mass_g": 116.99217420045531,
+            "best_score_100": 53.81511,
+            "evals": 3025
+          },
+          {
+            "best_genome_sha256": "4bbb778365722dd6adba68d8c497cdc1976574f0ee74c7a34e2e3f76ac138b34",
+            "best_mass_g": 118.83406238976615,
+            "best_score_100": 53.904211,
+            "evals": 3175
+          },
+          {
+            "best_genome_sha256": "79c99da063db8354a657d454089cbb85acd5f3fdde6d29849f5219c7917bdca8",
+            "best_mass_g": 118.22248174552497,
+            "best_score_100": 54.798553,
+            "evals": 3325
+          },
+          {
+            "best_genome_sha256": "cc06dc206f8a8c600945b588b574f31e61e657fbfaddbab468b99db490cc18da",
+            "best_mass_g": 117.77957664451782,
+            "best_score_100": 54.798926,
+            "evals": 3425
+          },
+          {
+            "best_genome_sha256": "f9174c297f83d7d0a69c6c8ded1936b9f9fa2379ec01f2b82c669a5806755a34",
+            "best_mass_g": 118.18216086038771,
+            "best_score_100": 55.403051,
+            "evals": 3500
+          },
+          {
+            "best_genome_sha256": "cc2b3067624f798f49c54bcec595b5242ab42af59c4fa5368882f8ad69389c23",
+            "best_mass_g": 115.35041005197051,
+            "best_score_100": 55.626003,
+            "evals": 3525
+          },
+          {
+            "best_genome_sha256": "d67b5dea5752d0cd12a88a9cbf74e60527f54c4a8fa5cbd94f83b74419ea32c2",
+            "best_mass_g": 116.22562008983591,
+            "best_score_100": 56.270093,
+            "evals": 3575
+          },
+          {
+            "best_genome_sha256": "3571e29494eb5a99f81e04740fdddb44f5a1211aee3dd64254f38bad4ad84543",
+            "best_mass_g": 115.30744838498465,
+            "best_score_100": 56.499217,
+            "evals": 3600
+          },
+          {
+            "best_genome_sha256": "ab2bd146be2aa1bca37429f27bd03226822fa81b3c2f5647ee624a9f93e66298",
+            "best_mass_g": 114.77903152263873,
+            "best_score_100": 57.618482,
+            "evals": 3875
+          },
+          {
+            "best_genome_sha256": "794ab2cacb5677347478f182bd0d68ba6e0d58a02dfd7a7c762122cbb422a1ee",
+            "best_mass_g": 114.46710311028403,
+            "best_score_100": 57.852985,
+            "evals": 3900
+          },
+          {
+            "best_genome_sha256": "60c20ac3b1646e8ec03bb8ada703d6812cfd8a15026236e0644da301e5dd68e6",
+            "best_mass_g": 113.7660260038334,
+            "best_score_100": 58.363875,
+            "evals": 4275
+          },
+          {
+            "best_genome_sha256": "ce3aaad98bbac8cc560ca8f91b73fca8d573d79304510695688a6d418e8c4337",
+            "best_mass_g": 115.30291986669796,
+            "best_score_100": 59.362805,
+            "evals": 4600
+          },
+          {
+            "best_genome_sha256": "669136388c0442675c47827736e72dd93c19aac48c5cc0da3521d07dba346b2d",
+            "best_mass_g": 115.63252906972397,
+            "best_score_100": 59.54614,
+            "evals": 4675
+          }
+        ],
+        "evaluations": 4800,
+        "final": {
+          "best_genome_sha256": "669136388c0442675c47827736e72dd93c19aac48c5cc0da3521d07dba346b2d",
+          "best_mass_g": 115.63252906972397,
+          "best_score_100": 59.54614
+        },
+        "island": "control/epoch09/xbabe4/island901",
+        "niches": 95,
+        "qd_score": 2733.1857934322525,
+        "seed": 4009001
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 159.35599122738404,
+          "best_score_100": 8.658659,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "b45d80ad324d37cac758358e23a7fda673a84851a50184abfce9f90a938211fa",
+            "best_mass_g": 159.35599122738404,
+            "best_score_100": 8.658659,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "93f8b4da06a78022602b5c56a34e0a79725948229fef505803bf991907f8e10f",
+            "best_mass_g": 183.203695423311,
+            "best_score_100": 17.007339,
+            "evals": 100
+          },
+          {
+            "best_genome_sha256": "28ab09f955a34c2374125fc3795ecf55a8ae3aaac5086ab32cab27884c15dbdc",
+            "best_mass_g": 130.70098920305816,
+            "best_score_100": 18.276647,
+            "evals": 125
+          },
+          {
+            "best_genome_sha256": "9722a742d11c7ed367d463b1e1e0d0dc7895a8766e84451fe51f6a45e7b80e0f",
+            "best_mass_g": 175.99606917819557,
+            "best_score_100": 22.753309,
+            "evals": 175
+          },
+          {
+            "best_genome_sha256": "7fd2c90512e251b808d3bbcddae403143bcc87ea53f8efd7deae2c41b8f28312",
+            "best_mass_g": 129.75187401185124,
+            "best_score_100": 25.682467,
+            "evals": 200
+          },
+          {
+            "best_genome_sha256": "cbba7c15daa486adeb88e1e8a179a44852144bf6e92fa6715833820e1950da3e",
+            "best_mass_g": 126.37167062660302,
+            "best_score_100": 27.694529,
+            "evals": 225
+          },
+          {
+            "best_genome_sha256": "86c37b9e5af803857e25eae3fd1126ea19e45f399baf0b20a7121d5b1c251b79",
+            "best_mass_g": 197.71203619491442,
+            "best_score_100": 27.948248,
+            "evals": 250
+          },
+          {
+            "best_genome_sha256": "479c5dbbe61e67c88ba9e05ad02b6bd0692556ec281b12b4d8a2f1d9c92ce89f",
+            "best_mass_g": 191.10953060410583,
+            "best_score_100": 30.439961,
+            "evals": 275
+          },
+          {
+            "best_genome_sha256": "789733b0004e5e9187a607c97ce2143997829ffa313242ec73b45d1cbe90bd74",
+            "best_mass_g": 208.42149510956864,
+            "best_score_100": 31.277505,
+            "evals": 325
+          },
+          {
+            "best_genome_sha256": "2bdfd37d111b24e1976b14a37ac8af2f4f06230e4e6d668ee707d38c9f3961c1",
+            "best_mass_g": 215.09944748937224,
+            "best_score_100": 37.476442,
+            "evals": 350
+          },
+          {
+            "best_genome_sha256": "40629d5dde64d2f54b3579dbecd8cb862e18cabbbb48ce82f6119e616663808e",
+            "best_mass_g": 139.5233149681758,
+            "best_score_100": 38.219962,
+            "evals": 475
+          },
+          {
+            "best_genome_sha256": "060701492a8d86053e2d67a5a8bd6f659725e9aab16963d8c06c85562e5800f6",
+            "best_mass_g": 152.62317476886824,
+            "best_score_100": 40.896833,
+            "evals": 500
+          },
+          {
+            "best_genome_sha256": "8544a5ffa60137e1fbb430de63419d1626dc2bdb35de1ab51958d5fce35a5a3b",
+            "best_mass_g": 144.05995928678172,
+            "best_score_100": 42.600169,
+            "evals": 575
+          },
+          {
+            "best_genome_sha256": "e22e2f83777d2fa6733806abe6345169757d36b89c3316428399b734a782cf4d",
+            "best_mass_g": 146.91166730144346,
+            "best_score_100": 43.415928,
+            "evals": 700
+          },
+          {
+            "best_genome_sha256": "3d959671669cc09eede06058b8417985e11bb3ac03b2d97a1c438e5221750028",
+            "best_mass_g": 144.72119743120732,
+            "best_score_100": 44.435778,
+            "evals": 925
+          },
+          {
+            "best_genome_sha256": "f6c0fe8f1414a26f4072f52c63544d57dc55bb2c8cc17ea0132085816f5fcd46",
+            "best_mass_g": 138.9090489254309,
+            "best_score_100": 45.634035,
+            "evals": 1050
+          },
+          {
+            "best_genome_sha256": "2061b780550eda53b2ab8b65265cf35ae7a25eb78f0a6fb15816f7424b378199",
+            "best_mass_g": 135.04166212734947,
+            "best_score_100": 45.856824,
+            "evals": 1150
+          },
+          {
+            "best_genome_sha256": "677555b0f9b474cc6d58148f7b4a8ad208a2e67dc8fd94c97e6db839ac508b5f",
+            "best_mass_g": 138.06295230625653,
+            "best_score_100": 45.867385,
+            "evals": 1200
+          },
+          {
+            "best_genome_sha256": "9acccc4e30c3113b90b1c754dec0070f023bfc3c81ad17b34c6ae6f173ba5db3",
+            "best_mass_g": 114.36615315244799,
+            "best_score_100": 47.143001,
+            "evals": 1225
+          },
+          {
+            "best_genome_sha256": "932eba62055a74a23938535c9b7c0307d6b5594ff0ad25ced21dba76b01fc182",
+            "best_mass_g": 140.56202756854972,
+            "best_score_100": 48.347487,
+            "evals": 1250
+          },
+          {
+            "best_genome_sha256": "12e14c43b87991db2e092693f7e067052dc24900eff0c849a4d329ea630e857b",
+            "best_mass_g": 125.05070929973448,
+            "best_score_100": 49.883966,
+            "evals": 1350
+          },
+          {
+            "best_genome_sha256": "1bae5916c4940adbfdc1f9103582d1e158bd48ac9dd88b87ab874554fe12f2d6",
+            "best_mass_g": 125.14360059513142,
+            "best_score_100": 50.589025,
+            "evals": 1400
+          },
+          {
+            "best_genome_sha256": "619afa593dcdd99b35bb7e41f28b538f39f4f109cf879fded0e2bdbe851c6008",
+            "best_mass_g": 114.85809005246998,
+            "best_score_100": 52.041108,
+            "evals": 1525
+          },
+          {
+            "best_genome_sha256": "6afacb412ad5783a3dd9a40f9e793d617e5c8b3cf61f5872e12363b8d8626dde",
+            "best_mass_g": 114.87436908498343,
+            "best_score_100": 52.806415,
+            "evals": 1625
+          },
+          {
+            "best_genome_sha256": "772f5eda1ad235120015da105716f3a2a5f485ae69d9931bec1f4913221d513f",
+            "best_mass_g": 115.81213956084848,
+            "best_score_100": 52.819851,
+            "evals": 1750
+          },
+          {
+            "best_genome_sha256": "3ba681474f8a181b45ccc77aa6638c5160df42d7707f6aa8cc4ecb2f990af072",
+            "best_mass_g": 114.6170619084567,
+            "best_score_100": 53.621597,
+            "evals": 1950
+          },
+          {
+            "best_genome_sha256": "9a6129a184ab37eb93513dc1748795aceab22a2715fec63f1b13b07b36adb012",
+            "best_mass_g": 112.87641014357429,
+            "best_score_100": 54.028952,
+            "evals": 2025
+          },
+          {
+            "best_genome_sha256": "831f8d7d85faa59bbfc99f1fc2d46f8fa46f69ea246d73b71bbe5ab516a1b932",
+            "best_mass_g": 112.66688863827838,
+            "best_score_100": 54.317503,
+            "evals": 2075
+          },
+          {
+            "best_genome_sha256": "0040a8dac62a52d6c0068012dbb2aaf6ce6d5d8caacdef675b13963cdcc4dda2",
+            "best_mass_g": 112.43915243279947,
+            "best_score_100": 54.400784,
+            "evals": 2825
+          },
+          {
+            "best_genome_sha256": "5ef47f41c54f742b8d79397edded08ed6db803c19cd493527457006c5fc3cb6d",
+            "best_mass_g": 112.83294165858774,
+            "best_score_100": 54.532504,
+            "evals": 2850
+          },
+          {
+            "best_genome_sha256": "2f21ec324747af01a77add2de75bc329f1230954c1802e161b35f01b7e0d4e44",
+            "best_mass_g": 113.02805048750534,
+            "best_score_100": 54.569007,
+            "evals": 3325
+          },
+          {
+            "best_genome_sha256": "5949020b5a24164a8144a22db2f3bf006de3fefaebf177ee425a6d12fa4396d4",
+            "best_mass_g": 111.58555456483504,
+            "best_score_100": 54.837285,
+            "evals": 3475
+          },
+          {
+            "best_genome_sha256": "b77593185920e61994311ef5c325fcdadd1c604250505f68b8aea16bced2ecbb",
+            "best_mass_g": 110.38223662480623,
+            "best_score_100": 54.941123,
+            "evals": 3600
+          },
+          {
+            "best_genome_sha256": "a32b73d64a00ec34449f00e60653fbec3897d33f6bfafe70ff1ff3b8ff9933cc",
+            "best_mass_g": 111.79840427302194,
+            "best_score_100": 55.809835,
+            "evals": 4025
+          },
+          {
+            "best_genome_sha256": "f260e46c152d0885cff64a6f24854f7bbf337a7091150fade26a7451565796bd",
+            "best_mass_g": 111.69646447181216,
+            "best_score_100": 55.839064,
+            "evals": 4150
+          },
+          {
+            "best_genome_sha256": "37158d48c20ba075943f5aa661f57fc1bf1c784a555a426e6dc76262148e1b7f",
+            "best_mass_g": 113.04408496759467,
+            "best_score_100": 56.083839,
+            "evals": 4250
+          },
+          {
+            "best_genome_sha256": "7d192879cb0ec8b708a0e64f40275f6b938720b4a86ef3f0dc91ef2024014829",
+            "best_mass_g": 109.63930105243153,
+            "best_score_100": 57.530185,
+            "evals": 4325
+          },
+          {
+            "best_genome_sha256": "3b3831a612548b1e77c506f9ceba2a0e71d8a03c7ae7b83246c204529b047b3b",
+            "best_mass_g": 109.24955028909878,
+            "best_score_100": 57.922515,
+            "evals": 4525
+          },
+          {
+            "best_genome_sha256": "3216ae5f0cb5524207fc51c7ff67e4f0f41b06caf1ec03e1c737b2303deb86b8",
+            "best_mass_g": 108.67067672360385,
+            "best_score_100": 58.951316,
+            "evals": 4575
+          }
+        ],
+        "evaluations": 4800,
+        "final": {
+          "best_genome_sha256": "3216ae5f0cb5524207fc51c7ff67e4f0f41b06caf1ec03e1c737b2303deb86b8",
+          "best_mass_g": 108.67067672360385,
+          "best_score_100": 58.951316
+        },
+        "island": "control/epoch09/xbabe4/island902",
+        "niches": 89,
+        "qd_score": 2471.535075795959,
+        "seed": 4009002
+      },
+      {
+        "after_sobol_init": {
+          "best_mass_g": 176.42588331499726,
+          "best_score_100": 7.092396,
+          "evals": 64
+        },
+        "best_changes": [
+          {
+            "best_genome_sha256": "0d634059881c24abfa38571f7734c33012033a1c41c9d6351ec09bfcc147998f",
+            "best_mass_g": 176.42588331499726,
+            "best_score_100": 7.092396,
+            "evals": 64
+          },
+          {
+            "best_genome_sha256": "e0da39996c3700a987c5b4e9f72e940c6f129563eeab575470237d3ba35e07e9",
+            "best_mass_g": 135.66791867730336,
+            "best_score_100": 16.695512,
+            "evals": 75
+          },
+          {
+            "best_genome_sha256": "07ee78dc9ce6971c91bc00dbf638395630de2f924d00a362511c9bd736c9ee0a",
+            "best_mass_g": 163.61688866095898,
+            "best_score_100": 22.38909,
+            "evals": 125
+          },
+          {
+            "best_genome_sha256": "5a72b49c1b9e024e434df0e4299e469d75519becb9f53268f213b4d22527cff0",
+            "best_mass_g": 188.60322018962577,
+            "best_score_100": 31.733037,
+            "evals": 175
+          },
+          {
+            "best_genome_sha256": "a6271bc6e2757c348061e689f5be8edef6c97b81896f3fb81b6b82bfab02c4a0",
+            "best_mass_g": 158.76685137827937,
+            "best_score_100": 32.478605,
+            "evals": 200
+          },
+          {
+            "best_genome_sha256": "bea22aa2045d9f5efb5b4e77dca7ff3cf56f7c35808c1f91dab912c25436177c",
+            "best_mass_g": 168.97535180081596,
+            "best_score_100": 35.224756,
+            "evals": 225
+          },
+          {
+            "best_genome_sha256": "3164fedacbe4a8f0ab1465067e16d161b5fbc63ea6c3663eb8b034b820018d5d",
+            "best_mass_g": 169.51731685062646,
+            "best_score_100": 35.889209,
+            "evals": 250
+          },
+          {
+            "best_genome_sha256": "c85f83b8d57e4c51d863f0e15b61b79cd058ccb78f625f4905fd24e76f0ba5e9",
+            "best_mass_g": 169.58980581655146,
+            "best_score_100": 35.929365,
+            "evals": 256
+          },
+          {
+            "best_genome_sha256": "21bdf500cdc25c146943c61129d08b1aaba29eb37efcbb77fbd434a9d1ccbe75",
+            "best_mass_g": 171.2774942554222,
+            "best_score_100": 39.418628,
+            "evals": 325
+          },
+          {
+            "best_genome_sha256": "0b0da428e6792cddab63a150bcd4876424ba5a70de5118ba80af77d26469c1ce",
+            "best_mass_g": 150.61918139772382,
+            "best_score_100": 40.455999,
+            "evals": 400
+          },
+          {
+            "best_genome_sha256": "a08cec6b5e2cf2a35ac5c883b90fd7d2678af8b16ca4189443b2224272176137",
+            "best_mass_g": 154.33971668375045,
+            "best_score_100": 41.224301,
+            "evals": 425
+          },
+          {
+            "best_genome_sha256": "d7145a40e2f8a7a1dcd532cd3fd0d765d9af8eb090a3a8e81ea146abf8c4e9c7",
+            "best_mass_g": 151.55923314200314,
+            "best_score_100": 43.712967,
+            "evals": 450
+          },
+          {
+            "best_genome_sha256": "4df3a6b92eb2fb51fb964f953b0fa2b6855e908b786bb11ef746427d4c5d78c9",
+            "best_mass_g": 149.71252588600794,
+            "best_score_100": 44.321183,
+            "evals": 475
+          },
+          {
+            "best_genome_sha256": "b65dd331113525b4fc286a4e747cf778e16e17b7ed77b5363e8a17b7860a9f98",
+            "best_mass_g": 149.57239409327767,
+            "best_score_100": 45.450862,
+            "evals": 500
+          },
+          {
+            "best_genome_sha256": "945eb777181b6a3be75897cd48d6f49d886b3fc16814bf330e14ae9cfda25bcb",
+            "best_mass_g": 150.14786429943808,
+            "best_score_100": 46.226038,
+            "evals": 850
+          },
+          {
+            "best_genome_sha256": "1a2017e4c0fc007e4c5f7914c5dca02c83cdd5cc7d506544be8afe02d9806b57",
+            "best_mass_g": 148.9583724971153,
+            "best_score_100": 46.505815,
+            "evals": 1075
+          },
+          {
+            "best_genome_sha256": "19d9a77dcd4f7f45e3902ab6f2f02454b00358fe0907d5c5bd83ef6520160ead",
+            "best_mass_g": 148.38017314362688,
+            "best_score_100": 46.824816,
+            "evals": 1200
+          },
+          {
+            "best_genome_sha256": "3e9e22703a4d0ad64b1ea7e9c61af62bbb2e3cae0710c6119675d4ec376409fc",
+            "best_mass_g": 150.1007219554818,
+            "best_score_100": 47.611237,
+            "evals": 1325
+          },
+          {
+            "best_genome_sha256": "33b764addcd0ca8c66b204859dd2575d48f0c45a55c4aaca0630a70a80eee04b",
+            "best_mass_g": 151.15351949130147,
+            "best_score_100": 47.71027,
+            "evals": 1425
+          },
+          {
+            "best_genome_sha256": "64b2331a197ec22746d48170c7549caa03678e8a3bf11fcffc280bd1e96c29bf",
+            "best_mass_g": 149.69017912148664,
+            "best_score_100": 48.365101,
+            "evals": 1675
+          },
+          {
+            "best_genome_sha256": "a635d492256b25ede1a3a1ca825cecd58aec7a5bc78fb31e8e5a14a782539df9",
+            "best_mass_g": 150.56522793489603,
+            "best_score_100": 49.083294,
+            "evals": 2000
+          },
+          {
+            "best_genome_sha256": "76086a5ebcfe3e257ef6285593a984e9f515662b7501780f68d80ca5ef427a44",
+            "best_mass_g": 149.16114273401402,
+            "best_score_100": 49.607371,
+            "evals": 2175
+          },
+          {
+            "best_genome_sha256": "e8b5a7d009962ca5cc70f810ef81c5f9fb8031d2d1aab9b6f56a6e9a10e8b53c",
+            "best_mass_g": 144.49638682162055,
+            "best_score_100": 49.809685,
+            "evals": 2475
+          },
+          {
+            "best_genome_sha256": "48a5ba4c2ee8c494c9a22168a81fd93925e51ba655428de3d50dad7407aeefd7",
+            "best_mass_g": 135.47962275072618,
+            "best_score_100": 50.567996,
+            "evals": 2700
+          },
+          {
+            "best_genome_sha256": "b2a2431d9353b997bee4369bf20f5d0cd846894f0c88670c0a42e766311003ea",
+            "best_mass_g": 132.35184078045992,
+            "best_score_100": 51.163974,
+            "evals": 2850
+          },
+          {
+            "best_genome_sha256": "5e313c4ea8509fef47d7daa4abbce22e83f4a4365b4f2ec27793b3a5750bec66",
+            "best_mass_g": 132.9905427668893,
+            "best_score_100": 51.639809,
+            "evals": 2975
+          },
+          {
+            "best_genome_sha256": "2f4e7cfab05f73fdfdf4faad83538baebe2bd2e5abd827eac9e88008b391a640",
+            "best_mass_g": 130.95295166447772,
+            "best_score_100": 51.742708,
+            "evals": 3000
+          },
+          {
+            "best_genome_sha256": "4590366bd2a8210f216994a8d72e35f5275282e17688d3143e140c0ecd91362f",
+            "best_mass_g": 131.3720164623149,
+            "best_score_100": 52.22824,
+            "evals": 3025
+          },
+          {
+            "best_genome_sha256": "2608dfdbba54c139c62a88b841a17647f68ff2617402be8a1735710005f9cd2b",
+            "best_mass_g": 122.76664122237236,
+            "best_score_100": 52.723386,
+            "evals": 3250
+          },
+          {
+            "best_genome_sha256": "5c82f371d66451efea95ca1430808d738db34b9d71b96d6e261085cb1297bdb7",
+            "best_mass_g": 119.19495021023577,
+            "best_score_100": 53.599156,
+            "evals": 3275
+          },
+          {
+            "best_genome_sha256": "91923a3043dae9088b3590a335a2b3737cab72d65969b759969f348d32eb1b2d",
+            "best_mass_g": 117.7682900343088,
+            "best_score_100": 55.858993,
+            "evals": 3450
+          },
+          {
+            "best_genome_sha256": "8a0d11122ef8c95b678791a6ed9df4744f294c5a1bc4b26105a01937603219ee",
+            "best_mass_g": 113.15044030435608,
+            "best_score_100": 56.555455,
+            "evals": 4075
+          },
+          {
+            "best_genome_sha256": "6dd7db1873ea81560773b8922e6b3a188bc1d5f27af14686f453d419f97be233",
+            "best_mass_g": 111.16970843381841,
+            "best_score_100": 56.721859,
+            "evals": 4125
+          },
+          {
+            "best_genome_sha256": "5ec2542c10929bf8a258940e8f6ff314f319d2b895340fd40ba9ab3eda885e40",
+            "best_mass_g": 111.53311084724831,
+            "best_score_100": 57.030379,
+            "evals": 4200
+          },
+          {
+            "best_genome_sha256": "1adc7a334ea15c7b873a16e64461315407d2cab5c66309d651db339e30d176bb",
+            "best_mass_g": 110.57601421424371,
+            "best_score_100": 57.071668,
+            "evals": 4225
+          },
+          {
+            "best_genome_sha256": "47227ea1edf769c96a6291cd27fd5bb33bb962b790b2d57a6a54e9adb747b370",
+            "best_mass_g": 107.9416147351946,
+            "best_score_100": 58.671622,
+            "evals": 4275
+          },
+          {
+            "best_genome_sha256": "c50e64e5469eb16d61e2d4956bbeeb4ce59ac536efab2b2cb659a9e16653aa38",
+            "best_mass_g": 113.65220398377689,
+            "best_score_100": 59.044698,
+            "evals": 4625
+          },
+          {
+            "best_genome_sha256": "0e8ff0a50e79b2907319aa7ff9453ce26919dc77a1763f6f0ef8e20100ff32d0",
+            "best_mass_g": 113.34540420383634,
+            "best_score_100": 59.558267,
+            "evals": 4675
+          }
+        ],
+        "evaluations": 4800,
+        "final": {
+          "best_genome_sha256": "0e8ff0a50e79b2907319aa7ff9453ce26919dc77a1763f6f0ef8e20100ff32d0",
+          "best_mass_g": 113.34540420383634,
+          "best_score_100": 59.558267
+        },
+        "island": "control/epoch09/xbabe4/island903",
+        "niches": 115,
+        "qd_score": 3165.3560671789714,
+        "seed": 4009003
+      }
+    ],
+    "what": "fresh-start control: scrambled Sobol start (64), no pool and no migration, the same decoder, objective and promotion; never merged and not eligible to win"
+  },
+  "blade": {
+    "edge_inner": {
+      "edge_arc_mm": 68.53156404535582,
+      "mean_flank_deg": 30.852096744600225,
+      "per_side_angle_gene_deg": 22.296405697555443,
+      "serration_depth_mm": 1.0860432706530112,
+      "sharpened_arc_mm": 63.29383315817152,
+      "teeth": 6,
+      "teeth_checked": 7,
+      "tooth_root_sf_min": 2.3794834862342276
+    },
+    "edge_spine": {
+      "edge_arc_mm": 80.72108774353244,
+      "mean_flank_deg": 29.129990954302873,
+      "per_side_angle_gene_deg": 23.47022308431128,
+      "serration_depth_mm": 1.3048515169056394,
+      "sharpened_arc_mm": 72.22658303801848,
+      "teeth": 5,
+      "teeth_checked": 6,
+      "tooth_root_sf_min": 3.222257537347308
+    },
+    "max_apex_mm": 0.11318599807605466,
+    "max_half_angle_deg": 23.470170755738323,
+    "reach_chord_mm": 72.23813619538883,
+    "tip_xy_mm": [
+      140.47767016935984,
+      -31.76847862865489
+    ],
+    "tooth_loads_n": {
+      "pry_across_blade_per_tooth": 20.0,
+      "snag_along_edge": 180.0
+    }
+  },
+  "cases": 16,
+  "cases_met": 16,
+  "cohort": {
+    "elites": 282,
+    "evaluations_per_island": 1200,
+    "evaluations_total": 296400.0,
+    "final_pool": "pools/p20",
+    "h_mm": 0.4,
+    "island_archive_rows": 58987,
+    "islands": 247,
+    "promotion": {
+      "log_every": 25,
+      "tier1_top": 0.4,
+      "tier2_top": 0.0
+    },
+    "reproduced": {
+      "history_entries_identical": 17,
+      "island": "epoch01/xbabe4/island101",
+      "rerun": {
+        "binary_sha256": "571afbc9e1114abc549e1da824a1ebf50c5705fa7ed9b80ee884f05659ae6cf1",
+        "evaluations": 200,
+        "island": "epoch01/xbabe4/island101",
+        "rerun_dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/repro_runs/epoch01_xbabe4_island101_on_local",
+        "rerun_host": "xbabe2",
+        "rerun_platform": "native static x86_64 on Linux; the island of record ran in a linux/amd64 container under Rosetta on xbabe4"
+      }
+    },
+    "round_depth_max": 14,
+    "rounds": [
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-27T20:52:36Z",
+        "host": "xbabe3",
+        "island_final_best": [
+          65.15073765395721,
+          64.08243360037699,
+          63.36402234654501,
+          64.21238457289968,
+          64.73441636549673,
+          64.32335787227305,
+          64.82825213348184,
+          65.89916810447673,
+          65.37612133502194,
+          64.09101221604415,
+          66.12189092092568,
+          64.66228940690085
+        ],
+        "islands": 12,
+        "merged_best": 66.12189092092568,
+        "merged_into": "pools/p02",
+        "pool_in": "epoch00/pool",
+        "pool_in_best": 63.35758365609886,
+        "round": 1,
+        "started_utc": "2026-10-27T19:29:01Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-27T22:35:21Z",
+        "host": "xbabe3",
+        "island_final_best": [
+          66.12189092092568,
+          66.32388963035089,
+          66.54360336445208,
+          66.49294410331777,
+          68.72363029865795,
+          66.52551569624433,
+          66.9449500412131,
+          67.5631698218376,
+          66.48725635976417,
+          66.75776054940572,
+          66.43028470844284,
+          67.15217933716673
+        ],
+        "islands": 12,
+        "merged_best": 68.72363029865795,
+        "merged_into": "pools/p05",
+        "pool_in": "pools/p02",
+        "pool_in_best": 66.12189092092568,
+        "round": 2,
+        "started_utc": "2026-10-27T20:53:15Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-27T23:53:15Z",
+        "host": "xbabe3",
+        "island_final_best": [
+          69.38800849558132,
+          68.72363029865795,
+          69.96362647713606,
+          68.79291492316645,
+          69.19024421640137,
+          69.70922208232844,
+          69.12666641943083,
+          69.03976124090781,
+          69.14104755296954,
+          69.2720634988458,
+          69.19355496224526,
+          69.34746413167281
+        ],
+        "islands": 12,
+        "merged_best": 69.96362647713606,
+        "merged_into": "pools/p08",
+        "pool_in": "pools/p05",
+        "pool_in_best": 68.72363029865795,
+        "round": 3,
+        "started_utc": "2026-10-27T22:35:40Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-28T01:17:21Z",
+        "host": "xbabe3",
+        "island_final_best": [
+          69.96362647713606,
+          70.37525239742837,
+          70.39272048174695,
+          70.32607265503414,
+          70.05731235260785,
+          70.31160404846943,
+          70.26059909111284,
+          70.13083417086011,
+          70.21487109647923,
+          70.3327193225914,
+          70.10644500411108,
+          70.06829910180679
+        ],
+        "islands": 12,
+        "merged_best": 71.93676779681492,
+        "merged_into": "pools/p11",
+        "pool_in": "pools/p08",
+        "pool_in_best": 69.96362647713606,
+        "round": 4,
+        "started_utc": "2026-10-27T23:53:46Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-28T02:26:18Z",
+        "host": "xbabe3",
+        "island_final_best": [
+          71.93676779681492,
+          71.9821343479122,
+          72.08049227345357,
+          72.20015103850352,
+          72.01250853986578,
+          72.00909258559444,
+          71.93676779681492,
+          72.3183989544591,
+          72.1147999136932,
+          72.16397282485669,
+          72.02275995856886,
+          71.93676779681492
+        ],
+        "islands": 12,
+        "merged_best": 72.8129254797523,
+        "merged_into": "pools/p14",
+        "pool_in": "pools/p11",
+        "pool_in_best": 71.93676779681492,
+        "round": 5,
+        "started_utc": "2026-10-28T01:18:14Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-28T04:09:45Z",
+        "host": "xbabe3",
+        "island_final_best": [
+          72.91150800021344,
+          72.8129254797523,
+          73.21479989922832,
+          73.22386603655144,
+          72.95590645110484,
+          73.61473229352696,
+          73.33227993759303,
+          73.3522281245691,
+          72.89609656791066,
+          73.18461600206518,
+          73.43361696328317,
+          72.96142811471572
+        ],
+        "islands": 12,
+        "merged_best": 74.57190502809318,
+        "merged_into": "pools/p17",
+        "pool_in": "pools/p14",
+        "pool_in_best": 72.8129254797523,
+        "round": 6,
+        "started_utc": "2026-10-28T02:27:09Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-28T05:50:53Z",
+        "host": "xbabe3",
+        "island_final_best": [
+          75.04156527609534,
+          75.12107161947894,
+          75.27251832394326,
+          75.10319020452549,
+          74.98296292742064,
+          74.99817420967524,
+          75.25327548323394,
+          74.95280414638012,
+          74.79737055112024,
+          74.8402082577329,
+          74.69846635003404,
+          74.7436111215489,
+          74.86458329796102
+        ],
+        "islands": 13,
+        "merged_best": 75.54032426019704,
+        "merged_into": "pools/p20",
+        "pool_in": "pools/p17",
+        "pool_in_best": 74.57190502809318,
+        "round": 7,
+        "started_utc": "2026-10-28T04:10:17Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-27T20:02:46Z",
+        "host": "xbabe4",
+        "island_final_best": [
+          64.52755672841667,
+          63.80648016892642,
+          63.885511373112045,
+          65.55774979082943,
+          65.40887307678265,
+          63.71342335764366,
+          64.0691143403945,
+          64.26153388417474,
+          64.4113594963678,
+          64.84502651695956,
+          63.984318759484566,
+          64.17103528773575
+        ],
+        "islands": 12,
+        "merged_best": 65.55774979082943,
+        "merged_into": "pools/p01",
+        "pool_in": "epoch00/pool",
+        "pool_in_best": 63.35758365609886,
+        "round": 1,
+        "started_utc": "2026-10-27T19:13:02Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-27T20:55:23Z",
+        "host": "xbabe4",
+        "island_final_best": [
+          66.10144814191388,
+          66.64067242714981,
+          66.82019687106545,
+          66.54901818110741,
+          66.57114120900872,
+          66.05047945592196,
+          66.53058707947122,
+          65.74811100406079,
+          66.3961684295893,
+          66.84920645216631,
+          66.30675213304313,
+          66.08482330863458
+        ],
+        "islands": 12,
+        "merged_best": 66.84920645216631,
+        "merged_into": "pools/p03",
+        "pool_in": "pools/p01",
+        "pool_in_best": 65.55774979082943,
+        "round": 2,
+        "started_utc": "2026-10-27T20:03:08Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-27T21:46:35Z",
+        "host": "xbabe4",
+        "island_final_best": [
+          66.86366301753074,
+          67.28687104185188,
+          67.04543700445592,
+          67.19038810545746,
+          67.13648788693064,
+          67.80924444881143,
+          66.84920645216631,
+          67.74465466152368,
+          67.32900031934624,
+          66.84920645216631,
+          66.91678277840612,
+          67.16255057906028
+        ],
+        "islands": 12,
+        "merged_best": 67.80924444881143,
+        "merged_into": "pools/p04",
+        "pool_in": "pools/p03",
+        "pool_in_best": 66.84920645216631,
+        "round": 3,
+        "started_utc": "2026-10-27T20:56:20Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-27T22:34:46Z",
+        "host": "xbabe4",
+        "island_final_best": [
+          68.60453462849631,
+          68.79452830870723,
+          68.38689425009615,
+          68.47044892828228,
+          67.80924444881143,
+          67.80947058470421,
+          68.03576582906688,
+          68.1970974481819,
+          68.29797456278983,
+          67.80924444881143,
+          67.80924444881143,
+          68.24472838622505
+        ],
+        "islands": 12,
+        "merged_best": 68.79452830870723,
+        "merged_into": "pools/p06",
+        "pool_in": "pools/p04",
+        "pool_in_best": 67.80924444881143,
+        "round": 4,
+        "started_utc": "2026-10-27T21:47:33Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-27T23:23:27Z",
+        "host": "xbabe4",
+        "island_final_best": [
+          68.92485702185222,
+          69.23241803405168,
+          69.84527020073546,
+          69.36161650190745,
+          69.22421637033419,
+          69.29097759281734,
+          69.36732020331067,
+          69.41953215466627,
+          68.79452830870723,
+          69.39163107365009,
+          69.50142823528739,
+          68.79452830870723
+        ],
+        "islands": 12,
+        "merged_best": 69.84527020073546,
+        "merged_into": "pools/p07",
+        "pool_in": "pools/p06",
+        "pool_in_best": 68.79452830870723,
+        "round": 5,
+        "started_utc": "2026-10-27T22:37:43Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-28T00:08:03Z",
+        "host": "xbabe4",
+        "island_final_best": [
+          69.89541849013612,
+          70.13429924905108,
+          71.5811587621502,
+          70.71418250022748,
+          70.54642355318695,
+          70.54408342008449,
+          69.94388333761303,
+          70.19339190246515,
+          70.31150257515564,
+          70.5924320639711,
+          70.285931449003,
+          70.39030918378846
+        ],
+        "islands": 12,
+        "merged_best": 71.5811587621502,
+        "merged_into": "pools/p09",
+        "pool_in": "pools/p07",
+        "pool_in_best": 69.84527020073546,
+        "round": 6,
+        "started_utc": "2026-10-27T23:23:51Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-28T00:52:38Z",
+        "host": "xbabe4",
+        "island_final_best": [
+          71.68166475914342,
+          71.93676779681492,
+          71.63889245750826,
+          71.76026324109536,
+          71.85434038395746,
+          71.91773572810604,
+          71.63166743030418,
+          71.84621777775072,
+          71.72535450618032,
+          71.64661188595198,
+          71.76437090291792,
+          71.8622629786756
+        ],
+        "islands": 12,
+        "merged_best": 71.93676779681492,
+        "merged_into": "pools/p10",
+        "pool_in": "pools/p09",
+        "pool_in_best": 71.5811587621502,
+        "round": 7,
+        "started_utc": "2026-10-28T00:08:56Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-28T01:36:42Z",
+        "host": "xbabe4",
+        "island_final_best": [
+          72.22560444032027,
+          72.13274050001974,
+          72.1614287904922,
+          72.00365503658868,
+          72.10943490894356,
+          71.93676779681492,
+          72.07908512006186,
+          72.067153881039,
+          72.00462180599642,
+          71.93676779681492,
+          72.04743755371558,
+          72.06553495188439
+        ],
+        "islands": 12,
+        "merged_best": 72.22560444032027,
+        "merged_into": "pools/p12",
+        "pool_in": "pools/p10",
+        "pool_in_best": 71.93676779681492,
+        "round": 8,
+        "started_utc": "2026-10-28T00:53:00Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-28T02:20:39Z",
+        "host": "xbabe4",
+        "island_final_best": [
+          72.27303799836723,
+          72.35785319507156,
+          72.24016409997903,
+          72.26361418428759,
+          72.22560444032027,
+          72.39770682879943,
+          72.49313727545977,
+          72.25331980717755,
+          72.8129254797523,
+          72.25108802602915,
+          72.22560444032027,
+          72.22560444032027
+        ],
+        "islands": 12,
+        "merged_best": 72.8129254797523,
+        "merged_into": "pools/p13",
+        "pool_in": "pools/p12",
+        "pool_in_best": 72.22560444032027,
+        "round": 10,
+        "started_utc": "2026-10-28T01:37:27Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-28T03:07:48Z",
+        "host": "xbabe4",
+        "island_final_best": [
+          73.05172686538066,
+          73.31014889538703,
+          73.33556087646076,
+          73.4861930667535,
+          73.45793265031784,
+          72.84695642194055,
+          72.96683111531604,
+          73.54740015836246,
+          73.04485949544139,
+          72.96415574127313,
+          73.05817185224001,
+          73.82619559047619
+        ],
+        "islands": 12,
+        "merged_best": 73.82619559047619,
+        "merged_into": "pools/p15",
+        "pool_in": "pools/p13",
+        "pool_in_best": 72.8129254797523,
+        "round": 11,
+        "started_utc": "2026-10-28T02:21:34Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-28T03:54:41Z",
+        "host": "xbabe4",
+        "island_final_best": [
+          74.03177640729538,
+          73.82619559047619,
+          73.95977223837559,
+          73.88502687139646,
+          74.38956414579748,
+          74.13045765861088,
+          74.09754286185598,
+          73.82619559047619,
+          73.97604210240833,
+          73.82619559047619,
+          74.57190502809318,
+          73.94786177173228,
+          74.06300082421748,
+          73.82959999682583
+        ],
+        "islands": 14,
+        "merged_best": 74.57190502809318,
+        "merged_into": "pools/p16",
+        "pool_in": "pools/p15",
+        "pool_in_best": 73.82619559047619,
+        "round": 12,
+        "started_utc": "2026-10-28T03:08:25Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-28T04:37:50Z",
+        "host": "xbabe4",
+        "island_final_best": [
+          74.74839238301304,
+          74.94068209451041,
+          74.8318947321125,
+          74.9124636856842,
+          74.95065305210369,
+          74.96635473582194,
+          75.11602432692392,
+          74.90546373936274,
+          75.0353629102152,
+          75.04982151902085,
+          74.8243835540702,
+          75.00579935585348,
+          74.83609621964159,
+          75.1463643817499
+        ],
+        "islands": 14,
+        "merged_best": 75.1463643817499,
+        "merged_into": "pools/p18",
+        "pool_in": "pools/p16",
+        "pool_in_best": 74.57190502809318,
+        "round": 13,
+        "started_utc": "2026-10-28T03:55:36Z"
+      },
+      {
+        "evaluations_per_island": 1200,
+        "finished_utc": "2026-10-28T05:21:20Z",
+        "host": "xbabe4",
+        "island_final_best": [
+          75.28865263587998,
+          75.15824891574061,
+          75.1463643817499,
+          75.15399684659398,
+          75.4279676891608,
+          75.54032426019704,
+          75.14872182984278,
+          75.38260589838296,
+          75.2105836322947,
+          75.32056690402511,
+          75.1463643817499,
+          75.1463643817499,
+          75.1463643817499,
+          75.39657436821189
+        ],
+        "islands": 14,
+        "merged_best": 75.54032426019704,
+        "merged_into": "pools/p19",
+        "pool_in": "pools/p18",
+        "pool_in_best": 75.1463643817499,
+        "round": 14,
+        "started_utc": "2026-10-28T04:38:37Z"
+      }
+    ],
+    "tier1_rows_reproduced": 172,
+    "what": "warm-started islands in asynchronous rounds per host; at the end of a host's round the hub merges its islands into the latest pool, from which the host's next round starts"
+  },
+  "crate_version": "5.0.0",
+  "decoded": {
+    "L_g": 75.71643930959331,
+    "R_b": 12.45,
+    "R_od": 15.368014977765444,
+    "T0": 8.5623488204819,
+    "T_g": 12.188601431738098,
+    "T_sw": 16.39536765231771,
+    "angle_in": 22.296405697555443,
+    "angle_sp": 23.47022308431128,
+    "belly": -0.3608851644058406,
+    "blade_belly": 5.420816291714356,
+    "blade_len": 60.87767016935986,
+    "blade_reach_max_mm": 85.725,
+    "bore_d": 24.9,
+    "bore_round": 2.986553688671801,
+    "centre_idx": 51.2062351750202,
+    "centre_mid": 30.2062351750202,
+    "centre_ring": 9.8531175875101,
+    "crown": 0.252906524682594,
+    "cx": -15.484454287358762,
+    "dL": 14.010204134573113,
+    "d_idx": 4.76662886250479,
+    "d_mid": 1.884485701954766,
+    "d_ring": 1.9332456926663064,
+    "edge_in_c1": -3.5646768366560426,
+    "edge_in_c2": 2.2665796038659547,
+    "edge_in_c3": -0.9960256155961627,
+    "edge_in_c4": 1.1442613693896728,
+    "edge_in_c5": -0.18887174993165012,
+    "edge_in_c6": -0.7034957179907679,
+    "edge_in_c7": 0.6598186172086549,
+    "edge_in_c8": -0.5344994438739721,
+    "edge_r": 4.3923238611045665,
+    "edge_sp_c1": -3.580243360698306,
+    "edge_sp_c2": 2.2479793723818577,
+    "edge_sp_c3": -1.2735033680529178,
+    "edge_sp_c4": 0.7429857083190239,
+    "edge_sp_c5": -0.27041883403000655,
+    "edge_sp_c6": 0.9537469736234945,
+    "edge_sp_c7": 0.6051512617781769,
+    "edge_sp_c8": 0.09846434299723972,
+    "edge_t_in": 0.07462274481928839,
+    "edge_t_sp": 0.11318512968693942,
+    "fuller_corrug_amp": 0.5099739258860484,
+    "fuller_depth": 1.3078660476456836,
+    "fuller_s0": 0.1500655633723271,
+    "fuller_s1": 0.5743156913311569,
+    "fuller_width": 9.102152383766294,
+    "grind_curv_in": -0.02405285628260495,
+    "grind_curv_sp": -0.044241101492374646,
+    "grip_hot": 1.6327155480017976,
+    "grip_perim": 99.45617415035366,
+    "guard_r": 7.71162000557114,
+    "h_exp": 1.2609180371099349,
+    "h_g": 17.868765583218057,
+    "h_root": 26.17808018933753,
+    "hand_scale": 1.0105761628215488,
+    "hook_drop": 31.76847862865489,
+    "jimp_d": 0.6424767830600284,
+    "jimp_n": 6.992126780127438,
+    "jimp_p": 2.2739702597511524,
+    "junction_deg": 42.377561817516295,
+    "lat_aniso_x": 1.5729917200923098,
+    "lat_cell": 11.88414886160406,
+    "lat_grade": 0.6880140182714348,
+    "lat_mix": 0.08814433013967615,
+    "lip_d": 1.6843049138669013,
+    "lip_w": 8.0,
+    "n0": 2.2704473844470052,
+    "n1": 3.1291454192803023,
+    "neck_in": 4.243274718625058,
+    "neck_r": 5.913989265553499,
+    "od_h2": 0.1062444146170024,
+    "od_tear": 0.5530410371451628,
+    "off_idx": 1.6657046923975454,
+    "off_mid": -0.9702016848487569,
+    "off_ring": -0.007892645417262534,
+    "pitch_idx": 21.0,
+    "pitch_mid": 21.0,
+    "pitch_ring": 19.7062351750202,
+    "point_angle": 71.49166893166574,
+    "point_len": 8.583220447267538,
+    "port_d": 3.932609672799515,
+    "port_n": 3.8898661628806965,
+    "ramp_h": 0.19505482041078148,
+    "rho_blade": 0.9934407041058559,
+    "rho_grad_wall": 0.012094193607623389,
+    "rho_grip": 0.1386917567188946,
+    "rho_guard": 0.09347111562949906,
+    "rho_ring": 0.5993760606715359,
+    "rib_w": 0.03783994732663321,
+    "ridge_amp": 1.3283941383350475,
+    "ridge_s0": 0.09443125918604396,
+    "ridge_s1": 0.5733617309430433,
+    "ridge_w": 6.790723948586393,
+    "ring_od": 30.73602995553089,
+    "s0_in": 0.07782284614561727,
+    "s0_sp": 0.1049059701635317,
+    "s_ps": 0.4542232408642073,
+    "s_sw": 0.5172116144882565,
+    "scope_blade": 0.06561012258326367,
+    "scope_grip": 0.2469295300614231,
+    "scope_ring": 0.6170217597802488,
+    "ser_depth_in": 1.0862221591237264,
+    "ser_depth_sp": 1.3116670563058734,
+    "ser_duty_in": 0.5113570310458808,
+    "ser_duty_sp": 0.5513823714466202,
+    "ser_pitch_in": 5.5195998445067325,
+    "ser_pitch_sp": 5.464288342579674,
+    "ser_s0_in": 0.18870577747480116,
+    "ser_s0_sp": 0.20019018178597792,
+    "ser_s1_in": 0.8128091763733192,
+    "ser_s1_sp": 0.7149835073086638,
+    "sharpened_edge_cap_mm": 101.6,
+    "shear_web_amp": 0.0033337442103200153,
+    "sigma_B": 0.01964068478963949,
+    "sigma_E": 0.05508814538963411,
+    "sigma_H": 0.18608688017848402,
+    "sigma_I": 0.019369821545313828,
+    "sigma_S": 0.13722572574064973,
+    "skew": -0.0982116050402814,
+    "skin_t": 1.1075551051939416,
+    "spine_arch": -2.5120577788095835,
+    "sweep_deg": 5.2936956030773565,
+    "t_0p25_target": 0.2621505111890447,
+    "t_1p00_target": 0.4138668442513133,
+    "t_2p00_target": 0.7871886610507413,
+    "t_core": 4.015538616943439,
+    "t_guard": 7.892198950257848,
+    "t_tip": 2.002240266512999,
+    "taper_deg": 62.321771935399475,
+    "taper_x0": 0.7542748104239835,
+    "tex_amp": 0.21599220511718156,
+    "tex_angle": -2.0166870557802596,
+    "tex_pitch": 2.5107461394086057,
+    "thumbpad": 1.4969746781670796,
+    "tip_angle": 38.02567136006786,
+    "tip_reserve": 5.696263524376404,
+    "w_idx": 11.310159940054627,
+    "w_knurl": 0.35627301940761796,
+    "w_mid": 11.385108636269823,
+    "w_ridge": 0.30099089446585503,
+    "w_ring": 10.33068156563854,
+    "web_t": 3.4944815322154033,
+    "x_t": -0.11643930959331783,
+    "yb0": -10.804113059367637,
+    "yb_g": -10.715133361617193,
+    "yt0": 11.155814947663847,
+    "yt_land": 11.450999170795793,
+    "yt_sw": 14.553033673705812
+  },
+  "descriptors": {
+    "grip_roundness_h_over_t": 1.630635052079169,
+    "groove_articulation_mm": 8.62025601700467,
+    "hook_drop_mm": 31.76847862865489,
+    "inner_turn_deg": 54.897033304089845,
+    "mass_g": 88.40684808266555,
+    "porosity_frac": 0.5813583767024413,
+    "silhouette_complexity": 5.48115208017741,
+    "surface_energy": 0.05577892132442553
+  },
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "ergonomics": {
+    "com_to_index_mm": 7.250606338592654,
+    "grip_h_over_t": 1.630635052079169,
+    "grip_length_mm": 75.89306458713581,
+    "grip_perimeter_mm": 99.44973453145423,
+    "guard_height_mm": 15.8,
+    "hand_factors": {
+      "balance": {
+        "beta": 0.1,
+        "e": 1.0
+      },
+      "contact_pressure": {
+        "beta": 0.15,
+        "e": 0.8968693246026538
+      },
+      "grip_length": {
+        "beta": 0.1,
+        "e": 1.0
+      },
+      "grip_section": {
+        "beta": 0.2,
+        "e": 1.0
+      },
+      "grip_surface": {
+        "beta": 0.05,
+        "e": 1.0
+      },
+      "guard": {
+        "beta": 0.1,
+        "e": 1.0
+      },
+      "hand_edges": {
+        "beta": 0.15,
+        "e": 1.0
+      },
+      "ring": {
+        "beta": 0.15,
+        "e": 1.0
+      }
+    },
+    "spin_inertia_ratio": 0.7729401871278978
+  },
+  "evolution": {
+    "control_final_best_score_100": [
+      58.452342,
+      59.54614,
+      58.951316,
+      59.558267
+    ],
+    "figure": "docs/g5/v6.0.0/img/evolution.svg",
+    "history_dir": "evidence/g5/v6.0.0/history",
+    "rounds": 20,
+    "winner_island": "epoch14/xbabe4/island1404"
+  },
+  "fitness_budget": {
+    "E": 0.9216093616815502,
+    "base": 0.8073065859702415,
+    "earned": 74.40213073773458,
+    "groups": {
+      "build": 7.054561710708155,
+      "cutting": 11.049123791036461,
+      "mass": 10.952182339673813,
+      "structural": 45.34626289631615
+    },
+    "lost_to_multipliers": 6.328527859289572,
+    "rule": "100 = earned (sum of term points = 100*E*W*base) + 100*base*(1-E*W) + 100*(1-base)",
+    "unmet_credit": 19.269341402975847,
+    "worst_margin_W": 1.0
+  },
+  "generation": "G5",
+  "grid_check": {
+    "evaluation": "Tier 1 of the ranking's top 16",
+    "h_mm": [
+      0.4,
+      0.3,
+      0.25,
+      0.2,
+      0.15
+    ],
+    "requirement_max_frac": 0.02,
+    "rows": [
+      {
+        "design_id": "kv4i1404_g00581_29ea3c73",
+        "mass_g": [
+          88.61082571445667,
+          89.49621800546457,
+          89.17070922226962,
+          88.40684808266555,
+          88.56123299304416
+        ],
+        "mass_rel_h020_vs_h015": 0.001743256108355351,
+        "pass": true,
+        "sealed_void_mm3": [
+          9.207087117421231,
+          140.49932229323733,
+          117.98916448138698,
+          44.89028235350714,
+          70.66045668642093
+        ],
+        "tier1_score_100": [
+          75.153997,
+          72.849287,
+          73.180812,
+          74.376865,
+          73.997353
+        ]
+      },
+      {
+        "design_id": "kv4i1406_g00009_528e4365",
+        "mass_g": [
+          88.62788160258069,
+          89.01967782862378,
+          88.46800131552358,
+          88.29250939527523,
+          88.2502007336018
+        ],
+        "mass_rel_h020_vs_h015": 0.000479417172105423,
+        "pass": true,
+        "sealed_void_mm3": [
+          14.419357583078718,
+          60.82866812487535,
+          28.549176349879417,
+          79.2568794665756,
+          92.36425434355648
+        ],
+        "tier1_score_100": [
+          75.540324,
+          74.51135,
+          75.163821,
+          74.369316,
+          74.162202
+        ]
+      },
+      {
+        "design_id": "kv4i1408_g00735_e6796cbf",
+        "mass_g": [
+          89.08770392796227,
+          89.47818297225099,
+          89.06670629651275,
+          88.86025995641087,
+          88.86204865682255
+        ],
+        "mass_rel_h020_vs_h015": 0.000020128957622711496,
+        "pass": true,
+        "sealed_void_mm3": [
+          17.270269813107888,
+          66.9650018692848,
+          34.215399380431336,
+          86.1783225861611,
+          99.00023949402463
+        ],
+        "tier1_score_100": [
+          75.382606,
+          74.351304,
+          74.998058,
+          74.235296,
+          73.990906
+        ]
+      },
+      {
+        "design_id": "kv4i1405_g00335_c923c290",
+        "mass_g": [
+          88.75059543132932,
+          89.01926706365154,
+          88.39652028288025,
+          88.40785779820217,
+          88.1306723002669
+        ],
+        "mass_rel_h020_vs_h015": 0.003145164909112319,
+        "pass": true,
+        "sealed_void_mm3": [
+          26.721549774454473,
+          68.34374952702612,
+          46.1981493569574,
+          102.2030585388917,
+          100.0483437294813
+        ],
+        "tier1_score_100": [
+          75.427968,
+          74.370264,
+          75.004679,
+          74.164923,
+          74.146655
+        ]
+      },
+      {
+        "design_id": "kv4i1414_g00435_0e2e651b",
+        "mass_g": [
+          89.75587884459198,
+          90.06164148487893,
+          90.21717887731036,
+          89.50477427093296,
+          89.51566945156911
+        ],
+        "mass_rel_h020_vs_h015": 0.00012171255270621018,
+        "pass": true,
+        "sealed_void_mm3": [
+          20.79059302547848,
+          70.86475716594175,
+          157.13798110707648,
+          97.84917203044502,
+          108.62932345297506
+        ],
+        "tier1_score_100": [
+          75.396574,
+          74.311749,
+          73.281844,
+          74.177891,
+          73.932414
+        ]
+      },
+      {
+        "design_id": "kv4i1410_g00279_290be921",
+        "mass_g": [
+          89.27695932507149,
+          89.74594745632429,
+          89.19985401886478,
+          89.00417134913839,
+          88.9124422531404
+        ],
+        "mass_rel_h020_vs_h015": 0.00103167896048606,
+        "pass": true,
+        "sealed_void_mm3": [
+          15.26103012009797,
+          54.52107406018911,
+          31.696078567405493,
+          83.26972213464643,
+          94.37195745483959
+        ],
+        "tier1_score_100": [
+          75.320567,
+          74.378463,
+          74.883763,
+          74.092049,
+          73.933409
+        ]
+      },
+      {
+        "design_id": "kv4i1401_g00149_412d5153",
+        "mass_g": [
+          88.92749023016286,
+          89.36696033730888,
+          88.65334831719089,
+          88.59704094865755,
+          88.54631115276618
+        ],
+        "mass_rel_h020_vs_h015": 0.0005729182303693126,
+        "pass": true,
+        "sealed_void_mm3": [
+          16.44330603829191,
+          67.98899756356144,
+          98.41106701532664,
+          87.54186397828681,
+          95.91281286411522
+        ],
+        "tier1_score_100": [
+          75.211439,
+          73.993034,
+          73.807106,
+          74.087996,
+          73.899996
+        ]
+      },
+      {
+        "design_id": "kv4i1409_g00336_4a44463a",
+        "mass_g": [
+          89.26945384069622,
+          89.75618492345937,
+          89.11778818117571,
+          88.98303068565238,
+          88.86816919410722
+        ],
+        "mass_rel_h020_vs_h015": 0.001292493055576216,
+        "pass": true,
+        "sealed_void_mm3": [
+          46.67970277738798,
+          115.88005665912326,
+          110.80512240860821,
+          118.80985767033408,
+          136.64832872834026
+        ],
+        "tier1_score_100": [
+          74.884306,
+          73.751514,
+          74.095631,
+          73.993659,
+          73.836251
+        ]
+      },
+      {
+        "design_id": "kv4i1401_g00281_b7d5a90f",
+        "mass_g": [
+          89.63493531915113,
+          89.87068751276209,
+          89.71379316073414,
+          89.13514655666336,
+          89.06238580629079
+        ],
+        "mass_rel_h020_vs_h015": 0.0008169638586914552,
+        "pass": true,
+        "sealed_void_mm3": [
+          20.270192798903338,
+          78.32450294508065,
+          222.28941995975356,
+          91.31458698802207,
+          105.98255848092239
+        ],
+        "tier1_score_100": [
+          75.278149,
+          74.090024,
+          72.466178,
+          74.099216,
+          73.837346
+        ]
+      },
+      {
+        "design_id": "kv4i1409_g00504_749c79d8",
+        "mass_g": [
+          88.65866284014426,
+          89.2134757858346,
+          88.5177272166162,
+          88.40168659819659,
+          88.2766964272161
+        ],
+        "mass_rel_h020_vs_h015": 0.0014158908980417273,
+        "pass": true,
+        "sealed_void_mm3": [
+          43.13860758639443,
+          117.95205825495896,
+          136.93775205567817,
+          128.27947997211726,
+          138.25909891648567
+        ],
+        "tier1_score_100": [
+          75.104723,
+          73.71761,
+          73.720735,
+          73.866332,
+          73.724038
+        ]
+      },
+      {
+        "design_id": "kv4i1414_g00999_42619e63",
+        "mass_g": [
+          90.85847477681843,
+          91.14865166134615,
+          90.4826625615789,
+          90.40102539393803,
+          90.33474880723264
+        ],
+        "mass_rel_h020_vs_h015": 0.0007336776553927837,
+        "pass": true,
+        "sealed_void_mm3": [
+          7.733114496189768,
+          42.477321710859215,
+          13.942036070022368,
+          67.25236327666245,
+          80.28514125477895
+        ],
+        "tier1_score_100": [
+          74.551055,
+          73.930951,
+          74.60488,
+          73.717258,
+          73.523456
+        ]
+      },
+      {
+        "design_id": "kv4i1410_g00280_5831a5e3",
+        "mass_g": [
+          90.3100918668528,
+          90.81595370008985,
+          90.06888417771185,
+          89.98910173664491,
+          89.89562786133375
+        ],
+        "mass_rel_h020_vs_h015": 0.0010398044658561645,
+        "pass": true,
+        "sealed_void_mm3": [
+          48.40009011619059,
+          99.7179227063959,
+          131.55239744239663,
+          106.4253692231449,
+          139.74595247267436
+        ],
+        "tier1_score_100": [
+          74.5128,
+          73.299037,
+          73.164103,
+          73.698276,
+          73.236247
+        ]
+      },
+      {
+        "design_id": "kv4i1405_g00205_a7f055b6",
+        "mass_g": [
+          90.2785949899505,
+          90.78007589469756,
+          90.33364879953042,
+          90.32487809035723,
+          90.19222524078022
+        ],
+        "mass_rel_h020_vs_h015": 0.001470779207663142,
+        "pass": true,
+        "sealed_void_mm3": [
+          48.69710764136859,
+          90.30518219321849,
+          111.65724863344622,
+          108.75533940152324,
+          105.55744250415185
+        ],
+        "tier1_score_100": [
+          73.843709,
+          72.996662,
+          72.928929,
+          72.986332,
+          72.99773
+        ]
+      },
+      {
+        "design_id": "kv4i1411_g00490_71efc13e",
+        "mass_g": [
+          90.31951374906293,
+          90.70236232929919,
+          90.04947001534507,
+          90.04640126302964,
+          89.77533943809244
+        ],
+        "mass_rel_h020_vs_h015": 0.0030193350048439704,
+        "pass": true,
+        "sealed_void_mm3": [
+          94.77577784349184,
+          138.8430700569883,
+          149.2588852582146,
+          182.1767596833791,
+          183.08576945800078
+        ],
+        "tier1_score_100": [
+          73.815638,
+          73.010837,
+          73.202352,
+          72.769875,
+          72.834872
+        ]
+      },
+      {
+        "design_id": "kv4i1310_g00526_5127c223",
+        "mass_g": [
+          90.85951694986063,
+          91.54878787374705,
+          90.71839975391792,
+          90.53967483458999,
+          91.00228931288095
+        ],
+        "mass_rel_h020_vs_h015": 0.005083547697359747,
+        "pass": true,
+        "sealed_void_mm3": [
+          51.18098052258717,
+          189.0497094429887,
+          89.39090205067805,
+          83.2186720933636,
+          239.45782186758862
+        ],
+        "tier1_score_100": [
+          72.171848,
+          69.833812,
+          71.614231,
+          71.617734,
+          69.690867
+        ]
+      },
+      {
+        "design_id": "kv4i1414_g00960_db1fd3ec",
+        "mass_g": [
+          88.87625853888969,
+          89.2873223952748,
+          88.73177455065628,
+          88.55282807969478,
+          88.51259220771323
+        ],
+        "mass_rel_h020_vs_h015": 0.0004545779417139961,
+        "pass": true,
+        "sealed_void_mm3": [
+          29.676432329868717,
+          67.07845584361667,
+          78.50338191559075,
+          60.07144561058469,
+          83.10730658122439
+        ],
+        "tier1_score_100": [
+          73.875095,
+          73.093194,
+          73.061818,
+          73.37975,
+          73.057041
+        ]
+      }
+    ],
+    "rule": "the winner is the highest-ranked design whose h 0.2 mass agrees with h 0.15; others are reported, never ranked"
+  },
+  "inputs": {
+    "L_g_mm": 75.89306458713581,
+    "am_build": 1.0,
+    "bore_round": 2.986553688671801,
+    "buckling_lambda": 7.3096418298502845,
+    "com_to_index_mm": 7.250606338592654,
+    "crown": 0.252906524682594,
+    "edge_r_min_mm": 3.0,
+    "fairness": 0.9907797592695086,
+    "guard_h_mm": 15.8,
+    "junction_step_mm": 0.0,
+    "karambit_ok": true,
+    "lip_w": 8.0,
+    "mass_g": 88.40684808266555,
+    "max_apex_mm": 0.11318599807605466,
+    "max_half_angle_deg": 23.470170755738323,
+    "point_monotonic": true,
+    "section_corner_r_min_mm": 4.428834747026447,
+    "spin_I_g_mm2": 442867.95940920705,
+    "spin_I_ref_g_mm2": 572965.3688402749,
+    "swell_h_over_t": 1.630635052079169,
+    "swell_perimeter_mm": 99.44973453145423,
+    "t_0p25_mm": 0.21830185472864957,
+    "t_1p00_mm": 0.4138668442513141,
+    "t_2p00_mm": 0.7709382040981679,
+    "tex_amp_mm": 0.21599220511718156,
+    "tex_crest_r_mm": 0.7392780167243547,
+    "watertight": true
+  },
+  "legacy_unscored": {
+    "choil_depth_mm": 4.84679975306384,
+    "crest_r_min_mm": 3.456326173034132,
+    "dolfinx_rel_err": 1.0,
+    "fat_sf": 0.21686553223497296,
+    "gci_admitted": false,
+    "grip_sf_min": 1.5597634490947752,
+    "groove_r_min_mm": 6.732621665266409,
+    "hm_spine_sf": 1.3383185145026324,
+    "hm_twist_sf": 0.39666754495383155,
+    "lat_rob_cert_n": 117.22449479429228,
+    "mid_depth_mm": 1.8917578431618711,
+    "ring_back_cap_n": 2053.9017849498946,
+    "ring_bearing_cap_n": 19616.463698651074,
+    "saddle_depth_mm": 1.8816984207789584,
+    "seq_ratio": 2.5,
+    "solid_tip_sf": 0.0,
+    "station_err_mm": 1.4500000000000028,
+    "strict_lat_n": 117.22449479429228,
+    "twist_body_sf": 3.530777048490149,
+    "twist_tip_sf": 3.0,
+    "twist_tipzone_strict_sf": 3.0
+  },
+  "lineage": [
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i012_g00204_19a0b6f0",
+      "best_mass_g": 103.57243589930627,
+      "best_raw_score_100": 63.35758365609886,
+      "niches": 131,
+      "pool": "epoch00/pool",
+      "qd_score": 4358.431738763091,
+      "rows_read": 1508,
+      "sha256": {
+        "archive.jsonl": "f03cd8cbe1fe757cf9443a708ed41ebdc866ea5934c791a4246d274ec095e3c3",
+        "genomes_g5.csv": "c5a356986b882bb018f531b1aa93cb36c1f99d8ee5b7d462e6708a5cc2d80b7c"
+      },
+      "sources": [
+        "epoch00/reeval"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i104_g00359_0d8e1e25",
+      "best_mass_g": 98.85264410079512,
+      "best_raw_score_100": 65.55774979082943,
+      "niches": 186,
+      "pool": "pools/p01",
+      "qd_score": 5822.252731723422,
+      "rows_read": 2008,
+      "sha256": {
+        "archive.jsonl": "77bb71c54e9f7c989d9a656b5264ccbd0cd0b880434e5bb4873d53cbdd7063fe",
+        "genomes_g5.csv": "e50c807d880999df5af129b778e4647e457956eea2ceb9b3fa1b106cf7536f1b"
+      },
+      "sources": [
+        "epoch00/pool",
+        "epoch01/xbabe4/island101",
+        "epoch01/xbabe4/island102",
+        "epoch01/xbabe4/island103",
+        "epoch01/xbabe4/island104",
+        "epoch01/xbabe4/island105",
+        "epoch01/xbabe4/island106",
+        "epoch01/xbabe4/island107",
+        "epoch01/xbabe4/island108",
+        "epoch01/xbabe4/island109",
+        "epoch01/xbabe4/island110",
+        "epoch01/xbabe4/island111",
+        "epoch01/xbabe4/island112"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv3i111_g00435_2b613362",
+      "best_mass_g": 97.87171038759993,
+      "best_raw_score_100": 66.12189092092568,
+      "niches": 198,
+      "pool": "pools/p02",
+      "qd_score": 6264.920358420534,
+      "rows_read": 2039,
+      "sha256": {
+        "archive.jsonl": "0ed7f17bfde7923c1984c7ed323536e84315895b0e6dad0f7c2e515142202ae4",
+        "genomes_g5.csv": "c2216a0e927ce8ed35a65a3a430e3bc8214e308b0f4cd829e8444e97365cef5f"
+      },
+      "sources": [
+        "pools/p01",
+        "epoch01/xbabe3/island101",
+        "epoch01/xbabe3/island102",
+        "epoch01/xbabe3/island103",
+        "epoch01/xbabe3/island104",
+        "epoch01/xbabe3/island105",
+        "epoch01/xbabe3/island106",
+        "epoch01/xbabe3/island107",
+        "epoch01/xbabe3/island108",
+        "epoch01/xbabe3/island109",
+        "epoch01/xbabe3/island110",
+        "epoch01/xbabe3/island111",
+        "epoch01/xbabe3/island112"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i210_g00281_bba4b900",
+      "best_mass_g": 97.82473045977453,
+      "best_raw_score_100": 66.84920645216631,
+      "niches": 205,
+      "pool": "pools/p03",
+      "qd_score": 7008.985125029087,
+      "rows_read": 2452,
+      "sha256": {
+        "archive.jsonl": "30ebaeebd10f9357ee1cbd37b3ad43c4ed4b62a3f06d679fe189469b0193fe91",
+        "genomes_g5.csv": "297c33ee1210d01f797fd91af47ae25cb42937209f0aaf5427bda3c46a50e22e"
+      },
+      "sources": [
+        "pools/p02",
+        "epoch02/xbabe4/island201",
+        "epoch02/xbabe4/island202",
+        "epoch02/xbabe4/island203",
+        "epoch02/xbabe4/island204",
+        "epoch02/xbabe4/island205",
+        "epoch02/xbabe4/island206",
+        "epoch02/xbabe4/island207",
+        "epoch02/xbabe4/island208",
+        "epoch02/xbabe4/island209",
+        "epoch02/xbabe4/island210",
+        "epoch02/xbabe4/island211",
+        "epoch02/xbabe4/island212"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i306_g00149_7f91c8b1",
+      "best_mass_g": 95.89827254014902,
+      "best_raw_score_100": 67.80924444881143,
+      "niches": 220,
+      "pool": "pools/p04",
+      "qd_score": 7807.462537676298,
+      "rows_read": 2687,
+      "sha256": {
+        "archive.jsonl": "7fdff7dcbd47d00dd7d231b27afae81ef5b6af2f85eb29edbf359e181b6875e6",
+        "genomes_g5.csv": "624a403fd3e6dc3b6ec1abd5b16e7db9a7e4fd34e4ad46814ab9d72c93adf068"
+      },
+      "sources": [
+        "pools/p03",
+        "epoch03/xbabe4/island301",
+        "epoch03/xbabe4/island302",
+        "epoch03/xbabe4/island303",
+        "epoch03/xbabe4/island304",
+        "epoch03/xbabe4/island305",
+        "epoch03/xbabe4/island306",
+        "epoch03/xbabe4/island307",
+        "epoch03/xbabe4/island308",
+        "epoch03/xbabe4/island309",
+        "epoch03/xbabe4/island310",
+        "epoch03/xbabe4/island311",
+        "epoch03/xbabe4/island312"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv3i205_g00435_68bdc63f",
+      "best_mass_g": 95.30576416465894,
+      "best_raw_score_100": 68.72363029865795,
+      "niches": 226,
+      "pool": "pools/p05",
+      "qd_score": 7912.471681405242,
+      "rows_read": 2614,
+      "sha256": {
+        "archive.jsonl": "07369ea1e89e60dad708a8e642f417a592baa5ff01e1aa7632c889c95c31e3cd",
+        "genomes_g5.csv": "1f76480e241dfc7215a678c3510ab648f6c12647c08a13599ba8e5228b6fb2f5"
+      },
+      "sources": [
+        "pools/p04",
+        "epoch02/xbabe3/island201",
+        "epoch02/xbabe3/island202",
+        "epoch02/xbabe3/island203",
+        "epoch02/xbabe3/island204",
+        "epoch02/xbabe3/island205",
+        "epoch02/xbabe3/island206",
+        "epoch02/xbabe3/island207",
+        "epoch02/xbabe3/island208",
+        "epoch02/xbabe3/island209",
+        "epoch02/xbabe3/island210",
+        "epoch02/xbabe3/island211",
+        "epoch02/xbabe3/island212"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i402_g00359_bc75f978",
+      "best_mass_g": 94.67359717724666,
+      "best_raw_score_100": 68.79452830870723,
+      "niches": 236,
+      "pool": "pools/p06",
+      "qd_score": 8663.285576700755,
+      "rows_read": 2878,
+      "sha256": {
+        "archive.jsonl": "8e97b4735569d0236cc3747488600e5cf0bc86104794bf01abbb4c8f60ee0826",
+        "genomes_g5.csv": "c3c2567f46d4723b761403bf873dbfb494f3e1b7f86647f112c2b87a801e8017"
+      },
+      "sources": [
+        "pools/p05",
+        "epoch04/xbabe4/island401",
+        "epoch04/xbabe4/island402",
+        "epoch04/xbabe4/island403",
+        "epoch04/xbabe4/island404",
+        "epoch04/xbabe4/island405",
+        "epoch04/xbabe4/island406",
+        "epoch04/xbabe4/island407",
+        "epoch04/xbabe4/island408",
+        "epoch04/xbabe4/island409",
+        "epoch04/xbabe4/island410",
+        "epoch04/xbabe4/island411",
+        "epoch04/xbabe4/island412"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i503_g00279_06823922",
+      "best_mass_g": 94.39489172992278,
+      "best_raw_score_100": 69.84527020073546,
+      "niches": 245,
+      "pool": "pools/p07",
+      "qd_score": 9117.326751992,
+      "rows_read": 3080,
+      "sha256": {
+        "archive.jsonl": "39d75ab78418300e0e9de16fd1680894a21df78ccf771caf8c4a7f75a53d3899",
+        "genomes_g5.csv": "94f4c85668340ba705e20bb13d47e5e2d10b332ff64b8e950ff1bf7518cafc90"
+      },
+      "sources": [
+        "pools/p06",
+        "epoch05/xbabe4/island501",
+        "epoch05/xbabe4/island502",
+        "epoch05/xbabe4/island503",
+        "epoch05/xbabe4/island504",
+        "epoch05/xbabe4/island505",
+        "epoch05/xbabe4/island506",
+        "epoch05/xbabe4/island507",
+        "epoch05/xbabe4/island508",
+        "epoch05/xbabe4/island509",
+        "epoch05/xbabe4/island510",
+        "epoch05/xbabe4/island511",
+        "epoch05/xbabe4/island512"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv3i303_g00279_875df945",
+      "best_mass_g": 94.44512708967989,
+      "best_raw_score_100": 69.96362647713606,
+      "niches": 248,
+      "pool": "pools/p08",
+      "qd_score": 9318.30364609224,
+      "rows_read": 2973,
+      "sha256": {
+        "archive.jsonl": "49011750092b8ceb80e3aefefff93e42c197d4fdcf9256eb4904aa1cf373c8ce",
+        "genomes_g5.csv": "709ddacb35fb39ef8932dc670ec29c26f19dd18fc297738ce23057d3836a27a3"
+      },
+      "sources": [
+        "pools/p07",
+        "epoch03/xbabe3/island301",
+        "epoch03/xbabe3/island302",
+        "epoch03/xbabe3/island303",
+        "epoch03/xbabe3/island304",
+        "epoch03/xbabe3/island305",
+        "epoch03/xbabe3/island306",
+        "epoch03/xbabe3/island307",
+        "epoch03/xbabe3/island308",
+        "epoch03/xbabe3/island309",
+        "epoch03/xbabe3/island310",
+        "epoch03/xbabe3/island311",
+        "epoch03/xbabe3/island312"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i603_g00435_39e8a9d1",
+      "best_mass_g": 97.03160197658197,
+      "best_raw_score_100": 71.5811587621502,
+      "niches": 255,
+      "pool": "pools/p09",
+      "qd_score": 9836.61384173848,
+      "rows_read": 3200,
+      "sha256": {
+        "archive.jsonl": "76cc2a9b39a48e0b7ef8701556b3801049e18f76c0fc55f44c73d66868763eca",
+        "genomes_g5.csv": "495504d7019444d524adc561c521232ea808217d0280b31105523b7cfb16c66d"
+      },
+      "sources": [
+        "pools/p08",
+        "epoch06/xbabe4/island601",
+        "epoch06/xbabe4/island602",
+        "epoch06/xbabe4/island603",
+        "epoch06/xbabe4/island604",
+        "epoch06/xbabe4/island605",
+        "epoch06/xbabe4/island606",
+        "epoch06/xbabe4/island607",
+        "epoch06/xbabe4/island608",
+        "epoch06/xbabe4/island609",
+        "epoch06/xbabe4/island610",
+        "epoch06/xbabe4/island611",
+        "epoch06/xbabe4/island612"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i702_g00435_45ba2fcc",
+      "best_mass_g": 96.22524542851939,
+      "best_raw_score_100": 71.93676779681492,
+      "niches": 256,
+      "pool": "pools/p10",
+      "qd_score": 10254.096026331084,
+      "rows_read": 3316,
+      "sha256": {
+        "archive.jsonl": "866b1604f282ba3abb20e27b052b93e3edbc3de9cfe3b91b978cdaa7e6e9b05b",
+        "genomes_g5.csv": "1ba783cb5f0222dc3eb5478c5cea186ff3e4296ca3f95d6d46097831a7252bec"
+      },
+      "sources": [
+        "pools/p09",
+        "epoch07/xbabe4/island701",
+        "epoch07/xbabe4/island702",
+        "epoch07/xbabe4/island703",
+        "epoch07/xbabe4/island704",
+        "epoch07/xbabe4/island705",
+        "epoch07/xbabe4/island706",
+        "epoch07/xbabe4/island707",
+        "epoch07/xbabe4/island708",
+        "epoch07/xbabe4/island709",
+        "epoch07/xbabe4/island710",
+        "epoch07/xbabe4/island711",
+        "epoch07/xbabe4/island712"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i702_g00435_45ba2fcc",
+      "best_mass_g": 96.22524542851939,
+      "best_raw_score_100": 71.93676779681492,
+      "niches": 257,
+      "pool": "pools/p11",
+      "qd_score": 10386.7828666442,
+      "rows_read": 3240,
+      "sha256": {
+        "archive.jsonl": "b3d1df647333dedb5a05c6c1e09ef61c5d2d30902d49dd18182f1dae11e2e8af",
+        "genomes_g5.csv": "76c86b0ba911b1f9ba6114786b98c2cbab89c584436eaabbac86a5b757a2ee84"
+      },
+      "sources": [
+        "pools/p10",
+        "epoch04/xbabe3/island401",
+        "epoch04/xbabe3/island402",
+        "epoch04/xbabe3/island403",
+        "epoch04/xbabe3/island404",
+        "epoch04/xbabe3/island405",
+        "epoch04/xbabe3/island406",
+        "epoch04/xbabe3/island407",
+        "epoch04/xbabe3/island408",
+        "epoch04/xbabe3/island409",
+        "epoch04/xbabe3/island410",
+        "epoch04/xbabe3/island411",
+        "epoch04/xbabe3/island412"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i801_g00435_351770fe",
+      "best_mass_g": 96.58297987902833,
+      "best_raw_score_100": 72.22560444032027,
+      "niches": 260,
+      "pool": "pools/p12",
+      "qd_score": 10693.660597916214,
+      "rows_read": 3332,
+      "sha256": {
+        "archive.jsonl": "6330518b9bd82ffff913be300b155b9da8dd8ccc4fc3b51758fc1f931a9a2e09",
+        "genomes_g5.csv": "c52236f40259885eb6f7d42b7322c583f1e832d34310b93b32a94da28758dccc"
+      },
+      "sources": [
+        "pools/p11",
+        "epoch08/xbabe4/island801",
+        "epoch08/xbabe4/island802",
+        "epoch08/xbabe4/island803",
+        "epoch08/xbabe4/island804",
+        "epoch08/xbabe4/island805",
+        "epoch08/xbabe4/island806",
+        "epoch08/xbabe4/island807",
+        "epoch08/xbabe4/island808",
+        "epoch08/xbabe4/island809",
+        "epoch08/xbabe4/island810",
+        "epoch08/xbabe4/island811",
+        "epoch08/xbabe4/island812"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i1009_g00435_c0cfa9b7",
+      "best_mass_g": 90.70444367176684,
+      "best_raw_score_100": 72.8129254797523,
+      "niches": 267,
+      "pool": "pools/p13",
+      "qd_score": 10961.121177930288,
+      "rows_read": 3387,
+      "sha256": {
+        "archive.jsonl": "822362eb8e71f6c3d31a9ab0fd8f9a6ece68feda7638aa01202a916042b2c5ab",
+        "genomes_g5.csv": "b5483fc1c11d7e6e62ac0cda0d90c6f8ff33ab4668bf326587b049cc155997a8"
+      },
+      "sources": [
+        "pools/p12",
+        "epoch10/xbabe4/island1001",
+        "epoch10/xbabe4/island1002",
+        "epoch10/xbabe4/island1003",
+        "epoch10/xbabe4/island1004",
+        "epoch10/xbabe4/island1005",
+        "epoch10/xbabe4/island1006",
+        "epoch10/xbabe4/island1007",
+        "epoch10/xbabe4/island1008",
+        "epoch10/xbabe4/island1009",
+        "epoch10/xbabe4/island1010",
+        "epoch10/xbabe4/island1011",
+        "epoch10/xbabe4/island1012"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i1009_g00435_c0cfa9b7",
+      "best_mass_g": 90.70444367176684,
+      "best_raw_score_100": 72.8129254797523,
+      "niches": 270,
+      "pool": "pools/p14",
+      "qd_score": 11054.235342846165,
+      "rows_read": 3356,
+      "sha256": {
+        "archive.jsonl": "f209e77608c24c58daea29cb280d6fab0fba335deb48f893286d8ba5903c8049",
+        "genomes_g5.csv": "ee4ca2bfdbb758fd8e11a56f547350c7ad55a20feaf999014146b0508c3d7cc5"
+      },
+      "sources": [
+        "pools/p13",
+        "epoch05/xbabe3/island501",
+        "epoch05/xbabe3/island502",
+        "epoch05/xbabe3/island503",
+        "epoch05/xbabe3/island504",
+        "epoch05/xbabe3/island505",
+        "epoch05/xbabe3/island506",
+        "epoch05/xbabe3/island507",
+        "epoch05/xbabe3/island508",
+        "epoch05/xbabe3/island509",
+        "epoch05/xbabe3/island510",
+        "epoch05/xbabe3/island511",
+        "epoch05/xbabe3/island512"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i1112_g00435_2be3954a",
+      "best_mass_g": 89.08881836316235,
+      "best_raw_score_100": 73.82619559047619,
+      "niches": 273,
+      "pool": "pools/p15",
+      "qd_score": 11355.38556795781,
+      "rows_read": 3479,
+      "sha256": {
+        "archive.jsonl": "712260fe5d4c0cffcc43842ddb891b6be4336bdf9668a195b3bbae6d41d0f8d4",
+        "genomes_g5.csv": "431e1f5d8e3d5afce4fc52b2d3c5b248284b73ac7eafd33ce79be27faa513d8c"
+      },
+      "sources": [
+        "pools/p14",
+        "epoch11/xbabe4/island1101",
+        "epoch11/xbabe4/island1102",
+        "epoch11/xbabe4/island1103",
+        "epoch11/xbabe4/island1104",
+        "epoch11/xbabe4/island1105",
+        "epoch11/xbabe4/island1106",
+        "epoch11/xbabe4/island1107",
+        "epoch11/xbabe4/island1108",
+        "epoch11/xbabe4/island1109",
+        "epoch11/xbabe4/island1110",
+        "epoch11/xbabe4/island1111",
+        "epoch11/xbabe4/island1112"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i1211_g00279_22f3d685",
+      "best_mass_g": 90.25496509557573,
+      "best_raw_score_100": 74.57190502809318,
+      "niches": 275,
+      "pool": "pools/p16",
+      "qd_score": 11606.386418243601,
+      "rows_read": 4097,
+      "sha256": {
+        "archive.jsonl": "3a1ffc776b1aa35b9174f22f07985071646f2a9251d6cc5a696fd78305eb21f6",
+        "genomes_g5.csv": "d10b609fce154ac913ea463b45174e1e3d885aa60cb197f872439d249d41e3f0"
+      },
+      "sources": [
+        "pools/p15",
+        "epoch12/xbabe4/island1201",
+        "epoch12/xbabe4/island1202",
+        "epoch12/xbabe4/island1203",
+        "epoch12/xbabe4/island1204",
+        "epoch12/xbabe4/island1205",
+        "epoch12/xbabe4/island1206",
+        "epoch12/xbabe4/island1207",
+        "epoch12/xbabe4/island1208",
+        "epoch12/xbabe4/island1209",
+        "epoch12/xbabe4/island1210",
+        "epoch12/xbabe4/island1211",
+        "epoch12/xbabe4/island1212",
+        "epoch12/xbabe4/island1213",
+        "epoch12/xbabe4/island1214"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i1211_g00279_22f3d685",
+      "best_mass_g": 90.25496509557573,
+      "best_raw_score_100": 74.57190502809318,
+      "niches": 277,
+      "pool": "pools/p17",
+      "qd_score": 11641.708803498757,
+      "rows_read": 3521,
+      "sha256": {
+        "archive.jsonl": "4cf475d727291dfa90e88d3f3e0090ba0415bad5acb41a8f106ba72759c85217",
+        "genomes_g5.csv": "1cdd90e5dbd8b1ff6029e59fc8f2727e57b1ff9d9dfd41616091cabe6c30ab34"
+      },
+      "sources": [
+        "pools/p16",
+        "epoch06/xbabe3/island601",
+        "epoch06/xbabe3/island602",
+        "epoch06/xbabe3/island603",
+        "epoch06/xbabe3/island604",
+        "epoch06/xbabe3/island605",
+        "epoch06/xbabe3/island606",
+        "epoch06/xbabe3/island607",
+        "epoch06/xbabe3/island608",
+        "epoch06/xbabe3/island609",
+        "epoch06/xbabe3/island610",
+        "epoch06/xbabe3/island611",
+        "epoch06/xbabe3/island612"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i1314_g00335_09b31863",
+      "best_mass_g": 89.83740235817267,
+      "best_raw_score_100": 75.1463643817499,
+      "niches": 277,
+      "pool": "pools/p18",
+      "qd_score": 11912.797988595195,
+      "rows_read": 4129,
+      "sha256": {
+        "archive.jsonl": "7bde6cc7dfe698744ae5030743e0c903c858be7b62bdbe8fb02f02b01def918a",
+        "genomes_g5.csv": "7e57cd5e8f58ceff526e1b1602014a6067d7f870b1f56ce05c3398bd9ebe9363"
+      },
+      "sources": [
+        "pools/p17",
+        "epoch13/xbabe4/island1301",
+        "epoch13/xbabe4/island1302",
+        "epoch13/xbabe4/island1303",
+        "epoch13/xbabe4/island1304",
+        "epoch13/xbabe4/island1305",
+        "epoch13/xbabe4/island1306",
+        "epoch13/xbabe4/island1307",
+        "epoch13/xbabe4/island1308",
+        "epoch13/xbabe4/island1309",
+        "epoch13/xbabe4/island1310",
+        "epoch13/xbabe4/island1311",
+        "epoch13/xbabe4/island1312",
+        "epoch13/xbabe4/island1313",
+        "epoch13/xbabe4/island1314"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i1406_g00009_528e4365",
+      "best_mass_g": 88.62788160258069,
+      "best_raw_score_100": 75.54032426019704,
+      "niches": 280,
+      "pool": "pools/p19",
+      "qd_score": 12045.655144035503,
+      "rows_read": 4158,
+      "sha256": {
+        "archive.jsonl": "435ac9c01218c59d37d916d0838b32c1aad2157bb1638639d72f97d13ef84c96",
+        "genomes_g5.csv": "9a9f9f6f05dabd5e9391888ab7e32752977f2dcd531ecdfed7ba57d8819d4a9c"
+      },
+      "sources": [
+        "pools/p18",
+        "epoch14/xbabe4/island1401",
+        "epoch14/xbabe4/island1402",
+        "epoch14/xbabe4/island1403",
+        "epoch14/xbabe4/island1404",
+        "epoch14/xbabe4/island1405",
+        "epoch14/xbabe4/island1406",
+        "epoch14/xbabe4/island1407",
+        "epoch14/xbabe4/island1408",
+        "epoch14/xbabe4/island1409",
+        "epoch14/xbabe4/island1410",
+        "epoch14/xbabe4/island1411",
+        "epoch14/xbabe4/island1412",
+        "epoch14/xbabe4/island1413",
+        "epoch14/xbabe4/island1414"
+      ]
+    },
+    {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i1406_g00009_528e4365",
+      "best_mass_g": 88.62788160258069,
+      "best_raw_score_100": 75.54032426019704,
+      "niches": 282,
+      "pool": "pools/p20",
+      "qd_score": 12081.50756269147,
+      "rows_read": 3883,
+      "sha256": {
+        "archive.jsonl": "4d5168c5c545e5aad32e80ebf47dee46c32e809dab48ddc7644ed6d188a6ceb7",
+        "genomes_g5.csv": "8a60102b13dc568826621d74375b365abc37b6d4568754457e3cd327884ab7eb"
+      },
+      "sources": [
+        "pools/p19",
+        "epoch07/xbabe3/island701",
+        "epoch07/xbabe3/island702",
+        "epoch07/xbabe3/island703",
+        "epoch07/xbabe3/island704",
+        "epoch07/xbabe3/island705",
+        "epoch07/xbabe3/island706",
+        "epoch07/xbabe3/island707",
+        "epoch07/xbabe3/island708",
+        "epoch07/xbabe3/island709",
+        "epoch07/xbabe3/island710",
+        "epoch07/xbabe3/island711",
+        "epoch07/xbabe3/island712",
+        "epoch07/xbabe3/island713"
+      ]
+    }
+  ],
+  "loads": {
+    "blade_model": "plate",
+    "buckling_lambda": 11.936271746214999,
+    "fatigue_sf": 1.1712566126336739,
+    "grip_lateral_sf": 12.447516981274651,
+    "grip_pull_sf": 15.04939282296476,
+    "grip_squeeze_sf": 2.319579885908063,
+    "grip_twist_sf": 20.42487892536435,
+    "guard_push_sf": 26.391175099880307,
+    "hand_fatigue_sf": 3.1799873790894218,
+    "lateral_arm_mm": 63.694118162522614,
+    "lateral_force_n": 188.4004417704735,
+    "lateral_limit_sf": 2.0131251403749895,
+    "lateral_peak_at": [
+      20.75,
+      -0.09373574772644166
+    ],
+    "lateral_ultimate_sf": 1.471956701595974,
+    "pull_sf": 1.8275568488008327,
+    "ring_any_direction_sf": 3.491623561463511,
+    "ring_back_sf": 68.46339283166316,
+    "ring_bearing_sf": 65.38821232883691,
+    "seq_lateral": 6.183180931790472,
+    "seq_pull": 1.9105416960104797,
+    "seq_twist": 10.751252565242606,
+    "teeth_sf": 2.3794834862342276,
+    "tip_axial_sf": 1.3131887353507083,
+    "tip_lateral_sf": 1.8596730245231607,
+    "tip_model": "solid",
+    "tip_twist_sf": 2.499167776298269,
+    "twist_limit_sf": 1.8997673807231834,
+    "twist_peak_at": [
+      51.5,
+      6.38354254143558
+    ]
+  },
+  "margins": {
+    "buckling": 7.957514497476666,
+    "fatigue": 1.1712566126336739,
+    "grip_squeeze": 1.9329832382567191,
+    "guard_push": 21.992645916566925,
+    "lateral_limit": 1.6776042836458247,
+    "lateral_ultimate": 1.1322743858430568,
+    "pull": 1.5229640406673606,
+    "ring_any_direction": 2.9096863012195926,
+    "ring_back": 34.23169641583158,
+    "ring_bearing": 32.69410616441846,
+    "sequence": 1.5921180800087331,
+    "teeth": 1.9829029051951896,
+    "tip_axial": 1.0943239461255903,
+    "tip_lateral": 1.5497275204359673,
+    "tip_twist": 2.082639813581891,
+    "twist_limit": 1.5831394839359862
+  },
+  "margins_min_over_plate_meshes": {
+    "buckling": 7.957514497476666,
+    "fatigue": 1.1712566126336739,
+    "grip_squeeze": 1.9329832382567191,
+    "guard_push": 21.992645916566925,
+    "lateral_limit": 1.6364329465009517,
+    "lateral_ultimate": 1.104486396187512,
+    "pull": 1.3989751643119768,
+    "ring_any_direction": 2.9096863012195926,
+    "ring_back": 34.23169641583158,
+    "ring_bearing": 32.69410616441846,
+    "sequence": 1.5921180800087331,
+    "teeth": 1.9829029051951896,
+    "tip_axial": 1.0943239461255903,
+    "tip_lateral": 1.5497275204359673,
+    "tip_twist": 2.082639813581891,
+    "twist_limit": 1.5831394839359862
+  },
+  "mass": {
+    "density_g_mm3": 0.00443,
+    "envelope_census": {
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "triangles": 2452544
+    },
+    "envelope_mesh_volume_mm3": 47662.293126607736,
+    "of_record": "partial-volume integral of the decoded AM field at h 0.2 mm",
+    "of_record_g": 88.40684808266555,
+    "print_mesh_census": {
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "triangles": 7576668
+    },
+    "print_mesh_g": 90.28864370022218,
+    "print_mesh_volume_mm3": 20381.183679508395,
+    "search_h04_g": 88.61082571445667
+  },
+  "meets_every_load_case": true,
+  "plate_mesh_check": {
+    "max_area_mm2": [
+      0.6,
+      0.3,
+      0.15
+    ],
+    "production_max_area_mm2": 0.3,
+    "rows": [
+      {
+        "design_id": "kv4i1404_g00581_29ea3c73",
+        "meets_every_load_case_on_every_mesh": true,
+        "meshes": [
+          {
+            "fatigue_sf": 1.1907888178032537,
+            "lateral_limit_sf": 1.9637195358011421,
+            "lateral_ultimate_sf": 1.4358323150437655,
+            "margins": {
+              "buckling": 7.957514497476666,
+              "fatigue": 1.1907888178032537,
+              "grip_squeeze": 1.9329832382567191,
+              "guard_push": 21.992645916566925,
+              "lateral_limit": 1.6364329465009517,
+              "lateral_ultimate": 1.104486396187512,
+              "pull": 1.5103966006421587,
+              "ring_any_direction": 2.9096863012195926,
+              "ring_back": 34.23169641583158,
+              "ring_bearing": 32.69410616441846,
+              "sequence": 1.6053654936185378,
+              "teeth": 1.9829029051951896,
+              "tip_axial": 1.0943239461255903,
+              "tip_lateral": 1.5497275204359673,
+              "tip_twist": 2.082639813581891,
+              "twist_limit": 1.609540363878742
+            },
+            "max_area_mm2": 0.6,
+            "pull_sf": 1.8124759207705905,
+            "twist_limit_sf": 1.9314484366544904
+          },
+          {
+            "fatigue_sf": 1.1712566126336739,
+            "lateral_limit_sf": 2.0131251403749895,
+            "lateral_ultimate_sf": 1.471956701595974,
+            "margins": {
+              "buckling": 7.957514497476666,
+              "fatigue": 1.1712566126336739,
+              "grip_squeeze": 1.9329832382567191,
+              "guard_push": 21.992645916566925,
+              "lateral_limit": 1.6776042836458247,
+              "lateral_ultimate": 1.1322743858430568,
+              "pull": 1.5229640406673606,
+              "ring_any_direction": 2.9096863012195926,
+              "ring_back": 34.23169641583158,
+              "ring_bearing": 32.69410616441846,
+              "sequence": 1.5921180800087331,
+              "teeth": 1.9829029051951896,
+              "tip_axial": 1.0943239461255903,
+              "tip_lateral": 1.5497275204359673,
+              "tip_twist": 2.082639813581891,
+              "twist_limit": 1.5831394839359862
+            },
+            "max_area_mm2": 0.3,
+            "pull_sf": 1.8275568488008327,
+            "twist_limit_sf": 1.8997673807231834
+          },
+          {
+            "fatigue_sf": 1.2067952913497104,
+            "lateral_limit_sf": 1.9992355963286321,
+            "lateral_ultimate_sf": 1.461800945736038,
+            "margins": {
+              "buckling": 7.957514497476666,
+              "fatigue": 1.2067952913497104,
+              "grip_squeeze": 1.9329832382567191,
+              "guard_push": 21.992645916566925,
+              "lateral_limit": 1.6660296636071934,
+              "lateral_ultimate": 1.1244622659507983,
+              "pull": 1.3989751643119768,
+              "ring_any_direction": 2.9096863012195926,
+              "ring_back": 34.23169641583158,
+              "ring_bearing": 32.69410616441846,
+              "sequence": 1.7332248964849633,
+              "teeth": 1.9829029051951896,
+              "tip_axial": 1.0943239461255903,
+              "tip_lateral": 1.5497275204359673,
+              "tip_twist": 2.082639813581891,
+              "twist_limit": 1.6311756571156293
+            },
+            "max_area_mm2": 0.15,
+            "pull_sf": 1.678770197174372,
+            "twist_limit_sf": 1.957410788538755
+          }
+        ],
+        "rank": 1,
+        "worst_margin_over_meshes": 1.0943239461255903
+      }
+    ],
+    "rule": "in rank order, the first design passing the grid check whose every load case meets its requirement on every plate mesh; a case's margin of record is its minimum over the meshes"
+  },
+  "point": {
+    "angle_1mm_deg": 65.51090395999447,
+    "angle_3mm_deg": 60.38479874880261,
+    "width_2mm": 2.047910320590479
+  },
+  "provenance": {
+    "binaries": {
+      "build": "RUSTFLAGS=\"-C target-feature=+crt-static\" cargo build --release --locked --target x86_64-unknown-linux-gnu (Rust 1.85.1)",
+      "g5-continue": {
+        "file": "g5-continue-571afbc9",
+        "role": "every island, merge and re-evaluation of the search",
+        "sha256": "571afbc9e1114abc549e1da824a1ebf50c5705fa7ed9b80ee884f05659ae6cf1",
+        "source_commit": "8ccd2f80"
+      },
+      "g5-edgeprofile": {
+        "sha256": "07409b7fa57a0a8d566bdb4cc888e446328fb0e9db417c47185fed4a968cb389",
+        "source_commit": "7ece9b98"
+      },
+      "g5-export-stl": {
+        "sha256": "5371392cc77cf8b1b26376a4584ff503606c407ec2cbc86843cf2940e1811ccc",
+        "source_commit": "7ece9b98"
+      },
+      "g5-fem-fields": {
+        "sha256": "dd573c3262c86fceb57054b228af0dbd83caf96e2237d598bcdb9757393d8315",
+        "source_commit": "bf0ae5fe"
+      },
+      "g5-pilot": {
+        "sha256": "fb75be867c59d88b52efdae96f9e1160b2233ff174063aa16326c28d26b3b251",
+        "source_commit": "7ece9b98"
+      },
+      "g5-release": {
+        "sha256": "8be11af56ba3a9711dd4bb51e50099cd16d85b4de5351eac6b1014c8b295900e",
+        "source_commit": "7ece9b98"
+      }
+    },
+    "decoder_commit_label": "bf3e37fa",
+    "decoder_sha256": "c63629d4b31058f54470c3ed0fd5f2a7f4f492dfdb11ebb04c4a4588e50ffa9b",
+    "genome_csv": "evidence/g5/v6.0.0/winner_genome.csv",
+    "genome_sha256": "29ea3c73be5380d8d0a7d9ff29c0ff8dadf2454fc5ad4aae2dbc6543a2924f44",
+    "metric": "W_ERGOLIGHT_v2",
+    "metric_draft": "rs-v5",
+    "platform_of_record": "linux/amd64: static x86_64 binaries, native on Linux and in a Rosetta container on macOS; Tier 2 at h 0.2 mm",
+    "requirements": "requirements/RS-karambit-v5.toml",
+    "vv": "evidence/g5/v5.0.0/vv"
+  },
+  "rank_of_record": 1,
+  "ranking": {
+    "h_mm": 0.2,
+    "how": "every elite of the final pool re-evaluated at Tier 1, h 0.4; the top 64 at Tier 2, h 0.2",
+    "rows": [
+      {
+        "E": 0.9216093616815502,
+        "design_id": "kv4i1404_g00581_29ea3c73",
+        "grid_pass": true,
+        "mass_g": 88.40684808266555,
+        "rank": 1,
+        "score_100": 74.402131,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9268809806784574,
+        "design_id": "kv4i1406_g00009_528e4365",
+        "grid_pass": true,
+        "mass_g": 88.29250939527523,
+        "rank": 2,
+        "score_100": 74.316236,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9279295507787855,
+        "design_id": "kv4i1408_g00735_e6796cbf",
+        "grid_pass": true,
+        "mass_g": 88.86025995641087,
+        "rank": 3,
+        "score_100": 74.178737,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9276260892346486,
+        "design_id": "kv4i1405_g00335_c923c290",
+        "grid_pass": true,
+        "mass_g": 88.40785779820217,
+        "rank": 4,
+        "score_100": 74.060217,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9309717057566741,
+        "design_id": "kv4i1414_g00435_0e2e651b",
+        "grid_pass": true,
+        "mass_g": 89.50477427093296,
+        "rank": 5,
+        "score_100": 74.038464,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9255929321840536,
+        "design_id": "kv4i1410_g00279_290be921",
+        "grid_pass": true,
+        "mass_g": 89.00417134913839,
+        "rank": 6,
+        "score_100": 74.0358,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9257105624451478,
+        "design_id": "kv4i1401_g00149_412d5153",
+        "grid_pass": true,
+        "mass_g": 88.59704094865755,
+        "rank": 7,
+        "score_100": 74.026896,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9313503763851122,
+        "design_id": "kv4i1409_g00336_4a44463a",
+        "grid_pass": true,
+        "mass_g": 88.98303068565238,
+        "rank": 8,
+        "score_100": 74.019092,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9281103436083289,
+        "design_id": "kv4i1401_g00281_b7d5a90f",
+        "grid_pass": true,
+        "mass_g": 89.13514655666336,
+        "rank": 9,
+        "score_100": 73.989133,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9295138354768477,
+        "design_id": "kv4i1409_g00504_749c79d8",
+        "grid_pass": true,
+        "mass_g": 88.40168659819659,
+        "rank": 10,
+        "score_100": 73.804,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.923764208379692,
+        "design_id": "kv4i1414_g00999_42619e63",
+        "grid_pass": true,
+        "mass_g": 90.40102539393803,
+        "rank": 11,
+        "score_100": 73.621735,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9291951691624326,
+        "design_id": "kv4i1410_g00280_5831a5e3",
+        "grid_pass": true,
+        "mass_g": 89.98910173664491,
+        "rank": 12,
+        "score_100": 73.620225,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9243992050588155,
+        "design_id": "kv4i1405_g00205_a7f055b6",
+        "grid_pass": true,
+        "mass_g": 90.32487809035723,
+        "rank": 13,
+        "score_100": 72.899958,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9314858961109942,
+        "design_id": "kv4i1411_g00490_71efc13e",
+        "grid_pass": true,
+        "mass_g": 90.04640126302964,
+        "rank": 14,
+        "score_100": 72.827997,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9038384281602942,
+        "design_id": "kv4i1310_g00526_5127c223",
+        "grid_pass": true,
+        "mass_g": 90.53967483458999,
+        "rank": 15,
+        "score_100": 71.779136,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9114547842190365,
+        "design_id": "kv4i1414_g00960_db1fd3ec",
+        "grid_pass": true,
+        "mass_g": 88.55282807969478,
+        "rank": 16,
+        "score_100": 71.531716,
+        "worst_margin_W": 0.97746569295617
+      },
+      {
+        "E": 0.9099741255135513,
+        "design_id": "kv4i1411_g00240_f50ed5bd",
+        "grid_pass": null,
+        "mass_g": 90.7978901358398,
+        "rank": 17,
+        "score_100": 71.471729,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8902003117166255,
+        "design_id": "kv3i713_g00544_632ca165",
+        "grid_pass": null,
+        "mass_g": 87.29240096058898,
+        "rank": 18,
+        "score_100": 70.856776,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9223957423594542,
+        "design_id": "kv4i1408_g00359_377476c4",
+        "grid_pass": null,
+        "mass_g": 88.81940843170936,
+        "rank": 19,
+        "score_100": 70.713551,
+        "worst_margin_W": 0.9602582922234332
+      },
+      {
+        "E": 0.9026035486191407,
+        "design_id": "kv4i1206_g00720_0b9b5d9e",
+        "grid_pass": null,
+        "mass_g": 93.28857624481708,
+        "rank": 20,
+        "score_100": 70.396939,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8709767940739781,
+        "design_id": "kv3i607_g00790_6d38b3e2",
+        "grid_pass": null,
+        "mass_g": 90.288014582539,
+        "rank": 21,
+        "score_100": 69.187215,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9284933300314286,
+        "design_id": "kv4i1405_g00699_110cfbe6",
+        "grid_pass": null,
+        "mass_g": 89.91242750224272,
+        "rank": 22,
+        "score_100": 68.844445,
+        "worst_margin_W": 0.932802802389019
+      },
+      {
+        "E": 0.8373574313603448,
+        "design_id": "kv4i1404_g00219_dfad5f2c",
+        "grid_pass": null,
+        "mass_g": 88.15255585124876,
+        "rank": 23,
+        "score_100": 67.106645,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8372639241609671,
+        "design_id": "kv4i1201_g00225_6a252a42",
+        "grid_pass": null,
+        "mass_g": 94.02152894058861,
+        "rank": 24,
+        "score_100": 66.054404,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.9195434804582021,
+        "design_id": "kv3i701_g00150_b734a77e",
+        "grid_pass": null,
+        "mass_g": 90.10428560118174,
+        "rank": 25,
+        "score_100": 65.090537,
+        "worst_margin_W": 0.9023746296020497
+      },
+      {
+        "E": 0.8455127935485106,
+        "design_id": "kv4i1104_g00525_4d133055",
+        "grid_pass": null,
+        "mass_g": 97.71125000404705,
+        "rank": 26,
+        "score_100": 64.457728,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8501957771791468,
+        "design_id": "kv4i710_g00680_8343c155",
+        "grid_pass": null,
+        "mass_g": 95.75004267546448,
+        "rank": 27,
+        "score_100": 64.40201,
+        "worst_margin_W": 0.9793321238540186
+      },
+      {
+        "E": 0.8159150301499585,
+        "design_id": "kv3i409_g00449_d49cd800",
+        "grid_pass": null,
+        "mass_g": 91.83065104509464,
+        "rank": 28,
+        "score_100": 63.813236,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8231518793475364,
+        "design_id": "kv4i802_g00815_2d7fb501",
+        "grid_pass": null,
+        "mass_g": 94.85037737856199,
+        "rank": 29,
+        "score_100": 63.494633,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8106044384238171,
+        "design_id": "kv3i612_g00981_0053fc13",
+        "grid_pass": null,
+        "mass_g": 93.05082329300154,
+        "rank": 30,
+        "score_100": 63.035048,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8151417184886631,
+        "design_id": "kv3i711_g01005_41a97493",
+        "grid_pass": null,
+        "mass_g": 94.07838528720417,
+        "rank": 31,
+        "score_100": 62.954374,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8181067229073106,
+        "design_id": "kv3i412_g00984_7a3f6997",
+        "grid_pass": null,
+        "mass_g": 101.0164790199211,
+        "rank": 32,
+        "score_100": 62.655599,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.82366207639952,
+        "design_id": "kv4i1103_g00605_5db78692",
+        "grid_pass": null,
+        "mass_g": 97.076339954529,
+        "rank": 33,
+        "score_100": 62.551284,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8127426902493011,
+        "design_id": "kv4i802_g00905_51383677",
+        "grid_pass": null,
+        "mass_g": 95.4157537433843,
+        "rank": 34,
+        "score_100": 61.849713,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8072067606255193,
+        "design_id": "kv3i603_g00489_b7bade84",
+        "grid_pass": null,
+        "mass_g": 94.67402056608776,
+        "rank": 35,
+        "score_100": 61.776695,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8519799702052144,
+        "design_id": "kv4i1309_g00036_b032cf58",
+        "grid_pass": null,
+        "mass_g": 98.29061790327849,
+        "rank": 36,
+        "score_100": 61.572639,
+        "worst_margin_W": 0.9428336429969605
+      },
+      {
+        "E": 0.8205231562197379,
+        "design_id": "kv4i1101_g00035_5974aa97",
+        "grid_pass": null,
+        "mass_g": 101.47746018640188,
+        "rank": 37,
+        "score_100": 61.230962,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8239791060049059,
+        "design_id": "kv4i1407_g00466_201505d0",
+        "grid_pass": null,
+        "mass_g": 99.32491017744029,
+        "rank": 38,
+        "score_100": 61.175902,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8106461286875032,
+        "design_id": "kv3i607_g00869_50681018",
+        "grid_pass": null,
+        "mass_g": 101.76363331560171,
+        "rank": 39,
+        "score_100": 61.057716,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8012155258601951,
+        "design_id": "kv4i1414_g00374_b23b6bd5",
+        "grid_pass": null,
+        "mass_g": 92.81908956107829,
+        "rank": 40,
+        "score_100": 60.897784,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8185705860995703,
+        "design_id": "kv3i603_g00814_3f94eb96",
+        "grid_pass": null,
+        "mass_g": 99.75000829206908,
+        "rank": 41,
+        "score_100": 60.31958,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7839134339866238,
+        "design_id": "kv4i1404_g00674_38c21ba1",
+        "grid_pass": null,
+        "mass_g": 95.37780558308755,
+        "rank": 42,
+        "score_100": 60.203311,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8533397460787329,
+        "design_id": "kv3i410_g00245_97a9d11e",
+        "grid_pass": null,
+        "mass_g": 97.69631148846369,
+        "rank": 43,
+        "score_100": 60.181893,
+        "worst_margin_W": 0.9200189005394217
+      },
+      {
+        "E": 0.7999204171220405,
+        "design_id": "kv3i505_g00774_da6d8cb9",
+        "grid_pass": null,
+        "mass_g": 98.59698566937244,
+        "rank": 44,
+        "score_100": 60.150346,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8322929106589148,
+        "design_id": "kv4i1405_g00966_acab495a",
+        "grid_pass": null,
+        "mass_g": 107.29392482361092,
+        "rank": 45,
+        "score_100": 60.083696,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7970907657896582,
+        "design_id": "kv4i1111_g00791_dc7bd3de",
+        "grid_pass": null,
+        "mass_g": 99.24361822025026,
+        "rank": 46,
+        "score_100": 59.793954,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.8184210624400637,
+        "design_id": "kv4i1403_g00549_fa5c03e6",
+        "grid_pass": null,
+        "mass_g": 103.5557581622827,
+        "rank": 47,
+        "score_100": 59.402755,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.7919840920461222,
+        "design_id": "kv4i510_g00695_7f8c80f4",
+        "grid_pass": null,
+        "mass_g": 100.96784302861239,
+        "rank": 48,
+        "score_100": 59.273509,
+        "worst_margin_W": 1.0
+      },
+      {
+        "E": 0.924601180824672,
+        "design_id": "kv4i1404_g00204_6fafee0e",
+        "grid_pass": null,
+        "mass_g": 89.00623176142432,
+        "rank": 49,
+        "score_100": 58.361537,
+        "worst_margin_W": 0.8005705628881709
+      },
+      {
+        "E": 0.9074827458557798,
+        "design_id": "kv4i1412_g00414_19a186b4",
+        "grid_pass": null,
+        "mass_g": 88.02765538836228,
+        "rank": 50,
+        "score_100": 57.789888,
+        "worst_margin_W": 0.8078744361999994
+      },
+      {
+        "E": 0.8190917313819889,
+        "design_id": "kv4i1414_g00434_2776f89a",
+        "grid_pass": null,
+        "mass_g": 107.44958152439371,
+        "rank": 51,
+        "score_100": 57.00487,
+        "worst_margin_W": 0.9422398723199401
+      },
+      {
+        "E": 0.9282602886822074,
+        "design_id": "kv4i1408_g00239_835be7a3",
+        "grid_pass": null,
+        "mass_g": 89.3463679183642,
+        "rank": 52,
+        "score_100": 56.647369,
+        "worst_margin_W": 0.7730938683791926
+      },
+      {
+        "E": 0.8161650432475354,
+        "design_id": "kv3i704_g00450_495a81cb",
+        "grid_pass": null,
+        "mass_g": 102.09948082383555,
+        "rank": 53,
+        "score_100": 53.899104,
+        "worst_margin_W": 0.909154061741041
+      },
+      {
+        "E": 0.8555456272200529,
+        "design_id": "kv4i606_g00644_5dbe3b5b",
+        "grid_pass": null,
+        "mass_g": 97.94707535494837,
+        "rank": 54,
+        "score_100": 53.726691,
+        "worst_margin_W": 0.8242384416548334
+      },
+      {
+        "E": 0.9171715903009733,
+        "design_id": "kv3i710_g00929_ce5c48f2",
+        "grid_pass": null,
+        "mass_g": 89.4298869020579,
+        "rank": 55,
+        "score_100": 53.708977,
+        "worst_margin_W": 0.7441287177128935
+      },
+      {
+        "E": 0.9264509628320939,
+        "design_id": "kv4i1413_g00944_a8e49c2d",
+        "grid_pass": null,
+        "mass_g": 93.62605265247034,
+        "rank": 56,
+        "score_100": 53.180188,
+        "worst_margin_W": 0.742804547415346
+      },
+      {
+        "E": 0.8376661451469605,
+        "design_id": "kv4i1001_g00126_800ee991",
+        "grid_pass": null,
+        "mass_g": 99.64706105551785,
+        "rank": 57,
+        "score_100": 51.106893,
+        "worst_margin_W": 0.7967089090847612
+      },
+      {
+        "E": 0.8235249520217771,
+        "design_id": "kv4i604_g01004_1c78c5a9",
+        "grid_pass": null,
+        "mass_g": 101.22016266255059,
+        "rank": 58,
+        "score_100": 50.578241,
+        "worst_margin_W": 0.8242384416548334
+      },
+      {
+        "E": 0.7376732334453704,
+        "design_id": "kv4i1003_g00140_2f84ba15",
+        "grid_pass": null,
+        "mass_g": 83.7579781032629,
+        "rank": 59,
+        "score_100": 50.313123,
+        "worst_margin_W": 0.8592856343434567
+      },
+      {
+        "E": 0.8269080211963019,
+        "design_id": "kv4i1108_g01020_8d3482e6",
+        "grid_pass": null,
+        "mass_g": 105.72403497122305,
+        "rank": 60,
+        "score_100": 46.146771,
+        "worst_margin_W": 0.7607053456097725
+      },
+      {
+        "E": 0.7813609542566688,
+        "design_id": "kv4i608_g00656_57f24876",
+        "grid_pass": null,
+        "mass_g": 96.17821135697838,
+        "rank": 61,
+        "score_100": 40.189215,
+        "worst_margin_W": 0.68058727612443
+      },
+      {
+        "E": 0.827226117482269,
+        "design_id": "kv4i1408_g00226_44e223d5",
+        "grid_pass": null,
+        "mass_g": 97.37685764092652,
+        "rank": 62,
+        "score_100": 32.515266,
+        "worst_margin_W": 0.5502411133720323
+      },
+      {
+        "E": 0.7963515327134096,
+        "design_id": "kv3i411_g00850_3f1d5e0b",
+        "grid_pass": null,
+        "mass_g": 103.06655385172579,
+        "rank": 63,
+        "score_100": 31.737947,
+        "worst_margin_W": 0.5368148629401556
+      },
+      {
+        "E": 0.8181577038928839,
+        "design_id": "kv4i1412_g00074_d90ca346",
+        "grid_pass": null,
+        "mass_g": 98.58611697246756,
+        "rank": 64,
+        "score_100": 25.091551,
+        "worst_margin_W": 0.4149463045648268
+      }
+    ],
+    "search_leader": {
+      "design_id": "kv4i1406_g00009_528e4365",
+      "tier1_h04_score_100": 75.540324,
+      "tier2_rank": 2
+    },
+    "shortlist": 64,
+    "tip_mesh_max_area_mm2": 0.08,
+    "v5_winner_same_platform": {
+      "cases": 16,
+      "cases_met": 16,
+      "design_id": "kv4i012_g00009_dd6ffea5",
+      "genome_sha256": "dd6ffea58ee06a7f15dcb648b5b934e9e1a1aafa8e7a343742e8443f20f636e1",
+      "grip_length_mm": 69.10747996092884,
+      "grip_perimeter_mm": 84.13500165738267,
+      "loads": {
+        "blade_model": "plate",
+        "buckling_lambda": 14.322654966663725,
+        "fatigue_sf": 1.0384172307840576,
+        "grip_lateral_sf": 11.439362322032215,
+        "grip_pull_sf": 11.794606347370044,
+        "grip_squeeze_sf": 3.1474257084925297,
+        "grip_twist_sf": 16.196518849977735,
+        "guard_push_sf": 28.183841199270475,
+        "hand_fatigue_sf": 2.8721271171005616,
+        "lateral_arm_mm": 72.89349250029521,
+        "lateral_force_n": 164.62374882025856,
+        "lateral_limit_sf": 2.41023640115579,
+        "lateral_peak_at": [
+          66.75,
+          8.527551420326656
+        ],
+        "lateral_ultimate_sf": 1.716698691661496,
+        "pull_sf": 2.34266623509799,
+        "ring_any_direction_sf": 3.7912816400131124,
+        "ring_back_sf": 73.76344555156174,
+        "ring_bearing_sf": 31.54618412336792,
+        "seq_lateral": 4.746157811136971,
+        "seq_pull": 1.6183618405438491,
+        "seq_twist": 8.245465353560574,
+        "teeth_sf": 1.7134596300528635,
+        "tip_axial_sf": 1.28421142661649,
+        "tip_lateral_sf": 1.9647997906307249,
+        "tip_model": "solid",
+        "tip_twist_sf": 2.778497409326425,
+        "twist_limit_sf": 1.9642940883844382,
+        "twist_peak_at": [
+          56.5,
+          6.943792157866193
+        ]
+      },
+      "margins_min_over_plate_meshes": {
+        "buckling": 9.548436644442484,
+        "fatigue": 1.0139538459907818,
+        "grip_squeeze": 2.6228547570771084,
+        "guard_push": 23.486534332725398,
+        "lateral_limit": 1.982974308287637,
+        "lateral_ultimate": 1.3037352744588095,
+        "pull": 1.8492445713729544,
+        "ring_any_direction": 3.159401366677594,
+        "ring_back": 36.88172277578087,
+        "ring_bearing": 15.77309206168396,
+        "sequence": 1.3486348671198742,
+        "teeth": 1.427883025044053,
+        "tip_axial": 1.0701761888470749,
+        "tip_lateral": 1.6373331588589375,
+        "tip_twist": 2.315414507772021,
+        "twist_limit": 1.5983488191852333
+      },
+      "mass_g": 83.25794749708463,
+      "plate_meshes": [
+        {
+          "fatigue_sf": 1.0139538459907818,
+          "lateral_limit_sf": 2.379569169945164,
+          "lateral_ultimate_sf": 1.6948558567964525,
+          "margins": {
+            "buckling": 9.548436644442484,
+            "fatigue": 1.0139538459907818,
+            "grip_squeeze": 2.6228547570771084,
+            "guard_push": 23.486534332725398,
+            "lateral_limit": 1.982974308287637,
+            "lateral_ultimate": 1.3037352744588095,
+            "pull": 1.8641682330045939,
+            "ring_any_direction": 3.159401366677594,
+            "ring_back": 36.88172277578087,
+            "ring_bearing": 15.77309206168396,
+            "sequence": 1.4123373768620806,
+            "teeth": 1.427883025044053,
+            "tip_axial": 1.0701761888470749,
+            "tip_lateral": 1.6373331588589375,
+            "tip_twist": 2.315414507772021,
+            "twist_limit": 1.5983488191852333
+          },
+          "max_area_mm2": 0.6,
+          "pull_sf": 2.2370018796055127,
+          "twist_limit_sf": 1.9180185830222798
+        },
+        {
+          "fatigue_sf": 1.0384172307840576,
+          "lateral_limit_sf": 2.41023640115579,
+          "lateral_ultimate_sf": 1.716698691661496,
+          "margins": {
+            "buckling": 9.548436644442484,
+            "fatigue": 1.0384172307840576,
+            "grip_squeeze": 2.6228547570771084,
+            "guard_push": 23.486534332725398,
+            "lateral_limit": 2.0085303342964917,
+            "lateral_ultimate": 1.3205374551242275,
+            "pull": 1.9522218625816583,
+            "ring_any_direction": 3.159401366677594,
+            "ring_back": 36.88172277578087,
+            "ring_bearing": 15.77309206168396,
+            "sequence": 1.3486348671198742,
+            "teeth": 1.427883025044053,
+            "tip_axial": 1.0701761888470749,
+            "tip_lateral": 1.6373331588589375,
+            "tip_twist": 2.315414507772021,
+            "twist_limit": 1.6369117403203652
+          },
+          "max_area_mm2": 0.3,
+          "pull_sf": 2.34266623509799,
+          "twist_limit_sf": 1.9642940883844382
+        },
+        {
+          "fatigue_sf": 1.039679802003864,
+          "lateral_limit_sf": 2.4453787083651295,
+          "lateral_ultimate_sf": 1.7417289139165864,
+          "margins": {
+            "buckling": 9.548436644442484,
+            "fatigue": 1.039679802003864,
+            "grip_squeeze": 2.6228547570771084,
+            "guard_push": 23.486534332725398,
+            "lateral_limit": 2.0378155903042745,
+            "lateral_ultimate": 1.339791472243528,
+            "pull": 1.8492445713729544,
+            "ring_any_direction": 3.159401366677594,
+            "ring_back": 36.88172277578087,
+            "ring_bearing": 15.77309206168396,
+            "sequence": 1.4237351364923054,
+            "teeth": 1.427883025044053,
+            "tip_axial": 1.0701761888470749,
+            "tip_lateral": 1.6373331588589375,
+            "tip_twist": 2.315414507772021,
+            "twist_limit": 1.638901997792433
+          },
+          "max_area_mm2": 0.15,
+          "pull_sf": 2.2190934856475453,
+          "twist_limit_sf": 1.9666823973509195
+        }
+      ],
+      "score": {
+        "E": 0.7400828044922853,
+        "base": 0.801812057692649,
+        "draft": "rs-v5",
+        "hand_factors": {
+          "balance": {
+            "beta": 0.1,
+            "e": 1.0
+          },
+          "contact_pressure": {
+            "beta": 0.15,
+            "e": 0.6694329500821695
+          },
+          "grip_length": {
+            "beta": 0.1,
+            "e": 1.0
+          },
+          "grip_section": {
+            "beta": 0.2,
+            "e": 1.0
+          },
+          "grip_surface": {
+            "beta": 0.05,
+            "e": 1.0
+          },
+          "guard": {
+            "beta": 0.1,
+            "e": 1.0
+          },
+          "hand_edges": {
+            "beta": 0.15,
+            "e": 1.0
+          },
+          "ring": {
+            "beta": 0.15,
+            "e": 1.0
+          }
+        },
+        "metric": "W_ERGOLIGHT_v2",
+        "raw_score_100": 59.34073163329057,
+        "score_100": 59.340732,
+        "terms": {
+          "am_build": {
+            "points": 2.471037291520304,
+            "s": 0.5564776618060316,
+            "weight": 0.06
+          },
+          "buckling": {
+            "points": 1.4801656089845705,
+            "s": 1.0,
+            "weight": 0.02
+          },
+          "edge": {
+            "points": 2.960331217969141,
+            "s": 1.0,
+            "weight": 0.04
+          },
+          "fatigue": {
+            "points": 2.822844014050414,
+            "s": 0.9535568171952575,
+            "weight": 0.04
+          },
+          "form": {
+            "points": 1.8433471271771174,
+            "s": 0.9962923694419292,
+            "weight": 0.025
+          },
+          "grip_squeeze": {
+            "points": 2.5902867050537517,
+            "s": 0.9999987991037808,
+            "weight": 0.035
+          },
+          "guard_push": {
+            "points": 2.2202484134768556,
+            "s": 1.0,
+            "weight": 0.03
+          },
+          "lateral_limit": {
+            "points": 2.590102960511546,
+            "s": 0.9999278632026741,
+            "weight": 0.035
+          },
+          "lateral_ultimate": {
+            "points": 2.5719477341008363,
+            "s": 0.9929189075636147,
+            "weight": 0.035
+          },
+          "mass": {
+            "points": 9.88371122973807,
+            "s": 0.4451624047896702,
+            "weight": 0.3
+          },
+          "point": {
+            "points": 4.351098037574362,
+            "s": 0.9798673903251769,
+            "weight": 0.06
+          },
+          "pull": {
+            "points": 1.4800101925684588,
+            "s": 0.9998950006572451,
+            "weight": 0.02
+          },
+          "ring_any_direction": {
+            "points": 1.4801655592848162,
+            "s": 0.9999999664228422,
+            "weight": 0.02
+          },
+          "ring_back": {
+            "points": 1.4801656089845705,
+            "s": 1.0,
+            "weight": 0.02
+          },
+          "ring_bearing": {
+            "points": 2.2202484134768556,
+            "s": 1.0,
+            "weight": 0.03
+          },
+          "sequence": {
+            "points": 2.942949598860568,
+            "s": 0.9941284883924247,
+            "weight": 0.04
+          },
+          "serration": {
+            "points": 1.4801656089845705,
+            "s": 1.0,
+            "weight": 0.02
+          },
+          "teeth": {
+            "points": 2.2125623392499327,
+            "s": 0.9965381917715745,
+            "weight": 0.03
+          },
+          "tip_axial": {
+            "points": 2.4929436766606243,
+            "s": 0.9624188233797294,
+            "weight": 0.035
+          },
+          "tip_lateral": {
+            "points": 2.5880704385497975,
+            "s": 0.9991431934914273,
+            "weight": 0.035
+          },
+          "tip_twist": {
+            "points": 2.59026566197519,
+            "s": 0.9999906752720634,
+            "weight": 0.035
+          },
+          "twist_limit": {
+            "points": 2.5880641945381977,
+            "s": 0.999140782945873,
+            "weight": 0.035
+          },
+          "worst_margin": {
+            "points": 0.0,
+            "s": 1.0,
+            "weight": 0.0
+          }
+        },
+        "worst_margin_W": 1.0
+      },
+      "tier1_h04_score_100": 59.54787724195731,
+      "what": "the v5.0.0 winner's committed genome at Tier 2, h 0.2 and on the plate check meshes, on the v6 platform of record",
+      "worst_margin": 1.0139538459907818
+    }
+  },
+  "release_assets": [
+    {
+      "bytes": 175277760,
+      "file": "g5-v6.0.0-archives.tar.gz",
+      "sha256": "fe1651beaa485639de1df4010c03a4c979d15910f34cc0f2246abfb6f3fe59c3"
+    },
+    {
+      "bytes": 1354227,
+      "file": "g5-v6.0.0-eval_h040.jsonl",
+      "sha256": "64027768be0aea9d4734ce07e4c6d220c60eb251a05ece5f411ab0ce636e7e84"
+    },
+    {
+      "bytes": 378833484,
+      "file": "g5-v6.0.0-kv4i1404_g00581_29ea3c73_AMbuild_h0.2_mm.stl",
+      "sha256": "7054688acce5fd7e5054ea3c6ac2a94d9b14653b6d676520b9c9a68aad018886"
+    },
+    {
+      "bytes": 122627284,
+      "file": "g5-v6.0.0-kv4i1404_g00581_29ea3c73_envelope_h0.2_mm.stl",
+      "sha256": "26987a58000432d0854cd1b40373e8cf2e4a0ea64bf5f4785563da3afa8398b7"
+    }
+  ],
+  "schema": "G5.0",
+  "score": {
+    "E": 0.9216093616815502,
+    "base": 0.8073065859702415,
+    "draft": "rs-v5",
+    "hand_factors": {
+      "balance": {
+        "beta": 0.1,
+        "e": 1.0
+      },
+      "contact_pressure": {
+        "beta": 0.15,
+        "e": 0.8968693246026538
+      },
+      "grip_length": {
+        "beta": 0.1,
+        "e": 1.0
+      },
+      "grip_section": {
+        "beta": 0.2,
+        "e": 1.0
+      },
+      "grip_surface": {
+        "beta": 0.05,
+        "e": 1.0
+      },
+      "guard": {
+        "beta": 0.1,
+        "e": 1.0
+      },
+      "hand_edges": {
+        "beta": 0.15,
+        "e": 1.0
+      },
+      "ring": {
+        "beta": 0.15,
+        "e": 1.0
+      }
+    },
+    "metric": "W_ERGOLIGHT_v2",
+    "raw_score_100": 74.40213073773458,
+    "score_100": 74.402131,
+    "terms": {
+      "am_build": {
+        "points": 4.7611601317220025,
+        "s": 0.8610228168391005,
+        "weight": 0.06
+      },
+      "buckling": {
+        "points": 1.8432187233631003,
+        "s": 1.0,
+        "weight": 0.02
+      },
+      "edge": {
+        "points": 3.6864374467262007,
+        "s": 1.0,
+        "weight": 0.04
+      },
+      "fatigue": {
+        "points": 3.615818791958493,
+        "s": 0.9808436584674937,
+        "weight": 0.04
+      },
+      "form": {
+        "points": 2.2934015789861526,
+        "s": 0.9953898796347542,
+        "weight": 0.025
+      },
+      "grip_squeeze": {
+        "points": 3.2252477283887,
+        "s": 0.9998806319489317,
+        "weight": 0.035
+      },
+      "guard_push": {
+        "points": 2.7648280850446505,
+        "s": 1.0,
+        "weight": 0.03
+      },
+      "lateral_limit": {
+        "points": 3.2235197593983074,
+        "s": 0.9993449327184837,
+        "weight": 0.035
+      },
+      "lateral_ultimate": {
+        "points": 3.145503235048706,
+        "s": 0.975158507910703,
+        "weight": 0.035
+      },
+      "mass": {
+        "points": 10.952182339673813,
+        "s": 0.3961252563555662,
+        "weight": 0.3
+      },
+      "point": {
+        "points": 5.51946762094716,
+        "s": 0.9981574714903158,
+        "weight": 0.06
+      },
+      "pull": {
+        "points": 1.8398334624791608,
+        "s": 0.9981633970830316,
+        "weight": 0.02
+      },
+      "ring_any_direction": {
+        "points": 1.8432183963087188,
+        "s": 0.9999998225634443,
+        "weight": 0.02
+      },
+      "ring_back": {
+        "points": 1.8432187233631003,
+        "s": 1.0,
+        "weight": 0.02
+      },
+      "ring_bearing": {
+        "points": 2.7648280850446505,
+        "s": 1.0,
+        "weight": 0.03
+      },
+      "sequence": {
+        "points": 3.6821677140268405,
+        "s": 0.9988417726433546,
+        "weight": 0.04
+      },
+      "serration": {
+        "points": 1.8432187233631003,
+        "s": 1.0,
+        "weight": 0.02
+      },
+      "teeth": {
+        "points": 2.7645914800020175,
+        "s": 0.9999144232352409,
+        "weight": 0.03
+      },
+      "tip_axial": {
+        "points": 3.122434980621528,
+        "s": 0.9680069639807338,
+        "weight": 0.035
+      },
+      "tip_lateral": {
+        "points": 3.220676643967846,
+        "s": 0.9984635194774817,
+        "weight": 0.035
+      },
+      "tip_twist": {
+        "points": 3.2254907938334054,
+        "s": 0.9999559862940625,
+        "weight": 0.035
+      },
+      "twist_limit": {
+        "points": 3.221666293466916,
+        "s": 0.9987703273415189,
+        "weight": 0.035
+      },
+      "worst_margin": {
+        "points": 0.0,
+        "s": 1.0,
+        "weight": 0.0
+      }
+    },
+    "worst_margin_W": 1.0
+  },
+  "search_score_100": 75.153997,
+  "status": "computational design; not built, printed or physically tested",
+  "version": "6.0.0",
+  "warm_start": {
+    "pool": {
+      "archive_niches": 1024,
+      "best_design_id": "kv4i012_g00204_19a0b6f0",
+      "best_mass_g": 103.57243589930627,
+      "best_raw_score_100": 63.35758365609886,
+      "niches": 131,
+      "pool": "epoch00/pool",
+      "qd_score": 4358.431738763091,
+      "rows_read": 1508,
+      "sha256": {
+        "archive.jsonl": "f03cd8cbe1fe757cf9443a708ed41ebdc866ea5934c791a4246d274ec095e3c3",
+        "genomes_g5.csv": "c5a356986b882bb018f531b1aa93cb36c1f99d8ee5b7d462e6708a5cc2d80b7c"
+      },
+      "sources": [
+        "epoch00/reeval"
+      ]
+    },
+    "reevaluated": "epoch00/reeval",
+    "v5_elite_genomes": [
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island01.csv",
+        "sha256": "45163a6053496aee62b761a46f1351e1ba1eaf128484dc8f461a6545b1220b25"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island02.csv",
+        "sha256": "4c0b77464814f06eea8ded9b10ffa45635e8e92bffb23eb49aaf7ddf584e627b"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island03.csv",
+        "sha256": "644bef610221c1f95b9651119cc80d0fcedcb0564009856d57cddad81723f860"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island04.csv",
+        "sha256": "4ae7ff4c20ad9dbaa8bcf973bc95470097e77626ccb2e57cc2fc20122b3621d7"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island05.csv",
+        "sha256": "3a49ac0fb0dd189706b835d1699b3457eaf571a43c29bf72f0703d67adfe529c"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island06.csv",
+        "sha256": "ba3cd2f37b88fa35ddc80a39209b98841ec7cd3133b2221a5f534576cabc488c"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island07.csv",
+        "sha256": "6acc0c0de841eede9c188241ad5f7d2d62648d09ddb705ad31be3f63ed11481a"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island08.csv",
+        "sha256": "4fb2d63ad02c847343df6af689cc12aeb3a4cf7778f36a132d8988bb52dae425"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island09.csv",
+        "sha256": "aee2a45d2f3fa0907ce6f4f85b1661b5508f4d5fc15fabda99c3fafc3a46edb6"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island10.csv",
+        "sha256": "3409caee63a358f5f241ae2ba6fd2cf9fdebb5330f4a56834bf6abb8187dfaf5"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island11.csv",
+        "sha256": "a59bce6b127b514848a7e0f782eef9c7af0172098721ee82a448482994c3bfcd"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island12.csv",
+        "sha256": "199d5c7790d22eb23fcf18f386f0b2c802258a48697783c913702315bbabd167"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island13.csv",
+        "sha256": "74c3dd342f29b92604d4cb15c8764d0b52effa58d3df2d00abf097b0f4567a7a"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island14.csv",
+        "sha256": "e7b2f58cd0dd9e3b3ab72a3b1b1c888b3785bc62547bb88fe3fed36f915eb733"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island15.csv",
+        "sha256": "2ca1d8f694b76111bb713b425a1cd261a20bb172741c5de08ac1322f250513cf"
+      },
+      {
+        "file": "evidence/g5/v5.0.0/genomes/island16.csv",
+        "sha256": "0b147db4f61e4ffc2d54eb49fe9d6c9133458e7427cee48d0e1c13a34c97c762"
+      }
+    ],
+    "v5_elites": 1508,
+    "what": "the 1,508 final elites of the v5.0.0 cohort (islands 01-16; the random-search control excluded), re-evaluated at Tier 1, h 0.4 on this platform and merged to the best record per niche"
+  },
+  "worst_margin": 1.0943239461255903,
+  "worst_margin_production_mesh": 1.0943239461255903
+}

@@ -1,0 +1,30 @@
+{
+ "what": "the same 12 Tier-1 evaluations (h 0.4) at one and at four evaluations per core complex (L3 slice), and one process with and without the glibc malloc tunables",
+ "genomes": 12,
+ "one_per_ccx_s_per_eval": 5.593333333333334,
+ "four_per_ccx_s_per_eval": 7.735,
+ "throughput_gain_four_vs_one_per_ccx": 2.892480068950657,
+ "per_process_a_s": [
+  5.4,
+  5.5675,
+  5.8125
+ ],
+ "per_process_b_s": [
+  7.74,
+  7.11,
+  8.49,
+  7.66,
+  7.5,
+  7.73,
+  7.67,
+  8.27,
+  8.71,
+  7.81,
+  7.03,
+  7.1
+ ],
+ "minor_faults_default": 726861.0,
+ "minor_faults_tunables": 295739.0,
+ "fault_ratio": 2.4577786494172225,
+ "outputs_identical_tunables": true
+}

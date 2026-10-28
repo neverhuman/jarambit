@@ -1,0 +1,76 @@
+{
+  "allowable_mpa": 750.75,
+  "case": "teeth",
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "fem_over_formula": 1.1448046659609201,
+  "gated": false,
+  "h_mm": 0.2,
+  "load": {
+    "patch": "outward y faces within 0.6 mm (x) and 0.8 mm (y) of the crest",
+    "pry_n": 20.0,
+    "snag_direction": [
+      0.9558935580005713,
+      -0.29371330540683427,
+      0.0
+    ],
+    "snag_n": 180.0
+  },
+  "loaded_faces": 16,
+  "model": "hex8 voxel FE (voxel_fe) on the design's AM voxel field; the formula's governing tooth with 4 mm of blade behind it, clamped there",
+  "note": "Cross-check, not gated: the score uses the formula SF (sf_formula = sf_record).",
+  "record_sha256": "631529a81986d7e2653445fbe653c93eb726d9f777d08fff87493d911234dceb",
+  "required_sf": 1.2,
+  "scored_margin": 1.9829029051951896,
+  "sf_fem": 2.7240437976179006,
+  "sf_formula": 2.3794834862342276,
+  "sf_record": 2.3794834862342276,
+  "solid_voxels": 18016,
+  "solver": {
+    "relative_residuals": [
+      [
+        7.073877761564247e-9,
+        8.152826887158322e-9,
+        8.06040454610339e-9,
+        7.160759527883521e-9,
+        8.801480771019221e-9,
+        6.770020428125597e-9
+      ],
+      [
+        7.073877761564247e-9,
+        8.152826887158322e-9,
+        8.06040454610339e-9,
+        7.160759527883521e-9,
+        8.801480771019221e-9,
+        6.770020428125597e-9
+      ]
+    ],
+    "seconds": 2.3533884560000002
+  },
+  "title": "Teeth",
+  "tooth": {
+    "crest_mm": [
+      115.99056261520394,
+      -24.710140208635078
+    ],
+    "edge": "inner",
+    "height_mm": 1.0131662828451815,
+    "x_mm": [
+      114.29006903505422,
+      119.7316484915333
+    ]
+  },
+  "vm_mpa": {
+    "pry": {
+      "max": 61.6139226442123,
+      "q99": 40.706749305997214,
+      "q999": 59.135213211265395,
+      "read_elements": 4787
+    },
+    "snag": {
+      "max": 356.80357646356083,
+      "q99": 164.49642532885474,
+      "q999": 275.60129563867866,
+      "read_elements": 4787
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "case": "fatigue",
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "field": {
+    "allowable_note": "fatigue SF = fatigue strength of the face class (ground outer faces; as-built cavity faces of a hollow blade at (t - 2 skin)/t of the amplitude) over the amplitude",
+    "governing_allowable_mpa": null,
+    "governing_at_mm": [
+      93.34748883878198,
+      -11.463091341945036
+    ],
+    "governing_element": 3923,
+    "governing_hollow": false,
+    "governing_sigma_mpa": 170.7567734027835,
+    "max_all_mpa": 245.1323797661556,
+    "max_read_mpa": 170.7567734027835,
+    "quantity": "stress amplitude max(k_b s_lat, k_t s_twist), MPa"
+  },
+  "gated": true,
+  "h_mm": 0.2,
+  "load": "amplitudes 4.7 N m root moment and 7 N m twist, 1e6 cycles",
+  "match": true,
+  "mesh": {
+    "elements": 6989,
+    "max_area_mm2": 0.3,
+    "nodes": 3879
+  },
+  "model": "CST+DKT sandwich plate of the whole blade, clamped at the heel",
+  "record_sha256": "631529a81986d7e2653445fbe653c93eb726d9f777d08fff87493d911234dceb",
+  "required_sf": 1.0,
+  "scored_margin": 1.1712566126336739,
+  "scored_sf_note": "the scored SF is min(plate, hand side (formula)) = min(1.1712566126336739, 3.1799873790894218)",
+  "sf_fem": 1.1712566126336739,
+  "sf_record": 1.1712566126336739,
+  "title": "Fatigue, fully reversed duty"
+}

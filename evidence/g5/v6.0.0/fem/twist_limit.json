@@ -1,0 +1,35 @@
+{
+  "case": "twist_limit",
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "field": {
+    "allowable_note": "first-yield (ultimate for the ultimate case) allowable of the element's wall",
+    "governing_allowable_mpa": 750.75,
+    "governing_at_mm": [
+      93.34748883878198,
+      -11.463091341945036
+    ],
+    "governing_element": 3923,
+    "governing_hollow": false,
+    "governing_sigma_mpa": 395.17996130358466,
+    "max_all_mpa": 567.3063646016743,
+    "max_read_mpa": 395.17996130358466,
+    "quantity": "von Mises (membrane + outer-skin bending), MPa"
+  },
+  "gated": true,
+  "h_mm": 0.2,
+  "load": "16.2 N m about the blade axis, over 25-75 % of the span",
+  "match": true,
+  "mesh": {
+    "elements": 6989,
+    "max_area_mm2": 0.3,
+    "nodes": 3879
+  },
+  "model": "CST+DKT sandwich plate of the whole blade, clamped at the heel",
+  "record_sha256": "631529a81986d7e2653445fbe653c93eb726d9f777d08fff87493d911234dceb",
+  "required_sf": 1.2,
+  "scored_margin": 1.5831394839359862,
+  "scored_sf_note": "the scored SF is min(plate, grip, twist (formula)) = min(1.8997673807231834, 20.42487892536435)",
+  "sf_fem": 1.8997673807231834,
+  "sf_record": 1.8997673807231834,
+  "title": "Body twist, limit load"
+}

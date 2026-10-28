@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" width="760" height="400" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+<style>
+.bg{fill:#fcfcfb}.t1{fill:#0b0b0b}.t2,.lb{fill:#52514e}.tk{fill:#898781}.grid{stroke:#e1e0d9}.axis{stroke:#c3c2b7}.ref{stroke:#898781}.win{stroke:#2a78d6}.dot{fill:#fcfcfb;stroke:#2a78d6}.base{stroke:#eb6834}
+@media (prefers-color-scheme: dark){.bg{fill:#1a1a19}.t1{fill:#f0efec}.t2,.lb{fill:#c3c2b7}.tk{fill:#898781}.grid{stroke:#2c2c2a}.axis{stroke:#383835}.ref{stroke:#898781}.win{stroke:#3987e5}.dot{fill:#1a1a19;stroke:#3987e5}.base{stroke:#d95926}}
+.t1{font-size:15px;font-weight:600}.t2,.lb{font-size:12px}.tk{font-size:11px}.grid,.axis{stroke-width:1}.ref{fill:none;stroke-width:1;stroke-dasharray:2 3}.win{fill:none;stroke-width:2;stroke-linejoin:round}.base{fill:none;stroke-width:2;stroke-dasharray:6 4}.dot{stroke-width:2}
+</style>
+<title id="t">Best score found against evaluations spent, v6 continuation and fresh-start control</title>
+<desc id="d">The pool lineage starts from the re-evaluated v5.0.0 elites at 63.4 and reaches 75.5 after 297908 evaluations; the 4 fresh-start control islands reach 59.6 after 19200 evaluations.</desc>
+<rect class="bg" width="760" height="400" rx="8"/>
+<text class="t1" x="48" y="26">Best score found, by evaluations spent</text>
+<text class="t2" x="48" y="45">W_ERGOLIGHT_v2, Tier 1 at h 0.4 mm · evaluations on a log scale, summed over each search's islands</text>
+<line class="win" x1="48" y1="62" x2="70" y2="62"/><text class="lb" x="76" y="66">Pool lineage (warm start)</text>
+<line class="base" x1="263" y1="62" x2="285" y2="62"/><text class="lb" x="291" y="66">Fresh-start control</text>
+<line class="grid" x1="48" x2="550" y1="354.0" y2="354.0"/><text class="tk" x="40" y="358.0" text-anchor="end">10</text>
+<line class="grid" x1="48" x2="550" y1="314.6" y2="314.6"/><text class="tk" x="40" y="318.6" text-anchor="end">20</text>
+<line class="grid" x1="48" x2="550" y1="275.1" y2="275.1"/><text class="tk" x="40" y="279.1" text-anchor="end">30</text>
+<line class="grid" x1="48" x2="550" y1="235.7" y2="235.7"/><text class="tk" x="40" y="239.7" text-anchor="end">40</text>
+<line class="grid" x1="48" x2="550" y1="196.3" y2="196.3"/><text class="tk" x="40" y="200.3" text-anchor="end">50</text>
+<line class="grid" x1="48" x2="550" y1="156.9" y2="156.9"/><text class="tk" x="40" y="160.9" text-anchor="end">60</text>
+<line class="grid" x1="48" x2="550" y1="117.4" y2="117.4"/><text class="tk" x="40" y="121.4" text-anchor="end">70</text>
+<line class="grid" x1="48" x2="550" y1="78.0" y2="78.0"/><text class="tk" x="40" y="82.0" text-anchor="end">80</text>
+<text class="tk" x="48.0" y="372" text-anchor="middle">100</text><text class="tk" x="173.5" y="372" text-anchor="middle">1k</text><text class="tk" x="299.0" y="372" text-anchor="middle">10k</text><text class="tk" x="424.5" y="372" text-anchor="middle">100k</text><text class="tk" x="550.0" y="372" text-anchor="middle">1M</text><line class="axis" x1="48" x2="550" y1="354" y2="354"/>
+<text class="tk" x="299.0" y="392" text-anchor="middle">evaluations spent (log scale)</text>
+<path class="base" d="M99.2 348.7 H107.9 V327.6 H123.6 V282.0 H135.7 V282.0 H137.0 V282.0 H145.7 V243.8 H154.1 V243.8 H161.3 V243.8 H167.8 V243.8 H173.5 V242.4 H174.8 V242.4 H178.7 V242.4 H183.4 V242.4 H187.8 V238.0 H191.8 V238.0 H195.6 V238.0 H199.1 V233.9 H202.4 V230.9 H205.5 V221.1 H208.5 V215.1 H211.3 V211.8 H212.6 V211.8 H213.9 V211.8 H216.5 V211.8 H218.9 V211.8 H221.2 V211.8 H223.4 V211.7 H225.6 V208.5 H227.6 V208.5 H229.6 V208.5 H231.5 V201.2 H233.4 V201.2 H235.2 V201.2 H236.9 V195.2 H238.6 V195.2 H240.2 V194.5 H241.8 V194.5 H243.3 V194.5 H244.8 V194.5 H246.3 V194.5 H247.7 V194.5 H249.1 V187.4 H250.4 V187.4 H250.4 V187.4 H251.7 V187.4 H253.0 V187.4 H254.3 V187.4 H255.5 V187.4 H256.7 V187.4 H257.8 V187.4 H259.0 V187.4 H260.1 V187.4 H261.2 V187.4 H262.3 V187.4 H263.4 V187.4 H264.4 V187.4 H265.4 V187.4 H266.4 V187.4 H267.4 V187.4 H268.4 V187.4 H269.3 V187.4 H270.2 V187.4 H271.2 V187.4 H272.1 V187.4 H272.9 V187.4 H273.8 V187.4 H274.7 V187.4 H275.5 V185.2 H276.4 V185.2 H277.2 V185.2 H278.0 V185.2 H278.8 V185.2 H279.6 V185.2 H280.3 V185.2 H281.1 V185.2 H281.8 V185.2 H282.6 V185.2 H283.3 V185.2 H284.0 V185.2 H284.8 V185.2 H285.5 V182.0 H286.2 V182.0 H286.8 V182.0 H287.5 V180.4 H288.1 V180.4 H288.2 V180.4 H288.8 V179.3 H289.5 V179.3 H290.1 V179.3 H290.8 V179.3 H291.4 V179.3 H292.0 V179.3 H292.6 V179.3 H293.3 V179.3 H293.9 V179.3 H294.5 V179.3 H295.0 V179.3 H295.6 V179.3 H296.2 V179.3 H296.8 V179.3 H297.3 V179.3 H297.9 V179.3 H298.5 V179.3 H299.0 V179.3 H299.5 V179.3 H300.1 V176.8 H300.6 V176.8 H301.1 V176.8 H301.7 V176.8 H302.2 V176.8 H302.7 V176.8 H303.2 V176.8 H303.7 V176.8 H304.2 V176.8 H304.7 V176.8 H305.2 V176.8 H305.7 V176.8 H306.1 V176.8 H306.6 V176.8 H307.1 V176.8 H307.6 V176.8 H308.0 V176.8 H308.5 V176.8 H308.9 V176.8 H309.4 V176.8 H309.8 V176.8 H310.3 V176.8 H310.7 V176.8 H311.2 V176.8 H311.6 V176.8 H312.0 V176.8 H312.5 V176.8 H312.9 V176.8 H313.3 V176.8 H313.7 V176.8 H314.1 V176.8 H314.5 V176.8 H315.0 V176.8 H315.4 V176.8 H315.8 V176.8 H316.2 V176.8 H316.6 V173.2 H316.9 V173.2 H317.3 V173.2 H317.7 V173.2 H318.1 V173.2 H318.5 V171.6 H318.9 V170.7 H319.3 V170.7 H319.6 V170.7 H320.0 V170.7 H320.4 V170.7 H320.7 V170.7 H321.1 V170.7 H321.5 V170.7 H321.8 V170.7 H322.2 V170.7 H322.5 V170.7 H322.9 V166.2 H323.2 V165.3 H323.6 V165.3 H323.9 V165.3 H324.3 V165.3 H324.6 V165.3 H325.0 V165.3 H325.3 V165.3 H325.6 V165.3 H325.9 V165.3 H326.0 V165.3 H326.3 V165.3 H326.6 V165.3 H327.0 V165.3 H327.3 V165.3 H327.6 V165.3 H327.9 V165.3 H328.2 V162.1 H328.6 V162.1 H328.9 V162.1 H329.2 V162.1 H329.5 V162.1 H329.8 V162.1 H330.1 V162.1 H330.4 V162.1 H330.7 V162.1 H331.0 V162.1 H331.3 V162.1 H331.6 V162.1 H331.9 V161.0 H332.2 V159.4 H332.5 V159.4 H332.8 V159.4 H333.1 V158.6 H333.4 V158.6 H333.7 V158.6 H334.0 V158.6 H334.3 V158.6 H334.6 V158.6"><title>fresh-start control: 59.56 after 19200 evaluations</title></path>
+<path class="win" d="M195.9 143.6 H324.3 V134.9 H359.4 V132.7 H380.6 V129.9 H395.8 V126.1 H407.7 V122.5 H417.5 V122.2 H425.7 V118.0 H432.9 V117.6 H439.3 V111.2 H444.9 V109.8 H450.1 V109.8 H454.8 V108.7 H459.1 V106.3 H463.1 V106.3 H466.9 V102.3 H470.9 V99.4 H474.2 V99.4 H477.7 V97.1 H481.1 V95.6 H484.0 V95.6"/>
+<circle class="dot" cx="195.9" cy="143.6" r="3.5"><title>epoch00/pool: 63.36 after 1508 evaluations</title></circle>
+<circle class="dot" cx="324.3" cy="134.9" r="3.5"><title>pools/p01: 65.56 after 15908 evaluations</title></circle>
+<circle class="dot" cx="359.4" cy="132.7" r="3.5"><title>pools/p02: 66.12 after 30308 evaluations</title></circle>
+<circle class="dot" cx="380.6" cy="129.9" r="3.5"><title>pools/p03: 66.85 after 44708 evaluations</title></circle>
+<circle class="dot" cx="395.8" cy="126.1" r="3.5"><title>pools/p04: 67.81 after 59108 evaluations</title></circle>
+<circle class="dot" cx="407.7" cy="122.5" r="3.5"><title>pools/p05: 68.72 after 73508 evaluations</title></circle>
+<circle class="dot" cx="417.5" cy="122.2" r="3.5"><title>pools/p06: 68.79 after 87908 evaluations</title></circle>
+<circle class="dot" cx="425.7" cy="118.0" r="3.5"><title>pools/p07: 69.85 after 102308 evaluations</title></circle>
+<circle class="dot" cx="432.9" cy="117.6" r="3.5"><title>pools/p08: 69.96 after 116708 evaluations</title></circle>
+<circle class="dot" cx="439.3" cy="111.2" r="3.5"><title>pools/p09: 71.58 after 131108 evaluations</title></circle>
+<circle class="dot" cx="444.9" cy="109.8" r="3.5"><title>pools/p10: 71.94 after 145508 evaluations</title></circle>
+<circle class="dot" cx="450.1" cy="109.8" r="3.5"><title>pools/p11: 71.94 after 159908 evaluations</title></circle>
+<circle class="dot" cx="454.8" cy="108.7" r="3.5"><title>pools/p12: 72.23 after 174308 evaluations</title></circle>
+<circle class="dot" cx="459.1" cy="106.3" r="3.5"><title>pools/p13: 72.81 after 188708 evaluations</title></circle>
+<circle class="dot" cx="463.1" cy="106.3" r="3.5"><title>pools/p14: 72.81 after 203108 evaluations</title></circle>
+<circle class="dot" cx="466.9" cy="102.3" r="3.5"><title>pools/p15: 73.83 after 217508 evaluations</title></circle>
+<circle class="dot" cx="470.9" cy="99.4" r="3.5"><title>pools/p16: 74.57 after 234308 evaluations</title></circle>
+<circle class="dot" cx="474.2" cy="99.4" r="3.5"><title>pools/p17: 74.57 after 248708 evaluations</title></circle>
+<circle class="dot" cx="477.7" cy="97.1" r="3.5"><title>pools/p18: 75.15 after 265508 evaluations</title></circle>
+<circle class="dot" cx="481.1" cy="95.6" r="3.5"><title>pools/p19: 75.54 after 282308 evaluations</title></circle>
+<circle class="dot" cx="484.0" cy="95.6" r="3.5"><title>pools/p20: 75.54 after 297908 evaluations</title></circle>
+<text class="lb" x="560" y="99.6">pool lineage · 75.5</text>
+<text class="lb" x="560" y="162.6">control · best 59.6</text>
+</svg>

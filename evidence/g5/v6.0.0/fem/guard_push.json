@@ -1,0 +1,47 @@
+{
+  "allowable_mpa": 599.6418972463227,
+  "case": "guard_push",
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "fem_over_formula": 0.3355039436320344,
+  "fixed_nodes": 145200,
+  "gated": false,
+  "h_mm": 0.2,
+  "load": {
+    "band": "rear (-x facing) faces within 2 mm of 60 % of h_g below the grip underside",
+    "direction": "+x",
+    "force_n": 300.0
+  },
+  "loaded_faces": 294,
+  "lobe_x_mm": [
+    74.1,
+    94.85
+  ],
+  "model": "hex8 voxel FE (voxel_fe) on the design's AM voxel field; the guard lobe and the grip above it, clamped 4 mm above the grip underside",
+  "note": "Cross-check, not gated: the score uses the formula SF (sf_formula = sf_record).",
+  "record_sha256": "631529a81986d7e2653445fbe653c93eb726d9f777d08fff87493d911234dceb",
+  "required_sf": 1.2,
+  "scored_margin": 21.992645916566925,
+  "sf_fem": 8.854343323093392,
+  "sf_formula": 26.391175099880307,
+  "sf_record": 26.391175099880307,
+  "solid_voxels": 159207,
+  "solver": {
+    "relative_residuals": [
+      6.629255318466969e-9,
+      6.78971025172282e-9,
+      6.192153118310511e-9,
+      6.7956851823061566e-9,
+      5.730494638335452e-9,
+      7.3972983388372456e-9
+    ],
+    "seconds": 25.563776011
+  },
+  "title": "Guard push",
+  "unsupported_voxels": 0,
+  "vm_mpa": {
+    "max": 115.66097857637286,
+    "q99": 47.241848833989486,
+    "q999": 67.72291014313518,
+    "read_elements": 84934
+  }
+}

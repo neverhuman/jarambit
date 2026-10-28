@@ -1,0 +1,27 @@
+{
+  "case": "sequence",
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "gated": true,
+  "h_mm": 0.2,
+  "hand_side": "ring any direction 270 deg (T6)",
+  "load": "the lateral, twist and pull limit loads on blade and hand side",
+  "match": true,
+  "match_all": true,
+  "ratios": {
+    "governing": "pull",
+    "lateral": 6.183180931790472,
+    "pull": 1.9105416960104797,
+    "twist": 10.751252565242606
+  },
+  "record_ratios": {
+    "lateral": 6.183180931790472,
+    "pull": 1.9105416960104797,
+    "twist": 10.751252565242606
+  },
+  "record_sha256": "631529a81986d7e2653445fbe653c93eb726d9f777d08fff87493d911234dceb",
+  "required_sf": 1.2,
+  "scored_margin": 1.5921180800087331,
+  "sf_fem": 1.9105416960104797,
+  "sf_record": 1.9105416960104797,
+  "title": "Blade before hand (failure sequence)"
+}

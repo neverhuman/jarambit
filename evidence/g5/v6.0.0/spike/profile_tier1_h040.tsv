@@ -1,0 +1,22 @@
+17.58%	jarambit_g5::g5_sdf::enforce_am_connectivity
+14.96%	jarambit_g5::g5_sdf::edt_1d_line
+13.51%	jarambit_g5::g5_sandwich::Skyline::factor
+4.03%	jarambit_g5::g5_sandwich::Skyline::solve
+4.00%	jarambit_g5::g5_sdf::edt_out
+3.24%	jarambit_g5::g5_sdf::build_g5_sdf_from_params_with_origin_shift
+2.92%	core::ops::function::impls::<impl core::ops::function::FnMut<A> for &F>::call_mut
+2.75%	rayon::iter::plumbing::Folder::consume_iter
+2.51%	jarambit_g5::g5_sdf::edt_in
+2.42%	jarambit_g5::g5_sandwich::Skyline::residual_and_backward_error
+2.16%	hypot
+2.05%	core::ops::function::impls::<impl core::ops::function::FnMut<A> for &F>::call_mut
+1.95%	jarambit_g5::g5_sdf::eval_blade_thickness_and_sdf2
+1.90%	core::ops::function::impls::<impl core::ops::function::FnMut<A> for &F>::call_mut
+1.64%	clear_page_rep
+1.41%	jarambit_g5::g5_sdf::edge_normal_distance
+1.23%	rayon::iter::plumbing::bridge_producer_consumer::helper
+1.06%	0x000000000018870e
+1.02%	native_queued_spin_lock_slowpath
+0.92%	core::ops::function::impls::<impl core::ops::function::FnMut<A> for &F>::call_mut
+0.80%	rayon::iter::plumbing::bridge_producer_consumer::helper
+0.76%	rmqueue_bulk
