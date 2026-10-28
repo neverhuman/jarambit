@@ -3,7 +3,7 @@
 `jarambit-g5` is the G5 genome, decoder, evaluator and search. G5 targets the requirement set
 [`requirements/RS-karambit-v5.toml`](../../requirements/RS-karambit-v5.toml) (sources:
 [`PROVENANCE-v5.md`](../../requirements/PROVENANCE-v5.md)) and the objective `W_ERGOLIGHT_v2`. It is the generation of
-release v5.0.0.
+releases v5.0.0 and v6.0.0.
 
 ## Status
 
@@ -56,9 +56,8 @@ In order (`docs/RELEASES.md`):
    - the thin-wall law per pair of wall faces, on the nominal section;
    - fatigue by surface class with FKM mean stress.
 
-   Every evaluator takes E, ν, G and its allowables from this module. Still to do:
-   - the sheet-TPMS laws (with the decoder);
-   - the solid-tip TET10 still uses the physics crate's hard-coded G3 material until the load-case PR copies it.
+   Every evaluator (including the sheet-TPMS lattice laws and `tip_tet10.rs`) takes E, ν, G and its allowables from this
+   module.
 3. **Decoder G5.0.** Done: 134 genes, down from G3's 179.
    - **Removed:**
      - the 37 texture genes (Turing, Voronoi and a 32-weight CPPN); the knurl and ridge that remain are zero-mean;

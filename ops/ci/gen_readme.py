@@ -643,13 +643,19 @@ def g5v6_evolution(r, rk, gc, man):
 
 
 def g5v6_verification(r, rv):
-    """v6 on: the first bullets of Verification and limits (platform, reproduction, lineage, GPU spike)."""
+    """v6 on: the first bullets of Verification and limits (platform, reproduction, lineage, fleet sizing, GPU spike)."""
     co, rp = r['cohort'], r['cohort']['reproduced']
+    sz = js(f'evidence/g5/v{rv}/fleet/sizing.json')
     sp = js(f'evidence/g5/v{rv}/spike/spike.json')
     return [f'- **One platform of record.** {r["provenance"]["platform_of_record"]}. Every row of every archive re-scores bit for bit; '
             f'every pool of the lineage is recomputed from its recorded sources byte for byte; re-evaluating all {co["elites"]:,} elites of the final '
             f'pool reproduces every Tier-1 row ({co["tier1_rows_reproduced"]}); and `{rp["island"]}` re-run on {rp["rerun"]["rerun_host"]} reproduces its '
             f'history bit for bit ({rp["history_entries_identical"]} entries over {rp["rerun"]["evaluations"]} evaluations).',
+            f'- **Fleet sizing** ([`fleet/sizing.json`](evidence/g5/v{rv}/fleet/sizing.json)). The continuation ran one island per core complex on the '
+            f'Threadripper hosts, following an early pilot. A controlled measurement afterwards ({sz["genomes"]} Tier-1 evaluations: '
+            f'{sz["one_per_ccx_s_per_eval"]:.1f} s each at one per core complex vs {sz["four_per_ccx_s_per_eval"]:.1f} s at four) shows that one island '
+            f'per core would have given {sz["throughput_gain_four_vs_one_per_ccx"]:.2f}× the throughput. The search is deterministic either way, so '
+            f'this cost evaluations, not correctness; glibc malloc tunables cut minor page faults {sz["fault_ratio"]:.1f}× with identical outputs.',
             f'- **GPUs: renders, not search.** A profile of the Tier-1 evaluation ([`spike/spike.json`](evidence/g5/v{rv}/spike/spike.json)) puts '
             f'{sp["profile"]["euclidean_distance_transform_pct"] + sp["profile"]["am_connectivity_pct"]:.0f} % of it in voxel kernels and '
             f'{sp["profile"]["plate_skyline_solve_pct"]:.0f} % in the plate solve. Records must stay exact CPU arithmetic, so a GPU could only screen children '
