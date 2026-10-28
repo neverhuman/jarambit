@@ -1,0 +1,42 @@
+{
+  "case": "tip_axial",
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "field": {
+    "allowable_mpa": 750.8,
+    "peak_at_mm": [
+      139.88,
+      -30.85,
+      -0.08
+    ],
+    "peak_distance_mm": 1.09,
+    "peak_mpa": 571.7,
+    "peak_vertex_raw_mpa": 571.6885337785716,
+    "quantity": "von Mises at the vertices (largest corner value), MPa",
+    "readout_mm": [
+      1.0,
+      10.0
+    ]
+  },
+  "gated": true,
+  "h_mm": 0.2,
+  "load": "150 N along the tip bisector on the last 0.75 mm, read from 1 to 10 mm",
+  "match": true,
+  "mesh": {
+    "dof": 361665,
+    "planform_max_area_mm2": 0.08,
+    "tets": 76440,
+    "vertices": 17565
+  },
+  "model": "TET10 solid of the last 30 mm of the blade, 4 layers through the thickness, clamped at the cut",
+  "record_sha256": "631529a81986d7e2653445fbe653c93eb726d9f777d08fff87493d911234dceb",
+  "required_sf": 1.2,
+  "scored_margin": 1.0943239461255903,
+  "sf_fem": 1.3131887353507083,
+  "sf_record": 1.3131887353507083,
+  "solver": {
+    "backward_error": 6.818039265346459e-16,
+    "direct": true,
+    "rel_res": 1.3362711805050891e-12
+  },
+  "title": "Point, axial"
+}

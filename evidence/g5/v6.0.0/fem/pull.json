@@ -1,0 +1,35 @@
+{
+  "case": "pull",
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "field": {
+    "allowable_note": "first-yield (ultimate for the ultimate case) allowable of the element's wall",
+    "governing_allowable_mpa": 750.75,
+    "governing_at_mm": [
+      114.19493143218585,
+      -23.073440375417565
+    ],
+    "governing_element": 2950,
+    "governing_hollow": false,
+    "governing_sigma_mpa": 410.7943347932575,
+    "max_all_mpa": 509.42918935940537,
+    "max_read_mpa": 410.7943347932575,
+    "quantity": "von Mises (membrane + outer-skin bending), MPa"
+  },
+  "gated": true,
+  "h_mm": 0.2,
+  "load": "600 N along the grip axis, the blade held over its last 20 mm",
+  "match": true,
+  "mesh": {
+    "elements": 6989,
+    "max_area_mm2": 0.3,
+    "nodes": 3879
+  },
+  "model": "CST+DKT sandwich plate of the whole blade, clamped at the heel",
+  "record_sha256": "631529a81986d7e2653445fbe653c93eb726d9f777d08fff87493d911234dceb",
+  "required_sf": 1.2,
+  "scored_margin": 1.5229640406673606,
+  "scored_sf_note": "the scored SF is min(plate, grip, pull (formula)) = min(1.8275568488008327, 15.04939282296476)",
+  "sf_fem": 1.8275568488008327,
+  "sf_record": 1.8275568488008327,
+  "title": "Pull"
+}

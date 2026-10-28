@@ -1,0 +1,348 @@
+{
+  "decoder_sha256": "c63629d4b31058f54470c3ed0fd5f2a7f4f492dfdb11ebb04c4a4588e50ffa9b",
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "figures": [
+    {
+      "case": "lateral_limit",
+      "gated": true,
+      "json": "lateral_limit.json",
+      "match": true,
+      "record_sf": 2.0131251403749895,
+      "sf": 2.0131251403749895,
+      "svg": "lateral_limit.svg",
+      "title": "Lateral bending, limit load"
+    },
+    {
+      "case": "lateral_ultimate",
+      "gated": true,
+      "json": "lateral_ultimate.json",
+      "match": true,
+      "record_sf": 1.471956701595974,
+      "sf": 1.471956701595974,
+      "svg": "lateral_ultimate.svg",
+      "title": "Lateral bending, ultimate load"
+    },
+    {
+      "case": "twist_limit",
+      "gated": true,
+      "json": "twist_limit.json",
+      "match": true,
+      "record_sf": 1.8997673807231834,
+      "sf": 1.8997673807231834,
+      "svg": "twist_limit.svg",
+      "title": "Body twist, limit load"
+    },
+    {
+      "case": "pull",
+      "gated": true,
+      "json": "pull.json",
+      "match": true,
+      "record_sf": 1.8275568488008327,
+      "sf": 1.8275568488008327,
+      "svg": "pull.svg",
+      "title": "Pull"
+    },
+    {
+      "case": "fatigue",
+      "gated": true,
+      "json": "fatigue.json",
+      "match": true,
+      "record_sf": 1.1712566126336739,
+      "sf": 1.1712566126336739,
+      "svg": "fatigue.svg",
+      "title": "Fatigue, fully reversed duty"
+    },
+    {
+      "case": "tip_axial",
+      "gated": true,
+      "json": "tip_axial.json",
+      "match": true,
+      "record_sf": 1.3131887353507083,
+      "sf": 1.3131887353507083,
+      "svg": "tip_axial.svg",
+      "title": "Point, axial"
+    },
+    {
+      "case": "tip_lateral",
+      "gated": true,
+      "json": "tip_lateral.json",
+      "match": true,
+      "record_sf": 1.8596730245231607,
+      "sf": 1.8596730245231607,
+      "svg": "tip_lateral.svg",
+      "title": "Point, side load"
+    },
+    {
+      "case": "tip_twist",
+      "gated": true,
+      "json": "tip_twist.json",
+      "match": true,
+      "record_sf": 2.499167776298269,
+      "sf": 2.499167776298269,
+      "svg": "tip_twist.svg",
+      "title": "Point, twist"
+    },
+    {
+      "case": "ring_bearing",
+      "gated": true,
+      "json": "ring_bearing.json",
+      "match": true,
+      "record_sf": 65.38821232883691,
+      "sf": 65.38821232883691,
+      "svg": "ring_bearing.svg",
+      "title": "Ring, bearing toward the handle"
+    },
+    {
+      "case": "ring_back",
+      "gated": true,
+      "json": "ring_back.json",
+      "match": true,
+      "record_sf": 68.46339283166316,
+      "sf": 68.46339283166316,
+      "svg": "ring_back.svg",
+      "title": "Ring, back"
+    },
+    {
+      "case": "ring_any_direction",
+      "gated": true,
+      "json": "ring_any_direction.json",
+      "match": true,
+      "record_sf": 3.491623561463511,
+      "sf": 3.491623561463511,
+      "svg": "ring_any_direction.svg",
+      "title": "Ring, any in-plane direction"
+    },
+    {
+      "case": "sequence",
+      "gated": true,
+      "json": "sequence.json",
+      "match": true,
+      "record_sf": 1.9105416960104797,
+      "sf": 1.9105416960104797,
+      "svg": "sequence.svg",
+      "title": "Blade before hand (failure sequence)"
+    },
+    {
+      "case": "buckling",
+      "gated": true,
+      "json": "buckling.json",
+      "match": true,
+      "record_sf": 11.936271746214999,
+      "sf": 11.936271746214999,
+      "svg": "buckling.svg",
+      "title": "Buckling of the point"
+    },
+    {
+      "case": "grip_squeeze",
+      "gated": false,
+      "json": "grip_squeeze.json",
+      "match": null,
+      "record_sf": 2.319579885908063,
+      "sf": 23.780016279247654,
+      "svg": "grip_squeeze.svg",
+      "title": "Grip squeeze"
+    },
+    {
+      "case": "guard_push",
+      "gated": false,
+      "json": "guard_push.json",
+      "match": null,
+      "record_sf": 26.391175099880307,
+      "sf": 8.854343323093392,
+      "svg": "guard_push.svg",
+      "title": "Guard push"
+    },
+    {
+      "case": "teeth",
+      "gated": false,
+      "json": "teeth.json",
+      "match": null,
+      "record_sf": 2.3794834862342276,
+      "sf": 2.7240437976179006,
+      "svg": "teeth.svg",
+      "title": "Teeth"
+    }
+  ],
+  "h": 0.2,
+  "mismatches": [],
+  "record_sha256": "631529a81986d7e2653445fbe653c93eb726d9f777d08fff87493d911234dceb",
+  "reproduced": [
+    {
+      "fem_fields": 188.4004417704735,
+      "field": "lateral_force_n",
+      "match": true,
+      "record": 188.4004417704735
+    },
+    {
+      "fem_fields": 63.694118162522614,
+      "field": "lateral_arm_mm",
+      "match": true,
+      "record": 63.694118162522614
+    },
+    {
+      "fem_fields": 2.0131251403749895,
+      "field": "lateral_limit_sf",
+      "match": true,
+      "record": 2.0131251403749895
+    },
+    {
+      "fem_fields": 1.471956701595974,
+      "field": "lateral_ultimate_sf",
+      "match": true,
+      "record": 1.471956701595974
+    },
+    {
+      "fem_fields": 1.8997673807231834,
+      "field": "twist_limit_sf",
+      "match": true,
+      "record": 1.8997673807231834
+    },
+    {
+      "fem_fields": 1.3131887353507083,
+      "field": "tip_axial_sf",
+      "match": true,
+      "record": 1.3131887353507083
+    },
+    {
+      "fem_fields": 1.8596730245231607,
+      "field": "tip_lateral_sf",
+      "match": true,
+      "record": 1.8596730245231607
+    },
+    {
+      "fem_fields": 2.499167776298269,
+      "field": "tip_twist_sf",
+      "match": true,
+      "record": 2.499167776298269
+    },
+    {
+      "fem_fields": 1.8275568488008327,
+      "field": "pull_sf",
+      "match": true,
+      "record": 1.8275568488008327
+    },
+    {
+      "fem_fields": 11.936271746214999,
+      "field": "buckling_lambda",
+      "match": true,
+      "record": 11.936271746214999
+    },
+    {
+      "fem_fields": 2.3794834862342276,
+      "field": "teeth_sf",
+      "match": true,
+      "record": 2.3794834862342276
+    },
+    {
+      "fem_fields": 1.1712566126336739,
+      "field": "fatigue_sf",
+      "match": true,
+      "record": 1.1712566126336739
+    },
+    {
+      "fem_fields": 12.447516981274651,
+      "field": "grip_lateral_sf",
+      "match": true,
+      "record": 12.447516981274651
+    },
+    {
+      "fem_fields": 20.42487892536435,
+      "field": "grip_twist_sf",
+      "match": true,
+      "record": 20.42487892536435
+    },
+    {
+      "fem_fields": 15.04939282296476,
+      "field": "grip_pull_sf",
+      "match": true,
+      "record": 15.04939282296476
+    },
+    {
+      "fem_fields": 2.319579885908063,
+      "field": "grip_squeeze_sf",
+      "match": true,
+      "record": 2.319579885908063
+    },
+    {
+      "fem_fields": 26.391175099880307,
+      "field": "guard_push_sf",
+      "match": true,
+      "record": 26.391175099880307
+    },
+    {
+      "fem_fields": 65.38821232883691,
+      "field": "ring_bearing_sf",
+      "match": true,
+      "record": 65.38821232883691
+    },
+    {
+      "fem_fields": 68.46339283166316,
+      "field": "ring_back_sf",
+      "match": true,
+      "record": 68.46339283166316
+    },
+    {
+      "fem_fields": 3.491623561463511,
+      "field": "ring_any_direction_sf",
+      "match": true,
+      "record": 3.491623561463511
+    },
+    {
+      "fem_fields": 3.1799873790894218,
+      "field": "hand_fatigue_sf",
+      "match": true,
+      "record": 3.1799873790894218
+    },
+    {
+      "fem_fields": 6.183180931790472,
+      "field": "seq_lateral",
+      "match": true,
+      "record": 6.183180931790472
+    },
+    {
+      "fem_fields": 10.751252565242606,
+      "field": "seq_twist",
+      "match": true,
+      "record": 10.751252565242606
+    },
+    {
+      "fem_fields": 1.9105416960104797,
+      "field": "seq_pull",
+      "match": true,
+      "record": 1.9105416960104797
+    },
+    {
+      "fem_fields": 20.75,
+      "field": "lateral_peak_at.s",
+      "match": true,
+      "record": 20.75
+    },
+    {
+      "fem_fields": -0.09373574772644166,
+      "field": "lateral_peak_at.eta",
+      "match": true,
+      "record": -0.09373574772644166
+    },
+    {
+      "fem_fields": 51.5,
+      "field": "twist_peak_at.s",
+      "match": true,
+      "record": 51.5
+    },
+    {
+      "fem_fields": 6.38354254143558,
+      "field": "twist_peak_at.eta",
+      "match": true,
+      "record": 6.38354254143558
+    }
+  ],
+  "timing_s": {
+    "grid": 19.603606679,
+    "hex8": 520.837390136,
+    "plate": 0.358786142,
+    "ring": 1.438253703,
+    "tip": 80.679449819,
+    "total": 623.614700666
+  },
+  "tool": "g5-fem-fields"
+}

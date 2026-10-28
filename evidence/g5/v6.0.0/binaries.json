@@ -1,0 +1,29 @@
+{
+ "g5-continue": {
+  "file": "g5-continue-571afbc9",
+  "sha256": "571afbc9e1114abc549e1da824a1ebf50c5705fa7ed9b80ee884f05659ae6cf1",
+  "source_commit": "8ccd2f80",
+  "role": "every island, merge and re-evaluation of the search"
+ },
+ "g5-pilot": {
+  "sha256": "fb75be867c59d88b52efdae96f9e1160b2233ff174063aa16326c28d26b3b251",
+  "source_commit": "7ece9b98"
+ },
+ "g5-release": {
+  "sha256": "8be11af56ba3a9711dd4bb51e50099cd16d85b4de5351eac6b1014c8b295900e",
+  "source_commit": "7ece9b98"
+ },
+ "g5-export-stl": {
+  "sha256": "5371392cc77cf8b1b26376a4584ff503606c407ec2cbc86843cf2940e1811ccc",
+  "source_commit": "7ece9b98"
+ },
+ "g5-edgeprofile": {
+  "sha256": "07409b7fa57a0a8d566bdb4cc888e446328fb0e9db417c47185fed4a968cb389",
+  "source_commit": "7ece9b98"
+ },
+ "build": "RUSTFLAGS=\"-C target-feature=+crt-static\" cargo build --release --locked --target x86_64-unknown-linux-gnu (Rust 1.85.1)",
+ "g5-fem-fields": {
+  "sha256": "dd573c3262c86fceb57054b228af0dbd83caf96e2237d598bcdb9757393d8315",
+  "source_commit": "bf0ae5fe"
+ }
+}

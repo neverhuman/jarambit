@@ -1,0 +1,35 @@
+{
+  "case": "lateral_limit",
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "field": {
+    "allowable_note": "first-yield (ultimate for the ultimate case) allowable of the element's wall",
+    "governing_allowable_mpa": 750.75,
+    "governing_at_mm": [
+      123.13104673532047,
+      -20.53560127709384
+    ],
+    "governing_element": 4346,
+    "governing_hollow": false,
+    "governing_sigma_mpa": 372.927636212499,
+    "max_all_mpa": 399.5525512060742,
+    "max_read_mpa": 372.927636212499,
+    "quantity": "von Mises (membrane + outer-skin bending), MPa"
+  },
+  "gated": true,
+  "h_mm": 0.2,
+  "load": "188.4 N normal to the blade, 5 mm behind the point (root moment 12 N m)",
+  "match": true,
+  "mesh": {
+    "elements": 6989,
+    "max_area_mm2": 0.3,
+    "nodes": 3879
+  },
+  "model": "CST+DKT sandwich plate of the whole blade, clamped at the heel",
+  "record_sha256": "631529a81986d7e2653445fbe653c93eb726d9f777d08fff87493d911234dceb",
+  "required_sf": 1.2,
+  "scored_margin": 1.6776042836458247,
+  "scored_sf_note": "the scored SF is min(plate, grip, lateral (formula)) = min(2.0131251403749895, 12.447516981274651)",
+  "sf_fem": 2.0131251403749895,
+  "sf_record": 2.0131251403749895,
+  "title": "Lateral bending, limit load"
+}

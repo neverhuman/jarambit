@@ -2,6 +2,39 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v6.0.0 — 2026-10-28 (major: the G5 continuation on one platform of record; FEM renderings of every load case; the fitness budget)
+
+- **Cohort of record v6.0.0**, with the frozen G5.0 decoder of v5.0.0 unchanged (`c63629d4b310…`, freeze `bf3e37fa`; the crate stays 5.0.0).
+  - **Best individual:** **`kv4i1404_g00581_29ea3c73`**, rank 1 of the Tier-2 ranking.
+  - **Score and loads:** W_ERGOLIGHT_v2 74.40 (hand multiplier E 0.922, worst-margin multiplier W 1.000); worst margin 1.094 over the plate meshes; 16 of 16 load cases met.
+  - **Mass:** 88.4 g.
+  - **Against the v5.0.0 winner**, re-evaluated on the same platform: score 59.34 → 74.40; worst margin 1.014 → 1.094; mass 83.3 → 88.4 g; cases met 16 → 16.
+  - **Receipt:** `evidence/g5/v6.0.0/release.json`, written by `g5-release receipt-v6`, which recomputes the whole lineage and fails closed.
+- **The continuation:**
+  - **Warm start:** the 1,508 final v5.0.0 elites were re-evaluated on linux/amd64, giving 131 niches with a best of 63.36.
+  - **Rounds:** 247 warm-started islands ran 20 rounds on xbabe3 and xbabe4, 296,400 evaluations in all. Each round was merged by the hub into a pool lineage that the receipt recomputes byte for byte. The best rose 63.36 → 75.54 on the search grid.
+  - **Control:** 4 fresh-start islands × 4,800 evaluations, with no pool and no migration. Best 59.56.
+- **One platform of record.** Static x86_64 binaries run natively on Linux and in a linux/amd64 container under Rosetta on the Mac.
+  - The same island is byte-identical on all four hosts.
+  - `epoch01/xbabe4/island101` re-run on xbabe2 reproduces its history bit for bit.
+  - The v5.0.0 limit (arm64 and x86 not bit-identical) no longer applies.
+- **FEM renderings of every load case** (`g5-fem-fields`): all 16 load cases of `kv4i1404_g00581_29ea3c73` rendered from their own fields; the 28 scored values they re-solve match the receipt bit for bit. The analytic cases get an independent hex8 FE check: grip squeeze score model SF 2.32, hex8 FE 23.78; guard push score model SF 26.39, hex8 FE 8.85; teeth score model SF 2.38, hex8 FE 2.72.
+- **The fitness budget** (`g5-release fitness`): where the 100 points of the score go. 74.4 earned (structural 45.3, mass 11.0, cutting geometry 11.0, build and form 7.1), 6.3 lost to the multipliers and 19.3 unmet credit.
+  - The ranked bars show each term's points against the most it could earn.
+- **Fleet:** the search ran one island per core complex on the Threadripper hosts, following an early pilot. A controlled measurement afterwards (`fleet/sizing.json`) shows that one island per core would have given 2.9× the throughput. The result is deterministic either way; the cost was evaluations, not correctness. The glibc malloc tunables cut page faults 2.5× with identical outputs.
+- **GPU spike, not adopted.** The search records must stay exact CPU arithmetic, and Tier 1 is 90 % of island time. A perfect pre-screen costing nothing would give at most 3.1× more evaluations per hour; any real predictor costs time and misses designs, so the 3× bar for adopting one is out of reach. The GPUs render.
+- **Corrections to the v5.0.0 paper** (none changes a v5.0.0 result):
+  - "E⁵ = 0.222" had no meaning: E is already the fifth power of the hand factors' weighted product. v6 also states the product inside the power.
+  - The marginal points per gram used E⁵ again: 0.063 → 0.211.
+  - The promotion window is 256 Tier-0 scores (warm-up 16), not 128.
+  - Lloyd relaxation is 20 iterations of 16 samples per centre, not 12 of 64.
+- **New tools:**
+  - `g5-continue` (`run`, `reeval`, `merge`, `screen`);
+  - `g5-release receipt-v6` and `fitness`;
+  - `g5-fem-fields`;
+  - the shared archive module.
+- **Generated docs:** the README, `docs/g5/paper/g5-v6.0.0.pdf` and the `cad/` kit, all from the receipt.
+
 ## v5.0.0 — 2026-10-27 (major: the G5 generation under RS-karambit-v5; README, paper and `cad/` generated from one receipt)
 
 - **Cohort of record v5.0.0.** The best individual is **`kv4i012_g00009_dd6ffea5`**, rank 1 of 32 at Tier 2

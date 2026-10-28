@@ -1,0 +1,21 @@
+{
+  "binary_sha256": "571afbc9e1114abc549e1da824a1ebf50c5705fa7ed9b80ee884f05659ae6cf1",
+  "commit": "bf3e37fa",
+  "decoder_sha256": "c63629d4b31058f54470c3ed0fd5f2a7f4f492dfdb11ebb04c4a4588e50ffa9b",
+  "effective_seed": 3740665449404502499,
+  "evals": 1200,
+  "h": 0.4,
+  "host": 4,
+  "init": 0,
+  "island": 407,
+  "log_every": 25,
+  "pool": "/home/ubuntu/jarambit_runs/evo_g5_v6/pools/p04",
+  "pool_sha256": {
+    "archive.jsonl": "7fdff7dcbd47d00dd7d231b27afae81ef5b6af2f85eb29edbf359e181b6875e6",
+    "genomes_g5.csv": "624a403fd3e6dc3b6ec1abd5b16e7db9a7e4fd34e4ad46814ab9d72c93adf068"
+  },
+  "raw_seed": 4004007,
+  "tier1_top": 0.4,
+  "tier2_top": 0.0,
+  "tool": "g5-continue run"
+}

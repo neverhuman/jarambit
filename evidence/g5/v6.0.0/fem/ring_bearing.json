@@ -1,0 +1,29 @@
+{
+  "case": "ring_bearing",
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "field": {
+    "capacity_n": 19616.463698651074,
+    "peak_at_mm": [
+      -3.769459643079852,
+      -10.68884996754651
+    ],
+    "peak_mpa": 10.724068889189233,
+    "quantity": "von Mises at the corner nodes at the case load, MPa"
+  },
+  "gated": true,
+  "h_mm": 0.2,
+  "load": "300 N on the bore, ±60° band facing the handle, pushing +x",
+  "match": true,
+  "mesh": {
+    "elements": 8241,
+    "nodes": 16889
+  },
+  "model": "T6 membrane of the ring and neck, per-Gauss-point thickness, seat clamped at x 40-46 mm",
+  "record_sha256": "631529a81986d7e2653445fbe653c93eb726d9f777d08fff87493d911234dceb",
+  "required_sf": 2.0,
+  "scored_margin": 32.69410616441846,
+  "sf_fem": 65.38821232883691,
+  "sf_record": 65.38821232883691,
+  "sweep": null,
+  "title": "Ring, bearing toward the handle"
+}

@@ -1,0 +1,8 @@
+{
+ "island": "epoch01/xbabe4/island101",
+ "rerun_host": "xbabe2",
+ "evaluations": 200,
+ "binary_sha256": "571afbc9e1114abc549e1da824a1ebf50c5705fa7ed9b80ee884f05659ae6cf1",
+ "rerun_dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/repro_runs/epoch01_xbabe4_island101_on_local",
+ "rerun_platform": "native static x86_64 on Linux; the island of record ran in a linux/amd64 container under Rosetta on xbabe4"
+}

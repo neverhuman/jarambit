@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" width="760" height="400" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+<style>
+.bg{fill:#fcfcfb}.t1,.v{fill:#0b0b0b}.t2,.lb{fill:#52514e}.tk{fill:#898781}.trk{fill:#e1e0d9}.sl{stroke:#fcfcfb}.lm{fill:#898781}.lu{fill:#c3c2b7}.g-structural{fill:#2a78d6}.g-mass{fill:#eb6834}.g-cutting{fill:#1baf7a}.g-build{fill:#eda100}
+@media (prefers-color-scheme: dark){.bg{fill:#1a1a19}.t1,.v{fill:#f0efec}.t2,.lb{fill:#c3c2b7}.tk{fill:#898781}.trk{fill:#2c2c2a}.sl{stroke:#1a1a19}.lm{fill:#898781}.lu{fill:#383835}.g-structural{fill:#3987e5}.g-mass{fill:#d95926}.g-cutting{fill:#199e70}.g-build{fill:#c98500}}
+.t1{font-size:15px;font-weight:600}.t2,.lb{font-size:12px}.tk{font-size:11px}.v{font-size:12px;font-weight:600}.big{font-size:34px;font-weight:600}.sl{stroke-width:2;stroke-linejoin:round}
+</style>
+<title id="t">Where the 100 points of the score go</title>
+<desc id="d">W_ERGOLIGHT_v2 score of kv4i1404_g00581_29ea3c73: 74.4 of 100 points earned. Structural safety 45.3; Mass 11.0; Cutting geometry 11.0; Build and form 7.1; Lost to the multipliers 6.3; Unmet credit 19.3</desc>
+<rect class="bg" width="760" height="400" rx="8"/>
+<text class="t1" x="24" y="30">Where the 100 points of the score go</text>
+<text class="t2" x="24" y="50">kv4i1404_g00581_29ea3c73 · W_ERGOLIGHT_v2 = 100 · E · W · base = 74.4 earned</text>
+<path class="g-structural sl" d="M196.00 100.00 A136 136 0 0 1 235.20 366.23 L220.79 318.35 A86 86 0 0 0 196.00 150.00 Z"><title>Structural safety: 45.35 points (16 load-case margins)</title></path>
+<path class="g-mass sl" d="M235.20 366.23 A136 136 0 0 1 143.57 361.49 L162.85 315.35 A86 86 0 0 0 220.79 318.35 Z"><title>Mass: 10.95 points (mass credit s = 0.396)</title></path>
+<path class="g-cutting sl" d="M143.57 361.49 A136 136 0 0 1 75.42 298.90 L119.75 275.78 A86 86 0 0 0 162.85 315.35 Z"><title>Cutting geometry: 11.05 points (point, edge angle, serration)</title></path>
+<path class="g-build sl" d="M75.42 298.90 A136 136 0 0 1 60.10 241.11 L110.06 239.23 A86 86 0 0 0 119.75 275.78 Z"><title>Build and form: 7.05 points (AM drainage, form)</title></path>
+<path class="lm sl" d="M60.10 241.11 A136 136 0 0 1 68.72 188.08 L115.51 205.70 A86 86 0 0 0 110.06 239.23 Z"><title>Lost to the multipliers: 6.33 points (E = 0.922 (hand: contact pressure e = 0.897) · W = 1.000)</title></path>
+<path class="lu sl" d="M68.72 188.08 A136 136 0 0 1 196.00 100.00 L196.00 150.00 A86 86 0 0 0 115.51 205.70 Z"><title>Unmet credit: 19.27 points (base = 0.807: terms short of full credit)</title></path>
+<text class="t1 big" x="196" y="242" text-anchor="middle">74.4</text>
+<text class="tk" x="196" y="262" text-anchor="middle">of 100 points earned</text>
+<rect class="g-structural" x="380" y="92" width="12" height="12" rx="3"/><text class="t2" x="400" y="102">Structural safety</text><text class="v" x="736" y="102" text-anchor="end">45.3</text>
+<text class="tk" x="400" y="118">16 load-case margins</text>
+<rect class="g-mass" x="380" y="138" width="12" height="12" rx="3"/><text class="t2" x="400" y="148">Mass</text><text class="v" x="736" y="148" text-anchor="end">11.0</text>
+<text class="tk" x="400" y="164">mass credit s = 0.396</text>
+<rect class="g-cutting" x="380" y="184" width="12" height="12" rx="3"/><text class="t2" x="400" y="194">Cutting geometry</text><text class="v" x="736" y="194" text-anchor="end">11.0</text>
+<text class="tk" x="400" y="210">point, edge angle, serration</text>
+<rect class="g-build" x="380" y="230" width="12" height="12" rx="3"/><text class="t2" x="400" y="240">Build and form</text><text class="v" x="736" y="240" text-anchor="end">7.1</text>
+<text class="tk" x="400" y="256">AM drainage, form</text>
+<rect class="lm" x="380" y="276" width="12" height="12" rx="3"/><text class="t2" x="400" y="286">Lost to the multipliers</text><text class="v" x="736" y="286" text-anchor="end">6.3</text>
+<text class="tk" x="400" y="302">E = 0.922 (hand: contact pressure e = 0.897) · W = 1.000</text>
+<rect class="lu" x="380" y="322" width="12" height="12" rx="3"/><text class="t2" x="400" y="332">Unmet credit</text><text class="v" x="736" y="332" text-anchor="end">19.3</text>
+<text class="tk" x="400" y="348">base = 0.807: terms short of full credit</text>
+<text class="tk" x="24" y="386">Earned = Σ term points; lost to the multipliers = 100 · base · (1 − E · W); unmet credit = 100 · (1 − base). The three sum to 100.</text>
+</svg>

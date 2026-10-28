@@ -1,0 +1,76 @@
+{
+  "best_design_id": "kv4i306_g00149_7f91c8b1",
+  "best_raw_score_100": 67.80924444881143,
+  "decoder_sha256": "c63629d4b31058f54470c3ed0fd5f2a7f4f492dfdb11ebb04c4a4588e50ffa9b",
+  "niches": 220,
+  "qd_score": 7807.462537676298,
+  "rows_read": 2687,
+  "sources": [
+    {
+      "archive.jsonl": "30ebaeebd10f9357ee1cbd37b3ad43c4ed4b62a3f06d679fe189469b0193fe91",
+      "dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/pools/p03",
+      "rows": 205
+    },
+    {
+      "archive.jsonl": "c5091a0d263fce78ef6e173de88ce5141fb3fe035ff8e5a727e8ff0cfeb2866c",
+      "dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/epoch03/xbabe4/island301",
+      "rows": 205
+    },
+    {
+      "archive.jsonl": "2ec5b45dee231c7ddb3eef37e37d84f49c4ec3a7dcdd9b5a61d813b8d501af18",
+      "dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/epoch03/xbabe4/island302",
+      "rows": 206
+    },
+    {
+      "archive.jsonl": "a8bfbc05b720993d22b76c7a33630c3f2b9a466d7a2145a374f32816a60509a4",
+      "dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/epoch03/xbabe4/island303",
+      "rows": 208
+    },
+    {
+      "archive.jsonl": "ec86b1ba58720501c4ed272db683bd63fd15396b6e45de78eee369accfd4fabb",
+      "dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/epoch03/xbabe4/island304",
+      "rows": 207
+    },
+    {
+      "archive.jsonl": "3571fe27b340e8a90582551e9a37a76cc7e9a2d9d8e91e6d7d489ca2c4d67719",
+      "dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/epoch03/xbabe4/island305",
+      "rows": 206
+    },
+    {
+      "archive.jsonl": "249cd96b20273ced4d3332bfe0cc9016ce15c308bf5636219d279edaf3f306f8",
+      "dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/epoch03/xbabe4/island306",
+      "rows": 206
+    },
+    {
+      "archive.jsonl": "5d3af230ea495ceae14ced66b6750aa5cd64c9446463b1011f086acdcd76fe52",
+      "dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/epoch03/xbabe4/island307",
+      "rows": 208
+    },
+    {
+      "archive.jsonl": "ee2d41ea19732e17ccd56606d8b7979cdcbd3a226f0a54116d4f01fc03b45da8",
+      "dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/epoch03/xbabe4/island308",
+      "rows": 207
+    },
+    {
+      "archive.jsonl": "19eba5bad30467ecab9b2e46fe1a171bbb04abdecc85bb2f4d372443ba9bd0c4",
+      "dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/epoch03/xbabe4/island309",
+      "rows": 207
+    },
+    {
+      "archive.jsonl": "79711d9ccefa760451af3aaa09923e0f9655af0094591de6d8501209f5b92ba4",
+      "dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/epoch03/xbabe4/island310",
+      "rows": 207
+    },
+    {
+      "archive.jsonl": "28226b70fd1a2065267116d5ee78ec57f0c19762848d2a63769766f0a4bedcc6",
+      "dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/epoch03/xbabe4/island311",
+      "rows": 209
+    },
+    {
+      "archive.jsonl": "a764b6b6a9702ae17b391bbe1d97d8763361baf84178cb9ece61d7f22f152acf",
+      "dir": "/home/ubuntu/jarambit_runs/evo_g5_v6/epoch03/xbabe4/island312",
+      "rows": 206
+    }
+  ],
+  "tool": "g5-continue merge"
+}

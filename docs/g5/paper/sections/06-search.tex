@@ -64,6 +64,6 @@ in the drainage connectivity flood fill and \gSpikePlatePct\,\% in the plate's s
 island's time (\gSpikeTierOneS~s against \gSpikeTierZeroS~s for Tier~0, over \gSpikeChildren{} children of the starting pool). The
 records of the search must stay exact CPU arithmetic, so a GPU could only shorten or skip Tier-1 work. Off-loading the voxel kernels
 for free bounds Tier~1 at \gSpikeKernelBound$\times$ faster, and a perfect, free pre-screen that promoted only the true top 10\,\% of
-children at \gSpikeScreenBound$\times$ more evaluations per hour; the Tier-0 screen already keeps \gSpikeKept{} of the \gSpikeTopTen{}
-best children (Spearman \gSpikeSpearman). Below the $3\times$ bar set for adopting a GPU path, the search stays on the CPUs and the
-GPUs render the figures.
+children at \gSpikeScreenBound$\times$ more evaluations per hour, and the Tier-0 screen already keeps \gSpikeKept{} of the
+\gSpikeTopTen{} best children (Spearman \gSpikeSpearman). A real predictor costs time and misses designs, so the $3\times$ bar set
+for adopting a GPU path is out of reach; the search stays on the CPUs and the GPUs render the figures.

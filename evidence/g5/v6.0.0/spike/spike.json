@@ -1,0 +1,90 @@
+{
+ "what": "GPU pre-screen spike (v6.0.0 plan W3): adopt a GPU f32 pre-screen only if >= 3x more evaluations per hour with equal or better results and bit-exact CPU f64 records",
+ "profile": {
+  "source": "perf record -F 997 of 6 Tier-1 evaluations at h 0.4 (one thread, xbabe2), self time per symbol",
+  "samples": 55762,
+  "euclidean_distance_transform_pct": 21.47,
+  "am_connectivity_pct": 17.58,
+  "plate_skyline_solve_pct": 19.96,
+  "sdf_build_and_eval_pct": 6.6,
+  "top_symbols": [
+   {
+    "symbol": "jarambit_g5::g5_sdf::enforce_am_connectivity",
+    "self_pct": 17.58
+   },
+   {
+    "symbol": "jarambit_g5::g5_sdf::edt_1d_line",
+    "self_pct": 14.96
+   },
+   {
+    "symbol": "jarambit_g5::g5_sandwich::Skyline::factor",
+    "self_pct": 13.51
+   },
+   {
+    "symbol": "jarambit_g5::g5_sandwich::Skyline::solve",
+    "self_pct": 4.03
+   },
+   {
+    "symbol": "jarambit_g5::g5_sdf::edt_out",
+    "self_pct": 4.0
+   },
+   {
+    "symbol": "jarambit_g5::g5_sdf::build_g5_sdf_from_params_with_origin_shift",
+    "self_pct": 3.24
+   },
+   {
+    "symbol": "core::ops::function::impls::<impl core::ops::function::FnMut<A> for &F>::call_mut",
+    "self_pct": 2.92
+   },
+   {
+    "symbol": "rayon::iter::plumbing::Folder::consume_iter",
+    "self_pct": 2.75
+   },
+   {
+    "symbol": "jarambit_g5::g5_sdf::edt_in",
+    "self_pct": 2.51
+   },
+   {
+    "symbol": "jarambit_g5::g5_sandwich::Skyline::residual_and_backward_error",
+    "self_pct": 2.42
+   },
+   {
+    "symbol": "hypot",
+    "self_pct": 2.16
+   },
+   {
+    "symbol": "core::ops::function::impls::<impl core::ops::function::FnMut<A> for &F>::call_mut",
+    "self_pct": 2.05
+   },
+   {
+    "symbol": "jarambit_g5::g5_sdf::eval_blade_thickness_and_sdf2",
+    "self_pct": 1.95
+   },
+   {
+    "symbol": "core::ops::function::impls::<impl core::ops::function::FnMut<A> for &F>::call_mut",
+    "self_pct": 1.9
+   }
+  ]
+ },
+ "screen": {
+  "finite": 200,
+  "h": 0.4,
+  "island_s_per_eval_at_tier1_top_0.4": 4.179627679093001,
+  "mean_tier0_s": 0.4081481495549998,
+  "mean_tier1_s": 9.428698823845004,
+  "n": 200,
+  "pool": "/home/ubuntu/jarambit_runs/evo_g5_v6/epoch00/pool",
+  "seed": 6,
+  "share_of_island_time_in_tier1": 0.9023482039807982,
+  "spearman_tier0_tier1": 0.9041401035025876,
+  "tier1_top10": 20,
+  "tier1_top10_kept_by_tier0_top40": 17,
+  "tool": "g5-continue screen"
+ },
+ "bounds": {
+  "voxel_kernel_offload_max_speedup_tier1": 1.64,
+  "perfect_free_screen_top10_speedup": 3.09,
+  "note": "records stay exact CPU f64, so a GPU can only skip or shorten Tier-1 work. Offloading the voxel distance transform and connectivity flood-fill (if free) bounds Tier 1 at the first figure; a perfect, zero-cost screen promoting only the true top 10 % gives the second. The Tier-0 screen already keeps 17 of 20 of them (Spearman 0.90)."
+ },
+ "decision": "not adopted: the 3x bar is unreachable by construction (a real predictor costs time and misses designs); the CPU path stays and the GPUs render"
+}

@@ -1,0 +1,42 @@
+{
+  "case": "tip_twist",
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "field": {
+    "allowable_mpa": 750.8,
+    "peak_at_mm": [
+      137.02,
+      -28.73,
+      0.52
+    ],
+    "peak_distance_mm": 4.6,
+    "peak_mpa": 300.4,
+    "peak_vertex_raw_mpa": 300.3714365644577,
+    "quantity": "von Mises at the vertices (largest corner value), MPa",
+    "readout_mm": [
+      4.5,
+      15.0
+    ]
+  },
+  "gated": true,
+  "h_mm": 0.2,
+  "load": "0.3 N m about the tip bisector, 3 mm behind the point; read from 4.5 to 15 mm",
+  "match": true,
+  "mesh": {
+    "dof": 361665,
+    "planform_max_area_mm2": 0.08,
+    "tets": 76440,
+    "vertices": 17565
+  },
+  "model": "TET10 solid of the last 30 mm of the blade, 4 layers through the thickness, clamped at the cut",
+  "record_sha256": "631529a81986d7e2653445fbe653c93eb726d9f777d08fff87493d911234dceb",
+  "required_sf": 1.2,
+  "scored_margin": 2.082639813581891,
+  "sf_fem": 2.499167776298269,
+  "sf_record": 2.499167776298269,
+  "solver": {
+    "backward_error": 8.142086233901999e-16,
+    "direct": true,
+    "rel_res": 1.829389557620962e-12
+  },
+  "title": "Point, twist"
+}

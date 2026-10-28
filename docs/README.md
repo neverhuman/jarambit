@@ -7,8 +7,9 @@ The current generation is **G5**. G3 and the v1/v2 study are kept as their own r
 | path | what it is |
 |---|---|
 | [`g5/paper/`](g5/paper/) | the G5 paper; every number comes from the release receipt via `g5-release-tex` |
-| [`g5/v5.0.0/img/`](g5/v5.0.0/img/) | the evolution figure and every image of the best individual |
-| [`g5/v5.0.0/cad/`](g5/v5.0.0/cad/) | the print and envelope files of the winner (the upload kit in [`../cad/`](../cad/) holds the same bytes) |
+| [`g5/v6.0.0/img/`](g5/v6.0.0/img/) | the evolution and fitness figures, the FEM renderings of every load case ([`fem/`](g5/v6.0.0/img/fem/)) and every image of the best individual |
+| [`g5/v6.0.0/cad/`](g5/v6.0.0/cad/) | the print spec of the winner (the upload kit in [`../cad/`](../cad/) holds its print and envelope files) |
+| [`g5/v5.0.0/`](g5/v5.0.0/) | the images and print spec of the v5.0.0 winner, the cohort v6.0.0 continues |
 | [`VERSION`](VERSION), [`RELEASES.md`](RELEASES.md) | the release number and the changelog of every release |
 
 ## G3 (earlier generation)

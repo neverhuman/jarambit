@@ -1,0 +1,44 @@
+{
+  "allowable_mpa": 599.6418972463227,
+  "case": "grip_squeeze",
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "fem_over_formula": 10.251863461877846,
+  "fixed_nodes": 10638,
+  "gated": false,
+  "h_mm": 0.2,
+  "load": {
+    "pad": "20 mm along x, |y - ym| <= h/4, the outer -z surface, uniform traction +z",
+    "pad_force_n": 459.99999999999994,
+    "palm": "the outer +z surface in the same window, normal (z) support only; two nodes also hold x, y against rigid-body motion"
+  },
+  "loaded_faces": 8900,
+  "model": "hex8 voxel FE (voxel_fe, copied from g5-gripfe) on the design's AM voxel field; 28 mm grip slice at the formula's governing station",
+  "note": "Cross-check, not gated: the score uses the formula SF (sf_formula = sf_record). The voxel SF uses the 99.9 % von Mises quantile; voxel peaks at staircase corners do not converge.",
+  "record_sha256": "631529a81986d7e2653445fbe653c93eb726d9f777d08fff87493d911234dceb",
+  "required_sf": 1.2,
+  "scored_margin": 1.9329832382567191,
+  "sf_fem": 23.780016279247654,
+  "sf_formula": 2.319579885908063,
+  "sf_record": 2.319579885908063,
+  "solid_voxels": 767939,
+  "solver": {
+    "relative_residuals": [
+      9.441383795992484e-9,
+      9.893357974476448e-9,
+      9.542716713694943e-9,
+      9.592136015937207e-9,
+      7.875669603216076e-9,
+      9.535188840917711e-9
+    ],
+    "seconds": 492.546776061
+  },
+  "station_x_mm": 37.74178034520334,
+  "title": "Grip squeeze",
+  "unsupported_voxels": 0,
+  "vm_mpa": {
+    "max": 61.39692180909289,
+    "q99": 19.135061117712606,
+    "q999": 25.216210544381262,
+    "read_elements": 450440
+  }
+}

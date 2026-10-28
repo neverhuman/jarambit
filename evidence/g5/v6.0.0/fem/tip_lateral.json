@@ -1,0 +1,42 @@
+{
+  "case": "tip_lateral",
+  "design_id": "kv4i1404_g00581_29ea3c73",
+  "field": {
+    "allowable_mpa": 750.8,
+    "peak_at_mm": [
+      139.7,
+      -31.08,
+      -0.17
+    ],
+    "peak_distance_mm": 1.04,
+    "peak_mpa": 403.7,
+    "peak_vertex_raw_mpa": 403.71684452491235,
+    "quantity": "von Mises at the vertices (largest corner value), MPa",
+    "readout_mm": [
+      1.0,
+      2.5
+    ]
+  },
+  "gated": true,
+  "h_mm": 0.2,
+  "load": "10 N normal to the blade on the last 0.75 mm, read from 1 to 2.5 mm",
+  "match": true,
+  "mesh": {
+    "dof": 361665,
+    "planform_max_area_mm2": 0.08,
+    "tets": 76440,
+    "vertices": 17565
+  },
+  "model": "TET10 solid of the last 30 mm of the blade, 4 layers through the thickness, clamped at the cut",
+  "record_sha256": "631529a81986d7e2653445fbe653c93eb726d9f777d08fff87493d911234dceb",
+  "required_sf": 1.2,
+  "scored_margin": 1.5497275204359673,
+  "sf_fem": 1.8596730245231607,
+  "sf_record": 1.8596730245231607,
+  "solver": {
+    "backward_error": 8.412027650080179e-16,
+    "direct": true,
+    "rel_res": 1.9855645458129248e-10
+  },
+  "title": "Point, side load"
+}

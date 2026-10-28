@@ -1,4 +1,4 @@
-# jarambit-g5: the G5 generation (decoder G5.0, frozen for v5.0.0)
+# jarambit-g5: the G5 generation (decoder G5.0, frozen for v5.0.0 and continued unchanged in v6.0.0)
 
 `jarambit-g5` is the G5 genome, decoder, evaluator and search. G5 targets the requirement set
 [`requirements/RS-karambit-v5.toml`](../../requirements/RS-karambit-v5.toml) (sources:
@@ -11,7 +11,7 @@ release v5.0.0.
 - `G5_DECODER_FROZEN` is `true`, so record cohorts run under an `evo_g5` root. The development pilots ran under
   `evo_g5_dev` and none of their numbers are records.
 - The freeze V&V receipts are in [`evidence/g5/v5.0.0/vv/`](../../evidence/g5/v5.0.0/vv/), written by `g5-vv`.
-- The cohort of record and its winner arrive with the v5.0.0 release receipt.
+- v5.0.0 is the first cohort of record. v6.0.0 continues it with the same decoder (crate version 5.0.0) on one platform of record: `g5-continue` warm-starts from the v5.0.0 elites, and `g5-release receipt-v6` writes the receipt.
 
 G5 started as a copy of the validated G3 crate ([`crates/g3`](../g3/README.md), the v3.0.0 cohort of record).
 Reviewed pull requests then changed it to RS-karambit-v5. `crates/g4` is the withdrawn v4.0.0 prototype (see its
@@ -26,6 +26,7 @@ Reviewed pull requests then changed it to RS-karambit-v5. `crates/g4` is the wit
 | `g5-pilot` | Re-evaluation of archived designs: `eval` (Tier 1), `tier2`, `hconv` (five grids), `export` (watertight STL). |
 | `g5-release` | The release receipt. `receipt` (v5.0.0); `receipt-v6`, which recomputes every merge of the lineage (`g5_release/v6.rs`); `top`; `plate-meshes` (B1); and `fitness` (the 100-point budget and per-term figures). |
 | `g5-release-tex` | The paper's LaTeX macros, from the receipt. |
+| `g5-fem-fields` | v6.0.0: the FEM field of every load case of one design (plate, solid tip, ring, Ritz column, sequence) as JSON and SVG. The scored values must reproduce the record bit for bit. Grip squeeze, guard push and teeth also get an independent hex8 voxel FE check. |
 | `g5-vv` | The verification studies behind the decoder freeze (`evidence/g5/v5.0.0/vv/`). |
 | `g5-export-stl` | The CAD kit of a genome: STL, 3MF, DXF and the print spec. |
 | `g5-gripfe`, `g5-tipconv`, `g5-bladefacts`, `g5-bladefield`, `g5-edgeprofile` | Release checks and figures inherited from v3.0.0: hex8 grip FE, tip mesh convergence, blade facts, the blade thickness field and the edge sections. |
