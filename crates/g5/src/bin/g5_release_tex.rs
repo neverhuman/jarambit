@@ -292,6 +292,14 @@ fn main() {
         ("gTexPitch", f("/decoded/tex_pitch", 2)),
         ("gScopeBlade", f("/decoded/scope_blade", 2)),
         ("gScopeBladeThree", f("/decoded/scope_blade", 3)),
+        // the texture depth on the blade is tex_amp x scope_blade (g5_sdf: the blade's texture weight); the reading
+        // follows the number, so the text stays true for any winner
+        ("gBladeTexDepth", format!("{:.3}", num(&r, "/decoded/tex_amp") * num(&r, "/decoded/scope_blade"))),
+        ("gBladeTexReading", (if num(&r, "/decoded/scope_blade") < 0.25 {
+            "so the as-decoded blade and its bevels are nearly smooth"
+        } else {
+            "carving inward across the blade flats and the bevels, so the as-decoded edge is notched"
+        }).to_string()),
     ];
 
     if v6 {

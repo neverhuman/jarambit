@@ -139,7 +139,7 @@ class GenReadme(unittest.TestCase):
         self.assertIn('not qualified for use as a knife', notes)
         if is_g5():
             # the lowest computed margins are disclosed next to the status
-            low = sorted((v for v in rec['margins'].values() if isinstance(v, float)))[:3]
+            low = sorted((v for v in rec.get('margins_min_over_plate_meshes', rec['margins']).values() if isinstance(v, float)))[:3]
             for v in low:
                 self.assertIn(f'{v:.2f}', ct)
         else:

@@ -618,13 +618,15 @@ def g5v6_evolution(r, rk, gc, man):
     if man['lineage']:
         L += ['The best design of the pool at points of the lineage, same camera and light (scores on the search grid):', '',
               '<table><tr>' + ''.join(
-                  f'<td align="center"><img src="{c["image"]}" alt="best of {c["pool"]}" width="100%"><br>`{c["pool"]}`<br>'
+                  f'<td align="center"><img src="{c["image"]}" alt="best of {c["pool"]}" width="100%"><br><code>{c["pool"]}</code><br>'
                   f'{pools[c["pool"]]["best_raw_score_100"]:.1f}, {pools[c["pool"]]["best_mass_g"]:.0f} g'
                   + (f'<br><b>{c["role"]}</b>' if c['role'] else '') + '</td>' for c in man['lineage']) + '</tr></table>', '']
     L += ['| Host | Round | Islands × evaluations | Started from (best) | Merged into (best) |', '|---|---:|---:|---|---|']
     for x in rounds:
         L.append(f'| {x["host"]} | {x["round"]} | {x["islands"]} × {int(x["evaluations_per_island"]):,} | `{x["pool_in"]}` ({x["pool_in_best"]:.2f}) | '
                  f'`{x["merged_into"]}` ({x["merged_best"]:.2f}) |')
+    if any(x['round'] > 9 for x in rounds):
+        L += ['', 'Round numbers skip 9, which the control islands use (islands 9xx).']
     lead = (f'**The search leader is the winner.** ' if sl['design_id'] == r['design_id'] else
             f'**Why the search leader is not the winner.** The best design on the search grid, `{sl["design_id"]}` ({sl["tier1_h04_score_100"]:.1f}), '
             f'{"ranks " + str(sl["tier2_rank"]) if sl["tier2_rank"] else "falls outside the shortlist"} once re-scored at Tier 2, h {rk["h_mm"]:g} mm. ')
@@ -651,9 +653,10 @@ def g5v6_verification(r, rv):
             f'- **GPUs: renders, not search.** A profile of the Tier-1 evaluation ([`spike/spike.json`](evidence/g5/v{rv}/spike/spike.json)) puts '
             f'{sp["profile"]["euclidean_distance_transform_pct"] + sp["profile"]["am_connectivity_pct"]:.0f} % of it in voxel kernels and '
             f'{sp["profile"]["plate_skyline_solve_pct"]:.0f} % in the plate solve. Records must stay exact CPU arithmetic, so a GPU could only screen children '
-            f'before Tier 1: a perfect, free screen would give at most {sp["bounds"]["perfect_free_screen_top10_speedup"]:.1f}× more evaluations per hour, '
-            f'and the Tier-0 screen already keeps {sp["screen"]["tier1_top10_kept_by_tier0_top40"]} of the {sp["screen"]["tier1_top10"]} best children '
-            f'(rank correlation {sp["screen"]["spearman_tier0_tier1"]:.2f}). The 3× bar for adopting it is out of reach, so the search stays on the CPUs.']
+            f'before Tier 1. A perfect screen costing nothing would give at most {sp["bounds"]["perfect_free_screen_top10_speedup"]:.1f}× more evaluations '
+            f'per hour, and the Tier-0 screen already keeps {sp["screen"]["tier1_top10_kept_by_tier0_top40"]} of the {sp["screen"]["tier1_top10"]} best children '
+            f'(rank correlation {sp["screen"]["spearman_tier0_tier1"]:.2f}). A real predictor costs time and misses designs, so the 3× bar for adopting it is '
+            'out of reach and the search stays on the CPUs.']
 
 
 def g5v6_fem(r, rv):
@@ -854,10 +857,12 @@ def readme_g5():
           f'- **Numerical studies** ([`{vvd}/`]({vvd}/)): grid agreement of mass, blade-plate and solid-tip mesh studies, '
           f'the grip perimeter within {100 * tg["max_perimeter_rel_err"]:.2f} % of its gene, Rayleigh–Ritz against Euler within {abs(ck["ritz_column"]["rel_err"]):.0e}, '
           f'and Lloyd niches with {100 * (1 - ck["cvt_1024"]["lloyd_quantisation_error"] / ck["cvt_1024"]["halton_quantisation_error"]):.1f} % less quantisation error than Halton.',
-          f'- **Texture on the blade.** The frozen G5.0 decoder lets the evolved surface texture reach the blade (here texture depth '
-          f'{dc["tex_amp"]:.2f} mm, blade scope {dc["scope_blade"]:.2f}), bevels included, and the renders and print meshes show it. The edge '
-          f'figures and measurements use the exact bevel law, which grinding after printing restores: the requirement\'s finishing allowance '
-          f'({ed_rs["finishing_allowance_mm"]:g} mm per ground face) exceeds the texture depth. Keeping texture off the bevels is a decoder change for a later generation.',
+          f'- **Texture on the blade.** The frozen G5.0 decoder lets the evolved surface texture reach the blade, where its depth is the texture '
+          f'depth times the blade scope ({dc["tex_amp"]:.2f} mm × {dc["scope_blade"]:.2f} = {dc["tex_amp"] * dc["scope_blade"]:.3f} mm here)'
+          + (', so the blade and its bevels are nearly smooth.' if dc['scope_blade'] < 0.25 else ', bevels included, and the renders and print meshes show it.')
+          + f' The edge figures and measurements use the exact bevel law, which grinding after printing restores: the requirement\'s finishing '
+          f'allowance ({ed_rs["finishing_allowance_mm"]:g} mm per ground face) exceeds the texture depth. Keeping texture off the bevels by construction '
+          'is a decoder change for a later generation.',
           f'- **Status: {r["status"]}.** Nothing here is a qualification for use. The safety factors are computed from models with the '
           'limits stated in the paper; the material values are specification minima, not measured coupons.',
           '- **Evidence gaps** listed in [`requirements/PROVENANCE-v5.md`](requirements/PROVENANCE-v5.md) need physical tests before any build: '
@@ -907,7 +912,8 @@ def cad_readme_g5():
     v, rv, r = receipt_g5()
     rs = toml('requirements/RS-karambit-v5.toml')
     _, _, spec = g5_files(rv)
-    wid, ms, mg = r['design_id'], r['mass'], r['margins']
+    # the margins of record (B1: the minimum over the plate meshes), as the README states them
+    wid, ms, mg = r['design_id'], r['mass'], r.get('margins_min_over_plate_meshes', r['margins'])
     mat, ed_rs = rs['material'], rs['edge']
     dim, am_s, env_s = spec['overall_dimensions_mm'], spec['am_build_stl'], spec['outer_envelope_stl']
     worst = sorted(((k, x) for k, x in mg.items() if isinstance(x, float)), key=lambda kv: kv[1])[:3]
