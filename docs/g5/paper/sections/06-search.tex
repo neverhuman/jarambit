@@ -51,11 +51,13 @@ function of the recorded inputs, and the receipt recomputes it byte for byte (Se
 \emph{Control.} \gControlIslands{} fresh-start islands ran \gControlEvals{} evaluations each from scrambled Sobol samples, with the
 same decoder, objective and promotion and no pool or migration. They are never merged and cannot win.
 
-\emph{Sizing on the hosts.} On the Threadripper hosts, Tier-1 evaluations share each core complex's L3 cache. The same
-\gSizingGenomes{} Tier-1 evaluations took \gSizingOneS~s each with one evaluation per core complex and \gSizingFourS~s with four
-(\gSizingGain$\times$ the throughput for four times the cores; \code{fleet/sizing.json}). The continuation therefore runs one island
-per core complex, beside the other users of the machines, and keeps freed memory for reuse (glibc tunables: \gSizingFaultRatio{}
-times fewer page faults, identical outputs).
+\emph{Sizing on the hosts.} The continuation ran one island per core complex (four cores sharing an L3 cache) on the
+Threadripper hosts, because an early pilot's time per evaluation rose steeply with the number of concurrent evaluations. A
+controlled measurement after the search does not support that choice. The same \gSizingGenomes{} Tier-1 evaluations took
+\gSizingOneS~s each with one evaluation per core complex and \gSizingFourS~s with four, so one per core would have given
+\gSizingGain$\times$ the throughput of the setting used (\code{fleet/sizing.json}); the pilot had mixed tiers, simultaneous
+multithreading and other users' load in it. The search is deterministic either way, so this cost evaluations, not correctness.
+Freed memory is kept for reuse (glibc tunables: \gSizingFaultRatio$\times$ fewer page faults, identical outputs).
 
 \emph{GPUs.} A profile of the Tier-1 evaluation puts \gSpikeEdtPct\,\% of its time in the voxel distance transform, \gSpikeConnPct\,\%
 in the drainage connectivity flood fill and \gSpikePlatePct\,\% in the plate's skyline solve; Tier~1 is \gSpikeTierOneShare\,\% of an
