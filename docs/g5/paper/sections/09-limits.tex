@@ -9,11 +9,11 @@ $\mu = \gWorstMarginRatio$ (on \gWorstMarginCase, multiplier $W = \gW$), finishe
 (\gMassG{}~g on the $0.20$~mm mesh, which \gMassReading), and sealed internal void volume \gSealedVoid{}~$\mathrm{mm^3}$
 (printed solid in the build field, $d_\mathrm{am} = -h$, so the mass counts solid titanium rather than trapped powder).
 \item \textbf{Blade surface texture (frozen \code{G5.0} decoder limit).} The frozen \code{G5.0} decoder allows the evolved
-surface texture to reach the blade zone (for \gDesign, texture depth \code{tex\_amp} $= \gTexAmp$~mm, pitch $\gTexPitch$~mm, and
-\code{scope\_blade} $= \gScopeBladeThree$), carving inward across both the blade flats and the bevels so the as-decoded edge is
-notched. The edge cross-sections (Fig.~\ref{fig:edges}) and edge measurements evaluate the exact bevel law, which post-build
-grinding restores because the \code{RS-karambit-v5} finishing allowance ($\gReqEdgeFinishMm$~mm per ground face) exceeds the
-$\gTexAmp$~mm texture depth. Restricting surface texture outside the bevels is deferred to a later decoder generation.
+surface texture to reach the blade zone, where its depth is \code{tex\_amp} $\times$ \code{scope\_blade} (for \gDesign,
+$\gTexAmp \times \gScopeBladeThree = \gBladeTexDepth$~mm; pitch $\gTexPitch$~mm), \gBladeTexReading. The edge cross-sections
+(Fig.~\ref{fig:edges}) and edge measurements evaluate the exact bevel law, which post-build grinding restores because the
+\code{RS-karambit-v5} finishing allowance ($\gReqEdgeFinishMm$~mm per ground face) exceeds the texture depth. Keeping texture off the
+bevels by construction is deferred to a later decoder generation.
 \item \textbf{One platform of record.} v5.0.0's \code{arm64} records agreed closely with, but were not bit-identical to,
 \code{x86\_64} re-evaluations, because the platforms' maths libraries differ in the last bits. v\gRecord{} runs the search, every
 re-evaluation and the ranking on one platform (static \code{x86\_64} binaries, natively or in a \code{linux/amd64} container): every archive
