@@ -145,7 +145,7 @@ fn v6_macros(r: &Value, receipt_path: &Path) -> Vec<(&'static str, String)> {
         ("gSizingOneS", format!("{:.1}", num(&sz, "/one_per_ccx_s_per_eval"))),
         ("gSizingFourS", format!("{:.1}", num(&sz, "/four_per_ccx_s_per_eval"))),
         ("gSizingGain", format!("{:.2}", num(&sz, "/throughput_gain_four_vs_one_per_ccx"))),
-        ("gSizingFaultRatio", format!("{:.0}", num(&sz, "/fault_ratio"))),
+        ("gSizingFaultRatio", format!("{:.1}", num(&sz, "/fault_ratio"))),
         // comparisons in words, so the text stays true whatever the numbers are
         ("gVsVFiveScore", cmp_word(num(r, "/score/score_100"), num(r, "/ranking/v5_winner_same_platform/score/score_100"), "higher than", "lower than", "equal to")),
         ("gVsVFiveMass", cmp_word(num(r, "/mass/of_record_g"), num(r, "/ranking/v5_winner_same_platform/mass_g"), "heavier than", "lighter than", "as heavy as")),
