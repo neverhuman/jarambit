@@ -41,6 +41,7 @@ jobs:
             . -> target
             crates/g3 -> crates/g3/target
             crates/g5 -> crates/g5/target
+            crates/g51 -> crates/g51/target
       - name: cargo test --release (all crates, incl. D1 owner-lock gate tests)
         # Retained exporter work exceeded 45 minutes on a general-pool host.
         # A uniform 75-minute step leaves 15 minutes below the job ceiling.
@@ -60,6 +61,9 @@ jobs:
       - name: G5 standalone crate tests (hermetic; RS-karambit-v5 loader, G3 record guard)
         timeout-minutes: 25
         run: cargo test --release --locked --manifest-path crates/g5/Cargo.toml -- --test-threads=2
+      - name: G5.1 standalone crate tests (hermetic; G5.0 decoder of record unchanged, bevel mask, voxel FE controls)
+        timeout-minutes: 25
+        run: cargo test --release --locked --manifest-path crates/g51/Cargo.toml -- --test-threads=2
       - name: D1 smoke (crescent-d1 on wave14_c03 reference)
         run: |
           cargo build --release -p jarambit
