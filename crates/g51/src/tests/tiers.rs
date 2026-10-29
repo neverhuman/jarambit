@@ -61,3 +61,11 @@ fn g51_archive_refuses_g5_records() {
     let refused = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| new_archive().insert(g, r5)));
     assert!(refused.is_err(), "a G5.0 record entered a G5.1 archive");
 }
+
+/// With no blade texture, Tier 2 (watertight census and TET10 tip on the Tier-1 grid) is G5.0's bit for bit.
+#[test]
+fn tier2_is_g5s_off_the_bevels() {
+    let g = without_blade_texture(super::textured_blade_designs(1, 0.03)[0].clone());
+    let (r, _) = crate::tiers::evaluate_tier2_elites(&g, 0.5);
+    assert_same_record(&r, &jarambit_g5::g5_qd::evaluate_tier2_elites(&g, 0.5));
+}

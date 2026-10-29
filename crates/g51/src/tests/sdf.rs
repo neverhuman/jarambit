@@ -97,3 +97,36 @@ fn blade_outer_field_matches_the_grid() {
         assert!(checked > 100_000, "{checked}");
     }
 }
+
+/// No step at the plunge line: walking along each sharpened edge, just inside it, the texture weight rises from 0
+/// on the bevel to 1 heel-ward of the grind start smoothly (no jump above 0.1 between samples 0.05 mm apart).
+#[test]
+fn bevel_mask_has_no_step_at_the_plunge_line() {
+    let mut crossings = 0usize;
+    for g in super::textured_blade_designs(6, 0.0) {
+        let p = g.decode();
+        let prof = build_blade_profile_2d(&p);
+        for inner in [true, false] {
+            let edge = if inner { &prof.y_in } else { &prof.y_sp };
+            let inward = if inner { 0.3 } else { -0.3 };
+            let at = |x: f64| {
+                let u = ((x - prof.x_heel) / (prof.x_tip - prof.x_heel)).clamp(0.0, 1.0) * (prof.xs.len() - 1) as f64;
+                let i0 = (u.floor() as usize).min(prof.xs.len() - 2);
+                let f = u - i0 as f64;
+                bevel_texture_weight(&p, &prof, x, edge[i0] * (1.0 - f) + edge[i0 + 1] * f + inward)
+            };
+            let (mut prev, mut x) = (at(prof.x_heel + 0.5), prof.x_heel + 0.55);
+            let (mut seen_one, mut seen_zero) = (prev == 1.0, prev == 0.0);
+            while x < prof.x_tip - 10.0 {
+                let w = at(x);
+                assert!((w - prev).abs() <= 0.1, "inner {inner}: weight jumps {prev} -> {w} at x {x}");
+                seen_one |= w == 1.0;
+                seen_zero |= w == 0.0;
+                prev = w;
+                x += 0.05;
+            }
+            crossings += usize::from(seen_one && seen_zero);
+        }
+    }
+    assert!(crossings >= 4, "only {crossings} edges cross from unground to ground");
+}

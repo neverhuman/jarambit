@@ -8,7 +8,7 @@ use jarambit_g5::g5_sdf::{
     build_blade_profile_2d, blade_bevel_window_weights, edt_out, effective_blade_rho, enforce_am_connectivity,
     eval_blade_thickness_and_sdf2, eval_grip_slice, eval_guard_lobe_y, gaussian_filter_3d, morph_close_variable_2d_z,
     morph_open_variable_2d_z, sdf_mask, tpms_val_and_grad, AmConnectivityStats, BladeProfile2D, VoxelGrid3D,
-    GUARD_X_MM, HANDZONE_SDF_BLUR_SIGMA_MM,
+    GUARD_X_MM, HANDZONE_SDF_BLUR_SIGMA_MM, SHARPENED_EDGE_CAP_MM,
 };
 use rayon::prelude::*;
 use std::collections::BTreeMap;
@@ -154,6 +154,8 @@ pub struct BevelDetail {
     pub slope: [f64; 2],
     /// Signed in-plane distance inside each edge (negative outside the planform)
     pub d_edge: [f64; 2],
+    /// Arc length (mm) still to go along each edge before its grind starts (0 from the grind start on)
+    pub before_plunge: [f64; 2],
 }
 
 /// `BevelDetail` at `(x, y)`, or `None` outside the blade's x range (where G5.0 returns `(0.0, 20.0)`).
@@ -231,6 +233,11 @@ pub fn blade_bevel_detail(
     let t_bevel_in = win_in * t_bevel_in_raw + (1.0 - win_in) * t_medial;
     let t_bevel_sp = win_sp * t_bevel_sp_raw + (1.0 - win_sp) * t_medial;
     let t_final = if d2 > 0.0 { 0.0 } else { t_medial.min(t_bevel_in).min(t_bevel_sp).min(t_spine_cap) };
+    // The grind start along each edge, as `blade_bevel_window_weights` places it
+    let cap_safe = SHARPENED_EDGE_CAP_MM - 1.5;
+    let start = |s0: f64, arc: f64| (s0.clamp(0.0, 0.50) * arc).min((arc - 8.0).max(0.0)).max((arc - cap_safe).max(0.0));
+    let start_in = start(p["s0_in"], prof.arc_in_mm);
+    let start_sp = start(p["s0_sp"], prof.arc_sp_mm);
     Some(BevelDetail {
         t_final,
         d2,
@@ -239,29 +246,29 @@ pub fn blade_bevel_detail(
         window: [win_in, win_sp],
         slope: [2.0 * tan_in * curv_in, 2.0 * tan_sp * curv_sp],
         d_edge: [d_in, d_sp],
+        before_plunge: [(start_in - s_arc_in).max(0.0), (start_sp - s_arc_sp).max(0.0)],
     })
 }
 
-/// Texture weight in [0, 1] at planform point `(x, y)` of the blade zone: 0 on a sharpened edge's bevel and its
-/// finishing allowance (RS-karambit-v5 `[edge] finishing_allowance_mm`, in plane past the bevel's inner boundary),
-/// rising to 1 over `BEVEL_TEXTURE_TAPER_MM`; exactly 1 away from every bevel. Just outside the planform the nearer
-/// edge decides, because those voxels shape the edge surface too.
+/// Texture weight in [0, 1] at planform point `(x, y)` of the blade zone: 0 on a ground bevel and its finishing
+/// allowance (RS-karambit-v5 `[edge] finishing_allowance_mm`), rising to 1 over `BEVEL_TEXTURE_TAPER_MM`; exactly 1
+/// away from every bevel. The distance to the ground region is taken in plane past the bevel's inner boundary and,
+/// heel-ward of the grind start, along the edge too, so the mask has no step at the plunge line either. Just outside
+/// the planform the nearer edge decides, because those voxels shape the edge surface too.
 pub fn bevel_texture_weight(p: &BTreeMap<&'static str, f64>, prof: &BladeProfile2D, x: f64, y: f64) -> f64 {
     let Some(b) = blade_bevel_detail(p, prof, x, y) else {
         return 1.0;
     };
+    let allowance = jarambit_g5::requirements::rs_v5().edge.finishing_allowance_mm;
+    let ramp = |dist: f64| smoothstep(allowance, allowance + BEVEL_TEXTURE_TAPER_MM, dist);
     if b.d2 > 0.0 {
         let e = if b.d_edge[0] < b.d_edge[1] { 0 } else { 1 };
-        return if b.window[e] > 0.0 { 0.0 } else { 1.0 };
+        return ramp(b.before_plunge[e]);
     }
-    let allowance = jarambit_g5::requirements::rs_v5().edge.finishing_allowance_mm;
     let mut w = 1.0;
     for e in 0..2 {
-        if b.window[e] <= 0.0 {
-            continue;
-        }
         let past = ((b.t_bevel_raw[e] - b.t_medial) / b.slope[e].max(1e-9)).max(0.0);
-        w *= smoothstep(allowance, allowance + BEVEL_TEXTURE_TAPER_MM, past);
+        w *= ramp(past.hypot(b.before_plunge[e]));
     }
     w
 }

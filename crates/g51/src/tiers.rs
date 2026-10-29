@@ -494,17 +494,7 @@ pub fn evaluate_tier2_from_tier1(
     rec.inputs.solid_tip_sf = 0.0;
     rec.inputs.dolfinx_rel_err = 1.0;
 
-    // Run fail-closed 3D TET10 tip submodel on the blade surface law (P6: full xs outline containing exact tip_xy,
-    // max triangle area `TIP_FE_MAX_AREA_MM2`). r2: on the sharp EDGE-spec points 0.4 mm^2 was 3-19 % off a 0.15 mm^2
-    // mesh, while 0.15 and 0.08 mm^2 agree within 0.7-8.2 % on the 8 edge-pilot top designs, so 0.15 is the production mesh.
     let blade = build_blade_profile_2d(&p);
-    let mut b_outer = Vec::with_capacity(blade.xs.len() * 2);
-    for i in 0..blade.xs.len() {
-        b_outer.push((blade.xs[i], blade.y_in[i]));
-    }
-    for i in (0..blade.xs.len()).rev() {
-        b_outer.push((blade.xs[i], blade.y_sp[i]));
-    }
     // RS-karambit-v5 tip cases on the TET10 solid (`loads::tip_solid_cases`). Fail closed: a finalist's tip is
     // judged on the solid, so a failed mesh or solve scores the tip cases zero. (G3's own TET10 solve, a 1.82 N m
     // twist with G3 material whose result W_ERGOLIGHT_v2 does not read, no longer runs.)
@@ -525,7 +515,7 @@ pub fn evaluate_tier2_from_tier1(
 
     rec.tier = EvalTier::Tier2Full3D;
     hand.apply(&mut rec.loads);
-    rec.score = score_record(&rec.inputs, &rec.loads, &rec.am_connectivity, &build_blade_profile_2d(&p));
+    rec.score = score_record(&rec.inputs, &rec.loads, &rec.am_connectivity, &blade);
     (rec, hand)
 }
 
