@@ -2,6 +2,12 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v6.1.1 — 2026-10-29 (patch, docs only: Blender renders of the latest-run leader; cohort of record v6.0.0)
+
+- New manual command `python3 tools/refresh_leader_assets.py [--design ID]` ([docs/LEADER_ASSETS.md](LEADER_ASSETS.md)): resolves the latest run's leader, takes its exported STL, renders 12 Blender views (`ops/render/blender/leader_views.py`) into `docs/assets/leader/`, regenerates the run's evolution plots, the README (hero strip + leader gallery) and the G5 paper PDF, and prints before/after hashes.
+- Run for `ec2i089_r01_p10_c68` (fitness 80.851214, 83.409 g, 13 of 26 legacy gates; not a qualified design). Its binary STL is committed in `evidence/legacy_continuous_run_v6.1.0/leaders/`.
+- The G5 record images (`docs/g5/v6.0.0/img/`) stay on the record design: they are hash-bound to the G5 receipt.
+
 ## v6.1.0 — 2026-10-29 (minor, docs only: the latest legacy-pipeline continuous evolution run)
 
 - Keeps the **cohort of record v6.0.0** (G5, `kv4i1404_g00581_29ea3c73`) unchanged; README headline and paper of record are unchanged.
