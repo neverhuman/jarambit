@@ -1,0 +1,17 @@
+[workspace]
+
+[package]
+name = "jarambit-g51"
+version = "7.0.0"
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+jarambit-g5 = { path = "../g5" }
+jarambit-crescent = { path = "../crescent" }
+jarambit-physics = { path = "../physics" }
+faer = { version = "0.24", default-features = false, features = ["std", "linalg", "sparse", "sparse-linalg"] }
+rayon = "1.10"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["float_roundtrip"] }
+toml = { version = "1.1", default-features = false, features = ["parse", "serde", "std"] }
