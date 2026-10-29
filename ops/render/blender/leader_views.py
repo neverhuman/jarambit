@@ -5,7 +5,7 @@
 
 Frame-agnostic (any CAD frame): the long axis is X, the tip is the vertex of max X, the ring is the
 min-X end. Hand zone (X below the grip/blade split) is anodized Ti, the blade bare satin Ti.
-Section views cut the actual mesh with bmesh bisect + fill; nothing is re-solved or re-scored.
+Section views cut the actual mesh with bmesh bisect (+ fill unless --open_cuts 1, which keeps\ninternal voids visible); view xray = mid-thickness cutaway of the AM-build mesh; nothing is re-solved or re-scored.
 """
 import math
 import os
@@ -18,7 +18,7 @@ from mathutils import Vector
 argv = sys.argv[sys.argv.index("--") + 1:]
 mesh_path, out_dir = argv[0], argv[1]
 opts = {"views": "hero,reverse,side,top,ring,grip,blade,tip,tip_edge,cut_full,cut_x,cut_b",
-        "samples": "64", "res": "1600x1000", "threads": "8"}
+        "samples": "64", "res": "1600x1000", "threads": "8", "open_cuts": "0", "split": "0.47"}
 i = 2
 while i < len(argv):
     opts[argv[i][2:]] = argv[i + 1]
@@ -64,7 +64,7 @@ xs = [v.x for v in V]
 X0, X1 = min(xs), max(xs)
 L = X1 - X0
 tip = max(V, key=lambda v: v.x)
-split_x = X0 + 0.47 * L  # hand zone / blade split (illustrative finish only)
+split_x = X0 + float(opts["split"]) * L  # hand zone / blade split (illustrative finish only)
 
 
 def region(lo, hi):
@@ -146,7 +146,7 @@ def section(normal, point, keep_positive=True):
     res = bmesh.ops.bisect_plane(bm, geom=geom, plane_co=Vector(point), plane_no=n,
                                  clear_inner=False, clear_outer=True, dist=1e-7)
     cut_edges = [e for e in res["geom_cut"] if isinstance(e, bmesh.types.BMEdge)]
-    if cut_edges:
+    if cut_edges and opts["open_cuts"] != "1":  # open cuts keep internal voids/lattice visible
         filled = bmesh.ops.holes_fill(bm, edges=cut_edges, sides=0)
         ob.data.materials.append(CUTFACE)
         for f in filled["faces"]:
@@ -184,13 +184,15 @@ sections = {
     "cut_b": ((1, 0, 0), (x_blade_cut, 0, 0), lambda: frame(region(x_blade_cut - 3e-3, x_blade_cut + 3e-3)[0],
                                                               region(x_blade_cut - 3e-3, x_blade_cut + 3e-3)[1] * 1.6,
                                                               (-1, -0.35, 0.35), 85)),
+    # x-ray cutaway: the AM-build mesh opened at mid-thickness, low oblique, so the internal lattice/voids show
+    "xray": ((0, 0, 1), (0, 0, 0), lambda: frame(c_all, r_all * 0.9, (0.1, -0.9, 0.35), 70)),
 }
 # cut_x / cut_b keep the +X side (toward the tip) and look at the face from -X
 for v in opts["views"].split(","):
     extra = None
     if v in sections:
         n, p, cam_fn = sections[v]
-        extra = section(n, p, keep_positive=(v != "cut_full"))
+        extra = section(n, p, keep_positive=(v not in ("cut_full", "xray")))
         src.hide_render = True
         cam_fn()
     elif v in views:

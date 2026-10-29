@@ -749,7 +749,7 @@ def readme_g5():
          f'Every computed number and picture on this page describes one design, **`{wid}`**, the best individual of the G5 '
          f'v{rv} cohort of record. They are generated from [`evidence/g5/v{rv}/release.json`](evidence/g5/v{rv}/release.json), '
          f'its verification studies and the sourced requirement set [`requirements/RS-karambit-v5.toml`](requirements/RS-karambit-v5.toml) '
-         f'([provenance](requirements/PROVENANCE-v5.md)). Status: {r["status"]}.', '',
+         f'([provenance](requirements/PROVENANCE-v5.md)). Status: {r["status"]}. The only exception is the clearly labelled legacy-pipeline addendum at the end of the page, which describes an older, non-lattice design line.', '',
          f'**Paper:** [`{paper}`]({paper}), generated from the same receipt. **3D printing:** the upload kit in [`cad/`](cad/).', '',
          f'<img src="{img["hero"]}" alt="The best individual {wid}" width="100%">', '',
          '## The best individual', '',
@@ -959,9 +959,14 @@ if __name__ == '__main__':
     if os.path.isfile(_lm):  # v6.1.1: hero strip of the latest-run leader (tools/refresh_leader_assets.py)
         _m = json.load(open(_lm)); _lines = new_readme.split('\n')
         _i = next(i for i, l in enumerate(_lines) if l.startswith('<img src='))
-        _lines.insert(_i + 1, f'\n<img src="docs/assets/leader/hero.jpg" alt="Latest-run leader {_m['design']}" width="100%">\n\n'
-                      f"<sub>Latest-run leader <code>{_m['design']}</code> (fitness {_m['fitness']}, legacy pipeline, 13 of 26 legacy gates, not the cohort of record): "
-                      f"[all renders](#leader-renders-{_m['design'].replace('_', '')}) · regenerate with <code>python3 tools/refresh_leader_assets.py</code>.</sub>")
+        if _m.get('pipeline') == 'G5':  # v6.1.2: current-pipeline (G5 lattice) leader; x-ray strip shows the internal voids
+            _lines.insert(_i + 1, f'\n<img src="docs/assets/leader/xray.jpg" alt="X-ray cutaway of {_m['design']}" width="100%">\n\n'
+                          f"<sub>X-ray cutaway of the G5 leader <code>{_m['design']}</code> ({_m['metric']} {_m['fitness']:.2f}, {_m['mass_g']:.1f} g): "
+                          f"the internal 3D-printed lattice voids (void fraction {_m['void_fraction']:.2f} of the envelope). "
+                          f"[All renders](#g5-leader-renders-{_m['design'].replace('_', '')}-current-pipeline) · regenerate with <code>python3 tools/refresh_leader_assets.py</code>.</sub>")
+        else:
+            _lines.insert(_i + 1, f'\n<img src="docs/assets/leader/hero.jpg" alt="Legacy-run leader {_m['design']}" width="100%">\n\n'
+                          f"<sub>Legacy-pipeline leader <code>{_m['design']}</code> (fitness {_m['fitness']}, not the cohort of record).</sub>")
         new_readme = '\n'.join(_lines)
     new_cad = cad_readme_g5() if is_g5 else cad_readme()
     if '--check' in sys.argv:

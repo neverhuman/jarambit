@@ -1,16 +1,16 @@
-# Jarambit 6.1.1: an evolved titanium karambit for laser powder-bed fusion
+# Jarambit 6.1.2: an evolved titanium karambit for laser powder-bed fusion
 
-[![release](https://img.shields.io/badge/release-v6.1.1-2f56d6)](https://github.com/neverhuman/jarambit/releases/tag/v6.1.1) [![paper](https://img.shields.io/badge/paper-G5%20v6.1.1%20PDF-2f56d6)](docs/g5/paper/g5-v6.1.1.pdf) [![3D print CAD](https://img.shields.io/badge/3D%20print%20CAD-cad%2F%20(STL%20%7C%203MF%20%7C%20DXF%20%7C%20PDF)-2f56d6)](cad/) ![design](https://img.shields.io/badge/best%20individual-kv4i1404__g00581__29ea3c73-555) ![score](https://img.shields.io/badge/W__ERGOLIGHT__v2-74.40-555) ![mass](https://img.shields.io/badge/mass-88.4%20g-555) ![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)
+[![release](https://img.shields.io/badge/release-v6.1.2-2f56d6)](https://github.com/neverhuman/jarambit/releases/tag/v6.1.2) [![paper](https://img.shields.io/badge/paper-G5%20v6.1.2%20PDF-2f56d6)](docs/g5/paper/g5-v6.1.2.pdf) [![3D print CAD](https://img.shields.io/badge/3D%20print%20CAD-cad%2F%20(STL%20%7C%203MF%20%7C%20DXF%20%7C%20PDF)-2f56d6)](cad/) ![design](https://img.shields.io/badge/best%20individual-kv4i1404__g00581__29ea3c73-555) ![score](https://img.shields.io/badge/W__ERGOLIGHT__v2-74.40-555) ![mass](https://img.shields.io/badge/mass-88.4%20g-555) ![status](https://img.shields.io/badge/status-computational%2C%20not%20built-b4570f)
 
-Every computed number and picture on this page describes one design, **`kv4i1404_g00581_29ea3c73`**, the best individual of the G5 v6.0.0 cohort of record. They are generated from [`evidence/g5/v6.0.0/release.json`](evidence/g5/v6.0.0/release.json), its verification studies and the sourced requirement set [`requirements/RS-karambit-v5.toml`](requirements/RS-karambit-v5.toml) ([provenance](requirements/PROVENANCE-v5.md)). Status: computational design; not built, printed or physically tested.
+Every computed number and picture on this page describes one design, **`kv4i1404_g00581_29ea3c73`**, the best individual of the G5 v6.0.0 cohort of record. They are generated from [`evidence/g5/v6.0.0/release.json`](evidence/g5/v6.0.0/release.json), its verification studies and the sourced requirement set [`requirements/RS-karambit-v5.toml`](requirements/RS-karambit-v5.toml) ([provenance](requirements/PROVENANCE-v5.md)). Status: computational design; not built, printed or physically tested. The only exception is the clearly labelled legacy-pipeline addendum at the end of the page, which describes an older, non-lattice design line.
 
-**Paper:** [`docs/g5/paper/g5-v6.1.1.pdf`](docs/g5/paper/g5-v6.1.1.pdf), generated from the same receipt. **3D printing:** the upload kit in [`cad/`](cad/).
+**Paper:** [`docs/g5/paper/g5-v6.1.2.pdf`](docs/g5/paper/g5-v6.1.2.pdf), generated from the same receipt. **3D printing:** the upload kit in [`cad/`](cad/).
 
 <img src="docs/g5/v6.0.0/img/hero.jpg" alt="The best individual kv4i1404_g00581_29ea3c73" width="100%">
 
-<img src="docs/assets/leader/hero.jpg" alt="Latest-run leader ec2i089_r01_p10_c68" width="100%">
+<img src="docs/assets/leader/xray.jpg" alt="X-ray cutaway of kv4i1404_g00581_29ea3c73" width="100%">
 
-<sub>Latest-run leader <code>ec2i089_r01_p10_c68</code> (fitness 80.851214, legacy pipeline, 13 of 26 legacy gates, not the cohort of record): [all renders](#leader-renders-ec2i089r01p10c68) · regenerate with <code>python3 tools/refresh_leader_assets.py</code>.</sub>
+<sub>X-ray cutaway of the G5 leader <code>kv4i1404_g00581_29ea3c73</code> (W_ERGOLIGHT_v2 74.40, 88.4 g): the internal 3D-printed lattice voids (void fraction 0.53 of the envelope). [All renders](#g5-leader-renders-kv4i1404g0058129ea3c73-current-pipeline) · regenerate with <code>python3 tools/refresh_leader_assets.py</code>.</sub>
 
 ## The best individual
 
@@ -171,7 +171,7 @@ The upload kit in [`cad/`](cad/) holds six files for `kv4i1404_g00581_29ea3c73`,
 | [`cad/kv4i1404_g00581_29ea3c73_spec_paper.pdf`](cad/kv4i1404_g00581_29ea3c73_spec_paper.pdf) | the G5 paper |
 | [`cad/kv4i1404_g00581_29ea3c73_xray_cutaway.jpg`](cad/kv4i1404_g00581_29ea3c73_xray_cutaway.jpg) | cutaway of the hollow core |
 
-Finer meshes and the full evaluation records are release assets of [v6.1.1](https://github.com/neverhuman/jarambit/releases/tag/v6.1.1), each with its SHA-256 in the receipt:
+Finer meshes and the full evaluation records are release assets of [v6.1.2](https://github.com/neverhuman/jarambit/releases/tag/v6.1.2), each with its SHA-256 in the receipt:
 
 | Asset | Size | SHA-256 |
 |---|---:|---|
@@ -205,22 +205,24 @@ Every island's launch record and history, every pool's sources and the final poo
 - [`docs/g5/`](docs/g5/): the paper, the images and the CAD archive. [`docs/RELEASES.md`](docs/RELEASES.md): every release.
 - Earlier generations, kept as their own record: G3 ([`docs/g3/`](docs/g3/), [`crates/g3/`](crates/g3/README.md)), the withdrawn G4 prototype ([`crates/g4/WITHDRAWN.md`](crates/g4/WITHDRAWN.md)) and the v1/v2 study ([`docs/paper/`](docs/paper/), [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md)). The v1 command-line pipeline (`cargo run -p jarambit`) is still in the repository; its plate level is opt-in with `JARAMBIT_FEM=1`.
 
-## Latest run (v6.1.0 addendum, legacy pipeline — not the cohort of record)
-
-The latest continuous island run (legacy v1 W_ULTRALIGHT_v1 pipeline, 103 islands on xbabe2, stopped 2026-10-29) found `ec2i089_r01_p10_c68`: fitness **80.851214**, mass **83.409 g** (3D 83.3333 g), **13 of 26** legacy hard gates met. It misses the hunter 260 N load (201–202 N), tip twist and solid-tip safety factors (0.52–0.71 vs 1.0), fatigue (0.56), human maximum, sharpness law and tip profile, so it is a research result, not a qualified design. Full gate table and plots: [docs/LATEST_RUN.md](docs/LATEST_RUN.md); evidence: [`evidence/legacy_continuous_run_v6.1.0/`](evidence/legacy_continuous_run_v6.1.0/).
-
-![Island convergence of the latest run](docs/assets/legacy_run_v6.1.0/convergence_islands.png)
-
-![Stage 1 mass vs fitness](docs/assets/legacy_run_v6.1.0/pareto_stage1_mass_vs_fitness.png)
-
 <!-- leader-gallery:begin (tools/refresh_leader_assets.py) -->
 
-### Leader renders: `ec2i089_r01_p10_c68`
+## G5 leader renders: `kv4i1404_g00581_29ea3c73` (current pipeline)
 
-Blender renders of the leader's exported STL (fitness 80.851214, 89,900 triangles), regenerated by `python3 tools/refresh_leader_assets.py` ([how](docs/LEADER_ASSETS.md)). Finishes are illustrative; section faces are the actual mesh cut by a plane.
+Blender renders of the current G5 pipeline's leader `kv4i1404_g00581_29ea3c73` (W_ERGOLIGHT_v2 74.40 on the h 0.2 mm ranking grid, mass 88.4 g, lattice porosity 0.58, internal void fraction of the AM-build mesh 0.53) from its AM-build STL (1,030,568 triangles). Regenerate with `python3 tools/refresh_leader_assets.py` ([how](docs/LEADER_ASSETS.md)). Finishes are illustrative; cuts are open so the printed internal lattice shows.
 
-<img src="docs/assets/leader/hero.jpg" alt="Leader ec2i089_r01_p10_c68" width="100%">
+<img src="docs/assets/leader/xray.jpg" alt="X-ray cutaway of kv4i1404_g00581_29ea3c73" width="100%">
+
+<img src="docs/assets/leader/hero.jpg" alt="Leader kv4i1404_g00581_29ea3c73" width="100%">
 
 <table><tr><td width="50%"><img src="docs/assets/leader/reverse.jpg" alt="Reverse oblique"><br>Reverse oblique.</td><td width="50%"><img src="docs/assets/leader/side.jpg" alt="Plan view"><br>Plan view.</td></tr><tr><td width="50%"><img src="docs/assets/leader/top.jpg" alt="Edge-on"><br>Edge-on.</td><td width="50%"><img src="docs/assets/leader/ring.jpg" alt="Ring"><br>Ring.</td></tr><tr><td width="50%"><img src="docs/assets/leader/grip.jpg" alt="Grip and pockets"><br>Grip and pockets.</td><td width="50%"><img src="docs/assets/leader/blade.jpg" alt="Blade"><br>Blade.</td></tr><tr><td width="50%"><img src="docs/assets/leader/tip.jpg" alt="The point"><br>The point.</td><td width="50%"><img src="docs/assets/leader/tip_edge.jpg" alt="Edge at the point"><br>Edge at the point.</td></tr><tr><td width="50%"><img src="docs/assets/leader/cut_full.jpg" alt="Mid-plane cut (z = 0)"><br>Mid-plane cut (z = 0).</td><td width="50%"><img src="docs/assets/leader/cut_x.jpg" alt="Section across the grip"><br>Section across the grip.</td></tr><tr><td width="50%"><img src="docs/assets/leader/cut_b.jpg" alt="Section across the blade"><br>Section across the blade.</td></tr></table>
 
 <!-- leader-gallery:end -->
+
+## Legacy-pipeline run (v6.1.0 addendum — older, solid, non-lattice design line; not G5, not the cohort of record)
+
+The most recent legacy continuous island run (legacy v1 W_ULTRALIGHT_v1 pipeline, 103 islands on xbabe2, stopped 2026-10-29) found `ec2i089_r01_p10_c68`: fitness **80.851214**, mass **83.409 g** (3D 83.3333 g), **13 of 26** legacy hard gates met. It misses the hunter 260 N load (201–202 N), tip twist and solid-tip safety factors (0.52–0.71 vs 1.0), fatigue (0.56), human maximum, sharpness law and tip profile, so it is a research result, not a qualified design. Full gate table and plots: [docs/LATEST_RUN.md](docs/LATEST_RUN.md); evidence: [`evidence/legacy_continuous_run_v6.1.0/`](evidence/legacy_continuous_run_v6.1.0/).
+
+![Island convergence of the latest run](docs/assets/legacy_run_v6.1.0/convergence_islands.png)
+
+![Stage 1 mass vs fitness](docs/assets/legacy_run_v6.1.0/pareto_stage1_mass_vs_fitness.png)
