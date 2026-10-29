@@ -20,6 +20,10 @@ use std::time::Instant;
 
 type Params = BTreeMap<&'static str, f64>;
 
+/// The read volumes (mm³) the protocol chooses among (`docs/g5/v7.0.0/calibration_protocol.md` §1.1); every solve
+/// records its reading at each.
+pub const CANDIDATE_READ_VOLUMES_MM3: [f64; 5] = [0.05, 0.1, 0.25, 0.5, 1.0];
+
 /// The choices that define the three FE cases.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FeDefinition {
@@ -33,6 +37,9 @@ pub struct FeDefinition {
     pub teeth_per_edge: Option<usize>,
     /// Voxel size of a local tooth model built from `sdf::blade_outer_field_at` (mm); `None`, crop the design grid
     pub teeth_h_mm: Option<f64>,
+    /// Origin shift of a local tooth model (mm; 0 except in the FE-noise study)
+    #[serde(default)]
+    pub teeth_origin_shift_mm: f64,
     pub threads: usize,
 }
 
@@ -45,6 +52,7 @@ impl FeDefinition {
             guard_clamp_mm: 4.0,
             teeth_per_edge: None,
             teeth_h_mm: None,
+            teeth_origin_shift_mm: 0.0,
             threads,
         }
     }
@@ -57,6 +65,8 @@ pub struct FeSolve {
     pub sf: f64,
     pub allowable_mpa: f64,
     pub reading: ReadingJson,
+    /// The read stress (MPa) at each of `CANDIDATE_READ_VOLUMES_MM3`
+    pub stress_by_volume_mpa: Vec<f64>,
     pub h_mm: f64,
     pub voxels: usize,
     pub loaded_faces: usize,
@@ -230,11 +240,17 @@ fn solve_and_read(
     let sol = solve_wrench(model, &problem, [f[0], f[1], f[2], 0.0, 0.0, 0.0], &opts).map_err(|e| format!("{label}: {e}"))?;
     let seconds = t.elapsed().as_secs_f64();
     let r = sol.reading(read, def.stress_volume_mm3).map_err(|e| format!("{label}: {e}"))?;
+    let stress_by_volume_mpa = CANDIDATE_READ_VOLUMES_MM3
+        .iter()
+        .map(|&v| sol.reading(read, Some(v)).map(|r| r.stress_mpa))
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(|e| format!("{label}: {e}"))?;
     Ok(FeSolve {
         label,
         sf: allowable_mpa / r.stress_mpa,
         allowable_mpa,
         reading: (&r).into(),
+        stress_by_volume_mpa,
         h_mm: g.h,
         voxels: sol.elements.len(),
         loaded_faces: nl,
@@ -286,7 +302,7 @@ pub fn grip_stations(p: &Params) -> Option<[GripStation; 3]> {
 /// One station: a 28 mm grip slice, the finger pad (20 mm along x, the middle half of the height) on the -z face,
 /// the palm on the +z face in the same window as a frictionless z support, two palm nodes against rigid motion; read
 /// within 8 mm of the station, off the supports (v6.0.0).
-fn grip_station_fe(grid: &VoxelGrid3D, p: &Params, st: &GripStation, def: &FeDefinition) -> Result<FeSolve, String> {
+pub fn grip_station_fe(grid: &VoxelGrid3D, p: &Params, st: &GripStation, def: &FeDefinition) -> Result<FeSolve, String> {
     let label = format!("grip squeeze at {:.0} % of the grip (x {:.1} mm)", 100.0 * st.s_frac, st.x_mm);
     let (xs, ym, h) = (st.x_mm, st.ym_mm, st.h_mm);
     let model = crop(grid, xs - 14.0, xs + 14.0, f64::NEG_INFINITY, f64::INFINITY).ok_or(format!("{label}: empty crop"))?;
@@ -418,7 +434,10 @@ fn tooth_fe(p: &Params, blade: &BladeProfile2D, grid: &VoxelGrid3D, t: &Tooth, d
     let (ylo, yhi) = (seg.iter().copied().fold(f64::INFINITY, f64::min), seg.iter().copied().fold(f64::NEG_INFINITY, f64::max));
     let (y0, y1, y_clamp) = if t.inner { (ylo - 1.0, yhi + 5.0, yhi + 4.0) } else { (ylo - 5.0, yhi + 1.0, ylo - 4.0) };
     let model = match def.teeth_h_mm {
-        Some(h) => local_blade_model(p, blade, xa - 2.0, xb + 2.0, y0, y1, h),
+        Some(h) => {
+            let o = def.teeth_origin_shift_mm;
+            local_blade_model(p, blade, xa - 2.0 + o, xb + 2.0 + o, y0 + o, y1 + o, h)
+        }
         None => crop(grid, xa - 2.0, xb + 2.0, y0, y1),
     }
     .ok_or(format!("{label}: no model (empty, or a local model outside the pure blade zone)"))?;

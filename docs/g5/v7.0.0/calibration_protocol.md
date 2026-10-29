@@ -35,7 +35,9 @@ Hex8 voxel FE (`crates/g51/src/fe`) on the design's G5.1 AM voxel field.
 - **Study designs:** the v6.0.0 winner, plus four designs drawn with seed 20261029 from the v6.0.0 final pool, one per
   quartile of its score.
 - **Guard clamp `c_g`:** the smallest of {4, 8, 12} mm whose SF differs from the next deeper clamp's by at most 5 % on
-  all five designs. If none qualifies, 12 mm, and the spread is reported.
+  all five designs, under every candidate reading (the 99.9 % quantile and each volume `V` below), because `V` is not
+  yet fixed. If none qualifies, 12 mm, and the spread is reported.
+- **Missing cases:** a design without a case (a solid grip has no squeeze case) is left out of that case's rules.
 - **Read volume `V`:** the smallest of {0.05, 0.1, 0.25, 0.5, 1.0} mm³ whose grip and guard readings differ by at most
   5 % between h 0.2 and h 0.15 on all five designs. If none qualifies, 1.0 mm³.
 - **Teeth `h_t`:** the coarsest of {0.1, 0.075, 0.05} mm whose tooth SF differs from the next finer one's by at most
