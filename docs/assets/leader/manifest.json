@@ -1,0 +1,63 @@
+{
+ "blender": "/home/ubuntu/opt/blender-4.5.3-linux-x64/blender",
+ "design": "ec2i089_r01_p10_c68",
+ "fitness": 80.851214,
+ "images": {
+  "blade": {
+   "path": "docs/assets/leader/blade.jpg",
+   "sha256": "0fac2d4dbdf6e9d52bdfb3a5dcc55eab94b07f4434b4a49f40f553dba9fad6e1"
+  },
+  "cut_b": {
+   "path": "docs/assets/leader/cut_b.jpg",
+   "sha256": "6db84b4f952b39bf18cb969e66836c6ad01405d03dfcd667caeb88430805c4ce"
+  },
+  "cut_full": {
+   "path": "docs/assets/leader/cut_full.jpg",
+   "sha256": "525f8476fdc63e7674bd479021df38635f16e685bd9c2e1ee80dddad7bdbaa92"
+  },
+  "cut_x": {
+   "path": "docs/assets/leader/cut_x.jpg",
+   "sha256": "1c86aed366d6bddbb16e1b0112fd52ece5e533100c084ac79d5e301df58b8c1b"
+  },
+  "grip": {
+   "path": "docs/assets/leader/grip.jpg",
+   "sha256": "3173e8264ae5eb7956b8f4c14bec32812fc5931141a4f0f929d99128aad23195"
+  },
+  "hero": {
+   "path": "docs/assets/leader/hero.jpg",
+   "sha256": "235ec7994f2dd309b7680cdec4e133882cab8f62e3242fc4852bf6d3486a6e33"
+  },
+  "reverse": {
+   "path": "docs/assets/leader/reverse.jpg",
+   "sha256": "ccbd83f0dc1a6db5ae654da058867ad5f050a6c8195e57f3b042335c9d06206b"
+  },
+  "ring": {
+   "path": "docs/assets/leader/ring.jpg",
+   "sha256": "9222dfb77ea655cc675fcb6aaf23e082898a818639da463bed205bd92ef3a109"
+  },
+  "side": {
+   "path": "docs/assets/leader/side.jpg",
+   "sha256": "944312ff06a09e0412305de0d6e7cb9146c2f0dc4bab591f3bc6f3cf5f173308"
+  },
+  "tip": {
+   "path": "docs/assets/leader/tip.jpg",
+   "sha256": "2dc2e831691b44644801a69ba690ec35496902197f1f4ce295a674df7e30f30e"
+  },
+  "tip_edge": {
+   "path": "docs/assets/leader/tip_edge.jpg",
+   "sha256": "d00adc4e044975bb260b77ffc8e4634cd5c0656477b5ec11bca32d3c804475ad"
+  },
+  "top": {
+   "path": "docs/assets/leader/top.jpg",
+   "sha256": "b88173729b8a06541dfd9cd52ca67099323c09a8e7f07e64d29975ffe2588ab1"
+  }
+ },
+ "renderer": "ops/render/blender/leader_views.py",
+ "renderer_sha256": "126d6891eb6c66c5526b64335ca5dac1d5c391420c7fa224adfa3a0f2f20e868",
+ "res": "1600x1000",
+ "samples": 96,
+ "schema": "jarambit.leader_assets.v1",
+ "stl": "evidence/legacy_continuous_run_v6.1.0/leaders/ec2i089_r01_p10_c68.stl",
+ "stl_sha256": "9422a42c4db668ea06daa42cfa429583d6a9f9fb9ce31268bfc26db980325f6a",
+ "triangles": 89900
+}

@@ -955,6 +955,14 @@ if __name__ == '__main__':
     _extra = os.path.join(ROOT, 'docs/README_LATEST_RUN.md')
     if os.path.isfile(_extra):  # v6.1.0: committed, hand-written addendum on the latest (non-record) run
         new_readme = new_readme.rstrip('\n') + '\n\n' + open(_extra, encoding='utf-8').read()
+    _lm = os.path.join(ROOT, 'docs/assets/leader/manifest.json')
+    if os.path.isfile(_lm):  # v6.1.1: hero strip of the latest-run leader (tools/refresh_leader_assets.py)
+        _m = json.load(open(_lm)); _lines = new_readme.split('\n')
+        _i = next(i for i, l in enumerate(_lines) if l.startswith('<img src='))
+        _lines.insert(_i + 1, f'\n<img src="docs/assets/leader/hero.jpg" alt="Latest-run leader {_m['design']}" width="100%">\n\n'
+                      f"<sub>Latest-run leader <code>{_m['design']}</code> (fitness {_m['fitness']}, legacy pipeline, 13 of 26 legacy gates, not the cohort of record): "
+                      f"[all renders](#leader-renders-{_m['design'].replace('_', '')}) · regenerate with <code>python3 tools/refresh_leader_assets.py</code>.</sub>")
+        new_readme = '\n'.join(_lines)
     new_cad = cad_readme_g5() if is_g5 else cad_readme()
     if '--check' in sys.argv:
         if rd('README.md') != new_readme:

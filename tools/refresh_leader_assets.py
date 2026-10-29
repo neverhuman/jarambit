@@ -1,0 +1,191 @@
+#!/usr/bin/env python3
+"""Refresh every leader-design image used by README.md and the G5 paper from ONE manual command.
+
+    python3 tools/refresh_leader_assets.py                     # current leader of the latest run
+    python3 tools/refresh_leader_assets.py --design ec2i089_r01_p10_c68
+    python3 tools/refresh_leader_assets.py --plan-only         # resolve inputs, render nothing
+    python3 tools/refresh_leader_assets.py --skip-render       # docs/paper only (reuse images)
+
+Steps (idempotent; same inputs -> same file set and paths):
+  1. Leader: --design, else the max-fitness entry of <evidence>/leaders/fitness.json.
+  2. Geometry: <evidence>/leaders/<id>.stl if committed, else the run's exported STL found under
+     --runs-root (by-content/attempt-*/<id>.stl); copied (binary STL) into <evidence>/leaders/.
+  3. Blender (ops/render/blender/leader_views.py, Cycles CPU, nice 19): hero, reverse, side, top,
+     ring, grip, blade, tip, tip_edge, cut_full, cut_x, cut_b -> docs/assets/leader/<view>.jpg.
+  4. Evolution plots: ops/render/leader/aggregate_run.py over --run-root (if present) ->
+     docs/assets/legacy_run_v6.1.0/*.png (same filenames the README/LATEST_RUN use).
+  5. docs/README_LATEST_RUN.md leader gallery block, docs/g5/paper/generated/leader.tex,
+     ops/ci/gen_readme.py (README.md + cad/README.md), G5 paper PDF via latexmk.
+  6. Writes docs/assets/leader/manifest.json and prints before/after SHA-256 of every output.
+Nothing is re-scored, re-solved or certified; images are illustrations of the committed geometry.
+"""
+import argparse
+import glob
+import hashlib
+import json
+import os
+import shutil
+import struct
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+VIEWS = ['hero', 'reverse', 'side', 'top', 'ring', 'grip', 'blade', 'tip', 'tip_edge', 'cut_full', 'cut_x', 'cut_b']
+CAPTIONS = {'hero': 'Oblique hero', 'reverse': 'Reverse oblique', 'side': 'Plan view', 'top': 'Edge-on',
+            'ring': 'Ring', 'grip': 'Grip and pockets', 'blade': 'Blade', 'tip': 'The point',
+            'tip_edge': 'Edge at the point', 'cut_full': 'Mid-plane cut (z = 0)',
+            'cut_x': 'Section across the grip', 'cut_b': 'Section across the blade'}
+ASSETS = ROOT / 'docs/assets/leader'
+PLOTS = ROOT / 'docs/assets/legacy_run_v6.1.0'
+BEGIN, END = '<!-- leader-gallery:begin (tools/refresh_leader_assets.py) -->', '<!-- leader-gallery:end -->'
+
+
+def sha(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest() if Path(p).is_file() else None
+
+
+def snapshot():
+    files = list(ASSETS.glob('*')) + list(PLOTS.glob('*.png')) + [ROOT / x for x in (
+        'README.md', 'cad/README.md', 'docs/README_LATEST_RUN.md', 'docs/g5/paper/generated/leader.tex')]
+    files += list((ROOT / 'docs/g5/paper').glob('g5-v*.pdf'))
+    return {str(f.relative_to(ROOT)): sha(f) for f in files if f.is_file()}
+
+
+def blender():
+    for c in (os.environ.get('BLENDER'), os.path.expanduser('~/opt/blender-4.5.3-linux-x64/blender'), shutil.which('blender')):
+        if c and os.path.isfile(c):
+            return c
+    sys.exit('no Blender found (set BLENDER)')
+
+
+def to_binary_stl(src, dst, label):
+    data = Path(src).read_bytes()
+    if data[:5] != b'solid' or b'facet' not in data[:400]:
+        shutil.copyfile(src, dst); return
+    tris, cur = [], []
+    for line in data.decode().splitlines():
+        t = line.split()
+        if t and t[0] == 'vertex':
+            cur.append(tuple(map(float, t[1:4])))
+            if len(cur) == 3:
+                tris.append(cur); cur = []
+    with open(dst, 'wb') as f:
+        f.write(label.encode()[:80].ljust(80, b' ')); f.write(struct.pack('<I', len(tris)))
+        for a, b, c in tris:
+            f.write(struct.pack('<12fH', 0, 0, 0, *a, *b, *c, 0))
+
+
+def resolve(args):
+    ev = ROOT / args.evidence
+    fit = json.loads((ev / 'leaders/fitness.json').read_text())
+    design = args.design or max(fit, key=fit.get).replace('_genome.csv', '')
+    stl = ev / 'leaders' / f'{design}.stl'
+    found = None
+    if not stl.is_file():
+        hits = sorted(glob.glob(os.path.join(os.path.expanduser(args.runs_root), '**', f'{design}.stl'), recursive=True))
+        if not hits:
+            sys.exit(f'no exported STL for {design} under {args.runs_root}; export it first')
+        found = hits[0]
+    return design, fit.get(design + '_genome.csv'), stl, found
+
+
+def gallery_md(design, fitness, mani):
+    rows, cells = [], [v for v in VIEWS if v != 'hero']
+    for i in range(0, len(cells), 2):
+        pair = cells[i:i + 2]
+        rows.append('<tr>' + ''.join(f'<td width="50%"><img src="docs/assets/leader/{v}.jpg" alt="{CAPTIONS[v]}"><br>{CAPTIONS[v]}.</td>' for v in pair) + '</tr>')
+    return '\n'.join([BEGIN, '', f'### Leader renders: `{design}`', '',
+        f'Blender renders of the leader\'s exported STL (fitness {fitness}, {mani["triangles"]:,} triangles), regenerated by '
+        '`python3 tools/refresh_leader_assets.py` ([how](docs/LEADER_ASSETS.md)). Finishes are illustrative; section faces are the actual mesh cut by a plane.', '',
+        f'<img src="docs/assets/leader/hero.jpg" alt="Leader {design}" width="100%">', '',
+        '<table>' + ''.join(rows) + '</table>', '', END])
+
+
+def leader_tex(design, fitness):
+    figs = [v for v in VIEWS if v != 'hero']
+    lines = ['% generated by tools/refresh_leader_assets.py -- do not edit',
+             '\\section*{Latest-run leader (legacy pipeline, not the cohort of record)}',
+             f'The latest continuous island run\'s leader \\texttt{{{design.replace("_", chr(92) + "_")}}} (fitness {fitness}) '
+             'rendered in Blender from its exported STL. Finishes are illustrative; section faces are the actual mesh cut by a plane.',
+             '\\begin{figure*}[t]\\centering',
+             '\\includegraphics[width=\\textwidth]{../../assets/leader/hero.jpg}',
+             f'\\caption{{Leader \\texttt{{{design.replace("_", chr(92) + "_")}}}, oblique.}}\\end{{figure*}}',
+             '\\begin{figure*}[t]\\centering']
+    for i, v in enumerate(figs):
+        lines.append(f'\\begin{{minipage}}{{0.32\\textwidth}}\\centering\\includegraphics[width=\\linewidth]{{../../assets/leader/{v}.jpg}}\\\\{{\\footnotesize {CAPTIONS[v]}}}\\end{{minipage}}' + ('\\\\[4pt]' if i % 3 == 2 else '\\hfill'))
+    lines.append(f'\\caption{{All Blender views of the latest-run leader.}}\\end{{figure*}}')
+    return '\n'.join(lines) + '\n'
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument('--design'); p.add_argument('--evidence', default='evidence/legacy_continuous_run_v6.1.0')
+    p.add_argument('--runs-root', default='~/jarambit_runs/evo_continuous')
+    p.add_argument('--run-root', default='~/jarambit_runs/evo_continuous/xbabe2', help='run whose plots to regenerate')
+    p.add_argument('--samples', type=int, default=96); p.add_argument('--res', default='1600x1000')
+    p.add_argument('--threads', type=int, default=8); p.add_argument('--views', default=','.join(VIEWS))
+    p.add_argument('--plan-only', action='store_true'); p.add_argument('--skip-render', action='store_true')
+    p.add_argument('--skip-plots', action='store_true'); p.add_argument('--skip-paper', action='store_true')
+    a = p.parse_args()
+    design, fitness, stl, found = resolve(a)
+    print(f'leader {design} fitness {fitness}\n  stl {stl if not found else found + " -> " + str(stl)}')
+    if a.plan_only:
+        return
+    before = snapshot()
+    if found:
+        to_binary_stl(found, stl, f'{design} (exported by the run; binary copy)')
+    ASSETS.mkdir(parents=True, exist_ok=True)
+    if not a.skip_render:
+        tmp = ROOT / 'target/leader-render'
+        shutil.rmtree(tmp, ignore_errors=True)
+        subprocess.run(['nice', '-n', '19', blender(), '-b', '--factory-startup', '-P', str(ROOT / 'ops/render/blender/leader_views.py'),
+                        '--', str(stl), str(tmp), '--views', a.views, '--samples', str(a.samples), '--res', a.res,
+                        '--threads', str(a.threads)], check=True)
+        from PIL import Image
+        for v in a.views.split(','):
+            Image.open(tmp / f'{v}.png').convert('RGB').save(ASSETS / f'{v}.jpg', quality=90, optimize=True)
+    if not a.skip_plots:
+        rr = Path(os.path.expanduser(a.run_root))
+        if (rr / 'islands').is_dir():
+            out = ROOT / 'target/leader-plots'; shutil.rmtree(out, ignore_errors=True)
+            subprocess.run(['nice', '-n', '19', sys.executable, str(ROOT / 'ops/render/leader/aggregate_run.py'), str(rr), rr.name, str(out)], check=True)
+            for png in out.glob('*.png'):
+                if (PLOTS / png.name).is_file():
+                    shutil.copyfile(png, PLOTS / png.name)
+        else:
+            print(f'  plots: run root {rr} absent; keeping committed plots')
+    tris = struct.unpack('<I', stl.read_bytes()[80:84])[0]
+    mani = dict(schema='jarambit.leader_assets.v1', design=design, fitness=fitness, stl=str(stl.relative_to(ROOT)),
+                stl_sha256=sha(stl), triangles=tris, blender=blender(), samples=a.samples, res=a.res,
+                renderer='ops/render/blender/leader_views.py', renderer_sha256=sha(ROOT / 'ops/render/blender/leader_views.py'),
+                images={v: dict(path=f'docs/assets/leader/{v}.jpg', sha256=sha(ASSETS / f'{v}.jpg')) for v in VIEWS if (ASSETS / f'{v}.jpg').is_file()})
+    (ASSETS / 'manifest.json').write_text(json.dumps(mani, indent=1, sort_keys=True) + '\n')
+    md = ROOT / 'docs/README_LATEST_RUN.md'
+    text = md.read_text()
+    block = gallery_md(design, fitness, mani)
+    if BEGIN in text:
+        text = text[:text.index(BEGIN)] + block + text[text.index(END) + len(END):]
+    else:
+        text = text.rstrip('\n') + '\n\n' + block + '\n'
+    md.write_text(text)
+    (ROOT / 'docs/g5/paper/generated/leader.tex').write_text(leader_tex(design, fitness))
+    subprocess.run([sys.executable, str(ROOT / 'ops/ci/gen_readme.py')], cwd=ROOT, check=True)
+    if not a.skip_paper:
+        pd = ROOT / 'docs/g5/paper'
+        ver = (ROOT / 'docs/VERSION').read_text().strip()
+        r = subprocess.run(['nice', '-n', '19', 'latexmk', '-lualatex', '-interaction=nonstopmode', '-halt-on-error', '-outdir=build', 'main.tex'], cwd=pd)
+        if r.returncode == 0:
+            shutil.copyfile(pd / 'build/main.pdf', pd / f'g5-v{ver}.pdf')
+        else:
+            print('  paper: latexmk failed; see docs/g5/paper/build/main.log')
+    after = snapshot()
+    print('\nchanged files (sha256 before -> after):')
+    for k in sorted(set(before) | set(after)):
+        if before.get(k) != after.get(k):
+            print(f'  {k}: {(before.get(k) or "new")[:12]} -> {(after.get(k) or "deleted")[:12]}')
+
+
+if __name__ == '__main__':
+    main()
