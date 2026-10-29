@@ -8,15 +8,13 @@ finished knife:
 \begin{itemize}
 \item \textbf{Ring and grip in requirement units.} The pommel ring has a fixed $24.9$~mm bore and an $8.0$~mm lip width
 (\code{owner-ring}). Rather than emerging indirectly from independent width and thickness offsets, the grip cross-section at
-the palm swell is parameterized directly by its perimeter (\code{grip\_perim} $\in [84, 100]$~mm) and its height-to-thickness
-ratio (\code{grip\_hot} $\in [1.2, 1.5]$ before dorsal/belly profiling, targeting $1.5$--$1.8$ total section $H/T$), matching
+the palm swell is parameterized directly by its perimeter (\code{grip\_perim} $\in [78, 104]$~mm, targeting the $\gReqPerimMin$--$\gReqPerimMax$~mm band) and its height-to-thickness
+ratio (\code{grip\_hot} $\in [1.40, 1.90]$, targeting $\gReqHoTMin$--$\gReqHoTMax$ section $H/T$), matching
 the decoded superellipse within $0.2\,\%$. The integral guard is hung from the scaled grip heel so that scaling the grip
 never buries the guard lobe.
 \item \textbf{Claw blade and sharp point wedge.} The curved claw blade has straight-line reach capped at $85.725$~mm
 ($3.375$~in) and sharpened arc capped at $101.6$~mm ($4.0$~in) per edge (\code{owner-reach}). Over the last
-\code{point\_len} $\in [10, 18]$~mm before the tip, a dedicated planform point wedge caps the half-width to
-$r \tan(\theta_\mathrm{point}/2)$ with $\theta_\mathrm{point} \in [22^\circ, 35^\circ]$, preventing the spine thickness
-profile from blunting the point in plan view (\code{owner-point}). The tip reserve $\Delta L \in [6, 16]$~mm keeps the distal
+\code{point\_len} $\in [3, 12]$~mm before the tip (fading to the outer planform law over the next $4$~mm), a dedicated rounded planform wedge ($0.175$~mm tip radius) of included angle $\theta_\mathrm{point} \in [30^\circ, 80^\circ]$ sets the point directly (\code{owner-point}). The tip reserve $\Delta L \in [4, 12]$~mm keeps the distal
 piercing zone free of serrations and internal hollows.
 \item \textbf{Sheet TPMS interior and rib-clear drainage ports.} Inside an outer skin of $0.8$--$1.2$~mm ($1.0$~mm minimum on
 load-bearing walls), the hollow grip and blade core are filled with a sheet-TPMS lattice $|\phi_\mathrm{TPMS}| - t_\mathrm{sheet}/2 \le 0$

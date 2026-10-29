@@ -82,8 +82,9 @@ In order (`docs/RELEASES.md`):
      - grid agreement is 0.13–0.53 %;
      - most designs drain (150–1,000 mm³ sealed).
 
-   Still to do: the finishing allowance (printed against finished geometry) and the declared build orientation for
-   face classes.
+   Not modelled in G5.0 (disclosed in the paper's limits): the finishing allowance is removed by post-build grinding
+   rather than added in the decoded SDF, the surface texture reaches the blade with weight `scope_blade` (masked off the
+   bevels in G5.1), and face roughness uses the conservative as-built wall class rather than a declared build orientation.
 4. **Load cases.** Done for Tiers 0 and 1, in `loads.rs`; recorded on every evaluation as `G5EvalRecord::loads`.
    - **Blade sections:** integrated from the decoded thickness law along the smoothed midline. Each force is resolved
      into axial force, bending through the thickness, in-plane bending and torsion, so a claw's offset point loads
