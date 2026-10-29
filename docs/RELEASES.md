@@ -1,3 +1,8 @@
+# v7.0.0 — 2026-10-29
+
+- Rewrote README and white paper for the latest xbabe2 continuous evolution run only. Best recorded candidate scored 80.851214 at 83.409 g and passed 13/26 legacy hard gates; it is not certified.
+- Added run plots and island i089 fitness curve. Deleted `docs/WHITEPAPER_g3_neckrail.md`, which described an older run.
+
 # RELEASES / CHANGELOG — jarambit (author Jepson Taylor)
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
