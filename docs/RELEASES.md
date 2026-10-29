@@ -1,11 +1,12 @@
-# v7.0.0 — 2026-10-29
-
-- Rewrote README and white paper for the latest xbabe2 continuous evolution run only. Best recorded candidate scored 80.851214 at 83.409 g and passed 13/26 legacy hard gates; it is not certified.
-- Added run plots and island i089 fitness curve. Deleted `docs/WHITEPAPER_g3_neckrail.md`, which described an older run.
-
 # RELEASES / CHANGELOG — jarambit (author Jepson Taylor)
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
+
+## v6.1.0 — 2026-10-29 (minor, docs only: the latest legacy-pipeline continuous evolution run)
+
+- Keeps the **cohort of record v6.0.0** (G5, `kv4i1404_g00581_29ea3c73`) unchanged; README headline and paper of record are unchanged.
+- Adds `docs/LATEST_RUN.md` and a labeled section in the README and white paper on the latest continuous island run on xbabe2 (legacy v1 / W_ULTRALIGHT_v1 pipeline, islands i001–i103, stopped 2026-10-29): best `ec2i089_r01_p10_c68`, fitness 80.851214, 83.409 g (3D 83.3333 g), 13 of 26 legacy hard gates met — not qualified for use.
+- Evidence committed in `evidence/legacy_continuous_run_v6.1.0/` (manifest, gate JSON, leaders fitness, genome, SHA256SUMS); plots in `docs/assets/legacy_run_v6.1.0/`.
 
 ## v6.0.0 — 2026-10-28 (major: the G5 continuation on one platform of record; FEM renderings of every load case; the fitness budget)
 

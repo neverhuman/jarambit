@@ -952,6 +952,9 @@ if __name__ == '__main__':
     v_cur = rd('docs/VERSION').strip()
     is_g5 = int(v_cur.split('.')[0]) >= 5 and os.path.isfile(os.path.join(ROOT, 'evidence/g5/RECORD'))
     new_readme = readme_g5() if is_g5 else readme()
+    _extra = os.path.join(ROOT, 'docs/README_LATEST_RUN.md')
+    if os.path.isfile(_extra):  # v6.1.0: committed, hand-written addendum on the latest (non-record) run
+        new_readme = new_readme.rstrip('\n') + '\n\n' + open(_extra, encoding='utf-8').read()
     new_cad = cad_readme_g5() if is_g5 else cad_readme()
     if '--check' in sys.argv:
         if rd('README.md') != new_readme:
