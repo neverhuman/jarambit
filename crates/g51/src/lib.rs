@@ -9,6 +9,7 @@
 //! `lib.rs` is outside G5.0's.
 
 pub mod f64x;
+pub mod fe;
 pub mod hand;
 pub mod hash;
 pub mod namespace;

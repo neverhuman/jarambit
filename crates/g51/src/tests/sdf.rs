@@ -72,3 +72,28 @@ fn g51_field_is_g5s_off_the_bevels_and_untextured_on_them() {
         assert!(removed > 0, "G5.0 put no texture on this design's bevels (masked {masked})");
     }
 }
+
+/// `blade_outer_field_at` is the G5.1 outer field of the pure blade zone (x >= 92 mm), bit for bit at every interior
+/// voxel, textured designs included, so a local tooth model at any voxel size has exactly the decoder's geometry.
+#[test]
+fn blade_outer_field_matches_the_grid() {
+    use crate::sdf::blade_outer_field_at;
+    for g in super::textured_blade_designs(2, 0.03) {
+        let p = g.decode();
+        let prof = build_blade_profile_2d(&p);
+        let grid = build_g51_sdf(&g, 0.4, false);
+        let mut checked = 0usize;
+        for i in 1..grid.nx - 1 {
+            for j in 1..grid.ny - 1 {
+                for k in 1..grid.nz - 1 {
+                    if let Some(v) = blade_outer_field_at(&p, &prof, grid.x[i], grid.y[j], grid.z[k]) {
+                        let idx = (i * grid.ny + j) * grid.nz + k;
+                        assert_eq!(v.to_bits(), grid.d[idx].to_bits(), "({i},{j},{k}) {v} vs {}", grid.d[idx]);
+                        checked += 1;
+                    }
+                }
+            }
+        }
+        assert!(checked > 100_000, "{checked}");
+    }
+}

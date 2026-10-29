@@ -1,6 +1,8 @@
 //! Tests of the G5.1 crate (outside the decoder hash, so tests can be added after the freeze).
 
+mod fe;
 mod guards;
+mod hand;
 mod hash;
 mod namespace;
 mod sdf;

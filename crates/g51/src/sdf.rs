@@ -266,6 +266,40 @@ pub fn bevel_texture_weight(p: &BTreeMap<&'static str, f64>, prof: &BladeProfile
     w
 }
 
+/// The G5.1 outer field (`VoxelGrid3D::d`) at any point of the pure blade zone (92 mm <= x <= x_tip), where the
+/// builder writes the blade law unblended and then step 6's texture: the same f32 arithmetic, so it equals the
+/// grid's value at every interior voxel there (`tests::sdf`). The voxel FE builds local tooth models from it at any
+/// voxel size. `None` outside that zone. (The AM field equals this one within 3.55 mm of both edges.)
+pub fn blade_outer_field_at(p: &BTreeMap<&'static str, f64>, prof: &BladeProfile2D, x: f64, y: f64, z: f64) -> Option<f32> {
+    if !(92.0..=prof.x_tip).contains(&x) {
+        return None;
+    }
+    let cl = 3.0_f32;
+    let (t_b, d2_b) = eval_blade_thickness_and_sdf2(p, prof, x, y);
+    let mut d = if t_b <= 0.0 { d2_b.max(0.5) as f32 } else { d2_b.max(z.abs() - 0.5 * t_b) as f32 }.clamp(-cl, cl);
+    let tex_amp = p["tex_amp"];
+    if tex_amp > 0.0 && d.abs() < 1.2 {
+        let scope_w = p["scope_blade"]
+            * smoothstep(prof.x_heel + 3.0, prof.x_heel + 8.0, x)
+            * (1.0 - smoothstep(prof.x_tip - 14.0, prof.x_tip - 8.0, x));
+        if scope_w > 0.01 {
+            let gc = eval_grip_slice(p, x);
+            let tt_half = (0.5 * gc.t_sec).max(1.0);
+            let aa = if y >= gc.ym { (gc.yt - gc.ym).max(0.3) } else { (gc.ym - gc.yb).max(0.3) };
+            let psi = (z / tt_half).atan2((y - gc.ym) / aa);
+            let land = smoothstep(0.55, 0.80, psi.cos());
+            let w_bevel = bevel_texture_weight(p, prof, x, y);
+            let tx = eval_surface_texture(p, x - p["x_t"], y - gc.ym, p["L_g"]);
+            let mut disp = tex_amp * tx * scope_w * w_bevel * (1.0 - land);
+            if d >= 0.0 {
+                disp = disp.max(0.0);
+            }
+            d += disp as f32;
+        }
+    }
+    Some(d)
+}
+
 /// Build the complete G5.1 3D SDF (`VoxelGrid3D`) for a `G5Genome` at voxel spacing `h` (mm),
 /// voxelizing the entire one-piece knife (ring + grip + guard lobe + curved claw blade).
 pub fn build_g51_sdf(genome: &G5Genome, h: f64, with_am: bool) -> VoxelGrid3D {

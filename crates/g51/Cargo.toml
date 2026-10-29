@@ -6,6 +6,10 @@ version = "7.0.0"
 edition = "2021"
 license = "MIT"
 
+[[bin]]
+name = "g51-fe"
+path = "src/bin/g51_fe.rs"
+
 [dependencies]
 jarambit-g5 = { path = "../g5" }
 jarambit-crescent = { path = "../crescent" }

@@ -4,11 +4,26 @@
 //! a test checks that no other source is left out (`tests::hash`).
 
 /// Decoder sources in hash order, by path relative to `src/` (the test compares this list with the directory).
-pub const G51_HASHED_SOURCES: [&str; 6] = ["f64x.rs", "hand.rs", "hash.rs", "namespace.rs", "sdf.rs", "tiers.rs"];
+pub const G51_HASHED_SOURCES: [&str; 10] = [
+    "f64x.rs",
+    "fe/hand.rs",
+    "fe/mod.rs",
+    "fe/solver.rs",
+    "fe/voxel.rs",
+    "hand.rs",
+    "hash.rs",
+    "namespace.rs",
+    "sdf.rs",
+    "tiers.rs",
+];
 
-fn hashed_texts() -> [&'static str; 6] {
+fn hashed_texts() -> [&'static str; 10] {
     [
         include_str!("f64x.rs"),
+        include_str!("fe/hand.rs"),
+        include_str!("fe/mod.rs"),
+        include_str!("fe/solver.rs"),
+        include_str!("fe/voxel.rs"),
         include_str!("hand.rs"),
         include_str!("hash.rs"),
         include_str!("namespace.rs"),
