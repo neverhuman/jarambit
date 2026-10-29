@@ -1,1 +1,30 @@
-\section{Introduction}This paper records only the latest retained continuous evolution run on xbabe2. Its purpose is to report the search result and its limits. A high weighted score is not an engineering qualification; the winner failed half of the recorded legacy hard gates.
+\section{Introduction}
+\label{sec:introduction}
+Automated design search can now propose and score candidates by the hundred thousand. What remains hard is knowing what the retained records establish about the one design a paper puts on its first page: which representation produced it, which ranking rule preferred it, which assessment measured it, and which questions no record answers. This paper studies that question on one complete computational case.
+
+We use \emph{Engineered Intelligence} for an arrangement with an authored part and an automated part. People author a versioned representation and its decoder, a declared objective, and the tests that measure each exported artifact; an evolutionary search then proposes new candidates from the recorded scores. The term names this division of labour. It implies no particular optimizer and no learned model, and it does not remove human judgement: the problem, the representation and the tests remain authored.
+
+The case is Jarambit, a titanium hooked utility knife with an integral finger ring. Its documented schema has 128 numeric coordinates, including conditional and discretized parameters, plus a categorical material field. The object is small but demanding: a mass objective interacts with lateral, ring-pull, torsion and fatigue requirements, and fine machined features (isogrid pockets, fullers, lattice and relief pockets) make both the exported CAD and its mechanics delicate.
+
+The retained records are large and uneven. \CohortThreeRuns{} completed native runs of \CohortThreeGenerations{} generations hold \num{\CohortThreeTotalEvaluations} birth records. A later week of island evolution on \AllRunsHosts{} hosts holds \num{\AllRunsStageOne} Stage-1 screens and \num{\AllRunsStageTwo} comparable Stage-2 assessments of \num{\AllRunsDistinctGenomes} distinct genomes. Every Stage-2 score in that census is recomputed by one canonical function, \code{W_ULTRALIGHT_v1}, from the design's own retained scorecard; stored leaderboard values are not used. The highest is \AllRunsLeader{} at \AllRunsLeaderScore{} of 100. Because the top of a ranked list tends to be overstated~\cite{smithwinkler}, that design was re-assessed in full; it scores \AllRunsLeaderReassessed{}.\ifdefined\JRSmoothedVariant{} Its pocket-smoothed export is a new solid, also assessed in full; it scores \PocketSmoothedScore{}.\fi{} Neither export is qualified, and neither has been built.
+
+\subsection{Research Question and Findings}
+\label{subsec:research-question-and-results}
+We ask: \emph{what can the retained links establish about a computational design result, and what can they not?} The records support \ifdefined\JRSmoothedVariant five\else four\fi{} findings.
+\begin{enumerate}
+\item \textbf{Coverage depends on the observation stage.} Complete genome and score tables coexist with selective parentage, geometry and later-assessment records, so a large archive is not a large assessed population.
+\item \textbf{A search rank is not an assessment outcome.} In historical Run~1 the highest-scoring birth, Individual~\HistoricalBestId{}, fails that run's recorded certification predicate, which lower-ranked Individual~1543 meets; later all-requirement qualification is a separate assessment.
+\item \textbf{A score is only as comparable as its scorer.} An early evaluator overstates the canonical score of the same genome (a stored \AllRunsInflatedStored{} re-assesses at \AllRunsInflatedReassessed{}). Its scorecards and those of a second evaluator matched to it, \AllRunsInflated{} in all, are excluded, and every remaining score is recomputed.
+\item \textbf{Solver agreement and error estimation answer different questions.} Two finite-element implementations agree within \SolverAgreementMaxPct\,\% on a shared solid mesh, while the plate mesh study refuses its extrapolated error estimates.
+\ifdefined\JRSmoothedVariant
+\item \textbf{A geometric post-process is a design change.} Surface-tension pocket smoothing preserves the pockets' removed volume to within \PocketRemovedVolumePct\,\%, yet the same setting moved the score by \PocketDeltaFSettingDesign{} on the design used to choose it and by \PocketDeltaF{} on the current best, so it is judged by a complete re-assessment, design by design.
+\fi
+\end{enumerate}
+
+\subsection{Contributions and Scope}
+\label{subsec:contributions}
+The paper contributes a source-linked account of one result, from representation and decoder through search records and canonical score to exported solid and assessment; a census of every comparable Stage-2 assessment under one scorer, with the exclusions and re-assessments that make it comparable\ifdefined\JRSmoothedVariant; a volume-preserving smoothing step inside the CAD export, evaluated by the full assessment rather than by appearance\fi; and a map of what each retained observation supports, including refused error estimates and a withdrawn buckling inference. Section~\ref{sec:study-design} defines the records and counting units, Sections~\ref{sec:genome}--\ref{sec:evolution} the representation and inheritance, Section~\ref{sec:results} the census, and Section~\ref{sec:verification} the numerical evidence.
+
+\begin{eibox}{Scope of the claims}
+All results are computational. No evolved design was fabricated or physically tested, and the best design is not qualified. Designs are ranked only by the canonical \code{W_ULTRALIGHT_v1} multi-objective score; legacy requirement checks are measured and reported but do not veto selection. No controlled comparison with other optimizers or with expert designs was run, so no search advantage is claimed.
+\end{eibox}

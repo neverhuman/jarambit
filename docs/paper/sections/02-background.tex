@@ -1,1 +1,41 @@
-\section{Study context}The run used a versioned candidate genome, Stage 1 screening and Stage 2 engineering scorecards. The run binary was built from the v6.0.0 worktree. This report treats the run manifest and candidate scorecard as the primary records.
+\section{Background and Related Research}
+\label{sec:background}
+\subsection{Computational Design and Representation}
+Computational design already includes mature approaches to changing structural form. Sigmund and Maute review density, level-set, evolutionary, and other topology-optimization approaches \cite{sigmundmaute}. Jarambit's documented native schema instead varies an application-specific parameterization under a fixed decoder. Its coordinate count is not evidence of an unrestricted topology search or a newly discovered representation language.
+
+DeepCAD learns CAD-operation sequences for autoencoding and generation \cite{deepcad}; Text2CAD generates parametric CAD sequences from text and reports visual, parametric, and geometric evaluations \cite{text2cad}. These representation choices differ from Jarambit's numeric schema. None supplies a common mechanical benchmark for the present study.
+
+Evolutionary engineering also predates language-model assistance. The cited 2003 ST5 report describes evolved antenna representations, fabricated prototypes, and comparison with a hand-designed antenna; flight qualification was still pending in that report \cite{st5}. MAP-Elites retains representatives across user-defined behavioral dimensions \cite{mapelites}. Such archive selection differs from retaining all observed births, and archive occupancy alone does not measure population diversity. Jarambit's cohort-specific archive and score definitions therefore remain part of its reported context.
+
+\subsection{Research Provenance and Artifact Access}
+The closest context for this study's evidence links is research provenance. PROV-DM distinguishes entities, activities, derivations, responsible agents, and collections \cite{provdm}. These concepts help explain why a candidate record, a search activity, an exported geometry, and a reporting derivative require distinct identities. Jarambit's retained links are compared on these dimensions; no PROV conformance or general interchange implementation is established here.
+
+Implemented provenance systems provide a closer comparison than metadata principles alone. AiiDA stores calculations, workflows, inputs, and outputs in a traversable provenance graph and supports automated computational workflows \cite{aiida}. Workflow Run RO-Crate packages workflow-execution provenance with associated inputs, outputs, and code across execution systems \cite{workflowrunrocrate}. These systems already address provenance capture and exchange.
+
+Jarambit contributes a retrospective case analysis at the boundary between records and published engineering claims: which candidate and observation stage a quantity describes, which denominator a count uses, and which evidence remains unavailable. The present study does not benchmark its packaging against AiiDA or RO-Crate, or establish superior capture, interoperability, or reader comprehension.
+
+The FAIR principles address discovery, access, interoperability, and reuse of research objects \cite{fair}. Software citation principles additionally distinguish persistent identification, access, and specificity of the software version used \cite{softwarecitation}. A hash identifies bytes; meaningful reconstruction also requires retrievable artifacts and interpretation of their types, revisions, and relationships. This study's contribution is a concrete retrospective account of those relationships and gaps, rather than a new general provenance model.
+
+We cite the inspected Jarambit publication baseline as a source snapshot \cite{repo}. It is distinct from the cohort producers and from the final manuscript release accession (Section~\ref{sec:reproducibility}). A methods publication, a source snapshot, an executed binary, and a generated figure likewise denote different objects.
+
+\begin{table*}[t]
+\caption{Context by representation, search, evidence, and validation scope. Rows describe distinct research purposes rather than a performance ranking.}
+\label{tab:related}
+\centering
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{@{}p{.15\textwidth}p{.19\textwidth}p{.18\textwidth}p{.21\textwidth}p{.19\textwidth}@{}}
+\toprule
+Context & Representation & Search or transformation & Evidence emphasized & Validation scope \\
+\midrule
+Topology optimization & Varies by formulation & Numerical design updates & Structural objectives and constraints & Method- and model-specific \\
+DeepCAD / Text2CAD & CAD-operation sequences & Learned generation & Reconstruction or generated CAD & Reported geometric/parametric evaluations \\
+Provenance systems & Workflow objects and relations & AiiDA capture; RO-Crate packaging & Execution history, artifacts, and derivation & Provenance/exchange scope, not physical validation \\
+This study & Fixed CAD schema and candidate identities & Retained evolutionary and assessment records & Coverage, ancestry, scores, and selected numerical observations & Retrospective computational evidence \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Numerical Credibility and Visual Interpretation}
+NASA's models-and-simulations standard supplies context for separating credibility questions; compliance is not claimed \cite{nasa}. The scikit-fem and DOLFINx methods references identify finite-element software roles, while execution provenance must identify the versions and model inputs actually used \cite{skfem,dolfinx}. Selected observable agreement on a shared mesh and admissibility of a grid-refinement estimate answer different questions (Section~\ref{sec:verification}).
+
+Quantitative views also need explicit units, transformations, masks, and legends. Crameri \emph{et al.} explain how uneven color gradients can introduce visual distinctions absent from the data \cite{crameri}. A percentile summary therefore requires its own interpretation and cannot inherit the physical units of its component fields. The paper's spatial views are reporting devices, not a separately validated visualization method.
