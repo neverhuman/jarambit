@@ -2,6 +2,10 @@
 
 Policy: semver. Since v1.0.0, a major version is cut for a scope change the owner chooses (v2.0.0 = option (a), 2026-10-18), minor versions for new waves or features, and patch versions for fixes. Each release gets a git tag `vX.Y.Z`, an entry here and a WHITEPAPER header bump. Before v1.0.0, major wave N ⇒ `0.N.0`. Sub-experiments (Wave N.1, N.2 …) ⇒ `docs/WAVE_LOG.md` only (no bump, no tag). `-dev` while a wave is flying; the tag is cut only when that wave's pack (plates + solids) lands.
 
+## v6.1.2 — 2026-10-29 (patch, docs only: G5 leader renders with lattice x-ray, replacing the legacy renders of v6.1.1; cohort of record v6.0.0)
+
+v6.1.1 rendered `ec2i089_r01_p10_c68` from the **legacy v1 pipeline** (solid, no internal lattice) as the "latest-run leader"; that is an older design line, not the current G5 design. v6.1.2 replaces those images with Blender renders of the current G5 pipeline's leader `kv4i1404_g00581_29ea3c73` (newest G5 run `evo_g5_v6`, Tier-2 h 0.2 mm ranking 74.40, 88.6 g) from its AM-build STL, including an x-ray cutaway of the internal 3D-printed lattice voids. `tools/refresh_leader_assets.py` now picks the leader from the newest current-pipeline (G5) run, refuses legacy designs unless `--allow-legacy`, refuses meshes without internal voids, and renders open cuts plus an `xray` view. The legacy addendum remains, relabelled as an older non-lattice line.
+
 ## v6.1.1 — 2026-10-29 (patch, docs only: Blender renders of the latest-run leader; cohort of record v6.0.0)
 
 - New manual command `python3 tools/refresh_leader_assets.py [--design ID]` ([docs/LEADER_ASSETS.md](LEADER_ASSETS.md)): resolves the latest run's leader, takes its exported STL, renders 12 Blender views (`ops/render/blender/leader_views.py`) into `docs/assets/leader/`, regenerates the run's evolution plots, the README (hero strip + leader gallery) and the G5 paper PDF, and prints before/after hashes.

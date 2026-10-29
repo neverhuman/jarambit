@@ -1,63 +1,76 @@
 {
  "blender": "/home/ubuntu/opt/blender-4.5.3-linux-x64/blender",
- "design": "ec2i089_r01_p10_c68",
- "fitness": 80.851214,
+ "design": "kv4i1404_g00581_29ea3c73",
+ "fitness": 74.402131,
  "images": {
   "blade": {
    "path": "docs/assets/leader/blade.jpg",
-   "sha256": "0fac2d4dbdf6e9d52bdfb3a5dcc55eab94b07f4434b4a49f40f553dba9fad6e1"
+   "sha256": "25b2df841369b811bb6c436011abc8187ec24ea84f7ea28ced0bf4769c2f1254"
   },
   "cut_b": {
    "path": "docs/assets/leader/cut_b.jpg",
-   "sha256": "6db84b4f952b39bf18cb969e66836c6ad01405d03dfcd667caeb88430805c4ce"
+   "sha256": "4bc974707e2769a4c3711c625ee8cd624d518316f94e2b34d406b72e636bac34"
   },
   "cut_full": {
    "path": "docs/assets/leader/cut_full.jpg",
-   "sha256": "525f8476fdc63e7674bd479021df38635f16e685bd9c2e1ee80dddad7bdbaa92"
+   "sha256": "c9723a000c01cdce1d10e089ee560485407f80d77cbace85cff941e608fbb9e3"
   },
   "cut_x": {
    "path": "docs/assets/leader/cut_x.jpg",
-   "sha256": "1c86aed366d6bddbb16e1b0112fd52ece5e533100c084ac79d5e301df58b8c1b"
+   "sha256": "3e20f42b478ee4d80af91e3be8a1dd5777d1b215317280288e43de1d6b814668"
   },
   "grip": {
    "path": "docs/assets/leader/grip.jpg",
-   "sha256": "3173e8264ae5eb7956b8f4c14bec32812fc5931141a4f0f929d99128aad23195"
+   "sha256": "6ad51b026fd9152a04cae3a3b4595f24b3bf9151d220e19e38414c2fc0e4f668"
   },
   "hero": {
    "path": "docs/assets/leader/hero.jpg",
-   "sha256": "235ec7994f2dd309b7680cdec4e133882cab8f62e3242fc4852bf6d3486a6e33"
+   "sha256": "005cef1e16893712bd16ec2ffbe180ed4b9323cd238e012573c53b2d9ed00d42"
   },
   "reverse": {
    "path": "docs/assets/leader/reverse.jpg",
-   "sha256": "ccbd83f0dc1a6db5ae654da058867ad5f050a6c8195e57f3b042335c9d06206b"
+   "sha256": "b7ac28dce43018b6243db97703c71e3023f6a12ab7fb3885f174be4f6e490ca0"
   },
   "ring": {
    "path": "docs/assets/leader/ring.jpg",
-   "sha256": "9222dfb77ea655cc675fcb6aaf23e082898a818639da463bed205bd92ef3a109"
+   "sha256": "b7eb5a587d357462736060bcc225a70464b855496b1bfdb7a162f4345d53e2ea"
   },
   "side": {
    "path": "docs/assets/leader/side.jpg",
-   "sha256": "944312ff06a09e0412305de0d6e7cb9146c2f0dc4bab591f3bc6f3cf5f173308"
+   "sha256": "36d070c03bdb757ebb1786b66a179a76d7b2cd8901b5d2cff133cb355f968d31"
   },
   "tip": {
    "path": "docs/assets/leader/tip.jpg",
-   "sha256": "2dc2e831691b44644801a69ba690ec35496902197f1f4ce295a674df7e30f30e"
+   "sha256": "f84ad24c7ad966f9a48f59e4af0c2a5000b557adffa42a2bcd81be33b9ad199c"
   },
   "tip_edge": {
    "path": "docs/assets/leader/tip_edge.jpg",
-   "sha256": "d00adc4e044975bb260b77ffc8e4634cd5c0656477b5ec11bca32d3c804475ad"
+   "sha256": "e408e09c37b54a2baa5124b59c361b7044afa74dc3ee3460c41cafefcfa6c327"
   },
   "top": {
    "path": "docs/assets/leader/top.jpg",
-   "sha256": "b88173729b8a06541dfd9cd52ca67099323c09a8e7f07e64d29975ffe2588ab1"
+   "sha256": "0918149782b7b14a94bc6ab40581052c056a664cfd896898ffde40131ecb62e4"
+  },
+  "xray": {
+   "path": "docs/assets/leader/xray.jpg",
+   "sha256": "c45014ba6706efd31cd8fe690363e6f6ed3d36cbea72e439081a158b1b7448ce"
   }
  },
+ "mass_g": 88.40684808266555,
+ "metric": "W_ERGOLIGHT_v2",
+ "pipeline": "G5",
+ "porosity_frac": 0.5813583767024413,
+ "ranking": "/home/ubuntu/jarambit_runs/evo_g5_v6/cert/tier2_h020.jsonl",
+ "record_design": "kv4i1404_g00581_29ea3c73",
  "renderer": "ops/render/blender/leader_views.py",
- "renderer_sha256": "126d6891eb6c66c5526b64335ca5dac1d5c391420c7fa224adfa3a0f2f20e868",
+ "renderer_sha256": "0e26d7234079427226a5e4c386a8c5f4403118b91248fe9c72d5c78787ca7acc",
  "res": "1600x1000",
+ "run_schema": "G5.0",
  "samples": 96,
  "schema": "jarambit.leader_assets.v1",
- "stl": "evidence/legacy_continuous_run_v6.1.0/leaders/ec2i089_r01_p10_c68.stl",
- "stl_sha256": "9422a42c4db668ea06daa42cfa429583d6a9f9fb9ce31268bfc26db980325f6a",
- "triangles": 89900
+ "score_100": 74.402131,
+ "stl": "/home/ubuntu/jarambit_runs/evo_g5_v6/prep/cad/out/kv4i1404_g00581_29ea3c73_AMbuild_mm.stl",
+ "stl_sha256": "6bcca3cd6bb7bdb7527504a87bcd2731010996a706266fbfe1cb4685405d3bff",
+ "triangles": 1030568,
+ "void_fraction": 0.5304087422898996
 }
