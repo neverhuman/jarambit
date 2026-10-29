@@ -905,6 +905,9 @@ def readme_g5():
           f'Every island\'s genomes and history are in [`evidence/g5/v{rv}/`](evidence/g5/v{rv}/), so any elite can be re-evaluated.', '']
     L += ['## Repository', '',
           '- [`crates/g5/`](crates/g5/README.md): the G5 genome (G5.0), decoder, materials, load models, objective, search and release tools.',
+          *(['- [`crates/g51/`](crates/g51/README.md): decoder G5.1 of the coming v7.0.0, in development (no results; not frozen): '
+             'surface texture kept off the ground bevels, and the hand-zone cases scored on the solid under the pre-registered '
+             '[calibration protocol](docs/g5/v7.0.0/calibration_protocol.md).'] if os.path.exists(os.path.join(ROOT, 'crates/g51/README.md')) else []),
           '- [`requirements/`](requirements/RS-karambit-v5.toml): RS-karambit-v5 and its [provenance](requirements/PROVENANCE-v5.md).',
           f'- [`evidence/g5/v{rv}/`](evidence/g5/v{rv}/): the receipt, the winner\'s genome, every island\'s history, the ranking, the grid check and `vv/`.',
           f'- [`docs/g5/`](docs/g5/): the paper, the images and the CAD archive. [`docs/RELEASES.md`](docs/RELEASES.md): every release.',

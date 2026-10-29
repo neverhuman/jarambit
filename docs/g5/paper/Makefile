@@ -5,7 +5,7 @@
 RAW_VERSION := $(shell cat ../../VERSION)
 ROOT        := ../../..
 RECORD      := $(shell cat $(ROOT)/evidence/g5/RECORD)
-VERSION     := $(if $(filter 5.% 6.%,$(RAW_VERSION)),$(RAW_VERSION),$(RECORD))
+VERSION     := $(if $(filter 5.% 6.% 7.%,$(RAW_VERSION)),$(RAW_VERSION),$(RECORD))
 IMG         := ../v$(RECORD)/img
 FIGURES     := $(patsubst %.svg,%.pdf,$(wildcard $(IMG)/*.svg $(IMG)/fem/*.svg))
 RECEIPT     := $(ROOT)/evidence/g5/v$(RECORD)/release.json
