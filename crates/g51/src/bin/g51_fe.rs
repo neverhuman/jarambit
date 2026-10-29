@@ -212,9 +212,187 @@ fn study_designs(repo: &str) {
     println!("{}", out.join("\n"));
 }
 
+/// One solve's SF under reading `r` (0: the 99.9 % quantile; 1..: `candidate_read_volumes_mm3[r - 1]`).
+fn sf_under(solve: &Value, r: usize) -> Option<f64> {
+    let allow = solve["allowable_mpa"].as_f64()?;
+    let stress = if r == 0 { solve["reading"]["q999_mpa"].as_f64()? } else { solve["stress_by_volume_mpa"][r - 1].as_f64()? };
+    Some(allow / stress)
+}
+
+/// The runs of a study matching `case`, `h` and `shift_mm` (and `key` = `val` when given).
+fn runs_of<'a>(doc: &'a Value, case: &str, h: f64, shift: f64, key: Option<(&str, f64)>) -> Vec<&'a Value> {
+    doc["runs"]
+        .as_array()
+        .map(|v| {
+            v.iter()
+                .filter(|r| {
+                    r["case"] == case
+                        && r["h"].as_f64() == Some(h)
+                        && r["shift_mm"].as_f64().is_some_and(|s| (s - shift).abs() < 1e-12)
+                        && key.is_none_or(|(k, x)| r[k].as_f64().is_some_and(|y| (y - x).abs() < 1e-12))
+                })
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
+/// A single-solve run's SF (`None` when it failed or is absent).
+fn one_sf(doc: &Value, case: &str, h: f64, shift: f64, key: Option<(&str, f64)>, r: usize) -> Option<f64> {
+    runs_of(doc, case, h, shift, key).first().and_then(|run| sf_under(&run["solve"], r))
+}
+
+/// A teeth run's SF: the minimum over its solved teeth (`None` when it failed or has no teeth).
+fn teeth_sf(doc: &Value, teeth_h: f64, shift: f64, r: usize) -> Option<f64> {
+    let run = doc["runs"].as_array()?.iter().find(|x| {
+        x["case"] == "teeth"
+            && x["teeth_h"].as_f64().is_some_and(|t| (t - teeth_h).abs() < 1e-12)
+            && x["shift_mm"].as_f64().is_some_and(|s| (s - shift).abs() < 1e-12)
+    })?;
+    run["solves"].as_array()?.iter().map(|s| sf_under(s, r)).collect::<Option<Vec<f64>>>()?.into_iter().reduce(f64::min)
+}
+
+fn rel(a: f64, b: f64) -> f64 {
+    (a / b - 1.0).abs()
+}
+
+/// Protocol 1.1 applied to the five study documents: the guard clamp, the read volume, the tooth voxel size, and the
+/// FE noise. A failed or missing solve counts against a candidate, never for it.
+fn rules(paths: &[String]) {
+    let docs: Vec<Value> = paths
+        .iter()
+        .map(|p| serde_json::from_str(&std::fs::read_to_string(p).unwrap_or_else(|e| fail(format!("{p}: {e}")))).unwrap_or_else(|e| fail(e)))
+        .collect();
+    let vols: Vec<f64> = serde_json::from_value(docs[0]["candidate_read_volumes_mm3"].clone()).unwrap_or_else(|e| fail(e));
+    let readings = 1 + vols.len();
+    let tol = 0.05;
+    let mut report = serde_json::Map::new();
+
+    // 1. guard clamp: c within 5 % of the next deeper clamp on every design, under every reading
+    let clamps = [4.0, 8.0, 12.0];
+    let mut c_g = None;
+    let mut clamp_rows = Vec::new();
+    for w in clamps.windows(2) {
+        let mut worst = 0.0_f64;
+        let mut ok = true;
+        for d in &docs {
+            for r in 0..readings {
+                match (one_sf(d, "guard_push", 0.2, 0.0, Some(("clamp_mm", w[0])), r), one_sf(d, "guard_push", 0.2, 0.0, Some(("clamp_mm", w[1])), r)) {
+                    (Some(a), Some(b)) => worst = worst.max(rel(a, b)),
+                    _ => ok = false,
+                }
+            }
+        }
+        ok &= worst <= tol;
+        clamp_rows.push(json!({"clamp_mm": w[0], "next_mm": w[1], "worst_rel_diff": worst, "ok": ok}));
+        if ok && c_g.is_none() {
+            c_g = Some(w[0]);
+        }
+    }
+    let c_g = c_g.unwrap_or(12.0);
+    report.insert("guard_clamp_mm".into(), json!({"value": c_g, "candidates": clamp_rows}));
+
+    // 2. read volume: grip (governing station) and guard (at c_g) within 5 % between h 0.2 and h 0.15 on every design
+    let mut v_rows = Vec::new();
+    let mut v_pick = None;
+    for (i, &v) in vols.iter().enumerate() {
+        let r = i + 1;
+        let mut worst = 0.0_f64;
+        let mut ok = true;
+        for d in &docs {
+            if let Some(st) = d["grip_governing_station"].as_f64() {
+                match (one_sf(d, "grip_squeeze", 0.2, 0.0, Some(("station", st)), r), one_sf(d, "grip_squeeze", 0.15, 0.0, Some(("station", st)), r)) {
+                    (Some(a), Some(b)) => worst = worst.max(rel(a, b)),
+                    _ => ok = false,
+                }
+            }
+            match (one_sf(d, "guard_push", 0.2, 0.0, Some(("clamp_mm", c_g)), r), one_sf(d, "guard_push", 0.15, 0.0, Some(("clamp_mm", c_g)), r)) {
+                (Some(a), Some(b)) => worst = worst.max(rel(a, b)),
+                _ => ok = false,
+            }
+        }
+        ok &= worst <= tol;
+        v_rows.push(json!({"volume_mm3": v, "worst_rel_diff_h020_h015": worst, "ok": ok}));
+        if ok && v_pick.is_none() {
+            v_pick = Some((r, v));
+        }
+    }
+    let (r_v, v) = v_pick.unwrap_or((vols.len(), *vols.last().unwrap()));
+    report.insert("read_volume_mm3".into(), json!({"value": v, "candidates": v_rows}));
+
+    // 3. tooth voxel size: the coarsest h_t within 5 % of the next finer on every serrated design, under V
+    let hts = [0.1, 0.075, 0.05];
+    let mut t_rows = Vec::new();
+    let mut h_t = None;
+    for w in hts.windows(2) {
+        let mut worst = 0.0_f64;
+        let mut ok = true;
+        for d in &docs {
+            let serrated = d["runs"].as_array().is_some_and(|v| v.iter().any(|x| x["case"] == "teeth" && x.get("note").is_none()));
+            if !serrated {
+                continue;
+            }
+            match (teeth_sf(d, w[0], 0.0, r_v), teeth_sf(d, w[1], 0.0, r_v)) {
+                (Some(a), Some(b)) => worst = worst.max(rel(a, b)),
+                _ => ok = false,
+            }
+        }
+        ok &= worst <= tol;
+        t_rows.push(json!({"teeth_h_mm": w[0], "next_mm": w[1], "worst_rel_diff": worst, "ok": ok}));
+        if ok && h_t.is_none() {
+            h_t = Some(w[0]);
+        }
+    }
+    let h_t = h_t.unwrap_or(0.05);
+    report.insert("teeth_h_mm".into(), json!({"value": h_t, "candidates": t_rows}));
+
+    // 4. FE noise: standard deviation of log SF over sub-voxel origin shifts, per case, under the chosen definition
+    let sd = |xs: &[f64]| -> f64 {
+        let l: Vec<f64> = xs.iter().map(|x| x.ln()).collect();
+        let m = l.iter().sum::<f64>() / l.len() as f64;
+        (l.iter().map(|x| (x - m).powi(2)).sum::<f64>() / (l.len() as f64 - 1.0)).sqrt()
+    };
+    let mut noise = Vec::new();
+    for d in &docs {
+        let id = d["design_id"].as_str().unwrap_or("?");
+        let grip: Option<Vec<f64>> = d["grip_governing_station"].as_f64().and_then(|st| {
+            [0.0, 0.05, 0.1].iter().map(|&s| one_sf(d, "grip_squeeze", 0.2, s, Some(("station", st)), r_v)).collect()
+        });
+        let guard: Option<Vec<f64>> = [0.0, 0.05, 0.1].iter().map(|&s| one_sf(d, "guard_push", 0.2, s, Some(("clamp_mm", c_g)), r_v)).collect();
+        let teeth: Option<Vec<f64>> = [0.0, 0.25, 0.5].iter().map(|&f| teeth_sf(d, h_t, f * h_t, r_v)).collect();
+        noise.push(json!({"design_id": id, "grip_sd_log": grip.map(|v| sd(&v)), "guard_sd_log": guard.map(|v| sd(&v)),
+                          "teeth_sd_log": teeth.map(|v| sd(&v))}));
+    }
+    report.insert("fe_noise".into(), json!(noise));
+
+    // reported beside the rules: each design's SFs under the chosen definition, h 0.3 / 0.2 / 0.15, teeth on the grid
+    let mut designs = Vec::new();
+    for d in &docs {
+        let st = d["grip_governing_station"].as_f64();
+        let grip_stations: Vec<Value> = runs_of(d, "grip_squeeze", 0.2, 0.0, None)
+            .iter()
+            .map(|r| json!({"station": r["station"], "sf": sf_under(&r["solve"], r_v), "error": r.get("error")}))
+            .collect();
+        let at = |case: &str, h: f64, key: Option<(&str, f64)>| one_sf(d, case, h, 0.0, key, r_v);
+        designs.push(json!({
+            "design_id": d["design_id"], "seconds": d["seconds"],
+            "grip_stations_h020": grip_stations,
+            "grip_governing_h": st.map(|s| json!({"0.3": at("grip_squeeze", 0.3, Some(("station", s))), "0.2": at("grip_squeeze", 0.2, Some(("station", s))), "0.15": at("grip_squeeze", 0.15, Some(("station", s)))})),
+            "guard_h": json!({"0.3": at("guard_push", 0.3, Some(("clamp_mm", c_g))), "0.2": at("guard_push", 0.2, Some(("clamp_mm", c_g))), "0.15": at("guard_push", 0.15, Some(("clamp_mm", c_g)))}),
+            "guard_clamps_h020": clamps.iter().map(|&c| at("guard_push", 0.2, Some(("clamp_mm", c)))).collect::<Vec<_>>(),
+            "teeth": json!({"grid_h020": d["runs"].as_array().and_then(|v| v.iter().find(|x| x["case"] == "teeth" && x["teeth_h"] == "grid")).and_then(|x| x["solves"].as_array()).map(|s| s.iter().filter_map(|t| sf_under(t, r_v)).fold(f64::INFINITY, f64::min)),
+                            "0.1": teeth_sf(d, 0.1, 0.0, r_v), "0.075": teeth_sf(d, 0.075, 0.0, r_v), "0.05": teeth_sf(d, 0.05, 0.0, r_v)}),
+            "errors": d["runs"].as_array().map(|v| v.iter().filter_map(|x| x.get("error")).cloned().collect::<Vec<_>>()),
+        }));
+    }
+    report.insert("designs".into(), json!(designs));
+    report.insert("tolerance".into(), json!(tol));
+    println!("{}", serde_json::to_string_pretty(&Value::Object(report)).unwrap());
+}
+
 fn main() {
     let a: Vec<String> = std::env::args().collect();
     match a.get(1).map(String::as_str) {
+        Some("rules") if a.len() >= 3 => rules(&a[2..]),
         Some("study") if a.len() >= 5 => study(&a[2], &a[3], &a[4], a.get(5).and_then(|v| v.parse().ok()).unwrap_or(2)),
         Some("study-designs") if a.len() >= 3 => study_designs(&a[2]),
         Some("v6check") if a.len() >= 3 => v6check(&a[2], a.get(3).and_then(|v| v.parse().ok()).unwrap_or(4)),
