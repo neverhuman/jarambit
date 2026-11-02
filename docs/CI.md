@@ -19,8 +19,9 @@ Loosening any D1 gate makes this workflow fail. Doing so is an explicit owner de
 
 ## Storage budget and retention proposal (2026-11-02)
 
-**Status: proposal for review; the storage policy below still needs a native Rust
-implementation and runtime qualification.** Keep the existing scoring,
+**Status: native Cargo configuration defaults plus a retention proposal.**
+Automatic mesh retention still needs a Rust implementation and runtime
+qualification. Keep the existing scoring,
 certification, promotion and evidence requirements intact.
 
 The disk steward's full inventories found a recurring capacity problem on the
@@ -37,6 +38,24 @@ Other writers also matter: xbabe1's remote-test target grew about 25.2 GiB over
 build admission. It cannot by itself bound unrelated CI and research output.
 Raw inventories, observation times, process checks and deletion receipts are
 retained in the operator's `~/ops/disk_steward/` directory on xbabe2.
+
+### Cargo development build defaults
+
+The native Cargo [configuration template](../ops/maintenance/cargo-storage-defaults.toml)
+sets `profile.dev.incremental = false` and `profile.dev.debug = "line-tables-only"`.
+The test profile inherits development defaults unless explicitly configured.
+Merge only missing keys into the user's `~/.cargo/config.toml`; retain existing
+settings and source/registry configuration. Explicit command-line/environment
+choices keep their normal precedence. The template leaves target-directory
+selection and release profiles to their existing owners.
+
+This addresses builds started through noninteractive SSH shells, where the
+caller's usual environment defaults may be absent. On November 2, xbabe1's live
+remote-test compiler processes showed `incremental=...` and `debuginfo=2`, while
+the corresponding environment defaults and user Cargo config were absent.
+Verify the effective compiler arguments with a small offline development/test
+build before relying on the installation; do not infer them from a config file
+or restart existing jobs to apply it.
 
 ### Proposed policy
 

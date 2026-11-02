@@ -1,0 +1,7 @@
+# Host build defaults for bounded development/test output.
+# Merge only missing keys into the user's Cargo config; preserve explicit settings.
+# Command-line and environment overrides remain available to the caller.
+# Each lane keeps its own persistent target directory.
+[profile.dev]
+incremental = false
+debug = "line-tables-only"
